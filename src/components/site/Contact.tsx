@@ -20,12 +20,12 @@ export function Contact() {
           </Reveal>
           <Reveal delay={150}>
             <p className="mx-auto mt-7 max-w-xl text-base leading-relaxed text-muted-foreground">
-              {t(UI.contactText)}
+              {t(UI.contactLead)}
             </p>
           </Reveal>
           <Reveal delay={220}>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-5">
-              <EmberButton href="https://wa.me/84345678910">{t(UI.ctaWhatsapp)}</EmberButton>
+              <EmberButton href="https://wa.me/84345678910">{t(UI.contactWhatsapp)}</EmberButton>
               <a
                 href="mailto:contact@xragency2030.com"
                 className="label-mono text-muted-foreground underline-offset-8 transition-colors hover:text-primary hover:underline"
@@ -40,7 +40,7 @@ export function Contact() {
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <div>
               <Logo />
-              <p className="mt-4 max-w-xs text-sm text-muted-foreground">{t(UI.footerTag)}</p>
+              <p className="mt-4 max-w-xs text-sm text-muted-foreground">{t(UI.footerMade)}</p>
             </div>
             <div className="label-mono space-y-3 text-muted-foreground">
               <p className="flex items-center gap-2">
