@@ -755,6 +755,30 @@ export const PORTFOLIO = [
     tags: ["Website", "AI"],
     image: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=1200&q=80",
   },
+  {
+    plate: "07",
+    name: "Lumina Digital",
+    sector: { fr: "Tech & SaaS · Lisbonne", en: "Tech & SaaS · Lisbon", vi: "Công nghệ & SaaS · Lisbon" },
+    result: { fr: "+320 % de leads", en: "+320% leads", vi: "+320% khách hàng tiềm năng" },
+    tags: ["Website", "SEO", "AI"],
+    image: "https://images.unsplash.com/photo-1558655146-d09347e92766?w=1200&q=80",
+  },
+  {
+    plate: "08",
+    name: "Neo Gear",
+    sector: { fr: "E-commerce · Dubaï", en: "E-commerce · Dubai", vi: "Thương mại điện tử · Dubai" },
+    result: { fr: "×2,4 sur le panier moyen", en: "2.4× average basket", vi: "Giá trị giỏ hàng ×2,4" },
+    tags: ["E-commerce", "Branding", "Ads"],
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&q=80",
+  },
+  {
+    plate: "09",
+    name: "Synth OS",
+    sector: { fr: "Studio produit · Berlin", en: "Product studio · Berlin", vi: "Studio sản phẩm · Berlin" },
+    result: { fr: "Identité complète en 6 semaines", en: "Full identity in 6 weeks", vi: "Bộ nhận diện hoàn chỉnh trong 6 tuần" },
+    tags: ["Brand identity", "Website", "Social"],
+    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200&q=80",
+  },
 ];
 
 export const TESTIMONIALS = [
