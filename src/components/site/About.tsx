@@ -1,8 +1,11 @@
-import studio from "@/assets/studio.jpg";
-import craft from "@/assets/craft.jpg";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { Reveal } from "./primitives";
+
+const STUDIO =
+  "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1400";
+const CRAFT =
+  "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=800";
 
 export function About() {
   const { t } = useLang();
@@ -36,22 +39,18 @@ export function About() {
         <div className="grid grid-cols-5 gap-4">
           <Reveal delay={100} className="col-span-3">
             <img
-              src={studio}
+              src={STUDIO}
               alt={t(UI.aboutLabel)}
               loading="lazy"
-              width={1200}
-              height={1504}
               className="h-full w-full rounded-3xl border border-border object-cover"
             />
           </Reveal>
           <Reveal delay={200} className="col-span-2 self-end">
             <img
-              src={craft}
+              src={CRAFT}
               alt="XR Agency craft"
               loading="lazy"
-              width={1200}
-              height={912}
-              className="w-full rounded-3xl border border-border object-cover"
+              className="aspect-3/4 w-full rounded-3xl border border-border object-cover"
             />
           </Reveal>
         </div>
