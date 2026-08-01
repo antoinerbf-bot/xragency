@@ -1,6 +1,6 @@
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
-import { Reveal } from "./primitives";
+import { Parallax, Reveal } from "./primitives";
 
 const STUDIO =
   "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1400";
@@ -38,20 +38,24 @@ export function About() {
 
         <div className="grid grid-cols-5 gap-4">
           <Reveal delay={100} className="col-span-3">
-            <img
-              src={STUDIO}
-              alt={t(UI.aboutLabel)}
-              loading="lazy"
-              className="h-full w-full rounded-3xl border border-border object-cover"
-            />
+            <Parallax speed={0.06}>
+              <img
+                src={STUDIO}
+                alt={t(UI.aboutLabel)}
+                loading="lazy"
+                className="h-full w-full rounded-3xl border border-border object-cover grayscale transition-all duration-700 hover:grayscale-0"
+              />
+            </Parallax>
           </Reveal>
           <Reveal delay={200} className="col-span-2 self-end">
-            <img
-              src={CRAFT}
-              alt="XR Agency craft"
-              loading="lazy"
-              className="aspect-3/4 w-full rounded-3xl border border-border object-cover"
-            />
+            <Parallax speed={-0.05}>
+              <img
+                src={CRAFT}
+                alt="XRAGENCY craft"
+                loading="lazy"
+                className="aspect-3/4 w-full rounded-3xl border border-border object-cover grayscale transition-all duration-700 hover:grayscale-0"
+              />
+            </Parallax>
           </Reveal>
         </div>
       </div>

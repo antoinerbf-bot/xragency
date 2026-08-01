@@ -1,7 +1,7 @@
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { PORTFOLIO, TESTIMONIALS } from "@/lib/content";
-import { Reveal, SectionHeading } from "./primitives";
+import { Parallax, Reveal, SectionHeading } from "./primitives";
 
 export function Work() {
   const { t } = useLang();
@@ -19,12 +19,14 @@ export function Work() {
                 className="group block overflow-hidden rounded-3xl border border-border"
               >
                 <div className="relative aspect-4/3 overflow-hidden">
-                  <img
-                    src={p.image}
-                    alt={p.name}
-                    loading="lazy"
-                    className="h-full w-full object-cover opacity-70 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100"
-                  />
+                  <Parallax speed={0.05} className="h-full w-full">
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      loading="lazy"
+                      className="h-[112%] w-full scale-105 object-cover grayscale transition-all duration-700 group-hover:scale-110 group-hover:grayscale-0"
+                    />
+                  </Parallax>
                   <span className="label-mono absolute left-4 top-4 rounded-full bg-background/80 px-3 py-1 text-muted-foreground backdrop-blur">
                     {t({ fr: "Planche", en: "Plate", vi: "Bản" })} {p.plate}
                   </span>

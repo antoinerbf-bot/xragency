@@ -15,19 +15,19 @@ export function Globe() {
       >
         <defs>
           <radialGradient id="globeFill" cx="45%" cy="35%">
-            <stop offset="0%" stopColor="oklch(0.735 0.168 52 / 0.12)" />
-            <stop offset="70%" stopColor="oklch(0.735 0.168 52 / 0.03)" />
+            <stop offset="0%" stopColor="oklch(0.785 0.175 58 / 0.12)" />
+            <stop offset="70%" stopColor="oklch(0.785 0.175 58 / 0.03)" />
             <stop offset="100%" stopColor="transparent" />
           </radialGradient>
         </defs>
-        <circle r="100" fill="url(#globeFill)" stroke="oklch(0.735 0.168 52 / 0.35)" strokeWidth="0.4" />
+        <circle r="100" fill="url(#globeFill)" stroke="oklch(0.785 0.175 58 / 0.35)" strokeWidth="0.4" />
         {meridians.map((k, i) => (
           <ellipse
             key={`m${i}`}
             rx={100 * k}
             ry="100"
             fill="none"
-            stroke="oklch(0.735 0.168 52 / 0.22)"
+            stroke="oklch(0.785 0.175 58 / 0.22)"
             strokeWidth="0.35"
           />
         ))}
@@ -38,7 +38,7 @@ export function Globe() {
             rx={100 * Math.sqrt(1 - p * p)}
             ry={100 * Math.sqrt(1 - p * p) * 0.16}
             fill="none"
-            stroke="oklch(0.735 0.168 52 / 0.2)"
+            stroke="oklch(0.785 0.175 58 / 0.2)"
             strokeWidth="0.35"
           />
         ))}
@@ -55,7 +55,7 @@ export function Globe() {
             cx={x}
             cy={y}
             r="1.6"
-            fill="oklch(0.82 0.17 60)"
+            fill={i % 3 === 0 ? "oklch(0.76 0.13 232)" : i % 3 === 1 ? "oklch(0.79 0.14 168)" : "oklch(0.85 0.17 62)"}
             className="animate-pulse-soft"
             style={{ animationDelay: `${i * 420}ms` }}
           />

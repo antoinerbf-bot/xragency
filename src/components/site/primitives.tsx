@@ -5,12 +5,55 @@ import type { L } from "@/lib/i18n";
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <a href="#top" className={cn("group inline-flex items-baseline gap-2", className)}>
-      <span className="display-serif text-xl tracking-[0.35em] text-foreground">XR</span>
-      <span className="display-serif text-xl tracking-[0.35em] text-primary transition-opacity group-hover:opacity-80">
-        AGENCY
+    <a href="#top" className={cn("group inline-flex items-center", className)}>
+      <span className="label-mono text-sm tracking-[0.4em] text-foreground transition-colors group-hover:text-primary">
+        XRAGENCY
       </span>
     </a>
+  );
+}
+
+/** Lightweight scroll parallax: translates children as the viewport moves. */
+export function Parallax({
+  children,
+  speed = 0.12,
+  className,
+}: {
+  children: ReactNode;
+  speed?: number;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const rect = el.getBoundingClientRect();
+      const center = rect.top + rect.height / 2 - window.innerHeight / 2;
+      el.style.transform = `translate3d(0, ${(-center * speed).toFixed(2)}px, 0)`;
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [speed]);
+
+  return (
+    <div ref={ref} className={cn("will-change-transform", className)}>
+      {children}
+    </div>
   );
 }
 
