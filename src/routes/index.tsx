@@ -36,9 +36,14 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <LanguageProvider>
-      <div className="min-h-screen bg-background text-foreground">
+      <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
+        <div
+          aria-hidden
+          className="pointer-events-none fixed inset-0 z-0"
+          style={{ background: "var(--gradient-halo)" }}
+        />
         <Nav />
-        <main>
+        <main className="relative z-10">
           <Hero />
           <About />
           <Services />
