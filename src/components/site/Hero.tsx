@@ -1,7 +1,7 @@
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
-import { EmberButton } from "./primitives";
+import { EmberButton, Parallax } from "./primitives";
 import { Globe } from "./Globe";
 
 const STATS = [
@@ -17,12 +17,12 @@ export function Hero() {
   return (
     <section id="top" className="grain relative min-h-screen overflow-hidden pt-28">
       <div className="absolute inset-0" style={{ background: "var(--gradient-halo)" }} />
-      <Globe />
+      <Parallax speed={0.18} className="absolute inset-0">
+        <Globe />
+      </Parallax>
 
       <div className="relative mx-auto flex min-h-[calc(100vh-7rem)] max-w-7xl flex-col px-6 lg:px-10">
         <div className="animate-rise flex flex-wrap items-center gap-x-8 gap-y-2 border-b border-border/60 pb-4">
-          <span className="label-mono text-muted-foreground">N° 08</span>
-          <span className="label-mono text-muted-foreground">{t(UI.heroEdition)}</span>
           <span className="label-mono text-muted-foreground">{CONTACT.cities}</span>
         </div>
 
@@ -40,7 +40,7 @@ export function Hero() {
           >
             {t(UI.heroTitle1)}
             <br />
-            <span className="text-primary">{t(UI.heroTitleAccent)}</span> {t(UI.heroTitle2)}
+            <span className="text-aurora">{t(UI.heroTitleAccent)}</span> {t(UI.heroTitle2)}
           </h1>
 
           <div
