@@ -47,7 +47,7 @@ export function Hero() {
           >
             {t(UI.heroTitle1)}
             <br />
-            <span className="text-aurora">{t(UI.heroTitleAccent)}</span> {t(UI.heroTitle2)}
+            <em className="not-italic text-primary">{t(UI.heroTitleAccent)}</em> {t(UI.heroTitle2)}
           </h1>
 
           <div
