@@ -39,7 +39,7 @@ function Index() {
       <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
         <div
           aria-hidden
-          className="pointer-events-none fixed inset-0 z-0"
+          className="pointer-events-none fixed inset-0 z-0 opacity-70"
           style={{ background: "var(--gradient-halo)" }}
         />
         <Nav />

@@ -16,7 +16,6 @@ export function Hero() {
 
   return (
     <section id="top" className="grain relative min-h-screen overflow-hidden pt-28">
-      <div className="absolute inset-0" style={{ background: "var(--gradient-halo)" }} />
       <Parallax speed={0.18} className="absolute inset-0">
         <Globe />
       </Parallax>
