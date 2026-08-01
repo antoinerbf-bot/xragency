@@ -1,24 +1,38 @@
 import { useMemo, useState } from "react";
-import { Check, Sparkles } from "lucide-react";
+import {
+  Building2,
+  Check,
+  Gem,
+  Hammer,
+  HeartPulse,
+  Hotel,
+  Rocket,
+  Scale,
+  ShoppingBag,
+  Sparkles,
+  UtensilsCrossed,
+  Compass,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLang, type L } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT, SERVICES } from "@/lib/content";
 import { EmberButton, Reveal } from "./primitives";
+import { Globe } from "./Globe";
 
-type Opt = { id: string; label: L };
+type Opt = { id: string; label: L; icon?: typeof Check };
 
 const SECTORS: Opt[] = [
-  { id: "resto", label: { fr: "Restaurant / Café", en: "Restaurant / Café", vi: "Nhà hàng / Quán cà phê" } },
-  { id: "hotel", label: { fr: "Hôtel / Spa", en: "Hotel / Spa", vi: "Khách sạn / Spa" } },
-  { id: "sante", label: { fr: "Santé / Médical", en: "Health / Medical", vi: "Y tế / Sức khỏe" } },
-  { id: "juridique", label: { fr: "Avocat / Conseil", en: "Law / Consulting", vi: "Luật / Tư vấn" } },
-  { id: "immo", label: { fr: "Immobilier", en: "Real estate", vi: "Bất động sản" } },
-  { id: "retail", label: { fr: "Boutique / E-commerce", en: "Retail / E-commerce", vi: "Bán lẻ / Thương mại điện tử" } },
-  { id: "artisan", label: { fr: "Artisan / BTP", en: "Craftsman / Construction", vi: "Thợ thủ công / Xây dựng" } },
-  { id: "beaute", label: { fr: "Beauté / Bien-être", en: "Beauty / Wellness", vi: "Làm đẹp / Chăm sóc" } },
-  { id: "tech", label: { fr: "Startup / Tech", en: "Startup / Tech", vi: "Startup / Công nghệ" } },
-  { id: "autre", label: { fr: "Autre secteur", en: "Other sector", vi: "Lĩnh vực khác" } },
+  { id: "resto", icon: UtensilsCrossed, label: { fr: "Restaurant / Café", en: "Restaurant / Café", vi: "Nhà hàng / Quán cà phê" } },
+  { id: "hotel", icon: Hotel, label: { fr: "Hôtel / Spa", en: "Hotel / Spa", vi: "Khách sạn / Spa" } },
+  { id: "sante", icon: HeartPulse, label: { fr: "Santé / Médical", en: "Health / Medical", vi: "Y tế / Sức khỏe" } },
+  { id: "juridique", icon: Scale, label: { fr: "Avocat / Conseil", en: "Law / Consulting", vi: "Luật / Tư vấn" } },
+  { id: "immo", icon: Building2, label: { fr: "Immobilier", en: "Real estate", vi: "Bất động sản" } },
+  { id: "retail", icon: ShoppingBag, label: { fr: "Boutique / E-commerce", en: "Retail / E-commerce", vi: "Bán lẻ / Thương mại điện tử" } },
+  { id: "artisan", icon: Hammer, label: { fr: "Artisan / BTP", en: "Craftsman / Construction", vi: "Thợ thủ công / Xây dựng" } },
+  { id: "beaute", icon: Gem, label: { fr: "Beauté / Bien-être", en: "Beauty / Wellness", vi: "Làm đẹp / Chăm sóc" } },
+  { id: "tech", icon: Rocket, label: { fr: "Startup / Tech", en: "Startup / Tech", vi: "Startup / Công nghệ" } },
+  { id: "autre", icon: Compass, label: { fr: "Autre secteur", en: "Other sector", vi: "Lĩnh vực khác" } },
 ];
 
 const OBJECTIVES: Opt[] = [
@@ -48,13 +62,18 @@ const svc = (id: string) => SERVICES.find((s) => s.id === id)!;
 
 type Reco = { title: L; plan: L; eur: number; period: "once" | "month" | "year" };
 
+/** Sectors that always require online booking / transactions -> E-commerce & Booking plan. */
+const BOOKING_SECTORS = ["hotel", "resto", "retail"];
+
 function buildReco(sector: string, objective: string, situation: string, budget: string): Reco[] {
   const tier = budget === "s" ? 0 : budget === "m" ? 1 : budget === "l" ? 2 : 2;
   const out: Reco[] = [];
 
   const websites = svc("websites");
-  if (situation === "none" || situation === "old" || objective === "sell") {
-    const idx = objective === "sell" ? 2 : Math.min(tier, 2);
+  const needsBooking = objective === "sell" || BOOKING_SECTORS.includes(sector);
+  if (situation === "none" || situation === "old" || needsBooking) {
+    // Booking / e-commerce sectors always get the transactional plan (1099 €).
+    const idx = needsBooking ? 2 : Math.min(tier, 2);
     const p = websites.plans[idx];
     out.push({ title: websites.title, plan: p.name, eur: p.eur, period: "once" });
   }
@@ -137,6 +156,9 @@ export function Intelligence() {
 
   return (
     <section id="intelligence" className="grain relative overflow-hidden py-24 lg:py-32">
+      <div className="pointer-events-none absolute inset-0 opacity-45">
+        <Globe />
+      </div>
       <div className="absolute inset-0" style={{ background: "var(--gradient-halo)" }} />
       <div className="relative mx-auto max-w-5xl px-6 lg:px-10">
         <Reveal>
@@ -186,6 +208,7 @@ export function Intelligence() {
                 <div className="mt-8 grid gap-3 sm:grid-cols-2">
                   {steps[step].options.map((o) => {
                     const active = answers[steps[step].key] === o.id;
+                    const Icon = o.icon;
                     return (
                       <button
                         key={o.id}
@@ -194,12 +217,17 @@ export function Intelligence() {
                           setStep((s) => s + 1);
                         }}
                         className={cn(
-                          "group flex items-center justify-between gap-4 rounded-2xl border border-border bg-background/40 px-5 py-4 text-left text-sm transition-all duration-300 hover:border-primary/70 hover:bg-primary/5",
+                          "group flex items-center gap-4 rounded-2xl border border-border bg-background/40 px-5 py-4 text-left text-sm backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/70 hover:bg-primary/5 hover:shadow-[var(--shadow-ember)]",
                           active && "border-primary bg-primary/10",
                         )}
                       >
-                        <span>{t(o.label)}</span>
-                        <span className="label-mono text-muted-foreground transition-colors group-hover:text-primary">
+                        {Icon ? (
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border text-primary transition-colors group-hover:border-primary/70 group-hover:bg-primary/10">
+                            <Icon className="h-4 w-4" />
+                          </span>
+                        ) : null}
+                        <span className="flex-1">{t(o.label)}</span>
+                        <span className="label-mono text-muted-foreground transition-all group-hover:translate-x-1 group-hover:text-primary">
                           →
                         </span>
                       </button>
