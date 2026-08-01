@@ -16,11 +16,19 @@ export function Hero() {
 
   return (
     <section id="top" className="grain relative min-h-screen overflow-hidden pt-28">
-      <Parallax speed={0.18} className="absolute inset-0">
+      <Parallax speed={0.22} className="absolute inset-0 lg:left-[22%]">
         <Globe />
       </Parallax>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(120% 80% at 10% 40%, var(--background) 18%, transparent 62%)",
+        }}
+      />
 
-      <div className="relative mx-auto flex min-h-[calc(100vh-7rem)] max-w-7xl flex-col px-6 lg:px-10">
+      <Parallax speed={-0.05} className="relative mx-auto flex min-h-[calc(100vh-7rem)] max-w-7xl flex-col px-6 lg:px-10">
         <div className="animate-rise flex flex-wrap items-center gap-x-8 gap-y-2 border-b border-border/60 pb-4">
           <span className="label-mono text-muted-foreground">{CONTACT.cities}</span>
         </div>
@@ -34,12 +42,12 @@ export function Hero() {
           </p>
 
           <h1
-            className="display-serif mt-8 max-w-4xl text-[clamp(2.75rem,9vw,7rem)]"
+            className="display-serif mt-8 max-w-3xl text-[clamp(2.75rem,8vw,6.5rem)] leading-[0.95]"
             style={{ animation: "ember-rise 1s cubic-bezier(0.16,1,0.3,1) 220ms both" }}
           >
             {t(UI.heroTitle1)}
             <br />
-            <span className="text-aurora">{t(UI.heroTitleAccent)}</span> {t(UI.heroTitle2)}
+            <em className="not-italic text-primary">{t(UI.heroTitleAccent)}</em> {t(UI.heroTitle2)}
           </h1>
 
           <div
@@ -82,7 +90,7 @@ export function Hero() {
           </span>
           <span className="label-mono text-muted-foreground/70">xragency.com</span>
         </div>
-      </div>
+      </Parallax>
     </section>
   );
 }
