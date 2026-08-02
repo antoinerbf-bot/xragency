@@ -36,27 +36,65 @@ export function Contact() {
           </Reveal>
         </div>
 
-        <footer className="mt-20 border-t border-border pt-10">
-          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-            <div>
-              <Logo />
-              <p className="mt-4 max-w-xs text-sm text-muted-foreground">{t(UI.footerMade)}</p>
-            </div>
-            <div className="label-mono space-y-3 text-muted-foreground">
-              <p className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-primary" /> Da Nang — Ho Chi Minh — Paris
-              </p>
-              <p className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-primary" /> contact@xragency2030.com
-              </p>
-              <p className="flex items-center gap-2">
-                <MessageCircle className="h-4 w-4 text-primary" /> WhatsApp 24/7
-              </p>
+        <footer className="mt-24">
+          <div className="relative overflow-hidden rounded-4xl border border-border">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 opacity-60"
+              style={{ background: "var(--gradient-halo)" }}
+            />
+            <div className="relative px-8 py-12 sm:px-12">
+              <a
+                href="mailto:contact@xragency2030.com"
+                className="display-serif block text-[clamp(2rem,7vw,4.5rem)] leading-[1.02] transition-colors hover:text-primary"
+              >
+                contact@xragency2030<span className="text-primary">.</span>com
+              </a>
+
+              <div className="mt-12 grid gap-8 border-t border-border/70 pt-8 sm:grid-cols-3">
+                <div className="label-mono flex items-start gap-3 text-muted-foreground">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <span>
+                    Paris
+                    <br />
+                    Da Nang
+                    <br />
+                    Dubai
+                  </span>
+                </div>
+                <a
+                  href="https://wa.me/33767566783"
+                  className="label-mono flex items-start gap-3 text-muted-foreground transition-colors hover:text-primary"
+                >
+                  <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <span>
+                    WhatsApp 24/7
+                    <br />
+                    +33 7 67 56 67 83
+                  </span>
+                </a>
+                <a
+                  href="mailto:contact@xragency2030.com"
+                  className="label-mono flex items-start gap-3 text-muted-foreground transition-colors hover:text-primary"
+                >
+                  <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <span>
+                    {t(UI.contactEmail)}
+                    <br />
+                    FR · EN · VI
+                  </span>
+                </a>
+              </div>
+
+              <div className="mt-12 flex flex-col gap-4 border-t border-border/70 pt-8 sm:flex-row sm:items-center sm:justify-between">
+                <Logo />
+                <p className="label-mono text-muted-foreground/70">{t(UI.footerMade)}</p>
+                <p className="label-mono text-muted-foreground/70">
+                  © {new Date().getFullYear()} — {t(UI.footerRights)}
+                </p>
+              </div>
             </div>
           </div>
-          <p className="label-mono mt-12 text-muted-foreground/70">
-            © {new Date().getFullYear()} XR Agency 2030. {t(UI.footerRights)}
-          </p>
         </footer>
       </div>
     </section>
