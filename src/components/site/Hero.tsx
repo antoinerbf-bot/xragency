@@ -3,6 +3,7 @@ import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax } from "./primitives";
 import { Globe } from "./Globe";
+import heroLoop from "@/assets/hero-loop.mp4.asset.json";
 
 const STATS = [
   { value: "50+", key: "statProjects" },
@@ -16,7 +17,18 @@ export function Hero() {
 
   return (
     <section id="top" className="grain relative min-h-screen overflow-hidden pt-28">
-      <Parallax speed={0.22} className="absolute inset-0 lg:left-[22%]">
+      <Parallax speed={0.16} className="absolute inset-0 -top-[10%] h-[120%]">
+        <video
+          src={heroLoop.url}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="h-full w-full object-cover opacity-60 saturate-125"
+        />
+      </Parallax>
+      <Parallax speed={0.3} className="absolute inset-0 opacity-70 lg:left-[26%]">
         <Globe />
       </Parallax>
       <div
@@ -24,7 +36,7 @@ export function Hero() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(120% 80% at 10% 40%, var(--background) 18%, transparent 62%)",
+            "radial-gradient(120% 85% at 8% 45%, var(--background) 26%, transparent 68%), linear-gradient(180deg, color-mix(in oklab, var(--background) 70%, transparent) 0%, transparent 30%, var(--background) 96%)",
         }}
       />
 

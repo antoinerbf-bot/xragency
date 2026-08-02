@@ -6,8 +6,8 @@ import type { L } from "@/lib/i18n";
 export function Logo({ className }: { className?: string }) {
   return (
     <a href="#top" className={cn("group inline-flex items-center", className)}>
-      <span className="label-mono text-sm tracking-[0.4em] text-foreground transition-colors group-hover:text-primary">
-        XRAGENCY
+      <span className="label-mono text-base font-medium tracking-[0.42em] text-foreground transition-colors group-hover:text-primary sm:text-lg">
+        XRAGENCY<span className="text-primary">.</span>
       </span>
     </a>
   );
@@ -124,7 +124,7 @@ export function SectionHeading({
 }) {
   const { t } = useLang();
   return (
-    <div className="max-w-3xl">
+    <Parallax speed={-0.04} className="max-w-3xl">
       <Reveal>
         <p className="label-mono text-primary">{t(label)}</p>
       </Reveal>
@@ -138,7 +138,7 @@ export function SectionHeading({
           <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">{t(lead)}</p>
         </Reveal>
       ) : null}
-    </div>
+    </Parallax>
   );
 }
 
