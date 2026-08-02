@@ -713,7 +713,7 @@ export const PORTFOLIO = [
     sector: { fr: "Gastronomie · Paris", en: "Fine dining · Paris", vi: "Ẩm thực cao cấp · Paris" },
     result: { fr: "+180 % de réservations", en: "+180% bookings", vi: "+180% lượt đặt bàn" },
     tags: ["Website", "SEO Local", "AI"],
-    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1400&q=85",
+    image: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1400&q=85",
   },
   {
     plate: "02",
@@ -721,7 +721,7 @@ export const PORTFOLIO = [
     sector: { fr: "Hôtel boutique · Nice", en: "Boutique hotel · Nice", vi: "Khách sạn boutique · Nice" },
     result: { fr: "+240 % en direct", en: "+240% direct", vi: "+240% đặt trực tiếp" },
     tags: ["Website", "SEO Pro", "Branding"],
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1400&q=85",
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=85",
   },
   {
     plate: "03",
@@ -729,7 +729,7 @@ export const PORTFOLIO = [
     sector: { fr: "Retail de luxe · Global", en: "Luxury retail · Global", vi: "Bán lẻ xa xỉ · Toàn cầu" },
     result: { fr: "6 chiffres au T1", en: "6 figures in Q1", vi: "Doanh thu 6 chữ số quý I" },
     tags: ["E-commerce", "SEO", "Ads"],
-    image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=1400&q=85",
+    image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1400&q=85",
   },
   {
     plate: "04",
@@ -737,7 +737,7 @@ export const PORTFOLIO = [
     sector: { fr: "Cabinet d'avocats · Paris", en: "Law firm · Paris", vi: "Văn phòng luật · Paris" },
     result: { fr: "TOP 1 SEO", en: "TOP 1 SEO", vi: "TOP 1 SEO" },
     tags: ["Website", "Branding", "SEO"],
-    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1400&q=85",
+    image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1400&q=85",
   },
   {
     plate: "05",
@@ -745,7 +745,7 @@ export const PORTFOLIO = [
     sector: { fr: "Studio créatif · Berlin", en: "Creative studio · Berlin", vi: "Studio sáng tạo · Berlin" },
     result: { fr: "Awwwards", en: "Awwwards", vi: "Awwwards" },
     tags: ["Brand identity", "Website"],
-    image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1400&q=85",
+    image: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=1400&q=85",
   },
   {
     plate: "06",
@@ -753,7 +753,7 @@ export const PORTFOLIO = [
     sector: { fr: "Hôtel spa · Bali", en: "Spa hotel · Bali", vi: "Khách sạn spa · Bali" },
     result: { fr: "Conciergerie IA 24/7", en: "24/7 AI concierge", vi: "Lễ tân AI 24/7" },
     tags: ["Website", "AI"],
-    image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1400&q=85",
+    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=85",
   },
   {
     plate: "07",
@@ -761,7 +761,7 @@ export const PORTFOLIO = [
     sector: { fr: "Tech & SaaS · Lisbonne", en: "Tech & SaaS · Lisbon", vi: "Công nghệ & SaaS · Lisbon" },
     result: { fr: "+320 % de leads", en: "+320% leads", vi: "+320% khách hàng tiềm năng" },
     tags: ["Website", "SEO", "AI"],
-    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1400&q=85",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=85",
   },
   {
     plate: "08",
@@ -769,7 +769,7 @@ export const PORTFOLIO = [
     sector: { fr: "E-commerce · Dubaï", en: "E-commerce · Dubai", vi: "Thương mại điện tử · Dubai" },
     result: { fr: "×2,4 sur le panier moyen", en: "2.4× average basket", vi: "Giá trị giỏ hàng ×2,4" },
     tags: ["E-commerce", "Branding", "Ads"],
-    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1400&q=85",
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1400&q=85",
   },
   {
     plate: "09",
@@ -777,7 +777,7 @@ export const PORTFOLIO = [
     sector: { fr: "Studio produit · Berlin", en: "Product studio · Berlin", vi: "Studio sản phẩm · Berlin" },
     result: { fr: "Identité complète en 6 semaines", en: "Full identity in 6 weeks", vi: "Bộ nhận diện hoàn chỉnh trong 6 tuần" },
     tags: ["Brand identity", "Website", "Social"],
-    image: "https://images.unsplash.com/photo-1531973576160-7125cd663d86?auto=format&fit=crop&w=1400&q=85",
+    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=1400&q=85",
   },
 ];
 
