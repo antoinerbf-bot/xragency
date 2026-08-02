@@ -44,7 +44,7 @@ export function Services() {
                       src={v.img}
                       alt={t(s.title)}
                       loading="lazy"
-                      className="h-full w-full scale-105 object-cover opacity-70 grayscale transition-all duration-700 group-hover:scale-110 group-hover:opacity-90 group-hover:grayscale-0"
+                      className="h-full w-full scale-105 object-cover opacity-90 saturate-[0.85] transition-all duration-700 group-hover:scale-110 group-hover:opacity-100 group-hover:saturate-125"
                     />
                   </Parallax>
                   <div
@@ -52,7 +52,7 @@ export function Services() {
                     className="absolute inset-0"
                     style={{
                       background:
-                        "linear-gradient(180deg, color-mix(in oklab, var(--background) 20%, transparent) 0%, color-mix(in oklab, var(--background) 78%, transparent) 55%, var(--background) 100%)",
+                        "linear-gradient(180deg, color-mix(in oklab, var(--background) 10%, transparent) 0%, color-mix(in oklab, var(--background) 80%, transparent) 52%, var(--background) 100%)",
                     }}
                   />
 
