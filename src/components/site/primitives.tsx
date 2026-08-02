@@ -124,7 +124,7 @@ export function SectionHeading({
 }) {
   const { t } = useLang();
   return (
-    <div className="max-w-3xl">
+    <Parallax speed={-0.04} className="max-w-3xl">
       <Reveal>
         <p className="label-mono text-primary">{t(label)}</p>
       </Reveal>
@@ -138,7 +138,7 @@ export function SectionHeading({
           <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">{t(lead)}</p>
         </Reveal>
       ) : null}
-    </div>
+    </Parallax>
   );
 }
 
