@@ -6,8 +6,8 @@ import type { L } from "@/lib/i18n";
 export function Logo({ className }: { className?: string }) {
   return (
     <a href="#top" className={cn("group inline-flex items-center", className)}>
-      <span className="label-mono text-sm tracking-[0.4em] text-foreground transition-colors group-hover:text-primary">
-        XRAGENCY
+      <span className="label-mono text-base font-medium tracking-[0.42em] text-foreground transition-colors group-hover:text-primary sm:text-lg">
+        XRAGENCY<span className="text-primary">.</span>
       </span>
     </a>
   );
