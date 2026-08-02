@@ -25,7 +25,7 @@ export function Hero() {
           loop
           playsInline
           preload="auto"
-          className="h-full w-full object-cover opacity-45"
+          className="h-full w-full object-cover opacity-60 saturate-125"
         />
       </Parallax>
       <Parallax speed={0.3} className="absolute inset-0 opacity-70 lg:left-[26%]">
