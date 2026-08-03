@@ -7,13 +7,13 @@ const u = (id: string) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1400&q=85`;
 
 const VISUAL: Record<string, { img: string; span: string }> = {
-  websites: { img: u("1547658719-da2b51169166"), span: "md:col-span-4 lg:row-span-2" },
-  branding: { img: u("1600096194534-95cf5ece04cf"), span: "md:col-span-2" },
+  websites: { img: u("1481487196290-c152efe083f5"), span: "md:col-span-4 lg:row-span-2" },
+  branding: { img: u("1611224923853-80b023f02d71"), span: "md:col-span-2" },
   seo: { img: u("1460925895917-afdab827c52f"), span: "md:col-span-2" },
   maps: { img: u("1524661135-423995f22d0b"), span: "md:col-span-3" },
-  social: { img: u("1611162617474-5b21e879e113"), span: "md:col-span-3" },
-  maintenance: { img: u("1518770660439-4636190af475"), span: "md:col-span-2" },
-  ai: { img: u("1526628953301-3e589a6a8b74"), span: "md:col-span-4" },
+  social: { img: u("1611162616475-46b635cb6868"), span: "md:col-span-3" },
+  maintenance: { img: u("1558494949-ef010cbdcc31"), span: "md:col-span-2" },
+  ai: { img: u("1552664730-d307ca884978"), span: "md:col-span-4" },
 };
 
 export function Services() {
@@ -31,7 +31,7 @@ export function Services() {
 
         <div className="mt-16 grid auto-rows-[minmax(0,1fr)] gap-5 md:grid-cols-6">
           {SERVICES.map((s, i) => {
-            const v = VISUAL[s.id] ?? { img: u("1547658719-da2b51169166"), span: "md:col-span-2" };
+            const v = VISUAL[s.id] ?? { img: u("1481487196290-c152efe083f5"), span: "md:col-span-2" };
             const wide = v.span.includes("col-span-4");
             return (
               <Reveal key={s.id} delay={i * 60} className={`${v.span} h-full`}>

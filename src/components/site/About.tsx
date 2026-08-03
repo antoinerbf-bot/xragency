@@ -3,9 +3,9 @@ import { UI } from "@/lib/copy";
 import { Parallax, Reveal } from "./primitives";
 
 const STUDIO =
-  "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=1400";
+  "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=85&w=1400";
 const CRAFT =
-  "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800";
+  "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&q=85&w=900";
 
 export function About() {
   const { t } = useLang();
