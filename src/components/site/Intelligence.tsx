@@ -171,7 +171,7 @@ export function Intelligence() {
 
   return (
     <section id="intelligence" className="grain relative overflow-hidden py-24 lg:py-32">
-      <div className="pointer-events-none absolute inset-0 opacity-45">
+      <div className="pointer-events-none absolute inset-0 opacity-15">
         <Globe />
       </div>
       <div className="absolute inset-0" style={{ background: "var(--gradient-halo)" }} />
@@ -277,7 +277,7 @@ export function Intelligence() {
                       >
                         {Icon ? (
                           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border text-primary transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
-                            <Icon className="h-4.5 w-4.5" />
+                            <Icon className="h-4 w-4" />
                           </span>
                         ) : null}
                         <span className="flex-1 font-medium">{t(o.label)}</span>
@@ -318,15 +318,15 @@ export function Intelligence() {
                 </ul>
 
                 <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                  <div className="rounded-2xl border border-border p-5">
+                  <div className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-ember)]">
                     <p className="label-mono text-muted-foreground">{t(UI.intelSetup)}</p>
                     <p className="display-serif mt-2 text-2xl text-primary">{price(setup)}</p>
                   </div>
-                  <div className="rounded-2xl border border-border p-5">
+                  <div className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-ember)]">
                     <p className="label-mono text-muted-foreground">{t(UI.intelRecurring)}</p>
                     <p className="display-serif mt-2 text-2xl text-primary">{price(monthly)}</p>
                   </div>
-                  <div className="rounded-2xl border border-border p-5">
+                  <div className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-ember)]">
                     <p className="label-mono text-muted-foreground">Google Maps</p>
                     <p className="display-serif mt-2 text-2xl text-primary">
                       {yearly ? price(yearly) : "—"}
