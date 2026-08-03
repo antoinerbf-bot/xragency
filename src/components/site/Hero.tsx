@@ -3,7 +3,7 @@ import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax } from "./primitives";
 import { Globe } from "./Globe";
-import heroLoop from "@/assets/hero-loop.mp4.asset.json";
+import heroLoop from "@/assets/hero-studio.mp4.asset.json";
 
 const STATS = [
   { value: "50+", key: "statProjects" },
@@ -25,10 +25,10 @@ export function Hero() {
           loop
           playsInline
           preload="auto"
-          className="h-full w-full object-cover opacity-60 saturate-125"
+          className="h-full w-full object-cover opacity-90 grayscale contrast-105"
         />
       </Parallax>
-      <Parallax speed={0.3} className="absolute inset-0 opacity-70 lg:left-[26%]">
+      <Parallax speed={0.3} className="absolute inset-0 opacity-20 lg:left-[30%]">
         <Globe />
       </Parallax>
       <div
@@ -36,7 +36,7 @@ export function Hero() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(120% 85% at 8% 45%, var(--background) 26%, transparent 68%), linear-gradient(180deg, color-mix(in oklab, var(--background) 70%, transparent) 0%, transparent 30%, var(--background) 96%)",
+            "radial-gradient(115% 90% at 6% 45%, var(--background) 34%, color-mix(in oklab, var(--background) 55%, transparent) 66%, transparent 82%), linear-gradient(180deg, color-mix(in oklab, var(--background) 80%, transparent) 0%, color-mix(in oklab, var(--background) 35%, transparent) 36%, var(--background) 97%)",
         }}
       />
 

@@ -12,6 +12,21 @@ import {
   Sparkles,
   UtensilsCrossed,
   Compass,
+  Search,
+  MapPinned,
+  Megaphone,
+  BadgeCheck,
+  Bot,
+  CreditCard,
+  CircleSlash,
+  History,
+  TrendingDown,
+  TrendingUp,
+  Wallet,
+  Coins,
+  Banknote,
+  Landmark,
+  ArrowRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLang, type L } from "@/lib/i18n";
@@ -36,26 +51,26 @@ const SECTORS: Opt[] = [
 ];
 
 const OBJECTIVES: Opt[] = [
-  { id: "visibility", label: { fr: "Être visible sur Google", en: "Be visible on Google", vi: "Hiển thị trên Google" } },
-  { id: "local", label: { fr: "Attirer des clients de ma zone", en: "Attract customers nearby", vi: "Thu hút khách hàng quanh khu vực" } },
-  { id: "leads", label: { fr: "Générer plus de demandes", en: "Generate more enquiries", vi: "Tạo thêm yêu cầu khách hàng" } },
-  { id: "brand", label: { fr: "Créer une marque forte", en: "Build a strong brand", vi: "Xây dựng thương hiệu mạnh" } },
-  { id: "automation", label: { fr: "Automatiser mon service client", en: "Automate customer service", vi: "Tự động hóa chăm sóc khách hàng" } },
-  { id: "sell", label: { fr: "Vendre ou réserver en ligne", en: "Sell or take bookings online", vi: "Bán hàng hoặc nhận đặt chỗ trực tuyến" } },
+  { id: "visibility", icon: Search, label: { fr: "Être visible sur Google", en: "Be visible on Google", vi: "Hiển thị trên Google" } },
+  { id: "local", icon: MapPinned, label: { fr: "Attirer des clients de ma zone", en: "Attract customers nearby", vi: "Thu hút khách hàng quanh khu vực" } },
+  { id: "leads", icon: Megaphone, label: { fr: "Générer plus de demandes", en: "Generate more enquiries", vi: "Tạo thêm yêu cầu khách hàng" } },
+  { id: "brand", icon: BadgeCheck, label: { fr: "Créer une marque forte", en: "Build a strong brand", vi: "Xây dựng thương hiệu mạnh" } },
+  { id: "automation", icon: Bot, label: { fr: "Automatiser mon service client", en: "Automate customer service", vi: "Tự động hóa chăm sóc khách hàng" } },
+  { id: "sell", icon: CreditCard, label: { fr: "Vendre ou réserver en ligne", en: "Sell or take bookings online", vi: "Bán hàng hoặc nhận đặt chỗ trực tuyến" } },
 ];
 
 const SITUATIONS: Opt[] = [
-  { id: "none", label: { fr: "Je n'ai pas encore de site", en: "I don't have a website yet", vi: "Tôi chưa có website" } },
-  { id: "old", label: { fr: "Mon site est dépassé", en: "My website is outdated", vi: "Website của tôi đã lỗi thời" } },
-  { id: "notraffic", label: { fr: "Mon site existe mais ne convertit pas", en: "My site exists but doesn't convert", vi: "Website có nhưng không chuyển đổi" } },
-  { id: "solid", label: { fr: "Mon site est bon, je veux accélérer", en: "My site is good, I want to scale", vi: "Website tốt, tôi muốn tăng tốc" } },
+  { id: "none", icon: CircleSlash, label: { fr: "Je n'ai pas encore de site", en: "I don't have a website yet", vi: "Tôi chưa có website" } },
+  { id: "old", icon: History, label: { fr: "Mon site est dépassé", en: "My website is outdated", vi: "Website của tôi đã lỗi thời" } },
+  { id: "notraffic", icon: TrendingDown, label: { fr: "Mon site existe mais ne convertit pas", en: "My site exists but doesn't convert", vi: "Website có nhưng không chuyển đổi" } },
+  { id: "solid", icon: TrendingUp, label: { fr: "Mon site est bon, je veux accélérer", en: "My site is good, I want to scale", vi: "Website tốt, tôi muốn tăng tốc" } },
 ];
 
 const BUDGETS: Opt[] = [
-  { id: "s", label: { fr: "Moins de 300 € / mois", en: "Under $325 / month", vi: "Dưới 8.400.000 ₫ / tháng" } },
-  { id: "m", label: { fr: "300 — 800 € / mois", en: "$325 — $865 / month", vi: "8.400.000 — 22.400.000 ₫ / tháng" } },
-  { id: "l", label: { fr: "800 — 2 000 € / mois", en: "$865 — $2,160 / month", vi: "22.400.000 — 56.000.000 ₫ / tháng" } },
-  { id: "xl", label: { fr: "Plus de 2 000 € / mois", en: "Over $2,160 / month", vi: "Trên 56.000.000 ₫ / tháng" } },
+  { id: "s", icon: Wallet, label: { fr: "Moins de 300 € / mois", en: "Under $325 / month", vi: "Dưới 8.400.000 ₫ / tháng" } },
+  { id: "m", icon: Coins, label: { fr: "300 — 800 € / mois", en: "$325 — $865 / month", vi: "8.400.000 — 22.400.000 ₫ / tháng" } },
+  { id: "l", icon: Banknote, label: { fr: "800 — 2 000 € / mois", en: "$865 — $2,160 / month", vi: "22.400.000 — 56.000.000 ₫ / tháng" } },
+  { id: "xl", icon: Landmark, label: { fr: "Plus de 2 000 € / mois", en: "Over $2,160 / month", vi: "Trên 56.000.000 ₫ / tháng" } },
 ];
 
 const svc = (id: string) => SERVICES.find((s) => s.id === id)!;
@@ -156,7 +171,7 @@ export function Intelligence() {
 
   return (
     <section id="intelligence" className="grain relative overflow-hidden py-24 lg:py-32">
-      <div className="pointer-events-none absolute inset-0 opacity-45">
+      <div className="pointer-events-none absolute inset-0 opacity-15">
         <Globe />
       </div>
       <div className="absolute inset-0" style={{ background: "var(--gradient-halo)" }} />
@@ -185,18 +200,56 @@ export function Intelligence() {
           <div className="surface-plate mt-10 rounded-3xl p-6 sm:p-10">
             {!done ? (
               <>
-                <div className="flex items-center gap-4">
-                  <Sparkles className="h-4 w-4 text-primary" />
-                  <span className="label-mono text-muted-foreground">
-                    {t(UI.intelStep)} {step + 1} {t(UI.intelOf)} 4
-                  </span>
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <Sparkles className="h-4 w-4 animate-pulse text-primary" />
+                    <span className="label-mono text-muted-foreground">
+                      {t(UI.intelStep)} {step + 1} {t(UI.intelOf)} 4
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {steps.map((st, i) => (
+                      <button
+                        key={st.key}
+                        onClick={() => i < step && setStep(i)}
+                        disabled={i > step}
+                        aria-label={`step-${i + 1}`}
+                        className={cn(
+                          "h-1.5 rounded-full transition-all duration-500",
+                          i === step
+                            ? "w-10 bg-primary"
+                            : i < step
+                              ? "w-6 cursor-pointer bg-primary/45 hover:bg-primary"
+                              : "w-6 bg-border",
+                        )}
+                      />
+                    ))}
+                  </div>
                 </div>
                 <div className="mt-4 h-px w-full bg-border">
                   <div
-                    className="h-px bg-primary transition-all duration-500"
+                    className="h-px bg-primary transition-all duration-700"
                     style={{ width: `${((step + 1) / 4) * 100}%` }}
                   />
                 </div>
+
+                {step > 0 ? (
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {steps.slice(0, step).map((st, i) => {
+                      const chosen = st.options.find((o) => o.id === answers[st.key]);
+                      if (!chosen) return null;
+                      return (
+                        <button
+                          key={st.key}
+                          onClick={() => setStep(i)}
+                          className="label-mono rounded-full border border-border bg-background/60 px-3 py-1 text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                        >
+                          {t(chosen.label)}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : null}
 
                 <p className="mt-8 text-sm leading-relaxed text-muted-foreground">
                   {t(UI.intelIntro)}
@@ -206,7 +259,7 @@ export function Intelligence() {
                 </h3>
 
                 <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                  {steps[step].options.map((o) => {
+                  {steps[step].options.map((o, i) => {
                     const active = answers[steps[step].key] === o.id;
                     const Icon = o.icon;
                     return (
@@ -216,20 +269,19 @@ export function Intelligence() {
                           setAnswers((a) => ({ ...a, [steps[step].key]: o.id }));
                           setStep((s) => s + 1);
                         }}
+                        style={{ animation: `ember-rise 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 45}ms both` }}
                         className={cn(
-                          "group flex items-center gap-4 rounded-2xl border border-border bg-background/40 px-5 py-4 text-left text-sm backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/70 hover:bg-primary/5 hover:shadow-[var(--shadow-ember)]",
-                          active && "border-primary bg-primary/10",
+                          "group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-border bg-card px-5 py-5 text-left text-sm shadow-[var(--shadow-ember)] transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-[var(--shadow-plate)]",
+                          active && "border-primary bg-accent",
                         )}
                       >
                         {Icon ? (
-                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border text-primary transition-colors group-hover:border-primary/70 group-hover:bg-primary/10">
+                          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border text-primary transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
                             <Icon className="h-4 w-4" />
                           </span>
                         ) : null}
-                        <span className="flex-1">{t(o.label)}</span>
-                        <span className="label-mono text-muted-foreground transition-all group-hover:translate-x-1 group-hover:text-primary">
-                          →
-                        </span>
+                        <span className="flex-1 font-medium">{t(o.label)}</span>
+                        <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-all group-hover:translate-x-1 group-hover:text-primary" />
                       </button>
                     );
                   })}
@@ -266,15 +318,15 @@ export function Intelligence() {
                 </ul>
 
                 <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                  <div className="rounded-2xl border border-border p-5">
+                  <div className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-ember)]">
                     <p className="label-mono text-muted-foreground">{t(UI.intelSetup)}</p>
                     <p className="display-serif mt-2 text-2xl text-primary">{price(setup)}</p>
                   </div>
-                  <div className="rounded-2xl border border-border p-5">
+                  <div className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-ember)]">
                     <p className="label-mono text-muted-foreground">{t(UI.intelRecurring)}</p>
                     <p className="display-serif mt-2 text-2xl text-primary">{price(monthly)}</p>
                   </div>
-                  <div className="rounded-2xl border border-border p-5">
+                  <div className="rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-ember)]">
                     <p className="label-mono text-muted-foreground">Google Maps</p>
                     <p className="display-serif mt-2 text-2xl text-primary">
                       {yearly ? price(yearly) : "—"}
