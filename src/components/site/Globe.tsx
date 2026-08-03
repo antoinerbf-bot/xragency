@@ -47,25 +47,25 @@ export function Globe({ className }: { className?: string }) {
       >
         <defs>
           <radialGradient id="globeFill" cx="45%" cy="35%">
-            <stop offset="0%" stopColor="oklch(0.785 0.175 58 / 0.18)" />
-            <stop offset="55%" stopColor="oklch(0.76 0.13 232 / 0.07)" />
+            <stop offset="0%" stopColor="oklch(0.18 0 0 / 0.06)" />
+            <stop offset="55%" stopColor="oklch(0.18 0 0 / 0.03)" />
             <stop offset="100%" stopColor="transparent" />
           </radialGradient>
           <linearGradient id="globeRim" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="oklch(0.85 0.17 62 / 0.65)" />
-            <stop offset="55%" stopColor="oklch(0.79 0.14 168 / 0.35)" />
-            <stop offset="100%" stopColor="oklch(0.76 0.13 232 / 0.55)" />
+            <stop offset="0%" stopColor="oklch(0.18 0 0 / 0.55)" />
+            <stop offset="55%" stopColor="oklch(0.18 0 0 / 0.28)" />
+            <stop offset="100%" stopColor="oklch(0.18 0 0 / 0.45)" />
           </linearGradient>
         </defs>
         <circle r="100" fill="url(#globeFill)" stroke="url(#globeRim)" strokeWidth="0.7" />
-        <circle r="110" fill="none" stroke="oklch(0.785 0.175 58 / 0.14)" strokeWidth="0.3" strokeDasharray="2 6" />
+        <circle r="110" fill="none" stroke="oklch(0.18 0 0 / 0.16)" strokeWidth="0.3" strokeDasharray="2 6" />
         {meridians.map((k, i) => (
           <ellipse
             key={`m${i}`}
             rx={100 * k}
             ry="100"
             fill="none"
-            stroke={i % 2 ? "oklch(0.76 0.13 232 / 0.22)" : "oklch(0.785 0.175 58 / 0.26)"}
+            stroke={i % 2 ? "oklch(0.18 0 0 / 0.24)" : "oklch(0.18 0 0 / 0.3)"}
             strokeWidth="0.35"
           />
         ))}
@@ -76,7 +76,7 @@ export function Globe({ className }: { className?: string }) {
             rx={100 * Math.sqrt(1 - p * p)}
             ry={100 * Math.sqrt(1 - p * p) * 0.16}
             fill="none"
-            stroke={i % 2 ? "oklch(0.79 0.14 168 / 0.18)" : "oklch(0.785 0.175 58 / 0.22)"}
+            stroke={i % 2 ? "oklch(0.18 0 0 / 0.2)" : "oklch(0.18 0 0 / 0.26)"}
             strokeWidth="0.35"
           />
         ))}
@@ -91,7 +91,7 @@ export function Globe({ className }: { className?: string }) {
             key={`a${i}`}
             d={d}
             fill="none"
-            stroke="oklch(0.85 0.17 62 / 0.4)"
+            stroke="oklch(0.18 0 0 / 0.4)"
             strokeWidth="0.5"
             strokeDasharray="3 5"
             className="animate-pulse-soft"
@@ -108,10 +108,10 @@ export function Globe({ className }: { className?: string }) {
         ].map(([x, y], i) => {
           const c =
             i % 3 === 0
-              ? "oklch(0.76 0.13 232)"
+              ? "oklch(0.35 0 0)"
               : i % 3 === 1
-                ? "oklch(0.79 0.14 168)"
-                : "oklch(0.85 0.17 62)";
+                ? "oklch(0.5 0 0)"
+                : "oklch(0.18 0 0)";
           return (
             <g key={`d${i}`} className="animate-pulse-soft" style={{ animationDelay: `${i * 420}ms` }}>
               <circle cx={x} cy={y} r="5" fill={c} opacity="0.14" />
