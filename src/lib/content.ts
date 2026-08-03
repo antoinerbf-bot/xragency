@@ -737,7 +737,7 @@ export const PORTFOLIO = [
     sector: { fr: "Cabinet d'avocats · Paris", en: "Law firm · Paris", vi: "Văn phòng luật · Paris" },
     result: { fr: "TOP 1 SEO", en: "TOP 1 SEO", vi: "TOP 1 SEO" },
     tags: ["Website", "Branding", "SEO"],
-    image: "https://images.unsplash.com/photo-1568992687947-868a62a9f521?auto=format&fit=crop&w=1400&q=85",
+    image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1400&q=85",
   },
   {
     plate: "05",
