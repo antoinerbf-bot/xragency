@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { PERIOD_LABEL, SERVICES } from "@/lib/content";
-import { EmberButton, Reveal, SectionHeading } from "./primitives";
+import { EmberButton, Parallax, Reveal, SectionHeading } from "./primitives";
 
 export function Pricing() {
   const { t, price } = useLang();
@@ -40,8 +40,9 @@ export function Pricing() {
           </div>
         </Reveal>
 
-        <div
+        <Parallax
           key={service.id}
+          speed={0.035}
           className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3"
         >
           {service.plans.map((p, i) => (
