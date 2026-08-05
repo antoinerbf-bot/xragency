@@ -90,7 +90,7 @@ export function Pricing() {
               </EmberButton>
             </article>
           ))}
-        </div>
+        </Parallax>
       </div>
     </section>
   );
