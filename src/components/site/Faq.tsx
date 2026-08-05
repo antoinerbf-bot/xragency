@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { FAQ } from "@/lib/content";
-import { Reveal, SectionHeading } from "./primitives";
+import { Parallax, Reveal, SectionHeading } from "./primitives";
 
 export function Faq() {
   const { t } = useLang();
