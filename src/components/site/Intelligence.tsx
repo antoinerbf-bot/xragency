@@ -86,7 +86,8 @@ function buildReco(sector: string, objective: string, situation: string, budget:
 
   const websites = svc("websites");
   const needsBooking = objective === "sell" || BOOKING_SECTORS.includes(sector);
-  if (situation === "none" || situation === "old" || needsBooking) {
+  const buildsSite = situation === "none" || situation === "old" || needsBooking;
+  if (buildsSite) {
     // Booking / e-commerce sectors always get the transactional plan (1099 €).
     const idx = needsBooking ? 2 : Math.min(tier, 2);
     const p = websites.plans[idx];
@@ -123,9 +124,12 @@ function buildReco(sector: string, objective: string, situation: string, budget:
     out.push({ title: social.title, plan: p.name, eur: p.eur, period: "month" });
   }
 
-  const maint = svc("maintenance");
-  const mp = maint.plans[Math.min(tier, 2)];
-  out.push({ title: maint.title, plan: mp.name, eur: mp.eur, period: "month" });
+  // Maintenance only makes sense when a site is built or already exists online.
+  if (buildsSite || situation === "notraffic" || situation === "solid") {
+    const maint = svc("maintenance");
+    const mp = maint.plans[Math.min(tier, 2)];
+    out.push({ title: maint.title, plan: mp.name, eur: mp.eur, period: "month" });
+  }
 
   return out;
 }
