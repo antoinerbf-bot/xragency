@@ -50,9 +50,6 @@ export const SERVICES: Service[] = [
   {
     id: "websites",
     num: "01",
-    rating: 5,
-    city: "Torino, IT",
-    date: { fr: "Mars 2025", en: "March 2025", vi: "Tháng 3/2025" },
     title: {
       fr: "Création de sites web",
       en: "Website Creation",
@@ -143,9 +140,6 @@ export const SERVICES: Service[] = [
   {
     id: "branding",
     num: "02",
-    rating: 5,
-    city: "Singapore, SG",
-    date: { fr: "Janvier 2025", en: "January 2025", vi: "Tháng 1/2025" },
     title: { fr: "Branding & Identité", en: "Branding & Identity", vi: "Thương hiệu & Nhận diện" },
     short: {
       fr: "Identités durables, systèmes complets, typographie propriétaire.",
@@ -213,9 +207,6 @@ export const SERVICES: Service[] = [
   {
     id: "seo",
     num: "03",
-    rating: 5,
-    city: "Montreux, CH",
-    date: { fr: "Février 2025", en: "February 2025", vi: "Tháng 2/2025" },
     title: { fr: "SEO Domination System", en: "SEO Domination System", vi: "Hệ thống Thống trị SEO" },
     short: {
       fr: "Sémantique, netlinking, autorité. Position par position.",
@@ -315,9 +306,6 @@ export const SERVICES: Service[] = [
   {
     id: "maps",
     num: "04",
-    rating: 5,
-    city: "New York, US",
-    date: { fr: "Avril 2025", en: "April 2025", vi: "Tháng 4/2025" },
     title: { fr: "Google Maps TOP 3", en: "Google Maps TOP 3", vi: "Google Maps TOP 3" },
     short: {
       fr: "Local pack, avis, photos. Le trafic qui appelle.",
@@ -805,6 +793,9 @@ export const PORTFOLIO = [
 export const TESTIMONIALS = [
   {
     num: "01",
+    rating: 5,
+    city: "Torino, IT",
+    date: { fr: "Mars 2025", en: "March 2025", vi: "Tháng 3/2025" },
     brand: "Pininfarina",
     field: { fr: "Ingénierie & Performance", en: "Engineering & Performance", vi: "Kỹ thuật & Hiệu năng" },
     quote: {
@@ -817,6 +808,9 @@ export const TESTIMONIALS = [
   },
   {
     num: "02",
+    rating: 5,
+    city: "Singapore, SG",
+    date: { fr: "Janvier 2025", en: "January 2025", vi: "Tháng 1/2025" },
     brand: "Aman Resorts",
     field: { fr: "Expérience & Réservation", en: "Experience & Booking", vi: "Trải nghiệm & Đặt phòng" },
     quote: {
@@ -829,6 +823,9 @@ export const TESTIMONIALS = [
   },
   {
     num: "03",
+    rating: 5,
+    city: "Montreux, CH",
+    date: { fr: "Février 2025", en: "February 2025", vi: "Tháng 2/2025" },
     brand: "Clinique La Prairie",
     field: { fr: "Santé & Longévité", en: "Health & Longevity", vi: "Sức khỏe & Trường thọ" },
     quote: {
@@ -841,6 +838,9 @@ export const TESTIMONIALS = [
   },
   {
     num: "04",
+    rating: 5,
+    city: "New York, US",
+    date: { fr: "Avril 2025", en: "April 2025", vi: "Tháng 4/2025" },
     brand: "Bespoke Real Estate",
     field: { fr: "Immobilier ultra-luxe", en: "Ultra-luxury real estate", vi: "Bất động sản siêu sang" },
     quote: {
