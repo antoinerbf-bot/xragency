@@ -1,3 +1,4 @@
+import { Star } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { PORTFOLIO, TESTIMONIALS } from "@/lib/content";
@@ -71,19 +72,30 @@ export function Testimonials() {
         <div className="mt-14 grid gap-6 md:grid-cols-2">
           {TESTIMONIALS.map((tm, i) => (
             <Reveal key={tm.num} delay={i * 70}>
-              <figure className="surface-plate h-full rounded-3xl p-8">
-                <div className="flex items-baseline justify-between">
-                  <span className="label-mono text-primary">{tm.num}</span>
-                  <span className="label-mono text-muted-foreground">{t(tm.field)}</span>
-                </div>
-                <h3 className="display-serif mt-5 text-2xl">{tm.brand}</h3>
-                <blockquote className="mt-5 text-base leading-relaxed text-muted-foreground">
-                  {t(tm.quote)}
-                </blockquote>
-                <figcaption className="label-mono mt-7 border-t border-border pt-5 text-muted-foreground">
-                  {tm.author} — {t(tm.role)}
-                </figcaption>
-              </figure>
+              <Parallax speed={i % 2 ? 0.03 : -0.03}>
+                <figure className="surface-plate h-full rounded-3xl p-8 transition-all duration-500 hover:-translate-y-1 hover:border-primary/40">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <span className="flex gap-0.5 text-primary">
+                      {Array.from({ length: tm.rating }).map((_, s) => (
+                        <Star key={s} className="h-3.5 w-3.5 fill-current" />
+                      ))}
+                    </span>
+                    <span className="label-mono text-muted-foreground">{t(tm.field)}</span>
+                  </div>
+                  <h3 className="display-serif mt-5 text-2xl">{tm.brand}</h3>
+                  <blockquote className="mt-5 text-base leading-relaxed text-muted-foreground">
+                    {t(tm.quote)}
+                  </blockquote>
+                  <figcaption className="mt-7 flex flex-wrap items-baseline justify-between gap-2 border-t border-border pt-5">
+                    <span className="label-mono text-foreground">
+                      {tm.author} — {t(tm.role)}
+                    </span>
+                    <span className="label-mono text-muted-foreground/70">
+                      {tm.city} · {t(tm.date)}
+                    </span>
+                  </figcaption>
+                </figure>
+              </Parallax>
             </Reveal>
           ))}
         </div>

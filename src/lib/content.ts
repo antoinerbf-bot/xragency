@@ -1,4 +1,13 @@
 import type { L } from "./i18n";
+import pf01 from "@/assets/pf-01-maison-lumiere.jpg";
+import pf02 from "@/assets/pf-02-villa-azur.jpg";
+import pf03 from "@/assets/pf-03-noir-or.jpg";
+import pf04 from "@/assets/pf-04-cabinet-mercier.jpg";
+import pf05 from "@/assets/pf-05-elan-studio.jpg";
+import pf06 from "@/assets/pf-06-zen-retreat.jpg";
+import pf07 from "@/assets/pf-07-lumina-digital.jpg";
+import pf08 from "@/assets/pf-08-neo-gear.jpg";
+import pf09 from "@/assets/pf-09-synth-os.jpg";
 
 export const CONTACT = {
   email: "contact.xragency@gmail.com",
@@ -6,7 +15,7 @@ export const CONTACT = {
   phone: "+33 7 67 56 67 83",
   instagram: "https://www.instagram.com/xragency_",
   linkedin: "https://linkedin.com/company/xragency",
-  cities: "Paris · Da Nang · Dubai",
+  cities: "Paris · Dubaï · Tokyo · New York",
 };
 
 export type Plan = {
@@ -713,7 +722,7 @@ export const PORTFOLIO = [
     sector: { fr: "Gastronomie · Paris", en: "Fine dining · Paris", vi: "Ẩm thực cao cấp · Paris" },
     result: { fr: "+180 % de réservations", en: "+180% bookings", vi: "+180% lượt đặt bàn" },
     tags: ["Website", "SEO Local", "AI"],
-    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1400&q=85",
+    image: pf01,
   },
   {
     plate: "02",
@@ -721,7 +730,7 @@ export const PORTFOLIO = [
     sector: { fr: "Hôtel boutique · Nice", en: "Boutique hotel · Nice", vi: "Khách sạn boutique · Nice" },
     result: { fr: "+240 % en direct", en: "+240% direct", vi: "+240% đặt trực tiếp" },
     tags: ["Website", "SEO Pro", "Branding"],
-    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=85",
+    image: pf02,
   },
   {
     plate: "03",
@@ -729,7 +738,7 @@ export const PORTFOLIO = [
     sector: { fr: "Retail de luxe · Global", en: "Luxury retail · Global", vi: "Bán lẻ xa xỉ · Toàn cầu" },
     result: { fr: "6 chiffres au T1", en: "6 figures in Q1", vi: "Doanh thu 6 chữ số quý I" },
     tags: ["E-commerce", "SEO", "Ads"],
-    image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=1400&q=85",
+    image: pf03,
   },
   {
     plate: "04",
@@ -737,7 +746,7 @@ export const PORTFOLIO = [
     sector: { fr: "Cabinet d'avocats · Paris", en: "Law firm · Paris", vi: "Văn phòng luật · Paris" },
     result: { fr: "TOP 1 SEO", en: "TOP 1 SEO", vi: "TOP 1 SEO" },
     tags: ["Website", "Branding", "SEO"],
-    image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1400&q=85",
+    image: pf04,
   },
   {
     plate: "05",
@@ -745,7 +754,7 @@ export const PORTFOLIO = [
     sector: { fr: "Studio créatif · Berlin", en: "Creative studio · Berlin", vi: "Studio sáng tạo · Berlin" },
     result: { fr: "Awwwards", en: "Awwwards", vi: "Awwwards" },
     tags: ["Brand identity", "Website"],
-    image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1400&q=85",
+    image: pf05,
   },
   {
     plate: "06",
@@ -753,7 +762,7 @@ export const PORTFOLIO = [
     sector: { fr: "Hôtel spa · Bali", en: "Spa hotel · Bali", vi: "Khách sạn spa · Bali" },
     result: { fr: "Conciergerie IA 24/7", en: "24/7 AI concierge", vi: "Lễ tân AI 24/7" },
     tags: ["Website", "AI"],
-    image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1400&q=85",
+    image: pf06,
   },
   {
     plate: "07",
@@ -761,7 +770,7 @@ export const PORTFOLIO = [
     sector: { fr: "Tech & SaaS · Lisbonne", en: "Tech & SaaS · Lisbon", vi: "Công nghệ & SaaS · Lisbon" },
     result: { fr: "+320 % de leads", en: "+320% leads", vi: "+320% khách hàng tiềm năng" },
     tags: ["Website", "SEO", "AI"],
-    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1400&q=85",
+    image: pf07,
   },
   {
     plate: "08",
@@ -769,7 +778,7 @@ export const PORTFOLIO = [
     sector: { fr: "E-commerce · Dubaï", en: "E-commerce · Dubai", vi: "Thương mại điện tử · Dubai" },
     result: { fr: "×2,4 sur le panier moyen", en: "2.4× average basket", vi: "Giá trị giỏ hàng ×2,4" },
     tags: ["E-commerce", "Branding", "Ads"],
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1400&q=85",
+    image: pf08,
   },
   {
     plate: "09",
@@ -777,13 +786,16 @@ export const PORTFOLIO = [
     sector: { fr: "Studio produit · Berlin", en: "Product studio · Berlin", vi: "Studio sản phẩm · Berlin" },
     result: { fr: "Identité complète en 6 semaines", en: "Full identity in 6 weeks", vi: "Bộ nhận diện hoàn chỉnh trong 6 tuần" },
     tags: ["Brand identity", "Website", "Social"],
-    image: "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=1400&q=85",
+    image: pf09,
   },
 ];
 
 export const TESTIMONIALS = [
   {
     num: "01",
+    rating: 5,
+    city: "Torino, IT",
+    date: { fr: "Mars 2025", en: "March 2025", vi: "Tháng 3/2025" },
     brand: "Pininfarina",
     field: { fr: "Ingénierie & Performance", en: "Engineering & Performance", vi: "Kỹ thuật & Hiệu năng" },
     quote: {
@@ -796,6 +808,9 @@ export const TESTIMONIALS = [
   },
   {
     num: "02",
+    rating: 5,
+    city: "Singapore, SG",
+    date: { fr: "Janvier 2025", en: "January 2025", vi: "Tháng 1/2025" },
     brand: "Aman Resorts",
     field: { fr: "Expérience & Réservation", en: "Experience & Booking", vi: "Trải nghiệm & Đặt phòng" },
     quote: {
@@ -808,6 +823,9 @@ export const TESTIMONIALS = [
   },
   {
     num: "03",
+    rating: 5,
+    city: "Montreux, CH",
+    date: { fr: "Février 2025", en: "February 2025", vi: "Tháng 2/2025" },
     brand: "Clinique La Prairie",
     field: { fr: "Santé & Longévité", en: "Health & Longevity", vi: "Sức khỏe & Trường thọ" },
     quote: {
@@ -820,6 +838,9 @@ export const TESTIMONIALS = [
   },
   {
     num: "04",
+    rating: 5,
+    city: "New York, US",
+    date: { fr: "Avril 2025", en: "April 2025", vi: "Tháng 4/2025" },
     brand: "Bespoke Real Estate",
     field: { fr: "Immobilier ultra-luxe", en: "Ultra-luxury real estate", vi: "Bất động sản siêu sang" },
     quote: {

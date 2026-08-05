@@ -2,7 +2,7 @@ import { Star } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { SERVICES } from "@/lib/content";
-import { EmberButton, Reveal } from "./primitives";
+import { EmberButton, Parallax, Reveal } from "./primitives";
 
 export function Feature() {
   const { t, price } = useLang();
@@ -49,7 +49,7 @@ export function Feature() {
           </div>
 
           <Reveal delay={140}>
-            <div className="surface-plate rounded-3xl p-6 sm:p-8">
+            <Parallax speed={0.05} className="surface-plate rounded-3xl p-6 sm:p-8">
               <p className="label-mono text-muted-foreground">{t(UI.mapsLocalPack)}</p>
               <div className="mt-6 space-y-3">
                 {[
@@ -78,14 +78,14 @@ export function Feature() {
                 <span className="display-serif text-4xl text-primary">+340%</span>
                 <span className="label-mono text-muted-foreground">{t(UI.mapsVisibility)}</span>
               </div>
-            </div>
+            </Parallax>
           </Reveal>
         </div>
 
         {/* AI assistants */}
         <div className="mt-28 grid gap-12 lg:grid-cols-2 lg:items-center">
           <Reveal>
-            <div className="surface-plate order-2 rounded-3xl p-6 sm:p-8">
+            <Parallax speed={-0.05} className="surface-plate order-2 rounded-3xl p-6 sm:p-8">
               <p className="label-mono text-muted-foreground">{t(UI.aiCompare)}</p>
               <div className="mt-6 grid grid-cols-3 gap-4 border-b border-border pb-3">
                 <span className="label-mono text-muted-foreground">{t(UI.aiFeature)}</span>
@@ -104,7 +104,7 @@ export function Feature() {
                   <span className="text-sm text-primary">{row[2]}</span>
                 </div>
               ))}
-            </div>
+            </Parallax>
           </Reveal>
 
           <div>
