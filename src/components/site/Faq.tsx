@@ -15,7 +15,7 @@ export function Faq() {
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <SectionHeading label={UI.faqLabel} line1={UI.faqTitle1} line2={UI.faqTitle2} />
 
-        <div className="mt-14 border-t border-border">
+        <Parallax speed={0.03} className="mt-14 border-t border-border">
           {FAQ.map((item, i) => {
             const active = open === i;
             return (
@@ -50,7 +50,7 @@ export function Faq() {
               </Reveal>
             );
           })}
-        </div>
+        </Parallax>
       </div>
     </section>
   );
