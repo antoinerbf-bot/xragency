@@ -6,7 +6,7 @@ import { Globe } from "./Globe";
 import heroLoop from "@/assets/hero-studio.mp4.asset.json";
 
 const STATS = [
-  { value: "50+", key: "statProjects" },
+  { value: "500+", key: "statProjects" },
   { value: "8+", key: "statYears" },
   { value: "100%", key: "statRemote" },
   { value: "24/7", key: "statProduction" },

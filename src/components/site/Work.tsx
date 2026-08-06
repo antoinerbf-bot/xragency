@@ -69,10 +69,10 @@ export function Testimonials() {
           <p className="label-mono mt-6 text-primary">{t(UI.trustRating)}</p>
         </Reveal>
 
-        <div className="mt-14 grid gap-6 md:grid-cols-2">
+        <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {TESTIMONIALS.map((tm, i) => (
             <Reveal key={tm.num} delay={i * 70}>
-              <Parallax speed={i % 2 ? 0.03 : -0.03}>
+              <Parallax speed={i % 3 === 1 ? 0.05 : i % 3 === 2 ? -0.04 : 0.02}>
                 <figure className="surface-plate h-full rounded-3xl p-8 transition-all duration-500 hover:-translate-y-1 hover:border-primary/40">
                   <div className="flex items-baseline justify-between gap-4">
                     <span className="flex gap-0.5 text-primary">
