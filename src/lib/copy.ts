@@ -92,6 +92,26 @@ export const UI: Record<string, L> = {
     en: "Indicative estimate based on our published price lists. The final quote is confirmed within 24 hours.",
     vi: "Ước tính tham khảo dựa trên bảng giá của chúng tôi. Báo giá cuối cùng được xác nhận trong 24 giờ.",
   },
+  intelWhy: { fr: "Pourquoi", en: "Why", vi: "Vì sao" },
+  intelOptionsTitle: { fr: "Options & suppléments", en: "Options & add-ons", vi: "Tùy chọn & phụ phí" },
+  intelOptionLang: {
+    fr: "Langue supplémentaire — 100 € par langue",
+    en: "Extra language — $108 per language",
+    vi: "Ngôn ngữ bổ sung — 100 € mỗi ngôn ngữ",
+  },
+  intelOptionBooking: {
+    fr: "Système de réservation en ligne — sur devis",
+    en: "Online booking system — on quote",
+    vi: "Hệ thống đặt chỗ trực tuyến — theo báo giá",
+  },
+  intelOptionEcom: {
+    fr: "E-commerce à partir de 1 099 € — ajusté selon le nombre de produits",
+    en: "E-commerce from $1,187 — adjusted to the number of products",
+    vi: "Thương mại điện tử từ 1.099 € — điều chỉnh theo số lượng sản phẩm",
+  },
+  intelTimeline: { fr: "Mise en ligne estimée", en: "Estimated go-live", vi: "Dự kiến ra mắt" },
+  intelTimelineValue: { fr: "7 à 21 jours", en: "7 to 21 days", vi: "7 đến 21 ngày" },
+  intelProgress: { fr: "Analyse", en: "Analysis", vi: "Phân tích" },
 
   servicesLabel: { fr: "Nos services", en: "Our services", vi: "Dịch vụ của chúng tôi" },
   servicesTitle1: { fr: "Ce que nous", en: "What we", vi: "Những gì chúng tôi" },
