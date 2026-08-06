@@ -19,12 +19,12 @@ export const LANGS: { code: Lang; label: string; flag: string }[] = [
 
 /**
  * Reference prices are stored once, in EUR.
- * Fixed conversion rates keep every displayed amount consistent across locales.
+ * Vietnam pricing uses a 20% market adjustment on top of the VND conversion rate.
  */
 export const RATES: Record<Lang, number> = {
   fr: 1,
   en: 1.08,
-  vi: 28000,
+  vi: 22400,
 };
 
 export function formatPrice(eur: number, lang: Lang): string {
