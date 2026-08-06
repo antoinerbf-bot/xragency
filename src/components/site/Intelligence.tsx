@@ -383,16 +383,28 @@ export function Intelligence() {
 
                 <ul className="mt-8 divide-y divide-border border-y border-border">
                   {reco.map((r, i) => (
-                    <li key={i} className="flex flex-wrap items-center gap-3 py-4">
-                      <Check className="h-4 w-4 shrink-0 text-primary" />
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm text-foreground">{t(r.plan)}</p>
-                        <p className="label-mono mt-1 text-muted-foreground">{t(r.title)}</p>
+                    <li
+                      key={i}
+                      style={{ animation: `ember-rise 0.6s cubic-bezier(0.16,1,0.3,1) ${i * 70}ms both` }}
+                      className="group py-5"
+                    >
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-primary/40 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                          <Check className="h-3.5 w-3.5" />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium text-foreground">{t(r.plan)}</p>
+                          <p className="label-mono mt-1 text-muted-foreground">{t(r.title)}</p>
+                        </div>
+                        <span className="label-mono text-primary">
+                          {price(r.eur)}
+                          {r.period === "month" ? " /m" : r.period === "year" ? " /a" : ""}
+                        </span>
                       </div>
-                      <span className="label-mono text-primary">
-                        {price(r.eur)}
-                        {r.period === "month" ? " /m" : r.period === "year" ? " /a" : ""}
-                      </span>
+                      <p className="mt-3 pl-10 text-xs leading-relaxed text-muted-foreground">
+                        <span className="label-mono text-primary">{t(UI.intelWhy)} · </span>
+                        {t(r.why)}
+                      </p>
                     </li>
                   ))}
                 </ul>
@@ -412,6 +424,23 @@ export function Intelligence() {
                       {yearly ? price(yearly) : "—"}
                     </p>
                   </div>
+                </div>
+
+                <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card px-5 py-4">
+                  <span className="label-mono text-muted-foreground">{t(UI.intelTimeline)}</span>
+                  <span className="label-mono text-primary">{t(UI.intelTimelineValue)}</span>
+                </div>
+
+                <div className="mt-6 rounded-2xl border border-dashed border-border p-5">
+                  <p className="label-mono text-muted-foreground">{t(UI.intelOptionsTitle)}</p>
+                  <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+                    {[UI.intelOptionLang, UI.intelOptionBooking, UI.intelOptionEcom].map((o, k) => (
+                      <li key={k} className="flex gap-3">
+                        <span className="text-primary">+</span>
+                        <span>{t(o)}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
                 <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
