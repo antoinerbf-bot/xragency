@@ -75,7 +75,7 @@ const BUDGETS: Opt[] = [
 
 const svc = (id: string) => SERVICES.find((s) => s.id === id)!;
 
-type Reco = { title: L; plan: L; eur: number; period: "once" | "month" | "year" };
+type Reco = { title: L; plan: L; eur: number; period: "once" | "month" | "year"; why: L };
 
 /** Sectors that always require online booking / transactions -> E-commerce & Booking plan. */
 const BOOKING_SECTORS = ["hotel", "resto", "retail"];
@@ -91,44 +91,120 @@ function buildReco(sector: string, objective: string, situation: string, budget:
     // Booking / e-commerce sectors always get the transactional plan (1099 €).
     const idx = needsBooking ? 2 : Math.min(tier, 2);
     const p = websites.plans[idx];
-    out.push({ title: websites.title, plan: p.name, eur: p.eur, period: "once" });
+    out.push({
+      title: websites.title,
+      plan: p.name,
+      eur: p.eur,
+      period: "once",
+      why: needsBooking
+        ? {
+            fr: "Votre activité encaisse ou réserve en ligne : il faut une base transactionnelle, pas une simple vitrine.",
+            en: "Your business sells or takes bookings online: you need a transactional base, not a simple showcase.",
+            vi: "Doanh nghiệp của bạn bán hàng hoặc nhận đặt chỗ trực tuyến: cần nền tảng giao dịch, không chỉ là trang giới thiệu.",
+          }
+        : {
+            fr: "Sans site à jour, chaque recherche à votre nom profite à un concurrent.",
+            en: "Without an up-to-date site, every search for your name benefits a competitor.",
+            vi: "Không có website cập nhật, mỗi lượt tìm kiếm tên bạn đều làm lợi cho đối thủ.",
+          },
+    });
   }
 
   if (objective === "brand" || situation === "none") {
     const branding = svc("branding");
     const p = branding.plans[Math.min(tier, 2)];
-    out.push({ title: branding.title, plan: p.name, eur: p.eur, period: "once" });
+    out.push({
+      title: branding.title,
+      plan: p.name,
+      eur: p.eur,
+      period: "once",
+      why: {
+        fr: "Une identité cohérente augmente la mémorisation et justifie un prix plus élevé.",
+        en: "A consistent identity increases recall and justifies a higher price point.",
+        vi: "Nhận diện nhất quán giúp khách nhớ lâu hơn và biện minh cho mức giá cao hơn.",
+      },
+    });
   }
 
   if (objective === "visibility" || objective === "leads" || situation === "notraffic" || situation === "solid") {
     const seo = svc("seo");
     const p = seo.plans[Math.min(tier, 2)];
-    out.push({ title: seo.title, plan: p.name, eur: p.eur, period: "month" });
+    out.push({
+      title: seo.title,
+      plan: p.name,
+      eur: p.eur,
+      period: "month",
+      why: {
+        fr: "Le SEO est le seul canal qui continue de produire des demandes sans budget publicitaire.",
+        en: "SEO is the only channel that keeps producing enquiries without ad spend.",
+        vi: "SEO là kênh duy nhất tiếp tục mang lại khách hàng mà không cần ngân sách quảng cáo.",
+      },
+    });
   }
 
   const localSectors = ["resto", "hotel", "sante", "juridique", "artisan", "beaute", "immo"];
   if (objective === "local" || objective === "leads" || localSectors.includes(sector)) {
     const maps = svc("maps");
-    out.push({ title: maps.title, plan: maps.plans[0].name, eur: maps.plans[0].eur, period: "year" });
+    out.push({
+      title: maps.title,
+      plan: maps.plans[0].name,
+      eur: maps.plans[0].eur,
+      period: "year",
+      why: {
+        fr: "90 % des clics locaux vont aux 3 premières fiches Google Maps.",
+        en: "90% of local clicks go to the first three Google Maps listings.",
+        vi: "90% lượt nhấp địa phương thuộc về 3 hồ sơ Google Maps đầu tiên.",
+      },
+    });
   }
 
   if (objective === "automation" || sector === "resto" || sector === "hotel" || budget === "xl") {
     const ai = svc("ai");
     const p = ai.plans[budget === "xl" ? 1 : 0];
-    out.push({ title: ai.title, plan: p.name, eur: p.eur, period: "month" });
+    out.push({
+      title: ai.title,
+      plan: p.name,
+      eur: p.eur,
+      period: "month",
+      why: {
+        fr: "L'assistant répond la nuit, le week-end et dans la langue du client.",
+        en: "The assistant replies at night, on weekends and in the customer's language.",
+        vi: "Trợ lý trả lời ban đêm, cuối tuần và bằng ngôn ngữ của khách hàng.",
+      },
+    });
   }
 
   if (objective === "brand" && tier >= 1) {
     const social = svc("social");
     const p = social.plans[Math.min(tier, 2)];
-    out.push({ title: social.title, plan: p.name, eur: p.eur, period: "month" });
+    out.push({
+      title: social.title,
+      plan: p.name,
+      eur: p.eur,
+      period: "month",
+      why: {
+        fr: "Une marque forte se prouve chaque semaine, pas une fois par an.",
+        en: "A strong brand proves itself weekly, not once a year.",
+        vi: "Thương hiệu mạnh được chứng minh hàng tuần, không phải mỗi năm một lần.",
+      },
+    });
   }
 
   // Maintenance only makes sense when a site is built or already exists online.
   if (buildsSite || situation === "notraffic" || situation === "solid") {
     const maint = svc("maintenance");
     const mp = maint.plans[Math.min(tier, 2)];
-    out.push({ title: maint.title, plan: mp.name, eur: mp.eur, period: "month" });
+    out.push({
+      title: maint.title,
+      plan: mp.name,
+      eur: mp.eur,
+      period: "month",
+      why: {
+        fr: "Sécurité, sauvegardes et vitesse : un site négligé perd son classement en quelques mois.",
+        en: "Security, backups and speed: a neglected site loses its ranking within months.",
+        vi: "Bảo mật, sao lưu và tốc độ: website bị bỏ bê sẽ mất thứ hạng chỉ sau vài tháng.",
+      },
+    });
   }
 
   return out;
