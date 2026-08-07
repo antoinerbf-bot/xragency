@@ -79,8 +79,14 @@ export function Services() {
                     <p className="mt-3 max-w-md text-sm leading-relaxed opacity-80">
                       {t(wide ? s.description : s.short)}
                     </p>
-                    {wide ? (
-                      <ul className="mt-5 flex flex-wrap gap-2">
+                    <div
+                      className={
+                        wide
+                          ? "mt-5"
+                          : "grid grid-rows-[0fr] transition-all duration-500 group-hover:mt-5 group-hover:grid-rows-[1fr]"
+                      }
+                    >
+                      <ul className="flex flex-wrap gap-2 overflow-hidden">
                         {s.highlights.slice(0, 3).map((h, k) => (
                           <li
                             key={k}
@@ -90,12 +96,12 @@ export function Services() {
                           </li>
                         ))}
                       </ul>
-                    ) : null}
+                    </div>
                     <div className="mt-6 flex items-baseline justify-between gap-4 border-t border-current/25 pt-4">
                       <span className="label-mono">
                         {t(UI.from)} {price(s.fromEur)} {t(PERIOD_LABEL[s.fromPeriod])}
                       </span>
-                      <span className="label-mono transition-transform group-hover:translate-x-1">
+                      <span className="label-mono flex h-8 w-8 items-center justify-center rounded-full border border-current/40 transition-all duration-300 group-hover:bg-current/15 group-hover:translate-x-1">
                         →
                       </span>
                     </div>
