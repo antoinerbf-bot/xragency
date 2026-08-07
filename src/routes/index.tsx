@@ -45,9 +45,9 @@ function Index() {
         <Nav />
         <main className="relative z-10">
           <Hero />
+          <Intelligence />
           <About />
           <Services />
-          <Intelligence />
           <Pricing />
           <Feature />
           <Work />
