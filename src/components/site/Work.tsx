@@ -104,7 +104,7 @@ export function Testimonials() {
                   ) : null}
                   <figcaption className="mt-7 flex flex-wrap items-baseline justify-between gap-2 border-t border-border pt-5">
                     <span className="label-mono flex items-center gap-1.5 text-foreground">
-                      <BadgeCheck className="h-3.5 w-3.5 text-primary" title={t(UI.workVerified)} />
+                      <BadgeCheck className="h-3.5 w-3.5 text-primary" aria-label={t(UI.workVerified)} />
                       {tm.author} — {t(tm.role)}
                     </span>
                     <span className="label-mono text-muted-foreground/70">
