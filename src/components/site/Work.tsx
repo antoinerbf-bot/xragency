@@ -1,4 +1,4 @@
-import { Star } from "lucide-react";
+import { ArrowUpRight, BadgeCheck, Star } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { PORTFOLIO, TESTIMONIALS } from "@/lib/content";
@@ -30,6 +30,10 @@ export function Work() {
                   </Parallax>
                   <span className="label-mono absolute left-4 top-4 rounded-full bg-background/80 px-3 py-1 text-muted-foreground backdrop-blur">
                     {t({ fr: "Planche", en: "Plate", vi: "Bản" })} {p.plate}
+                  </span>
+                  <span className="label-mono absolute bottom-4 left-4 flex translate-y-3 items-center gap-2 rounded-full bg-primary px-3 py-1.5 text-primary-foreground opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                    {t(UI.workCase)}
+                    <ArrowUpRight className="h-3.5 w-3.5" />
                   </span>
                 </div>
                 <div className="p-6">
