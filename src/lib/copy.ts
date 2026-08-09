@@ -165,6 +165,9 @@ export const UI: Record<string, L> = {
   trustTitle1: { fr: "Des marques de prestige", en: "Prestigious brands", vi: "Những thương hiệu danh tiếng" },
   trustTitle2: { fr: "choisissent XRAGENCY.", en: "choose XRAGENCY.", vi: "chọn XRAGENCY." },
   trustRating: { fr: "4,9/5 — sur la base de 150+ avis clients.", en: "4.9/5 — based on 150+ customer reviews.", vi: "4,9/5 — dựa trên hơn 150 đánh giá khách hàng." },
+  workCase: { fr: "Obtenir le même résultat", en: "Get the same result", vi: "Đạt kết quả tương tự" },
+  workVerified: { fr: "Avis vérifié", en: "Verified review", vi: "Đánh giá đã xác minh" },
+  workLinkedCase: { fr: "Voir l'étude de cas", en: "View the case study", vi: "Xem nghiên cứu tình huống" },
 
   faqLabel: { fr: "Questions fréquentes", en: "Frequently asked questions", vi: "Câu hỏi thường gặp" },
   faqTitle1: { fr: "Tout ce qu'il faut", en: "Everything you need", vi: "Mọi điều bạn cần" },

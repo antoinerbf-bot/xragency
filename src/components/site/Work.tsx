@@ -1,4 +1,4 @@
-import { Star } from "lucide-react";
+import { ArrowUpRight, BadgeCheck, Star } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { PORTFOLIO, TESTIMONIALS } from "@/lib/content";
@@ -30,6 +30,10 @@ export function Work() {
                   </Parallax>
                   <span className="label-mono absolute left-4 top-4 rounded-full bg-background/80 px-3 py-1 text-muted-foreground backdrop-blur">
                     {t({ fr: "Planche", en: "Plate", vi: "Bản" })} {p.plate}
+                  </span>
+                  <span className="label-mono absolute bottom-4 left-4 flex translate-y-3 items-center gap-2 rounded-full bg-primary px-3 py-1.5 text-primary-foreground opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                    {t(UI.workCase)}
+                    <ArrowUpRight className="h-3.5 w-3.5" />
                   </span>
                 </div>
                 <div className="p-6">
@@ -71,9 +75,12 @@ export function Testimonials() {
 
         <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {TESTIMONIALS.map((tm, i) => (
+            (() => {
+              const linked = PORTFOLIO.find((p) => p.name === tm.brand);
+              return (
             <Reveal key={tm.num} delay={i * 70}>
               <Parallax speed={i % 3 === 1 ? 0.05 : i % 3 === 2 ? -0.04 : 0.02}>
-                <figure className="surface-plate h-full rounded-3xl p-8 transition-all duration-500 hover:-translate-y-1 hover:border-primary/40">
+                <figure className="surface-plate flex h-full flex-col rounded-3xl p-8 transition-all duration-500 hover:-translate-y-1 hover:border-primary/40">
                   <div className="flex items-baseline justify-between gap-4">
                     <span className="flex gap-0.5 text-primary">
                       {Array.from({ length: tm.rating }).map((_, s) => (
@@ -83,11 +90,21 @@ export function Testimonials() {
                     <span className="label-mono text-muted-foreground">{t(tm.field)}</span>
                   </div>
                   <h3 className="display-serif mt-5 text-2xl">{tm.brand}</h3>
-                  <blockquote className="mt-5 text-base leading-relaxed text-muted-foreground">
+                  <blockquote className="mt-5 flex-1 text-base leading-relaxed text-muted-foreground">
                     {t(tm.quote)}
                   </blockquote>
+                  {linked ? (
+                    <a
+                      href="#work"
+                      className="label-mono mt-6 inline-flex items-center gap-2 self-start rounded-full border border-primary/40 px-3 py-1.5 text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                    >
+                      {t(UI.workLinkedCase)} · {t(linked.result)}
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </a>
+                  ) : null}
                   <figcaption className="mt-7 flex flex-wrap items-baseline justify-between gap-2 border-t border-border pt-5">
-                    <span className="label-mono text-foreground">
+                    <span className="label-mono flex items-center gap-1.5 text-foreground">
+                      <BadgeCheck className="h-3.5 w-3.5 text-primary" aria-label={t(UI.workVerified)} />
                       {tm.author} — {t(tm.role)}
                     </span>
                     <span className="label-mono text-muted-foreground/70">
@@ -97,6 +114,8 @@ export function Testimonials() {
                 </figure>
               </Parallax>
             </Reveal>
+              );
+            })()
           ))}
         </div>
       </div>
