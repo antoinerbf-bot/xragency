@@ -40,7 +40,10 @@ export function Hero() {
         }}
       />
 
-      <Parallax speed={-0.05} className="relative mx-auto flex min-h-[calc(100vh-7rem)] max-w-7xl flex-col px-6 lg:px-10">
+      <Parallax
+        speed={-0.05}
+        className="relative mx-auto flex min-h-[calc(100vh-7rem)] max-w-7xl flex-col px-6 lg:px-10"
+      >
         <div className="animate-rise flex flex-wrap items-center justify-between gap-x-8 gap-y-2 border-b border-border/60 pb-4">
           <span className="label-mono text-muted-foreground">{CONTACT.cities}</span>
           <span className="label-mono hidden items-center gap-2 text-muted-foreground md:flex">

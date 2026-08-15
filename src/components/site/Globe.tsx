@@ -58,7 +58,13 @@ export function Globe({ className }: { className?: string }) {
           </linearGradient>
         </defs>
         <circle r="100" fill="url(#globeFill)" stroke="url(#globeRim)" strokeWidth="0.7" />
-        <circle r="110" fill="none" stroke="oklch(0.18 0 0 / 0.16)" strokeWidth="0.3" strokeDasharray="2 6" />
+        <circle
+          r="110"
+          fill="none"
+          stroke="oklch(0.18 0 0 / 0.16)"
+          strokeWidth="0.3"
+          strokeDasharray="2 6"
+        />
         {meridians.map((k, i) => (
           <ellipse
             key={`m${i}`}
@@ -107,13 +113,13 @@ export function Globe({ className }: { className?: string }) {
           [-70, 14],
         ].map(([x, y], i) => {
           const c =
-            i % 3 === 0
-              ? "oklch(0.35 0 0)"
-              : i % 3 === 1
-                ? "oklch(0.5 0 0)"
-                : "oklch(0.18 0 0)";
+            i % 3 === 0 ? "oklch(0.35 0 0)" : i % 3 === 1 ? "oklch(0.5 0 0)" : "oklch(0.18 0 0)";
           return (
-            <g key={`d${i}`} className="animate-pulse-soft" style={{ animationDelay: `${i * 420}ms` }}>
+            <g
+              key={`d${i}`}
+              className="animate-pulse-soft"
+              style={{ animationDelay: `${i * 420}ms` }}
+            >
               <circle cx={x} cy={y} r="5" fill={c} opacity="0.14" />
               <circle cx={x} cy={y} r="1.8" fill={c} />
             </g>

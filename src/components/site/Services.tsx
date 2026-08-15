@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { PERIOD_LABEL, SERVICES } from "@/lib/content";
@@ -41,8 +42,9 @@ export function Services() {
             const wide = v.span.includes("col-span-4");
             return (
               <Reveal key={s.id} delay={i * 60} className={`${v.span} h-full`}>
-                <a
-                  href="#intelligence"
+                <Link
+                  to="/services/$serviceId"
+                  params={{ serviceId: s.id }}
                   className="group relative flex h-full min-h-[20rem] flex-col justify-end overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-plate)] transition-all duration-500 hover:-translate-y-1 hover:border-foreground/40"
                 >
                   <Parallax speed={0.04} className="absolute inset-0 -top-[8%] h-[116%]">
@@ -106,7 +108,7 @@ export function Services() {
                       </span>
                     </div>
                   </div>
-                </a>
+                </Link>
               </Reveal>
             );
           })}

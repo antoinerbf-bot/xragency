@@ -1,4 +1,13 @@
-import { Mail, MessageCircle, MapPin, Instagram, Linkedin, ArrowUpRight, Clock, Globe2 } from "lucide-react";
+import {
+  Mail,
+  MessageCircle,
+  MapPin,
+  Instagram,
+  Linkedin,
+  ArrowUpRight,
+  Clock,
+  Globe2,
+} from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
@@ -8,7 +17,14 @@ export function Contact() {
   const { t } = useLang();
 
   const chips = [
-    { icon: Clock, text: t({ fr: "Réponse en moins de 2 h", en: "Reply in under 2 hours", vi: "Phản hồi dưới 2 giờ" }) },
+    {
+      icon: Clock,
+      text: t({
+        fr: "Réponse en moins de 2 h",
+        en: "Reply in under 2 hours",
+        vi: "Phản hồi dưới 2 giờ",
+      }),
+    },
     { icon: Globe2, text: t({ fr: "FR · EN · VI", en: "FR · EN · VI", vi: "FR · EN · VI" }) },
     { icon: MapPin, text: CONTACT.cities },
   ];
@@ -84,10 +100,18 @@ export function Contact() {
               <Mail className="h-7 w-7 text-primary" />
               <div>
                 <p className="label-mono text-muted-foreground">
-                  {t({ fr: "Brief, devis ou audit", en: "Brief, quote or audit", vi: "Brief, báo giá hoặc audit" })}
+                  {t({
+                    fr: "Brief, devis ou audit",
+                    en: "Brief, quote or audit",
+                    vi: "Brief, báo giá hoặc audit",
+                  })}
                 </p>
                 <p className="display-serif mt-2 text-3xl">
-                  {t({ fr: "Parlons de votre projet", en: "Let's talk about your project", vi: "Cùng bàn về dự án của bạn" })}
+                  {t({
+                    fr: "Parlons de votre projet",
+                    en: "Let's talk about your project",
+                    vi: "Cùng bàn về dự án của bạn",
+                  })}
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <EmberButton href="#intelligence">{t(UI.ctaAnalysis)}</EmberButton>

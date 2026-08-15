@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { LanguageProvider } from "@/lib/i18n";
 import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
 import { About } from "@/components/site/About";
@@ -35,27 +34,25 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <LanguageProvider>
-      <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
-        <div
-          aria-hidden
-          className="pointer-events-none fixed inset-0 z-0 opacity-70"
-          style={{ background: "var(--gradient-halo)" }}
-        />
-        <Nav />
-        <main className="relative z-10">
-          <Hero />
-          <Intelligence />
-          <About />
-          <Services />
-          <Pricing />
-          <Feature />
-          <Work />
-          <Testimonials />
-          <Faq />
-          <Contact />
-        </main>
-      </div>
-    </LanguageProvider>
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-0 opacity-70"
+        style={{ background: "var(--gradient-halo)" }}
+      />
+      <Nav />
+      <main className="relative z-10">
+        <Hero />
+        <Intelligence />
+        <About />
+        <Services />
+        <Pricing />
+        <Feature />
+        <Work />
+        <Testimonials />
+        <Faq />
+        <Contact />
+      </main>
+    </div>
   );
 }

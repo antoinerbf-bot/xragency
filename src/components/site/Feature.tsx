@@ -115,7 +115,11 @@ export function Feature() {
               <h2 className="display-serif mt-6 text-4xl sm:text-5xl">
                 {t({ fr: "Un service client", en: "Customer service", vi: "Chăm sóc khách hàng" })}{" "}
                 <em className="italic text-primary">
-                  {t({ fr: "qui ne dort jamais.", en: "that never sleeps.", vi: "không bao giờ ngủ." })}
+                  {t({
+                    fr: "qui ne dort jamais.",
+                    en: "that never sleeps.",
+                    vi: "không bao giờ ngủ.",
+                  })}
                 </em>
               </h2>
             </Reveal>

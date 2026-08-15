@@ -62,7 +62,7 @@ tous les textes commerciaux ;
 
 les informations de contact.
 
-Ne reprends ni le design, ni les couleurs, ni les composants, ni la mise en page de XR Agency. peut etre quelque illustration 
+Ne reprends ni le design, ni les couleurs, ni les composants, ni la mise en page de XR Agency. peut etre quelque illustration
 
 Le design doit rester celui du projet Cinematic.
 
@@ -104,7 +104,7 @@ Le résultat final doit être un seul site cohérent, premium, moderne, rapide e
 
 En cas de conflit entre les deux projets :
 
-Design → toujours utiliser Cinematic Strategy Engine. recuperer les meilleurs illustrations de xr agency 2030 et creer les manquantes 
+Design → toujours utiliser Cinematic Strategy Engine. recuperer les meilleurs illustrations de xr agency 2030 et creer les manquantes
 
 Contenu (services, prix, textes, logo) → toujours utiliser XR Agency 2030.
 

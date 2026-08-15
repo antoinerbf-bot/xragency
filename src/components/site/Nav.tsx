@@ -5,11 +5,11 @@ import { UI } from "@/lib/copy";
 import { Logo, EmberButton } from "./primitives";
 
 const LINKS = [
-  { href: "#services", key: "navServices" },
-  { href: "#pricing", key: "navPricing" },
-  { href: "#work", key: "navWork" },
-  { href: "#intelligence", key: "navIntelligence" },
-  { href: "#faq", key: "navFaq" },
+  { href: "/#services", key: "navServices" },
+  { href: "/#pricing", key: "navPricing" },
+  { href: "/#work", key: "navWork" },
+  { href: "/#intelligence", key: "navIntelligence" },
+  { href: "/#faq", key: "navFaq" },
 ] as const;
 
 export function Nav() {
@@ -65,7 +65,7 @@ export function Nav() {
               </button>
             ))}
           </div>
-          <EmberButton href="#contact" className="hidden md:inline-flex">
+          <EmberButton href="/#contact" className="hidden md:inline-flex">
             {t(UI.bookCall)}
           </EmberButton>
           <button
@@ -104,7 +104,7 @@ export function Nav() {
                 {t(UI[l.key])}
               </a>
             ))}
-            <a href="#contact" onClick={() => setOpen(false)} className="label-mono text-primary">
+            <a href="/#contact" onClick={() => setOpen(false)} className="label-mono text-primary">
               {t(UI.bookCall)}
             </a>
             <div className="flex gap-2 pt-2">

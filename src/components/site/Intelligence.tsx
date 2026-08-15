@@ -38,39 +38,195 @@ import { Globe } from "./Globe";
 type Opt = { id: string; label: L; icon?: typeof Check };
 
 const SECTORS: Opt[] = [
-  { id: "resto", icon: UtensilsCrossed, label: { fr: "Restaurant / Café", en: "Restaurant / Café", vi: "Nhà hàng / Quán cà phê" } },
-  { id: "hotel", icon: Hotel, label: { fr: "Hôtel / Spa", en: "Hotel / Spa", vi: "Khách sạn / Spa" } },
-  { id: "sante", icon: HeartPulse, label: { fr: "Santé / Médical", en: "Health / Medical", vi: "Y tế / Sức khỏe" } },
-  { id: "juridique", icon: Scale, label: { fr: "Avocat / Conseil", en: "Law / Consulting", vi: "Luật / Tư vấn" } },
-  { id: "immo", icon: Building2, label: { fr: "Immobilier", en: "Real estate", vi: "Bất động sản" } },
-  { id: "retail", icon: ShoppingBag, label: { fr: "Boutique / E-commerce", en: "Retail / E-commerce", vi: "Bán lẻ / Thương mại điện tử" } },
-  { id: "artisan", icon: Hammer, label: { fr: "Artisan / BTP", en: "Craftsman / Construction", vi: "Thợ thủ công / Xây dựng" } },
-  { id: "beaute", icon: Gem, label: { fr: "Beauté / Bien-être", en: "Beauty / Wellness", vi: "Làm đẹp / Chăm sóc" } },
-  { id: "tech", icon: Rocket, label: { fr: "Startup / Tech", en: "Startup / Tech", vi: "Startup / Công nghệ" } },
-  { id: "autre", icon: Compass, label: { fr: "Autre secteur", en: "Other sector", vi: "Lĩnh vực khác" } },
+  {
+    id: "resto",
+    icon: UtensilsCrossed,
+    label: { fr: "Restaurant / Café", en: "Restaurant / Café", vi: "Nhà hàng / Quán cà phê" },
+  },
+  {
+    id: "hotel",
+    icon: Hotel,
+    label: { fr: "Hôtel / Spa", en: "Hotel / Spa", vi: "Khách sạn / Spa" },
+  },
+  {
+    id: "sante",
+    icon: HeartPulse,
+    label: { fr: "Santé / Médical", en: "Health / Medical", vi: "Y tế / Sức khỏe" },
+  },
+  {
+    id: "juridique",
+    icon: Scale,
+    label: { fr: "Avocat / Conseil", en: "Law / Consulting", vi: "Luật / Tư vấn" },
+  },
+  {
+    id: "immo",
+    icon: Building2,
+    label: { fr: "Immobilier", en: "Real estate", vi: "Bất động sản" },
+  },
+  {
+    id: "retail",
+    icon: ShoppingBag,
+    label: {
+      fr: "Boutique / E-commerce",
+      en: "Retail / E-commerce",
+      vi: "Bán lẻ / Thương mại điện tử",
+    },
+  },
+  {
+    id: "artisan",
+    icon: Hammer,
+    label: { fr: "Artisan / BTP", en: "Craftsman / Construction", vi: "Thợ thủ công / Xây dựng" },
+  },
+  {
+    id: "beaute",
+    icon: Gem,
+    label: { fr: "Beauté / Bien-être", en: "Beauty / Wellness", vi: "Làm đẹp / Chăm sóc" },
+  },
+  {
+    id: "tech",
+    icon: Rocket,
+    label: { fr: "Startup / Tech", en: "Startup / Tech", vi: "Startup / Công nghệ" },
+  },
+  {
+    id: "autre",
+    icon: Compass,
+    label: { fr: "Autre secteur", en: "Other sector", vi: "Lĩnh vực khác" },
+  },
 ];
 
 const OBJECTIVES: Opt[] = [
-  { id: "visibility", icon: Search, label: { fr: "Être visible sur Google", en: "Be visible on Google", vi: "Hiển thị trên Google" } },
-  { id: "local", icon: MapPinned, label: { fr: "Attirer des clients de ma zone", en: "Attract customers nearby", vi: "Thu hút khách hàng quanh khu vực" } },
-  { id: "leads", icon: Megaphone, label: { fr: "Générer plus de demandes", en: "Generate more enquiries", vi: "Tạo thêm yêu cầu khách hàng" } },
-  { id: "brand", icon: BadgeCheck, label: { fr: "Créer une marque forte", en: "Build a strong brand", vi: "Xây dựng thương hiệu mạnh" } },
-  { id: "automation", icon: Bot, label: { fr: "Automatiser mon service client", en: "Automate customer service", vi: "Tự động hóa chăm sóc khách hàng" } },
-  { id: "sell", icon: CreditCard, label: { fr: "Vendre ou réserver en ligne", en: "Sell or take bookings online", vi: "Bán hàng hoặc nhận đặt chỗ trực tuyến" } },
+  {
+    id: "visibility",
+    icon: Search,
+    label: {
+      fr: "Être visible sur Google",
+      en: "Be visible on Google",
+      vi: "Hiển thị trên Google",
+    },
+  },
+  {
+    id: "local",
+    icon: MapPinned,
+    label: {
+      fr: "Attirer des clients de ma zone",
+      en: "Attract customers nearby",
+      vi: "Thu hút khách hàng quanh khu vực",
+    },
+  },
+  {
+    id: "leads",
+    icon: Megaphone,
+    label: {
+      fr: "Générer plus de demandes",
+      en: "Generate more enquiries",
+      vi: "Tạo thêm yêu cầu khách hàng",
+    },
+  },
+  {
+    id: "brand",
+    icon: BadgeCheck,
+    label: {
+      fr: "Créer une marque forte",
+      en: "Build a strong brand",
+      vi: "Xây dựng thương hiệu mạnh",
+    },
+  },
+  {
+    id: "automation",
+    icon: Bot,
+    label: {
+      fr: "Automatiser mon service client",
+      en: "Automate customer service",
+      vi: "Tự động hóa chăm sóc khách hàng",
+    },
+  },
+  {
+    id: "sell",
+    icon: CreditCard,
+    label: {
+      fr: "Vendre ou réserver en ligne",
+      en: "Sell or take bookings online",
+      vi: "Bán hàng hoặc nhận đặt chỗ trực tuyến",
+    },
+  },
 ];
 
 const SITUATIONS: Opt[] = [
-  { id: "none", icon: CircleSlash, label: { fr: "Je n'ai pas encore de site", en: "I don't have a website yet", vi: "Tôi chưa có website" } },
-  { id: "old", icon: History, label: { fr: "Mon site est dépassé", en: "My website is outdated", vi: "Website của tôi đã lỗi thời" } },
-  { id: "notraffic", icon: TrendingDown, label: { fr: "Mon site existe mais ne convertit pas", en: "My site exists but doesn't convert", vi: "Website có nhưng không chuyển đổi" } },
-  { id: "solid", icon: TrendingUp, label: { fr: "Mon site est bon, je veux accélérer", en: "My site is good, I want to scale", vi: "Website tốt, tôi muốn tăng tốc" } },
+  {
+    id: "none",
+    icon: CircleSlash,
+    label: {
+      fr: "Je n'ai pas encore de site",
+      en: "I don't have a website yet",
+      vi: "Tôi chưa có website",
+    },
+  },
+  {
+    id: "old",
+    icon: History,
+    label: {
+      fr: "Mon site est dépassé",
+      en: "My website is outdated",
+      vi: "Website của tôi đã lỗi thời",
+    },
+  },
+  {
+    id: "notraffic",
+    icon: TrendingDown,
+    label: {
+      fr: "Mon site existe mais ne convertit pas",
+      en: "My site exists but doesn't convert",
+      vi: "Website có nhưng không chuyển đổi",
+    },
+  },
+  {
+    id: "solid",
+    icon: TrendingUp,
+    label: {
+      fr: "Mon site est bon, je veux accélérer",
+      en: "My site is good, I want to scale",
+      vi: "Website tốt, tôi muốn tăng tốc",
+    },
+  },
 ];
 
 const BUDGETS: Opt[] = [
-  { id: "s", icon: Wallet, label: { fr: "Moins de 300 € / mois", en: "Under $325 / month", vi: "Dưới 8.400.000 ₫ / tháng" } },
-  { id: "m", icon: Coins, label: { fr: "300 — 800 € / mois", en: "$325 — $865 / month", vi: "8.400.000 — 22.400.000 ₫ / tháng" } },
-  { id: "l", icon: Banknote, label: { fr: "800 — 2 000 € / mois", en: "$865 — $2,160 / month", vi: "22.400.000 — 56.000.000 ₫ / tháng" } },
-  { id: "xl", icon: Landmark, label: { fr: "Plus de 2 000 € / mois", en: "Over $2,160 / month", vi: "Trên 56.000.000 ₫ / tháng" } },
+  {
+    id: "s",
+    icon: Wallet,
+    label: {
+      fr: "Moins de 300 € / mois",
+      en: "Under $325 / month",
+      vi: "Dưới 8.400.000 ₫ / tháng",
+    },
+  },
+  {
+    id: "m",
+    icon: Coins,
+    label: {
+      fr: "300 — 800 € / mois",
+      en: "$325 — $865 / month",
+      vi: "8.400.000 — 22.400.000 ₫ / tháng",
+    },
+  },
+  {
+    id: "l",
+    icon: Banknote,
+    label: {
+      fr: "800 — 2 000 € / mois",
+      en: "$865 — $2,160 / month",
+      vi: "22.400.000 — 56.000.000 ₫ / tháng",
+    },
+  },
+  {
+    id: "xl",
+    icon: Landmark,
+    label: {
+      fr: "Plus de 2 000 € / mois",
+      en: "Over $2,160 / month",
+      vi: "Trên 56.000.000 ₫ / tháng",
+    },
+  },
 ];
 
 const svc = (id: string) => SERVICES.find((s) => s.id === id)!;
@@ -126,7 +282,12 @@ function buildReco(sector: string, objective: string, situation: string, budget:
     });
   }
 
-  if (objective === "visibility" || objective === "leads" || situation === "notraffic" || situation === "solid") {
+  if (
+    objective === "visibility" ||
+    objective === "leads" ||
+    situation === "notraffic" ||
+    situation === "solid"
+  ) {
     const seo = svc("seo");
     const p = seo.plans[Math.min(tier, 2)];
     out.push({
@@ -225,9 +386,7 @@ export function Intelligence() {
   const done = step > 3;
   const reco = useMemo(
     () =>
-      done
-        ? buildReco(answers.sector, answers.objective, answers.situation, answers.budget)
-        : [],
+      done ? buildReco(answers.sector, answers.objective, answers.situation, answers.budget) : [],
     [done, answers],
   );
 
@@ -349,7 +508,9 @@ export function Intelligence() {
                           setAnswers((a) => ({ ...a, [steps[step].key]: o.id }));
                           setStep((s) => s + 1);
                         }}
-                        style={{ animation: `ember-rise 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 45}ms both` }}
+                        style={{
+                          animation: `ember-rise 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 45}ms both`,
+                        }}
                         className={cn(
                           "group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-border bg-card px-5 py-5 text-left text-sm shadow-[var(--shadow-ember)] transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-[var(--shadow-plate)]",
                           active && "border-primary bg-accent",
@@ -379,13 +540,17 @@ export function Intelligence() {
             ) : (
               <div className="animate-rise">
                 <p className="label-mono text-primary">{t(UI.intelResultLabel)}</p>
-                <h3 className="display-serif mt-4 text-3xl sm:text-4xl">{t(UI.intelResultTitle)}</h3>
+                <h3 className="display-serif mt-4 text-3xl sm:text-4xl">
+                  {t(UI.intelResultTitle)}
+                </h3>
 
                 <ul className="mt-8 divide-y divide-border border-y border-border">
                   {reco.map((r, i) => (
                     <li
                       key={i}
-                      style={{ animation: `ember-rise 0.6s cubic-bezier(0.16,1,0.3,1) ${i * 70}ms both` }}
+                      style={{
+                        animation: `ember-rise 0.6s cubic-bezier(0.16,1,0.3,1) ${i * 70}ms both`,
+                      }}
                       className="group py-5"
                     >
                       <div className="flex flex-wrap items-center gap-3">

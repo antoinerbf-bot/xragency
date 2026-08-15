@@ -69,7 +69,9 @@ export function Pricing() {
 
               <p className="mt-6 flex items-baseline gap-2">
                 <span className="display-serif text-4xl text-primary">{price(p.eur)}</span>
-                <span className="label-mono text-muted-foreground">{t(PERIOD_LABEL[p.period])}</span>
+                <span className="label-mono text-muted-foreground">
+                  {t(PERIOD_LABEL[p.period])}
+                </span>
               </p>
 
               <ul className="mt-7 flex-1 space-y-3">

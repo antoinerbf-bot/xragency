@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import { LanguageProvider } from "../lib/i18n";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -78,17 +79,37 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "XR Agency 2030 — Studio digital premium & IA" },
-      { name: "description", content: "Sites web sur mesure, branding, SEO local, Google Maps TOP 3 et assistants IA. Studio digital premium — FR / EN / VI." },
+      {
+        name: "description",
+        content:
+          "Sites web sur mesure, branding, SEO local, Google Maps TOP 3 et assistants IA. Studio digital premium — FR / EN / VI.",
+      },
       { name: "author", content: "Lovable" },
       { property: "og:title", content: "XR Agency 2030 — Studio digital premium & IA" },
-      { property: "og:description", content: "Sites web sur mesure, branding, SEO local, Google Maps TOP 3 et assistants IA. Studio digital premium — FR / EN / VI." },
+      {
+        property: "og:description",
+        content:
+          "Sites web sur mesure, branding, SEO local, Google Maps TOP 3 et assistants IA. Studio digital premium — FR / EN / VI.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "XR Agency 2030 — Studio digital premium & IA" },
-      { name: "twitter:description", content: "Sites web sur mesure, branding, SEO local, Google Maps TOP 3 et assistants IA. Studio digital premium — FR / EN / VI." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/598abd61-8cc7-4f7d-81d3-3cb16b65c5e5/id-preview-6d4a4fa1--18d903fa-c8c0-4cc8-8ba4-d9c21f212aaa.lovable.app-1785400682426.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/598abd61-8cc7-4f7d-81d3-3cb16b65c5e5/id-preview-6d4a4fa1--18d903fa-c8c0-4cc8-8ba4-d9c21f212aaa.lovable.app-1785400682426.png" },
+      {
+        name: "twitter:description",
+        content:
+          "Sites web sur mesure, branding, SEO local, Google Maps TOP 3 et assistants IA. Studio digital premium — FR / EN / VI.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/598abd61-8cc7-4f7d-81d3-3cb16b65c5e5/id-preview-6d4a4fa1--18d903fa-c8c0-4cc8-8ba4-d9c21f212aaa.lovable.app-1785400682426.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/598abd61-8cc7-4f7d-81d3-3cb16b65c5e5/id-preview-6d4a4fa1--18d903fa-c8c0-4cc8-8ba4-d9c21f212aaa.lovable.app-1785400682426.png",
+      },
     ],
     links: [
       {
@@ -123,8 +144,10 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <LanguageProvider>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }
