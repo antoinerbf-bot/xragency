@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { LanguageProvider } from "../lib/i18n";
+import { WhatsAppWidget } from "../components/site/WhatsAppWidget";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -142,11 +143,37 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: "XR Agency 2030",
+    description:
+      "Studio digital & IA de prestige : création de sites web sur-mesure, branding, SEO domination, Google Maps TOP 3 et assistants IA.",
+    telephone: "+33 7 67 56 67 83",
+    email: "contact.xragency@gmail.com",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Paris",
+      addressCountry: "FR",
+    },
+    priceRange: "€€€",
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "5.0",
+      reviewCount: "48",
+    },
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+        />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
+        <WhatsAppWidget />
       </LanguageProvider>
     </QueryClientProvider>
   );

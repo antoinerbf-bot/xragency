@@ -1,11 +1,21 @@
-import { ArrowUpRight, BadgeCheck, Star } from "lucide-react";
+import { useState } from "react";
+import {
+  ArrowUpRight,
+  BadgeCheck,
+  Star,
+  X,
+  MessageCircle,
+  Sparkles,
+  CheckCircle2,
+} from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
-import { PORTFOLIO, TESTIMONIALS } from "@/lib/content";
-import { Parallax, Reveal, SectionHeading } from "./primitives";
+import { PORTFOLIO, TESTIMONIALS, CONTACT } from "@/lib/content";
+import { Parallax, Reveal, SectionHeading, EmberButton } from "./primitives";
 
 export function Work() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const [activeProject, setActiveProject] = useState<(typeof PORTFOLIO)[0] | null>(null);
 
   return (
     <section id="work" className="relative py-24 lg:py-32">
@@ -15,9 +25,9 @@ export function Work() {
         <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {PORTFOLIO.map((p, i) => (
             <Reveal key={p.plate} delay={i * 60}>
-              <a
-                href="#intelligence"
-                className="group block overflow-hidden rounded-3xl border border-border"
+              <div
+                onClick={() => setActiveProject(p)}
+                className="group block cursor-pointer overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:border-primary/50 hover:shadow-xl"
               >
                 <div className="relative aspect-4/3 overflow-hidden">
                   <Parallax speed={0.05} className="h-full w-full">
@@ -31,33 +41,117 @@ export function Work() {
                   <span className="label-mono absolute left-4 top-4 rounded-full bg-background/80 px-3 py-1 text-muted-foreground backdrop-blur">
                     {t({ fr: "Planche", en: "Plate", vi: "Bản" })} {p.plate}
                   </span>
-                  <span className="label-mono absolute bottom-4 left-4 flex translate-y-3 items-center gap-2 rounded-full bg-primary px-3 py-1.5 text-primary-foreground opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                  <span className="label-mono absolute bottom-4 left-4 flex translate-y-3 items-center gap-2 rounded-full bg-primary px-3.5 py-1.5 text-xs text-primary-foreground opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 shadow-lg">
                     {t(UI.workCase)}
                     <ArrowUpRight className="h-3.5 w-3.5" />
                   </span>
                 </div>
                 <div className="p-6">
-                  <p className="label-mono text-muted-foreground">{t(p.sector)}</p>
+                  <p className="label-mono text-xs text-muted-foreground">{t(p.sector)}</p>
                   <h3 className="display-serif mt-3 text-2xl transition-colors group-hover:text-primary">
                     {p.name}
                   </h3>
-                  <p className="label-mono mt-3 text-primary">{t(p.result)}</p>
+                  <p className="label-mono mt-3 text-sm font-semibold text-primary">
+                    {t(p.result)}
+                  </p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {p.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="label-mono rounded-full border border-border px-2.5 py-1 text-muted-foreground"
+                        className="label-mono rounded-full border border-border px-2.5 py-1 text-xs text-muted-foreground"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
                 </div>
-              </a>
+              </div>
             </Reveal>
           ))}
         </div>
       </div>
+
+      {/* Project Detail Modal */}
+      {activeProject ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-border bg-card p-6 sm:p-10 shadow-2xl">
+            <button
+              onClick={() => setActiveProject(null)}
+              aria-label="Fermer"
+              className="absolute right-6 top-6 rounded-full border border-border p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="relative aspect-16/9 overflow-hidden rounded-2xl border border-border">
+              <img
+                src={activeProject.image}
+                alt={activeProject.name}
+                className="h-full w-full object-cover"
+              />
+            </div>
+
+            <div className="mt-8">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/60 pb-4">
+                <div>
+                  <span className="label-mono text-xs text-primary">
+                    Planche {activeProject.plate} · {t(activeProject.sector)}
+                  </span>
+                  <h3 className="display-serif mt-2 text-3xl sm:text-4xl text-foreground">
+                    {activeProject.name}
+                  </h3>
+                </div>
+                <div className="rounded-2xl border border-primary/40 bg-primary/10 px-4 py-2.5">
+                  <span className="label-mono text-xs text-muted-foreground">Impact mesuré</span>
+                  <p className="display-serif text-xl font-bold text-primary">
+                    {t(activeProject.result)}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <h4 className="label-mono text-xs uppercase tracking-wider text-muted-foreground">
+                  Disciplines déployées
+                </h4>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {activeProject.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="label-mono flex items-center gap-1.5 rounded-full border border-border bg-accent/30 px-3 py-1.5 text-xs text-foreground"
+                    >
+                      <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-border/60 pt-6">
+                <a
+                  href={`${CONTACT.whatsapp}?text=${encodeURIComponent(
+                    `Bonjour XR Agency, j'ai vu votre réalisation "${activeProject.name}" (${activeProject.tags.join(
+                      ", ",
+                    )}) et je souhaite un résultat similaire pour mon entreprise.`,
+                  )}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-xs font-semibold uppercase tracking-wider text-primary-foreground transition-all hover:bg-primary/90"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  Demander une étude similaire
+                </a>
+
+                <button
+                  onClick={() => setActiveProject(null)}
+                  className="label-mono text-xs text-muted-foreground hover:text-foreground"
+                >
+                  Fermer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

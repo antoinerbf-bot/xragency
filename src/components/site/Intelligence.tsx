@@ -27,6 +27,8 @@ import {
   Banknote,
   Landmark,
   ArrowRight,
+  Copy,
+  CheckCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLang, type L } from "@/lib/i18n";
@@ -394,6 +396,21 @@ export function Intelligence() {
   const monthly = reco.filter((r) => r.period === "month").reduce((a, b) => a + b.eur, 0);
   const yearly = reco.filter((r) => r.period === "year").reduce((a, b) => a + b.eur, 0);
 
+  const [copied, setCopied] = useState(false);
+
+  const copySummary = () => {
+    const summaryText = `XR Agency 2030 — Estimation Devis\n\nRecommandations :\n${reco
+      .map((r) => `• ${t(r.title)} (${t(r.plan)}) : ${price(r.eur)}`)
+      .join("\n")}\n\nTotal Mise en place : ${price(setup)}\nTotal Mensuel : ${price(
+      monthly,
+    )}\nGoogle Maps annuel : ${yearly ? price(yearly) : "—"}`;
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(summaryText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    }
+  };
+
   const waMessage = encodeURIComponent(
     lang === "vi"
       ? `Xin chào XR Agency, tôi vừa hoàn tất phân tích XRAGENCY Intelligence. Đề xuất: ${reco
@@ -612,10 +629,26 @@ export function Intelligence() {
                   {t(UI.intelDisclaimer)}
                 </p>
 
-                <div className="mt-8 flex flex-wrap gap-3">
+                <div className="mt-8 flex flex-wrap items-center gap-3">
                   <EmberButton href={`${CONTACT.whatsapp}?text=${waMessage}`}>
                     {t(UI.intelSend)}
                   </EmberButton>
+                  <button
+                    onClick={copySummary}
+                    className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-xs font-medium uppercase tracking-wider text-foreground transition-all hover:border-primary hover:text-primary"
+                  >
+                    {copied ? (
+                      <>
+                        <CheckCheck className="h-4 w-4 text-emerald-500" />
+                        <span>Copié !</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-4 w-4" />
+                        <span>Copier le devis</span>
+                      </>
+                    )}
+                  </button>
                   <EmberButton
                     variant="ghost"
                     onClick={() => {

@@ -135,6 +135,39 @@ export function Feature() {
             </Reveal>
           </div>
         </div>
+
+        {/* Tech & Infrastructure Standards of Excellence */}
+        <div className="mt-28 border-t border-border/60 pt-16">
+          <Reveal>
+            <div className="flex flex-col items-center text-center">
+              <span className="label-mono text-xs uppercase tracking-widest text-primary">
+                Technologies & Infrastructures d'Élite
+              </span>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Chaque solution est déployée sur les meilleurs standards mondiaux de vitesse et de
+                sécurité.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-6">
+                {[
+                  "Google Cloud Platform",
+                  "Vercel Edge Network",
+                  "OpenAI GPT-4o",
+                  "Stripe Payments",
+                  "React 19 & TanStack",
+                  "Cloudflare Security",
+                ].map((tech, idx) => (
+                  <span
+                    key={idx}
+                    className="label-mono inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-xs text-foreground backdrop-blur-sm transition-all hover:border-primary/50"
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        </div>
       </div>
     </section>
   );

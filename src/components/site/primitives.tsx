@@ -8,60 +8,24 @@ export function Logo({ className, subtitle = true }: { className?: string; subti
     <a
       href="/"
       className={cn(
-        "group inline-flex items-center gap-3 transition-opacity hover:opacity-95",
+        "group inline-flex flex-col tracking-tight transition-all duration-300 hover:opacity-90",
         className,
       )}
     >
-      <div className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl border border-border/80 bg-card/80 backdrop-blur-md transition-all duration-500 group-hover:border-primary/60 group-hover:bg-primary/10 group-hover:shadow-[0_0_20px_rgba(0,0,0,0.08)]">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-        <svg
-          viewBox="0 0 32 32"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="relative h-5 w-5 text-foreground transition-transform duration-500 group-hover:scale-105"
-        >
-          {/* Stylized X & R interconnected geometric paths */}
-          <path
-            d="M6 8L15 18M15 18L24 8M15 18L6 24"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="transition-colors duration-300 group-hover:stroke-primary"
-          />
-          <path
-            d="M17 10H23C24.6569 10 26 11.3431 26 13C26 14.6569 24.6569 16 23 16H17V24"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M21 16L26 24"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="transition-colors duration-300 group-hover:stroke-primary"
-          />
-          <circle cx="15" cy="18" r="1.5" className="fill-primary" />
-        </svg>
-      </div>
-
-      <div className="flex flex-col">
-        <span className="label-mono flex items-center text-sm font-semibold tracking-[0.28em] text-foreground transition-colors group-hover:text-primary sm:text-base sm:tracking-[0.32em]">
-          XR
-          <span className="font-light text-muted-foreground group-hover:text-foreground">
-            AGENCY
-          </span>
-          <span className="ml-0.5 text-primary">2030</span>
+      <div className="flex items-baseline gap-1.5">
+        <span className="display-serif text-lg font-bold tracking-[0.22em] text-foreground transition-all duration-300 group-hover:tracking-[0.26em] sm:text-xl">
+          XR<span className="font-light tracking-[0.22em]">AGENCY</span>
         </span>
-        {subtitle ? (
-          <span className="label-mono text-[8.5px] uppercase tracking-[0.24em] text-muted-foreground/70 transition-colors group-hover:text-muted-foreground">
-            Studio Digital & IA
-          </span>
-        ) : null}
+        <span className="h-1.5 w-1.5 rounded-full bg-primary transition-transform duration-300 group-hover:scale-125" />
+        <span className="label-mono text-[10px] font-medium tracking-[0.2em] text-muted-foreground/80">
+          2030
+        </span>
       </div>
+      {subtitle ? (
+        <span className="label-mono mt-0.5 text-[8px] uppercase tracking-[0.32em] text-muted-foreground transition-colors group-hover:text-foreground">
+          Studio Digital & Stratégie IA
+        </span>
+      ) : null}
     </a>
   );
 }
