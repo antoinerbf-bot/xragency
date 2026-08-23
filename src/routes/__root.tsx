@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import { LanguageProvider } from "../lib/i18n";
 import { WhatsAppWidget } from "../components/site/WhatsAppWidget";
+import { CursorGlow } from "../components/site/CursorGlow";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -172,6 +173,7 @@ function RootComponent() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
         />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <CursorGlow />
         <Outlet />
         <WhatsAppWidget />
       </LanguageProvider>

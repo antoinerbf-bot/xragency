@@ -7,11 +7,12 @@ import {
   ShieldCheck,
   MessageCircle,
   Zap,
+  Plus,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
-import { SERVICES, PERIOD_LABEL, CONTACT } from "@/lib/content";
+import { SERVICES, PERIOD_LABEL, CONTACT, FAQ } from "@/lib/content";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
 import { EmberButton, Reveal } from "@/components/site/primitives";
@@ -76,8 +77,20 @@ function ServiceDetailPage() {
       : 0,
   );
 
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [showSticky, setShowSticky] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setShowSticky(window.scrollY > 500);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const heroImg = SERVICE_IMAGES[service.id] ?? WEBSITES_IMG;
   const otherServices = SERVICES.filter((s) => s.id !== service.id);
+
+  // Filter relevant FAQs
+  const relevantFaqs = FAQ.slice(0, 4);
 
   // WhatsApp link with customized message for this service
   const waPrefilled = encodeURIComponent(
@@ -462,6 +475,65 @@ function ServiceDetailPage() {
           </section>
         )}
 
+        {/* Frequently Asked Questions */}
+        <section className="border-t border-border/60 py-24 lg:py-32">
+          <div className="mx-auto max-w-5xl px-6 lg:px-10">
+            <Reveal>
+              <div className="text-center">
+                <p className="label-mono text-xs uppercase tracking-widest text-primary">
+                  {t(UI.faqLabel)}
+                </p>
+                <h2 className="display-serif mt-4 text-3xl sm:text-5xl">Questions Fréquentes</h2>
+                <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
+                  Tout ce que vous devez savoir avant de démarrer votre collaboration avec XR
+                  Agency.
+                </p>
+              </div>
+            </Reveal>
+
+            <div className="mt-14 border-t border-border">
+              {relevantFaqs.map((item, i) => {
+                const active = openFaq === i;
+                return (
+                  <Reveal key={i} delay={i * 50}>
+                    <div className="border-b border-border">
+                      <button
+                        onClick={() => setOpenFaq(active ? null : i)}
+                        className="flex w-full items-start justify-between gap-6 py-6 text-left"
+                      >
+                        <div className="flex items-start gap-4">
+                          <span className="label-mono mt-1 text-primary">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <span className="display-serif text-lg sm:text-xl font-medium text-foreground">
+                            {t(item.q)}
+                          </span>
+                        </div>
+                        <Plus
+                          className={cn(
+                            "mt-1 h-5 w-5 shrink-0 text-primary transition-transform duration-300",
+                            active && "rotate-45",
+                          )}
+                        />
+                      </button>
+                      <div
+                        className="grid transition-all duration-500 ease-out"
+                        style={{ gridTemplateRows: active ? "1fr" : "0fr" }}
+                      >
+                        <div className="overflow-hidden">
+                          <p className="max-w-3xl pb-7 pl-10 text-sm leading-relaxed text-muted-foreground">
+                            {t(item.a)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </Reveal>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         {/* Other Services Discovery Bar */}
         <section className="border-t border-border/60 bg-accent/10 py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -515,6 +587,34 @@ function ServiceDetailPage() {
 
         {/* Global Contact Component */}
         <Contact />
+
+        {/* Sticky Floating Bottom Conversion Bar */}
+        {showSticky ? (
+          <div className="fixed bottom-6 left-1/2 z-40 flex -translate-x-1/2 items-center gap-4 rounded-full border border-border bg-card/90 px-5 py-2.5 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-bottom-3 duration-300">
+            <div className="hidden sm:block">
+              <span className="label-mono text-xs text-muted-foreground">{t(service.title)}</span>
+              <p className="display-serif text-sm font-bold text-primary">
+                {t(UI.from)} {price(service.fromEur)}
+              </p>
+            </div>
+            <div className="hidden h-6 w-px bg-border sm:block" />
+            <a
+              href="#plans"
+              className="rounded-full bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-wider text-primary-foreground transition-all hover:bg-primary/90"
+            >
+              Voir les forfaits
+            </a>
+            <a
+              href={waUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 rounded-full border border-emerald-500/50 bg-emerald-500/10 px-3.5 py-2 text-xs font-medium text-emerald-500 transition-all hover:bg-emerald-500/20"
+            >
+              <MessageCircle className="h-3.5 w-3.5" />
+              WhatsApp
+            </a>
+          </div>
+        ) : null}
       </main>
     </div>
   );
