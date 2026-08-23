@@ -21,9 +21,7 @@ export function Globe({ className }: { className?: string }) {
 
   useEffect(() => {
     let width = 0;
-    let currentPhi = 0;
-    let currentTheta = 0.22;
-    const doublePi = Math.PI * 2;
+    const currentTheta = 0.22;
 
     const onResize = () => {
       if (canvasRef.current) {
@@ -137,8 +135,7 @@ export function Globe({ className }: { className?: string }) {
         <canvas
           ref={canvasRef}
           onPointerDown={(e) => {
-            pointerInteracting.current =
-              e.clientX - pointerInteractionMovement.current;
+            pointerInteracting.current = e.clientX - pointerInteractionMovement.current;
             if (canvasRef.current) {
               canvasRef.current.style.cursor = "grabbing";
             }
@@ -162,12 +159,8 @@ export function Globe({ className }: { className?: string }) {
             }
           }}
           onTouchMove={(e) => {
-            if (
-              pointerInteracting.current !== null &&
-              e.touches[0]
-            ) {
-              const delta =
-                e.touches[0].clientX - pointerInteracting.current;
+            if (pointerInteracting.current !== null && e.touches[0]) {
+              const delta = e.touches[0].clientX - pointerInteracting.current;
               pointerInteractionMovement.current = delta * 0.008;
             }
           }}

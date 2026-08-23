@@ -3,24 +3,30 @@ import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { PERIOD_LABEL, SERVICES } from "@/lib/content";
 import { Parallax, Reveal, SectionHeading } from "./primitives";
-import imgBranding from "@/assets/svc-branding.jpg";
-import imgSeo from "@/assets/svc-seo.jpg";
-import imgMaps from "@/assets/svc-maps.jpg";
-import imgSocial from "@/assets/svc-social.jpg";
-import imgMaintenance from "@/assets/svc-maintenance.jpg";
-import imgAi from "@/assets/svc-ai.jpg";
-
-const WEBSITES =
-  "https://images.unsplash.com/photo-1481487196290-c152efe083f5?auto=format&fit=crop&w=1400&q=85";
+// Ultra-premium realistic editorial photography for each service
+const IMG_WEBSITES =
+  "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1600&q=85";
+const IMG_BRANDING =
+  "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?auto=format&fit=crop&w=1600&q=85";
+const IMG_SEO =
+  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=85";
+const IMG_MAPS =
+  "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1600&q=85";
+const IMG_SOCIAL =
+  "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=1600&q=85";
+const IMG_MAINTENANCE =
+  "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=85";
+const IMG_AI =
+  "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1600&q=85";
 
 const VISUAL: Record<string, { img: string; span: string }> = {
-  websites: { img: WEBSITES, span: "md:col-span-4 lg:row-span-2" },
-  branding: { img: imgBranding, span: "md:col-span-2" },
-  seo: { img: imgSeo, span: "md:col-span-2" },
-  maps: { img: imgMaps, span: "md:col-span-3" },
-  social: { img: imgSocial, span: "md:col-span-3" },
-  maintenance: { img: imgMaintenance, span: "md:col-span-2" },
-  ai: { img: imgAi, span: "md:col-span-4" },
+  websites: { img: IMG_WEBSITES, span: "md:col-span-4 lg:row-span-2" },
+  branding: { img: IMG_BRANDING, span: "md:col-span-2" },
+  seo: { img: IMG_SEO, span: "md:col-span-2" },
+  maps: { img: IMG_MAPS, span: "md:col-span-3" },
+  social: { img: IMG_SOCIAL, span: "md:col-span-3" },
+  maintenance: { img: IMG_MAINTENANCE, span: "md:col-span-2" },
+  ai: { img: IMG_AI, span: "md:col-span-4" },
 };
 
 export function Services() {

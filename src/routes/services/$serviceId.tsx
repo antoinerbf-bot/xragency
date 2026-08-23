@@ -18,24 +18,29 @@ import { Contact } from "@/components/site/Contact";
 import { EmberButton, Reveal } from "@/components/site/primitives";
 import { cn } from "@/lib/utils";
 
-import imgBranding from "@/assets/svc-branding.jpg";
-import imgSeo from "@/assets/svc-seo.jpg";
-import imgMaps from "@/assets/svc-maps.jpg";
-import imgSocial from "@/assets/svc-social.jpg";
-import imgMaintenance from "@/assets/svc-maintenance.jpg";
-import imgAi from "@/assets/svc-ai.jpg";
-
-const WEBSITES_IMG =
-  "https://images.unsplash.com/photo-1481487196290-c152efe083f5?auto=format&fit=crop&w=1400&q=85";
+const IMG_WEBSITES =
+  "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1600&q=85";
+const IMG_BRANDING =
+  "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?auto=format&fit=crop&w=1600&q=85";
+const IMG_SEO =
+  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=85";
+const IMG_MAPS =
+  "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1600&q=85";
+const IMG_SOCIAL =
+  "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=1600&q=85";
+const IMG_MAINTENANCE =
+  "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=85";
+const IMG_AI =
+  "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1600&q=85";
 
 const SERVICE_IMAGES: Record<string, string> = {
-  websites: WEBSITES_IMG,
-  branding: imgBranding,
-  seo: imgSeo,
-  maps: imgMaps,
-  social: imgSocial,
-  maintenance: imgMaintenance,
-  ai: imgAi,
+  websites: IMG_WEBSITES,
+  branding: IMG_BRANDING,
+  seo: IMG_SEO,
+  maps: IMG_MAPS,
+  social: IMG_SOCIAL,
+  maintenance: IMG_MAINTENANCE,
+  ai: IMG_AI,
 };
 
 export const Route = createFileRoute("/services/$serviceId")({
