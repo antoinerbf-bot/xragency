@@ -16,6 +16,7 @@ import { SERVICES, PERIOD_LABEL, CONTACT, FAQ } from "@/lib/content";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
 import { EmberButton, Reveal } from "@/components/site/primitives";
+import { MapsSimulator } from "@/components/site/MapsSimulator";
 import { cn } from "@/lib/utils";
 
 const IMG_WEBSITES =
@@ -312,6 +313,15 @@ function ServiceDetailPage() {
                   </Reveal>
                 ))}
               </div>
+            </div>
+          </section>
+        )}
+
+        {/* Google Maps Dedicated Interactive Simulator & 7 Phases */}
+        {service.id === "maps" && (
+          <section className="border-t border-border/60 py-24 lg:py-32">
+            <div className="mx-auto max-w-7xl px-6 lg:px-10">
+              <MapsSimulator />
             </div>
           </section>
         )}

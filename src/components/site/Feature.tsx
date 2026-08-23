@@ -3,6 +3,7 @@ import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { SERVICES } from "@/lib/content";
 import { EmberButton, Parallax, Reveal } from "./primitives";
+import { MapsSimulator } from "./MapsSimulator";
 
 export function Feature() {
   const { t, price } = useLang();
@@ -80,6 +81,11 @@ export function Feature() {
               </div>
             </Parallax>
           </Reveal>
+        </div>
+
+        {/* Interactive Google Maps Simulator & 7-Phase Methodology */}
+        <div className="mt-20">
+          <MapsSimulator />
         </div>
 
         {/* AI assistants */}
