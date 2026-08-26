@@ -10,42 +10,145 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardAuditsRouteImport } from './routes/dashboard/audits'
+import { Route as DashboardLoginRouteImport } from './routes/dashboard/login'
+import { Route as DashboardNewRouteImport } from './routes/dashboard/new'
+import { Route as DashboardProspectsRouteImport } from './routes/dashboard/prospects'
 import { Route as ServicesServiceIdRouteImport } from './routes/services/$serviceId'
+import { Route as DashboardAuditsAuditIdRouteImport } from './routes/dashboard/audits.$auditId'
+import { Route as DashboardProspectsProspectIdRouteImport } from './routes/dashboard/prospects.$prospectId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAuditsRoute = DashboardAuditsRouteImport.update({
+  id: '/audits',
+  path: '/audits',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardLoginRoute = DashboardLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardNewRoute = DashboardNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardProspectsRoute = DashboardProspectsRouteImport.update({
+  id: '/prospects',
+  path: '/prospects',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const ServicesServiceIdRoute = ServicesServiceIdRouteImport.update({
   id: '/services/$serviceId',
   path: '/services/$serviceId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardAuditsAuditIdRoute = DashboardAuditsAuditIdRouteImport.update({
+  id: '/$auditId',
+  path: '/$auditId',
+  getParentRoute: () => DashboardAuditsRoute,
+} as any)
+const DashboardProspectsProspectIdRoute =
+  DashboardProspectsProspectIdRouteImport.update({
+    id: '/$prospectId',
+    path: '/$prospectId',
+    getParentRoute: () => DashboardProspectsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
+  '/dashboard/login': typeof DashboardLoginRoute
+  '/dashboard/new': typeof DashboardNewRoute
+  '/dashboard/prospects': typeof DashboardProspectsRouteWithChildren
   '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/audits/$auditId': typeof DashboardAuditsAuditIdRoute
+  '/dashboard/prospects/$prospectId': typeof DashboardProspectsProspectIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
+  '/dashboard/login': typeof DashboardLoginRoute
+  '/dashboard/new': typeof DashboardNewRoute
+  '/dashboard/prospects': typeof DashboardProspectsRouteWithChildren
   '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/audits/$auditId': typeof DashboardAuditsAuditIdRoute
+  '/dashboard/prospects/$prospectId': typeof DashboardProspectsProspectIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
+  '/dashboard/login': typeof DashboardLoginRoute
+  '/dashboard/new': typeof DashboardNewRoute
+  '/dashboard/prospects': typeof DashboardProspectsRouteWithChildren
   '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/audits/$auditId': typeof DashboardAuditsAuditIdRoute
+  '/dashboard/prospects/$prospectId': typeof DashboardProspectsProspectIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/services/$serviceId'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/dashboard/audits'
+    | '/dashboard/login'
+    | '/dashboard/new'
+    | '/dashboard/prospects'
+    | '/services/$serviceId'
+    | '/dashboard/'
+    | '/dashboard/audits/$auditId'
+    | '/dashboard/prospects/$prospectId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/services/$serviceId'
-  id: '__root__' | '/' | '/services/$serviceId'
+  to:
+    | '/'
+    | '/dashboard/audits'
+    | '/dashboard/login'
+    | '/dashboard/new'
+    | '/dashboard/prospects'
+    | '/services/$serviceId'
+    | '/dashboard'
+    | '/dashboard/audits/$auditId'
+    | '/dashboard/prospects/$prospectId'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/dashboard/audits'
+    | '/dashboard/login'
+    | '/dashboard/new'
+    | '/dashboard/prospects'
+    | '/services/$serviceId'
+    | '/dashboard/'
+    | '/dashboard/audits/$auditId'
+    | '/dashboard/prospects/$prospectId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   ServicesServiceIdRoute: typeof ServicesServiceIdRoute
 }
 
@@ -58,6 +161,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/audits': {
+      id: '/dashboard/audits'
+      path: '/audits'
+      fullPath: '/dashboard/audits'
+      preLoaderRoute: typeof DashboardAuditsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/login': {
+      id: '/dashboard/login'
+      path: '/login'
+      fullPath: '/dashboard/login'
+      preLoaderRoute: typeof DashboardLoginRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/new': {
+      id: '/dashboard/new'
+      path: '/new'
+      fullPath: '/dashboard/new'
+      preLoaderRoute: typeof DashboardNewRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/prospects': {
+      id: '/dashboard/prospects'
+      path: '/prospects'
+      fullPath: '/dashboard/prospects'
+      preLoaderRoute: typeof DashboardProspectsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/services/$serviceId': {
       id: '/services/$serviceId'
       path: '/services/$serviceId'
@@ -65,11 +210,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesServiceIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/audits/$auditId': {
+      id: '/dashboard/audits/$auditId'
+      path: '/$auditId'
+      fullPath: '/dashboard/audits/$auditId'
+      preLoaderRoute: typeof DashboardAuditsAuditIdRouteImport
+      parentRoute: typeof DashboardAuditsRoute
+    }
+    '/dashboard/prospects/$prospectId': {
+      id: '/dashboard/prospects/$prospectId'
+      path: '/$prospectId'
+      fullPath: '/dashboard/prospects/$prospectId'
+      preLoaderRoute: typeof DashboardProspectsProspectIdRouteImport
+      parentRoute: typeof DashboardProspectsRoute
+    }
   }
 }
 
+interface DashboardAuditsRouteChildren {
+  DashboardAuditsAuditIdRoute: typeof DashboardAuditsAuditIdRoute
+}
+
+const DashboardAuditsRouteChildren: DashboardAuditsRouteChildren = {
+  DashboardAuditsAuditIdRoute: DashboardAuditsAuditIdRoute,
+}
+
+const DashboardAuditsRouteWithChildren = DashboardAuditsRoute._addFileChildren(
+  DashboardAuditsRouteChildren,
+)
+
+interface DashboardProspectsRouteChildren {
+  DashboardProspectsProspectIdRoute: typeof DashboardProspectsProspectIdRoute
+}
+
+const DashboardProspectsRouteChildren: DashboardProspectsRouteChildren = {
+  DashboardProspectsProspectIdRoute: DashboardProspectsProspectIdRoute,
+}
+
+const DashboardProspectsRouteWithChildren =
+  DashboardProspectsRoute._addFileChildren(DashboardProspectsRouteChildren)
+
+interface DashboardRouteChildren {
+  DashboardAuditsRoute: typeof DashboardAuditsRouteWithChildren
+  DashboardLoginRoute: typeof DashboardLoginRoute
+  DashboardNewRoute: typeof DashboardNewRoute
+  DashboardProspectsRoute: typeof DashboardProspectsRouteWithChildren
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAuditsRoute: DashboardAuditsRouteWithChildren,
+  DashboardLoginRoute: DashboardLoginRoute,
+  DashboardNewRoute: DashboardNewRoute,
+  DashboardProspectsRoute: DashboardProspectsRouteWithChildren,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   ServicesServiceIdRoute: ServicesServiceIdRoute,
 }
 export const routeTree = rootRouteImport

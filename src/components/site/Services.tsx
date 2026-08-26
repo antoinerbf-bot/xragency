@@ -2,38 +2,51 @@ import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { PERIOD_LABEL, SERVICES } from "@/lib/content";
-import { Parallax, Reveal, SectionHeading } from "./primitives";
-// Ultra-premium realistic editorial photography for each service
-const IMG_WEBSITES =
-  "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1600&q=85";
-const IMG_BRANDING =
-  "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?auto=format&fit=crop&w=1600&q=85";
-const IMG_SEO =
-  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=85";
-const IMG_MAPS =
-  "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1600&q=85";
-const IMG_SOCIAL =
-  "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=1600&q=85";
-const IMG_MAINTENANCE =
-  "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=85";
-const IMG_AI =
-  "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1600&q=85";
+import { Reveal, SectionHeading } from "./primitives";
+import { ArrowRight, Sparkles, Check } from "lucide-react";
 
-const VISUAL: Record<string, { img: string; span: string }> = {
-  websites: { img: IMG_WEBSITES, span: "md:col-span-4 lg:row-span-2" },
-  branding: { img: IMG_BRANDING, span: "md:col-span-2" },
-  seo: { img: IMG_SEO, span: "md:col-span-2" },
-  maps: { img: IMG_MAPS, span: "md:col-span-3" },
-  social: { img: IMG_SOCIAL, span: "md:col-span-3" },
-  maintenance: { img: IMG_MAINTENANCE, span: "md:col-span-2" },
-  ai: { img: IMG_AI, span: "md:col-span-4" },
+/* ── Illustration per service ── */
+const SERVICE_IMG: Record<string, string> = {
+  websites:
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=85&w=800",
+  branding:
+    "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=85&w=800",
+  seo: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?auto=format&fit=crop&q=85&w=800",
+  maps: "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=85&w=800",
+  social:
+    "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&q=85&w=800",
+  maintenance:
+    "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=85&w=800",
+  ai: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=85&w=800",
+  ecommerce:
+    "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=85&w=800",
+  refonte:
+    "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=85&w=800",
+  ads: "https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&q=85&w=800",
+  strategy:
+    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=85&w=800",
+};
+
+/* ── Subtle accent per service ── */
+const ACCENT_GRADIENT: Record<string, string> = {
+  websites: "linear-gradient(135deg, oklch(0.18 0 0 / 0.04) 0%, transparent 60%)",
+  branding: "linear-gradient(135deg, oklch(0.35 0.04 260 / 0.06) 0%, transparent 60%)",
+  seo: "linear-gradient(135deg, oklch(0.55 0.08 162 / 0.06) 0%, transparent 60%)",
+  maps: "linear-gradient(135deg, oklch(0.50 0.10 264 / 0.06) 0%, transparent 60%)",
+  social: "linear-gradient(135deg, oklch(0.65 0.12 303 / 0.06) 0%, transparent 60%)",
+  maintenance: "linear-gradient(135deg, oklch(0.45 0.06 22 / 0.06) 0%, transparent 60%)",
+  ai: "linear-gradient(135deg, oklch(0.60 0.10 70 / 0.06) 0%, transparent 60%)",
+  ecommerce: "linear-gradient(135deg, oklch(0.50 0.08 330 / 0.06) 0%, transparent 60%)",
+  refonte: "linear-gradient(135deg, oklch(0.40 0.06 200 / 0.06) 0%, transparent 60%)",
+  ads: "linear-gradient(135deg, oklch(0.55 0.10 50 / 0.06) 0%, transparent 60%)",
+  strategy: "linear-gradient(135deg, oklch(0.45 0.06 280 / 0.06) 0%, transparent 60%)",
 };
 
 export function Services() {
   const { t, price } = useLang();
 
   return (
-    <section id="services" className="relative py-24 lg:py-32">
+    <section id="services" className="relative py-16 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <SectionHeading
           label={UI.servicesLabel}
@@ -42,75 +55,81 @@ export function Services() {
           lead={UI.servicesLead}
         />
 
-        <div className="mt-16 grid auto-rows-[minmax(0,1fr)] gap-5 md:grid-cols-6">
+        {/* ── Premium card grid ── */}
+        <div className="mt-14 grid gap-6 sm:mt-20 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s, i) => {
-            const v = VISUAL[s.id] ?? { img: WEBSITES, span: "md:col-span-2" };
-            const wide = v.span.includes("col-span-4");
+            const bg = ACCENT_GRADIENT[s.id] ?? "transparent";
+            const img = SERVICE_IMG[s.id];
+            const startingPriceFormatted = price(s.fromEur);
+            const periodText = t(PERIOD_LABEL[s.fromPeriod]);
+
             return (
-              <Reveal key={s.id} delay={i * 60} className={`${v.span} h-full`}>
+              <Reveal key={s.id} delay={i * 50}>
                 <Link
                   to="/services/$serviceId"
                   params={{ serviceId: s.id }}
-                  className="group relative flex h-full min-h-[20rem] flex-col justify-end overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-plate)] transition-all duration-500 hover:-translate-y-1 hover:border-foreground/40"
+                  className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card transition-all duration-500 hover:border-primary/50 hover:shadow-2xl"
+                  style={{ background: bg }}
                 >
-                  <Parallax speed={0.04} className="absolute inset-0 -top-[8%] h-[116%]">
-                    <img
-                      src={v.img}
-                      alt={t(s.title)}
-                      loading="lazy"
-                      className="h-full w-full scale-105 object-cover grayscale-[0.55] transition-all duration-700 group-hover:scale-110 group-hover:grayscale-0"
-                    />
-                  </Parallax>
-                  <div
-                    aria-hidden
-                    className="absolute inset-0"
-                    style={{
-                      background:
-                        "linear-gradient(180deg, transparent 0%, color-mix(in oklab, oklch(0.12 0 0) 22%, transparent) 40%, color-mix(in oklab, oklch(0.1 0 0) 88%, transparent) 100%)",
-                    }}
-                  />
-
-                  <div className="relative p-6 text-[oklch(0.99_0_0)] sm:p-7">
-                    <div className="flex items-center gap-3">
-                      <span className="label-mono opacity-70">{s.num}</span>
-                      {s.premium ? (
-                        <span className="label-mono rounded-full border border-current/50 px-2 py-0.5">
-                          Premium
-                        </span>
-                      ) : null}
+                  {/* Illustration */}
+                  {img ? (
+                    <div className="relative aspect-[16/10] overflow-hidden">
+                      <img
+                        src={img}
+                        alt={t(s.title)}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
+                      
+                      {/* Service number badge */}
+                      <span className="label-mono absolute left-4 top-4 rounded-full border border-white/20 bg-black/50 px-3 py-1 text-[10px] text-white backdrop-blur-md">
+                        {s.num}
+                      </span>
+                      
+                      {/* Price badge directly visible on card */}
+                      <span className="label-mono absolute right-4 top-4 rounded-full border border-primary/50 bg-background/90 px-3 py-1 text-xs font-semibold text-primary backdrop-blur-md shadow-md">
+                        Dès {startingPriceFormatted} <span className="text-[10px] font-normal text-muted-foreground">{s.fromPeriod !== "once" ? (s.fromPeriod === "month" ? "/m" : "/an") : ""}</span>
+                      </span>
                     </div>
-                    <h3
-                      className={`display-serif mt-3 ${wide ? "text-3xl sm:text-4xl" : "text-2xl"}`}
-                    >
+                  ) : (
+                    <div className="relative flex aspect-[16/10] items-center justify-center border-b border-border/40">
+                      <span className="display-serif text-6xl text-muted-foreground/20">
+                        {s.num}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Content */}
+                  <div className="flex flex-1 flex-col p-6">
+                    <h3 className="display-serif text-xl transition-colors duration-300 group-hover:text-primary sm:text-2xl">
                       {t(s.title)}
                     </h3>
-                    <p className="mt-3 max-w-md text-sm leading-relaxed opacity-80">
-                      {t(wide ? s.description : s.short)}
+                    <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
+                      {t(s.short)}
                     </p>
-                    <div
-                      className={
-                        wide
-                          ? "mt-5"
-                          : "grid grid-rows-[0fr] transition-all duration-500 group-hover:mt-5 group-hover:grid-rows-[1fr]"
-                      }
-                    >
-                      <ul className="flex flex-wrap gap-2 overflow-hidden">
+
+                    {/* Highlights */}
+                    <div className="mt-4">
+                      <ul className="flex flex-wrap gap-1.5">
                         {s.highlights.slice(0, 3).map((h, k) => (
                           <li
                             key={k}
-                            className="label-mono rounded-full border border-current/40 px-3 py-1 backdrop-blur"
+                            className="label-mono rounded-full border border-border/80 bg-accent/20 px-2.5 py-1 text-[9px] text-muted-foreground"
                           >
                             {t(h)}
                           </li>
                         ))}
                       </ul>
                     </div>
-                    <div className="mt-6 flex items-baseline justify-between gap-4 border-t border-current/25 pt-4">
-                      <span className="label-mono">
-                        {t(UI.from)} {price(s.fromEur)} {t(PERIOD_LABEL[s.fromPeriod])}
+
+                    {/* CTA Footer */}
+                    <div className="mt-6 flex items-center justify-between border-t border-border/50 pt-4">
+                      <span className="label-mono text-[11px] font-semibold text-primary transition-colors duration-300">
+                        Découvrir les formules →
                       </span>
-                      <span className="label-mono flex h-8 w-8 items-center justify-center rounded-full border border-current/40 transition-all duration-300 group-hover:bg-current/15 group-hover:translate-x-1">
-                        →
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground transition-all duration-300 group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
+                        <ArrowRight className="h-3.5 w-3.5" />
                       </span>
                     </div>
                   </div>
@@ -119,6 +138,34 @@ export function Services() {
             );
           })}
         </div>
+
+        {/* Bottom CTA */}
+        <Reveal delay={SERVICES.length * 50}>
+          <div className="mt-14 flex flex-col items-center gap-4 text-center sm:mt-20">
+            <p className="text-sm text-muted-foreground">
+              {t({
+                fr: "Chaque projet est unique. Discutons du vôtre dès aujourd'hui.",
+                en: "Every project is unique. Let's discuss yours today.",
+                vi: "Mỗi dự án đều độc nhất. Hãy thảo luận về dự án của bạn ngay hôm nay.",
+              })}
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <a
+                href="#pricing"
+                className="label-mono inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-xs text-foreground transition-all duration-300 hover:border-primary hover:text-primary"
+              >
+                Consulter la grille tarifaire complète ↓
+              </a>
+              <a
+                href="#intelligence"
+                className="label-mono inline-flex items-center gap-2 rounded-full border border-primary bg-primary px-6 py-3 text-xs font-semibold text-primary-foreground shadow-lg transition-all duration-300 hover:bg-primary/90"
+              >
+                <Sparkles className="h-3.5 w-3.5" />
+                Lancer mon analyse stratégique IA
+              </a>
+            </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

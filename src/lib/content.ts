@@ -1098,7 +1098,7 @@ export const SERVICES: Service[] = [
       en: "Premium visual content, engaging captions, scheduling, moderation and monitoring: your social presence becomes an awareness engine.",
       vi: "Nội dung hình ảnh cao cấp, chú thích cuốn hút, lên lịch, kiểm duyệt và theo dõi: mạng xã hội trở thành cỗ máy nhận diện.",
     },
-    fromEur: 199,
+    fromEur: 250,
     fromPeriod: "month",
     highlights: [
       {
@@ -1244,38 +1244,36 @@ export const SERVICES: Service[] = [
     ],
     plans: [
       {
-        name: { fr: "Community Essential", en: "Community Essential", vi: "Community Essential" },
-        eur: 199,
+        name: { fr: "Community Starter", en: "Community Starter", vi: "Community Starter" },
+        eur: 250,
         period: "month",
         features: [
           { fr: "8 publications par mois", en: "8 posts per month", vi: "8 bài đăng mỗi tháng" },
-          { fr: "1 réseau social", en: "1 social network", vi: "1 mạng xã hội" },
-          { fr: "Création de contenu", en: "Content creation", vi: "Sáng tạo nội dung" },
-          { fr: "Hashtags optimisés", en: "Optimised hashtags", vi: "Hashtag tối ưu" },
+          { fr: "1 réseau social en gestion", en: "1 managed social network", vi: "1 mạng xã hội quản lý" },
+          { fr: "1 langue de rédaction", en: "1 content language", vi: "1 ngôn ngữ nội dung" },
+          { fr: "Création de contenu visuel", en: "Visual content creation", vi: "Sáng tạo nội dung hình ảnh" },
+          { fr: "Hashtags & légendes optimisés", en: "Optimised hashtags & captions", vi: "Hashtag & chú thích tối ưu" },
           { fr: "Reporting mensuel", en: "Monthly reporting", vi: "Báo cáo hàng tháng" },
           { fr: "Support par e-mail", en: "Email support", vi: "Hỗ trợ qua e-mail" },
         ],
       },
       {
-        name: { fr: "Community Business", en: "Community Business", vi: "Community Business" },
-        eur: 349,
+        name: { fr: "Community Growth", en: "Community Growth", vi: "Community Growth" },
+        eur: 399,
         period: "month",
         popular: true,
         features: [
           { fr: "16 publications par mois", en: "16 posts per month", vi: "16 bài đăng mỗi tháng" },
-          { fr: "2 réseaux sociaux", en: "2 social networks", vi: "2 mạng xã hội" },
+          { fr: "2 réseaux sociaux en gestion", en: "2 managed social networks", vi: "2 mạng xã hội quản lý" },
+          { fr: "2 langues de rédaction", en: "2 content languages", vi: "2 ngôn ngữ nội dung" },
           { fr: "Stories quotidiennes", en: "Daily stories", vi: "Story hàng ngày" },
           {
             fr: "Modération des commentaires",
             en: "Comment moderation",
             vi: "Kiểm duyệt bình luận",
           },
-          {
-            fr: "Reporting bimensuel",
-            en: "Bi-monthly reporting",
-            vi: "Báo cáo hai lần mỗi tháng",
-          },
           { fr: "Stratégie éditoriale", en: "Editorial strategy", vi: "Chiến lược nội dung" },
+          { fr: "Reporting bimensuel", en: "Bi-monthly reporting", vi: "Báo cáo hai lần mỗi tháng" },
           { fr: "Support prioritaire", en: "Priority support", vi: "Hỗ trợ ưu tiên" },
         ],
       },
@@ -1284,23 +1282,24 @@ export const SERVICES: Service[] = [
         eur: 599,
         period: "month",
         features: [
-          { fr: "Publications illimitées", en: "Unlimited posts", vi: "Bài đăng không giới hạn" },
+          { fr: "30 publications par mois", en: "30 posts per month", vi: "30 bài đăng mỗi tháng" },
           {
-            fr: "3 réseaux sociaux et plus",
-            en: "3+ social networks",
-            vi: "Từ 3 mạng xã hội trở lên",
+            fr: "3 réseaux sociaux en gestion",
+            en: "3 managed social networks",
+            vi: "3 mạng xã hội quản lý",
           },
+          { fr: "3 langues de rédaction", en: "3 content languages", vi: "3 ngôn ngữ nội dung" },
           {
             fr: "Vidéos courtes (Reels / TikTok)",
             en: "Short videos (Reels / TikTok)",
             vi: "Video ngắn (Reels / TikTok)",
           },
-          { fr: "Gestion des publicités", en: "Paid ads management", vi: "Quản lý quảng cáo" },
           {
-            fr: "Partenariats influenceurs",
-            en: "Influencer partnerships",
-            vi: "Hợp tác người ảnh hưởng",
+            fr: "Logos & visuels marque déposée",
+            en: "Brand trademark logos & visuals",
+            vi: "Logo & hình ảnh thương hiệu",
           },
+          { fr: "Gestion des publicités", en: "Paid ads management", vi: "Quản lý quảng cáo" },
           {
             fr: "Account manager dédié",
             en: "Dedicated account manager",
@@ -1745,10 +1744,537 @@ export const SERVICES: Service[] = [
       },
     ],
   },
+  /* ── 08 · E-commerce ── */
+  {
+    id: "ecommerce",
+    num: "08",
+    title: { fr: "E-commerce", en: "E-commerce", vi: "Thương mại điện tử" },
+    short: {
+      fr: "Boutiques en ligne performantes, conçues pour convertir.",
+      en: "High-performing online stores, built to convert.",
+      vi: "Cửa hàng trực tuyến hiệu suất cao, thiết kế để chuyển đổi.",
+    },
+    description: {
+      fr: "Nous créons des boutiques en ligne sur mesure qui transforment les visiteurs en acheteurs : design premium, fiches produit sensorielles, tunnel de conversion optimisé et intégration logistique.",
+      en: "We build bespoke online stores that turn visitors into buyers: premium design, sensory product pages, optimised conversion funnels and logistics integration.",
+      vi: "Chúng tôi tạo cửa hàng trực tuyến riêng biệt biến khách truy cập thành người mua: thiết kế cao cấp, trang sản phẩm cảm quan, phễu chuyển đổi tối ưu và tích hợp vận hành.",
+    },
+    fromEur: 799,
+    fromPeriod: "once",
+    highlights: [
+      { fr: "Shopify & WooCommerce", en: "Shopify & WooCommerce", vi: "Shopify & WooCommerce" },
+      { fr: "Tunnel de conversion", en: "Conversion funnel", vi: "Phễu chuyển đổi" },
+      { fr: "Paiement sécurisé", en: "Secure payments", vi: "Thanh toán bảo mật" },
+      { fr: "Suivi logistique", en: "Logistics tracking", vi: "Theo dõi vận chuyển" },
+    ],
+    steps: [
+      {
+        num: "01",
+        title: { fr: "Atelier Produit & Marque", en: "Product & Brand Workshop", vi: "Workshop Sản phẩm & Thương hiệu" },
+        desc: {
+          fr: "Définition de l'univers de marque, de la gamme de produits et de l'expérience d'achat cible.",
+          en: "Brand universe, product range and target shopping experience definition.",
+          vi: "Xác định vũ trụ thương hiệu, dòng sản phẩm và trải nghiệm mua sắm mục tiêu.",
+        },
+      },
+      {
+        num: "02",
+        title: { fr: "Design & Architecture", en: "Design & Architecture", vi: "Thiết kế & Kiến trúc" },
+        desc: {
+          fr: "Conception de l'interface, des fiches produit et du parcours d'achat optimisé pour le mobile.",
+          en: "Interface design, product pages and mobile-first purchase journey.",
+          vi: "Thiết kế giao diện, trang sản phẩm và hành trình mua sắm ưu tiên di động.",
+        },
+      },
+      {
+        num: "03",
+        title: { fr: "Développement & Intégrations", en: "Development & Integrations", vi: "Phát triển & Tích hợp" },
+        desc: {
+          fr: "Intégration CMS, passerelles de paiement, logistique et outils marketing.",
+          en: "CMS integration, payment gateways, logistics and marketing tools.",
+          vi: "Tích hợp CMS, cổng thanh toán, vận chuyển và công cụ marketing.",
+        },
+      },
+      {
+        num: "04",
+        title: { fr: "Lancement & Optimisation", en: "Launch & Optimization", vi: "Ra mắt & Tối ưu" },
+        desc: {
+          fr: "Tests A/B, suivi des performances et itérations continues pour maximiser les ventes.",
+          en: "A/B testing, performance tracking and continuous iteration to maximise sales.",
+          vi: "Thử nghiệm A/B, theo dõi hiệu suất và cải tiến liên tục để tối đa doanh số.",
+        },
+      },
+    ],
+    metrics: [
+      {
+        metric: "+190%",
+        label: { fr: "Taux de conversion", en: "Conversion rate", vi: "Tỷ lệ chuyển đổi" },
+        desc: { fr: "Optimisation continue du parcours d'achat.", en: "Continuous purchase journey optimization.", vi: "Tối ưu liên tục hành trình mua sắm." },
+      },
+      {
+        metric: "< 2s",
+        label: { fr: "Temps de chargement", en: "Load time", vi: "Thời gian tải" },
+        desc: { fr: "Performance maximale pour zéro abandon.", en: "Maximum performance for zero abandonment.", vi: "Hiệu suất tối đa, không bỏ lỡ đơn hàng." },
+      },
+    ],
+    comparisons: [
+      {
+        feature: { fr: "Expérience d'achat", en: "Shopping experience", vi: "Trải nghiệm mua sắm" },
+        us: { fr: "Immersion éditoriale premium", en: "Premium editorial immersion", vi: "Trải nghiệm biên tập cao cấp" },
+        them: { fr: "Template générique sans âme", en: "Soulless generic template", vi: "Mẫu chung không có hồn" },
+      },
+      {
+        feature: { fr: "Performance", en: "Performance", vi: "Hiệu suất" },
+        us: { fr: "Core Web Vitals au vert", en: "All Core Web Vitals green", vi: "Tất cả Core Web Vitals đạt chuẩn" },
+        them: { fr: "Lenteur et abandons", en: "Slow and high abandonment", vi: "Chậm và tỷ lệ bỏ cao" },
+      },
+    ],
+    plans: [
+      {
+        name: { fr: "Starter", en: "Starter", vi: "Khởi đầu" },
+        audience: { fr: "TPE & artisans", en: "Small businesses & artisans", vi: "Doanh nghiệp nhỏ & nghệ nhân" },
+        eur: 799,
+        period: "once",
+        features: [
+          { fr: "Boutique Shopify/WooCommerce", en: "Shopify/WooCommerce store", vi: "Cửa hàng Shopify/WooCommerce" },
+          { fr: "Jusqu'à 50 produits", en: "Up to 50 products", vi: "Tối đa 50 sản phẩm" },
+          { fr: "Paiement en ligne", en: "Online payments", vi: "Thanh toán trực tuyến" },
+          { fr: "Design responsive", en: "Responsive design", vi: "Thiết kế responsive" },
+          { fr: "SEO de base", en: "Basic SEO", vi: "SEO cơ bản" },
+        ],
+      },
+      {
+        name: { fr: "Growth", en: "Growth", vi: "Tăng trưởng" },
+        audience: { fr: "Marques en croissance", en: "Growing brands", vi: "Thương hiệu đang phát triển" },
+        eur: 1499,
+        period: "month",
+        popular: true,
+        features: [
+          { fr: "Tout Starter +", en: "Everything in Starter +", vi: "Tất cả Khởi đầu +" },
+          { fr: "Produits illimités", en: "Unlimited products", vi: "Sản phẩm không giới hạn" },
+          { fr: "Tunnel de conversion avancé", en: "Advanced conversion funnel", vi: "Phễu chuyển đổi nâng cao" },
+          { fr: "Email marketing intégré", en: "Integrated email marketing", vi: "Email marketing tích hợp" },
+          { fr: "Analytics avancés", en: "Advanced analytics", vi: "Phân tích nâng cao" },
+          { fr: "Support prioritaire", en: "Priority support", vi: "Hỗ trợ ưu tiên" },
+        ],
+      },
+      {
+        name: { fr: "Enterprise", en: "Enterprise", vi: "Doanh nghiệp" },
+        audience: { fr: "Marques établies", en: "Established brands", vi: "Thương hiệu đã khẳng định" },
+        eur: 2999,
+        period: "month",
+        features: [
+          { fr: "Tout Growth +", en: "Everything in Growth +", vi: "Tất cả Tăng trưởng +" },
+          { fr: "Multi-boutique / multi-langue", en: "Multi-store / multi-language", vi: "Đa cửa hàng / đa ngôn ngữ" },
+          { fr: "ERP & CRM integration", en: "ERP & CRM integration", vi: "Tích hợp ERP & CRM" },
+          { fr: "Account manager dédié", en: "Dedicated account manager", vi: "Quản lý tài khoản riêng" },
+          { fr: "SLA garanti", en: "Guaranteed SLA", vi: "SLA đảm bảo" },
+        ],
+      },
+    ],
+    serviceFaqs: [
+      {
+        q: { fr: "Quelle plateforme utilisez-vous ?", en: "Which platform do you use?", vi: "Bạn sử dụng nền tảng nào?" },
+        a: { fr: "Shopify, WooCommerce ou solutions headless selon vos besoins.", en: "Shopify, WooCommerce or headless solutions depending on your needs.", vi: "Shopify, WooCommerce hoặc giải pháp headless tùy nhu cầu." },
+      },
+      {
+        q: { fr: "Pouvez-vous migrer mon site existant ?", en: "Can you migrate my existing site?", vi: "Bạn có thể chuyển đổi website hiện tại không?" },
+        a: { fr: "Oui, nous gérons la migration complète sans perte de SEO ni de données.", en: "Yes, we handle full migration with zero SEO or data loss.", vi: "Có, chúng tôi xử lý chuyển đổi toàn bộ không mất SEO hay dữ liệu." },
+      },
+    ],
+  },
+  /* ── 09 · Refonte ── */
+  {
+    id: "refonte",
+    num: "09",
+    title: { fr: "Refonte de site internet", en: "Website Redesign", vi: "Thiết kế lại website" },
+    short: {
+      fr: "Moderniser votre site pour booster image et conversion.",
+      en: "Modernise your site to boost image and conversion.",
+      vi: "Hiện đại hóa website để tăng hình ảnh và chuyển đổi.",
+    },
+    description: {
+      fr: "Nous transformons votre site existant en une expérience digitale premium : audit UX complet, redesign sur-mesure, migration sans perte SEO et performance accrue.",
+      en: "We transform your existing website into a premium digital experience: full UX audit, bespoke redesign, zero-loss SEO migration and increased performance.",
+      vi: "Chúng tôi biến website hiện tại thành trải nghiệm số cao cấp: kiểm tra UX toàn diện, thiết kế riêng, chuyển đổi không mất SEO và tăng hiệu suất.",
+    },
+    fromEur: 499,
+    fromPeriod: "once",
+    highlights: [
+      { fr: "Audit UX complet", en: "Full UX audit", vi: "Kiểm tra UX toàn diện" },
+      { fr: "Migration sans perte SEO", en: "Zero-loss SEO migration", vi: "Chuyển đổi không mất SEO" },
+      { fr: "Design system moderne", en: "Modern design system", vi: "Hệ thống thiết kế hiện đại" },
+      { fr: "Performance x2", en: "2x performance", vi: "Hiệu suất x2" },
+    ],
+    steps: [
+      {
+        num: "01",
+        title: { fr: "Audit & Diagnostic", en: "Audit & Diagnostic", vi: "Kiểm tra & Chẩn đoán" },
+        desc: {
+          fr: "Analyse complète de l'existant : UX, performance, SEO, accessibilité et parcours utilisateur.",
+          en: "Full analysis of the current site: UX, performance, SEO, accessibility and user journeys.",
+          vi: "Phân tích toàn diện: UX, hiệu suất, SEO, khả năng truy cập và hành trình người dùng.",
+        },
+      },
+      {
+        num: "02",
+        title: { fr: "Stratégie & Wireframes", en: "Strategy & Wireframes", vi: "Chiến lược & Wireframe" },
+        desc: {
+          fr: "Définition de la nouvelle architecture, des parcours clés et des objectifs de conversion.",
+          en: "New information architecture, key user journeys and conversion goal setting.",
+          vi: "Xác định kiến trúc mới, hành trình chính và mục tiêu chuyển đổi.",
+        },
+      },
+      {
+        num: "03",
+        title: { fr: "Design & Développement", en: "Design & Development", vi: "Thiết kế & Phát triển" },
+        desc: {
+          fr: "Refonte visuelle complète et développement avec les technologies les plus performantes.",
+          en: "Complete visual overhaul and development with the most performant technologies.",
+          vi: "Làm mới toàn bộ giao diện và phát triển với công nghệ hiệu suất cao nhất.",
+        },
+      },
+      {
+        num: "04",
+        title: { fr: "Migration & Lancement", en: "Migration & Launch", vi: "Di chuyển & Ra mắt" },
+        desc: {
+          fr: "Migration technique sans downtime, redirections SEO et lancement optimisé.",
+          en: "Zero-downtime technical migration, SEO redirects and optimized launch.",
+          vi: "Di chuyển kỹ thuật không gián đoạn, chuyển hướng SEO và ra mắt tối ưu.",
+        },
+      },
+    ],
+    metrics: [
+      {
+        metric: "+240%",
+        label: { fr: "Amélioration conversion", en: "Conversion improvement", vi: "Cải thiện chuyển đổi" },
+        desc: { fr: "Parcours optimisés pour la conversion.", en: "Journeys optimized for conversion.", vi: "Hành trình tối ưu cho chuyển đổi." },
+      },
+      {
+        metric: "x2.5",
+        label: { fr: "Performance", en: "Performance boost", vi: "Tăng hiệu suất" },
+        desc: { fr: "Vitesse de chargement multipliée par 2,5.", en: "Load speed multiplied by 2.5x.", vi: "Tốc độ tải tăng gấp 2,5 lần." },
+      },
+    ],
+    comparisons: [
+      {
+        feature: { fr: "Approche", en: "Approach", vi: "Phương pháp" },
+        us: { fr: "Refonte stratégique data-driven", en: "Strategic data-driven redesign", vi: "Thiết kế lại chiến lược dựa trên dữ liệu" },
+        them: { fr: "Coup de peinture cosmétique", en: "Cosmetic paint job", vi: "Sơn lại bề mặt" },
+      },
+      {
+        feature: { fr: "SEO", en: "SEO", vi: "SEO" },
+        us: { fr: "Zéro perte de référencement", en: "Zero ranking loss", vi: "Không mất thứ hạng" },
+        them: { fr: "Chute de trafic post-refonte", en: "Post-redesign traffic drop", vi: "Sụt giảm traffic sau thiết kế lại" },
+      },
+    ],
+    plans: [
+      {
+        name: { fr: "Audit", en: "Audit", vi: "Kiểm tra" },
+        audience: { fr: "Diagnostic initial", en: "Initial diagnostic", vi: "Chẩn đoán ban đầu" },
+        eur: 499,
+        period: "once",
+        features: [
+          { fr: "Audit UX complet", en: "Full UX audit", vi: "Kiểm tra UX toàn diện" },
+          { fr: "Rapport performance", en: "Performance report", vi: "Báo cáo hiệu suất" },
+          { fr: "Analyse SEO", en: "SEO analysis", vi: "Phân tích SEO" },
+          { fr: "Recommandations prioritaires", en: "Priority recommendations", vi: "Khuyến nghị ưu tiên" },
+        ],
+      },
+      {
+        name: { fr: "Refonte", en: "Redesign", vi: "Thiết kế lại" },
+        audience: { fr: "PME & startups", en: "SMEs & startups", vi: "Doanh nghiệp vừa & startup" },
+        eur: 1499,
+        period: "once",
+        popular: true,
+        features: [
+          { fr: "Tout Audit +", en: "Everything in Audit +", vi: "Tất cả Kiểm tra +" },
+          { fr: "Design system complet", en: "Complete design system", vi: "Hệ thống thiết kế đầy đủ" },
+          { fr: "Développement sur-mesure", en: "Custom development", vi: "Phát triển riêng biệt" },
+          { fr: "Migration SEO", en: "SEO migration", vi: "Di chuyển SEO" },
+          { fr: "Tests cross-browser", en: "Cross-browser testing", vi: "Kiểm tra đa trình duyệt" },
+          { fr: "Formation CMS", en: "CMS training", vi: "Đào tạo CMS" },
+        ],
+      },
+      {
+        name: { fr: "Premium", en: "Premium", vi: "Cao cấp" },
+        audience: { fr: "Grandes entreprises", en: "Large enterprises", vi: "Doanh nghiệp lớn" },
+        eur: 2999,
+        period: "once",
+        features: [
+          { fr: "Tout Refonte +", en: "Everything in Redesign +", vi: "Tất cả Thiết kế lại +" },
+          { fr: "Architecture sur-mesure", en: "Bespoke architecture", vi: "Kiến trúc riêng biệt" },
+          { fr: "Animations avancées", en: "Advanced animations", vi: "Hoạt ảnh nâng cao" },
+          { fr: "Intégrations API", en: "API integrations", vi: "Tích hợp API" },
+          { fr: "Support 12 mois", en: "12-month support", vi: "Hỗ trợ 12 tháng" },
+        ],
+      },
+    ],
+  },
+  /* ── 10 · Publicité digitale ── */
+  {
+    id: "ads",
+    num: "10",
+    title: { fr: "Publicité digitale", en: "Digital Advertising", vi: "Quảng cáo số" },
+    short: {
+      fr: "Campagnes d'acquisition orientées ROAS et conversion.",
+      en: "Acquisition campaigns focused on ROAS and conversion.",
+      vi: "Chiến dịch thu hút tập trung ROAS và chuyển đổi.",
+    },
+    description: {
+      fr: "Nous pilotons vos campagnes Google Ads, Meta Ads et display pour maximiser votre retour sur investissement publicitaire : ciblage précis, A/B testing continu et optimisation du ROAS.",
+      en: "We manage your Google Ads, Meta Ads and display campaigns to maximise your advertising ROI: precise targeting, continuous A/B testing and ROAS optimization.",
+      vi: "Chúng tôi quản lý chiến dịch Google Ads, Meta Ads và hiển thị để tối đa ROI quảng cáo: nhắm mục tiêu chính xác, thử nghiệm A/B liên tục và tối ưu ROAS.",
+    },
+    fromEur: 499,
+    fromPeriod: "month",
+    highlights: [
+      { fr: "Google Ads & Meta Ads", en: "Google Ads & Meta Ads", vi: "Google Ads & Meta Ads" },
+      { fr: "A/B testing continu", en: "Continuous A/B testing", vi: "Thử nghiệm A/B liên tục" },
+      { fr: "ROAS > 4x", en: "ROAS > 4x", vi: "ROAS > 4x" },
+      { fr: "Reporting mensuel", en: "Monthly reporting", vi: "Báo cáo hàng tháng" },
+    ],
+    steps: [
+      {
+        num: "01",
+        title: { fr: "Stratégie & Ciblage", en: "Strategy & Targeting", vi: "Chiến lược & Nhắm mục tiêu" },
+        desc: {
+          fr: "Analyse du marché, définition des personas et stratégie d'enchères.",
+          en: "Market analysis, persona definition and bidding strategy.",
+          vi: "Phân tích thị trường, xác định chân dung khách hàng và chiến lược đấu thầu.",
+        },
+      },
+      {
+        num: "02",
+        title: { fr: "Création & Lancement", en: "Creation & Launch", vi: "Tạo & Ra mắt" },
+        desc: {
+          fr: "Conception des annonces, landing pages et mise en production des campagnes.",
+          en: "Ad creative, landing pages and campaign deployment.",
+          vi: "Thiết kế quảng cáo, trang đích và triển khai chiến dịch.",
+        },
+      },
+      {
+        num: "03",
+        title: { fr: "Optimisation & Scaling", en: "Optimization & Scaling", vi: "Tối ưu & Mở rộng" },
+        desc: {
+          fr: "Ajustements quotidiens, scaling des gagnants et arrêt des sous-performants.",
+          en: "Daily adjustments, scaling winners and pausing underperformers.",
+          vi: "Điều chỉnh hàng ngày, mở rộng quảng cáo hiệu quả và dừng quảng cáo kém.",
+        },
+      },
+      {
+        num: "04",
+        title: { fr: "Reporting & Analyse", en: "Reporting & Analysis", vi: "Báo cáo & Phân tích" },
+        desc: {
+          fr: "Rapports détaillés, analyse ROI et recommandations pour le mois suivant.",
+          en: "Detailed reports, ROI analysis and recommendations for the next month.",
+          vi: "Báo cáo chi tiết, phân tích ROI và khuyến nghị cho tháng tiếp theo.",
+        },
+      },
+    ],
+    metrics: [
+      {
+        metric: "> 4x",
+        label: { fr: "ROAS moyen", en: "Average ROAS", vi: "ROAS trung bình" },
+        desc: { fr: "Retour sur investissement publicitaire.", en: "Return on advertising spend.", vi: "Hoàn vốn chi phí quảng cáo." },
+      },
+      {
+        metric: "-35%",
+        label: { fr: "Coût par lead", en: "Cost per lead", vi: "Chi phí mỗi lead" },
+        desc: { fr: "Réduction du coût d'acquisition.", en: "Lower acquisition cost.", vi: "Giảm chi phí thu hút." },
+      },
+    ],
+    comparisons: [
+      {
+        feature: { fr: "Gestion", en: "Management", vi: "Quản lý" },
+        us: { fr: "Optimisation quotidienne par des experts", en: "Daily optimization by experts", vi: "Tối ưu hàng ngày bởi chuyên gia" },
+        them: { fr: "Configuration initiale puis abandon", en: "Setup and forget", vi: "Thiết lập rồi bỏ quên" },
+      },
+      {
+        feature: { fr: "Transparence", en: "Transparency", vi: "Minh bạch" },
+        us: { fr: "Reporting complet et accessible", en: "Full accessible reporting", vi: "Báo cáo đầy đủ và dễ truy cập" },
+        them: { fr: "Tableaux de bord opaques", en: "Opaque dashboards", vi: "Bảng điều khiển mờ nhạt" },
+      },
+    ],
+    plans: [
+      {
+        name: { fr: "Launch", en: "Launch", vi: "Ra mắt" },
+        audience: { fr: "Démarrage publicitaire", en: "Advertising startup", vi: "Bắt đầu quảng cáo" },
+        eur: 499,
+        period: "month",
+        features: [
+          { fr: "1 plateforme (Google ou Meta)", en: "1 platform (Google or Meta)", vi: "1 nền tảng (Google hoặc Meta)" },
+          { fr: "Stratégie initiale", en: "Initial strategy", vi: "Chiến lược ban đầu" },
+          { fr: "Création des annonces", en: "Ad creation", vi: "Tạo quảng cáo" },
+          { fr: "Optimisation hebdomadaire", en: "Weekly optimization", vi: "Tối ưu hàng tuần" },
+          { fr: "Reporting mensuel", en: "Monthly reporting", vi: "Báo cáo hàng tháng" },
+        ],
+      },
+      {
+        name: { fr: "Scale", en: "Scale", vi: "Mở rộng" },
+        audience: { fr: "Croissance accélérée", en: "Accelerated growth", vi: "Tăng tốc mở rộng" },
+        eur: 999,
+        period: "month",
+        popular: true,
+        features: [
+          { fr: "Tout Launch +", en: "Everything in Launch +", vi: "Tất cả Ra mắt +" },
+          { fr: "Multi-plateforme", en: "Multi-platform", vi: "Đa nền tảng" },
+          { fr: "A/B testing avancé", en: "Advanced A/B testing", vi: "Thử nghiệm A/B nâng cao" },
+          { fr: "Landing pages incluses", en: "Landing pages included", vi: "Trang đích bao gồm" },
+          { fr: "Optimisation quotidienne", en: "Daily optimization", vi: "Tối ưu hàng ngày" },
+          { fr: "Account manager", en: "Account manager", vi: "Quản lý tài khoản" },
+        ],
+      },
+      {
+        name: { fr: "Premium", en: "Premium", vi: "Cao cấp" },
+        audience: { fr: "Marques établies", en: "Established brands", vi: "Thương hiệu đã khẳng định" },
+        eur: 1999,
+        period: "month",
+        features: [
+          { fr: "Tout Scale +", en: "Everything in Scale +", vi: "Tất cả Mở rộng +" },
+          { fr: "Stratégie omnicanale", en: "Omnichannel strategy", vi: "Chiến lược đa kênh" },
+          { fr: "Retargeting avancé", en: "Advanced retargeting", vi: "Retargeting nâng cao" },
+          { fr: "Creative studio inclus", en: "Creative studio included", vi: "Studio sáng tạo bao gồm" },
+          { fr: "SLA performance garanti", en: "Guaranteed performance SLA", vi: "SLA hiệu suất đảm bảo" },
+        ],
+      },
+    ],
+  },
+  /* ── 11 · Stratégie digitale ── */
+  {
+    id: "strategy",
+    num: "11",
+    title: { fr: "Stratégie digitale", en: "Digital Strategy", vi: "Chiến lược số" },
+    short: {
+      fr: "Audit, positionnement et feuille de route pour dominer votre marché.",
+      en: "Audit, positioning and roadmap to dominate your market.",
+      vi: "Kiểm tra, định vị và lộ trình để thống lĩnh thị trường.",
+    },
+    description: {
+      fr: "Nous définissons votre feuille de route digitale : analyse de marché, positionnement de marque, stratégie d'acquisition et framework KPI pour une croissance mesurable et durable.",
+      en: "We define your digital roadmap: market analysis, brand positioning, acquisition strategy and KPI framework for measurable, sustainable growth.",
+      vi: "Chúng tôi xác định lộ trình số của bạn: phân tích thị trường, định vị thương hiệu, chiến lược thu hút và khung KPI để tăng trưởng đo lường được và bền vững.",
+    },
+    fromEur: 799,
+    fromPeriod: "once",
+    highlights: [
+      { fr: "Analyse de marché", en: "Market analysis", vi: "Phân tích thị trường" },
+      { fr: "Positionnement de marque", en: "Brand positioning", vi: "Định vị thương hiệu" },
+      { fr: "Stratégie d'acquisition", en: "Acquisition strategy", vi: "Chiến lược thu hút" },
+      { fr: "Framework KPI", en: "KPI framework", vi: "Khung KPI" },
+    ],
+    steps: [
+      {
+        num: "01",
+        title: { fr: "Immersion & Diagnostic", en: "Immersion & Diagnostic", vi: "Tìm hiểu & Chẩn đoán" },
+        desc: {
+          fr: "Analyse approfondie de votre marché, concurrents, forces et opportunités digitales.",
+          en: "In-depth analysis of your market, competitors, strengths and digital opportunities.",
+          vi: "Phân tích chuyên sâu thị trường, đối thủ, điểm mạnh và cơ hội số.",
+        },
+      },
+      {
+        num: "02",
+        title: { fr: "Positionnement & Architecture", en: "Positioning & Architecture", vi: "Định vị & Kiến trúc" },
+        desc: {
+          fr: "Définition du positionnement unique, de la proposition de valeur et de l'architecture digitale.",
+          en: "Defining unique positioning, value proposition and digital architecture.",
+          vi: "Xác định định vị độc nhất, đề xuất giá trị và kiến trúc số.",
+        },
+      },
+      {
+        num: "03",
+        title: { fr: "Feuille de Route", en: "Roadmap", vi: "Lộ trình" },
+        desc: {
+          fr: "Plan d'action priorisé sur 6-12 mois avec objectifs KPI et budget estimé.",
+          en: "Prioritized 6-12 month action plan with KPI targets and estimated budget.",
+          vi: "Kế hoạch hành động ưu tiên 6-12 tháng với mục tiêu KPI và ngân sách ước tính.",
+        },
+      },
+      {
+        num: "04",
+        title: { fr: "Accompagnement", en: "Support", vi: "Đồng hành" },
+        desc: {
+          fr: "Suivi mensuel, ajustements stratégiques et optimisation continue des performances.",
+          en: "Monthly tracking, strategic adjustments and continuous performance optimization.",
+          vi: "Theo dõi hàng tháng, điều chỉnh chiến lược và tối ưu hiệu suất liên tục.",
+        },
+      },
+    ],
+    metrics: [
+      {
+        metric: "+3,2x",
+        label: { fr: "ROI moyen", en: "Average ROI", vi: "ROI trung bình" },
+        desc: { fr: "Retour sur investissement mesurable.", en: "Measurable return on investment.", vi: "Hoàn vốn đầu tư đo lường được." },
+      },
+      {
+        metric: "6 mois",
+        label: { fr: "Horizon stratégique", en: "Strategic horizon", vi: "Tầm nhìn chiến lược" },
+        desc: { fr: "Plan d'action structuré et réaliste.", en: "Structured and realistic action plan.", vi: "Kế hoạch hành động có cấu trúc và thực tế." },
+      },
+    ],
+    comparisons: [
+      {
+        feature: { fr: "Vision", en: "Vision", vi: "Tầm nhìn" },
+        us: { fr: "Stratégie 360° data-driven", en: "360° data-driven strategy", vi: "Chiến lược 360° dựa trên dữ liệu" },
+        them: { fr: "Recommandations génériques", en: "Generic recommendations", vi: "Khuyến nghị chung chung" },
+      },
+      {
+        feature: { fr: "Suivi", en: "Tracking", vi: "Theo dõi" },
+        us: { fr: "KPIs mesurables et reporting", en: "Measurable KPIs and reporting", vi: "KPI đo lường được và báo cáo" },
+        them: { fr: "Pas de suivi structuré", en: "No structured tracking", vi: "Không theo dõi có cấu trúc" },
+      },
+    ],
+    plans: [
+      {
+        name: { fr: "Audit", en: "Audit", vi: "Kiểm tra" },
+        audience: { fr: "Diagnostic stratégique", en: "Strategic diagnostic", vi: "Chẩn đoán chiến lược" },
+        eur: 799,
+        period: "once",
+        features: [
+          { fr: "Audit digital complet", en: "Full digital audit", vi: "Kiểm tra số toàn diện" },
+          { fr: "Analyse concurrentielle", en: "Competitive analysis", vi: "Phân tích đối thủ" },
+          { fr: "Recommandations prioritaires", en: "Priority recommendations", vi: "Khuyến nghị ưu tiên" },
+          { fr: "Rapport exécutif", en: "Executive report", vi: "Báo cáo điều hành" },
+        ],
+      },
+      {
+        name: { fr: "Roadmap", en: "Roadmap", vi: "Lộ trình" },
+        audience: { fr: "PME ambitieuses", en: "Ambitious SMEs", vi: "Doanh nghiệp vừa tham vọng" },
+        eur: 1999,
+        period: "once",
+        popular: true,
+        features: [
+          { fr: "Tout Audit +", en: "Everything in Audit +", vi: "Tất cả Kiểm tra +" },
+          { fr: "Feuille de route 12 mois", en: "12-month roadmap", vi: "Lộ trình 12 tháng" },
+          { fr: "Positionnement de marque", en: "Brand positioning", vi: "Định vị thương hiệu" },
+          { fr: "Stratégie d'acquisition", en: "Acquisition strategy", vi: "Chiến lược thu hút" },
+          { fr: "Framework KPI", en: "KPI framework", vi: "Khung KPI" },
+          { fr: "2 sessions de présentation", en: "2 presentation sessions", vi: "2 buổi trình bày" },
+        ],
+      },
+      {
+        name: { fr: "Accompagnement", en: "Support", vi: "Đồng hành" },
+        audience: { fr: "Croissance continue", en: "Continuous growth", vi: "Tăng trưởng liên tục" },
+        eur: 2499,
+        period: "month",
+        features: [
+          { fr: "Tout Roadmap +", en: "Everything in Roadmap +", vi: "Tất cả Lộ trình +" },
+          { fr: "Suivi mensuel stratégique", en: "Monthly strategic tracking", vi: "Theo dõi chiến lược hàng tháng" },
+          { fr: "Ajustements en continu", en: "Continuous adjustments", vi: "Điều chỉnh liên tục" },
+          { fr: "Comités trimestriels", en: "Quarterly reviews", vi: "Đánh giá hàng quý" },
+          { fr: "Account director dédié", en: "Dedicated account director", vi: "Giám đốc tài khoản riêng" },
+        ],
+      },
+    ],
+  },
 ];
 
-export const FAQ: { q: L; a: L }[] = [
+export type FaqCategory = "sites" | "seo" | "ads" | "ia" | "tarifs" | "delais" | "general";
+
+export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
   {
+    category: "delais",
     q: {
       fr: "Combien de temps faut-il pour créer mon site ?",
       en: "How long does it take to build my website?",
@@ -1761,6 +2287,7 @@ export const FAQ: { q: L; a: L }[] = [
     },
   },
   {
+    category: "sites",
     q: {
       fr: "Que comprend l'hébergement inclus ?",
       en: "What does the included hosting cover?",
@@ -1773,6 +2300,7 @@ export const FAQ: { q: L; a: L }[] = [
     },
   },
   {
+    category: "sites",
     q: {
       fr: "Puis-je modifier mon site moi-même ?",
       en: "Can I edit my website myself?",
@@ -1785,6 +2313,7 @@ export const FAQ: { q: L; a: L }[] = [
     },
   },
   {
+    category: "seo",
     q: {
       fr: "Combien de temps pour voir des résultats en SEO ?",
       en: "How long before SEO results appear?",
@@ -1797,6 +2326,7 @@ export const FAQ: { q: L; a: L }[] = [
     },
   },
   {
+    category: "seo",
     q: {
       fr: "Quelle est la différence entre le SEO et Google Maps ?",
       en: "What is the difference between SEO and Google Maps?",
@@ -1809,6 +2339,7 @@ export const FAQ: { q: L; a: L }[] = [
     },
   },
   {
+    category: "seo",
     q: {
       fr: "Comment fonctionne la garantie Google Maps TOP 3 ?",
       en: "How does the Google Maps TOP 3 guarantee work?",
@@ -1821,6 +2352,7 @@ export const FAQ: { q: L; a: L }[] = [
     },
   },
   {
+    category: "seo",
     q: {
       fr: "Comment le prix Google Maps est-il calculé ?",
       en: "How is the Google Maps price calculated?",
@@ -1833,6 +2365,7 @@ export const FAQ: { q: L; a: L }[] = [
     },
   },
   {
+    category: "general",
     q: {
       fr: "Combien de publications sont incluses chaque mois ?",
       en: "How many posts are included each month?",
@@ -1845,6 +2378,7 @@ export const FAQ: { q: L; a: L }[] = [
     },
   },
   {
+    category: "general",
     q: {
       fr: "Puis-je valider les contenus avant publication ?",
       en: "Can I approve content before publication?",
@@ -1857,6 +2391,7 @@ export const FAQ: { q: L; a: L }[] = [
     },
   },
   {
+    category: "ia",
     q: {
       fr: "L'IA peut-elle vraiment remplacer un employé ?",
       en: "Can AI really replace an employee?",
@@ -1869,6 +2404,7 @@ export const FAQ: { q: L; a: L }[] = [
     },
   },
   {
+    category: "ia",
     q: {
       fr: "Sur quelles plateformes l'assistant IA fonctionne-t-il ?",
       en: "Which platforms does the AI assistant run on?",
@@ -1881,6 +2417,7 @@ export const FAQ: { q: L; a: L }[] = [
     },
   },
   {
+    category: "sites",
     q: {
       fr: "Que se passe-t-il si mon site tombe en panne ?",
       en: "What happens if my website goes down?",
@@ -1893,6 +2430,7 @@ export const FAQ: { q: L; a: L }[] = [
     },
   },
   {
+    category: "tarifs",
     q: {
       fr: "Y a-t-il un engagement minimum ?",
       en: "Is there a minimum commitment?",
@@ -1905,6 +2443,7 @@ export const FAQ: { q: L; a: L }[] = [
     },
   },
   {
+    category: "general",
     q: {
       fr: "Les droits d'utilisation de mon identité sont-ils inclus ?",
       en: "Are the usage rights to my identity included?",
@@ -1918,116 +2457,186 @@ export const FAQ: { q: L; a: L }[] = [
   },
 ];
 
-export const PORTFOLIO = [
+export const SHOWCASE = [
   {
-    plate: "01",
+    id: "maison-lumiere",
     name: "Maison Lumière",
-    sector: { fr: "Gastronomie · Paris", en: "Fine dining · Paris", vi: "Ẩm thực cao cấp · Paris" },
-    result: { fr: "+180 % de réservations", en: "+180% bookings", vi: "+180% lượt đặt bàn" },
-    tags: ["Website", "SEO Local", "AI"],
-    image: pf01,
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorLuxe",
+    type: { fr: "Site vitrine luxe", en: "Luxury showcase", vi: "Website giới thiệu xa xỉ" },
+    desc: {
+      fr: "Identité visuelle raffinée, galerie immersive, navigation éditoriale pour cette joaillerie indépendante parisienne.",
+      en: "Refined visual identity, immersive gallery, editorial navigation for this independent Parisian jeweler.",
+      vi: "Nhận diện tinh tế, phòng trưng bày nhập vai, điều hướng biên tập cho tiệm trang sức độc lập Paris.",
+    },
+    metric: "+320% demandes de RDV",
+    image: "https://images.unsplash.com/photo-1605100804763-247f67222fae?auto=format&fit=crop&q=85&w=1200",
   },
   {
-    plate: "02",
+    id: "villa-azur",
     name: "Villa Azur",
-    sector: {
-      fr: "Hôtel boutique · Nice",
-      en: "Boutique hotel · Nice",
-      vi: "Khách sạn boutique · Nice",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorHotellerie",
+    type: { fr: "Site vitrine + réservation", en: "Showcase + booking", vi: "Giới thiệu + đặt phòng" },
+    desc: {
+      fr: "Photographie grand format, système de réservation intégré, design épuré pour ce boutique-hôtel en Côte d'Azur.",
+      en: "Large-format photography, integrated booking system, clean design for this Côte d'Azur boutique hotel.",
+      vi: "Nhiếp ảnh khổ lớn, hệ thống đặt phòng tích hợp, thiết kế tinh tế cho khách sạn boutique Côte d'Azur.",
     },
-    result: { fr: "+240 % en direct", en: "+240% direct", vi: "+240% đặt trực tiếp" },
-    tags: ["Website", "SEO Pro", "Branding"],
-    image: pf02,
+    metric: "+280% réservations directes",
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=85&w=1200",
   },
   {
-    plate: "03",
-    name: "Noir & Or",
-    sector: {
-      fr: "Retail de luxe · Global",
-      en: "Luxury retail · Global",
-      vi: "Bán lẻ xa xỉ · Toàn cầu",
+    id: "le-novara",
+    name: "Le Novara",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorGastronomie",
+    type: { fr: "Site vitrine + réservation", en: "Showcase + booking", vi: "Giới thiệu + đặt bàn" },
+    desc: {
+      fr: "Menu interactif, ambiance éditoriale sombre, réservation en ligne. Restaurant gastronomique 1 étoile.",
+      en: "Interactive menu, dark editorial ambiance, online booking. 1-star gastronomic restaurant.",
+      vi: "Thực đơn tương tác, không gian biên tập tối, đặt bàn trực tuyến. Nhà hàng ẩm thực 1 sao.",
     },
-    result: { fr: "6 chiffres au T1", en: "6 figures in Q1", vi: "Doanh thu 6 chữ số quý I" },
-    tags: ["E-commerce", "SEO", "Ads"],
-    image: pf03,
+    metric: "+180% réservations",
+    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=85&w=1200",
   },
   {
-    plate: "04",
-    name: "Cabinet Mercier",
-    sector: {
-      fr: "Cabinet d'avocats · Paris",
-      en: "Law firm · Paris",
-      vi: "Văn phòng luật · Paris",
+    id: "prestige-auto",
+    name: "Prestige Auto 75",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorAuto",
+    type: { fr: "Site vitrine + configurateur", en: "Showcase + configurator", vi: "Website + cấu hình" },
+    desc: {
+      fr: "Showroom digital premium, configurateur véhicule, galerie immersive pour ce préparateur automobile de luxe.",
+      en: "Premium digital showroom, vehicle configurator, immersive gallery for this luxury auto preparer.",
+      vi: "Phòng trưng bày số cao cấp, cấu hình xe, phòng trưng bày nhập vai cho đơn vị độ xe sang.",
     },
-    result: { fr: "TOP 1 SEO", en: "TOP 1 SEO", vi: "TOP 1 SEO" },
-    tags: ["Website", "Branding", "SEO"],
-    image: pf04,
+    metric: "+150% demandes d'essai",
+    image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=85&w=1200",
   },
   {
-    plate: "05",
-    name: "Élan Studio",
-    sector: {
-      fr: "Studio créatif · Berlin",
-      en: "Creative studio · Berlin",
-      vi: "Studio sáng tạo · Berlin",
+    id: "groupe-mercier",
+    name: "Groupe Mercier",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorImmobilier",
+    type: { fr: "Portail immobilier", en: "Real estate portal", vi: "Cổng thông tin BĐS" },
+    desc: {
+      fr: "Portail immobilier haut de gamme, visites virtuelles 3D, filtres avancés. Agence premium parisienne.",
+      en: "High-end property portal, 3D virtual tours, advanced filters. Premium Parisian agency.",
+      vi: "Cổng BĐS cao cấp, tham quan ảo 3D, bộ lọc nâng cao. Công ty môi giới cao cấp Paris.",
     },
-    result: { fr: "Awwwards", en: "Awwwards", vi: "Awwwards" },
-    tags: ["Brand identity", "Website"],
-    image: pf05,
+    metric: "+220% contacts qualifiés",
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=85&w=1200",
   },
   {
-    plate: "06",
-    name: "Zen Retreat",
-    sector: { fr: "Hôtel spa · Bali", en: "Spa hotel · Bali", vi: "Khách sạn spa · Bali" },
-    result: { fr: "Conciergerie IA 24/7", en: "24/7 AI concierge", vi: "Lễ tân AI 24/7" },
-    tags: ["Website", "AI"],
-    image: pf06,
+    id: "cabinet-bellaire",
+    name: "Cabinet Belaire",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorSante",
+    type: { fr: "Site vitrine médical", en: "Medical showcase", vi: "Website y tế" },
+    desc: {
+      fr: "Design médical premium, prise de rendez-vous en ligne, parcours patient fluide. Clinique esthétique privée.",
+      en: "Premium medical design, online booking, seamless patient journey. Private aesthetic clinic.",
+      vi: "Thiết kế y tế cao cấp, đặt lịch trực tuyến, hành trình bệnh nhân mượt mà. Phòng khám thẩm mỹ tư nhân.",
+    },
+    metric: "+260% prises de RDV",
+    image: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=85&w=1200",
   },
   {
-    plate: "07",
-    name: "Lumina Digital",
-    sector: {
-      fr: "Tech & SaaS · Lisbonne",
-      en: "Tech & SaaS · Lisbon",
-      vi: "Công nghệ & SaaS · Lisbon",
+    id: "atelier-sauge",
+    name: "Atelier Sauge",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorBeaute",
+    type: { fr: "E-commerce beauté", en: "Beauty e-commerce", vi: "TMĐT làm đẹp" },
+    desc: {
+      fr: "E-commerce artisanal, fiches produit sensorielles, univers de marque cohérent. Cosmétiques naturels haut de gamme.",
+      en: "Artisanal e-commerce, sensory product pages, cohesive brand universe. Premium natural cosmetics.",
+      vi: "TMĐT thủ công, trang sản phẩm cảm quan, vũ trụ thương hiệu nhất quán. Mỹ phẩm tự nhiên cao cấp.",
     },
-    result: { fr: "+320 % de leads", en: "+320% leads", vi: "+320% khách hàng tiềm năng" },
-    tags: ["Website", "SEO", "AI"],
-    image: pf07,
+    metric: "+190% conversions",
+    image: "https://images.unsplash.com/photo-1596462502278-27bfdc403398?auto=format&fit=crop&q=85&w=1200",
   },
   {
-    plate: "08",
-    name: "Neo Gear",
-    sector: {
-      fr: "E-commerce · Dubaï",
-      en: "E-commerce · Dubai",
-      vi: "Thương mại điện tử · Dubai",
+    id: "duchesne-architectes",
+    name: "Duchesne Architectes",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorArchitecture",
+    type: { fr: "Portfolio architectural", en: "Architecture portfolio", vi: "Portfolio kiến trúc" },
+    desc: {
+      fr: "Portfolio immersif plein écran, transitions cinématiques, narration projet par projet. Studio d'architecture contemporain.",
+      en: "Full-screen immersive portfolio, cinematic transitions, project-by-project storytelling. Contemporary architecture studio.",
+      vi: "Portfolio nhập vai toàn màn hình, chuyển cảnh điện ảnh, kể chuyện theo dự án. Studio kiến trúc đương đại.",
     },
-    result: {
-      fr: "×2,4 sur le panier moyen",
-      en: "2.4× average basket",
-      vi: "Giá trị giỏ hàng ×2,4",
-    },
-    tags: ["E-commerce", "Branding", "Ads"],
-    image: pf08,
+    metric: "+340% temps sur site",
+    image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=85&w=1200",
   },
   {
-    plate: "09",
-    name: "Synth OS",
-    sector: {
-      fr: "Studio produit · Berlin",
-      en: "Product studio · Berlin",
-      vi: "Studio sản phẩm · Berlin",
+    id: "nordeen",
+    name: "Nordeen",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorTech",
+    type: { fr: "Web App SaaS", en: "SaaS Web App", vi: "Ứng dụng web SaaS" },
+    desc: {
+      fr: "Dashboard SaaS complet, landing page conversion, onboarding utilisateur. Startup B2B scandinave.",
+      en: "Complete SaaS dashboard, conversion landing page, user onboarding. Scandinavian B2B startup.",
+      vi: "Dashboard SaaS hoàn chỉnh, trang chuyển đổi, hướng dẫn người dùng. Startup B2B Scandinavia.",
     },
-    result: {
-      fr: "Identité complète en 6 semaines",
-      en: "Full identity in 6 weeks",
-      vi: "Bộ nhận diện hoàn chỉnh trong 6 tuần",
+    metric: "+420% inscriptions",
+    image: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=85&w=1200",
+  },
+  {
+    id: "coach-renaud",
+    name: "Coach Renaud Delacroix",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorCoaching",
+    type: { fr: "Site vitrine + vente", en: "Showcase + sales", vi: "Giới thiệu + bán hàng" },
+    desc: {
+      fr: "Tunnel de conversion, inscription événements, vente de programmes en ligne. Coach en leadership exécutif.",
+      en: "Conversion funnel, event registration, online program sales. Executive leadership coaching.",
+      vi: "Phễu chuyển đổi, đăng ký sự kiện, bán chương trình trực tuyến. Huấn luyện lãnh đạo điều hành.",
     },
-    tags: ["Brand identity", "Website", "Social"],
-    image: pf09,
+    metric: "+180% ventes",
+    image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=85&w=1200",
+  },
+  {
+    id: "parfums-de-noir",
+    name: "Parfums de Noir",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorArtisanat",
+    type: { fr: "E-commerce artisanal", en: "Artisanal e-commerce", vi: "TMĐT thủ công" },
+    desc: {
+      fr: "Boutique en ligne immersive, storytelling olfactif, packaging digital premium. Parfumeur artisan independent.",
+      en: "Immersive online shop, olfactory storytelling, premium digital packaging. Independent artisan perfumer.",
+      vi: "Cửa hàng trực tuyến nhập vai, kể chuyện mùi hương, đóng gói số cao cấp. Thợ nước hoa độc lập.",
+    },
+    metric: "+290% panier moyen",
+    image: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&q=85&w=1200",
+  },
+  {
+    id: "noir-or",
+    name: "Noir & Or Manufacture",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorMode",
+    type: { fr: "E-commerce mode", en: "Fashion e-commerce", vi: "TMĐT thời trang" },
+    desc: {
+      fr: "Direction artistique digitale, lookbook interactif, e-commerce haute couture. Marque de mode émergente.",
+      en: "Digital art direction, interactive lookbook, haute couture e-commerce. Emerging fashion brand.",
+      vi: "Chỉ đạo nghệ thuật số, lookbook tương tác, TMĐT haute couture. Thương hiệu thời trang mới nổi.",
+    },
+    metric: "+310% ventes en ligne",
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=85&w=1200",
   },
 ];
+
+/** Legacy alias — keep PORTFOLIO pointing to showcase for backward compatibility */
+export const PORTFOLIO = SHOWCASE.map((s, i) => ({
+  plate: String(i + 1).padStart(2, "0"),
+  name: s.name,
+  sector: s.type,
+  result: { fr: s.metric, en: s.metric, vi: s.metric },
+  tags: [s.type.en],
+  image: s.image,
+}));
 
 export const TESTIMONIALS = [
   {

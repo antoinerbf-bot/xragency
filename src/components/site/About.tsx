@@ -8,12 +8,11 @@ import {
   Bot,
   BarChart3,
   CheckCircle2,
-  Users,
-  ArrowRight,
-  ShieldCheck,
   Zap,
-  MessageCircle,
-  HelpCircle,
+  ShieldCheck,
+  Clock,
+  Layers,
+  ArrowRight,
 } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
@@ -21,171 +20,94 @@ import { CONTACT } from "@/lib/content";
 import { Parallax, Reveal, EmberButton } from "./primitives";
 import { cn } from "@/lib/utils";
 
-const u = (id: string, w = 1200) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&q=85&w=${w}`;
-
 // Real, authentic, high-end photography of creative direction & workshops
-const GALLERY = [
+const GALLERY: { src: string; caption: typeof UI.galleryCaption1; speed: number }[] = [
   {
     src: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=85",
-    caption: "Direction Stratégique",
-    speed: 0.05,
+    caption: UI.galleryCaption1,
+    speed: 0.04,
   },
   {
     src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=85",
-    caption: "Atelier Créatif & UX",
-    speed: -0.04,
+    caption: UI.galleryCaption2,
+    speed: -0.03,
   },
   {
     src: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=85",
-    caption: "Conception Éditoriale",
+    caption: UI.galleryCaption3,
     speed: 0.04,
   },
   {
     src: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=800&q=85",
-    caption: "Ingénierie & Déploiement",
+    caption: UI.galleryCaption4,
     speed: -0.03,
   },
 ];
 
-const HUB_PILLARS = [
+const ADVANTAGES = [
   {
-    id: "strategy",
-    num: "01",
-    icon: Compass,
+    icon: Zap,
     title: {
-      fr: "Direction Stratégique & Arbitrage",
-      en: "Strategic Direction & Leadership",
-      vi: "Định hướng & Chiến lược",
+      fr: "Vitesse d'Exécution Record",
+      en: "Record Speed of Execution",
+      vi: "Tốc độ triển khai kỷ lục",
     },
-    short: {
-      fr: "Vision claire, arbitrage budgétaire et choix des leviers de croissance les plus rentables.",
-      en: "Clear vision, budget allocation and targeting the highest ROI growth levers.",
-      vi: "Tầm nhìn rõ ràng, tối ưu ngân sách và tập trung vào các đòn bẩy sinh lời cao nhất.",
+    desc: {
+      fr: "Votre projet opérationnel en 7 à 14 jours, sans délais d'attente ni réunions superflues.",
+      en: "Your project live in 7 to 14 days, with zero onboarding delays or endless meetings.",
+      vi: "Dự án vận hành trong 7 đến 14 ngày, không chậm trễ hay họp hành rườm rà.",
     },
-    deliverables: [
-      "Audit d'opportunité de marché",
-      "Positionnement de marque haut de gamme",
-      "Plan d'acquisition prioritaire",
-    ],
-    metric: "+3,2x de ROI moyen",
+    tag: "7 à 14 jours",
   },
   {
-    id: "acquisition",
-    num: "02",
-    icon: TrendingUp,
+    icon: Layers,
     title: {
-      fr: "Acquisition & Domination Locale",
-      en: "Inbound Acquisition & Local Dominance",
-      vi: "Thu hút Khách hàng & Thống trị Địa phương",
+      fr: "Collectif Senior 4-en-1",
+      en: "Senior 4-in-1 Collective",
+      vi: "Đội ngũ Cấp cao 4-trong-1",
     },
-    short: {
-      fr: "Propulsez votre entreprise en tête de Google Maps (TOP 3) et sur les mots-clés stratégiques.",
-      en: "Skyrocket your business to the top of Google Maps (TOP 3) and high-intent SEO queries.",
-      vi: "Đưa doanh nghiệp lên top đầu Google Maps (TOP 3) và các từ khóa chiến lược.",
+    desc: {
+      fr: "Directeur Artistique, Développeur Cloud, Expert SEO et Ingénieur IA dédiés à votre réussite.",
+      en: "Art Director, Cloud Developer, SEO Specialist and AI Engineer dedicated to your success.",
+      vi: "Chỉ đạo nghệ thuật, Lập trình viên Cloud, Chuyên gia SEO và Kỹ sư AI đồng hành cùng bạn.",
     },
-    deliverables: [
-      "Google Maps TOP 3 Garanti",
-      "SEO Domination System",
-      "Captation de prospects intentionnistes",
-    ],
-    metric: "+340% d'appels entrants",
+    tag: "DA · DEV · SEO · IA",
   },
   {
-    id: "design",
-    num: "03",
-    icon: Palette,
+    icon: ShieldCheck,
     title: {
-      fr: "Haute Couture Digitale & UX",
-      en: "Digital Haute Couture & UX",
-      vi: "Thiết kế Đẳng cấp & Trải nghiệm UX",
+      fr: "Garantie de Résultat & Rigueur",
+      en: "Guaranteed Results & Rigor",
+      vi: "Cam kết kết quả & Chuẩn mực",
     },
-    short: {
-      fr: "Des interfaces épurées, sensorielles et mémorables qui imposent votre autorité immédiatement.",
-      en: "Refined, sensory and memorable interfaces that immediately establish market authority.",
-      vi: "Giao diện tinh tế, sang trọng và ấn tượng giúp khẳng định vị thế thương hiệu ngay lập tức.",
+    desc: {
+      fr: "Engagements contractuels fermes, Google Maps TOP 3 garanti et PageSpeed 100/100.",
+      en: "Strict contractual commitments, guaranteed Google Maps TOP 3 and 100/100 PageSpeed.",
+      vi: "Cam kết hợp đồng rõ ràng, đảm bảo TOP 3 Google Maps và PageSpeed 100/100.",
     },
-    deliverables: [
-      "Direction artistique sur mesure",
-      "Typographie & identité de prestige",
-      "Expérience mobile ultra-fluide",
-    ],
-    metric: "PageSpeed 100/100",
+    tag: "100% Garanti",
   },
   {
-    id: "tech",
-    num: "04",
-    icon: Cpu,
-    title: {
-      fr: "Ingénierie & Performance Cloud",
-      en: "Cloud Engineering & Speed",
-      vi: "Kỹ thuật & Hiệu năng Đám mây",
-    },
-    short: {
-      fr: "Architecture React 19, temps de chargement sous 1.5s et sécurité cloud maximale.",
-      en: "Modern React 19 stack, sub-1.5s load times and impenetrable cloud infrastructure.",
-      vi: "Công nghệ React 19 hiện đại, thời gian tải dưới 1.5s và bảo mật đám mây tuyệt đối.",
-    },
-    deliverables: [
-      "Code propre et évolutif",
-      "Temps de chargement < 1.5s",
-      "Maintenance & 99.9% uptime",
-    ],
-    metric: "< 1.5s d'affichage",
-  },
-  {
-    id: "ai",
-    num: "05",
-    icon: Bot,
-    title: {
-      fr: "Automatisation & Intelligence IA",
-      en: "Automation & 24/7 AI Agents",
-      vi: "Tự động hóa & Trợ lý AI 24/7",
-    },
-    short: {
-      fr: "Assistants IA 24/7 formés sur votre activité pour convertir vos prospects sans interruption.",
-      en: "24/7 AI assistants trained on your business data to convert prospects without downtime.",
-      vi: "Trợ lý AI 24/7 được đào tạo chuyên sâu về doanh nghiệp của bạn để chuyển đổi khách hàng liên tục.",
-    },
-    deliverables: [
-      "Qualification automatique des leads",
-      "Disponibilité 24/7 multilingue",
-      "Génération instantanée de devis",
-    ],
-    metric: "Zéro lead perdu",
-  },
-  {
-    id: "data",
-    num: "06",
     icon: BarChart3,
     title: {
-      fr: "Pilotage & Mesure de Performance",
-      en: "Performance Tracking & Reporting",
-      vi: "Báo cáo & Đo lường Hiệu quả",
+      fr: "Rentabilité & Zéro Charge",
+      en: "Max ROI & Zero Payroll Tax",
+      vi: "Tối đa ROI & Không gánh nặng",
     },
-    short: {
-      fr: "Transparence absolue avec un suivi rigoureux des positions, des conversions et du chiffre d'affaires généré.",
-      en: "Total transparency with rigorous monitoring of rankings, lead flow and revenue generated.",
-      vi: "Minh bạch tuyệt đối với việc theo dõi thứ hạng, lượng khách hàng tiềm năng và doanh thu tạo ra.",
+    desc: {
+      fr: "Une formule agile sans engagement lourd : vous n'investissez que dans la croissance réelle.",
+      en: "Agile, flexible engagement model: you only invest in tangible business growth.",
+      vi: "Mô hình linh hoạt không ràng buộc: bạn chỉ đầu tư vào sự tăng trưởng thực chất.",
     },
-    deliverables: [
-      "Tableaux de bord en temps réel",
-      "Suivi hebdomadaire des positions",
-      "Ajustements continus sans friction",
-    ],
-    metric: "100% transparence",
+    tag: "+3,2x ROI moyen",
   },
 ];
 
 export function About() {
-  const { t, lang, price } = useLang();
-  const [activePillarId, setActivePillarId] = useState("strategy");
-
-  const activePillar = HUB_PILLARS.find((p) => p.id === activePillarId) ?? HUB_PILLARS[0];
-  const ActiveIcon = activePillar.icon;
+  const { t } = useLang();
 
   return (
-    <section id="about" className="relative overflow-hidden py-24 lg:py-32">
+    <section id="about" className="relative overflow-hidden py-16 sm:py-24 lg:py-32">
       {/* Subtle ambient light */}
       <div
         aria-hidden
@@ -194,22 +116,22 @@ export function About() {
       />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
-        {/* Section Header: The Core Concept */}
+        {/* Section Header */}
         <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
             <Reveal>
               <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-primary">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span className="label-mono text-xs uppercase tracking-widest">
-                  External Agency Intelligence
+                  {t(UI.aboutKicker)}
                 </span>
               </div>
             </Reveal>
 
             <Reveal delay={80}>
               <h2 className="display-serif mt-6 text-4xl sm:text-5xl lg:text-6xl leading-[1.04]">
-                Votre direction digitale & studio d'élite,{" "}
-                <em className="italic text-primary">activés à la demande.</em>
+                {t(UI.aboutHeading)}{" "}
+                <em className="italic text-primary">{t(UI.aboutHeadingAccent)}</em>
               </h2>
             </Reveal>
           </div>
@@ -217,9 +139,7 @@ export function About() {
           <div className="lg:col-span-5">
             <Reveal delay={150}>
               <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                Pourquoi recruter et gérer 5 salariés quand vous pouvez brancher instantanément une
-                équipe senior complète, coordonnée et disponible au moment où votre entreprise
-                accélère ?
+                {t(UI.aboutLead)}
               </p>
             </Reveal>
             <Reveal delay={220}>
@@ -239,229 +159,111 @@ export function About() {
                   </div>
                 </div>
                 <p className="label-mono text-xs text-muted-foreground">
-                  Collectif Senior · Paris, Asie & USA
+                  {t(UI.aboutTeamLabel)}
                 </p>
               </div>
             </Reveal>
           </div>
         </div>
 
-        {/* 1. Dynamic Interactive Hub d'Intelligence Engine */}
-        <div className="mt-20">
+        {/* 1. Comparison: Équipe Salariée Interne vs Hub Externe XR Agency */}
+        <div className="mt-16 sm:mt-20">
           <Reveal>
-            <div className="surface-plate overflow-hidden rounded-3xl border border-border bg-card p-6 sm:p-10 shadow-2xl">
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/60 pb-6">
-                <div>
-                  <span className="label-mono text-xs uppercase tracking-widest text-primary">
-                    Hub Modulaire d'Expertises
-                  </span>
-                  <h3 className="display-serif mt-2 text-2xl sm:text-3xl text-foreground">
-                    Explorez les 6 piliers de frappe de votre agence externe
-                  </h3>
-                </div>
-                <span className="label-mono text-xs text-muted-foreground">
-                  Cliquez sur un pôle pour voir son impact
-                </span>
-              </div>
-
-              {/* Pillars Tabs */}
-              <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-                {HUB_PILLARS.map((p) => {
-                  const IconComp = p.icon;
-                  const isActive = p.id === activePillarId;
-                  return (
-                    <button
-                      key={p.id}
-                      onClick={() => setActivePillarId(p.id)}
-                      className={cn(
-                        "group flex flex-col items-start justify-between rounded-2xl border p-4 text-left transition-all duration-300",
-                        isActive
-                          ? "border-primary bg-primary/10 shadow-[0_0_20px_rgba(0,0,0,0.08)] ring-1 ring-primary"
-                          : "border-border bg-card/60 hover:border-primary/50 hover:bg-accent/20",
-                      )}
-                    >
-                      <div className="flex w-full items-center justify-between">
-                        <span className="label-mono text-xs text-muted-foreground">{p.num}</span>
-                        <div
-                          className={cn(
-                            "flex h-7 w-7 items-center justify-center rounded-lg transition-colors",
-                            isActive
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-accent/40 text-muted-foreground group-hover:text-primary",
-                          )}
-                        >
-                          <IconComp className="h-4 w-4" />
-                        </div>
-                      </div>
-                      <span className="label-mono mt-4 text-xs font-semibold text-foreground line-clamp-2">
-                        {t(p.title)}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Active Pillar Detail Card */}
-              <div className="mt-8 rounded-3xl border border-primary/40 bg-accent/20 p-6 sm:p-8">
-                <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
-                  <div className="space-y-4 lg:col-span-7">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-                        <ActiveIcon className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <span className="label-mono text-xs text-primary">
-                          Pôle {activePillar.num} · Activé à la demande
-                        </span>
-                        <h4 className="display-serif text-2xl sm:text-3xl text-foreground">
-                          {t(activePillar.title)}
-                        </h4>
-                      </div>
-                    </div>
-
-                    <p className="text-base leading-relaxed text-muted-foreground">
-                      {t(activePillar.short)}
-                    </p>
-
-                    <div className="mt-6 space-y-2">
-                      <span className="label-mono text-xs uppercase tracking-wider text-muted-foreground">
-                        Livrables & interventions directes :
-                      </span>
-                      <div className="flex flex-wrap gap-2 pt-1">
-                        {activePillar.deliverables.map((del, i) => (
-                          <span
-                            key={i}
-                            className="label-mono inline-flex items-center gap-1.5 rounded-full border border-border bg-card/80 px-3.5 py-1.5 text-xs text-foreground"
-                          >
-                            <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
-                            {del}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-lg lg:col-span-5">
-                    <div>
-                      <span className="label-mono text-xs text-muted-foreground">
-                        Impact & Résultat Mesuré
-                      </span>
-                      <p className="display-serif mt-2 text-3xl font-bold text-primary sm:text-4xl">
-                        {activePillar.metric}
-                      </p>
-                      <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                        Chaque pôle est déployé avec une obligation de rigueur et un reporting
-                        transparent.
-                      </p>
-                    </div>
-
-                    <div className="mt-6 border-t border-border/60 pt-4">
-                      <a
-                        href="#intelligence"
-                        className="label-mono inline-flex items-center gap-2 text-xs font-semibold text-primary transition-transform hover:translate-x-1"
-                      >
-                        Tester ce pôle dans le configurateur IA →
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-
-        {/* 2. Concrete Comparison: Équipe Salariée Interne vs Hub Externe XR Agency */}
-        <div className="mt-20">
-          <Reveal>
-            <div className="rounded-3xl border border-border/80 bg-accent/15 p-6 sm:p-10">
+            <div className="rounded-3xl border border-border/80 bg-accent/15 p-5 sm:p-10 shadow-xl">
               <div className="text-center">
                 <span className="label-mono text-xs uppercase tracking-widest text-primary">
-                  Le Choix Stratégique
+                  {t(UI.aboutChoiceKicker)}
                 </span>
                 <h3 className="display-serif mt-3 text-3xl sm:text-4xl text-foreground">
-                  Recruter une équipe interne ou brancher XR Agency ?
+                  {t(UI.aboutChoiceTitle)}
                 </h3>
                 <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground">
-                  Comparez la flexibilité, le coût et l'impact direct sur votre trésorerie.
+                  {t(UI.aboutChoiceLead)}
                 </p>
               </div>
 
-              <div className="mt-12 grid gap-6 md:grid-cols-2">
+              <div className="mt-10 sm:mt-12 grid gap-5 sm:gap-6 md:grid-cols-2">
                 {/* Option Interne */}
-                <div className="rounded-3xl border border-border bg-card/60 p-7 opacity-80 transition-opacity hover:opacity-100">
-                  <div className="flex items-center justify-between border-b border-border/60 pb-4">
-                    <span className="label-mono text-xs text-muted-foreground">
-                      Option Traditionnelle
-                    </span>
-                    <span className="label-mono text-xs text-muted-foreground">En interne</span>
+                <div className="rounded-3xl border border-border bg-card/60 p-6 sm:p-8 opacity-85 transition-opacity hover:opacity-100 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between border-b border-border/60 pb-4">
+                      <span className="label-mono text-xs text-muted-foreground uppercase tracking-wider">
+                        {t(UI.aboutTraditional)}
+                      </span>
+                      <span className="label-mono text-xs text-muted-foreground">{t(UI.aboutInHouse)}</span>
+                    </div>
+                    <h4 className="display-serif mt-5 text-2xl text-foreground">
+                      {t(UI.aboutRecruitTitle)}
+                    </h4>
+                    <p className="display-serif mt-3 text-3xl text-muted-foreground/80">
+                      ~18 500 € <span className="label-mono text-xs">{t(UI.aboutRecruitCost)}</span>
+                    </p>
+                    <ul className="mt-6 space-y-3.5 text-xs text-muted-foreground">
+                      <li className="flex items-start gap-2.5">
+                        <span className="text-red-400 font-bold shrink-0">✕</span> {t(UI.aboutCon1)}
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <span className="text-red-400 font-bold shrink-0">✕</span> {t(UI.aboutCon2)}
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <span className="text-red-400 font-bold shrink-0">✕</span> {t(UI.aboutCon3)}
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <span className="text-red-400 font-bold shrink-0">✕</span> {t(UI.aboutCon4)}
+                      </li>
+                    </ul>
                   </div>
-                  <h4 className="display-serif mt-4 text-2xl text-foreground">
-                    Recrutement de 4 à 5 salariés
-                  </h4>
-                  <p className="display-serif mt-3 text-3xl text-muted-foreground/80">
-                    ~18 500 € <span className="label-mono text-xs">/mois + charges</span>
-                  </p>
-                  <ul className="mt-6 space-y-3 text-xs text-muted-foreground">
-                    <li className="flex items-start gap-2">
-                      <span className="text-red-400 font-bold">✕</span> 3 à 6 mois de processus de
-                      recrutement
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-red-400 font-bold">✕</span> Charges patronales,
-                      matériel, congés payés
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-red-400 font-bold">✕</span> Compétences limitées à
-                      chaque profil recruté
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-red-400 font-bold">✕</span> Risque financier lourd et
-                      rigidité contractuelle
-                    </li>
-                  </ul>
+                  <div className="mt-8 pt-4 border-t border-border/40">
+                    <span className="label-mono text-[11px] text-muted-foreground/60">
+                      Inertie managériale & coûts fixes élevés
+                    </span>
+                  </div>
                 </div>
 
                 {/* Option XR Agency */}
-                <div className="relative rounded-3xl border-2 border-primary bg-card p-7 shadow-2xl">
-                  <span className="label-mono absolute -top-3.5 right-8 rounded-full bg-primary px-3.5 py-1 text-xs text-primary-foreground font-semibold">
-                    Recommandé
+                <div className="relative rounded-3xl border-2 border-primary bg-card p-6 sm:p-8 shadow-2xl flex flex-col justify-between">
+                  <span className="label-mono absolute -top-3.5 right-8 rounded-full bg-primary px-3.5 py-1 text-xs text-primary-foreground font-semibold shadow-md">
+                    {t(UI.aboutRecommended)}
                   </span>
-                  <div className="flex items-center justify-between border-b border-border/60 pb-4">
-                    <span className="label-mono text-xs text-primary font-semibold">
-                      Formule Hub Externe
-                    </span>
-                    <span className="label-mono text-xs text-primary">XR Agency 2030</span>
+                  <div>
+                    <div className="flex items-center justify-between border-b border-border/60 pb-4">
+                      <span className="label-mono text-xs text-primary font-semibold uppercase tracking-wider">
+                        {t(UI.aboutExternalFormula)}
+                      </span>
+                      <span className="label-mono text-xs text-primary">{t(UI.aboutXrLabel)}</span>
+                    </div>
+                    <h4 className="display-serif mt-5 text-2xl text-foreground">
+                      {t(UI.aboutDigitalTitle)}
+                    </h4>
+                    <p className="display-serif mt-3 text-3xl text-primary">
+                      Dès 499 €{" "}
+                      <span className="label-mono text-xs text-muted-foreground font-normal">
+                        {t(UI.aboutFromLabel)}
+                      </span>
+                    </p>
+                    <ul className="mt-6 space-y-3.5 text-xs text-foreground">
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4 w-4 text-primary shrink-0" /> {t(UI.aboutPro1)}
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4 w-4 text-primary shrink-0" /> {t(UI.aboutPro2)}
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4 w-4 text-primary shrink-0" /> {t(UI.aboutPro3)}
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="h-4 w-4 text-primary shrink-0" /> {t(UI.aboutPro4)}
+                      </li>
+                    </ul>
                   </div>
-                  <h4 className="display-serif mt-4 text-2xl text-foreground">
-                    Votre Direction Digitale & IA Immédiate
-                  </h4>
-                  <p className="display-serif mt-3 text-3xl text-primary">
-                    Dès 499 €{" "}
-                    <span className="label-mono text-xs text-muted-foreground">
-                      /mois ou au forfait
-                    </span>
-                  </p>
-                  <ul className="mt-6 space-y-3 text-xs text-foreground">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0" /> Opérationnel en 48
-                      heures ouvrées
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0" /> Accès à un
-                      collectif senior (DA, Dev, SEO, IA)
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0" /> Zéro charge
-                      patronale, zéro engagement contraignant
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0" /> Garantie de
-                      résultat et suivi continu en direct
-                    </li>
-                  </ul>
+
                   <div className="mt-8">
-                    <EmberButton href="#intelligence" className="w-full justify-center">
-                      Simuler mon accompagnement externe
+                    <EmberButton href="#services" className="w-full justify-center">
+                      {t({
+                        fr: "Explorer nos solutions & tarifs",
+                        en: "Explore our solutions & pricing",
+                        vi: "Khám phá giải pháp & bảng giá",
+                      })}
                     </EmberButton>
                   </div>
                 </div>
@@ -470,21 +272,50 @@ export function About() {
           </Reveal>
         </div>
 
-        {/* 3. Authentic Photo Gallery (Real craft, workshops & editorial scenes) */}
-        <div className="mt-20 grid grid-cols-2 items-end gap-4 sm:gap-6 lg:grid-cols-4">
+        {/* 2. 4 Direct Advantages Grid */}
+        <div className="mt-14 sm:mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {ADVANTAGES.map((adv, idx) => {
+            const IconComp = adv.icon;
+            return (
+              <Reveal key={idx} delay={idx * 70}>
+                <div className="surface-plate h-full rounded-3xl border border-border bg-card/60 p-6 flex flex-col justify-between transition-all duration-300 hover:border-primary/50 hover:bg-card">
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary border border-primary/20">
+                        <IconComp className="h-5 w-5" />
+                      </div>
+                      <span className="label-mono text-[10px] rounded-full border border-border px-2.5 py-1 text-muted-foreground">
+                        {adv.tag}
+                      </span>
+                    </div>
+                    <h4 className="display-serif mt-5 text-lg text-foreground">
+                      {t(adv.title)}
+                    </h4>
+                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                      {t(adv.desc)}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+
+        {/* 3. Authentic Photo Gallery (Craft, Workshops & High-End Design) */}
+        <div className="mt-16 sm:mt-20 grid grid-cols-2 items-end gap-4 sm:gap-6 lg:grid-cols-4">
           {GALLERY.map((g, i) => (
             <Reveal key={i} delay={100 + i * 80}>
               <Parallax speed={g.speed}>
-                <div className="group relative overflow-hidden rounded-3xl border border-border bg-card">
+                <div className="group relative overflow-hidden rounded-3xl border border-border bg-card shadow-lg">
                   <img
                     src={g.src}
-                    alt={g.caption}
+                    alt={t(g.caption)}
                     loading="lazy"
-                    className="h-[14rem] sm:h-[18rem] w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                    className="h-[13rem] sm:h-[17rem] w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
                   />
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent p-4">
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/95 via-background/50 to-transparent p-4">
                     <p className="label-mono text-[11px] text-foreground font-medium">
-                      {g.caption}
+                      {t(g.caption)}
                     </p>
                   </div>
                 </div>

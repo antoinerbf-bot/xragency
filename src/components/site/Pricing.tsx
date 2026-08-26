@@ -1,19 +1,44 @@
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, Sparkles, MessageSquare, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
-import { PERIOD_LABEL, SERVICES } from "@/lib/content";
+import { CONTACT, PERIOD_LABEL, SERVICES } from "@/lib/content";
 import { EmberButton, Parallax, Reveal, SectionHeading } from "./primitives";
+
+const CATEGORIES = [
+  { id: "all", label: { fr: "Tous les services (11)", en: "All Services (11)", vi: "Tất cả dịch vụ (11)" } },
+  { id: "web", label: { fr: "Sites Web & E-commerce", en: "Websites & E-commerce", vi: "Website & TMĐT" }, ids: ["websites", "ecommerce", "refonte"] },
+  { id: "growth", label: { fr: "Google Maps & SEO", en: "Google Maps & SEO", vi: "Google Maps & SEO" }, ids: ["maps", "seo", "ads"] },
+  { id: "ai", label: { fr: "Intelligence Artificielle", en: "Artificial Intelligence", vi: "Trí tuệ Nhân tạo" }, ids: ["ai", "strategy"] },
+  { id: "brand", label: { fr: "Branding & Maintenance", en: "Branding & Maintenance", vi: "Thương hiệu & Bảo trì" }, ids: ["branding", "social", "maintenance"] },
+];
 
 export function Pricing() {
   const { t, price } = useLang();
-  const [active, setActive] = useState(SERVICES[0].id);
-  const service = SERVICES.find((s) => s.id === active)!;
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [activeServiceId, setActiveServiceId] = useState(SERVICES[0].id);
+
+  const filteredServices = SERVICES.filter((s) => {
+    if (activeCategory === "all") return true;
+    const cat = CATEGORIES.find((c) => c.id === activeCategory);
+    return cat?.ids?.includes(s.id);
+  });
+
+  // Ensure active service is in the filtered list
+  const currentService =
+    filteredServices.find((s) => s.id === activeServiceId) || filteredServices[0] || SERVICES[0];
 
   return (
-    <section id="pricing" className="relative py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
+    <section id="pricing" className="relative py-16 sm:py-24 lg:py-32">
+      {/* Background Ambient Glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-30"
+        style={{ background: "var(--gradient-halo)" }}
+      />
+
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
         <SectionHeading
           label={UI.pricingLabel}
           line1={UI.pricingTitle1}
@@ -21,78 +46,166 @@ export function Pricing() {
           lead={UI.pricingLead}
         />
 
-        <Reveal>
-          <div className="mt-12 flex flex-wrap gap-2">
-            {SERVICES.map((s) => (
+        {/* 1. Category Quick Filters */}
+        <Reveal delay={60}>
+          <div className="mt-10 flex flex-wrap justify-center gap-2">
+            {CATEGORIES.map((cat) => (
               <button
-                key={s.id}
-                onClick={() => setActive(s.id)}
+                key={cat.id}
+                onClick={() => {
+                  setActiveCategory(cat.id);
+                  const firstInCat = SERVICES.find((s) => cat.id === "all" || cat.ids?.includes(s.id));
+                  if (firstInCat) setActiveServiceId(firstInCat.id);
+                }}
                 className={cn(
-                  "label-mono rounded-full border px-4 py-2.5 transition-all duration-300",
-                  active === s.id
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border text-muted-foreground hover:border-primary/60 hover:text-primary",
+                  "label-mono rounded-full border px-4 py-2 text-xs transition-all duration-300",
+                  activeCategory === cat.id
+                    ? "border-primary bg-primary text-primary-foreground font-semibold shadow-md"
+                    : "border-border bg-card/60 text-muted-foreground hover:border-primary/50 hover:text-foreground",
                 )}
               >
-                {s.num} · {t(s.title)}
+                {t(cat.label)}
               </button>
             ))}
           </div>
         </Reveal>
 
-        <Parallax
-          key={service.id}
-          speed={0.035}
-          className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3"
+        {/* 2. Service Selector Pills */}
+        <Reveal delay={120}>
+          <div className="mt-6 -mx-6 px-6 overflow-x-auto sm:mx-0 sm:px-0">
+            <div className="flex gap-2 w-max sm:flex-wrap sm:w-auto sm:justify-center">
+              {filteredServices.map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => setActiveServiceId(s.id)}
+                  className={cn(
+                    "label-mono rounded-full border px-4 py-2.5 text-xs transition-all duration-300",
+                    currentService.id === s.id
+                      ? "border-primary bg-primary/15 text-primary ring-1 ring-primary font-semibold"
+                      : "border-border bg-card/40 text-muted-foreground hover:border-primary/50 hover:text-foreground",
+                  )}
+                >
+                  <span className="opacity-60 mr-1.5">{s.num}</span>
+                  {t(s.title)}
+                </button>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
+        {/* 3. Service Header Details */}
+        <Reveal delay={160}>
+          <div className="mt-10 rounded-2xl border border-border/80 bg-accent/20 p-5 sm:p-6 text-center max-w-3xl mx-auto">
+            <span className="label-mono text-xs uppercase tracking-widest text-primary">
+              Formules & Tarifs détaillés · {currentService.num}
+            </span>
+            <h3 className="display-serif mt-2 text-2xl sm:text-3xl text-foreground">
+              {t(currentService.title)}
+            </h3>
+            <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
+              {t(currentService.description)}
+            </p>
+          </div>
+        </Reveal>
+
+        {/* 4. The 3 Pricing Cards for the Selected Service */}
+        <div
+          key={currentService.id}
+          className="mt-10 sm:mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3"
         >
-          {service.plans.map((p, i) => (
-            <article
-              key={`${service.id}-${i}`}
-              className={cn(
-                "surface-plate relative flex flex-col rounded-3xl p-8",
-                p.popular && "border-primary/60",
-              )}
-              style={{
-                animation: `ember-rise 0.7s cubic-bezier(0.16,1,0.3,1) ${i * 70}ms both`,
-              }}
+          {currentService.plans.map((p, i) => {
+            const waMessage = encodeURIComponent(
+              `Bonjour XR Agency, je suis intéressé par votre prestation "${t(currentService.title)}" — Formule "${t(p.name)}" (${price(p.eur)}${t(PERIOD_LABEL[p.period])}). Pouvons-nous échanger à ce sujet ?`,
+            );
+
+            return (
+              <Reveal key={`${currentService.id}-${i}`} delay={i * 80}>
+                <article
+                  className={cn(
+                    "surface-plate relative flex h-full flex-col justify-between rounded-3xl p-6 sm:p-8 border transition-all duration-300 hover:border-primary/60 hover:shadow-2xl",
+                    p.popular ? "border-primary bg-primary/5 shadow-lg" : "border-border bg-card",
+                  )}
+                >
+                  {p.popular ? (
+                    <span className="label-mono absolute -top-3 left-8 rounded-full bg-primary px-3.5 py-1 text-xs text-primary-foreground font-semibold shadow-md">
+                      {t(UI.popular)}
+                    </span>
+                  ) : null}
+
+                  <div>
+                    <div className="flex items-start justify-between gap-3">
+                      <h4 className="display-serif text-2xl text-foreground">{t(p.name)}</h4>
+                    </div>
+
+                    {p.audience ? (
+                      <p className="label-mono mt-2 text-xs text-muted-foreground">{t(p.audience)}</p>
+                    ) : null}
+
+                    {/* Price display */}
+                    <div className="mt-6 border-y border-border/60 py-4">
+                      <div className="flex items-baseline gap-2">
+                        <span className="display-serif text-4xl font-bold text-primary">
+                          {price(p.eur)}
+                        </span>
+                        <span className="label-mono text-xs text-muted-foreground">
+                          {t(PERIOD_LABEL[p.period])}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Feature bullet points */}
+                    <ul className="mt-6 space-y-3">
+                      {p.features.map((f, k) => (
+                        <li key={k} className="flex items-start gap-2.5 text-xs text-foreground/90">
+                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                          <span className="leading-relaxed">{t(f)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="mt-8 space-y-2.5 pt-4 border-t border-border/50">
+                    <a
+                      href="#intelligence"
+                      className={cn(
+                        "label-mono flex w-full items-center justify-center gap-2 rounded-full py-3 text-xs font-semibold uppercase tracking-wider transition-all min-h-[44px]",
+                        p.popular
+                          ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
+                          : "border border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground",
+                      )}
+                    >
+                      <Sparkles className="h-3.5 w-3.5" />
+                      {t(UI.choosePlan)}
+                    </a>
+
+                    <a
+                      href={`${CONTACT.whatsapp}?text=${waMessage}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="label-mono flex w-full items-center justify-center gap-2 rounded-full border border-border bg-card/60 py-2.5 text-[11px] text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground min-h-[38px]"
+                    >
+                      <MessageSquare className="h-3.5 w-3.5 text-emerald-400" />
+                      Demande rapide sur WhatsApp
+                    </a>
+                  </div>
+                </article>
+              </Reveal>
+            );
+          })}
+        </div>
+
+        {/* Link to dedicated detailed service page */}
+        <Reveal delay={240}>
+          <div className="mt-12 text-center">
+            <a
+              href={`/services/${currentService.id}`}
+              className="label-mono inline-flex items-center gap-2 text-xs text-primary font-semibold transition-transform hover:translate-x-1"
             >
-              {p.popular ? (
-                <span className="label-mono absolute -top-3 left-8 rounded-full bg-primary px-3 py-1 text-primary-foreground">
-                  {t(UI.popular)}
-                </span>
-              ) : null}
-
-              <h3 className="display-serif text-2xl">{t(p.name)}</h3>
-              {p.audience ? (
-                <p className="label-mono mt-2 text-muted-foreground">{t(p.audience)}</p>
-              ) : null}
-
-              <p className="mt-6 flex items-baseline gap-2">
-                <span className="display-serif text-4xl text-primary">{price(p.eur)}</span>
-                <span className="label-mono text-muted-foreground">
-                  {t(PERIOD_LABEL[p.period])}
-                </span>
-              </p>
-
-              <ul className="mt-7 flex-1 space-y-3">
-                {p.features.map((f, k) => (
-                  <li key={k} className="flex gap-3 text-sm text-muted-foreground">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                    <span>{t(f)}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <EmberButton
-                href="#intelligence"
-                variant={p.popular ? "solid" : "ghost"}
-                className="mt-8 w-full"
-              >
-                {t(UI.choosePlan)}
-              </EmberButton>
-            </article>
-          ))}
-        </Parallax>
+              Consulter la page complète et détaillée pour « {t(currentService.title)} » →
+            </a>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

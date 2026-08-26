@@ -10,9 +10,9 @@ export const UI: Record<string, L> = {
   bookCall: { fr: "Réserver un appel", en: "Book a call", vi: "Đặt lịch gọi" },
 
   heroKicker: {
-    fr: "Feature — Studio digital de prestige",
-    en: "Feature — Prestige digital studio",
-    vi: "Chuyên đề — Studio digital cao cấp",
+    fr: "Studio Digital Premium — Édition MMXXVI",
+    en: "Premium Digital Studio — Edition MMXXVI",
+    vi: "Studio Digital Cao Cấp — Ấn bản MMXXVI",
   },
   heroEdition: { fr: "Édition MMXXVI", en: "Edition MMXXVI", vi: "Ấn bản MMXXVI" },
   heroReadTime: { fr: "Lecture 4 min", en: "4 min read", vi: "Đọc 4 phút" },
@@ -28,9 +28,9 @@ export const UI: Record<string, L> = {
     en: "— Art direction, MMXXVI",
     vi: "— Chỉ đạo nghệ thuật, MMXXVI",
   },
-  heroTitle1: { fr: "The Art of", en: "The Art of", vi: "The Art of" },
+  heroTitle1: { fr: "L'Art du", en: "The Art of", vi: "The Art of" },
   heroTitleAccent: { fr: "Digital", en: "Digital", vi: "Digital" },
-  heroTitle2: { fr: "Craftsmanship.", en: "Craftsmanship.", vi: "Craftsmanship." },
+  heroTitle2: { fr: "Sur-Mesure.", en: "Craftsmanship.", vi: "Craftsmanship." },
   heroLead: {
     fr: "Une maison indépendante qui compose des expériences digitales pour marques exigeantes : identité, sites, référencement, Google Maps, IA.",
     en: "An independent house composing digital experiences for demanding brands: identity, websites, SEO, Google Maps, AI.",
@@ -44,10 +44,22 @@ export const UI: Record<string, L> = {
   ctaAnalysis: { fr: "Lancer mon analyse", en: "Start my analysis", vi: "Bắt đầu phân tích" },
   ctaContinue: { fr: "Continuer", en: "Continue", vi: "Tiếp tục" },
 
+  trustBarLabel: {
+    fr: "Ils nous ont fait confiance",
+    en: "Trusted by leading brands",
+    vi: "Được các thương hiệu tin tưởng",
+  },
+  trustBarClients: {
+    fr: "+500 projets livrés · 8 pays · 4 continents",
+    en: "500+ projects delivered · 8 countries · 4 continents",
+    vi: "Hơn 500 dự án bàn giao · 8 quốc gia · 4 châu lục",
+  },
   statProjects: { fr: "Projets livrés", en: "Projects delivered", vi: "Dự án bàn giao" },
   statYears: { fr: "Années d'expertise", en: "Years of expertise", vi: "Năm kinh nghiệm" },
   statRemote: { fr: "Remote — 6 fuseaux", en: "Remote — 6 time zones", vi: "Remote — 6 múi giờ" },
   statProduction: { fr: "Production mondiale", en: "Global production", vi: "Sản xuất toàn cầu" },
+  statSatisfaction: { fr: "Satisfaction client", en: "Client satisfaction", vi: "Hài lòng khách hàng" },
+  statResponse: { fr: "Temps de réponse", en: "Response time", vi: "Thời gian phản hồi" },
 
   chapter1: { fr: "Chapitre — I · Maison", en: "Chapter — I · House", vi: "Chương — I · Studio" },
   chapter2: {
@@ -95,7 +107,7 @@ export const UI: Record<string, L> = {
   },
 
   intelLabel: {
-    fr: "Strategic Business AI",
+    fr: "IA Stratégique",
     en: "Strategic Business AI",
     vi: "Strategic Business AI",
   },
@@ -249,25 +261,25 @@ export const UI: Record<string, L> = {
     en: "Portfolio · Case studies",
     vi: "Dự án · Nghiên cứu tình huống",
   },
-  workTitle1: { fr: "Selected", en: "Selected", vi: "Selected" },
-  workTitle2: { fr: "work.", en: "work.", vi: "work." },
+  workTitle1: { fr: "Références", en: "Selected", vi: "Selected" },
+  workTitle2: { fr: "Sélectionnées.", en: "work.", vi: "work." },
   equation: {
-    fr: "Stratégie × (Design + Tech) = Résultats",
+    fr: "Stratégie × (Design + Technologie) = Résultats",
     en: "Strategy × (Design + Tech) = Results",
     vi: "Chiến lược × (Thiết kế + Công nghệ) = Kết quả",
   },
 
   trustLabel: { fr: "Ils nous font confiance", en: "They trust us", vi: "Họ tin tưởng chúng tôi" },
   trustTitle1: {
-    fr: "Des marques de prestige",
-    en: "Prestigious brands",
-    vi: "Những thương hiệu danh tiếng",
+    fr: "Des entreprises locales",
+    en: "Local and international businesses",
+    vi: "Doanh nghiệp địa phương",
   },
-  trustTitle2: { fr: "choisissent XRAGENCY.", en: "choose XRAGENCY.", vi: "chọn XRAGENCY." },
-  trustRating: {
-    fr: "4,9/5 — sur la base de 150+ avis clients.",
-    en: "4.9/5 — based on 150+ customer reviews.",
-    vi: "4,9/5 — dựa trên hơn 150 đánh giá khách hàng.",
+  trustTitle2: { fr: "et internationales.", en: "trust us.", vi: "tin tưởng chúng tôi." },
+  trustSubtitle: {
+    fr: "Des entreprises locales et internationales nous confient leur présence digitale. Des études de cas authentiques arrivent prochainement.",
+    en: "Local and international businesses trust us with their digital presence. Authentic case studies coming soon.",
+    vi: "Các doanh nghiệp địa phương và quốc tế tin tưởng giao phó sự hiện diện số cho chúng tôi. Các nghiên cứu tình sẽ có sớm.",
   },
   workCase: {
     fr: "Obtenir le même résultat",
@@ -288,6 +300,18 @@ export const UI: Record<string, L> = {
   },
   faqTitle1: { fr: "Tout ce qu'il faut", en: "Everything you need", vi: "Mọi điều bạn cần" },
   faqTitle2: { fr: "savoir.", en: "to know.", vi: "biết." },
+
+  // ── FAQ Categories ──
+  faqCatAll: { fr: "Toutes", en: "All", vi: "Tất cả" },
+  faqCatSites: { fr: "Sites internet", en: "Websites", vi: "Website" },
+  faqCatSeo: { fr: "SEO & visibilité", en: "SEO & visibility", vi: "SEO & hiển thị" },
+  faqCatAds: { fr: "Google Ads", en: "Google Ads", vi: "Google Ads" },
+  faqCatIa: { fr: "Intelligence Artificielle", en: "Artificial Intelligence", vi: "Trí tuệ nhân tạo" },
+  faqCatTarifs: { fr: "Tarifs & accompagnement", en: "Pricing & support", vi: "Bảng giá & hỗ trợ" },
+  faqCatDelais: { fr: "Délais", en: "Timelines", vi: "Thời gian" },
+  faqCatGeneral: { fr: "Général", en: "General", vi: "Chung" },
+  faqShowAll: { fr: "Voir toutes les questions", en: "See all questions", vi: "Xem tất cả câu hỏi" },
+  faqShowLess: { fr: "Voir moins", en: "Show less", vi: "Xem ít hơn" },
 
   contactLabel: {
     fr: "Gratuit · 30 min · Sans engagement",
@@ -326,6 +350,29 @@ export const UI: Record<string, L> = {
     vi: "Nhắn tin WhatsApp",
   },
   contactEmail: { fr: "Nous écrire", en: "Email us", vi: "Gửi e-mail" },
+  contactHeading: {
+    fr: "Construisons votre avantage digital.",
+    en: "Let's build your digital advantage.",
+    vi: "Hãy xây dựng lợi thế số của bạn.",
+  },
+  contactFormName: { fr: "Nom", en: "Name", vi: "Tên" },
+  contactFormEmail: { fr: "Email", en: "Email", vi: "Email" },
+  contactFormCompany: { fr: "Entreprise", en: "Company", vi: "Công ty" },
+  contactFormWebsite: { fr: "Site internet", en: "Website", vi: "Website" },
+  contactFormMessage: { fr: "Message", en: "Message", vi: "Tin nhắn" },
+  contactFormNeed: { fr: "Quel est votre besoin ?", en: "What do you need?", vi: "Bạn cần gì?" },
+  contactFormNeedSite: { fr: "Création de site", en: "Website creation", vi: "Tạo website" },
+  contactFormNeedRedesign: { fr: "Refonte", en: "Redesign", vi: "Thiết kế lại" },
+  contactFormNeedSeo: { fr: "SEO", en: "SEO", vi: "SEO" },
+  contactFormNeedAds: { fr: "Publicité", en: "Advertising", vi: "Quảng cáo" },
+  contactFormNeedAi: { fr: "IA & Automatisation", en: "AI & Automation", vi: "AI & Tự động hóa" },
+  contactFormNeedStrategy: { fr: "Stratégie digitale", en: "Digital strategy", vi: "Chiến lược số" },
+  contactFormNeedOther: { fr: "Autre", en: "Other", vi: "Khác" },
+  contactFormSubmit: {
+    fr: "Parlons de votre projet",
+    en: "Let's talk about your project",
+    vi: "Hãy bàn về dự án của bạn",
+  },
   contactQuote: {
     fr: "« Une correspondance vaut mille présentations. Écrivez-nous — nous répondons sous 24 h. »",
     en: "“One letter is worth a thousand presentations. Write to us — we reply within 24 hours.”",
@@ -393,7 +440,7 @@ export const UI: Record<string, L> = {
     en: "Evaluation criteria",
     vi: "Tiêu chí đánh giá",
   },
-  withXrAgency: { fr: "XR Agency 2030", en: "XR Agency 2030", vi: "XR Agency 2030" },
+  withXrAgency: { fr: "XR Agency", en: "XR Agency", vi: "XR Agency" },
   traditionalAgency: {
     fr: "Standard du marché",
     en: "Market standard",
@@ -414,4 +461,431 @@ export const UI: Record<string, L> = {
     en: "Contact our senior team today and receive your proposal within 24 hours.",
     vi: "Liên hệ với đội ngũ chuyên gia của chúng tôi ngay hôm nay và nhận đề xuất trong vòng 24 giờ.",
   },
+
+  // ── Showcase / Portfolio ──
+  showcaseLabel: { fr: "Inspirations · Direction artistique", en: "Inspirations · Art direction", vi: "Cảm hứng · Chỉ đạo nghệ thuật" },
+  showcaseTitle1: { fr: "Inspirations de style.", en: "Style inspirations.", vi: "Cảm hứng phong cách." },
+  showcaseTitle2: { fr: "Direction artistique.", en: "Art direction.", vi: "Chỉ đạo nghệ thuật." },
+  showcaseLead: {
+    fr: "Ces sites illustrent le niveau d'exigence, l'esthétique et le standard de qualité que nous appliquons à chaque projet. Ils ne sont pas des réalisations XR Agency, mais représentent la direction artistique que nous visons pour votre marque.",
+    en: "These websites illustrate the level of demand, aesthetics and quality standard we apply to every project. They are not XR Agency creations, but represent the art direction we aim for your brand.",
+    vi: "Những website này minh họa mức độ yêu cầu, thẩm mỹ và tiêu chuẩn chất lượng mà chúng tôi áp dụng cho mỗi dự án. Đây không phải là tác phẩm của XR Agency, mà đại diện cho hướng nghệ thuật chúng tôi hướng đến cho thương hiệu của bạn.",
+  },
+  showcaseDisclaimer: {
+    fr: "Les sites présentés sont des références de direction artistique et non des projets réalisés par XR Agency. Ils illustrent le niveau d'exigence et le style que nous appliquons.",
+    en: "The sites shown are art direction references, not XR Agency projects. They illustrate the standard and style we deliver.",
+    vi: "Các website được trình bày là tham khảo chỉ đạo nghệ thuật, không phải dự án XR Agency đã thực hiện. Chúng minh họa mức độ yêu cầu và phong cách chúng tôi áp dụng.",
+  },
+  showcaseVisitSite: { fr: "Visiter le site", en: "Visit website", vi: "Xem website" },
+  showcaseAllSectors: { fr: "Tous les secteurs", en: "All sectors", vi: "Tất cả lĩnh vực" },
+  showcaseSiteVitrine: { fr: "Site vitrine", en: "Showcase site", vi: "Website giới thiệu" },
+  showcaseEcommerce: { fr: "E-commerce", en: "E-commerce", vi: "Thương mại điện tử" },
+  showcaseBoth: { fr: "Vitrine + E-commerce", en: "Showcase + E-commerce", vi: "Giới thiệu + TMĐT" },
+  showcaseWebApp: { fr: "Web App", en: "Web App", vi: "Ứng dụng web" },
+
+  // Sectors
+  sectorLuxe: { fr: "Luxe & Joaillerie", en: "Luxury & Jewelry", vi: "Xa xỉ & Trang sức" },
+  sectorGastronomie: { fr: "Gastronomie", en: "Fine Dining", vi: "Ẩm thực cao cấp" },
+  sectorHotellerie: { fr: "Hôtellerie & Tourisme", en: "Hospitality & Travel", vi: "Khách sạn & Du lịch" },
+  sectorImmobilier: { fr: "Immobilier", en: "Real Estate", vi: "Bất động sản" },
+  sectorSante: { fr: "Santé & Bien-être", en: "Health & Wellness", vi: "Sức khỏe & Sức khỏe" },
+  sectorBeaute: { fr: "Beauté & Cosmétique", en: "Beauty & Cosmetics", vi: "Làm đẹp & Mỹ phẩm" },
+  sectorAuto: { fr: "Automobile", en: "Automotive", vi: "Ô tô" },
+  sectorMode: { fr: "Mode & Prêt-à-porter", en: "Fashion & Ready-to-wear", vi: "Thời trang" },
+  sectorArchitecture: { fr: "Architecture & Design", en: "Architecture & Design", vi: "Kiến trúc & Thiết kế" },
+  sectorTech: { fr: "Tech & Innovation", en: "Tech & Innovation", vi: "Công nghệ & Đổi mới" },
+  sectorCoaching: { fr: "Coaching & Formation", en: "Coaching & Training", vi: "Huấn luyện & Đào tạo" },
+  sectorArtisanat: { fr: "Artisanat & BTP", en: "Crafts & Construction", vi: "Thủ công & Xây dựng" },
+
+  // ── Legal mentions ──
+  legalTitle: { fr: "Mentions légales", en: "Legal information", vi: "Thông tin pháp lý" },
+  legalCompany: { fr: "Société", en: "Company", vi: "Công ty" },
+  legalForm: { fr: "Forme juridique", en: "Legal form", vi: "Hình thức pháp lý" },
+  legalCapital: { fr: "Capital social", en: "Share capital", vi: "Vốn điều lệ" },
+  legalRcs: { fr: "Immatriculation", en: "Registration", vi: "Đăng ký" },
+  legalSiren: { fr: "SIREN", en: "SIREN", vi: "SIREN" },
+  legalSiret: { fr: "SIRET", en: "SIRET", vi: "SIRET" },
+  legalTva: { fr: "N° TVA intracommunautaire", en: "VAT number", vi: "Mã số thuế VAT" },
+  legalDirector: { fr: "Directeur de la publication", en: "Publication director", vi: "Giám đốc xuất bản" },
+  legalAddress: { fr: "Siège social", en: "Registered office", vi: "Trụ sở chính" },
+  legalHosting: { fr: "Hébergement", en: "Hosting", vi: "Lưu trữ" },
+  legalHostingProvider: {
+    fr: "Vercel Inc. — 340 S Lemon Ave #4133, Walnut, CA 91789, USA",
+    en: "Vercel Inc. — 340 S Lemon Ave #4133, Walnut, CA 91789, USA",
+    vi: "Vercel Inc. — 340 S Lemon Ave #4133, Walnut, CA 91789, USA",
+  },
+  legalCopyright: {
+    fr: "© 2026 XR Agency — Tous droits réservés",
+    en: "© 2026 XR Agency — All rights reserved",
+    vi: "© 2026 XR Agency — Mọi quyền được bảo lưu",
+  },
+  legalPrivacy: {
+    fr: "Politique de confidentialité",
+    en: "Privacy policy",
+    vi: "Chính sách bảo mật",
+  },
+  legalPrivacyText: {
+    fr: "Les données collectées (nom, email, téléphone) sont exclusivement utilisées dans le cadre de notre relation commerciale. Elles ne sont jamais transmises à des tiers. Conformément au RGPD, vous pouvez exercer votre droit d'accès, de rectification ou de suppression en nous écrivant à contact.xragency@gmail.com.",
+    en: "Data collected (name, email, phone) is used solely within our business relationship. It is never shared with third parties. Under GDPR, you may exercise your right to access, rectify or delete data by writing to contact.xragency@gmail.com.",
+    vi: "Dữ liệu thu thập (tên, email, điện thoại) chỉ được sử dụng trong mối quan hệ kinh doanh. Không bao giờ chia sẻ với bên thứ ba. Theo RGPD, bạn có quyền truy cập, sửa đổi hoặc xóa dữ liệu bằng cách gửi email đến contact.xragency@gmail.com.",
+  },
+  legalTerms: {
+    fr: "Conditions générales",
+    en: "Terms & conditions",
+    vi: "Điều khoản sử dụng",
+  },
+  footerContact: {
+    fr: "Contact",
+    en: "Contact",
+    vi: "Liên hệ",
+  },
+  footerLegal: {
+    fr: "Mentions légales",
+    en: "Legal info",
+    vi: "Thông tin pháp lý",
+  },
+  ctaReassurance: {
+    fr: "Réponse sous 2h · FR / EN / VI · Sans engagement",
+    en: "Reply within 2h · FR / EN / VI · No commitment",
+    vi: "Phản hồi trong 2h · FR / EN / VI · Không cam kết",
+  },
+
+  // ── SaaS Dashboard ──
+  dashTitle: { fr: "Tableau de bord", en: "Dashboard", vi: "Bảng điều khiển" },
+  dashProspects: { fr: "Prospects", en: "Prospects", vi: "Khách tiềm năng" },
+  dashAudits: { fr: "Audits", en: "Audits", vi: "Kiểm toán" },
+  dashNewAudit: { fr: "Nouvel audit", en: "New audit", vi: "Kiểm toán mới" },
+  dashSettings: { fr: "Paramètres", en: "Settings", vi: "Cài đặt" },
+  dashLogout: { fr: "Déconnexion", en: "Sign out", vi: "Đăng xuất" },
+  dashLogin: { fr: "Connexion", en: "Sign in", vi: "Đăng nhập" },
+  dashTotalProspects: { fr: "Total prospects", en: "Total prospects", vi: "Tổng khách tiềm năng" },
+  dashAuditsCompleted: { fr: "Audits terminés", en: "Audits completed", vi: "Kiểm toán hoàn thành" },
+  dashAvgScore: { fr: "Score moyen", en: "Average score", vi: "Điểm trung bình" },
+  dashConversionRate: { fr: "Taux conversion", en: "Conversion rate", vi: "Tỷ lệ chuyển đổi" },
+  dashRecentActivity: { fr: "Activité récente", en: "Recent activity", vi: "Hoạt động gần đây" },
+  dashQuickAudit: { fr: "Audit rapide", en: "Quick audit", vi: "Kiểm toán nhanh" },
+  dashEnterUrl: { fr: "Entrez une URL pour analyser", en: "Enter a URL to analyze", vi: "Nhập URL để phân tích" },
+  dashAnalyze: { fr: "Analyser", en: "Analyze", vi: "Phân tích" },
+  dashNoProspects: { fr: "Aucun prospect", en: "No prospects yet", vi: "Chưa có khách tiềm năng" },
+  dashAddProspect: { fr: "Ajouter un prospect", en: "Add prospect", vi: "Thêm khách" },
+  dashNoAudits: { fr: "Aucun audit", en: "No audits yet", vi: "Chưa có kiểm toán" },
+  dashRunAudit: { fr: "Lancer un audit", en: "Run an audit", vi: "Chạy kiểm toán" },
+  dashScore: { fr: "Score", en: "Score", vi: "Điểm" },
+  dashStatus: { fr: "Statut", en: "Status", vi: "Trạng thái" },
+  dashDate: { fr: "Date", en: "Date", vi: "Ngày" },
+  dashActions: { fr: "Actions", en: "Actions", vi: "Hành động" },
+  dashBusinessName: { fr: "Entreprise", en: "Business", vi: "Doanh nghiệp" },
+  dashWebsite: { fr: "Site web", en: "Website", vi: "Trang web" },
+  dashIndustry: { fr: "Secteur", en: "Industry", vi: "Ngành" },
+  dashLocation: { fr: "Localisation", en: "Location", vi: "Vị trí" },
+  dashContact: { fr: "Contact", en: "Contact", vi: "Liên hệ" },
+  dashNotes: { fr: "Notes", en: "Notes", vi: "Ghi chú" },
+  dashOpportunities: { fr: "Opportunités", en: "Opportunities", vi: "Cơ hội" },
+  dashIssues: { fr: "Problèmes détectés", en: "Issues detected", vi: "Vấn đề phát hiện" },
+  dashExecutiveSummary: { fr: "Synthèse exécutive", en: "Executive summary", vi: "Tóm tắt điều hành" },
+  dashCategoryBreakdown: { fr: "Détail par catégorie", en: "Category breakdown", vi: "Chi tiết theo danh mục" },
+  dashRecommendedServices: { fr: "Services recommandés", en: "Recommended services", vi: "Dịch vụ đề xuất" },
+  dashEmail: { fr: "Email", en: "Email", vi: "Email" },
+  dashPassword: { fr: "Mot de passe", en: "Password", vi: "Mật khẩu" },
+  dashForgotPassword: { fr: "Mot de passe oublié ?", en: "Forgot password?", vi: "Quên mật khẩu?" },
+  dashNoAccount: { fr: "Pas de compte ?", en: "No account?", vi: "Chưa có tài khoản?" },
+  dashSignUp: { fr: "S'inscrire", en: "Sign up", vi: "Đăng ký" },
+  dashWelcomeBack: { fr: "Bienvenue", en: "Welcome back", vi: "Chào mừng trở lại" },
+  dashLoginSubtitle: { fr: "Connectez-vous à votre espace d'audit", en: "Sign in to your audit workspace", vi: "Đăng nhập vào không gian kiểm toán" },
+  statusNew: { fr: "Nouveau", en: "New", vi: "Mới" },
+  statusAudited: { fr: "Audité", en: "Audited", vi: "Đã kiểm toán" },
+  statusContacted: { fr: "Contacté", en: "Contacted", vi: "Đã liên hệ" },
+  statusQualified: { fr: "Qualifié", en: "Qualified", vi: "Đủ điều kiện" },
+  statusClient: { fr: "Client", en: "Client", vi: "Khách hàng" },
+  statusPending: { fr: "En attente", en: "Pending", vi: "Đang chờ" },
+  statusCrawling: { fr: "Crawl en cours", en: "Crawling", vi: "Đang thu thập" },
+  statusAnalyzing: { fr: "Analyse en cours", en: "Analyzing", vi: "Đang phân tích" },
+  statusCompleted: { fr: "Terminé", en: "Completed", vi: "Hoàn thành" },
+  statusFailed: { fr: "Échec", en: "Failed", vi: "Thất bại" },
+
+  // ── About Section ──
+  aboutKicker: {
+    fr: "External Agency Intelligence",
+    en: "External Agency Intelligence",
+    vi: "Trí tuệ Agency Ngoại bộ",
+  },
+  aboutHeading: {
+    fr: "Votre direction digitale & studio d'élite,",
+    en: "Your digital direction & elite studio,",
+    vi: "Hướng dẫn số & studio đẳng cấp của bạn,",
+  },
+  aboutHeadingAccent: {
+    fr: "activés à la demande.",
+    en: "activated on demand.",
+    vi: "kích hoạt theo yêu cầu.",
+  },
+  aboutLead: {
+    fr: "Pourquoi recruter et gérer 5 salariés quand vous pouvez brancher instantanément une équipe senior complète, coordonnée et disponible au moment où votre entreprise accélère ?",
+    en: "Why hire and manage 5 employees when you can instantly plug in a complete, coordinated senior team available exactly when your business accelerates?",
+    vi: "Tại sao phải tuyển dụng và quản lý 5 nhân viên khi bạn có thể kết nối ngay lập tức một đội ngũ cấp cao hoàn chỉnh, phối hợp nhịp nhàng và sẵn sàng khi doanh nghiệp tăng tốc?",
+  },
+  aboutTeamLabel: {
+    fr: "Collectif Senior · Paris, Asie & USA",
+    en: "Senior Collective · Paris, Asia & USA",
+    vi: "Tập thể Cấp cao · Paris, Châu Á & USA",
+  },
+  aboutHubKicker: {
+    fr: "Hub Modulaire d'Expertises",
+    en: "Modular Expertise Hub",
+    vi: "Trung tâm Chuyên môn Mô-đun",
+  },
+  aboutHubTitle: {
+    fr: "Explorez les 6 piliers de frappe de votre agence externe",
+    en: "Explore the 6 pillars of your external agency",
+    vi: "Khám phá 6 trụ cột của agency ngoại bộ",
+  },
+  aboutHubHint: {
+    fr: "Cliquez sur un pôle pour voir son impact",
+    en: "Click a pillar to see its impact",
+    vi: "Nhấn vào một trụ cột để xem tác động",
+  },
+  aboutPoleLabel: {
+    fr: "Pôle",
+    en: "Pillar",
+    vi: "Trụ cột",
+  },
+  aboutPoleActivated: {
+    fr: "Activé à la demande",
+    en: "Activated on demand",
+    vi: "Kích hoạt theo yêu cầu",
+  },
+  aboutDeliverables: {
+    fr: "Livrables & interventions directes :",
+    en: "Deliverables & direct interventions:",
+    vi: "Kết quả bàn giao & can thiệp trực tiếp:",
+  },
+  aboutImpactLabel: {
+    fr: "Impact & Résultat Mesuré",
+    en: "Impact & Measured Result",
+    vi: "Tác động & Kết quả Đo lường",
+  },
+  aboutImpactDesc: {
+    fr: "Chaque pôle est déployé avec une obligation de rigueur et un reporting transparent.",
+    en: "Each pillar is deployed with rigorous standards and transparent reporting.",
+    vi: "Mỗi trụ cột được triển khai với tiêu chuẩn nghiêm ngặt và báo cáo minh bạch.",
+  },
+  aboutTestPole: {
+    fr: "Tester ce pôle dans le configurateur IA →",
+    en: "Test this pillar in the AI configurator →",
+    vi: "Thử trụ cột này trong bộ cấu hình AI →",
+  },
+  aboutChoiceKicker: {
+    fr: "Le Choix Stratégique",
+    en: "The Strategic Choice",
+    vi: "Lựa chọn Chiến lược",
+  },
+  aboutChoiceTitle: {
+    fr: "Recruter une équipe interne ou brancher XR Agency ?",
+    en: "Hire an internal team or plug in XR Agency?",
+    vi: "Tuyển đội nội bộ hay kết nối XR Agency?",
+  },
+  aboutChoiceLead: {
+    fr: "Comparez la flexibilité, le coût et l'impact direct sur votre trésorerie.",
+    en: "Compare flexibility, cost and direct impact on your cash flow.",
+    vi: "So sánh tính linh hoạt, chi phí và tác động trực tiếp đến dòng tiền.",
+  },
+  aboutTraditional: {
+    fr: "Option Traditionnelle",
+    en: "Traditional Option",
+    vi: "Phương án Truyền thống",
+  },
+  aboutInHouse: {
+    fr: "En interne",
+    en: "In-house",
+    vi: "Nội bộ",
+  },
+  aboutRecruitTitle: {
+    fr: "Recrutement de 4 à 5 salariés",
+    en: "Hiring 4 to 5 employees",
+    vi: "Tuyển dụng 4 đến 5 nhân viên",
+  },
+  aboutRecruitCost: {
+    fr: "/mois + charges",
+    en: "/month + payroll taxes",
+    vi: "/tháng + thuế",
+  },
+  aboutCon1: {
+    fr: "3 à 6 mois de processus de recrutement",
+    en: "3 to 6 months of recruitment process",
+    vi: "3 đến 6 tháng quy trình tuyển dụng",
+  },
+  aboutCon2: {
+    fr: "Charges patronales, matériel, congés payés",
+    en: "Payroll taxes, equipment, paid leave",
+    vi: "Thuế, thiết bị, nghỉ phép",
+  },
+  aboutCon3: {
+    fr: "Compétences limitées à chaque profil recruté",
+    en: "Skills limited to each recruited profile",
+    vi: "Kỹ năng giới hạn ở mỗi hồ sơ tuyển dụng",
+  },
+  aboutCon4: {
+    fr: "Risque financier lourd et rigidité contractuelle",
+    en: "Heavy financial risk and contractual rigidity",
+    vi: "Rủi ro tài chính lớn và ràng buộc hợp đồng",
+  },
+  aboutRecommended: {
+    fr: "Recommandé",
+    en: "Recommended",
+    vi: "Đề xuất",
+  },
+  aboutExternalFormula: {
+    fr: "Formule Hub Externe",
+    en: "External Hub Plan",
+    vi: "Gói Trung tâm Ngoại bộ",
+  },
+  aboutXrLabel: {
+    fr: "XR Agency",
+    en: "XR Agency",
+    vi: "XR Agency",
+  },
+  aboutDigitalTitle: {
+    fr: "Votre Direction Digitale & IA Immédiate",
+    en: "Your Immediate Digital & AI Direction",
+    vi: "Hướng dẫn Số & AI Ngay lập tức",
+  },
+  aboutFromLabel: {
+    fr: "/mois ou au forfait",
+    en: "/month or flat rate",
+    vi: "/tháng hoặc trọn gói",
+  },
+  aboutPro1: {
+    fr: "Opérationnel en 48 heures ouvrées",
+    en: "Operational within 48 business hours",
+    vi: "Hoạt động trong 48 giờ làm việc",
+  },
+  aboutPro2: {
+    fr: "Accès à un collectif senior (DA, Dev, SEO, IA)",
+    en: "Access to a senior collective (DA, Dev, SEO, AI)",
+    vi: "Truy cập tập thể cấp cao (DA, Dev, SEO, AI)",
+  },
+  aboutPro3: {
+    fr: "Zéro charge patronale, zéro engagement contraignant",
+    en: "Zero payroll tax, zero binding commitment",
+    vi: "Không thuế, không ràng buộc hợp đồng",
+  },
+  aboutPro4: {
+    fr: "Garantie de résultat et suivi continu en direct",
+    en: "Result guarantee and continuous live monitoring",
+    vi: "Đảm bảo kết quả và giám sát liên tục",
+  },
+  aboutSimulateCta: {
+    fr: "Simuler mon accompagnement externe",
+    en: "Simulate my external support",
+    vi: "Mô phỏng hỗ trợ ngoại bộ",
+  },
+
+  // ── Intelligence Section Labels ──
+  intelAdvisorActive: {
+    fr: "Conseiller Stratégique IA Actif · Réponses instantanées",
+    en: "AI Strategic Advisor Active · Instant responses",
+    vi: "Cố vấn Chiến lược AI Đang hoạt động · Phản hồi tức thì",
+  },
+  intelAuditTimer: {
+    fr: "Audit & Estimation sous 60s",
+    en: "Audit & Estimate in 60s",
+    vi: "Audit & Ước tính trong 60s",
+  },
+  intelAdvisorName: {
+    fr: "Alexandre · Stratège Digital Senior",
+    en: "Alexandre · Senior Digital Strategist",
+    vi: "Alexandre · Chiến lược gia Digital Cấp cao",
+  },
+  intelAdvisorSub: {
+    fr: "XR Agency Paris & International",
+    en: "XR Agency Paris & International",
+    vi: "XR Agency Paris & Quốc tế",
+  },
+  intelRestartLabel: {
+    fr: "Recommencer",
+    en: "Start over",
+    vi: "Làm lại",
+  },
+  intelSetupLabel: {
+    fr: "Mise en place",
+    en: "Setup",
+    vi: "Triển khai",
+  },
+  intelMonthlyLabel: {
+    fr: "Suivi Mensuel",
+    en: "Monthly Tracking",
+    vi: "Theo dõi Hàng tháng",
+  },
+  intelYearlyLabel: {
+    fr: "Google Maps (Annuel)",
+    en: "Google Maps (Annual)",
+    vi: "Google Maps (Hàng năm)",
+  },
+  intelSendWhatsapp: {
+    fr: "Transmettre mon plan sur WhatsApp",
+    en: "Send my plan via WhatsApp",
+    vi: "Gửi kế hoạch qua WhatsApp",
+  },
+  intelCopyPlan: {
+    fr: "Copier le plan",
+    en: "Copy plan",
+    vi: "Sao chép kế hoạch",
+  },
+  intelPlanCopied: {
+    fr: "Plan copié !",
+    en: "Plan copied!",
+    vi: "Đã sao chép!",
+  },
+  intelFormule: {
+    fr: "Formule :",
+    en: "Plan:",
+    vi: "Gói:",
+  },
+  intelWhyLabel: {
+    fr: "Pourquoi :",
+    en: "Why:",
+    vi: "Vì sao:",
+  },
+
+  // ── Logo & Global ──
+  logoSubtitle: {
+    fr: "Le Digital",
+    en: "The Digital",
+    vi: "Digital",
+  },
+
+  // ── Marquee ──
+  marqueeServices: {
+    fr: "Sites Web \u00B7 Identité · SEO · Google Maps · Social Media · IA · Maintenance · ",
+    en: "Websites · Branding · SEO · Google Maps · Social Media · AI · Maintenance · ",
+    vi: "Website · Nhận diện · SEO · Google Maps · Mạng xã hội · AI · Bảo trì · ",
+  },
+
+  // ── Parallax Captions ──
+  dividerCaption1: {
+    fr: "Architecture · Design · Performance",
+    en: "Architecture · Design · Performance",
+    vi: "Kiến trúc · Thiết kế · Hiệu năng",
+  },
+  dividerCaption2: {
+    fr: "L'art du détail · The art of detail",
+    en: "The art of detail",
+    vi: "Nghệ thuật của chi tiết",
+  },
+  dividerCaption3: {
+    fr: "Paris · Dubaï · Tokyo · New York",
+    en: "Paris · Dubai · Tokyo · New York",
+    vi: "Paris · Dubai · Tokyo · New York",
+  },
+  dividerCaption4: {
+    fr: "Votre prochaine réussite commence ici",
+    en: "Your next success starts here",
+    vi: "Thành công tiếp theo bắt đầu từ đây",
+  },
+
+  // ── Gallery Captions ──
+  galleryCaption1: { fr: "Direction Stratégique", en: "Strategic Direction", vi: "Định hướng Chiến lược" },
+  galleryCaption2: { fr: "Atelier Créatif & UX", en: "Creative Workshop & UX", vi: "Xưởng Sáng tạo & UX" },
+  galleryCaption3: { fr: "Conception Éditoriale", en: "Editorial Design", vi: "Thiết kế Biên tập" },
+  galleryCaption4: { fr: "Ingénierie & Déploiement", en: "Engineering & Deployment", vi: "Kỹ thuật & Triển khai" },
 };

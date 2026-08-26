@@ -369,7 +369,7 @@ export function Intelligence() {
       recs.push({
         id: "seo",
         title: {
-          fr: "SEO Domination System",
+          fr: "Système de Domination SEO",
           en: "SEO Domination System",
           vi: "Chiến dịch SEO Chuyên sâu",
         },
@@ -576,7 +576,7 @@ export function Intelligence() {
   };
 
   return (
-    <section id="intelligence" className="grain relative overflow-hidden py-24 lg:py-32">
+    <section id="intelligence" className="grain relative overflow-hidden py-16 sm:py-24 lg:py-32">
       {/* Background Atmosphere */}
       <div className="absolute inset-0" style={{ background: "var(--gradient-halo)" }} />
 
@@ -589,11 +589,11 @@ export function Intelligence() {
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
               </span>
               <span className="label-mono text-xs text-muted-foreground">
-                Conseiller Stratégique IA Actif · Réponses instantanées
+                {t(UI.intelAdvisorActive)}
               </span>
             </div>
             <span className="label-mono text-xs text-muted-foreground/70">
-              Audit & Estimation sous 60s
+              {t(UI.intelAuditTimer)}
             </span>
           </div>
         </Reveal>
@@ -615,17 +615,17 @@ export function Intelligence() {
           {/* Main Interactive AI Interface Container */}
           <div className="surface-plate mt-10 overflow-hidden rounded-3xl border border-border bg-card shadow-2xl backdrop-blur-xl">
             {/* Top Assistant Header */}
-            <div className="flex items-center justify-between border-b border-border/60 bg-accent/20 px-6 py-4">
+            <div className="flex items-center justify-between border-b border-border/60 bg-accent/20 px-4 py-3 sm:px-6 sm:py-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-primary border border-primary/30">
                   <Bot className="h-5 w-5" />
                 </div>
                 <div>
                   <h4 className="display-serif text-sm font-semibold text-foreground">
-                    Alexandre · Stratège Digital Senior
+                    {t(UI.intelAdvisorName)}
                   </h4>
                   <p className="label-mono text-[10px] text-muted-foreground">
-                    XR Agency Paris & International
+                    {t(UI.intelAdvisorSub)}
                   </p>
                 </div>
               </div>
@@ -635,12 +635,12 @@ export function Intelligence() {
                 className="label-mono inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-card/60 px-3 py-1.5 text-[11px] text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
               >
                 <RotateCcw className="h-3 w-3" />
-                Recommencer
+                {t(UI.intelRestartLabel)}
               </button>
             </div>
 
             {/* Chat Flow Stream */}
-            <div className="max-h-[560px] min-h-[380px] overflow-y-auto p-6 space-y-6">
+            <div className="max-h-[560px] min-h-[320px] sm:min-h-[380px] overflow-y-auto p-4 sm:p-6 space-y-5 sm:space-y-6">
               {messages.map((msg) => {
                 const isAi = msg.sender === "ai";
                 return (
@@ -680,7 +680,7 @@ export function Intelligence() {
                               <button
                                 key={opt.id}
                                 onClick={() => handleSelectOption(currentStep, opt)}
-                                className="group flex items-center gap-3 rounded-xl border border-border/70 bg-card/80 p-3 text-left transition-all duration-200 hover:border-primary hover:bg-primary/5 hover:translate-x-0.5"
+                                className="group flex items-center gap-3 rounded-xl border border-border/70 bg-card/80 p-3 sm:p-3.5 text-left transition-all duration-200 hover:border-primary hover:bg-primary/5 hover:translate-x-0.5 min-h-[44px]"
                               >
                                 {IconComponent ? (
                                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-border bg-accent/40 text-primary group-hover:border-primary/50">
@@ -727,10 +727,10 @@ export function Intelligence() {
                                   </span>
                                 </div>
                                 <p className="label-mono mt-2 text-xs font-medium text-foreground">
-                                  Formule : {t(item.plan)}
+                                  {t(UI.intelFormule)} {t(item.plan)}
                                 </p>
                                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                                  <strong className="text-foreground">Pourquoi : </strong>
+                                  <strong className="text-foreground">{t(UI.intelWhyLabel)} </strong>
                                   {t(item.why)}
                                 </p>
                               </div>
@@ -741,7 +741,7 @@ export function Intelligence() {
                           <div className="grid gap-3 sm:grid-cols-3 rounded-2xl border border-border/80 bg-accent/40 p-4">
                             <div>
                               <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                                Mise en place
+                                {t(UI.intelSetupLabel)}
                               </span>
                               <p className="display-serif mt-1 text-xl text-primary">
                                 {price(msg.recommendation.setup)}
@@ -749,7 +749,7 @@ export function Intelligence() {
                             </div>
                             <div>
                               <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                                Suivi Mensuel
+                                {t(UI.intelMonthlyLabel)}
                               </span>
                               <p className="display-serif mt-1 text-xl text-primary">
                                 {msg.recommendation.monthly > 0
@@ -759,7 +759,7 @@ export function Intelligence() {
                             </div>
                             <div>
                               <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                                Google Maps (Annuel)
+                                {t(UI.intelYearlyLabel)}
                               </span>
                               <p className="display-serif mt-1 text-xl text-primary">
                                 {msg.recommendation.yearly > 0
@@ -770,7 +770,7 @@ export function Intelligence() {
                           </div>
 
                           {/* Direct Actions */}
-                          <div className="flex flex-wrap items-center gap-3 pt-2">
+                          <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 pt-2">
                             <a
                               href={`${CONTACT.whatsapp}?text=${encodeURIComponent(
                                 `Bonjour Alexandre, je viens de terminer mon audit IA sur votre site. Voici les prestations recommandées : ${msg.recommendation.items
@@ -779,15 +779,15 @@ export function Intelligence() {
                               )}`}
                               target="_blank"
                               rel="noreferrer"
-                              className="flex items-center gap-2 rounded-full bg-emerald-600 px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white shadow-lg transition-all hover:bg-emerald-500"
+                              className="flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white shadow-lg transition-all hover:bg-emerald-500 min-h-[44px]"
                             >
                               <MessageSquare className="h-4 w-4" />
-                              Transmettre mon plan sur WhatsApp
+                              {t(UI.intelSendWhatsapp)}
                             </a>
 
                             <button
                               onClick={() => {
-                                const summary = `XR Agency 2030 — Diagnostic & Recommandation\n\n${msg.recommendation?.items
+                                const summary = `XR Agency — Diagnostic & Recommandation\n\n${msg.recommendation?.items
                                   .map(
                                     (r) =>
                                       `• ${t(r.title)} (${t(r.plan)}) : ${price(r.eur)}${
@@ -811,17 +811,17 @@ export function Intelligence() {
                                 setCopied(true);
                                 setTimeout(() => setCopied(false), 2500);
                               }}
-                              className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-xs font-medium uppercase tracking-wider text-foreground hover:border-primary hover:text-primary transition-all"
+                              className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-xs font-medium uppercase tracking-wider text-foreground hover:border-primary hover:text-primary transition-all min-h-[44px]"
                             >
                               {copied ? (
                                 <>
                                   <CheckCheck className="h-4 w-4 text-emerald-500" />
-                                  <span>Plan copié !</span>
+                                  <span>{t(UI.intelPlanCopied)}</span>
                                 </>
                               ) : (
                                 <>
                                   <Copy className="h-4 w-4" />
-                                  <span>Copier le plan</span>
+                                  <span>{t(UI.intelCopyPlan)}</span>
                                 </>
                               )}
                             </button>
@@ -853,7 +853,7 @@ export function Intelligence() {
             {/* Freeform Message Input Footer */}
             <form
               onSubmit={handleCustomTextSubmit}
-              className="flex items-center gap-3 border-t border-border/60 bg-card/60 p-4"
+              className="flex items-center gap-2 sm:gap-3 border-t border-border/60 bg-card/60 p-3 sm:p-4"
             >
               <input
                 type="text"
@@ -866,12 +866,12 @@ export function Intelligence() {
                       ? "Type your answer or question here..."
                       : "Répondez ou posez une question sur votre projet..."
                 }
-                className="flex-1 rounded-full border border-border bg-background/80 px-5 py-3 text-xs text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                className="flex-1 min-h-[44px] rounded-full border border-border bg-background/80 px-4 sm:px-5 py-2.5 sm:py-3 text-xs text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               />
               <button
                 type="submit"
                 disabled={!inputText.trim()}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground disabled:opacity-40 transition-all hover:bg-primary/90"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground disabled:opacity-40 transition-all hover:bg-primary/90"
               >
                 <Send className="h-4 w-4" />
               </button>

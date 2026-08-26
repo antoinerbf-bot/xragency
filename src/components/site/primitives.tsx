@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { useLang } from "@/lib/i18n";
+import { UI } from "@/lib/copy";
 import type { L } from "@/lib/i18n";
 
 export function Logo({ className, subtitle = true }: { className?: string; subtitle?: boolean }) {
+  const { t } = useLang();
   return (
     <a
       href="/"
@@ -17,13 +19,10 @@ export function Logo({ className, subtitle = true }: { className?: string; subti
           XR<span className="font-light tracking-[0.22em]">AGENCY</span>
         </span>
         <span className="h-1.5 w-1.5 rounded-full bg-primary transition-transform duration-300 group-hover:scale-125" />
-        <span className="label-mono text-[10px] font-medium tracking-[0.2em] text-muted-foreground/80">
-          2030
-        </span>
       </div>
       {subtitle ? (
         <span className="label-mono mt-0.5 text-[8px] uppercase tracking-[0.32em] text-muted-foreground transition-colors group-hover:text-foreground">
-          Studio Digital & Stratégie IA
+          {t(UI.logoSubtitle)}
         </span>
       ) : null}
     </a>
@@ -177,7 +176,7 @@ export function EmberButton({
   disabled?: boolean;
 }) {
   const base =
-    "label-mono inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-40";
+    "label-mono inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 min-h-[44px] transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-40";
   const styles = {
     solid:
       "bg-primary text-primary-foreground hover:brightness-110 hover:shadow-[var(--shadow-ember)]",

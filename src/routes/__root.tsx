@@ -80,14 +80,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "XR Agency 2030 — Studio digital premium & IA" },
+      { title: "XR Agency — Studio digital premium & IA" },
       {
         name: "description",
         content:
           "Sites web sur mesure, branding, SEO local, Google Maps TOP 3 et assistants IA. Studio digital premium — FR / EN / VI.",
       },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "XR Agency 2030 — Studio digital premium & IA" },
+      { property: "og:title", content: "XR Agency — Studio digital premium & IA" },
       {
         property: "og:description",
         content:
@@ -96,7 +96,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "XR Agency 2030 — Studio digital premium & IA" },
+      { name: "twitter:title", content: "XR Agency — Studio digital premium & IA" },
       {
         name: "twitter:description",
         content:
@@ -119,6 +119,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      // Preconnect to external origins for faster resource loading
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "preconnect", href: "https://images.unsplash.com" },
+      // Preload Google Fonts CSS with swap
+      {
+        rel: "preload",
+        as: "style",
+        href: "https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap",
+      },
+      { rel: "canonical", href: "https://xragency.vercel.app" },
     ],
   }),
   shellComponent: RootShell,
@@ -129,7 +140,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <head>
         <HeadContent />
       </head>
@@ -147,22 +158,21 @@ function RootComponent() {
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    name: "XR Agency 2030",
+    name: "XR Agency",
+    alternateName: "KARMA SASU",
     description:
       "Studio digital & IA de prestige : création de sites web sur-mesure, branding, SEO domination, Google Maps TOP 3 et assistants IA.",
+    url: "https://xragency.vercel.app",
     telephone: "+33 7 67 56 67 83",
     email: "contact.xragency@gmail.com",
     address: {
       "@type": "PostalAddress",
+      streetAddress: "78 Avenue des Champs-Élysées, Bureau 562",
       addressLocality: "Paris",
+      postalCode: "75008",
       addressCountry: "FR",
     },
     priceRange: "€€€",
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "5.0",
-      reviewCount: "48",
-    },
   };
 
   return (

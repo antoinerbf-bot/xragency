@@ -1,39 +1,67 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { LANGS, useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { Logo, EmberButton } from "./primitives";
 
 const LINKS = [
-  { href: "/#services", key: "navServices" },
-  { href: "/#pricing", key: "navPricing" },
-  { href: "/#work", key: "navWork" },
-  { href: "/#intelligence", key: "navIntelligence" },
-  { href: "/#faq", key: "navFaq" },
+  { href: "/#services", key: "navServices", section: "services" },
+  { href: "/#pricing", key: "navPricing", section: "pricing" },
+  { href: "/#work", key: "navWork", section: "work" },
+  { href: "/#intelligence", key: "navIntelligence", section: "intelligence" },
+  { href: "/#faq", key: "navFaq", section: "faq" },
 ] as const;
 
 export function Nav() {
   const { t, lang, setLang } = useLang();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+
+  const onScroll = useCallback(() => {
+    const scrollY = window.scrollY;
+    setScrolled(scrollY > 40);
+
+    // Progress bar
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (docHeight > 0) setProgress(Math.min(scrollY / docHeight, 1));
+
+    // Active section detection
+    const sections = LINKS.map((l) => l.section);
+    let current: string | null = null;
+    for (const id of sections) {
+      const el = document.getElementById(id);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= 120) current = id;
+      }
+    }
+    setActiveSection(current);
+  }, []);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [onScroll]);
 
   return (
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500",
         scrolled
-          ? "border-b border-border/70 bg-background/85 backdrop-blur-xl"
+          ? "border-b border-border/70 bg-background/90 backdrop-blur-xl shadow-sm"
           : "border-b border-transparent",
       )}
     >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
+      {/* Scroll progress bar */}
+      <div
+        className="absolute bottom-0 left-0 h-px bg-primary/60 transition-[width] duration-150"
+        style={{ width: `${(progress * 100).toFixed(1)}%` }}
+        aria-hidden
+      />
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 sm:py-5 lg:px-10">
         <Logo />
 
         <div className="hidden items-center gap-9 lg:flex">
@@ -41,7 +69,12 @@ export function Nav() {
             <a
               key={l.href}
               href={l.href}
-              className="label-mono text-muted-foreground transition-colors hover:text-primary"
+              className={cn(
+                "label-mono transition-colors duration-300",
+                activeSection === l.section
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-primary",
+              )}
             >
               {t(UI[l.key])}
             </a>
@@ -93,21 +126,25 @@ export function Nav() {
 
       {open ? (
         <div className="border-t border-border bg-background/95 px-6 py-6 backdrop-blur-xl lg:hidden">
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-1">
             {LINKS.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="label-mono text-muted-foreground"
+                className="label-mono rounded-xl px-4 py-3.5 text-sm text-muted-foreground transition-colors hover:bg-accent/40 hover:text-foreground"
               >
                 {t(UI[l.key])}
               </a>
             ))}
-            <a href="/#contact" onClick={() => setOpen(false)} className="label-mono text-primary">
+            <a
+              href="/#contact"
+              onClick={() => setOpen(false)}
+              className="label-mono mt-2 rounded-full bg-primary px-6 py-3 text-center text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+            >
               {t(UI.bookCall)}
             </a>
-            <div className="flex gap-2 pt-2">
+            <div className="flex gap-2 pt-4">
               {LANGS.map((l) => (
                 <button
                   key={l.code}
