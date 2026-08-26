@@ -42,6 +42,13 @@ const SERVICE_IMAGES: Record<string, string> = {
   social: IMG_SOCIAL,
   maintenance: IMG_MAINTENANCE,
   ai: IMG_AI,
+  ecommerce:
+    "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=85",
+  refonte:
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=85",
+  ads: "https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=1600&q=85",
+  strategy:
+    "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1600&q=85",
 };
 
 export const Route = createFileRoute("/services/$serviceId")({
@@ -282,7 +289,11 @@ function ServiceDetailPage() {
                   {t(UI.serviceProcess)}
                 </p>
                 <h2 className="display-serif mt-4 text-3xl sm:text-5xl">
-                  {t({ fr: "Notre méthode de réalisation", en: "Our delivery methodology", vi: "Phương pháp thực hiện" })}
+                  {t({
+                    fr: "Notre méthode de réalisation",
+                    en: "Our delivery methodology",
+                    vi: "Phương pháp thực hiện",
+                  })}
                 </h2>
                 <p className="mt-4 max-w-2xl text-base text-muted-foreground">
                   {t(UI.serviceProcessDesc)}
@@ -306,7 +317,8 @@ function ServiceDetailPage() {
                       </div>
                       <div className="mt-8 border-t border-border/60 pt-4">
                         <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/70">
-                          {t({ fr: "Étape", en: "Step", vi: "Bước" })} {st.num} {t({ fr: "sur 04", en: "of 04", vi: "trong 04" })}
+                          {t({ fr: "Étape", en: "Step", vi: "Bước" })} {st.num}{" "}
+                          {t({ fr: "sur 04", en: "of 04", vi: "trong 04" })}
                         </span>
                       </div>
                     </div>
@@ -335,10 +347,18 @@ function ServiceDetailPage() {
                   {t(UI.navPricing)} · {t(service.title)}
                 </p>
                 <h2 className="display-serif mt-4 text-3xl sm:text-5xl">
-                  {t({ fr: "Formules & Tarification Officielle", en: "Plans & Official Pricing", vi: "Gói & Bảng giá Chính thức" })}
+                  {t({
+                    fr: "Formules & Tarification Officielle",
+                    en: "Plans & Official Pricing",
+                    vi: "Gói & Bảng giá Chính thức",
+                  })}
                 </h2>
                 <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-                  {t({ fr: "Choisissez la formule la plus adaptée à vos ambitions. Tarifs clairs, transparents et sans frais cachés.", en: "Choose the plan best suited to your ambitions. Clear, transparent pricing with no hidden fees.", vi: "Chọn gói phù hợp nhất với mục tiêu của bạn. Giá rõ ràng, minh bạch, không phí ẩn." })}
+                  {t({
+                    fr: "Choisissez la formule la plus adaptée à vos ambitions. Tarifs clairs, transparents et sans frais cachés.",
+                    en: "Choose the plan best suited to your ambitions. Clear, transparent pricing with no hidden fees.",
+                    vi: "Chọn gói phù hợp nhất với mục tiêu của bạn. Giá rõ ràng, minh bạch, không phí ẩn.",
+                  })}
                 </p>
               </Reveal>
             </div>
@@ -412,14 +432,22 @@ function ServiceDetailPage() {
                           )}
                         >
                           <MessageCircle className="h-4 w-4" />
-                          {t({ fr: "Commander cette formule", en: "Order this plan", vi: "Đặt gói này" })}
+                          {t({
+                            fr: "Commander cette formule",
+                            en: "Order this plan",
+                            vi: "Đặt gói này",
+                          })}
                         </a>
                         <Link
                           to="/"
                           hash="intelligence"
                           className="block text-center text-xs text-muted-foreground hover:text-primary"
                         >
-                          {t({ fr: "Ou calculer dans l'estimateur IA →", en: "Or calculate in the AI estimator →", vi: "Hoặc tính trong bộ ước tính AI →" })}
+                          {t({
+                            fr: "Ou calculer dans l'estimateur IA →",
+                            en: "Or calculate in the AI estimator →",
+                            vi: "Hoặc tính trong bộ ước tính AI →",
+                          })}
                         </Link>
                       </div>
                     </article>
@@ -440,7 +468,11 @@ function ServiceDetailPage() {
                     {t(UI.serviceCompareTitle)}
                   </p>
                   <h2 className="display-serif mt-4 text-3xl sm:text-5xl">
-                    {t({ fr: "L'Excellence XR Agency vs Les Standards", en: "XR Agency Excellence vs Market Standards", vi: "Sự xuất sắc XR Agency vs Tiêu chuẩn" })}
+                    {t({
+                      fr: "L'Excellence XR Agency vs Les Standards",
+                      en: "XR Agency Excellence vs Market Standards",
+                      vi: "Sự xuất sắc XR Agency vs Tiêu chuẩn",
+                    })}
                   </h2>
                   <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
                     {t(UI.serviceCompareDesc)}
@@ -501,7 +533,11 @@ function ServiceDetailPage() {
                   {t(UI.faqTitle1)} <em className="italic text-primary">{t(UI.faqTitle2)}</em>
                 </h2>
                 <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-                  {t({ fr: "Tout ce que vous devez savoir avant de démarrer votre collaboration avec XR Agency.", en: "Everything you need to know before starting your collaboration with XR Agency.", vi: "Mọi điều bạn cần biết trước khi bắt đầu hợp tác với XR Agency." })}
+                  {t({
+                    fr: "Tout ce que vous devez savoir avant de démarrer votre collaboration avec XR Agency.",
+                    en: "Everything you need to know before starting your collaboration with XR Agency.",
+                    vi: "Mọi điều bạn cần biết trước khi bắt đầu hợp tác với XR Agency.",
+                  })}
                 </p>
               </div>
             </Reveal>
@@ -558,7 +594,11 @@ function ServiceDetailPage() {
                   {t(UI.otherServices)}
                 </p>
                 <h3 className="display-serif mt-2 text-2xl sm:text-3xl">
-                  {t({ fr: "Complétez votre écosystème", en: "Complete your ecosystem", vi: "Hoàn thiện hệ sinh thái" })}
+                  {t({
+                    fr: "Complétez votre écosystème",
+                    en: "Complete your ecosystem",
+                    vi: "Hoàn thiện hệ sinh thái",
+                  })}
                 </h3>
               </div>
               <Link

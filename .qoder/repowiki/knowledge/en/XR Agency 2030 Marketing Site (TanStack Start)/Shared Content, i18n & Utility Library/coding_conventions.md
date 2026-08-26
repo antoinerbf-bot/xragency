@@ -1,0 +1,5 @@
+- All user-facing text is stored as triple-keyed objects `{ fr, en, vi }` typed as `L`, never as plain strings, ensuring every visible label has explicit translations.
+- Business data (services, plans, steps, metrics, comparisons) is modeled with TypeScript interfaces and exported as plain constants rather than functions or classes.
+- i18n state is accessed exclusively through the `useLang()` hook inside React components instead of reading `localStorage` directly.
+- Errors are reported via the centralized `reportLovableError` helper rather than calling Lovable hooks inline at each call site.
+- Responsive behavior uses a single `MOBILE_BREAKPOINT` constant (768px) evaluated through `matchMedia` with an event listener that is removed on unmount.

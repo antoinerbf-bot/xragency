@@ -7,11 +7,38 @@ import { CONTACT, PERIOD_LABEL, SERVICES } from "@/lib/content";
 import { EmberButton, Parallax, Reveal, SectionHeading } from "./primitives";
 
 const CATEGORIES = [
-  { id: "all", label: { fr: "Tous les services (11)", en: "All Services (11)", vi: "Tất cả dịch vụ (11)" } },
-  { id: "web", label: { fr: "Sites Web & E-commerce", en: "Websites & E-commerce", vi: "Website & TMĐT" }, ids: ["websites", "ecommerce", "refonte"] },
-  { id: "growth", label: { fr: "Google Maps & SEO", en: "Google Maps & SEO", vi: "Google Maps & SEO" }, ids: ["maps", "seo", "ads"] },
-  { id: "ai", label: { fr: "Intelligence Artificielle", en: "Artificial Intelligence", vi: "Trí tuệ Nhân tạo" }, ids: ["ai", "strategy"] },
-  { id: "brand", label: { fr: "Branding & Maintenance", en: "Branding & Maintenance", vi: "Thương hiệu & Bảo trì" }, ids: ["branding", "social", "maintenance"] },
+  {
+    id: "all",
+    label: { fr: "Tous les services (11)", en: "All Services (11)", vi: "Tất cả dịch vụ (11)" },
+  },
+  {
+    id: "web",
+    label: { fr: "Sites Web & E-commerce", en: "Websites & E-commerce", vi: "Website & TMĐT" },
+    ids: ["websites", "ecommerce", "refonte"],
+  },
+  {
+    id: "growth",
+    label: { fr: "Google Maps & SEO", en: "Google Maps & SEO", vi: "Google Maps & SEO" },
+    ids: ["maps", "seo", "ads"],
+  },
+  {
+    id: "ai",
+    label: {
+      fr: "Intelligence Artificielle",
+      en: "Artificial Intelligence",
+      vi: "Trí tuệ Nhân tạo",
+    },
+    ids: ["ai", "strategy"],
+  },
+  {
+    id: "brand",
+    label: {
+      fr: "Branding & Maintenance",
+      en: "Branding & Maintenance",
+      vi: "Thương hiệu & Bảo trì",
+    },
+    ids: ["branding", "social", "maintenance"],
+  },
 ];
 
 export function Pricing() {
@@ -54,7 +81,9 @@ export function Pricing() {
                 key={cat.id}
                 onClick={() => {
                   setActiveCategory(cat.id);
-                  const firstInCat = SERVICES.find((s) => cat.id === "all" || cat.ids?.includes(s.id));
+                  const firstInCat = SERVICES.find(
+                    (s) => cat.id === "all" || cat.ids?.includes(s.id),
+                  );
                   if (firstInCat) setActiveServiceId(firstInCat.id);
                 }}
                 className={cn(
@@ -138,7 +167,9 @@ export function Pricing() {
                     </div>
 
                     {p.audience ? (
-                      <p className="label-mono mt-2 text-xs text-muted-foreground">{t(p.audience)}</p>
+                      <p className="label-mono mt-2 text-xs text-muted-foreground">
+                        {t(p.audience)}
+                      </p>
                     ) : null}
 
                     {/* Price display */}

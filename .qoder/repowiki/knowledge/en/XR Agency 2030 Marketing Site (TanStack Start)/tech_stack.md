@@ -1,0 +1,1 @@
+TanStack Start (SSR) + Vite + Nitro as the runtime; React 19 with JSX transform; Tailwind CSS v4 with `tailwind-merge`/`class-variance-authority`; Radix UI primitives; TypeScript with `@/*` path aliasing; Zod for validation; ESLint 9 + Prettier for code quality.

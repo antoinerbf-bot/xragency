@@ -58,8 +58,5 @@ export function getSupabaseServer(): SupabaseClient {
 
 // ── Check if Supabase is configured ──
 export function isSupabaseConfigured(): boolean {
-  return !!(
-    import.meta.env.VITE_SUPABASE_URL &&
-    import.meta.env.VITE_SUPABASE_ANON_KEY
-  );
+  return !!(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
 }

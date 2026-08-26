@@ -1,0 +1,1 @@
+Client-side components that render portals or interact with the DOM (e.g. `dialog.tsx`, `sheet.tsx`) begin with the `'use client'` directive required by Next.js App Router; server components must not import these files directly without marking themselves as clients.

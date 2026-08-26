@@ -1,0 +1,1 @@
+Defining `src/start.ts` opts out of TanStack Start's default CSRF middleware, so `createCsrfMiddleware` must be registered manually to protect `serverFn` handlers; the server entry in `src/server.ts` is required to intercept h3-swapped 500 JSON responses and render the HTML error page instead.

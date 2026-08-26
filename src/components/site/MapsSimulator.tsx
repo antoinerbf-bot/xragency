@@ -205,7 +205,8 @@ export function MapsSimulator() {
                   Simulateur de Visibilité Google Maps TOP 3
                 </h3>
                 <p className="label-mono text-xs text-muted-foreground">
-                  Évaluez le potentiel d'acquisition locale et d'appels entrants de votre établissement
+                  Évaluez le potentiel d'acquisition locale et d'appels entrants de votre
+                  établissement
                 </p>
               </div>
             </div>
@@ -395,7 +396,9 @@ export function MapsSimulator() {
                   <div className="flex items-center justify-between rounded-2xl border border-border/70 bg-card/70 p-4">
                     <div className="flex items-center gap-2.5">
                       <Search className="h-4 w-4 text-primary" />
-                      <span className="text-xs text-muted-foreground">Recherches locales cibles</span>
+                      <span className="text-xs text-muted-foreground">
+                        Recherches locales cibles
+                      </span>
                     </div>
                     <span className="label-mono text-xs font-bold text-foreground">
                       ~{simulationResults.estimatedMonthlySearches.toLocaleString()} /mois
@@ -456,8 +459,8 @@ export function MapsSimulator() {
                 Comment nous propulsons votre établissement dans le TOP 3
               </h3>
               <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground">
-                Un processus transparent et chirurgical pour dominer les résultats de recherche locale
-                de manière durable.
+                Un processus transparent et chirurgical pour dominer les résultats de recherche
+                locale de manière durable.
               </p>
             </div>
           </Reveal>

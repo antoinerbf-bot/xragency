@@ -1,0 +1,5 @@
+- Each route file under `src/routes/` exports a named `Route` created via `createFileRoute` or `createRootRouteWithContext`, which the code generator then maps to typed route entries.
+- Unhandled server-side errors are consistently handled by rendering an HTML error page via `renderErrorPage()` with `content-type: text/html; charset=utf-8` and status 500, both in the request middleware and the top-level fetch handler.
+- Route `head` functions return meta/link objects for SEO, including Open Graph and Twitter Card fields, rather than relying on global head configuration.
+- Dynamic segments use TanStack Router's `$paramName` syntax (e.g., `$serviceId`) and are consumed through `params.paramName` inside loaders.
+- Global cross-cutting concerns (query cache, i18n) are provided at the root route via React context (`QueryClientProvider`, `LanguageProvider`) and consumed by child routes through `useRouteContext` or hooks.

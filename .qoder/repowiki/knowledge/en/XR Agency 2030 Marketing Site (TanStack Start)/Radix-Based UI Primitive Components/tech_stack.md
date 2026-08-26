@@ -1,0 +1,1 @@
+React + TypeScript components built on Radix UI primitives (`@radix-ui/react-*`), styled with Tailwind CSS utilities merged via `class-variance-authority` (`cva`) and the project's `cn` utility; icons from `lucide-react`; form primitives integrate `react-hook-form`.

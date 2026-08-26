@@ -1,0 +1,12 @@
+schema_version: 1
+module_path: shared_libs
+title: Shared Content, i18n & Utility Library
+scope:
+  - src/lib/
+  - src/hooks/
+source_files: []
+depends_on: []
+related_to:
+  - path: app_entry
+  - path: site_components
+  - path: ui_primitives

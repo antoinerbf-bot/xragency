@@ -1,0 +1,4 @@
+- All source files resolve via the `@/*` absolute path alias defined in `tsconfig.json` instead of relative imports.
+- UI components are built on Radix UI primitives styled with Tailwind CSS and composed through `class-variance-authority` variants.
+- TypeScript is compiled in strict mode with `noUncheckedSideEffectImports` enabled and no emitted output (`noEmit: true`) — compilation is used purely for type-checking.
+- Linting and formatting are enforced project-wide via ESLint 9 with `eslint-plugin-prettier` and Prettier configuration at the repo root.

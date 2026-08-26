@@ -1,0 +1,6 @@
+- Each component is exported as a named `React.forwardRef` function with an explicit `displayName` set to match the component name.
+- Styling is applied by merging default Tailwind class strings with user-supplied `className` through the shared `cn` helper from `@/lib/utils`.
+- Variant-driven components declare their variants via `cva(...)` and type props using `VariantProps<typeof ...Variants>`.
+- Radix-based components expose a flat set of sub-components (Root, Trigger, Content, Overlay, etc.) by aliasing or wrapping `*Primitive.*` members and re-exporting them together.
+- Primitives accept and forward all underlying HTML/element props via spread (`...props`) and preserve ref forwarding to the underlying element.
+- Accessible state is wired through Radix data attributes (e.g. `data-[state=open]`) combined with ARIA attributes like `aria-invalid`, `aria-describedby`, and screen-reader-only text.

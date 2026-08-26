@@ -1,0 +1,13 @@
+schema_version: 1
+module_path: app_entry
+title: TanStack React Start App Entry & Routing
+scope:
+  - src/server.ts
+  - src/start.ts
+  - src/router.tsx
+  - src/routeTree.gen.ts
+  - src/routes/
+source_files: []
+depends_on: []
+related_to:
+  - path: shared_libs

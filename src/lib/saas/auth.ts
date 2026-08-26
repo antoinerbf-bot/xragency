@@ -14,7 +14,9 @@ export async function getSession(): Promise<AuthUser | null> {
   if (!isSupabaseConfigured()) return null;
 
   const supabase = getSupabase();
-  const { data: { session } } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
   if (!session?.user) return null;
 

@@ -58,7 +58,11 @@ export const UI: Record<string, L> = {
   statYears: { fr: "Années d'expertise", en: "Years of expertise", vi: "Năm kinh nghiệm" },
   statRemote: { fr: "Remote — 6 fuseaux", en: "Remote — 6 time zones", vi: "Remote — 6 múi giờ" },
   statProduction: { fr: "Production mondiale", en: "Global production", vi: "Sản xuất toàn cầu" },
-  statSatisfaction: { fr: "Satisfaction client", en: "Client satisfaction", vi: "Hài lòng khách hàng" },
+  statSatisfaction: {
+    fr: "Satisfaction client",
+    en: "Client satisfaction",
+    vi: "Hài lòng khách hàng",
+  },
   statResponse: { fr: "Temps de réponse", en: "Response time", vi: "Thời gian phản hồi" },
 
   chapter1: { fr: "Chapitre — I · Maison", en: "Chapter — I · House", vi: "Chương — I · Studio" },
@@ -306,11 +310,19 @@ export const UI: Record<string, L> = {
   faqCatSites: { fr: "Sites internet", en: "Websites", vi: "Website" },
   faqCatSeo: { fr: "SEO & visibilité", en: "SEO & visibility", vi: "SEO & hiển thị" },
   faqCatAds: { fr: "Google Ads", en: "Google Ads", vi: "Google Ads" },
-  faqCatIa: { fr: "Intelligence Artificielle", en: "Artificial Intelligence", vi: "Trí tuệ nhân tạo" },
+  faqCatIa: {
+    fr: "Intelligence Artificielle",
+    en: "Artificial Intelligence",
+    vi: "Trí tuệ nhân tạo",
+  },
   faqCatTarifs: { fr: "Tarifs & accompagnement", en: "Pricing & support", vi: "Bảng giá & hỗ trợ" },
   faqCatDelais: { fr: "Délais", en: "Timelines", vi: "Thời gian" },
   faqCatGeneral: { fr: "Général", en: "General", vi: "Chung" },
-  faqShowAll: { fr: "Voir toutes les questions", en: "See all questions", vi: "Xem tất cả câu hỏi" },
+  faqShowAll: {
+    fr: "Voir toutes les questions",
+    en: "See all questions",
+    vi: "Xem tất cả câu hỏi",
+  },
   faqShowLess: { fr: "Voir moins", en: "Show less", vi: "Xem ít hơn" },
 
   contactLabel: {
@@ -366,7 +378,11 @@ export const UI: Record<string, L> = {
   contactFormNeedSeo: { fr: "SEO", en: "SEO", vi: "SEO" },
   contactFormNeedAds: { fr: "Publicité", en: "Advertising", vi: "Quảng cáo" },
   contactFormNeedAi: { fr: "IA & Automatisation", en: "AI & Automation", vi: "AI & Tự động hóa" },
-  contactFormNeedStrategy: { fr: "Stratégie digitale", en: "Digital strategy", vi: "Chiến lược số" },
+  contactFormNeedStrategy: {
+    fr: "Stratégie digitale",
+    en: "Digital strategy",
+    vi: "Chiến lược số",
+  },
   contactFormNeedOther: { fr: "Autre", en: "Other", vi: "Khác" },
   contactFormSubmit: {
     fr: "Parlons de votre projet",
@@ -463,8 +479,16 @@ export const UI: Record<string, L> = {
   },
 
   // ── Showcase / Portfolio ──
-  showcaseLabel: { fr: "Inspirations · Direction artistique", en: "Inspirations · Art direction", vi: "Cảm hứng · Chỉ đạo nghệ thuật" },
-  showcaseTitle1: { fr: "Inspirations de style.", en: "Style inspirations.", vi: "Cảm hứng phong cách." },
+  showcaseLabel: {
+    fr: "Inspirations · Direction artistique",
+    en: "Inspirations · Art direction",
+    vi: "Cảm hứng · Chỉ đạo nghệ thuật",
+  },
+  showcaseTitle1: {
+    fr: "Inspirations de style.",
+    en: "Style inspirations.",
+    vi: "Cảm hứng phong cách.",
+  },
   showcaseTitle2: { fr: "Direction artistique.", en: "Art direction.", vi: "Chỉ đạo nghệ thuật." },
   showcaseLead: {
     fr: "Ces sites illustrent le niveau d'exigence, l'esthétique et le standard de qualité que nous appliquons à chaque projet. Ils ne sont pas des réalisations XR Agency, mais représentent la direction artistique que nous visons pour votre marque.",
@@ -480,22 +504,42 @@ export const UI: Record<string, L> = {
   showcaseAllSectors: { fr: "Tous les secteurs", en: "All sectors", vi: "Tất cả lĩnh vực" },
   showcaseSiteVitrine: { fr: "Site vitrine", en: "Showcase site", vi: "Website giới thiệu" },
   showcaseEcommerce: { fr: "E-commerce", en: "E-commerce", vi: "Thương mại điện tử" },
-  showcaseBoth: { fr: "Vitrine + E-commerce", en: "Showcase + E-commerce", vi: "Giới thiệu + TMĐT" },
+  showcaseBoth: {
+    fr: "Vitrine + E-commerce",
+    en: "Showcase + E-commerce",
+    vi: "Giới thiệu + TMĐT",
+  },
   showcaseWebApp: { fr: "Web App", en: "Web App", vi: "Ứng dụng web" },
 
   // Sectors
   sectorLuxe: { fr: "Luxe & Joaillerie", en: "Luxury & Jewelry", vi: "Xa xỉ & Trang sức" },
   sectorGastronomie: { fr: "Gastronomie", en: "Fine Dining", vi: "Ẩm thực cao cấp" },
-  sectorHotellerie: { fr: "Hôtellerie & Tourisme", en: "Hospitality & Travel", vi: "Khách sạn & Du lịch" },
+  sectorHotellerie: {
+    fr: "Hôtellerie & Tourisme",
+    en: "Hospitality & Travel",
+    vi: "Khách sạn & Du lịch",
+  },
   sectorImmobilier: { fr: "Immobilier", en: "Real Estate", vi: "Bất động sản" },
   sectorSante: { fr: "Santé & Bien-être", en: "Health & Wellness", vi: "Sức khỏe & Sức khỏe" },
   sectorBeaute: { fr: "Beauté & Cosmétique", en: "Beauty & Cosmetics", vi: "Làm đẹp & Mỹ phẩm" },
   sectorAuto: { fr: "Automobile", en: "Automotive", vi: "Ô tô" },
   sectorMode: { fr: "Mode & Prêt-à-porter", en: "Fashion & Ready-to-wear", vi: "Thời trang" },
-  sectorArchitecture: { fr: "Architecture & Design", en: "Architecture & Design", vi: "Kiến trúc & Thiết kế" },
+  sectorArchitecture: {
+    fr: "Architecture & Design",
+    en: "Architecture & Design",
+    vi: "Kiến trúc & Thiết kế",
+  },
   sectorTech: { fr: "Tech & Innovation", en: "Tech & Innovation", vi: "Công nghệ & Đổi mới" },
-  sectorCoaching: { fr: "Coaching & Formation", en: "Coaching & Training", vi: "Huấn luyện & Đào tạo" },
-  sectorArtisanat: { fr: "Artisanat & BTP", en: "Crafts & Construction", vi: "Thủ công & Xây dựng" },
+  sectorCoaching: {
+    fr: "Coaching & Formation",
+    en: "Coaching & Training",
+    vi: "Huấn luyện & Đào tạo",
+  },
+  sectorArtisanat: {
+    fr: "Artisanat & BTP",
+    en: "Crafts & Construction",
+    vi: "Thủ công & Xây dựng",
+  },
 
   // ── Legal mentions ──
   legalTitle: { fr: "Mentions légales", en: "Legal information", vi: "Thông tin pháp lý" },
@@ -506,7 +550,11 @@ export const UI: Record<string, L> = {
   legalSiren: { fr: "SIREN", en: "SIREN", vi: "SIREN" },
   legalSiret: { fr: "SIRET", en: "SIRET", vi: "SIRET" },
   legalTva: { fr: "N° TVA intracommunautaire", en: "VAT number", vi: "Mã số thuế VAT" },
-  legalDirector: { fr: "Directeur de la publication", en: "Publication director", vi: "Giám đốc xuất bản" },
+  legalDirector: {
+    fr: "Directeur de la publication",
+    en: "Publication director",
+    vi: "Giám đốc xuất bản",
+  },
   legalAddress: { fr: "Siège social", en: "Registered office", vi: "Trụ sở chính" },
   legalHosting: { fr: "Hébergement", en: "Hosting", vi: "Lưu trữ" },
   legalHostingProvider: {
@@ -559,12 +607,20 @@ export const UI: Record<string, L> = {
   dashLogout: { fr: "Déconnexion", en: "Sign out", vi: "Đăng xuất" },
   dashLogin: { fr: "Connexion", en: "Sign in", vi: "Đăng nhập" },
   dashTotalProspects: { fr: "Total prospects", en: "Total prospects", vi: "Tổng khách tiềm năng" },
-  dashAuditsCompleted: { fr: "Audits terminés", en: "Audits completed", vi: "Kiểm toán hoàn thành" },
+  dashAuditsCompleted: {
+    fr: "Audits terminés",
+    en: "Audits completed",
+    vi: "Kiểm toán hoàn thành",
+  },
   dashAvgScore: { fr: "Score moyen", en: "Average score", vi: "Điểm trung bình" },
   dashConversionRate: { fr: "Taux conversion", en: "Conversion rate", vi: "Tỷ lệ chuyển đổi" },
   dashRecentActivity: { fr: "Activité récente", en: "Recent activity", vi: "Hoạt động gần đây" },
   dashQuickAudit: { fr: "Audit rapide", en: "Quick audit", vi: "Kiểm toán nhanh" },
-  dashEnterUrl: { fr: "Entrez une URL pour analyser", en: "Enter a URL to analyze", vi: "Nhập URL để phân tích" },
+  dashEnterUrl: {
+    fr: "Entrez une URL pour analyser",
+    en: "Enter a URL to analyze",
+    vi: "Nhập URL để phân tích",
+  },
   dashAnalyze: { fr: "Analyser", en: "Analyze", vi: "Phân tích" },
   dashNoProspects: { fr: "Aucun prospect", en: "No prospects yet", vi: "Chưa có khách tiềm năng" },
   dashAddProspect: { fr: "Ajouter un prospect", en: "Add prospect", vi: "Thêm khách" },
@@ -582,16 +638,32 @@ export const UI: Record<string, L> = {
   dashNotes: { fr: "Notes", en: "Notes", vi: "Ghi chú" },
   dashOpportunities: { fr: "Opportunités", en: "Opportunities", vi: "Cơ hội" },
   dashIssues: { fr: "Problèmes détectés", en: "Issues detected", vi: "Vấn đề phát hiện" },
-  dashExecutiveSummary: { fr: "Synthèse exécutive", en: "Executive summary", vi: "Tóm tắt điều hành" },
-  dashCategoryBreakdown: { fr: "Détail par catégorie", en: "Category breakdown", vi: "Chi tiết theo danh mục" },
-  dashRecommendedServices: { fr: "Services recommandés", en: "Recommended services", vi: "Dịch vụ đề xuất" },
+  dashExecutiveSummary: {
+    fr: "Synthèse exécutive",
+    en: "Executive summary",
+    vi: "Tóm tắt điều hành",
+  },
+  dashCategoryBreakdown: {
+    fr: "Détail par catégorie",
+    en: "Category breakdown",
+    vi: "Chi tiết theo danh mục",
+  },
+  dashRecommendedServices: {
+    fr: "Services recommandés",
+    en: "Recommended services",
+    vi: "Dịch vụ đề xuất",
+  },
   dashEmail: { fr: "Email", en: "Email", vi: "Email" },
   dashPassword: { fr: "Mot de passe", en: "Password", vi: "Mật khẩu" },
   dashForgotPassword: { fr: "Mot de passe oublié ?", en: "Forgot password?", vi: "Quên mật khẩu?" },
   dashNoAccount: { fr: "Pas de compte ?", en: "No account?", vi: "Chưa có tài khoản?" },
   dashSignUp: { fr: "S'inscrire", en: "Sign up", vi: "Đăng ký" },
   dashWelcomeBack: { fr: "Bienvenue", en: "Welcome back", vi: "Chào mừng trở lại" },
-  dashLoginSubtitle: { fr: "Connectez-vous à votre espace d'audit", en: "Sign in to your audit workspace", vi: "Đăng nhập vào không gian kiểm toán" },
+  dashLoginSubtitle: {
+    fr: "Connectez-vous à votre espace d'audit",
+    en: "Sign in to your audit workspace",
+    vi: "Đăng nhập vào không gian kiểm toán",
+  },
   statusNew: { fr: "Nouveau", en: "New", vi: "Mới" },
   statusAudited: { fr: "Audité", en: "Audited", vi: "Đã kiểm toán" },
   statusContacted: { fr: "Contacté", en: "Contacted", vi: "Đã liên hệ" },
@@ -884,8 +956,20 @@ export const UI: Record<string, L> = {
   },
 
   // ── Gallery Captions ──
-  galleryCaption1: { fr: "Direction Stratégique", en: "Strategic Direction", vi: "Định hướng Chiến lược" },
-  galleryCaption2: { fr: "Atelier Créatif & UX", en: "Creative Workshop & UX", vi: "Xưởng Sáng tạo & UX" },
+  galleryCaption1: {
+    fr: "Direction Stratégique",
+    en: "Strategic Direction",
+    vi: "Định hướng Chiến lược",
+  },
+  galleryCaption2: {
+    fr: "Atelier Créatif & UX",
+    en: "Creative Workshop & UX",
+    vi: "Xưởng Sáng tạo & UX",
+  },
   galleryCaption3: { fr: "Conception Éditoriale", en: "Editorial Design", vi: "Thiết kế Biên tập" },
-  galleryCaption4: { fr: "Ingénierie & Déploiement", en: "Engineering & Deployment", vi: "Kỹ thuật & Triển khai" },
+  galleryCaption4: {
+    fr: "Ingénierie & Déploiement",
+    en: "Engineering & Deployment",
+    vi: "Kỹ thuật & Triển khai",
+  },
 };

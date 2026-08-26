@@ -1,0 +1,20 @@
+schema_version: 1
+module_path: ""
+title: XR Agency 2030 Marketing Site (TanStack Start)
+scope:
+  - README.md
+  - AGENTS.md
+  - .gitignore
+  - .prettierignore
+  - .prettierrc
+  - bunfig.toml
+  - components.json
+  - eslint.config.js
+  - package.json
+  - package-lock.json
+  - tsconfig.json
+  - vite.config.ts
+  - bun.lock
+source_files: []
+depends_on: []
+related_to: []

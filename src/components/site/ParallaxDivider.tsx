@@ -47,11 +47,7 @@ export function ParallaxDivider({
   }, []);
 
   return (
-    <div
-      ref={ref}
-      className="relative overflow-hidden"
-      style={{ height }}
-    >
+    <div ref={ref} className="relative overflow-hidden" style={{ height }}>
       <img
         src={image}
         alt=""
@@ -64,7 +60,9 @@ export function ParallaxDivider({
       <div
         className="absolute inset-0"
         style={{
-          background: overlay ?? "linear-gradient(180deg, rgba(10,10,10,0.45) 0%, rgba(10,10,10,0.25) 50%, rgba(10,10,10,0.5) 100%)",
+          background:
+            overlay ??
+            "linear-gradient(180deg, rgba(10,10,10,0.45) 0%, rgba(10,10,10,0.25) 50%, rgba(10,10,10,0.5) 100%)",
         }}
       />
       {/* Caption */}

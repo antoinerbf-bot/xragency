@@ -36,7 +36,8 @@ function getServiceTags(type: { fr: string; en: string; vi: string }): string[] 
   const fr = type.fr.toLowerCase();
   const tags: string[] = [];
   if (fr.includes("e-commerce") || fr.includes("boutique")) tags.push("ecommerce");
-  else if (fr.includes("site vitrine") || fr.includes("portfolio") || fr.includes("portail")) tags.push("vitrine");
+  else if (fr.includes("site vitrine") || fr.includes("portfolio") || fr.includes("portail"))
+    tags.push("vitrine");
   if (fr.includes("refonte")) tags.push("refonte");
   if (fr.includes("seo")) tags.push("seo");
   if (fr.includes("branding") || fr.includes("identité")) tags.push("branding");
@@ -65,7 +66,11 @@ export function Work() {
         map.set(tag, (map.get(tag) ?? 0) + 1);
       }
     }
-    return SERVICE_FILTERS.filter((f) => map.has(f.key)).map((f) => ({ key: f.key, label: f.label, count: map.get(f.key) ?? 0 }));
+    return SERVICE_FILTERS.filter((f) => map.has(f.key)).map((f) => ({
+      key: f.key,
+      label: f.label,
+      count: map.get(f.key) ?? 0,
+    }));
   }, []);
 
   const filtered = useMemo(() => {
@@ -215,9 +220,7 @@ function ShowcaseCard({ item }: { item: (typeof SHOWCASE)[number] }) {
   const { t } = useLang();
 
   return (
-    <div
-      className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-500 hover:border-primary/40 hover:shadow-2xl"
-    >
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-500 hover:border-primary/40 hover:shadow-2xl">
       {/* Image with parallax-like hover zoom */}
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
@@ -241,7 +244,7 @@ function ShowcaseCard({ item }: { item: (typeof SHOWCASE)[number] }) {
           rel="noreferrer"
           className="label-mono absolute bottom-4 right-4 flex items-center gap-1.5 rounded-full border border-white/20 bg-white/15 px-3 py-1.5 text-[10px] text-white/90 backdrop-blur-md opacity-0 transition-all duration-500 group-hover:opacity-100 hover:bg-white/25"
         >
-          Visit Website
+          {t(UI.showcaseVisitSite)}
           <ArrowUpRight className="h-3 w-3" />
         </a>
       </div>
@@ -257,9 +260,7 @@ function ShowcaseCard({ item }: { item: (typeof SHOWCASE)[number] }) {
           </span>
         </div>
 
-        <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
-          {t(item.desc)}
-        </p>
+        <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{t(item.desc)}</p>
 
         {/* Metric + Visit Website */}
         <div className="mt-5 flex items-center justify-between border-t border-border/60 pt-4">
@@ -270,7 +271,7 @@ function ShowcaseCard({ item }: { item: (typeof SHOWCASE)[number] }) {
             rel="noreferrer"
             className="label-mono flex items-center gap-1 text-[10px] text-muted-foreground transition-colors hover:text-primary"
           >
-            Visit Website
+            {t(UI.showcaseVisitSite)}
             <ArrowUpRight className="h-3 w-3" />
           </a>
         </div>
@@ -306,10 +307,22 @@ export function Testimonials() {
                   </div>
                   <p className="mt-4 text-xs font-medium uppercase tracking-wider text-muted-foreground/50">
                     {i === 0
-                      ? t({ fr: "Étude de cas à venir", en: "Case study coming soon", vi: "Sắp có nghiên cứu" })
+                      ? t({
+                          fr: "Étude de cas à venir",
+                          en: "Case study coming soon",
+                          vi: "Sắp có nghiên cứu",
+                        })
                       : i === 1
-                        ? t({ fr: "Témoignage client", en: "Client testimonial", vi: "Nhận xét khách hàng" })
-                        : t({ fr: "Retour d'expérience", en: "Client feedback", vi: "Phản hồi khách hàng" })}
+                        ? t({
+                            fr: "Témoignage client",
+                            en: "Client testimonial",
+                            vi: "Nhận xét khách hàng",
+                          })
+                        : t({
+                            fr: "Retour d'expérience",
+                            en: "Client feedback",
+                            vi: "Phản hồi khách hàng",
+                          })}
                   </p>
                 </div>
               ))}

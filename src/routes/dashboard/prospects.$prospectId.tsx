@@ -36,9 +36,7 @@ function ProspectDetail() {
             <h1 className="font-display text-2xl font-bold text-foreground">
               {prospect?.business_name || "Prospect"}
             </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {prospect?.website_url || "—"}
-            </p>
+            <p className="mt-1 text-sm text-muted-foreground">{prospect?.website_url || "—"}</p>
           </div>
           {prospect && <StatusBadge status={prospect.status} />}
         </div>
@@ -46,8 +44,14 @@ function ProspectDetail() {
         {prospect && (
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <InfoField label={UI.dashIndustry[lang]} value={prospect.industry} />
-            <InfoField label={UI.dashLocation[lang]} value={[prospect.city, prospect.country].filter(Boolean).join(", ")} />
-            <InfoField label={UI.dashContact[lang]} value={prospect.contact_name || prospect.contact_email || "—"} />
+            <InfoField
+              label={UI.dashLocation[lang]}
+              value={[prospect.city, prospect.country].filter(Boolean).join(", ")}
+            />
+            <InfoField
+              label={UI.dashContact[lang]}
+              value={prospect.contact_name || prospect.contact_email || "—"}
+            />
           </div>
         )}
       </div>
@@ -71,7 +75,9 @@ function ProspectDetail() {
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-lg font-bold text-foreground">{audit.total_score ?? "—"}/100</span>
+                  <span className="text-lg font-bold text-foreground">
+                    {audit.total_score ?? "—"}/100
+                  </span>
                   <StatusBadge status={audit.status} />
                 </div>
               </Link>
@@ -84,7 +90,9 @@ function ProspectDetail() {
 
       {!prospect && (
         <div className="mt-8 rounded-xl border border-dashed border-border p-12 text-center">
-          <p className="text-sm text-muted-foreground">Prospect non trouvé ou Supabase non configuré.</p>
+          <p className="text-sm text-muted-foreground">
+            Prospect non trouvé ou Supabase non configuré.
+          </p>
         </div>
       )}
     </div>

@@ -1,0 +1,1 @@
+TanStack React Start (SSR + client routing), TanStack Router (file-based routes via `routeTree.gen.ts`), TanStack Query (`QueryClient` injected into router context), Cloudflare Workers-compatible fetch handler shape, h3 as the underlying HTTP framework (error body format detected).

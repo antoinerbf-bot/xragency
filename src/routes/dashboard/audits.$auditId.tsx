@@ -52,7 +52,8 @@ function AuditResult() {
                   {audit.website_url}
                 </h1>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  {new Date(audit.created_at).toLocaleDateString()} · {audit.pages_crawled} pages crawlées
+                  {new Date(audit.created_at).toLocaleDateString()} · {audit.pages_crawled} pages
+                  crawlées
                 </p>
               </div>
               <StatusBadge status={audit.status} />
@@ -80,8 +81,12 @@ function AuditResult() {
           {/* Executive summary */}
           {audit.executive_summary && (
             <div className="mt-6 rounded-xl border border-border bg-card p-6">
-              <h2 className="text-lg font-semibold text-foreground">{UI.dashExecutiveSummary[lang]}</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{audit.executive_summary}</p>
+              <h2 className="text-lg font-semibold text-foreground">
+                {UI.dashExecutiveSummary[lang]}
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                {audit.executive_summary}
+              </p>
             </div>
           )}
 
@@ -132,7 +137,9 @@ function IssueCard({ issue }: { issue: AuditIssue }) {
   };
 
   return (
-    <div className={`rounded-lg border border-border border-l-4 ${severityColors[issue.severity] ?? ""} p-4`}>
+    <div
+      className={`rounded-lg border border-border border-l-4 ${severityColors[issue.severity] ?? ""} p-4`}
+    >
       <div className="flex items-start justify-between">
         <div>
           <h3 className="text-sm font-semibold text-foreground">{issue.title}</h3>
@@ -171,7 +178,9 @@ function OpportunityCard({ opportunity }: { opportunity: AuditOpportunity }) {
             Service: {opportunity.recommended_service}
           </p>
         </div>
-        <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${priorityColors[opportunity.priority] ?? ""}`}>
+        <span
+          className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${priorityColors[opportunity.priority] ?? ""}`}
+        >
           {opportunity.priority}
         </span>
       </div>

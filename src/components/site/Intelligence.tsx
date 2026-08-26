@@ -730,7 +730,9 @@ export function Intelligence() {
                                   {t(UI.intelFormule)} {t(item.plan)}
                                 </p>
                                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                                  <strong className="text-foreground">{t(UI.intelWhyLabel)} </strong>
+                                  <strong className="text-foreground">
+                                    {t(UI.intelWhyLabel)}{" "}
+                                  </strong>
                                   {t(item.why)}
                                 </p>
                               </div>

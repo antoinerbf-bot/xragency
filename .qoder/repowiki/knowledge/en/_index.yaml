@@ -1,0 +1,79 @@
+# 知识卡导出索引文件
+schema_version: 1
+locale: en-US
+branch: main
+nodes_managed: true
+exported_at: "2026-08-19T18:55:24Z"
+modules:
+  "":
+    dir_name: XR Agency 2030 Marketing Site (TanStack Start)
+    title: XR Agency 2030 Marketing Site (TanStack Start)
+    scope:
+      - README.md
+      - AGENTS.md
+      - .gitignore
+      - .prettierignore
+      - .prettierrc
+      - bunfig.toml
+      - components.json
+      - eslint.config.js
+      - package.json
+      - package-lock.json
+      - tsconfig.json
+      - vite.config.ts
+      - bun.lock
+    source_files: []
+    children:
+      - app_entry
+      - shared_libs
+      - site_components
+      - ui_primitives
+    depends_on: []
+    related_to: []
+  app_entry:
+    dir_name: TanStack React Start App Entry & Routing
+    title: TanStack React Start App Entry & Routing
+    scope:
+      - src/server.ts
+      - src/start.ts
+      - src/router.tsx
+      - src/routeTree.gen.ts
+      - src/routes/
+    source_files: []
+    children: []
+    depends_on: []
+    related_to:
+      - path: shared_libs
+  shared_libs:
+    dir_name: Shared Content, i18n & Utility Library
+    title: Shared Content, i18n & Utility Library
+    scope:
+      - src/lib/
+      - src/hooks/
+    source_files: []
+    children: []
+    depends_on: []
+    related_to:
+      - path: app_entry
+      - path: site_components
+      - path: ui_primitives
+  site_components:
+    dir_name: XR Agency Marketing Site Components
+    title: XR Agency Marketing Site Components
+    scope:
+      - src/components/site/
+    source_files: []
+    children: []
+    depends_on: []
+    related_to:
+      - path: shared_libs
+  ui_primitives:
+    dir_name: Radix-Based UI Primitive Components
+    title: Radix-Based UI Primitive Components
+    scope:
+      - src/components/ui/
+    source_files: []
+    children: []
+    depends_on: []
+    related_to:
+      - path: shared_libs

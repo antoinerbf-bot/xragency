@@ -35,8 +35,8 @@ function LoginPage() {
         if (result.error) throw new Error(result.error.message);
       }
       navigate({ to: "/dashboard" });
-    } catch (err: any) {
-      setError(err.message || "Une erreur est survenue");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Une erreur est survenue");
     } finally {
       setLoading(false);
     }
@@ -48,7 +48,15 @@ function LoginPage() {
         <div className="max-w-md text-center">
           <h1 className="font-display text-2xl font-bold text-foreground">Configuration requise</h1>
           <p className="mt-3 text-sm text-muted-foreground">
-            Configurez les variables d'environnement Supabase (<code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">VITE_SUPABASE_URL</code> et <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">VITE_SUPABASE_ANON_KEY</code>) pour activer l'authentification.
+            Configurez les variables d'environnement Supabase (
+            <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+              VITE_SUPABASE_URL
+            </code>{" "}
+            et{" "}
+            <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+              VITE_SUPABASE_ANON_KEY
+            </code>
+            ) pour activer l'authentification.
           </p>
           <Link
             to="/"
@@ -72,9 +80,7 @@ function LoginPage() {
           <h1 className="font-display text-2xl font-bold text-foreground">
             {UI.dashWelcomeBack[lang]}
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {UI.dashLoginSubtitle[lang]}
-          </p>
+          <p className="mt-1 text-sm text-muted-foreground">{UI.dashLoginSubtitle[lang]}</p>
         </div>
 
         {/* Form */}
@@ -114,7 +120,9 @@ function LoginPage() {
           </div>
 
           {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</div>
+            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+              {error}
+            </div>
           )}
 
           <button

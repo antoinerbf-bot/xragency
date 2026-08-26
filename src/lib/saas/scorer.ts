@@ -15,10 +15,7 @@ export interface ScoreResult {
 
 const MAX_PER_CATEGORY = 20;
 
-function computeCategory(
-  issues: AuditIssue[],
-  category: string,
-): number {
+function computeCategory(issues: AuditIssue[], category: string): number {
   const catIssues = issues.filter((i) => i.category === category);
   let deduction = 0;
   for (const issue of catIssues) {

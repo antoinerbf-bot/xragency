@@ -158,9 +158,7 @@ export function About() {
                     IA
                   </div>
                 </div>
-                <p className="label-mono text-xs text-muted-foreground">
-                  {t(UI.aboutTeamLabel)}
-                </p>
+                <p className="label-mono text-xs text-muted-foreground">{t(UI.aboutTeamLabel)}</p>
               </div>
             </Reveal>
           </div>
@@ -190,7 +188,9 @@ export function About() {
                       <span className="label-mono text-xs text-muted-foreground uppercase tracking-wider">
                         {t(UI.aboutTraditional)}
                       </span>
-                      <span className="label-mono text-xs text-muted-foreground">{t(UI.aboutInHouse)}</span>
+                      <span className="label-mono text-xs text-muted-foreground">
+                        {t(UI.aboutInHouse)}
+                      </span>
                     </div>
                     <h4 className="display-serif mt-5 text-2xl text-foreground">
                       {t(UI.aboutRecruitTitle)}
@@ -288,9 +288,7 @@ export function About() {
                         {adv.tag}
                       </span>
                     </div>
-                    <h4 className="display-serif mt-5 text-lg text-foreground">
-                      {t(adv.title)}
-                    </h4>
+                    <h4 className="display-serif mt-5 text-lg text-foreground">{t(adv.title)}</h4>
                     <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
                       {t(adv.desc)}
                     </p>

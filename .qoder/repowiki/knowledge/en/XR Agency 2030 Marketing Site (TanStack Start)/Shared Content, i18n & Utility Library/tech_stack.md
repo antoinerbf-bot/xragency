@@ -1,0 +1,1 @@
+React Context for i18n state; `clsx` + `tailwind-merge` for class merging; `window.matchMedia` for responsive detection; browser `error` / `unhandledrejection` events for error capture; Lovable editor runtime hooks (`__lovableEvents`, `__lovableReportRuntimeError`) for preview-time error reporting.

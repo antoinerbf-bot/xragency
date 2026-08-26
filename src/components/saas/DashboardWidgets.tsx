@@ -9,7 +9,12 @@ interface ScoreRingProps {
   showLabel?: boolean;
 }
 
-export function ScoreRing({ score, size = 120, strokeWidth = 8, showLabel = true }: ScoreRingProps) {
+export function ScoreRing({
+  score,
+  size = 120,
+  strokeWidth = 8,
+  showLabel = true,
+}: ScoreRingProps) {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (score / 100) * circumference;
@@ -43,9 +48,14 @@ export function ScoreRing({ score, size = 120, strokeWidth = 8, showLabel = true
         />
       </svg>
       {showLabel && (
-        <div className="absolute flex flex-col items-center justify-center" style={{ width: size, height: size }}>
+        <div
+          className="absolute flex flex-col items-center justify-center"
+          style={{ width: size, height: size }}
+        >
           <span className={`text-2xl font-bold ${color}`}>{score}</span>
-          <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</span>
+          <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
+            {label}
+          </span>
         </div>
       )}
     </div>
@@ -66,13 +76,17 @@ export function StatCard({ label, value, icon, trend }: StatCardProps) {
     <div className="rounded-xl border border-border bg-card p-5">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</p>
+          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            {label}
+          </p>
           <p className="mt-2 text-2xl font-bold text-foreground">{value}</p>
         </div>
         <div className="rounded-lg bg-primary/10 p-2 text-primary">{icon}</div>
       </div>
       {trend && (
-        <p className={`mt-2 text-xs font-medium ${trend.positive ? "text-emerald-500" : "text-red-500"}`}>
+        <p
+          className={`mt-2 text-xs font-medium ${trend.positive ? "text-emerald-500" : "text-red-500"}`}
+        >
           {trend.positive ? "↑" : "↓"} {trend.value}
         </p>
       )}
@@ -98,7 +112,9 @@ const STATUS_COLORS: Record<string, string> = {
 export function StatusBadge({ status }: { status: string }) {
   const colors = STATUS_COLORS[status] ?? "bg-gray-100 text-gray-600";
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${colors}`}>
+    <span
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${colors}`}
+    >
       {status}
     </span>
   );
@@ -115,16 +131,27 @@ interface CategoryBarProps {
 export function CategoryBar({ label, score, maxScore = 20 }: CategoryBarProps) {
   const pct = Math.round((score / maxScore) * 100);
   const barColor =
-    pct >= 80 ? "bg-emerald-500" : pct >= 60 ? "bg-green-500" : pct >= 40 ? "bg-amber-500" : "bg-red-500";
+    pct >= 80
+      ? "bg-emerald-500"
+      : pct >= 60
+        ? "bg-green-500"
+        : pct >= 40
+          ? "bg-amber-500"
+          : "bg-red-500";
 
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between text-sm">
         <span className="text-muted-foreground">{label}</span>
-        <span className="font-semibold text-foreground">{score}/{maxScore}</span>
+        <span className="font-semibold text-foreground">
+          {score}/{maxScore}
+        </span>
       </div>
       <div className="h-2 overflow-hidden rounded-full bg-border">
-        <div className={`h-full rounded-full ${barColor} transition-all duration-700`} style={{ width: `${pct}%` }} />
+        <div
+          className={`h-full rounded-full ${barColor} transition-all duration-700`}
+          style={{ width: `${pct}%` }}
+        />
       </div>
     </div>
   );

@@ -86,7 +86,7 @@ export function Globe({ className }: { className?: string }) {
     const h = () => canvas.getBoundingClientRect().height;
 
     /* ---- particles ---- */
-    let particles = createParticles(60, w(), h());
+    const particles = createParticles(60, w(), h());
 
     /* ---- animation loop ---- */
     const draw = () => {
@@ -268,7 +268,7 @@ export function Globe({ className }: { className?: string }) {
         ctx.stroke();
 
         /* animated dot along the arc */
-        const t = ((Date.now() * 0.0004 + a * 0.3) % 1);
+        const t = (Date.now() * 0.0004 + a * 0.3) % 1;
         const bx = (1 - t) * (1 - t) * pa.x + 2 * (1 - t) * t * cpx + t * t * pb.x;
         const by = (1 - t) * (1 - t) * pa.y + 2 * (1 - t) * t * cpy + t * t * pb.y;
         ctx.beginPath();

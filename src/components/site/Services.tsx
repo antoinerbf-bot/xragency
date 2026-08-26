@@ -81,15 +81,18 @@ export function Services() {
                         className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
-                      
+
                       {/* Service number badge */}
                       <span className="label-mono absolute left-4 top-4 rounded-full border border-white/20 bg-black/50 px-3 py-1 text-[10px] text-white backdrop-blur-md">
                         {s.num}
                       </span>
-                      
+
                       {/* Price badge directly visible on card */}
                       <span className="label-mono absolute right-4 top-4 rounded-full border border-primary/50 bg-background/90 px-3 py-1 text-xs font-semibold text-primary backdrop-blur-md shadow-md">
-                        Dès {startingPriceFormatted} <span className="text-[10px] font-normal text-muted-foreground">{s.fromPeriod !== "once" ? (s.fromPeriod === "month" ? "/m" : "/an") : ""}</span>
+                        Dès {startingPriceFormatted}{" "}
+                        <span className="text-[10px] font-normal text-muted-foreground">
+                          {s.fromPeriod !== "once" ? (s.fromPeriod === "month" ? "/m" : "/an") : ""}
+                        </span>
                       </span>
                     </div>
                   ) : (

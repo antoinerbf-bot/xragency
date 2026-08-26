@@ -1,0 +1,6 @@
+- All user-facing strings are localized through `useLang().t()` with keys from `@/lib/copy` or inline `{ fr, en, vi }` objects — no hardcoded literals in JSX.
+- Sections compose `Parallax` and `Reveal` primitives from `./primitives` to apply scroll parallax and intersection-observer reveal animations consistently across headings, cards, and lists.
+- Data-driven content (services, sectors, objectives, budgets) is declared as typed arrays of option objects at the top of each component and rendered via `.map`, keeping JSX declarative.
+- Interactive state within a section (e.g. the Intelligence wizard steps) is kept local via `useState`/`useMemo`, while cross-section shared state lives in `@/lib/i18n`.
+- Styling combines Tailwind utilities with the `cn` helper for conditional class composition, and visual effects use CSS variables (`--shadow-ember`, `--gradient-halo`, `--gradient-ember`) instead of inline style values where possible.
+- Each file exports exactly one named React component function that renders a semantic `<section>` element, making the site a composition of full-page sections.

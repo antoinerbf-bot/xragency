@@ -51,7 +51,9 @@ function NewAuditPage() {
 
     try {
       const supabase = getSupabase();
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error("Non authentifié");
 
       // Create prospect
@@ -93,8 +95,8 @@ function NewAuditPage() {
 
       // Navigate to audit result page (will trigger crawl/analyze)
       navigate({ to: "/dashboard/audits/$auditId", params: { auditId: audit.id } });
-    } catch (err: any) {
-      setError(err.message || "Une erreur est survenue");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Une erreur est survenue");
       setLoading(false);
     }
   };
@@ -125,7 +127,9 @@ function NewAuditPage() {
         {/* Business info */}
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="text-sm font-medium text-foreground">{UI.dashBusinessName[lang]}</label>
+            <label className="text-sm font-medium text-foreground">
+              {UI.dashBusinessName[lang]}
+            </label>
             <input
               type="text"
               value={form.businessName}
@@ -214,7 +218,9 @@ function NewAuditPage() {
         </div>
 
         {error && (
-          <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</div>
+          <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+            {error}
+          </div>
         )}
 
         <button

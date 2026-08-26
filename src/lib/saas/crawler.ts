@@ -36,11 +36,17 @@ function extractTag(html: string, tag: string): string | null {
 }
 
 function extractMeta(html: string, name: string): string | null {
-  const re = new RegExp(`<meta[^>]*(?:name|property)=["']${name}["'][^>]*content=["']([^"']*)["']`, "i");
+  const re = new RegExp(
+    `<meta[^>]*(?:name|property)=["']${name}["'][^>]*content=["']([^"']*)["']`,
+    "i",
+  );
   const m = html.match(re);
   if (m) return m[1];
   // reverse order: content before name
-  const re2 = new RegExp(`<meta[^>]*content=["']([^"']*)["'][^>]*(?:name|property)=["']${name}["']`, "i");
+  const re2 = new RegExp(
+    `<meta[^>]*content=["']([^"']*)["'][^>]*(?:name|property)=["']${name}["']`,
+    "i",
+  );
   const m2 = html.match(re2);
   return m2 ? m2[1] : null;
 }
@@ -104,15 +110,17 @@ function extractEmails(html: string): string[] {
 }
 
 function extractPhones(html: string): string[] {
-  const re = /(?:tel:|phone:|call:)?[\+]?[\d\s\-\(\)\.]{8,}/g;
+  const re = /(?:tel:|phone:|call:)?\+?[\d\s\-().]{8,}/g;
   const matches = html.match(re) ?? [];
   // Filter to likely phone numbers
-  return [...new Set(
-    matches
-      .map((m) => m.trim())
-      .filter((m) => m.replace(/\D/g, "").length >= 7 && m.replace(/\D/g, "").length <= 15)
-      .slice(0, 5),
-  )];
+  return [
+    ...new Set(
+      matches
+        .map((m) => m.trim())
+        .filter((m) => m.replace(/\D/g, "").length >= 7 && m.replace(/\D/g, "").length <= 15)
+        .slice(0, 5),
+    ),
+  ];
 }
 
 function countWords(html: string): number {
@@ -143,9 +151,7 @@ function parsePage(html: string, url: string, loadTime: number | null): CrawledP
     /\d+\s+[A-Za-z\s]+(?:street|st|avenue|ave|road|rd|boulevard|blvd|lane|drive|dr)\b/gi,
     /\d+\s+[A-Za-zÀ-ÿ\s]+(?:rue|avenue|av|boulevard|bd|chemin|ch)\b/gi,
   ];
-  const addresses = addrPatterns
-    .flatMap((p) => html.match(p) ?? [])
-    .slice(0, 3);
+  const addresses = addrPatterns.flatMap((p) => html.match(p) ?? []).slice(0, 3);
 
   // Detect social links
   const socialPatterns = [
@@ -156,9 +162,7 @@ function parsePage(html: string, url: string, loadTime: number | null): CrawledP
     /instagram\.com\/[^"'\s]+/gi,
     /youtube\.com\/[^"'\s]+/gi,
   ];
-  const socialLinks = socialPatterns
-    .flatMap((p) => html.match(p) ?? [])
-    .slice(0, 10);
+  const socialLinks = socialPatterns.flatMap((p) => html.match(p) ?? []).slice(0, 10);
 
   return {
     url,
@@ -174,11 +178,7 @@ function parsePage(html: string, url: string, loadTime: number | null): CrawledP
     images,
     internalLinks: internal,
     externalLinks: external,
-    hasContactForm: hasPattern(html, [
-      /<form[^>]*>/i,
-      /type=["']submit["']/i,
-      /contact[-_]?form/i,
-    ]),
+    hasContactForm: hasPattern(html, [/<form[^>]*>/i, /type=["']submit["']/i, /contact[-_]?form/i]),
     hasPhone: phones.length > 0 || /tel:/i.test(html),
     hasEmail: emails.length > 0 || /mailto:/i.test(html),
     hasAddress: addresses.length > 0,
@@ -187,14 +187,26 @@ function parsePage(html: string, url: string, loadTime: number | null): CrawledP
     addresses,
     socialLinks,
     hasTestimonials: hasPattern(html, [
-      /testimonial/i, /review/i, /avis/i, /rating/i, /★/, /\d[\.,]?\d\s*\/\s*5/,
+      /testimonial/i,
+      /review/i,
+      /avis/i,
+      /rating/i,
+      /★/,
+      /\d[.,]?\d\s*\/\s*5/,
     ]),
     hasBooking: hasPattern(html, [
-      /booking/i, /reservation/i, /schedule/i, /calendar/i, /rendez[- ]?vous/i,
+      /booking/i,
+      /reservation/i,
+      /schedule/i,
+      /calendar/i,
+      /rendez[- ]?vous/i,
     ]),
     hasCTA: hasPattern(html, [
-      /call[- ]?to[- ]?action/i, /get[- ]?(?:started|quote|in[- ]?touch)/i,
-      /contact(?:ez|-)?(?:[- ]?nous)?/i, /demander/i, /commencer/i,
+      /call[- ]?to[- ]?action/i,
+      /get[- ]?(?:started|quote|in[- ]?touch)/i,
+      /contact(?:ez|-)?(?:[- ]?nous)?/i,
+      /demander/i,
+      /commencer/i,
       /<button[^>]*>/i,
     ]),
     wordCount: countWords(html),
@@ -203,7 +215,9 @@ function parsePage(html: string, url: string, loadTime: number | null): CrawledP
 }
 
 // ── Try fetching robots.txt ──
-async function fetchRobotsTxt(baseUrl: string): Promise<{ content: string | null; allowsCrawl: boolean }> {
+async function fetchRobotsTxt(
+  baseUrl: string,
+): Promise<{ content: string | null; allowsCrawl: boolean }> {
   try {
     const url = new URL("/robots.txt", baseUrl).href;
     const res = await fetchWithTimeout(url, 5000);
@@ -303,12 +317,18 @@ export const crawlWebsite = createServerFn({ method: "POST" })
 
         // Add internal links to queue (only HTML pages, max depth)
         for (const link of page.internalLinks) {
-          if (!visited.has(link) && new URL(link).hostname === baseHost && queue.length < MAX_PAGES * 3) {
+          if (
+            !visited.has(link) &&
+            new URL(link).hostname === baseHost &&
+            queue.length < MAX_PAGES * 3
+          ) {
             queue.push(link);
           }
         }
       } catch (err) {
-        errors.push(`Failed to crawl ${url}: ${err instanceof Error ? err.message : "unknown error"}`);
+        errors.push(
+          `Failed to crawl ${url}: ${err instanceof Error ? err.message : "unknown error"}`,
+        );
       }
     }
 

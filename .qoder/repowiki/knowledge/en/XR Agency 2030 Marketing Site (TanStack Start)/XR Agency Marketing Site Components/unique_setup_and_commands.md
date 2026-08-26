@@ -1,0 +1,1 @@
+None beyond standard Vite/Next build; assets like the hero background video are imported as `.asset.json` modules (`hero-studio.mp4.asset.json`), indicating asset pipeline configuration rather than runtime setup.
