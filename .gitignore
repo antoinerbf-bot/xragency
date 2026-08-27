@@ -5,4 +5,5 @@ dist/
 .env
 .env.*
 .vercel
+.vercel-tmp/
 .env*

@@ -40,16 +40,37 @@ function App() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible')
+            observer.unobserve(entry.target)
           }
         })
       },
-      { threshold: 0.1 }
+      { threshold: 0, rootMargin: '0px 0px -50px 0px' }
     )
 
-    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
+    const observeReveal = (el: Element) => {
+      if (!el.classList.contains('visible')) {
+        observer.observe(el)
+      }
+    }
+
+    document.querySelectorAll('.reveal').forEach(observeReveal)
+
+    // Re-observe when DOM changes (filter toggles, accordion, etc.)
+    const mutationObs = new MutationObserver((mutations) => {
+      mutations.forEach((m) => {
+        m.addedNodes.forEach((node) => {
+          if (node instanceof Element) {
+            if (node.classList.contains('reveal')) observeReveal(node)
+            node.querySelectorAll?.('.reveal').forEach(observeReveal)
+          }
+        })
+      })
+    })
+    mutationObs.observe(document.body, { childList: true, subtree: true })
 
     return () => {
       observer.disconnect()
+      mutationObs.disconnect()
       document.removeEventListener('click', handleAnchorClick)
     }
   }, [])
