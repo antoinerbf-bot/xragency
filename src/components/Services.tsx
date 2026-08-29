@@ -18,10 +18,10 @@ export default function Services() {
   const { lang, t, translations: tr } = useI18n()
 
   return (
-    <section id="services" className="py-20 lg:py-32 bg-muted/30">
+    <section id="services" className="py-16 lg:py-24 bg-muted/20">
       <div className="max-w-7xl mx-auto px-5 lg:px-10">
-        <div className="reveal mb-16">
-          <p className="text-xs font-mono tracking-[0.3em] text-muted-foreground uppercase mb-4">
+        <div className="reveal mb-12">
+          <p className="text-xs font-mono tracking-[0.3em] text-muted-foreground uppercase mb-3">
             {t(tr.services.label)}
           </p>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl leading-tight">
@@ -29,43 +29,43 @@ export default function Services() {
           </h2>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {tr.services.items.map((service, idx) => (
             <div
               key={service.num}
-              className="reveal group relative p-5 md:p-8 rounded-2xl border border-border bg-white hover:shadow-lg hover:border-primary/20 transition-all duration-300"
+              className="reveal group service-card relative p-4 md:p-6 rounded-xl border border-border bg-white hover:shadow-md hover:border-primary/30 transition-all duration-300"
             >
-              <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+              <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
                 {/* Number */}
-                <span className="text-xs font-mono text-muted-foreground">{service.num}</span>
+                <span className="text-xs font-mono text-muted-foreground flex-shrink-0">{service.num}</span>
 
                 {/* Content */}
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold mb-1">{t(service.name)}</h3>
-                  <p className="text-sm text-muted-foreground">{t(service.desc)}</p>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base font-semibold mb-0.5 truncate">{t(service.name)}</h3>
+                  <p className="text-xs md:text-sm text-muted-foreground line-clamp-1">{t(service.desc)}</p>
                 </div>
 
                 {/* Metric & Price */}
-                <div className="text-right flex flex-col items-end gap-1">
+                <div className="text-right flex flex-col items-end gap-0.5 flex-shrink-0">
                   <p className="text-xs font-mono text-muted-foreground">{t(service.metric)}</p>
-                  <p className="text-lg font-serif font-semibold">
+                  <p className="text-base font-serif font-semibold">
                     {formatPrice(service.price, lang)}
-                    {service.period && <span className="text-xs text-muted-foreground font-sans">{service.period}</span>}
+                    {service.period && <span className="text-[10px] text-muted-foreground font-sans ml-1">{service.period}</span>}
                   </p>
                 </div>
 
-                {/* Image preview */}
-                <div className="hidden md:block w-24 h-16 rounded-lg overflow-hidden opacity-60 group-hover:opacity-100 transition-opacity">
+                {/* Image preview - reduced size */}
+                <div className="hidden md:block w-16 h-12 rounded-lg overflow-hidden flex-shrink-0 opacity-50 group-hover:opacity-100 transition-opacity duration-300">
                   <img
                     src={serviceImages[idx]}
                     alt={t(service.name)}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
                     loading="lazy"
                   />
                 </div>
 
                 {/* Arrow */}
-                <svg className="w-5 h-5 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 flex-shrink-0 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </div>
