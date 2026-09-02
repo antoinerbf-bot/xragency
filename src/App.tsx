@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { ServiceCartProvider } from './context/ServiceCartContext'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import About from './components/About'
@@ -76,22 +77,24 @@ function App() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans">
-      <Header />
-      <main>
-        <Hero />
-        <About />
-        <Services />
-        <Pricing />
-        <MapsSimulator />
-        <Inspirations />
-        <Intelligence />
-        <FAQ />
-        <Contact />
-      </main>
-      <Footer />
-      <WhatsAppButton />
-    </div>
+    <ServiceCartProvider>
+      <div className="min-h-screen bg-background text-foreground font-sans">
+        <Header />
+        <main>
+          <Hero />
+          <About />
+          <Services />
+          <Pricing />
+          <MapsSimulator />
+          <Inspirations />
+          <Intelligence />
+          <FAQ />
+          <Contact />
+        </main>
+        <Footer />
+        <WhatsAppButton />
+      </div>
+    </ServiceCartProvider>
   )
 }
 
