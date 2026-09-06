@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { Sparkles, Zap, ArrowRight, ShieldCheck, Globe as GlobeIcon } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
-import { EmberButton, Parallax } from "./primitives";
+import { EmberButton, Parallax, FloatingBadge } from "./primitives";
 import { Globe } from "./Globe";
 import heroLoop from "@/assets/hero-studio.mp4.asset.json";
 
 /* ── Animated counter hook ── */
-function useCountUp(target: number, duration = 2000, startDelay = 600) {
+function useCountUp(target: number, duration = 1600, startDelay = 500) {
   const [value, setValue] = useState(0);
   const started = useRef(false);
 
@@ -18,7 +20,6 @@ function useCountUp(target: number, duration = 2000, startDelay = 600) {
       const tick = (now: number) => {
         const elapsed = now - start;
         const progress = Math.min(elapsed / duration, 1);
-        // ease-out cubic
         const eased = 1 - Math.pow(1 - progress, 3);
         setValue(Math.round(target * eased));
         if (progress < 1) requestAnimationFrame(tick);
@@ -43,22 +44,22 @@ function AnimatedStat({
   label: string;
   delay: number;
 }) {
-  const count = useCountUp(value, 1800, delay);
+  const count = useCountUp(value, 1600, delay);
   return (
     <div
-      className="bg-card/70 px-5 py-5 backdrop-blur-sm transition-colors hover:bg-accent/40"
-      style={{ animation: `ember-rise 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}ms both` }}
+      className="bg-card/75 px-5 py-4 backdrop-blur-md transition-all duration-300 hover:bg-accent/40 hover:-translate-y-0.5 cursor-default"
+      style={{ animation: `ember-rise 0.75s cubic-bezier(0.16,1,0.3,1) ${delay}ms both` }}
     >
-      <dt className="display-serif text-3xl text-primary sm:text-4xl">
+      <dt className="display-serif text-2xl text-primary sm:text-3xl font-bold tracking-tight">
         {count}
         {suffix ?? ""}
       </dt>
-      <dd className="label-mono mt-1.5 text-xs text-muted-foreground">{label}</dd>
+      <dd className="label-mono mt-1 text-xs text-muted-foreground">{label}</dd>
     </div>
   );
 }
 
-/* ── Trust bar: monogram logos ── */
+/* ── Monogram clients ── */
 const TRUST_CLIENTS = [
   { initials: "CL", name: "Clinique Privée" },
   { initials: "MR", name: "Maison Rebuffé" },
@@ -74,9 +75,9 @@ export function Hero() {
   const { t } = useLang();
 
   return (
-    <section id="top" className="grain relative min-h-[100dvh] overflow-hidden pt-24 sm:pt-28">
-      {/* Background ambient video */}
-      <Parallax speed={0.12} className="absolute inset-0 -top-[10%] h-[120%]">
+    <section id="top" className="grain relative min-h-[92dvh] overflow-hidden pt-20 sm:pt-24">
+      {/* Background ambient video with multi-speed parallax */}
+      <Parallax speed={0.14} className="absolute inset-0 -top-[12%] h-[124%] pointer-events-none">
         <video
           src={heroLoop.url}
           autoPlay
@@ -84,11 +85,11 @@ export function Hero() {
           loop
           playsInline
           preload="auto"
-          className="h-full w-full object-cover opacity-40 grayscale contrast-105"
+          className="h-full w-full object-cover opacity-35 grayscale contrast-105"
         />
       </Parallax>
 
-      {/* Atmospheric lighting layers */}
+      {/* Atmospheric lighting depth layers */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -98,9 +99,9 @@ export function Hero() {
         }}
       />
 
-      <div className="relative mx-auto flex min-h-[calc(100dvh-7rem)] max-w-7xl flex-col justify-between px-6 lg:px-10">
+      <div className="relative mx-auto flex min-h-[calc(92dvh-6.5rem)] max-w-7xl flex-col justify-between px-6 lg:px-10">
         {/* Top Header Status Bar */}
-        <div className="animate-rise flex flex-wrap items-center justify-between gap-x-8 gap-y-2 border-b border-border/60 pb-4">
+        <div className="animate-rise flex flex-wrap items-center justify-between gap-x-8 gap-y-2 border-b border-border/60 pb-3.5">
           <div className="flex items-center gap-3">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
@@ -108,120 +109,160 @@ export function Hero() {
             </span>
             <span className="label-mono text-xs text-muted-foreground">{t(UI.intelOnline)}</span>
           </div>
-          <span className="label-mono text-xs text-muted-foreground">{CONTACT.cities}</span>
+          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+            <span className="label-mono hidden sm:inline">Paris · Dubaï · Tokyo · New York</span>
+            <span className="label-mono rounded-full border border-primary/30 bg-primary/5 px-2.5 py-0.5 text-[10px] text-primary">
+              Studio Certifié
+            </span>
+          </div>
         </div>
 
-        {/* Hero Main Content & Signature Globe */}
-        <div className="grid items-center gap-12 py-12 lg:grid-cols-12 lg:py-16">
+        {/* Hero Main Content & 3D Interactive Globe */}
+        <div className="grid items-center gap-10 py-10 lg:grid-cols-12 lg:py-14">
           {/* Left Column: Typography & CTAs */}
-          <div className="relative z-10 lg:col-span-7">
-            <p
-              className="label-mono inline-flex w-fit items-center rounded-full border border-primary/40 bg-primary/5 px-4 py-1.5 text-xs text-primary"
-              style={{ animation: "ember-rise 0.9s cubic-bezier(0.16,1,0.3,1) 120ms both" }}
+          <Parallax speed={-0.03} className="relative z-10 lg:col-span-7">
+            <div
+              className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/5 px-4 py-1.5"
+              style={{ animation: "ember-rise 0.75s cubic-bezier(0.16,1,0.3,1) 120ms both" }}
             >
-              {t(UI.heroKicker)}
-            </p>
+              <Sparkles className="h-3.5 w-3.5 text-primary animate-pulse" />
+              <span className="label-mono text-xs text-primary font-medium">
+                {t(UI.heroKicker)}
+              </span>
+            </div>
 
             <h1
-              className="display-serif mt-6 text-[clamp(2.5rem,6.5vw,5.5rem)] leading-[0.98]"
-              style={{ animation: "ember-rise 1s cubic-bezier(0.16,1,0.3,1) 220ms both" }}
+              className="display-serif mt-5 text-[clamp(2.4rem,6vw,5.2rem)] leading-[0.96] tracking-tight"
+              style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 200ms both" }}
             >
               {t(UI.heroTitle1)}
               <br />
-              <em className="not-italic text-primary">{t(UI.heroTitleAccent)}</em>{" "}
+              <em className="not-italic italic text-primary">{t(UI.heroTitleAccent)}</em>{" "}
               {t(UI.heroTitle2)}
             </h1>
 
             <div
-              className="mt-8 max-w-xl"
-              style={{ animation: "ember-rise 1s cubic-bezier(0.16,1,0.3,1) 340ms both" }}
+              className="mt-6 max-w-xl"
+              style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 300ms both" }}
             >
               <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
                 {t(UI.heroLead)}
               </p>
-              <p className="mt-3 text-xs leading-relaxed text-muted-foreground/80">
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground/80 font-mono">
                 {t(UI.heroMeta)}
               </p>
             </div>
 
+            {/* Direct CTAs */}
             <div
-              className="mt-10 flex flex-wrap items-center gap-4"
-              style={{ animation: "ember-rise 1s cubic-bezier(0.16,1,0.3,1) 440ms both" }}
+              className="mt-8 flex flex-wrap items-center gap-3.5"
+              style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 400ms both" }}
             >
-              <EmberButton href="#intelligence">{t(UI.ctaAnalysis)}</EmberButton>
-              <EmberButton href="#services" variant="ghost">
-                {t(UI.ctaContinue)}
+              <EmberButton href="#intelligence" className="shadow-lg">
+                {t(UI.ctaAnalysis)}
               </EmberButton>
-              <span className="label-mono text-xs text-muted-foreground/80">
+
+              <Link
+                to="/services"
+                className="label-mono inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-6 py-3.5 text-xs text-foreground transition-all duration-300 hover:border-primary hover:text-primary hover:-translate-y-0.5"
+              >
+                Explorer nos 11 services
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+
+              <span className="label-mono hidden text-xs text-muted-foreground/80 sm:inline">
                 {t(UI.intelDuration)}
               </span>
             </div>
-            <p
-              className="label-mono mt-4 text-[10px] text-muted-foreground/50"
-              style={{ animation: "ember-rise 1s cubic-bezier(0.16,1,0.3,1) 540ms both" }}
-            >
-              {t(UI.ctaReassurance)}
-            </p>
-          </div>
 
-          {/* Right Column: Signature Interactive Globe Visual */}
+            <div
+              className="mt-4 flex items-center gap-2"
+              style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 500ms both" }}
+            >
+              <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+              <p className="label-mono text-[11px] text-muted-foreground/70">
+                {t(UI.ctaReassurance)} · Pas de reconduction tacite
+              </p>
+            </div>
+          </Parallax>
+
+          {/* Right Column: Signature 3D Interactive Globe Visual with Floating Depth Chips */}
           <div className="relative flex items-center justify-center lg:col-span-5">
-            <Parallax speed={0.06} className="relative w-full max-w-[540px]">
+            {/* Ambient Floating Depth Badges */}
+            <FloatingBadge delay={0} className="hidden sm:block absolute -top-4 -right-2 z-20">
+              <div className="surface-plate flex items-center gap-2 rounded-2xl border border-primary/25 bg-card/90 px-3.5 py-2 shadow-2xl backdrop-blur-md">
+                <Sparkles className="h-3.5 w-3.5 text-primary" />
+                <span className="label-mono text-[10px] text-foreground font-semibold">
+                  Google Maps TOP 3
+                </span>
+              </div>
+            </FloatingBadge>
+
+            <FloatingBadge delay={400} className="hidden sm:block absolute top-1/2 -left-6 z-20 -translate-y-1/2">
+              <div className="surface-plate flex items-center gap-2 rounded-2xl border border-border/80 bg-card/90 px-3.5 py-2 shadow-2xl backdrop-blur-md">
+                <Zap className="h-3.5 w-3.5 text-primary" />
+                <span className="label-mono text-[10px] text-foreground font-semibold">
+                  PageSpeed 100/100
+                </span>
+              </div>
+            </FloatingBadge>
+
+            <Parallax speed={0.07} className="relative w-full max-w-[480px]">
               <Globe className="aspect-square w-full" />
-              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full border border-border/60 bg-card/80 px-4 py-1.5 shadow-lg backdrop-blur-md">
+              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full border border-border/60 bg-card/90 px-4 py-1.5 shadow-xl backdrop-blur-md flex items-center gap-2">
+                <GlobeIcon className="h-3 w-3 text-primary" />
                 <span className="label-mono text-[10px] tracking-wider text-muted-foreground">
-                  Réseau International · Paris · Asie · USA
+                  Paris · Dubaï · Tokyo · New York
                 </span>
               </div>
             </Parallax>
           </div>
         </div>
 
-        {/* Bottom Key Stats Bar — Animated Counters */}
+        {/* Bottom Key Stats Bar with Animated Counters */}
         <div>
-          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 sm:grid-cols-4">
-            <AnimatedStat value={500} suffix="+" label={t(UI.statProjects)} delay={560} />
-            <AnimatedStat value={8} suffix="+" label={t(UI.statYears)} delay={650} />
-            <AnimatedStat value={98} suffix="%" label={t(UI.statSatisfaction)} delay={740} />
-            <AnimatedStat value={2} suffix="h" label={t(UI.statResponse)} delay={830} />
+          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 sm:grid-cols-4 shadow-sm">
+            <AnimatedStat value={500} suffix="+" label={t(UI.statProjects)} delay={550} />
+            <AnimatedStat value={8} suffix="+" label={t(UI.statYears)} delay={630} />
+            <AnimatedStat value={98} suffix="%" label={t(UI.statSatisfaction)} delay={710} />
+            <AnimatedStat value={2} suffix="h" label={t(UI.statResponse)} delay={790} />
           </dl>
 
-          {/* Trust Bar — Client Monograms */}
+          {/* Trust Bar: Client Monograms */}
           <div
-            className="mt-8"
-            style={{ animation: "ember-rise 0.9s cubic-bezier(0.16,1,0.3,1) 950ms both" }}
+            className="mt-6"
+            style={{ animation: "ember-rise 0.75s cubic-bezier(0.16,1,0.3,1) 880ms both" }}
           >
-            <p className="label-mono text-center text-[10px] tracking-widest text-muted-foreground/50">
+            <p className="label-mono text-center text-[10px] tracking-widest text-muted-foreground/60 uppercase">
               {t(UI.trustBarLabel)}
             </p>
-            <div className="mt-3 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
               {TRUST_CLIENTS.map((c) => (
                 <div
                   key={c.initials}
-                  className="group flex items-center gap-2 opacity-40 transition-opacity duration-300 hover:opacity-80"
+                  className="group flex items-center gap-2 opacity-50 transition-all duration-300 hover:opacity-100 hover:scale-105 cursor-default"
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full border border-border/80 bg-card/50">
-                    <span className="label-mono text-[9px] font-semibold tracking-wider text-muted-foreground">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full border border-border bg-card/70 shadow-xs">
+                    <span className="label-mono text-[9px] font-semibold tracking-wider text-muted-foreground group-hover:text-primary transition-colors">
                       {c.initials}
                     </span>
                   </div>
-                  <span className="label-mono hidden text-[10px] text-muted-foreground/70 sm:inline">
+                  <span className="label-mono hidden text-[10px] text-muted-foreground/80 sm:inline">
                     {c.name}
                   </span>
                 </div>
               ))}
             </div>
-            <p className="label-mono mt-3 text-center text-[10px] text-muted-foreground/40">
-              {t(UI.trustBarClients)}
-            </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border/60 py-5 mt-8">
-            <span className="label-mono text-xs text-muted-foreground/70">p. 001</span>
+          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border/60 py-4 mt-5">
+            <span className="label-mono text-xs text-muted-foreground/70">p. 001 · Studio Principal</span>
             <span className="label-mono hidden text-xs text-muted-foreground/70 md:block">
-              Sites · Identité · SEO · Google Maps · Social · IA · Maintenance
+              Sites Web · Identité · SEO Domination · Google Maps · Social · IA · Maintenance
             </span>
-            <span className="label-mono text-xs text-muted-foreground/70">xragency.vercel.app</span>
+            <Link to="/services" className="label-mono text-xs text-primary hover:underline">
+              Consulter le catalogue complet →
+            </Link>
           </div>
         </div>
       </div>

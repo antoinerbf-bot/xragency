@@ -54,10 +54,11 @@ function Index() {
     <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 z-0 opacity-70"
+        className="pointer-events-none fixed inset-0 z-0 opacity-60"
         style={{ background: "var(--gradient-halo)" }}
       />
       <Nav />
+
       <main className="relative z-10">
         {/* 1. Hero — Hook, 3D Globe, Monograms & Key Authority Stats */}
         <Hero />
@@ -68,7 +69,7 @@ function Index() {
         {/* 3. The Business Model — Internal Payroll vs External Agile Hub & Advantages */}
         <About />
 
-        {/* 4. Solution Overview — 11 Services with starting prices */}
+        {/* 4. Solution Overview — Services with starting prices */}
         <Services />
 
         {/* 5. Transparent Pricing Grid — 11 Services & 33 Exact Plans */}
@@ -78,11 +79,22 @@ function Index() {
         <ParallaxDivider
           image="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=85&w=2400"
           caption={t(UI.dividerCaption1)}
-          height="25vh"
+          height="22vh"
         />
 
-        {/* 6. Growth Tool — Interactive Google Maps TOP 3 Simulator & 7-Phase Methodology */}
+        {/* 6. Growth Tool — Interactive Google Maps TOP 3 Configurator */}
         <MapsSimulator />
+
+        {/* Visual break between Maps & AI — distinct sections */}
+        <ParallaxDivider
+          image="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=85&w=2400"
+          caption={t({
+            fr: "Assistants IA · Disponibles 24h/24",
+            en: "AI Assistants · Available 24/7",
+            vi: "Trợ lý AI · Hoạt động 24/7",
+          })}
+          height="20vh"
+        />
 
         {/* 7. Proof & Prestige — Portfolio Showcase with filters and metrics */}
         <Work />

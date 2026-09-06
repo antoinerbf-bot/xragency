@@ -1,20 +1,16 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import {
   MapPinned,
-  Search,
   Building2,
-  TrendingUp,
   ShieldCheck,
   CheckCircle2,
   Sparkles,
-  Zap,
   ArrowRight,
-  Plus,
-  X,
   MessageCircle,
-  BarChart3,
   Award,
-  Layers,
+  Zap,
+  Users,
+  BarChart3,
   Gauge,
 } from "lucide-react";
 import { useLang } from "@/lib/i18n";
@@ -22,479 +18,395 @@ import { CONTACT } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { Reveal, SectionHeading } from "./primitives";
 
-const CITIES_LIST = [
-  "Paris",
-  "Lyon",
-  "Marseille",
-  "Bordeaux",
-  "Toulouse",
-  "Nice",
-  "Nantes",
-  "Strasbourg",
-  "Genève",
-  "Bruxelles",
-  "New York",
-  "Da Nang",
+/* ── Sector options ── */
+const SECTORS = [
+  { id: "resto", icon: "🍽️", label: "Restaurant / Bar" },
+  { id: "hotel", icon: "🏨", label: "Hôtel / Spa" },
+  { id: "sante", icon: "⚕️", label: "Santé / Médecin" },
+  { id: "juridique", icon: "⚖️", label: "Avocat / Notaire" },
+  { id: "immo", icon: "🏠", label: "Immobilier" },
+  { id: "artisan", icon: "🔨", label: "Artisan / BTP" },
+  { id: "beaute", icon: "💆", label: "Beauté / Bien-être" },
+  { id: "autre", icon: "💼", label: "Autre commerce" },
 ];
 
-const SECTORS_LIST = [
-  {
-    id: "resto",
-    label: "Restaurant / Bar / Café",
-    keywords: ["restaurant", "brasserie", "terrasse"],
-  },
-  {
-    id: "hotel",
-    label: "Hôtel / Spa / Hébergement",
-    keywords: ["hotel de charme", "spa de luxe", "residence"],
-  },
-  {
-    id: "sante",
-    label: "Santé / Médecin / Dentiste",
-    keywords: ["dentiste", "centre medical", "clinique"],
-  },
-  {
-    id: "juridique",
-    label: "Avocat / Notaire / Conseil",
-    keywords: ["avocat", "cabinet conseil", "gestion de patrimoine"],
-  },
-  {
-    id: "immo",
-    label: "Immobilier / Architecture",
-    keywords: ["agence immobiliere", "architecte interieur", "estimation"],
-  },
-  {
-    id: "artisan",
-    label: "Artisan / Rénovation / BTP",
-    keywords: ["plombier", "renovation", "electricien"],
-  },
-  {
-    id: "beaute",
-    label: "Beauté / Coiffure / Esthétique",
-    keywords: ["salon de coiffure", "institut beaute", "soins"],
-  },
-  { id: "autre", label: "Autre commerce / Service", keywords: ["boutique", "service pro"] },
+/* ── City size options ── */
+const CITY_SIZES = [
+  { id: "small", label: "Petite ville", sub: "< 50 000 hab.", multiplier: 1.0 },
+  { id: "medium", label: "Ville moyenne", sub: "50 000 – 150 000", multiplier: 1.3 },
+  { id: "large", label: "Grande ville", sub: "150 000 – 500 000", multiplier: 1.6 },
+  { id: "metro", label: "Métropole", sub: "500 000+", multiplier: 2.1 },
 ];
 
-const PHASES_PROCESS = [
-  {
-    num: "01",
-    name: "Analyse Initiale",
-    title: "Diagnostic de présence",
-    desc: "Audit technique complet de votre fiche actuelle, historique des avis, cohérence des données et pénalités éventuelles.",
-  },
-  {
-    num: "02",
-    name: "Audit Concurrentiel",
-    title: "Décryptage du TOP 3",
-    desc: "Analyse chirurgicale des 3 concurrents occupant actuellement le Local Pack : volume d'avis, mots-clés et autorité.",
-  },
-  {
-    num: "03",
-    name: "Stratégie Ciblée",
-    title: "Mots-clés & Zones",
-    desc: "Sélection rigoureuse des requêtes à fort volume de conversion et cartographie des rayons géographiques prioritaires.",
-  },
-  {
-    num: "04",
-    name: "Optimisation GBP",
-    title: "Restructuration Pro",
-    desc: "Optimisation des catégories primaires/secondaires, géolocalisation des visuels HD, attributs clés et catalogue de services.",
-  },
-  {
-    num: "05",
-    name: "Autorité Locale",
-    title: "Signaux & Citations NAP",
-    desc: "Déploiement de citations locales cohérentes (Nom, Adresse, Téléphone) et renforcement de votre crédibilité territoriale.",
-  },
-  {
-    num: "06",
-    name: "Pilotage Actif",
-    title: "Veille & Ajustements",
-    desc: "Mises à jour stratégiques régulières, animation de posts géolocalisés et réponses optimisées aux avis clients.",
-  },
-  {
-    num: "07",
-    name: "Résultats & ROI",
-    title: "Mesure transparente",
-    desc: "Tableau de bord de suivi hebdomadaire des positions, hausse mesurée des appels téléphoniques et des itinéraires.",
-  },
+/* ── Keywords volume options ── */
+const KEYWORD_RANGES = [
+  { id: "k1", label: "1 à 3", sub: "mots-clés principaux", factor: 1.0 },
+  { id: "k2", label: "4 à 6", sub: "mots-clés principaux", factor: 1.25 },
+  { id: "k3", label: "7 à 10", sub: "mots-clés principaux", factor: 1.55 },
 ];
+
+/* ── Current ranking options ── */
+const CURRENT_RANKS = [
+  { id: "absent", label: "Absent de Maps", sub: "Fiche non créée ou invisible", penalty: 1.15 },
+  { id: "below20", label: "Hors Top 20", sub: "Très peu visible", penalty: 1.08 },
+  { id: "4to10", label: "Position 4 – 10", sub: "Visible mais pas dans le Pack", penalty: 1.0 },
+];
+
+/* ── 7-Phase methodology ── */
+const PHASES = [
+  { num: "01", name: "Analyse Initiale", title: "Diagnostic de présence", desc: "Audit technique complet de votre fiche actuelle, historique des avis, cohérence des données et pénalités éventuelles." },
+  { num: "02", name: "Audit Concurrentiel", title: "Décryptage du TOP 3", desc: "Analyse chirurgicale des 3 concurrents occupant actuellement le Local Pack : volume d'avis, mots-clés et autorité." },
+  { num: "03", name: "Stratégie Ciblée", title: "Mots-clés & Zones", desc: "Sélection rigoureuse des requêtes à fort volume de conversion et cartographie des rayons géographiques prioritaires." },
+  { num: "04", name: "Optimisation GBP", title: "Restructuration Pro", desc: "Optimisation des catégories primaires/secondaires, géolocalisation des visuels HD, attributs clés et catalogue de services." },
+  { num: "05", name: "Autorité Locale", title: "Signaux & Citations NAP", desc: "Déploiement de citations locales cohérentes (Nom, Adresse, Téléphone) et renforcement de votre crédibilité territoriale." },
+  { num: "06", name: "Pilotage Actif", title: "Veille & Ajustements", desc: "Mises à jour stratégiques régulières, animation de posts géolocalisés et réponses optimisées aux avis clients." },
+  { num: "07", name: "Résultats & ROI", title: "Mesure transparente", desc: "Tableau de bord de suivi hebdomadaire des positions, hausse mesurée des appels téléphoniques et des itinéraires." },
+];
+
+/* ── Animated price counter ── */
+function useAnimatedPrice(target: number, duration = 500) {
+  const [val, setVal] = useState(target);
+  const prevRef = useRef(target);
+  const rafRef = useRef<number>(0);
+
+  useEffect(() => {
+    const from = prevRef.current;
+    if (from === target) return;
+    prevRef.current = target;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setVal(Math.round(from + (target - from) * eased));
+      if (t < 1) rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [target, duration]);
+
+  return val;
+}
+
+function formatEur(n: number) {
+  return new Intl.NumberFormat("fr-FR", {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(n);
+}
+
+/* ── Selector Button ── */
+function SelectorBtn({
+  selected,
+  onClick,
+  children,
+  className,
+}: {
+  selected: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "flex w-full flex-col items-center gap-1.5 rounded-xl border px-3 py-3 text-center text-xs transition-all duration-200",
+        selected
+          ? "border-primary bg-primary/8 text-primary shadow-sm ring-1 ring-primary/30"
+          : "border-border bg-card/60 text-muted-foreground hover:border-primary/40 hover:text-foreground",
+        className,
+      )}
+    >
+      {children}
+    </button>
+  );
+}
 
 export function MapsSimulator() {
-  const { lang, price } = useLang();
+  const { price: formatPrice } = useLang();
 
-  // Interactive Form State
-  const [selectedCity, setSelectedCity] = useState("Paris");
-  const [customCity, setCustomCity] = useState("");
-  const [selectedSector, setSelectedSector] = useState(SECTORS_LIST[0]);
-  const [keywords, setKeywords] = useState<string[]>([
-    "restaurant gastronomique",
-    "brasserie centre-ville",
-  ]);
-  const [newKeyword, setNewKeyword] = useState("");
-  const [currentRank, setCurrentRank] = useState<"none" | "below10" | "top5_10" | "top3">(
-    "below10",
-  );
+  const [sector, setSector] = useState(SECTORS[0].id);
+  const [citySize, setCitySize] = useState(CITY_SIZES[0].id);
+  const [keywords, setKeywords] = useState(KEYWORD_RANGES[0].id);
+  const [rank, setRank] = useState(CURRENT_RANKS[0].id);
 
-  const city = customCity.trim() ? customCity.trim() : selectedCity;
-
-  // Add keyword
-  const addKeyword = () => {
-    if (newKeyword.trim() && !keywords.includes(newKeyword.trim()) && keywords.length < 5) {
-      setKeywords([...keywords, newKeyword.trim()]);
-      setNewKeyword("");
-    }
-  };
-
-  const removeKeyword = (index: number) => {
-    setKeywords(keywords.filter((_, i) => i !== index));
-  };
-
-  // Dynamic simulation score calculations
-  const simulationResults = useMemo(() => {
-    const isLargeCity = ["Paris", "Lyon", "Marseille", "New York", "Bruxelles", "Genève"].includes(
-      city,
-    );
-    const difficultyScore = isLargeCity ? 85 : 65;
-    const competitionLevel = isLargeCity ? "Élevée (Grande Métropole)" : "Modérée";
-    const estimatedCallsGain = isLargeCity ? "+280% à +380%" : "+180% à +260%";
-    const estimatedMonthlySearches = keywords.length * (isLargeCity ? 1200 : 450);
-
+  /* ── Dynamic price calculation ── */
+  const { priceMin, priceMax } = useMemo(() => {
+    const base = 999;
+    const sizeMul = CITY_SIZES.find((c) => c.id === citySize)?.multiplier ?? 1;
+    const kwFactor = KEYWORD_RANGES.find((k) => k.id === keywords)?.factor ?? 1;
+    const rankPenalty = CURRENT_RANKS.find((r) => r.id === rank)?.penalty ?? 1;
+    const raw = base * sizeMul * kwFactor * rankPenalty;
     return {
-      difficultyScore,
-      competitionLevel,
-      estimatedCallsGain,
-      estimatedMonthlySearches,
+      priceMin: Math.round(raw / 100) * 100,
+      priceMax: Math.round((raw * 1.45) / 100) * 100,
     };
-  }, [city, keywords]);
+  }, [citySize, keywords, rank]);
+
+  const animMin = useAnimatedPrice(priceMin);
+  const animMax = useAnimatedPrice(priceMax);
+
+  const selectedSector = SECTORS.find((s) => s.id === sector);
 
   const waPrefill = encodeURIComponent(
-    `Bonjour XR Agency, j'ai réalisé la simulation Google Maps TOP 3 pour mon activité "${selectedSector.label}" à "${city}" sur les mots-clés : ${keywords.join(
-      ", ",
-    )}. Position actuelle : ${
-      currentRank === "none"
-        ? "Inexistant"
-        : currentRank === "below10"
-          ? "Au-delà du top 10"
-          : currentRank === "top5_10"
-            ? "Top 5-10"
-            : "Top 3"
-    }. Pouvons-nous lancer l'audit personnalisé ?`,
+    `Bonjour XR Agency, je suis intéressé par votre offre Google Maps TOP 3 garantie.\n\n` +
+    `• Secteur : ${selectedSector?.label}\n` +
+    `• Taille de ville : ${CITY_SIZES.find((c) => c.id === citySize)?.label}\n` +
+    `• Mots-clés : ${KEYWORD_RANGES.find((k) => k.id === keywords)?.label}\n` +
+    `• Position actuelle : ${CURRENT_RANKS.find((r) => r.id === rank)?.label}\n\n` +
+    `Budget estimé configurateur : ${formatEur(priceMin)} – ${formatEur(priceMax)} / an\n\n` +
+    `Pouvons-nous lancer l'audit personnalisé ?`
   );
 
   return (
-    <section id="maps" className="relative py-16 sm:py-24 lg:py-32">
+    <section id="maps" className="relative py-12 sm:py-18 lg:py-24">
       {/* Background Glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-25"
+        className="pointer-events-none absolute inset-0 opacity-20"
         style={{ background: "var(--gradient-halo)" }}
       />
 
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-10 space-y-20 sm:space-y-28">
-        {/* 1. Interactive Simulation Studio */}
-        <div className="surface-plate relative overflow-hidden rounded-3xl border border-border bg-card p-5 sm:p-10 shadow-2xl">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/60 pb-6">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-primary/40 bg-primary/10 text-primary">
-                <Gauge className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="display-serif text-2xl text-foreground">
-                  Simulateur de Visibilité Google Maps TOP 3
-                </h3>
-                <p className="label-mono text-xs text-muted-foreground">
-                  Évaluez le potentiel d'acquisition locale et d'appels entrants de votre
-                  établissement
-                </p>
-              </div>
-            </div>
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-10 space-y-16 sm:space-y-20">
 
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3.5 py-1 text-xs text-emerald-400">
-              <ShieldCheck className="h-3.5 w-3.5" />
-              <span>Garantie Annuelle TOP 3</span>
-            </div>
-          </div>
-
-          <div className="mt-8 grid gap-8 lg:grid-cols-12">
-            {/* Left Column: Interactive Settings */}
-            <div className="space-y-6 lg:col-span-7">
-              {/* Step 1: City Selection */}
-              <div>
-                <label className="label-mono text-xs uppercase tracking-wider text-muted-foreground">
-                  Étape 1 · Votre Ville / Zone d'implantation
-                </label>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {CITIES_LIST.map((c) => (
-                    <button
-                      key={c}
-                      onClick={() => {
-                        setSelectedCity(c);
-                        setCustomCity("");
-                      }}
-                      className={cn(
-                        "label-mono rounded-full px-3.5 py-1.5 text-xs transition-all",
-                        selectedCity === c && !customCity
-                          ? "bg-primary text-primary-foreground font-semibold shadow-md"
-                          : "border border-border bg-card/60 text-muted-foreground hover:border-primary/50 hover:text-foreground",
-                      )}
-                    >
-                      {c}
-                    </button>
-                  ))}
-                </div>
-                <div className="mt-3">
-                  <input
-                    type="text"
-                    value={customCity}
-                    onChange={(e) => setCustomCity(e.target.value)}
-                    placeholder="Ou entrez une autre ville..."
-                    className="w-full rounded-xl border border-border bg-background/80 px-4 py-2.5 text-xs text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Step 2: Sector Selection */}
-              <div>
-                <label className="label-mono text-xs uppercase tracking-wider text-muted-foreground">
-                  Étape 2 · Votre Métier / Secteur
-                </label>
-                <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                  {SECTORS_LIST.map((s) => (
-                    <button
-                      key={s.id}
-                      onClick={() => {
-                        setSelectedSector(s);
-                        setKeywords(s.keywords);
-                      }}
-                      className={cn(
-                        "flex items-center gap-2.5 rounded-xl border p-3 text-left transition-all text-xs",
-                        selectedSector.id === s.id
-                          ? "border-primary bg-primary/10 text-foreground font-medium ring-1 ring-primary"
-                          : "border-border bg-card/60 text-muted-foreground hover:border-primary/50",
-                      )}
-                    >
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                      <span>{s.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Step 3: Targeted Keywords */}
-              <div>
-                <div className="flex items-center justify-between">
-                  <label className="label-mono text-xs uppercase tracking-wider text-muted-foreground">
-                    Étape 3 · Requêtes & Mots-clés cibles ({keywords.length}/5)
-                  </label>
-                  <span className="label-mono text-[10px] text-muted-foreground">
-                    Ce que tapent vos clients
-                  </span>
-                </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {keywords.map((kw, i) => (
-                    <span
-                      key={i}
-                      className="label-mono inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs text-foreground"
-                    >
-                      <Search className="h-3 w-3 text-primary" />
-                      {kw}
-                      <button
-                        onClick={() => removeKeyword(i)}
-                        className="ml-1 text-muted-foreground hover:text-red-400"
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-3 flex gap-2">
-                  <input
-                    type="text"
-                    value={newKeyword}
-                    onChange={(e) => setNewKeyword(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addKeyword())}
-                    placeholder="Ajouter un mot-clé (ex: avocat droit des affaires)..."
-                    className="flex-1 rounded-xl border border-border bg-background/80 px-4 py-2 text-xs text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none"
-                  />
-                  <button
-                    onClick={addKeyword}
-                    disabled={!newKeyword.trim() || keywords.length >= 5}
-                    className="inline-flex items-center gap-1 rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground disabled:opacity-40"
-                  >
-                    <Plus className="h-3.5 w-3.5" />
-                    Ajouter
-                  </button>
-                </div>
-              </div>
-
-              {/* Step 4: Current Positioning */}
-              <div>
-                <label className="label-mono text-xs uppercase tracking-wider text-muted-foreground">
-                  Étape 4 · Votre visibilité actuelle sur Google Maps
-                </label>
-                <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                  {[
-                    { id: "none", label: "Pas de fiche" },
-                    { id: "below10", label: "Au-delà du Top 10" },
-                    { id: "top5_10", label: "Dans le Top 5-10" },
-                    { id: "top3", label: "Déjà Top 3" },
-                  ].map((pos) => (
-                    <button
-                      key={pos.id}
-                      onClick={() =>
-                        setCurrentRank(pos.id as "none" | "below10" | "top5_10" | "top3")
-                      }
-                      className={cn(
-                        "rounded-xl border p-2.5 text-center text-xs transition-all",
-                        currentRank === pos.id
-                          ? "border-primary bg-primary/10 text-foreground font-semibold ring-1 ring-primary"
-                          : "border-border bg-card/60 text-muted-foreground hover:border-primary/40",
-                      )}
-                    >
-                      {pos.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Live Simulation Report & Guarantee */}
-            <div className="flex flex-col justify-between rounded-3xl border border-primary/30 bg-accent/25 p-6 sm:p-8 lg:col-span-5">
-              <div>
-                <div className="flex items-center justify-between border-b border-border/60 pb-4">
-                  <span className="label-mono text-xs uppercase tracking-widest text-primary">
-                    Diagnostic en Direct
-                  </span>
-                  <span className="label-mono text-xs text-muted-foreground">
-                    {city} · {keywords.length} mots-clés
-                  </span>
-                </div>
-
-                <div className="mt-6 space-y-4">
-                  <div className="flex items-center justify-between rounded-2xl border border-border/70 bg-card/70 p-4">
-                    <div className="flex items-center gap-2.5">
-                      <TrendingUp className="h-4 w-4 text-emerald-400" />
-                      <span className="text-xs text-muted-foreground">Hausse estimée d'appels</span>
-                    </div>
-                    <span className="display-serif text-lg font-bold text-emerald-400">
-                      {simulationResults.estimatedCallsGain}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between rounded-2xl border border-border/70 bg-card/70 p-4">
-                    <div className="flex items-center gap-2.5">
-                      <BarChart3 className="h-4 w-4 text-primary" />
-                      <span className="text-xs text-muted-foreground">Niveau de concurrence</span>
-                    </div>
-                    <span className="label-mono text-xs font-semibold text-foreground">
-                      {simulationResults.competitionLevel}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between rounded-2xl border border-border/70 bg-card/70 p-4">
-                    <div className="flex items-center gap-2.5">
-                      <Search className="h-4 w-4 text-primary" />
-                      <span className="text-xs text-muted-foreground">
-                        Recherches locales cibles
-                      </span>
-                    </div>
-                    <span className="label-mono text-xs font-bold text-foreground">
-                      ~{simulationResults.estimatedMonthlySearches.toLocaleString()} /mois
-                    </span>
-                  </div>
-                </div>
-
-                {/* Price & Guarantee box */}
-                <div className="mt-6 rounded-2xl border border-primary/40 bg-card p-5">
-                  <div className="flex items-baseline justify-between">
-                    <span className="label-mono text-xs text-muted-foreground">
-                      Pack Annuel Garanti
-                    </span>
-                    <div className="flex items-baseline gap-1">
-                      <span className="display-serif text-2xl font-bold text-primary">
-                        {price(999)}
-                      </span>
-                      <span className="label-mono text-xs text-muted-foreground">/an</span>
-                    </div>
-                  </div>
-
-                  <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
-                    * Objectif TOP 3 sur vos mots-clés prioritaires sur 12 mois.
-                  </p>
-
-                  <div className="mt-4 flex items-center gap-2 border-t border-border/60 pt-3 text-xs text-emerald-400">
-                    <ShieldCheck className="h-4 w-4 shrink-0" />
-                    <span className="font-medium">
-                      Garantie TOP 3 contractuelle · Satisfait ou remboursé
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8">
-                <a
-                  href={`${CONTACT.whatsapp}?text=${waPrefill}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-primary py-3.5 text-xs font-semibold uppercase tracking-wider text-primary-foreground shadow-lg transition-all hover:bg-primary/90 min-h-[44px]"
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  Lancer mon audit Google Maps sur WhatsApp
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 2. The 7-Phase Methodology (Simple & Visual) */}
+        {/* ── Section Header ── */}
         <div>
-          <Reveal>
-            <div className="text-center">
-              <span className="label-mono text-xs uppercase tracking-widest text-primary">
-                Méthodologie en 7 Phases
-              </span>
-              <h3 className="display-serif mt-3 text-3xl sm:text-4xl text-foreground">
-                Comment nous propulsons votre établissement dans le TOP 3
-              </h3>
-              <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground">
-                Un processus transparent et chirurgical pour dominer les résultats de recherche
-                locale de manière durable.
+          <SectionHeading
+            label={{ fr: "Google Maps TOP 3", en: "Google Maps TOP 3", vi: "Google Maps TOP 3" }}
+            line1={{ fr: "Garantie TOP 3", en: "Guaranteed TOP 3", vi: "Đảm bảo TOP 3" }}
+            line2={{
+              fr: "ou remboursé intégral.",
+              en: "or full refund.",
+              vi: "hoặc hoàn tiền.",
+            }}
+            lead={{
+              fr: "Le seul studio digital à proposer une garantie de résultat. Configurez votre projet et obtenez une estimation instantanée.",
+              en: "The only digital studio offering a guaranteed result. Configure your project and get an instant estimate.",
+              vi: "Studio duy nhất đảm bảo kết quả. Cấu hình dự án và nhận ước tính ngay lập tức.",
+            }}
+          />
+
+          {/* ── Exclusivity Badge — very visible ── */}
+          <Reveal delay={80}>
+            <div className="mt-8 inline-flex items-center gap-3 rounded-2xl border-2 border-primary/30 bg-primary px-5 py-3.5 shadow-lg">
+              <Zap className="h-5 w-5 shrink-0 text-primary-foreground" />
+              <p className="text-sm font-bold text-primary-foreground leading-snug">
+                Seul prestataire en France avec garantie TOP 3 ou remboursement intégral
               </p>
+              <Award className="h-5 w-5 shrink-0 text-primary-foreground/70" />
             </div>
           </Reveal>
+        </div>
 
-          <div className="mt-12 sm:mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {PHASES_PROCESS.map((phase, idx) => (
-              <Reveal key={idx} delay={idx * 60}>
-                <div className="surface-plate relative flex h-full flex-col justify-between rounded-3xl p-6 transition-all duration-300 hover:border-primary hover:-translate-y-1">
+        {/* ── Intelligent Configurator ── */}
+        <Reveal delay={60}>
+          <div className="rounded-3xl border border-border bg-card shadow-xl overflow-hidden">
+            {/* Configurator header */}
+            <div className="border-b border-border/60 bg-accent/20 px-6 py-5 sm:px-8">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+                  <Gauge className="h-4.5 w-4.5" />
+                </div>
+                <div>
+                  <p className="label-mono text-xs text-primary">Configurateur de projet</p>
+                  <p className="display-serif text-lg text-foreground mt-0.5">
+                    Estimez votre investissement Google Maps
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 sm:p-8 space-y-8">
+              {/* Step 1 — Sector */}
+              <div>
+                <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">1</span>
+                  Votre secteur d'activité
+                </p>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  {SECTORS.map((s) => (
+                    <SelectorBtn
+                      key={s.id}
+                      selected={sector === s.id}
+                      onClick={() => setSector(s.id)}
+                    >
+                      <span className="text-2xl">{s.icon}</span>
+                      <span className="text-[11px] leading-tight">{s.label}</span>
+                    </SelectorBtn>
+                  ))}
+                </div>
+              </div>
+
+              {/* Step 2 — City Size */}
+              <div>
+                <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">2</span>
+                  Taille de votre ville
+                </p>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  {CITY_SIZES.map((c) => (
+                    <SelectorBtn
+                      key={c.id}
+                      selected={citySize === c.id}
+                      onClick={() => setCitySize(c.id)}
+                    >
+                      <Building2 className="h-4 w-4" />
+                      <span className="font-semibold text-[12px]">{c.label}</span>
+                      <span className="text-[10px] opacity-60">{c.sub}</span>
+                    </SelectorBtn>
+                  ))}
+                </div>
+              </div>
+
+              {/* Step 3 — Keywords */}
+              <div>
+                <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">3</span>
+                  Nombre de mots-clés principaux
+                </p>
+                <div className="grid grid-cols-3 gap-2">
+                  {KEYWORD_RANGES.map((k) => (
+                    <SelectorBtn
+                      key={k.id}
+                      selected={keywords === k.id}
+                      onClick={() => setKeywords(k.id)}
+                    >
+                      <BarChart3 className="h-4 w-4" />
+                      <span className="font-bold text-base">{k.label}</span>
+                      <span className="text-[10px] opacity-60">{k.sub}</span>
+                    </SelectorBtn>
+                  ))}
+                </div>
+              </div>
+
+              {/* Step 4 — Current Ranking */}
+              <div>
+                <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">4</span>
+                  Votre positionnement actuel sur Google Maps
+                </p>
+                <div className="grid grid-cols-3 gap-2">
+                  {CURRENT_RANKS.map((r) => (
+                    <SelectorBtn
+                      key={r.id}
+                      selected={rank === r.id}
+                      onClick={() => setRank(r.id)}
+                    >
+                      <MapPinned className="h-4 w-4" />
+                      <span className="font-semibold text-[12px] leading-tight">{r.label}</span>
+                      <span className="text-[10px] opacity-60 leading-tight">{r.sub}</span>
+                    </SelectorBtn>
+                  ))}
+                </div>
+              </div>
+
+              {/* ── Dynamic Price Result ── */}
+              <div className="rounded-2xl border-2 border-primary/30 bg-primary/5 p-5 sm:p-6">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <div className="flex items-center justify-between">
-                      <span className="label-mono inline-flex h-8 w-8 items-center justify-center rounded-xl border border-primary/40 bg-primary/10 text-xs font-bold text-primary">
-                        {phase.num}
+                    <p className="label-mono text-xs text-muted-foreground">Investissement annuel estimé</p>
+                    <div className="mt-1 flex items-baseline gap-2">
+                      <span
+                        key={animMin}
+                        className="display-serif text-3xl font-bold text-primary sm:text-4xl animate-price-reveal"
+                      >
+                        {formatEur(animMin)}
                       </span>
-                      <span className="label-mono text-[10px] text-muted-foreground uppercase">
-                        {phase.name}
+                      <span className="display-serif text-xl text-primary/60">–</span>
+                      <span
+                        key={animMax}
+                        className="display-serif text-3xl font-bold text-primary sm:text-4xl animate-price-reveal"
+                      >
+                        {formatEur(animMax)}
                       </span>
+                      <span className="label-mono text-xs text-muted-foreground">/ an</span>
                     </div>
-
-                    <h4 className="display-serif mt-5 text-lg text-foreground">{phase.title}</h4>
-                    <p className="mt-2.5 text-xs leading-relaxed text-muted-foreground">
-                      {phase.desc}
+                    <p className="mt-1.5 text-xs text-muted-foreground/70">
+                      Estimation indicative · Tarif exact après audit personnalisé gratuit
                     </p>
                   </div>
 
-                  <div className="mt-6 border-t border-border/50 pt-3">
-                    <span className="label-mono text-[10px] text-primary flex items-center gap-1">
-                      <CheckCircle2 className="h-3 w-3" /> Phase {phase.num} validée
-                    </span>
+                  <div className="flex flex-col gap-2 sm:items-end">
+                    {/* Guarantee badge */}
+                    <div className="flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-3 py-2">
+                      <ShieldCheck className="h-4 w-4 shrink-0 text-primary" />
+                      <span className="label-mono text-[10px] font-bold text-primary">
+                        Garantie TOP 3 ou remboursé
+                      </span>
+                    </div>
+                    <a
+                      href={`${CONTACT.whatsapp}?text=${waPrefill}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="label-mono inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-xs font-semibold text-primary-foreground transition-all duration-200 hover:bg-primary/90 hover:-translate-y-0.5 hover:shadow-lg"
+                    >
+                      <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
+                      Lancer mon audit gratuit
+                    </a>
                   </div>
                 </div>
-              </Reveal>
-            ))}
+
+                {/* Trust signals */}
+                <div className="mt-4 flex flex-wrap gap-3 border-t border-primary/20 pt-4">
+                  {[
+                    { icon: CheckCircle2, text: "Audit initial offert" },
+                    { icon: CheckCircle2, text: "Contrat de résultat" },
+                    { icon: CheckCircle2, text: "Rapport mensuel inclus" },
+                    { icon: CheckCircle2, text: "Sans engagement minimum" },
+                  ].map(({ icon: Icon, text }) => (
+                    <div key={text} className="flex items-center gap-1.5">
+                      <Icon className="h-3.5 w-3.5 shrink-0 text-primary" />
+                      <span className="label-mono text-[10px] text-muted-foreground">{text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </Reveal>
+
+        {/* ── 7-Phase Methodology ── */}
+        <Reveal delay={80}>
+          <div>
+            <div className="mb-8 text-center">
+              <p className="label-mono text-xs text-primary">Méthodologie exclusive</p>
+              <h3 className="display-serif mt-2 text-2xl sm:text-3xl text-foreground">
+                Le processus en 7 phases
+              </h3>
+              <p className="mt-2 text-sm text-muted-foreground max-w-xl mx-auto">
+                Une approche structurée, transparente et mesurable pour vous propulser dans le TOP 3 Google Maps.
+              </p>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {PHASES.slice(0, 4).map((ph) => (
+                <div
+                  key={ph.num}
+                  className="rounded-2xl border border-border/80 bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary/30"
+                >
+                  <p className="label-mono text-xs text-primary">{ph.num} · {ph.name}</p>
+                  <p className="display-serif mt-1.5 text-base text-foreground">{ph.title}</p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{ph.desc}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 grid gap-4 sm:grid-cols-3">
+              {PHASES.slice(4).map((ph) => (
+                <div
+                  key={ph.num}
+                  className="rounded-2xl border border-border/80 bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary/30"
+                >
+                  <p className="label-mono text-xs text-primary">{ph.num} · {ph.name}</p>
+                  <p className="display-serif mt-1.5 text-base text-foreground">{ph.title}</p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{ph.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
       </div>
     </section>
   );

@@ -305,11 +305,11 @@ export const SERVICES: Service[] = [
           vi: "Thương mại điện tử & Đặt chỗ",
         },
         audience: {
-          fr: "À partir de 1 099 € — selon le nombre de produits",
-          en: "From $1,187 — depending on the number of products",
-          vi: "Từ 1.099 € — tùy theo số lượng sản phẩm",
+          fr: "À partir de 1 499 € — selon le nombre de produits",
+          en: "From $1,619 — depending on the number of products",
+          vi: "Từ 1.499 € — tùy theo số lượng sản phẩm",
         },
-        eur: 1099,
+        eur: 1499,
         period: "once",
         features: [
           {

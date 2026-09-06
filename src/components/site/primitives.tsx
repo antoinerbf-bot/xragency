@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
@@ -7,8 +8,8 @@ import type { L } from "@/lib/i18n";
 export function Logo({ className, subtitle = true }: { className?: string; subtitle?: boolean }) {
   const { t } = useLang();
   return (
-    <a
-      href="/"
+    <Link
+      to="/"
       className={cn(
         "group inline-flex flex-col tracking-tight transition-all duration-300 hover:opacity-90",
         className,
@@ -25,7 +26,7 @@ export function Logo({ className, subtitle = true }: { className?: string; subti
           {t(UI.logoSubtitle)}
         </span>
       ) : null}
-    </a>
+    </Link>
   );
 }
 
@@ -33,10 +34,12 @@ export function Logo({ className, subtitle = true }: { className?: string; subti
 export function Parallax({
   children,
   speed = 0.12,
+  direction = "y",
   className,
 }: {
   children: ReactNode;
   speed?: number;
+  direction?: "y" | "x" | "both";
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -49,13 +52,24 @@ export function Parallax({
     let frame = 0;
     const update = () => {
       frame = 0;
+      const isMobile = window.innerWidth < 768;
+      const effectiveSpeed = isMobile ? speed * 0.35 : speed;
       const rect = el.getBoundingClientRect();
       const center = rect.top + rect.height / 2 - window.innerHeight / 2;
-      el.style.transform = `translate3d(0, ${(-center * speed).toFixed(2)}px, 0)`;
+
+      if (direction === "y") {
+        el.style.transform = `translate3d(0, ${(-center * effectiveSpeed).toFixed(2)}px, 0)`;
+      } else if (direction === "x") {
+        el.style.transform = `translate3d(${(-center * effectiveSpeed).toFixed(2)}px, 0, 0)`;
+      } else {
+        el.style.transform = `translate3d(${(-center * effectiveSpeed * 0.4).toFixed(2)}px, ${(-center * effectiveSpeed).toFixed(2)}px, 0)`;
+      }
     };
+
     const onScroll = () => {
       if (!frame) frame = window.requestAnimationFrame(update);
     };
+
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
@@ -64,10 +78,30 @@ export function Parallax({
       window.removeEventListener("resize", onScroll);
       if (frame) window.cancelAnimationFrame(frame);
     };
-  }, [speed]);
+  }, [speed, direction]);
 
   return (
     <div ref={ref} className={cn("will-change-transform", className)}>
+      {children}
+    </div>
+  );
+}
+
+/** Ambient floating element for subtle depth accents */
+export function FloatingBadge({
+  children,
+  className,
+  delay = 0,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  return (
+    <div
+      className={cn("animate-float", className)}
+      style={{ animationDelay: `${delay}ms` }}
+    >
       {children}
     </div>
   );
@@ -95,7 +129,7 @@ export function Reveal({
           obs.disconnect();
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -60px 0px" },
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -140,7 +174,7 @@ export function SectionHeading({
 }) {
   const { t } = useLang();
   return (
-    <Parallax speed={-0.04} className="max-w-3xl">
+    <Parallax speed={-0.03} className="max-w-3xl">
       <Reveal>
         <p className="label-mono text-primary">{t(label)}</p>
       </Reveal>
@@ -176,12 +210,12 @@ export function EmberButton({
   disabled?: boolean;
 }) {
   const base =
-    "label-mono inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 min-h-[44px] transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-40";
+    "label-mono inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 min-h-[44px] transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer";
   const styles = {
     solid:
-      "bg-primary text-primary-foreground hover:brightness-110 hover:shadow-[var(--shadow-ember)]",
-    outline: "border border-primary/60 text-primary hover:bg-primary/10",
-    ghost: "border border-border text-foreground hover:border-primary/60 hover:text-primary",
+      "bg-primary text-primary-foreground hover:brightness-110 hover:shadow-[var(--shadow-ember)] hover:-translate-y-0.5",
+    outline: "border border-primary/60 text-primary hover:bg-primary/10 hover:-translate-y-0.5",
+    ghost: "border border-border text-foreground hover:border-primary/60 hover:text-primary hover:-translate-y-0.5",
   }[variant];
 
   if (href) {

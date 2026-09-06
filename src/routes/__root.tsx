@@ -10,6 +10,8 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { LanguageProvider } from "../lib/i18n";
+import { CartProvider } from "../hooks/useCart";
+import { Cart } from "../components/site/Cart";
 import { WhatsAppWidget } from "../components/site/WhatsAppWidget";
 import { CursorGlow } from "../components/site/CursorGlow";
 import appCss from "../styles.css?url";
@@ -178,14 +180,17 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
-        />
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <CursorGlow />
-        <Outlet />
-        <WhatsAppWidget />
+        <CartProvider>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+          />
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <CursorGlow />
+          <Cart />
+          <Outlet />
+          <WhatsAppWidget />
+        </CartProvider>
       </LanguageProvider>
     </QueryClientProvider>
   );

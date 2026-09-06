@@ -9,8 +9,8 @@ import type { NewAuditInput } from "../../lib/saas/types";
 
 export const Route = createFileRoute("/dashboard/new")({
   component: NewAuditPage,
-  validateSearch: (search: Record<string, unknown>) => ({
-    url: (search.url as string) ?? "",
+  validateSearch: (search: Record<string, unknown>): { url?: string } => ({
+    url: (search.url as string) || undefined,
   }),
 });
 

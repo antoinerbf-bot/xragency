@@ -6,14 +6,17 @@ import {
   Linkedin,
   ArrowUpRight,
   Clock,
-  Globe2,
   Send,
+  Phone,
 } from "lucide-react";
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Logo, Reveal } from "./primitives";
+
+const WA_DIRECT = `https://wa.me/33767566783`;
 
 export function Contact() {
   const { t } = useLang();
@@ -30,271 +33,233 @@ export function Contact() {
   ];
 
   return (
-    <section id="contact" className="relative py-16 sm:py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        {/* ── Impactful heading ── */}
-        <Reveal>
-          <p className="label-mono text-primary">{t(UI.contactLabel)}</p>
-        </Reveal>
-        <Reveal delay={80}>
-          <h2 className="display-serif mt-6 text-[clamp(2.4rem,6vw,5rem)] leading-[1.02]">
-            {t(UI.contactHeading)}
-          </h2>
-        </Reveal>
+    <section id="contact" className="relative py-12 sm:py-18 lg:py-24">
+      {/* Warm ambient background */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-30"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 0%, oklch(0.75 0.06 60 / 0.08), transparent 65%)",
+        }}
+      />
 
-        {/* ── Compact contact chips ── */}
-        <Reveal delay={140}>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href={`mailto:${CONTACT.email}`}
-              className="label-mono inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
-            >
-              <Mail className="h-3.5 w-3.5 text-primary" />
-              {CONTACT.email}
-            </a>
-            <a
-              href={CONTACT.whatsapp}
-              target="_blank"
-              rel="noreferrer"
-              className="label-mono inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
-            >
-              <MessageCircle className="h-3.5 w-3.5 text-primary" />
-              WhatsApp · {CONTACT.phone}
-            </a>
-            <span className="label-mono inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs text-muted-foreground">
-              <MapPin className="h-3.5 w-3.5 text-primary" />
-              {CONTACT.cities}
-            </span>
-            <span className="label-mono inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs text-muted-foreground">
-              <Clock className="h-3.5 w-3.5 text-primary" />
-              {t({ fr: "Réponse < 2 h", en: "Reply < 2h", vi: "Phản hồi < 2h" })}
-            </span>
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
+        {/* ── WhatsApp Direct CTA — Section principale warmth ── */}
+        <Reveal>
+          <div className="rounded-3xl border border-border/60 bg-accent/10 px-6 py-8 text-center sm:px-10 sm:py-10">
+            <p className="label-mono text-xs text-primary">{t(UI.contactLabel)}</p>
+            <h2 className="display-serif mt-4 text-[clamp(2rem,5vw,4rem)] leading-[0.96]">
+              {t(UI.contactHeading)}
+            </h2>
+            <p className="mt-4 text-sm text-muted-foreground max-w-lg mx-auto">
+              {t({
+                fr: "La façon la plus directe et la plus rapide de nous parler. Réponse garantie en moins de 2h.",
+                en: "The most direct and fastest way to talk to us. Guaranteed reply in under 2h.",
+                vi: "Cách trực tiếp và nhanh nhất để liên hệ với chúng tôi. Phản hồi trong 2 giờ.",
+              })}
+            </p>
+
+            {/* Main WhatsApp button — warm + pulse */}
+            <div className="mt-8 flex flex-col items-center gap-4">
+              <a
+                href={WA_DIRECT}
+                target="_blank"
+                rel="noreferrer"
+                id="contact-whatsapp-btn"
+                className="group inline-flex items-center gap-3 rounded-full bg-primary px-8 py-4 text-sm font-semibold text-primary-foreground shadow-lg transition-all duration-300 hover:bg-primary/90 hover:-translate-y-1 hover:shadow-xl wa-pulse"
+                style={{ minWidth: "260px", justifyContent: "center" }}
+              >
+                <MessageCircle className="h-5 w-5 text-emerald-400 transition-transform duration-300 group-hover:scale-110" />
+                Réserver ma consultation WhatsApp
+                <Phone className="h-4 w-4 opacity-60" />
+              </a>
+              <p className="label-mono text-[10px] text-muted-foreground/50">
+                +33 7 67 56 67 83 · Sans engagement · Réponse en moins de 2h
+              </p>
+            </div>
+
+            {/* Contact chips — compact */}
+            <div className="mt-8 flex flex-wrap justify-center gap-2.5">
+              <a
+                href={`mailto:${CONTACT.email}`}
+                className="label-mono inline-flex items-center gap-2 rounded-full border border-border px-3.5 py-2 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+              >
+                <Mail className="h-3.5 w-3.5 text-primary" />
+                {CONTACT.email}
+              </a>
+              <span className="label-mono inline-flex items-center gap-2 rounded-full border border-border px-3.5 py-2 text-xs text-muted-foreground">
+                <MapPin className="h-3.5 w-3.5 text-primary" />
+                {CONTACT.cities}
+              </span>
+              <span className="label-mono inline-flex items-center gap-2 rounded-full border border-border px-3.5 py-2 text-xs text-muted-foreground">
+                <Clock className="h-3.5 w-3.5 text-primary" />
+                {t({ fr: "Réponse < 2 h", en: "Reply < 2h", vi: "Phản hồi < 2h" })}
+              </span>
+            </div>
           </div>
         </Reveal>
 
-        {/* ── Simplified form ── */}
-        <Reveal delay={200}>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              const fd = new FormData(e.currentTarget);
-              const subject = encodeURIComponent(
-                fd.get("need")
-                  ? `[${fd.get("need")}] ${fd.get("name")} — ${fd.get("company") || "N/A"}`
-                  : `${fd.get("name")} — ${fd.get("company") || "N/A"}`,
-              );
-              const body = encodeURIComponent(
-                `${fd.get("message")}\n\n---\nName: ${fd.get("name")}\nEmail: ${fd.get("email")}\nCompany: ${fd.get("company")}\nWebsite: ${fd.get("website")}\nNeed: ${fd.get("need")}`,
-              );
-              window.location.href = `mailto:${CONTACT.email}?subject=${subject}&body=${body}`;
-            }}
-            className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
-          >
-            <div>
-              <label className="label-mono mb-1.5 block text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                {t(UI.contactFormName)}
-              </label>
-              <input
-                name="name"
-                required
-                className="w-full rounded-xl border border-border bg-card/60 px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary/60"
-                placeholder="John Doe"
-              />
-            </div>
-            <div>
-              <label className="label-mono mb-1.5 block text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                {t(UI.contactFormEmail)}
-              </label>
-              <input
-                name="email"
-                type="email"
-                required
-                className="w-full rounded-xl border border-border bg-card/60 px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary/60"
-                placeholder="john@company.com"
-              />
-            </div>
-            <div>
-              <label className="label-mono mb-1.5 block text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                {t(UI.contactFormCompany)}
-              </label>
-              <input
-                name="company"
-                className="w-full rounded-xl border border-border bg-card/60 px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary/60"
-                placeholder="Company Inc."
-              />
-            </div>
-            <div>
-              <label className="label-mono mb-1.5 block text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                {t(UI.contactFormWebsite)}
-              </label>
-              <input
-                name="website"
-                className="w-full rounded-xl border border-border bg-card/60 px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary/60"
-                placeholder="https://..."
-              />
-            </div>
-            <div className="sm:col-span-2">
-              <label className="label-mono mb-1.5 block text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                {t(UI.contactFormNeed)}
-              </label>
-              <select
-                name="need"
-                value={need}
-                onChange={(e) => setNeed(e.target.value)}
-                className="w-full appearance-none rounded-xl border border-border bg-card/60 px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary/60"
-              >
-                <option value="">—</option>
-                {NEED_OPTIONS.map((key, i) => (
-                  <option key={i} value={t(key)}>
-                    {t(key)}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="sm:col-span-2 lg:col-span-3">
-              <label className="label-mono mb-1.5 block text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                {t(UI.contactFormMessage)}
-              </label>
-              <textarea
-                name="message"
-                rows={4}
-                required
-                className="w-full resize-none rounded-xl border border-border bg-card/60 px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary/60"
-                placeholder="Tell us about your project..."
-              />
-            </div>
-            <div className="sm:col-span-2 lg:col-span-3">
-              <button
-                type="submit"
-                className="group inline-flex items-center gap-3 rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:bg-primary/90 hover:shadow-lg"
-              >
-                <Send className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
-                {t(UI.contactFormSubmit)}
-              </button>
-            </div>
-          </form>
+        {/* ── Contact Form — secondary ── */}
+        <Reveal delay={140}>
+          <div className="mt-12">
+            <p className="label-mono text-xs text-muted-foreground/60 mb-6 text-center">
+              {t({ fr: "Ou envoyez-nous un message détaillé", en: "Or send us a detailed message", vi: "Hoặc gửi tin nhắn chi tiết" })}
+            </p>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const fd = new FormData(e.currentTarget);
+                const subject = encodeURIComponent(
+                  fd.get("need")
+                    ? `[${fd.get("need")}] ${fd.get("name")} — ${fd.get("company") || "N/A"}`
+                    : `${fd.get("name")} — ${fd.get("company") || "N/A"}`,
+                );
+                const body = encodeURIComponent(
+                  `${fd.get("message")}\n\n---\nName: ${fd.get("name")}\nEmail: ${fd.get("email")}\nCompany: ${fd.get("company")}\nWebsite: ${fd.get("website")}\nNeed: ${fd.get("need")}`,
+                );
+                window.location.href = `mailto:${CONTACT.email}?subject=${subject}&body=${body}`;
+              }}
+              className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+            >
+              <div>
+                <label className="label-mono mb-1.5 block text-[10px] uppercase tracking-wider text-muted-foreground/60">
+                  {t(UI.contactFormName)}
+                </label>
+                <input
+                  name="name"
+                  required
+                  className="w-full rounded-xl border border-border bg-card/60 px-4 py-3 text-sm text-foreground outline-none transition-all duration-200 focus:border-primary/60 focus:ring-2 focus:ring-primary/10"
+                  placeholder="John Doe"
+                />
+              </div>
+              <div>
+                <label className="label-mono mb-1.5 block text-[10px] uppercase tracking-wider text-muted-foreground/60">
+                  {t(UI.contactFormEmail)}
+                </label>
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  className="w-full rounded-xl border border-border bg-card/60 px-4 py-3 text-sm text-foreground outline-none transition-all duration-200 focus:border-primary/60 focus:ring-2 focus:ring-primary/10"
+                  placeholder="john@company.com"
+                />
+              </div>
+              <div>
+                <label className="label-mono mb-1.5 block text-[10px] uppercase tracking-wider text-muted-foreground/60">
+                  {t(UI.contactFormCompany)}
+                </label>
+                <input
+                  name="company"
+                  className="w-full rounded-xl border border-border bg-card/60 px-4 py-3 text-sm text-foreground outline-none transition-all duration-200 focus:border-primary/60 focus:ring-2 focus:ring-primary/10"
+                  placeholder="Company Inc."
+                />
+              </div>
+              <div>
+                <label className="label-mono mb-1.5 block text-[10px] uppercase tracking-wider text-muted-foreground/60">
+                  {t(UI.contactFormWebsite)}
+                </label>
+                <input
+                  name="website"
+                  className="w-full rounded-xl border border-border bg-card/60 px-4 py-3 text-sm text-foreground outline-none transition-all duration-200 focus:border-primary/60 focus:ring-2 focus:ring-primary/10"
+                  placeholder="https://..."
+                />
+              </div>
+              <div className="sm:col-span-2">
+                <label className="label-mono mb-1.5 block text-[10px] uppercase tracking-wider text-muted-foreground/60">
+                  {t(UI.contactFormNeed)}
+                </label>
+                <select
+                  name="need"
+                  value={need}
+                  onChange={(e) => setNeed(e.target.value)}
+                  className="w-full appearance-none rounded-xl border border-border bg-card/60 px-4 py-3 text-sm text-foreground outline-none transition-all duration-200 focus:border-primary/60 focus:ring-2 focus:ring-primary/10"
+                >
+                  <option value="">—</option>
+                  {NEED_OPTIONS.map((key, i) => (
+                    <option key={i} value={t(key)}>
+                      {t(key)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="sm:col-span-2 lg:col-span-3">
+                <label className="label-mono mb-1.5 block text-[10px] uppercase tracking-wider text-muted-foreground/60">
+                  {t(UI.contactFormMessage)}
+                </label>
+                <textarea
+                  name="message"
+                  rows={4}
+                  required
+                  className="w-full resize-none rounded-xl border border-border bg-card/60 px-4 py-3 text-sm text-foreground outline-none transition-all duration-200 focus:border-primary/60 focus:ring-2 focus:ring-primary/10"
+                  placeholder="Décrivez votre projet..."
+                />
+              </div>
+              <div className="sm:col-span-2 lg:col-span-3">
+                <button
+                  type="submit"
+                  className="group inline-flex items-center gap-3 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5"
+                >
+                  <Send className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
+                  {t(UI.contactFormSubmit)}
+                </button>
+              </div>
+            </form>
+          </div>
         </Reveal>
 
         {/* ── Mentions légales ── */}
-        <div className="mt-16 border-t border-border/60 pt-10">
+        <div className="mt-14 border-t border-border/60 pt-8">
           <Reveal>
             <p className="label-mono text-xs text-primary">{t(UI.legalTitle)}</p>
           </Reveal>
-          <div className="mt-6 grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2 lg:grid-cols-3">
-            <Reveal delay={40}>
-              <div>
-                <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                  {t(UI.legalCompany)}
-                </span>
-                <p className="mt-0.5 text-foreground">
-                  KARMA <span className="text-muted-foreground">(XR Agency 2030)</span>
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={60}>
-              <div>
-                <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                  {t(UI.legalForm)}
-                </span>
-                <p className="mt-0.5 text-foreground">
-                  SASU — Société par actions simplifiée unipersonnelle
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={80}>
-              <div>
-                <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                  {t(UI.legalCapital)}
-                </span>
-                <p className="mt-0.5 text-foreground">100,00 €</p>
-              </div>
-            </Reveal>
-            <Reveal delay={100}>
-              <div>
-                <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                  {t(UI.legalSiren)}
-                </span>
-                <p className="mt-0.5 text-foreground">889 178 141</p>
-              </div>
-            </Reveal>
-            <Reveal delay={120}>
-              <div>
-                <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                  {t(UI.legalSiret)}
-                </span>
-                <p className="mt-0.5 text-foreground">889 178 141 00012</p>
-              </div>
-            </Reveal>
-            <Reveal delay={140}>
-              <div>
-                <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                  {t(UI.legalRcs)}
-                </span>
-                <p className="mt-0.5 text-foreground">RCS Paris</p>
-              </div>
-            </Reveal>
-            <Reveal delay={160}>
-              <div>
-                <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                  {t(UI.legalTva)}
-                </span>
-                <p className="mt-0.5 text-foreground">FR00 889 178 141</p>
-              </div>
-            </Reveal>
-            <Reveal delay={180}>
-              <div>
-                <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                  {t(UI.legalDirector)}
-                </span>
-                <p className="mt-0.5 text-foreground">M. Antoine Rebuffé</p>
-              </div>
-            </Reveal>
-            <Reveal delay={200}>
-              <div>
-                <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                  {t(UI.legalAddress)}
-                </span>
-                <p className="mt-0.5 text-foreground">
-                  78 Avenue des Champs-Élysées, Bureau 562 — 75008 Paris
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={220}>
-              <div>
-                <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                  {t(UI.legalHosting)}
-                </span>
-                <p className="mt-0.5 text-muted-foreground">{t(UI.legalHostingProvider)}</p>
-              </div>
-            </Reveal>
+          <div className="mt-5 grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { label: t(UI.legalCompany), value: "KARMA (XR Agency 2030)" },
+              { label: t(UI.legalForm), value: "SASU — Société par actions simplifiée unipersonnelle" },
+              { label: t(UI.legalCapital), value: "100,00 €" },
+              { label: t(UI.legalSiren), value: "889 178 141" },
+              { label: t(UI.legalSiret), value: "889 178 141 00012" },
+              { label: t(UI.legalRcs), value: "RCS Paris" },
+              { label: t(UI.legalTva), value: "FR00 889 178 141" },
+              { label: t(UI.legalDirector), value: "M. Antoine Rebuffé" },
+              { label: t(UI.legalAddress), value: "78 Avenue des Champs-Élysées, Bureau 562 — 75008 Paris" },
+              { label: t(UI.legalHosting), value: t(UI.legalHostingProvider) },
+            ].map(({ label, value }, idx) => (
+              <Reveal key={idx} delay={idx * 25}>
+                <div>
+                  <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
+                    {label}
+                  </span>
+                  <p className="mt-0.5 text-sm text-foreground">{value}</p>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
 
         {/* ── Politique de confidentialité ── */}
-        <div className="mt-10 border-t border-border/40 pt-8">
+        <div className="mt-8 border-t border-border/40 pt-6">
           <Reveal>
             <p className="label-mono text-[10px] uppercase tracking-wider text-primary">
               {t(UI.legalPrivacy)}
             </p>
-            <p className="mt-3 max-w-3xl text-xs leading-relaxed text-muted-foreground/70">
+            <p className="mt-2 max-w-3xl text-xs leading-relaxed text-muted-foreground/70">
               {t(UI.legalPrivacyText)}
             </p>
           </Reveal>
         </div>
 
-        <footer className="mt-12 border-t border-border/40 pt-10">
-          {/* Footer main grid */}
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Brand */}
+        <footer className="mt-10 border-t border-border/40 pt-8">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <div className="lg:col-span-1">
               <Logo />
-              <p className="label-mono mt-4 text-xs text-muted-foreground/70">{t(UI.footerMade)}</p>
+              <p className="label-mono mt-3 text-xs text-muted-foreground/70">{t(UI.footerMade)}</p>
               <p className="label-mono mt-1 text-xs text-muted-foreground/50">
                 {t(UI.legalCopyright)}
               </p>
             </div>
 
-            {/* Contact */}
             <div>
               <p className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">
                 {t(UI.footerContact)}
@@ -307,7 +272,7 @@ export function Contact() {
                   {CONTACT.email}
                 </a>
                 <a
-                  href={CONTACT.whatsapp}
+                  href={WA_DIRECT}
                   target="_blank"
                   rel="noreferrer"
                   className="block text-sm text-foreground transition-colors hover:text-primary"
@@ -318,18 +283,45 @@ export function Contact() {
               </div>
             </div>
 
-            {/* Navigation */}
             <div>
               <p className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">
-                Navigation
+                Navigation & Services
               </p>
-              <div className="mt-3 space-y-2">
-                <a
-                  href="/#services"
+              <div className="mt-3 space-y-1.5">
+                <Link
+                  to="/services"
+                  className="block text-sm font-semibold text-primary transition-colors hover:underline"
+                >
+                  Tous les Services (11) →
+                </Link>
+                <Link
+                  to="/services/$serviceId"
+                  params={{ serviceId: "seo" }}
                   className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
-                  {t(UI.navServices)}
-                </a>
+                  SEO Domination System
+                </Link>
+                <Link
+                  to="/services/$serviceId"
+                  params={{ serviceId: "websites" }}
+                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Création de Sites Web
+                </Link>
+                <Link
+                  to="/services/$serviceId"
+                  params={{ serviceId: "maps" }}
+                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Google Maps TOP 3
+                </Link>
+                <Link
+                  to="/services/$serviceId"
+                  params={{ serviceId: "ai" }}
+                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Assistants IA 24/7
+                </Link>
                 <a
                   href="/#pricing"
                   className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -342,16 +334,9 @@ export function Contact() {
                 >
                   {t(UI.navIntelligence)}
                 </a>
-                <a
-                  href="/#faq"
-                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {t(UI.navFaq)}
-                </a>
               </div>
             </div>
 
-            {/* Légal */}
             <div>
               <p className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">
                 {t(UI.footerLegal)}
@@ -366,8 +351,7 @@ export function Contact() {
             </div>
           </div>
 
-          {/* Footer bottom */}
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="label-mono text-[10px] text-muted-foreground/40">
               {t(UI.ctaReassurance)}
             </p>
@@ -381,14 +365,14 @@ export function Contact() {
                   href={href}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-all hover:-translate-y-0.5 hover:border-primary hover:text-primary"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all hover:-translate-y-0.5 hover:border-primary hover:text-primary"
                 >
                   <Icon className="h-4 w-4" />
                 </a>
               ))}
               <a
                 href="#top"
-                className="flex h-10 items-center gap-2 rounded-full border border-border px-4 text-muted-foreground transition-all hover:-translate-y-0.5 hover:border-primary hover:text-primary"
+                className="flex h-9 items-center gap-2 rounded-full border border-border px-3.5 text-muted-foreground transition-all hover:-translate-y-0.5 hover:border-primary hover:text-primary"
               >
                 <span className="label-mono text-xs">Top</span>
                 <ArrowUpRight className="h-3.5 w-3.5" />

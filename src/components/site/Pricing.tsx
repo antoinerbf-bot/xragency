@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Check, Sparkles, MessageSquare, ArrowRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { MessageSquare, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT, PERIOD_LABEL, SERVICES } from "@/lib/content";
-import { EmberButton, Parallax, Reveal, SectionHeading } from "./primitives";
+import { Reveal, SectionHeading } from "./primitives";
+import { AddToCartBtn } from "./Cart";
 
 const CATEGORIES = [
   {
@@ -52,16 +54,15 @@ export function Pricing() {
     return cat?.ids?.includes(s.id);
   });
 
-  // Ensure active service is in the filtered list
   const currentService =
     filteredServices.find((s) => s.id === activeServiceId) || filteredServices[0] || SERVICES[0];
 
   return (
-    <section id="pricing" className="relative py-16 sm:py-24 lg:py-32">
+    <section id="pricing" className="relative py-12 sm:py-18 lg:py-24">
       {/* Background Ambient Glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-30"
+        className="pointer-events-none absolute inset-0 opacity-25"
         style={{ background: "var(--gradient-halo)" }}
       />
 
@@ -75,7 +76,7 @@ export function Pricing() {
 
         {/* 1. Category Quick Filters */}
         <Reveal delay={60}>
-          <div className="mt-10 flex flex-wrap justify-center gap-2">
+          <div className="mt-8 flex flex-wrap justify-center gap-2">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
@@ -87,7 +88,7 @@ export function Pricing() {
                   if (firstInCat) setActiveServiceId(firstInCat.id);
                 }}
                 className={cn(
-                  "label-mono rounded-full border px-4 py-2 text-xs transition-all duration-300",
+                  "label-mono rounded-full border px-3.5 py-1.5 text-xs transition-all duration-300",
                   activeCategory === cat.id
                     ? "border-primary bg-primary text-primary-foreground font-semibold shadow-md"
                     : "border-border bg-card/60 text-muted-foreground hover:border-primary/50 hover:text-foreground",
@@ -100,21 +101,21 @@ export function Pricing() {
         </Reveal>
 
         {/* 2. Service Selector Pills */}
-        <Reveal delay={120}>
-          <div className="mt-6 -mx-6 px-6 overflow-x-auto sm:mx-0 sm:px-0">
+        <Reveal delay={100}>
+          <div className="mt-4 -mx-6 px-6 overflow-x-auto sm:mx-0 sm:px-0">
             <div className="flex gap-2 w-max sm:flex-wrap sm:w-auto sm:justify-center">
               {filteredServices.map((s) => (
                 <button
                   key={s.id}
                   onClick={() => setActiveServiceId(s.id)}
                   className={cn(
-                    "label-mono rounded-full border px-4 py-2.5 text-xs transition-all duration-300",
+                    "label-mono rounded-full border px-3.5 py-2 text-xs transition-all duration-300",
                     currentService.id === s.id
                       ? "border-primary bg-primary/15 text-primary ring-1 ring-primary font-semibold"
                       : "border-border bg-card/40 text-muted-foreground hover:border-primary/50 hover:text-foreground",
                   )}
                 >
-                  <span className="opacity-60 mr-1.5">{s.num}</span>
+                  <span className="opacity-50 mr-1">{s.num}</span>
                   {t(s.title)}
                 </button>
               ))}
@@ -122,25 +123,25 @@ export function Pricing() {
           </div>
         </Reveal>
 
-        {/* 3. Service Header Details */}
-        <Reveal delay={160}>
-          <div className="mt-10 rounded-2xl border border-border/80 bg-accent/20 p-5 sm:p-6 text-center max-w-3xl mx-auto">
+        {/* 3. Service Header */}
+        <Reveal delay={140}>
+          <div className="mt-8 rounded-2xl border border-border/80 bg-accent/20 px-5 py-4 sm:px-6 text-center max-w-3xl mx-auto">
             <span className="label-mono text-xs uppercase tracking-widest text-primary">
               Formules & Tarifs détaillés · {currentService.num}
             </span>
-            <h3 className="display-serif mt-2 text-2xl sm:text-3xl text-foreground">
+            <h3 className="display-serif mt-1.5 text-xl sm:text-2xl text-foreground">
               {t(currentService.title)}
             </h3>
-            <p className="mt-2 text-xs sm:text-sm text-muted-foreground">
+            <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground">
               {t(currentService.description)}
             </p>
           </div>
         </Reveal>
 
-        {/* 4. The 3 Pricing Cards for the Selected Service */}
+        {/* 4. Pricing Cards */}
         <div
           key={currentService.id}
-          className="mt-10 sm:mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3"
+          className="mt-8 sm:mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3"
         >
           {currentService.plans.map((p, i) => {
             const waMessage = encodeURIComponent(
@@ -148,34 +149,34 @@ export function Pricing() {
             );
 
             return (
-              <Reveal key={`${currentService.id}-${i}`} delay={i * 80}>
+              <Reveal key={`${currentService.id}-${i}`} delay={i * 70}>
                 <article
                   className={cn(
-                    "surface-plate relative flex h-full flex-col justify-between rounded-3xl p-6 sm:p-8 border transition-all duration-300 hover:border-primary/60 hover:shadow-2xl",
+                    "surface-plate relative flex h-full flex-col justify-between rounded-2xl p-5 sm:p-6 border transition-all duration-300 hover:border-primary/60 hover:shadow-xl hover:-translate-y-1",
                     p.popular ? "border-primary bg-primary/5 shadow-lg" : "border-border bg-card",
                   )}
                 >
                   {p.popular ? (
-                    <span className="label-mono absolute -top-3 left-8 rounded-full bg-primary px-3.5 py-1 text-xs text-primary-foreground font-semibold shadow-md">
+                    <span className="label-mono absolute -top-3 left-7 rounded-full bg-primary px-3 py-0.5 text-xs text-primary-foreground font-semibold shadow-md">
                       {t(UI.popular)}
                     </span>
                   ) : null}
 
                   <div>
                     <div className="flex items-start justify-between gap-3">
-                      <h4 className="display-serif text-2xl text-foreground">{t(p.name)}</h4>
+                      <h4 className="display-serif text-xl text-foreground">{t(p.name)}</h4>
                     </div>
 
                     {p.audience ? (
-                      <p className="label-mono mt-2 text-xs text-muted-foreground">
+                      <p className="label-mono mt-1.5 text-xs text-muted-foreground">
                         {t(p.audience)}
                       </p>
                     ) : null}
 
-                    {/* Price display */}
-                    <div className="mt-6 border-y border-border/60 py-4">
+                    {/* Price display — compact */}
+                    <div className="mt-5 border-y border-border/60 py-3.5">
                       <div className="flex items-baseline gap-2">
-                        <span className="display-serif text-4xl font-bold text-primary">
+                        <span className="display-serif text-3xl font-bold text-primary">
                           {price(p.eur)}
                         </span>
                         <span className="label-mono text-xs text-muted-foreground">
@@ -185,10 +186,10 @@ export function Pricing() {
                     </div>
 
                     {/* Feature bullet points */}
-                    <ul className="mt-6 space-y-3">
+                    <ul className="mt-5 space-y-2.5">
                       {p.features.map((f, k) => (
-                        <li key={k} className="flex items-start gap-2.5 text-xs text-foreground/90">
-                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                        <li key={k} className="flex items-start gap-2 text-xs text-foreground/90">
+                          <span className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary">✓</span>
                           <span className="leading-relaxed">{t(f)}</span>
                         </li>
                       ))}
@@ -196,27 +197,28 @@ export function Pricing() {
                   </div>
 
                   {/* Actions */}
-                  <div className="mt-8 space-y-2.5 pt-4 border-t border-border/50">
-                    <a
-                      href="#intelligence"
-                      className={cn(
-                        "label-mono flex w-full items-center justify-center gap-2 rounded-full py-3 text-xs font-semibold uppercase tracking-wider transition-all min-h-[44px]",
-                        p.popular
-                          ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
-                          : "border border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground",
-                      )}
-                    >
-                      <Sparkles className="h-3.5 w-3.5" />
-                      {t(UI.choosePlan)}
-                    </a>
+                  <div className="mt-6 space-y-2 pt-4 border-t border-border/50">
+                    {/* Add to cart */}
+                    <AddToCartBtn
+                      item={{
+                        serviceId: currentService.id,
+                        serviceName: t(currentService.title),
+                        planName: t(p.name),
+                        priceEur: p.eur,
+                        period: p.period as "once" | "month" | "year",
+                        periodLabel: t(PERIOD_LABEL[p.period]),
+                      }}
+                      popular={p.popular}
+                    />
 
+                    {/* Quick WhatsApp fallback */}
                     <a
                       href={`${CONTACT.whatsapp}?text=${waMessage}`}
                       target="_blank"
                       rel="noreferrer"
                       className="label-mono flex w-full items-center justify-center gap-2 rounded-full border border-border bg-card/60 py-2.5 text-[11px] text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground min-h-[38px]"
                     >
-                      <MessageSquare className="h-3.5 w-3.5 text-emerald-400" />
+                      <MessageSquare className="h-3.5 w-3.5 text-emerald-500" />
                       Demande rapide sur WhatsApp
                     </a>
                   </div>
@@ -226,15 +228,17 @@ export function Pricing() {
           })}
         </div>
 
-        {/* Link to dedicated detailed service page */}
-        <Reveal delay={240}>
-          <div className="mt-12 text-center">
-            <a
-              href={`/services/${currentService.id}`}
-              className="label-mono inline-flex items-center gap-2 text-xs text-primary font-semibold transition-transform hover:translate-x-1"
+        {/* Link to dedicated service page */}
+        <Reveal delay={220}>
+          <div className="mt-10 text-center">
+            <Link
+              to="/services/$serviceId"
+              params={{ serviceId: currentService.id }}
+              className="label-mono inline-flex items-center gap-2 text-xs text-primary font-semibold transition-all hover:translate-x-1"
             >
-              Consulter la page complète et détaillée pour « {t(currentService.title)} » →
-            </a>
+              Consulter la page complète pour « {t(currentService.title)} »
+              <ArrowRight className="h-3 w-3" />
+            </Link>
           </div>
         </Reveal>
       </div>

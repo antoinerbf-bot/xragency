@@ -8,15 +8,17 @@ import {
   MessageCircle,
   Zap,
   Plus,
+  Compass,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { SERVICES, PERIOD_LABEL, CONTACT, FAQ } from "@/lib/content";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
-import { EmberButton, Reveal } from "@/components/site/primitives";
+import { EmberButton, Reveal, Parallax } from "@/components/site/primitives";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
+import { AddToCartBtn } from "@/components/site/Cart";
 import { cn } from "@/lib/utils";
 
 const IMG_WEBSITES =
@@ -51,13 +53,53 @@ const SERVICE_IMAGES: Record<string, string> = {
     "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1600&q=85",
 };
 
+/* ── Human-friendly slug aliases mapping ── */
+const SERVICE_ALIASES: Record<string, string> = {
+  "seo-domination": "seo",
+  "seo-domination-system": "seo",
+  "seo": "seo",
+  "referencement-naturel": "seo",
+  "websites": "websites",
+  "site-web": "websites",
+  "creation-site-web": "websites",
+  "creation-de-sites-web": "websites",
+  "branding": "branding",
+  "identite-visuelle": "branding",
+  "maps": "maps",
+  "google-maps": "maps",
+  "google-maps-top-3": "maps",
+  "social": "social",
+  "community-management": "social",
+  "social-media": "social",
+  "maintenance": "maintenance",
+  "webcare": "maintenance",
+  "maintenance-cloud": "maintenance",
+  "ai": "ai",
+  "assistants-ia": "ai",
+  "ia": "ai",
+  "ecommerce": "ecommerce",
+  "e-commerce": "ecommerce",
+  "boutique-en-ligne": "ecommerce",
+  "refonte": "refonte",
+  "refonte-site": "refonte",
+  "refonte-de-site-web": "refonte",
+  "ads": "ads",
+  "google-ads": "ads",
+  "publicite-digitale": "ads",
+  "strategy": "strategy",
+  "strategie-digitale": "strategy",
+  "conseil": "strategy",
+};
+
 export const Route = createFileRoute("/services/$serviceId")({
   loader: ({ params }) => {
-    const service = SERVICES.find((s) => s.id === params.serviceId);
+    const raw = params.serviceId.toLowerCase();
+    const resolvedId = SERVICE_ALIASES[raw] ?? raw;
+    const service = SERVICES.find((s) => s.id === resolvedId);
     if (!service) {
       throw notFound();
     }
-    return { service };
+    return { service, canonicalId: resolvedId };
   },
   head: ({ loaderData }) => {
     const s = loaderData?.service;
@@ -93,6 +135,10 @@ function ServiceDetailPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [showSticky, setShowSticky] = useState(false);
 
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [service.id]);
+
   useEffect(() => {
     const onScroll = () => setShowSticky(window.scrollY > 500);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -127,16 +173,18 @@ function ServiceDetailPage() {
         <div className="mx-auto max-w-7xl px-6 pt-4 lg:px-10">
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/60 pb-4">
             <Link
-              to="/"
+              to="/services"
               className="label-mono inline-flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
             >
               <ArrowLeft className="h-4 w-4" />
-              {t(UI.backToServices)}
+              {t({ fr: "Catalogue des Prestations", en: "Services Catalogue", vi: "Danh mục Dịch vụ" })}
             </Link>
             <div className="label-mono flex items-center gap-2 text-xs text-muted-foreground">
-              <span>{service.num}</span>
+              <Link to="/" className="hover:text-primary transition-colors">Accueil</Link>
               <span>/</span>
-              <span className="text-foreground">{t(service.title)}</span>
+              <Link to="/services" className="hover:text-primary transition-colors">Services</Link>
+              <span>/</span>
+              <span className="text-foreground font-semibold">{t(service.title)}</span>
             </div>
           </div>
         </div>
@@ -420,28 +468,35 @@ function ServiceDetailPage() {
                       </div>
 
                       <div className="mt-10 space-y-3">
+                        <AddToCartBtn
+                          item={{
+                            serviceId: service.id,
+                            serviceName: t(service.title),
+                            planName: t(p.name),
+                            priceEur: p.eur,
+                            period: p.period,
+                            periodLabel: t(PERIOD_LABEL[p.period]),
+                          }}
+                          popular={p.popular}
+                        />
+
                         <a
                           href={planWaUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className={cn(
-                            "flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-xs font-medium uppercase tracking-wider transition-all duration-300",
-                            p.popular
-                              ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                              : "border border-border bg-card hover:border-primary hover:text-primary",
-                          )}
+                          className="flex w-full items-center justify-center gap-2 rounded-full border border-border/80 bg-card/60 py-3 text-xs text-muted-foreground transition-all duration-300 hover:border-emerald-500/60 hover:text-emerald-500 hover:bg-emerald-500/5"
                         >
-                          <MessageCircle className="h-4 w-4" />
+                          <MessageCircle className="h-3.5 w-3.5 text-emerald-500" />
                           {t({
-                            fr: "Commander cette formule",
-                            en: "Order this plan",
-                            vi: "Đặt gói này",
+                            fr: "Commander sur WhatsApp",
+                            en: "Order on WhatsApp",
+                            vi: "Đặt qua WhatsApp",
                           })}
                         </a>
                         <Link
                           to="/"
                           hash="intelligence"
-                          className="block text-center text-xs text-muted-foreground hover:text-primary"
+                          className="block text-center text-xs text-muted-foreground hover:text-primary pt-1"
                         >
                           {t({
                             fr: "Ou calculer dans l'estimateur IA →",

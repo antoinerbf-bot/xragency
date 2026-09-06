@@ -328,7 +328,7 @@ export function Intelligence() {
           en: budgetId === "scale" ? "E-commerce / Custom Plan" : "Business Prestige Plan",
           vi: budgetId === "scale" ? "Gói E-commerce / Cao cấp" : "Gói Doanh nghiệp Prestige",
         },
-        eur: budgetId === "scale" ? 1099 : 799,
+        eur: budgetId === "scale" ? 1499 : 799,
         period: "once",
         why: {
           fr: "Votre site constitue le socle de conversion incontournable pour valoriser votre autorité et convertir vos visiteurs en clients payants.",

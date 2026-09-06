@@ -201,9 +201,9 @@ export const UI: Record<string, L> = {
     vi: "Hệ thống đặt chỗ trực tuyến — theo báo giá",
   },
   intelOptionEcom: {
-    fr: "E-commerce à partir de 1 099 € — ajusté selon le nombre de produits",
-    en: "E-commerce from $1,187 — adjusted to the number of products",
-    vi: "Thương mại điện tử từ 1.099 € — điều chỉnh theo số lượng sản phẩm",
+    fr: "E-commerce à partir de 1 499 € — ajusté selon le nombre de produits",
+    en: "E-commerce from $1,619 — adjusted to the number of products",
+    vi: "Thương mại điện tử từ 1.499 € — điều chỉnh theo số lượng sản phẩm",
   },
   intelTimeline: { fr: "Mise en ligne estimée", en: "Estimated go-live", vi: "Dự kiến ra mắt" },
   intelTimelineValue: { fr: "7 à 21 jours", en: "7 to 21 days", vi: "7 đến 21 ngày" },
