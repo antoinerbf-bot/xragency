@@ -315,13 +315,7 @@ export function Contact() {
                 >
                   Google Maps TOP 3
                 </Link>
-                <Link
-                  to="/services/$serviceId"
-                  params={{ serviceId: "ai" }}
-                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  Assistants IA 24/7
-                </Link>
+
                 <a
                   href="/#pricing"
                   className="block text-sm text-muted-foreground transition-colors hover:text-foreground"

@@ -11,7 +11,7 @@ import { AddToCartBtn } from "./Cart";
 const CATEGORIES = [
   {
     id: "all",
-    label: { fr: "Tous les services (11)", en: "All Services (11)", vi: "Tất cả dịch vụ (11)" },
+    label: { fr: "Tous les services (10)", en: "All Services (10)", vi: "Tất cả dịch vụ (10)" },
   },
   {
     id: "web",
@@ -24,13 +24,13 @@ const CATEGORIES = [
     ids: ["maps", "seo", "ads"],
   },
   {
-    id: "ai",
+    id: "strategy",
     label: {
-      fr: "Intelligence Artificielle",
-      en: "Artificial Intelligence",
-      vi: "Trí tuệ Nhân tạo",
+      fr: "Stratégie Digitale",
+      en: "Digital Strategy",
+      vi: "Chiến lược Số",
     },
-    ids: ["ai", "strategy"],
+    ids: ["strategy"],
   },
   {
     id: "brand",
@@ -47,6 +47,7 @@ export function Pricing() {
   const { t, price } = useLang();
   const [activeCategory, setActiveCategory] = useState("all");
   const [activeServiceId, setActiveServiceId] = useState(SERVICES[0].id);
+  const [installmentSelections, setInstallmentSelections] = useState<Record<number, boolean>>({});
 
   const filteredServices = SERVICES.filter((s) => {
     if (activeCategory === "all") return true;
@@ -138,14 +139,21 @@ export function Pricing() {
           </div>
         </Reveal>
 
+
+
         {/* 4. Pricing Cards */}
         <div
           key={currentService.id}
           className="mt-8 sm:mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3"
         >
           {currentService.plans.map((p, i) => {
+            const isInst = installmentSelections[i] ?? false;
+            const planIsInstallment = currentService.id === "websites" && isInst && p.period === "once";
+            const displayPrice = planIsInstallment ? Math.round((p.eur * 1.4) / 12) : p.eur;
+            const displayPeriod = planIsInstallment ? "month" : p.period;
+
             const waMessage = encodeURIComponent(
-              `Bonjour XR Agency, je suis intéressé par votre prestation "${t(currentService.title)}" — Formule "${t(p.name)}" (${price(p.eur)}${t(PERIOD_LABEL[p.period])}). Pouvons-nous échanger à ce sujet ?`,
+              `Bonjour XR Agency, je suis intéressé par votre prestation "${t(currentService.title)}" — Formule "${t(p.name)}" (${price(displayPrice)}${planIsInstallment ? " / mois sur 12 mois" : ""}). Pouvons-nous échanger à ce sujet ?`,
             );
 
             return (
@@ -173,14 +181,48 @@ export function Pricing() {
                       </p>
                     ) : null}
 
+                    {/* Inline Payment Selector for Websites */}
+                    {currentService.id === "websites" && p.period === "once" && (
+                      <div className="mt-4 flex rounded-lg bg-accent/30 p-1 border border-border/50">
+                        <button
+                          onClick={() => setInstallmentSelections(prev => ({ ...prev, [i]: true }))}
+                          className={cn(
+                            "flex-1 rounded-md text-[10px] sm:text-xs font-medium transition-all py-1.5",
+                            isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                          )}
+                        >
+                          Mensualités
+                        </button>
+                        <button
+                          onClick={() => setInstallmentSelections(prev => ({ ...prev, [i]: false }))}
+                          className={cn(
+                            "flex-1 rounded-md text-[10px] sm:text-xs font-medium transition-all py-1.5",
+                            !isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                          )}
+                        >
+                          Comptant
+                        </button>
+                      </div>
+                    )}
+
                     {/* Price display — compact */}
                     <div className="mt-5 border-y border-border/60 py-3.5">
                       <div className="flex items-baseline gap-2">
                         <span className="display-serif text-3xl font-bold text-primary">
-                          {price(p.eur)}
+                          {price(displayPrice)}
                         </span>
-                        <span className="label-mono text-xs text-muted-foreground">
-                          {t(PERIOD_LABEL[p.period])}
+                        <span className="label-mono flex flex-col items-start gap-1 text-xs text-muted-foreground">
+                          <span>{t(PERIOD_LABEL[displayPeriod])}</span>
+                          {planIsInstallment && (
+                            <span className="text-[9px] sm:text-[10px] text-primary/80 leading-tight max-w-[140px]">
+                              {t({ fr: "sur 12 mois (inclus domaine & hébergement 79€/m)", en: "over 12 mo (incl. domain & hosting 79€/m)", vi: "trong 12 tháng (gồm domain & hébergement 79€/m)" })}
+                            </span>
+                          )}
+                          {displayPeriod === "month" && (
+                            <span className="text-[9px] sm:text-[10px] text-primary/80">
+                              ≈ {price(Math.round((p.eur * 1.4) / 12))} /mois
+                            </span>
+                          )}
                         </span>
                       </div>
                     </div>
@@ -203,10 +245,10 @@ export function Pricing() {
                       item={{
                         serviceId: currentService.id,
                         serviceName: t(currentService.title),
-                        planName: t(p.name),
-                        priceEur: p.eur,
-                        period: p.period as "once" | "month" | "year",
-                        periodLabel: t(PERIOD_LABEL[p.period]),
+                        planName: t(p.name) + (planIsInstallment ? " (12 mois)" : ""),
+                        priceEur: displayPrice,
+                        period: displayPeriod as "once" | "month" | "year",
+                        periodLabel: t(PERIOD_LABEL[displayPeriod]),
                       }}
                       popular={p.popular}
                     />

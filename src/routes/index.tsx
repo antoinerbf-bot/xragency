@@ -4,7 +4,7 @@ import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
-import { About } from "@/components/site/About";
+
 import { Services } from "@/components/site/Services";
 import { Pricing } from "@/components/site/Pricing";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
@@ -63,16 +63,25 @@ function Index() {
         {/* 1. Hero — Hook, 3D Globe, Monograms & Key Authority Stats */}
         <Hero />
 
-        {/* 2. Parallax marquee — continuous expertises ticker */}
+        {/* 1b. Parallax divider before Intelligence */}
+        <ParallaxDivider
+          image="https://images.unsplash.com/photo-1601933471209-9e2e57c6de79?auto=format&fit=crop&q=85&w=2400"
+          caption={t({ fr: "Intelligence XRAGENCY", en: "XRAGENCY Intelligence", vi: "Trí tuệ XRAGENCY" })}
+          height="30vh"
+        />
+
+        {/* 2. Intelligence robot – visible second */}
+        <Intelligence />
+
+        {/* 3. Parallax marquee — continuous expertises ticker */}
         <ParallaxMarquee />
 
-        {/* 3. The Business Model — Internal Payroll vs External Agile Hub & Advantages */}
-        <About />
 
-        {/* 4. Solution Overview — Services with starting prices */}
+
+        {/* 5. Solution Overview — Services with starting prices */}
         <Services />
 
-        {/* 5. Transparent Pricing Grid — 11 Services & 33 Exact Plans */}
+        {/* 6. Transparent Pricing Grid — 11 Services & 33 Exact Plans */}
         <Pricing />
 
         {/* Subtle cinematic divider */}
@@ -82,27 +91,15 @@ function Index() {
           height="22vh"
         />
 
-        {/* 6. Growth Tool — Interactive Google Maps TOP 3 Configurator */}
+        {/* 7. Growth Tool — Interactive Google Maps TOP 3 Configurator */}
         <MapsSimulator />
 
-        {/* Visual break between Maps & AI — distinct sections */}
-        <ParallaxDivider
-          image="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=85&w=2400"
-          caption={t({
-            fr: "Assistants IA · Disponibles 24h/24",
-            en: "AI Assistants · Available 24/7",
-            vi: "Trợ lý AI · Hoạt động 24/7",
-          })}
-          height="20vh"
-        />
 
-        {/* 7. Proof & Prestige — Portfolio Showcase with filters and metrics */}
+
+        {/* 8. Proof & Prestige — Portfolio Showcase with filters and metrics */}
         <Work />
 
-        {/* 8. Conversion Accelerator — Strategic AI Conversational Advisor */}
-        <Intelligence />
-
-        {/* 9. Objection Handling — Categorized FAQ */}
+        {/* 9. Conversion Accelerator — Strategic AI Conversational Advisor */}
         <Faq />
 
         {/* 10. Direct Action — Contact Form & Legal Info */}

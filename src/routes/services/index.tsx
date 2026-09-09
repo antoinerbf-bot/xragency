@@ -28,7 +28,7 @@ const SERVICE_IMAGES: Record<string, string> = {
     "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1400&q=85",
   maintenance:
     "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1400&q=85",
-  ai: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1400&q=85",
+
   ecommerce:
     "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=85",
   refonte:
@@ -39,7 +39,7 @@ const SERVICE_IMAGES: Record<string, string> = {
 };
 
 /* ── Discipline categorization ── */
-type CategoryId = "all" | "web" | "growth" | "brand" | "ai";
+type CategoryId = "all" | "web" | "growth" | "brand" | "strategy";
 
 interface Category {
   id: CategoryId;
@@ -51,9 +51,9 @@ const CATEGORIES: Category[] = [
   {
     id: "all",
     label: {
-      fr: "Toutes les disciplines (11)",
-      en: "All disciplines (11)",
-      vi: "Tất cả lĩnh vực (11)",
+      fr: "Toutes les disciplines (10)",
+      en: "All disciplines (10)",
+      vi: "Tất cả lĩnh vực (10)",
     },
     serviceIds: SERVICES.map((s) => s.id),
   },
@@ -85,13 +85,13 @@ const CATEGORIES: Category[] = [
     serviceIds: ["branding", "social"],
   },
   {
-    id: "ai",
+    id: "strategy",
     label: {
-      fr: "IA, Cloud & Conseil",
-      en: "AI, Cloud & Advisory",
-      vi: "AI, Cloud & Cố vấn",
+      fr: "Cloud & Conseil",
+      en: "Cloud & Advisory",
+      vi: "Cloud & Cố vấn",
     },
-    serviceIds: ["ai", "maintenance", "strategy"],
+    serviceIds: ["maintenance", "strategy"],
   },
 ];
 
@@ -102,13 +102,13 @@ export const Route = createFileRoute("/services/")({
       {
         name: "description",
         content:
-          "Catalogue officiel des 11 disciplines digitales de XR Agency : Sites web sur mesure, SEO domination, Google Maps TOP 3, branding et assistants IA.",
+          "Catalogue officiel des 10 disciplines digitales de XR Agency : Sites web sur mesure, SEO domination, Google Maps TOP 3, et branding.",
       },
       { property: "og:title", content: "Nos Prestations & Formules — XR Agency" },
       {
         property: "og:description",
         content:
-          "Catalogue officiel des 11 disciplines digitales de XR Agency. Studio digital haut de gamme & IA.",
+          "Catalogue officiel des 10 disciplines digitales de XR Agency. Studio digital haut de gamme & IA.",
       },
       { property: "og:type", content: "website" },
     ],
@@ -163,7 +163,7 @@ function ServicesIndexPage() {
             </div>
             <div className="label-mono inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] text-primary">
               <Sparkles className="h-3 w-3" />
-              11 expertises certifiées · FR / EN / VI
+              10 expertises certifiées · FR / EN / VI
             </div>
           </div>
         </div>

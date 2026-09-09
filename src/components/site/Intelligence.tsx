@@ -193,15 +193,6 @@ const OBJECTIVES: Opt[] = [
       vi: "Bứt phá SEO Google & chuyển đổi khách tiềm năng",
     },
   },
-  {
-    id: "ai_auto",
-    icon: Bot,
-    label: {
-      fr: "Automatiser mon service client 24/7 avec un assistant IA",
-      en: "Automate 24/7 customer service with an AI assistant",
-      vi: "Tự động hóa chăm sóc khách hàng 24/7 với trợ lý AI",
-    },
-  },
 ];
 
 const BUDGETS: Opt[] = [
@@ -283,6 +274,7 @@ export function Intelligence() {
   const [isTyping, setIsTyping] = useState(false);
   const [copied, setCopied] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Initialize first AI message
   useEffect(() => {
@@ -305,7 +297,12 @@ export function Intelligence() {
   }, [lang, messages.length]);
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if ((messages.length > 1 || isTyping) && chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   }, [messages, isTyping]);
 
   // Strategic rule engine for recommendations
@@ -384,26 +381,6 @@ export function Intelligence() {
           fr: "Un positionnement organique durable en première page Google sur vos mots-clés les plus rentables sans dépendre du coût publicitaire.",
           en: "Sustainable page 1 Google rankings for high-intent keywords, freeing you from perpetual advertising costs.",
           vi: "Vị trí top đầu Google bền vững cho các từ khóa mang lại doanh thu cao mà không phụ thuộc vào quảng cáo.",
-        },
-      });
-    }
-
-    // 24/7 AI Assistant
-    if (objectiveId === "ai_auto" || budgetId === "scale" || situationId === "scale") {
-      recs.push({
-        id: "ai",
-        title: { fr: "Assistants IA 24/7", en: "24/7 AI Assistants", vi: "Trợ lý AI Tự động 24/7" },
-        plan: {
-          fr: "Pack Assistant IA Chatbot & Qualification",
-          en: "AI Assistant & Lead Qualification Pack",
-          vi: "Gói Trợ lý AI Tư vấn & Thu thập Lead",
-        },
-        eur: 499,
-        period: "month",
-        why: {
-          fr: "Répond instantanément à chaque prospect jour et nuit, qualifie les besoins et pré-remplit les devis sans intervention humaine.",
-          en: "Instantly engages every lead 24/7, qualifies their requirements, and prepares custom quotes without human delay.",
-          vi: "Phản hồi ngay lập tức mọi khách hàng 24/7, phân loại nhu cầu và tạo báo giá tự động.",
         },
       });
     }
@@ -576,7 +553,7 @@ export function Intelligence() {
   };
 
   return (
-    <section id="intelligence" className="grain relative overflow-hidden py-16 sm:py-24 lg:py-32">
+    <section id="intelligence" className="grain relative overflow-hidden py-16 sm:py-24 lg:py-32 scroll-mt-24">
       {/* Background Atmosphere */}
       <div className="absolute inset-0" style={{ background: "var(--gradient-halo)" }} />
 
@@ -640,7 +617,10 @@ export function Intelligence() {
             </div>
 
             {/* Chat Flow Stream */}
-            <div className="max-h-[560px] min-h-[320px] sm:min-h-[380px] overflow-y-auto p-4 sm:p-6 space-y-5 sm:space-y-6">
+            <div 
+              ref={chatContainerRef}
+              className="max-h-[560px] min-h-[320px] sm:min-h-[380px] overflow-y-auto p-4 sm:p-6 space-y-5 sm:space-y-6"
+            >
               {messages.map((msg) => {
                 const isAi = msg.sender === "ai";
                 return (

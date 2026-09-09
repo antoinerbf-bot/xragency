@@ -5,7 +5,7 @@ import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax, FloatingBadge } from "./primitives";
-import { Globe } from "./Globe";
+import { Globe3D } from "./Globe3D";
 import heroLoop from "@/assets/hero-studio.mp4.asset.json";
 
 /* ── Animated counter hook ── */
@@ -166,7 +166,7 @@ export function Hero() {
                 to="/services"
                 className="label-mono inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-6 py-3.5 text-xs text-foreground transition-all duration-300 hover:border-primary hover:text-primary hover:-translate-y-0.5"
               >
-                Explorer nos 11 services
+                Explorer nos 10 services
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
 
@@ -189,15 +189,6 @@ export function Hero() {
           {/* Right Column: Signature 3D Interactive Globe Visual with Floating Depth Chips */}
           <div className="relative flex items-center justify-center lg:col-span-5">
             {/* Ambient Floating Depth Badges */}
-            <FloatingBadge delay={0} className="hidden sm:block absolute -top-4 -right-2 z-20">
-              <div className="surface-plate flex items-center gap-2 rounded-2xl border border-primary/25 bg-card/90 px-3.5 py-2 shadow-2xl backdrop-blur-md">
-                <Sparkles className="h-3.5 w-3.5 text-primary" />
-                <span className="label-mono text-[10px] text-foreground font-semibold">
-                  Google Maps TOP 3
-                </span>
-              </div>
-            </FloatingBadge>
-
             <FloatingBadge delay={400} className="hidden sm:block absolute top-1/2 -left-6 z-20 -translate-y-1/2">
               <div className="surface-plate flex items-center gap-2 rounded-2xl border border-border/80 bg-card/90 px-3.5 py-2 shadow-2xl backdrop-blur-md">
                 <Zap className="h-3.5 w-3.5 text-primary" />
@@ -208,7 +199,7 @@ export function Hero() {
             </FloatingBadge>
 
             <Parallax speed={0.07} className="relative w-full max-w-[480px]">
-              <Globe className="aspect-square w-full" />
+              <Globe3D className="aspect-square w-full" />
               <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full border border-border/60 bg-card/90 px-4 py-1.5 shadow-xl backdrop-blur-md flex items-center gap-2">
                 <GlobeIcon className="h-3 w-3 text-primary" />
                 <span className="label-mono text-[10px] tracking-wider text-muted-foreground">

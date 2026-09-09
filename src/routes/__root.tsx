@@ -14,6 +14,8 @@ import { CartProvider } from "../hooks/useCart";
 import { Cart } from "../components/site/Cart";
 import { WhatsAppWidget } from "../components/site/WhatsAppWidget";
 import { CursorGlow } from "../components/site/CursorGlow";
+import { ThemeSwitcher } from "../components/theme/ThemeSwitcher";
+import { ThemeProvider } from "../components/theme/ThemeProvider";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -179,19 +181,22 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <LanguageProvider>
-        <CartProvider>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
-          />
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <CursorGlow />
-          <Cart />
-          <Outlet />
-          <WhatsAppWidget />
-        </CartProvider>
-      </LanguageProvider>
+      <ThemeProvider>
+        <LanguageProvider>
+          <CartProvider>
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+            />
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <CursorGlow />
+            <Cart />
+            <ThemeSwitcher />
+            <Outlet />
+            <WhatsAppWidget />
+          </CartProvider>
+        </LanguageProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

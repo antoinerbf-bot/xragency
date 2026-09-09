@@ -29,11 +29,15 @@ export const RATES: Record<Lang, number> = {
 
 export function formatPrice(eur: number, lang: Lang): string {
   if (lang === "en") {
-    const usd = Math.round(eur * RATES.en);
+    // English pricing: +20% premium
+    const premiumEur = eur * 1.20;
+    const usd = Math.round(premiumEur * 1.08); // 1.08 is approx EUR to USD exchange rate
     return `$${usd.toLocaleString("en-US")}`;
   }
   if (lang === "vi") {
-    const vnd = Math.round((eur * RATES.vi) / 1000) * 1000;
+    // Vietnam pricing: -20% regional discount
+    const discountedEur = eur * 0.80;
+    const vnd = Math.round((discountedEur * 27500) / 1000) * 1000; // 27500 is approx EUR to VND exchange rate
     return `${vnd.toLocaleString("vi-VN")} ₫`;
   }
   return `${Math.round(eur).toLocaleString("fr-FR")} €`;
@@ -72,7 +76,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     () => ({
       lang,
       setLang,
-      t: (v: L) => v[lang],
+      t: (v: L | undefined) => {
+        if (!v) return "";
+        return v[lang] ?? Object.values(v)[0] ?? "";
+      },
       price: (eur: number) => formatPrice(eur, lang),
     }),
     [lang, setLang],

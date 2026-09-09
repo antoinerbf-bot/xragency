@@ -149,7 +149,7 @@ export function Nav() {
                       <div className="overflow-hidden rounded-2xl border border-border bg-card/98 p-4 shadow-2xl backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-200">
                         <div className="flex items-center justify-between border-b border-border/60 pb-2.5 px-2">
                           <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                            11 Disciplines Maîtresses
+                            10 Disciplines Maîtresses
                           </span>
                           <Link
                             to="/services"
@@ -305,7 +305,7 @@ export function Nav() {
             >
               <span>{t(UI.navServices)} · Catalogue</span>
               <span className="label-mono rounded-full bg-primary/10 px-2 py-0.5 text-[10px] text-primary">
-                11 offres
+                10 offres
               </span>
             </Link>
 
@@ -335,14 +335,7 @@ export function Nav() {
               >
                 → Google Maps TOP 3
               </Link>
-              <Link
-                to="/services/$serviceId"
-                params={{ serviceId: "ai" }}
-                onClick={() => setOpen(false)}
-                className="label-mono rounded-lg px-2.5 py-1.5 text-xs text-muted-foreground hover:text-primary hover:bg-accent/30"
-              >
-                → Assistants IA
-              </Link>
+
             </div>
 
             {NAV_ITEMS.filter((i) => !i.hasDropdown).map((item) => (

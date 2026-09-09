@@ -93,13 +93,18 @@ const SERVICE_ALIASES: Record<string, string> = {
 
 export const Route = createFileRoute("/services/$serviceId")({
   loader: ({ params }) => {
-    const raw = params.serviceId.toLowerCase();
-    const resolvedId = SERVICE_ALIASES[raw] ?? raw;
-    const service = SERVICES.find((s) => s.id === resolvedId);
-    if (!service) {
-      throw notFound();
+    try {
+      const raw = params.serviceId.toLowerCase();
+      const resolvedId = SERVICE_ALIASES[raw] ?? raw;
+      const service = SERVICES.find((s) => s.id === resolvedId);
+      if (!service) {
+        throw notFound();
+      }
+      return { service, canonicalId: resolvedId };
+    } catch (err) {
+      console.error('Service loader error:', err);
+      throw err;
     }
-    return { service, canonicalId: resolvedId };
   },
   head: ({ loaderData }) => {
     const s = loaderData?.service;
@@ -134,6 +139,7 @@ function ServiceDetailPage() {
 
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [showSticky, setShowSticky] = useState(false);
+  const [installmentSelections, setInstallmentSelections] = useState<Record<number, boolean>>({});
 
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
@@ -152,8 +158,12 @@ function ServiceDetailPage() {
   const relevantFaqs = FAQ.slice(0, 4);
 
   // WhatsApp link with customized message for this service
+  const planForWa = service.plans[selectedPlanIndex];
+  const isInstWa = installmentSelections[selectedPlanIndex] ?? false;
+  const planIsInstallmentWa = service.id === "websites" && isInstWa && planForWa?.period === "once";
+  
   const waPrefilled = encodeURIComponent(
-    `Bonjour XR Agency, je suis intéressé par votre service "${service.title[lang]}" (Forfait: "${service.plans[selectedPlanIndex]?.name[lang]}"). Pouvons-nous échanger ?`,
+    `Bonjour XR Agency, je suis intéressé par votre service "${service.title[lang]}" (Forfait: "${planForWa?.name[lang]}"${planIsInstallmentWa ? " en mensualités sur 12 mois" : ""}). Pouvons-nous échanger ?`,
   );
   const waUrl = `${CONTACT.whatsapp}?text=${waPrefilled}`;
 
@@ -411,11 +421,19 @@ function ServiceDetailPage() {
               </Reveal>
             </div>
 
+
+
             <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {service.plans.map((p, i) => {
                 const isSelected = selectedPlanIndex === i;
+                
+                const isInst = installmentSelections[i] ?? false;
+                const planIsInstallment = service.id === "websites" && isInst && p.period === "once";
+                const displayPrice = planIsInstallment ? Math.round((p.eur * 1.4) / 12) : p.eur;
+                const displayPeriod = planIsInstallment ? "month" : p.period;
+
                 const planWaMessage = encodeURIComponent(
-                  `Bonjour XR Agency, je souhaite commander la formule "${p.name[lang]}" du service "${service.title[lang]}" (${price(p.eur)}). Comment démarrer ?`,
+                  `Bonjour XR Agency, je souhaite commander la formule "${p.name[lang]}" du service "${service.title[lang]}" (${price(displayPrice)}${planIsInstallment ? " / mois sur 12 mois" : ""}). Comment démarrer ?`,
                 );
                 const planWaUrl = `${CONTACT.whatsapp}?text=${planWaMessage}`;
 
@@ -445,12 +463,47 @@ function ServiceDetailPage() {
                           </p>
                         ) : null}
 
+                        {/* Inline Payment Selector for Websites */}
+                        {service.id === "websites" && p.period === "once" && (
+                          <div className="mt-4 flex rounded-lg bg-accent/30 p-1 border border-border/50">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setInstallmentSelections(prev => ({ ...prev, [i]: true }));
+                              }}
+                              className={cn(
+                                "flex-1 rounded-md text-[10px] sm:text-[11px] font-medium transition-all py-1.5",
+                                isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                              )}
+                            >
+                              Mensualités
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setInstallmentSelections(prev => ({ ...prev, [i]: false }));
+                              }}
+                              className={cn(
+                                "flex-1 rounded-md text-[10px] sm:text-[11px] font-medium transition-all py-1.5",
+                                !isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                              )}
+                            >
+                              Comptant
+                            </button>
+                          </div>
+                        )}
+
                         <p className="mt-6 flex items-baseline gap-2 border-b border-border/60 pb-6">
                           <span className="display-serif text-4xl text-primary">
-                            {price(p.eur)}
+                            {price(displayPrice)}
                           </span>
-                          <span className="label-mono text-xs text-muted-foreground">
-                            {t(PERIOD_LABEL[p.period])}
+                          <span className="label-mono flex flex-col items-start gap-1 text-xs text-muted-foreground">
+                            <span>{t(PERIOD_LABEL[displayPeriod])}</span>
+                            {planIsInstallment && (
+                              <span className="text-[10px] text-primary/80 leading-tight max-w-[140px]">
+                                {t({ fr: "sur 12 mois (inclus domaine & hébergement 79€/m)", en: "over 12 mo (incl. domain & hosting 79€/m)", vi: "trong 12 tháng (gồm domain & hosting 79€/m)" })}
+                              </span>
+                            )}
                           </span>
                         </p>
 
@@ -472,10 +525,10 @@ function ServiceDetailPage() {
                           item={{
                             serviceId: service.id,
                             serviceName: t(service.title),
-                            planName: t(p.name),
-                            priceEur: p.eur,
-                            period: p.period,
-                            periodLabel: t(PERIOD_LABEL[p.period]),
+                            planName: t(p.name) + (planIsInstallment ? " (12 mois)" : ""),
+                            priceEur: displayPrice,
+                            period: displayPeriod,
+                            periodLabel: t(PERIOD_LABEL[displayPeriod]),
                           }}
                           popular={p.popular}
                         />
@@ -597,6 +650,49 @@ function ServiceDetailPage() {
               </div>
             </Reveal>
 
+            {/* Use the service‑specific FAQs if they exist, otherwise fallback to the global FAQ list */}
+            {service.serviceFaqs?.length ? (
+              <div className="mt-14 border-t border-border">
+                {service.serviceFaqs.map((item, i) => {
+                  const active = openFaq === i;
+                  return (
+                    <Reveal key={i} delay={i * 50}>
+                      <div className="border-b border-border">
+                        <button
+                          onClick={() => setOpenFaq(active ? null : i)}
+                          className="flex w-full items-start justify-between gap-6 py-6 text-left"
+                        >
+                          <div className="flex items-start gap-4">
+                            <span className="label-mono mt-1 text-primary">
+                              {String(i + 1).padStart(2, "0")}
+                            </span>
+                            <span className="display-serif text-lg sm:text-xl font-medium text-foreground">
+                              {t(item.q)}
+                            </span>
+                          </div>
+                          <Plus
+                            className={cn(
+                              "mt-1 h-5 w-5 shrink-0 text-primary transition-transform duration-300",
+                              active && "rotate-45",
+                            )}
+                          />
+                        </button>
+                        <div
+                          className="grid transition-all duration-500 ease-out"
+                          style={{ gridTemplateRows: active ? "1fr" : "0fr" }}
+                        >
+                          <div className="overflow-hidden">
+                            <p className="max-w-3xl pb-7 pl-10 text-sm leading-relaxed text-muted-foreground">
+                              {t(item.a)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </Reveal>
+                  );
+                })}
+              </div>
+            ) : (
             <div className="mt-14 border-t border-border">
               {relevantFaqs.map((item, i) => {
                 const active = openFaq === i;
@@ -637,6 +733,7 @@ function ServiceDetailPage() {
                 );
               })}
             </div>
+            )}
           </div>
         </section>
 
