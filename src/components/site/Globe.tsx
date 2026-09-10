@@ -1,14 +1,13 @@
-// src/components/site/Globe3D.tsx
-// Uses cobe (canvas-based) instead of @react-three/fiber to avoid SSR crashes
+// src/components/site/Globe.tsx
 import { useEffect, useRef } from "react";
 import createGlobe from "cobe";
 import { cn } from "@/lib/utils";
 
-interface Globe3DProps {
+interface GlobeProps {
   className?: string;
 }
 
-export function Globe3D({ className }: Globe3DProps) {
+export function Globe({ className }: GlobeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const phiRef = useRef(0);
   const globeRef = useRef<ReturnType<typeof createGlobe> | null>(null);
@@ -17,11 +16,11 @@ export function Globe3D({ className }: Globe3DProps) {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    let width = canvas.offsetWidth || 600;
+    let width = canvas.offsetWidth;
 
     const onResize = () => {
       if (canvasRef.current) {
-        width = canvasRef.current.offsetWidth || 600;
+        width = canvasRef.current.offsetWidth;
       }
     };
     window.addEventListener("resize", onResize);
@@ -36,19 +35,17 @@ export function Globe3D({ className }: Globe3DProps) {
       diffuse: 1.2,
       mapSamples: 16000,
       mapBrightness: 6,
-      baseColor: [0.15, 0.1, 0.25],
-      markerColor: [0.6, 0.3, 1.0],
-      glowColor: [0.5, 0.25, 0.9],
+      baseColor: [0.3, 0.3, 0.3],
+      markerColor: [0.6, 0.3, 1],
+      glowColor: [0.6, 0.3, 1],
       markers: [
-        { location: [48.8566, 2.3522], size: 0.06 },    // Paris
-        { location: [43.2965, 5.3698], size: 0.04 },    // Marseille
-        { location: [45.764, 4.8357], size: 0.04 },     // Lyon
-        { location: [44.8378, -0.5792], size: 0.04 },   // Bordeaux
-        { location: [25.2048, 55.2708], size: 0.06 },   // Dubai
-        { location: [40.7128, -74.006], size: 0.06 },   // New York
-        { location: [35.6895, 139.6917], size: 0.05 },  // Tokyo
-        { location: [1.3521, 103.8198], size: 0.04 },   // Singapore
-        { location: [51.5074, -0.1278], size: 0.05 },   // London
+        { location: [48.8566, 2.3522], size: 0.05 },   // Paris
+        { location: [43.2965, 5.3698], size: 0.04 },   // Marseille
+        { location: [45.764, 4.8357], size: 0.04 },    // Lyon
+        { location: [25.2048, 55.2708], size: 0.05 },  // Dubai
+        { location: [40.7128, -74.006], size: 0.05 },  // New York
+        { location: [35.6895, 139.6917], size: 0.05 }, // Tokyo
+        { location: [1.3521, 103.8198], size: 0.04 },  // Singapore
       ],
       onRender: (state) => {
         phiRef.current += 0.003;
@@ -66,15 +63,23 @@ export function Globe3D({ className }: Globe3DProps) {
 
   return (
     <div
-      className={cn("relative flex items-center justify-center", className)}
+      className={cn(
+        "relative flex items-center justify-center overflow-hidden",
+        className
+      )}
       style={{ aspectRatio: "1 / 1" }}
     >
       <canvas
         ref={canvasRef}
-        style={{ width: "100%", height: "100%", aspectRatio: "1 / 1" }}
+        style={{
+          width: "100%",
+          height: "100%",
+          maxWidth: "100%",
+          aspectRatio: "1 / 1",
+        }}
       />
     </div>
   );
 }
 
-export default Globe3D;
+export default Globe;

@@ -21,13 +21,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Sites web sur mesure, branding, SEO local, Google Maps TOP 3 et assistants IA. Studio digital premium — FR / EN / VI.",
+          "Sites web sur mesure, branding, SEO local, Google Maps TOP 3. Studio digital premium — FR / EN / VI.",
       },
       { property: "og:title", content: "XR Agency — Studio digital premium & IA" },
       {
         property: "og:description",
         content:
-          "Sites web sur mesure, branding, SEO local, Google Maps TOP 3 et assistants IA. Studio digital premium — FR / EN / VI.",
+          "Sites web sur mesure, branding, SEO local, Google Maps TOP 3. Studio digital premium — FR / EN / VI.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
