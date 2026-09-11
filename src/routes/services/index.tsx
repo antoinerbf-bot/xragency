@@ -10,12 +10,12 @@ export const Route = createFileRoute("/services/")({
       {
         name: "description",
         content:
-          "Catalogue XR Agency : création de sites, e-commerce, SEO, Google Maps, branding, social media, publicité, maintenance et stratégie digitale.",
+          "Catalogue XR Agency : création de sites, e-commerce, SEO, Google Maps, branding, community management et webcare.",
       },
       { property: "og:title", content: "Nos Prestations & Formules — XR Agency" },
       {
         property: "og:description",
-        content: "Studio digital premium : design, acquisition, visibilité locale, contenu et stratégie.",
+        content: "Studio digital premium : création, visibilité, image, contenu et accompagnement digital.",
       },
       { property: "og:type", content: "website" },
     ],
