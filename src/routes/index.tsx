@@ -28,8 +28,11 @@ function Index() {
       <Nav />
       <main className="relative z-10">
         <Hero />
-        <HomeServices />
+
+        {/* The homepage is deliberately sequenced as a client journey:
+            discover XR Agency → understand the opportunity → explore the 7 disciplines → proof → decision. */}
         <Intelligence />
+        <HomeServices />
         <Work />
         <Faq />
         <Contact />
