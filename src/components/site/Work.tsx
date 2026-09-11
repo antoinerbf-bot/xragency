@@ -36,6 +36,16 @@ export function Work() {
           <p className="max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base lg:pb-2">Entrez votre secteur. Nous vous montrons immédiatement des références digitales dans le même univers — leur vraie homepage, en grand, à explorer.</p>
         </header>
 
+        <div className="mt-8 border border-border/60 bg-card/30 px-5 py-5 sm:px-7 sm:py-6">
+          <div className="flex items-start gap-4">
+            <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-primary/30 text-[10px] text-primary">i</span>
+            <div>
+              <p className="label-mono text-[9px] uppercase tracking-[0.2em] text-primary">Nature des références</p>
+              <p className="mt-2 max-w-4xl text-xs leading-relaxed text-muted-foreground sm:text-sm">Cette sélection présente des références issues de partenariats, de collaborations design et de projets réalisés de près ou de loin avec différents intervenants. Certaines contributions concernent le design, l'UX/UI, la direction créative, le développement ou des applications et outils internes. Une référence présentée ici ne signifie donc pas nécessairement que XRAGENCY a conçu et développé l'intégralité du site internet.</p>
+            </div>
+          </div>
+        </div>
+
         <div className="mt-10 border-y border-border/60 py-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <label className="relative block w-full max-w-xl">
@@ -78,7 +88,7 @@ export function Work() {
           </div>
         </div> : <div className="mt-7 border-y border-border/50 py-20 text-center"><p className="display-serif text-3xl">Aucune référence trouvée.</p><button type="button" onClick={clearFilters} className="mt-4 label-mono text-[10px] uppercase tracking-[0.15em] text-primary">Voir tous les secteurs</button></div>}
 
-        <div className="mt-2 flex items-center justify-between border-t border-border/50 pt-5"><p className="max-w-2xl text-[10px] leading-relaxed text-muted-foreground/45">Références externes utilisées pour montrer des directions créatives et UX. Elles ne sont pas présentées comme des réalisations XRAGENCY. Les liens ouvrent les sites officiels.</p><span className="hidden label-mono text-[9px] uppercase tracking-[0.15em] text-muted-foreground/35 sm:block">Scroll to explore</span></div>
+        <div className="mt-2 flex items-center justify-between border-t border-border/50 pt-5"><p className="max-w-3xl text-[10px] leading-relaxed text-muted-foreground/45">Références externes utilisées pour montrer des directions créatives, des collaborations et des savoir-faire digitaux. Elles ne sont pas présentées comme des réalisations intégrales XRAGENCY. Selon les projets, l'intervention peut avoir porté sur le design, l'UX/UI, la direction créative, le développement ou des applications et outils internes. Les liens ouvrent les sites officiels.</p><span className="hidden label-mono text-[9px] uppercase tracking-[0.15em] text-muted-foreground/35 sm:block">Scroll to explore</span></div>
       </div>
     </section>
   );
