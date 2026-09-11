@@ -7,6 +7,7 @@ import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
 import { Reveal } from "@/components/site/primitives";
 import { LocalVisibilityExperience } from "@/components/site/LocalVisibilityExperience";
+import { SocialContentExperience } from "@/components/site/SocialContentExperience";
 
 const SERVICE_IMAGES: Record<string, string> = {
   websites: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1800&q=85",
@@ -89,8 +90,9 @@ function ServiceDetailPage() {
         </section>
 
         {service.id === "maps" && <LocalVisibilityExperience />}
+        {service.id === "social" && <SocialContentExperience />}
 
-        {service.highlights.length > 0 && service.id !== "maps" && <section className="border-y border-border/60 bg-card/25 py-10"><div className="mx-auto grid max-w-7xl gap-4 px-6 sm:grid-cols-2 lg:grid-cols-4 lg:px-10">{service.highlights.slice(0, 4).map((item, index) => <div key={index} className="rounded-2xl border border-border/70 bg-background/50 p-5"><span className="label-mono text-[10px] text-primary">0{index + 1}</span><p className="mt-3 text-sm font-medium leading-relaxed">{t(item)}</p></div>)}</div></section>}
+        {service.highlights.length > 0 && service.id !== "maps" && service.id !== "social" && <section className="border-y border-border/60 bg-card/25 py-10"><div className="mx-auto grid max-w-7xl gap-4 px-6 sm:grid-cols-2 lg:grid-cols-4 lg:px-10">{service.highlights.slice(0, 4).map((item, index) => <div key={index} className="rounded-2xl border border-border/70 bg-background/50 p-5"><span className="label-mono text-[10px] text-primary">0{index + 1}</span><p className="mt-3 text-sm font-medium leading-relaxed">{t(item)}</p></div>)}</div></section>}
 
         <section id="plans" className="py-20 lg:py-28">
           <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -100,7 +102,7 @@ function ServiceDetailPage() {
           </div>
         </section>
 
-        {service.steps && service.steps.length > 0 && <section className="border-y border-border/60 bg-card/25 py-20 lg:py-28"><div className="mx-auto max-w-7xl px-6 lg:px-10"><p className="label-mono text-xs uppercase tracking-widest text-primary">{t({ fr: "Process", en: "Process", vi: "Quy trình" })}</p><div className="mt-10 divide-y divide-border/60 border-y border-border/60">{service.steps.map((step) => <div key={step.num} className="grid gap-4 py-7 md:grid-cols-[100px_260px_1fr] md:items-start"><span className="label-mono text-xs text-primary">{step.num}</span><h3 className="display-serif text-2xl">{t(step.title)}</h3><p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">{t(step.desc)}</p></div>)}</div></div></section>}
+        {service.steps && service.steps.length > 0 && service.id !== "maps" && service.id !== "social" && <section className="border-y border-border/60 bg-card/25 py-20 lg:py-28"><div className="mx-auto max-w-7xl px-6 lg:px-10"><p className="label-mono text-xs uppercase tracking-widest text-primary">{t({ fr: "Process", en: "Process", vi: "Quy trình" })}</p><div className="mt-10 divide-y divide-border/60 border-y border-border/60">{service.steps.map((step) => <div key={step.num} className="grid gap-4 py-7 md:grid-cols-[100px_260px_1fr] md:items-start"><span className="label-mono text-xs text-primary">{step.num}</span><h3 className="display-serif text-2xl">{t(step.title)}</h3><p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">{t(step.desc)}</p></div>)}</div></div></section>}
 
         {service.serviceFaqs && service.serviceFaqs.length > 0 && <section className="py-20 lg:py-28"><div className="mx-auto max-w-5xl px-6 lg:px-10"><p className="label-mono text-xs uppercase tracking-widest text-primary">FAQ</p><div className="mt-8 divide-y divide-border/60 border-y border-border/60">{service.serviceFaqs.map((faq, index) => { const open = openFaq === index; return <button key={index} type="button" onClick={() => setOpenFaq(open ? null : index)} className="block w-full py-6 text-left"><div className="flex items-center justify-between gap-6"><h3 className="text-base font-medium sm:text-lg">{t(faq.q)}</h3><span className="label-mono text-xs text-primary">{open ? "−" : "+"}</span></div>{open && <p className="mt-4 max-w-3xl pr-8 text-sm leading-relaxed text-muted-foreground">{t(faq.a)}</p>}</button>; })}</div></div></section>}
 
