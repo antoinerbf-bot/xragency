@@ -6,95 +6,141 @@ export type PortfolioReference = {
   image: string;
 };
 
-const images: Record<string, string> = {
-  luxe: "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&q=85&w=1200",
-  hotel: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=85&w=1200",
-  restaurant: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=85&w=1200",
-  immobilier: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=85&w=1200",
-  auto: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=85&w=1200",
-  architecture: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=85&w=1200",
-  mode: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&q=85&w=1200",
-  beaute: "https://images.unsplash.com/photo-1596462502278-27bfdc403398?auto=format&fit=crop&q=85&w=1200",
-  sante: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=85&w=1200",
-  droit: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=85&w=1200",
-  finance: "https://images.unsplash.com/photo-1559526324-593bc073d938?auto=format&fit=crop&q=85&w=1200",
-  tech: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=85&w=1200",
-  education: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=85&w=1200",
-  sport: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=85&w=1200",
-  voyage: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&q=85&w=1200",
-  maison: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=85&w=1200",
-  joaillerie: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=85&w=1200",
-  food: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=85&w=1200",
-  spa: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=85&w=1200",
-  construction: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=85&w=1200",
-};
+/**
+ * Homepage previews are generated from the live public websites so the portfolio
+ * shows the actual interface rather than generic stock photography.
+ */
+const preview = (url: string) => `https://image.thum.io/get/width/1800/crop/1050/noanimate/${url}`;
+
+const ref = (name: string, url: string, sector: string, type: PortfolioReference["type"]): PortfolioReference => ({
+  name,
+  url,
+  sector,
+  type,
+  image: preview(url),
+});
 
 export const PORTFOLIO_REFERENCES: PortfolioReference[] = [
-  { name: "Hermès", url: "https://www.hermes.com/", sector: "luxe", type: "E-commerce", image: images.luxe },
-  { name: "CHANEL", url: "https://www.chanel.com/", sector: "luxe", type: "E-commerce", image: images.luxe },
-  { name: "Dior", url: "https://www.dior.com/", sector: "luxe", type: "E-commerce", image: images.luxe },
-  { name: "Aman", url: "https://www.aman.com/", sector: "hotel", type: "Vitrine", image: images.hotel },
-  { name: "Rosewood Hotels", url: "https://www.rosewoodhotels.com/", sector: "hotel", type: "Vitrine", image: images.hotel },
-  { name: "Four Seasons", url: "https://www.fourseasons.com/", sector: "hotel", type: "Vitrine", image: images.hotel },
-  { name: "Noma", url: "https://noma.dk/", sector: "restaurant", type: "Vitrine", image: images.restaurant },
-  { name: "Eleven Madison Park", url: "https://www.elevenmadisonpark.com/", sector: "restaurant", type: "Vitrine", image: images.restaurant },
-  { name: "Le Bernardin", url: "https://www.le-bernardin.com/", sector: "restaurant", type: "Vitrine", image: images.restaurant },
-  { name: "Sotheby's International Realty", url: "https://www.sothebysrealty.com/", sector: "immobilier", type: "Portail", image: images.immobilier },
-  { name: "Knight Frank", url: "https://www.knightfrank.com/", sector: "immobilier", type: "Portail", image: images.immobilier },
-  { name: "Savills", url: "https://www.savills.com/", sector: "immobilier", type: "Portail", image: images.immobilier },
-  { name: "Porsche", url: "https://www.porsche.com/", sector: "auto", type: "Vitrine", image: images.auto },
-  { name: "Ferrari", url: "https://www.ferrari.com/", sector: "auto", type: "Vitrine", image: images.auto },
-  { name: "Lamborghini", url: "https://www.lamborghini.com/", sector: "auto", type: "Vitrine", image: images.auto },
-  { name: "Foster + Partners", url: "https://www.fosterandpartners.com/", sector: "architecture", type: "Vitrine", image: images.architecture },
-  { name: "Bjarke Ingels Group", url: "https://big.dk/", sector: "architecture", type: "Vitrine", image: images.architecture },
-  { name: "Snøhetta", url: "https://snohetta.com/", sector: "architecture", type: "Vitrine", image: images.architecture },
-  { name: "NET-A-PORTER", url: "https://www.net-a-porter.com/", sector: "mode", type: "E-commerce", image: images.mode },
-  { name: "SSENSE", url: "https://www.ssense.com/", sector: "mode", type: "E-commerce", image: images.mode },
-  { name: "FARFETCH", url: "https://www.farfetch.com/", sector: "mode", type: "E-commerce", image: images.mode },
-  { name: "Aesop", url: "https://www.aesop.com/", sector: "beaute", type: "E-commerce", image: images.beaute },
-  { name: "Glossier", url: "https://www.glossier.com/", sector: "beaute", type: "E-commerce", image: images.beaute },
-  { name: "Sephora", url: "https://www.sephora.com/", sector: "beaute", type: "E-commerce", image: images.beaute },
-  { name: "Mayo Clinic", url: "https://www.mayoclinic.org/", sector: "sante", type: "Portail", image: images.sante },
-  { name: "Cleveland Clinic", url: "https://my.clevelandclinic.org/", sector: "sante", type: "Portail", image: images.sante },
-  { name: "One Medical", url: "https://www.onemedical.com/", sector: "sante", type: "Vitrine", image: images.sante },
-  { name: "Latham & Watkins", url: "https://www.lw.com/", sector: "droit", type: "Vitrine", image: images.droit },
-  { name: "Freshfields", url: "https://www.freshfields.com/", sector: "droit", type: "Vitrine", image: images.droit },
-  { name: "Clifford Chance", url: "https://www.cliffordchance.com/", sector: "droit", type: "Vitrine", image: images.droit },
-  { name: "Stripe", url: "https://stripe.com/", sector: "finance", type: "SaaS", image: images.finance },
-  { name: "Revolut", url: "https://www.revolut.com/", sector: "finance", type: "Vitrine", image: images.finance },
-  { name: "Wise", url: "https://wise.com/", sector: "finance", type: "Vitrine", image: images.finance },
-  { name: "Linear", url: "https://linear.app/", sector: "tech", type: "SaaS", image: images.tech },
-  { name: "Notion", url: "https://www.notion.so/", sector: "tech", type: "SaaS", image: images.tech },
-  { name: "Vercel", url: "https://vercel.com/", sector: "tech", type: "SaaS", image: images.tech },
-  { name: "Coursera", url: "https://www.coursera.org/", sector: "education", type: "SaaS", image: images.education },
-  { name: "MasterClass", url: "https://www.masterclass.com/", sector: "education", type: "SaaS", image: images.education },
-  { name: "Duolingo", url: "https://www.duolingo.com/", sector: "education", type: "SaaS", image: images.education },
-  { name: "Nike", url: "https://www.nike.com/", sector: "sport", type: "E-commerce", image: images.sport },
-  { name: "adidas", url: "https://www.adidas.com/", sector: "sport", type: "E-commerce", image: images.sport },
-  { name: "PUMA", url: "https://www.puma.com/", sector: "sport", type: "E-commerce", image: images.sport },
-  { name: "Airbnb", url: "https://www.airbnb.com/", sector: "voyage", type: "Portail", image: images.voyage },
-  { name: "Booking.com", url: "https://www.booking.com/", sector: "voyage", type: "Portail", image: images.voyage },
-  { name: "Expedia", url: "https://www.expedia.com/", sector: "voyage", type: "Portail", image: images.voyage },
-  { name: "Vitra", url: "https://www.vitra.com/", sector: "maison", type: "E-commerce", image: images.maison },
-  { name: "Herman Miller", url: "https://www.hermanmiller.com/", sector: "maison", type: "E-commerce", image: images.maison },
-  { name: "IKEA", url: "https://www.ikea.com/", sector: "maison", type: "E-commerce", image: images.maison },
-  { name: "Cartier", url: "https://www.cartier.com/", sector: "joaillerie", type: "E-commerce", image: images.joaillerie },
-  { name: "Tiffany & Co.", url: "https://www.tiffany.com/", sector: "joaillerie", type: "E-commerce", image: images.joaillerie },
-  { name: "Van Cleef & Arpels", url: "https://www.vancleefarpels.com/", sector: "joaillerie", type: "E-commerce", image: images.joaillerie },
-  { name: "Eataly", url: "https://www.eataly.com/", sector: "food", type: "E-commerce", image: images.food },
-  { name: "Whole Foods Market", url: "https://www.wholefoodsmarket.com/", sector: "food", type: "E-commerce", image: images.food },
-  { name: "HelloFresh", url: "https://www.hellofresh.com/", sector: "food", type: "E-commerce", image: images.food },
-  { name: "Six Senses", url: "https://www.sixsenses.com/", sector: "spa", type: "Vitrine", image: images.spa },
-  { name: "Mandarin Oriental", url: "https://www.mandarinoriental.com/", sector: "spa", type: "Vitrine", image: images.spa },
-  { name: "Soho House", url: "https://www.sohohouse.com/", sector: "spa", type: "Vitrine", image: images.spa },
-  { name: "Bechtel", url: "https://www.bechtel.com/", sector: "construction", type: "Vitrine", image: images.construction },
-  { name: "VINCI", url: "https://www.vinci.com/", sector: "construction", type: "Vitrine", image: images.construction },
-  { name: "Bouygues Construction", url: "https://www.bouygues-construction.com/", sector: "construction", type: "Vitrine", image: images.construction },
+  // Luxe — independent / mid-size references rather than global mega-brands
+  ref("Le Gramme", "https://www.legramme.com/", "luxe", "E-commerce"),
+  ref("Maison Matisse", "https://www.maison-matisse.com/", "luxe", "E-commerce"),
+  ref("Fornasetti", "https://www.fornasetti.com/", "luxe", "E-commerce"),
+
+  // Hôtellerie
+  ref("d’Angleterre", "https://www.dangleterre.com/", "hotel", "Vitrine"),
+  ref("Saxon Hotel", "https://www.saxon.co.za/", "hotel", "Vitrine"),
+  ref("Passalacqua", "https://www.passalacqua.it/", "hotel", "Vitrine"),
+
+  // Restauration
+  ref("Curious Cork", "https://www.curiouscork.wine/", "restaurant", "Vitrine"),
+  ref("Baker’s Crust", "https://www.bakerscrust.com/", "restaurant", "E-commerce"),
+  ref("Seagar’s", "https://www.seagars.com/", "restaurant", "Vitrine"),
+
+  // Immobilier
+  ref("11 Tanjung", "https://11tanjung.com/", "immobilier", "Vitrine"),
+  ref("Navana Real Estate", "https://navana.com/", "immobilier", "Vitrine"),
+  ref("The Hideout", "https://thehideout.com/", "immobilier", "Vitrine"),
+
+  // Automobile / mobilité
+  ref("Lacks Enterprises", "https://lacksenterprises.com/", "auto", "Vitrine"),
+  ref("Kelford Cams", "https://kelfordcams.com/", "auto", "E-commerce"),
+  ref("Springrates", "https://www.springrates.com/", "auto", "E-commerce"),
+
+  // Architecture
+  ref("FGM Architects", "https://www.fgmarchitects.com/", "architecture", "Vitrine"),
+  ref("Sera Architects", "https://seraarchitects.com/", "architecture", "Vitrine"),
+  ref("Feldman Architecture", "https://www.feldmanarchitecture.com/", "architecture", "Vitrine"),
+
+  // Mode
+  ref("L.F.Markey", "https://lfmarkey.com/", "mode", "E-commerce"),
+  ref("Palmer Harding", "https://www.palmerharding.com/", "mode", "E-commerce"),
+  ref("Odeur", "https://odeurstudios.com/", "mode", "E-commerce"),
+
+  // Beauté
+  ref("Anillo", "https://anillo.com/", "beaute", "E-commerce"),
+  ref("Typology", "https://www.typology.com/", "beaute", "E-commerce"),
+  ref("Nécessaire", "https://necessaire.com/", "beaute", "E-commerce"),
+
+  // Santé
+  ref("Embrace Your Smile", "https://embraceyoursmile.com/", "sante", "Vitrine"),
+  ref("Cuyuna Regional Medical Center", "https://www.cuyunamed.org/", "sante", "Portail"),
+  ref("NasaClip", "https://nasaclip.com/", "sante", "Vitrine"),
+
+  // Droit
+  ref("Law Offices of Dianne Sawaya", "https://www.dlslaw.com/", "droit", "Vitrine"),
+  ref("The Stritmatter Firm", "https://www.stritmatter.com/", "droit", "Vitrine"),
+  ref("Simeone & Miller", "https://www.simeonemiller.com/", "droit", "Vitrine"),
+
+  // Finance
+  ref("Monzo", "https://monzo.com/", "finance", "Vitrine"),
+  ref("N26", "https://n26.com/", "finance", "Vitrine"),
+  ref("Klarna", "https://www.klarna.com/", "finance", "SaaS"),
+
+  // Tech / SaaS
+  ref("Linear", "https://linear.app/", "tech", "SaaS"),
+  ref("Raycast", "https://www.raycast.com/", "tech", "SaaS"),
+  ref("Lottiefiles", "https://lottiefiles.com/", "tech", "SaaS"),
+
+  // Éducation
+  ref("Minerva University", "https://www.minerva.edu/", "education", "Vitrine"),
+  ref("42", "https://42.fr/", "education", "Vitrine"),
+  ref("Hyper Island", "https://www.hyperisland.com/", "education", "Vitrine"),
+
+  // Sport
+  ref("On Running", "https://www.on.com/", "sport", "E-commerce"),
+  ref("Rapha", "https://www.rapha.cc/", "sport", "E-commerce"),
+  ref("WHOOP", "https://www.whoop.com/", "sport", "E-commerce"),
+
+  // Voyage
+  ref("Black Tomato", "https://www.blacktomato.com/", "voyage", "Vitrine"),
+  ref("Mr & Mrs Smith", "https://www.mrandmrssmith.com/", "voyage", "Portail"),
+  ref("Original Travel", "https://www.originaltravel.co.uk/", "voyage", "Vitrine"),
+
+  // Maison / Design
+  ref("Muuto", "https://www.muuto.com/", "maison", "E-commerce"),
+  ref("Ferm Living", "https://fermliving.com/", "maison", "E-commerce"),
+  ref("Hay", "https://www.hayshop.com/", "maison", "E-commerce"),
+
+  // Joaillerie
+  ref("Completedworks", "https://completedworks.com/", "joaillerie", "E-commerce"),
+  ref("Sophie Whitelaw", "https://www.sophiewhitelaw.com/", "joaillerie", "Vitrine"),
+  ref("Spinelli Kilcollin", "https://www.spinellikilcollin.com/", "joaillerie", "E-commerce"),
+
+  // Food / épicerie
+  ref("Graza", "https://www.graza.co/", "food", "E-commerce"),
+  ref("Fishwife", "https://eatfishwife.com/", "food", "E-commerce"),
+  ref("Diaspora Co.", "https://www.diasporaco.com/", "food", "E-commerce"),
+
+  // Spa / Wellness
+  ref("Life Time", "https://www.lifetime.life/", "spa", "Vitrine"),
+  ref("Aman Spa", "https://www.aman.com/wellness", "spa", "Vitrine"),
+  ref("The Well", "https://www.the-well.com/", "spa", "Vitrine"),
+
+  // Construction
+  ref("Vitruvius Built", "https://www.vitruviusbuilt.com/", "construction", "Vitrine"),
+  ref("Alberici", "https://www.alberici.com/", "construction", "Vitrine"),
+  ref("Granger Construction", "https://www.grangerconstruction.com/", "construction", "Vitrine"),
 ];
 
 export const PORTFOLIO_SECTORS = [
-  ["luxe", "Luxe"], ["hotel", "Hôtellerie"], ["restaurant", "Restauration"], ["immobilier", "Immobilier"], ["auto", "Automobile"],
-  ["architecture", "Architecture"], ["mode", "Mode"], ["beaute", "Beauté"], ["sante", "Santé"], ["droit", "Droit"],
-  ["finance", "Finance"], ["tech", "Tech / SaaS"], ["education", "Éducation"], ["sport", "Sport"], ["voyage", "Voyage"],
-  ["maison", "Maison / Design"], ["joaillerie", "Joaillerie"], ["food", "Food / Épicerie"], ["spa", "Spa / Wellness"], ["construction", "Construction"],
+  ["luxe", "Luxe"],
+  ["hotel", "Hôtellerie"],
+  ["restaurant", "Restauration"],
+  ["immobilier", "Immobilier"],
+  ["auto", "Automobile"],
+  ["architecture", "Architecture"],
+  ["mode", "Mode"],
+  ["beaute", "Beauté"],
+  ["sante", "Santé"],
+  ["droit", "Droit"],
+  ["finance", "Finance"],
+  ["tech", "Tech / SaaS"],
+  ["education", "Éducation"],
+  ["sport", "Sport"],
+  ["voyage", "Voyage"],
+  ["maison", "Maison / Design"],
+  ["joaillerie", "Joaillerie"],
+  ["food", "Food / Épicerie"],
+  ["spa", "Spa / Wellness"],
+  ["construction", "Construction"],
 ] as const;
