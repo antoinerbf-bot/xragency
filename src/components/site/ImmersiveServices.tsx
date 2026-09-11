@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, ArrowUpRight, Sparkles, Zap } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
-import { SERVICES } from "@/lib/content";
+import { SERVICES, PERIOD_LABEL } from "@/lib/content";
 import { UI } from "@/lib/copy";
 import { Reveal } from "@/components/site/primitives";
 import { cn } from "@/lib/utils";
@@ -116,6 +116,7 @@ export function ImmersiveServices() {
                 {services.map((service, index) => {
                   const offset = index - active;
                   const image = SERVICE_IMAGES[service.id] ?? SERVICE_IMAGES.websites;
+                  const displayEur = service.id === "maps" ? 1399 : service.fromEur;
                   return (
                     <article
                       key={service.id}
@@ -138,7 +139,7 @@ export function ImmersiveServices() {
                           <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4 text-white">
                             <div>
                               <div className="label-mono text-[9px] uppercase tracking-widest text-white/65">{t(UI.from)}</div>
-                              <div className="display-serif mt-1 text-3xl">{price(service.fromEur)}<span className="label-mono ml-2 text-[9px] text-white/65">{service.fromPeriod}</span></div>
+                              <div className="display-serif mt-1 text-3xl">{price(displayEur)}<span className="label-mono ml-2 text-[9px] text-white/65">{t(PERIOD_LABEL[service.fromPeriod])}</span></div>
                             </div>
                             <div className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 backdrop-blur-md">
                               <span className="label-mono text-[9px]">{service.plans.length} OFFRES</span>
