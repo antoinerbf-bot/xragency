@@ -66,6 +66,8 @@ export function ImmersiveServices() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [services.length]);
 
+  const scrollHeight = `${Math.max(services.length * 78, 100)}vh`;
+
   return (
     <section id="xr-services-immersive" className="relative bg-background">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -97,7 +99,7 @@ export function ImmersiveServices() {
         </div>
       </div>
 
-      <div className="relative mt-0 lg:min-h-[270vh]">
+      <div className="relative mt-0" style={{ minHeight: scrollHeight }}>
         <div className="sticky top-0 flex min-h-[calc(100svh-5rem)] items-center overflow-hidden py-8 lg:py-12">
           <div className="mx-auto w-full max-w-7xl px-6 lg:px-10">
             <div className="grid gap-8 lg:grid-cols-[0.55fr_1.45fr] lg:items-center">
