@@ -1,865 +1,382 @@
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import {
-  Building2,
-  Check,
-  Gem,
-  Hammer,
-  HeartPulse,
-  Hotel,
-  Rocket,
-  Scale,
-  ShoppingBag,
-  Sparkles,
-  UtensilsCrossed,
-  Compass,
-  Search,
-  MapPinned,
-  Megaphone,
-  BadgeCheck,
-  Bot,
-  CreditCard,
-  CircleSlash,
-  History,
-  TrendingDown,
-  TrendingUp,
-  Wallet,
-  Coins,
-  Banknote,
-  Landmark,
   ArrowRight,
-  Copy,
-  CheckCheck,
-  MessageSquare,
-  Send,
-  User,
-  ShieldCheck,
-  Zap,
-  RotateCcw,
+  Check,
+  CircleDollarSign,
+  Globe2,
+  MapPinned,
+  MousePointerClick,
+  Search,
+  Sparkles,
+  Target,
+  TrendingUp,
+  X,
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { useLang } from "@/lib/i18n";
+import { CONTACT } from "@/lib/content";
 import { cn } from "@/lib/utils";
-import { useLang, type L } from "@/lib/i18n";
-import { UI } from "@/lib/copy";
-import { CONTACT, SERVICES } from "@/lib/content";
-import { EmberButton, Reveal } from "./primitives";
-import { Globe } from "./Globe";
+import { Reveal } from "./primitives";
 
-type Opt = { id: string; label: L; icon?: typeof Check };
+type Surface = "maps" | "seo" | "ads";
+type PlanId = "local" | "growth" | "authority";
 
-const SECTORS: Opt[] = [
-  {
-    id: "resto",
-    icon: UtensilsCrossed,
-    label: {
-      fr: "Restaurant / Bar / Café",
-      en: "Restaurant / Bar / Café",
-      vi: "Nhà hàng / Quán cà phê",
-    },
+const copy = {
+  fr: {
+    eyebrow: "XR INTELLIGENCE / GOOGLE VISIBILITY",
+    title: "Comprenez où Google peut vous rendre visible.",
+    intro: "Trois surfaces. Trois logiques. Découvrez ce que vous achetez réellement — et pourquoi.",
+    searchLabel: "Simulation de recherche",
+    search: "restaurant français à Da Nang",
+    sponsored: "Sponsorisé",
+    organic: "Résultats naturels",
+    maps: "Google Maps",
+    mapsShort: "MAPS",
+    seo: "SEO",
+    ads: "Google Ads",
+    adsUnavailable: "Non proposé par XRAGENCY",
+    mapsTitle: "Être trouvé localement",
+    mapsText: "Google Maps répond aux recherches où la proximité et l'intention locale comptent. Votre fiche, votre pertinence, votre distance et votre réputation influencent votre présence locale.",
+    seoTitle: "Être trouvé sur les recherches organiques",
+    seoText: "Le SEO travaille votre site et son autorité pour que Google puisse comprendre vos pages, les relier aux bonnes recherches et les faire progresser naturellement.",
+    adsTitle: "Payer pour apparaître immédiatement",
+    adsText: "Google Ads est une publicité payante. L'annonceur choisit notamment son ciblage et son budget. XRAGENCY ne vend pas cette prestation.",
+    why: "Pourquoi ces résultats apparaissent-ils ?",
+    mapsSignals: ["Pertinence de la fiche", "Distance / zone locale", "Réputation & avis", "Qualité des informations"],
+    seoSignals: ["Pertinence des pages", "Structure technique", "Contenu utile", "Autorité & liens", "Concurrence"],
+    adsSignals: ["Budget publicitaire", "Ciblage", "Enchères", "Pertinence de l'annonce"],
+    journey: "Le SEO se construit",
+    journeyText: "Une position n'est pas un bouton ON/OFF. On travaille, mesure, apprend et optimise dans le temps. Aucune position n'est garantie.",
+    level: "Choisissez votre niveau d'accompagnement",
+    levelText: "La différence de prix correspond au périmètre de travail, à la profondeur stratégique et au niveau de développement de votre visibilité.",
+    local: "LOCAL",
+    localSub: "Être visible dans votre zone",
+    localPrice: "299 € / mois",
+    localWhy: "Pour une entreprise dont l'objectif principal est la visibilité locale.",
+    localItems: ["SEO local", "Optimisation des pages stratégiques", "Google Business Profile lorsque pertinent", "Suivi de visibilité", "Recommandations mensuelles"],
+    growth: "GROWTH",
+    growthSub: "Développer votre marché",
+    growthPrice: "499 € / mois",
+    growthWhy: "Pour développer votre couverture organique au-delà de quelques recherches locales.",
+    growthItems: ["Tout le niveau Local", "Recherche de mots-clés approfondie", "Optimisation continue", "Stratégie et optimisation de contenus", "Analyse concurrentielle", "Maillage interne", "Reporting de progression"],
+    authority: "AUTHORITY",
+    authoritySub: "Construire une présence forte",
+    authorityPrice: "799 € / mois",
+    authorityWhy: "Pour les marchés concurrentiels où il faut travailler le SEO comme un véritable actif de croissance.",
+    authorityItems: ["Tout le niveau Growth", "Audit technique approfondi", "Stratégie éditoriale", "Production / optimisation de contenus", "Analyse concurrentielle avancée", "Travail d'autorité", "Optimisation continue & reporting stratégique"],
+    recommended: "Le plus complet",
+    included: "Ce que vous achetez",
+    compare: "Maps + SEO : pourquoi les deux ?",
+    compareText: "Maps travaille votre visibilité locale. Le SEO travaille vos résultats organiques. Les deux surfaces répondent à des intentions différentes et peuvent se renforcer mutuellement.",
+    mapsNeed: "Vous voulez être trouvé près de vous ?",
+    seoNeed: "Vous voulez être trouvé sur vos services ?",
+    both: "Les deux peuvent être complémentaires.",
+    cta: "Recevoir mon analyse gratuite",
+    ctaText: "Nous identifions les principales opportunités de visibilité de votre entreprise avant de vous proposer quoi que ce soit.",
+    reset: "Réinitialiser",
+    step: "Surface sélectionnée",
   },
-  {
-    id: "hotel",
-    icon: Hotel,
-    label: {
-      fr: "Hôtel / Résidence / Spa",
-      en: "Hotel / Resort / Spa",
-      vi: "Khách sạn / Resort / Spa",
-    },
+  en: {
+    eyebrow: "XR INTELLIGENCE / GOOGLE VISIBILITY",
+    title: "Understand where Google can make you visible.",
+    intro: "Three surfaces. Three mechanics. See what you are actually buying — and why.",
+    searchLabel: "Search simulation",
+    search: "best French restaurant in Da Nang",
+    sponsored: "Sponsored",
+    organic: "Organic results",
+    maps: "Google Maps",
+    mapsShort: "MAPS",
+    seo: "SEO",
+    ads: "Google Ads",
+    adsUnavailable: "Not offered by XRAGENCY",
+    mapsTitle: "Be found locally",
+    mapsText: "Google Maps serves searches where proximity and local intent matter. Your profile, relevance, distance and reputation influence local visibility.",
+    seoTitle: "Be found in organic search",
+    seoText: "SEO works on your website and its authority so Google can understand your pages, match them to relevant searches and improve their organic visibility over time.",
+    adsTitle: "Pay to appear immediately",
+    adsText: "Google Ads is paid advertising. Advertisers control targeting and budget among other factors. XRAGENCY does not offer this service.",
+    why: "Why do these results appear?",
+    mapsSignals: ["Profile relevance", "Distance / local area", "Reputation & reviews", "Information quality"],
+    seoSignals: ["Page relevance", "Technical structure", "Useful content", "Authority & links", "Competition"],
+    adsSignals: ["Ad budget", "Targeting", "Bids", "Ad relevance"],
+    journey: "SEO is built over time",
+    journeyText: "A ranking is not an ON/OFF switch. We work, measure, learn and optimise over time. No position is guaranteed.",
+    level: "Choose your level of support",
+    levelText: "The price difference reflects the scope of work, strategic depth and level of visibility development.",
+    local: "LOCAL",
+    localSub: "Be visible in your area",
+    localPrice: "€299 / month",
+    localWhy: "For businesses whose primary goal is local visibility.",
+    localItems: ["Local SEO", "Strategic page optimisation", "Google Business Profile when relevant", "Visibility tracking", "Monthly recommendations"],
+    growth: "GROWTH",
+    growthSub: "Develop your market",
+    growthPrice: "€499 / month",
+    growthWhy: "For businesses that want to expand organic coverage beyond a few local searches.",
+    growthItems: ["Everything in Local", "Deeper keyword research", "Ongoing optimisation", "Content strategy & optimisation", "Competitor analysis", "Internal linking", "Progress reporting"],
+    authority: "AUTHORITY",
+    authoritySub: "Build a strong presence",
+    authorityPrice: "€799 / month",
+    authorityWhy: "For competitive markets where SEO needs to be treated as a genuine growth asset.",
+    authorityItems: ["Everything in Growth", "Deep technical audit", "Editorial strategy", "Content production / optimisation", "Advanced competitor analysis", "Authority building", "Ongoing optimisation & strategic reporting"],
+    recommended: "Most complete",
+    included: "What you are buying",
+    compare: "Maps + SEO: why both?",
+    compareText: "Maps works on local visibility. SEO works on organic search results. They answer different search intents and can reinforce each other.",
+    mapsNeed: "Want to be found nearby?",
+    seoNeed: "Want to be found for your services?",
+    both: "Both can work together.",
+    cta: "Get my free visibility analysis",
+    ctaText: "We identify the main visibility opportunities for your business before proposing anything.",
+    reset: "Reset",
+    step: "Selected surface",
   },
-  {
-    id: "sante",
-    icon: HeartPulse,
-    label: {
-      fr: "Santé / Cabinet médical",
-      en: "Health / Medical clinic",
-      vi: "Y tế / Phòng khám",
-    },
+  vi: {
+    eyebrow: "XR INTELLIGENCE / GOOGLE VISIBILITY",
+    title: "Hiểu Google có thể giúp bạn xuất hiện ở đâu.",
+    intro: "Ba vị trí. Ba cơ chế. Hiểu chính xác bạn đang mua gì — và vì sao.",
+    searchLabel: "Mô phỏng tìm kiếm",
+    search: "nhà hàng Pháp ngon ở Đà Nẵng",
+    sponsored: "Được tài trợ",
+    organic: "Kết quả tự nhiên",
+    maps: "Google Maps",
+    mapsShort: "MAPS",
+    seo: "SEO",
+    ads: "Google Ads",
+    adsUnavailable: "XRAGENCY không cung cấp",
+    mapsTitle: "Được tìm thấy tại địa phương",
+    mapsText: "Google Maps phục vụ các tìm kiếm có yếu tố vị trí và nhu cầu địa phương. Hồ sơ, mức độ liên quan, khoảng cách và uy tín ảnh hưởng đến khả năng hiển thị.",
+    seoTitle: "Được tìm thấy trong kết quả tự nhiên",
+    seoText: "SEO tối ưu website và độ uy tín để Google hiểu nội dung, kết nối với các tìm kiếm phù hợp và cải thiện khả năng hiển thị tự nhiên theo thời gian.",
+    adsTitle: "Trả tiền để xuất hiện ngay",
+    adsText: "Google Ads là quảng cáo trả phí. Nhà quảng cáo kiểm soát mục tiêu và ngân sách cùng nhiều yếu tố khác. XRAGENCY không cung cấp dịch vụ này.",
+    why: "Vì sao các kết quả này xuất hiện?",
+    mapsSignals: ["Mức độ liên quan của hồ sơ", "Khoảng cách / khu vực", "Uy tín & đánh giá", "Chất lượng thông tin"],
+    seoSignals: ["Mức độ liên quan của trang", "Cấu trúc kỹ thuật", "Nội dung hữu ích", "Uy tín & liên kết", "Cạnh tranh"],
+    adsSignals: ["Ngân sách quảng cáo", "Nhắm mục tiêu", "Đấu giá", "Mức độ liên quan của quảng cáo"],
+    journey: "SEO được xây dựng theo thời gian",
+    journeyText: "Thứ hạng không phải công tắc bật/tắt. Chúng tôi làm việc, đo lường, học hỏi và tối ưu liên tục. Không có vị trí nào được đảm bảo.",
+    level: "Chọn mức đồng hành",
+    levelText: "Chênh lệch giá phản ánh phạm vi công việc, chiều sâu chiến lược và mức độ phát triển khả năng hiển thị.",
+    local: "LOCAL",
+    localSub: "Hiển thị trong khu vực",
+    localPrice: "299 € / tháng",
+    localWhy: "Cho doanh nghiệp ưu tiên khả năng hiển thị tại địa phương.",
+    localItems: ["SEO địa phương", "Tối ưu các trang chiến lược", "Google Business Profile khi phù hợp", "Theo dõi khả năng hiển thị", "Đề xuất hàng tháng"],
+    growth: "GROWTH",
+    growthSub: "Phát triển thị trường",
+    growthPrice: "499 € / tháng",
+    growthWhy: "Cho doanh nghiệp muốn mở rộng phạm vi tìm kiếm tự nhiên vượt ra ngoài vài từ khóa địa phương.",
+    growthItems: ["Tất cả Local", "Nghiên cứu từ khóa sâu hơn", "Tối ưu liên tục", "Chiến lược & tối ưu nội dung", "Phân tích đối thủ", "Liên kết nội bộ", "Báo cáo tiến độ"],
+    authority: "AUTHORITY",
+    authoritySub: "Xây dựng vị thế mạnh",
+    authorityPrice: "799 € / tháng",
+    authorityWhy: "Cho thị trường cạnh tranh, nơi SEO cần được xem như một tài sản tăng trưởng thực sự.",
+    authorityItems: ["Tất cả Growth", "Audit kỹ thuật chuyên sâu", "Chiến lược biên tập", "Sản xuất / tối ưu nội dung", "Phân tích đối thủ nâng cao", "Xây dựng uy tín", "Tối ưu liên tục & báo cáo chiến lược"],
+    recommended: "Đầy đủ nhất",
+    included: "Bạn đang mua gì",
+    compare: "Maps + SEO: vì sao nên kết hợp?",
+    compareText: "Maps tập trung vào khả năng hiển thị địa phương. SEO tập trung vào kết quả tìm kiếm tự nhiên. Hai bề mặt phục vụ các ý định tìm kiếm khác nhau và có thể bổ trợ nhau.",
+    mapsNeed: "Muốn được tìm thấy gần khách hàng?",
+    seoNeed: "Muốn được tìm thấy với dịch vụ của mình?",
+    both: "Hai dịch vụ có thể bổ trợ cho nhau.",
+    cta: "Nhận phân tích miễn phí",
+    ctaText: "Chúng tôi xác định các cơ hội hiển thị chính trước khi đề xuất bất kỳ dịch vụ nào.",
+    reset: "Đặt lại",
+    step: "Bề mặt đã chọn",
   },
-  {
-    id: "juridique",
-    icon: Scale,
-    label: {
-      fr: "Avocat / Notaire / Conseil",
-      en: "Lawyer / Consultant / Finance",
-      vi: "Luật sư / Tư vấn / Tài chính",
-    },
-  },
-  {
-    id: "immo",
-    icon: Building2,
-    label: {
-      fr: "Immobilier & Promoteur",
-      en: "Real estate & Architecture",
-      vi: "Bất động sản & Kiến trúc",
-    },
-  },
-  {
-    id: "retail",
-    icon: ShoppingBag,
-    label: {
-      fr: "Boutique / E-commerce de luxe",
-      en: "Boutique / Luxury E-commerce",
-      vi: "Bán lẻ / Thương mại điện tử",
-    },
-  },
-  {
-    id: "artisan",
-    icon: Hammer,
-    label: { fr: "Artisan d'art / BTP", en: "Craftsman / Construction", vi: "Thủ công / Xây dựng" },
-  },
-  {
-    id: "beaute",
-    icon: Gem,
-    label: {
-      fr: "Beauté / Esthétique / Luxe",
-      en: "Beauty / Luxury & Lifestyle",
-      vi: "Làm đẹp / Sang trọng",
-    },
-  },
-  {
-    id: "tech",
-    icon: Rocket,
-    label: { fr: "Startup / SaaS / Tech", en: "Startup / SaaS / Tech", vi: "Startup / Công nghệ" },
-  },
-  {
-    id: "autre",
-    icon: Compass,
-    label: { fr: "Autre secteur d'activité", en: "Other business sector", vi: "Lĩnh vực khác" },
-  },
-];
+} as const;
 
-const SITUATIONS: Opt[] = [
-  {
-    id: "creation",
-    icon: Sparkles,
-    label: {
-      fr: "Lancement complet (aucun site ni identité existante)",
-      en: "Brand new launch (no website or existing branding)",
-      vi: "Dự án mới (chưa có website hay nhận diện)",
-    },
-  },
-  {
-    id: "refonte",
-    icon: History,
-    label: {
-      fr: "Site ou identité vieillissante à moderniser",
-      en: "Outdated website or identity to modernize",
-      vi: "Website hoặc thương hiệu cũ cần làm mới",
-    },
-  },
-  {
-    id: "visibilite",
-    icon: TrendingDown,
-    label: {
-      fr: "Site en ligne mais manque critique de visibilité / clients",
-      en: "Online website but lack of traffic and leads",
-      vi: "Có website nhưng ít khách hàng và lượt truy cập",
-    },
-  },
-  {
-    id: "scale",
-    icon: TrendingUp,
-    label: {
-      fr: "Activité établie souhaitant automatiser et dominer son marché",
-      en: "Established business scaling with AI and dominance",
-      vi: "Doanh nghiệp phát triển muốn mở rộng và tự động hóa",
-    },
-  },
-];
-
-const OBJECTIVES: Opt[] = [
-  {
-    id: "local",
-    icon: MapPinned,
-    label: {
-      fr: "Dominer Google Maps & attirer une clientèle locale",
-      en: "Dominate Google Maps & attract local clientele",
-      vi: "Thống trị Google Maps & thu hút khách địa phương",
-    },
-  },
-  {
-    id: "prestige",
-    icon: Gem,
-    label: {
-      fr: "Créer un site vitrine d'exception & asseoir mon autorité",
-      en: "Create a prestigious website & establish authority",
-      vi: "Xây dựng website đẳng cấp & khẳng định uy tín",
-    },
-  },
-  {
-    id: "conversion",
-    icon: Search,
-    label: {
-      fr: "Propulser mon référencement SEO & convertir mes visiteurs",
-      en: "Skyrocket organic SEO & convert high-intent visitors",
-      vi: "Bứt phá SEO Google & chuyển đổi khách tiềm năng",
-    },
-  },
-];
-
-const BUDGETS: Opt[] = [
-  {
-    id: "starter",
-    icon: Wallet,
-    label: {
-      fr: "Démarrage pragmatique (< 1 000 €)",
-      en: "Essential kickoff (< $1,000)",
-      vi: "Khởi đầu thiết yếu (< 25.000.000 ₫)",
-    },
-  },
-  {
-    id: "growth",
-    icon: Coins,
-    label: {
-      fr: "Croissance & Visibilité Pro (1 000 € — 2 500 €)",
-      en: "Growth & Pro Visibility ($1,000 — $2,500)",
-      vi: "Tăng trưởng & Chuyên nghiệp (25M — 60M ₫)",
-    },
-  },
-  {
-    id: "scale",
-    icon: Banknote,
-    label: {
-      fr: "Écosystème Digital Complet (2 500 € — 5 000 €+)",
-      en: "Complete Digital Ecosystem ($2,500 — $5,000+)",
-      vi: "Hệ sinh thái toàn diện (60M — 120M ₫+)",
-    },
-  },
-  {
-    id: "retainer",
-    icon: Landmark,
-    label: {
-      fr: "Accompagnement mensuel récurrent sur mesure",
-      en: "Tailored monthly growth retainer",
-      vi: "Đồng hành hàng tháng theo yêu cầu",
-    },
-  },
-];
-
-interface RecommendationItem {
-  id: string;
-  title: L;
-  plan: L;
-  eur: number;
-  period: "once" | "month" | "year";
-  why: L;
-}
-
-interface ChatMessage {
-  id: string;
-  sender: "ai" | "user";
-  text: string;
-  options?: Opt[];
-  recommendation?: {
-    diagnosis: string;
-    items: RecommendationItem[];
-    setup: number;
-    monthly: number;
-    yearly: number;
-  };
-}
+const plans: Record<PlanId, { price: keyof typeof copy.fr; title: keyof typeof copy.fr; sub: keyof typeof copy.fr; why: keyof typeof copy.fr; items: keyof typeof copy.fr }> = {
+  local: { price: "localPrice", title: "local", sub: "localSub", why: "localWhy", items: "localItems" },
+  growth: { price: "growthPrice", title: "growth", sub: "growthSub", why: "growthWhy", items: "growthItems" },
+  authority: { price: "authorityPrice", title: "authority", sub: "authoritySub", why: "authorityWhy", items: "authorityItems" },
+};
 
 export function Intelligence() {
-  const { t, price, lang } = useLang();
-  const [mode, setMode] = useState<"chat" | "quiz">("chat");
+  const { lang } = useLang();
+  const t = copy[lang] ?? copy.fr;
+  const [surface, setSurface] = useState<Surface>("seo");
+  const [plan, setPlan] = useState<PlanId>("growth");
 
-  // Conversational Chat state
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [currentStep, setCurrentStep] = useState<number>(0);
-  const [answers, setAnswers] = useState<{
-    sector?: string;
-    situation?: string;
-    objective?: string;
-    budget?: string;
-  }>({});
-  const [inputText, setInputText] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
-
-  // Initialize first AI message
-  useEffect(() => {
-    if (messages.length === 0) {
-      const initialGreeting: Record<string, string> = {
-        fr: "Bonjour et bienvenue chez XR Agency. Je suis Alexandre, conseiller stratégique digital. Afin de concevoir l'accompagnement le plus rentable pour votre entreprise, quel est votre secteur d'activité ?",
-        en: "Hello and welcome to XR Agency. I'm Alexandre, Senior Digital Strategist. To design the most profitable growth roadmap for your business, what is your industry sector?",
-        vi: "Xin chào và chào mừng bạn đến với XR Agency. Tôi là Alexandre, chuyên gia tư vấn chiến lược kỹ thuật số. Để thiết kế lộ trình phát triển tối ưu nhất cho doanh nghiệp của bạn, lĩnh vực kinh doanh của bạn là gì?",
-      };
-
-      setMessages([
-        {
-          id: "welcome",
-          sender: "ai",
-          text: initialGreeting[lang] || initialGreeting.fr,
-          options: SECTORS,
-        },
-      ]);
-    }
-  }, [lang, messages.length]);
-
-  useEffect(() => {
-    if ((messages.length > 1 || isTyping) && chatContainerRef.current) {
-      chatContainerRef.current.scrollTo({
-        top: chatContainerRef.current.scrollHeight,
-        behavior: "smooth",
-      });
-    }
-  }, [messages, isTyping]);
-
-  // Strategic rule engine for recommendations
-  const generateRecommendations = (
-    sectorId?: string,
-    situationId?: string,
-    objectiveId?: string,
-    budgetId?: string,
-  ): RecommendationItem[] => {
-    const recs: RecommendationItem[] = [];
-
-    // Core website recommendation
-    if (situationId === "creation" || objectiveId === "prestige" || budgetId === "scale") {
-      recs.push({
-        id: "websites",
-        title: { fr: "Création de site web", en: "Website Creation", vi: "Thiết kế Website" },
-        plan: {
-          fr:
-            budgetId === "scale" ? "Formule E-commerce / Sur-mesure" : "Formule Business Prestige",
-          en: budgetId === "scale" ? "E-commerce / Custom Plan" : "Business Prestige Plan",
-          vi: budgetId === "scale" ? "Gói E-commerce / Cao cấp" : "Gói Doanh nghiệp Prestige",
-        },
-        eur: budgetId === "scale" ? 1499 : 799,
-        period: "once",
-        why: {
-          fr: "Votre site constitue le socle de conversion incontournable pour valoriser votre autorité et convertir vos visiteurs en clients payants.",
-          en: "Your website is the core conversion foundation required to build authority and turn visitors into high-paying clients.",
-          vi: "Website là nền tảng chuyển đổi cốt lõi giúp nâng cao uy tín và chuyển đổi khách truy cập thành khách hàng.",
-        },
-      });
-    }
-
-    // Google Maps & Local Dominance
-    if (
-      objectiveId === "local" ||
-      sectorId === "resto" ||
-      sectorId === "hotel" ||
-      sectorId === "sante" ||
-      sectorId === "artisan"
-    ) {
-      recs.push({
-        id: "maps",
-        title: { fr: "Google Maps TOP 3", en: "Google Maps TOP 3", vi: "Google Maps TOP 3" },
-        plan: {
-          fr: "Pack Annuel Garanti TOP 3",
-          en: "Guaranteed Annual TOP 3 Pack",
-          vi: "Gói TOP 3 Đảm bảo Hàng năm",
-        },
-        eur: 999,
-        period: "year",
-        why: {
-          fr: "Pour votre activité locale, 78% des recherches se font sur Google Maps. Le TOP 3 garanti génère un flux continu d'appels et de visites directes.",
-          en: "For your local business, 78% of searches occur on Google Maps. A guaranteed TOP 3 position drives a steady stream of direct calls and visits.",
-          vi: "Đối với mô hình kinh doanh của bạn, 78% lượt tìm kiếm diễn ra trên Google Maps. TOP 3 giúp mang lại lượng khách hàng gọi điện và ghé thăm đều đặn.",
-        },
-      });
-    }
-
-    // SEO Domination
-    if (objectiveId === "conversion" || situationId === "visibilite") {
-      recs.push({
-        id: "seo",
-        title: {
-          fr: "Système de Domination SEO",
-          en: "SEO Domination System",
-          vi: "Chiến dịch SEO Chuyên sâu",
-        },
-        plan: {
-          fr: budgetId === "starter" ? "Pack SEO Local" : "Pack SEO Domination Boost",
-          en: budgetId === "starter" ? "Local SEO Pack" : "SEO Domination Boost Pack",
-          vi: budgetId === "starter" ? "Gói SEO Địa phương" : "Gói Bứt phá SEO Domination",
-        },
-        eur: budgetId === "starter" ? 199 : 349,
-        period: "month",
-        why: {
-          fr: "Un positionnement organique durable en première page Google sur vos mots-clés les plus rentables sans dépendre du coût publicitaire.",
-          en: "Sustainable page 1 Google rankings for high-intent keywords, freeing you from perpetual advertising costs.",
-          vi: "Vị trí top đầu Google bền vững cho các từ khóa mang lại doanh thu cao mà không phụ thuộc vào quảng cáo.",
-        },
-      });
-    }
-
-    // Default fallback if minimal options
-    if (recs.length === 0) {
-      recs.push({
-        id: "websites",
-        title: { fr: "Création de site web", en: "Website Creation", vi: "Thiết kế Website" },
-        plan: { fr: "Pack Vitrine Pro", en: "Pro Showcase Pack", vi: "Gói Giới thiệu Pro" },
-        eur: 499,
-        period: "once",
-        why: {
-          fr: "Une présence web moderne, ultra-rapide et responsive pour valider votre professionnalisme auprès de vos futurs clients.",
-          en: "A modern, high-speed, and responsive web presence to establish authority with prospective clients.",
-          vi: "Website hiện đại, tốc độ cao và tối ưu di động để khẳng định sự chuyên nghiệp.",
-        },
-      });
-    }
-
-    return recs;
-  };
-
-  const handleSelectOption = (stepIndex: number, opt: Opt) => {
-    const updatedAnswers = { ...answers };
-
-    if (stepIndex === 0) updatedAnswers.sector = opt.id;
-    if (stepIndex === 1) updatedAnswers.situation = opt.id;
-    if (stepIndex === 2) updatedAnswers.objective = opt.id;
-    if (stepIndex === 3) updatedAnswers.budget = opt.id;
-
-    setAnswers(updatedAnswers);
-
-    // User reply message
-    const userMsg: ChatMessage = {
-      id: `user-${Date.now()}`,
-      sender: "user",
-      text: t(opt.label),
-    };
-
-    setMessages((prev) => [...prev, userMsg]);
-    setIsTyping(true);
-
-    setTimeout(() => {
-      setIsTyping(false);
-      const nextStep = stepIndex + 1;
-      setCurrentStep(nextStep);
-
-      if (nextStep === 1) {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `ai-${Date.now()}`,
-            sender: "ai",
-            text:
-              lang === "vi"
-                ? `Rất tốt. Để định hình chiến lược chính xác nhất, tình trạng hiện tại của doanh nghiệp bạn là gì?`
-                : lang === "en"
-                  ? `Excellent. To identify your growth bottlenecks, what is your current business situation?`
-                  : `Très bien noté. Pour cibler le levier le plus efficace, quelle est la situation actuelle de votre activité ?`,
-            options: SITUATIONS,
-          },
-        ]);
-      } else if (nextStep === 2) {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `ai-${Date.now()}`,
-            sender: "ai",
-            text:
-              lang === "vi"
-                ? `Đã hiểu. Mục tiêu ưu tiên hàng đầu của bạn trong 6 tháng tới là gì?`
-                : lang === "en"
-                  ? `Understood. What is your #1 priority goal for the next 6 months?`
-                  : `C'est très clair. Quel est votre objectif numéro 1 pour les 6 prochains mois ?`,
-            options: OBJECTIVES,
-          },
-        ]);
-      } else if (nextStep === 3) {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `ai-${Date.now()}`,
-            sender: "ai",
-            text:
-              lang === "vi"
-                ? `Hoàn hảo. Bạn dự kiến ngân sách và hình thức đầu tư như thế nào?`
-                : lang === "en"
-                  ? `Perfect. What approximate investment budget are you planning for this project?`
-                  : `Parfait. Quel est votre horizon budgétaire approximatif pour ce déploiement ?`,
-            options: BUDGETS,
-          },
-        ]);
-      } else {
-        // Final Strategic Diagnostic & Synthesis
-        const finalRecs = generateRecommendations(
-          updatedAnswers.sector,
-          updatedAnswers.situation,
-          updatedAnswers.objective,
-          opt.id,
-        );
-
-        const setupTotal = finalRecs
-          .filter((r) => r.period === "once")
-          .reduce((a, b) => a + b.eur, 0);
-        const monthlyTotal = finalRecs
-          .filter((r) => r.period === "month")
-          .reduce((a, b) => a + b.eur, 0);
-        const yearlyTotal = finalRecs
-          .filter((r) => r.period === "year")
-          .reduce((a, b) => a + b.eur, 0);
-
-        const diagnosisText =
-          lang === "vi"
-            ? `Tôi đã hoàn tất phân tích toàn diện cho doanh nghiệp của bạn. Dựa trên mục tiêu và tình hình thực tế, đây là lộ trình chiến lược được tối ưu hóa cao nhất:`
-            : lang === "en"
-              ? `I have completed the strategic analysis for your business. Based on your goals and digital maturity, here is your high-impact tailored roadmap:`
-              : `J'ai finalisé l'analyse stratégique de votre profil. Au vu de vos objectifs et de votre secteur, voici la feuille de route la plus rentable et pérenne que je vous recommande :`;
-
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `ai-reco-${Date.now()}`,
-            sender: "ai",
-            text: diagnosisText,
-            recommendation: {
-              diagnosis: diagnosisText,
-              items: finalRecs,
-              setup: setupTotal,
-              monthly: monthlyTotal,
-              yearly: yearlyTotal,
-            },
-          },
-        ]);
-      }
-    }, 700);
-  };
-
-  const handleCustomTextSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputText.trim()) return;
-
-    const userText = inputText.trim();
-    setInputText("");
-
-    const userMsg: ChatMessage = {
-      id: `user-${Date.now()}`,
-      sender: "user",
-      text: userText,
-    };
-
-    setMessages((prev) => [...prev, userMsg]);
-    setIsTyping(true);
-
-    setTimeout(() => {
-      setIsTyping(false);
-      // Advance to next intelligent question or final recommendation
-      if (currentStep < 3) {
-        handleSelectOption(currentStep, SECTORS[0]);
-      } else {
-        handleSelectOption(3, BUDGETS[1]);
-      }
-    }, 800);
-  };
-
-  const handleRestart = () => {
-    setMessages([]);
-    setAnswers({});
-    setCurrentStep(0);
-  };
+  const surfaceData = {
+    maps: { title: t.mapsTitle, text: t.mapsText, icon: MapPinned, signals: t.mapsSignals, accent: "border-sky-400/30" },
+    seo: { title: t.seoTitle, text: t.seoText, icon: Search, signals: t.seoSignals, accent: "border-white/20" },
+    ads: { title: t.adsTitle, text: t.adsText, icon: MousePointerClick, signals: t.adsSignals, accent: "border-amber-400/30" },
+  }[surface];
+  const SurfaceIcon = surfaceData.icon;
+  const selectedPlan = plans[plan];
+  const items = t[selectedPlan.items] as readonly string[];
 
   return (
-    <section id="intelligence" className="grain relative overflow-hidden py-16 sm:py-24 lg:py-32 scroll-mt-24">
-      {/* Background Atmosphere */}
-      <div className="absolute inset-0" style={{ background: "var(--gradient-halo)" }} />
-
-      <div className="relative mx-auto max-w-5xl px-6 lg:px-10">
+    <section id="intelligence" className="relative overflow-hidden border-y border-border/50 py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-5 md:px-8">
         <Reveal>
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
-              </span>
-              <span className="label-mono text-xs text-muted-foreground">
-                {t(UI.intelAdvisorActive)}
-              </span>
+          <div className="mb-12 max-w-4xl">
+            <div className="mb-4 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+              <Sparkles className="h-3.5 w-3.5" /> {t.eyebrow}
             </div>
-            <span className="label-mono text-xs text-muted-foreground/70">
-              {t(UI.intelAuditTimer)}
-            </span>
+            <h2 className="text-4xl font-medium tracking-[-0.04em] md:text-6xl">{t.title}</h2>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground md:text-lg">{t.intro}</p>
           </div>
         </Reveal>
 
         <Reveal delay={80}>
-          <div className="mt-8 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-4">
+          <div className="overflow-hidden rounded-3xl border border-border bg-background/70 shadow-2xl">
+            <div className="border-b border-border px-5 py-5 md:px-8">
+              <div className="mb-3 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{t.searchLabel}</div>
+              <div className="flex items-center gap-3 rounded-2xl border border-border bg-muted/30 px-4 py-3 font-medium">
+                <Search className="h-4 w-4 text-muted-foreground" />
+                <span>{t.search}</span>
+              </div>
+            </div>
+
+            <div className="grid border-b border-border md:grid-cols-3">
+              {(["maps", "seo", "ads"] as Surface[]).map((id) => {
+                const Icon = id === "maps" ? MapPinned : id === "seo" ? Search : MousePointerClick;
+                const label = id === "maps" ? t.maps : id === "seo" ? t.seo : t.ads;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => setSurface(id)}
+                    className={cn(
+                      "group flex min-h-24 items-center gap-4 border-b border-border px-5 text-left transition md:border-b-0 md:border-r last:md:border-r-0 md:px-7",
+                      surface === id ? "bg-foreground/[0.06]" : "hover:bg-muted/30",
+                    )}
+                  >
+                    <div className="rounded-xl border border-border p-3"><Icon className="h-5 w-5" /></div>
+                    <div>
+                      <div className="font-medium">{label}</div>
+                      <div className="mt-1 text-xs text-muted-foreground">{id === "ads" ? t.sponsored : id === "maps" ? t.mapsShort : t.organic}</div>
+                    </div>
+                    {surface === id && <div className="ml-auto h-2 w-2 rounded-full bg-foreground" />}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="grid gap-8 p-5 md:grid-cols-[1.05fr_.95fr] md:p-8">
+              <div className={cn("rounded-2xl border p-6", surfaceData.accent)}>
+                <div className="mb-6 flex items-start justify-between gap-4">
+                  <div>
+                    <div className="mb-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{t.step}</div>
+                    <h3 className="text-2xl font-medium">{surfaceData.title}</h3>
+                  </div>
+                  <SurfaceIcon className="h-6 w-6 text-muted-foreground" />
+                </div>
+                <p className="leading-7 text-muted-foreground">{surfaceData.text}</p>
+                <div className="mt-8">
+                  <div className="mb-4 text-xs font-medium uppercase tracking-[0.16em]">{t.why}</div>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {surfaceData.signals.map((signal) => (
+                      <div key={signal} className="flex items-center gap-2 rounded-xl bg-muted/40 px-3 py-3 text-sm">
+                        <Check className="h-4 w-4 shrink-0 text-muted-foreground" />{signal}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-border bg-muted/20 p-6">
+                <div className="mb-6 flex items-center gap-3">
+                  <Target className="h-5 w-5" />
+                  <div className="font-medium">{t.journey}</div>
+                </div>
+                <div className="space-y-4">
+                  {["48", "31", "17", "9"].map((value, index) => (
+                    <div key={value} className="flex items-center gap-3">
+                      <span className="w-10 font-mono text-xs text-muted-foreground">#{value}</span>
+                      <div className="h-2 flex-1 overflow-hidden rounded-full bg-border">
+                        <div className="h-full rounded-full bg-foreground transition-all duration-700" style={{ width: `${25 + index * 20}%` }} />
+                      </div>
+                      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{index === 3 ? "Goal" : "Work"}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-7 text-sm leading-6 text-muted-foreground">{t.journeyText}</p>
+                {surface === "ads" && (
+                  <div className="mt-5 flex items-center gap-2 rounded-xl border border-amber-400/20 bg-amber-400/5 p-3 text-xs text-muted-foreground">
+                    <X className="h-4 w-4" /> {t.adsUnavailable}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={120}>
+          <div className="mt-16 mb-8 max-w-3xl">
+            <h3 className="text-3xl font-medium tracking-[-0.03em] md:text-4xl">{t.level}</h3>
+            <p className="mt-3 text-muted-foreground leading-7">{t.levelText}</p>
+          </div>
+        </Reveal>
+
+        <div className="grid gap-4 lg:grid-cols-3">
+          {(Object.keys(plans) as PlanId[]).map((id) => {
+            const p = plans[id];
+            const active = plan === id;
+            const planItems = t[p.items] as readonly string[];
+            return (
+              <Reveal key={id} delay={id === "local" ? 0 : id === "growth" ? 60 : 120}>
+                <button
+                  type="button"
+                  onClick={() => setPlan(id)}
+                  className={cn("h-full w-full rounded-3xl border p-6 text-left transition duration-300", active ? "border-foreground bg-foreground/[0.05] shadow-xl" : "border-border hover:border-foreground/30")}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <div className="text-[10px] font-semibold tracking-[0.22em] text-muted-foreground">{t[p.title]}</div>
+                      <div className="mt-2 text-xl font-medium">{t[p.sub]}</div>
+                    </div>
+                    {active && <div className="rounded-full bg-foreground p-1 text-background"><Check className="h-3 w-3" /></div>}
+                  </div>
+                  <div className="mt-7 text-3xl font-medium tracking-tight">{t[p.price]}</div>
+                  <p className="mt-3 min-h-12 text-sm leading-6 text-muted-foreground">{t[p.why]}</p>
+                  <div className="mt-6 border-t border-border pt-5">
+                    <div className="mb-3 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{t.included}</div>
+                    <ul className="space-y-2">
+                      {planItems.map((item) => <li key={item} className="flex gap-2 text-sm"><Check className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />{item}</li>)}
+                    </ul>
+                  </div>
+                </button>
+              </Reveal>
+            );
+          })}
+        </div>
+
+        <Reveal delay={100}>
+          <div className="mt-10 grid gap-6 rounded-3xl border border-border p-6 md:grid-cols-[1fr_auto] md:p-8">
             <div>
-              <h2 className="display-serif text-4xl sm:text-5xl lg:text-6xl text-foreground">
-                XRAGENCY <span className="text-primary">Intelligence</span>
-              </h2>
-              <p className="label-mono mt-3 text-xs uppercase tracking-widest text-primary">
-                Audit Stratégique & Recommandation Personnalisée
-              </p>
+              <div className="flex items-center gap-3 text-sm font-medium"><MapPinned className="h-4 w-4" /> {t.compare}</div>
+              <p className="mt-3 max-w-3xl leading-7 text-muted-foreground">{t.compareText}</p>
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                <div className="rounded-2xl bg-muted/40 p-4"><MapPinned className="h-4 w-4" /><div className="mt-3 text-sm font-medium">{t.maps}</div><div className="mt-1 text-xs text-muted-foreground">{t.mapsNeed}</div></div>
+                <div className="rounded-2xl bg-muted/40 p-4"><Search className="h-4 w-4" /><div className="mt-3 text-sm font-medium">{t.seo}</div><div className="mt-1 text-xs text-muted-foreground">{t.seoNeed}</div></div>
+                <div className="rounded-2xl bg-muted/40 p-4"><TrendingUp className="h-4 w-4" /><div className="mt-3 text-sm font-medium">Maps + SEO</div><div className="mt-1 text-xs text-muted-foreground">{t.both}</div></div>
+              </div>
+            </div>
+            <div className="flex items-end">
+              <Link to="/services/seo" className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-medium transition hover:bg-muted">Voir l'offre SEO <ArrowRight className="h-4 w-4" /></Link>
             </div>
           </div>
         </Reveal>
 
         <Reveal delay={140}>
-          {/* Main Interactive AI Interface Container */}
-          <div className="surface-plate mt-10 overflow-hidden rounded-3xl border border-border bg-card shadow-2xl backdrop-blur-xl">
-            {/* Top Assistant Header */}
-            <div className="flex items-center justify-between border-b border-border/60 bg-accent/20 px-4 py-3 sm:px-6 sm:py-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-primary border border-primary/30">
-                  <Bot className="h-5 w-5" />
-                </div>
-                <div>
-                  <h4 className="display-serif text-sm font-semibold text-foreground">
-                    {t(UI.intelAdvisorName)}
-                  </h4>
-                  <p className="label-mono text-[10px] text-muted-foreground">
-                    {t(UI.intelAdvisorSub)}
-                  </p>
-                </div>
+          <div className="mt-12 rounded-3xl border border-border bg-foreground p-7 text-background md:p-10">
+            <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
+              <div>
+                <div className="mb-3 flex items-center gap-2 text-xs uppercase tracking-[0.2em] opacity-60"><Globe2 className="h-4 w-4" /> XRAGENCY</div>
+                <h3 className="max-w-2xl text-3xl font-medium tracking-[-0.03em] md:text-4xl">{t.cta}</h3>
+                <p className="mt-3 max-w-2xl leading-7 opacity-70">{t.ctaText}</p>
               </div>
-
-              <button
-                onClick={handleRestart}
-                className="label-mono inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-card/60 px-3 py-1.5 text-[11px] text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
-              >
-                <RotateCcw className="h-3 w-3" />
-                {t(UI.intelRestartLabel)}
-              </button>
+              <a href={`https://wa.me/${CONTACT.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent("Bonjour XRAGENCY, je souhaite recevoir une analyse gratuite de ma visibilité Google.")}`} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full bg-background px-6 py-3 text-sm font-medium text-foreground transition hover:opacity-90">{t.cta} <ArrowRight className="h-4 w-4" /></a>
             </div>
-
-            {/* Chat Flow Stream */}
-            <div 
-              ref={chatContainerRef}
-              className="max-h-[560px] min-h-[320px] sm:min-h-[380px] overflow-y-auto p-4 sm:p-6 space-y-5 sm:space-y-6"
-            >
-              {messages.map((msg) => {
-                const isAi = msg.sender === "ai";
-                return (
-                  <div
-                    key={msg.id}
-                    className={cn(
-                      "flex gap-3.5 animate-in fade-in slide-in-from-bottom-2 duration-300",
-                      isAi ? "items-start" : "flex-row-reverse items-end",
-                    )}
-                  >
-                    {isAi ? (
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary border border-primary/40">
-                        <Bot className="h-4 w-4" />
-                      </div>
-                    ) : (
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                        <User className="h-4 w-4" />
-                      </div>
-                    )}
-
-                    <div
-                      className={cn(
-                        "max-w-[85%] rounded-2xl p-4.5 sm:p-5 text-sm leading-relaxed",
-                        isAi
-                          ? "border border-border/80 bg-accent/30 text-foreground"
-                          : "bg-primary text-primary-foreground font-medium",
-                      )}
-                    >
-                      <p className="whitespace-pre-line">{msg.text}</p>
-
-                      {/* Options Chips Selection */}
-                      {msg.options && currentStep < 4 ? (
-                        <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                          {msg.options.map((opt) => {
-                            const IconComponent = opt.icon;
-                            return (
-                              <button
-                                key={opt.id}
-                                onClick={() => handleSelectOption(currentStep, opt)}
-                                className="group flex items-center gap-3 rounded-xl border border-border/70 bg-card/80 p-3 sm:p-3.5 text-left transition-all duration-200 hover:border-primary hover:bg-primary/5 hover:translate-x-0.5 min-h-[44px]"
-                              >
-                                {IconComponent ? (
-                                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-border bg-accent/40 text-primary group-hover:border-primary/50">
-                                    <IconComponent className="h-3.5 w-3.5" />
-                                  </div>
-                                ) : null}
-                                <span className="label-mono text-xs text-foreground group-hover:text-primary">
-                                  {t(opt.label)}
-                                </span>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      ) : null}
-
-                      {/* Final Recommendation Summary Card */}
-                      {msg.recommendation ? (
-                        <div className="mt-6 space-y-6">
-                          {/* Recommended Services List */}
-                          <div className="space-y-4">
-                            {msg.recommendation.items.map((item, idx) => (
-                              <div
-                                key={idx}
-                                className="rounded-2xl border border-border bg-card p-5 shadow-sm"
-                              >
-                                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/60 pb-3">
-                                  <div className="flex items-center gap-2">
-                                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/20 text-primary text-xs font-bold">
-                                      0{idx + 1}
-                                    </span>
-                                    <h5 className="display-serif text-base font-semibold text-foreground">
-                                      {t(item.title)}
-                                    </h5>
-                                  </div>
-                                  <span className="display-serif text-base font-bold text-primary">
-                                    {price(item.eur)}{" "}
-                                    <span className="label-mono text-xs font-normal text-muted-foreground">
-                                      {item.period === "month"
-                                        ? "/m"
-                                        : item.period === "year"
-                                          ? "/an"
-                                          : ""}
-                                    </span>
-                                  </span>
-                                </div>
-                                <p className="label-mono mt-2 text-xs font-medium text-foreground">
-                                  {t(UI.intelFormule)} {t(item.plan)}
-                                </p>
-                                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                                  <strong className="text-foreground">
-                                    {t(UI.intelWhyLabel)}{" "}
-                                  </strong>
-                                  {t(item.why)}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-
-                          {/* Totals Summary */}
-                          <div className="grid gap-3 sm:grid-cols-3 rounded-2xl border border-border/80 bg-accent/40 p-4">
-                            <div>
-                              <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                                {t(UI.intelSetupLabel)}
-                              </span>
-                              <p className="display-serif mt-1 text-xl text-primary">
-                                {price(msg.recommendation.setup)}
-                              </p>
-                            </div>
-                            <div>
-                              <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                                {t(UI.intelMonthlyLabel)}
-                              </span>
-                              <p className="display-serif mt-1 text-xl text-primary">
-                                {msg.recommendation.monthly > 0
-                                  ? `${price(msg.recommendation.monthly)} /m`
-                                  : "—"}
-                              </p>
-                            </div>
-                            <div>
-                              <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                                {t(UI.intelYearlyLabel)}
-                              </span>
-                              <p className="display-serif mt-1 text-xl text-primary">
-                                {msg.recommendation.yearly > 0
-                                  ? `${price(msg.recommendation.yearly)} /an`
-                                  : "—"}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Direct Actions */}
-                          <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 pt-2">
-                            <a
-                              href={`${CONTACT.whatsapp}?text=${encodeURIComponent(
-                                `Bonjour Alexandre, je viens de terminer mon audit IA sur votre site. Voici les prestations recommandées : ${msg.recommendation.items
-                                  .map((r) => `${t(r.title)} (${t(r.plan)})`)
-                                  .join(", ")}. Pouvons-nous valider ce plan ensemble ?`,
-                              )}`}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white shadow-lg transition-all hover:bg-emerald-500 min-h-[44px]"
-                            >
-                              <MessageSquare className="h-4 w-4" />
-                              {t(UI.intelSendWhatsapp)}
-                            </a>
-
-                            <button
-                              onClick={() => {
-                                const summary = `XR Agency — Diagnostic & Recommandation\n\n${msg.recommendation?.items
-                                  .map(
-                                    (r) =>
-                                      `• ${t(r.title)} (${t(r.plan)}) : ${price(r.eur)}${
-                                        r.period === "month"
-                                          ? "/m"
-                                          : r.period === "year"
-                                            ? "/an"
-                                            : ""
-                                      }`,
-                                  )
-                                  .join("\n")}\n\nMise en place : ${price(
-                                  msg.recommendation?.setup || 0,
-                                )}\nSuivi Mensuel : ${price(
-                                  msg.recommendation?.monthly || 0,
-                                )}\nGoogle Maps : ${
-                                  msg.recommendation?.yearly
-                                    ? price(msg.recommendation.yearly)
-                                    : "—"
-                                }`;
-                                navigator.clipboard.writeText(summary);
-                                setCopied(true);
-                                setTimeout(() => setCopied(false), 2500);
-                              }}
-                              className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-xs font-medium uppercase tracking-wider text-foreground hover:border-primary hover:text-primary transition-all min-h-[44px]"
-                            >
-                              {copied ? (
-                                <>
-                                  <CheckCheck className="h-4 w-4 text-emerald-500" />
-                                  <span>{t(UI.intelPlanCopied)}</span>
-                                </>
-                              ) : (
-                                <>
-                                  <Copy className="h-4 w-4" />
-                                  <span>{t(UI.intelCopyPlan)}</span>
-                                </>
-                              )}
-                            </button>
-                          </div>
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-                );
-              })}
-
-              {/* Typing indicator */}
-              {isTyping ? (
-                <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary border border-primary/40">
-                    <Bot className="h-4 w-4" />
-                  </div>
-                  <div className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2.5">
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary" />
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary [animation-delay:0.2s]" />
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary [animation-delay:0.4s]" />
-                  </div>
-                </div>
-              ) : null}
-
-              <div ref={chatEndRef} />
-            </div>
-
-            {/* Freeform Message Input Footer */}
-            <form
-              onSubmit={handleCustomTextSubmit}
-              className="flex items-center gap-2 sm:gap-3 border-t border-border/60 bg-card/60 p-3 sm:p-4"
-            >
-              <input
-                type="text"
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                placeholder={
-                  lang === "vi"
-                    ? "Nhập câu trả lời hoặc câu hỏi của bạn..."
-                    : lang === "en"
-                      ? "Type your answer or question here..."
-                      : "Répondez ou posez une question sur votre projet..."
-                }
-                className="flex-1 min-h-[44px] rounded-full border border-border bg-background/80 px-4 sm:px-5 py-2.5 sm:py-3 text-xs text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-              />
-              <button
-                type="submit"
-                disabled={!inputText.trim()}
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground disabled:opacity-40 transition-all hover:bg-primary/90"
-              >
-                <Send className="h-4 w-4" />
-              </button>
-            </form>
           </div>
         </Reveal>
+
+        <div className="mt-5 flex justify-end">
+          <button type="button" onClick={() => { setSurface("seo"); setPlan("growth"); }} className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground"><CircleDollarSign className="h-3.5 w-3.5" /> {t.reset}</button>
+        </div>
       </div>
     </section>
   );
