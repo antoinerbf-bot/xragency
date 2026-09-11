@@ -12,13 +12,13 @@ const ref = (name: string, url: string, sector: string, type: PortfolioReference
 
 export const PORTFOLIO_REFERENCES: PortfolioReference[] = [
   ref("Le Gramme", "https://legramme.com/", "luxe", "E-commerce"), ref("MaisonCléo", "https://maisoncleo.com/", "luxe", "E-commerce"), ref("Completedworks", "https://completedworks.com/", "luxe", "E-commerce"),
-  ref("THE PIG Hotels", "https://www.thepighotel.com/", "hotel", "Vitrine"), ref("Heckfield Place", "https://www.heckfieldplace.com/", "hotel", "Vitrine"), ref("Naman Retreat", "https://www.namanretreat.com/", "hotel", "Vitrine"),
-  ref("Septime", "https://www.septime-charonne.fr/", "restaurant", "Vitrine"), ref("Burnt Ends", "https://burntends.com.sg/", "restaurant", "Vitrine"), ref("Fishwife", "https://fishwife.com/", "restaurant", "Vitrine"),
+  ref("AYANA", "https://www.ayana.com/", "hotel", "Vitrine"), ref("Heckfield Place", "https://www.heckfieldplace.com/", "hotel", "Vitrine"), ref("Naman Retreat", "https://www.namanretreat.com/", "hotel", "Vitrine"),
+  ref("Septime", "https://www.septime-charonne.fr/", "restaurant", "Vitrine"), ref("Burnt Ends", "https://burntends.com.sg/", "restaurant", "Vitrine"), ref("BRAT", "https://bratrestaurant.co.uk/", "restaurant", "Vitrine"),
   ref("The Modern House", "https://www.themodernhouse.com/", "immobilier", "Portail"), ref("DDRE Global", "https://ddreglobal.com/", "immobilier", "Vitrine"), ref("Aucoot", "https://www.aucoot.com/", "immobilier", "Vitrine"),
   ref("Girardo & Co.", "https://girardo.com/", "auto", "Vitrine"), ref("DK Engineering", "https://www.dkeng.co.uk/", "auto", "Vitrine"), ref("Romans International", "https://www.romansinternational.com/", "auto", "E-commerce"),
   ref("FGM Architects", "https://fgma.co.uk/", "architecture", "Vitrine"), ref("Office Winhov", "https://winhov.nl/", "architecture", "Vitrine"), ref("Montalba Architects", "https://montalbaarchitects.com/", "architecture", "Vitrine"),
   ref("Paloma Wool", "https://palomawool.com/", "mode", "E-commerce"), ref("MaisonCléo", "https://maisoncleo.com/", "mode", "E-commerce"), ref("Girls of Dust", "https://www.girlsofdust.com/", "mode", "E-commerce"),
-  ref("VIOLETTE_FR", "https://www.violettefr.com/", "beaute", "E-commerce"), ref("Typology", "https://www.typology.com/", "beaute", "E-commerce"), ref("Agent Nateur", "https://www.agentnateur.com/", "beaute", "E-commerce"),
+  ref("Anillo", "https://anillo.com/", "beaute", "E-commerce"), ref("Typology", "https://www.typology.com/", "beaute", "E-commerce"), ref("Agent Nateur", "https://www.agentnateur.com/", "beaute", "E-commerce"),
   ref("Neko Health", "https://www.nekohealth.com/", "sante", "Vitrine"), ref("OneSkin", "https://www.oneskin.co/", "sante", "E-commerce"), ref("Forward Health", "https://goforward.com/", "sante", "Vitrine"),
   ref("Keystone Law", "https://keystonelaw.com/", "droit", "Vitrine"), ref("Hodge Jones & Allen", "https://www.hja.net/", "droit", "Vitrine"), ref("Buckles Solicitors", "https://www.buckles-law.co.uk/", "droit", "Vitrine"),
   ref("Plum", "https://withplum.com/", "finance", "Vitrine"), ref("Yotta", "https://www.withyotta.com/", "finance", "Vitrine"), ref("Tide", "https://www.tide.co/", "finance", "Vitrine"),
