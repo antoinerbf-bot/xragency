@@ -19,10 +19,7 @@ const SERVICE_IMG: Record<string, string> = {
 
 export function HomeServices() {
   const { t, price } = useLang();
-  const featured = useMemo(
-    () => FEATURED_IDS.map((id) => SERVICES.find((service) => service.id === id)).filter(Boolean) as typeof SERVICES,
-    [],
-  );
+  const featured = useMemo(() => FEATURED_IDS.map((id) => SERVICES.find((service) => service.id === id)).filter(Boolean) as typeof SERVICES, []);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -39,30 +36,23 @@ export function HomeServices() {
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
+    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); if (frame) window.cancelAnimationFrame(frame); };
   }, []);
 
   const position = progress * Math.max(featured.length - 1, 1);
   const activeIndex = Math.min(featured.length - 1, Math.round(position));
 
   return (
-    <section id="homepage-services" className="relative bg-background" style={{ height: `${Math.max(featured.length, 1) * 100}svh` }}>
+    <section id="homepage-services" aria-label="Les sept expertises XR Agency" className="relative bg-background" style={{ height: `${Math.max(featured.length, 1) * 100}svh` }}>
       <div className="sticky top-0 h-[100svh] min-h-[680px] overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_35%,hsl(var(--primary)/0.10),transparent_42%)]" />
 
         <div className="absolute left-5 right-5 top-24 z-30 flex items-start justify-between sm:left-8 sm:right-8 lg:left-12 lg:right-12 lg:top-28">
           <div>
-            <span className="label-mono text-[9px] uppercase tracking-[0.3em] text-primary">XR AGENCY · EXPERTISES</span>
-            <h2 className="display-serif mt-3 max-w-3xl text-4xl leading-[0.88] sm:text-6xl lg:text-7xl">Sept expertises.<br />Une seule expérience.</h2>
+            <span className="label-mono text-[9px] uppercase tracking-[0.3em] text-primary">XR AGENCY · 07 DISCIPLINES</span>
+            <h2 className="display-serif mt-3 max-w-3xl text-4xl leading-[0.88] sm:text-6xl lg:text-7xl">Une expertise.<br />Puis la suivante.</h2>
           </div>
-          <div className="hidden text-right sm:block">
-            <div className="label-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{String(activeIndex + 1).padStart(2, "0")} / {String(featured.length).padStart(2, "0")}</div>
-            <div className="mt-3 h-px w-28 overflow-hidden bg-border"><div className="h-full bg-primary" style={{ width: `${progress * 100}%` }} /></div>
-          </div>
+          <div className="hidden text-right sm:block"><div className="label-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{String(activeIndex + 1).padStart(2, "0")} / 07</div><div className="mt-3 h-px w-28 overflow-hidden bg-border"><div className="h-full bg-primary" style={{ width: `${progress * 100}%` }} /></div></div>
         </div>
 
         <div className="absolute inset-x-0 bottom-0 top-0 mx-auto max-w-[1600px]">
@@ -79,29 +69,21 @@ export function HomeServices() {
               <article key={service.id} className="absolute inset-x-5 bottom-10 top-52 origin-center transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] sm:inset-x-8 sm:bottom-12 sm:top-48 lg:inset-x-12 lg:bottom-14 lg:top-44" style={{ zIndex: 20 - Math.round(abs * 2), opacity, transform: `translate3d(${translateX}%, ${translateY}%, 0) scale(${scale})`, pointerEvents: active ? "auto" : "none" }}>
                 <div className="relative h-full overflow-hidden rounded-[2rem] border border-white/10 bg-black shadow-2xl sm:rounded-[2.5rem]">
                   <img src={image} alt="" aria-hidden className="absolute inset-[-5%] h-[110%] w-[110%] object-cover transition-transform duration-[1400ms]" style={{ transform: `scale(${active ? 1.04 : 1.1}) translate3d(${distance * -1.5}%, ${distance * -1}%, 0)` }} />
-                  <div className="absolute inset-0 bg-black/50" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-black/15" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/20" />
-
+                  <div className="absolute inset-0 bg-black/50" /><div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-black/15" /><div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/20" />
                   <div className="relative z-10 flex h-full flex-col justify-end p-7 sm:p-10 lg:p-16">
                     <div className="max-w-5xl">
                       <div className="mb-5 flex items-center gap-3 label-mono text-[9px] uppercase tracking-[0.24em] text-white/45"><span className="text-primary">{service.num}</span><span className="h-px w-10 bg-white/20" /><span>XR AGENCY</span></div>
                       <p className="label-mono text-[9px] uppercase tracking-[0.2em] text-white/55">{t(service.short)}</p>
                       <h3 className="display-serif mt-3 max-w-4xl text-5xl leading-[0.84] text-white sm:text-7xl lg:text-[8.5rem]">{t(service.title)}</h3>
                       <p className="mt-5 max-w-2xl text-sm leading-6 text-white/65 sm:text-base">{t(service.description)}</p>
-                      <div className="mt-7 flex flex-wrap items-center gap-3">
-                        <Link to="/services/$serviceId" params={{ serviceId: service.id }} className="group inline-flex items-center gap-3 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-black transition-all duration-300 hover:gap-5">Découvrir la prestation <ArrowUpRight className="h-4 w-4" /></Link>
-                        <span className="rounded-full border border-white/15 bg-white/5 px-4 py-3 label-mono text-[9px] uppercase tracking-[0.12em] text-white/60 backdrop-blur-xl">À partir de {price(service.fromEur)}{service.fromPeriod === "month" ? " / mois" : service.fromPeriod === "year" ? " / an" : ""}</span>
-                      </div>
+                      <div className="mt-7 flex flex-wrap items-center gap-3"><Link to="/services/$serviceId" params={{ serviceId: service.id }} className="group inline-flex items-center gap-3 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-black transition-all duration-300 hover:gap-5">Découvrir la prestation <ArrowUpRight className="h-4 w-4" /></Link><span className="rounded-full border border-white/15 bg-white/5 px-4 py-3 label-mono text-[9px] uppercase tracking-[0.12em] text-white/60 backdrop-blur-xl">À partir de {price(service.fromEur)}{service.fromPeriod === "month" ? " / mois" : service.fromPeriod === "year" ? " / an" : ""}</span></div>
                     </div>
-                    <div className="mt-8 flex items-center justify-between border-t border-white/15 pt-4">
-                      <div className="flex gap-1.5">{featured.map((item, dotIndex) => <span key={item.id} className={cn("h-1 rounded-full transition-all duration-500", dotIndex === index ? "w-10 bg-white" : "w-2 bg-white/25")} />)}</div>
-                      <div className="flex items-center gap-2 label-mono text-[9px] uppercase tracking-[0.16em] text-white/40">{index < featured.length - 1 ? <>Scroller <ArrowDown className="h-3 w-3 animate-bounce" /></> : "Explorer l'expertise"}</div>
-                    </div>
+                    <div className="mt-8 flex items-center justify-between border-t border-white/15 pt-4"><div className="flex gap-1.5">{featured.map((item, dotIndex) => <span key={item.id} className={cn("h-1 rounded-full transition-all duration-500", dotIndex === index ? "w-10 bg-white" : "w-2 bg-white/25")} />)}</div><div className="flex items-center gap-2 label-mono text-[9px] uppercase tracking-[0.16em] text-white/40">{index < featured.length - 1 ? <>Scroller <ArrowDown className="h-3 w-3 animate-bounce" /></> : "Explorer l'expertise"}</div></div>
                   </div>
                 </div>
               </article>
-          )})}
+            );
+          })}
         </div>
       </div>
     </section>
