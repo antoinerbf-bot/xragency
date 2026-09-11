@@ -8,8 +8,9 @@ import type { L } from "@/lib/i18n";
 export function Logo({ className, subtitle = true }: { className?: string; subtitle?: boolean }) {
   const { t } = useLang();
   return (
-    <Link
-      to="/"
+    <a
+      href="/"
+      aria-label="XR Agency — Accueil"
       className={cn(
         "group inline-flex flex-col tracking-tight transition-all duration-300 hover:opacity-90",
         className,
@@ -26,7 +27,7 @@ export function Logo({ className, subtitle = true }: { className?: string; subti
           {t(UI.logoSubtitle)}
         </span>
       ) : null}
-    </Link>
+    </a>
   );
 }
 
@@ -87,7 +88,6 @@ export function Parallax({
   );
 }
 
-/** Ambient floating element for subtle depth accents */
 export function FloatingBadge({
   children,
   className,
@@ -98,10 +98,7 @@ export function FloatingBadge({
   delay?: number;
 }) {
   return (
-    <div
-      className={cn("animate-float", className)}
-      style={{ animationDelay: `${delay}ms` }}
-    >
+    <div className={cn("animate-float", className)} style={{ animationDelay: `${delay}ms` }}>
       {children}
     </div>
   );
@@ -139,11 +136,7 @@ export function Reveal({
     <div
       ref={ref}
       className={cn("transition-none", className)}
-      style={
-        shown
-          ? { animation: `ember-rise 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}ms both` }
-          : { opacity: 0 }
-      }
+      style={shown ? { animation: `ember-rise 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}ms both` } : { opacity: 0 }}
     >
       {children}
     </div>
@@ -175,19 +168,9 @@ export function SectionHeading({
   const { t } = useLang();
   return (
     <Parallax speed={-0.03} className="max-w-3xl">
-      <Reveal>
-        <p className="label-mono text-primary">{t(label)}</p>
-      </Reveal>
-      <Reveal delay={80}>
-        <h2 className="display-serif mt-6 text-4xl sm:text-5xl lg:text-6xl">
-          {t(line1)} <em className="text-primary not-italic italic">{t(line2)}</em>
-        </h2>
-      </Reveal>
-      {lead ? (
-        <Reveal delay={150}>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">{t(lead)}</p>
-        </Reveal>
-      ) : null}
+      <Reveal><p className="label-mono text-primary">{t(label)}</p></Reveal>
+      <Reveal delay={80}><h2 className="display-serif mt-6 text-4xl sm:text-5xl lg:text-6xl">{t(line1)} <em className="text-primary not-italic italic">{t(line2)}</em></h2></Reveal>
+      {lead ? <Reveal delay={150}><p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">{t(lead)}</p></Reveal> : null}
     </Parallax>
   );
 }
@@ -209,30 +192,13 @@ export function EmberButton({
   type?: "button" | "submit";
   disabled?: boolean;
 }) {
-  const base =
-    "label-mono inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 min-h-[44px] transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer";
+  const base = "label-mono inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 min-h-[44px] transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer";
   const styles = {
-    solid:
-      "bg-primary text-primary-foreground hover:brightness-110 hover:shadow-[var(--shadow-ember)] hover:-translate-y-0.5",
+    solid: "bg-primary text-primary-foreground hover:brightness-110 hover:shadow-[var(--shadow-ember)] hover:-translate-y-0.5",
     outline: "border border-primary/60 text-primary hover:bg-primary/10 hover:-translate-y-0.5",
     ghost: "border border-border text-foreground hover:border-primary/60 hover:text-primary hover:-translate-y-0.5",
   }[variant];
 
-  if (href) {
-    return (
-      <a href={href} className={cn(base, styles, className)}>
-        {children}
-      </a>
-    );
-  }
-  return (
-    <button
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      className={cn(base, styles, className)}
-    >
-      {children}
-    </button>
-  );
+  if (href) return <a href={href} className={cn(base, styles, className)}>{children}</a>;
+  return <button type={type} onClick={onClick} disabled={disabled} className={cn(base, styles, className)}>{children}</button>;
 }
