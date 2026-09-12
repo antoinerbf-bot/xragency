@@ -1,9 +1,11 @@
 import { useMemo, useState } from "react";
-import { ArrowRight, Check, RotateCcw, Sparkles } from "lucide-react";
+import { jsPDF } from "jspdf";
+import { ArrowRight, Check, Mail, MessageCircle, RotateCcw, Sparkles, UserRound } from "lucide-react";
 import { CONTACT } from "@/lib/content";
 
 type Choice = { id: string; label: string; detail: string };
 type Sector = Choice & { goals: string[] };
+type Proposal = { id: string; label: string; detail: string; price: number; period: "once" | "month" };
 
 const SECTORS: Sector[] = [
   { id: "hospitality", label: "Restaurant & hôtellerie", detail: "Restaurant, hôtel, café, rooftop", goals: ["Augmenter les réservations", "Monter en gamme", "Être trouvé localement"] },
@@ -44,8 +46,6 @@ const DISCOVERY: Choice[] = [
   { id: "mixed", label: "Un peu de tout", detail: "Acquisition déjà diversifiée" },
 ];
 
-const WAIT = 220;
-
 const SERVICE_ORDER: Record<string, string[]> = {
   hospitality: ["website", "maps", "social", "seo", "branding", "maintenance"],
   realestate: ["website", "maps", "branding", "seo", "social", "maintenance"],
@@ -54,79 +54,91 @@ const SERVICE_ORDER: Record<string, string[]> = {
   other: ["website", "branding", "seo", "maps", "social", "maintenance"],
 };
 
+const BASE_PRICES: Record<string, number> = { website: 499, branding: 199, seo: 299, maps: 199, social: 499, maintenance: 29 };
+const LABELS: Record<string, string> = { website: "Création de site web", branding: "Branding", seo: "SEO", maps: "Google Maps", social: "Social Media", maintenance: "WebCare" };
+
 export function QuoteConfiguratorCompact() {
   const [step, setStep] = useState(0);
   const [sectorId, setSectorId] = useState("");
   const [goal, setGoal] = useState("");
   const [situation, setSituation] = useState("");
-  const [serviceId, setServiceId] = useState("");
   const [budget, setBudget] = useState("");
   const [discovery, setDiscovery] = useState("");
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [client, setClient] = useState({ name: "", email: "", whatsapp: "" });
+  const [generated, setGenerated] = useState(false);
 
   const sector = SECTORS.find((x) => x.id === sectorId);
-  const service = SERVICES.find((x) => x.id === serviceId);
   const situationChoice = SITUATIONS.find((x) => x.id === situation);
   const budgetChoice = BUDGETS.find((x) => x.id === budget);
   const discoveryChoice = DISCOVERY.find((x) => x.id === discovery);
   const orderedServices = (SERVICE_ORDER[sectorId] ?? SERVICE_ORDER.other).map((id) => SERVICES.find((x) => x.id === id)).filter(Boolean) as Choice[];
 
-  const choose = (setter: (value: string) => void, value: string, next: number) => {
-    setter(value);
-    window.setTimeout(() => setStep(next), WAIT);
-  };
+  const proposals = useMemo<Proposal[]>(() => {
+    if (!sector) return [];
+    return orderedServices.slice(0, 4).map((service) => {
+      let price = BASE_PRICES[service.id];
+      if (service.id === "website" && situation === "selling") price = 1490;
+      if (service.id === "website" && situation === "redesign") price = 799;
+      if (service.id === "maintenance") price = 29;
+      const detail = service.id === "website" && situation === "selling" ? "E-commerce, paiement & réservation" : service.detail;
+      return { id: service.id, label: service.label, detail, price, period: service.id === "seo" || service.id === "social" || service.id === "maintenance" ? "month" : "once" };
+    });
+  }, [orderedServices, sector, situation]);
 
-  const reset = () => {
-    setStep(0); setSectorId(""); setGoal(""); setSituation(""); setServiceId(""); setBudget(""); setDiscovery("");
-  };
+  const total = selectedServices.reduce((sum, id) => { const p = proposals.find((x) => x.id === id); return sum + (p?.price ?? 0); }, 0);
+  const monthly = selectedServices.reduce((sum, id) => { const p = proposals.find((x) => x.id === id); return sum + (p?.period === "month" ? p.price : 0); }, 0);
+  const once = total - monthly;
+
+  const choose = (setter: (value: string) => void, value: string, next: number) => { setter(value); window.setTimeout(() => setStep(next), 180); };
+  const toggleService = (id: string) => setSelectedServices((current) => current.includes(id) ? current.filter((x) => x !== id) : [...current, id]);
+  const reset = () => { setStep(0); setSectorId(""); setGoal(""); setSituation(""); setBudget(""); setDiscovery(""); setSelectedServices([]); setClient({ name: "", email: "", whatsapp: "" }); setGenerated(false); };
 
   const recommendation = useMemo(() => {
-    if (!sector || !service || !situationChoice || !budgetChoice || !discoveryChoice) return "";
-    const serviceText: Record<string, string> = {
-      website: situation === "none" ? "Une création web pensée pour votre activité et votre objectif." : situation === "selling" ? "Un site orienté conversion, avec vente, paiement ou réservation selon votre besoin." : "Une refonte web orientée conversion, expérience utilisateur et image de marque.",
-      branding: "Une identité premium cohérente avec votre positionnement et votre clientèle.",
-      seo: "Un plan SEO construit autour des recherches qui peuvent réellement générer des clients.",
-      maps: "Une stratégie de visibilité locale pour apparaître au bon moment dans Google Maps et la recherche.",
-      social: "Une présence sociale structurée pour renforcer votre image, votre communauté et votre acquisition.",
-      maintenance: "Un accompagnement WebCare dimensionné selon votre rythme d'évolution.",
-    };
-    const goalText = goal.toLowerCase();
-    const priority = goalText.includes("réservation") || goalText.includes("rendez-vous") ? "La priorité sera le parcours de réservation et la conversion." : goalText.includes("google") || goalText.includes("local") || goalText.includes("visible") ? "La priorité sera la visibilité sur les points de recherche les plus rentables." : goalText.includes("vente") || goalText.includes("vendre") ? "La priorité sera le parcours commercial et la conversion." : goalText.includes("premium") || goalText.includes("gamme") ? "La priorité sera la perception de marque et l'expérience proposée." : "La stratégie sera calibrée selon votre situation, votre budget et votre objectif.";
-    const acquisition = discovery === "google" ? "Comme vos clients passent déjà par Google, nous privilégierons les points de visibilité qui captent cette demande." : discovery === "social" ? "Comme la découverte se fait déjà sur les réseaux, nous renforcerons le lien entre contenu, image de marque et conversion." : discovery === "referral" ? "Comme la recommandation est centrale, le site et le branding devront surtout transformer cette confiance en prise de contact." : "Nous chercherons à mieux relier vos différents points d'acquisition pour éviter de dépendre d'un seul canal.";
-    const budgetNote = budget === "under500" ? "Nous commencerons par le levier le plus prioritaire." : budget === "500_1000" ? "Nous privilégierons une base solide et évolutive." : "Nous pouvons envisager un dispositif plus complet et progressif.";
-    return `${serviceText[service.id]} Pour ${sector.label.toLowerCase()}, ${priority.toLowerCase()} ${acquisition} ${budgetNote}`;
-  }, [sector, service, situationChoice, budgetChoice, discoveryChoice, situation, goal, budget, discovery]);
+    if (!sector || !discoveryChoice) return "";
+    const channel = discovery === "google" ? "la recherche Google et la visibilité locale" : discovery === "social" ? "les réseaux sociaux et leur capacité à convertir" : discovery === "referral" ? "la transformation du bouche-à-oreille en demandes qualifiées" : "la complémentarité de vos canaux d'acquisition";
+    const objective = goal.toLowerCase().includes("réservation") ? "le parcours de réservation et la conversion" : goal.toLowerCase().includes("vente") || goal.toLowerCase().includes("vendre") ? "le parcours commercial et la conversion" : goal.toLowerCase().includes("local") || goal.toLowerCase().includes("google") ? "la visibilité sur les recherches à forte intention" : goal.toLowerCase().includes("gamme") || goal.toLowerCase().includes("premium") ? "la perception premium et l'expérience de marque" : "la crédibilité et l'acquisition";
+    return `Pour ${sector.label.toLowerCase()}, Alexandre recommande de travailler en priorité ${objective}, tout en renforçant ${channel}.`;
+  }, [sector, discovery, discoveryChoice, goal]);
 
-  const titles = ["D'abord, votre activité.", "Votre priorité ?", "Votre situation aujourd'hui ?", "Quel investissement envisagez-vous ?", "Quelle expertise activer ?", "Comment vos clients vous trouvent-ils ?", "Votre recommandation est prête."];
-  const progress = ((step + 1) / 7) * 100;
+  const generatePdf = async () => {
+    if (!client.name || !client.email || !client.whatsapp || !selectedServices.length) return;
+    const doc = new jsPDF({ unit: "mm", format: "a4" });
+    const quoteNumber = `XR-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    let y = 22;
+    doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.text("XRAGENCY", 20, y);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.text("Studio digital premium · Devis personnalisé avec Alexandre", 20, y + 7);
+    doc.setDrawColor(210); doc.line(20, y + 12, 190, y + 12); y += 25;
+    doc.setFont("helvetica", "bold"); doc.setFontSize(15); doc.text("DEVIS PERSONNALISÉ", 20, y); y += 9;
+    doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.text(`Référence : ${quoteNumber}`, 20, y); doc.text(`Date : ${new Date().toLocaleDateString("fr-FR")}`, 145, y); y += 14;
+    doc.setFont("helvetica", "bold"); doc.text("Votre entreprise", 20, y); doc.setFont("helvetica", "normal"); y += 6;
+    doc.text(`Nom : ${client.name}`, 20, y); doc.text(`Email : ${client.email}`, 20, y + 5); doc.text(`WhatsApp : ${client.whatsapp}`, 20, y + 10); y += 20;
+    doc.setFont("helvetica", "bold"); doc.text("Contexte analysé avec Alexandre", 20, y); doc.setFont("helvetica", "normal"); y += 6;
+    const context = `Secteur : ${sector?.label ?? "—"} · Objectif : ${goal || "—"} · Situation : ${situationChoice?.label ?? "—"} · Budget : ${budgetChoice?.label ?? "—"} · Acquisition : ${discoveryChoice?.label ?? "—"}`;
+    const contextLines = doc.splitTextToSize(context, 170); doc.text(contextLines, 20, y); y += contextLines.length * 5 + 8;
+    doc.setFont("helvetica", "bold"); doc.text("Prestations proposées", 20, y); y += 8;
+    selectedServices.forEach((id) => { const p = proposals.find((x) => x.id === id); if (!p) return; doc.setFont("helvetica", "bold"); doc.text(p.label, 20, y); doc.setFont("helvetica", "normal"); doc.text(`${p.detail} · ${p.price.toLocaleString("fr-FR")} €${p.period === "month" ? " / mois" : ""}`, 20, y + 5); y += 13; if (y > 255) { doc.addPage(); y = 22; } });
+    doc.line(20, y, 190, y); y += 9; doc.setFont("helvetica", "bold"); doc.text(`Total prestations ponctuelles : ${once.toLocaleString("fr-FR")} €`, 20, y); y += 6; doc.text(`Abonnements mensuels : ${monthly.toLocaleString("fr-FR")} € / mois`, 20, y); y += 12;
+    doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.text("KARMA SASU · SIREN 889 178 141 · 78 Avenue des Champs-Élysées, Bureau 562, 75008 Paris", 20, 276); doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83", 20, 281);
+    const file = new File([doc.output("blob")], `${quoteNumber}-XRAGENCY.pdf`, { type: "application/pdf" });
+    doc.save(file.name);
+    setGenerated(true);
+    if (navigator.share && navigator.canShare?.({ files: [file] })) { try { await navigator.share({ title: "Votre devis XRAGENCY", text: "Votre devis personnalisé réalisé avec Alexandre.", files: [file] }); } catch { /* user cancelled share */ } }
+  };
 
-  const card = (item: Choice, onClick: () => void, compact = false) => (
-    <button key={item.id} type="button" onClick={onClick} className={`group w-full rounded-lg border border-border bg-background text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md active:scale-[.99] ${compact ? "px-2.5 py-2" : "p-3"}`}>
-      <div className="flex items-center justify-between gap-2"><span className="text-[11px] font-medium leading-tight sm:text-sm">{item.label}</span><ArrowRight className="h-3 w-3 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" /></div>
-      <div className="mt-0.5 hidden text-[9px] leading-4 text-muted-foreground sm:block">{item.detail}</div>
-    </button>
-  );
+  const titles = ["D'abord, votre activité.", "Votre priorité ?", "Votre situation aujourd'hui ?", "Quel investissement envisagez-vous ?", "Quelles expertises activer ?", "Comment vos clients vous trouvent-ils ?", "Votre sélection est prête.", "Vos coordonnées"];
+  const progress = ((step + 1) / 8) * 100;
+  const card = (item: Choice, onClick: () => void, selected = false) => <button key={item.id} type="button" onClick={onClick} className={`group w-full rounded-xl border p-3 text-left transition-all hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-lg ${selected ? "border-primary bg-primary/[0.07] shadow-md" : "border-border bg-background"}`}><div className="flex items-center justify-between gap-2"><span className="text-[11px] font-medium leading-tight sm:text-sm">{item.label}</span>{selected ? <Check className="h-3.5 w-3.5 text-primary" /> : <ArrowRight className="h-3 w-3 text-muted-foreground group-hover:translate-x-1 group-hover:text-primary" />}</div><div className="mt-1 hidden text-[9px] leading-4 text-muted-foreground sm:block">{item.detail}</div></button>;
 
-  return (
-    <section id="quote" className="relative border-y border-border/50 bg-background py-3 sm:py-5">
-      <div className="mx-auto max-w-xl px-3.5 sm:px-5">
-        <div className="mb-1.5 flex items-center justify-between gap-2">
-          <div className="flex min-w-0 items-center gap-2"><span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-primary/40 bg-primary/10 text-primary"><Sparkles className="h-3 w-3" /></span><div className="min-w-0"><div className="label-mono text-[7px] uppercase tracking-[0.2em] text-primary">XR INTELLIGENCE</div><div className="truncate text-[9px] text-muted-foreground">Alexandre est là pour vous servir · devis personnalisé</div></div></div><div className="flex shrink-0 items-center gap-1.5"><div className="h-1 w-9 overflow-hidden rounded-full bg-muted sm:w-12"><div className="h-full rounded-full bg-primary transition-all duration-500" style={{ width: `${progress}%` }} /></div><span className="label-mono text-[7px] text-muted-foreground">{String(step + 1).padStart(2, "0")}/07</span></div>
-        </div>
-
-        <div className="rounded-xl border border-border bg-card/70 p-2.5 shadow-[0_12px_40px_-32px_rgba(0,0,0,.5)] sm:p-3.5">
-          <div className="mb-2 flex items-end justify-between gap-2"><div><p className="label-mono text-[7px] uppercase tracking-[0.18em] text-muted-foreground">{step === 6 ? "Analyse terminée" : `Question ${step + 1} sur 7`}</p><h2 className="mt-0.5 text-base font-medium tracking-[-0.03em] sm:text-xl">{titles[step]}</h2></div>{step > 0 && <button type="button" onClick={() => setStep(step - 1)} className="rounded-full border border-border px-2 py-1 text-[10px] text-muted-foreground hover:text-foreground" aria-label="Question précédente">←</button>}</div>
-
-          <div key={step} className="animate-in fade-in slide-in-from-right-1 duration-200">
-            {step === 0 && <div><p className="mb-1.5 text-[9px] text-muted-foreground">Choisissez votre univers. Alexandre adaptera les questions suivantes.</p><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">{SECTORS.map((x) => card(x, () => choose(setSectorId, x.id, 1), true))}</div></div>}
-            {step === 1 && sector && <div><p className="mb-1.5 text-[9px] text-muted-foreground">Votre objectif principal permet de prioriser les bonnes prestations.</p><div className="grid gap-1.5 sm:grid-cols-3">{sector.goals.map((x) => card({ id: x, label: x, detail: "Priorité adaptée à votre secteur" }, () => choose(setGoal, x, 2)))}</div></div>}
-            {step === 2 && <div><p className="mb-1.5 text-[9px] text-muted-foreground">Votre point de départ change directement la recommandation.</p><div className="grid grid-cols-2 gap-1.5">{SITUATIONS.map((x) => card(x, () => choose(setSituation, x.id, 3)))}</div></div>}
-            {step === 3 && <div><p className="mb-1.5 text-[9px] text-muted-foreground">Le budget sert à calibrer le projet, pas à vous enfermer dans une formule.</p><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3 lg:grid-cols-5">{BUDGETS.map((x) => card(x, () => choose(setBudget, x.id, 4)))}</div></div>}
-            {step === 4 && <div><p className="mb-1.5 text-[9px] text-muted-foreground">Alexandre vous propose ensuite les expertises les plus pertinentes pour votre activité.</p><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">{orderedServices.map((x) => card(x, () => choose(setServiceId, x.id, 5)))}</div></div>}
-            {step === 5 && <div><p className="mb-1.5 text-[9px] text-muted-foreground">Dernière question : où vos clients vous trouvent-ils aujourd'hui ?</p><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">{DISCOVERY.map((x) => card(x, () => choose(setDiscovery, x.id, 6)) )}</div></div>}
-            {step === 6 && sector && service && situationChoice && budgetChoice && discoveryChoice && <div className="space-y-2.5"><div className="rounded-lg border border-primary/30 bg-primary/[0.06] p-3"><div className="flex items-center gap-1.5 text-[11px] font-medium"><Check className="h-3.5 w-3.5 text-primary" /> Recommandation XR Intelligence</div><p className="mt-1.5 text-xs leading-5 sm:text-sm">{recommendation}</p></div><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">{[["Secteur", sector.label], ["Objectif", goal], ["Situation", situationChoice.label], ["Budget", budgetChoice.label], ["Expertise", service.label], ["Acquisition", discoveryChoice.label]].map(([label, value]) => <div key={label} className="rounded-lg border border-border bg-background p-2"><div className="label-mono text-[6px] uppercase tracking-wider text-muted-foreground">{label}</div><div className="mt-0.5 text-[9px] leading-4">{value}</div></div>)}</div><div className="flex flex-wrap gap-1.5"><a href={`${CONTACT.whatsapp}?text=${encodeURIComponent(`Bonjour XR Agency, je souhaite un devis sur mesure. Secteur : ${sector.label}. Objectif : ${goal}. Situation : ${situationChoice.label}. Expertise : ${service.label}. Budget : ${budgetChoice.label}. Acquisition : ${discoveryChoice.label}.`)}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-2 text-[8px] font-semibold uppercase tracking-wider text-primary-foreground">Recevoir mon devis <ArrowRight className="h-3 w-3" /></a><button type="button" onClick={reset} className="inline-flex items-center gap-1.5 rounded-full border border-border px-3.5 py-2 text-[8px] font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground"><RotateCcw className="h-3 w-3" /> Recommencer</button></div></div>}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+  return <section id="quote" className="relative border-y border-border/50 bg-background py-4 sm:py-6"><div className="mx-auto max-w-2xl px-3.5 sm:px-5"><div className="mb-2 flex items-center justify-between gap-3"><div className="flex items-center gap-2"><div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-primary/30 bg-primary/[0.08] text-primary shadow-sm"><span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-primary" /><UserRound className="h-5 w-5" /></div><div><div className="label-mono text-[8px] uppercase tracking-[0.2em] text-primary">XR INTELLIGENCE</div><div className="text-[10px] text-muted-foreground sm:text-xs">Alexandre vous accompagne · devis personnalisé</div></div></div><div className="flex items-center gap-1.5"><div className="h-1 w-10 overflow-hidden rounded-full bg-muted sm:w-16"><div className="h-full rounded-full bg-primary transition-all" style={{ width: `${progress}%` }} /></div><span className="label-mono text-[7px] text-muted-foreground">{String(step + 1).padStart(2, "0")}/08</span></div></div>
+    <div className="rounded-2xl border border-border bg-card/80 p-3 shadow-[0_20px_60px_-45px_rgba(0,0,0,.6)] sm:p-5"><div className="mb-3 flex items-end justify-between gap-2"><div><p className="label-mono text-[7px] uppercase tracking-[0.18em] text-muted-foreground">{step >= 7 ? "Finalisation" : `Question ${step + 1} sur 8`}</p><h2 className="mt-1 text-base font-medium tracking-[-0.03em] sm:text-2xl">{titles[step]}</h2></div>{step > 0 && step < 7 && <button type="button" onClick={() => setStep(step - 1)} className="rounded-full border border-border px-2.5 py-1 text-[10px] text-muted-foreground hover:text-foreground">←</button>}</div>
+      {step === 0 && <div><p className="mb-2 text-[9px] text-muted-foreground">Alexandre adapte la suite du diagnostic à votre métier.</p><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">{SECTORS.map((x) => card(x, () => choose(setSectorId, x.id, 1)))}</div></div>}
+      {step === 1 && sector && <div className="grid gap-1.5 sm:grid-cols-3">{sector.goals.map((x) => card({ id: x, label: x, detail: "Priorité adaptée à votre secteur" }, () => choose(setGoal, x, 2)))}</div>}
+      {step === 2 && <div className="grid grid-cols-2 gap-1.5">{SITUATIONS.map((x) => card(x, () => choose(setSituation, x.id, 3)))}</div>}
+      {step === 3 && <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">{BUDGETS.map((x) => card(x, () => choose(setBudget, x.id, 4)))}</div>}
+      {step === 4 && <div><p className="mb-2 text-[9px] text-muted-foreground">Alexandre priorise les expertises les plus pertinentes. Vous pourrez en sélectionner plusieurs.</p><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">{orderedServices.map((x) => card(x, () => toggleService(x.id), selectedServices.includes(x.id)))}</div><button type="button" disabled={!selectedServices.length} onClick={() => setStep(5)} className="mt-3 w-full rounded-full bg-primary px-5 py-3 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground disabled:opacity-40">Continuer avec ma sélection →</button></div>}
+      {step === 5 && <div><p className="mb-2 text-[9px] text-muted-foreground">Dernière question d'acquisition.</p><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">{DISCOVERY.map((x) => card(x, () => choose(setDiscovery, x.id, 6)))}</div></div>}
+      {step === 6 && sector && <div className="space-y-3"><div className="rounded-2xl border border-primary/30 bg-primary/[0.06] p-4"><div className="flex items-center gap-2 text-xs font-semibold"><Sparkles className="h-4 w-4 text-primary" /> Recommandation d'Alexandre</div><p className="mt-2 text-xs leading-5 sm:text-sm">{recommendation}</p></div><div className="grid gap-2 sm:grid-cols-2">{selectedServices.map((id) => { const p = proposals.find((x) => x.id === id); return p ? <div key={id} className="flex items-center justify-between rounded-xl border border-border bg-background p-3"><div><div className="text-xs font-medium">{p.label}</div><div className="text-[9px] text-muted-foreground">{p.detail}</div></div><div className="text-right text-xs font-semibold text-primary">À partir de {p.price.toLocaleString("fr-FR")} €{p.period === "month" ? " / mois" : ""}</div></div> : null; })}</div><div className="rounded-xl border border-border bg-background p-3 text-xs"><div className="flex justify-between"><span>Prestations ponctuelles</span><strong>{once.toLocaleString("fr-FR")} €</strong></div><div className="mt-1 flex justify-between"><span>Abonnements mensuels</span><strong>{monthly.toLocaleString("fr-FR")} € / mois</strong></div></div><button type="button" onClick={() => setStep(7)} className="w-full rounded-full bg-primary px-5 py-3.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">Recevoir mon devis PDF →</button></div>}
+      {step === 7 && <div className="space-y-2.5"><p className="text-[9px] text-muted-foreground">Vos informations servent uniquement à préparer et partager votre devis personnalisé.</p><input value={client.name} onChange={(e) => setClient({ ...client, name: e.target.value })} placeholder="Nom / entreprise" className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" /><input value={client.email} onChange={(e) => setClient({ ...client, email: e.target.value })} type="email" placeholder="Votre e-mail" className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" /><input value={client.whatsapp} onChange={(e) => setClient({ ...client, whatsapp: e.target.value })} placeholder="Votre WhatsApp / téléphone" className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" /><button type="button" disabled={!client.name || !client.email || !client.whatsapp} onClick={generatePdf} className="w-full rounded-full bg-primary px-5 py-3.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground disabled:opacity-40">{generated ? "PDF généré · Partager à nouveau →" : "Générer mon devis PDF →"}</button><div className="grid grid-cols-2 gap-2"><a href={`${CONTACT.whatsapp}?text=${encodeURIComponent(`Bonjour XR Agency, je viens de préparer un devis avec Alexandre. Nom : ${client.name}. Email : ${client.email}. WhatsApp : ${client.whatsapp}. Total estimé : ${once.toLocaleString("fr-FR")} € + ${monthly.toLocaleString("fr-FR")} €/mois.`)}`} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-border px-3 py-3 text-[10px] font-semibold uppercase tracking-wider"><MessageCircle className="h-3.5 w-3.5" /> WhatsApp</a><a href={`mailto:${client.email}?subject=${encodeURIComponent("Votre devis XRAGENCY")}&body=${encodeURIComponent("Bonjour, votre devis XRAGENCY a été préparé avec Alexandre. Le PDF vient d'être généré depuis le configurateur.")}`} className="inline-flex items-center justify-center gap-2 rounded-xl border border-border px-3 py-3 text-[10px] font-semibold uppercase tracking-wider"><Mail className="h-3.5 w-3.5" /> E-mail</a></div><button type="button" onClick={reset} className="mx-auto flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground"><RotateCcw className="h-3 w-3" /> Recommencer</button></div>}
+    </div></div></section>;
 }
