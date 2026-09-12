@@ -65,9 +65,9 @@ export function HomeServices() {
       id="homepage-services"
       aria-label="Les sept expertises XR Agency"
       className="relative bg-background"
-      style={{ height: `${Math.max(featured.length, 1) * 100}svh` }}
+      style={{ height: `${Math.max(featured.length, 1) * 78}svh` }}
     >
-      <div className="sticky top-0 h-[100svh] min-h-[680px] overflow-hidden">
+      <div className="sticky top-0 h-[100svh] min-h-[580px] overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_35%,hsl(var(--primary)/0.10),transparent_42%)]" />
 
         <div className="absolute left-5 right-5 top-24 z-30 flex items-start justify-between sm:left-8 sm:right-8 lg:left-12 lg:right-12 lg:top-28">
@@ -99,7 +99,7 @@ export function HomeServices() {
             return (
               <article
                 key={service.id}
-                className="absolute inset-x-5 bottom-10 top-52 origin-center transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] sm:inset-x-8 sm:bottom-12 sm:top-48 lg:inset-x-12 lg:bottom-14 lg:top-44"
+                className="absolute inset-x-5 bottom-8 top-48 origin-center transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] sm:inset-x-8 sm:bottom-10 sm:top-44 lg:inset-x-12 lg:bottom-12 lg:top-40"
                 style={{
                   zIndex: 20 - Math.round(abs * 2),
                   opacity,
@@ -119,19 +119,19 @@ export function HomeServices() {
                   <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-black/15" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/20" />
 
-                  <div className="relative z-10 flex h-full flex-col justify-end p-7 sm:p-10 lg:p-16">
+                  <div className="relative z-10 flex h-full flex-col justify-end p-6 sm:p-9 lg:p-14">
                     <div className="max-w-5xl">
-                      <div className="mb-5 flex items-center gap-3 label-mono text-[9px] uppercase tracking-[0.24em] text-white/45">
+                      <div className="mb-4 flex items-center gap-3 label-mono text-[9px] uppercase tracking-[0.24em] text-white/45">
                         <span className="text-primary">{DISPLAY_NUM[service.id]}</span>
                         <span className="h-px w-10 bg-white/20" />
                         <span>XR AGENCY</span>
                       </div>
                       <p className="label-mono text-[9px] uppercase tracking-[0.2em] text-white/55">{t(service.short)}</p>
-                      <h3 className="display-serif mt-3 max-w-4xl text-5xl leading-[0.84] text-white sm:text-7xl lg:text-[8.5rem]">
+                      <h3 className="display-serif mt-3 max-w-4xl text-5xl leading-[0.84] text-white sm:text-7xl lg:text-[8rem]">
                         {t(service.title)}
                       </h3>
-                      <p className="mt-5 max-w-2xl text-sm leading-6 text-white/65 sm:text-base">{t(service.description)}</p>
-                      <div className="mt-7 flex flex-wrap items-center gap-3">
+                      <p className="mt-4 max-w-2xl text-sm leading-6 text-white/65 sm:text-base">{t(service.description)}</p>
+                      <div className="mt-6 flex flex-wrap items-center gap-3">
                         <Link
                           to="/services/$serviceId"
                           params={{ serviceId: service.id }}
@@ -145,7 +145,7 @@ export function HomeServices() {
                       </div>
                     </div>
 
-                    <div className="mt-8 flex items-center justify-between border-t border-white/15 pt-4">
+                    <div className="mt-6 flex items-center justify-between border-t border-white/15 pt-4">
                       <div className="flex gap-1.5">
                         {featured.map((item, dotIndex) => (
                           <span
