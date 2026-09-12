@@ -46,6 +46,14 @@ const DISCOVERY: Choice[] = [
 
 const WAIT = 220;
 
+const SERVICE_ORDER: Record<string, string[]> = {
+  hospitality: ["website", "maps", "social", "seo", "branding", "maintenance"],
+  realestate: ["website", "maps", "branding", "seo", "social", "maintenance"],
+  professional: ["website", "seo", "branding", "maps", "social", "maintenance"],
+  commerce: ["website", "social", "seo", "branding", "maps", "maintenance"],
+  other: ["website", "branding", "seo", "maps", "social", "maintenance"],
+};
+
 export function QuoteConfiguratorCompact() {
   const [step, setStep] = useState(0);
   const [sectorId, setSectorId] = useState("");
@@ -60,6 +68,7 @@ export function QuoteConfiguratorCompact() {
   const situationChoice = SITUATIONS.find((x) => x.id === situation);
   const budgetChoice = BUDGETS.find((x) => x.id === budget);
   const discoveryChoice = DISCOVERY.find((x) => x.id === discovery);
+  const orderedServices = (SERVICE_ORDER[sectorId] ?? SERVICE_ORDER.other).map((id) => SERVICES.find((x) => x.id === id)).filter(Boolean) as Choice[];
 
   const choose = (setter: (value: string) => void, value: string, next: number) => {
     setter(value);
@@ -82,11 +91,12 @@ export function QuoteConfiguratorCompact() {
     };
     const goalText = goal.toLowerCase();
     const priority = goalText.includes("réservation") || goalText.includes("rendez-vous") ? "La priorité sera le parcours de réservation et la conversion." : goalText.includes("google") || goalText.includes("local") || goalText.includes("visible") ? "La priorité sera la visibilité sur les points de recherche les plus rentables." : goalText.includes("vente") || goalText.includes("vendre") ? "La priorité sera le parcours commercial et la conversion." : goalText.includes("premium") || goalText.includes("gamme") ? "La priorité sera la perception de marque et l'expérience proposée." : "La stratégie sera calibrée selon votre situation, votre budget et votre objectif.";
+    const acquisition = discovery === "google" ? "Comme vos clients passent déjà par Google, nous privilégierons les points de visibilité qui captent cette demande." : discovery === "social" ? "Comme la découverte se fait déjà sur les réseaux, nous renforcerons le lien entre contenu, image de marque et conversion." : discovery === "referral" ? "Comme la recommandation est centrale, le site et le branding devront surtout transformer cette confiance en prise de contact." : "Nous chercherons à mieux relier vos différents points d'acquisition pour éviter de dépendre d'un seul canal.";
     const budgetNote = budget === "under500" ? "Nous commencerons par le levier le plus prioritaire." : budget === "500_1000" ? "Nous privilégierons une base solide et évolutive." : "Nous pouvons envisager un dispositif plus complet et progressif.";
-    return `${serviceText[service.id]} ${priority} ${budgetNote}`;
-  }, [sector, service, situationChoice, budgetChoice, discoveryChoice, situation, goal, budget]);
+    return `${serviceText[service.id]} Pour ${sector.label.toLowerCase()}, ${priority.toLowerCase()} ${acquisition} ${budgetNote}`;
+  }, [sector, service, situationChoice, budgetChoice, discoveryChoice, situation, goal, budget, discovery]);
 
-  const titles = ["D'abord, votre activité.", "Votre priorité ?", "Votre situation aujourd'hui ?", "Quelle expertise activer ?", "Quel investissement envisagez-vous ?", "Comment vos clients vous trouvent-ils ?", "Votre recommandation est prête."];
+  const titles = ["D'abord, votre activité.", "Votre priorité ?", "Votre situation aujourd'hui ?", "Quel investissement envisagez-vous ?", "Quelle expertise activer ?", "Comment vos clients vous trouvent-ils ?", "Votre recommandation est prête."];
   const progress = ((step + 1) / 7) * 100;
 
   const card = (item: Choice, onClick: () => void, compact = false) => (
@@ -108,12 +118,12 @@ export function QuoteConfiguratorCompact() {
 
           <div key={step} className="animate-in fade-in slide-in-from-right-1 duration-200">
             {step === 0 && <div><p className="mb-1.5 text-[9px] text-muted-foreground">Choisissez votre univers. Alexandre adaptera les questions suivantes.</p><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">{SECTORS.map((x) => card(x, () => choose(setSectorId, x.id, 1), true))}</div></div>}
-            {step === 1 && sector && <div><p className="mb-1.5 text-[9px] text-muted-foreground">Votre objectif principal nous permet de prioriser les bonnes prestations.</p><div className="grid gap-1.5 sm:grid-cols-3">{sector.goals.map((x) => card({ id: x, label: x, detail: "Priorité adaptée à votre secteur" }, () => choose(setGoal, x, 2)))}</div></div>}
+            {step === 1 && sector && <div><p className="mb-1.5 text-[9px] text-muted-foreground">Votre objectif principal permet de prioriser les bonnes prestations.</p><div className="grid gap-1.5 sm:grid-cols-3">{sector.goals.map((x) => card({ id: x, label: x, detail: "Priorité adaptée à votre secteur" }, () => choose(setGoal, x, 2)))}</div></div>}
             {step === 2 && <div><p className="mb-1.5 text-[9px] text-muted-foreground">Votre point de départ change directement la recommandation.</p><div className="grid grid-cols-2 gap-1.5">{SITUATIONS.map((x) => card(x, () => choose(setSituation, x.id, 3)))}</div></div>}
-            {step === 3 && <div><p className="mb-1.5 text-[9px] text-muted-foreground">Une expertise à la fois : sélectionnez celle qui vous semble la plus utile.</p><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">{SERVICES.map((x) => card(x, () => choose(setServiceId, x.id, 4)))}</div></div>}
-            {step === 4 && <div><p className="mb-1.5 text-[9px] text-muted-foreground">Le budget sert à calibrer le projet, pas à vous enfermer dans une formule.</p><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3 lg:grid-cols-5">{BUDGETS.map((x) => card(x, () => choose(setBudget, x.id, 5)))}</div></div>}
+            {step === 3 && <div><p className="mb-1.5 text-[9px] text-muted-foreground">Le budget sert à calibrer le projet, pas à vous enfermer dans une formule.</p><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3 lg:grid-cols-5">{BUDGETS.map((x) => card(x, () => choose(setBudget, x.id, 4)))}</div></div>}
+            {step === 4 && <div><p className="mb-1.5 text-[9px] text-muted-foreground">Alexandre vous propose ensuite les expertises les plus pertinentes pour votre activité.</p><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">{orderedServices.map((x) => card(x, () => choose(setServiceId, x.id, 5)))}</div></div>}
             {step === 5 && <div><p className="mb-1.5 text-[9px] text-muted-foreground">Dernière question : où vos clients vous trouvent-ils aujourd'hui ?</p><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">{DISCOVERY.map((x) => card(x, () => choose(setDiscovery, x.id, 6)) )}</div></div>}
-            {step === 6 && sector && service && situationChoice && budgetChoice && discoveryChoice && <div className="space-y-2.5"><div className="rounded-lg border border-primary/30 bg-primary/[0.06] p-3"><div className="flex items-center gap-1.5 text-[11px] font-medium"><Check className="h-3.5 w-3.5 text-primary" /> Recommandation XR Intelligence</div><p className="mt-1.5 text-xs leading-5 sm:text-sm">{recommendation}</p></div><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">{[["Secteur", sector.label], ["Objectif", goal], ["Situation", situationChoice.label], ["Budget", budgetChoice.label]].map(([label, value]) => <div key={label} className="rounded-lg border border-border bg-background p-2"><div className="label-mono text-[6px] uppercase tracking-wider text-muted-foreground">{label}</div><div className="mt-0.5 text-[9px] leading-4">{value}</div></div>)}</div><div className="flex flex-wrap gap-1.5"><a href={`${CONTACT.whatsapp}?text=${encodeURIComponent(`Bonjour XR Agency, je souhaite un devis sur mesure. Secteur : ${sector.label}. Objectif : ${goal}. Situation : ${situationChoice.label}. Expertise : ${service.label}. Budget : ${budgetChoice.label}. Acquisition : ${discoveryChoice.label}.`)}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-2 text-[8px] font-semibold uppercase tracking-wider text-primary-foreground">Recevoir mon devis <ArrowRight className="h-3 w-3" /></a><button type="button" onClick={reset} className="inline-flex items-center gap-1.5 rounded-full border border-border px-3.5 py-2 text-[8px] font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground"><RotateCcw className="h-3 w-3" /> Recommencer</button></div></div>}
+            {step === 6 && sector && service && situationChoice && budgetChoice && discoveryChoice && <div className="space-y-2.5"><div className="rounded-lg border border-primary/30 bg-primary/[0.06] p-3"><div className="flex items-center gap-1.5 text-[11px] font-medium"><Check className="h-3.5 w-3.5 text-primary" /> Recommandation XR Intelligence</div><p className="mt-1.5 text-xs leading-5 sm:text-sm">{recommendation}</p></div><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">{[["Secteur", sector.label], ["Objectif", goal], ["Situation", situationChoice.label], ["Budget", budgetChoice.label], ["Expertise", service.label], ["Acquisition", discoveryChoice.label]].map(([label, value]) => <div key={label} className="rounded-lg border border-border bg-background p-2"><div className="label-mono text-[6px] uppercase tracking-wider text-muted-foreground">{label}</div><div className="mt-0.5 text-[9px] leading-4">{value}</div></div>)}</div><div className="flex flex-wrap gap-1.5"><a href={`${CONTACT.whatsapp}?text=${encodeURIComponent(`Bonjour XR Agency, je souhaite un devis sur mesure. Secteur : ${sector.label}. Objectif : ${goal}. Situation : ${situationChoice.label}. Expertise : ${service.label}. Budget : ${budgetChoice.label}. Acquisition : ${discoveryChoice.label}.`)}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-2 text-[8px] font-semibold uppercase tracking-wider text-primary-foreground">Recevoir mon devis <ArrowRight className="h-3 w-3" /></a><button type="button" onClick={reset} className="inline-flex items-center gap-1.5 rounded-full border border-border px-3.5 py-2 text-[8px] font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground"><RotateCcw className="h-3 w-3" /> Recommencer</button></div></div>}
           </div>
         </div>
       </div>
