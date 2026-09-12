@@ -6,7 +6,7 @@ export default defineConfig({
     port: 8080,
     strictPort: false,
   },
-  base: "/xragencyai/",
+  base: "/",
   tanstackStart: {
     server: { entry: "server" },
   },
