@@ -28,23 +28,13 @@ export function Work() {
   return (
     <section id="work" className="relative overflow-hidden border-t border-border/50 bg-background py-20 sm:py-28 lg:py-32">
       <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
-        <header className="grid gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
+        <header className="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-end">
           <div>
             <span className="label-mono text-[10px] uppercase tracking-[0.3em] text-primary">{t(UI.showcaseLabel)}</span>
-            <h2 className="display-serif mt-4 max-w-5xl text-5xl leading-[0.88] sm:text-7xl lg:text-[7.5rem]">Selected references.</h2>
+            <h2 className="display-serif mt-4 max-w-5xl text-5xl leading-[0.88] sm:text-7xl lg:text-[7.5rem]">Des références pour vous projeter.</h2>
           </div>
-          <p className="max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base lg:pb-2">Entrez votre secteur. Nous vous montrons immédiatement des références digitales dans le même univers — leur vraie homepage, en grand, à explorer.</p>
+          <p className="max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base lg:pb-2">Choisissez votre secteur et explorez des directions digitales dans le même univers. Chaque aperçu ouvre le site concerné.</p>
         </header>
-
-        <div className="mt-8 border border-border/60 bg-card/30 px-5 py-5 sm:px-7 sm:py-6">
-          <div className="flex items-start gap-4">
-            <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-primary/30 text-[10px] text-primary">i</span>
-            <div>
-              <p className="label-mono text-[9px] uppercase tracking-[0.2em] text-primary">Nature des références</p>
-              <p className="mt-2 max-w-4xl text-xs leading-relaxed text-muted-foreground sm:text-sm">Cette sélection présente des références issues de partenariats, de collaborations design et de projets réalisés de près ou de loin avec différents intervenants. Certaines contributions concernent le design, l'UX/UI, la direction créative, le développement ou des applications et outils internes. Une référence présentée ici ne signifie donc pas nécessairement que XRAGENCY a conçu et développé l'intégralité du site internet.</p>
-            </div>
-          </div>
-        </div>
 
         <div className="mt-10 border-y border-border/60 py-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -53,7 +43,7 @@ export function Work() {
               <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Votre secteur d'activité — ex. restaurant, immobilier, hôtel…" className="h-11 w-full border-0 border-b border-border/60 bg-transparent pl-7 pr-8 text-sm outline-none placeholder:text-muted-foreground/35 focus:border-primary" />
               {query && <button type="button" onClick={() => setQuery("")} aria-label="Effacer la recherche" className="absolute right-0 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-foreground"><X className="h-4 w-4" /></button>}
             </label>
-            <div className="label-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground/45">20 secteurs · 60 références · previews live</div>
+            <div className="label-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground/45">Explorer par secteur · aperçu live</div>
           </div>
 
           <div className="mt-5 flex items-center gap-5 overflow-x-auto pb-1 scrollbar-hide">
@@ -70,8 +60,8 @@ export function Work() {
         </div>
 
         <div className="mt-8 flex items-end justify-between gap-5">
-          <div><span className="label-mono text-[9px] uppercase tracking-[0.2em] text-primary">{selectedLabel}</span><p className="mt-2 display-serif text-2xl sm:text-3xl">{filtered.length} references</p></div>
-          <span className="hidden label-mono text-[9px] uppercase tracking-[0.15em] text-muted-foreground/40 sm:block">Drag / scroll to explore →</span>
+          <div><span className="label-mono text-[9px] uppercase tracking-[0.2em] text-primary">{selectedLabel}</span><p className="mt-2 display-serif text-2xl sm:text-3xl">{filtered.length} références</p></div>
+          <span className="hidden label-mono text-[9px] uppercase tracking-[0.15em] text-muted-foreground/40 sm:block">Glisser pour explorer →</span>
         </div>
 
         {visible.length > 0 ? <div className="mt-7 -mx-5 overflow-x-auto px-5 pb-8 scrollbar-hide sm:-mx-8 sm:px-8 lg:-mx-12 lg:px-12" style={{ scrollSnapType: "x mandatory" }}>
@@ -88,7 +78,7 @@ export function Work() {
           </div>
         </div> : <div className="mt-7 border-y border-border/50 py-20 text-center"><p className="display-serif text-3xl">Aucune référence trouvée.</p><button type="button" onClick={clearFilters} className="mt-4 label-mono text-[10px] uppercase tracking-[0.15em] text-primary">Voir tous les secteurs</button></div>}
 
-        <div className="mt-2 flex items-center justify-between border-t border-border/50 pt-5"><p className="max-w-3xl text-[10px] leading-relaxed text-muted-foreground/45">Références externes utilisées pour montrer des directions créatives, des collaborations et des savoir-faire digitaux. Elles ne sont pas présentées comme des réalisations intégrales XRAGENCY. Selon les projets, l'intervention peut avoir porté sur le design, l'UX/UI, la direction créative, le développement ou des applications et outils internes. Les liens ouvrent les sites officiels.</p><span className="hidden label-mono text-[9px] uppercase tracking-[0.15em] text-muted-foreground/35 sm:block">Scroll to explore</span></div>
+        <p className="mt-2 border-t border-border/50 pt-5 text-[10px] leading-relaxed text-muted-foreground/40">Références externes utilisées comme inspiration, collaborations ou démonstrations de savoir-faire. Elles ne sont pas présentées comme des réalisations intégrales XRAGENCY.</p>
       </div>
     </section>
   );
