@@ -52,7 +52,7 @@ export function Nav() {
   return (
     <header className={cn("fixed inset-x-0 top-0 z-50 transition-all duration-500", scrolled ? "border-b border-border/70 bg-background/92 py-2 shadow-sm backdrop-blur-xl sm:py-3" : "border-b border-transparent bg-background/60 py-3 backdrop-blur-md sm:py-4.5")}>
       <div aria-hidden className="absolute bottom-0 left-0 h-[1.5px] bg-gradient-to-r from-primary/80 via-primary to-primary/40 transition-[width] duration-150" style={{ width: `${(progress * 100).toFixed(1)}%` }} />
-      <nav className="mx-auto flex w-full max-w-[1600px] items-center justify-between gap-3 px-4 lg:gap-4 lg:px-8">
+      <nav className="relative mx-auto flex w-full max-w-[1600px] items-center gap-3 px-4 lg:gap-4 lg:px-8">
         <Logo className="shrink-0" />
 
         <div className="hidden min-w-0 flex-1 items-center justify-center gap-1 lg:flex">
@@ -65,7 +65,7 @@ export function Nav() {
           <a href="/#quote" onClick={(e) => { e.preventDefault(); handleNavClick("quote", "/#quote"); }} className={cn("ml-1 inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-[9px] font-semibold uppercase tracking-[0.14em] transition-all", activeSection === "quote" ? "border-primary bg-primary text-primary-foreground shadow-lg" : "border-primary/40 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground")}><Sparkles className="h-3 w-3"/> Intelligence · Devis sur mesure</a>
         </div>
 
-        <div className="ml-auto flex shrink-0 items-center justify-end gap-1.5 sm:gap-2">
+        <div className="ml-auto flex shrink-0 items-center justify-end gap-1.5 sm:gap-2 lg:static max-lg:absolute max-lg:right-4 max-lg:top-1/2 max-lg:-translate-y-1/2">
           <ThemeSwitcher className="h-9 w-9 shrink-0 rounded-full shadow-none" />
           <div className="hidden items-center gap-1 rounded-full border border-border bg-card/60 px-1 py-1 sm:flex">{LANGS.map((l) => <button key={l.code} onClick={() => setLang(l.code)} className={cn("label-mono cursor-pointer rounded-full px-2.5 py-0.5 text-xs transition-colors", lang === l.code ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground")}>{l.label}</button>)}</div>
           <CartFloatingButton />
