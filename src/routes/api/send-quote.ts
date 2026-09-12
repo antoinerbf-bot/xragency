@@ -1,0 +1,30 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { Resend } from "resend";
+
+export const Route = createFileRoute("/api/send-quote")({
+  server: {
+    handlers: {
+      POST: async ({ request }) => {
+        try {
+          const body = await request.json() as { email?: string; name?: string; pdfBase64?: string; quoteNumber?: string };
+          if (!body.email || !body.pdfBase64) return Response.json({ error: "Email et PDF requis." }, { status: 400 });
+          if (!process.env.RESEND_API_KEY) return Response.json({ error: "RESEND_API_KEY manquante." }, { status: 503 });
+          const resend = new Resend(process.env.RESEND_API_KEY);
+          const from = process.env.RESEND_FROM_EMAIL || "XRAGENCY <contact.xragency@gmail.com>";
+          const { data, error } = await resend.emails.send({
+            from,
+            to: [body.email],
+            bcc: ["contact.xragency@gmail.com"],
+            subject: `Votre devis XRAGENCY${body.quoteNumber ? ` · ${body.quoteNumber}` : ""}`,
+            html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#111"><h2>Votre devis XRAGENCY</h2><p>Bonjour ${body.name || ""},</p><p>Votre devis personnalisé réalisé avec Alexandre est joint à cet e-mail.</p><p>Merci pour votre confiance.<br/>XRAGENCY · KARMA SASU</p></div>`,
+            attachments: [{ content: body.pdfBase64, filename: `${body.quoteNumber || "devis-xragency"}.pdf` }],
+          });
+          if (error) return Response.json({ error: error.message }, { status: 502 });
+          return Response.json({ ok: true, id: data?.id });
+        } catch (error) {
+          return Response.json({ error: error instanceof Error ? error.message : "Erreur lors de l'envoi." }, { status: 500 });
+        }
+      },
+    },
+  },
+});
