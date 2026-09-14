@@ -17,6 +17,7 @@ import { SERVICES, PERIOD_LABEL, CONTACT, FAQ } from "@/lib/content";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
 import { EmberButton, Reveal, Parallax } from "@/components/site/primitives";
+import { HeroSection } from "@/components/seo/HeroSection";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
 import { AddToCartBtn } from "@/components/site/Cart";
 import { cn } from "@/lib/utils";
@@ -202,112 +203,71 @@ function ServiceDetailPage() {
           <div className="mx-auto max-w-7xl px-6 lg:px-10">
             <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-7">
-                <Reveal>
-                  <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-primary">
-                    <Sparkles className="h-3.5 w-3.5" />
-                    <span className="label-mono text-xs uppercase tracking-widest">
-                      {t(service.title)} · {service.num}
-                    </span>
-                  </div>
-                </Reveal>
-
-                <Reveal delay={80}>
-                  <h1 className="display-serif mt-6 text-[clamp(2.5rem,6.5vw,5.2rem)] leading-[1.02]">
-                    {t(service.title)}
-                  </h1>
-                </Reveal>
-
-                <Reveal delay={160}>
-                  <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-                    {t(service.description)}
-                  </p>
-                </Reveal>
-
-                {/* Key Metric Highlights */}
-                <Reveal delay={240}>
-                  <div className="mt-8 flex flex-wrap gap-2.5">
-                    {service.highlights.map((h, idx) => (
-                      <span
-                        key={idx}
-                        className="label-mono inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-2 text-xs text-foreground backdrop-blur-sm"
-                      >
-                        <Zap className="h-3 w-3 text-primary" />
-                        {t(h)}
-                      </span>
-                    ))}
-                  </div>
-                </Reveal>
-
-                {/* Direct CTA Buttons */}
-                <Reveal delay={320}>
-                  <div className="mt-10 flex flex-wrap items-center gap-4">
-                    <EmberButton href="#plans">{t(UI.explorePacks)}</EmberButton>
-                    <a
-                      href={waUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-6 py-3.5 text-xs uppercase tracking-widest text-foreground transition-all duration-300 hover:border-primary hover:text-primary"
-                    >
-                      <MessageCircle className="h-4 w-4 text-emerald-500" />
-                      {t(UI.bookDirectWhatsapp)}
-                    </a>
-                    <Link
-                      to="/"
-                      hash="intelligence"
-                      className="label-mono text-xs text-muted-foreground transition-colors hover:text-primary"
-                    >
-                      {t(UI.getCustomQuote)} →
-                    </Link>
-                  </div>
-                </Reveal>
+                {service.id === 'seo' ? (
+                  <HeroSection
+                    title={t(service.title)}
+                    description={t(service.description)}
+                    ctaPrimary={{ label: t(UI.explorePacks), href: "#plans" }}
+                  />
+                ) : (
+                  <>
+                    <Reveal>
+                      <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-primary">
+                        <Sparkles className="h-3.5 w-3.5" />
+                        <span className="label-mono text-xs uppercase tracking-widest">
+                          {t(service.title)} · {service.num}
+                        </span>
+                      </div>
+                    </Reveal>
+                    <Reveal delay={80}>
+                      <h1 className="display-serif mt-6 text-[clamp(2.5rem,6.5vw,5.2rem)] leading-[1.02]">
+                        {t(service.title)}
+                      </h1>
+                    </Reveal>
+                    <Reveal delay={160}>
+                      <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+                        {t(service.description)}
+                      </p>
+                    </Reveal>
+                    <Reveal delay={240}>
+                      <div className="mt-8 flex flex-wrap gap-2.5">
+                        {service.highlights.map((h, idx) => (
+                          <span
+                            key={idx}
+                            className="label-mono inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-2 text-xs text-foreground backdrop-blur-sm"
+                          >
+                            <Zap className="h-3 w-3 text-primary" />
+                            {t(h)}
+                          </span>
+                        ))}
+                      </div>
+                    </Reveal>
+                    <Reveal delay={320}>
+                      <div className="mt-10 flex flex-wrap items-center gap-4">
+                        <EmberButton href="#plans">{t(UI.explorePacks)}</EmberButton>
+                        <a
+                          href={waUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-6 py-3.5 text-xs uppercase tracking-widest text-foreground transition-all duration-300 hover:border-primary hover:text-primary"
+                        >
+                          <MessageCircle className="h-4 w-4 text-emerald-500" />
+                          {t(UI.bookDirectWhatsapp)}
+                        </a>
+                        <Link
+                          to="/"
+                          hash="intelligence"
+                          className="label-mono text-xs text-muted-foreground transition-colors hover:text-primary"
+                        >
+                          {t(UI.getCustomQuote)} →
+                        </Link>
+                      </div>
+                    </Reveal>
+                  </>
+                )}
               </div>
-
-              {/* Visual Presentation Card */}
               <div className="lg:col-span-5">
-                <Reveal delay={200}>
-                  <div className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-2xl">
-                    <div className="relative aspect-[4/3] overflow-hidden">
-                      <img
-                        src={heroImg}
-                        alt={t(service.title)}
-                        className="h-full w-full object-cover grayscale-[0.35] transition-transform duration-700 hover:scale-105 hover:grayscale-0"
-                      />
-                      <div
-                        aria-hidden
-                        className="absolute inset-0"
-                        style={{
-                          background:
-                            "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--background) 70%, transparent) 100%)",
-                        }}
-                      />
-                    </div>
-
-                    <div className="relative p-7">
-                      <div className="flex items-center justify-between border-b border-border pb-4">
-                        <span className="label-mono text-xs text-muted-foreground">
-                          {t(UI.from)}
-                        </span>
-                        <div className="flex items-baseline gap-1.5">
-                          <span className="display-serif text-3xl text-primary">
-                            {price(service.fromEur)}
-                          </span>
-                          <span className="label-mono text-xs text-muted-foreground">
-                            {t(PERIOD_LABEL[service.fromPeriod])}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="mt-4 flex items-center justify-between">
-                        <span className="label-mono flex items-center gap-1.5 text-xs text-muted-foreground">
-                          <ShieldCheck className="h-4 w-4 text-primary" />
-                          {t(UI.resultsGuaranteed)}
-                        </span>
-                        <span className="label-mono text-xs text-muted-foreground">
-                          {service.plans.length} {t({ fr: "formules", en: "plans", vi: "gói" })}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </Reveal>
+                <img src={heroImg} alt={t(service.title)} className="w-full rounded-lg shadow-lg" />
               </div>
             </div>
           </div>
@@ -506,7 +466,7 @@ function ServiceDetailPage() {
                         </p>
 
                         <ul className="mt-6 space-y-3.5">
-                          {p.features.map((f, k) => (
+                          509:                           {(p.features || []).map((f, k) => (
                             <li
                               key={k}
                               className="flex items-start gap-3 text-sm text-muted-foreground"
@@ -565,7 +525,7 @@ function ServiceDetailPage() {
         </section>
 
         {/* Comparison Matrix: XR Agency vs Market */}
-        {service.comparisons && service.comparisons.length > 0 && (
+        {service.comparisons?.length > 0 && (
           <section className="border-t border-border/60 py-24 lg:py-32">
             <div className="mx-auto max-w-7xl px-6 lg:px-10">
               <Reveal>
@@ -603,7 +563,7 @@ function ServiceDetailPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border/60">
-                      {service.comparisons.map((c, idx) => (
+{(service.comparisons || []).map((c, idx) => (
                         <tr key={idx} className="transition-colors hover:bg-accent/20">
                           <td className="p-5 sm:p-6 font-medium text-sm text-foreground">
                             {t(c.feature)}

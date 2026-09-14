@@ -756,7 +756,7 @@ export const SERVICES: Service[] = [
     plans: [
       {
         name: { fr: "SEO Local", en: "Local SEO", vi: "SEO Địa phương" },
-        eur: 299,
+        eur: 389,
         period: "month",
         features: [
           { fr: "Amélioration de la visibilité auprès des clients proches", en: "Better visibility with nearby clients", vi: "Cải thiện hiển thị với khách hàng gần" },
@@ -769,7 +769,7 @@ export const SERVICES: Service[] = [
       },
       {
         name: { fr: "SEO Boost", en: "SEO Boost", vi: "SEO Tăng tốc" },
-        eur: 499,
+        eur: 649,
         period: "month",
         popular: true,
         features: [

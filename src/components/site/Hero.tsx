@@ -5,7 +5,7 @@ import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax, FloatingBadge } from "./primitives";
-import { Globe3D } from "./Globe3D";
+// import EarthGlobe from "./EarthGlobe"; // Globe removed per user request
 import heroLoop from "@/assets/hero-studio.mp4.asset.json";
 
 /* ── Animated counter hook ── */
@@ -187,27 +187,7 @@ export function Hero() {
           </Parallax>
 
           {/* Right Column: Signature 3D Interactive Globe Visual with Floating Depth Chips */}
-          <div className="relative flex items-center justify-center lg:col-span-5">
-            {/* Ambient Floating Depth Badges */}
-            <FloatingBadge delay={400} className="hidden sm:block absolute top-1/2 -left-6 z-20 -translate-y-1/2">
-              <div className="surface-plate flex items-center gap-2 rounded-2xl border border-border/80 bg-card/90 px-3.5 py-2 shadow-2xl backdrop-blur-md">
-                <Zap className="h-3.5 w-3.5 text-primary" />
-                <span className="label-mono text-[10px] text-foreground font-semibold">
-                  PageSpeed 100/100
-                </span>
-              </div>
-            </FloatingBadge>
-
-            <Parallax speed={0.07} className="relative w-full max-w-[480px]">
-              <Globe3D className="aspect-square w-full" />
-              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full border border-border/60 bg-card/90 px-4 py-1.5 shadow-xl backdrop-blur-md flex items-center gap-2">
-                <GlobeIcon className="h-3 w-3 text-primary" />
-                <span className="label-mono text-[10px] tracking-wider text-muted-foreground">
-                  Paris · Dubaï · Tokyo · New York
-                </span>
-              </div>
-            </Parallax>
-          </div>
+          
         </div>
 
         {/* Bottom Key Stats Bar with Animated Counters */}
