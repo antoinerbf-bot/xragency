@@ -5,12 +5,10 @@ import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import type { L } from "@/lib/i18n";
 
-export function Logo({ className, subtitle = true }: { className?: string; subtitle?: boolean }) {
-  const { t } = useLang();
+export function Logo({ className }: { className?: string }) {
   return (
     <Link to="/" aria-label="XR Agency — Accueil" className={cn("group inline-flex flex-col tracking-tight transition-all duration-300 hover:opacity-90", className)}>
-      <div className="flex items-baseline gap-1.5"><span className="display-serif text-lg font-bold tracking-[0.22em] text-foreground transition-all duration-300 group-hover:tracking-[0.26em] sm:text-xl">XR<span className="font-light tracking-[0.22em]">AGENCY</span></span><span className="h-1.5 w-1.5 rounded-full bg-primary transition-transform duration-300 group-hover:scale-125" /></div>
-      {subtitle ? <span className="label-mono mt-0.5 text-[8px] uppercase tracking-[0.32em] text-muted-foreground transition-colors group-hover:text-foreground">{t(UI.logoSubtitle)}</span> : null}
+      <span className="display-serif text-lg font-bold tracking-[0.18em] text-foreground transition-all duration-300 group-hover:tracking-[0.22em] sm:text-xl">XR AGENCY</span>
     </Link>
   );
 }
