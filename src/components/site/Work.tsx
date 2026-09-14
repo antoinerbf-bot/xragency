@@ -1,272 +1,85 @@
-import { useState, useMemo } from "react";
-import { Sparkles, ArrowUpRight } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ArrowUpRight, ExternalLink, Search, X } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
-import { SHOWCASE } from "@/lib/content";
-import { Reveal, SectionHeading, EmberButton } from "./primitives";
+import { PORTFOLIO_REFERENCES, PORTFOLIO_SECTORS } from "@/lib/portfolioReferences";
 import { cn } from "@/lib/utils";
 
-const SECTOR_ORDER = [
-  "sectorLuxe",
-  "sectorHotellerie",
-  "sectorGastronomie",
-  "sectorAuto",
-  "sectorImmobilier",
-  "sectorSante",
-  "sectorBeaute",
-  "sectorArchitecture",
-  "sectorTech",
-  "sectorCoaching",
-  "sectorMode",
-  "sectorArtisanat",
-] as const;
-
-const SERVICE_FILTERS: { key: string; label: { fr: string; en: string; vi: string } }[] = [
-  { key: "vitrine", label: { fr: "Site vitrine", en: "Showcase", vi: "Giới thiệu" } },
-  { key: "ecommerce", label: { fr: "E-commerce", en: "E-commerce", vi: "TMĐT" } },
-  { key: "refonte", label: { fr: "Refonte", en: "Redesign", vi: "Thiết kế lại" } },
-  { key: "seo", label: { fr: "SEO", en: "SEO", vi: "SEO" } },
-  { key: "branding", label: { fr: "Branding", en: "Branding", vi: "Branding" } },
-  { key: "ia", label: { fr: "IA", en: "AI", vi: "AI" } },
-];
-
-function getServiceTags(type: { fr: string; en: string; vi: string }): string[] {
-  const fr = type.fr.toLowerCase();
-  const tags: string[] = [];
-  if (fr.includes("e-commerce") || fr.includes("boutique")) tags.push("ecommerce");
-  else if (fr.includes("site vitrine") || fr.includes("portfolio") || fr.includes("portail"))
-    tags.push("vitrine");
-  if (fr.includes("refonte")) tags.push("refonte");
-  if (fr.includes("seo")) tags.push("seo");
-  if (fr.includes("branding") || fr.includes("identité")) tags.push("branding");
-  if (fr.includes("ia") || fr.includes("saas") || fr.includes("dashboard")) tags.push("ia");
-  if (tags.length === 0) tags.push("vitrine");
-  return tags;
-}
+const TYPE_FILTERS = [["all", "Tout"], ["Vitrine", "Vitrine"], ["E-commerce", "E-commerce"], ["SaaS", "SaaS / IA"], ["Portail", "Portail"]] as const;
 
 export function Work() {
   const { t } = useLang();
-  const [activeSector, setActiveSector] = useState<string | null>(null);
-  const [activeService, setActiveService] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [sector, setSector] = useState("all");
+  const [type, setType] = useState("all");
 
-  const sectors = useMemo(() => {
-    const map = new Map<string, number>();
-    for (const s of SHOWCASE) {
-      map.set(s.sectorKey, (map.get(s.sectorKey) ?? 0) + 1);
-    }
-    return SECTOR_ORDER.filter((k) => map.has(k)).map((k) => ({ key: k, count: map.get(k) ?? 0 }));
-  }, []);
+  const normalizedQuery = query.trim().toLocaleLowerCase();
+  const filtered = useMemo(() => PORTFOLIO_REFERENCES.filter((item) => {
+    const sectorLabel = PORTFOLIO_SECTORS.find(([key]) => key === item.sector)?.[1] ?? "";
+    const matchesQuery = !normalizedQuery || `${item.name} ${sectorLabel} ${item.type}`.toLocaleLowerCase().includes(normalizedQuery);
+    return matchesQuery && (sector === "all" || item.sector === sector) && (type === "all" || item.type === type);
+  }), [normalizedQuery, sector, type]);
 
-  const serviceTagCounts = useMemo(() => {
-    const map = new Map<string, number>();
-    for (const s of SHOWCASE) {
-      for (const tag of getServiceTags(s.type)) {
-        map.set(tag, (map.get(tag) ?? 0) + 1);
-      }
-    }
-    return SERVICE_FILTERS.filter((f) => map.has(f.key)).map((f) => ({
-      key: f.key,
-      label: f.label,
-      count: map.get(f.key) ?? 0,
-    }));
-  }, []);
-
-  const filtered = useMemo(() => {
-    let items = SHOWCASE;
-    if (activeSector) items = items.filter((s) => s.sectorKey === activeSector);
-    if (activeService) items = items.filter((s) => getServiceTags(s.type).includes(activeService));
-    return items;
-  }, [activeSector, activeService]);
+  const visible = filtered.slice(0, sector !== "all" || normalizedQuery ? 3 : 6);
+  const selectedLabel = sector === "all" ? "References by industry" : PORTFOLIO_SECTORS.find(([key]) => key === sector)?.[1];
+  const hasFilter = Boolean(query || sector !== "all" || type !== "all");
+  const clearFilters = () => { setQuery(""); setSector("all"); setType("all"); };
 
   return (
-    <section id="work" className="relative py-12 sm:py-18 lg:py-24">
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
-        <SectionHeading
-          label={UI.showcaseLabel}
-          line1={UI.showcaseTitle1}
-          line2={UI.showcaseTitle2}
-          lead={UI.showcaseLead}
-        />
-
-        {/* Service type filter pills */}
-        <Reveal delay={80}>
-          <div className="mt-10 flex flex-wrap gap-2">
-            <button
-              onClick={() => setActiveService(null)}
-              className={cn(
-                "label-mono rounded-full border px-3.5 py-1.5 text-xs transition-all duration-300",
-                !activeService
-                  ? "border-primary bg-primary text-primary-foreground shadow-sm"
-                  : "border-border text-muted-foreground hover:border-primary/40 hover:text-foreground",
-              )}
-            >
-              {t({ fr: "Tous les services", en: "All services", vi: "Tất cả dịch vụ" })}
-            </button>
-            {serviceTagCounts.map(({ key, label, count }) => (
-              <button
-                key={key}
-                onClick={() => setActiveService(activeService === key ? null : key)}
-                className={cn(
-                  "label-mono rounded-full border px-3.5 py-1.5 text-xs transition-all duration-300",
-                  activeService === key
-                    ? "border-primary bg-primary text-primary-foreground shadow-sm"
-                    : "border-border text-muted-foreground hover:border-primary/40 hover:text-foreground",
-                )}
-              >
-                {t(label)}
-                <span className="ml-1.5 opacity-50">{count}</span>
-              </button>
-            ))}
+    <section id="work" className="relative overflow-hidden border-t border-border/50 bg-background py-20 sm:py-28 lg:py-32">
+      <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
+        <header className="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-end">
+          <div>
+            <span className="label-mono text-[10px] uppercase tracking-[0.3em] text-primary">{t(UI.showcaseLabel)}</span>
+            <h2 className="display-serif mt-4 max-w-5xl text-5xl leading-[0.88] sm:text-7xl lg:text-[7.5rem]">Des références pour vous projeter.</h2>
           </div>
-        </Reveal>
+          <p className="max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base lg:pb-2">Choisissez votre secteur et explorez des directions digitales dans le même univers. Chaque aperçu ouvre le site concerné.</p>
+        </header>
 
-        {/* Sector filter pills */}
-        <Reveal delay={110}>
-          <div className="mt-2.5 flex flex-wrap gap-2">
-            <button
-              onClick={() => setActiveSector(null)}
-              className={cn(
-                "label-mono rounded-full border px-3.5 py-1.5 text-xs transition-all duration-300",
-                !activeSector
-                  ? "border-primary/60 bg-primary/10 text-primary shadow-sm"
-                  : "border-border/60 text-muted-foreground/70 hover:border-primary/30 hover:text-foreground",
-              )}
-            >
-              {t(UI.showcaseAllSectors)}
-            </button>
-            {sectors.map(({ key, count }) => (
-              <button
-                key={key}
-                onClick={() => setActiveSector(activeSector === key ? null : key)}
-                className={cn(
-                  "label-mono rounded-full border px-3.5 py-1.5 text-xs transition-all duration-300",
-                  activeSector === key
-                    ? "border-primary/60 bg-primary/10 text-primary shadow-sm"
-                    : "border-border/60 text-muted-foreground/70 hover:border-primary/30 hover:text-foreground",
-                )}
-              >
-                {t(UI[key as keyof typeof UI])}
-                <span className="ml-1.5 opacity-50">{count}</span>
-              </button>
-            ))}
+        <div className="mt-10 border-y border-border/60 py-5">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <label className="relative block w-full max-w-xl">
+              <Search className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50" />
+              <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Votre secteur d'activité — ex. restaurant, immobilier, hôtel…" className="h-11 w-full border-0 border-b border-border/60 bg-transparent pl-7 pr-8 text-sm outline-none placeholder:text-muted-foreground/35 focus:border-primary" />
+              {query && <button type="button" onClick={() => setQuery("")} aria-label="Effacer la recherche" className="absolute right-0 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-foreground"><X className="h-4 w-4" /></button>}
+            </label>
+            <div className="label-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground/45">Explorer par secteur · aperçu live</div>
           </div>
-        </Reveal>
 
-        {/* Showcase grid — more compact */}
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((item, i) => (
-            <Reveal key={item.id} delay={i * 50}>
-              <ShowcaseCard item={item} />
-            </Reveal>
-          ))}
+          <div className="mt-5 flex items-center gap-5 overflow-x-auto pb-1 scrollbar-hide">
+            <span className="label-mono shrink-0 text-[9px] uppercase tracking-[0.2em] text-muted-foreground/50">Secteur</span>
+            <button type="button" onClick={() => setSector("all")} className={cn("label-mono shrink-0 text-[10px] uppercase tracking-[0.12em] transition-colors", sector === "all" ? "text-primary" : "text-muted-foreground/50 hover:text-foreground")}>Tous</button>
+            {PORTFOLIO_SECTORS.map(([key, label]) => <button type="button" key={key} onClick={() => setSector(key)} className={cn("label-mono shrink-0 text-[10px] uppercase tracking-[0.12em] transition-colors", sector === key ? "text-primary" : "text-muted-foreground/50 hover:text-foreground")}>{label}</button>)}
+          </div>
+
+          <div className="mt-4 flex items-center gap-3 overflow-x-auto pb-1 scrollbar-hide">
+            <span className="label-mono shrink-0 text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">Format</span>
+            {TYPE_FILTERS.map(([key, label]) => <button type="button" key={key} onClick={() => setType(key)} className={cn("label-mono shrink-0 rounded-full border px-3 py-1.5 text-[9px] uppercase tracking-[0.1em] transition-all", type === key ? "border-foreground bg-foreground text-background" : "border-border/60 text-muted-foreground/60 hover:border-foreground/40 hover:text-foreground")}>{label}</button>)}
+            {hasFilter && <button type="button" onClick={clearFilters} className="label-mono ml-auto shrink-0 text-[9px] uppercase tracking-[0.15em] text-primary">Reset</button>}
+          </div>
         </div>
 
-        {filtered.length === 0 ? (
-          <Reveal delay={100}>
-            <p className="mt-12 text-center text-sm text-muted-foreground">
-              {t({
-                fr: "Aucun projet ne correspond à ces filtres.",
-                en: "No projects match these filters.",
-                vi: "Không có dự án nào phù hợp với bộ lọc này.",
-              })}
-            </p>
-          </Reveal>
-        ) : null}
+        <div className="mt-8 flex items-end justify-between gap-5">
+          <div><span className="label-mono text-[9px] uppercase tracking-[0.2em] text-primary">{selectedLabel}</span><p className="mt-2 display-serif text-2xl sm:text-3xl">{filtered.length} références</p></div>
+          <span className="hidden label-mono text-[9px] uppercase tracking-[0.15em] text-muted-foreground/40 sm:block">Glisser pour explorer →</span>
+        </div>
 
-        <Reveal delay={180}>
-          <p className="mt-8 text-center text-[11px] leading-relaxed text-muted-foreground/60 italic max-w-2xl mx-auto">
-            {t(UI.showcaseDisclaimer)}
-          </p>
-        </Reveal>
-
-        <Reveal delay={240}>
-          <div className="mt-12 flex flex-col items-center gap-4 text-center">
-            <p className="text-sm text-muted-foreground">
-              {t({
-                fr: "Votre secteur n'est pas listé ? Chaque projet est unique.",
-                en: "Your sector isn't listed? Every project is unique.",
-                vi: "Lĩnh vực của bạn không có trong danh sách? Mỗi dự án đều độc nhất.",
-              })}
-            </p>
-            <EmberButton href="#contact" variant="outline">
-              <Sparkles className="h-4 w-4" />
-              {t({
-                fr: "Demander une étude personnalisée",
-                en: "Request a custom study",
-                vi: "Yêu cầu nghiên cứu tùy chỉnh",
-              })}
-            </EmberButton>
+        {visible.length > 0 ? <div className="mt-7 -mx-5 overflow-x-auto px-5 pb-8 scrollbar-hide sm:-mx-8 sm:px-8 lg:-mx-12 lg:px-12" style={{ scrollSnapType: "x mandatory" }}>
+          <div className="flex w-max gap-5 lg:gap-7">
+            {visible.map((item, index) => <a key={`${item.sector}-${item.name}-${index}`} href={item.url} target="_blank" rel="noreferrer" className="group block w-[82vw] max-w-[920px] shrink-0 snap-start lg:w-[62vw]">
+              <div className="relative aspect-[16/9] overflow-hidden bg-card">
+                <img src={item.image} alt={`${item.name} homepage`} loading={index < 2 ? "eager" : "lazy"} className="h-full w-full object-cover object-top transition-transform duration-[1200ms] ease-out group-hover:scale-[1.025]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/5 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-50" />
+                <div className="absolute left-5 top-5 flex items-center gap-3 label-mono text-[9px] uppercase tracking-[0.2em] text-white/70 sm:left-7 sm:top-7"><span>{String(index + 1).padStart(2, "0")} / {String(visible.length).padStart(2, "0")}</span><span className="h-px w-8 bg-white/30" /><span>{PORTFOLIO_SECTORS.find(([key]) => key === item.sector)?.[1]}</span></div>
+                <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-5 text-white sm:bottom-7 sm:left-7 sm:right-7"><div><div className="label-mono text-[9px] uppercase tracking-[0.15em] text-white/55">{item.type} · live homepage preview</div><h3 className="display-serif mt-2 text-4xl leading-[0.9] sm:text-6xl">{item.name}</h3></div><span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/25 bg-black/20 backdrop-blur-md transition-all duration-500 group-hover:bg-white group-hover:text-black sm:h-14 sm:w-14"><ArrowUpRight className="h-5 w-5" /></span></div>
+              </div>
+              <div className="mt-3 flex items-center justify-between px-1"><span className="label-mono text-[9px] uppercase tracking-[0.15em] text-muted-foreground/45">Reference · {item.url.replace(/^https?:\/\//, "").replace(/\/$/, "")}</span><span className="hidden items-center gap-2 label-mono text-[9px] uppercase tracking-[0.15em] text-primary sm:flex">Visit site <ExternalLink className="h-3 w-3" /></span></div>
+            </a>)}
           </div>
-        </Reveal>
+        </div> : <div className="mt-7 border-y border-border/50 py-20 text-center"><p className="display-serif text-3xl">Aucune référence trouvée.</p><button type="button" onClick={clearFilters} className="mt-4 label-mono text-[10px] uppercase tracking-[0.15em] text-primary">Voir tous les secteurs</button></div>}
+
+        <p className="mt-2 border-t border-border/50 pt-5 text-[10px] leading-relaxed text-muted-foreground/40">Références externes utilisées comme inspiration, collaborations ou démonstrations de savoir-faire. Elles ne sont pas présentées comme des réalisations intégrales XRAGENCY.</p>
       </div>
     </section>
-  );
-}
-
-/* ── Individual Showcase Card — premium overlay hover ── */
-function ShowcaseCard({ item }: { item: (typeof SHOWCASE)[number] }) {
-  const { t } = useLang();
-
-  return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-400 hover:border-primary/40 hover:-translate-y-[4px] hover:shadow-[0_8px_32px_-8px_oklch(0_0_0/0.14),0_20px_60px_-16px_oklch(0_0_0/0.10)]">
-      {/* Image with hover zoom */}
-      <div className="relative aspect-[4/3] overflow-hidden">
-        <img
-          src={item.image}
-          alt={item.name}
-          loading="lazy"
-          className="h-full w-full scale-100 object-cover transition-transform duration-600 ease-out group-hover:scale-108"
-        />
-
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent opacity-60 transition-opacity duration-400 group-hover:opacity-80" />
-
-        {/* Sector badge */}
-        <span className="label-mono absolute left-3 top-3 rounded-full border border-white/20 bg-black/40 px-2.5 py-1 text-[10px] text-white backdrop-blur-md">
-          {t(UI[item.sectorKey as keyof typeof UI])}
-        </span>
-
-        {/* Full hover overlay with centered CTA */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-all duration-400 group-hover:opacity-100">
-          <a
-            href={item.url}
-            target="_blank"
-            rel="noreferrer"
-            className="label-mono flex items-center gap-2 rounded-full border border-white/30 bg-white/20 px-4 py-2.5 text-xs font-semibold text-white backdrop-blur-md transition-all duration-200 hover:bg-white/35 hover:scale-105"
-          >
-            Voir le site
-            <ArrowUpRight className="h-3.5 w-3.5" />
-          </a>
-        </div>
-      </div>
-
-      {/* Content — compact */}
-      <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="display-serif text-lg transition-colors duration-300 group-hover:text-primary">
-            {item.name}
-          </h3>
-          <span className="label-mono shrink-0 rounded-full border border-border/60 px-2 py-0.5 text-[9px] text-muted-foreground/60">
-            {t(item.type)}
-          </span>
-        </div>
-
-        <p className="mt-2 flex-1 text-xs leading-relaxed text-muted-foreground">{t(item.desc)}</p>
-
-        {/* Metric */}
-        <div className="mt-4 flex items-center justify-between border-t border-border/60 pt-3">
-          <span className="label-mono text-xs font-semibold text-primary">{item.metric}</span>
-          <a
-            href={item.url}
-            target="_blank"
-            rel="noreferrer"
-            className="label-mono flex items-center gap-1 text-[10px] text-muted-foreground transition-colors hover:text-primary"
-          >
-            {t(UI.showcaseVisitSite)}
-            <ArrowUpRight className="h-3 w-3" />
-          </a>
-        </div>
-      </div>
-    </div>
   );
 }
