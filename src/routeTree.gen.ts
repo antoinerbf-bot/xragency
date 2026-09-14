@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ApiSendQuoteRouteImport } from './routes/api/send-quote'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardAuditsRouteImport } from './routes/dashboard/audits'
 import { Route as DashboardLoginRouteImport } from './routes/dashboard/login'
@@ -18,6 +19,8 @@ import { Route as DashboardNewRouteImport } from './routes/dashboard/new'
 import { Route as DashboardProspectsRouteImport } from './routes/dashboard/prospects'
 import { Route as ServicesIndexRouteImport } from './routes/services/index'
 import { Route as ServicesServiceIdRouteImport } from './routes/services/$serviceId'
+import { Route as ServicesSeoRouteImport } from './routes/services/seo'
+import { Route as ServicesWebcareRouteImport } from './routes/services/webcare'
 import { Route as DashboardAuditsAuditIdRouteImport } from './routes/dashboard/audits.$auditId'
 import { Route as DashboardProspectsProspectIdRouteImport } from './routes/dashboard/prospects.$prospectId'
 
@@ -29,6 +32,11 @@ const IndexRoute = IndexRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSendQuoteRoute = ApiSendQuoteRouteImport.update({
+  id: '/api/send-quote',
+  path: '/api/send-quote',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
@@ -66,6 +74,16 @@ const ServicesServiceIdRoute = ServicesServiceIdRouteImport.update({
   path: '/services/$serviceId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServicesSeoRoute = ServicesSeoRouteImport.update({
+  id: '/services/seo',
+  path: '/services/seo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesWebcareRoute = ServicesWebcareRouteImport.update({
+  id: '/services/webcare',
+  path: '/services/webcare',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardAuditsAuditIdRoute = DashboardAuditsAuditIdRouteImport.update({
   id: '/$auditId',
   path: '/$auditId',
@@ -81,11 +99,14 @@ const DashboardProspectsProspectIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
   '/dashboard/new': typeof DashboardNewRoute
   '/dashboard/prospects': typeof DashboardProspectsRouteWithChildren
   '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/services/seo': typeof ServicesSeoRoute
+  '/services/webcare': typeof ServicesWebcareRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/services/': typeof ServicesIndexRoute
   '/dashboard/audits/$auditId': typeof DashboardAuditsAuditIdRoute
@@ -93,11 +114,14 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
   '/dashboard/new': typeof DashboardNewRoute
   '/dashboard/prospects': typeof DashboardProspectsRouteWithChildren
   '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/services/seo': typeof ServicesSeoRoute
+  '/services/webcare': typeof ServicesWebcareRoute
   '/dashboard': typeof DashboardIndexRoute
   '/services': typeof ServicesIndexRoute
   '/dashboard/audits/$auditId': typeof DashboardAuditsAuditIdRoute
@@ -107,11 +131,14 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
   '/dashboard/new': typeof DashboardNewRoute
   '/dashboard/prospects': typeof DashboardProspectsRouteWithChildren
   '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/services/seo': typeof ServicesSeoRoute
+  '/services/webcare': typeof ServicesWebcareRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/services/': typeof ServicesIndexRoute
   '/dashboard/audits/$auditId': typeof DashboardAuditsAuditIdRoute
@@ -122,11 +149,14 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
     | '/dashboard/new'
     | '/dashboard/prospects'
     | '/services/$serviceId'
+    | '/services/seo'
+    | '/services/webcare'
     | '/dashboard/'
     | '/services/'
     | '/dashboard/audits/$auditId'
@@ -134,11 +164,14 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
     | '/dashboard/new'
     | '/dashboard/prospects'
     | '/services/$serviceId'
+    | '/services/seo'
+    | '/services/webcare'
     | '/dashboard'
     | '/services'
     | '/dashboard/audits/$auditId'
@@ -147,11 +180,14 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
     | '/dashboard/new'
     | '/dashboard/prospects'
     | '/services/$serviceId'
+    | '/services/seo'
+    | '/services/webcare'
     | '/dashboard/'
     | '/services/'
     | '/dashboard/audits/$auditId'
@@ -161,7 +197,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRouteWithChildren
+  ApiSendQuoteRoute: typeof ApiSendQuoteRoute
   ServicesServiceIdRoute: typeof ServicesServiceIdRoute
+  ServicesSeoRoute: typeof ServicesSeoRoute
+  ServicesWebcareRoute: typeof ServicesWebcareRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
 }
 
@@ -179,6 +218,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/send-quote': {
+      id: '/api/send-quote'
+      path: '/api/send-quote'
+      fullPath: '/api/send-quote'
+      preLoaderRoute: typeof ApiSendQuoteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/': {
@@ -228,6 +274,20 @@ declare module '@tanstack/react-router' {
       path: '/services/$serviceId'
       fullPath: '/services/$serviceId'
       preLoaderRoute: typeof ServicesServiceIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/seo': {
+      id: '/services/seo'
+      path: '/services/seo'
+      fullPath: '/services/seo'
+      preLoaderRoute: typeof ServicesSeoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/webcare': {
+      id: '/services/webcare'
+      path: '/services/webcare'
+      fullPath: '/services/webcare'
+      preLoaderRoute: typeof ServicesWebcareRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/audits/$auditId': {
@@ -293,7 +353,10 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRouteWithChildren,
+  ApiSendQuoteRoute: ApiSendQuoteRoute,
   ServicesServiceIdRoute: ServicesServiceIdRoute,
+  ServicesSeoRoute: ServicesSeoRoute,
+  ServicesWebcareRoute: ServicesWebcareRoute,
   ServicesIndexRoute: ServicesIndexRoute,
 }
 export const routeTree = rootRouteImport
