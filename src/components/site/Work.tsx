@@ -4,7 +4,6 @@ import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { SHOWCASE } from "@/lib/content";
 import { cn } from "@/lib/utils";
-import { EyeTracker } from "./EyeTracker";
 
 const SECTOR_KEYS = [
   "all",
@@ -59,8 +58,14 @@ export function Work() {
                 "Chọn lĩnh vực hoạt động và khám phá các dự án phù hợp với ngành của bạn. Mỗi thẻ hiển thị loại dịch vụ và kết quả đạt được."}
             </p>
           </div>
-          <div className="flex justify-center lg:justify-end">
-            <EyeTracker />
+          <div className="flex flex-col items-start justify-end gap-4 lg:items-end">
+            <a
+              href="/work"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-5 py-3 label-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary transition-all hover:bg-primary hover:text-primary-foreground"
+            >
+              Voir toutes les réalisations
+              <span aria-hidden>→</span>
+            </a>
           </div>
         </header>
 

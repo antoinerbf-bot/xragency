@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
@@ -163,13 +162,13 @@ export function ServicesCatalog() {
                       <span className="text-muted-foreground"> / an</span>
                     )}
                   </p>
-                  <Link
-                    to={href}
+                  <a
+                    href={href}
                     className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-5 py-3 label-mono text-[10px] font-semibold uppercase tracking-[0.14em] transition-all duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground"
                   >
                     {copy.learn}
                     <ArrowUpRight className="h-3.5 w-3.5" />
-                  </Link>
+                  </a>
                 </div>
               </article>
             );
@@ -183,14 +182,13 @@ export function ServicesCatalog() {
               <h3 className="display-serif text-3xl sm:text-4xl">{copy.ctaTitle}</h3>
               <p className="mt-3 max-w-xl text-sm leading-7 text-muted-foreground">{copy.ctaLead}</p>
             </div>
-            <Link
-              to="/"
-              hash="intelligence"
+            <a
+              href="/#intelligence"
               className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-6 py-3.5 label-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-foreground transition-all hover:gap-3"
             >
               {copy.cta}
               <ArrowUpRight className="h-4 w-4" />
-            </Link>
+            </a>
           </div>
         </div>
       </div>

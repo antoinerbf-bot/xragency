@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Nav } from "@/components/site/Nav";
@@ -235,16 +235,15 @@ function WorkPage() {
                   "Chúng tôi phân tích tình huống và đề xuất lộ trình rõ ràng."}
               </p>
             </div>
-            <Link
-              to="/"
-              hash="intelligence"
+            <a
+              href="/#intelligence"
               className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 label-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-foreground"
             >
               {lang === "fr" && "Lancer mon analyse"}
               {lang === "en" && "Start my analysis"}
               {lang === "vi" && "Bắt đầu phân tích"}
               <ArrowUpRight className="h-4 w-4" />
-            </Link>
+            </a>
           </div>
         </section>
       </main>
