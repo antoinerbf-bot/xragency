@@ -7,8 +7,10 @@ import type { L } from "@/lib/i18n";
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <Link to="/" aria-label="XR Agency — Accueil" className={cn("group inline-flex flex-col tracking-tight transition-all duration-300 hover:opacity-90", className)}>
-      <span className="display-serif text-lg font-bold tracking-[0.18em] text-foreground transition-all duration-300 group-hover:tracking-[0.22em] sm:text-xl">XR AGENCY</span>
+    <Link to="/" aria-label="XRagency. — Accueil" className={cn("group inline-flex items-baseline tracking-tight transition-all duration-300 hover:opacity-90", className)}>
+      <span className="font-semibold text-lg tracking-[-0.02em] text-foreground transition-all duration-300 group-hover:tracking-[0.01em] sm:text-xl">
+        XRagency<span className="text-primary">.</span>
+      </span>
     </Link>
   );
 }

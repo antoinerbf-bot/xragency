@@ -4,6 +4,7 @@ import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { PORTFOLIO_REFERENCES, PORTFOLIO_SECTORS } from "@/lib/portfolioReferences";
 import { cn } from "@/lib/utils";
+import { EyeTracker } from "./EyeTracker";
 
 const TYPE_FILTERS = [["all", "Tout"], ["Vitrine", "Vitrine"], ["E-commerce", "E-commerce"], ["SaaS", "SaaS / IA"], ["Portail", "Portail"]] as const;
 
@@ -28,12 +29,22 @@ export function Work() {
   return (
     <section id="work" className="relative overflow-hidden border-t border-border/50 bg-background py-20 sm:py-28 lg:py-32">
       <div className="mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
-        <header className="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-end">
+        <header className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
           <div>
-            <span className="label-mono text-[10px] uppercase tracking-[0.3em] text-primary">{t(UI.showcaseLabel)}</span>
-            <h2 className="display-serif mt-4 max-w-5xl text-5xl leading-[0.88] sm:text-7xl lg:text-[7.5rem]">Des références pour vous projeter.</h2>
+            <span className="label-mono text-[10px] uppercase tracking-[0.3em] text-primary">
+              PORTFOLIO · {PORTFOLIO_REFERENCES.length}+ WORKS
+            </span>
+            <h2 className="display-serif mt-5 max-w-4xl text-5xl leading-[0.88] sm:text-7xl lg:text-[6.5rem]">
+              Our portfolio.
+            </h2>
+            <p className="mt-6 max-w-lg text-sm leading-relaxed text-muted-foreground sm:text-base">
+              Choisissez votre secteur d&apos;activité et explorez des directions digitales cohérentes avec votre métier.
+              Chaque projet est une référence réelle — filtrez pour voir ce qui vous concerne.
+            </p>
           </div>
-          <p className="max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base lg:pb-2">Choisissez votre secteur et explorez des directions digitales dans le même univers. Chaque aperçu ouvre le site concerné.</p>
+          <div className="flex justify-center lg:justify-end">
+            <EyeTracker />
+          </div>
         </header>
 
         <div className="mt-10 border-y border-border/60 py-5">

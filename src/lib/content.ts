@@ -260,8 +260,8 @@ export const SERVICES: Service[] = [
           { fr: "Livraison en 7 jours", en: "Delivered in 7 days", vi: "Bàn giao trong 7 ngày" },
           {
             fr: "Langue supplémentaire : +100 € / langue",
-            en: "Extra language: +$108 / language",
-            vi: "Thêm ngôn ngữ: +100 € / ngôn ngữ",
+            en: "Extra language: +$130 / language",
+            vi: "Thêm ngôn ngữ: +2.200.000 ₫ / ngôn ngữ",
           },
         ],
       },
@@ -293,8 +293,8 @@ export const SERVICES: Service[] = [
           { fr: "Livraison en 14 jours", en: "Delivered in 14 days", vi: "Bàn giao trong 14 ngày" },
           {
             fr: "Langue supplémentaire : +100 € / langue",
-            en: "Extra language: +$108 / language",
-            vi: "Thêm ngôn ngữ: +100 € / ngôn ngữ",
+            en: "Extra language: +$130 / language",
+            vi: "Thêm ngôn ngữ: +2.200.000 ₫ / ngôn ngữ",
           },
         ],
       },
@@ -306,8 +306,8 @@ export const SERVICES: Service[] = [
         },
         audience: {
           fr: "À partir de 1 499 € — selon le nombre de produits",
-          en: "From $1,619 — depending on the number of products",
-          vi: "Từ 1.499 € — tùy theo số lượng sản phẩm",
+          en: "From $1,943 — depending on the number of products",
+          vi: "Từ 32.978.000 ₫ — tùy theo số lượng sản phẩm",
         },
         eur: 1499,
         period: "once",
@@ -337,8 +337,8 @@ export const SERVICES: Service[] = [
           },
           {
             fr: "Option : multilingue +100 € / langue",
-            en: "Option: multilingual +$108 / language",
-            vi: "Tùy chọn: đa ngôn ngữ +100 € / ngôn ngữ",
+            en: "Option: multilingual +$130 / language",
+            vi: "Tùy chọn: đa ngôn ngữ +2.200.000 ₫ / ngôn ngữ",
           },
         ],
       },
@@ -1064,9 +1064,9 @@ export const SERVICES: Service[] = [
       vi: "Định hướng nghệ thuật và sản xuất nội dung liên tục.",
     },
     description: {
-      fr: "Contenus visuels premium, légendes engageantes, planification, modération et veille : votre présence sociale devient une machine à notoriété. Option multilingue disponible (+100€ par langue supplémentaire).",
-      en: "Premium visual content, engaging captions, scheduling, moderation and monitoring: your social presence becomes an awareness engine. Multilingual option available (+100€ per extra language).",
-      vi: "Nội dung hình ảnh cao cấp, chú thích cuốn hút, lên lịch, kiểm duyệt và theo dõi: mạng xã hội trở thành cỗ máy nhận diện. Tuỳ chọn đa ngôn ngữ (+100€/ngôn ngữ phụ).",
+      fr: "Contenus visuels premium, légendes engageantes, planification, modération et veille : votre présence sociale devient une machine à notoriété. Option multilingue disponible (+100 € par langue supplémentaire).",
+      en: "Premium visual content, engaging captions, scheduling, moderation and monitoring: your social presence becomes an awareness engine. Multilingual option available (+$130 per extra language).",
+      vi: "Nội dung hình ảnh cao cấp, chú thích cuốn hút, lên lịch, kiểm duyệt và theo dõi: mạng xã hội trở thành cỗ máy nhận diện. Tuỳ chọn đa ngôn ngữ (+2.200.000 ₫/ngôn ngữ phụ).",
     },
     fromEur: 299,
     fromPeriod: "month",
@@ -1225,7 +1225,7 @@ export const SERVICES: Service[] = [
         eur: 299,
         period: "month",
         features: [
-          { fr: "1 langue incluse (+100€/langue suppl.)", en: "1 language included (+100€/extra lang)", vi: "Bao gồm 1 ngôn ngữ (+100€/ngôn ngữ thêm)" },
+          { fr: "1 langue incluse (+100 €/langue suppl.)", en: "1 language included (+$130/extra lang)", vi: "Bao gồm 1 ngôn ngữ (+2.200.000 ₫/ngôn ngữ thêm)" },
           { fr: "16 publications par mois (Posts & Carrousels)", en: "16 posts per month (Posts & Carousels)", vi: "16 bài đăng mỗi tháng (Post & Carousel)" },
           { fr: "Stratégie éditoriale et visuelle", en: "Editorial and visual strategy", vi: "Chiến lược nội dung và hình ảnh" },
           { fr: "Rédaction engageante et ciblée", en: "Engaging and targeted copywriting", vi: "Viết bài cuốn hút, đúng mục tiêu" },
@@ -1240,7 +1240,7 @@ export const SERVICES: Service[] = [
         period: "month",
         popular: true,
         features: [
-          { fr: "1 langue incluse (+100€/langue suppl.)", en: "1 language included (+100€/extra lang)", vi: "Bao gồm 1 ngôn ngữ (+100€/ngôn ngữ thêm)" },
+          { fr: "1 langue incluse (+100 €/langue suppl.)", en: "1 language included (+$130/extra lang)", vi: "Bao gồm 1 ngôn ngữ (+2.200.000 ₫/ngôn ngữ thêm)" },
           { fr: "Tout ce qui est inclus dans Présence", en: "Everything included in Presence", vi: "Mọi thứ trong gói Cơ bản" },
           { fr: "20 publications / mois haute qualité", en: "20 high-quality posts / month", vi: "20 bài đăng chất lượng cao / tháng" },
           { fr: "Format Vidéos Courtes (Reels/TikTok)", en: "Short Video format (Reels/TikTok)", vi: "Định dạng video ngắn (Reels/TikTok)" },
@@ -1254,7 +1254,7 @@ export const SERVICES: Service[] = [
         eur: 699,
         period: "month",
         features: [
-          { fr: "1 langue incluse (+100€/langue suppl.)", en: "1 language included (+100€/extra lang)", vi: "Bao gồm 1 ngôn ngữ (+100€/ngôn ngữ thêm)" },
+          { fr: "1 langue incluse (+100 €/langue suppl.)", en: "1 language included (+$130/extra lang)", vi: "Bao gồm 1 ngôn ngữ (+2.200.000 ₫/ngôn ngữ thêm)" },
           { fr: "Publication de contenu en continu", en: "Continuous content publishing", vi: "Đăng tải nội dung liên tục" },
           { fr: "Story quotidienne animée", en: "Daily animated story", vi: "Story động hàng ngày" },
           { fr: "Modération et réponse aux commentaires", en: "Comment moderation and response", vi: "Kiểm duyệt và trả lời bình luận" },

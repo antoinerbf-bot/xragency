@@ -105,9 +105,9 @@ export const UI: Record<string, L> = {
     vi: "Chúng tôi tạo ra chúng.",
   },
   aboutText: {
-    fr: "Nous croyons en un monde où la technologie et l'humain s'unissent pour créer des expériences inoubliables. Sept disciplines, une seule maison, composées à la main.",
-    en: "We believe in a world where technology and humans unite to create unforgettable experiences. Seven disciplines, one house, composed by hand.",
-    vi: "Chúng tôi tin vào một thế giới nơi công nghệ và con người cùng tạo nên những trải nghiệm khó quên. Bảy lĩnh vực, một studio, chế tác thủ công.",
+    fr: "Nous croyons en un monde où la technologie et l'humain s'unissent pour créer des expériences inoubliables. Plusieurs expertises, une seule maison, composées à la main.",
+    en: "We believe in a world where technology and humans unite to create unforgettable experiences. Multiple disciplines, one house, composed by hand.",
+    vi: "Chúng tôi tin vào một thế giới nơi công nghệ và con người cùng tạo nên những trải nghiệm khó quên. Nhiều chuyên môn, một studio, chế tác thủ công.",
   },
 
   intelLabel: {
@@ -191,9 +191,9 @@ export const UI: Record<string, L> = {
     vi: "Tùy chọn & phụ phí",
   },
   intelOptionLang: {
-    fr: "Langue supplémentaire — 100 € par langue",
-    en: "Extra language — $108 per language",
-    vi: "Ngôn ngữ bổ sung — 100 € mỗi ngôn ngữ",
+    fr: "Langue supplémentaire — +100 € par langue",
+    en: "Extra language — +$130 per language",
+    vi: "Ngôn ngữ bổ sung — +2.200.000 ₫ mỗi ngôn ngữ",
   },
   intelOptionBooking: {
     fr: "Système de réservation en ligne — sur devis",
@@ -202,8 +202,8 @@ export const UI: Record<string, L> = {
   },
   intelOptionEcom: {
     fr: "E-commerce à partir de 1 499 € — ajusté selon le nombre de produits",
-    en: "E-commerce from $1,619 — adjusted to the number of products",
-    vi: "Thương mại điện tử từ 1.499 € — điều chỉnh theo số lượng sản phẩm",
+    en: "E-commerce from $1,943 — adjusted to the number of products",
+    vi: "Thương mại điện tử từ 32.978.000 ₫ — điều chỉnh theo số lượng sản phẩm",
   },
   intelTimeline: { fr: "Mise en ligne estimée", en: "Estimated go-live", vi: "Dự kiến ra mắt" },
   intelTimelineValue: { fr: "7 à 21 jours", en: "7 to 21 days", vi: "7 đến 21 ngày" },
@@ -213,9 +213,9 @@ export const UI: Record<string, L> = {
   servicesTitle1: { fr: "Ce que nous", en: "What we", vi: "Những gì chúng tôi" },
   servicesTitle2: { fr: "faisons.", en: "do.", vi: "thực hiện." },
   servicesLead: {
-    fr: "Sept disciplines. Une seule maison. Composées à la main pour marques exigeantes.",
-    en: "Seven disciplines. One house. Composed by hand for demanding brands.",
-    vi: "Bảy lĩnh vực. Một studio. Chế tác thủ công cho những thương hiệu khắt khe.",
+    fr: "Plusieurs expertises. Une seule maison. Composées à la main pour marques exigeantes.",
+    en: "Multiple disciplines. One house. Composed by hand for demanding brands.",
+    vi: "Nhiều chuyên môn. Một studio. Chế tác thủ công cho những thương hiệu khắt khe.",
   },
   from: { fr: "À partir de", en: "From", vi: "Từ" },
   discover: { fr: "Découvrir", en: "Discover", vi: "Khám phá" },

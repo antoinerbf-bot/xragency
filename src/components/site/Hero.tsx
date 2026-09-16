@@ -5,6 +5,7 @@ import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax, FloatingBadge } from "./primitives";
+import { SurfaceDigital } from "./SurfaceDigital";
 // import EarthGlobe from "./EarthGlobe"; // Globe removed per user request
 import heroLoop from "@/assets/hero-studio.mp4.asset.json";
 
@@ -76,8 +77,11 @@ export function Hero() {
 
   return (
     <section id="top" className="grain relative min-h-[92dvh] overflow-hidden pt-20 sm:pt-24">
-      {/* Background ambient video with multi-speed parallax */}
-      <Parallax speed={0.14} className="absolute inset-0 -top-[12%] h-[124%] pointer-events-none">
+      {/* Surface digitale — network / structure / visibility */}
+      <div className="pointer-events-none absolute inset-0 bg-background">
+        <SurfaceDigital className="opacity-90" />
+      </div>
+      <Parallax speed={0.08} className="absolute inset-0 -top-[8%] h-[116%] pointer-events-none">
         <video
           src={heroLoop.url}
           autoPlay
@@ -85,7 +89,7 @@ export function Hero() {
           loop
           playsInline
           preload="auto"
-          className="h-full w-full object-cover opacity-35 grayscale contrast-105"
+          className="h-full w-full object-cover opacity-[0.12] grayscale contrast-110 mix-blend-luminosity"
         />
       </Parallax>
 

@@ -18,26 +18,20 @@ export const LANGS: { code: Lang; label: string; flag: string }[] = [
 ];
 
 /**
- * Reference prices are stored once, in EUR.
- * Vietnam pricing uses a 20% market adjustment on top of the VND conversion rate.
+ * All prices are stored once in EUR (source of truth).
+ * EN = +20% vs EU price, then converted to USD (rate ~1.08).
+ * VI = -20% vs EU price, then converted to VND (rate ~27 500).
  */
-export const RATES: Record<Lang, number> = {
-  fr: 1,
-  en: 1.08,
-  vi: 22400,
-};
+export const EUR_TO_USD = 1.08;
+export const EUR_TO_VND = 27500;
 
 export function formatPrice(eur: number, lang: Lang): string {
   if (lang === "en") {
-    // English pricing: +20% premium
-    const premiumEur = eur * 1.20;
-    const usd = Math.round(premiumEur * 1.08); // 1.08 is approx EUR to USD exchange rate
+    const usd = Math.round(eur * 1.2 * EUR_TO_USD);
     return `$${usd.toLocaleString("en-US")}`;
   }
   if (lang === "vi") {
-    // Vietnam pricing: -20% regional discount
-    const discountedEur = eur * 0.80;
-    const vnd = Math.round((discountedEur * 27500) / 1000) * 1000; // 27500 is approx EUR to VND exchange rate
+    const vnd = Math.round((eur * 0.8 * EUR_TO_VND) / 1000) * 1000;
     return `${vnd.toLocaleString("vi-VN")} ₫`;
   }
   return `${Math.round(eur).toLocaleString("fr-FR")} €`;
