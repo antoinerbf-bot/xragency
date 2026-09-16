@@ -2,44 +2,66 @@ import { useEffect, useRef, type RefObject } from "react";
 
 /**
  * Photorealistic gecko portfolio signature (qbenix-inspired).
- * Real photo base + tracking pupils over the eyes.
+ * Real photo base + tracking pupils + subtle body lean with spring inertia.
+ * Gracefully disabled on touch / reduced-motion.
  */
 export function EyeTracker({ className = "" }: { className?: string }) {
   const leftPupil = useRef<HTMLDivElement>(null);
   const rightPupil = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   const container = useRef<HTMLDivElement>(null);
   const target = useRef({ x: 0, y: 0 });
   const current = useRef({ x: 0, y: 0 });
+  const bodyTarget = useRef({ rx: 0, ry: 0, tx: 0, ty: 0 });
+  const bodyCurrent = useRef({ rx: 0, ry: 0, tx: 0, ty: 0 });
   const raf = useRef(0);
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) return;
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    if (reduced || isTouch) return;
 
     const onMove = (e: MouseEvent) => {
       const el = container.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
-      // Gaze origin ≈ between the two eyes on the image
       const cx = rect.left + rect.width * 0.55;
       const cy = rect.top + rect.height * 0.38;
-      const dx = (e.clientX - cx) / Math.max(window.innerWidth * 0.4, 1);
-      const dy = (e.clientY - cy) / Math.max(window.innerHeight * 0.4, 1);
+      const dx = (e.clientX - cx) / Math.max(window.innerWidth * 0.35, 1);
+      const dy = (e.clientY - cy) / Math.max(window.innerHeight * 0.35, 1);
       target.current.x = Math.max(-1, Math.min(1, dx));
       target.current.y = Math.max(-1, Math.min(1, dy));
+
+      bodyTarget.current.rx = target.current.y * -4;
+      bodyTarget.current.ry = target.current.x * 5;
+      bodyTarget.current.tx = target.current.x * 8;
+      bodyTarget.current.ty = target.current.y * 5;
     };
 
     const tick = () => {
-      current.current.x += (target.current.x - current.current.x) * 0.1;
-      current.current.y += (target.current.y - current.current.y) * 0.1;
-      const ox = current.current.x * 10;
-      const oy = current.current.y * 7;
+      const eyeSpring = 0.09;
+      const bodySpring = 0.055;
+      current.current.x += (target.current.x - current.current.x) * eyeSpring;
+      current.current.y += (target.current.y - current.current.y) * eyeSpring;
+      const ox = current.current.x * 11;
+      const oy = current.current.y * 8;
 
       for (const el of [leftPupil.current, rightPupil.current]) {
         if (el) {
           el.style.transform = `translate(calc(-50% + ${ox}px), calc(-50% + ${oy}px))`;
         }
       }
+
+      bodyCurrent.current.rx += (bodyTarget.current.rx - bodyCurrent.current.rx) * bodySpring;
+      bodyCurrent.current.ry += (bodyTarget.current.ry - bodyCurrent.current.ry) * bodySpring;
+      bodyCurrent.current.tx += (bodyTarget.current.tx - bodyCurrent.current.tx) * bodySpring;
+      bodyCurrent.current.ty += (bodyTarget.current.ty - bodyCurrent.current.ty) * bodySpring;
+
+      if (bodyRef.current) {
+        const { rx, ry, tx, ty } = bodyCurrent.current;
+        bodyRef.current.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotateX(${rx}deg) rotateY(${ry}deg)`;
+      }
+
       raf.current = requestAnimationFrame(tick);
     };
 
@@ -53,11 +75,13 @@ export function EyeTracker({ className = "" }: { className?: string }) {
 
   return (
     <div ref={container} className={`relative select-none ${className}`} aria-hidden>
-      <div className="relative mx-auto aspect-square w-full max-w-[420px] overflow-hidden rounded-[2rem] sm:max-w-[480px] lg:max-w-[520px]">
-        {/* Soft ambient */}
+      <div
+        ref={bodyRef}
+        className="relative mx-auto aspect-square w-full max-w-[420px] overflow-hidden rounded-[2rem] will-change-transform sm:max-w-[480px] lg:max-w-[520px]"
+        style={{ transformStyle: "preserve-3d", perspective: "900px" }}
+      >
         <div className="pointer-events-none absolute -inset-8 rounded-full bg-primary/15 blur-3xl" />
 
-        {/* Photoreal gecko */}
         <img
           src="/gecko-portfolio.jpg"
           alt=""
@@ -65,7 +89,6 @@ export function EyeTracker({ className = "" }: { className?: string }) {
           draggable={false}
         />
 
-        {/* Cinematic grade */}
         <div
           className="pointer-events-none absolute inset-0 z-[2]"
           style={{
@@ -74,12 +97,10 @@ export function EyeTracker({ className = "" }: { className?: string }) {
           }}
         />
 
-        {/* LEFT eye tracker overlay — calibrated for face-forward / 3/4 stock gecko */}
         <EyeOverlay
           pupilRef={leftPupil}
           className="left-[28%] top-[34%] z-[3] h-[14%] w-[14%] sm:left-[29%] sm:top-[33%]"
         />
-        {/* RIGHT eye */}
         <EyeOverlay
           pupilRef={rightPupil}
           className="left-[52%] top-[33%] z-[3] h-[14%] w-[14%] sm:left-[53%] sm:top-[32%]"
@@ -98,7 +119,6 @@ function EyeOverlay({
 }) {
   return (
     <div className={`absolute ${className}`}>
-      {/* Darken original eye so synthetic pupil reads clean */}
       <div className="absolute inset-0 rounded-full bg-black/50 mix-blend-multiply" />
       <div
         className="absolute inset-0 overflow-hidden rounded-full"

@@ -502,6 +502,17 @@ export const UI: Record<string, L> = {
   },
   showcaseVisitSite: { fr: "Visiter le site", en: "Visit website", vi: "Xem website" },
   showcaseAllSectors: { fr: "Tous les secteurs", en: "All sectors", vi: "Tất cả lĩnh vực" },
+  showcaseAllServices: { fr: "Tous les services", en: "All services", vi: "Tất cả dịch vụ" },
+  serviceWebsite: { fr: "Site web", en: "Website", vi: "Website" },
+  serviceEcommerce: { fr: "E-commerce", en: "E-commerce", vi: "Thương mại điện tử" },
+  serviceBooking: { fr: "Réservation", en: "Booking", vi: "Đặt chỗ" },
+  serviceBranding: { fr: "Branding", en: "Branding", vi: "Thương hiệu" },
+  serviceSeo: { fr: "SEO", en: "SEO", vi: "SEO" },
+  serviceSocial: { fr: "Social Media", en: "Social Media", vi: "Mạng xã hội" },
+  serviceStrategy: { fr: "Stratégie digitale", en: "Digital Strategy", vi: "Chiến lược số" },
+  serviceAi: { fr: "IA", en: "AI", vi: "AI" },
+  serviceWebcare: { fr: "Webcare", en: "Webcare", vi: "Webcare" },
+
   showcaseSiteVitrine: { fr: "Site vitrine", en: "Showcase site", vi: "Website giới thiệu" },
   showcaseEcommerce: { fr: "E-commerce", en: "E-commerce", vi: "Thương mại điện tử" },
   showcaseBoth: {

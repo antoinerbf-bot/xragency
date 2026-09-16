@@ -2451,6 +2451,7 @@ export const SHOWCASE = [
     name: "Maison Lumière",
     url: "https://xragency.vercel.app",
     sectorKey: "sectorLuxe",
+    services: ["website", "branding"],
     type: { fr: "Site vitrine luxe", en: "Luxury showcase", vi: "Website giới thiệu xa xỉ" },
     desc: {
       fr: "Identité visuelle raffinée, galerie immersive, navigation éditoriale pour cette joaillerie indépendante parisienne.",
@@ -2466,6 +2467,7 @@ export const SHOWCASE = [
     name: "Villa Azur",
     url: "https://xragency.vercel.app",
     sectorKey: "sectorHotellerie",
+    services: ["website", "booking"],
     type: {
       fr: "Site vitrine + réservation",
       en: "Showcase + booking",
@@ -2485,6 +2487,7 @@ export const SHOWCASE = [
     name: "Le Novara",
     url: "https://xragency.vercel.app",
     sectorKey: "sectorGastronomie",
+    services: ["website", "booking"],
     type: {
       fr: "Site vitrine + réservation",
       en: "Showcase + booking",
@@ -2504,6 +2507,7 @@ export const SHOWCASE = [
     name: "Prestige Auto 75",
     url: "https://xragency.vercel.app",
     sectorKey: "sectorAuto",
+    services: ["website", "branding"],
     type: {
       fr: "Site vitrine + configurateur",
       en: "Showcase + configurator",
@@ -2523,6 +2527,7 @@ export const SHOWCASE = [
     name: "Groupe Mercier",
     url: "https://xragency.vercel.app",
     sectorKey: "sectorImmobilier",
+    services: ["website", "seo"],
     type: { fr: "Portail immobilier", en: "Real estate portal", vi: "Cổng thông tin BĐS" },
     desc: {
       fr: "Portail immobilier haut de gamme, visites virtuelles 3D, filtres avancés. Agence premium parisienne.",
@@ -2538,6 +2543,7 @@ export const SHOWCASE = [
     name: "Cabinet Belaire",
     url: "https://xragency.vercel.app",
     sectorKey: "sectorSante",
+    services: ["website", "booking"],
     type: { fr: "Site vitrine médical", en: "Medical showcase", vi: "Website y tế" },
     desc: {
       fr: "Design médical premium, prise de rendez-vous en ligne, parcours patient fluide. Clinique esthétique privée.",
@@ -2553,6 +2559,7 @@ export const SHOWCASE = [
     name: "Atelier Sauge",
     url: "https://xragency.vercel.app",
     sectorKey: "sectorBeaute",
+    services: ["ecommerce", "branding"],
     type: { fr: "E-commerce beauté", en: "Beauty e-commerce", vi: "TMĐT làm đẹp" },
     desc: {
       fr: "E-commerce artisanal, fiches produit sensorielles, univers de marque cohérent. Cosmétiques naturels haut de gamme.",
@@ -2568,6 +2575,7 @@ export const SHOWCASE = [
     name: "Duchesne Architectes",
     url: "https://xragency.vercel.app",
     sectorKey: "sectorArchitecture",
+    services: ["website", "branding"],
     type: {
       fr: "Portfolio architectural",
       en: "Architecture portfolio",
@@ -2587,6 +2595,7 @@ export const SHOWCASE = [
     name: "Nordeen",
     url: "https://xragency.vercel.app",
     sectorKey: "sectorTech",
+    services: ["website", "ai"],
     type: { fr: "Web App SaaS", en: "SaaS Web App", vi: "Ứng dụng web SaaS" },
     desc: {
       fr: "Dashboard SaaS complet, landing page conversion, onboarding utilisateur. Startup B2B scandinave.",
@@ -2602,6 +2611,7 @@ export const SHOWCASE = [
     name: "Coach Renaud Delacroix",
     url: "https://xragency.vercel.app",
     sectorKey: "sectorCoaching",
+    services: ["website", "strategy"],
     type: { fr: "Site vitrine + vente", en: "Showcase + sales", vi: "Giới thiệu + bán hàng" },
     desc: {
       fr: "Tunnel de conversion, inscription événements, vente de programmes en ligne. Coach en leadership exécutif.",
@@ -2617,6 +2627,7 @@ export const SHOWCASE = [
     name: "Parfums de Noir",
     url: "https://xragency.vercel.app",
     sectorKey: "sectorArtisanat",
+    services: ["ecommerce", "branding"],
     type: { fr: "E-commerce artisanal", en: "Artisanal e-commerce", vi: "TMĐT thủ công" },
     desc: {
       fr: "Boutique en ligne immersive, storytelling olfactif, packaging digital premium. Parfumeur artisan independent.",
@@ -2632,6 +2643,7 @@ export const SHOWCASE = [
     name: "Noir & Or Manufacture",
     url: "https://xragency.vercel.app",
     sectorKey: "sectorMode",
+    services: ["ecommerce", "branding"],
     type: { fr: "E-commerce mode", en: "Fashion e-commerce", vi: "TMĐT thời trang" },
     desc: {
       fr: "Direction artistique digitale, lookbook interactif, e-commerce haute couture. Marque de mode émergente.",
