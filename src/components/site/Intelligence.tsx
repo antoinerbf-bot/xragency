@@ -100,8 +100,8 @@ export function Intelligence() {
         <Reveal delay={70}>
           <div className="overflow-hidden rounded-[2rem] border border-border bg-background shadow-2xl">
             <div className="border-b border-border p-5 md:p-7">
-              <div className="mb-3 flex items-center justify-between gap-4"><span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{t.searchLabel}</span><span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Google / simulation</span></div>
-              <div className="flex items-center gap-3 rounded-2xl border border-border bg-muted/25 px-4 py-4 font-medium"><Search className="h-4 w-4 text-muted-foreground" /><span>{t.search}</span></div>
+              <div className="mb-3 flex items-center justify-between gap-4"><span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{t.searchLabel}</span><span className="flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-muted-foreground"><span className="grid h-6 w-6 place-items-center rounded-full bg-white text-[11px] font-bold text-[#4285F4] shadow-sm">G</span> Google · simulation</span></div>
+              <div className="flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-4 font-medium shadow-sm"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white text-sm font-bold text-[#4285F4] shadow-sm">G</span><Search className="h-4 w-4 text-muted-foreground" /><span className="truncate">{t.search}</span><span className="ml-auto hidden rounded-full bg-primary/10 px-2.5 py-1 text-[8px] uppercase tracking-[.14em] text-primary sm:block">Live demo</span></div>
             </div>
             <div className="grid border-b border-border md:grid-cols-3">
               {(["maps", "seo", "ads"] as Surface[]).map((id) => {
@@ -112,13 +112,13 @@ export function Intelligence() {
                 return <button key={id} type="button" onClick={() => setSurface(id)} className={cn("flex min-h-20 items-center gap-4 border-b border-border px-5 text-left transition md:border-b-0 md:border-r last:md:border-r-0 md:px-7", active ? "bg-foreground/[0.055]" : "hover:bg-muted/25")}><span className={cn("rounded-xl border p-3", active ? "border-foreground/30" : "border-border")}><TabIcon className="h-5 w-5" /></span><span><span className="block font-medium">{label}</span><span className="mt-1 block text-xs text-muted-foreground">{sub}</span></span>{active && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-foreground" />}</button>;
               })}
             </div>
-            <div className="grid gap-4 p-4 md:grid-cols-[1.08fr_.92fr] md:p-6">
+            <div className="grid gap-4 bg-muted/[0.12] p-4 md:grid-cols-[1.08fr_.92fr] md:p-6">
               <div className={cn("rounded-2xl border p-6 md:p-7", data.accent)}>
                 <div className="flex items-start justify-between gap-6"><div><div className="mb-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{surface === "ads" ? t.sponsored : surface === "maps" ? t.mapsShort : t.organic}</div><h3 className="text-2xl font-medium tracking-tight md:text-3xl">{data.title}</h3></div><Icon className="h-6 w-6 shrink-0 text-muted-foreground" /></div>
                 <p className="mt-5 leading-7 text-muted-foreground">{data.text}</p>
                 <div className="mt-7 border-t border-border pt-6"><div className="mb-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{t.why}</div><div className="grid gap-2 sm:grid-cols-2">{data.signals.map((signal) => <div key={signal} className="flex items-center gap-2 rounded-xl bg-muted/35 px-3 py-3 text-sm"><Check className="h-4 w-4 shrink-0 text-muted-foreground" />{signal}</div>)}</div></div>
               </div>
-              <div className="flex flex-col justify-center rounded-2xl border border-border bg-muted/15 p-6 md:p-7"><div className="flex items-center gap-3"><TrendingUp className="h-5 w-5" /><div className="font-medium">{t.bridge}</div></div><p className="mt-4 text-sm leading-6 text-muted-foreground">{t.bridgeText}</p>{surface === "ads" && <div className="mt-5 flex items-center gap-2 rounded-xl border border-amber-400/20 bg-amber-400/5 p-3 text-xs text-muted-foreground"><X className="h-4 w-4" />{t.unavailable}</div>}</div>
+              <div className="flex flex-col justify-center rounded-2xl border border-border bg-muted/15 p-6 md:p-7"><div className="flex items-center gap-3"><span className="grid h-9 w-9 place-items-center rounded-full bg-primary/10 text-primary"><TrendingUp className="h-4 w-4" /></span><div><div className="text-[9px] uppercase tracking-[.18em] text-primary">XR visibility layer</div><div className="font-medium">{t.bridge}</div></div></div><p className="mt-4 text-sm leading-6 text-muted-foreground">{t.bridgeText}</p>{surface === "ads" && <div className="mt-5 flex items-center gap-2 rounded-xl border border-amber-400/20 bg-amber-400/5 p-3 text-xs text-muted-foreground"><X className="h-4 w-4" />{t.unavailable}</div>}</div>
             </div>
           </div>
         </Reveal>
