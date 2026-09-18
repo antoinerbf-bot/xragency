@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { jsPDF } from "jspdf";
 import { ArrowRight, Check, Mail, MessageCircle, RotateCcw, Sparkles } from "lucide-react";
 import { Alexandre3D } from "./Alexandre3D";
+import { SERVICES } from "@/lib/content";
 
 type Choice = { id: string; label: string; detail: string };
 type Sector = Choice & { goals: string[] };
