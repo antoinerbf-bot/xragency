@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { ArrowRight, Check, FileImage, Globe, Upload, X } from "lucide-react";
 
 type Mode = "audit" | "mockup";
@@ -23,7 +23,7 @@ export function FreeOfferLead() {
     setFiles((current) => [...current, ...Array.from(incoming)].slice(0, 8));
   };
 
-  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSending(true);
     setMessage("");
@@ -103,7 +103,7 @@ export function FreeOfferLead() {
                 <div className="mb-6"><div className="text-lg font-medium">{mode === "mockup" ? "Préparez votre maquette" : "Préparez votre audit"}</div><div className="mt-1 text-xs text-muted-foreground">Les informations sont envoyées directement à notre équipe.</div></div>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <input required name="name" placeholder="Nom & prénom *" className={fieldClass} />
-                  <input required name="company" placeholder="Entreprise *" className="field" />
+                  <input required name="company" placeholder="Entreprise *" className={fieldClass} />
                   <input required type="email" name="email" placeholder="Email professionnel *" className="field" />
                   <input required name="whatsapp" placeholder="WhatsApp / téléphone *" className="field" />
                   <input required type="url" name="website" placeholder="Site internet *" className={fieldClass + " sm:col-span-2"} />
