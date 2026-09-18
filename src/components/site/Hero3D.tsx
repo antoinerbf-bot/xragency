@@ -64,7 +64,12 @@ function RealisticHeroObject() {
   );
 }
 
-class Hero3DErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {  state = { hasError: false };  static getDerivedStateFromError() { return { hasError: true }; }  componentDidCatch(_error: Error, _info: ErrorInfo) {}  render() { return this.state.hasError ? null : this.props.children; }}class Hero3DErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> { state = { hasError: false }; static getDerivedStateFromError() { return { hasError: true }; } componentDidCatch(_error: Error, _info: ErrorInfo) {} render() { return this.state.hasError ? null : this.props.children; } }
+class Hero3DErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  componentDidCatch(_error: Error, _info: ErrorInfo) {}
+  render() { return this.state.hasError ? null : this.props.children; }
+}
 
 function HeroFallback() {
   return (
@@ -98,7 +103,7 @@ export function Hero3D() {
       className="pointer-events-none absolute inset-0 z-[1] opacity-70 sm:opacity-85"
       aria-hidden
     >
-      <Hero3DErrorBoundary>        <Hero3DErrorBoundary><Canvas
+      <Hero3DErrorBoundary>\n        <Canvas
         dpr={[1, 1.5]}
         camera={{ position: [0, 0.05, 5.2], fov: 34 }}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
@@ -118,6 +123,6 @@ export function Hero3D() {
         <Suspense fallback={<HeroFallback />}>
           <RealisticHeroObject />
         </Suspense>
-      </Canvas></Hero3DErrorBoundary></div>
+      </Canvas>\n      </Hero3DErrorBoundary>\n    </div>
   );
 }
