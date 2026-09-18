@@ -1,9 +1,11 @@
 import { useEffect, useRef, type RefObject } from "react";
 
 /**
- * Photorealistic gecko portfolio signature (qbenix-inspired).
- * Real photo base + tracking pupils + subtle body lean with spring inertia.
- * Gracefully disabled on touch / reduced-motion.
+ * Premium photorealistic gecko portfolio signature (QBENIX quality).
+ * - Eyes follow the cursor with smooth spring physics
+ * - Subtle 3D body lean
+ * - Theme-aware (light / dark) background + color grading
+ * - Disabled on touch devices and reduced-motion
  */
 export function EyeTracker({ className = "" }: { className?: string }) {
   const leftPupil = useRef<HTMLDivElement>(null);
@@ -25,26 +27,31 @@ export function EyeTracker({ className = "" }: { className?: string }) {
       const el = container.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
-      const cx = rect.left + rect.width * 0.55;
-      const cy = rect.top + rect.height * 0.38;
-      const dx = (e.clientX - cx) / Math.max(window.innerWidth * 0.35, 1);
-      const dy = (e.clientY - cy) / Math.max(window.innerHeight * 0.35, 1);
+      // Center of the head / eyes area
+      const cx = rect.left + rect.width * 0.52;
+      const cy = rect.top + rect.height * 0.36;
+      const dx = (e.clientX - cx) / Math.max(window.innerWidth * 0.32, 1);
+      const dy = (e.clientY - cy) / Math.max(window.innerHeight * 0.32, 1);
       target.current.x = Math.max(-1, Math.min(1, dx));
       target.current.y = Math.max(-1, Math.min(1, dy));
 
-      bodyTarget.current.rx = target.current.y * -4;
-      bodyTarget.current.ry = target.current.x * 5;
-      bodyTarget.current.tx = target.current.x * 8;
-      bodyTarget.current.ty = target.current.y * 5;
+      bodyTarget.current.rx = target.current.y * -5.5;
+      bodyTarget.current.ry = target.current.x * 6.5;
+      bodyTarget.current.tx = target.current.x * 10;
+      bodyTarget.current.ty = target.current.y * 6;
     };
 
     const tick = () => {
-      const eyeSpring = 0.09;
-      const bodySpring = 0.055;
+      // Smooth spring for eyes (responsive but not jittery)
+      const eyeSpring = 0.12;
+      const bodySpring = 0.06;
+
       current.current.x += (target.current.x - current.current.x) * eyeSpring;
       current.current.y += (target.current.y - current.current.y) * eyeSpring;
-      const ox = current.current.x * 11;
-      const oy = current.current.y * 8;
+
+      // Pupil travel range — matches real gecko eye movement
+      const ox = current.current.x * 13;
+      const oy = current.current.y * 9;
 
       for (const el of [leftPupil.current, rightPupil.current]) {
         if (el) {
@@ -74,36 +81,70 @@ export function EyeTracker({ className = "" }: { className?: string }) {
   }, []);
 
   return (
-    <div ref={container} className={`relative select-none ${className}`} aria-hidden>
+    <div
+      ref={container}
+      className={`relative select-none ${className}`}
+      aria-hidden
+    >
+      {/* Soft ambient glow — adapts to theme via CSS variables */}
+      <div
+        className="pointer-events-none absolute -inset-12 rounded-full opacity-70 blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, color-mix(in oklab, var(--primary) 22%, transparent) 0%, transparent 70%)",
+        }}
+      />
+
       <div
         ref={bodyRef}
-        className="relative mx-auto aspect-square w-full max-w-[420px] overflow-hidden rounded-[2rem] will-change-transform sm:max-w-[480px] lg:max-w-[520px]"
-        style={{ transformStyle: "preserve-3d", perspective: "900px" }}
+        className="relative mx-auto aspect-square w-full max-w-[440px] overflow-hidden rounded-[2.25rem] will-change-transform sm:max-w-[500px] lg:max-w-[560px]"
+        style={{
+          transformStyle: "preserve-3d",
+          perspective: "1000px",
+          background: "color-mix(in oklab, var(--muted) 40%, var(--background))",
+          boxShadow:
+            "0 25px 60px -20px color-mix(in oklab, var(--foreground) 18%, transparent), 0 0 0 1px color-mix(in oklab, var(--border) 60%, transparent)",
+        }}
       >
-        <div className="pointer-events-none absolute -inset-8 rounded-full bg-primary/15 blur-3xl" />
+        {/* Background plate — light/dark adaptive */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 85% 75% at 55% 45%, color-mix(in oklab, var(--muted) 55%, var(--background)) 0%, var(--background) 100%)",
+          }}
+        />
 
         <img
           src="/gecko-portfolio.jpg"
           alt=""
-          className="relative z-[1] h-full w-full object-cover object-[center_30%] contrast-[1.05] saturate-[1.05]"
+          className="relative z-[1] h-full w-full object-cover object-[center_28%]"
+          style={{
+            // Soft color grade that works in both themes
+            filter:
+              "contrast(1.04) saturate(1.08) brightness(var(--gecko-brightness, 1))",
+          }}
           draggable={false}
         />
 
+        {/* Theme-aware vignette */}
         <div
           className="pointer-events-none absolute inset-0 z-[2]"
           style={{
             background:
-              "radial-gradient(ellipse 80% 70% at 55% 40%, transparent 0%, rgba(0,0,0,0.15) 70%, rgba(0,0,0,0.45) 100%)",
+              "radial-gradient(ellipse 75% 65% at 55% 40%, transparent 0%, color-mix(in oklab, var(--background) 35%, transparent) 75%, color-mix(in oklab, var(--background) 70%, transparent) 100%)",
           }}
         />
 
+        {/* Left eye */}
         <EyeOverlay
           pupilRef={leftPupil}
-          className="left-[28%] top-[34%] z-[3] h-[14%] w-[14%] sm:left-[29%] sm:top-[33%]"
+          className="left-[27.5%] top-[33.5%] z-[3] h-[13.5%] w-[13.5%] sm:left-[28.5%] sm:top-[32.5%]"
         />
+        {/* Right eye */}
         <EyeOverlay
           pupilRef={rightPupil}
-          className="left-[52%] top-[33%] z-[3] h-[14%] w-[14%] sm:left-[53%] sm:top-[32%]"
+          className="left-[51.5%] top-[32.5%] z-[3] h-[13.5%] w-[13.5%] sm:left-[52.5%] sm:top-[31.5%]"
         />
       </div>
     </div>
@@ -119,36 +160,43 @@ function EyeOverlay({
 }) {
   return (
     <div className={`absolute ${className}`}>
-      <div className="absolute inset-0 rounded-full bg-black/50 mix-blend-multiply" />
+      {/* Soft eyelid / socket shadow */}
+      <div className="absolute inset-0 rounded-full bg-black/40 mix-blend-multiply" />
+
       <div
         className="absolute inset-0 overflow-hidden rounded-full"
         style={{
           boxShadow:
-            "inset 0 0 12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.12)",
+            "inset 0 0 14px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.14)",
           background:
-            "radial-gradient(circle at 40% 35%, #eef2f0 0%, #c8d0cc 55%, #8a9490 100%)",
+            "radial-gradient(circle at 38% 32%, #f0f4f2 0%, #c5cdc9 50%, #7a8580 100%)",
         }}
       >
+        {/* Iris + pupil — follows cursor */}
         <div
           ref={pupilRef}
-          className="absolute left-1/2 top-1/2 h-[58%] w-[58%] will-change-transform"
+          className="absolute left-1/2 top-1/2 h-[60%] w-[60%] will-change-transform"
           style={{
             borderRadius: "50%",
             background: `
               radial-gradient(circle at 50% 50%,
-                #050807 0%,
-                #050807 36%,
-                #0f2e2a 40%,
-                #1a5c52 52%,
-                #5ec4b0 68%,
-                #0f2e2a 100%)
+                #030605 0%,
+                #030605 34%,
+                #0c2522 38%,
+                #156b5e 50%,
+                #4db8a6 66%,
+                #0c2522 100%)
             `,
-            boxShadow: "0 0 0 1px rgba(0,0,0,0.4), inset 0 0 6px rgba(0,0,0,0.6)",
+            boxShadow:
+              "0 0 0 1.5px rgba(0,0,0,0.45), inset 0 0 8px rgba(0,0,0,0.65)",
           }}
         >
-          <div className="absolute left-1/2 top-1/2 h-[48%] w-[48%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-black" />
-          <div className="absolute left-[30%] top-[24%] h-[26%] w-[26%] rounded-full bg-white/90" />
-          <div className="absolute bottom-[18%] right-[20%] h-[10%] w-[10%] rounded-full bg-white/35" />
+          {/* Black pupil core */}
+          <div className="absolute left-1/2 top-1/2 h-[46%] w-[46%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-black" />
+          {/* Primary specular highlight */}
+          <div className="absolute left-[28%] top-[22%] h-[28%] w-[28%] rounded-full bg-white/95" />
+          {/* Secondary smaller highlight */}
+          <div className="absolute bottom-[16%] right-[18%] h-[11%] w-[11%] rounded-full bg-white/40" />
         </div>
       </div>
     </div>
