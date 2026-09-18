@@ -1,154 +1,216 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 type Point = { x: number; y: number };
 
 export function EyeTracker({ className = "" }: { className?: string }) {
   const root = useRef<HTMLDivElement>(null);
-  const face = useRef<HTMLDivElement>(null);
-  const tongue = useRef<HTMLDivElement>(null);
-  const target = useRef<Point>({ x: 0, y: 0 });
-  const current = useRef<Point>({ x: 0, y: 0 });
-  const cursor = useRef<Point>({ x: 0, y: 0 });
-  const lastMove = useRef(0);
-  const erraticSince = useRef<number | null>(null);
-  const lastStrike = useRef(0);
-  const raf = useRef(0);
-  const [tongueVisible, setTongueVisible] = useState(false);
-  const [leaping, setLeaping] = useState(false);
-  const [pulse, setPulse] = useState(0);
 
   useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let dead = false;
+    let frame = 0;
+    let cleanups: Array<() => void> = [];
 
-    const point = (clientX: number, clientY: number) => {
-      const el = root.current;
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      const mouthX = r.left + r.width * 0.56;
-      const mouthY = r.top + r.height * 0.39;
-      const nx = Math.max(window.innerWidth * 0.42, 180);
-      const ny = Math.max(window.innerHeight * 0.42, 180);
-      const x = Math.max(-1, Math.min(1, (clientX - mouthX) / nx));
-      const y = Math.max(-1, Math.min(1, (clientY - mouthY) / ny));
-      const previous = cursor.current;
-      const speed = Math.hypot(clientX - previous.x, clientY - previous.y);
+    const start = async () => {
+      const T = await import("three");
+      if (dead || !root.current) return;
 
-      target.current = { x, y };
-      cursor.current = { x: clientX, y: clientY };
-      lastMove.current = performance.now();
+      const host = root.current;
+      host.replaceChildren();
 
-      if (speed > 38 && !erraticSince.current) erraticSince.current = performance.now();
-      if (speed < 10) erraticSince.current = null;
-    };
+      const scene = new T.Scene();
+      const camera = new T.PerspectiveCamera(26, 1, 0.1, 100);
+      camera.position.set(0, 1.25, 7);
+      camera.lookAt(0, 0.65, 0);
 
-    const onPointer = (e: PointerEvent) => point(e.clientX, e.clientY);
-    window.addEventListener("pointermove", onPointer, { passive: true });
-    window.addEventListener("pointerdown", onPointer, { passive: true });
+      const renderer = new T.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8));
+      renderer.outputColorSpace = T.SRGBColorSpace;
+      renderer.toneMapping = T.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = T.PCFSoftShadowMap;
+      host.appendChild(renderer.domElement);
+      renderer.domElement.style.cssText = "width:100%;height:100%;display:block";
 
-    const tick = (now: number) => {
-      const el = root.current;
-      const f = face.current;
-      if (el && f) {
-        current.current.x += (target.current.x - current.current.x) * 0.075;
-        current.current.y += (target.current.y - current.current.y) * 0.075;
+      const ambient = new T.HemisphereLight(0xbfffe9, 0x07140f, 2.3);
+      scene.add(ambient);
+      const key = new T.DirectionalLight(0xe7fff7, 4.5);
+      key.position.set(-3, 5, 4);
+      key.castShadow = true;
+      scene.add(key);
+      const rim = new T.PointLight(0x39e6c0, 9, 8);
+      rim.position.set(3, 2, 2);
+      scene.add(rim);
 
-        const x = current.current.x;
-        const y = current.current.y;
-        const idle = now - lastMove.current > 900;
-        const idleSaccade = idle ? Math.sin(now * 0.0027) * 0.11 : 0;
-        const idleY = idle ? Math.cos(now * 0.0019) * 0.055 : 0;
+      const animal = new T.Group();
+      animal.rotation.y = -0.18;
+      scene.add(animal);
 
-        f.style.transform =
-          `translate3d(${x * 22}px, ${y * 12 + Math.sin(now * 0.002) * 2}px, 0) rotateY(${x * 18 + idleSaccade * 18}deg) rotateX(${-y * 11 + idleY * 10}deg) scale(${1 + Math.sin(now * 0.0018) * 0.008})`;
+      const skin = new T.MeshPhysicalMaterial({
+        color: 0x18bda5,
+        roughness: 0.48,
+        clearcoat: 0.35,
+        clearcoatRoughness: 0.25,
+        sheen: 0.22,
+      });
+      const skinDark = new T.MeshPhysicalMaterial({ color: 0x07594d, roughness: 0.52, clearcoat: 0.25 });
+      const amber = new T.MeshPhysicalMaterial({ color: 0xc77a24, roughness: 0.25, clearcoat: 0.45 });
+      const pupil = new T.MeshStandardMaterial({ color: 0x020302, roughness: 0.12 });
+      const leafMat = new T.MeshStandardMaterial({ color: 0x0a3b2d, roughness: 0.85, side: T.DoubleSide });
 
-        const bodyX = (x + 1) * 50;
-        const bodyY = (y + 1) * 50;
-        el.style.setProperty("--cursor-x", `${bodyX}%`);
-        el.style.setProperty("--cursor-y", `${bodyY}%`);
-        el.style.setProperty("--chameleon-pulse", `${0.72 + Math.sin(now * 0.00135) * 0.14}`);
+      const ellipsoid = (s: [number, number, number], m: T.Material) => {
+        const o = new T.Mesh(new T.SphereGeometry(1, 40, 24), m);
+        o.scale.set(...s);
+        o.castShadow = true;
+        o.receiveShadow = true;
+        return o;
+      };
 
-        const r = el.getBoundingClientRect();
-        const mouth = { x: r.left + r.width * 0.56, y: r.top + r.height * 0.39 };
-        const distance = Math.hypot(cursor.current.x - mouth.x, cursor.current.y - mouth.y);
+      const leaf = new T.Mesh(new T.CircleGeometry(2.9, 64), leafMat);
+      leaf.rotation.x = -Math.PI / 2.05;
+      leaf.scale.set(1.1, 0.5, 1);
+      leaf.position.y = -0.55;
+      animal.add(leaf);
 
-        if (!reduced && distance < 200 && now - lastStrike.current > 2600) {
-          lastStrike.current = now;
-          setTongueVisible(true);
-          window.setTimeout(() => setTongueVisible(false), 430);
-        }
+      const body = ellipsoid([1.28, 0.72, 0.7], skin);
+      body.position.set(-0.25, 0.32, 0);
+      animal.add(body);
 
-        if (!reduced && ((distance < 80) || (erraticSince.current && now - erraticSince.current > 1500))) {
-          if (!leaping) {
-            setLeaping(true);
-            window.setTimeout(() => setLeaping(false), 900);
-          }
-          erraticSince.current = null;
-        }
+      const neck = ellipsoid([0.62, 0.65, 0.62], skinDark);
+      neck.position.set(0.75, 0.48, 0);
+      animal.add(neck);
 
-        if (tongue.current && tongueVisible) {
-          const dx = cursor.current.x - mouth.x;
-          const dy = cursor.current.y - mouth.y;
-          const length = Math.min(Math.hypot(dx, dy), 230);
-          const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-          tongue.current.style.width = `${Math.max(28, length)}px`;
-          tongue.current.style.transform = `translate3d(0,0,0) rotate(${angle}deg)`;
-        }
+      const head = ellipsoid([0.88, 0.68, 0.62], skin);
+      head.position.set(1.25, 0.88, 0);
+      animal.add(head);
 
-        if (Math.floor(now / 120) % 2 === 0) setPulse(Math.sin(now * 0.002));
+      const crest = ellipsoid([0.48, 0.32, 0.5], skinDark);
+      crest.position.set(1.2, 1.34, 0);
+      animal.add(crest);
+
+      const eyeRigs: T.Group[] = [];
+      for (const z of [-0.46, 0.46]) {
+        const rig = new T.Group();
+        rig.position.set(1.55, 1.08, z);
+        const socket = ellipsoid([0.29, 0.29, 0.29], skinDark);
+        const iris = new T.Mesh(new T.SphereGeometry(0.19, 28, 18), amber);
+        iris.position.z = z > 0 ? 0.17 : -0.17;
+        const black = new T.Mesh(new T.SphereGeometry(0.095, 22, 14), pupil);
+        black.position.z = z > 0 ? 0.32 : -0.32;
+        rig.add(socket, iris, black);
+        animal.add(rig);
+        eyeRigs.push(rig);
       }
-      raf.current = requestAnimationFrame(tick);
+
+      const tongue = new T.Mesh(
+        new T.CylinderGeometry(0.035, 0.022, 1, 16),
+        new T.MeshPhysicalMaterial({ color: 0xef7184, roughness: 0.32, clearcoat: 0.35 })
+      );
+      tongue.rotation.z = Math.PI / 2;
+      tongue.position.set(1.98, 0.72, 0);
+      tongue.visible = false;
+      animal.add(tongue);
+
+      const mouse: Point = { x: 0, y: 0 };
+      const smooth: Point = { x: 0, y: 0 };
+      let lastMove = performance.now();
+      let erratic = 0;
+      let lastStrike = 0;
+      let leapUntil = 0;
+
+      const onMove = (e: PointerEvent) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        lastMove = performance.now();
+        const speed = Math.hypot(e.movementX, e.movementY);
+        if (speed > 38) erratic = performance.now();
+      };
+      window.addEventListener("pointermove", onMove, { passive: true });
+      cleanups.push(() => window.removeEventListener("pointermove", onMove));
+
+      const resize = () => {
+        const w = Math.max(1, host.clientWidth);
+        const h = Math.max(1, host.clientHeight);
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+      };
+      resize();
+      const ro = new ResizeObserver(resize);
+      ro.observe(host);
+      cleanups.push(() => ro.disconnect());
+
+      const animate = (now: number) => {
+        if (dead) return;
+        const rect = host.getBoundingClientRect();
+        const tx = Math.max(-1, Math.min(1, (mouse.x - (rect.left + rect.width * 0.56)) / Math.max(180, innerWidth * 0.42)));
+        const ty = Math.max(-1, Math.min(1, (mouse.y - (rect.top + rect.height * 0.4)) / Math.max(180, innerHeight * 0.42)));
+        smooth.x += (tx - smooth.x) * 0.075;
+        smooth.y += (ty - smooth.y) * 0.075;
+
+        const idle = now - lastMove > 900;
+        const sx = idle ? Math.sin(now * 0.0027) * 0.1 : 0;
+        const sy = idle ? Math.cos(now * 0.0019) * 0.055 : 0;
+        head.rotation.y = smooth.x * 0.38 + sx;
+        head.rotation.x = -smooth.y * 0.22 + sy;
+        neck.rotation.y = smooth.x * 0.16;
+
+        eyeRigs.forEach((eye, i) => {
+          const sign = i === 0 ? 1 : -1;
+          eye.rotation.y = smooth.x * 0.72 + sx * sign;
+          eye.rotation.x = -smooth.y * 0.48 + sy;
+        });
+
+        body.scale.y = 0.72 + Math.sin(now * 0.0017) * 0.018;
+        const dark = document.documentElement.classList.contains("dark");
+        const base = dark ? new T.Color(0x163f9b) : new T.Color(0x18bda5);
+        const glow = dark ? new T.Color(0x8d3cff) : new T.Color(0x4df3d2);
+        const blend = (smooth.x + 1) * 0.5;
+        skin.color.copy(base).lerp(glow, blend * 0.42);
+
+        const mouthX = rect.left + rect.width * 0.61;
+        const mouthY = rect.top + rect.height * 0.43;
+        const dist = Math.hypot(mouse.x - mouthX, mouse.y - mouthY);
+
+        if (dist < 200 && now - lastStrike > 2600) {
+          lastStrike = now;
+          tongue.visible = true;
+          const dx = mouse.x - mouthX;
+          const dy = mouse.y - mouthY;
+          const len = Math.min(2.6, Math.max(0.45, Math.hypot(dx, dy) / 110));
+          tongue.scale.y = len;
+          tongue.rotation.z = Math.atan2(dy, dx) - Math.PI / 2;
+          setTimeout(() => { tongue.visible = false; }, 300);
+        }
+
+        if (dist < 80 || (erratic && now - erratic > 1500)) {
+          leapUntil = now + 850;
+          erratic = 0;
+        }
+        const leap = Math.max(0, leapUntil - now);
+        if (leap) {
+          const p = 1 - leap / 850;
+          animal.position.z = Math.sin(p * Math.PI) * 0.8;
+          animal.position.y = Math.sin(p * Math.PI) * 0.28;
+          animal.rotation.x = -Math.sin(p * Math.PI) * 0.18;
+        } else {
+          animal.position.set(0, 0, 0);
+          animal.rotation.x = 0;
+        }
+
+        renderer.render(scene, camera);
+        frame = requestAnimationFrame(animate);
+      };
+      frame = requestAnimationFrame(animate);
     };
 
-    lastMove.current = performance.now();
-    raf.current = requestAnimationFrame(tick);
-
+    start();
     return () => {
-      window.removeEventListener("pointermove", onPointer);
-      window.removeEventListener("pointerdown", onPointer);
-      cancelAnimationFrame(raf.current);
+      dead = true;
+      cancelAnimationFrame(frame);
+      cleanups.forEach((fn) => fn());
     };
-  }, [leaping, tongueVisible]);
+  }, []);
 
-  return (
-    <div
-      ref={root}
-      className={`relative h-full w-full select-none overflow-visible [perspective:1100px] ${className}`}
-      aria-hidden
-      style={{
-        ["--pulse" as string]: String(0.7 + pulse * 0.08),
-      }}
-    >
-      <div className="pointer-events-none absolute inset-0 rounded-full opacity-70 mix-blend-screen transition-opacity duration-700"
-        style={{
-          background: "radial-gradient(circle at var(--cursor-x,55%) var(--cursor-y,40%), rgba(71,255,220,.38), rgba(58,180,255,.16) 18%, transparent 48%)",
-          filter: "blur(24px)",
-        }}
-      />
-
-      <div
-        ref={face}
-        className={`absolute inset-0 origin-[55%_35%] will-change-transform transition-[filter] duration-700 ${leaping ? "animate-[chameleon-leap_.9s_cubic-bezier(.2,.9,.25,1)]" : ""}`}
-        style={{
-          transformStyle: "preserve-3d",
-          filter: "saturate(calc(1.05 + var(--pulse))) hue-rotate(calc(var(--cursor-x, 50%) / 14))",
-        }}
-      >
-        <img
-          src="/gecko-portfolio.jpg"
-          alt=""
-          draggable={false}
-          className="h-full w-full object-contain object-bottom mix-blend-multiply contrast-[1.08] dark:mix-blend-screen dark:contrast-[1.1] dark:saturate-[1.15]"
-        />
-      </div>
-
-      <div
-        ref={tongue}
-        className={`pointer-events-none absolute left-[56%] top-[39%] h-[5px] origin-left rounded-full bg-gradient-to-r from-rose-300 via-pink-500 to-transparent shadow-[0_0_12px_rgba(244,63,94,.75)] transition-opacity duration-75 ${tongueVisible ? "opacity-100" : "opacity-0"}`}
-      >
-        <span className="absolute -right-1 -top-[3px] h-3 w-3 rounded-full border border-rose-200 bg-rose-400 shadow-[0_0_10px_rgba(244,63,94,.9)]" />
-      </div>
-
-      <div className="pointer-events-none absolute bottom-[7%] left-1/2 h-px w-[58%] -translate-x-1/2 bg-gradient-to-r from-transparent via-emerald-300/35 to-transparent blur-[1px]" />
-    </div>
-  );
+  return <div ref={root} className={`relative h-full w-full select-none overflow-visible ${className}`} aria-hidden />;
 }
