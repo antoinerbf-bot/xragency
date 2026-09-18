@@ -9,9 +9,7 @@ const extra: ShowcaseItem[] = [
     url: "https://xragency.vercel.app",
     sectorKey: "sectorArtisanat",
     services: ["website", "branding"],
-    type: { fr: "Site artisan",
-      en: "Craftsman site",
-      vi: "Website thợ thủ công" },
+    type: { fr: "Site artisan", en: "Craftsman site", vi: "Website thợ thủ công" },
     desc: {
       fr: "Vitrine éditoriale pour un atelier d’ébénisterie, galerie de pièces uniques et prise de rendez-vous.",
       en: "Editorial showcase for a cabinetmaking workshop, unique pieces gallery and booking.",
@@ -56,7 +54,7 @@ const extra: ShowcaseItem[] = [
     url: "https://xragency.vercel.app",
     sectorKey: "sectorImmobilier",
     services: ["website", "strategy"],
-    type: { fr: "Site immobilier", en: "Real estate site", vi: "Website bất động sản" },
+    type: { fr: "Site immobilier", en: "Real estate site", vi: "Website BDS" },
     desc: {
       fr: "Catalogue biens, pages quartier et tunnel de contact pour une agence premium.",
       en: "Property catalogue, neighborhood pages and contact funnel for a premium agency.",
@@ -86,7 +84,7 @@ const extra: ShowcaseItem[] = [
     url: "https://xragency.vercel.app",
     sectorKey: "sectorTech",
     services: ["website", "ai", "strategy"],
-    type: { fr: "Site produit IA", en: "AI product site", vi: "Website sản phẩm AI" },
+    type: { fr: "Site produit IA", en: "AI product site", vi: "Website AI" },
     desc: {
       fr: "Landing produit, démo et récit de marque pour une startup IA B2B.",
       en: "Product landing, demo and brand story for a B2B AI startup.",
@@ -105,7 +103,7 @@ const extra: ShowcaseItem[] = [
     desc: {
       fr: "Boutique en ligne, rituel de marque et fiches produits pour une ligne de soin.",
       en: "Online shop, brand ritual and product pages for a skincare line.",
-      vi: "Cửa hàng online, nghi thức thương hiệu và trang sản phẩm skincare.",
+      vi: "Cửa hàng online và trang sản phẩm skincare.",
     },
     metric: "+175% CA e-commerce",
     image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&q=85&w=1200",
@@ -120,7 +118,7 @@ const extra: ShowcaseItem[] = [
     desc: {
       fr: "Lookbook saisonnier, film et site éditorial pour une maison de prêt-à-porter.",
       en: "Seasonal lookbook, film and editorial site for a ready-to-wear house.",
-      vi: "Lookbook mùa, phim và website biên tập cho thương hiệu may sẵn.",
+      vi: "Lookbook mùa và website biên tập.",
     },
     metric: "+125% press mentions",
     image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&q=85&w=1200",
@@ -150,7 +148,7 @@ const extra: ShowcaseItem[] = [
     desc: {
       fr: "Identité, menu digital et site pour un restaurant de saison.",
       en: "Identity, digital menu and site for a seasonal restaurant.",
-      vi: "Nhận diện, thực đơn số và website nhà hàng theo mùa.",
+      vi: "Nhận diện, thực đơn số và website nhà hàng.",
     },
     metric: "+95% couverts semaine",
     image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=85&w=1200",
@@ -180,11 +178,19 @@ const extra: ShowcaseItem[] = [
     desc: {
       fr: "E-shop haute joaillerie, configurateur de pièce et storytelling.",
       en: "High jewelry e-shop, piece configurator and storytelling.",
-      vi: "E-shop trang sức, cấu hình sản phẩm và storytelling.",
+      vi: "E-shop trang sức và storytelling.",
     },
     metric: "+260% ventes private",
     image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=85&w=1200",
   },
 ];
 
-export const ALL_SHOWCASE: ShowcaseItem[] = [...SHOWCASE, ...extra];
+const seen = new Set(SHOWCASE.map((s) => s.id));
+for (const item of extra) {
+  if (!seen.has(item.id)) {
+    (SHOWCASE as ShowcaseItem[]).push(item);
+    seen.add(item.id);
+  }
+}
+
+export const ALL_SHOWCASE: ShowcaseItem[] = SHOWCASE as ShowcaseItem[];
