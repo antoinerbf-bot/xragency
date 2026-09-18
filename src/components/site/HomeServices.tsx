@@ -1,4 +1,4 @@
-import { ArrowUpRight, Check, Instagram, Linkedin, Music2, Facebook, Search, Globe2 } from "lucide-react";
+import { ArrowUpRight, Check, Instagram, Linkedin, Music2, Search, Globe2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
@@ -16,7 +16,7 @@ const SERVICE_IMG: Record<string, string> = {
   maintenance: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=90&w=2200",
 };
 function ServiceMarks({ id }: { id: string }) {
-  if (id === "social") return <div className="flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-2 backdrop-blur-md"><Instagram className="h-4 w-4" /><Facebook className="h-4 w-4" /><Music2 className="h-4 w-4" /><Linkedin className="h-4 w-4" /></div>;
+  if (id === "social") return <div className="flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-2 backdrop-blur-md"><Instagram className="h-4 w-4" /><Music2 className="h-4 w-4" /><Linkedin className="h-4 w-4" /></div>;
   if (id === "seo") return <div className="flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-2 backdrop-blur-md"><span className="grid h-5 w-5 place-items-center rounded-full bg-white text-[11px] font-bold text-[#4285F4]">G</span><Search className="h-3.5 w-3.5" /><span className="text-[9px] font-semibold tracking-wide">ORGANIC VISIBILITY</span></div>;
   if (id === "websites") return <div className="flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-2 backdrop-blur-md"><Globe2 className="h-4 w-4" /><span className="text-[9px] font-semibold tracking-wide">WEB · UX · CONVERSION</span></div>;
   if (id === "maps") return <div className="rounded-full border border-white/15 bg-black/30 px-3 py-2 text-[9px] font-semibold tracking-wide backdrop-blur-md"><span className="mr-1.5 text-[#4285F4]">G</span> GOOGLE MAPS</div>;
