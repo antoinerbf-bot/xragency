@@ -37,7 +37,8 @@ function AlexandreModel() {
 export function Alexandre3D({ className = "" }: { className?: string }) {
   return (
     <div className={`pointer-events-none relative h-24 w-24 shrink-0 sm:h-28 sm:w-28 ${className}`} aria-hidden>
-      <Alexandre3DErrorBoundary>\n        <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 3.6], fov: 34 }} gl={{ antialias: true, alpha: true }}>
+      <Alexandre3DErrorBoundary>
+        <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 3.6], fov: 34 }} gl={{ antialias: true, alpha: true }}>
         <ambientLight intensity={0.6} />
         <directionalLight position={[2, 3, 4]} intensity={3.2} />
         <pointLight position={[-2, 1, 2]} intensity={1.8} color="#8ff1df" />
@@ -45,6 +46,8 @@ export function Alexandre3D({ className = "" }: { className?: string }) {
         <Suspense fallback={null}>
           <AlexandreModel />
         </Suspense>
-      </Canvas>\n      </Alexandre3DErrorBoundary>\n    </div>
+      </Canvas>
+      </Alexandre3DErrorBoundary>
+    </div>
   );
 }
