@@ -64,7 +64,9 @@ function RealisticHeroObject() {
   );
 }
 
-class Hero3DErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {\n  state = { hasError: false };\n  static getDerivedStateFromError() { return { hasError: true }; }\n  componentDidCatch(_error: Error, _info: ErrorInfo) {}\n  render() { return this.state.hasError ? null : this.props.children; }\n}\n\nfunction HeroFallback() {
+class Hero3DErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {  state = { hasError: false };  static getDerivedStateFromError() { return { hasError: true }; }  componentDidCatch(_error: Error, _info: ErrorInfo) {}  render() { return this.state.hasError ? null : this.props.children; }}class Hero3DErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> { state = { hasError: false }; static getDerivedStateFromError() { return { hasError: true }; } componentDidCatch(_error: Error, _info: ErrorInfo) {} render() { return this.state.hasError ? null : this.props.children; } }
+
+function HeroFallback() {
   return (
     <Float speed={1.4} rotationIntensity={0.18} floatIntensity={0.2}>
       <mesh scale={1.5}>
@@ -96,7 +98,7 @@ export function Hero3D() {
       className="pointer-events-none absolute inset-0 z-[1] opacity-70 sm:opacity-85"
       aria-hidden
     >
-      <Hero3DErrorBoundary>\n        <Canvas
+      <Hero3DErrorBoundary>        <Hero3DErrorBoundary><Canvas
         dpr={[1, 1.5]}
         camera={{ position: [0, 0.05, 5.2], fov: 34 }}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
@@ -116,9 +118,6 @@ export function Hero3D() {
         <Suspense fallback={<HeroFallback />}>
           <RealisticHeroObject />
         </Suspense>
-      </Canvas>
-    </div>
+      </Canvas></Hero3DErrorBoundary></div>
   );
 }
-
-useGLTF.preload(HEAD_MODEL);
