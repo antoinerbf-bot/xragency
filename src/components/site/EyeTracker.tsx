@@ -206,7 +206,6 @@ export function EyeTracker({ className = "" }: { className?: string }) {
         camera={{ position: [0, 0.2, 5.4], fov: 34 }}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       >
-        <Scene />
         <Suspense fallback={null}>
           <Scene />
         </Suspense>
