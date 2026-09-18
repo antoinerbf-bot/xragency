@@ -149,7 +149,7 @@ export function Hero() {
               className="mt-8 flex flex-wrap items-center gap-3.5"
               style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 400ms both" }}
             >
-              <EmberButton href="#quote" className="shadow-lg">
+              <EmberButton href="#conversion" className="shadow-lg">
                 {t(UI.ctaAnalysis)}
               </EmberButton>
 
@@ -184,7 +184,9 @@ export function Hero() {
           </dl>
 
           <div className="mt-5 flex items-center justify-between gap-4 border-t border-border/60 py-4">
-            <span className="label-mono text-xs text-muted-foreground/70">XR Intelligence · Alexandre · Devis sur mesure</span>\n            <span className="label-mono text-xs text-primary">01 · Analyse</span>\n          </div>
+            <span className="label-mono text-xs text-muted-foreground/70">XR Intelligence · Alexandre · Devis sur mesure</span>
+            <span className="label-mono text-xs text-primary">01 · Analyse</span>
+          </div>
         </div>
       </div>
     </section>
