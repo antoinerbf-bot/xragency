@@ -183,7 +183,8 @@ export function Hero() {
             <AnimatedStat value={2} suffix="h" label={t(UI.statResponse)} delay={790} />
           </dl>
 
-          <div className="mt-5 flex items-center justify-between gap-4 border-t border-border/60 py-4">\n            <span className="label-mono text-xs text-muted-foreground/70">XR Intelligence · Alexandre · Devis sur mesure</span>\n            <span className="label-mono text-xs text-primary">01 · Analyse</span>\n          </div>
+          <div className="mt-5 flex items-center justify-between gap-4 border-t border-border/60 py-4">
+            <span className="label-mono text-xs text-muted-foreground/70">XR Intelligence · Alexandre · Devis sur mesure</span>\n            <span className="label-mono text-xs text-primary">01 · Analyse</span>\n          </div>
         </div>
       </div>
     </section>
