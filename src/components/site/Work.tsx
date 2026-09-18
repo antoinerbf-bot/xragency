@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
@@ -110,7 +110,7 @@ export function Work() {
   const [service, setService] = useState<string>("all");
 
   const filtered = useMemo(() => {
-    return (ALL_ALL_SHOWCASE as ShowcaseItem[]).filter((item) => {
+    return (ALL_SHOWCASE as ShowcaseItem[]).filter((item) => {
       const sectorOk = sector === "all" || item.sectorKey === sector;
       const services = item.services ?? ["website"];
       const serviceOk = service === "all" || services.includes(service);
@@ -125,7 +125,7 @@ export function Work() {
 
   const serviceCount = useCallback((key: string) => {
     if (key === "all") return ALL_SHOWCASE.length;
-    return (ALL_ALL_SHOWCASE as ShowcaseItem[]).filter((s) =>
+    return (ALL_SHOWCASE as ShowcaseItem[]).filter((s) =>
       (s.services ?? ["website"]).includes(key),
     ).length;
   }, []);
