@@ -1,5 +1,6 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, useGLTF } from "@react-three/drei";
+import { Suspense } from "react";
 import { useRef } from "react";
 import * as THREE from "three";
 
@@ -34,7 +35,9 @@ export function Alexandre3D({ className = "" }: { className?: string }) {
         <directionalLight position={[2, 3, 4]} intensity={3.2} />
         <pointLight position={[-2, 1, 2]} intensity={1.8} color="#8ff1df" />
         <Environment preset="studio" />
-        <AlexandreModel />
+        <Suspense fallback={null}>
+          <AlexandreModel />
+        </Suspense>
       </Canvas>
     </div>
   );
