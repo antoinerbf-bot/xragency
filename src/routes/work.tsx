@@ -86,6 +86,41 @@ function serviceLabel(
   return key;
 }
 
+function FilterChip({
+  active,
+  label,
+  count,
+  onClick,
+}: {
+  active: boolean;
+  label: string;
+  count: number;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "group inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-left transition-all duration-300",
+        active
+          ? "border-foreground bg-foreground text-background shadow-sm"
+          : "border-border/70 bg-background/70 text-foreground/75 hover:border-foreground/25 hover:bg-card hover:text-foreground",
+      )}
+    >
+      <span className="text-[13px] font-medium tracking-[-0.01em]">{label}</span>
+      <span
+        className={cn(
+          "inline-flex min-w-5 items-center justify-center rounded-full px-1.5 text-[10px] tabular-nums",
+          active ? "bg-background/15 text-background" : "bg-muted text-muted-foreground",
+        )}
+      >
+        {count}
+      </span>
+    </button>
+  );
+}
+
 function WorkPage() {
   const { t, lang } = useLang();
   const [sector, setSector] = useState<string>("all");
@@ -117,6 +152,13 @@ function WorkPage() {
     en: "Filter by industry and service. Each project shows the type of work and the result — so you can project yourself clearly.",
     vi: "Lọc theo ngành và dịch vụ. Mỗi dự án hiển thị loại dịch vụ và kết quả — để bạn hình dung rõ ràng.",
   }[lang];
+
+  const resultLabel =
+    lang === "fr"
+      ? `${filtered.length} projet${filtered.length > 1 ? "s" : ""}`
+      : lang === "en"
+        ? `${filtered.length} project${filtered.length > 1 ? "s" : ""}`
+        : `${filtered.length} dự án`;
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
@@ -163,62 +205,92 @@ function WorkPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-[1600px] px-5 py-14 sm:px-8 lg:px-12 lg:py-20">
-          <div className="space-y-4 border-y border-border/60 py-6">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="label-mono mr-1 text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
-                {lang === "fr" ? "Secteur" : lang === "en" ? "Industry" : "Ngành"}
-              </span>
-              {SECTOR_KEYS.map((key) => {
-                const count = sectorCount(key);
-                if (key !== "all" && count === 0) return null;
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => setSector(key)}
-                    className={cn(
-                      "label-mono rounded-full border px-3.5 py-2 text-[10px] uppercase tracking-[0.12em] transition-all duration-300",
-                      sector === key
-                        ? "border-primary bg-primary font-semibold text-primary-foreground shadow-md"
-                        : "border-border bg-card/50 text-muted-foreground hover:border-primary/40 hover:text-foreground",
-                    )}
-                  >
-                    {sectorLabel(key, t)}
-                    <span className="ml-1.5 opacity-60">{count}</span>
-                  </button>
-                );
-              })}
+        <section className="mx-auto max-w-[1600px] px-5 py-10 sm:px-8 lg:px-12 lg:py-16">
+          <div className="sticky top-16 z-30 -mx-5 mb-12 border-y border-border/60 bg-background/85 px-5 py-6 backdrop-blur-xl sm:-mx-8 sm:px-8 lg:static lg:mx-0 lg:rounded-3xl lg:border lg:px-8 lg:py-8">
+            <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <p className="label-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground">
+                  {lang === "fr" ? "Explorer" : lang === "en" ? "Explore" : "Khám phá"}
+                </p>
+                <p className="mt-1 text-lg font-medium tracking-tight">{resultLabel}</p>
+              </div>
+              {(sector !== "all" || service !== "all") && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSector("all");
+                    setService("all");
+                  }}
+                  className="label-mono text-[10px] uppercase tracking-[0.16em] text-primary hover:underline"
+                >
+                  {lang === "fr" ? "Réinitialiser" : lang === "en" ? "Reset filters" : "Đặt lại"}
+                </button>
+              )}
             </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="label-mono mr-1 text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
-                {lang === "fr" ? "Service" : lang === "en" ? "Service" : "Dịch vụ"}
-              </span>
-              {SERVICE_KEYS.map((key) => {
-                const count = serviceCount(key);
-                if (key !== "all" && count === 0) return null;
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => setService(key)}
-                    className={cn(
-                      "label-mono rounded-full border px-3.5 py-2 text-[10px] uppercase tracking-[0.12em] transition-all duration-300",
-                      service === key
-                        ? "border-primary bg-primary font-semibold text-primary-foreground shadow-md"
-                        : "border-border bg-card/50 text-muted-foreground hover:border-primary/40 hover:text-foreground",
-                    )}
-                  >
-                    {serviceLabel(key, t)}
-                    <span className="ml-1.5 opacity-60">{count}</span>
-                  </button>
-                );
-              })}
+
+            <div className="grid gap-8 lg:grid-cols-[140px_1fr] lg:gap-10">
+              <div className="pt-1">
+                <p className="text-sm font-medium text-foreground">
+                  {lang === "fr" ? "Secteur" : lang === "en" ? "Industry" : "Ngành"}
+                </p>
+                <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                  {lang === "fr"
+                    ? "Le domaine d’activité du projet."
+                    : lang === "en"
+                      ? "The project’s industry."
+                      : "Lĩnh vực của dự án."}
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {SECTOR_KEYS.map((key) => {
+                  const count = sectorCount(key);
+                  if (key !== "all" && count === 0) return null;
+                  return (
+                    <FilterChip
+                      key={key}
+                      active={sector === key}
+                      label={sectorLabel(key, t)}
+                      count={count}
+                      onClick={() => setSector(key)}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="mt-8 grid gap-8 border-t border-border/50 pt-8 lg:grid-cols-[140px_1fr] lg:gap-10">
+              <div className="pt-1">
+                <p className="text-sm font-medium text-foreground">
+                  {lang === "fr" ? "Service" : lang === "en" ? "Service" : "Dịch vụ"}
+                </p>
+                <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                  {lang === "fr"
+                    ? "Le type de prestation réalisée."
+                    : lang === "en"
+                      ? "The type of work delivered."
+                      : "Loại dịch vụ đã thực hiện."}
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {SERVICE_KEYS.map((key) => {
+                  const count = serviceCount(key);
+                  if (key !== "all" && count === 0) return null;
+                  return (
+                    <FilterChip
+                      key={key}
+                      active={service === key}
+                      label={serviceLabel(key, t)}
+                      count={count}
+                      onClick={() => setService(key)}
+                    />
+                  );
+                })}
+              </div>
             </div>
           </div>
 
           {filtered.length > 0 ? (
-            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-12 lg:gap-6">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-12 lg:gap-6">
               {filtered.map((item, index) => {
                 const isFeature = index === 0 || (index % 5 === 0 && index > 0);
                 const span = isFeature
@@ -290,7 +362,7 @@ function WorkPage() {
               })}
             </div>
           ) : (
-            <div className="mt-12 py-16 text-center">
+            <div className="py-16 text-center">
               <p className="display-serif text-3xl">
                 {lang === "fr" && "Aucun projet pour cette combinaison."}
                 {lang === "en" && "No projects match this combination."}
