@@ -6,7 +6,9 @@ import * as THREE from "three";
 
 const MODEL = "https://threejs.org/examples/models/gltf/LeePerrySmith/LeePerrySmith.glb";
 
-class Alexandre3DErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {\n  state = { hasError: false };\n  static getDerivedStateFromError() { return { hasError: true }; }\n  componentDidCatch(_error: Error, _info: ErrorInfo) {}\n  render() { return this.state.hasError ? null : this.props.children; }\n}\n\nfunction AlexandreModel() {
+class Alexandre3DErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {  state = { hasError: false };  static getDerivedStateFromError() { return { hasError: true }; }  componentDidCatch(_error: Error, _info: ErrorInfo) {}  render() { return this.state.hasError ? null : this.props.children; }}class Alexandre3DErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> { state = { hasError: false }; static getDerivedStateFromError() { return { hasError: true }; } componentDidCatch(_error: Error, _info: ErrorInfo) {} render() { return this.state.hasError ? null : this.props.children; } }
+
+function AlexandreModel() {
   const { scene } = useGLTF(MODEL);
   const ref = useRef<THREE.Group>(null);
 
@@ -30,7 +32,7 @@ class Alexandre3DErrorBoundary extends Component<{ children: ReactNode }, { hasE
 export function Alexandre3D({ className = "" }: { className?: string }) {
   return (
     <div className={`pointer-events-none relative h-24 w-24 shrink-0 sm:h-28 sm:w-28 ${className}`} aria-hidden>
-      <Alexandre3DErrorBoundary>\n        <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 3.6], fov: 34 }} gl={{ antialias: true, alpha: true }}>
+      <Alexandre3DErrorBoundary>        <Alexandre3DErrorBoundary><Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 3.6], fov: 34 }} gl={{ antialias: true, alpha: true }}>
         <ambientLight intensity={0.6} />
         <directionalLight position={[2, 3, 4]} intensity={3.2} />
         <pointLight position={[-2, 1, 2]} intensity={1.8} color="#8ff1df" />
@@ -38,9 +40,6 @@ export function Alexandre3D({ className = "" }: { className?: string }) {
         <Suspense fallback={null}>
           <AlexandreModel />
         </Suspense>
-      </Canvas>
-    </div>
+      </Canvas></Alexandre3DErrorBoundary></div>
   );
 }
-
-useGLTF.preload(MODEL);
