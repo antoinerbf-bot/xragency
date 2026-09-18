@@ -3,6 +3,14 @@ import { ArrowRight, Check, FileImage, Globe, Upload, X } from "lucide-react";
 
 type Mode = "audit" | "mockup";
 
+async function toBase64(file: File) {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  let binary = ""; for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(binary);
+}
+
+const fieldClass = "w-full rounded-xl border border-border bg-card px-3.5 py-3 text-sm outline-none transition placeholder:text-muted-foreground/60 focus:border-primary/60";
+
 export function FreeOfferLead() {
   const [mode, setMode] = useState<Mode>("mockup");
   const [files, setFiles] = useState<File[]>([]);
@@ -24,9 +32,7 @@ export function FreeOfferLead() {
       files.map(async (file) => ({
         name: file.name,
         type: file.type,
-        content: (await file.arrayBuffer()).byteLength
-          ? btoa(String.fromCharCode(...new Uint8Array(await file.arrayBuffer())))
-          : "",
+        content: await toBase64(file),
       })),
     );
 
@@ -96,13 +102,13 @@ export function FreeOfferLead() {
               <>
                 <div className="mb-6"><div className="text-lg font-medium">{mode === "mockup" ? "Préparez votre maquette" : "Préparez votre audit"}</div><div className="mt-1 text-xs text-muted-foreground">Les informations sont envoyées directement à notre équipe.</div></div>
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <input required name="name" placeholder="Nom & prénom *" className="field" />
+                  <input required name="name" placeholder="Nom & prénom *" className={fieldClass} />
                   <input required name="company" placeholder="Entreprise *" className="field" />
                   <input required type="email" name="email" placeholder="Email professionnel *" className="field" />
                   <input required name="whatsapp" placeholder="WhatsApp / téléphone *" className="field" />
-                  <input required type="url" name="website" placeholder="Site internet *" className="field sm:col-span-2" />
-                  <textarea required name="brief" placeholder={mode === "mockup" ? "Que souhaitez-vous améliorer ? Objectifs, pages, offre..." : "Quels problèmes voulez-vous que nous analysions ?"} className="field min-h-24 resize-y sm:col-span-2" />
-                  {mode === "mockup" && <textarea name="references" placeholder="Sites / univers visuels que vous aimez (liens ou références)" className="field min-h-20 resize-y sm:col-span-2" />}
+                  <input required type="url" name="website" placeholder="Site internet *" className={fieldClass + " sm:col-span-2"} />
+                  <textarea required name="brief" placeholder={mode === "mockup" ? "Que souhaitez-vous améliorer ? Objectifs, pages, offre..." : "Quels problèmes voulez-vous que nous analysions ?"} className={fieldClass + " min-h-24 resize-y sm:col-span-2"} />
+                  {mode === "mockup" && <textarea name="references" placeholder="Sites / univers visuels que vous aimez (liens ou références)" className={fieldClass + " min-h-20 resize-y sm:col-span-2"} />}
                 </div>
 
                 {mode === "mockup" && (
