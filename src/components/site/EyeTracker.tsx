@@ -1,5 +1,5 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useMemo, useRef, type MutableRefObject } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
 import * as THREE from "three";
 
 function Leaf() {
@@ -193,15 +193,24 @@ function Scene() {
 }
 
 export function EyeTracker({ className = "" }: { className?: string }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <div className={`relative h-full w-full overflow-visible ${className}`} aria-label="Interactive 3D chameleon">
-      <Canvas
+      {mounted && <Canvas
         dpr={[1, 1.7]}
         camera={{ position: [0, 0.2, 5.4], fov: 34 }}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       >
         <Scene />
-      </Canvas>
+        <Suspense fallback={null}>
+          <Scene />
+        </Suspense>
+      </Canvas>}
     </div>
   );
 }
