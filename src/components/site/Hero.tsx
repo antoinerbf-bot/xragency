@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "@tanstack/react-router";
 import { Sparkles, ShieldCheck } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
@@ -99,12 +98,12 @@ export function Hero() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
             </span>
-            <span className="label-mono text-xs text-muted-foreground">{t(UI.intelOnline)}</span>
+            <span className="label-mono text-xs text-muted-foreground">Stratège senior en ligne</span>
           </div>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span className="label-mono hidden sm:inline">Paris · Dubaï · Tokyo · New York</span>
             <span className="label-mono rounded-full border border-primary/30 bg-primary/5 px-2.5 py-0.5 text-[10px] text-primary">
-              Studio Certifié
+              Studio certifié · live
             </span>
           </div>
         </div>
@@ -150,17 +149,11 @@ export function Hero() {
               className="mt-8 flex flex-wrap items-center gap-3.5"
               style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 400ms both" }}
             >
-              <EmberButton href="#intelligence" className="shadow-lg">
+              <EmberButton href="#quote" className="shadow-lg">
                 {t(UI.ctaAnalysis)}
               </EmberButton>
 
-              <Link
-                to="/services"
-                className="label-mono inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-6 py-3.5 text-xs text-foreground transition-all duration-300 hover:border-primary hover:text-primary hover:-translate-y-0.5"
-              >
-                Explorer nos 10 services
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
+
 
               <span className="label-mono hidden text-xs text-muted-foreground/80 sm:inline">
                 {t(UI.intelDuration)}
@@ -190,15 +183,7 @@ export function Hero() {
             <AnimatedStat value={2} suffix="h" label={t(UI.statResponse)} delay={790} />
           </dl>
 
-          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border/60 py-4 mt-5">
-            <span className="label-mono text-xs text-muted-foreground/70">p. 001 · Studio Principal</span>
-            <span className="label-mono hidden text-xs text-muted-foreground/70 md:block">
-              Sites Web · Identité · SEO Domination · Google Maps · Social · IA · Maintenance
-            </span>
-            <Link to="/services" className="label-mono text-xs text-primary hover:underline">
-              Consulter le catalogue complet →
-            </Link>
-          </div>
+          <div className="mt-5 flex items-center justify-between gap-4 border-t border-border/60 py-4">\n            <span className="label-mono text-xs text-muted-foreground/70">XR Intelligence · Alexandre · Devis sur mesure</span>\n            <span className="label-mono text-xs text-primary">01 · Analyse</span>\n          </div>
         </div>
       </div>
     </section>
