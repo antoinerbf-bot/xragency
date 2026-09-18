@@ -1,5 +1,5 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, type MutableRefObject } from "react";
 import * as THREE from "three";
 
 function Leaf() {
@@ -57,7 +57,7 @@ function Tail() {
   );
 }
 
-function Chameleon({ pointer }: { pointer: React.MutableRefObject<THREE.Vector2> }) {
+function Chameleon({ pointer }: { pointer: MutableRefObject<THREE.Vector2> }) {
   const root = useRef<THREE.Group>(null);
   const leftEye = useRef<THREE.Group>(null);
   const rightEye = useRef<THREE.Group>(null);
