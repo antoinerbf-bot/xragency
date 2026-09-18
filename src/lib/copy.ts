@@ -1,13 +1,13 @@
 import type { L } from "./i18n";
 
 export const UI: Record<string, L> = {
-  navServices: { fr: "Services", en: "Services", vi: "Dịch vụ" },
-  navPricing: { fr: "Tarifs", en: "Pricing", vi: "Bảng giá" },
-  navWork: { fr: "Réalisations", en: "Work", vi: "Dự án" },
-  navIntelligence: { fr: "Intelligence", en: "Intelligence", vi: "Intelligence" },
-  navFaq: { fr: "FAQ", en: "FAQ", vi: "Hỏi đáp" },
-  navContact: { fr: "Contact", en: "Contact", vi: "Liên hệ" },
-  bookCall: { fr: "Réserver un appel", en: "Book a call", vi: "Đặt lịch gọi" },
+  navServices: { fr: "Services", en: "Services", vi: "Dịch vụ" , es: "Servicios" },
+  navPricing: { fr: "Tarifs", en: "Pricing", vi: "Bảng giá" , es: "Precios" },
+  navWork: { fr: "Réalisations", en: "Work", vi: "Dự án" , es: "Proyectos" },
+  navIntelligence: { fr: "Intelligence", en: "Intelligence", vi: "Intelligence" , es: "Inteligencia" },
+  navFaq: { fr: "FAQ", en: "FAQ", vi: "Hỏi đáp" , es: "Preguntas" },
+  navContact: { fr: "Contact", en: "Contact", vi: "Liên hệ" , es: "Contacto" },
+  bookCall: { fr: "Réserver un appel", en: "Book a call", vi: "Đặt lịch gọi" , es: "Reservar una llamada" },
 
   heroKicker: {
     fr: "Studio Digital Premium — Édition MMXXVI",
