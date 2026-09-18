@@ -34,7 +34,6 @@ function Index() {
         <QuoteConfiguratorCompact />
         <HomeServices />
         <Intelligence />
-        <FreeAuditCTA />
         <Faq />
         <Contact />
       </main>
