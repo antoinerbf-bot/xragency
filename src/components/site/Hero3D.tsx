@@ -103,7 +103,8 @@ export function Hero3D() {
       className="pointer-events-none absolute inset-0 z-[1] opacity-70 sm:opacity-85"
       aria-hidden
     >
-      <Hero3DErrorBoundary>\n        <Canvas
+      <Hero3DErrorBoundary>
+        <Canvas
         dpr={[1, 1.5]}
         camera={{ position: [0, 0.05, 5.2], fov: 34 }}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
@@ -123,6 +124,8 @@ export function Hero3D() {
         <Suspense fallback={<HeroFallback />}>
           <RealisticHeroObject />
         </Suspense>
-      </Canvas>\n      </Hero3DErrorBoundary>\n    </div>
+      </Canvas>
+      </Hero3DErrorBoundary>
+    </div>
   );
 }
