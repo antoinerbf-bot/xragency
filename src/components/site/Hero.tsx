@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Sparkles, Zap, ArrowRight, ShieldCheck, Globe as GlobeIcon } from "lucide-react";
+import { Sparkles, ShieldCheck } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
