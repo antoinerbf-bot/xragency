@@ -1,6 +1,6 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Float, Html, useGLTF } from "@react-three/drei";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Component, Suspense, useEffect, useRef, useState, type ErrorInfo, type ReactNode } from "react";
 import * as THREE from "three";
 
 const HEAD_MODEL =
@@ -64,7 +64,7 @@ function RealisticHeroObject() {
   );
 }
 
-function HeroFallback() {
+class Hero3DErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {\n  state = { hasError: false };\n  static getDerivedStateFromError() { return { hasError: true }; }\n  componentDidCatch(_error: Error, _info: ErrorInfo) {}\n  render() { return this.state.hasError ? null : this.props.children; }\n}\n\nfunction HeroFallback() {
   return (
     <Float speed={1.4} rotationIntensity={0.18} floatIntensity={0.2}>
       <mesh scale={1.5}>
@@ -96,7 +96,7 @@ export function Hero3D() {
       className="pointer-events-none absolute inset-0 z-[1] opacity-70 sm:opacity-85"
       aria-hidden
     >
-      <Canvas
+      <Hero3DErrorBoundary>\n        <Canvas
         dpr={[1, 1.5]}
         camera={{ position: [0, 0.05, 5.2], fov: 34 }}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
