@@ -60,18 +60,6 @@ function AnimatedStat({
   );
 }
 
-/* ── Monogram clients ── */
-const TRUST_CLIENTS = [
-  { initials: "CL", name: "Clinique Privée" },
-  { initials: "MR", name: "Maison Rebuffé" },
-  { initials: "HB", name: "Hôtel Boutique" },
-  { initials: "JD", name: "Joaillerie Ducale" },
-  { initials: "AV", name: "Atelier Végétal" },
-  { initials: "NP", name: "Nouvelle Paris" },
-  { initials: "SG", name: "Studio Green" },
-  { initials: "LV", name: "La Villa" },
-];
-
 export function Hero() {
   const { t } = useLang();
 
@@ -121,7 +109,7 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Hero Main Content & 3D Interactive Globe */}
+        {/* Hero Main Content */}
         <div className="grid items-center gap-10 py-10 lg:grid-cols-12 lg:py-14">
           {/* Left Column: Typography & CTAs */}
           <Parallax speed={-0.03} className="relative z-10 lg:col-span-7">
@@ -190,8 +178,7 @@ export function Hero() {
             </div>
           </Parallax>
 
-          {/* Right Column: Signature 3D Interactive Globe Visual with Floating Depth Chips */}
-          
+          {/* Right Column reserved for future visual */}
         </div>
 
         {/* Bottom Key Stats Bar with Animated Counters */}
@@ -202,33 +189,6 @@ export function Hero() {
             <AnimatedStat value={98} suffix="%" label={t(UI.statSatisfaction)} delay={710} />
             <AnimatedStat value={2} suffix="h" label={t(UI.statResponse)} delay={790} />
           </dl>
-
-          {/* Trust Bar: Client Monograms */}
-          <div
-            className="mt-6"
-            style={{ animation: "ember-rise 0.75s cubic-bezier(0.16,1,0.3,1) 880ms both" }}
-          >
-            <p className="label-mono text-center text-[10px] tracking-widest text-muted-foreground/60 uppercase">
-              {t(UI.trustBarLabel)}
-            </p>
-            <div className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-              {TRUST_CLIENTS.map((c) => (
-                <div
-                  key={c.initials}
-                  className="group flex items-center gap-2 opacity-50 transition-all duration-300 hover:opacity-100 hover:scale-105 cursor-default"
-                >
-                  <div className="flex h-7 w-7 items-center justify-center rounded-full border border-border bg-card/70 shadow-xs">
-                    <span className="label-mono text-[9px] font-semibold tracking-wider text-muted-foreground group-hover:text-primary transition-colors">
-                      {c.initials}
-                    </span>
-                  </div>
-                  <span className="label-mono hidden text-[10px] text-muted-foreground/80 sm:inline">
-                    {c.name}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
 
           <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border/60 py-4 mt-5">
             <span className="label-mono text-xs text-muted-foreground/70">p. 001 · Studio Principal</span>
