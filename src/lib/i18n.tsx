@@ -8,13 +8,19 @@ import {
   type ReactNode,
 } from "react";
 
-export type Lang = "fr" | "en" | "vi";
-export type L = Record<Lang, string>;
+export type Lang = "fr" | "en" | "vi" | "es" | "pt" | "zh" | "ja" | "ko" | "ar";
+export type L = Partial<Record<Lang, string>> & { fr: string; en: string; vi: string };
 
 export const LANGS: { code: Lang; label: string; flag: string }[] = [
   { code: "fr", label: "FR", flag: "🇫🇷" },
   { code: "en", label: "EN", flag: "🇬🇧" },
   { code: "vi", label: "VI", flag: "🇻🇳" },
+  { code: "es", label: "ES", flag: "🇪🇸" },
+  { code: "pt", label: "PT", flag: "🇵🇹" },
+  { code: "zh", label: "中文", flag: "🇨🇳" },
+  { code: "ja", label: "日本語", flag: "🇯🇵" },
+  { code: "ko", label: "한국어", flag: "🇰🇷" },
+  { code: "ar", label: "AR", flag: "🇦🇪" },
 ];
 
 /**
@@ -51,13 +57,15 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const stored = window.localStorage.getItem("xr-lang") as Lang | null;
-    if (stored && ["fr", "en", "vi"].includes(stored)) {
+    if (stored && ["fr", "en", "vi", "es", "pt", "zh", "ja", "ko", "ar"].includes(stored)) {
       setLangState(stored);
       return;
     }
     const nav = window.navigator.language.slice(0, 2).toLowerCase();
     if (nav === "vi") setLangState("vi");
-    else if (nav !== "fr") setLangState("en");
+    else if (nav === "fr") setLangState("fr");
+    else if (["es", "pt", "zh", "ja", "ko", "ar"].includes(nav)) setLangState(nav as Lang);
+    else setLangState("en");
   }, []);
 
   const setLang = useCallback((l: Lang) => {
@@ -72,7 +80,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       setLang,
       t: (v: L | undefined) => {
         if (!v) return "";
-        return v[lang] ?? Object.values(v)[0] ?? "";
+        return v[lang] ?? v.en ?? v.fr ?? v.vi ?? Object.values(v)[0] ?? "";
       },
       price: (eur: number) => formatPrice(eur, lang),
     }),

@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { jsPDF } from "jspdf";
-import { ArrowRight, Check, Mail, MessageCircle, RotateCcw, Sparkles, UserRound } from "lucide-react";
+import { ArrowRight, Check, Mail, MessageCircle, RotateCcw, Sparkles } from "lucide-react";
+import { Alexandre3D } from "./Alexandre3D";
+import { SERVICES } from "@/lib/content";
 
 type Choice = { id: string; label: string; detail: string };
 type Sector = Choice & { goals: string[] };
@@ -24,13 +26,52 @@ const BUDGETS: Choice[] = [
 const DISCOVERY: Choice[] = [
   { id: "google", label: "Google / Maps", detail: "Recherche, SEO ou visibilité locale" }, { id: "social", label: "Instagram / Facebook / TikTok", detail: "Réseaux sociaux et recommandations" }, { id: "referral", label: "Bouche-à-oreille", detail: "Recommandations et réseau" }, { id: "mixed", label: "Un peu de tout", detail: "Acquisition déjà diversifiée" },
 ];
-const SERVICE_ORDER: Record<string, string[]> = { hospitality: ["website", "maps", "social", "seo", "branding", "maintenance"], realestate: ["website", "maps", "branding", "seo", "social", "maintenance"], professional: ["website", "seo", "branding", "maps", "social", "maintenance"], commerce: ["website", "social", "seo", "branding", "maps", "maintenance"], other: ["website", "branding", "seo", "maps", "social", "maintenance"] };
-const BASE_PRICES: Record<string, number> = { website: 499, branding: 199, seo: 299, maps: 199, social: 499, maintenance: 29 };
+const SERVICE_ORDER: Record<string, string[]> = {
+  hospitality: ["websites", "maps", "social", "seo", "branding", "maintenance"],
+  realestate: ["websites", "maps", "branding", "seo", "social", "maintenance"],
+  professional: ["websites", "seo", "branding", "maps", "strategy", "maintenance"],
+  commerce: ["websites", "social", "seo", "branding", "maps", "maintenance"],
+  other: ["websites", "branding", "seo", "maps", "strategy", "maintenance"],
+};
+const BASE_PRICES: Record<string, number> = {
+  websites: 499,
+  ecommerce: 799,
+  refonte: 499,
+  branding: 199,
+  seo: 299,
+  maps: 999,
+  social: 299,
+  ads: 499,
+  strategy: 799,
+  maintenance: 29,
+};
 
 export function QuoteConfiguratorCompact() {
   const [step, setStep] = useState(0); const [sectorId, setSectorId] = useState(""); const [goal, setGoal] = useState(""); const [situation, setSituation] = useState(""); const [budget, setBudget] = useState(""); const [discovery, setDiscovery] = useState(""); const [selectedServices, setSelectedServices] = useState<string[]>([]); const [client, setClient] = useState({ name: "", email: "", whatsapp: "" }); const [generated, setGenerated] = useState(false); const [sending, setSending] = useState(false); const [sendMessage, setSendMessage] = useState("");
-  const sector = SECTORS.find((x) => x.id === sectorId); const situationChoice = SITUATIONS.find((x) => x.id === situation); const budgetChoice = BUDGETS.find((x) => x.id === budget); const discoveryChoice = DISCOVERY.find((x) => x.id === discovery); const orderedServices = (SERVICE_ORDER[sectorId] ?? SERVICE_ORDER.other).map((id) => SERVICES.find((x) => x.id === id)).filter(Boolean) as Choice[];
-  const proposals = useMemo<Proposal[]>(() => orderedServices.slice(0, 4).map((service) => { let price = BASE_PRICES[service.id]; if (service.id === "website" && situation === "selling") price = 1490; if (service.id === "website" && situation === "redesign") price = 799; return { id: service.id, label: service.label, detail: service.id === "website" && situation === "selling" ? "E-commerce, paiement & réservation" : service.detail, price, period: service.id === "seo" || service.id === "social" || service.id === "maintenance" ? "month" : "once" }; }), [orderedServices, situation]);
+  const sector = SECTORS.find((x) => x.id === sectorId); const situationChoice = SITUATIONS.find((x) => x.id === situation); const budgetChoice = BUDGETS.find((x) => x.id === budget); const discoveryChoice = DISCOVERY.find((x) => x.id === discovery); const orderedServices = (SERVICE_ORDER[sectorId] ?? SERVICE_ORDER.other).map((id) => { const service = SERVICES.find((x) => x.id === id); return service ? { id: service.id, label: service.title.fr, detail: service.short.fr } : null; }).filter(Boolean) as Choice[];
+  const proposals = useMemo<Proposal[]>(() => {
+    const priority = situation === "selling"
+      ? ["ecommerce", "maps", "social", "seo"]
+      : situation === "redesign"
+        ? ["refonte", "seo", "branding", "maps"]
+        : situation === "existing"
+          ? ["seo", "maps", "social", "maintenance"]
+          : ["websites", "branding", "seo", "maps"];
+    const ids = [...priority, ...orderedServices.map((service) => service.id)].filter((id, index, arr) => arr.indexOf(id) === index).slice(0, 5);
+    return ids.map((id) => {
+      const service = SERVICES.find((x) => x.id === id);
+      if (!service) return null;
+      const price = BASE_PRICES[id] ?? service.fromEur;
+      const period = service.fromPeriod === "month" ? "month" : "once";
+      return {
+        id,
+        label: service.title,
+        detail: service.description,
+        price,
+        period,
+      };
+    }).filter(Boolean) as Proposal[];
+  }, [orderedServices, situation]);
   const total = selectedServices.reduce((sum, id) => sum + (proposals.find((x) => x.id === id)?.price ?? 0), 0); const monthly = selectedServices.reduce((sum, id) => { const p = proposals.find((x) => x.id === id); return sum + (p?.period === "month" ? p.price : 0); }, 0); const once = total - monthly;
   const choose = (setter: (value: string) => void, value: string, next: number) => { setter(value); window.setTimeout(() => setStep(next), 180); }; const toggleService = (id: string) => setSelectedServices((current) => current.includes(id) ? current.filter((x) => x !== id) : [...current, id]);
   const reset = () => { setStep(0); setSectorId(""); setGoal(""); setSituation(""); setBudget(""); setDiscovery(""); setSelectedServices([]); setClient({ name: "", email: "", whatsapp: "" }); setGenerated(false); setSendMessage(""); };
@@ -54,7 +95,7 @@ export function QuoteConfiguratorCompact() {
 
   const titles = ["D'abord, votre activité.", "Votre priorité ?", "Votre situation aujourd'hui ?", "Quel investissement envisagez-vous ?", "Quelles expertises activer ?", "Comment vos clients vous trouvent-ils ?", "Votre sélection est prête.", "Vos coordonnées"]; const progress = ((step + 1) / 8) * 100; const card = (item: Choice, onClick: () => void, selected = false) => <button key={item.id} type="button" onClick={onClick} className={`group w-full rounded-xl border p-3 text-left transition-all hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-lg ${selected ? "border-primary bg-primary/[0.07] shadow-md" : "border-border bg-background"}`}><div className="flex items-center justify-between gap-2"><span className="text-[11px] font-medium leading-tight sm:text-sm">{item.label}</span>{selected ? <Check className="h-3.5 w-3.5 text-primary" /> : <ArrowRight className="h-3 w-3 text-muted-foreground group-hover:translate-x-1 group-hover:text-primary" />}</div><div className="mt-1 hidden text-[9px] leading-4 text-muted-foreground sm:block">{item.detail}</div></button>;
 
-  return <section id="intelligence" className="relative overflow-hidden border-y border-border/50 bg-background py-10 sm:py-16"><div className="relative mx-auto max-w-5xl px-4 sm:px-6"><div className="mb-7 grid gap-7 lg:grid-cols-[1fr_1.7fr] lg:items-end"><div className="flex items-center gap-2"><div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-primary/40 bg-card/70 text-primary shadow-[0_0_50px_-18px_var(--primary)]"><span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-primary" /><span className="text-sm font-bold">A</span></div><div><div className="label-mono text-[9px] uppercase tracking-[0.22em] text-primary">XR INTELLIGENCE</div><div className="mt-1 text-sm text-muted-foreground sm:text-base">Alexandre — votre intelligence digitale</div></div></div><div><p className="label-mono text-[8px] uppercase tracking-[0.2em] text-muted-foreground">01 · Diagnostic intelligent</p><h2 className="mt-2 text-3xl font-medium tracking-[-0.045em] sm:text-5xl">Parlez à <em className="text-primary not-italic italic">Alexandre.</em></h2><p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">Quelques questions. Une lecture de votre activité. Un plan d’action digital construit autour de vos priorités.</p></div><div className="flex items-center gap-1.5"><div className="h-1 w-10 overflow-hidden rounded-full bg-muted sm:w-16"><div className="h-full rounded-full bg-primary transition-all" style={{ width: `${progress}%` }} /></div><span className="label-mono text-[7px] text-muted-foreground">{String(step + 1).padStart(2, "0")}/08</span></div></div>
+  return <section id="intelligence" className="relative overflow-hidden border-y border-border/50 bg-background py-10 sm:py-16"><div className="relative mx-auto max-w-5xl px-4 sm:px-6"><div className="mb-7 grid gap-7 lg:grid-cols-[auto_1fr] lg:items-end"><div className="flex items-center gap-3"><div className="rounded-2xl border border-primary/20 bg-card/60 shadow-[0_0_60px_-25px_var(--primary)]"><Alexandre3D /></div><div><div className="label-mono text-[9px] uppercase tracking-[0.22em] text-primary">XR INTELLIGENCE</div><div className="mt-1 text-sm text-muted-foreground sm:text-base">Alexandre — votre intelligence digitale</div></div></div><div><p className="label-mono text-[8px] uppercase tracking-[0.2em] text-muted-foreground">01 · Diagnostic intelligent</p><h2 className="mt-2 text-3xl font-medium tracking-[-0.045em] sm:text-5xl">Parlez à <em className="text-primary not-italic italic">Alexandre.</em></h2><p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">Quelques questions. Une lecture de votre activité. Un plan d’action digital construit autour de vos priorités.</p></div><div className="flex items-center gap-1.5"><div className="h-1 w-10 overflow-hidden rounded-full bg-muted sm:w-16"><div className="h-full rounded-full bg-primary transition-all" style={{ width: `${progress}%` }} /></div><span className="label-mono text-[7px] text-muted-foreground">{String(step + 1).padStart(2, "0")}/08</span></div></div>
     <div className="rounded-[1.5rem] border border-primary/15 bg-card/80 p-3 shadow-[0_30px_90px_-55px_var(--primary)] backdrop-blur-sm sm:p-6"><div className="mb-3 flex items-end justify-between gap-2"><div><p className="label-mono text-[7px] uppercase tracking-[0.18em] text-muted-foreground">{step >= 7 ? "Finalisation" : `Question ${step + 1} sur 8`}</p><h2 className="mt-1 text-base font-medium tracking-[-0.03em] sm:text-2xl">{titles[step]}</h2></div>{step > 0 && step < 7 && <button type="button" onClick={() => setStep(step - 1)} className="rounded-full border border-border px-2.5 py-1 text-[10px] text-muted-foreground hover:text-foreground">←</button>}</div>
       {step === 0 && <div><p className="mb-2 text-[9px] text-muted-foreground">Alexandre adapte la suite du diagnostic à votre métier.</p><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">{SECTORS.map((x) => card(x, () => choose(setSectorId, x.id, 1)))}</div></div>}
       {step === 1 && sector && <div className="grid gap-1.5 sm:grid-cols-3">{sector.goals.map((x) => card({ id: x, label: x, detail: "Priorité adaptée à votre secteur" }, () => choose(setGoal, x, 2)))}</div>}

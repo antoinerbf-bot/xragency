@@ -1,8 +1,9 @@
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { SHOWCASE } from "@/lib/content";
+import { SHOWCASE_EXTENDED } from "@/lib/showcaseExtended";
 import { cn } from "@/lib/utils";
 
 const SECTOR_KEYS = [
@@ -66,13 +67,50 @@ function serviceLabel(
   return key;
 }
 
+const ALL_SHOWCASE = [...SHOWCASE, ...SHOWCASE_EXTENDED];
+
+function PortfolioScrollStage() {
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    const update = () => {
+      const max = Math.max(1, window.innerHeight * 2.6);
+      setProgress(Math.min(1, Math.max(0, window.scrollY / max)));
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
+  const cards = [SHOWCASE[0], SHOWCASE[1], SHOWCASE[2]];
+  return <div className="relative mt-12 h-[78vh] min-h-[520px] overflow-hidden rounded-[2rem] border border-border/60 bg-card/30 sm:mt-16">
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,color-mix(in_oklab,var(--primary)_18%,transparent),transparent_48%)]" />
+    <div className="absolute left-5 top-5 z-20 label-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground sm:left-8 sm:top-8">SCROLL EXPERIENCE · 01—03</div>
+    {cards.map((item, index) => {
+      const local = Math.max(0, Math.min(1, progress * 3 - index * 0.72));
+      const y = (1 - local) * (index === 0 ? 170 : 230) - index * 18;
+      const rotate = (index - 1) * 4 + (1 - local) * (index === 0 ? -8 : 7);
+      const scale = 0.86 + local * 0.14;
+      return <div key={item.id} className="absolute left-1/2 top-1/2 w-[82%] max-w-4xl -translate-x-1/2 -translate-y-1/2" style={{ transform: `translate3d(-50%, calc(-50% + ${y}px), 0) rotate(${rotate}deg) scale(${scale})`, zIndex: 10 + index }}>
+        <div className="relative overflow-hidden rounded-[1.5rem] border border-white/15 bg-black shadow-2xl aspect-[16/10]">
+          <img src={item.image} alt="" className="h-full w-full object-cover opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+          <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4 text-white sm:bottom-8 sm:left-8 sm:right-8">
+            <div><p className="label-mono text-[9px] uppercase tracking-[0.18em] text-white/60">{String(index + 1).padStart(2,"0")} · {item.type.fr}</p><h3 className="display-serif mt-2 text-3xl sm:text-5xl">{item.name}</h3></div>
+            <span className="hidden rounded-full border border-white/20 px-3 py-1 label-mono text-[9px] uppercase tracking-widest text-white/70 sm:block">{item.metric}</span>
+          </div>
+        </div>
+      </div>;
+    })}
+    <div className="absolute bottom-5 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 sm:bottom-8">{[0,1,2].map(i => <span key={i} className={cn("h-1.5 rounded-full transition-all", i <= Math.floor(progress*3) ? "w-8 bg-primary" : "w-2 bg-white/30")} />)}</div>
+  </div>;
+}
+
 export function Work() {
   const { t, lang } = useLang();
   const [sector, setSector] = useState<string>("all");
   const [service, setService] = useState<string>("all");
 
   const filtered = useMemo(() => {
-    return (SHOWCASE as ShowcaseItem[]).filter((item) => {
+    return (ALL_SHOWCASE as ShowcaseItem[]).filter((item) => {
       const sectorOk = sector === "all" || item.sectorKey === sector;
       const services = item.services ?? ["website"];
       const serviceOk = service === "all" || services.includes(service);
@@ -81,13 +119,13 @@ export function Work() {
   }, [sector, service]);
 
   const sectorCount = useCallback((key: string) => {
-    if (key === "all") return SHOWCASE.length;
-    return SHOWCASE.filter((s) => s.sectorKey === key).length;
+    if (key === "all") return ALL_SHOWCASE.length;
+    return ALL_SHOWCASE.filter((s) => s.sectorKey === key).length;
   }, []);
 
   const serviceCount = useCallback((key: string) => {
-    if (key === "all") return SHOWCASE.length;
-    return (SHOWCASE as ShowcaseItem[]).filter((s) =>
+    if (key === "all") return ALL_SHOWCASE.length;
+    return (ALL_SHOWCASE as ShowcaseItem[]).filter((s) =>
       (s.services ?? ["website"]).includes(key),
     ).length;
   }, []);
@@ -101,7 +139,7 @@ export function Work() {
         <header className="grid items-end gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
           <div>
             <span className="label-mono text-[10px] uppercase tracking-[0.3em] text-primary">
-              PORTFOLIO · {SHOWCASE.length}+ WORKS
+              PORTFOLIO · {ALL_SHOWCASE.length}+ WORKS
             </span>
             <h2 className="display-serif mt-5 max-w-4xl text-5xl leading-[0.88] sm:text-7xl lg:text-[6.5rem]">
               {lang === "fr" && (
@@ -148,11 +186,14 @@ export function Work() {
           </div>
         </header>
 
+        <PortfolioScrollStage />
+
         <div className="mt-12 space-y-4 border-y border-border/60 py-6">
           <div className="flex flex-wrap items-center gap-2">
             <span className="label-mono mr-1 text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
               {lang === "fr" ? "Secteur" : lang === "en" ? "Industry" : "Ngành"}
             </span>
+            <div className="mb-3 flex items-center justify-between gap-3 rounded-2xl border border-border/50 bg-card/40 px-4 py-3"><span className="label-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">{lang === "fr" ? "Explorer par profil" : lang === "en" ? "Explore by profile" : "Khám phá theo hồ sơ"}</span><span className="label-mono text-[9px] text-primary">{filtered.length} / {ALL_SHOWCASE.length}</span></div>
             {SECTOR_KEYS.map((key) => {
               const count = sectorCount(key);
               if (key !== "all" && count === 0) return null;
