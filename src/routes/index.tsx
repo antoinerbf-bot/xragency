@@ -29,8 +29,8 @@ function Index() {
       <Nav />
       <main className="relative z-10">
         <Hero />
-        <QuoteConfiguratorCompact />
         <Intelligence />
+        <QuoteConfiguratorCompact />
         <HomeServices />
         <FreeAuditCTA />
         <Faq />
