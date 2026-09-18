@@ -5,7 +5,6 @@ import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCom
 import { Intelligence } from "@/components/site/Intelligence";
 import { HomeServices } from "@/components/site/HomeServices";
 import { FreeAuditCTA } from "@/components/site/FreeAuditCTA";
-import { Work } from "@/components/site/Work";
 import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
 
@@ -34,7 +33,6 @@ function Index() {
         <QuoteConfiguratorCompact />
         <HomeServices />
         <FreeAuditCTA />
-        <Work />
         <Faq />
         <Contact />
       </main>
