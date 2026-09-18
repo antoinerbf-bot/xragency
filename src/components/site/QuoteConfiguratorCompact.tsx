@@ -65,8 +65,8 @@ export function QuoteConfiguratorCompact() {
       const period = service.fromPeriod === "month" ? "month" : "once";
       return {
         id,
-        label: service.title,
-        detail: service.description,
+        label: service.title.fr,
+        detail: service.description.fr,
         price,
         period,
       };
