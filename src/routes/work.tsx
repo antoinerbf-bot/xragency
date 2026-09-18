@@ -102,22 +102,30 @@ function FilterChip({
       type="button"
       onClick={onClick}
       className={cn(
-        "group inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-left transition-all duration-300",
+        "inline-flex h-10 shrink-0 items-center gap-2 rounded-full border px-3.5 text-left transition-colors duration-300",
         active
-          ? "border-foreground bg-foreground text-background shadow-sm"
-          : "border-border/70 bg-background/70 text-foreground/75 hover:border-foreground/25 hover:bg-card hover:text-foreground",
+          ? "border-primary bg-primary text-primary-foreground"
+          : "border-border bg-card text-foreground/80 hover:border-primary/40 hover:text-foreground",
       )}
     >
-      <span className="text-[13px] font-medium tracking-[-0.01em]">{label}</span>
+      <span className="whitespace-nowrap text-[13px] font-medium tracking-[-0.01em]">{label}</span>
       <span
         className={cn(
           "inline-flex min-w-5 items-center justify-center rounded-full px-1.5 text-[10px] tabular-nums",
-          active ? "bg-background/15 text-background" : "bg-muted text-muted-foreground",
+          active ? "bg-primary-foreground/20 text-primary-foreground" : "bg-muted text-muted-foreground",
         )}
       >
         {count}
       </span>
     </button>
+  );
+}
+
+function ChipRow({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
+      {children}
+    </div>
   );
 }
 
@@ -165,13 +173,13 @@ function WorkPage() {
       <Nav />
 
       <main className="relative z-10">
-        <section className="relative min-h-[88vh] overflow-hidden pt-20 sm:pt-24">
-          <div className="relative mx-auto grid min-h-[calc(88vh-5rem)] max-w-[1680px] items-center lg:grid-cols-[minmax(320px,0.9fr)_1.15fr]">
-            <div className="relative z-20 px-5 pb-10 pt-8 sm:px-8 lg:px-12 lg:pb-16">
+        <section className="relative overflow-hidden pt-20 sm:pt-24 lg:min-h-[88vh]">
+          <div className="relative mx-auto grid max-w-[1680px] items-center lg:min-h-[calc(88vh-5rem)] lg:grid-cols-[minmax(280px,0.9fr)_1.15fr]">
+            <div className="relative z-20 px-5 pb-6 pt-6 sm:px-8 lg:px-12 lg:pb-16 lg:pt-8">
               <p className="label-mono text-[10px] uppercase tracking-[0.32em] text-primary">
                 PORTFOLIO · {SHOWCASE.length}+ WORKS
               </p>
-              <h1 className="display-serif mt-5 text-5xl leading-[0.88] sm:text-7xl lg:text-[6.8rem]">
+              <h1 className="display-serif mt-4 text-4xl leading-[0.9] sm:mt-5 sm:text-7xl lg:text-[6.8rem]">
                 {lang === "fr" && (
                   <>
                     Nos
@@ -194,25 +202,25 @@ function WorkPage() {
                   </>
                 )}
               </h1>
-              <p className="mt-8 max-w-md text-sm leading-7 text-muted-foreground sm:text-base">
+              <p className="mt-5 max-w-md text-sm leading-7 text-muted-foreground sm:mt-8 sm:text-base">
                 {intro}
               </p>
             </div>
 
-            <div className="relative h-[52vh] min-h-[340px] w-full lg:h-[calc(88vh-5rem)]">
+            <div className="relative h-[42vh] min-h-[260px] w-full sm:h-[52vh] sm:min-h-[340px] lg:h-[calc(88vh-5rem)]">
               <EyeTracker />
             </div>
           </div>
         </section>
 
-        <section className="mx-auto max-w-[1600px] px-5 py-10 sm:px-8 lg:px-12 lg:py-16">
-          <div className="sticky top-16 z-30 -mx-5 mb-12 border-y border-border/60 bg-background/85 px-5 py-6 backdrop-blur-xl sm:-mx-8 sm:px-8 lg:static lg:mx-0 lg:rounded-3xl lg:border lg:px-8 lg:py-8">
-            <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+        <section className="mx-auto max-w-[1600px] px-5 py-8 sm:px-8 lg:px-12 lg:py-16">
+          <div className="sticky top-16 z-30 -mx-5 mb-10 border-y border-border bg-background/90 px-5 py-5 backdrop-blur-xl sm:-mx-8 sm:px-8 lg:static lg:mx-0 lg:rounded-3xl lg:border lg:px-8 lg:py-8">
+            <div className="mb-5 flex flex-wrap items-end justify-between gap-3 lg:mb-6">
               <div>
                 <p className="label-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground">
                   {lang === "fr" ? "Explorer" : lang === "en" ? "Explore" : "Khám phá"}
                 </p>
-                <p className="mt-1 text-lg font-medium tracking-tight">{resultLabel}</p>
+                <p className="mt-1 text-base font-medium tracking-tight sm:text-lg">{resultLabel}</p>
               </div>
               {(sector !== "all" || service !== "all") && (
                 <button
@@ -228,12 +236,12 @@ function WorkPage() {
               )}
             </div>
 
-            <div className="grid gap-8 lg:grid-cols-[140px_1fr] lg:gap-10">
+            <div className="grid gap-4 lg:grid-cols-[140px_1fr] lg:gap-10">
               <div className="pt-1">
                 <p className="text-sm font-medium text-foreground">
                   {lang === "fr" ? "Secteur" : lang === "en" ? "Industry" : "Ngành"}
                 </p>
-                <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                <p className="mt-1 hidden text-xs leading-5 text-muted-foreground lg:block">
                   {lang === "fr"
                     ? "Le domaine d’activité du projet."
                     : lang === "en"
@@ -241,7 +249,7 @@ function WorkPage() {
                       : "Lĩnh vực của dự án."}
                 </p>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <ChipRow>
                 {SECTOR_KEYS.map((key) => {
                   const count = sectorCount(key);
                   if (key !== "all" && count === 0) return null;
@@ -255,15 +263,15 @@ function WorkPage() {
                     />
                   );
                 })}
-              </div>
+              </ChipRow>
             </div>
 
-            <div className="mt-8 grid gap-8 border-t border-border/50 pt-8 lg:grid-cols-[140px_1fr] lg:gap-10">
+            <div className="mt-6 grid gap-4 border-t border-border/60 pt-6 lg:mt-8 lg:grid-cols-[140px_1fr] lg:gap-10 lg:pt-8">
               <div className="pt-1">
                 <p className="text-sm font-medium text-foreground">
                   {lang === "fr" ? "Service" : lang === "en" ? "Service" : "Dịch vụ"}
                 </p>
-                <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                <p className="mt-1 hidden text-xs leading-5 text-muted-foreground lg:block">
                   {lang === "fr"
                     ? "Le type de prestation réalisée."
                     : lang === "en"
@@ -271,7 +279,7 @@ function WorkPage() {
                       : "Loại dịch vụ đã thực hiện."}
                 </p>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <ChipRow>
                 {SERVICE_KEYS.map((key) => {
                   const count = serviceCount(key);
                   if (key !== "all" && count === 0) return null;
@@ -285,12 +293,12 @@ function WorkPage() {
                     />
                   );
                 })}
-              </div>
+              </ChipRow>
             </div>
           </div>
 
           {filtered.length > 0 ? (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-12 lg:gap-6">
+            <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-12 lg:gap-6">
               {filtered.map((item, index) => {
                 const isFeature = index === 0 || (index % 5 === 0 && index > 0);
                 const span = isFeature
@@ -299,15 +307,15 @@ function WorkPage() {
                     ? "lg:col-span-5"
                     : "lg:col-span-4";
                 const aspect = isFeature
-                  ? "aspect-[16/10] sm:aspect-[16/9]"
+                  ? "aspect-[16/11] sm:aspect-[16/9]"
                   : "aspect-[16/11]";
 
                 return (
                   <article
                     key={item.id}
                     className={cn(
-                      "group relative overflow-hidden rounded-2xl border border-border/50 bg-card/20 transition-all duration-500 ease-out",
-                      "hover:-translate-y-1.5 hover:border-primary/35 hover:shadow-[0_24px_60px_-20px_rgba(0,0,0,0.35)]",
+                      "group relative overflow-hidden rounded-2xl border border-border/60 bg-card/40 transition-all duration-500 ease-out",
+                      "hover:border-primary/35 hover:shadow-[0_20px_50px_-24px_hsl(var(--foreground)/0.35)]",
                       span,
                     )}
                   >
@@ -319,11 +327,11 @@ function WorkPage() {
                         decoding="async"
                         className="h-full w-full object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-100" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
                       <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/40 px-3 py-1 label-mono text-[9px] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-md">
                         PROJECT
                       </span>
-                      <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 text-white">
+                      <div className="absolute bottom-0 left-0 right-0 p-4 text-white sm:p-6">
                         <div className="flex items-center gap-2 label-mono text-[9px] uppercase tracking-[0.18em] text-white/55">
                           <span>{String(index + 1).padStart(2, "0")}</span>
                           <span className="h-px w-5 bg-white/30" />
@@ -331,9 +339,9 @@ function WorkPage() {
                         </div>
                         <h2
                           className={cn(
-                            "display-serif mt-2 leading-[0.95] transition-transform duration-500 group-hover:translate-x-0.5",
+                            "display-serif mt-2 leading-[0.95]",
                             isFeature
-                              ? "text-3xl sm:text-4xl lg:text-5xl"
+                              ? "text-2xl sm:text-4xl lg:text-5xl"
                               : "text-2xl sm:text-3xl",
                           )}
                         >
@@ -346,14 +354,14 @@ function WorkPage() {
                     </div>
                     <div className="flex items-end justify-between gap-3 px-4 py-4 sm:px-5">
                       <div className="min-w-0">
-                        <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground transition-colors group-hover:text-foreground/80">
+                        <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">
                           {t(item.desc)}
                         </p>
                         <p className="mt-2 label-mono text-[10px] font-semibold tracking-[0.08em] text-primary">
                           {item.metric}
                         </p>
                       </div>
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-background/70 transition-all duration-300 group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:scale-105">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-background/80 transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
                         <ArrowUpRight className="h-4 w-4" />
                       </span>
                     </div>
@@ -363,7 +371,7 @@ function WorkPage() {
             </div>
           ) : (
             <div className="py-16 text-center">
-              <p className="display-serif text-3xl">
+              <p className="display-serif text-2xl sm:text-3xl">
                 {lang === "fr" && "Aucun projet pour cette combinaison."}
                 {lang === "en" && "No projects match this combination."}
                 {lang === "vi" && "Không có dự án phù hợp."}
@@ -381,7 +389,7 @@ function WorkPage() {
             </div>
           )}
 
-          <div className="mt-16 flex flex-col items-start justify-between gap-6 rounded-3xl border border-primary/20 bg-primary/[0.04] px-8 py-10 sm:flex-row sm:items-center sm:px-12">
+          <div className="mt-12 flex flex-col items-start justify-between gap-6 rounded-3xl border border-primary/20 bg-primary/[0.06] px-5 py-8 sm:mt-16 sm:flex-row sm:items-center sm:px-12 sm:py-10">
             <div>
               <h3 className="display-serif text-2xl sm:text-3xl">
                 {lang === "fr" && "Un projet dans votre secteur ?"}
@@ -399,7 +407,7 @@ function WorkPage() {
             </div>
             <a
               href="/#intelligence"
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 label-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-foreground transition-transform hover:scale-[1.02]"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 label-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-foreground sm:w-auto"
             >
               {lang === "fr" && "Lancer mon analyse"}
               {lang === "en" && "Start my analysis"}
