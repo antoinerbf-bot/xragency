@@ -1,60 +1,32 @@
-import { Suspense, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, Html, useGLTF } from "@react-three/drei";
-import * as THREE from "three";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, MessageCircle, Sparkles } from "lucide-react";
 
-const MODEL_URL = "https://readyplayerme.github.io/visage/male.glb";
-
-function AlexandreModel({ pointer }: { pointer: { x: number; y: number } }) {
-  const group = useRef<THREE.Group>(null);
-  const { scene } = useGLTF(MODEL_URL);
-
-  useFrame((state) => {
-    if (!group.current) return;
-    const t = state.clock.elapsedTime;
-    group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, pointer.x * 0.22, 0.08);
-    group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, pointer.y * -0.06, 0.08);
-    group.current.position.y = Math.sin(t * 1.4) * 0.012;
-  });
-
-  return <primitive ref={group} object={scene.clone()} scale={1.45} position={[0, -1.55, 0]} />;
-}
-
-function AvatarScene({ pointer }: { pointer: { x: number; y: number } }) {
+function BotFace() {
   return (
-    <Canvas camera={{ position: [0, 0.15, 3.1], fov: 28 }} dpr={[1, 1.5]} gl={{ alpha: true, antialias: true }}>
-      <ambientLight intensity={1.5} />
-      <directionalLight position={[2, 3, 4]} intensity={2.2} />
-      <directionalLight position={[-2, 1, 2]} intensity={0.8} />
-      <Suspense fallback={<Html center><span className="label-mono text-[8px] text-muted-foreground">Alexandre</span></Html>}>
-        <AlexandreModel pointer={pointer} />
-        <Environment preset="studio" />
-      </Suspense>
-    </Canvas>
+    <div className="relative h-[118px] w-[118px]">
+      <div className="absolute inset-[15px] rounded-[35%] border border-primary/35 bg-gradient-to-br from-card via-background to-primary/10 shadow-[0_20px_50px_-20px_rgba(0,0,0,.8)] transition-transform duration-500 group-hover:rotate-[-3deg]">
+        <div className="absolute left-1/2 top-[-10px] h-5 w-px -translate-x-1/2 bg-primary/50"><span className="absolute -top-1 left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-primary shadow-[0_0_16px_rgba(255,255,255,.6)]" /></div>
+        <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 gap-5">
+          <span className="h-3.5 w-3.5 rounded-full bg-foreground shadow-[0_0_14px_rgba(255,255,255,.18)] transition-transform duration-300 group-hover:translate-x-1" />
+          <span className="h-3.5 w-3.5 rounded-full bg-foreground shadow-[0_0_14px_rgba(255,255,255,.18)] transition-transform duration-300 group-hover:translate-x-1" />
+        </div>
+        <div className="absolute bottom-5 left-1/2 h-1 w-10 -translate-x-1/2 rounded-full bg-primary/60" />
+        <div className="absolute -bottom-2 left-1/2 h-1 w-16 -translate-x-1/2 rounded-full bg-primary/20 blur-md" />
+      </div>
+      <span className="absolute left-0 top-1/2 h-7 w-2 -translate-y-1/2 rounded-full border border-border bg-card" />
+      <span className="absolute right-0 top-1/2 h-7 w-2 -translate-y-1/2 rounded-full border border-border bg-card" />
+    </div>
   );
 }
 
 export function AlexandreAdvisor() {
-  const [pointer, setPointer] = useState({ x: 0, y: 0 });
-
   return (
-    <div
-      className="relative mx-auto h-[150px] w-[145px] sm:h-[180px] sm:w-[170px]"
-      onPointerMove={(event) => {
-        const rect = event.currentTarget.getBoundingClientRect();
-        setPointer({
-          x: Math.max(-1, Math.min(1, (event.clientX - rect.left - rect.width / 2) / (rect.width / 2))),
-          y: Math.max(-1, Math.min(1, (event.clientY - rect.top - rect.height / 2) / (rect.height / 2))),
-        });
-      }}
-    >
-      <div className="absolute inset-x-4 bottom-2 h-12 rounded-full bg-primary/10 blur-xl" />
-      <div className="absolute inset-3 rounded-full border border-primary/10 bg-primary/[0.025]" />
-      <AvatarScene pointer={pointer} />
+    <div className="group relative mx-auto flex h-[150px] w-[150px] items-center justify-center">
+      <div className="absolute inset-5 rounded-full bg-primary/[0.08] blur-2xl transition duration-700 group-hover:scale-125" />
+      <div className="absolute inset-2 rounded-full border border-primary/10 [animation:spin_18s_linear_infinite]" />
+      <BotFace />
       <div className="absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-border bg-background/90 px-2.5 py-1 backdrop-blur">
         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
-        <span className="label-mono text-[7px] uppercase tracking-[0.16em] text-muted-foreground">Alexandre · en ligne</span>
+        <span className="label-mono text-[7px] uppercase tracking-[.16em] text-muted-foreground">Alexandre · en ligne</span>
       </div>
     </div>
   );
@@ -62,21 +34,14 @@ export function AlexandreAdvisor() {
 
 export function AlexandreIntro({ onStart }: { onStart: () => void }) {
   return (
-    <div className="grid items-center gap-6 lg:grid-cols-[190px_1fr] lg:gap-10">
+    <div className="group grid items-center gap-5 rounded-[1.75rem] border border-primary/20 bg-primary/[0.035] p-5 sm:p-7 lg:grid-cols-[155px_1fr_auto] lg:p-8">
       <AlexandreAdvisor />
       <div>
-        <div className="mb-3 flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-primary"><Sparkles className="h-3.5 w-3.5" /> XR Intelligence</div>
-        <h2 className="display-serif max-w-3xl text-3xl leading-[0.98] tracking-tight sm:text-5xl">Votre stratégie commence avec Alexandre.</h2>
-        <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground">Stratège digital senior en ligne. Il analyse votre activité, vos priorités et vos canaux d’acquisition pour construire un devis personnalisé.</p>
-        <div className="mt-5 flex flex-wrap gap-2 text-[8px] uppercase tracking-[0.12em] text-muted-foreground">
-          <span className="rounded-full border border-border px-3 py-1.5">Analyse interactive</span>
-          <span className="rounded-full border border-border px-3 py-1.5">Recommandations</span>
-          <span className="rounded-full border border-border px-3 py-1.5">Devis sur mesure</span>
-        </div>
-        <button type="button" onClick={onStart} className="mt-6 inline-flex items-center gap-3 rounded-full bg-primary px-5 py-3 text-[9px] font-semibold uppercase tracking-[0.14em] text-primary-foreground shadow-lg transition hover:-translate-y-0.5">Lancer mon analyse <ArrowRight className="h-3.5 w-3.5" /></button>
+        <div className="mb-2 flex items-center gap-2 text-[8px] font-semibold uppercase tracking-[.22em] text-primary"><Sparkles className="h-3 w-3" /> XR Intelligence</div>
+        <h2 className="display-serif text-3xl leading-[.92] tracking-tight sm:text-4xl">Parlez avec Alexandre.</h2>
+        <p className="mt-3 max-w-xl text-xs leading-5 text-muted-foreground sm:text-sm">Votre stratège digital vous accompagne, pose les bonnes questions et construit votre recommandation.</p>
       </div>
+      <button type="button" onClick={onStart} className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-[9px] font-semibold uppercase tracking-[.14em] text-primary-foreground shadow-lg transition hover:-translate-y-0.5"><MessageCircle className="h-3.5 w-3.5" /> Discuter avec Alexandre <ArrowRight className="h-3 w-3" /></button>
     </div>
   );
 }
-
-useGLTF.preload(MODEL_URL);
