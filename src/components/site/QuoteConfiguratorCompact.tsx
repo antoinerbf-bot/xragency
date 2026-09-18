@@ -47,7 +47,7 @@ const BASE_PRICES: Record<string, number> = {
 
 export function QuoteConfiguratorCompact() {
   const [step, setStep] = useState(0); const [sectorId, setSectorId] = useState(""); const [goal, setGoal] = useState(""); const [situation, setSituation] = useState(""); const [budget, setBudget] = useState(""); const [discovery, setDiscovery] = useState(""); const [selectedServices, setSelectedServices] = useState<string[]>([]); const [client, setClient] = useState({ name: "", email: "", whatsapp: "" }); const [generated, setGenerated] = useState(false); const [sending, setSending] = useState(false); const [sendMessage, setSendMessage] = useState("");
-  const sector = SECTORS.find((x) => x.id === sectorId); const situationChoice = SITUATIONS.find((x) => x.id === situation); const budgetChoice = BUDGETS.find((x) => x.id === budget); const discoveryChoice = DISCOVERY.find((x) => x.id === discovery); const orderedServices = (SERVICE_ORDER[sectorId] ?? SERVICE_ORDER.other).map((id) => SERVICES.find((x) => x.id === id)).filter(Boolean) as Choice[];
+  const sector = SECTORS.find((x) => x.id === sectorId); const situationChoice = SITUATIONS.find((x) => x.id === situation); const budgetChoice = BUDGETS.find((x) => x.id === budget); const discoveryChoice = DISCOVERY.find((x) => x.id === discovery); const orderedServices = (SERVICE_ORDER[sectorId] ?? SERVICE_ORDER.other).map((id) => { const service = SERVICES.find((x) => x.id === id); return service ? { id: service.id, label: service.title.fr, detail: service.short.fr } : null; }).filter(Boolean) as Choice[];
   const proposals = useMemo<Proposal[]>(() => {
     const priority = situation === "selling"
       ? ["ecommerce", "maps", "social", "seo"]
