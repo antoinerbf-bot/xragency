@@ -123,22 +123,13 @@ function WorkPage() {
       <Nav />
 
       <main className="relative z-10">
-        <section className="relative min-h-[85vh] overflow-hidden border-b border-border/40 pt-24 sm:pt-28">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(ellipse 70% 60% at 70% 40%, color-mix(in oklab, var(--primary) 8%, transparent) 0%, transparent 55%), linear-gradient(180deg, var(--background) 0%, color-mix(in oklab, var(--background) 92%, #111) 100%)",
-            }}
-          />
-
-          <div className="relative mx-auto grid min-h-[calc(85vh-6rem)] max-w-[1600px] items-center gap-10 px-5 pb-16 sm:px-8 lg:grid-cols-[1fr_1.05fr] lg:gap-6 lg:px-12 lg:pb-20">
-            <div className="order-2 lg:order-1">
+        <section className="relative min-h-[88vh] overflow-hidden pt-20 sm:pt-24">
+          <div className="relative mx-auto grid min-h-[calc(88vh-5rem)] max-w-[1680px] items-center lg:grid-cols-[minmax(320px,0.9fr)_1.15fr]">
+            <div className="relative z-20 px-5 pb-10 pt-8 sm:px-8 lg:px-12 lg:pb-16">
               <p className="label-mono text-[10px] uppercase tracking-[0.32em] text-primary">
                 PORTFOLIO · {SHOWCASE.length}+ WORKS
               </p>
-              <h1 className="display-serif mt-5 text-5xl leading-[0.88] sm:text-7xl lg:text-[7rem]">
+              <h1 className="display-serif mt-5 text-5xl leading-[0.88] sm:text-7xl lg:text-[6.8rem]">
                 {lang === "fr" && (
                   <>
                     Nos
@@ -166,10 +157,8 @@ function WorkPage() {
               </p>
             </div>
 
-            <div className="order-1 flex justify-center lg:order-2 lg:justify-end lg:pr-4">
-              <div className="w-full max-w-[520px] lg:max-w-none lg:w-[95%]">
-                <EyeTracker />
-              </div>
+            <div className="relative h-[52vh] min-h-[340px] w-full lg:h-[calc(88vh-5rem)]">
+              <EyeTracker />
             </div>
           </div>
         </section>
@@ -259,18 +248,9 @@ function WorkPage() {
                         className="h-full w-full object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-100" />
-                      <div
-                        className="pointer-events-none absolute inset-0 opacity-60 mix-blend-soft-light"
-                        style={{
-                          background:
-                            "radial-gradient(ellipse 70% 60% at 50% 40%, transparent 0%, rgba(0,0,0,0.35) 100%)",
-                        }}
-                      />
-
                       <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/40 px-3 py-1 label-mono text-[9px] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-md">
                         PROJECT
                       </span>
-
                       <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 text-white">
                         <div className="flex items-center gap-2 label-mono text-[9px] uppercase tracking-[0.18em] text-white/55">
                           <span>{String(index + 1).padStart(2, "0")}</span>
@@ -292,7 +272,6 @@ function WorkPage() {
                         </p>
                       </div>
                     </div>
-
                     <div className="flex items-end justify-between gap-3 px-4 py-4 sm:px-5">
                       <div className="min-w-0">
                         <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground transition-colors group-hover:text-foreground/80">
