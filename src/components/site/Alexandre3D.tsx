@@ -1,10 +1,17 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, useGLTF } from "@react-three/drei";
-import { Suspense } from "react";
+import { Component, Suspense, type ErrorInfo, type ReactNode } from "react";
 import { useRef } from "react";
 import * as THREE from "three";
 
 const MODEL = "https://threejs.org/examples/models/gltf/LeePerrySmith/LeePerrySmith.glb";
+
+class Alexandre3DErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  componentDidCatch(_error: Error, _info: ErrorInfo) {}
+  render() { return this.state.hasError ? null : this.props.children; }
+}
 
 function AlexandreModel() {
   const { scene } = useGLTF(MODEL);
@@ -30,7 +37,8 @@ function AlexandreModel() {
 export function Alexandre3D({ className = "" }: { className?: string }) {
   return (
     <div className={`pointer-events-none relative h-24 w-24 shrink-0 sm:h-28 sm:w-28 ${className}`} aria-hidden>
-      <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 3.6], fov: 34 }} gl={{ antialias: true, alpha: true }}>
+      <Alexandre3DErrorBoundary>
+        <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 3.6], fov: 34 }} gl={{ antialias: true, alpha: true }}>
         <ambientLight intensity={0.6} />
         <directionalLight position={[2, 3, 4]} intensity={3.2} />
         <pointLight position={[-2, 1, 2]} intensity={1.8} color="#8ff1df" />
@@ -39,8 +47,7 @@ export function Alexandre3D({ className = "" }: { className?: string }) {
           <AlexandreModel />
         </Suspense>
       </Canvas>
+      </Alexandre3DErrorBoundary>
     </div>
   );
 }
-
-useGLTF.preload(MODEL);
