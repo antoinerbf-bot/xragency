@@ -4,7 +4,6 @@ import { Hero } from "@/components/site/Hero";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
 import { Intelligence } from "@/components/site/Intelligence";
 import { HomeServices } from "@/components/site/HomeServices";
-import { FreeOfferLead } from "@/components/site/FreeOfferLead";
 import { FreeAuditCTA } from "@/components/site/FreeAuditCTA";
 import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
@@ -32,7 +31,6 @@ function Index() {
         <Hero />
         <QuoteConfiguratorCompact />
         <HomeServices />
-        <FreeOfferLead />
         <Intelligence />
         <FreeAuditCTA />
         <Faq />
