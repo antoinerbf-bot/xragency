@@ -1,186 +1,207 @@
-import { useEffect, useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useMemo, useRef } from "react";
+import * as THREE from "three";
 
-type Point = { x: number; y: number };
-
-const clamp = (value: number, min: number, max: number) =>
-  Math.max(min, Math.min(max, value));
-
-/**
- * Portfolio creature interaction.
- *
- * The previous implementation only translated a flat JPG. This component now
- * treats the creature like a responsive interactive specimen:
- * - cursor/touch tracking with inertial easing
- * - subtle parallax / body tilt
- * - adaptive hue/contrast response
- * - idle breathing + eye-like micro motion
- * - close-cursor "hunt" state around ~200px
- * - short pounce state below ~80px
- * - erratic cursor detection to trigger a second hunting response
- *
- * The visual source remains the existing photorealistic portfolio asset so we
- * do not replace the approved creature artwork with a generic illustration.
- */
-export function EyeTracker({ className = "" }: { className?: string }) {
-  const root = useRef<HTMLDivElement>(null);
-  const creature = useRef<HTMLDivElement>(null);
-  const tongue = useRef<HTMLSpanElement>(null);
-  const glow = useRef<HTMLSpanElement>(null);
-
-  const target = useRef<Point>({ x: 0, y: 0 });
-  const current = useRef<Point>({ x: 0, y: 0 });
-  const pointer = useRef<Point>({ x: 0, y: 0 });
-  const previousPointer = useRef<Point>({ x: 0, y: 0 });
-  const lastMove = useRef(0);
-  const erraticUntil = useRef(0);
-  const raf = useRef(0);
-  const startedAt = useRef(performance.now());
-
-  useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const updatePointer = (clientX: number, clientY: number) => {
-      const el = root.current;
-      if (!el) return;
-
-      const rect = el.getBoundingClientRect();
-      const centerX = rect.left + rect.width * 0.56;
-      const centerY = rect.top + rect.height * 0.42;
-
-      const dx = clientX - centerX;
-      const dy = clientY - centerY;
-      const now = performance.now();
-
-      if (lastMove.current > 0) {
-        const dt = Math.max(16, now - lastMove.current);
-        const vx = (clientX - previousPointer.current.x) / dt;
-        const vy = (clientY - previousPointer.current.y) / dt;
-        const velocity = Math.hypot(vx, vy);
-
-        if (velocity > 1.25) {
-          erraticUntil.current = now + 1500;
-        }
-      }
-
-      previousPointer.current = { x: clientX, y: clientY };
-      lastMove.current = now;
-      pointer.current = { x: clientX, y: clientY };
-
-      target.current.x = clamp(dx / Math.max(window.innerWidth * 0.42, 180), -1, 1);
-      target.current.y = clamp(dy / Math.max(window.innerHeight * 0.42, 180), -1, 1);
-    };
-
-    const onPointer = (event: PointerEvent) =>
-      updatePointer(event.clientX, event.clientY);
-
-    window.addEventListener("pointermove", onPointer, { passive: true });
-    window.addEventListener("pointerdown", onPointer, { passive: true });
-
-    const tick = (time: number) => {
-      const el = root.current;
-      const body = creature.current;
-
-      if (el && body) {
-        const x = current.current.x +=
-          (target.current.x - current.current.x) * (reduced ? 0.28 : 0.095);
-        const y = current.current.y +=
-          (target.current.y - current.current.y) * (reduced ? 0.28 : 0.095);
-
-        const rect = el.getBoundingClientRect();
-        const centerX = rect.left + rect.width * 0.56;
-        const centerY = rect.top + rect.height * 0.42;
-        const distance = Math.hypot(
-          pointer.current.x - centerX,
-          pointer.current.y - centerY,
-        );
-        const hunting = distance < 200 || time < erraticUntil.current;
-        const pouncing = distance > 0 && distance < 80;
-        const idle = time - lastMove.current > 1600;
-        const breathe = Math.sin((time - startedAt.current) / 720) * 0.018;
-        const idleSway = idle ? Math.sin(time / 1500) * 0.018 : 0;
-
-        const travelX = pouncing ? x * 58 : x * (hunting ? 30 : 20);
-        const travelY = pouncing ? y * 38 : y * (hunting ? 17 : 11);
-        const scale = pouncing ? 1.045 : 1 + breathe + idleSway;
-        const rotateY = x * (pouncing ? 26 : hunting ? 20 : 14);
-        const rotateX = -y * (pouncing ? 17 : hunting ? 13 : 9);
-        const hue = x * 9 + y * -4;
-
-        body.style.transform =
-          `translate3d(${travelX}px, ${travelY}px, 0) rotateY(${rotateY}deg) rotateX(${rotateX}deg) scale(${scale})`;
-        body.style.filter =
-          `saturate(${1.04 + Math.abs(x) * 0.2}) contrast(${1.04 + Math.abs(y) * 0.06}) hue-rotate(${hue}deg)`;
-
-        body.style.setProperty("--creature-x", x.toFixed(3));
-        body.style.setProperty("--creature-y", y.toFixed(3));
-        body.style.setProperty("--hunt-opacity", hunting ? "1" : "0");
-        body.style.setProperty("--pounce-opacity", pouncing ? "1" : "0");
-
-        if (tongue.current) {
-          const tongueLength = pouncing ? 115 : hunting ? 76 : 0;
-          tongue.current.style.opacity = tongueLength ? "0.72" : "0";
-          tongue.current.style.width = `${tongueLength}px`;
-          tongue.current.style.transform =
-            `translate3d(${x * 14}px, ${y * 8}px, 0) rotate(${x * 8}deg)`;
-        }
-
-        if (glow.current) {
-          glow.current.style.opacity = hunting ? "0.7" : "0.2";
-          glow.current.style.transform =
-            `translate3d(${x * -18}px, ${y * -10}px, 0) scale(${pouncing ? 1.35 : 1})`;
-        }
-      }
-
-      raf.current = requestAnimationFrame(tick);
-    };
-
-    raf.current = requestAnimationFrame(tick);
-
-    return () => {
-      window.removeEventListener("pointermove", onPointer);
-      window.removeEventListener("pointerdown", onPointer);
-      cancelAnimationFrame(raf.current);
-    };
+function Leaf() {
+  const geometry = useMemo(() => {
+    const shape = new THREE.Shape();
+    shape.moveTo(-2.7, 0);
+    shape.bezierCurveTo(-1.6, 1.35, 1.55, 1.25, 2.9, 0);
+    shape.bezierCurveTo(1.45, -1.1, -1.5, -1.05, -2.7, 0);
+    return new THREE.ShapeGeometry(shape, 18);
   }, []);
 
   return (
-    <div
-      ref={root}
-      className={`relative h-full w-full select-none overflow-visible [perspective:1200px] [--creature-x:0] [--creature-y:0] ${className}`}
-      aria-hidden
-    >
-      <span
-        ref={glow}
-        className="pointer-events-none absolute left-[45%] top-[38%] h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-3xl transition-opacity duration-300"
+    <group rotation={[0.05, 0.08, -0.12]} position={[0, -1.35, 0]}>
+      <mesh geometry={geometry} rotation={[Math.PI / 2, 0, 0]}>
+        <meshPhysicalMaterial
+          color="#173d2d"
+          roughness={0.58}
+          metalness={0.04}
+          clearcoat={0.18}
+        />
+      </mesh>
+      <mesh position={[0, 0.02, 0.02]} rotation={[Math.PI / 2, 0, 0]}>
+        <boxGeometry args={[5.1, 0.018, 0.025]} />
+        <meshStandardMaterial color="#6d9a70" roughness={0.7} />
+      </mesh>
+    </group>
+  );
+}
+
+function Tail() {
+  const curve = useMemo(
+    () =>
+      new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-0.15, -0.3, 0),
+        new THREE.Vector3(-0.85, -0.55, 0.05),
+        new THREE.Vector3(-1.55, -0.32, 0.12),
+        new THREE.Vector3(-1.72, 0.28, 0.08),
+        new THREE.Vector3(-1.25, 0.72, 0),
+        new THREE.Vector3(-0.72, 0.62, -0.08),
+      ]),
+    [],
+  );
+
+  return (
+    <mesh geometry={new THREE.TubeGeometry(curve, 32, 0.18, 12, false)}>
+      <meshPhysicalMaterial
+        color="#2f8f69"
+        roughness={0.34}
+        metalness={0.02}
+        clearcoat={0.55}
+        iridescence={0.25}
+        iridescenceIOR={1.35}
       />
+    </mesh>
+  );
+}
 
-      <div
-        ref={creature}
-        className="absolute inset-0 origin-[56%_42%] will-change-transform"
-        style={{
-          transformStyle: "preserve-3d",
-          transition: "filter 160ms linear",
-        }}
+function Chameleon({ pointer }: { pointer: React.MutableRefObject<THREE.Vector2> }) {
+  const root = useRef<THREE.Group>(null);
+  const leftEye = useRef<THREE.Group>(null);
+  const rightEye = useRef<THREE.Group>(null);
+  const tongue = useRef<THREE.Mesh>(null);
+
+  const scales = useMemo(() => {
+    const points: [number, number, number][] = [];
+    for (let i = 0; i < 70; i += 1) {
+      const t = i / 69;
+      const x = -0.95 + t * 1.85;
+      const radius = 0.48 - Math.abs(t - 0.52) * 0.2;
+      const rows = i % 5;
+      const y = (rows - 2) * 0.16;
+      const z = Math.sqrt(Math.max(0.01, radius * radius - y * y)) * 0.72;
+      points.push([x, y, z]);
+    }
+    return points;
+  }, []);
+
+  useFrame((state) => {
+    if (!root.current) return;
+    const p = pointer.current;
+    const time = state.clock.elapsedTime;
+    const hunting = Math.hypot(p.x, p.y) < 0.35;
+    const pounce = Math.hypot(p.x, p.y) < 0.16;
+
+    root.current.rotation.y += ((p.x * 0.5) - root.current.rotation.y) * 0.055;
+    root.current.rotation.x += ((-p.y * 0.18) - root.current.rotation.x) * 0.055;
+    root.current.position.x += ((p.x * (pounce ? 0.48 : hunting ? 0.22 : 0.12)) - root.current.position.x) * 0.055;
+    root.current.position.y += ((-p.y * (pounce ? 0.26 : hunting ? 0.12 : 0.07)) - root.current.position.y) * 0.055;
+    root.current.position.y += Math.sin(time * 1.7) * 0.002;
+
+    const eyeTurn = p.x * 0.9;
+    const eyeTilt = -p.y * 0.55;
+    if (leftEye.current) {
+      leftEye.current.rotation.y += (eyeTurn - leftEye.current.rotation.y) * 0.11;
+      leftEye.current.rotation.x += (eyeTilt - leftEye.current.rotation.x) * 0.11;
+    }
+    if (rightEye.current) {
+      rightEye.current.rotation.y += (eyeTurn - rightEye.current.rotation.y) * 0.11;
+      rightEye.current.rotation.x += (eyeTilt - rightEye.current.rotation.x) * 0.11;
+    }
+    if (tongue.current) {
+      tongue.current.scale.x += ((pounce ? 4.8 : hunting ? 1.7 : 0.05) - tongue.current.scale.x) * 0.14;
+      tongue.current.position.z = 0.55 + Math.sin(time * 8) * (pounce ? 0.025 : 0);
+    }
+  });
+
+  const bodyMaterial = {
+    color: "#24956d",
+    roughness: 0.3,
+    metalness: 0.02,
+    clearcoat: 0.62,
+    clearcoatRoughness: 0.2,
+    iridescence: 0.3,
+    iridescenceIOR: 1.38,
+  };
+
+  return (
+    <group ref={root} scale={1.05}>
+      <mesh position={[0, -0.1, 0]} scale={[1.25, 0.58, 0.52]}>
+        <sphereGeometry args={[1, 48, 32]} />
+        <meshPhysicalMaterial {...bodyMaterial} />
+      </mesh>
+
+      <mesh position={[0.9, 0.12, 0.02]} scale={[0.7, 0.48, 0.46]}>
+        <sphereGeometry args={[1, 48, 32]} />
+        <meshPhysicalMaterial {...bodyMaterial} />
+      </mesh>
+
+      <mesh position={[1.38, 0.2, 0.02]} scale={[0.48, 0.39, 0.38]}>
+        <sphereGeometry args={[1, 48, 32]} />
+        <meshPhysicalMaterial color="#2b9f75" roughness={0.28} clearcoat={0.7} iridescence={0.35} />
+      </mesh>
+
+      <Tail />
+
+      {scales.map(([x, y, z], index) => (
+        <mesh key={index} position={[x, y, z + 0.08]} rotation={[0.25, 0, 0]} scale={0.045 + (index % 3) * 0.008}>
+          <icosahedronGeometry args={[1, 2]} />
+          <meshPhysicalMaterial color={index % 4 === 0 ? "#66c58d" : "#1c7659"} roughness={0.42} clearcoat={0.25} />
+        </mesh>
+      ))}
+
+      {([-0.48, 0.48] as const).map((x, i) => (
+        <group key={x} position={[1.22 + x * 0.3, 0.48, x * 0.22]} ref={i === 0 ? leftEye : rightEye}>
+          <mesh scale={[0.23, 0.23, 0.18]}>
+            <sphereGeometry args={[1, 32, 24]} />
+            <meshPhysicalMaterial color="#d6a62e" roughness={0.2} clearcoat={0.55} />
+          </mesh>
+          <mesh position={[0, 0, 0.18]} scale={0.075}>
+            <sphereGeometry args={[1, 24, 18]} />
+            <meshStandardMaterial color="#111" roughness={0.18} />
+          </mesh>
+        </group>
+      ))}
+
+      <mesh position={[1.7, 0.05, 0.04]} rotation={[0, 0, -0.1]}>
+        <sphereGeometry args={[0.22, 24, 18]} />
+        <meshPhysicalMaterial color="#328d66" roughness={0.35} clearcoat={0.5} />
+      </mesh>
+
+      <mesh ref={tongue} position={[1.92, 0.02, 0.56]} scale={[0.05, 0.018, 0.018]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshPhysicalMaterial color="#d66f83" roughness={0.4} />
+      </mesh>
+
+      <mesh position={[0.1, 0.08, 0.51]} rotation={[Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[1.7, 0.08]} />
+        <meshBasicMaterial color="#86c78e" transparent opacity={0.08} />
+      </mesh>
+    </group>
+  );
+}
+
+function Scene() {
+  const pointer = useRef(new THREE.Vector2(0, 0));
+
+  useFrame(({ pointer: p }) => {
+    pointer.current.lerp(new THREE.Vector2(p.x, p.y), 0.08);
+  });
+
+  return (
+    <>
+      <ambientLight intensity={1.5} />
+      <directionalLight position={[3, 5, 4]} intensity={3.2} />
+      <pointLight position={[-3, 1, 2]} intensity={18} distance={8} color="#7cf0b0" />
+      <pointLight position={[3, 0, 1]} intensity={10} distance={7} color="#d7a7ff" />
+      <Leaf />
+      <Chameleon pointer={pointer} />
+    </>
+  );
+}
+
+export function EyeTracker({ className = "" }: { className?: string }) {
+  return (
+    <div className={`relative h-full w-full overflow-visible ${className}`} aria-label="Interactive 3D chameleon">
+      <Canvas
+        dpr={[1, 1.7]}
+        camera={{ position: [0, 0.2, 5.4], fov: 34 }}
+        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       >
-        <img
-          src="/gecko-portfolio.jpg"
-          alt=""
-          draggable={false}
-          className="h-full w-full object-contain object-bottom mix-blend-multiply contrast-[1.05] dark:mix-blend-screen dark:contrast-[1.08] dark:saturate-[1.05]"
-        />
-
-        <span
-          ref={tongue}
-          className="pointer-events-none absolute left-[55%] top-[47%] h-[2px] origin-left rounded-full bg-gradient-to-r from-rose-300/80 to-transparent opacity-0 shadow-[0_0_10px_rgba(251,113,133,.5)]"
-        />
-      </div>
-
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 [opacity:var(--hunt-opacity)]"
-      >
-        <span className="absolute left-[54%] top-[40%] h-2 w-2 rounded-full bg-primary shadow-[0_0_18px_hsl(var(--primary))]" />
-      </div>
+        <Scene />
+      </Canvas>
     </div>
   );
 }
