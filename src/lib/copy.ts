@@ -10,9 +10,9 @@ export const UI: Record<string, L> = {
   bookCall: { fr: "Réserver un appel", en: "Book a call", vi: "Đặt lịch gọi" },
 
   heroKicker: {
-    fr: "Studio Digital Premium — Édition MMXXVI",
-    en: "Premium Digital Studio — Edition MMXXVI",
-    vi: "Studio Digital Cao Cấp — Ấn bản MMXXVI",
+    fr: "Agence digitale premium",
+    en: "Premium Digital Agency",
+    vi: "Agencе kỹ thuật số cao cấp",
   },
   heroEdition: { fr: "Édition MMXXVI", en: "Edition MMXXVI", vi: "Ấn bản MMXXVI" },
   heroReadTime: { fr: "Lecture 4 min", en: "4 min read", vi: "Đọc 4 phút" },
