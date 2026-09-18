@@ -16,6 +16,7 @@ import { WhatsAppWidget } from "../components/site/WhatsAppWidget";
 import { CursorGlow } from "../components/site/CursorGlow";
 import { ThemeSwitcher } from "../components/theme/ThemeSwitcher";
 import { ThemeProvider } from "../components/theme/ThemeProvider";
+import "../lib/more-showcase";
 import appCss from "../styles.css?url";
 
 
@@ -119,11 +120,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
-      // Preconnect to external origins for faster resource loading
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://images.unsplash.com" },
-      // Preload Google Fonts CSS with swap
       {
         rel: "preload",
         as: "style",
@@ -184,7 +183,6 @@ function RootComponent() {
               type="application/ld+json"
               dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
             />
-            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <CursorGlow />
             <Cart />
             <ThemeSwitcher />
