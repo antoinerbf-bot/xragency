@@ -7,14 +7,15 @@ import type { L } from "@/lib/i18n";
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <Link to="/" aria-label="XRAGENCY — Accueil" className={cn("group flex shrink-0 flex-col items-center transition-all duration-300", className)}>
-      <span className="relative flex h-9 w-9 items-center justify-center rounded-full border border-foreground/80 text-foreground transition-all duration-300 group-hover:border-primary group-hover:text-primary sm:h-10 sm:w-10">
-        <span className="absolute h-[1.5px] w-4 rotate-45 rounded-full bg-current" />
-        <span className="absolute h-[1.5px] w-4 -rotate-45 rounded-full bg-current" />
-        <span className="absolute -right-[4px] top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-primary" />
-      </span>
-      <span className="label-mono mt-1 text-[7px] font-semibold uppercase tracking-[0.16em] text-foreground transition-colors group-hover:text-primary sm:text-[8px]">
-        Studio digital premium
+    <Link
+      to="/"
+      aria-label="XRAGENCY — Accueil"
+      className={cn("group flex shrink-0 items-center justify-center", className)}
+    >
+      <span className="relative flex h-10 w-10 items-center justify-center rounded-full border border-foreground/70 text-foreground transition-all duration-300 group-hover:border-primary group-hover:text-primary sm:h-11 sm:w-11">
+        <span className="font-sans text-[18px] font-medium leading-none tracking-[-0.08em]">
+          X<span className="ml-[1px] text-[0.7em] align-[0.16em]">·</span>
+        </span>
       </span>
     </Link>
   );
