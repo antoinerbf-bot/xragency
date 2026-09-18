@@ -6,7 +6,6 @@ import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax, FloatingBadge } from "./primitives";
 import { SurfaceDigital } from "./SurfaceDigital";
-import { Hero3D } from "./Hero3D";
 // import EarthGlobe from "./EarthGlobe"; // Globe removed per user request
 import heroLoop from "@/assets/hero-studio.mp4.asset.json";
 
@@ -68,7 +67,6 @@ export function Hero() {
     <section id="top" className="grain relative min-h-[92dvh] overflow-hidden pt-20 sm:pt-24">
       {/* Surface digitale — network / structure / visibility */}
       <div className="pointer-events-none absolute inset-0 bg-background">
-        <Hero3D />
         <SurfaceDigital className="opacity-90" />
       </div>
       <Parallax speed={0.08} className="absolute inset-0 -top-[8%] h-[116%] pointer-events-none">
@@ -114,7 +112,7 @@ export function Hero() {
         {/* Hero Main Content */}
         <div className="grid items-center gap-10 py-10 lg:grid-cols-12 lg:py-14">
           {/* Left Column: Typography & CTAs */}
-          <Parallax speed={-0.03} className="relative z-10 lg:col-span-8">
+          <Parallax speed={-0.03} className="relative z-10 lg:col-span-7">
             <div
               className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/5 px-4 py-1.5"
               style={{ animation: "ember-rise 0.75s cubic-bezier(0.16,1,0.3,1) 120ms both" }}
@@ -153,15 +151,14 @@ export function Hero() {
               style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 400ms both" }}
             >
               <EmberButton href="#intelligence" className="shadow-lg">
-                XR Intelligence — analyser mon activité
-                <ArrowRight className="h-3.5 w-3.5" />
+                {t(UI.ctaAnalysis)}
               </EmberButton>
 
               <Link
-                to="/work"
+                to="/services"
                 className="label-mono inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-6 py-3.5 text-xs text-foreground transition-all duration-300 hover:border-primary hover:text-primary hover:-translate-y-0.5"
               >
-                Voir nos réalisations
+                Explorer nos 10 services
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
 
@@ -194,11 +191,13 @@ export function Hero() {
           </dl>
 
           <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border/60 py-4 mt-5">
-            <span className="label-mono text-xs text-muted-foreground/70">p. 001 · Studio digital premium</span>
+            <span className="label-mono text-xs text-muted-foreground/70">p. 001 · Studio Principal</span>
             <span className="label-mono hidden text-xs text-muted-foreground/70 md:block">
-              Web · Branding · SEO · Google Maps · Social · IA · WebCare
+              Sites Web · Identité · SEO Domination · Google Maps · Social · IA · Maintenance
             </span>
-            <span className="label-mono text-xs text-primary">XR Intelligence · 01</span>
+            <Link to="/services" className="label-mono text-xs text-primary hover:underline">
+              Consulter le catalogue complet →
+            </Link>
           </div>
         </div>
       </div>
