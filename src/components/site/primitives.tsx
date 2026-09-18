@@ -12,9 +12,9 @@ export function Logo({ className }: { className?: string }) {
       aria-label="XRAGENCY — Accueil"
       className={cn("group flex shrink-0 items-center justify-center", className)}
     >
-      <span className="relative flex h-10 w-10 items-center justify-center rounded-full border border-foreground/70 text-foreground transition-all duration-300 group-hover:border-primary group-hover:text-primary sm:h-11 sm:w-11">
-        <span className="font-sans text-[18px] font-medium leading-none tracking-[-0.08em]">
-          X<span className="ml-[1px] text-[0.7em] align-[0.16em]">·</span>
+      <span className="relative flex h-12 w-12 items-center justify-center rounded-full border-[1.5px] border-foreground text-foreground transition-all duration-300 group-hover:border-primary group-hover:text-primary sm:h-14 sm:w-14">
+        <span className="font-sans text-[30px] font-extrabold leading-none tracking-[-0.09em] sm:text-[34px]">
+          X.
         </span>
       </span>
     </Link>
