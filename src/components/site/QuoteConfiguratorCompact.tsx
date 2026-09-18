@@ -13,7 +13,7 @@ const SECTORS: Sector[] = [
   { id: "commerce", label: "Commerce & marque", detail: "Boutique, retail, e-commerce", goals: ["Vendre davantage", "Améliorer la conversion", "Développer la marque"] },
   { id: "other", label: "Autre activité", detail: "Alexandre adapte le diagnostic à votre métier", goals: ["Développer mon activité", "Professionnaliser mon image", "Construire une présence forte"] },
 ];
-const SERVICES: Choice[] = [
+const SERVICE_CHOICES: Choice[] = [
   { id: "website", label: "Création de site web", detail: "Vitrine, Business, e-commerce, réservation" }, { id: "branding", label: "Branding", detail: "Identité, direction artistique, image" }, { id: "seo", label: "SEO", detail: "Visibilité organique et acquisition Google" }, { id: "maps", label: "Google Maps", detail: "Visibilité locale et recherches de proximité" }, { id: "social", label: "Social Media", detail: "Contenu, animation et présence sociale" }, { id: "maintenance", label: "WebCare", detail: "Corrections, évolutions et suivi du site" },
 ];
 const SITUATIONS: Choice[] = [
