@@ -172,9 +172,9 @@ function WorkPage() {
       <Nav />
 
       <main className="relative z-10">
-        <section className="relative overflow-hidden pt-20 sm:pt-24 lg:min-h-[76vh]">
-          <div className="relative mx-auto grid max-w-[1680px] items-center lg:min-h-[calc(76vh-5rem)] lg:grid-cols-[minmax(280px,0.9fr)_1.15fr]">
-            <div className="relative z-20 px-5 pb-6 pt-6 sm:px-8 lg:px-12 lg:pb-16 lg:pt-8">
+        <section className="relative overflow-hidden pt-20 sm:pt-24 lg:min-h-[48vh]">
+          <div className="relative mx-auto grid max-w-[1680px] items-center lg:min-h-[calc(48vh-5rem)]">
+            <div className="relative z-20 px-5 pb-10 pt-6 sm:px-8 lg:px-12 lg:pb-14 lg:pt-10">
               <p className="label-mono text-[10px] uppercase tracking-[0.32em] text-primary">
                 PORTFOLIO · {SHOWCASE.length}+ WORKS
               </p>
