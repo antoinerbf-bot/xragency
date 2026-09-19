@@ -3,6 +3,7 @@ import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
 import { Intelligence } from "@/components/site/Intelligence";
+import { DigitalAudit } from "@/components/site/DigitalAudit";
 import { HomeServices } from "@/components/site/HomeServices";
 import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
@@ -31,6 +32,7 @@ function Index() {
         <QuoteConfiguratorCompact />
         <HomeServices />
         <Intelligence />
+        <DigitalAudit />
         <Faq />
         <Contact />
       </main>
