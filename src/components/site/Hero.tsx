@@ -153,14 +153,14 @@ export function Hero() {
                 <div className="group sm:-translate-y-1 sm:hover:-translate-y-2 transition-transform duration-500">
                   <EmberButton href="#quote" className="relative w-full justify-center overflow-hidden rounded-2xl py-3.5 shadow-[0_18px_45px_-24px_rgba(0,0,0,.8)]">
                     <span className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
-                    <span className="relative flex items-center gap-2">Lancer mon analyse <ArrowUpRight className="h-3.5 w-3.5" /></span>
+                    <span className="relative flex items-center gap-2">Faire mon devis gratuit <ArrowUpRight className="h-3.5 w-3.5" /></span>
                   </EmberButton>
                 </div>
                 <a href={CONTACT.whatsapp + "?text=" + encodeURIComponent("Bonjour XRAGENCY, je souhaite ma maquette gratuite (valeur 200 €). Je vais vous envoyer mon logo, les éléments que j'ai déjà et le lien de mon site si j'en ai un. Merci de me dire où les envoyer.")} target="_blank" rel="noreferrer" className="group relative overflow-hidden rounded-2xl border border-primary/25 bg-card/60 px-4 py-3 text-left backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-primary/60 hover:shadow-[0_18px_45px_-24px_rgba(0,0,0,.7)] sm:translate-y-2">
                   <span className="absolute -right-5 -top-5 h-16 w-16 rounded-full bg-primary/15 blur-xl transition group-hover:scale-150" />
                   <span className="relative flex items-center gap-2"><FileImage className="h-4 w-4 text-primary" /><span><b className="block text-[10px] uppercase tracking-[.12em]">Maquette gratuite</b><small className="mt-0.5 block text-[9px] text-muted-foreground">Valorisation 200 € · sans engagement</small></span></span>
                 </a>
-                <a href="#audit" target="_blank" rel="noreferrer" className="group relative overflow-hidden rounded-2xl border border-border bg-background/60 px-4 py-3 text-left backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_18px_45px_-24px_rgba(0,0,0,.7)] sm:translate-y-1">
+                <a href="#audit" className="group relative overflow-hidden rounded-2xl border border-border bg-background/60 px-4 py-3 text-left backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_18px_45px_-24px_rgba(0,0,0,.7)] sm:translate-y-1">
                   <span className="absolute -left-5 -bottom-5 h-16 w-16 rounded-full bg-primary/10 blur-xl transition group-hover:scale-150" />
                   <span className="relative flex items-center gap-2"><Search className="h-4 w-4 text-primary" /><span><b className="block text-[10px] uppercase tracking-[.12em]">Audit digital gratuit</b><small className="mt-0.5 block text-[9px] text-muted-foreground">Audit automatique sur mesure · PDF offert</small></span></span>
                 </a>
