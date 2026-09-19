@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { jsPDF } from "jspdf";
 import { ArrowRight, Check, ChevronDown, Globe2, Mail, MessageCircle, RotateCcw, Sparkles } from "lucide-react";
-import { JulieAdvisor } from "./AlexandreAdvisor";
+import { JulieAdvisor } from "./JulieAdvisor";
 
 type Choice = { id: string; label: string; detail: string };
 type Sector = Choice & { goals: string[] };
@@ -32,15 +32,11 @@ const BUDGETS: Choice[] = [
 const DISCOVERY: Choice[] = [
   { id: "google", label: "Google / Maps", detail: "Recherche, SEO ou visibilité locale" }, { id: "social", label: "Instagram / Facebook / TikTok", detail: "Réseaux sociaux et recommandations" }, { id: "referral", label: "Bouche-à-oreille", detail: "Recommandations et réseau" }, { id: "mixed", label: "Un peu de tout", detail: "Acquisition déjà diversifiée" },
 ];
-const SERVICE_ORDER: Record<string, string[]> = { hospitality: ["website", "maps", "social", "seo", "branding", "maintenance"], realestate: ["website", "maps", "branding", "seo", "social", "maintenance"], professional: ["website", "seo", "branding", "maps", "social", "maintenance"], commerce: ["website", "social", "seo", "branding", "maps", "maintenance"], other: ["website", "branding", "seo", "maps", "social", "maintenance"] };
+const SERVICE_ORDER: Record<string, string[]> = { restaurant: ["website", "maps", "social", "seo", "branding", "maintenance"], hotel: ["website", "maps", "seo", "social", "branding", "maintenance"], realestate: ["website", "maps", "branding", "seo", "social", "maintenance"], law: ["website", "seo", "branding", "maps", "social", "maintenance"], finance: ["website", "seo", "branding", "maps", "content", "maintenance"], health: ["website", "maps", "seo", "social", "branding", "maintenance"], architecture: ["website", "branding", "seo", "content", "maps", "maintenance"], luxury: ["website", "branding", "content", "seo", "social", "maintenance"], commerce: ["website", "social", "seo", "branding", "conversion", "maintenance"], tourism: ["website", "maps", "seo", "social", "content", "maintenance"], agency: ["website", "branding", "conversion", "seo", "content", "maintenance"], other: ["website", "branding", "seo", "maps", "social", "maintenance"] };
 const BASE_PRICES: Record<string, number> = { website: 499, branding: 199, seo: 299, maps: 199, social: 499, maintenance: 29 };
 
 const PROFILE_SERVICE_RULES: Record<string, string[]> = {
-  hospitality: ["website", "maps", "seo", "social"],
-  realestate: ["website", "maps", "branding", "seo"],
-  professional: ["website", "seo", "branding", "maps"],
-  commerce: ["website", "social", "seo", "branding"],
-  other: ["website", "seo", "branding", "maps"],
+  restaurant: ["website", "maps", "social", "seo"], hotel: ["website", "maps", "seo", "social"], realestate: ["website", "maps", "branding", "seo"], law: ["website", "seo", "branding", "maps"], finance: ["website", "seo", "branding", "conversion"], health: ["website", "maps", "seo", "social"], architecture: ["website", "branding", "seo", "content"], luxury: ["website", "branding", "content", "seo"], commerce: ["website", "social", "seo", "conversion"], tourism: ["website", "maps", "seo", "social"], agency: ["website", "branding", "conversion", "seo"], other: ["website", "seo", "branding", "maps"],
 };
 
 const WEBSITE_TIERS = {
