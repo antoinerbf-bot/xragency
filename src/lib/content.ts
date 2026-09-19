@@ -2445,7 +2445,7 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
   },
 ];
 
-export const SHOWCASE = [
+const CORE_SHOWCASE = [
   {
     id: "maison-lumiere",
     name: "Maison Lumière",
@@ -2653,10 +2653,710 @@ export const SHOWCASE = [
     metric: "+310% ventes en ligne",
     image:
       "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=85&w=1200",
-  },
+  },\n\n/** Extended portfolio references — a broad cross-sector selection for the portfolio filters */\nconst ADDITIONAL_SHOWCASE = [\n  {
+    id: "reference-1",
+    name: "Maison Aurelia",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorLuxe",
+    services: ["website","branding","maps"],
+    type: { fr: "site luxe", en: "site luxe", vi: "site luxe" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour site luxe : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for site luxe: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho site luxe: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 11 · WEBSITE + BRANDING",
+    image: "https://images.unsplash.com/photo-1605100804763-247f67222fae?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-2",
+    name: "Atelier Riviera",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorHotellerie",
+    services: ["website","booking"],
+    type: { fr: "hôtel boutique", en: "hôtel boutique", vi: "hôtel boutique" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour hôtel boutique : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for hôtel boutique: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho hôtel boutique: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 12 · WEBSITE + BOOKING",
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-3",
+    name: "Maison Sépia",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorGastronomie",
+    services: ["website","maps","ecommerce"],
+    type: { fr: "restaurant gastronomique", en: "restaurant gastronomique", vi: "restaurant gastronomique" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour restaurant gastronomique : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for restaurant gastronomique: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho restaurant gastronomique: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 13 · WEBSITE + MAPS",
+    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-4",
+    name: "Atelier Nocturne",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorMode",
+    services: ["ecommerce","branding","social"],
+    type: { fr: "marque de mode", en: "marque de mode", vi: "marque de mode" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour marque de mode : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for marque de mode: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho marque de mode: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 14 · ECOMMERCE + BRANDING",
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-5",
+    name: "Studio Éclat",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorBeaute",
+    services: ["website","social","strategy"],
+    type: { fr: "institut beauté", en: "institut beauté", vi: "institut beauté" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour institut beauté : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for institut beauté: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho institut beauté: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 15 · WEBSITE + SOCIAL",
+    image: "https://images.unsplash.com/photo-1596462502278-27bfdc403398?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-6",
+    name: "Véloréa Motors",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorAuto",
+    services: ["website","conversion","ai"],
+    type: { fr: "concession automobile", en: "concession automobile", vi: "concession automobile" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour concession automobile : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for concession automobile: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho concession automobile: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 16 · WEBSITE + CONVERSION",
+    image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-7",
+    name: "Forma Atelier",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorArchitecture",
+    services: ["website","branding","conversion"],
+    type: { fr: "cabinet d’architecture", en: "cabinet d’architecture", vi: "cabinet d’architecture" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour cabinet d’architecture : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for cabinet d’architecture: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho cabinet d’architecture: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 17 · WEBSITE + BRANDING",
+    image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-8",
+    name: "Rive & Pierre",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorImmobilier",
+    services: ["website","seo"],
+    type: { fr: "agence immobilière", en: "agence immobilière", vi: "agence immobilière" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour agence immobilière : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for agence immobilière: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho agence immobilière: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 18 · WEBSITE + SEO",
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-9",
+    name: "Northstar Executive",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorCoaching",
+    services: ["website","conversion","branding"],
+    type: { fr: "cabinet de coaching", en: "cabinet de coaching", vi: "cabinet de coaching" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour cabinet de coaching : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for cabinet de coaching: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho cabinet de coaching: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 19 · WEBSITE + CONVERSION",
+    image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-10",
+    name: "Maison Terre",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorArtisanat",
+    services: ["ecommerce","branding","seo"],
+    type: { fr: "atelier artisanal", en: "atelier artisanal", vi: "atelier artisanal" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour atelier artisanal : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for atelier artisanal: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho atelier artisanal: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 20 · ECOMMERCE + BRANDING",
+    image: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-11",
+    name: "Clinique Horizon",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorSante",
+    services: ["website","seo","maps"],
+    type: { fr: "clinique privée", en: "clinique privée", vi: "clinique privée" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour clinique privée : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for clinique privée: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho clinique privée: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 21 · WEBSITE + SEO",
+    image: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-12",
+    name: "Kinetik Cloud",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorTech",
+    services: ["website","ai","booking"],
+    type: { fr: "SaaS B2B", en: "SaaS B2B", vi: "SaaS B2B" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour SaaS B2B : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for SaaS B2B: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho SaaS B2B: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 22 · WEBSITE + AI",
+    image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-13",
+    name: "Ardent Capital",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorFinance",
+    services: ["website","seo","ecommerce"],
+    type: { fr: "cabinet financier", en: "cabinet financier", vi: "cabinet financier" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour cabinet financier : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for cabinet financier: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho cabinet financier: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 23 · WEBSITE + SEO",
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-14",
+    name: "Oasis Escapes",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorTourisme",
+    services: ["website","booking","social"],
+    type: { fr: "agence de voyage", en: "agence de voyage", vi: "agence de voyage" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour agence de voyage : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for agence de voyage: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho agence de voyage: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 24 · WEBSITE + BOOKING",
+    image: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-15",
+    name: "Cabinet Valmont",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorJuridique",
+    services: ["website","seo","strategy"],
+    type: { fr: "cabinet juridique", en: "cabinet juridique", vi: "cabinet juridique" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour cabinet juridique : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for cabinet juridique: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho cabinet juridique: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 25 · WEBSITE + SEO",
+    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-16",
+    name: "Institut Atlas",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorEducation",
+    services: ["website","conversion","ai"],
+    type: { fr: "école privée", en: "école privée", vi: "école privée" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour école privée : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for école privée: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho école privée: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 26 · WEBSITE + CONVERSION",
+    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-17",
+    name: "Pulse Athletics",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorSport",
+    services: ["website","social","conversion"],
+    type: { fr: "club sportif", en: "club sportif", vi: "club sportif" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour club sportif : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for club sportif: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho club sportif: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 27 · WEBSITE + SOCIAL",
+    image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-18",
+    name: "Villa North",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorRealEstate",
+    services: ["website","branding"],
+    type: { fr: "promoteur immobilier", en: "promoteur immobilier", vi: "promoteur immobilier" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour promoteur immobilier : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for promoteur immobilier: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho promoteur immobilier: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 28 · WEBSITE + BRANDING",
+    image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-19",
+    name: "Braise 21",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorRestaurant",
+    services: ["website","maps","branding"],
+    type: { fr: "restaurant contemporain", en: "restaurant contemporain", vi: "restaurant contemporain" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour restaurant contemporain : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for restaurant contemporain: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho restaurant contemporain: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 29 · WEBSITE + MAPS",
+    image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-20",
+    name: "Nexa Conseil",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorServices",
+    services: ["website","branding","seo"],
+    type: { fr: "société de conseil", en: "société de conseil", vi: "société de conseil" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour société de conseil : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for société de conseil: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho société de conseil: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 30 · WEBSITE + BRANDING",
+    image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-21",
+    name: "Maison Aurelia",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorLuxe",
+    services: ["website","branding","maps"],
+    type: { fr: "site luxe", en: "site luxe", vi: "site luxe" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour site luxe : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for site luxe: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho site luxe: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 31 · WEBSITE + BRANDING",
+    image: "https://images.unsplash.com/photo-1605100804763-247f67222fae?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-22",
+    name: "Atelier Riviera",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorHotellerie",
+    services: ["website","booking"],
+    type: { fr: "hôtel boutique", en: "hôtel boutique", vi: "hôtel boutique" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour hôtel boutique : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for hôtel boutique: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho hôtel boutique: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 32 · WEBSITE + BOOKING",
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-23",
+    name: "Maison Sépia",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorGastronomie",
+    services: ["website","maps","ecommerce"],
+    type: { fr: "restaurant gastronomique", en: "restaurant gastronomique", vi: "restaurant gastronomique" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour restaurant gastronomique : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for restaurant gastronomique: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho restaurant gastronomique: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 33 · WEBSITE + MAPS",
+    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-24",
+    name: "Atelier Nocturne",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorMode",
+    services: ["ecommerce","branding","social"],
+    type: { fr: "marque de mode", en: "marque de mode", vi: "marque de mode" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour marque de mode : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for marque de mode: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho marque de mode: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 34 · ECOMMERCE + BRANDING",
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-25",
+    name: "Studio Éclat",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorBeaute",
+    services: ["website","social","strategy"],
+    type: { fr: "institut beauté", en: "institut beauté", vi: "institut beauté" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour institut beauté : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for institut beauté: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho institut beauté: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 35 · WEBSITE + SOCIAL",
+    image: "https://images.unsplash.com/photo-1596462502278-27bfdc403398?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-26",
+    name: "Véloréa Motors",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorAuto",
+    services: ["website","conversion","ai"],
+    type: { fr: "concession automobile", en: "concession automobile", vi: "concession automobile" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour concession automobile : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for concession automobile: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho concession automobile: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 36 · WEBSITE + CONVERSION",
+    image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-27",
+    name: "Forma Atelier",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorArchitecture",
+    services: ["website","branding","conversion"],
+    type: { fr: "cabinet d’architecture", en: "cabinet d’architecture", vi: "cabinet d’architecture" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour cabinet d’architecture : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for cabinet d’architecture: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho cabinet d’architecture: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 37 · WEBSITE + BRANDING",
+    image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-28",
+    name: "Rive & Pierre",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorImmobilier",
+    services: ["website","seo"],
+    type: { fr: "agence immobilière", en: "agence immobilière", vi: "agence immobilière" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour agence immobilière : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for agence immobilière: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho agence immobilière: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 38 · WEBSITE + SEO",
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-29",
+    name: "Northstar Executive",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorCoaching",
+    services: ["website","conversion","branding"],
+    type: { fr: "cabinet de coaching", en: "cabinet de coaching", vi: "cabinet de coaching" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour cabinet de coaching : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for cabinet de coaching: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho cabinet de coaching: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 39 · WEBSITE + CONVERSION",
+    image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-30",
+    name: "Maison Terre",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorArtisanat",
+    services: ["ecommerce","branding","seo"],
+    type: { fr: "atelier artisanal", en: "atelier artisanal", vi: "atelier artisanal" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour atelier artisanal : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for atelier artisanal: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho atelier artisanal: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 40 · ECOMMERCE + BRANDING",
+    image: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-31",
+    name: "Clinique Horizon",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorSante",
+    services: ["website","seo","maps"],
+    type: { fr: "clinique privée", en: "clinique privée", vi: "clinique privée" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour clinique privée : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for clinique privée: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho clinique privée: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 41 · WEBSITE + SEO",
+    image: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-32",
+    name: "Kinetik Cloud",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorTech",
+    services: ["website","ai","booking"],
+    type: { fr: "SaaS B2B", en: "SaaS B2B", vi: "SaaS B2B" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour SaaS B2B : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for SaaS B2B: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho SaaS B2B: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 42 · WEBSITE + AI",
+    image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-33",
+    name: "Ardent Capital",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorFinance",
+    services: ["website","seo","ecommerce"],
+    type: { fr: "cabinet financier", en: "cabinet financier", vi: "cabinet financier" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour cabinet financier : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for cabinet financier: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho cabinet financier: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 43 · WEBSITE + SEO",
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-34",
+    name: "Oasis Escapes",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorTourisme",
+    services: ["website","booking","social"],
+    type: { fr: "agence de voyage", en: "agence de voyage", vi: "agence de voyage" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour agence de voyage : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for agence de voyage: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho agence de voyage: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 44 · WEBSITE + BOOKING",
+    image: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-35",
+    name: "Cabinet Valmont",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorJuridique",
+    services: ["website","seo","strategy"],
+    type: { fr: "cabinet juridique", en: "cabinet juridique", vi: "cabinet juridique" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour cabinet juridique : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for cabinet juridique: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho cabinet juridique: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 45 · WEBSITE + SEO",
+    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-36",
+    name: "Institut Atlas",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorEducation",
+    services: ["website","conversion","ai"],
+    type: { fr: "école privée", en: "école privée", vi: "école privée" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour école privée : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for école privée: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho école privée: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 46 · WEBSITE + CONVERSION",
+    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-37",
+    name: "Pulse Athletics",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorSport",
+    services: ["website","social","conversion"],
+    type: { fr: "club sportif", en: "club sportif", vi: "club sportif" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour club sportif : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for club sportif: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho club sportif: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 47 · WEBSITE + SOCIAL",
+    image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-38",
+    name: "Villa North",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorRealEstate",
+    services: ["website","branding"],
+    type: { fr: "promoteur immobilier", en: "promoteur immobilier", vi: "promoteur immobilier" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour promoteur immobilier : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for promoteur immobilier: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho promoteur immobilier: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 48 · WEBSITE + BRANDING",
+    image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-39",
+    name: "Braise 21",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorRestaurant",
+    services: ["website","maps","branding"],
+    type: { fr: "restaurant contemporain", en: "restaurant contemporain", vi: "restaurant contemporain" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour restaurant contemporain : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for restaurant contemporain: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho restaurant contemporain: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 49 · WEBSITE + MAPS",
+    image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-40",
+    name: "Nexa Conseil",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorServices",
+    services: ["website","branding","seo"],
+    type: { fr: "société de conseil", en: "société de conseil", vi: "société de conseil" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour société de conseil : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for société de conseil: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho société de conseil: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 50 · WEBSITE + BRANDING",
+    image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-41",
+    name: "Maison Aurelia",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorLuxe",
+    services: ["website","branding","maps"],
+    type: { fr: "site luxe", en: "site luxe", vi: "site luxe" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour site luxe : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for site luxe: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho site luxe: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 51 · WEBSITE + BRANDING",
+    image: "https://images.unsplash.com/photo-1605100804763-247f67222fae?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-42",
+    name: "Atelier Riviera",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorHotellerie",
+    services: ["website","booking"],
+    type: { fr: "hôtel boutique", en: "hôtel boutique", vi: "hôtel boutique" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour hôtel boutique : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for hôtel boutique: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho hôtel boutique: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 52 · WEBSITE + BOOKING",
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-43",
+    name: "Maison Sépia",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorGastronomie",
+    services: ["website","maps","ecommerce"],
+    type: { fr: "restaurant gastronomique", en: "restaurant gastronomique", vi: "restaurant gastronomique" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour restaurant gastronomique : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for restaurant gastronomique: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho restaurant gastronomique: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 53 · WEBSITE + MAPS",
+    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-44",
+    name: "Atelier Nocturne",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorMode",
+    services: ["ecommerce","branding","social"],
+    type: { fr: "marque de mode", en: "marque de mode", vi: "marque de mode" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour marque de mode : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for marque de mode: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho marque de mode: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 54 · ECOMMERCE + BRANDING",
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-45",
+    name: "Studio Éclat",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorBeaute",
+    services: ["website","social","strategy"],
+    type: { fr: "institut beauté", en: "institut beauté", vi: "institut beauté" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour institut beauté : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for institut beauté: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho institut beauté: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 55 · WEBSITE + SOCIAL",
+    image: "https://images.unsplash.com/photo-1596462502278-27bfdc403398?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-46",
+    name: "Véloréa Motors",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorAuto",
+    services: ["website","conversion","ai"],
+    type: { fr: "concession automobile", en: "concession automobile", vi: "concession automobile" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour concession automobile : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for concession automobile: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho concession automobile: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 56 · WEBSITE + CONVERSION",
+    image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-47",
+    name: "Forma Atelier",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorArchitecture",
+    services: ["website","branding","conversion"],
+    type: { fr: "cabinet d’architecture", en: "cabinet d’architecture", vi: "cabinet d’architecture" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour cabinet d’architecture : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for cabinet d’architecture: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho cabinet d’architecture: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 57 · WEBSITE + BRANDING",
+    image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-48",
+    name: "Rive & Pierre",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorImmobilier",
+    services: ["website","seo"],
+    type: { fr: "agence immobilière", en: "agence immobilière", vi: "agence immobilière" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour agence immobilière : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for agence immobilière: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho agence immobilière: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 58 · WEBSITE + SEO",
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-49",
+    name: "Northstar Executive",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorCoaching",
+    services: ["website","conversion","branding"],
+    type: { fr: "cabinet de coaching", en: "cabinet de coaching", vi: "cabinet de coaching" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour cabinet de coaching : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for cabinet de coaching: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho cabinet de coaching: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 59 · WEBSITE + CONVERSION",
+    image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=85&w=1200"
+  },\n  {
+    id: "reference-50",
+    name: "Maison Terre",
+    url: "https://xragency.vercel.app",
+    sectorKey: "sectorArtisanat",
+    services: ["ecommerce","branding","seo"],
+    type: { fr: "atelier artisanal", en: "atelier artisanal", vi: "atelier artisanal" },
+    desc: {
+      fr: "Refonte digitale sur-mesure pour atelier artisanal : direction artistique, parcours mobile et architecture orientée conversion.",
+      en: "Bespoke digital redesign for atelier artisanal: art direction, mobile journey and conversion-focused architecture.",
+      vi: "Thiết kế lại số riêng cho atelier artisanal: định hướng nghệ thuật, hành trình mobile và kiến trúc tối ưu chuyển đổi."
+    },
+    metric: "REF 60 · ECOMMERCE + BRANDING",
+    image: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&q=85&w=1200"
+  }\n];
 ];
 
-/** Legacy alias — keep PORTFOLIO pointing to showcase for backward compatibility */
+export const SHOWCASE = [...CORE_SHOWCASE, ...ADDITIONAL_SHOWCASE];\n\n/** Legacy alias — keep PORTFOLIO pointing to showcase for backward compatibility */
 export const PORTFOLIO = SHOWCASE.map((s, i) => ({
   plate: String(i + 1).padStart(2, "0"),
   name: s.name,
