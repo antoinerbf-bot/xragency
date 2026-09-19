@@ -7,7 +7,7 @@ function AlexandrePortrait() {
 
   return (
     <div
-      className="relative h-[92px] w-[78px] cursor-pointer sm:h-[108px] sm:w-[92px]"
+      className="relative h-[88px] w-[76px] cursor-pointer sm:h-[102px] sm:w-[88px]"
       onMouseMove={(e) => {
         const r = e.currentTarget.getBoundingClientRect();
         setLook({
@@ -24,7 +24,7 @@ function AlexandrePortrait() {
     >
       <div className="absolute inset-0 rounded-full bg-primary/[0.08] blur-2xl" />
 
-      <svg viewBox="0 0 112 132" className="relative h-full w-full overflow-visible drop-shadow-[0_12px_22px_rgba(0,0,0,.22)]">
+      <svg viewBox="0 0 112 132" className="relative h-full w-full overflow-visible drop-shadow-[0_10px_18px_rgba(0,0,0,.18)]">
         <defs>
           <linearGradient id="jacket" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0" stopColor="hsl(var(--foreground) / .22)" />
@@ -68,17 +68,17 @@ function AlexandrePortrait() {
         {/* ears */}
         <ellipse cx="39.5" cy="57" rx="5.5" ry="8.5" fill="url(#skin)" />
         <ellipse cx="72.5" cy="57" rx="5.5" ry="8.5" fill="url(#skin)" />
-        <path d="M38 56c3-3 4 1 1 4M74 56c-3-3-4 1-1 4" fill="none" stroke="#9b6758" strokeWidth="1" opacity=".65" />
+        <path d="M38 56c3-3 4 1 1 4M74 56c-3-3-4 1-1 4" fill="none" stroke="#8c5a4e" strokeWidth=".7" opacity=".5" />
 
         {/* face */}
-        <path d="M40 32c5-12 28-13 34 0v28c0 17-8 28-17 31-9-3-17-14-17-31Z" fill="url(#skin)" stroke="#9f6c5b" strokeOpacity=".35" />
+        <path d="M40 32c5-12 28-13 34 0v28c0 17-8 28-17 31-9-3-17-14-17-31Z" fill="url(#skin)" stroke="#8b5d50" strokeOpacity=".18" />
         <path d="M40 32c6-14 30-15 35 2l-2 8c-5-6-10-8-17-8-6 0-11 2-16 6Z" fill="url(#hair)" />
         <path d="M44 34c5-7 18-11 27-2" fill="none" stroke="#363840" strokeWidth="2" strokeLinecap="round" opacity=".7" />
 
         {/* subtle facial planes */}
-        <path d="M56 43c-2 7-3 11-2 15 1 2 3 3 5 2" fill="none" stroke="#a96f5e" strokeWidth="1.2" opacity=".55" />
-        <path d="M48 67c5 3 11 3 16 0" fill="none" stroke="#9d6254" strokeWidth="1.2" opacity=".65" />
-        <path d="M45 54c3-2 7-2 10 0M59 54c3-2 7-2 10 0" fill="none" stroke="#714b42" strokeWidth="1.2" opacity=".55" />
+        <path d="M56 43c-2 7-3 11-2 15 1 2 3 3 5 2" fill="none" stroke="#8e5d51" strokeWidth=".8" opacity=".45" />
+        <path d="M48 67c5 3 11 3 16 0" fill="none" stroke="#865448" strokeWidth=".9" opacity=".55" />
+        <path d="M45 54c3-2 7-2 10 0M59 54c3-2 7-2 10 0" fill="none" stroke="#68463f" strokeWidth=".9" opacity=".5" />
 
         {/* eyes with cursor-following pupils */}
         <ellipse cx="50.5" cy="56" rx="4.3" ry="2.6" fill="#f7f5ef" />
@@ -89,7 +89,7 @@ function AlexandrePortrait() {
         <circle cx={61.9 + look.x * 1.5} cy={55.4 + look.y * .8} r=".45" fill="white" />
 
         {/* eyebrows */}
-        <path d="M46 50c3-2 6-2 9-.5M58 49.5c3-1.5 6-1.5 9 .5" fill="none" stroke="#343238" strokeWidth="2" strokeLinecap="round" />
+        <path d="M46 50c3-2 6-2 9-.5M58 49.5c3-1.5 6-1.5 9 .5" fill="none" stroke="#25252a" strokeWidth="1.5" strokeLinecap="round" />
 
         {/* mouth / speech reaction */}
         <path
@@ -119,7 +119,7 @@ function AlexandrePortrait() {
 
 export function AlexandreAdvisor() {
   return (
-    <div className="group relative mx-auto flex h-24 w-24 items-center justify-center sm:h-28 sm:w-28">
+    <div className="group relative mx-auto flex h-[88px] w-[88px] items-center justify-center sm:h-[102px] sm:w-[102px]">
       <div className="pointer-events-none absolute inset-4 rounded-full bg-primary/[0.07] blur-2xl transition duration-700 group-hover:scale-110" />
       
       <AlexandrePortrait />
