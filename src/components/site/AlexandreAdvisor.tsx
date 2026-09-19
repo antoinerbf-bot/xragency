@@ -29,12 +29,12 @@ function JuliePortrait() {
   );
 }
 
-export function JulieAdvisor() {
+export function JulieAdvisor({ mood = "calm" }: { mood?: "calm" | "focus" | "recommend" | "success" }) {
   return (
-    <div className="group relative mx-auto flex h-[112px] w-[112px] items-center justify-center sm:h-[132px] sm:w-[132px]">
+    <div className="group relative mx-auto flex h-[154px] w-[126px] items-center justify-center sm:h-[168px] sm:w-[136px]">
       <div className="pointer-events-none absolute inset-2 rounded-full bg-primary/[0.09] blur-2xl transition duration-700 group-hover:scale-110" />
-      <div className="absolute -right-1 top-2 rounded-full border border-primary/20 bg-background/80 px-2 py-1 label-mono text-[7px] text-primary shadow-sm backdrop-blur">LIVE</div>
-      <JuliePortrait />
+      <div className="absolute -right-1 top-1 rounded-full border border-primary/20 bg-background/85 px-2 py-1 label-mono text-[7px] text-primary shadow-sm backdrop-blur">{mood === "success" ? "PRÊTE" : mood === "recommend" ? "CONSEIL" : mood === "focus" ? "ANALYSE" : "LIVE"}</div>
+      <div className={mood === "success" ? "translate-y-[-2px] transition duration-500" : mood === "recommend" ? "translate-x-[2px] transition duration-500" : "transition duration-500"}><JuliePortrait /></div>
     </div>
   );
 }
@@ -48,7 +48,7 @@ export function JulieIntro({ onStart }: { onStart: () => void }) {
         <div>
           <div className="mb-1.5 flex items-center gap-1.5 text-[8px] font-semibold uppercase tracking-[.2em] text-primary"><Sparkles className="h-3 w-3" /> XR Intelligence · Julie</div>
           <h2 className="display-serif text-2xl leading-none tracking-tight sm:text-3xl">Votre conseillère digitale.</h2>
-          <p className="mt-2 max-w-xl text-[11px] leading-5 text-muted-foreground sm:text-xs">Il analyse votre activité, vos objectifs et vos priorités pour construire un parcours clair — sans vous noyer dans une liste de services.</p>
+          <p className="mt-2 max-w-xl text-[11px] leading-5 text-muted-foreground sm:text-xs">Elle analyse votre activité, vos objectifs et vos priorités pour construire un parcours clair — sans vous noyer dans une liste de services.</p>
           <div className="mt-3 flex flex-wrap gap-1.5"><span className="inline-flex items-center gap-1 rounded-full border border-border bg-background/55 px-2 py-1 text-[8px] text-muted-foreground"><Activity className="h-3 w-3 text-primary"/> Analyse en direct</span><span className="inline-flex items-center gap-1 rounded-full border border-border bg-background/55 px-2 py-1 text-[8px] text-muted-foreground"><ShieldCheck className="h-3 w-3 text-primary"/> Recommandation sur mesure</span></div>
         </div>
         <button type="button" onClick={onStart} className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-[8px] font-semibold uppercase tracking-[.13em] text-primary-foreground shadow-[0_12px_35px_-18px_hsl(var(--primary)/.8)] transition hover:-translate-y-0.5 hover:shadow-lg"><MessageCircle className="h-3 w-3" /> Commencer <ArrowRight className="h-3 w-3" /></button>
