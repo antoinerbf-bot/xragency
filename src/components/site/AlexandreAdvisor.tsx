@@ -1,13 +1,13 @@
 import { ArrowRight, MessageCircle, Sparkles } from "lucide-react";
 import { useState } from "react";
 
-function BotFace() {
+function AlexandrePortrait() {
   const [look, setLook] = useState({ x: 0, y: 0 });
   const [talking, setTalking] = useState(false);
 
   return (
     <div
-      className="relative h-20 w-20 cursor-pointer sm:h-24 sm:w-24"
+      className="relative h-[112px] w-[96px] cursor-pointer sm:h-[132px] sm:w-[112px]"
       onMouseMove={(e) => {
         const r = e.currentTarget.getBoundingClientRect();
         setLook({
@@ -22,33 +22,94 @@ function BotFace() {
       }}
       aria-label="Interagir avec Alexandre"
     >
-      <div className="absolute inset-0 rounded-[28%] border border-white/15 bg-gradient-to-br from-white/[0.16] via-card to-primary/[0.08] shadow-[0_16px_45px_-28px_rgba(0,0,0,.95)] backdrop-blur-xl transition-transform duration-500 hover:-translate-y-0.5">
-        <div className="absolute inset-x-3 top-2 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-        <div className="absolute left-1/2 top-[-7px] h-3 w-px -translate-x-1/2 bg-primary/50">
-          <span className="absolute -top-1 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-primary shadow-[0_0_10px_hsl(var(--primary))]" />
-        </div>
-        <div
-          className="absolute left-1/2 top-[43%] flex -translate-x-1/2 -translate-y-1/2 gap-3"
-          style={{ transform: `translate(calc(-50% + ${look.x * 3}px), calc(-50% + ${look.y * 2}px))` }}
-        >
-          <span className="h-2.5 w-2.5 rounded-full bg-foreground/90 shadow-[0_0_9px_rgba(255,255,255,.16)]" />
-          <span className="h-2.5 w-2.5 rounded-full bg-foreground/90 shadow-[0_0_9px_rgba(255,255,255,.16)]" />
-        </div>
-        <div className={`absolute bottom-3 left-1/2 h-px -translate-x-1/2 bg-primary/70 transition-all duration-200 ${talking ? "w-8 shadow-[0_0_12px_hsl(var(--primary))]" : "w-5"}`} />
-      </div>
-      <span className="absolute left-[-3px] top-1/2 h-4 w-1 -translate-y-1/2 rounded-full bg-white/10" />
-      <span className="absolute right-[-3px] top-1/2 h-4 w-1 -translate-y-1/2 rounded-full bg-white/10" />
-    </div>
-  );
-}
+      <div className="absolute inset-0 rounded-full bg-primary/[0.08] blur-2xl" />
 
-export function AlexandreAdvisor() {
-  return (
-    <div className="group relative mx-auto flex h-24 w-28 items-center justify-center sm:h-28 sm:w-32">
-      <div className="pointer-events-none absolute inset-5 rounded-full bg-primary/[0.08] blur-2xl transition duration-700 group-hover:scale-110" />
-      <div className="pointer-events-none absolute inset-2 rounded-full border border-primary/10 opacity-60 [animation:spin_24s_linear_infinite]" />
-      <BotFace />
-      <div className="absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-full border border-white/10 bg-background/80 px-2 py-0.5 backdrop-blur">
+      <svg viewBox="0 0 112 132" className="relative h-full w-full overflow-visible drop-shadow-[0_18px_28px_rgba(0,0,0,.28)]">
+        <defs>
+          <linearGradient id="jacket" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="hsl(var(--foreground) / .22)" />
+            <stop offset=".5" stopColor="hsl(var(--card) / .92)" />
+            <stop offset="1" stopColor="hsl(var(--primary) / .16)" />
+          </linearGradient>
+          <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#f0c5a4" />
+            <stop offset=".55" stopColor="#d99d7d" />
+            <stop offset="1" stopColor="#b9785e" />
+          </linearGradient>
+          <linearGradient id="hair" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#22242a" />
+            <stop offset=".7" stopColor="#090a0d" />
+            <stop offset="1" stopColor="#000" />
+          </linearGradient>
+          <linearGradient id="shirt" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#f5f3ee" />
+            <stop offset="1" stopColor="#c8c5bd" />
+          </linearGradient>
+          <radialGradient id="faceLight" cx=".38" cy=".28" r=".8">
+            <stop offset="0" stopColor="#fff" stopOpacity=".28" />
+            <stop offset=".55" stopColor="#fff" stopOpacity=".04" />
+            <stop offset="1" stopColor="#000" stopOpacity=".16" />
+          </radialGradient>
+          <filter id="soft">
+            <feGaussianBlur stdDeviation="1.8" />
+          </filter>
+        </defs>
+
+        {/* shoulders / tailored jacket */}
+        <path d="M18 128c2-22 13-31 30-35h16c17 4 28 13 30 35Z" fill="url(#jacket)" stroke="hsl(var(--foreground) / .12)" strokeWidth="1" />
+        <path d="M44 96l12 17 12-17-5-7H49Z" fill="url(#shirt)" opacity=".95" />
+        <path d="M56 111l-6-13 6-6 6 6Z" fill="hsl(var(--primary) / .7)" opacity=".9" />
+        <path d="M27 105c8-7 13-9 19-10M85 105c-8-7-13-9-19-10" fill="none" stroke="hsl(var(--foreground) / .1)" strokeWidth="1" />
+
+        {/* neck */}
+        <path d="M47 87v12c2 5 7 8 9 8s7-3 9-8V87Z" fill="url(#skin)" />
+        <path d="M47 88c3 5 6 7 9 7s7-2 9-7c-1 9-5 13-9 13s-8-4-9-13Z" fill="#8d5b4a" opacity=".18" />
+
+        {/* ears */}
+        <ellipse cx="39.5" cy="57" rx="5.5" ry="8.5" fill="url(#skin)" />
+        <ellipse cx="72.5" cy="57" rx="5.5" ry="8.5" fill="url(#skin)" />
+        <path d="M38 56c3-3 4 1 1 4M74 56c-3-3-4 1-1 4" fill="none" stroke="#9b6758" strokeWidth="1" opacity=".65" />
+
+        {/* face */}
+        <path d="M40 32c5-12 28-13 34 0v28c0 17-8 28-17 31-9-3-17-14-17-31Z" fill="url(#skin)" stroke="#9f6c5b" strokeOpacity=".35" />
+        <path d="M40 32c6-14 30-15 35 2l-2 8c-5-6-10-8-17-8-6 0-11 2-16 6Z" fill="url(#hair)" />
+        <path d="M44 34c5-7 18-11 27-2" fill="none" stroke="#363840" strokeWidth="2" strokeLinecap="round" opacity=".7" />
+
+        {/* subtle facial planes */}
+        <path d="M56 43c-2 7-3 11-2 15 1 2 3 3 5 2" fill="none" stroke="#a96f5e" strokeWidth="1.2" opacity=".55" />
+        <path d="M48 67c5 3 11 3 16 0" fill="none" stroke="#9d6254" strokeWidth="1.2" opacity=".65" />
+        <path d="M45 54c3-2 7-2 10 0M59 54c3-2 7-2 10 0" fill="none" stroke="#714b42" strokeWidth="1.2" opacity=".55" />
+
+        {/* eyes with cursor-following pupils */}
+        <ellipse cx="50.5" cy="56" rx="4.3" ry="2.6" fill="#f7f5ef" />
+        <ellipse cx="61.5" cy="56" rx="4.3" ry="2.6" fill="#f7f5ef" />
+        <circle cx={50.5 + look.x * 1.5} cy={56 + look.y * .8} r="1.7" fill="#16181d" />
+        <circle cx={61.5 + look.x * 1.5} cy={56 + look.y * .8} r="1.7" fill="#16181d" />
+        <circle cx={50.9 + look.x * 1.5} cy={55.4 + look.y * .8} r=".45" fill="white" />
+        <circle cx={61.9 + look.x * 1.5} cy={55.4 + look.y * .8} r=".45" fill="white" />
+
+        {/* eyebrows */}
+        <path d="M46 50c3-2 6-2 9-.5M58 49.5c3-1.5 6-1.5 9 .5" fill="none" stroke="#343238" strokeWidth="2" strokeLinecap="round" />
+
+        {/* mouth / speech reaction */}
+        <path
+          d={talking ? "M52 72c3 3 7 3 10 0" : "M52 72c3 1.2 7 1.2 10 0"}
+          fill="none"
+          stroke={talking ? "hsl(var(--primary))" : "#774a40"}
+          strokeWidth={talking ? "2" : "1.4"}
+          strokeLinecap="round"
+        />
+
+        {/* ear device / AI detail */}
+        <circle cx="74" cy="61" r="2.2" fill="hsl(var(--primary))" opacity=".85" />
+        <circle cx="74" cy="61" r="4.2" fill="none" stroke="hsl(var(--primary) / .25)" strokeWidth=".7" />
+        <path d="M76 62c4 2 5 4 5 7" fill="none" stroke="hsl(var(--primary) / .35)" strokeWidth=".8" />
+
+        {/* soft rim light */}
+        <path d="M42 39c-4 9-4 26 1 37" fill="none" stroke="white" strokeOpacity=".14" strokeWidth="1.5" filter="url(#soft)" />
+      </svg>
+
+      <div className="absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-full border border-white/10 bg-background/85 px-2 py-0.5 backdrop-blur-md">
         <span className="h-1 w-1 animate-pulse rounded-full bg-emerald-400" />
         <span className="text-[6px] uppercase tracking-[.14em] text-muted-foreground">Alexandre · IA</span>
       </div>
@@ -56,16 +117,36 @@ export function AlexandreAdvisor() {
   );
 }
 
+export function AlexandreAdvisor() {
+  return (
+    <div className="group relative mx-auto flex h-28 w-28 items-center justify-center sm:h-32 sm:w-32">
+      <div className="pointer-events-none absolute inset-4 rounded-full bg-primary/[0.07] blur-2xl transition duration-700 group-hover:scale-110" />
+      <div className="pointer-events-none absolute inset-2 rounded-full border border-primary/10 opacity-50 [animation:spin_30s_linear_infinite]" />
+      <AlexandrePortrait />
+    </div>
+  );
+}
+
 export function AlexandreIntro({ onStart }: { onStart: () => void }) {
   return (
-    <div className="group grid items-center gap-4 rounded-2xl border border-primary/15 bg-card/55 p-4 shadow-[0_20px_60px_-40px_rgba(0,0,0,.9)] backdrop-blur-xl sm:grid-cols-[110px_1fr_auto] sm:p-5">
+    <div className="group grid items-center gap-4 rounded-2xl border border-primary/15 bg-card/55 p-4 shadow-[0_20px_60px_-40px_rgba(0,0,0,.9)] backdrop-blur-xl sm:grid-cols-[130px_1fr_auto] sm:p-5">
       <AlexandreAdvisor />
       <div>
-        <div className="mb-1.5 flex items-center gap-1.5 text-[8px] font-semibold uppercase tracking-[.2em] text-primary"><Sparkles className="h-3 w-3" /> XR Intelligence</div>
+        <div className="mb-1.5 flex items-center gap-1.5 text-[8px] font-semibold uppercase tracking-[.2em] text-primary">
+          <Sparkles className="h-3 w-3" /> XR Intelligence
+        </div>
         <h2 className="display-serif text-2xl leading-none tracking-tight sm:text-3xl">Parlez avec Alexandre.</h2>
-        <p className="mt-2 max-w-xl text-[11px] leading-4.5 text-muted-foreground sm:text-xs">Un assistant discret vous guide vers une configuration cohérente.</p>
+        <p className="mt-2 max-w-xl text-[11px] leading-4.5 text-muted-foreground sm:text-xs">
+          Un conseiller digital vivant vous guide vers une configuration cohérente.
+        </p>
       </div>
-      <button type="button" onClick={onStart} className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-[8px] font-semibold uppercase tracking-[.13em] text-primary-foreground shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"><MessageCircle className="h-3 w-3" /> Discuter avec Alexandre <ArrowRight className="h-3 w-3" /></button>
+      <button
+        type="button"
+        onClick={onStart}
+        className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-[8px] font-semibold uppercase tracking-[.13em] text-primary-foreground shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+      >
+        <MessageCircle className="h-3 w-3" /> Discuter avec Alexandre <ArrowRight className="h-3 w-3" />
+      </button>
     </div>
   );
 }
