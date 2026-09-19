@@ -91,23 +91,6 @@ export function Hero() {
       />
 
       <div className="relative mx-auto flex min-h-[calc(92dvh-6.5rem)] max-w-7xl flex-col justify-between px-6 lg:px-10">
-        {/* Top Header Status Bar */}
-        <div className="animate-rise flex flex-wrap items-center justify-between gap-x-8 gap-y-2 border-b border-border/60 pb-3.5">
-          <div className="flex items-center gap-3">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-            </span>
-            <span className="label-mono text-xs text-muted-foreground">Stratège senior en ligne</span>
-          </div>
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <span className="label-mono hidden sm:inline">Paris · Dubaï · Tokyo · New York</span>
-            <span className="label-mono rounded-full border border-primary/30 bg-primary/5 px-2.5 py-0.5 text-[10px] text-primary">
-              Studio certifié · live
-            </span>
-          </div>
-        </div>
-
         {/* Hero Main Content */}
         <div className="grid items-center gap-10 py-10 lg:grid-cols-12 lg:py-14">
           {/* Left Column: Typography & CTAs */}
