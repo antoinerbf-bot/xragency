@@ -160,9 +160,9 @@ export function Hero() {
                   <span className="absolute -right-5 -top-5 h-16 w-16 rounded-full bg-primary/15 blur-xl transition group-hover:scale-150" />
                   <span className="relative flex items-center gap-2"><FileImage className="h-4 w-4 text-primary" /><span><b className="block text-[10px] uppercase tracking-[.12em]">Maquette gratuite</b><small className="mt-0.5 block text-[9px] text-muted-foreground">Valorisation 200 € · sans engagement</small></span></span>
                 </a>
-                <a href={CONTACT.whatsapp + "?text=" + encodeURIComponent("Bonjour XRAGENCY, je souhaite mon audit digital gratuit (valeur 100 €). Je vais vous envoyer le lien de mon site et, si utile, mon logo et mes éléments existants.")} target="_blank" rel="noreferrer" className="group relative overflow-hidden rounded-2xl border border-border bg-background/60 px-4 py-3 text-left backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_18px_45px_-24px_rgba(0,0,0,.7)] sm:translate-y-1">
+                <a href="#audit" target="_blank" rel="noreferrer" className="group relative overflow-hidden rounded-2xl border border-border bg-background/60 px-4 py-3 text-left backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_18px_45px_-24px_rgba(0,0,0,.7)] sm:translate-y-1">
                   <span className="absolute -left-5 -bottom-5 h-16 w-16 rounded-full bg-primary/10 blur-xl transition group-hover:scale-150" />
-                  <span className="relative flex items-center gap-2"><Search className="h-4 w-4 text-primary" /><span><b className="block text-[10px] uppercase tracking-[.12em]">Audit digital gratuit</b><small className="mt-0.5 block text-[9px] text-muted-foreground">Valorisation 100 € · sans engagement</small></span></span>
+                  <span className="relative flex items-center gap-2"><Search className="h-4 w-4 text-primary" /><span><b className="block text-[10px] uppercase tracking-[.12em]">Audit digital gratuit</b><small className="mt-0.5 block text-[9px] text-muted-foreground">Audit automatique sur mesure · PDF offert</small></span></span>
                 </a>
               </div>
               <span className="label-mono hidden text-xs text-muted-foreground/80 sm:inline">{t(UI.intelDuration)}</span>
