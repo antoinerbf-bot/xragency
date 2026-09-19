@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, MapPinned, MousePointerClick, Search, Sparkles, TrendingUp, X } from "lucide-react";
+import { Check, MapPinned, MousePointerClick, Search, Sparkles, TrendingUp, X, ArrowUpRight } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { Reveal } from "./primitives";
@@ -88,31 +88,31 @@ export function Intelligence() {
 
   return (
     <section id="google-simulation" className="relative border-b border-border/50 py-12 md:py-16">
-      <div className="mx-auto max-w-7xl px-5 md:px-8">
+      <div className="mx-auto max-w-[1380px] px-4 md:px-8">
         <Reveal>
-          <div className="mb-7 max-w-4xl md:mb-9">
+          <div className="mb-6 max-w-5xl md:mb-8">
             <div className="mb-4 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-muted-foreground"><Sparkles className="h-3.5 w-3.5" /> {t.eyebrow}</div>
-            <h2 className="text-3xl font-medium tracking-[-0.05em] md:text-5xl">{t.title}</h2>
+            <h2 className="text-3xl font-medium tracking-[-0.055em] md:text-5xl lg:text-6xl">{t.title}</h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground md:text-base">{t.intro}</p>
           </div>
         </Reveal>
 
         <Reveal delay={70}>
-          <div className="overflow-hidden rounded-[1.5rem] border border-border bg-background shadow-[0_30px_80px_-55px_rgba(0,0,0,.8)]">
-            <div className="border-b border-border p-4 md:p-5">
+          <div className="relative overflow-hidden rounded-[2rem] border border-border/80 bg-card/70 shadow-[0_35px_100px_-55px_rgba(0,0,0,.9)] backdrop-blur-xl"><div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
+            <div className="relative border-b border-border/70 bg-background/55 p-4 md:p-6">
               <div className="mb-3 flex items-center justify-between gap-4"><span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{t.searchLabel}</span><span className="flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-muted-foreground"><span className="grid h-6 w-6 place-items-center rounded-full bg-white text-[11px] font-bold text-[#4285F4] shadow-sm">G</span> Google · simulation</span></div>
               <div className="flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-4 font-medium shadow-sm"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white text-sm font-bold text-[#4285F4] shadow-sm">G</span><Search className="h-4 w-4 text-muted-foreground" /><span className="truncate">{t.search}</span><span className="ml-auto hidden rounded-full bg-primary/10 px-2.5 py-1 text-[8px] uppercase tracking-[.14em] text-primary sm:block">Live demo</span></div>
             </div>
-            <div className="grid border-b border-border md:grid-cols-3">
+            <div className="relative grid border-b border-border/70 bg-background/35 md:grid-cols-3">
               {(["maps", "seo", "ads"] as Surface[]).map((id) => {
                 const TabIcon = id === "maps" ? MapPinned : id === "seo" ? Search : MousePointerClick;
                 const label = id === "maps" ? t.maps : id === "seo" ? t.seo : t.ads;
                 const sub = id === "maps" ? t.mapsShort : id === "seo" ? t.organic : t.sponsored;
                 const active = surface === id;
-                return <button key={id} type="button" onClick={() => setSurface(id)} className={cn("flex min-h-20 items-center gap-4 border-b border-border px-5 text-left transition md:border-b-0 md:border-r last:md:border-r-0 md:px-7", active ? "bg-foreground/[0.055]" : "hover:bg-muted/25")}><span className={cn("rounded-xl border p-3", active ? "border-foreground/30" : "border-border")}><TabIcon className="h-5 w-5" /></span><span><span className="block font-medium">{label}</span><span className="mt-1 block text-xs text-muted-foreground">{sub}</span></span>{active && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-foreground" />}</button>;
+                return <button key={id} type="button" onClick={() => setSurface(id)} className={cn("group flex min-h-20 items-center gap-4 border-b border-border/70 px-4 text-left transition md:border-b-0 md:border-r last:md:border-r-0 md:px-6", active ? "bg-foreground/[0.06]" : "hover:bg-muted/25")}><span className={cn("rounded-xl border p-3", active ? "border-foreground/30" : "border-border")}><TabIcon className="h-5 w-5" /></span><span><span className="block font-medium">{label}</span><span className="mt-1 block text-xs text-muted-foreground">{sub}</span></span>{active && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-foreground" />}</button>;
               })}
             </div>
-            <div className="grid gap-3 bg-muted/[0.12] p-3 md:grid-cols-[1.08fr_.92fr] md:p-4">
+            <div className="relative grid gap-3 bg-muted/[0.10] p-3 md:grid-cols-[1.15fr_.85fr] md:p-4">
               <div className={cn("rounded-2xl border p-4 md:p-5", data.accent)}>
                 <div className="flex items-start justify-between gap-6"><div><div className="mb-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{surface === "ads" ? t.sponsored : surface === "maps" ? t.mapsShort : t.organic}</div><h3 className="text-2xl font-medium tracking-tight md:text-3xl">{data.title}</h3></div><Icon className="h-6 w-6 shrink-0 text-muted-foreground" /></div>
                 <p className="mt-3 text-sm leading-6 text-muted-foreground">{data.text}</p>
@@ -122,7 +122,7 @@ export function Intelligence() {
             </div>
           </div>
         </Reveal>
-        <div className="mt-4 flex justify-end"><a href="#homepage-services" className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-sm font-medium text-background transition hover:opacity-90">{t.next} <span aria-hidden>↓</span></a></div>
+        <div className="mt-4 flex justify-end"><a href="#homepage-services" className="group inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-sm font-medium text-background transition hover:-translate-y-0.5 hover:shadow-lg">{t.next} <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></a></div>
       </div>
     </section>
   );
