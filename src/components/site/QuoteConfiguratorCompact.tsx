@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { jsPDF } from "jspdf";
-import { ArrowRight, Check, Mail, MessageCircle, RotateCcw, Sparkles, UserRound, Zap } from "lucide-react";
+import { ArrowRight, Check, Mail, MessageCircle, RotateCcw, Sparkles, UserRound } from "lucide-react";
 import { AlexandreAdvisor } from "./AlexandreAdvisor";
 
 type Choice = { id: string; label: string; detail: string };
