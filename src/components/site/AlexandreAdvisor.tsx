@@ -7,7 +7,7 @@ function AlexandrePortrait() {
 
   return (
     <div
-      className="relative h-[112px] w-[96px] cursor-pointer sm:h-[132px] sm:w-[112px]"
+      className="relative h-[92px] w-[78px] cursor-pointer sm:h-[108px] sm:w-[92px]"
       onMouseMove={(e) => {
         const r = e.currentTarget.getBoundingClientRect();
         setLook({
@@ -24,7 +24,7 @@ function AlexandrePortrait() {
     >
       <div className="absolute inset-0 rounded-full bg-primary/[0.08] blur-2xl" />
 
-      <svg viewBox="0 0 112 132" className="relative h-full w-full overflow-visible drop-shadow-[0_18px_28px_rgba(0,0,0,.28)]">
+      <svg viewBox="0 0 112 132" className="relative h-full w-full overflow-visible drop-shadow-[0_12px_22px_rgba(0,0,0,.22)]">
         <defs>
           <linearGradient id="jacket" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0" stopColor="hsl(var(--foreground) / .22)" />
@@ -119,9 +119,9 @@ function AlexandrePortrait() {
 
 export function AlexandreAdvisor() {
   return (
-    <div className="group relative mx-auto flex h-28 w-28 items-center justify-center sm:h-32 sm:w-32">
+    <div className="group relative mx-auto flex h-24 w-24 items-center justify-center sm:h-28 sm:w-28">
       <div className="pointer-events-none absolute inset-4 rounded-full bg-primary/[0.07] blur-2xl transition duration-700 group-hover:scale-110" />
-      <div className="pointer-events-none absolute inset-2 rounded-full border border-primary/10 opacity-50 [animation:spin_30s_linear_infinite]" />
+      
       <AlexandrePortrait />
     </div>
   );
