@@ -120,7 +120,7 @@ export function Intelligence() {
 
         <Reveal delay={60}>
           <div className="overflow-hidden rounded-[1.4rem] border border-border/80 bg-card/70 shadow-[0_30px_90px_-55px_rgba(0,0,0,.9)] backdrop-blur-xl">
-            <div className="border-b border-border/70 bg-background/70 p-3 md:p-4">
+            <div className="border-b border-border/70 bg-background/70 p-3 md:p-4"><div className="mb-3 flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,.7)]"/><span className="text-[8px] font-medium uppercase tracking-[.14em] text-muted-foreground">Interface de recherche · simulation réaliste</span><span className="ml-auto rounded-full border border-border px-2 py-1 text-[7px] uppercase tracking-[.12em] text-muted-foreground">Pas un résultat réel</span></div>
               <div className="mb-2 flex items-center justify-between text-[8px] uppercase tracking-[.16em] text-muted-foreground"><span>{t.searchLabel}</span><span>Google · simulation</span></div>
               <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2.5 text-xs shadow-sm md:text-sm">
                 <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white text-[11px] font-bold text-[#4285F4]">G</span>
