@@ -2653,7 +2653,7 @@ const CORE_SHOWCASE = [
     metric: "+310% ventes en ligne",
     image:
       "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=85&w=1200",
-  },\n\n/** Extended portfolio references — a broad cross-sector selection for the portfolio filters */\nconst ADDITIONAL_SHOWCASE = [\n  {
+  },\n];\n\n/** Extended portfolio references — a broad cross-sector selection for the portfolio filters */\nconst ADDITIONAL_SHOWCASE = [\n  {
     id: "reference-1",
     name: "Maison Aurelia",
     url: "https://xragency.vercel.app",
