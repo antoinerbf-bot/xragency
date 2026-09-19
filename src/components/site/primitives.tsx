@@ -7,9 +7,15 @@ import type { L } from "@/lib/i18n";
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <Link to="/" aria-label="XRagency. — Accueil" className={cn("group inline-flex items-baseline tracking-tight transition-all duration-300 hover:opacity-90", className)}>
-      <span className="font-semibold text-lg tracking-[-0.02em] text-foreground transition-all duration-300 group-hover:tracking-[0.01em] sm:text-xl">
-        XRagency<span className="text-primary">.</span>
+    <Link to="/" aria-label="XRagency. — Accueil" className={cn("group relative inline-flex items-center gap-2.5 transition-transform duration-300 hover:-translate-y-0.5", className)}>
+      <span className="relative grid h-9 w-9 place-items-center overflow-hidden rounded-xl border border-primary/25 bg-gradient-to-br from-primary/20 via-card to-background shadow-[0_8px_30px_-12px_hsl(var(--primary)/.65)] sm:h-10 sm:w-10">
+        <span className="absolute inset-1 rounded-[9px] border border-primary/20" />
+        <span className="relative font-black text-[13px] tracking-[-0.12em] text-foreground">XR</span>
+        <span className="absolute bottom-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_10px_hsl(var(--primary)/.8)]" />
+      </span>
+      <span className="leading-none">
+        <span className="block font-semibold text-[17px] tracking-[-.045em] text-foreground sm:text-[19px]">XRagency<span className="text-primary">.</span></span>
+        <span className="mt-1 block label-mono text-[7px] uppercase tracking-[.24em] text-muted-foreground">Digital intelligence</span>
       </span>
     </Link>
   );
