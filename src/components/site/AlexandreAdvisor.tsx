@@ -1,7 +1,6 @@
 import { ArrowRight, MessageCircle, Sparkles } from "lucide-react";
-import { useState } from "react";
 
-function AlexandrePortrait({ isTalking }: { isTalking: boolean }) {
+function AlexandrePortrait() {
   return <div className="relative h-[88px] w-[76px] sm:h-[102px] sm:w-[88px]">
     <svg viewBox="0 0 112 132" className="h-full w-full drop-shadow-[0_10px_18px_rgba(0,0,0,.18)]" aria-label="Alexandre, assistant IA">
       <defs>
@@ -18,7 +17,7 @@ function AlexandrePortrait({ isTalking }: { isTalking: boolean }) {
       <path d="M30 51h52v16c0 8-7 15-16 18H46c-9-3-16-10-16-18z" fill="url(#xrGlass)" stroke="#d9f4ff" strokeOpacity=".3"/>
       <ellipse cx="43" cy="60" rx="5" ry="4" fill="#07101a"/><ellipse cx="69" cy="60" rx="5" ry="4" fill="#07101a"/>
       <circle cx="44" cy="59" r="1.5" fill="#d9f8ff"/><circle cx="70" cy="59" r="1.5" fill="#d9f8ff"/>
-      <path d="M48 74c5 ${isTalking ? "3 10 3 16 0" : "2 8 2 13 0"}" fill="none" stroke="#314454" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M48 74c5 2 10 2 16 0" fill="none" stroke="#314454" strokeWidth="2" strokeLinecap="round"/>
       <path d="M37 48c4-4 10-5 15-3M61 45c5-2 11-1 15 3" fill="none" stroke="#6f7e8f" strokeWidth="2" strokeLinecap="round"/>
       <path d="M20 47c-3 2-4 7-2 10M92 47c3 2 4 7 2 10" fill="none" stroke="#9aa8b7" strokeWidth="3" strokeLinecap="round"/>
       <circle cx="18" cy="59" r="2.5" fill="#7ee7ff"/><circle cx="94" cy="59" r="2.5" fill="#7ee7ff"/>
@@ -33,7 +32,6 @@ export function AlexandreAdvisor() {
   return (
     <div className="group relative mx-auto flex h-[88px] w-[88px] items-center justify-center sm:h-[102px] sm:w-[102px]">
       <div className="pointer-events-none absolute inset-4 rounded-full bg-primary/[0.07] blur-2xl transition duration-700 group-hover:scale-110" />
-      
       <AlexandrePortrait />
     </div>
   );
