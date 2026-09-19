@@ -29,9 +29,9 @@ function JuliePortrait() {
   );
 }
 
-export function JulieAdvisor({ mood = "calm" }: { mood?: "calm" | "focus" | "recommend" | "success"; expression?: "neutral" | "smile" }) {
+export function JulieAdvisor({ mood = "calm" }: { mood?: "calm" | "focus" | "recommend" | "success" }) {
   return (
-    <div className="group relative mx-auto flex h-[154px] w-[126px] items-center justify-center sm:h-[168px] sm:w-[136px]">
+    <div className="group relative mx-auto flex h-[136px] w-[112px] items-center justify-center sm:h-[148px] sm:w-[120px]">
       <div className="pointer-events-none absolute inset-2 rounded-full bg-primary/[0.09] blur-2xl transition duration-700 group-hover:scale-110" />
       <div className="absolute -right-1 top-1 rounded-full border border-primary/20 bg-background/85 px-2 py-1 label-mono text-[7px] text-primary shadow-sm backdrop-blur">{mood === "success" ? "PRÊTE" : mood === "recommend" ? "CONSEIL" : mood === "focus" ? "ANALYSE" : "LIVE"}</div>
       <div className={mood === "success" ? "translate-y-[-2px] transition duration-500" : mood === "recommend" ? "translate-x-[2px] transition duration-500" : mood === "focus" ? "translate-y-[1px] transition duration-500" : "transition duration-500"}><JuliePortrait /></div>
