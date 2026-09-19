@@ -8,14 +8,15 @@ import type { L } from "@/lib/i18n";
 export function Logo({ className }: { className?: string }) {
   return (
     <Link to="/" aria-label="XRagency. — Accueil" className={cn("group relative inline-flex items-center gap-2.5 transition-transform duration-300 hover:-translate-y-0.5", className)}>
-      <span className="relative grid h-9 w-9 place-items-center overflow-hidden rounded-xl border border-primary/25 bg-gradient-to-br from-primary/20 via-card to-background shadow-[0_8px_30px_-12px_hsl(var(--primary)/.65)] sm:h-10 sm:w-10">
-        <span className="absolute inset-1 rounded-[9px] border border-primary/20" />
-        <span className="relative font-black text-[13px] tracking-[-0.12em] text-foreground">XR</span>
-        <span className="absolute bottom-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_10px_hsl(var(--primary)/.8)]" />
+      <span className="relative grid h-10 w-10 place-items-center overflow-hidden rounded-[13px] border border-primary/30 bg-background shadow-[0_10px_34px_-14px_hsl(var(--primary)/.8)] sm:h-11 sm:w-11">
+        <span className="absolute -inset-4 bg-[radial-gradient(circle_at_35%_30%,hsl(var(--primary)/.32),transparent_52%)] transition-transform duration-700 group-hover:scale-125" />
+        <span className="absolute inset-[5px] rounded-[9px] border border-primary/20" />
+        <span className="relative font-black text-[13px] tracking-[-0.15em] text-foreground">XR</span>
+        <span className="absolute bottom-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_12px_hsl(var(--primary)/.9)]" />
       </span>
       <span className="leading-none">
-        <span className="block font-semibold text-[17px] tracking-[-.045em] text-foreground sm:text-[19px]">XRagency<span className="text-primary">.</span></span>
-        <span className="mt-1 block label-mono text-[7px] uppercase tracking-[.24em] text-muted-foreground">Digital intelligence</span>
+        <span className="block font-semibold text-[18px] tracking-[-.055em] text-foreground sm:text-[20px]">XR<span className="text-primary">agency</span><span className="text-primary">.</span></span>
+        <span className="mt-1 block label-mono text-[7px] uppercase tracking-[.27em] text-muted-foreground">Digital intelligence</span>
       </span>
     </Link>
   );
