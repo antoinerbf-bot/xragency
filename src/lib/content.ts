@@ -2825,7 +2825,7 @@ const CORE_SHOWCASE = [
     id: "reference-13",
     name: "Ardent Capital",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorFinance",
+    sectorKey: "sectorTech",
     services: ["website","seo","ecommerce"],
     type: { fr: "cabinet financier", en: "cabinet financier", vi: "cabinet financier" },
     desc: {
@@ -2839,7 +2839,7 @@ const CORE_SHOWCASE = [
     id: "reference-14",
     name: "Oasis Escapes",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorTourisme",
+    sectorKey: "sectorHotellerie",
     services: ["website","booking","social"],
     type: { fr: "agence de voyage", en: "agence de voyage", vi: "agence de voyage" },
     desc: {
@@ -2853,7 +2853,7 @@ const CORE_SHOWCASE = [
     id: "reference-15",
     name: "Cabinet Valmont",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorJuridique",
+    sectorKey: "sectorCoaching",
     services: ["website","seo","strategy"],
     type: { fr: "cabinet juridique", en: "cabinet juridique", vi: "cabinet juridique" },
     desc: {
@@ -2867,7 +2867,7 @@ const CORE_SHOWCASE = [
     id: "reference-16",
     name: "Institut Atlas",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorEducation",
+    sectorKey: "sectorCoaching",
     services: ["website","conversion","ai"],
     type: { fr: "école privée", en: "école privée", vi: "école privée" },
     desc: {
@@ -2881,7 +2881,7 @@ const CORE_SHOWCASE = [
     id: "reference-17",
     name: "Pulse Athletics",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorSport",
+    sectorKey: "sectorSante",
     services: ["website","social","conversion"],
     type: { fr: "club sportif", en: "club sportif", vi: "club sportif" },
     desc: {
@@ -2895,7 +2895,7 @@ const CORE_SHOWCASE = [
     id: "reference-18",
     name: "Villa North",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorRealEstate",
+    sectorKey: "sectorImmobilier",
     services: ["website","branding"],
     type: { fr: "promoteur immobilier", en: "promoteur immobilier", vi: "promoteur immobilier" },
     desc: {
@@ -2909,7 +2909,7 @@ const CORE_SHOWCASE = [
     id: "reference-19",
     name: "Braise 21",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorRestaurant",
+    sectorKey: "sectorGastronomie",
     services: ["website","maps","branding"],
     type: { fr: "restaurant contemporain", en: "restaurant contemporain", vi: "restaurant contemporain" },
     desc: {
@@ -2923,7 +2923,7 @@ const CORE_SHOWCASE = [
     id: "reference-20",
     name: "Nexa Conseil",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorServices",
+    sectorKey: "sectorTech",
     services: ["website","branding","seo"],
     type: { fr: "société de conseil", en: "société de conseil", vi: "société de conseil" },
     desc: {
@@ -3105,7 +3105,7 @@ const CORE_SHOWCASE = [
     id: "reference-33",
     name: "Ardent Capital",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorFinance",
+    sectorKey: "sectorTech",
     services: ["website","seo","ecommerce"],
     type: { fr: "cabinet financier", en: "cabinet financier", vi: "cabinet financier" },
     desc: {
@@ -3119,7 +3119,7 @@ const CORE_SHOWCASE = [
     id: "reference-34",
     name: "Oasis Escapes",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorTourisme",
+    sectorKey: "sectorHotellerie",
     services: ["website","booking","social"],
     type: { fr: "agence de voyage", en: "agence de voyage", vi: "agence de voyage" },
     desc: {
@@ -3133,7 +3133,7 @@ const CORE_SHOWCASE = [
     id: "reference-35",
     name: "Cabinet Valmont",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorJuridique",
+    sectorKey: "sectorCoaching",
     services: ["website","seo","strategy"],
     type: { fr: "cabinet juridique", en: "cabinet juridique", vi: "cabinet juridique" },
     desc: {
@@ -3147,7 +3147,7 @@ const CORE_SHOWCASE = [
     id: "reference-36",
     name: "Institut Atlas",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorEducation",
+    sectorKey: "sectorCoaching",
     services: ["website","conversion","ai"],
     type: { fr: "école privée", en: "école privée", vi: "école privée" },
     desc: {
@@ -3161,7 +3161,7 @@ const CORE_SHOWCASE = [
     id: "reference-37",
     name: "Pulse Athletics",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorSport",
+    sectorKey: "sectorSante",
     services: ["website","social","conversion"],
     type: { fr: "club sportif", en: "club sportif", vi: "club sportif" },
     desc: {
@@ -3175,7 +3175,7 @@ const CORE_SHOWCASE = [
     id: "reference-38",
     name: "Villa North",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorRealEstate",
+    sectorKey: "sectorImmobilier",
     services: ["website","branding"],
     type: { fr: "promoteur immobilier", en: "promoteur immobilier", vi: "promoteur immobilier" },
     desc: {
@@ -3189,7 +3189,7 @@ const CORE_SHOWCASE = [
     id: "reference-39",
     name: "Braise 21",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorRestaurant",
+    sectorKey: "sectorGastronomie",
     services: ["website","maps","branding"],
     type: { fr: "restaurant contemporain", en: "restaurant contemporain", vi: "restaurant contemporain" },
     desc: {
@@ -3203,7 +3203,7 @@ const CORE_SHOWCASE = [
     id: "reference-40",
     name: "Nexa Conseil",
     url: "https://xragency.vercel.app",
-    sectorKey: "sectorServices",
+    sectorKey: "sectorTech",
     services: ["website","branding","seo"],
     type: { fr: "société de conseil", en: "société de conseil", vi: "société de conseil" },
     desc: {
