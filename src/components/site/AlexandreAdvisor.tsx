@@ -1,9 +1,9 @@
 import { ArrowRight, MessageCircle, Sparkles, Activity, ShieldCheck } from "lucide-react";
 
-function AlexandrePortrait() {
-  return <div className="relative h-[112px] w-[94px] sm:h-[132px] sm:w-[112px]">
+function JuliePortrait() {
+  return <div className="relative h-[126px] w-[104px] sm:h-[142px] sm:w-[118px]">
     <div className="absolute inset-x-2 bottom-0 h-7 rounded-full bg-primary/10 blur-xl" />
-    <svg viewBox="0 0 112 150" className="relative h-full w-full drop-shadow-[0_18px_28px_rgba(0,0,0,.28)]" aria-label="Alexandre, conseiller digital IA">
+    <svg viewBox="0 0 112 150" className="relative h-full w-full drop-shadow-[0_18px_28px_rgba(0,0,0,.28)]" aria-label="Julie, conseillère digitale IA">
       <defs>
         <linearGradient id="aHelmet" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#ffffff"/><stop offset=".38" stopColor="#dbe5ee"/><stop offset=".72" stopColor="#7b8a9b"/><stop offset="1" stopColor="#263241"/></linearGradient>
         <linearGradient id="aFace" x1=".2" y1="0" x2=".8" y2="1"><stop offset="0" stopColor="#eaf3fa"/><stop offset=".48" stopColor="#a9b7c6"/><stop offset="1" stopColor="#526171"/></linearGradient>
@@ -33,25 +33,25 @@ function AlexandrePortrait() {
   </div>;
 }
 
-export function AlexandreAdvisor() {
+export function JulieAdvisor() {
   return (
     <div className="group relative mx-auto flex h-[112px] w-[112px] items-center justify-center sm:h-[132px] sm:w-[132px]">
       <div className="pointer-events-none absolute inset-2 rounded-full bg-primary/[0.09] blur-2xl transition duration-700 group-hover:scale-110" />
       <div className="absolute -right-1 top-2 rounded-full border border-primary/20 bg-background/80 px-2 py-1 label-mono text-[7px] text-primary shadow-sm backdrop-blur">LIVE</div>
-      <AlexandrePortrait />
+      <JuliePortrait />
     </div>
   );
 }
 
-export function AlexandreIntro({ onStart }: { onStart: () => void }) {
+export function JulieIntro({ onStart }: { onStart: () => void }) {
   return (
     <div className="group relative overflow-hidden rounded-[1.6rem] border border-primary/15 bg-gradient-to-br from-card/90 via-card/65 to-primary/[.035] p-4 shadow-[0_30px_80px_-55px_rgba(0,0,0,.9)] backdrop-blur-xl sm:p-5">
       <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-primary/10 blur-3xl" />
       <div className="relative grid items-center gap-4 sm:grid-cols-[140px_1fr_auto]">
-        <AlexandreAdvisor />
+        <JulieAdvisor />
         <div>
-          <div className="mb-1.5 flex items-center gap-1.5 text-[8px] font-semibold uppercase tracking-[.2em] text-primary"><Sparkles className="h-3 w-3" /> XR Intelligence · Alexandre</div>
-          <h2 className="display-serif text-2xl leading-none tracking-tight sm:text-3xl">Votre conseiller digital.</h2>
+          <div className="mb-1.5 flex items-center gap-1.5 text-[8px] font-semibold uppercase tracking-[.2em] text-primary"><Sparkles className="h-3 w-3" /> XR Intelligence · Julie</div>
+          <h2 className="display-serif text-2xl leading-none tracking-tight sm:text-3xl">Votre conseillère digitale.</h2>
           <p className="mt-2 max-w-xl text-[11px] leading-5 text-muted-foreground sm:text-xs">Il analyse votre activité, vos objectifs et vos priorités pour construire un parcours clair — sans vous noyer dans une liste de services.</p>
           <div className="mt-3 flex flex-wrap gap-1.5"><span className="inline-flex items-center gap-1 rounded-full border border-border bg-background/55 px-2 py-1 text-[8px] text-muted-foreground"><Activity className="h-3 w-3 text-primary"/> Analyse en direct</span><span className="inline-flex items-center gap-1 rounded-full border border-border bg-background/55 px-2 py-1 text-[8px] text-muted-foreground"><ShieldCheck className="h-3 w-3 text-primary"/> Recommandation sur mesure</span></div>
         </div>
