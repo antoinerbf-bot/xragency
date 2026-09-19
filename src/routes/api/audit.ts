@@ -32,8 +32,20 @@ export const Route = createFileRoute("/api/audit")({
           if (!body.url) return Response.json({ error: "URL requise." }, { status: 400 });
           const raw = body.url.trim().startsWith("http") ? body.url.trim() : "https://" + body.url.trim();
           const target = new URL(raw);
-          if (!["http:", "https:"].includes(target.protocol)) return Response.json({ error: "URL invalide." }, { status: 400 });
-          const response = await fetch(target.toString(), { redirect: "follow", signal: AbortSignal.timeout(12000), headers: { "user-agent": "XRAGENCY-Alexandre-Audit/1.0" } });
+          const blockedHost = /^(localhost|.*\\.localhost|.*\\.local|127\\.|0\\.0\\.0\\.0|10\\.|192\\.168\\.|169\\.254\\.|172\\.(1[6-9]|2[0-9]|3[0-1])\\.|::1|fc00:|fd00:|fe80:)/i;
+          if (!["http:", "https:"].includes(target.protocol) || blockedHost.test(target.hostname)) {
+            return Response.json({ error: "Cette URL publique n'est pas accessible pour l'audit." }, { status: 400 });
+          }
+          const response = await fetch(target.toString(), { redirect: "manual", signal: AbortSignal.timeout(12000), headers: { "user-agent": "XRAGENCY-Julie-Audit/1.0" } });
+          if ([301,302,303,307,308].includes(response.status)) {
+            const location = response.headers.get("location");
+            if (!location) return Response.json({ error: "Redirection invalide." }, { status: 502 });
+            const redirected = new URL(location, target);
+            if (!["http:", "https:"].includes(redirected.protocol) || blockedHost.test(redirected.hostname)) {
+              return Response.json({ error: "La redirection pointe vers une adresse non publique." }, { status: 400 });
+            }
+            return Response.json({ error: "Le site redirige vers une autre URL. Relancez l'audit avec l'URL finale." }, { status: 422 });
+          }
           const html = await response.text();
           const title = text(html, /<title[^>]*>([^<]+)<\/title>/i);
           const description = text(html, /<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i);
