@@ -144,14 +144,31 @@ export function Intelligence() {
                 {surface === "maps" && <div className="relative h-[190px] overflow-hidden bg-[#e8eee8]">
                   <div className="absolute inset-0 opacity-70" style={{backgroundImage:"linear-gradient(35deg,transparent 47%,rgba(70,90,70,.22) 48%,rgba(70,90,70,.22) 50%,transparent 51%),linear-gradient(110deg,transparent 47%,rgba(70,90,70,.16) 48%,rgba(70,90,70,.16) 50%,transparent 51%)",backgroundSize:"76px 76px"}}/>
                   <div className="absolute left-[24%] top-[30%] h-3 w-3 rounded-full bg-primary ring-4 ring-primary/15"/><div className="absolute left-[53%] top-[48%] h-3 w-3 rounded-full bg-foreground ring-4 ring-foreground/10"/><div className="absolute left-[72%] top-[26%] h-3 w-3 rounded-full bg-foreground ring-4 ring-foreground/10"/>
-                  <div className="absolute bottom-3 left-3 rounded-lg border border-white/70 bg-white/90 px-2 py-1 text-[7px] uppercase tracking-[.14em] text-slate-700 shadow-sm">Google Maps · recherche locale</div>
+                  <div className="absolute right-3 top-3 rounded-lg border border-white/80 bg-white/95 px-2 py-1 text-[7px] uppercase tracking-[.12em] text-slate-700 shadow-sm">Simulation Maps</div>
+                  <div className="absolute bottom-3 left-3 rounded-lg border border-white/70 bg-white/95 px-2.5 py-1.5 shadow-sm"><div className="text-[8px] font-semibold text-slate-800">Architectes premium</div><div className="mt-0.5 text-[7px] text-slate-500">Paris · 3 résultats simulés</div></div>
                 </div>}
-                {surface !== "maps" && <div className="border-b border-border bg-background px-3 py-2 text-[8px] uppercase tracking-[.14em] text-muted-foreground">google.com · page de résultats</div>}
+                {surface !== "maps" && <div className="border-b border-border bg-background px-3 py-2.5">
+  <div className="flex items-center gap-3">
+    <span className="text-base font-medium tracking-[-.08em] text-[#4285F4]">Google</span>
+    <div className="h-7 flex-1 rounded-full border border-border bg-muted/20 px-3 text-[8px] text-muted-foreground shadow-sm">{t.search}</div>
+    <Search className="h-3.5 w-3.5 text-muted-foreground"/>
+  </div>
+  <div className="mt-2 flex gap-4 overflow-hidden text-[7px] text-muted-foreground">
+    <span className="border-b-2 border-[#4285F4] pb-1 text-[#4285F4]">Tous</span><span>Images</span><span>Actualités</span><span>Maps</span><span>Plus</span>
+  </div>
+</div>
                 <div className="divide-y divide-border/70">
-                  {resultRows.map((row,i) => <div key={row.name} className="flex items-center gap-2.5 px-3 py-3">
-                    <div className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-muted text-[8px] font-semibold">{i+1}</div>
-                    <div className="min-w-0 flex-1"><div className="truncate text-[10px] font-medium md:text-xs">{row.name}</div><div className="mt-0.5 truncate text-[8px] text-muted-foreground">{row.meta}</div></div>
-                    <span className={cn("shrink-0 rounded-full px-1.5 py-1 text-[7px] uppercase tracking-[.1em]", surface === "ads" ? "bg-amber-500/10 text-amber-700" : "bg-muted text-muted-foreground")}>{row.tag}</span>
+                  {resultRows.map((row,i) => <div key={row.name} className="group px-3 py-3.5 transition hover:bg-muted/20">
+                    <div className="flex items-start gap-2.5">
+                      <div className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full border border-border bg-background text-[8px] font-semibold">{i+1}</div>
+                      <div className="min-w-0 flex-1">
+                        {surface === "ads" && <div className="mb-1 text-[7px] font-medium text-foreground">Annonce · <span className="font-normal text-muted-foreground">www.exemple-studio.fr</span></div>}
+                        {surface === "seo" && <div className="mb-1 truncate text-[7px] text-emerald-700">https://www.exemple-studio.fr › expertise</div>}
+                        <div className="truncate text-[10px] font-medium text-[#1a0dab] group-hover:underline md:text-xs">{row.name}</div>
+                        <div className="mt-1 line-clamp-2 text-[8px] leading-3.5 text-muted-foreground">Architecture, projets sur mesure et accompagnement premium. Découvrez l'approche, les réalisations et les informations de contact.</div>
+                      </div>
+                      <span className={cn("shrink-0 rounded-full px-1.5 py-1 text-[7px] uppercase tracking-[.1em]", surface === "ads" ? "bg-amber-500/10 text-amber-700" : "bg-muted text-muted-foreground")}>{row.tag}</span>
+                    </div>
                   </div>)}
                 </div>
               </div>
