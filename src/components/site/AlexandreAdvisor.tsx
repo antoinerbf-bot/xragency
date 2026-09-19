@@ -1,36 +1,32 @@
 import { ArrowRight, MessageCircle, Sparkles, Activity, ShieldCheck } from "lucide-react";
 
 function JuliePortrait() {
-  return <div className="relative h-[126px] w-[104px] sm:h-[142px] sm:w-[118px]">
-    <div className="absolute inset-x-2 bottom-0 h-7 rounded-full bg-primary/10 blur-xl" />
-    <svg viewBox="0 0 112 150" className="relative h-full w-full drop-shadow-[0_18px_28px_rgba(0,0,0,.28)]" aria-label="Julie, conseillère digitale IA">
-      <defs>
-        <linearGradient id="aHelmet" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#ffffff"/><stop offset=".38" stopColor="#dbe5ee"/><stop offset=".72" stopColor="#7b8a9b"/><stop offset="1" stopColor="#263241"/></linearGradient>
-        <linearGradient id="aFace" x1=".2" y1="0" x2=".8" y2="1"><stop offset="0" stopColor="#eaf3fa"/><stop offset=".48" stopColor="#a9b7c6"/><stop offset="1" stopColor="#526171"/></linearGradient>
-        <linearGradient id="aGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#e8fbff" stopOpacity=".75"/><stop offset=".45" stopColor="#67d9ff" stopOpacity=".18"/><stop offset="1" stopColor="#08121e" stopOpacity=".72"/></linearGradient>
-        <linearGradient id="aSuit" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#364351"/><stop offset=".5" stopColor="#111923"/><stop offset="1" stopColor="#05090e"/></linearGradient>
-        <filter id="aGlow"><feGaussianBlur stdDeviation="2.5"/></filter>
-      </defs>
-      <ellipse cx="56" cy="143" rx="32" ry="4" fill="#000" opacity=".16"/>
-      <path d="M18 141c2-27 17-43 38-43s36 16 38 43" fill="url(#aSuit)" stroke="#91a0ae" strokeOpacity=".35"/>
-      <path d="M31 102c6-8 14-12 25-12s19 4 25 12l-7 10H38z" fill="#0a1018"/>
-      <path d="M36 107h40l4 34H32z" fill="url(#aSuit)" stroke="#6f7e8d" strokeOpacity=".28"/>
-      <path d="M49 109h14v25H49z" fill="#1b2b38" stroke="#6ee7ff" strokeOpacity=".28"/>
-      <path d="M52 114h8v2h-8zm0 6h5v2h-5zm0 6h8v2h-8z" fill="#7ee7ff" opacity=".8"/>
-      <rect x="22" y="19" width="68" height="79" rx="31" fill="url(#aHelmet)" stroke="#eef7ff" strokeOpacity=".7"/>
-      <path d="M28 54c0-21 12-31 28-31s28 10 28 31v20c0 10-8 18-18 21H46c-10-3-18-11-18-21z" fill="url(#aFace)"/>
-      <path d="M28 54h56v20c0 10-8 18-18 21H46c-10-3-18-11-18-21z" fill="url(#aGlass)" stroke="#d7f7ff" strokeOpacity=".45"/>
-      <path d="M33 42c7-10 16-15 28-15s21 5 28 15" fill="none" stroke="#fff" strokeOpacity=".65" strokeWidth="2"/>
-      <ellipse cx="43" cy="62" rx="6" ry="4.5" fill="#050c14"/><ellipse cx="69" cy="62" rx="6" ry="4.5" fill="#050c14"/>
-      <circle cx="44.5" cy="61" r="1.7" fill="#dffaff"/><circle cx="70.5" cy="61" r="1.7" fill="#dffaff"/>
-      <path d="M47 78c5 3 13 3 18 0" fill="none" stroke="#263c4b" strokeWidth="2.2" strokeLinecap="round"/>
-      <path d="M42 88h28" stroke="#7ee7ff" strokeOpacity=".5" strokeWidth="1"/>
-      <path d="M18 52c-4 3-5 9-2 14M94 52c4 3 5 9 2 14" fill="none" stroke="#95a6b6" strokeWidth="3.5" strokeLinecap="round"/>
-      <circle cx="16" cy="69" r="3" fill="#7ee7ff"/><circle cx="96" cy="69" r="3" fill="#7ee7ff"/>
-      <circle cx="84" cy="31" r="2.5" fill="#7ee7ff"/><circle cx="84" cy="31" r="7" fill="#7ee7ff" opacity=".2" filter="url(#aGlow)"/>
-      <path d="M39 129h34" stroke="#7ee7ff" strokeOpacity=".25" strokeWidth="1"/>
-    </svg>
-  </div>;
+  return (
+    <div className="relative h-[142px] w-[116px] sm:h-[158px] sm:w-[128px]" aria-label="Julie, conseillère digitale">
+      <div className="absolute inset-x-3 bottom-1 h-6 rounded-full bg-black/15 blur-xl" />
+      <div className="relative h-full w-full overflow-hidden rounded-[2.2rem] border border-white/15 bg-gradient-to-b from-[#dfe9e6] via-[#b9c9c5] to-[#7c918b] shadow-[0_25px_60px_-28px_rgba(0,0,0,.7)]">
+        <div className="absolute -left-8 -top-10 h-32 w-32 rounded-full bg-[#26352f] shadow-[inset_-8px_-5px_20px_rgba(0,0,0,.35)]" />
+        <div className="absolute -right-10 -top-12 h-36 w-36 rounded-full bg-[#18231f] shadow-[inset_8px_-4px_20px_rgba(0,0,0,.3)]" />
+        <div className="absolute left-1/2 top-5 h-[78px] w-[68px] -translate-x-1/2 rounded-[45%_45%_42%_42%] bg-gradient-to-br from-[#f3c8a9] via-[#dca887] to-[#a96f55] shadow-[inset_-8px_-5px_14px_rgba(102,54,36,.2)]">
+          <div className="absolute left-2 top-5 h-7 w-4 rounded-full bg-[#f7d4b9]/70 blur-[2px]" />
+          <div className="absolute left-[13px] top-[34px] h-[5px] w-[13px] rounded-full bg-[#26302d]" />
+          <div className="absolute right-[13px] top-[34px] h-[5px] w-[13px] rounded-full bg-[#26302d]" />
+          <span className="absolute left-[17px] top-[34px] h-2 w-2 rounded-full bg-white/90 shadow-[0_0_8px_rgba(255,255,255,.5)]" />
+          <span className="absolute right-[17px] top-[34px] h-2 w-2 rounded-full bg-white/90 shadow-[0_0_8px_rgba(255,255,255,.5)]" />
+          <div className="absolute left-1/2 top-[43px] h-[9px] w-[2px] -translate-x-1/2 rounded-full bg-[#9f6653]/70" />
+          <div className="absolute left-1/2 top-[55px] h-[4px] w-[18px] -translate-x-1/2 rounded-full border-b border-[#8f4f4c] opacity-80" />
+          <div className="absolute -left-[5px] top-[36px] h-[12px] w-[8px] rounded-full bg-[#dca887]" />
+          <div className="absolute -right-[3px] top-[36px] h-[12px] w-[8px] rounded-full bg-[#dca887]" />
+        </div>
+        <div className="absolute left-1/2 top-[74px] h-[26px] w-[22px] -translate-x-1/2 bg-[#c88f73]" />
+        <div className="absolute left-1/2 bottom-[-10px] h-[64px] w-[96px] -translate-x-1/2 rounded-[48%_48%_0_0] bg-gradient-to-br from-[#182824] via-[#101916] to-[#070c0b]" />
+        <div className="absolute left-1/2 bottom-[29px] h-9 w-[30px] -translate-x-1/2 rotate-45 rounded-br-xl border-r border-b border-primary/40 bg-[#172622]" />
+        <div className="absolute left-1/2 bottom-[13px] h-px w-12 -translate-x-1/2 bg-primary/35" />
+        <div className="absolute bottom-3 left-3 rounded-full border border-white/20 bg-black/20 px-1.5 py-0.5 text-[6px] uppercase tracking-[.18em] text-white/70 backdrop-blur">JULIE</div>
+        <div className="absolute right-3 top-3 h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,.8)]" />
+      </div>
+    </div>
+  );
 }
 
 export function JulieAdvisor() {
