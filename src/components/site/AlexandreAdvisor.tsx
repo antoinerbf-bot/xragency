@@ -1,15 +1,16 @@
 import { ArrowRight, MessageCircle, Sparkles } from "lucide-react";
+import { useState } from "react";
 
-function BotFace() {
+function BotFace() {\n  const [look, setLook] = useState({ x: 0, y: 0 });
   return (
-    <div className="relative h-[118px] w-[118px]">
+    <div className="relative h-[118px] w-[118px]" onMouseMove={(e) => { const r=e.currentTarget.getBoundingClientRect(); setLook({ x: Math.max(-1, Math.min(1, ((e.clientX-r.left)/r.width-.5)*2)), y: Math.max(-1, Math.min(1, ((e.clientY-r.top)/r.height-.5)*2)) }); }} onMouseLeave={() => setLook({x:0,y:0})}>
       <div className="absolute inset-[15px] rounded-[35%] border border-primary/35 bg-gradient-to-br from-card via-background to-primary/10 shadow-[0_20px_50px_-20px_rgba(0,0,0,.8)] transition-transform duration-500 group-hover:rotate-[-3deg]">
         <div className="absolute left-1/2 top-[-10px] h-5 w-px -translate-x-1/2 bg-primary/50"><span className="absolute -top-1 left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-primary shadow-[0_0_16px_rgba(255,255,255,.6)]" /></div>
-        <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 gap-5">
+        <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 gap-5" style={{ transform: `translate(-50%, -50%) translate(${look.x*4}px, ${look.y*3}px)` }}>
           <span className="h-3.5 w-3.5 rounded-full bg-foreground shadow-[0_0_14px_rgba(255,255,255,.18)] transition-transform duration-300 group-hover:translate-x-1" />
           <span className="h-3.5 w-3.5 rounded-full bg-foreground shadow-[0_0_14px_rgba(255,255,255,.18)] transition-transform duration-300 group-hover:translate-x-1" />
         </div>
-        <div className="absolute bottom-5 left-1/2 h-1 w-10 -translate-x-1/2 rounded-full bg-primary/60" />
+        <div className="absolute bottom-5 left-1/2 h-1 w-10 -translate-x-1/2 rounded-full bg-primary/60" /><div className="absolute bottom-[-1px] left-1/2 h-3 w-8 -translate-x-1/2 rounded-full bg-primary/10 blur-sm" />
         <div className="absolute -bottom-2 left-1/2 h-1 w-16 -translate-x-1/2 rounded-full bg-primary/20 blur-md" />
       </div>
       <span className="absolute left-0 top-1/2 h-7 w-2 -translate-y-1/2 rounded-full border border-border bg-card" />
