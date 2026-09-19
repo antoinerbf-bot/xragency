@@ -1,16 +1,20 @@
 import { ArrowRight, MessageCircle, Sparkles } from "lucide-react";
 import { useState } from "react";
 
-function BotFace() {\n  const [look, setLook] = useState({ x: 0, y: 0 });
+function BotFace() {
+  const [look, setLook] = useState({ x: 0, y: 0 });
+  const [talking, setTalking] = useState(false);
   return (
-    <div className="relative h-[118px] w-[118px]" onMouseMove={(e) => { const r=e.currentTarget.getBoundingClientRect(); setLook({ x: Math.max(-1, Math.min(1, ((e.clientX-r.left)/r.width-.5)*2)), y: Math.max(-1, Math.min(1, ((e.clientY-r.top)/r.height-.5)*2)) }); }} onMouseLeave={() => setLook({x:0,y:0})}>
+    <div className="relative h-[118px] w-[118px]" onMouseMove={(e) => { const r=e.currentTarget.getBoundingClientRect(); setLook({ x: Math.max(-1, Math.min(1, ((e.clientX-r.left)/r.width-.5)*2)), y: Math.max(-1, Math.min(1, ((e.clientY-r.top)/r.height-.5)*2)) }); }} onMouseLeave={() => setLook({x:0,y:0})}
+      onClick={() => { setTalking(true); window.setTimeout(() => setTalking(false), 1100); }}
+      aria-label="Interagir avec Alexandre">
       <div className="absolute inset-[15px] rounded-[35%] border border-primary/35 bg-gradient-to-br from-card via-background to-primary/10 shadow-[0_20px_50px_-20px_rgba(0,0,0,.8)] transition-transform duration-500 group-hover:rotate-[-3deg]">
         <div className="absolute left-1/2 top-[-10px] h-5 w-px -translate-x-1/2 bg-primary/50"><span className="absolute -top-1 left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-primary shadow-[0_0_16px_rgba(255,255,255,.6)]" /></div>
         <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 gap-5" style={{ transform: `translate(-50%, -50%) translate(${look.x*4}px, ${look.y*3}px)` }}>
           <span className="h-3.5 w-3.5 rounded-full bg-foreground shadow-[0_0_14px_rgba(255,255,255,.18)] transition-transform duration-300 group-hover:translate-x-1" />
           <span className="h-3.5 w-3.5 rounded-full bg-foreground shadow-[0_0_14px_rgba(255,255,255,.18)] transition-transform duration-300 group-hover:translate-x-1" />
         </div>
-        <div className="absolute bottom-5 left-1/2 h-1 w-10 -translate-x-1/2 rounded-full bg-primary/60" /><div className="absolute bottom-[-1px] left-1/2 h-3 w-8 -translate-x-1/2 rounded-full bg-primary/10 blur-sm" />
+        <div className={`absolute bottom-5 left-1/2 h-1 -translate-x-1/2 rounded-full bg-primary/60 transition-all duration-300 ${talking ? "w-14 shadow-[0_0_18px_rgba(255,255,255,.5)]" : "w-10"}`} /><div className="absolute bottom-[-1px] left-1/2 h-3 w-8 -translate-x-1/2 rounded-full bg-primary/10 blur-sm" />
         <div className="absolute -bottom-2 left-1/2 h-1 w-16 -translate-x-1/2 rounded-full bg-primary/20 blur-md" />
       </div>
       <span className="absolute left-0 top-1/2 h-7 w-2 -translate-y-1/2 rounded-full border border-border bg-card" />
@@ -21,8 +25,9 @@ function BotFace() {\n  const [look, setLook] = useState({ x: 0, y: 0 });
 
 export function AlexandreAdvisor() {
   return (
-    <div className="group relative mx-auto flex h-[150px] w-[150px] items-center justify-center">
-      <div className="absolute inset-5 rounded-full bg-primary/[0.08] blur-2xl transition duration-700 group-hover:scale-125" />
+    <div className="group relative mx-auto flex h-[160px] w-[160px] cursor-pointer items-center justify-center">
+      <div className="absolute inset-5 rounded-full bg-primary/[0.10] blur-2xl transition duration-700 group-hover:scale-125" />
+      <div className="absolute -top-1 left-1/2 -translate-x-1/2 rounded-full border border-primary/20 bg-background/80 px-2 py-1 text-[6px] uppercase tracking-[.18em] text-primary backdrop-blur">assistant IA</div>
       <div className="absolute inset-2 rounded-full border border-primary/10 [animation:spin_18s_linear_infinite]" />
       <BotFace />
       <div className="absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-border bg-background/90 px-2.5 py-1 backdrop-blur">
