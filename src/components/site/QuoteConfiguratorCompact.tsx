@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { jsPDF } from "jspdf";
-import { ArrowRight, Check, Mail, MessageCircle, RotateCcw, Sparkles, UserRound } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, Globe2, Mail, MessageCircle, RotateCcw, Sparkles } from "lucide-react";
 import { AlexandreAdvisor } from "./AlexandreAdvisor";
 
 type Choice = { id: string; label: string; detail: string };
@@ -131,6 +131,20 @@ export function QuoteConfiguratorCompact() {
   const total = selectedServices.reduce((sum, id) => sum + (proposals.find((x) => x.id === id)?.price ?? 0), 0);
   const monthly = selectedServices.reduce((sum, id) => { const p = proposals.find((x) => x.id === id); return sum + (p?.period === "month" ? p.price : 0); }, 0);
   const once = total - monthly;
+
+  const generatePdf = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(20); doc.text("XRAGENCY · DEVIS DIGITAL", 20, 22);
+    doc.setFontSize(10); doc.text("KARMA SASU · SIREN 889 178 141", 20, 31);
+    doc.text("78 Avenue des Champs-Élysées, Bureau 562, 75008 Paris", 20, 37);
+    let y = 52; doc.setFontSize(12); doc.text("Informations société", 20, y); y += 8; doc.setFontSize(10);
+    [`Société : ${client.company}`, `Contact : ${client.name}`, `E-mail : ${client.email}`, `WhatsApp / téléphone : ${client.whatsapp}`, `Site : ${client.website || "Aucun site indiqué"}`, `Activité : ${sector?.label || ""}`, `Priorité : ${goal}`, `Situation : ${SITUATIONS.find(x => x.id === situation)?.label || ""}`, `Budget : ${budgetChoice?.label || ""}`, `Acquisition : ${discoveryChoice?.label || ""}`].forEach(line => { doc.text(line, 20, y); y += 6; });
+    y += 6; doc.setFontSize(12); doc.text("Prestations sélectionnées", 20, y); y += 8; doc.setFontSize(10);
+    selectedServices.forEach(id => { const p = proposals.find(x => x.id === id); if (p) { doc.text(`${p.label} · ${p.price ? `${p.price} €${p.period === "month" ? "/mois" : ""}` : "Sur mesure"}`, 20, y); y += 6; } });
+    y += 6; doc.text(`Total ponctuel estimé : ${once.toLocaleString("fr-FR")} €`, 20, y); y += 6;
+    doc.text(`Total mensuel estimé : ${monthly.toLocaleString("fr-FR")} € / mois`, 20, y);
+    doc.save("devis-xragency.pdf"); setGenerated(true);
+  };
 
   const choose = (setter: (value: string) => void, value: string, next: number) => { setter(value); window.setTimeout(() => setStep(next), 180); };
   const toggleService = (id: string) => setSelectedServices((current) => current.includes(id) ? current.filter((x) => x !== id) : [...current, id]);
