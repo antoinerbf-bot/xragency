@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Sparkles, ShieldCheck } from "lucide-react";
+import { Sparkles, ShieldCheck, FileImage, Search, ArrowUpRight } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
@@ -149,15 +149,12 @@ export function Hero() {
               className="mt-8 flex flex-wrap items-center gap-3.5"
               style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 400ms both" }}
             >
-              <EmberButton href="#conversion" className="shadow-lg">
-                {t(UI.ctaAnalysis)}
-              </EmberButton>
-
-
-
-              <span className="label-mono hidden text-xs text-muted-foreground/80 sm:inline">
-                {t(UI.intelDuration)}
-              </span>
+              <div className="grid w-full max-w-2xl grid-cols-1 gap-2 sm:grid-cols-3">
+                <EmberButton href="#quote" className="justify-center shadow-lg">{t(UI.ctaAnalysis)}</EmberButton>
+                <a href={CONTACT.whatsapp + "?text=" + encodeURIComponent("Bonjour XRAGENCY, je souhaite demander ma maquette gratuite (valeur 200 €).")} target="_blank" rel="noreferrer" className="group inline-flex items-center justify-center gap-2 rounded-full border border-border bg-background/75 px-4 py-3 text-[9px] font-semibold uppercase tracking-[.12em] backdrop-blur transition hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary"><FileImage className="h-3.5 w-3.5" /> Maquette gratuite <ArrowUpRight className="h-3 w-3 opacity-50" /></a>
+                <a href={CONTACT.whatsapp + "?text=" + encodeURIComponent("Bonjour XRAGENCY, je souhaite demander mon audit digital gratuit, sans engagement.")} target="_blank" rel="noreferrer" className="group inline-flex items-center justify-center gap-2 rounded-full border border-border bg-background/75 px-4 py-3 text-[9px] font-semibold uppercase tracking-[.12em] backdrop-blur transition hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary"><Search className="h-3.5 w-3.5" /> Audit digital gratuit <ArrowUpRight className="h-3 w-3 opacity-50" /></a>
+              </div>
+              <span className="label-mono hidden text-xs text-muted-foreground/80 sm:inline">{t(UI.intelDuration)}</span>
             </div>
 
             <div
