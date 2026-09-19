@@ -3,6 +3,7 @@ import { useLang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
 import { SurfaceDigital } from "./SurfaceDigital";
 import { cn } from "@/lib/utils";
+import { Parallax } from "./primitives";
 
 /** Core catalog shown on /services — coherent set, not the full internal list */
 const CATALOG_IDS = [
@@ -130,7 +131,7 @@ export function ServicesCatalog() {
                   </p>
                 </div>
 
-                <div className="max-w-2xl">
+                <Parallax speed={-0.025} className="max-w-2xl">
                   <h2 className="display-serif text-3xl leading-tight sm:text-4xl lg:text-5xl">
                     {t(service.title)}
                   </h2>
@@ -147,9 +148,9 @@ export function ServicesCatalog() {
                       </li>
                     ))}
                   </ul>
-                </div>
+                </Parallax>
 
-                <div className="flex flex-col items-start gap-4 lg:items-end">
+                <div className="relative z-10 flex flex-col items-start gap-4 lg:items-end">
                   <p className="label-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                     {copy.from}{" "}
                     <span className="text-base font-semibold tracking-normal text-foreground">
@@ -183,10 +184,10 @@ export function ServicesCatalog() {
               <p className="mt-3 max-w-xl text-sm leading-7 text-muted-foreground">{copy.ctaLead}</p>
             </div>
             <a
-              href="/#intelligence"
+              href="/#quote"
               className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-6 py-3.5 label-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-foreground transition-all hover:gap-3"
             >
-              {copy.cta}
+              Faire mon devis gratuit
               <ArrowUpRight className="h-4 w-4" />
             </a>
           </div>

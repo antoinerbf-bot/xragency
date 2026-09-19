@@ -3,7 +3,6 @@ import { useMemo, useState, useCallback } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
-import { EyeTracker } from "@/components/site/EyeTracker";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { SHOWCASE } from "@/lib/content";
@@ -173,13 +172,13 @@ function WorkPage() {
       <Nav />
 
       <main className="relative z-10">
-        <section className="relative overflow-hidden pt-20 sm:pt-24 lg:min-h-[88vh]">
-          <div className="relative mx-auto grid max-w-[1680px] items-center lg:min-h-[calc(88vh-5rem)] lg:grid-cols-[minmax(280px,0.9fr)_1.15fr]">
-            <div className="relative z-20 px-5 pb-6 pt-6 sm:px-8 lg:px-12 lg:pb-16 lg:pt-8">
+        <section className="relative overflow-hidden pt-20 sm:pt-24 lg:min-h-[48vh]">
+          <div className="relative mx-auto grid max-w-[1680px] items-center lg:min-h-[calc(48vh-5rem)]">
+            <div className="relative z-20 px-5 pb-10 pt-6 sm:px-8 lg:px-12 lg:pb-14 lg:pt-10">
               <p className="label-mono text-[10px] uppercase tracking-[0.32em] text-primary">
                 PORTFOLIO · {SHOWCASE.length}+ WORKS
               </p>
-              <h1 className="display-serif mt-4 text-4xl leading-[0.9] sm:mt-5 sm:text-7xl lg:text-[6.8rem]">
+              <h1 className="display-serif mt-4 text-4xl leading-[0.9] sm:mt-5 sm:text-7xl lg:text-[5.7rem]">
                 {lang === "fr" && (
                   <>
                     Nos
@@ -202,19 +201,15 @@ function WorkPage() {
                   </>
                 )}
               </h1>
-              <p className="mt-5 max-w-md text-sm leading-7 text-muted-foreground sm:mt-8 sm:text-base">
+              <p className="mt-5 max-w-md text-sm leading-6 text-muted-foreground sm:mt-7 sm:text-base sm:leading-7">
                 {intro}
               </p>
-            </div>
-
-            <div className="relative h-[42vh] min-h-[260px] w-full sm:h-[52vh] sm:min-h-[340px] lg:h-[calc(88vh-5rem)]">
-              <EyeTracker />
             </div>
           </div>
         </section>
 
         <section className="mx-auto max-w-[1600px] px-5 py-8 sm:px-8 lg:px-12 lg:py-16">
-          <div className="sticky top-16 z-30 -mx-5 mb-10 border-y border-border bg-background/90 px-5 py-5 backdrop-blur-xl sm:-mx-8 sm:px-8 lg:static lg:mx-0 lg:rounded-3xl lg:border lg:px-8 lg:py-8">
+          <div className="sticky top-14 z-30 -mx-5 mb-8 border-y border-border bg-background/92 px-5 py-4 shadow-[0_18px_50px_-35px_hsl(var(--foreground)/0.5)] backdrop-blur-2xl sm:-mx-8 sm:px-8 lg:static lg:mx-0 lg:rounded-3xl lg:border lg:px-7 lg:py-6">
             <div className="mb-5 flex flex-wrap items-end justify-between gap-3 lg:mb-6">
               <div>
                 <p className="label-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground">

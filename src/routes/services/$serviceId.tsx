@@ -466,7 +466,7 @@ function ServiceDetailPage() {
                         </p>
 
                         <ul className="mt-6 space-y-3.5">
-                          509:                           {(p.features || []).map((f, k) => (
+                          {(p.features || []).map((f, k) => (
                             <li
                               key={k}
                               className="flex items-start gap-3 text-sm text-muted-foreground"

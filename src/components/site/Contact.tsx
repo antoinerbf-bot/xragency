@@ -217,7 +217,6 @@ export function Contact() {
             {[
               { label: t(UI.legalCompany), value: "KARMA (XR Agency 2030)" },
               { label: t(UI.legalForm), value: "SASU — Société par actions simplifiée unipersonnelle" },
-              { label: t(UI.legalCapital), value: "100,00 €" },
               { label: t(UI.legalSiren), value: "889 178 141" },
               { label: t(UI.legalSiret), value: "889 178 141 00012" },
               { label: t(UI.legalRcs), value: "RCS Paris" },

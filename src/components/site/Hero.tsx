@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { Sparkles, Zap, ArrowRight, ShieldCheck, Globe as GlobeIcon } from "lucide-react";
+import { Sparkles, ShieldCheck, FileImage, Search, ArrowUpRight } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
@@ -92,23 +91,6 @@ export function Hero() {
       />
 
       <div className="relative mx-auto flex min-h-[calc(92dvh-6.5rem)] max-w-7xl flex-col justify-between px-6 lg:px-10">
-        {/* Top Header Status Bar */}
-        <div className="animate-rise flex flex-wrap items-center justify-between gap-x-8 gap-y-2 border-b border-border/60 pb-3.5">
-          <div className="flex items-center gap-3">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-            </span>
-            <span className="label-mono text-xs text-muted-foreground">{t(UI.intelOnline)}</span>
-          </div>
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <span className="label-mono hidden sm:inline">Paris · Dubaï · Tokyo · New York</span>
-            <span className="label-mono rounded-full border border-primary/30 bg-primary/5 px-2.5 py-0.5 text-[10px] text-primary">
-              Studio Certifié
-            </span>
-          </div>
-        </div>
-
         {/* Hero Main Content */}
         <div className="grid items-center gap-10 py-10 lg:grid-cols-12 lg:py-14">
           {/* Left Column: Typography & CTAs */}
@@ -150,21 +132,23 @@ export function Hero() {
               className="mt-8 flex flex-wrap items-center gap-3.5"
               style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 400ms both" }}
             >
-              <EmberButton href="#intelligence" className="shadow-lg">
-                {t(UI.ctaAnalysis)}
-              </EmberButton>
-
-              <Link
-                to="/services"
-                className="label-mono inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-6 py-3.5 text-xs text-foreground transition-all duration-300 hover:border-primary hover:text-primary hover:-translate-y-0.5"
-              >
-                Explorer nos 10 services
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-
-              <span className="label-mono hidden text-xs text-muted-foreground/80 sm:inline">
-                {t(UI.intelDuration)}
-              </span>
+              <div className="grid w-full max-w-3xl grid-cols-1 gap-2 sm:grid-cols-3 [perspective:900px]">
+                <div className="group sm:-translate-y-1 sm:hover:-translate-y-2 transition-transform duration-500">
+                  <EmberButton href="#quote" className="relative w-full justify-center overflow-hidden rounded-2xl py-3.5 shadow-[0_18px_45px_-24px_rgba(0,0,0,.8)]">
+                    <span className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
+                    <span className="relative flex items-center gap-2">Faire mon devis gratuit <ArrowUpRight className="h-3.5 w-3.5" /></span>
+                  </EmberButton>
+                </div>
+                <a href={CONTACT.whatsapp + "?text=" + encodeURIComponent("Bonjour XRAGENCY, je souhaite ma maquette gratuite (valeur 200 €). Je vais vous envoyer mon logo, les éléments que j'ai déjà et le lien de mon site si j'en ai un. Merci de me dire où les envoyer.")} target="_blank" rel="noreferrer" className="group relative overflow-hidden rounded-2xl border border-primary/25 bg-card/60 px-4 py-3 text-left backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-primary/60 hover:shadow-[0_18px_45px_-24px_rgba(0,0,0,.7)] sm:translate-y-2">
+                  <span className="absolute -right-5 -top-5 h-16 w-16 rounded-full bg-primary/15 blur-xl transition group-hover:scale-150" />
+                  <span className="relative flex items-center gap-2"><FileImage className="h-4 w-4 text-primary" /><span><b className="block text-[10px] uppercase tracking-[.12em]">Maquette gratuite</b><small className="mt-0.5 block text-[9px] text-muted-foreground">Valorisation 200 € · sans engagement</small></span></span>
+                </a>
+                <a href="#audit" className="group relative overflow-hidden rounded-2xl border border-border bg-background/60 px-4 py-3 text-left backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_18px_45px_-24px_rgba(0,0,0,.7)] sm:translate-y-1">
+                  <span className="absolute -left-5 -bottom-5 h-16 w-16 rounded-full bg-primary/10 blur-xl transition group-hover:scale-150" />
+                  <span className="relative flex items-center gap-2"><Search className="h-4 w-4 text-primary" /><span><b className="block text-[10px] uppercase tracking-[.12em]">Audit digital gratuit</b><small className="mt-0.5 block text-[9px] text-muted-foreground">Audit automatique sur mesure · PDF offert</small></span></span>
+                </a>
+              </div>
+              <span className="label-mono hidden text-xs text-muted-foreground/80 sm:inline">{t(UI.intelDuration)}</span>
             </div>
 
             <div
@@ -190,14 +174,9 @@ export function Hero() {
             <AnimatedStat value={2} suffix="h" label={t(UI.statResponse)} delay={790} />
           </dl>
 
-          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border/60 py-4 mt-5">
-            <span className="label-mono text-xs text-muted-foreground/70">p. 001 · Studio Principal</span>
-            <span className="label-mono hidden text-xs text-muted-foreground/70 md:block">
-              Sites Web · Identité · SEO Domination · Google Maps · Social · IA · Maintenance
-            </span>
-            <Link to="/services" className="label-mono text-xs text-primary hover:underline">
-              Consulter le catalogue complet →
-            </Link>
+          <div className="mt-5 flex items-center justify-between gap-4 border-t border-border/60 py-4">
+            <span className="label-mono text-xs text-muted-foreground/70">XR Intelligence · Alexandre · Devis sur mesure</span>
+            <span className="label-mono text-xs text-primary">01 · Analyse</span>
           </div>
         </div>
       </div>
