@@ -20,8 +20,8 @@ function JuliePortrait({ mood }: { mood: JulieMood }) {
         <div className="absolute inset-x-[-8%] bottom-[-18%] h-[65%] rounded-[50%_50%_0_0] bg-[linear-gradient(135deg,#17201e,#07100e)]" />
         <div className="absolute left-1/2 top-[18px] h-[92px] w-[72px] -translate-x-1/2 rounded-[48%_48%_44%_44%] bg-[url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=420&q=88')] bg-cover bg-center shadow-[0_15px_30px_-20px_rgba(0,0,0,.8)]">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#b77d67]/20" />
-          <div className="absolute left-[18px] top-[42px] h-[5px] w-[12px] rounded-full bg-[#222] transition-transform duration-500 ${eyeShift}" />
-          <div className="absolute right-[18px] top-[42px] h-[5px] w-[12px] rounded-full bg-[#222] transition-transform duration-500 ${eyeShift}" />
+          <div className={`absolute left-[18px] top-[42px] h-[5px] w-[12px] rounded-full bg-[#222] transition-transform duration-500 ${eyeShift}`} />
+          <div className={`absolute right-[18px] top-[42px] h-[5px] w-[12px] rounded-full bg-[#222] transition-transform duration-500 ${eyeShift}`} />
           <div className="absolute left-[25px] top-[44px] h-[2px] w-[2px] rounded-full bg-white/90" />
           <div className="absolute right-[25px] top-[44px] h-[2px] w-[2px] rounded-full bg-white/90" />
           <div className="absolute left-1/2 top-[61px] h-[4px] w-[18px] -translate-x-1/2 rounded-full border-b border-[#874c4a]/80" />
