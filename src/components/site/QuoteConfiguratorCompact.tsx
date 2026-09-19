@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { jsPDF } from "jspdf";
 import { ArrowRight, Check, ChevronDown, Globe2, Mail, MessageCircle, RotateCcw, Sparkles } from "lucide-react";
-import { JulieAdvisor } from "./JulieAdvisor";
+import { JulieAdvisor } from "./AlexandreAdvisor";
 
 type Choice = { id: string; label: string; detail: string };
 type Sector = Choice & { goals: string[] };
