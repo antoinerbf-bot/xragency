@@ -3,7 +3,6 @@ import { useMemo, useState, useCallback } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
-import { EyeTracker } from "@/components/site/EyeTracker";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { SHOWCASE } from "@/lib/content";
@@ -205,10 +204,6 @@ function WorkPage() {
               <p className="mt-5 max-w-md text-sm leading-6 text-muted-foreground sm:mt-7 sm:text-base sm:leading-7">
                 {intro}
               </p>
-            </div>
-
-            <div className="relative h-[35vh] min-h-[230px] w-full sm:h-[44vh] sm:min-h-[300px] lg:h-[calc(76vh-5rem)]">
-              <EyeTracker />
             </div>
           </div>
         </section>
