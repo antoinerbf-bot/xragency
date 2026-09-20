@@ -63,7 +63,7 @@ export function QuoteConfiguratorCompact() {
       const hash = new URLSearchParams(hashQuery);
       const raw = query.get("service") || hash.get("service");
       if (!raw) return;
-      const normalized = raw === "ecommerce" ? "website" : raw;
+      const normalized = raw === "ecommerce" || raw === "websites" ? "website" : raw;
       if (!SERVICES.some((x) => x.id === normalized)) return;
       setSelectedServices(current => current.includes(normalized) ? current : [...current, normalized]);
       setStep(4);
