@@ -41,8 +41,16 @@ export function ServicesCatalog() {
 
   const period = (p:string) => p === "month" ? (lang==="fr"?" / mois":lang==="vi"?" / tháng":" / month") : p === "year" ? (lang==="fr"?" / an":lang==="vi"?" / năm":" / year") : "";
   const relevant = RELEVANCE[universe] ?? [];
+  const sectorChips = [
+    ["restaurant", lang === "fr" ? "Gastronomie" : lang === "vi" ? "Ẩm thực" : "Food & Dining"],
+    ["hospitality", lang === "fr" ? "Hôtellerie" : lang === "vi" ? "Khách sạn" : "Hospitality"],
+    ["realestate", lang === "fr" ? "Immobilier" : lang === "vi" ? "Bất động sản" : "Real Estate"],
+    ["automotive", lang === "fr" ? "Automobile" : lang === "vi" ? "Ô tô" : "Automotive"],
+    ["fashion", lang === "fr" ? "Mode" : lang === "vi" ? "Thời trang" : "Fashion"],
+    ["jewelry", lang === "fr" ? "Joaillerie" : lang === "vi" ? "Trang sức" : "Jewelry"],
+  ] as const;
   const selectService = (id:string) => {
-    const target = id === "ecommerce" ? "ecommerce" : id;
+    const target = id === "ecommerce" || id === "websites" ? id : id;
     window.location.href = `/#quote?service=${encodeURIComponent(target)}`;
   };
   const doors = [
@@ -64,11 +72,11 @@ export function ServicesCatalog() {
         <h1 className="display-serif mt-5 max-w-5xl text-[clamp(3rem,7vw,6.7rem)] leading-[.9] tracking-[-.045em] text-white">{copy.title1}<br/><em className="not-italic italic text-primary">{copy.title2}</em></h1>
         <p className="mt-7 max-w-2xl text-base leading-7 text-white/75 sm:text-lg">{copy.lead}</p>
         <div className="mt-7 flex flex-wrap gap-2">
-          {[["restaurant","Gastronomie"],["hospitality","Hôtellerie"],["realestate","Immobilier"],["automotive","Automobile"],["fashion","Mode"],["jewelry","Joaillerie"]].map(([id,label]) =>
+          {sectorChips.map(([id,label]) =>
             <button key={id} type="button" onClick={()=>setUniverse(universe===id?"":id)} aria-pressed={universe===id} className={cn("min-h-11 rounded-full border px-4 text-sm backdrop-blur-xl transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary", universe===id?"border-primary bg-primary/15 text-white":"border-white/15 bg-black/25 text-white/75")}>{label}</button>
           )}
         </div>
-        <div className="mt-4 flex items-center gap-2 text-xs text-white/50"><Sparkles className="h-3.5 w-3.5 text-primary"/>{universe ? `${copy.relevant} ${["Gastronomie","Hôtellerie","Immobilier","Automobile","Mode","Joaillerie"][["restaurant","hospitality","realestate","automotive","fashion","jewelry"].indexOf(universe)]}` : copy.showAll}</div>
+        <div className="mt-4 flex items-center gap-2 text-xs text-white/50"><Sparkles className="h-3.5 w-3.5 text-primary"/>{universe ? `${copy.relevant} ${sectorChips.find(([id]) => id === universe)?.[1] ?? ""}` : copy.showAll}</div>
       </div>
     </div>
 
