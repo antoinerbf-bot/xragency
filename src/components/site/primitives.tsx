@@ -12,11 +12,11 @@ export function Logo({ className }: { className?: string }) {
       aria-label="XRagency. — Accueil"
       className={cn("group inline-flex items-center transition-transform duration-300 hover:-translate-y-0.5", className)}
     >
-      <span className="relative grid h-10 w-10 place-items-center sm:h-11 sm:w-11">
-        <span className="absolute inset-0 rounded-[12px] border border-primary/30 bg-background/80 shadow-[0_10px_34px_-14px_hsl(var(--primary)/.8)] transition-all duration-500 group-hover:border-primary/60 group-hover:shadow-[0_12px_40px_-10px_hsl(var(--primary)/.9)]" />
-        <span className="absolute inset-[5px] rounded-[9px] border border-primary/15 transition-transform duration-500 group-hover:scale-105" />
-        <span className="relative font-black text-[19px] tracking-[-0.16em] text-foreground sm:text-[21px]">X</span>
-        <span className="absolute bottom-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_12px_hsl(var(--primary)/.9)]" />
+      <span className="relative inline-flex items-center justify-center pb-[1px]">
+        <span className="relative font-black text-[22px] leading-none tracking-[-0.14em] text-current sm:text-[27px]">
+          X
+        </span>
+        <span className="absolute -bottom-0.5 -right-2 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_9px_hsl(var(--primary)/.45)]" />
       </span>
     </Link>
   );
