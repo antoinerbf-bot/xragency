@@ -55,7 +55,22 @@ const BRANDING_TIERS = {
 } as const;
 
 export function QuoteConfiguratorCompact() {
-  const [step, setStep] = useState(0); const [sectorId, setSectorId] = useState(""); useEffect(() => { const onSector = (event: Event) => { const id = (event as CustomEvent<{id:string}>).detail?.id; if (!id || !SECTORS.some((x) => x.id === id)) return; setSectorId(id); setShowAllSectors(false); setStep(0); window.setTimeout(() => document.getElementById("quote")?.scrollIntoView({ behavior: "smooth", block: "start" }), 40); }; const onService = (event: Event) => { const id = (event as CustomEvent<{id:string}>).detail?.id; if (!id || !SERVICES.some((x) => x.id === id)) return; setSelectedServices(current => current.includes(id) ? current : [...current, id]); setStep(0); window.setTimeout(() => document.getElementById("quote")?.scrollIntoView({ behavior: "smooth", block: "start" }), 40); }; window.addEventListener("xr:sector", onSector); window.addEventListener("xr:service", onService); return () => { window.removeEventListener("xr:sector", onSector); window.removeEventListener("xr:service", onService); }; }, []); const [showAllSectors, setShowAllSectors] = useState(false); const [goal, setGoal] = useState(""); const [situation, setSituation] = useState(""); const [budget, setBudget] = useState(""); const [discovery, setDiscovery] = useState(""); const [selectedServices, setSelectedServices] = useState<string[]>([]); const [client, setClient] = useState({ company: "", name: "", email: "", whatsapp: "", website: "" }); const [generated, setGenerated] = useState(false); const [sending, setSending] = useState(false); const [sendMessage, setSendMessage] = useState("");
+  const [step, setStep] = useState(0); const [sectorId, setSectorId] = useState("");
+  useEffect(() => {
+    const readServicePrefill = () => {
+      const query = new URLSearchParams(window.location.search);
+      const hashQuery = window.location.hash.includes("?") ? window.location.hash.split("?")[1] : "";
+      const hash = new URLSearchParams(hashQuery);
+      const raw = query.get("service") || hash.get("service");
+      if (!raw) return;
+      const normalized = raw === "ecommerce" ? "website" : raw;
+      if (!SERVICES.some((x) => x.id === normalized)) return;
+      setSelectedServices(current => current.includes(normalized) ? current : [...current, normalized]);
+      setStep(4);
+    };
+    readServicePrefill();
+  }, []);
+  useEffect(() => { const onSector = (event: Event) => { const id = (event as CustomEvent<{id:string}>).detail?.id; if (!id || !SECTORS.some((x) => x.id === id)) return; setSectorId(id); setShowAllSectors(false); setStep(0); window.setTimeout(() => document.getElementById("quote")?.scrollIntoView({ behavior: "smooth", block: "start" }), 40); }; const onService = (event: Event) => { const id = (event as CustomEvent<{id:string}>).detail?.id; if (!id || !SERVICES.some((x) => x.id === id)) return; setSelectedServices(current => current.includes(id) ? current : [...current, id]); setStep(0); window.setTimeout(() => document.getElementById("quote")?.scrollIntoView({ behavior: "smooth", block: "start" }), 40); }; window.addEventListener("xr:sector", onSector); window.addEventListener("xr:service", onService); return () => { window.removeEventListener("xr:sector", onSector); window.removeEventListener("xr:service", onService); }; }, []); const [showAllSectors, setShowAllSectors] = useState(false); const [goal, setGoal] = useState(""); const [situation, setSituation] = useState(""); const [budget, setBudget] = useState(""); const [discovery, setDiscovery] = useState(""); const [selectedServices, setSelectedServices] = useState<string[]>([]); const [client, setClient] = useState({ company: "", name: "", email: "", whatsapp: "", website: "" }); const [generated, setGenerated] = useState(false); const [sending, setSending] = useState(false); const [sendMessage, setSendMessage] = useState("");
   const sector = SECTORS.find((x) => x.id === sectorId);
   const situationChoice = SITUATIONS.find((x) => x.id === situation);
   const budgetChoice = BUDGETS.find((x) => x.id === budget);
