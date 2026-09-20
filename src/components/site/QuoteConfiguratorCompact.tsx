@@ -24,6 +24,14 @@ const SECTORS: Sector[] = [
   { id: "agency", label: "Agence · studio · freelance", detail: "Créatifs, marketing, tech, conseil et production", goals: ["Présenter l'expertise", "Générer des leads", "Monter en gamme"] },
   { id: "other", label: "Autre activité", detail: "Votre activité ne figure pas ici ? XR Intelligence s'adapte.", goals: ["Développer mon activité", "Professionnaliser mon image", "Construire une présence forte"] },
 ];
+const SECTOR_TONE: Record<string, string> = {
+  restaurant: "bg-amber-500/[0.035]", hospitality: "bg-amber-400/[0.035]", realestate: "bg-emerald-700/[0.045]",
+  automotive: "bg-red-500/[0.035]", fashion: "bg-slate-400/[0.04]", jewelry: "bg-yellow-300/[0.04]",
+  beauty: "bg-amber-200/[0.045]", health: "bg-emerald-500/[0.035]", architecture: "bg-stone-400/[0.04]",
+  construction: "bg-orange-500/[0.035]", legal: "bg-amber-600/[0.03]", finance: "bg-sky-500/[0.035]",
+  commerce: "bg-fuchsia-500/[0.025]", tourism: "bg-cyan-500/[0.03]", agency: "bg-primary/[0.05]", other: "bg-primary/[0.035]",
+};
+
 const SERVICES: Choice[] = [
   { id: "website", label: "Site web", detail: "Vitrine, Business, e-commerce ou réservation" }, { id: "branding", label: "Branding", detail: "Logo, identité, direction artistique et univers" }, { id: "seo", label: "SEO", detail: "Positionnement organique et acquisition Google" }, { id: "maps", label: "Google Maps", detail: "Fiche locale, visibilité et optimisation locale" }, { id: "ads", label: "Google Ads", detail: "Campagnes sponsorisées et acquisition payante" }, { id: "social", label: "Social Media", detail: "Stratégie, contenus et animation des réseaux" }, { id: "content", label: "Contenu · photo · vidéo", detail: "Direction de contenu, visuels et formats de campagne" }, { id: "conversion", label: "Conversion & parcours", detail: "UX, landing pages, CTA et optimisation commerciale" }, { id: "maintenance", label: "WebCare", detail: "Corrections, évolutions et suivi du site" },
 ];
@@ -173,8 +181,8 @@ export function QuoteConfiguratorCompact() {
             <h3 className="mt-2 text-[clamp(1.5rem,3vw,2rem)] font-semibold">Dites-nous votre univers.</h3>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">Choisissez votre famille de projet. La plaque XR Intelligence évolue immédiatement avec votre univers.</p>
           </div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">{(showAllSectors ? SECTORS : SECTORS.slice(0,6)).map((x,i) => <button key={x.id} type="button" aria-label={`Choisir ${x.label}`} onClick={() => { setSectorId(x.id); window.setTimeout(() => setStep(1), 200); }} className={`group relative min-h-[116px] overflow-hidden rounded-2xl border p-4 text-left transition-all duration-300 hover:-translate-y-1 hover:border-primary/55 ${sectorId === x.id ? "border-primary bg-primary/[.09] shadow-[0_18px_45px_-25px_hsl(var(--primary)/.45)]" : "border-border bg-background/70"}`}>
-            <span className="absolute right-3 top-3 font-mono text-sm text-primary">0{String(i+1).padStart(1,"0")}</span>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">{(showAllSectors ? SECTORS : SECTORS.slice(0,6)).map((x,i) => <button key={x.id} type="button" aria-label={`Choisir ${x.label}`} onClick={() => { setSectorId(x.id); window.setTimeout(() => setStep(1), 200); }} className={`group relative min-h-[116px] overflow-hidden rounded-2xl border p-4 text-left transition-all duration-300 hover:-translate-y-1 hover:border-primary/55 ${SECTOR_TONE[x.id] ?? "bg-background/70"} ${sectorId === x.id ? "border-primary bg-primary/[.09] shadow-[0_18px_45px_-25px_hsl(var(--primary)/.45)]" : "border-border"}`}>
+            <span className="absolute right-3 top-3 font-mono text-sm text-primary">String(i + 1).padStart(2, "0")</span>
             <span className="block pr-8 text-[15px] font-semibold leading-5 group-hover:text-primary">{x.label}</span>
             <span className="mt-2 block text-sm leading-5 text-muted-foreground">{x.detail}</span>
             <span className="absolute bottom-3 right-4 h-2 w-2 rounded-full bg-primary/40 transition group-hover:scale-150 group-hover:bg-primary" />
