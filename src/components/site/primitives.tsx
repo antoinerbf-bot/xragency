@@ -2,67 +2,29 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { useLang } from "@/lib/i18n";
-import { UI } from "@/lib/copy";
 import type { L } from "@/lib/i18n";
 
 export function Logo({ className }: { className?: string }) {
   return (
     <Link
       to="/"
-      aria-label="XRagency. — Accueil"
-      className={cn("group inline-flex items-center transition-transform duration-300 hover:-translate-y-0.5", className)}
+      aria-label="XRAGENCY — Accueil"
+      className={cn(
+        "group relative inline-flex min-h-11 items-center px-1 font-black text-[18px] leading-none tracking-[0.16em] text-foreground transition-opacity duration-200 hover:opacity-80 sm:text-[20px]",
+        className,
+      )}
     >
-      <span className="relative grid h-10 w-10 place-items-center sm:h-11 sm:w-11">
-        <span className="absolute inset-0 rounded-[12px] border border-primary/30 bg-background/80 shadow-[0_10px_34px_-14px_hsl(var(--primary)/.8)] transition-all duration-500 group-hover:border-primary/60 group-hover:shadow-[0_12px_40px_-10px_hsl(var(--primary)/.9)]" />
-        <span className="absolute inset-[5px] rounded-[9px] border border-primary/15 transition-transform duration-500 group-hover:scale-105" />
-        <span className="relative font-black text-[19px] tracking-[-0.16em] text-foreground sm:text-[21px]">X</span>
-        <span className="absolute bottom-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_12px_hsl(var(--primary)/.9)]" />
-      </span>
+      XRAGENCY
     </Link>
   );
 }
-
-export function Parallax({ children, speed = 0.12, direction = "y", className }: { children: ReactNode; speed?: number; direction?: "y" | "x" | "both"; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const isMobile = window.innerWidth < 768;
-      const effectiveSpeed = isMobile ? speed * 0.35 : speed;
-      const rect = el.getBoundingClientRect();
-      const center = rect.top + rect.height / 2 - window.innerHeight / 2;
-      if (direction === "y") el.style.transform = `translate3d(0, ${(-center * effectiveSpeed).toFixed(2)}px, 0)`;
-      else if (direction === "x") el.style.transform = `translate3d(${(-center * effectiveSpeed).toFixed(2)}px, 0, 0)`;
-      else el.style.transform = `translate3d(${(-center * effectiveSpeed * 0.4).toFixed(2)}px, ${(-center * effectiveSpeed).toFixed(2)}px, 0)`;
-    };
-    const onScroll = () => { if (!frame) frame = window.requestAnimationFrame(update); };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); if (frame) window.cancelAnimationFrame(frame); };
-  }, [speed, direction]);
-  return <div ref={ref} className={cn("will-change-transform", className)}>{children}</div>;
+export function Parallax({ children, speed=0.12, direction="y", className }: { children: ReactNode; speed?:number; direction?:"y"|"x"|"both"; className?:string }) {
+ const ref=useRef<HTMLDivElement>(null);
+ useEffect(()=>{const el=ref.current;if(!el||window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;let frame=0;const update=()=>{frame=0;const s=window.innerWidth<768?speed*.35:speed;const r=el.getBoundingClientRect();const c=r.top+r.height/2-window.innerHeight/2;if(direction==="y")el.style.transform=`translate3d(0,${(-c*s).toFixed(2)}px,0)`;else if(direction==="x")el.style.transform=`translate3d(${(-c*s).toFixed(2)}px,0,0)`;else el.style.transform=`translate3d(${(-c*s*.4).toFixed(2)}px,${(-c*s).toFixed(2)}px,0)`};const onScroll=()=>{if(!frame)frame=requestAnimationFrame(update)};update();window.addEventListener("scroll",onScroll,{passive:true});window.addEventListener("resize",onScroll);return()=>{window.removeEventListener("scroll",onScroll);window.removeEventListener("resize",onScroll);if(frame)cancelAnimationFrame(frame)}},[speed,direction]);
+ return <div ref={ref} className={cn("will-change-transform",className)}>{children}</div>;
 }
-
-export function FloatingBadge({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) { return <div className={cn("animate-float", className)} style={{ animationDelay: `${delay}ms` }}>{children}</div>; }
-
-export function Reveal({ children, delay = 0, className }: { children: ReactNode; delay?: number; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null); const [shown, setShown] = useState(false);
-  useEffect(() => { const el = ref.current; if (!el) return; const obs = new IntersectionObserver((entries) => { if (entries[0].isIntersecting) { setShown(true); obs.disconnect(); } }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }); obs.observe(el); return () => obs.disconnect(); }, []);
-  return <div ref={ref} className={cn("transition-none", className)} style={shown ? { animation: `ember-rise 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}ms both` } : { opacity: 0 }}>{children}</div>;
-}
-
-export function ChapterMarker({ num, title, page }: { num: string; title: L; page: string }) { const { t } = useLang(); return <div className="mx-auto flex max-w-7xl items-center gap-6 border-t border-border/70 px-6 py-5 lg:px-10"><span className="label-mono text-primary">{num}</span><span className="label-mono flex-1 text-muted-foreground">{t(title)}</span><span className="label-mono text-muted-foreground/70">{page}</span></div>; }
-
-export function SectionHeading({ label, line1, line2, lead }: { label: L; line1: L; line2: L; lead?: L }) { const { t } = useLang(); return <Parallax speed={-0.03} className="max-w-3xl"><Reveal><p className="label-mono text-primary">{t(label)}</p></Reveal><Reveal delay={80}><h2 className="display-serif mt-6 text-4xl sm:text-5xl lg:text-6xl">{t(line1)} <em className="text-primary not-italic italic">{t(line2)}</em></h2></Reveal>{lead ? <Reveal delay={150}><p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">{t(lead)}</p></Reveal> : null}</Parallax>; }
-
-export function EmberButton({ children, href, variant = "solid", onClick, className, type = "button", disabled }: { children: ReactNode; href?: string; variant?: "solid" | "ghost" | "outline"; onClick?: () => void; className?: string; type?: "button" | "submit"; disabled?: boolean }) {
-  const base = "label-mono inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 min-h-[44px] transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer";
-  const styles = { solid: "bg-primary text-primary-foreground hover:brightness-110 hover:shadow-[var(--shadow-ember)] hover:-translate-y-0.5", outline: "border border-primary/60 text-primary hover:bg-primary/10 hover:-translate-y-0.5", ghost: "border border-border text-foreground hover:border-primary/60 hover:text-primary hover:-translate-y-0.5" }[variant];
-  if (href) return <a href={href} className={cn(base, styles, className)}>{children}</a>;
-  return <button type={type} onClick={onClick} disabled={disabled} className={cn(base, styles, className)}>{children}</button>;
-}
+export function FloatingBadge({children,className,delay=0}:{children:ReactNode;className?:string;delay?:number}){return <div className={cn("animate-float",className)} style={{animationDelay:`${delay}ms`}}>{children}</div>}
+export function Reveal({children,delay=0,className}:{children:ReactNode;delay?:number;className?:string}){const ref=useRef<HTMLDivElement>(null);const[shown,setShown]=useState(false);useEffect(()=>{const el=ref.current;if(!el)return;const obs=new IntersectionObserver(e=>{if(e[0].isIntersecting){setShown(true);obs.disconnect()}},{threshold:.1,rootMargin:"0px 0px -50px 0px"});obs.observe(el);return()=>obs.disconnect()},[]);return <div ref={ref} className={cn("transition-none",className)} style={shown?{animation:`ember-rise .9s cubic-bezier(.16,1,.3,1) ${delay}ms both`}:{opacity:0}}>{children}</div>}
+export function ChapterMarker({num,title,page}:{num:string;title:L;page:string}){const{t}=useLang();return <div className="mx-auto flex max-w-7xl items-center gap-6 border-t border-border/70 px-6 py-5 lg:px-10"><span className="label-mono text-primary">{num}</span><span className="label-mono flex-1 text-muted-foreground">{t(title)}</span><span className="label-mono text-muted-foreground/70">{page}</span></div>}
+export function SectionHeading({label,line1,line2,lead}:{label:L;line1:L;line2:L;lead?:L}){const{t}=useLang();return <Parallax speed={-.03} className="max-w-3xl"><Reveal><p className="label-mono text-primary">{t(label)}</p></Reveal><Reveal delay={80}><h2 className="display-serif mt-6 text-4xl sm:text-5xl lg:text-6xl">{t(line1)} <em className="text-primary not-italic italic">{t(line2)}</em></h2></Reveal>{lead?<Reveal delay={150}><p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">{t(lead)}</p></Reveal>:null}</Parallax>}
+export function EmberButton({children,href,variant="solid",onClick,className,type="button",disabled}:{children:ReactNode;href?:string;variant?:"solid"|"ghost"|"outline";onClick?:()=>void;className?:string;type?:"button"|"submit";disabled?:boolean}){const base="label-mono inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full px-7 py-3.5 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-40";const styles={solid:"bg-primary text-primary-foreground hover:brightness-110 hover:shadow-[var(--shadow-ember)] hover:-translate-y-0.5",outline:"border border-primary/60 text-primary hover:bg-primary/10 hover:-translate-y-0.5",ghost:"border border-border text-foreground hover:border-primary/60 hover:text-primary hover:-translate-y-0.5"}[variant];return href?<a href={href} className={cn(base,styles,className)}>{children}</a>:<button type={type} onClick={onClick} disabled={disabled} className={cn(base,styles,className)}>{children}</button>}
