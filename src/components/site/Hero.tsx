@@ -11,7 +11,7 @@ const SECTORS = [
 ] as const;
 
 function useCountUp(target: number, duration = 1200, delay = 0) {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(target);
   const started = useRef(false);
   useEffect(() => {
     if (started.current) return;
@@ -28,7 +28,7 @@ function useCountUp(target: number, duration = 1200, delay = 0) {
     }, delay);
     return () => { window.clearTimeout(timer); if (frame) cancelAnimationFrame(frame); };
   }, [target, duration, delay]);
-  return value || target;
+  return value;
 }
 
 function Stat({ value, suffix, label, delay }: { value: number; suffix: string; label: string; delay: number }) {
@@ -52,6 +52,7 @@ export function Hero() {
       <video className="h-full w-full object-cover opacity-70" src="/media/hero-studio.mp4" autoPlay muted loop playsInline preload="metadata" poster="/media/hero-poster.webp" aria-hidden onError={(event) => { event.currentTarget.style.display = "none"; }} />
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,7,8,.98)_0%,rgba(6,7,8,.78)_40%,rgba(6,7,8,.30)_72%,rgba(6,7,8,.58)_100%),linear-gradient(0deg,rgba(6,7,8,.88)_0%,transparent_45%,rgba(6,7,8,.30)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_48%,rgba(210,154,72,.18),transparent_28%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_42%,rgba(210,154,72,.10),transparent_35%)]" />
     </div>
     <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1500px] flex-col px-5 pb-5 pt-24 sm:px-8 sm:pt-28 lg:px-12">
       <div className="flex flex-1 items-center"><div className="w-full max-w-5xl">
