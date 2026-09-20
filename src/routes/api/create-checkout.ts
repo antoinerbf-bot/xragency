@@ -107,6 +107,8 @@ export const Route = createFileRoute("/api/create-checkout")({
           if (body.client?.email) form.set("customer_email", body.client.email);
           if (body.client?.name) form.set("metadata[customer_name]", body.client.name);
           if (body.client?.company) form.set("metadata[company]", body.client.company);
+          if (body.client?.whatsapp) form.set("metadata[whatsapp]", body.client.whatsapp);
+          if (body.client?.website) form.set("metadata[website]", body.client.website);
           form.set("metadata[sector]", sectorId);
           form.set("metadata[situation]", situation);
           form.set("metadata[budget]", budget);
