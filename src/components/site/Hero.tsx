@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, FileImage, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowUpRight, FileImage, Sparkles } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
@@ -21,7 +21,7 @@ function Stat({value,label}:{value:string;label:string}) {
 export function Hero(){
   const {t}=useLang();
   const videoRef=useRef<HTMLVideoElement>(null);
-  const [reduceMotion,setReduceMotion]=useState(false);
+  const [reduceMotion,setReduceMotion]=useState(false);\n  const [videoFailed,setVideoFailed]=useState(false);
   useEffect(()=>{
     const mq=window.matchMedia("(prefers-reduced-motion: reduce)");
     const update=()=>{const connection=(navigator as Navigator & {connection?:{saveData?:boolean}}).connection;setReduceMotion(mq.matches||Boolean(connection?.saveData));};
@@ -50,7 +50,7 @@ export function Hero(){
       <img src={pf07} alt="" className="absolute inset-0 h-full w-full object-cover object-center opacity-45 saturate-[.7]"/>
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,.72),rgba(0,0,0,.22)_62%,rgba(0,0,0,.55))]"/>
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.58),transparent_35%,var(--background)_100%)]"/>
-      {!reduceMotion&&<video ref={videoRef} autoPlay muted loop playsInline preload="metadata" poster={pf07} className="absolute inset-0 h-full w-full object-cover object-center opacity-55 mix-blend-screen" aria-hidden><source src="/media/hero-desktop.mp4" type="video/mp4"/></video>}
+      {!reduceMotion&&!videoFailed&&<video autoPlay muted loop playsInline preload="metadata" poster={pf07} className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center opacity-55 mix-blend-screen" aria-hidden onError={() => setVideoFailed(true)}><source src="/__l5e/assets-v1/22bc4b57-f585-4301-9b43-db26f682e9a7/hero-studio.mp4" type="video/mp4"/></video>}
       <div className="absolute -right-[8%] top-[15%] h-[48vw] w-[48vw] rounded-full bg-primary/[.12] blur-[110px]"/>
       <div className="pointer-events-none absolute inset-0 opacity-[.05] [background-image:radial-gradient(rgba(255,255,255,.9)_0.7px,transparent_0.7px)] [background-size:5px_5px]"/>
     </div>
@@ -67,7 +67,7 @@ export function Hero(){
       </div>
       <div className="mt-7 overflow-hidden rounded-2xl border border-white/10 bg-black/25 backdrop-blur-md">
         <div className="grid grid-cols-2 divide-x divide-y divide-white/10 sm:grid-cols-4 sm:divide-y-0">
-          <Stat value="500+" label={t(UI.statProjects)}/><Stat value="8+" label={t(UI.statYears)}/><Stat value="7" label="expertises"/><Stat value="3" label="langues"/>
+          <Stat value="500+" label={t(UI.statProjects)}/><Stat value="8+" label={t(UI.statYears)}/><Stat value="98%" label="satisfaction"/><Stat value="2h" label="réponse moyenne"/>
         </div>
       </div>
       <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
