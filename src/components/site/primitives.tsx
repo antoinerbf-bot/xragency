@@ -6,9 +6,15 @@ import type { L } from "@/lib/i18n";
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <Link to="/" aria-label="XRagency. — Accueil" className={cn("group relative inline-flex min-h-11 items-center px-1", className)}>
-      <span className="relative font-black text-[24px] leading-none tracking-[-0.16em] text-current sm:text-[28px]">X</span>
-      <span aria-hidden className="absolute -bottom-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-[var(--warm)] shadow-[0_0_14px_rgba(207,157,78,.85)] transition-transform duration-300 group-hover:scale-125" />
+    <Link
+      to="/"
+      aria-label="XRAGENCY — Accueil"
+      className={cn(
+        "group relative inline-flex min-h-11 items-center px-1 font-black text-[18px] leading-none tracking-[0.16em] text-foreground transition-opacity duration-200 hover:opacity-80 sm:text-[20px]",
+        className,
+      )}
+    >
+      XRAGENCY
     </Link>
   );
 }
