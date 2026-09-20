@@ -297,7 +297,7 @@ function ServiceDetailPage() {
                         </p>
                       </div>
                       <div className="mt-8 border-t border-border/60 pt-4">
-                        <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/70">
+                        <span className="label-mono text-xs uppercase tracking-wider text-muted-foreground/70">
                           {t({ fr: "Étape", en: "Step", vi: "Bước" })} {st.num}{" "}
                           {t({ fr: "sur 04", en: "of 04", vi: "trong 04" })}
                         </span>
@@ -395,7 +395,7 @@ function ServiceDetailPage() {
                                 setInstallmentSelections(prev => ({ ...prev, [i]: true }));
                               }}
                               className={cn(
-                                "flex-1 rounded-md text-[10px] sm:text-[11px] font-medium transition-all py-1.5",
+                                "flex-1 rounded-md text-xs sm:text-sm font-medium transition-all py-1.5",
                                 isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                               )}
                             >
@@ -407,7 +407,7 @@ function ServiceDetailPage() {
                                 setInstallmentSelections(prev => ({ ...prev, [i]: false }));
                               }}
                               className={cn(
-                                "flex-1 rounded-md text-[10px] sm:text-[11px] font-medium transition-all py-1.5",
+                                "flex-1 rounded-md text-xs sm:text-sm font-medium transition-all py-1.5",
                                 !isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                               )}
                             >
@@ -423,7 +423,7 @@ function ServiceDetailPage() {
                           <span className="label-mono flex flex-col items-start gap-1 text-xs text-muted-foreground">
                             <span>{t(PERIOD_LABEL[displayPeriod])}</span>
                             {planIsInstallment && (
-                              <span className="text-[10px] text-primary/80 leading-tight max-w-[140px]">
+                              <span className="text-xs text-primary/80 leading-tight max-w-[140px]">
                                 {t({ fr: "sur 12 mois (inclus domaine & hébergement 79€/m)", en: "over 12 mo (incl. domain & hosting 79€/m)", vi: "trong 12 tháng (gồm domain & hosting 79€/m)" })}
                               </span>
                             )}
