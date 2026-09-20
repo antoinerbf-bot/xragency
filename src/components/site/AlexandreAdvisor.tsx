@@ -10,101 +10,84 @@ const moodCopy: Record<JulieMood, { badge: string; line: string; tone: string }>
   success: { badge: "PRÊTE", line: "Votre première recommandation est prête. Vous pouvez encore l'ajuster.", tone: "border-emerald-400/30" },
 };
 
+
 function JuliePortrait({ mood }: { mood: JulieMood }) {
   const motion = mood === "recommend" ? "translate-x-[2px]" : mood === "focus" ? "-translate-x-[1px]" : "";
 
   return (
-    <div className="group/portrait relative h-[154px] w-[118px] sm:h-[174px] sm:w-[134px]" aria-label="Julie, à votre service">
-      <div className="absolute inset-x-5 bottom-0 h-4 rounded-full bg-black/40 blur-xl" />
-      <div className="relative h-full w-full overflow-hidden rounded-[1.9rem] border border-white/15 bg-[linear-gradient(145deg,#efe9e1_0%,#d4cec7_45%,#a9aaa7_100%)] shadow-[0_30px_70px_-28px_rgba(0,0,0,.9)] transition-transform duration-500 group-hover/portrait:-translate-y-1">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_12%,rgba(255,255,255,.92),transparent_25%),linear-gradient(115deg,rgba(255,255,255,.18),transparent_42%,rgba(8,11,11,.18))]" />
+    <div className="group/portrait relative h-[190px] w-[150px] sm:h-[226px] sm:w-[178px]" aria-label="Julie, conseillère digitale">
+      <div className="absolute -left-5 top-6 h-20 w-20 rounded-full bg-fuchsia-400/30 blur-2xl transition duration-700 group-hover/portrait:scale-125" />
+      <div className="absolute -right-4 bottom-5 h-24 w-24 rounded-full bg-cyan-400/25 blur-2xl transition duration-700 group-hover/portrait:scale-125" />
+      <div className="absolute inset-0 overflow-hidden rounded-[2.5rem] border border-white/20 bg-[linear-gradient(145deg,#f8f2e8,#dfe8e8_48%,#c8d2ec)] shadow-[0_35px_80px_-30px_rgba(0,0,0,.8)] transition-transform duration-500 group-hover/portrait:-translate-y-2">
+        <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-yellow-300/70 blur-[1px]" />
+        <div className="absolute -left-8 bottom-12 h-24 w-24 rounded-full bg-fuchsia-300/55 rotate-12" />
+        <div className="absolute right-5 bottom-8 h-16 w-16 rounded-[1.5rem] bg-cyan-300/50 rotate-12" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(255,255,255,.95),transparent_34%),linear-gradient(125deg,rgba(255,255,255,.18),transparent_45%,rgba(14,20,30,.14))]" />
 
-        <div className={`absolute inset-x-0 bottom-0 h-[96%] transition-transform duration-700 ${motion}`}>
-          <svg viewBox="0 0 240 330" className="h-full w-full" role="img" aria-label="Julie">
+        <div className={`absolute inset-x-0 bottom-0 h-[97%] transition-transform duration-700 ${motion}`}>
+          <svg viewBox="0 0 260 360" className="h-full w-full" role="img" aria-label="Julie">
             <defs>
-              <linearGradient id="julieSkin2" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stopColor="#f8ddca" />
-                <stop offset="0.5" stopColor="#edc2ac" />
-                <stop offset="1" stopColor="#c98f78" />
+              <linearGradient id="julieSkinEditorial" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stopColor="#ffe5d4" />
+                <stop offset="0.55" stopColor="#efbea6" />
+                <stop offset="1" stopColor="#c78370" />
               </linearGradient>
-              <linearGradient id="julieHair2" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stopColor="#3a2a28" />
-                <stop offset="0.45" stopColor="#171112" />
-                <stop offset="1" stopColor="#4b3432" />
+              <linearGradient id="julieHairEditorial" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stopColor="#542f38" />
+                <stop offset="0.5" stopColor="#1d1720" />
+                <stop offset="1" stopColor="#8a4f55" />
               </linearGradient>
-              <linearGradient id="julieBlazer" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stopColor="#34393a" />
-                <stop offset="0.55" stopColor="#161b1b" />
-                <stop offset="1" stopColor="#090d0d" />
+              <linearGradient id="julieJacketEditorial" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stopColor="#392c55" />
+                <stop offset="0.5" stopColor="#17172a" />
+                <stop offset="1" stopColor="#0a1020" />
               </linearGradient>
-              <radialGradient id="julieCheek">
-                <stop offset="0" stopColor="#d98f83" stopOpacity=".34" />
-                <stop offset="1" stopColor="#d98f83" stopOpacity="0" />
-              </radialGradient>
-              <filter id="julieSoftShadow" x="-30%" y="-30%" width="160%" height="180%">
-                <feDropShadow dx="0" dy="11" stdDeviation="10" floodColor="#000" floodOpacity=".25" />
-              </filter>
             </defs>
 
-            <ellipse cx="120" cy="324" rx="76" ry="12" fill="rgba(0,0,0,.18)" />
+            <ellipse cx="130" cy="354" rx="82" ry="10" fill="rgba(0,0,0,.16)" />
+            <path d="M36 358c5-67 35-100 94-106 59 6 89 39 94 106H36Z" fill="url(#julieJacketEditorial)" />
+            <path d="M91 253h78l-15 42-24 42-24-42-15-42Z" fill="#f8f1e8" />
+            <path d="M91 253l39 84 39-84" fill="none" stroke="#e4b8b1" strokeWidth="3" />
+            <circle cx="172" cy="285" r="4" fill="#f3c96b" />
 
-            {/* Tailored blazer and neckline: editorial human silhouette, not a robot/avatar. */}
-            <path d="M40 326c4-55 29-84 72-89l8 17 8-17c44 5 68 34 72 89H40Z" fill="url(#julieBlazer)" filter="url(#julieSoftShadow)" />
-            <path d="M112 238h16l8 26-16 28-16-28 8-26Z" fill="#f5d2bf" />
-            <path d="M88 248l32 43 32-43 25 78H63l25-78Z" fill="#f2eee8" opacity=".92" />
-            <path d="M88 248l32 43 32-43" fill="none" stroke="#d5cec5" strokeWidth="2" />
-            <path d="M120 291v33" stroke="#6d7270" strokeWidth="2" opacity=".35" />
+            <path d="M67 113c0-56 27-91 65-91 45 0 73 34 69 92l-8 74c-6 39-30 65-61 65-32 0-56-27-62-66l-3-74Z" fill="url(#julieSkinEditorial)" />
+            <path d="M61 126C50 80 65 30 115 18c45-11 88 18 91 76 2 35-4 60-14 75l-12-8c8-33 2-62-20-81-17-15-36-22-51-39-7 28-25 48-47 61l-1 34-0 0Z" fill="url(#julieHairEditorial)" />
+            <path d="M69 132c-13 22-11 50 2 68l12-10c-5-18-5-38 1-58H69Zm123 0c12 22 10 49-2 68l-11-10c5-19 5-39-1-58h14Z" fill="#321c28" opacity=".9" />
+            <path d="M86 91c18-19 39-28 64-25 19 2 35 10 49 25" fill="none" stroke="#a66b70" strokeWidth="5" strokeLinecap="round" opacity=".45" />
 
-            {/* Face: asymmetric, softly shaded features for a human/editorial feel. */}
-            <path d="M60 119c0-51 26-82 60-82 43 0 67 30 64 84l-7 62c-7 39-31 62-57 62-29 0-53-24-60-63l0-63Z" fill="url(#julieSkin2)" filter="url(#julieSoftShadow)" />
-            <ellipse cx="82" cy="175" rx="27" ry="22" fill="url(#julieCheek)" />
-            <ellipse cx="158" cy="175" rx="25" ry="22" fill="url(#julieCheek)" />
-
-            {/* Natural shoulder-length hair. */}
-            <path d="M57 130c-6-54 8-100 54-113 45-12 80 17 82 74 1 22-3 43-8 58l-12-4c4-28-1-54-18-70-16-15-34-21-50-38-8 29-25 48-47 59l-1 34Z" fill="url(#julieHair2)" />
-            <path d="M62 117c-11 17-10 48 1 66l10-9c-4-19-4-38 1-57l-12 0Zm116 0c9 18 9 46-1 66l-9-9c4-20 4-39-1-57l11 0Z" fill="#241719" opacity=".94" />
-            <path d="M75 72c18-17 38-24 60-22 18 2 34 10 46 24" fill="none" stroke="#5b403d" strokeWidth="5" strokeLinecap="round" opacity=".5" />
-
-            {/* Brows and eyes. */}
-            <path d="M75 132c11-8 24-9 36-2" fill="none" stroke="#4a302e" strokeWidth="5" strokeLinecap="round" />
-            <path d="M130 130c11-7 25-6 35 3" fill="none" stroke="#4a302e" strokeWidth="5" strokeLinecap="round" />
+            <path d="M84 141c12-8 25-8 38-1M141 139c12-7 25-5 36 4" fill="none" stroke="#56353b" strokeWidth="5" strokeLinecap="round" />
             <g className="origin-center transition-transform duration-300 group-hover/portrait:scale-y-[.08]">
-              <ellipse cx="91" cy="146" rx="6" ry="5" fill="#3a2928" />
-              <ellipse cx="150" cy="145" rx="6" ry="5" fill="#3a2928" />
-              <circle cx="93" cy="144" r="1.7" fill="#fff" />
-              <circle cx="152" cy="143" r="1.7" fill="#fff" />
+              <ellipse cx="103" cy="155" rx="6.5" ry="5.5" fill="#30242d" />
+              <ellipse cx="160" cy="153" rx="6.5" ry="5.5" fill="#30242d" />
+              <circle cx="105" cy="153" r="1.8" fill="#fff" />
+              <circle cx="162" cy="151" r="1.8" fill="#fff" />
             </g>
+            <path d="M130 155c-2 14-7 26 2 31 4 2 8 1 10-2" fill="none" stroke="#bd806e" strokeWidth="3" strokeLinecap="round" />
+            <path d="M103 197Q130 189 157 197" fill="none" stroke="#8d4d5d" strokeWidth="4" strokeLinecap="round" className="transition-opacity duration-300 group-hover/portrait:opacity-0" />
+            <path d="M103 194Q130 214 157 194" fill="none" stroke="#8d4d5d" strokeWidth="4" strokeLinecap="round" className="opacity-0 transition-opacity duration-500 group-hover/portrait:opacity-100" />
 
-            {/* Nose, lips and restrained professional smile on hover. */}
-            <path d="M119 145c-2 12-6 25 2 30 4 3 8 1 10-2" fill="none" stroke="#bd806c" strokeWidth="3" strokeLinecap="round" />
-            <path d="M84 176c7 5 15 7 23 5M133 181c9 2 17 0 24-5" fill="none" stroke="#d89084" strokeWidth="4" strokeLinecap="round" opacity=".5" />
-            <path d="M99 188 Q120 181 141 188" fill="none" stroke="#8b4a50" strokeWidth="3.5" strokeLinecap="round" className="transition-opacity duration-300 group-hover/portrait:opacity-0" />
-            <path d="M99 186 Q120 201 141 186" fill="none" stroke="#8b4a50" strokeWidth="3.5" strokeLinecap="round" className="opacity-0 transition-opacity duration-500 group-hover/portrait:opacity-100" />
-
-            {/* Small natural highlights and clothing detail. */}
-            <path d="M70 211c13 13 29 20 50 20s38-7 51-20c-4 26-22 43-51 43s-46-17-50-43Z" fill="#e5b5a0" opacity=".45" />
-            <path d="M102 260l18 31 18-31" fill="none" stroke="#fff" strokeWidth="2" opacity=".42" />
-            <circle cx="151" cy="236" r="2.4" fill="#c9a46b" />
+            <path d="M75 219c15 15 34 22 55 22s41-7 56-22c-6 30-25 49-56 49s-49-19-55-49Z" fill="#e2aa9b" opacity=".35" />
+            <path d="M83 297c14 10 31 15 47 15s34-5 48-15" fill="none" stroke="#a58bd1" strokeWidth="2" opacity=".7" />
           </svg>
         </div>
 
-        <div className="absolute left-3 top-3 rounded-full border border-white/25 bg-black/25 px-2 py-1 text-[7px] font-semibold uppercase tracking-[.16em] text-white backdrop-blur-md">
+        <div className="absolute left-3 top-3 rounded-full border border-white/35 bg-white/45 px-3 py-1.5 text-[8px] font-semibold uppercase tracking-[.16em] text-slate-900 backdrop-blur-md">
           Julie
         </div>
         <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-2">
-          <span className="rounded-full border border-white/20 bg-black/30 px-2 py-1 text-[6px] uppercase tracking-[.16em] text-white/90 backdrop-blur-md">
+          <span className="rounded-full border border-white/35 bg-white/45 px-3 py-1.5 text-[8px] font-semibold tracking-[.06em] text-slate-900 backdrop-blur-md">
             À votre service
           </span>
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,.8)]" />
+          <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_14px_rgba(52,211,153,.95)]" />
         </div>
-
-        <div className="pointer-events-none absolute inset-x-3 bottom-12 rounded-xl border border-white/15 bg-black/15 px-2.5 py-2 opacity-0 translate-y-2 backdrop-blur-md transition-all duration-500 group-hover/portrait:translate-y-0 group-hover/portrait:opacity-100">
-          <p className="text-[7px] font-medium leading-3 text-white/90">Je vous aide à trouver le bon levier pour votre activité.</p>
+        <div className="pointer-events-none absolute inset-x-3 bottom-14 rounded-2xl border border-white/35 bg-slate-950/70 px-3 py-2.5 opacity-0 translate-y-2 backdrop-blur-md transition-all duration-500 group-hover/portrait:translate-y-0 group-hover/portrait:opacity-100">
+          <p className="text-[9px] font-medium leading-4 text-white">Je vous aide à choisir le bon projet.</p>
         </div>
       </div>
     </div>
   );
 }
+
 export function JulieAdvisor({ mood = "calm", sector, goal, selectedServices = [], step = 0 }: JulieAdvisorProps) {
   const copy = moodCopy[mood];
   const context = sector ? sector.split(" · ")[0] : "votre activité";
