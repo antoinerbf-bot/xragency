@@ -139,10 +139,10 @@ function ServiceCard({ s, i }: { s: (typeof SERVICES)[number]; i: number }) {
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-          <span className="label-mono absolute left-3 top-2 rounded-full border border-white/20 bg-black/40 px-2 py-0.5 text-[9px] text-white/90 backdrop-blur-sm">
+          <span className="label-mono absolute left-3 top-2 rounded-full border border-white/20 bg-black/40 px-2 py-0.5 text-xs text-white/90 backdrop-blur-sm">
             {s.num}
           </span>
-          <span className="label-mono absolute right-3 top-2 rounded-full bg-background/90 px-2.5 py-0.5 text-[9px] font-semibold text-primary backdrop-blur-sm shadow-sm">
+          <span className="label-mono absolute right-3 top-2 rounded-full bg-background/90 px-2.5 py-0.5 text-xs font-semibold text-primary backdrop-blur-sm shadow-sm">
             Dès {price(s.fromEur)}
           </span>
         </div>
@@ -152,11 +152,11 @@ function ServiceCard({ s, i }: { s: (typeof SERVICES)[number]; i: number }) {
           <h3 className="display-serif text-base leading-tight transition-colors duration-300 group-hover:text-primary">
             {t(s.title)}
           </h3>
-          <p className="mt-1.5 flex-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+          <p className="mt-1.5 flex-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
             {t(s.short)}
           </p>
           <div className="mt-3 flex items-center justify-between border-t border-border/40 pt-2.5">
-            <span className="label-mono text-[10px] font-semibold text-primary">
+            <span className="label-mono text-xs font-semibold text-primary">
               Voir les formules →
             </span>
             <span className="flex h-6 w-6 items-center justify-center rounded-full border border-border transition-all duration-200 group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
@@ -227,7 +227,7 @@ export function Services() {
               <div className="absolute inset-x-0 bottom-0 z-10 p-7">
                 <span
                   key={`num-${activeId}`}
-                  className="label-mono text-[10px] text-white/40 animate-fade-up"
+                  className="label-mono text-xs text-white/40 animate-fade-up"
                 >
                   {activeService.num} · {String(SERVICES.length).padStart(2, "0")}
                 </span>
@@ -248,7 +248,7 @@ export function Services() {
                   {activeService.highlights.slice(0, 3).map((h, k) => (
                     <span
                       key={k}
-                      className="label-mono rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[9px] text-white backdrop-blur-sm"
+                      className="label-mono rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-xs text-white backdrop-blur-sm"
                     >
                       {t(h)}
                     </span>
