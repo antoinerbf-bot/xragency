@@ -1,5 +1,6 @@
 import { ArrowRight, Check, Sparkles } from "lucide-react";
-import { useLang } from "@/lib/i18n";\nimport type { CSSProperties } from "react";
+import { useLang } from "@/lib/i18n";
+import type { CSSProperties } from "react";
 import { SERVICES } from "@/lib/content";
 
 const ORDER = ["websites","branding","seo","maps","social","maintenance","ecommerce"] as const;
