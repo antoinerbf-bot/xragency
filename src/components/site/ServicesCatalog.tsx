@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ArrowDown, ArrowUpRight, Check, ShoppingBag, Sparkles, Target, Wrench } from "lucide-react";
+import { ArrowDown, ArrowUpRight, ShoppingBag, Sparkles, Target, Wrench } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
 import { cn } from "@/lib/utils";
