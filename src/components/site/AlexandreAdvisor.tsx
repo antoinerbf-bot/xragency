@@ -19,7 +19,7 @@ function JuliePortrait({ mood }: { mood: JulieMood }) {
       <div className="relative h-full w-full overflow-hidden rounded-[1.9rem] border border-white/15 bg-[linear-gradient(145deg,#efe9e1_0%,#d4cec7_45%,#a9aaa7_100%)] shadow-[0_30px_70px_-28px_rgba(0,0,0,.9)] transition-transform duration-500 group-hover/portrait:-translate-y-1">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_12%,rgba(255,255,255,.92),transparent_25%),linear-gradient(115deg,rgba(255,255,255,.18),transparent_42%,rgba(8,11,11,.18))]" />
 
-        <div className={\`absolute inset-x-0 bottom-0 h-[96%] transition-transform duration-700 \${motion}\`}>
+        <div className={`absolute inset-x-0 bottom-0 h-[96%] transition-transform duration-700 ${motion}`}>
           <svg viewBox="0 0 240 330" className="h-full w-full" role="img" aria-label="Julie">
             <defs>
               <linearGradient id="julieSkin2" x1="0" y1="0" x2="1" y2="1">
