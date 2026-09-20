@@ -80,7 +80,7 @@ export const Route = createFileRoute("/api/create-checkout")({
       POST: async ({ request }) => {
         try {
           if (!process.env.STRIPE_SECRET_KEY) {
-            return Response.json({ error: "STRIPE_SECRET_KEY manquante dans Netlify." }, { status: 503 });
+            return Response.json({ error: "STRIPE_SECRET_KEY manquante dans Vercel." }, { status: 503 });
           }
 
           const body = await request.json() as CheckoutBody;
