@@ -13,15 +13,15 @@ const moodCopy: Record<JulieMood, { badge: string; line: string; tone: string }>
 function JuliePortrait({ mood }: { mood: JulieMood }) {
   const motion = mood === "recommend" ? "translate-x-[2px]" : mood === "focus" ? "-translate-x-[1px]" : "";
   return (
-    <div className="group/portrait relative h-[142px] w-[112px] sm:h-[156px] sm:w-[124px]" aria-label="Julie, à votre écoute">
+    <div className="group/portrait relative h-[154px] w-[118px] sm:h-[174px] sm:w-[134px]" aria-label="Julie, à votre écoute">
       <div className="absolute inset-x-3 bottom-0 h-5 rounded-full bg-black/35 blur-xl" />
-      <div className="relative h-full w-full overflow-hidden rounded-[1.75rem] border border-white/20 bg-[#d8d1c9] shadow-[0_30px_70px_-28px_rgba(0,0,0,.9)]">
+      <div className="relative h-full w-full overflow-hidden rounded-[1.9rem] border border-white/20 bg-[#d8d1c9] shadow-[0_30px_70px_-28px_rgba(0,0,0,.9)]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_15%,rgba(255,255,255,.8),transparent_30%),linear-gradient(145deg,#eee8e1,#c7cbc7_55%,#69726e)]" />
         <div className={`absolute inset-x-0 bottom-0 h-[72%] overflow-hidden transition-transform duration-700 ${motion}`}>
           <img
-            src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=90"
+            src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=92"
             alt="Julie"
-            className="h-[118%] w-full object-cover object-[50%_22%] saturate-[.82] contrast-[1.03]"
+            className="h-[122%] w-full object-cover object-[50%_18%] saturate-[.9] contrast-[1.04] brightness-[.98]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0c1211] via-transparent to-transparent" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(12,18,17,.16),transparent_45%,rgba(12,18,17,.08))]" />
