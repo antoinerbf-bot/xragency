@@ -10,4 +10,9 @@ export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
   },
+  // Build the TanStack Start server for Netlify Functions.
+  // @lovable.dev/vite-tanstack-config already provides Nitro.
+  nitro: {
+    preset: "netlify",
+  },
 });
