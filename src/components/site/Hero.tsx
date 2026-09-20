@@ -61,20 +61,20 @@ export function Hero() {
   const { t } = useLang();
 
   return (
-    <section id="top" className="grain relative min-h-[92dvh] overflow-hidden pt-20 sm:pt-24">
+    <section id="top" className="grain relative min-h-[92dvh] overflow-hidden pt-20 sm:pt-24">\n      <div className="absolute inset-0 z-0">\n        <video className="h-full w-full object-cover object-center opacity-45 dark:opacity-55" autoPlay muted loop playsInline preload="metadata" poster="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2400&q=85" aria-hidden>\n          <source src="https://assets.mixkit.co/videos/preview/mixkit-luxury-hotel-room-panning-shot-4196-large.mp4" type="video/mp4" />\n        </video>\n        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,10,14,.94)_0%,rgba(8,10,14,.78)_38%,rgba(8,10,14,.38)_72%,rgba(8,10,14,.68)_100%)] dark:bg-[linear-gradient(90deg,rgba(4,5,8,.94)_0%,rgba(4,5,8,.78)_42%,rgba(4,5,8,.38)_76%,rgba(4,5,8,.72)_100%)]" />\n        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_30%,rgba(255,92,180,.20),transparent_28%),radial-gradient(circle_at_88%_72%,rgba(44,211,255,.16),transparent_24%)]" />\n      </div>
       {/* Atmospheric lighting depth layers */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 z-[1]"
         style={{
           background:
             "radial-gradient(120% 100% at 10% 40%, var(--background) 30%, color-mix(in oklab, var(--background) 65%, transparent) 60%, color-mix(in oklab, var(--background) 85%, transparent) 100%), linear-gradient(180deg, color-mix(in oklab, var(--background) 60%, transparent) 0%, transparent 45%, var(--background) 98%)",
         }}
       />
 
-      <div className="relative mx-auto flex min-h-[calc(92dvh-6.5rem)] max-w-7xl flex-col justify-between px-6 lg:px-10">
+      <div className="relative z-10 mx-auto flex min-h-[calc(92dvh-6.5rem)] max-w-7xl flex-col justify-between px-6 lg:px-10">
         {/* Hero Main Content */}
-        <div className="grid items-center gap-10 py-10 lg:grid-cols-12 lg:py-14">
+        <div className="grid items-center gap-7 py-7 lg:grid-cols-12 lg:py-9">
           {/* Left Column: Typography & CTAs */}
           <Parallax speed={-0.03} className="relative z-10 lg:col-span-7">
             <div
@@ -111,7 +111,7 @@ export function Hero() {
 
             {/* Direct CTAs */}
             <div
-              className="mt-8 flex flex-wrap items-center gap-3.5"
+              className="mt-6 flex flex-wrap items-center gap-3"
               style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 400ms both" }}
             >
               <div className="grid w-full max-w-3xl grid-cols-1 gap-2 sm:grid-cols-3 [perspective:900px]">
@@ -156,8 +156,8 @@ export function Hero() {
             <AnimatedStat value={2} suffix="h" label={t(UI.statResponse)} delay={790} />
           </dl>
 
-          <div className="mt-5 flex items-center justify-between gap-4 border-t border-border/60 py-4">
-            <span className="label-mono text-xs text-muted-foreground/70">XR Intelligence · Julie · Devis sur mesure</span>
+          <div className="mt-3 flex items-center justify-between gap-4 border-t border-white/20 py-3">
+            <span className="label-mono text-xs text-white/70">XR Intelligence · Julie · Devis sur mesure</span>
             <span className="label-mono text-xs text-primary">01 · Analyse</span>
           </div>
         </div>
