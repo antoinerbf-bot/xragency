@@ -37,8 +37,8 @@ export function UniversePresence({ sector, mood = "calm", step = 0 }: Props) {
   const label = sector || "Choisissez votre univers";
   return (
     <div className="group relative w-full max-w-[380px]" aria-label={`Plaque d'atelier XR Intelligence — ${label}`}>
-      <div className={`relative aspect-[4/5] overflow-hidden rounded-[1.6rem] border border-primary/25 bg-black shadow-[0_30px_80px_-45px_rgba(0,0,0,.95)] ring-1 ${moodClass} transition-all duration-500 group-hover:-translate-y-1`}>
-        <img src={scene.image} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.035]" />
+      <div className={`relative aspect-[4/5] overflow-hidden rounded-[1.6rem] border border-primary/25 bg-black shadow-[0_30px_80px_-45px_rgba(0,0,0,.95)] ring-1 ${moodClass} transition-all duration-200 group-hover:-translate-y-1 group-hover:brightness-110`}>
+        <img src={scene.image} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-200 group-hover:scale-[1.035]" />
         <div className={`absolute inset-0 bg-gradient-to-br ${scene.tone}`} />
         <div className="absolute inset-3 rounded-[1.25rem] border border-amber-200/20" />
         <div className="absolute inset-x-6 top-6 flex items-center justify-between">
