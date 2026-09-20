@@ -1,198 +1,110 @@
-import { ArrowUpRight } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ArrowDown, ArrowUpRight, Check, ShoppingBag, Sparkles, Target, Wrench } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
-import { SurfaceDigital } from "./SurfaceDigital";
 import { cn } from "@/lib/utils";
-import { Parallax } from "./primitives";
+import aiImg from "@/assets/svc-ai.jpg";
+import brandingImg from "@/assets/svc-branding.jpg";
+import maintenanceImg from "@/assets/svc-maintenance.jpg";
+import mapsImg from "@/assets/svc-maps.jpg";
+import seoImg from "@/assets/svc-seo.jpg";
+import socialImg from "@/assets/svc-social.jpg";
 
-/** Core catalog shown on /services — coherent set, not the full internal list */
-const CATALOG_IDS = [
-  "websites",
-  "branding",
-  "seo",
-  "maps",
-  "social",
-  "maintenance",
-  "ecommerce",
-] as const;
-
-const FIG_LABEL: Record<string, { fr: string; en: string; vi: string }> = {
-  websites: { fr: "FLAGSHIP", en: "FLAGSHIP", vi: "FLAGSHIP" },
-  branding: { fr: "IDENTITÉ", en: "IDENTITY", vi: "NHẬN DIỆN" },
-  seo: { fr: "VISIBILITÉ", en: "VISIBILITY", vi: "HIỂN THỊ" },
-  maps: { fr: "LOCAL", en: "LOCAL", vi: "ĐỊA PHƯƠNG" },
-  social: { fr: "RÉSEAUX", en: "SOCIAL", vi: "MẠNG XÃ HỘI" },
-  maintenance: { fr: "SOIN", en: "CARE", vi: "BẢO TRÌ" },
-  ecommerce: { fr: "COMMERCE", en: "COMMERCE", vi: "THƯƠNG MẠI" },
+const CATALOG_IDS = ["websites","branding","seo","maps","social","maintenance","ecommerce"] as const;
+const HREF: Record<string,string> = {
+  websites:"/services/websites", branding:"/services/branding", seo:"/services/seo", maps:"/services/maps",
+  social:"/services/social", maintenance:"/services/webcare", ecommerce:"/services/ecommerce",
 };
-
-const HREF: Record<string, string> = {
-  websites: "/services/websites",
-  branding: "/services/branding",
-  seo: "/services/seo",
-  maps: "/services/maps",
-  social: "/services/social",
-  maintenance: "/services/webcare",
-  ecommerce: "/services/ecommerce",
+const IMAGES: Record<string,string> = {
+  websites: aiImg, branding: brandingImg, seo: seoImg, maps: mapsImg, social: socialImg,
+  maintenance: maintenanceImg, ecommerce: aiImg,
+};
+const TINT: Record<string,string> = {
+  websites:"--service-amber", branding:"--service-champagne", seo:"--service-blue", maps:"--service-green",
+  social:"--service-magenta", maintenance:"--service-cobalt", ecommerce:"--service-gold",
+};
+const RELEVANCE: Record<string,string[]> = {
+  restaurant:["websites","maps","social","seo","maintenance"], hospitality:["websites","maps","seo","social"],
+  realestate:["websites","branding","seo","maps"], automotive:["websites","maps","seo","maintenance"],
+  fashion:["branding","websites","social","seo"], jewelry:["branding","websites","seo"],
 };
 
 export function ServicesCatalog() {
   const { t, price, lang } = useLang();
-  const catalog = CATALOG_IDS.map((id) => SERVICES.find((s) => s.id === id)).filter(
-    Boolean,
-  ) as typeof SERVICES;
-
+  const [universe,setUniverse] = useState<string>("");
+  const catalog = useMemo(() => CATALOG_IDS.map(id => SERVICES.find(s => s.id === id)).filter(Boolean) as typeof SERVICES, []);
   const copy = {
-    fr: {
-      eyebrow: "SERVICES",
-      title1: "Plusieurs expertises.",
-      title2: "Un seul système.",
-      lead: "Sites, identité, SEO, Google Maps, réseaux et maintenance. Chaque prestation travaille seule — ensemble, elles construisent une présence digitale qui convertit.",
-      learn: "En savoir plus",
-      from: "À partir de",
-      ctaTitle: "Pas sûr par où commencer ?",
-      ctaLead: "Décrivez votre situation. On vous propose un ordre clair et une estimation.",
-      cta: "Lancer mon analyse",
-    },
-    en: {
-      eyebrow: "SERVICES",
-      title1: "Multiple disciplines.",
-      title2: "One system.",
-      lead: "Websites, identity, SEO, Google Maps, social and maintenance. Each service works on its own — together they build a digital presence that converts.",
-      learn: "Learn more",
-      from: "From",
-      ctaTitle: "Not sure where to start?",
-      ctaLead: "Tell us about your situation. We'll suggest a sequence and a budget range.",
-      cta: "Start my analysis",
-    },
-    vi: {
-      eyebrow: "DỊCH VỤ",
-      title1: "Nhiều chuyên môn.",
-      title2: "Một hệ thống.",
-      lead: "Website, nhận diện, SEO, Google Maps, mạng xã hội và bảo trì. Mỗi dịch vụ hoạt động riêng — cùng nhau tạo nên hiện diện số chuyển đổi.",
-      learn: "Tìm hiểu thêm",
-      from: "Từ",
-      ctaTitle: "Chưa chắc bắt đầu từ đâu?",
-      ctaLead: "Mô tả tình huống của bạn. Chúng tôi đề xuất thứ tự và khoảng ngân sách.",
-      cta: "Bắt đầu phân tích",
-    },
+    fr:{eyebrow:"EXPERTISES · 07",title1:"Plusieurs expertises.",title2:"Un seul système.",lead:"Sites, identité, SEO, Maps, réseaux, soin et e-commerce : chaque scène répond à un besoin précis, puis s’assemble dans votre présence digitale.",enter:"Entrer dans l’expérience",compose:"Composer cette offre",from:"À partir de",indecision:"Pas sûr par où commencer ?",indecisionLead:"Trois portes simples pour trouver la bonne scène sans passer par un deuxième questionnaire.",site:"J’ai besoin d’un site / d’une boutique",visibility:"On ne me trouve pas (Google / Maps)",recurring:"Je veux que ça tourne (social / maintenance)",quote:"Faire mon devis gratuit",reassurance:"Sans engagement · 30 min",showAll:"Voir toutes les expertises",sticky:"Faire mon devis",relevant:"pertinent pour",},
+    en:{eyebrow:"EXPERTISES · 07",title1:"Multiple disciplines.",title2:"One system.",lead:"Websites, identity, SEO, Maps, social, care and e-commerce: each scene solves a specific need, then fits into one digital presence.",enter:"Enter the experience",compose:"Compose this offer",from:"From",indecision:"Not sure where to start?",indecisionLead:"Three simple doors to find the right scene without another long questionnaire.",site:"I need a website / online store",visibility:"People can't find me (Google / Maps)",recurring:"I want it to run (social / maintenance)",quote:"Make my free quote",reassurance:"No commitment · 30 min",showAll:"See all expertise",sticky:"Make my quote",relevant:"relevant for",},
+    vi:{eyebrow:"CHUYÊN MÔN · 07",title1:"Nhiều chuyên môn.",title2:"Một hệ thống.",lead:"Website, nhận diện, SEO, Maps, mạng xã hội, chăm sóc và thương mại điện tử: mỗi cảnh giải quyết một nhu cầu cụ thể rồi kết nối thành một hiện diện số.",enter:"Bước vào trải nghiệm",compose:"Chọn dịch vụ này",from:"Từ",indecision:"Chưa chắc bắt đầu từ đâu?",indecisionLead:"Ba cánh cửa đơn giản để chọn đúng dịch vụ mà không cần thêm một bảng câu hỏi dài.",site:"Tôi cần website / cửa hàng online",visibility:"Khách hàng không tìm thấy tôi (Google / Maps)",recurring:"Tôi muốn mọi thứ vận hành (social / bảo trì)",quote:"Nhận báo giá miễn phí",reassurance:"Không cam kết · 30 phút",showAll:"Xem toàn bộ chuyên môn",sticky:"Nhận báo giá",relevant:"phù hợp với",},
   }[lang];
 
-  return (
-    <section className="relative">
-      {/* Hero — same Surface digitale universe as Home */}
-      <div className="relative min-h-[70vh] overflow-hidden border-b border-border/40">
-        <div className="pointer-events-none absolute inset-0 bg-background">
-          <SurfaceDigital className="opacity-80" />
+  const period = (p:string) => p === "month" ? (lang==="fr"?" / mois":lang==="vi"?" / tháng":" / month") : p === "year" ? (lang==="fr"?" / an":lang==="vi"?" / năm":" / year") : "";
+  const relevant = RELEVANCE[universe] ?? [];
+  const selectService = (id:string) => {
+    const target = id === "ecommerce" ? "ecommerce" : id;
+    window.location.href = `/#quote?service=${encodeURIComponent(target)}`;
+  };
+  const doors = [
+    {icon:ShoppingBag,label:copy.site,ids:["websites","ecommerce"]},
+    {icon:Target,label:copy.visibility,ids:["seo","maps"]},
+    {icon:Wrench,label:copy.recurring,ids:["social","maintenance"]},
+  ];
+
+  return <section className="relative overflow-hidden bg-background">
+    <style>{`:root{--service-amber:#cf9d4e;--service-champagne:#d8c4a0;--service-blue:#5da7df;--service-green:#72b98b;--service-magenta:#c65a9c;--service-cobalt:#5276c7;--service-gold:#e0b85d}@keyframes xr-kenburns{from{transform:scale(1)}to{transform:scale(1.045)}}@media(prefers-reduced-motion:reduce){.xr-kenburns{animation:none!important}}`}</style>
+
+    <div className="relative min-h-[80svh] overflow-hidden border-b border-border/40 sm:min-h-[70svh]">
+      <img src={IMAGES.websites} alt="" className="xr-kenburns absolute inset-0 h-full w-full object-cover opacity-75 motion-safe:animate-[xr-kenburns_20s_ease-in-out_infinite_alternate]" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,6,7,.96)_0%,rgba(5,6,7,.78)_45%,rgba(5,6,7,.45)_100%)]"/>
+      <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,6,7,.95)_0%,transparent_55%,rgba(5,6,7,.45)_100%)]"/>
+      <div className="grain absolute inset-0 opacity-50"/>
+      <div className="relative z-10 mx-auto flex min-h-[80svh] max-w-[1500px] flex-col justify-end px-5 pb-10 pt-28 sm:min-h-[70svh] sm:px-8 sm:pb-14 lg:px-12 lg:pb-20">
+        <p className="label-mono text-xs uppercase tracking-[.28em] text-primary">{copy.eyebrow}</p>
+        <h1 className="display-serif mt-5 max-w-5xl text-[clamp(3rem,7vw,6.7rem)] leading-[.9] tracking-[-.045em] text-white">{copy.title1}<br/><em className="not-italic italic text-primary">{copy.title2}</em></h1>
+        <p className="mt-7 max-w-2xl text-base leading-7 text-white/75 sm:text-lg">{copy.lead}</p>
+        <div className="mt-7 flex flex-wrap gap-2">
+          {[["restaurant","Gastronomie"],["hospitality","Hôtellerie"],["realestate","Immobilier"],["automotive","Automobile"],["fashion","Mode"],["jewelry","Joaillerie"]].map(([id,label]) =>
+            <button key={id} type="button" onClick={()=>setUniverse(universe===id?"":id)} aria-pressed={universe===id} className={cn("min-h-11 rounded-full border px-4 text-sm backdrop-blur-xl transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary", universe===id?"border-primary bg-primary/15 text-white":"border-white/15 bg-black/25 text-white/75")}>{label}</button>
+          )}
         </div>
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(80% 60% at 50% 40%, transparent 0%, color-mix(in oklab, var(--background) 55%, transparent) 70%, var(--background) 100%)",
-          }}
-        />
-        <div className="relative z-10 mx-auto flex min-h-[70vh] max-w-[1400px] flex-col justify-end px-5 pb-16 pt-32 sm:px-8 lg:px-12 lg:pb-24">
-          <p className="label-mono text-[10px] uppercase tracking-[0.32em] text-primary">{copy.eyebrow}</p>
-          <h1 className="display-serif mt-5 max-w-5xl text-5xl leading-[0.9] sm:text-7xl lg:text-[6.5rem]">
-            {copy.title1}
-            <br />
-            <span className="text-foreground/90">{copy.title2}</span>
-          </h1>
-          <p className="mt-8 max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
-            {copy.lead}
-          </p>
-          <p className="mt-6 label-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
-            01 // {String(catalog.length).padStart(2, "0")}
-          </p>
-        </div>
+        <div className="mt-4 flex items-center gap-2 text-xs text-white/50"><Sparkles className="h-3.5 w-3.5 text-primary"/>{universe ? `${copy.relevant} ${["Gastronomie","Hôtellerie","Immobilier","Automobile","Mode","Joaillerie"][["restaurant","hospitality","realestate","automotive","fashion","jewelry"].indexOf(universe)]}` : copy.showAll}</div>
       </div>
+    </div>
 
-      {/* FIG. cards — Qbenix language */}
-      <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
-        <div className="grid gap-8 lg:gap-12">
-          {catalog.map((service, index) => {
-            const fig = FIG_LABEL[service.id] ?? { fr: "SERVICE", en: "SERVICE", vi: "DỊCH VỤ" };
-            const href = HREF[service.id] ?? `/services/${service.id}`;
-            return (
-              <article
-                key={service.id}
-                className={cn(
-                  "group grid items-center gap-8 border-b border-border/50 pb-12 last:border-0 lg:grid-cols-[200px_1fr_auto] lg:gap-12 lg:pb-16",
-                )}
-              >
-                <div>
-                  <p className="label-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground">
-                    FIG. {String(index + 1).padStart(2, "0")}
-                  </p>
-                  <p className="mt-3 label-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-                    {fig[lang]}
-                  </p>
-                </div>
-
-                <Parallax speed={-0.025} className="max-w-2xl">
-                  <h2 className="display-serif text-3xl leading-tight sm:text-4xl lg:text-5xl">
-                    {t(service.title)}
-                  </h2>
-                  <p className="mt-4 text-sm leading-7 text-muted-foreground sm:text-base">
-                    {t(service.description)}
-                  </p>
-                  <ul className="mt-5 flex flex-wrap gap-2">
-                    {service.highlights.slice(0, 3).map((h, i) => (
-                      <li
-                        key={i}
-                        className="rounded-full border border-border/70 bg-card/40 px-3 py-1.5 label-mono text-[9px] uppercase tracking-[0.1em] text-muted-foreground"
-                      >
-                        {t(h)}
-                      </li>
-                    ))}
-                  </ul>
-                </Parallax>
-
-                <div className="relative z-10 flex flex-col items-start gap-4 lg:items-end">
-                  <p className="label-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                    {copy.from}{" "}
-                    <span className="text-base font-semibold tracking-normal text-foreground">
-                      {price(service.fromEur)}
-                    </span>
-                    {service.fromPeriod === "month" && (
-                      <span className="text-muted-foreground"> / mois</span>
-                    )}
-                    {service.fromPeriod === "year" && (
-                      <span className="text-muted-foreground"> / an</span>
-                    )}
-                  </p>
-                  <a
-                    href={href}
-                    className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-5 py-3 label-mono text-[10px] font-semibold uppercase tracking-[0.14em] transition-all duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground"
-                  >
-                    {copy.learn}
-                    <ArrowUpRight className="h-3.5 w-3.5" />
-                  </a>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-
-        {/* Bottom CTA */}
-        <div className="mt-20 rounded-3xl border border-primary/20 bg-primary/[0.04] px-8 py-12 sm:px-12 lg:px-16">
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <h3 className="display-serif text-3xl sm:text-4xl">{copy.ctaTitle}</h3>
-              <p className="mt-3 max-w-xl text-sm leading-7 text-muted-foreground">{copy.ctaLead}</p>
+    <div id="services-scenes" className="mx-auto max-w-[1500px] px-5 py-12 sm:px-8 sm:py-16 lg:px-12 lg:py-24">
+      <div className="mb-8 flex items-end justify-between gap-4"><div><p className="label-mono text-xs uppercase tracking-[.2em] text-primary">01 — SCÈNES</p><p className="mt-3 max-w-2xl text-base leading-6 text-muted-foreground">{copy.lead}</p></div><ArrowDown className="hidden h-5 w-5 text-primary sm:block"/></div>
+      <div className="grid auto-rows-fr gap-4 lg:grid-cols-3">
+        {catalog.map((service,index)=>{
+          const id=service.id, isFlagship=id==="websites", isRelevant=!universe || relevant.includes(id), tint=TINT[id];
+          return <article key={id} className={cn("group relative overflow-hidden rounded-[1.5rem] border bg-card/50 transition duration-300 hover:-translate-y-1",isFlagship?"lg:col-span-2":"",isRelevant?"opacity-100":"opacity-45")} style={{borderColor:`color-mix(in srgb, var(${tint}) 28%, var(--border))`}}>
+            <div className={cn("relative overflow-hidden",isFlagship?"h-[260px] sm:h-[330px]":"h-[210px] sm:h-[235px]")}>
+              <img src={IMAGES[id]} alt={t(service.title)} loading={index<2?"eager":"lazy"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"/>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-black/5"/>
+              <div className="absolute left-4 top-4 flex items-center gap-2"><span className="font-mono text-sm text-primary">{String(index+1).padStart(2,"0")}</span>{isRelevant&&universe&&<span className="rounded-full border border-white/15 bg-black/35 px-2 py-1 text-[11px] text-white/70">{copy.relevant}</span>}</div>
+              <div className="absolute bottom-4 left-4 right-4"><h2 className={cn("display-serif text-3xl text-white",isFlagship?"sm:text-5xl":"sm:text-4xl")}>{t(service.title)}</h2></div>
             </div>
-            <a
-              href="/#quote"
-              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-6 py-3.5 label-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-foreground transition-all hover:gap-3"
-            >
-              Faire mon devis gratuit
-              <ArrowUpRight className="h-4 w-4" />
-            </a>
-          </div>
-        </div>
+            <div className="p-5 sm:p-6">
+              <p className="max-w-xl text-base leading-6 text-muted-foreground">{t(service.short)}</p>
+              <div className="mt-4 flex flex-wrap gap-2">{service.highlights.slice(0,3).map((h,i)=><span key={i} className="rounded-full border px-2.5 py-1.5 text-xs text-muted-foreground" style={{borderColor:`color-mix(in srgb, var(${tint}) 35%, var(--border))`}}>{t(h)}</span>)}</div>
+              <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-base text-muted-foreground">{copy.from} <strong className="text-xl text-foreground">{price(service.fromEur)}</strong><span>{period(service.fromPeriod)}</span></p>
+                <div className="flex flex-wrap gap-2">
+                  <a href={HREF[id]} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-foreground px-4 py-2.5 text-sm font-semibold text-background transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">{copy.enter}<ArrowUpRight className="h-4 w-4"/></a>
+                  <button type="button" onClick={()=>selectService(id)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-border px-4 py-2.5 text-sm text-foreground transition hover:border-primary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">{copy.compose}</button>
+                </div>
+              </div>
+            </div>
+          </article>;
+        })}
       </div>
-    </section>
-  );
+
+      <div className="mt-16 rounded-[2rem] border border-primary/20 bg-primary/[.035] p-6 sm:p-8 lg:p-10">
+        <div className="max-w-3xl"><p className="label-mono text-xs uppercase tracking-[.2em] text-primary">02 — CHOISIR SANS SE PERDRE</p><h2 className="display-serif mt-3 text-3xl sm:text-5xl">{copy.indecision}</h2><p className="mt-3 text-base leading-6 text-muted-foreground">{copy.indecisionLead}</p></div>
+        <div className="mt-7 grid gap-3 md:grid-cols-3">{doors.map(({icon:Icon,label,ids})=><button key={label} type="button" onClick={()=>{setUniverse(""); document.getElementById(`scene-${ids[0]}`)?.scrollIntoView({behavior:"smooth",block:"center"});}} className="group min-h-[150px] rounded-2xl border border-border bg-background/65 p-5 text-left transition hover:-translate-y-1 hover:border-primary/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"><Icon className="h-5 w-5 text-primary"/><span className="mt-5 block text-base font-semibold">{label}</span><span className="mt-3 inline-flex items-center gap-1 text-sm text-primary">{copy.showAll}<ArrowUpRight className="h-3.5 w-3.5"/></span></button>)}</div>
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"><p className="text-sm text-muted-foreground">{copy.reassurance}</p><a href="/#quote" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">{copy.quote}<ArrowUpRight className="h-4 w-4"/></a></div>
+      </div>
+    </div>
+    <div className="fixed inset-x-3 bottom-3 z-40 sm:hidden"><a href="/#quote" className="flex min-h-12 items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-2xl">{copy.sticky}</a></div>
+  </section>;
 }
