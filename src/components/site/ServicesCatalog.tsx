@@ -77,7 +77,7 @@ export function ServicesCatalog() {
       <div className="grid auto-rows-fr gap-4 lg:grid-cols-3">
         {catalog.map((service,index)=>{
           const id=service.id, isFlagship=id==="websites", isRelevant=!universe || relevant.includes(id), tint=TINT[id];
-          return <article key={id} className={cn("group relative overflow-hidden rounded-[1.5rem] border bg-card/50 transition duration-300 hover:-translate-y-1",isFlagship?"lg:col-span-2":"",isRelevant?"opacity-100":"opacity-45")} style={{borderColor:`color-mix(in srgb, var(${tint}) 28%, var(--border))`}}>
+          return <article id={`scene-${id}`} key={id} className={cn("group relative overflow-hidden rounded-[1.5rem] border bg-card/50 transition duration-300 hover:-translate-y-1",isFlagship?"lg:col-span-2":"",isRelevant?"opacity-100":"opacity-45")} style={{borderColor:`color-mix(in srgb, var(${tint}) 28%, var(--border))`}}>
             <div className={cn("relative overflow-hidden",isFlagship?"h-[260px] sm:h-[330px]":"h-[210px] sm:h-[235px]")}>
               <img src={IMAGES[id]} alt={t(service.title)} loading={index<2?"eager":"lazy"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"/>
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-black/5"/>
