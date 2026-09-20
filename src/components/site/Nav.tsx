@@ -30,7 +30,7 @@ export function Nav() {
   return (
     <header className={cn("fixed inset-x-0 top-0 z-50 transition-all duration-300", scrolled ? "border-b border-white/10 bg-[#090a0b]/78 py-2 backdrop-blur-2xl" : "border-b border-transparent bg-black/15 py-2.5 backdrop-blur-sm")}>
       <nav className="mx-auto flex w-full max-w-[1500px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
-        <Logo className="shrink-0 text-white" />
+        <Logo className="shrink-0" />
         <div className="hidden items-center gap-1 lg:flex">
           <button onClick={() => go("homepage-services")} className="rounded-full px-3.5 py-2 text-sm text-white/70 transition hover:bg-white/10 hover:text-white">{t(UI.navServices)}</button>
           <a href="/work" className="rounded-full px-3.5 py-2 text-sm text-white/70 transition hover:bg-white/10 hover:text-white">{t(UI.navWork)}</a>
