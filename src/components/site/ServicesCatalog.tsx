@@ -1,5 +1,5 @@
 import { ArrowRight, Check, Sparkles } from "lucide-react";
-import { useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/i18n";\nimport type { CSSProperties } from "react";
 import { SERVICES } from "@/lib/content";
 
 const ORDER = ["websites","branding","seo","maps","social","maintenance","ecommerce"] as const;
@@ -52,7 +52,7 @@ export function ServicesCatalog() {
         {services.map((service,index)=>{
           const tint=TINT[service.id] ?? "#d7a35d";
           const href=HREF[service.id] ?? ("/services/" + service.id);
-          return <article key={service.id} className="group relative overflow-hidden rounded-[2rem] border border-border/60 bg-card/50" style={{"--tint":tint} as React.CSSProperties}>
+          return <article key={service.id} className="group relative overflow-hidden rounded-[2rem] border border-border/60 bg-card/50" style={{"--tint":tint} as CSSProperties}>
             <div className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100" style={{background:"radial-gradient(circle at 75% 25%, color-mix(in srgb, var(--tint) 18%, transparent), transparent 40%)"}}/>
             <div className="relative grid min-h-[560px] lg:grid-cols-[.95fr_1.05fr]">
               <a href={href} className="relative min-h-[360px] overflow-hidden lg:min-h-full">
