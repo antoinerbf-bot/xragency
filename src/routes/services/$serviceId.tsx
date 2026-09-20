@@ -1,6 +1,6 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { ArrowRight, Check, ChevronDown, MessageCircle, Sparkles } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { SERVICES, CONTACT, PERIOD_LABEL } from "@/lib/content";
 import { useLang } from "@/lib/i18n";
 import { Nav } from "@/components/site/Nav";
@@ -56,7 +56,7 @@ function ServiceDetail(){
   const [activePlan,setActivePlan]=useState(Math.max(0,service.plans.findIndex(p=>p.popular)));
   const [faq,setFaq]=useState<number|null>(0);
   const [scrolled,setScrolled]=useState(false);
-  useEffect(()=>{ window.scrollTo({top:0,behavior:"instant" as ScrollBehavior}); const onScroll=()=>setScrolled(window.scrollY>420); window.addEventListener("scroll",onScroll,{passive:true}); return()=>window.removeEventListener("scroll",onScroll); },[service.id]);
+  useEffect(()=>{ window.scrollTo(0,0); const onScroll=()=>setScrolled(window.scrollY>420); window.addEventListener("scroll",onScroll,{passive:true}); return()=>window.removeEventListener("scroll",onScroll); },[service.id]);
   const plan=service.plans[activePlan] ?? service.plans[0];
   const next=NEXT[service.id] ? SERVICES.find(s=>s.id===NEXT[service.id]) : undefined;
   const whatsapp=CONTACT.whatsapp+"?text="+encodeURIComponent("Bonjour XR Agency, je souhaite parler de la prestation "+service.title.fr+" ("+price(plan.eur)+" €).");
