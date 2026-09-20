@@ -4,7 +4,7 @@ import { CONTACT } from "@/lib/content";
 const whatsapp = (message: string) => `${CONTACT.whatsapp}?text=${encodeURIComponent(message)}`;
 
 const actions = [
-  { id: "analysis", label: "Lancer mon analyse", kicker: "XR Intelligence · Alexandre", text: "Votre stratégie, en quelques étapes.", icon: Search, href: "#quote", primary: true },
+  { id: "analysis", label: "Lancer mon analyse", kicker: "XR Intelligence · Julie", text: "Votre stratégie, en quelques étapes.", icon: Search, href: "#quote", primary: true },
   { id: "mockup", label: "Maquette gratuite", kicker: "Valeur 200 € · offerte", text: "Une première direction créative.", icon: FileImage, href: whatsapp("Bonjour XRAGENCY, je souhaite demander ma maquette gratuite (valeur 200 €). Je vous envoie mon activité, mon site, mon logo et mes références."), primary: false },
   { id: "audit", label: "Audit digital gratuit", kicker: "Offert · sans engagement", text: "Voyez ce qui freine votre présence.", icon: Sparkles, href: whatsapp("Bonjour XRAGENCY, je souhaite demander mon audit digital gratuit personnalisé. Voici mon activité et mon site."), primary: false },
 ];
