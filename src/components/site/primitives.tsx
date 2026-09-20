@@ -5,10 +5,12 @@ import { useLang } from "@/lib/i18n";
 import type { L } from "@/lib/i18n";
 
 export function Logo({ className }: { className?: string }) {
-  return <Link to="/" aria-label="XRagency. — Accueil" className={cn("group relative inline-flex min-h-11 items-center px-1", className)}>
-    <span className="relative font-black text-[26px] leading-none tracking-[-0.16em] text-foreground sm:text-[28px]">X</span>
-    <span aria-hidden className="absolute bottom-1 right-0 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_14px_hsl(var(--primary)/.9)] transition-transform duration-300 group-hover:scale-125" />
-  </Link>;
+  return (
+    <Link to="/" aria-label="XRagency. — Accueil" className={cn("group relative inline-flex min-h-11 items-center px-1", className)}>
+      <span className="relative font-black text-[24px] leading-none tracking-[-0.16em] text-current sm:text-[28px]">X</span>
+      <span aria-hidden className="absolute -bottom-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-[var(--warm)] shadow-[0_0_14px_rgba(207,157,78,.85)] transition-transform duration-300 group-hover:scale-125" />
+    </Link>
+  );
 }
 export function Parallax({ children, speed=0.12, direction="y", className }: { children: ReactNode; speed?:number; direction?:"y"|"x"|"both"; className?:string }) {
  const ref=useRef<HTMLDivElement>(null);
