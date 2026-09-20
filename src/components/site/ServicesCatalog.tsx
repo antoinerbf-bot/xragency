@@ -37,7 +37,7 @@ export function ServicesCatalog() {
           <h1 className="display-serif mt-5 text-[clamp(3.2rem,8vw,8.5rem)] leading-[.82] tracking-[-.045em]">{copy.title}</h1>
           <p className="mt-8 max-w-2xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">{copy.lead}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href={"/?service="+service.id+"#quote"} className="inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold uppercase tracking-[.1em] text-primary-foreground hover:-translate-y-0.5 transition">{copy.cta}<ArrowRight className="h-4 w-4"/></a>
+            <a href="/#quote" className="inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold uppercase tracking-[.1em] text-primary-foreground hover:-translate-y-0.5 transition">{copy.cta}<ArrowRight className="h-4 w-4"/></a>
             <span className="inline-flex min-h-12 items-center rounded-full border border-white/15 bg-black/25 px-5 py-3 text-sm text-white/75 backdrop-blur">01 — 07 · {lang === "fr" ? "Expertises" : lang === "en" ? "Disciplines" : "Chuyên môn"}</span>
           </div>
         </div>
