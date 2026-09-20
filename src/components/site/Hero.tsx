@@ -157,7 +157,7 @@ export function Hero() {
           </dl>
 
           <div className="mt-5 flex items-center justify-between gap-4 border-t border-border/60 py-4">
-            <span className="label-mono text-xs text-muted-foreground/70">XR Intelligence · Alexandre · Devis sur mesure</span>
+            <span className="label-mono text-xs text-muted-foreground/70">XR Intelligence · Julie · Devis sur mesure</span>
             <span className="label-mono text-xs text-primary">01 · Analyse</span>
           </div>
         </div>
