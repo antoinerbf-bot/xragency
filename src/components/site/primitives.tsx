@@ -16,7 +16,7 @@ export function Logo({ className }: { className?: string }) {
         <span className="relative font-black text-[22px] leading-none tracking-[-0.14em] text-current sm:text-[27px]">
           X
         </span>
-        <span className="absolute -bottom-0.5 -right-2 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_9px_hsl(var(--primary)/.45)]" />
+        <span className="absolute -bottom-0.5 -right-2 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_9px_var(--primary)]" />
       </span>
     </Link>
   );
