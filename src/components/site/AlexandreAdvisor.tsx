@@ -15,19 +15,33 @@ function JuliePortrait({ mood }: { mood: JulieMood }) {
   return (
     <div className="relative h-[150px] w-[122px] sm:h-[166px] sm:w-[134px]" aria-label="Julie, conseillère digitale">
       <div className="absolute inset-x-2 bottom-0 h-7 rounded-full bg-black/30 blur-xl" />
-      <div className="relative h-full w-full overflow-hidden rounded-[2rem] border border-white/20 bg-[#d9d1ca] shadow-[0_30px_70px_-30px_rgba(0,0,0,.85)]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(255,255,255,.55),transparent_28%),linear-gradient(145deg,#efe8df,#b8c0bd_52%,#65736f)]" />
-        <div className="absolute inset-x-[-8%] bottom-[-18%] h-[65%] rounded-[50%_50%_0_0] bg-[linear-gradient(135deg,#17201e,#07100e)]" />
-        <div className="absolute left-1/2 top-[18px] h-[92px] w-[72px] -translate-x-1/2 rounded-[48%_48%_44%_44%] bg-[url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=420&q=88')] bg-cover bg-center shadow-[0_15px_30px_-20px_rgba(0,0,0,.8)]">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#b77d67]/20" />
-          <div className={`absolute left-[18px] top-[42px] h-[5px] w-[12px] rounded-full bg-[#222] transition-transform duration-500 ${eyeShift}`} />
-          <div className={`absolute right-[18px] top-[42px] h-[5px] w-[12px] rounded-full bg-[#222] transition-transform duration-500 ${eyeShift}`} />
-          <div className="absolute left-[25px] top-[44px] h-[2px] w-[2px] rounded-full bg-white/90" />
-          <div className="absolute right-[25px] top-[44px] h-[2px] w-[2px] rounded-full bg-white/90" />
-          <div className="absolute left-1/2 top-[61px] h-[4px] w-[18px] -translate-x-1/2 rounded-full border-b border-[#874c4a]/80" />
-        </div>
-        <div className="absolute left-1/2 top-[8px] h-[45px] w-[92px] -translate-x-1/2 rounded-[55%_55%_30%_30%] bg-[#352b29]/95" />
-        <div className="absolute bottom-[18px] left-1/2 h-9 w-9 -translate-x-1/2 rotate-45 rounded-[8px] border border-primary/35 bg-[#172521]/90 shadow-[0_0_25px_hsl(var(--primary)/.12)]" />
+      <div className="relative h-full w-full overflow-hidden rounded-[2rem] border border-white/20 bg-[#e7e0d8] shadow-[0_30px_70px_-30px_rgba(0,0,0,.85)]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,rgba(255,255,255,.7),transparent_30%),linear-gradient(145deg,#f4eee8,#c9cbc6_54%,#7b817c)]" />
+
+        {/* Professional portrait — restrained expression, no robot / no photo dependency */}
+        <div className="absolute inset-x-[-8%] bottom-[-20%] h-[67%] rounded-[50%_50%_0_0] bg-[linear-gradient(135deg,#26302e,#0b1211)]" />
+        <div className="absolute left-1/2 top-[29px] h-[88px] w-[68px] -translate-x-1/2 rounded-[46%_46%_43%_43%] bg-[#b98570] shadow-[0_18px_35px_-25px_rgba(0,0,0,.9)]" />
+
+        {/* Hair: clean, understated business look */}
+        <div className="absolute left-1/2 top-[13px] h-[54px] w-[84px] -translate-x-1/2 rounded-[54%_54%_34%_34%] bg-[#292523]" />
+        <div className="absolute left-[27px] top-[34px] h-[58px] w-[19px] rounded-[55%_20%_45%_35%] bg-[#292523]" />
+        <div className="absolute right-[27px] top-[34px] h-[58px] w-[19px] rounded-[20%_55%_35%_45%] bg-[#292523]" />
+
+        {/* Eyes: calm and focused */}
+        <div className={`absolute left-[19px] top-[62px] h-[3px] w-[12px] rounded-full bg-[#272321] transition-transform duration-500 ${eyeShift}`} />
+        <div className={`absolute right-[19px] top-[62px] h-[3px] w-[12px] rounded-full bg-[#272321] transition-transform duration-500 ${eyeShift}`} />
+        <div className="absolute left-[24px] top-[62px] h-[1px] w-[3px] rounded-full bg-white/70" />
+        <div className="absolute right-[24px] top-[62px] h-[1px] w-[3px] rounded-full bg-white/70" />
+
+        {/* Nose + neutral mouth: no smile */}
+        <div className="absolute left-1/2 top-[65px] h-[12px] w-[6px] -translate-x-1/2 rounded-full border-l border-[#8f5f52]/45" />
+        <div className="absolute left-1/2 top-[80px] h-[2px] w-[13px] -translate-x-1/2 rounded-full bg-[#754c48]/80" />
+
+        {/* Minimal business outfit */}
+        <div className="absolute bottom-[-3px] left-1/2 h-[57px] w-[78px] -translate-x-1/2 rounded-[45%_45%_0_0] bg-[#121917]" />
+        <div className="absolute bottom-[28px] left-1/2 h-[22px] w-[22px] -translate-x-1/2 rotate-45 rounded-[4px] border border-primary/25 bg-[#202a27]" />
+        <div className="absolute bottom-[28px] left-1/2 h-[9px] w-[2px] -translate-x-1/2 bg-primary/35" />
+
         <div className="absolute bottom-3 left-3 rounded-full border border-white/25 bg-black/30 px-2 py-1 text-[6px] font-semibold uppercase tracking-[.18em] text-white/80 backdrop-blur">JULIE · IA</div>
         <div className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full border border-white/20 bg-black/25 px-2 py-1 backdrop-blur"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" /><span className="text-[6px] uppercase tracking-[.16em] text-white/75">live</span></div>
       </div>
