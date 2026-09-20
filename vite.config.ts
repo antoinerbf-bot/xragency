@@ -1,18 +1,16 @@
 // vite.config.ts
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import netlify from "@netlify/vite-plugin-tanstack-start";
 
 export default defineConfig({
-  server: {
-    port: 8080,
-    strictPort: false,
-  },
-  base: "/",
+  // The official Netlify TanStack Start plugin owns the Netlify SSR/function
+  // wiring. Disable the wrapper's default Nitro target to avoid duplicate
+  // server adapters.
+  nitro: false,
   tanstackStart: {
     server: { entry: "server" },
   },
-  // Build the TanStack Start server for Netlify Functions.
-  // @lovable.dev/vite-tanstack-config already provides Nitro.
-  nitro: {
-    preset: "netlify",
+  vite: {
+    plugins: [netlify()],
   },
 });
