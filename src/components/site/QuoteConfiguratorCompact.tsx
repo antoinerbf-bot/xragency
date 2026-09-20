@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { jsPDF } from "jspdf";
-import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Check, Globe2, Mail, MessageCircle, RotateCcw, Sparkles } from "lucide-react";
 import { UniversePresence } from "./UniversePresence";
 
@@ -55,7 +54,8 @@ const BRANDING_TIERS = {
   premium: { price: 399, label: "Identité de marque complète", detail: "Système de marque étendu, direction artistique et Brand Book" },
 } as const;
 
-export function QuoteConfiguratorCompact() {\n  useEffect(() => { const params = new URLSearchParams(window.location.search); const requested = params.get("service"); if (!requested) return; const map: Record<string,string> = { websites:"website", ecommerce:"website", maintenance:"maintenance", webcare:"maintenance", social:"social", branding:"branding", seo:"seo", maps:"maps", ads:"ads" }; const id = map[requested] ?? requested; if (SERVICES.some((item) => item.id === id)) { setSelectedServices([id]); setStep(4); window.setTimeout(() => document.getElementById("quote")?.scrollIntoView({ behavior: "smooth" }), 80); } }, []);
+export function QuoteConfiguratorCompact() {
+  useEffect(() => { const params = new URLSearchParams(window.location.search); const requested = params.get("service"); if (!requested) return; const map: Record<string,string> = { websites:"website", ecommerce:"website", maintenance:"maintenance", webcare:"maintenance", social:"social", branding:"branding", seo:"seo", maps:"maps", ads:"ads" }; const id = map[requested] ?? requested; if (SERVICES.some((item) => item.id === id)) { setSelectedServices([id]); setStep(4); window.setTimeout(() => document.getElementById("quote")?.scrollIntoView({ behavior: "smooth" }), 80); } }, []);
   const [step, setStep] = useState(0);
   useEffect(() => { const onSector = (event: Event) => { const id = (event as CustomEvent<string>).detail; if (SECTORS.some((item) => item.id === id)) { setSectorId(id); setStep(1); } }; window.addEventListener("xr:sector", onSector); return () => window.removeEventListener("xr:sector", onSector); }, []); const [sectorId, setSectorId] = useState(""); const [showAllSectors, setShowAllSectors] = useState(false); const [goal, setGoal] = useState(""); const [situation, setSituation] = useState(""); const [budget, setBudget] = useState(""); const [discovery, setDiscovery] = useState(""); const [selectedServices, setSelectedServices] = useState<string[]>([]); const [client, setClient] = useState({ company: "", name: "", email: "", whatsapp: "", website: "" }); const [generated, setGenerated] = useState(false); const [sending, setSending] = useState(false); const [sendMessage, setSendMessage] = useState("");
   const sector = SECTORS.find((x) => x.id === sectorId);
