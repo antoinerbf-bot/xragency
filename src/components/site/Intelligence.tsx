@@ -110,18 +110,18 @@ export function Intelligence() {
         <Reveal>
           <div className="mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
-              <div className="mb-2 flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[.22em] text-muted-foreground"><Sparkles className="h-3 w-3" /> {t.eyebrow}</div>
+              <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[.22em] text-muted-foreground"><Sparkles className="h-3 w-3" /> {t.eyebrow}</div>
               <h2 className="text-2xl font-medium tracking-[-.05em] md:text-4xl">{t.title}</h2>
               <p className="mt-2 max-w-2xl text-xs leading-5 text-muted-foreground md:text-sm">{t.intro}</p>
             </div>
-            <div className="rounded-full border border-primary/15 bg-primary/[.04] px-3 py-1.5 text-[8px] uppercase tracking-[.16em] text-primary">3 surfaces · 1 recherche</div>
+            <div className="rounded-full border border-primary/15 bg-primary/[.04] px-3 py-1.5 text-xs uppercase tracking-[.16em] text-primary">3 surfaces · 1 recherche</div>
           </div>
         </Reveal>
 
         <Reveal delay={60}>
           <div className="overflow-hidden rounded-[1.4rem] border border-border/80 bg-card/70 shadow-[0_30px_90px_-55px_rgba(0,0,0,.9)] backdrop-blur-xl">
-            <div className="border-b border-border/70 bg-background/70 p-3 md:p-4"><div className="mb-3 flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,.7)]"/><span className="text-[8px] font-medium uppercase tracking-[.14em] text-muted-foreground">Interface de recherche · simulation réaliste</span><span className="ml-auto rounded-full border border-border px-2 py-1 text-[7px] uppercase tracking-[.12em] text-muted-foreground">Pas un résultat réel</span></div>
-              <div className="mb-2 flex items-center justify-between text-[8px] uppercase tracking-[.16em] text-muted-foreground"><span>{t.searchLabel}</span><span>Google · simulation</span></div>
+            <div className="border-b border-border/70 bg-background/70 p-3 md:p-4"><div className="mb-3 flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,.7)]"/><span className="text-xs font-medium uppercase tracking-[.14em] text-muted-foreground">Interface de recherche · simulation réaliste</span><span className="ml-auto rounded-full border border-border px-2 py-1 text-[7px] uppercase tracking-[.12em] text-muted-foreground">Pas un résultat réel</span></div>
+              <div className="mb-2 flex items-center justify-between text-xs uppercase tracking-[.16em] text-muted-foreground"><span>{t.searchLabel}</span><span>Google · simulation</span></div>
               <div className="flex items-center gap-2 rounded-2xl border border-border bg-background px-3 py-2.5 text-xs shadow-sm md:text-sm">
                 <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white text-[11px] font-bold text-[#4285F4]">G</span>
                 <Search className="h-3.5 w-3.5 text-muted-foreground" />
@@ -135,7 +135,7 @@ export function Intelligence() {
                 const label = id === "maps" ? t.maps : id === "seo" ? t.seo : t.ads;
                 const sub = id === "maps" ? t.mapsShort : id === "seo" ? t.organic : t.sponsored;
                 const active = surface === id;
-                return <button key={id} type="button" onClick={() => setSurface(id)} className={cn("relative flex min-h-[64px] items-center gap-2 border-r border-border/70 px-3 text-left last:border-r-0 md:px-5", active ? "bg-primary/[.07]" : "hover:bg-muted/30")}><span className={cn("grid h-8 w-8 shrink-0 place-items-center rounded-lg border", active ? "border-primary/35 bg-primary/10 text-primary" : "border-border text-muted-foreground")}><TabIcon className="h-4 w-4"/></span><span className="min-w-0"><span className="block truncate text-[10px] font-medium md:text-xs">{label}</span><span className="mt-0.5 hidden truncate text-[8px] text-muted-foreground sm:block">{sub}</span></span>{active&&<span className="absolute inset-x-0 bottom-0 h-0.5 bg-primary"/>}</button>;
+                return <button key={id} type="button" onClick={() => setSurface(id)} className={cn("relative flex min-h-[64px] items-center gap-2 border-r border-border/70 px-3 text-left last:border-r-0 md:px-5", active ? "bg-primary/[.07]" : "hover:bg-muted/30")}><span className={cn("grid h-8 w-8 shrink-0 place-items-center rounded-lg border", active ? "border-primary/35 bg-primary/10 text-primary" : "border-border text-muted-foreground")}><TabIcon className="h-4 w-4"/></span><span className="min-w-0"><span className="block truncate text-sm font-medium md:text-xs">{label}</span><span className="mt-0.5 hidden truncate text-xs text-muted-foreground sm:block">{sub}</span></span>{active&&<span className="absolute inset-x-0 bottom-0 h-0.5 bg-primary"/>}</button>;
               })}
             </div>
 
@@ -146,34 +146,34 @@ export function Intelligence() {
                   <div className="absolute left-[24%] top-[30%] h-3 w-3 rounded-full bg-primary ring-4 ring-primary/15"/><div className="absolute left-[53%] top-[48%] h-3 w-3 rounded-full bg-foreground ring-4 ring-foreground/10"/><div className="absolute left-[72%] top-[26%] h-3 w-3 rounded-full bg-foreground ring-4 ring-foreground/10"/>
                   <div className="absolute bottom-3 left-3 rounded-lg border border-white/70 bg-white/90 px-2 py-1 text-[7px] uppercase tracking-[.14em] text-slate-700 shadow-sm">Google Maps · recherche locale</div>
                 </div>}
-                {surface !== "maps" && <div className="border-b border-border bg-background px-3 py-2 text-[8px] uppercase tracking-[.14em] text-muted-foreground">google.com · page de résultats</div>}
+                {surface !== "maps" && <div className="border-b border-border bg-background px-3 py-2 text-xs uppercase tracking-[.14em] text-muted-foreground">google.com · page de résultats</div>}
                 <div className="divide-y divide-border/70">
                   {resultRows.map((row,i) => <div key={row.name} className="flex items-center gap-2.5 px-3 py-3">
-                    <div className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-muted text-[8px] font-semibold">{i+1}</div>
-                    <div className="min-w-0 flex-1"><div className="truncate text-[10px] font-medium md:text-xs">{row.name}</div><div className="mt-0.5 truncate text-[8px] text-muted-foreground">{row.meta}</div></div>
+                    <div className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-muted text-xs font-semibold">{i+1}</div>
+                    <div className="min-w-0 flex-1"><div className="truncate text-sm font-medium md:text-xs">{row.name}</div><div className="mt-0.5 truncate text-xs text-muted-foreground">{row.meta}</div></div>
                     <span className={cn("shrink-0 rounded-full px-1.5 py-1 text-[7px] uppercase tracking-[.1em]", surface === "ads" ? "bg-amber-500/10 text-amber-700" : "bg-muted text-muted-foreground")}>{row.tag}</span>
                   </div>)}
                 </div>
               </div>
 
               <div className="rounded-xl border border-primary/15 bg-primary/[.035] p-4">
-                <div className="flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[.16em] text-primary"><TrendingUp className="h-3.5 w-3.5"/> {surface === "maps" ? "Google Maps" : surface === "seo" ? "SEO classique" : "Google Ads"}</div>
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[.16em] text-primary"><TrendingUp className="h-3.5 w-3.5"/> {surface === "maps" ? "Google Maps" : surface === "seo" ? "SEO classique" : "Google Ads"}</div>
                 <h3 className="mt-2 text-lg font-medium tracking-tight md:text-xl">{data.title}</h3>
-                <p className="mt-2 text-[10px] leading-4.5 text-muted-foreground md:text-xs">{data.text}</p>
-                <div className="mt-3 rounded-lg border border-primary/15 bg-background/70 p-3 text-[9px] leading-4.5 text-muted-foreground">
+                <p className="mt-2 text-sm leading-4.5 text-muted-foreground md:text-xs">{data.text}</p>
+                <div className="mt-3 rounded-lg border border-primary/15 bg-background/70 p-3 text-xs leading-4.5 text-muted-foreground">
                   {surface === "maps" && <><strong className="text-foreground">Pourquoi c'est important :</strong> la recherche locale capte une grande partie de l'intention immédiate. La fiche, la distance, les avis et les informations comptent.</>}
                   {surface === "seo" && <><strong className="text-foreground">À comprendre :</strong> ces résultats ne sont pas des annonces. Ils apparaissent grâce au travail de pertinence, contenu et structure du site.</>}
                   {surface === "ads" && <><strong className="text-foreground">À comprendre :</strong> les trois lignes du haut sont des annonces payantes. Elles sont identifiées comme « ANNONCE ».</>}
                 </div>
-                <div className="mt-3 grid grid-cols-2 gap-1.5">{data.signals.map(signal => <div key={signal} className="rounded-lg bg-muted/35 px-2 py-2 text-[8px] leading-3.5"><Check className="mr-1 inline h-3 w-3 text-primary"/>{signal}</div>)}</div>
+                <div className="mt-3 grid grid-cols-2 gap-1.5">{data.signals.map(signal => <div key={signal} className="rounded-lg bg-muted/35 px-2 py-2 text-xs leading-3.5"><Check className="mr-1 inline h-3 w-3 text-primary"/>{signal}</div>)}</div>
               </div>
             </div>
           </div>
         </Reveal>
 
         <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <span className="text-[8px] uppercase tracking-[.16em] text-muted-foreground">Simulez · comprenez · voyez où la visibilité se gagne</span>
-          <a href="#homepage-services" className="inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-4 py-2.5 text-[10px] font-medium text-background transition hover:-translate-y-0.5">{t.next} <ArrowUpRight className="h-3.5 w-3.5"/></a>
+          <span className="text-xs uppercase tracking-[.16em] text-muted-foreground">Simulez · comprenez · voyez où la visibilité se gagne</span>
+          <a href={surface === "maps" ? "/?service=maps#quote" : "/?service=seo#quote"} className="inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-4 py-2.5 text-sm font-medium text-background transition hover:-translate-y-0.5">{surface === "maps" ? "Composer ma visibilité" : "Composer ma visibilité"} <ArrowUpRight className="h-3.5 w-3.5"/></a>
         </div>
       </div>
     </section>
