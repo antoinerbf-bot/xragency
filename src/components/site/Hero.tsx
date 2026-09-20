@@ -44,7 +44,7 @@ export function Hero() {
   const [reduceMotion, setReduceMotion] = useState(false);
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReduceMotion(mq.matches || "connectionSaveData" in navigator && Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData));
+    const update = () => { const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection; setReduceMotion(mq.matches || Boolean(connection?.saveData)); };
     update(); mq.addEventListener?.("change", update);
     return () => mq.removeEventListener?.("change", update);
   }, []);
