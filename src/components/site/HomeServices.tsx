@@ -1,4 +1,4 @@
-import { ArrowUpRight, Check, Instagram, Linkedin, Music2, Search, Globe2 } from "lucide-react";
+import { ArrowUpRight, Check, Instagram, Linkedin, Music2, Search, Globe2 } from "lucide-react";\nimport svcBranding from "@/assets/svc-branding.jpg";\nimport svcSeo from "@/assets/svc-seo.jpg";\nimport svcMaps from "@/assets/svc-maps.jpg";\nimport svcSocial from "@/assets/svc-social.jpg";\nimport svcMaintenance from "@/assets/svc-maintenance.jpg";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
@@ -9,11 +9,11 @@ const DISPLAY_NUM: Record<string, string> = { websites: "01", branding: "02", se
 const DISPLAY_PRICE: Record<string, number | null> = { websites: 499, branding: null, seo: null, maps: null, social: 499, maintenance: null, ecommerce: 1499 };
 const SERVICE_IMG: Record<string, string> = {
   websites: "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=90&w=2200",
-  branding: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=90&w=2200",
-  seo: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=90&w=2200",
-  maps: "https://images.unsplash.com/photo-1524666041070-9e3c7be7b8e0?auto=format&fit=crop&q=90&w=2200",
-  social: "https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?auto=format&fit=crop&q=90&w=2200",
-  maintenance: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=90&w=2200",
+  branding: svcBranding,
+  seo: svcSeo,
+  maps: svcMaps,
+  social: svcSocial,
+  maintenance: svcMaintenance,
   ecommerce: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=90&w=2200",
 };
 function ServiceMarks({ id }: { id: string }) {
