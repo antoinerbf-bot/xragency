@@ -173,7 +173,7 @@ export function Intelligence() {
 
         <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <span className="text-xs uppercase tracking-[.16em] text-muted-foreground">Simulez · comprenez · voyez où la visibilité se gagne</span>
-          <a href={surface === "maps" ? "/?service=maps#quote" : "/?service=seo#quote"} className="inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-4 py-2.5 text-sm font-medium text-background transition hover:-translate-y-0.5">{surface === "maps" ? "Composer ma visibilité" : "Composer ma visibilité"} <ArrowUpRight className="h-3.5 w-3.5"/></a>
+          <button type="button" onClick={() => { window.dispatchEvent(new CustomEvent("xr:service", { detail: { id: surface === "maps" ? "maps" : "seo" } })); window.setTimeout(() => document.getElementById("quote")?.scrollIntoView({ behavior: "smooth", block: "start" }), 40); }} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-foreground px-4 py-2.5 text-sm font-medium text-background transition hover:-translate-y-0.5">Composer ma visibilité <ArrowUpRight className="h-3.5 w-3.5"/></button>
         </div>
       </div>
     </section>
