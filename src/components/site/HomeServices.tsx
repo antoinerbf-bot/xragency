@@ -1,4 +1,9 @@
-import { ArrowUpRight, Check, Instagram, Linkedin, Music2, Search, Globe2 } from "lucide-react";\nimport svcBranding from "@/assets/svc-branding.jpg";\nimport svcSeo from "@/assets/svc-seo.jpg";\nimport svcMaps from "@/assets/svc-maps.jpg";\nimport svcSocial from "@/assets/svc-social.jpg";\nimport svcMaintenance from "@/assets/svc-maintenance.jpg";
+import { ArrowUpRight, Check, Instagram, Linkedin, Music2, Search, Globe2 } from "lucide-react";
+import svcBranding from "@/assets/svc-branding.jpg";
+import svcSeo from "@/assets/svc-seo.jpg";
+import svcMaps from "@/assets/svc-maps.jpg";
+import svcSocial from "@/assets/svc-social.jpg";
+import svcMaintenance from "@/assets/svc-maintenance.jpg";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
