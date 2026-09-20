@@ -59,7 +59,7 @@ function Connection({ from, to }: { from: Market; to: Market }) {
 }
 
 function GlobeScene() {
-  const [earth, bump, specular, clouds] = useTexture([earthMap, earthBump, earthSpec, cloudsMap]);
+  const [earth, bump, _specular, clouds] = useTexture([earthMap, earthBump, earthSpec, cloudsMap]);
   const globeRef = useRef<THREE.Group>(null);
   const cloudsRef = useRef<THREE.Mesh>(null);
   const [dragging, setDragging] = useState(false);
@@ -97,7 +97,7 @@ function GlobeScene() {
     <group ref={globeRef} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerLeave={pointerUp}>
       <mesh>
         <sphereGeometry args={[1.5, 128, 128]} />
-        <meshStandardMaterial map={earth} bumpMap={bump} bumpScale={0.045} roughness={0.82} metalness={0.02} specularMap={specular} />
+        <meshStandardMaterial map={earth} bumpMap={bump} bumpScale={0.045} roughness={0.82} metalness={0.02} />
       </mesh>
 
       <mesh ref={cloudsRef} scale={1.012}>
