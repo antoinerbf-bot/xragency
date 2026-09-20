@@ -3353,7 +3353,7 @@ const CORE_SHOWCASE = [
     },
     metric: "REF 60 · ECOMMERCE + BRANDING",
     image: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&q=85&w=1200"
-  }\n];
+  }
 ];
 
 export const SHOWCASE = [...CORE_SHOWCASE, ...ADDITIONAL_SHOWCASE];\n\n/** Legacy alias — keep PORTFOLIO pointing to showcase for backward compatibility */
