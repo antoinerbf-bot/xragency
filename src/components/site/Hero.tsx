@@ -1,165 +1,108 @@
 import { useEffect, useRef, useState } from "react";
-import { Sparkles, ShieldCheck, FileImage, Search, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, FileImage, Search, ShieldCheck, Sparkles } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
-import { EmberButton, Parallax, FloatingBadge } from "./primitives";
-// import EarthGlobe from "./EarthGlobe"; // Globe removed per user request
+import { EmberButton, Parallax } from "./primitives";
+import pf07 from "@/assets/pf-07-lumina-digital.jpg";
 
-/* ── Animated counter hook ── */
-function useCountUp(target: number, duration = 1600, startDelay = 500) {
+function useCountUp(target: number, duration = 1400, startDelay = 400) {
   const [value, setValue] = useState(0);
   const started = useRef(false);
-
   useEffect(() => {
     const timeout = setTimeout(() => {
+      if (started.current) return;
       started.current = true;
       const start = performance.now();
       const tick = (now: number) => {
-        const elapsed = now - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        setValue(Math.round(target * eased));
+        const progress = Math.min((now - start) / duration, 1);
+        setValue(Math.round(target * (1 - Math.pow(1 - progress, 3))));
         if (progress < 1) requestAnimationFrame(tick);
       };
       requestAnimationFrame(tick);
     }, startDelay);
     return () => clearTimeout(timeout);
   }, [target, duration, startDelay]);
-
   return value;
 }
 
-/* ── Stat card with animated counter ── */
-function AnimatedStat({
-  value,
-  suffix,
-  label,
-  delay,
-}: {
-  value: number;
-  suffix?: string;
-  label: string;
-  delay: number;
-}) {
-  const count = useCountUp(value, 1600, delay);
-  return (
-    <div
-      className="bg-card/75 px-5 py-4 backdrop-blur-md transition-all duration-300 hover:bg-accent/40 hover:-translate-y-0.5 cursor-default"
-      style={{ animation: `ember-rise 0.75s cubic-bezier(0.16,1,0.3,1) ${delay}ms both` }}
-    >
-      <dt className="display-serif text-2xl text-primary sm:text-3xl font-bold tracking-tight">
-        {count}
-        {suffix ?? ""}
-      </dt>
-      <dd className="label-mono mt-1 text-xs text-muted-foreground">{label}</dd>
-    </div>
-  );
+function Stat({ value, suffix, label, delay }: { value: number; suffix?: string; label: string; delay: number }) {
+  const count = useCountUp(value, 1400, delay);
+  return <div className="px-4 py-3 sm:px-5"><div className="display-serif text-xl font-bold text-primary sm:text-2xl">{count}{suffix}</div><div className="mt-0.5 text-sm text-muted-foreground">{label}</div></div>;
 }
+
+const HERO_SECTORS = [
+  ["restaurant", "Restaurant · café · bar"], ["hospitality", "Hôtel · villa · resort"], ["realestate", "Immobilier · location"],
+  ["automotive", "Automobile · mobilité"], ["fashion", "Mode · accessoires"], ["jewelry", "Joaillerie · horlogerie"],
+  ["beauty", "Beauté · spa"], ["health", "Santé · médical"], ["architecture", "Architecture · intérieur"],
+  ["construction", "Construction · rénovation"], ["legal", "Avocat · droit"], ["finance", "Finance · patrimoine"],
+  ["commerce", "Commerce · e-commerce"], ["tourism", "Voyage · tourisme"], ["agency", "Agence · studio"],
+] as const;
 
 export function Hero() {
   const { t } = useLang();
-
+  const [reduceMotion, setReduceMotion] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduceMotion(mq.matches || "connectionSaveData" in navigator && Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData));
+    update(); mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
+  const goSector = (id: string) => {
+    window.dispatchEvent(new CustomEvent("xr:sector", { detail: id }));
+    document.getElementById("quote")?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+  };
   return (
-    <section id="top" className="grain relative min-h-[92dvh] overflow-hidden pt-20 sm:pt-24">
-      {/* Atmospheric lighting depth layers */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(120% 100% at 10% 40%, var(--background) 30%, color-mix(in oklab, var(--background) 65%, transparent) 60%, color-mix(in oklab, var(--background) 85%, transparent) 100%), linear-gradient(180deg, color-mix(in oklab, var(--background) 60%, transparent) 0%, transparent 45%, var(--background) 98%)",
-        }}
-      />
+    <section id="top" className="grain relative min-h-[100svh] overflow-hidden pt-20 sm:pt-24">
+      <div className="absolute inset-0 -z-10 overflow-hidden bg-background">
+        <img src={pf07} alt="" className="absolute inset-0 h-full w-full object-cover object-center opacity-35 saturate-[.75]" />
+        <div className="absolute inset-0 bg-[radial-gradient(90%_100%_at_15%_45%,hsl(var(--background)/.98)_5%,hsl(var(--background)/.82)_42%,hsl(var(--background)/.45)_72%,hsl(var(--background)/.9)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,hsl(var(--background)/.72),transparent_28%,hsl(var(--background)/.82)_96%)]" />
+        <div className="absolute -right-[10%] top-[18%] h-[55vw] w-[55vw] rounded-full bg-primary/[.09] blur-[90px] animate-[ember-pulse_20s_ease-in-out_infinite]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[.055] [background-image:radial-gradient(rgba(255,255,255,.9)_0.7px,transparent_0.7px)] [background-size:5px_5px]" />
+        <video
+          autoPlay={!reduceMotion}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={pf07}
+          className="absolute inset-0 h-full w-full object-cover object-center opacity-35 mix-blend-screen"
+          style={{ pointerEvents: "none", display: reduceMotion ? "none" : "block" }}
+          aria-hidden="true"
+        >
+          <source src="/media/hero-desktop.mp4" type="video/mp4" />
+        </video>
+      </div>
 
-      <div className="relative mx-auto flex min-h-[calc(92dvh-6.5rem)] max-w-7xl flex-col justify-between px-6 lg:px-10">
-        {/* Hero Main Content */}
-        <div className="grid items-center gap-10 py-10 lg:grid-cols-12 lg:py-14">
-          {/* Left Column: Typography & CTAs */}
-          <Parallax speed={-0.03} className="relative z-10 lg:col-span-7">
-            <div
-              className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/5 px-4 py-1.5"
-              style={{ animation: "ember-rise 0.75s cubic-bezier(0.16,1,0.3,1) 120ms both" }}
-            >
-              <Sparkles className="h-3.5 w-3.5 text-primary animate-pulse" />
-              <span className="label-mono text-xs text-primary font-medium">
-                {t(UI.heroKicker)}
-              </span>
-            </div>
+      <div className="relative mx-auto flex min-h-[calc(100svh-5rem)] max-w-[1500px] flex-col justify-end px-5 pb-5 sm:px-8 sm:pb-7 lg:px-12">
+        <Parallax speed={-0.02} className="max-w-5xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/35 bg-background/45 px-3 py-1.5 backdrop-blur-md">
+            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            <span className="text-sm font-medium tracking-[.08em] text-primary">{t(UI.heroKicker)}</span>
+          </div>
+          <h1 className="display-serif mt-4 max-w-5xl text-[clamp(2.6rem,7vw,6.5rem)] leading-[.91] tracking-[-.045em]">
+            {t(UI.heroTitle1)}<br /><em className="not-italic italic text-primary">{t(UI.heroTitleAccent)}</em>{" "}{t(UI.heroTitle2)}
+          </h1>
+          <p className="mt-5 max-w-2xl text-base leading-7 text-foreground/85 sm:text-lg sm:leading-8">{t(UI.heroLead)}</p>
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <EmberButton href="#quote" className="px-6 py-3.5">Faire mon devis gratuit <ArrowUpRight className="h-4 w-4" /></EmberButton>
+            <a href={CONTACT.whatsapp + "?text=" + encodeURIComponent("Bonjour XRAGENCY, je souhaite ma maquette gratuite (valeur 200 €).")} target="_blank" rel="noreferrer" className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-white/20 bg-black/30 px-5 py-3 text-sm font-medium text-white backdrop-blur-md transition hover:-translate-y-0.5 hover:border-primary/60"><FileImage className="h-4 w-4 text-primary" />Maquette gratuite · 200 €</a>
+          </div>
+          <div className="mt-3 flex items-center gap-2 text-sm text-foreground/70"><ShieldCheck className="h-4 w-4 text-primary" /> Audit digital gratuit · valorisation 100 € · sans engagement</div>
+        </Parallax>
 
-            <h1
-              className="display-serif mt-5 text-[clamp(2.4rem,6vw,5.2rem)] leading-[0.96] tracking-tight"
-              style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 200ms both" }}
-            >
-              {t(UI.heroTitle1)}
-              <br />
-              <em className="not-italic italic text-primary">{t(UI.heroTitleAccent)}</em>{" "}
-              {t(UI.heroTitle2)}
-            </h1>
-
-            <div
-              className="mt-6 max-w-xl"
-              style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 300ms both" }}
-            >
-              <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                {t(UI.heroLead)}
-              </p>
-              <p className="mt-2 text-xs leading-relaxed text-muted-foreground/80 font-mono">
-                {t(UI.heroMeta)}
-              </p>
-            </div>
-
-            {/* Direct CTAs */}
-            <div
-              className="mt-8 flex flex-wrap items-center gap-3.5"
-              style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 400ms both" }}
-            >
-              <div className="grid w-full max-w-3xl grid-cols-1 gap-2 sm:grid-cols-3 [perspective:900px]">
-                <div className="group sm:-translate-y-1 sm:hover:-translate-y-2 transition-transform duration-500">
-                  <EmberButton href="#quote" className="relative w-full justify-center overflow-hidden rounded-2xl py-3.5 shadow-[0_18px_45px_-24px_rgba(0,0,0,.8)]">
-                    <span className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
-                    <span className="relative flex items-center gap-2">Faire mon devis gratuit <ArrowUpRight className="h-3.5 w-3.5" /></span>
-                  </EmberButton>
-                </div>
-                <a href={CONTACT.whatsapp + "?text=" + encodeURIComponent("Bonjour XRAGENCY, je souhaite ma maquette gratuite (valeur 200 €). Je vais vous envoyer mon logo, les éléments que j'ai déjà et le lien de mon site si j'en ai un. Merci de me dire où les envoyer.")} target="_blank" rel="noreferrer" className="group relative overflow-hidden rounded-2xl border border-primary/25 bg-card/60 px-4 py-3 text-left backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-primary/60 hover:shadow-[0_18px_45px_-24px_rgba(0,0,0,.7)] sm:translate-y-2">
-                  <span className="absolute -right-5 -top-5 h-16 w-16 rounded-full bg-primary/15 blur-xl transition group-hover:scale-150" />
-                  <span className="relative flex items-center gap-2"><FileImage className="h-4 w-4 text-primary" /><span><b className="block text-[10px] uppercase tracking-[.12em]">Maquette gratuite</b><small className="mt-0.5 block text-[9px] text-muted-foreground">Valorisation 200 € · sans engagement</small></span></span>
-                </a>
-                <a href="#audit" className="group relative overflow-hidden rounded-2xl border border-border bg-background/60 px-4 py-3 text-left backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_18px_45px_-24px_rgba(0,0,0,.7)] sm:translate-y-1">
-                  <span className="absolute -left-5 -bottom-5 h-16 w-16 rounded-full bg-primary/10 blur-xl transition group-hover:scale-150" />
-                  <span className="relative flex items-center gap-2"><Search className="h-4 w-4 text-primary" /><span><b className="block text-[10px] uppercase tracking-[.12em]">Audit digital gratuit</b><small className="mt-0.5 block text-[9px] text-muted-foreground">Audit automatique sur mesure · PDF offert</small></span></span>
-                </a>
-              </div>
-              <span className="label-mono hidden text-xs text-muted-foreground/80 sm:inline">{t(UI.intelDuration)}</span>
-            </div>
-
-            <div
-              className="mt-4 flex items-center gap-2"
-              style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 500ms both" }}
-            >
-              <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-              <p className="label-mono text-[11px] text-muted-foreground/70">
-                {t(UI.ctaReassurance)} · Pas de reconduction tacite
-              </p>
-            </div>
-          </Parallax>
-
-          {/* Right Column reserved for future visual */}
+        <div className="mt-6 overflow-hidden rounded-2xl border border-border/60 bg-background/55 backdrop-blur-md">
+          <div className="grid grid-cols-2 divide-x divide-border/50 sm:grid-cols-4 sm:divide-x">
+            <Stat value={500} suffix="+" label={t(UI.statProjects)} delay={500} />
+            <Stat value={8} suffix="+" label={t(UI.statYears)} delay={580} />
+            <Stat value={98} suffix="%" label={t(UI.statSatisfaction)} delay={660} />
+            <Stat value={2} suffix="h" label={t(UI.statResponse)} delay={740} />
+          </div>
         </div>
 
-        {/* Bottom Key Stats Bar with Animated Counters */}
-        <div>
-          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 sm:grid-cols-4 shadow-sm">
-            <AnimatedStat value={500} suffix="+" label={t(UI.statProjects)} delay={550} />
-            <AnimatedStat value={8} suffix="+" label={t(UI.statYears)} delay={630} />
-            <AnimatedStat value={98} suffix="%" label={t(UI.statSatisfaction)} delay={710} />
-            <AnimatedStat value={2} suffix="h" label={t(UI.statResponse)} delay={790} />
-          </dl>
-
-          <div className="mt-5 flex items-center justify-between gap-4 border-t border-border/60 py-4">
-            <span className="label-mono text-xs text-muted-foreground/70">XR Intelligence · Julie · Devis sur mesure</span>
-            <span className="label-mono text-xs text-primary">01 · Analyse</span>
-          </div>
+        <div className="mt-4 flex flex-wrap gap-2 pb-1">
+          {HERO_SECTORS.map(([id, label]) => <button key={id} type="button" onClick={() => goSector(id)} className="min-h-[38px] rounded-full border border-white/15 bg-black/25 px-3 py-2 text-sm text-white/75 backdrop-blur-md transition hover:-translate-y-0.5 hover:border-primary/55 hover:text-white">{label}</button>)}
         </div>
       </div>
     </section>
