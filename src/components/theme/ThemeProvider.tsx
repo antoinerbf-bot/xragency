@@ -13,18 +13,8 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>('light');
 
-  // Initialize theme from localStorage or system preference
-  useEffect(() => {
-    const stored = window.localStorage.getItem('xr-theme') as Theme | null;
-    if (stored && (stored === 'light' || stored === 'dark')) {
-      setTheme(stored);
-    } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(prefersDark ? 'dark' : 'light');
-    }
-  }, []);
 
-  // Apply theme class to html element and persist
+  // Always open the client-facing site in light mode.
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'dark') {
