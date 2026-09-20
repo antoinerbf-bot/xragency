@@ -75,13 +75,13 @@ function GlobeScene() {
     if (cloudsRef.current) cloudsRef.current.rotation.y += delta * 0.012;
   });
 
-  const pointerDown = useCallback((e: THREE.PointerEvent) => {
+  const pointerDown = useCallback((e: any) => {
     setDragging(true);
     lastPointer.current = { x: e.clientX, y: e.clientY };
     e.stopPropagation();
   }, []);
 
-  const pointerMove = useCallback((e: THREE.PointerEvent) => {
+  const pointerMove = useCallback((e: any) => {
     if (!dragging) return;
     const dx = e.clientX - lastPointer.current.x;
     const dy = e.clientY - lastPointer.current.y;
