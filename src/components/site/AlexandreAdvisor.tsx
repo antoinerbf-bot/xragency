@@ -4,46 +4,38 @@ type JulieMood = "calm" | "focus" | "recommend" | "success";
 type JulieAdvisorProps = { mood?: JulieMood; sector?: string; goal?: string; selectedServices?: string[]; step?: number };
 
 const moodCopy: Record<JulieMood, { badge: string; line: string; tone: string }> = {
-  calm: { badge: "EN ÉCOUTE", line: "Je vous écoute. On part de votre situation, pas d'un catalogue.", tone: "border-white/15" },
+  calm: { badge: "À VOTRE ÉCOUTE", line: "Dites-moi simplement où vous en êtes. Je vous guide ensuite, étape par étape.", tone: "border-white/15" },
   focus: { badge: "J'ANALYSE", line: "Je croise vos réponses pour isoler les leviers vraiment utiles.", tone: "border-primary/30" },
   recommend: { badge: "JE RECOMMANDE", line: "J'ai assez de contexte pour vous proposer un parcours cohérent.", tone: "border-primary/45" },
   success: { badge: "PRÊTE", line: "Votre première recommandation est prête. Vous pouvez encore l'ajuster.", tone: "border-emerald-400/30" },
 };
 
 function JuliePortrait({ mood }: { mood: JulieMood }) {
-  const eyeShift = mood === "recommend" ? "translate-x-[2px]" : mood === "focus" ? "-translate-x-[1px]" : "";
+  const motion = mood === "recommend" ? "translate-x-[2px]" : mood === "focus" ? "-translate-x-[1px]" : "";
   return (
-    <div className="relative h-[150px] w-[122px] sm:h-[166px] sm:w-[134px]" aria-label="Julie, conseillère digitale">
-      <div className="absolute inset-x-2 bottom-0 h-7 rounded-full bg-black/30 blur-xl" />
-      <div className="relative h-full w-full overflow-hidden rounded-[2rem] border border-white/20 bg-[#e7e0d8] shadow-[0_30px_70px_-30px_rgba(0,0,0,.85)]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,rgba(255,255,255,.7),transparent_30%),linear-gradient(145deg,#f4eee8,#c9cbc6_54%,#7b817c)]" />
+    <div className="group/portrait relative h-[142px] w-[112px] sm:h-[156px] sm:w-[124px]" aria-label="Julie, à votre écoute">
+      <div className="absolute inset-x-3 bottom-0 h-5 rounded-full bg-black/35 blur-xl" />
+      <div className="relative h-full w-full overflow-hidden rounded-[1.75rem] border border-white/20 bg-[#d8d1c9] shadow-[0_30px_70px_-28px_rgba(0,0,0,.9)]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_15%,rgba(255,255,255,.8),transparent_30%),linear-gradient(145deg,#eee8e1,#c7cbc7_55%,#69726e)]" />
+        <div className={`absolute inset-x-0 bottom-0 h-[72%] overflow-hidden transition-transform duration-700 ${motion}`}>
+          <img
+            src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=90"
+            alt="Julie"
+            className="h-[118%] w-full object-cover object-[50%_22%] saturate-[.82] contrast-[1.03]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0c1211] via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(12,18,17,.16),transparent_45%,rgba(12,18,17,.08))]" />
+        </div>
 
-        {/* Professional portrait — restrained expression, no robot / no photo dependency */}
-        <div className="absolute inset-x-[-8%] bottom-[-20%] h-[67%] rounded-[50%_50%_0_0] bg-[linear-gradient(135deg,#26302e,#0b1211)]" />
-        <div className="absolute left-1/2 top-[29px] h-[88px] w-[68px] -translate-x-1/2 rounded-[46%_46%_43%_43%] bg-[#b98570] shadow-[0_18px_35px_-25px_rgba(0,0,0,.9)]" />
-
-        {/* Hair: clean, understated business look */}
-        <div className="absolute left-1/2 top-[13px] h-[54px] w-[84px] -translate-x-1/2 rounded-[54%_54%_34%_34%] bg-[#292523]" />
-        <div className="absolute left-[27px] top-[34px] h-[58px] w-[19px] rounded-[55%_20%_45%_35%] bg-[#292523]" />
-        <div className="absolute right-[27px] top-[34px] h-[58px] w-[19px] rounded-[20%_55%_35%_45%] bg-[#292523]" />
-
-        {/* Eyes: calm and focused */}
-        <div className={`absolute left-[19px] top-[62px] h-[3px] w-[12px] rounded-full bg-[#272321] transition-transform duration-500 ${eyeShift}`} />
-        <div className={`absolute right-[19px] top-[62px] h-[3px] w-[12px] rounded-full bg-[#272321] transition-transform duration-500 ${eyeShift}`} />
-        <div className="absolute left-[24px] top-[62px] h-[1px] w-[3px] rounded-full bg-white/70" />
-        <div className="absolute right-[24px] top-[62px] h-[1px] w-[3px] rounded-full bg-white/70" />
-
-        {/* Nose + neutral mouth: no smile */}
-        <div className="absolute left-1/2 top-[65px] h-[12px] w-[6px] -translate-x-1/2 rounded-full border-l border-[#8f5f52]/45" />
-        <div className="absolute left-1/2 top-[80px] h-[2px] w-[13px] -translate-x-1/2 rounded-full bg-[#754c48]/80" />
-
-        {/* Minimal business outfit */}
-        <div className="absolute bottom-[-3px] left-1/2 h-[57px] w-[78px] -translate-x-1/2 rounded-[45%_45%_0_0] bg-[#121917]" />
-        <div className="absolute bottom-[28px] left-1/2 h-[22px] w-[22px] -translate-x-1/2 rotate-45 rounded-[4px] border border-primary/25 bg-[#202a27]" />
-        <div className="absolute bottom-[28px] left-1/2 h-[9px] w-[2px] -translate-x-1/2 bg-primary/35" />
-
-        <div className="absolute bottom-3 left-3 rounded-full border border-white/25 bg-black/30 px-2 py-1 text-[6px] font-semibold uppercase tracking-[.18em] text-white/80 backdrop-blur">JULIE · IA</div>
-        <div className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full border border-white/20 bg-black/25 px-2 py-1 backdrop-blur"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" /><span className="text-[6px] uppercase tracking-[.16em] text-white/75">live</span></div>
+        <div className="absolute left-3 top-3 rounded-full border border-white/30 bg-black/25 px-2 py-1 text-[7px] font-semibold uppercase tracking-[.16em] text-white backdrop-blur-md">
+          Julie
+        </div>
+        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-2">
+          <span className="rounded-full border border-white/20 bg-black/30 px-2 py-1 text-[6px] uppercase tracking-[.16em] text-white/85 backdrop-blur-md">
+            À votre écoute
+          </span>
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,.8)]" />
+        </div>
       </div>
     </div>
   );
