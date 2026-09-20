@@ -185,22 +185,26 @@ export function Pricing() {
                     {currentService.id === "websites" && p.period === "once" && (
                       <div className="mt-4 flex rounded-lg bg-accent/30 p-1 border border-border/50">
                         <button
-                          onClick={() => setInstallmentSelections(prev => ({ ...prev, [i]: true }))}
-                          className={cn(
-                            "flex-1 rounded-md text-[10px] sm:text-xs font-medium transition-all py-1.5",
-                            isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-                          )}
-                        >
-                          Mensualités
-                        </button>
-                        <button
                           onClick={() => setInstallmentSelections(prev => ({ ...prev, [i]: false }))}
                           className={cn(
-                            "flex-1 rounded-md text-[10px] sm:text-xs font-medium transition-all py-1.5",
-                            !isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                            "flex-1 rounded-md text-[10px] sm:text-xs font-semibold transition-all py-1.5",
+                            !isInst
+                              ? "bg-primary text-primary-foreground shadow-sm"
+                              : "text-muted-foreground hover:text-foreground"
                           )}
                         >
                           Comptant
+                        </button>
+                        <button
+                          onClick={() => setInstallmentSelections(prev => ({ ...prev, [i]: true }))}
+                          className={cn(
+                            "flex-1 rounded-md text-[10px] sm:text-xs font-medium transition-all py-1.5",
+                            isInst
+                              ? "bg-primary/10 text-primary ring-1 ring-primary/30"
+                              : "text-muted-foreground hover:text-foreground"
+                          )}
+                        >
+                          Mensuel
                         </button>
                       </div>
                     )}
