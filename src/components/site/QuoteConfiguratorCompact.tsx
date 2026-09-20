@@ -56,6 +56,65 @@ const BRANDING_TIERS = {
 
 export function QuoteConfiguratorCompact() {
   const [step, setStep] = useState(0); const [sectorId, setSectorId] = useState("");
+useEffect(() => { const onSector = (event: Event) => { const id = (event as CustomEvent<{id:string}>).detail?.id; if (!id || !SECTORS.some((x) => x.id === id)) return; setSectorId(id); setShowAllSectors(false); setStep(0); window.setTimeout(() => document.getElementById("quote")?.scrollIntoView({ behavior: "smooth", block: "start" }), 40); }; const onService = (event: Event) => { const id = (event as CustomEvent<{id:string}>).detail?.id; if (!id || !SERVICES.some((x) => x.id === id)) return; setSelectedServices(current => current.includes(id) ? current : [...current, id]); setStep(0); window.setTimeout(() => document.getElementById("quote")?.scrollIntoView({ behavior: "smooth", block: "start" }), 40); }; window.addEventListener("xr:sector", onSector); window.addEventListener("xr:service", onService); return () => { window.removeEventListener("xr:sector", onSector); window.removeEventListener("xr:service", onService); }; }, []); const [showAllSectors, setShowAllSectors] = useState(false); const [goal, setGoal] = useState(""); const [situation, setSituation] = useState(""); const [budget, setBudget] = useState(""); const [discovery, setDiscovery] = useState(""); const [selectedServices, setSelectedServices] = useState<string[]>([]); const [client, setClient] = useState({ company: "", name: "", email: "", whatsapp: "", website: "" }); const [generated, setGenerated] = useState(false); const [sending, setSending] = useState(false); import { useEffect, useMemo, useState } from "react";
+import { jsPDF } from "jspdf";
+import { ArrowRight, Check, Globe2, Mail, MessageCircle, RotateCcw, Sparkles } from "lucide-react";
+import { UniversePresence } from "./UniversePresence";
+
+type Choice = { id: string; label: string; detail: string };
+type Sector = Choice & { goals: string[] };
+type Proposal = { id: string; label: string; detail: string; price: number; period: "once" | "month" };
+const SECTORS: Sector[] = [
+  { id: "restaurant", label: "Restaurant · café · bar", detail: "Restaurants, cafés, rooftops, bars et concepts food", goals: ["Augmenter les réservations", "Être trouvé localement", "Monter en gamme"] },
+  { id: "hospitality", label: "Hôtel · villa · resort", detail: "Hôtels, resorts, villas, maisons d'hôtes et hospitality", goals: ["Augmenter les réservations", "Attirer une clientèle internationale", "Améliorer la visibilité"] },
+  { id: "realestate", label: "Immobilier · location", detail: "Agences, promoteurs, biens premium et location", goals: ["Générer plus de demandes", "Valoriser les biens", "Attirer une clientèle premium"] },
+  { id: "automotive", label: "Automobile · mobilité", detail: "Concessions, garages premium, location et mobilité", goals: ["Générer des demandes qualifiées", "Valoriser les véhicules", "Développer la visibilité locale"] },
+  { id: "fashion", label: "Mode · accessoires", detail: "Mode, prêt-à-porter, maroquinerie et accessoires", goals: ["Renforcer l'image de marque", "Vendre davantage", "Développer une audience internationale"] },
+  { id: "jewelry", label: "Joaillerie · horlogerie", detail: "Bijoux, montres, maisons et pièces d'exception", goals: ["Renforcer le positionnement premium", "Générer des demandes", "Créer une présence internationale"] },
+  { id: "beauty", label: "Beauté · esthétique · spa", detail: "Instituts, spas, cliniques esthétiques et bien-être", goals: ["Générer des rendez-vous", "Être trouvé localement", "Professionnaliser l'image"] },
+  { id: "health", label: "Santé · médical", detail: "Cliniques, cabinets, spécialistes et santé privée", goals: ["Générer des prises de rendez-vous", "Gagner en confiance", "Être visible sur Google"] },
+  { id: "architecture", label: "Architecture · intérieur", detail: "Architectes, architecture intérieure et design d'espace", goals: ["Montrer les réalisations", "Attirer des projets premium", "Développer la visibilité"] },
+  { id: "construction", label: "Construction · rénovation", detail: "Bâtiment, rénovation, artisans et entreprises techniques", goals: ["Générer des demandes", "Présenter le savoir-faire", "Être trouvé localement"] },
+  { id: "legal", label: "Avocat · droit · expertise", detail: "Cabinets juridiques, droit des affaires et professions réglementées", goals: ["Gagner en crédibilité", "Obtenir des prospects qualifiés", "Être visible sur Google"] },
+  { id: "finance", label: "Finance · patrimoine · assurance", detail: "Finance, gestion de patrimoine, assurance et conseil", goals: ["Gagner en confiance", "Générer des leads", "Structurer l'image de marque"] },
+  { id: "commerce", label: "Commerce · e-commerce", detail: "Boutiques, marques, retail, catalogues et vente en ligne", goals: ["Vendre davantage", "Améliorer la conversion", "Développer la marque"] },
+  { id: "tourism", label: "Voyage · tourisme · expériences", detail: "Agences, excursions, activités, loisirs et expériences", goals: ["Augmenter les réservations", "Être trouvé par les touristes", "Convertir davantage"] },
+  { id: "agency", label: "Agence · studio · freelance", detail: "Créatifs, marketing, tech, conseil et production", goals: ["Présenter l'expertise", "Générer des leads", "Monter en gamme"] },
+  { id: "other", label: "Autre activité", detail: "Votre activité ne figure pas ici ? XR Intelligence s'adapte.", goals: ["Développer mon activité", "Professionnaliser mon image", "Construire une présence forte"] },
+];
+const SERVICES: Choice[] = [
+  { id: "website", label: "Site web", detail: "Vitrine, Business, e-commerce ou réservation" }, { id: "branding", label: "Branding", detail: "Logo, identité, direction artistique et univers" }, { id: "seo", label: "SEO", detail: "Positionnement organique et acquisition Google" }, { id: "maps", label: "Google Maps", detail: "Fiche locale, visibilité et optimisation locale" }, { id: "ads", label: "Google Ads", detail: "Campagnes sponsorisées et acquisition payante" }, { id: "social", label: "Social Media", detail: "Stratégie, contenus et animation des réseaux" }, { id: "content", label: "Contenu · photo · vidéo", detail: "Direction de contenu, visuels et formats de campagne" }, { id: "conversion", label: "Conversion & parcours", detail: "UX, landing pages, CTA et optimisation commerciale" }, { id: "maintenance", label: "WebCare", detail: "Corrections, évolutions et suivi du site" },
+];
+const SITUATIONS: Choice[] = [
+  { id: "none", label: "Pas encore de site", detail: "Créer un socle digital propre dès le départ" }, { id: "existing", label: "J'ai déjà un site", detail: "Le conserver et l'améliorer" }, { id: "redesign", label: "Mon site doit être refait", detail: "Design, structure, mobile ou conversion à revoir" }, { id: "outdated", label: "Il fonctionne mais il est daté", detail: "Moderniser sans repartir de zéro" }, { id: "invisible", label: "J'ai peu de visibilité", detail: "Le problème est surtout l'acquisition" }, { id: "selling", label: "Je vends / prends des réservations", detail: "Catalogue, paiement, réservation ou rendez-vous" }, { id: "international", label: "Je vise l'international", detail: "Langues, image premium et acquisition internationale" }, { id: "launch", label: "Je lance une nouvelle activité", detail: "Construire l'offre et la présence dès le départ" },
+];
+const BUDGETS: Choice[] = [
+  { id: "under500", label: "Moins de 500 €", detail: "Un levier prioritaire" }, { id: "500_1000", label: "500 – 1 000 €", detail: "Une présence solide" }, { id: "1000_2500", label: "1 000 – 2 500 €", detail: "Un dispositif complet" }, { id: "2500_5000", label: "2 500 – 5 000 €", detail: "Une stratégie structurée" }, { id: "5000_plus", label: "5 000 € +", detail: "Un projet premium sur mesure" },
+];
+const DISCOVERY: Choice[] = [
+  { id: "google", label: "Google / Maps", detail: "Recherche, SEO ou visibilité locale" }, { id: "social", label: "Instagram / Facebook / TikTok", detail: "Réseaux sociaux et recommandations" }, { id: "referral", label: "Bouche-à-oreille", detail: "Recommandations et réseau" }, { id: "mixed", label: "Un peu de tout", detail: "Acquisition déjà diversifiée" },
+];
+const SERVICE_ORDER: Record<string, string[]> = { restaurant: ["website","maps","social","seo","branding","maintenance"], hospitality: ["website","maps","seo","social","branding","maintenance"], realestate: ["website","maps","branding","seo","social","maintenance"], automotive: ["website","maps","conversion","seo","content","maintenance"], fashion: ["website","branding","social","content","seo","maintenance"], jewelry: ["website","branding","content","seo","social","maintenance"], beauty: ["website","maps","social","seo","branding","maintenance"], health: ["website","maps","seo","branding","content","maintenance"], architecture: ["website","branding","content","seo","maps","maintenance"], construction: ["website","maps","seo","branding","content","maintenance"], legal: ["website","seo","branding","maps","content","maintenance"], finance: ["website","seo","branding","content","maps","maintenance"], commerce: ["website","social","seo","branding","conversion","maintenance"], tourism: ["website","maps","seo","social","content","maintenance"], agency: ["website","branding","conversion","seo","content","maintenance"], other: ["website","branding","seo","maps","social","maintenance"] };
+
+const BASE_PRICES: Record<string, number> = { website: 499, branding: 199, seo: 199, maps: 99, ads: 299, social: 299, content: 399, conversion: 299, maintenance: 29 };
+const PROFILE_SERVICE_RULES: Record<string, string[]> = Object.fromEntries(
+  Object.entries(SERVICE_ORDER).map(([sectorId, services]) => [sectorId, services.slice(0, 4)])
+);
+
+const WEBSITE_TIERS = {
+  showcase: { price: 499, label: "Site Vitrine Pro", detail: "Site premium jusqu'à 3 pages, responsive, contact et SEO de base" },
+  business: { price: 799, label: "Site Business", detail: "Site jusqu'à 5 pages, blog, galerie, chat et analytics avancés" },
+  ecommerce: { price: 1499, label: "E-commerce & Réservation", detail: "Catalogue, paiement sécurisé, gestion des stocks et parcours de réservation" },
+} as const;
+
+const BRANDING_TIERS = {
+  starter: { price: 199, label: "Branding essentiel", detail: "Logo, palette, typographie et fichiers maîtres" },
+  premium: { price: 399, label: "Identité de marque complète", detail: "Système de marque étendu, direction artistique et Brand Book" },
+} as const;
+
+export function QuoteConfiguratorCompact() {
+  const [step, setStep] = useState(0); const [sectorId, setSectorId] = useState("");
+useEffect(() => { const onSector = (event: Event) => { const id = (event as CustomEvent<{id:string}>).detail?.id; if (!id || !SECTORS.some((x) => x.id === id)) return; setSectorId(id); setShowAllSectors(false); setStep(0); window.setTimeout(() => document.getElementById("quote")?.scrollIntoView({ behavior: "smooth", block: "start" }), 40); }; const onService = (event: Event) => { const id = (event as CustomEvent<{id:string}>).detail?.id; if (!id || !SERVICES.some((x) => x.id === id)) return; setSelectedServices(current => current.includes(id) ? current : [...current, id]); setStep(0); window.setTimeout(() => document.getElementById("quote")?.scrollIntoView({ behavior: "smooth", block: "start" }), 40); }; window.addEventListener("xr:sector", onSector); window.addEventListener("xr:service", onService); return () => { window.removeEventListener("xr:sector", onSector); window.removeEventListener("xr:service", onService); }; }, []); const [showAllSectors, setShowAllSectors] = useState(false); const [goal, setGoal] = useState(""); const [situation, setSituation] = useState(""); const [budget, setBudget] = useState(""); const [discovery, setDiscovery] = useState(""); const [selectedServices, setSelectedServices] = useState<string[]>([]); const [client, setClient] = useState({ company: "", name: "", email: "", whatsapp: "", website: "" }); const [generated, setGenerated] = useState(false); const [sending, setSending] = useState(false); const [sendMessage, setSendMessage] = useState("");
   useEffect(() => {
     const readServicePrefill = () => {
       const query = new URLSearchParams(window.location.search);
@@ -70,7 +129,7 @@ export function QuoteConfiguratorCompact() {
     };
     readServicePrefill();
   }, []);
-  useEffect(() => { const onSector = (event: Event) => { const id = (event as CustomEvent<{id:string}>).detail?.id; if (!id || !SECTORS.some((x) => x.id === id)) return; setSectorId(id); setShowAllSectors(false); setStep(0); window.setTimeout(() => document.getElementById("quote")?.scrollIntoView({ behavior: "smooth", block: "start" }), 40); }; const onService = (event: Event) => { const id = (event as CustomEvent<{id:string}>).detail?.id; if (!id || !SERVICES.some((x) => x.id === id)) return; setSelectedServices(current => current.includes(id) ? current : [...current, id]); setStep(0); window.setTimeout(() => document.getElementById("quote")?.scrollIntoView({ behavior: "smooth", block: "start" }), 40); }; window.addEventListener("xr:sector", onSector); window.addEventListener("xr:service", onService); return () => { window.removeEventListener("xr:sector", onSector); window.removeEventListener("xr:service", onService); }; }, []); const [showAllSectors, setShowAllSectors] = useState(false); const [goal, setGoal] = useState(""); const [situation, setSituation] = useState(""); const [budget, setBudget] = useState(""); const [discovery, setDiscovery] = useState(""); const [selectedServices, setSelectedServices] = useState<string[]>([]); const [client, setClient] = useState({ company: "", name: "", email: "", whatsapp: "", website: "" }); const [generated, setGenerated] = useState(false); const [sending, setSending] = useState(false); const [sendMessage, setSendMessage] = useState("");
+  
   const sector = SECTORS.find((x) => x.id === sectorId);
   const situationChoice = SITUATIONS.find((x) => x.id === situation);
   const budgetChoice = BUDGETS.find((x) => x.id === budget);
