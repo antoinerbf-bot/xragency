@@ -74,7 +74,15 @@ function JuliePortrait({ mood }: { mood: JulieMood }) {
               stroke="#7b3f48"
               strokeWidth="4"
               strokeLinecap="round"
-              className="transition-all duration-500 group-hover/portrait:[d:path('M98 181 Q120 207 142 181')]"
+              className="transition-opacity duration-300 group-hover/portrait:opacity-0"
+            />
+            <path
+              d="M98 182 Q120 204 142 182"
+              fill="none"
+              stroke="#7b3f48"
+              strokeWidth="4"
+              strokeLinecap="round"
+              className="opacity-0 transition-opacity duration-500 group-hover/portrait:opacity-100"
             />
 
             <path d="M66 203c17 12 31 18 54 18s38-6 54-18c-4 25-22 42-54 42s-50-17-54-42Z" fill="#e7b79f" opacity=".7" />
