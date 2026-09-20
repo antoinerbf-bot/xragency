@@ -1,140 +1,786 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
-import { ArrowRight, Check, ChevronDown, MessageCircle, Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";\nimport type { CSSProperties } from "react";
-import { SERVICES, CONTACT, PERIOD_LABEL } from "@/lib/content";
+import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import {
+  Check,
+  ArrowRight,
+  ArrowLeft,
+  Sparkles,
+  ShieldCheck,
+  MessageCircle,
+  Zap,
+  Plus,
+  Compass,
+} from "lucide-react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { useLang } from "@/lib/i18n";
+import { UI } from "@/lib/copy";
+import { SERVICES, PERIOD_LABEL, CONTACT, FAQ } from "@/lib/content";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
+import { EmberButton, Reveal, Parallax } from "@/components/site/primitives";
+import { HeroSection } from "@/components/seo/HeroSection";
+import { MapsSimulator } from "@/components/site/MapsSimulator";
+import { AddToCartBtn } from "@/components/site/Cart";
+import { cn } from "@/lib/utils";
 
-const ALIASES: Record<string,string> = {
-  "seo-domination":"seo","seo-domination-system":"seo","referencement-naturel":"seo",
-  "site-web":"websites","creation-site-web":"websites","creation-de-sites-web":"websites",
-  "identite-visuelle":"branding","google-maps":"maps","google-maps-top-3":"maps",
-  "community-management":"social","social-media":"social","webcare":"maintenance",
-  "maintenance-cloud":"maintenance","e-commerce":"ecommerce","boutique-en-ligne":"ecommerce",
-  "refonte":"websites","refonte-site":"websites","google-ads":"ads","publicite-digitale":"ads",
-  "strategie-digitale":"strategy","conseil":"strategy"
+const IMG_WEBSITES =
+  "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1600&q=85";
+const IMG_BRANDING =
+  "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?auto=format&fit=crop&w=1600&q=85";
+const IMG_SEO =
+  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=85";
+const IMG_MAPS =
+  "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1600&q=85";
+const IMG_SOCIAL =
+  "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=1600&q=85";
+const IMG_MAINTENANCE =
+  "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=85";
+const IMG_AI =
+  "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1600&q=85";
+
+const SERVICE_IMAGES: Record<string, string> = {
+  websites: IMG_WEBSITES,
+  branding: IMG_BRANDING,
+  seo: IMG_SEO,
+  maps: IMG_MAPS,
+  social: IMG_SOCIAL,
+  maintenance: IMG_MAINTENANCE,
+  ai: IMG_AI,
+  ecommerce:
+    "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=85",
+  refonte:
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=85",
+  ads: "https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=1600&q=85",
+  strategy:
+    "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1600&q=85",
 };
-const TINT: Record<string,string> = {
-  websites:"#d7a35d", branding:"#b889d6", seo:"#6f9bd1", maps:"#5f9f9a",
-  social:"#c66b87", maintenance:"#7e93ad", ecommerce:"#d88455", ads:"#c47b66", strategy:"#8b7fc4"
+
+/* ── Human-friendly slug aliases mapping ── */
+const SERVICE_ALIASES: Record<string, string> = {
+  "seo-domination": "seo",
+  "seo-domination-system": "seo",
+  "seo": "seo",
+  "referencement-naturel": "seo",
+  "websites": "websites",
+  "site-web": "websites",
+  "creation-site-web": "websites",
+  "creation-de-sites-web": "websites",
+  "branding": "branding",
+  "identite-visuelle": "branding",
+  "maps": "maps",
+  "google-maps": "maps",
+  "google-maps-top-3": "maps",
+  "social": "social",
+  "community-management": "social",
+  "social-media": "social",
+  "maintenance": "maintenance",
+  "webcare": "maintenance",
+  "maintenance-cloud": "maintenance",
+  
+  "ecommerce": "ecommerce",
+  "e-commerce": "ecommerce",
+  "boutique-en-ligne": "ecommerce",
+  "refonte": "refonte",
+  "refonte-site": "refonte",
+  "refonte-de-site-web": "refonte",
+  "ads": "ads",
+  "google-ads": "ads",
+  "publicite-digitale": "ads",
+  "strategy": "strategy",
+  "strategie-digitale": "strategy",
+  "conseil": "strategy",
 };
-const IMG: Record<string,string> = {
-  websites:"https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=90&w=2200",
-  branding:"https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=90&w=2200",
-  seo:"https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=90&w=2200",
-  maps:"https://images.unsplash.com/photo-1524666041070-9e3c7be7b8e0?auto=format&fit=crop&q=90&w=2200",
-  social:"https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?auto=format&fit=crop&q=90&w=2200",
-  maintenance:"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=90&w=2200",
-  ecommerce:"https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=90&w=2200"
-};
-const NEXT: Record<string,string> = { websites:"seo", branding:"websites", seo:"maps", maps:"social", social:"maintenance", maintenance:"ecommerce", ecommerce:"websites" };
 
 export const Route = createFileRoute("/services/$serviceId")({
-  loader: ({params}) => {
-    const id = ALIASES[params.serviceId.toLowerCase()] ?? params.serviceId.toLowerCase();
-    const service = SERVICES.find(s => s.id === id);
-    if (!service) throw notFound();
-    return {service, canonicalId:id};
+  loader: ({ params }) => {
+    try {
+      const raw = params.serviceId.toLowerCase();
+      const resolvedId = SERVICE_ALIASES[raw] ?? raw;
+      const service = SERVICES.find((s) => s.id === resolvedId);
+      if (!service) {
+        throw notFound();
+      }
+      return { service, canonicalId: resolvedId };
+    } catch (err) {
+      console.error('Service loader error:', err);
+      throw err;
+    }
   },
-  head: ({loaderData}) => loaderData?.service ? ({
-    meta:[
-      {title: loaderData.service.title.fr+" — XR Agency"},
-      {name:"description",content:loaderData.service.description.fr},
-      {property:"og:title",content:loaderData.service.title.fr+" — XR Agency"},
-      {property:"og:description",content:loaderData.service.short.fr},
-      {property:"og:type",content:"website"}
-    ]
-  }) : {meta:[{title:"Service — XR Agency"}]},
-  component: ServiceDetail
+  head: ({ loaderData }) => {
+    const s = loaderData?.service;
+    if (!s) return { meta: [{ title: "Service — XR Agency" }] };
+    return {
+      meta: [
+        { title: `${s.title.fr} — XR Agency` },
+        {
+          name: "description",
+          content: `${s.short.fr} — Tarifs officiels, livrables et garantie de performance.`,
+        },
+        { property: "og:title", content: `${s.title.fr} — XR Agency` },
+        {
+          property: "og:description",
+          content: `${s.short.fr} — Studio digital & IA de prestige.`,
+        },
+        { property: "og:type", content: "website" },
+      ],
+    };
+  },
+  component: ServiceDetailPage,
 });
 
-function ServiceDetail(){
-  const {service} = Route.useLoaderData();
-  const {t,lang,price} = useLang();
-  const tint=TINT[service.id] ?? "#d7a35d";
-  const [activePlan,setActivePlan]=useState(Math.max(0,service.plans.findIndex(p=>p.popular)));
-  const [faq,setFaq]=useState<number|null>(0);
-  const [scrolled,setScrolled]=useState(false);
-  useEffect(()=>{ window.scrollTo(0,0); const onScroll=()=>setScrolled(window.scrollY>420); window.addEventListener("scroll",onScroll,{passive:true}); return()=>window.removeEventListener("scroll",onScroll); },[service.id]);
-  const plan=service.plans[activePlan] ?? service.plans[0];
-  const next=NEXT[service.id] ? SERVICES.find(s=>s.id===NEXT[service.id]) : undefined;
-  const whatsapp=CONTACT.whatsapp+"?text="+encodeURIComponent("Bonjour XR Agency, je souhaite parler de la prestation "+service.title.fr+" ("+price(plan.eur)+" €).");
-  const copy={
-    fr:{back:"Toutes les prestations",kicker:"XR / PRESTATION",hero:"Un levier. Une transformation. Un prochain mouvement.",cta:"Composer mon devis",whatsapp:"Parler sur WhatsApp",why:"Pourquoi cette prestation ?",deliver:"Ce que nous construisons",method:"Le déroulé",offer:"Choisissez votre niveau",proof:"Preuves & livrables",faq:"Questions avant de commencer",next:"Poursuivre l'exploration",recommend:"Configurer ce projet"},
-    en:{back:"All services",kicker:"XR / SERVICE",hero:"One lever. One transformation. One next move.",cta:"Build my quote",whatsapp:"Talk on WhatsApp",why:"Why this service?",deliver:"What we build",method:"The process",offer:"Choose your level",proof:"Proof & deliverables",faq:"Questions before we start",next:"Continue exploring",recommend:"Configure this project"},
-    vi:{back:"Tất cả dịch vụ",kicker:"XR / DỊCH VỤ",hero:"Một đòn bẩy. Một chuyển đổi. Một bước tiếp theo.",cta:"Tạo báo giá",whatsapp:"Trao đổi qua WhatsApp",why:"Tại sao dịch vụ này?",deliver:"Chúng tôi xây dựng gì",method:"Quy trình",offer:"Chọn cấp độ",proof:"Bằng chứng & bàn giao",faq:"Câu hỏi trước khi bắt đầu",next:"Tiếp tục khám phá",recommend:"Cấu hình dự án"}
-  }[lang];
+function ServiceDetailPage() {
+  const { service } = Route.useLoaderData();
+  const { t, price, lang } = useLang();
+  const [selectedPlanIndex, setSelectedPlanIndex] = useState(
+    service.plans.findIndex((p) => p.popular) !== -1
+      ? service.plans.findIndex((p) => p.popular)
+      : 0,
+  );
 
-  return <div className="min-h-screen overflow-x-hidden bg-background text-foreground" style={{"--service-tint":tint} as CSSProperties}>
-    <Nav/>
-    <main>
-      <section className="relative min-h-[92svh] overflow-hidden">
-        <img src={IMG[service.id] ?? IMG.websites} alt="" className="absolute inset-0 h-full w-full object-cover object-center scale-[1.02]"/>
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.62),rgba(0,0,0,.18)_42%,var(--background)_100%)]"/>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_25%,color-mix(in_srgb,var(--service-tint)_30%,transparent),transparent_34%)]"/>
-        <div className="relative z-10 mx-auto flex min-h-[92svh] max-w-[1500px] flex-col justify-between px-5 pb-10 pt-28 sm:px-8 lg:px-12 lg:pb-16">
-          <a href="/services" className="inline-flex min-h-11 w-fit items-center rounded-full border border-white/20 bg-black/25 px-4 py-2 text-sm text-white/80 backdrop-blur hover:text-white">{copy.back}</a>
-          <div className="max-w-6xl">
-            <div className="mb-5 flex items-center gap-3"><span className="label-mono text-white/65">{copy.kicker} · {service.num}/07</span><span className="h-px w-14" style={{background:tint}}/></div>
-            <h1 className="display-serif max-w-5xl text-[clamp(3.5rem,8.5vw,9rem)] leading-[.8] text-white">{t(service.title)}</h1>
-            <p className="mt-7 max-w-3xl text-lg leading-8 text-white/80 sm:text-xl">{t(service.short)}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a href={"/?service="+service.id+"#quote"} className="inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold uppercase tracking-[.1em] text-primary-foreground hover:-translate-y-0.5 transition">{copy.cta}<ArrowRight className="h-4 w-4"/></a>
-              <a href={whatsapp} target="_blank" rel="noreferrer" className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/20 bg-black/25 px-5 py-3.5 text-sm font-semibold text-white backdrop-blur hover:border-white/40"><MessageCircle className="h-4 w-4"/> {copy.whatsapp}</a>
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [showSticky, setShowSticky] = useState(false);
+  const [installmentSelections, setInstallmentSelections] = useState<Record<number, boolean>>({});
+
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [service.id]);
+
+  useEffect(() => {
+    const onScroll = () => setShowSticky(window.scrollY > 500);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const heroImg = SERVICE_IMAGES[service.id] ?? IMG_WEBSITES;
+  const otherServices = SERVICES.filter((s) => s.id !== service.id);
+
+  // Filter relevant FAQs
+  const relevantFaqs = FAQ.slice(0, 4);
+
+  // WhatsApp link with customized message for this service
+  const planForWa = service.plans[selectedPlanIndex];
+  const isInstWa = installmentSelections[selectedPlanIndex] ?? false;
+  const planIsInstallmentWa = service.id === "websites" && isInstWa && planForWa?.period === "once";
+  
+  const waPrefilled = encodeURIComponent(
+    `Bonjour XR Agency, je suis intéressé par votre service "${service.title[lang]}" (Forfait: "${planForWa?.name[lang]}"${planIsInstallmentWa ? " en mensualités sur 12 mois" : ""}). Pouvons-nous échanger ?`,
+  );
+  const waUrl = `${CONTACT.whatsapp}?text=${waPrefilled}`;
+
+  return (
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
+      {/* Background ambient lighting */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-0 opacity-60"
+        style={{ background: "var(--gradient-halo)" }}
+      />
+
+      <Nav />
+
+      <main className="relative z-10 pt-28">
+        {/* Breadcrumbs / Back Bar */}
+        <div className="mx-auto max-w-7xl px-6 pt-4 lg:px-10">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/60 pb-4">
+            <Link
+              to="/services"
+              className="label-mono inline-flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              {t({ fr: "Catalogue des Prestations", en: "Services Catalogue", vi: "Danh mục Dịch vụ" })}
+            </Link>
+            <div className="label-mono flex items-center gap-2 text-xs text-muted-foreground">
+              <Link to="/" className="hover:text-primary transition-colors">Accueil</Link>
+              <span>/</span>
+              <Link to="/services" className="hover:text-primary transition-colors">Services</Link>
+              <span>/</span>
+              <span className="text-foreground font-semibold">{t(service.title)}</span>
             </div>
-            <div className="mt-8 flex flex-wrap gap-2">{service.highlights.slice(0,4).map((h,i)=><span key={i} className="rounded-full border border-white/15 bg-black/20 px-3 py-2 text-sm text-white/75 backdrop-blur">{t(h)}</span>)}</div>
           </div>
         </div>
-      </section>
 
-      <section className="border-b border-border/60 py-20 sm:py-28">
-        <div className="mx-auto max-w-[1300px] px-5 sm:px-8 lg:px-12">
-          <p className="label-mono text-primary">{copy.why}</p>
-          <div className="mt-5 grid gap-8 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
-            <h2 className="display-serif text-5xl leading-[.9] sm:text-7xl">{t(service.description)}</h2>
-            <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">{service.highlights.slice(0,3).map((h,i)=><div key={i} className="rounded-2xl border border-border/70 bg-card/55 p-5"><span className="label-mono text-primary">0{i+1}</span><p className="mt-3 text-base leading-6">{t(h)}</p></div>)}</div>
+        {/* Hero Section */}
+        <section className="relative overflow-hidden py-16 lg:py-24">
+          <div className="mx-auto max-w-7xl px-6 lg:px-10">
+            <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
+              <div className="lg:col-span-7">
+                {service.id === 'seo' ? (
+                  <HeroSection
+                    title={t(service.title)}
+                    description={t(service.description)}
+                    ctaPrimary={{ label: t(UI.explorePacks), href: "#plans" }}
+                  />
+                ) : (
+                  <>
+                    <Reveal>
+                      <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-primary">
+                        <Sparkles className="h-3.5 w-3.5" />
+                        <span className="label-mono text-xs uppercase tracking-widest">
+                          {t(service.title)} · {service.num}
+                        </span>
+                      </div>
+                    </Reveal>
+                    <Reveal delay={80}>
+                      <h1 className="display-serif mt-6 text-[clamp(2.5rem,6.5vw,5.2rem)] leading-[1.02]">
+                        {t(service.title)}
+                      </h1>
+                    </Reveal>
+                    <Reveal delay={160}>
+                      <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+                        {t(service.description)}
+                      </p>
+                    </Reveal>
+                    <Reveal delay={240}>
+                      <div className="mt-8 flex flex-wrap gap-2.5">
+                        {service.highlights.map((h, idx) => (
+                          <span
+                            key={idx}
+                            className="label-mono inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-2 text-xs text-foreground backdrop-blur-sm"
+                          >
+                            <Zap className="h-3 w-3 text-primary" />
+                            {t(h)}
+                          </span>
+                        ))}
+                      </div>
+                    </Reveal>
+                    <Reveal delay={320}>
+                      <div className="mt-10 flex flex-wrap items-center gap-4">
+                        <EmberButton href="#plans">{t(UI.explorePacks)}</EmberButton>
+                        <a
+                          href={waUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-6 py-3.5 text-xs uppercase tracking-widest text-foreground transition-all duration-300 hover:border-primary hover:text-primary"
+                        >
+                          <MessageCircle className="h-4 w-4 text-emerald-500" />
+                          {t(UI.bookDirectWhatsapp)}
+                        </a>
+                        <Link
+                          to="/"
+                          hash="intelligence"
+                          className="label-mono text-xs text-muted-foreground transition-colors hover:text-primary"
+                        >
+                          {t(UI.getCustomQuote)} →
+                        </Link>
+                      </div>
+                    </Reveal>
+                  </>
+                )}
+              </div>
+              <div className="lg:col-span-5">
+                <img src={heroImg} alt={t(service.title)} className="w-full rounded-lg shadow-lg" />
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {service.metrics?.length ? <section className="py-16 sm:py-24"><div className="mx-auto grid max-w-[1300px] gap-3 px-5 sm:px-8 md:grid-cols-3 lg:px-12">{service.metrics.slice(0,3).map((m,i)=><div key={i} className="rounded-[1.5rem] border border-border/70 bg-card/45 p-7 sm:p-9"><p className="display-serif text-4xl sm:text-5xl" style={{color:tint}}>{m.metric}</p><p className="mt-3 text-sm font-semibold uppercase tracking-[.08em]">{t(m.label)}</p><p className="mt-2 text-sm leading-6 text-muted-foreground">{t(m.desc)}</p></div>)}</div></section> : null}
+        {/* Proven Metrics Section */}
+        {service.metrics && service.metrics.length > 0 && (
+          <section className="border-y border-border/60 bg-accent/20 py-16">
+            <div className="mx-auto max-w-7xl px-6 lg:px-10">
+              <div className="grid gap-6 md:grid-cols-3">
+                {service.metrics.map((m, idx) => (
+                  <Reveal key={idx} delay={idx * 90}>
+                    <div className="surface-plate rounded-2xl p-7">
+                      <p className="display-serif text-4xl text-primary sm:text-5xl">{m.metric}</p>
+                      <h4 className="label-mono mt-3 text-sm font-semibold uppercase tracking-wider text-foreground">
+                        {t(m.label)}
+                      </h4>
+                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                        {t(m.desc)}
+                      </p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
-      <section className="border-y border-border/60 bg-accent/20 py-20 sm:py-28">
-        <div className="mx-auto max-w-[1300px] px-5 sm:px-8 lg:px-12">
-          <p className="label-mono text-primary">{copy.method}</p>
-          <h2 className="display-serif mt-4 text-5xl sm:text-7xl">{lang==="fr"?"Du premier échange à la mise en ligne.":lang==="en"?"From first exchange to launch.":"Từ trao đổi đầu tiên đến triển khai."}</h2>
-          <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {(service.steps ?? []).slice(0,4).map((step,i)=><article key={i} className="rounded-[1.5rem] border border-border/70 bg-card/60 p-6 sm:p-8"><span className="label-mono text-primary">{step.num}</span><h3 className="display-serif mt-6 text-2xl">{t(step.title)}</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">{t(step.desc)}</p></article>)}
+        {/* 4-Step Process & Deliverables */}
+        {service.steps && service.steps.length > 0 && (
+          <section className="py-24 lg:py-32">
+            <div className="mx-auto max-w-7xl px-6 lg:px-10">
+              <Reveal>
+                <p className="label-mono text-xs uppercase tracking-widest text-primary">
+                  {t(UI.serviceProcess)}
+                </p>
+                <h2 className="display-serif mt-4 text-3xl sm:text-5xl">
+                  {t({
+                    fr: "Notre méthode de réalisation",
+                    en: "Our delivery methodology",
+                    vi: "Phương pháp thực hiện",
+                  })}
+                </h2>
+                <p className="mt-4 max-w-2xl text-base text-muted-foreground">
+                  {t(UI.serviceProcessDesc)}
+                </p>
+              </Reveal>
+
+              <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                {service.steps.map((st, idx) => (
+                  <Reveal key={idx} delay={idx * 100}>
+                    <div className="surface-plate relative flex h-full flex-col justify-between rounded-3xl p-8 transition-transform duration-300 hover:-translate-y-1">
+                      <div>
+                        <span className="label-mono inline-flex h-9 w-9 items-center justify-center rounded-xl border border-primary/40 bg-primary/10 text-sm font-semibold text-primary">
+                          {st.num}
+                        </span>
+                        <h3 className="display-serif mt-6 text-xl text-foreground">
+                          {t(st.title)}
+                        </h3>
+                        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                          {t(st.desc)}
+                        </p>
+                      </div>
+                      <div className="mt-8 border-t border-border/60 pt-4">
+                        <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/70">
+                          {t({ fr: "Étape", en: "Step", vi: "Bước" })} {st.num}{" "}
+                          {t({ fr: "sur 04", en: "of 04", vi: "trong 04" })}
+                        </span>
+                      </div>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Google Maps Dedicated Interactive Simulator & 7 Phases */}
+        {service.id === "maps" && (
+          <section className="border-t border-border/60 py-24 lg:py-32">
+            <div className="mx-auto max-w-7xl px-6 lg:px-10">
+              <MapsSimulator />
+            </div>
+          </section>
+        )}
+
+        {/* Interactive Pricing Grid */}
+        <section id="plans" className="relative border-t border-border/60 py-24 lg:py-32">
+          <div className="mx-auto max-w-7xl px-6 lg:px-10">
+            <div className="text-center">
+              <Reveal>
+                <p className="label-mono text-xs uppercase tracking-widest text-primary">
+                  {t(UI.navPricing)} · {t(service.title)}
+                </p>
+                <h2 className="display-serif mt-4 text-3xl sm:text-5xl">
+                  {t({
+                    fr: "Formules & Tarification Officielle",
+                    en: "Plans & Official Pricing",
+                    vi: "Gói & Bảng giá Chính thức",
+                  })}
+                </h2>
+                <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
+                  {t({
+                    fr: "Choisissez la formule la plus adaptée à vos ambitions. Tarifs clairs, transparents et sans frais cachés.",
+                    en: "Choose the plan best suited to your ambitions. Clear, transparent pricing with no hidden fees.",
+                    vi: "Chọn gói phù hợp nhất với mục tiêu của bạn. Giá rõ ràng, minh bạch, không phí ẩn.",
+                  })}
+                </p>
+              </Reveal>
+            </div>
+
+
+
+            <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {service.plans.map((p, i) => {
+                const isSelected = selectedPlanIndex === i;
+                
+                const isInst = installmentSelections[i] ?? false;
+                const planIsInstallment = service.id === "websites" && isInst && p.period === "once";
+                const displayPrice = planIsInstallment ? Math.round((p.eur * 1.4) / 12) : p.eur;
+                const displayPeriod = planIsInstallment ? "month" : p.period;
+
+                const planWaMessage = encodeURIComponent(
+                  `Bonjour XR Agency, je souhaite commander la formule "${p.name[lang]}" du service "${service.title[lang]}" (${price(displayPrice)}${planIsInstallment ? " / mois sur 12 mois" : ""}). Comment démarrer ?`,
+                );
+                const planWaUrl = `${CONTACT.whatsapp}?text=${planWaMessage}`;
+
+                return (
+                  <Reveal key={i} delay={i * 80}>
+                    <article
+                      onClick={() => setSelectedPlanIndex(i)}
+                      className={cn(
+                        "surface-plate relative flex h-full flex-col justify-between rounded-3xl p-8 transition-all duration-300 cursor-pointer",
+                        p.popular
+                          ? "border-primary shadow-[0_0_30px_rgba(0,0,0,0.1)]"
+                          : "hover:border-primary/50",
+                        isSelected && "ring-2 ring-primary",
+                      )}
+                    >
+                      {p.popular ? (
+                        <span className="label-mono absolute -top-3.5 left-8 rounded-full bg-primary px-3.5 py-1 text-xs text-primary-foreground">
+                          {t(UI.popular)}
+                        </span>
+                      ) : null}
+
+                      <div>
+                        <h3 className="display-serif text-2xl text-foreground">{t(p.name)}</h3>
+                        {p.audience ? (
+                          <p className="label-mono mt-2 text-xs text-muted-foreground">
+                            {t(p.audience)}
+                          </p>
+                        ) : null}
+
+                        {/* Inline Payment Selector for Websites */}
+                        {service.id === "websites" && p.period === "once" && (
+                          <div className="mt-4 flex rounded-lg bg-accent/30 p-1 border border-border/50">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setInstallmentSelections(prev => ({ ...prev, [i]: true }));
+                              }}
+                              className={cn(
+                                "flex-1 rounded-md text-[10px] sm:text-[11px] font-medium transition-all py-1.5",
+                                isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                              )}
+                            >
+                              Mensualités
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setInstallmentSelections(prev => ({ ...prev, [i]: false }));
+                              }}
+                              className={cn(
+                                "flex-1 rounded-md text-[10px] sm:text-[11px] font-medium transition-all py-1.5",
+                                !isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                              )}
+                            >
+                              Comptant
+                            </button>
+                          </div>
+                        )}
+
+                        <p className="mt-6 flex items-baseline gap-2 border-b border-border/60 pb-6">
+                          <span className="display-serif text-4xl text-primary">
+                            {price(displayPrice)}
+                          </span>
+                          <span className="label-mono flex flex-col items-start gap-1 text-xs text-muted-foreground">
+                            <span>{t(PERIOD_LABEL[displayPeriod])}</span>
+                            {planIsInstallment && (
+                              <span className="text-[10px] text-primary/80 leading-tight max-w-[140px]">
+                                {t({ fr: "sur 12 mois (inclus domaine & hébergement 79€/m)", en: "over 12 mo (incl. domain & hosting 79€/m)", vi: "trong 12 tháng (gồm domain & hosting 79€/m)" })}
+                              </span>
+                            )}
+                          </span>
+                        </p>
+
+                        <ul className="mt-6 space-y-3.5">
+                          {(p.features || []).map((f, k) => (
+                            <li
+                              key={k}
+                              className="flex items-start gap-3 text-sm text-muted-foreground"
+                            >
+                              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                              <span>{t(f)}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="mt-10 space-y-3">
+                        <AddToCartBtn
+                          item={{
+                            serviceId: service.id,
+                            serviceName: t(service.title),
+                            planName: t(p.name) + (planIsInstallment ? " (12 mois)" : ""),
+                            priceEur: displayPrice,
+                            period: displayPeriod,
+                            periodLabel: t(PERIOD_LABEL[displayPeriod]),
+                          }}
+                          popular={p.popular}
+                        />
+
+                        <a
+                          href={planWaUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex w-full items-center justify-center gap-2 rounded-full border border-border/80 bg-card/60 py-3 text-xs text-muted-foreground transition-all duration-300 hover:border-emerald-500/60 hover:text-emerald-500 hover:bg-emerald-500/5"
+                        >
+                          <MessageCircle className="h-3.5 w-3.5 text-emerald-500" />
+                          {t({
+                            fr: "Commander sur WhatsApp",
+                            en: "Order on WhatsApp",
+                            vi: "Đặt qua WhatsApp",
+                          })}
+                        </a>
+                        <Link
+                          to="/"
+                          hash="intelligence"
+                          className="block text-center text-xs text-muted-foreground hover:text-primary pt-1"
+                        >
+                          {t({
+                            fr: "Ou calculer dans l'estimateur IA →",
+                            en: "Or calculate in the AI estimator →",
+                            vi: "Hoặc tính trong bộ ước tính AI →",
+                          })}
+                        </Link>
+                      </div>
+                    </article>
+                  </Reveal>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-[1300px] px-5 sm:px-8 lg:px-12">
-          <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><div><p className="label-mono text-primary">{copy.offer}</p><h2 className="display-serif mt-4 text-5xl sm:text-7xl">{lang==="fr"?"Choisissez ce qui correspond à votre ambition.":lang==="en"?"Choose the level that matches your ambition.":"Chọn cấp độ phù hợp với mục tiêu."}</h2></div><span className="label-mono text-muted-foreground">{service.plans.length} {lang==="fr"?"options":lang==="en"?"options":"lựa chọn"}</span></div>
-          <div className="mt-12 grid gap-5 lg:grid-cols-3">
-            {service.plans.map((p,i)=><button key={i} type="button" onClick={()=>setActivePlan(i)} className={"group rounded-[1.5rem] border p-6 text-left transition duration-300 hover:-translate-y-1 sm:p-8 "+(i===activePlan?"border-primary bg-primary/[.07] shadow-2xl shadow-primary/10":"border-border/70 bg-card/45 hover:border-primary/40")}>
-              <div className="flex items-start justify-between gap-3"><span className="label-mono text-muted-foreground">0{i+1}</span>{p.popular&&<span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">{lang==="fr"?"Populaire":lang==="en"?"Popular":"Phổ biến"}</span>}</div>
-              <h3 className="display-serif mt-7 text-3xl">{t(p.name)}</h3>
-              {p.audience&&<p className="mt-2 text-sm text-muted-foreground">{t(p.audience)}</p>}
-              <p className="mt-6 text-3xl font-semibold">{price(p.eur)} € <span className="text-sm font-normal text-muted-foreground">{t(PERIOD_LABEL[p.period])}</span></p>
-              <ul className="mt-6 space-y-2">{p.features.slice(0,6).map((f,j)=><li key={j} className="flex gap-2 text-sm leading-5"><Check className="mt-0.5 h-4 w-4 shrink-0" style={{color:tint}}/>{t(f)}</li>)}</ul>
-            </button>)}
+        {/* Comparison Matrix: XR Agency vs Market */}
+        {service.comparisons?.length > 0 && (
+          <section className="border-t border-border/60 py-24 lg:py-32">
+            <div className="mx-auto max-w-7xl px-6 lg:px-10">
+              <Reveal>
+                <div className="text-center">
+                  <p className="label-mono text-xs uppercase tracking-widest text-primary">
+                    {t(UI.serviceCompareTitle)}
+                  </p>
+                  <h2 className="display-serif mt-4 text-3xl sm:text-5xl">
+                    {t({
+                      fr: "L'Excellence XR Agency vs Les Standards",
+                      en: "XR Agency Excellence vs Market Standards",
+                      vi: "Sự xuất sắc XR Agency vs Tiêu chuẩn",
+                    })}
+                  </h2>
+                  <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
+                    {t(UI.serviceCompareDesc)}
+                  </p>
+                </div>
+              </Reveal>
+
+              <Reveal delay={120}>
+                <div className="mt-16 overflow-hidden rounded-3xl border border-border bg-card shadow-lg">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-border bg-accent/40">
+                        <th className="label-mono p-5 sm:p-6 text-xs text-muted-foreground">
+                          {t(UI.featureComparison)}
+                        </th>
+                        <th className="label-mono p-5 sm:p-6 text-xs text-primary font-bold">
+                          {t(UI.withXrAgency)}
+                        </th>
+                        <th className="label-mono p-5 sm:p-6 text-xs text-muted-foreground">
+                          {t(UI.traditionalAgency)}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border/60">
+{(service.comparisons || []).map((c, idx) => (
+                        <tr key={idx} className="transition-colors hover:bg-accent/20">
+                          <td className="p-5 sm:p-6 font-medium text-sm text-foreground">
+                            {t(c.feature)}
+                          </td>
+                          <td className="p-5 sm:p-6 text-sm text-foreground">
+                            <span className="inline-flex items-center gap-2 text-primary font-medium">
+                              <Check className="h-4 w-4 shrink-0" />
+                              {t(c.us)}
+                            </span>
+                          </td>
+                          <td className="p-5 sm:p-6 text-sm text-muted-foreground opacity-80">
+                            {t(c.them)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </Reveal>
+            </div>
+          </section>
+        )}
+
+        {/* Frequently Asked Questions */}
+        <section className="border-t border-border/60 py-24 lg:py-32">
+          <div className="mx-auto max-w-5xl px-6 lg:px-10">
+            <Reveal>
+              <div className="text-center">
+                <p className="label-mono text-xs uppercase tracking-widest text-primary">
+                  {t(UI.faqLabel)}
+                </p>
+                <h2 className="display-serif mt-4 text-3xl sm:text-5xl">
+                  {t(UI.faqTitle1)} <em className="italic text-primary">{t(UI.faqTitle2)}</em>
+                </h2>
+                <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
+                  {t({
+                    fr: "Tout ce que vous devez savoir avant de démarrer votre collaboration avec XR Agency.",
+                    en: "Everything you need to know before starting your collaboration with XR Agency.",
+                    vi: "Mọi điều bạn cần biết trước khi bắt đầu hợp tác với XR Agency.",
+                  })}
+                </p>
+              </div>
+            </Reveal>
+
+            {/* Use the service‑specific FAQs if they exist, otherwise fallback to the global FAQ list */}
+            {service.serviceFaqs?.length ? (
+              <div className="mt-14 border-t border-border">
+                {service.serviceFaqs.map((item, i) => {
+                  const active = openFaq === i;
+                  return (
+                    <Reveal key={i} delay={i * 50}>
+                      <div className="border-b border-border">
+                        <button
+                          onClick={() => setOpenFaq(active ? null : i)}
+                          className="flex w-full items-start justify-between gap-6 py-6 text-left"
+                        >
+                          <div className="flex items-start gap-4">
+                            <span className="label-mono mt-1 text-primary">
+                              {String(i + 1).padStart(2, "0")}
+                            </span>
+                            <span className="display-serif text-lg sm:text-xl font-medium text-foreground">
+                              {t(item.q)}
+                            </span>
+                          </div>
+                          <Plus
+                            className={cn(
+                              "mt-1 h-5 w-5 shrink-0 text-primary transition-transform duration-300",
+                              active && "rotate-45",
+                            )}
+                          />
+                        </button>
+                        <div
+                          className="grid transition-all duration-500 ease-out"
+                          style={{ gridTemplateRows: active ? "1fr" : "0fr" }}
+                        >
+                          <div className="overflow-hidden">
+                            <p className="max-w-3xl pb-7 pl-10 text-sm leading-relaxed text-muted-foreground">
+                              {t(item.a)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </Reveal>
+                  );
+                })}
+              </div>
+            ) : (
+            <div className="mt-14 border-t border-border">
+              {relevantFaqs.map((item, i) => {
+                const active = openFaq === i;
+                return (
+                  <Reveal key={i} delay={i * 50}>
+                    <div className="border-b border-border">
+                      <button
+                        onClick={() => setOpenFaq(active ? null : i)}
+                        className="flex w-full items-start justify-between gap-6 py-6 text-left"
+                      >
+                        <div className="flex items-start gap-4">
+                          <span className="label-mono mt-1 text-primary">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <span className="display-serif text-lg sm:text-xl font-medium text-foreground">
+                            {t(item.q)}
+                          </span>
+                        </div>
+                        <Plus
+                          className={cn(
+                            "mt-1 h-5 w-5 shrink-0 text-primary transition-transform duration-300",
+                            active && "rotate-45",
+                          )}
+                        />
+                      </button>
+                      <div
+                        className="grid transition-all duration-500 ease-out"
+                        style={{ gridTemplateRows: active ? "1fr" : "0fr" }}
+                      >
+                        <div className="overflow-hidden">
+                          <p className="max-w-3xl pb-7 pl-10 text-sm leading-relaxed text-muted-foreground">
+                            {t(item.a)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </Reveal>
+                );
+              })}
+            </div>
+            )}
           </div>
-          <div className="mt-8 rounded-[1.5rem] border border-primary/30 bg-primary/[.055] p-7 sm:p-9"><div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"><div><p className="label-mono text-primary">{copy.recommend}</p><p className="mt-2 text-lg">{t(plan.name)} · <strong>{price(plan.eur)} €</strong> {t(PERIOD_LABEL[plan.period])}</p></div><a href={"/?service="+service.id+"#quote"} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground">{copy.cta}<ArrowRight className="h-4 w-4"/></a></div></div>
-        </div>
-      </section>
+        </section>
 
-      {service.deliverables?.length ? <section className="border-y border-border/60 py-20 sm:py-28"><div className="mx-auto max-w-[1300px] px-5 sm:px-8 lg:px-12"><p className="label-mono text-primary">{copy.deliver}</p><div className="mt-10 grid gap-4 md:grid-cols-2">{service.deliverables.slice(0,8).map((d,i)=><div key={i} className="flex gap-5 rounded-2xl border border-border/70 bg-card/45 p-6"><span className="label-mono text-primary">0{(i%9)+1}</span><div><h3 className="text-base font-semibold">{t(d.title)}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{t(d.desc)}</p></div></div>)}</div></div></section>:null}
+        {/* Other Services Discovery Bar */}
+        <section className="border-t border-border/60 bg-accent/10 py-20">
+          <div className="mx-auto max-w-7xl px-6 lg:px-10">
+            <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+              <div>
+                <p className="label-mono text-xs uppercase tracking-widest text-primary">
+                  {t(UI.otherServices)}
+                </p>
+                <h3 className="display-serif mt-2 text-2xl sm:text-3xl">
+                  {t({
+                    fr: "Complétez votre écosystème",
+                    en: "Complete your ecosystem",
+                    vi: "Hoàn thiện hệ sinh thái",
+                  })}
+                </h3>
+              </div>
+              <Link
+                to="/"
+                className="label-mono text-xs text-primary transition-colors hover:underline"
+              >
+                {t(UI.backToServices)}
+              </Link>
+            </div>
 
-      {service.serviceFaqs?.length ? <section className="py-20 sm:py-28"><div className="mx-auto max-w-4xl px-5 sm:px-8"><p className="label-mono text-primary">{copy.faq}</p><h2 className="display-serif mt-4 text-5xl sm:text-7xl">{lang==="fr"?"Les réponses avant le clic.":lang==="en"?"Answers before the click.":"Giải đáp trước khi bắt đầu."}</h2><div className="mt-10 divide-y divide-border/60 border-y border-border/60">{service.serviceFaqs.slice(0,8).map((f,i)=><button key={i} type="button" onClick={()=>setFaq(faq===i?null:i)} className="w-full py-5 text-left"><div className="flex items-center justify-between gap-6"><span className="text-base font-semibold">{t(f.q)}</span><ChevronDown className={"h-5 w-5 shrink-0 transition "+(faq===i?"rotate-180 text-primary":"")}/></div>{faq===i&&<p className="mt-4 max-w-3xl text-sm leading-7 text-muted-foreground">{t(f.a)}</p>}</button>)}</div></div></section>:null}
+            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {otherServices.slice(0, 3).map((os) => (
+                <Link
+                  key={os.id}
+                  to="/services/$serviceId"
+                  params={{ serviceId: os.id }}
+                  className="surface-plate group flex flex-col justify-between rounded-2xl p-6 transition-all duration-300 hover:border-primary hover:-translate-y-0.5"
+                >
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <span className="label-mono text-xs text-muted-foreground">{os.num}</span>
+                      <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+                    </div>
+                    <h4 className="display-serif mt-4 text-lg text-foreground group-hover:text-primary transition-colors">
+                      {t(os.title)}
+                    </h4>
+                    <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+                      {t(os.short)}
+                    </p>
+                  </div>
+                  <div className="mt-6 border-t border-border/50 pt-3">
+                    <span className="label-mono text-xs text-primary">
+                      {t(UI.from)} {price(os.fromEur)}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
 
-      <section className="border-t border-border/60 py-20 sm:py-28"><div className="mx-auto max-w-[1300px] px-5 sm:px-8 lg:px-12"><div className="rounded-[2rem] border border-primary/25 bg-primary/[.06] p-8 sm:p-12 lg:p-16"><Sparkles className="h-6 w-6 text-primary"/><h2 className="display-serif mt-5 max-w-5xl text-5xl sm:text-7xl">{lang==="fr"?"Le prochain écran est votre devis.":lang==="en"?"The next screen is your quote.":"Bước tiếp theo là báo giá của bạn."}</h2><p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground">{lang==="fr"?"Le configurateur XR Intelligence reprend votre activité, votre budget et vos priorités pour composer le plan le plus cohérent.":lang==="en"?"XR Intelligence uses your activity, budget and priorities to build the most coherent plan.":"XR Intelligence dùng hoạt động, ngân sách và ưu tiên của bạn để xây dựng kế hoạch phù hợp."}</p><a href={"/?service="+service.id+"#quote"} className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-7 py-4 text-sm font-semibold text-primary-foreground">{copy.cta}<ArrowRight className="h-4 w-4"/></a></div></div></section>
+        {/* Global Contact Component */}
+        <Contact />
 
-      {next&&<section className="border-t border-border/60 py-12"><div className="mx-auto flex max-w-[1300px] flex-col gap-4 px-5 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12"><div><p className="label-mono text-muted-foreground">{copy.next}</p><h3 className="display-serif mt-2 text-3xl">{t(next.title)}</h3></div><a href={"/services/"+next.id} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-semibold hover:border-primary">{lang==="fr"?"Explorer ensuite":lang==="en"?"Explore next":"Khám phá tiếp"}<ArrowRight className="h-4 w-4"/></a></div></section>}
-    </main>
-    {scrolled&&<div className="fixed inset-x-0 bottom-0 z-50 border-t border-border/70 bg-background/90 p-3 backdrop-blur-xl sm:hidden"><a href={"/?service="+service.id+"#quote"} className="flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground">{copy.cta}<ArrowRight className="h-4 w-4"/></a></div>}
-    <Contact/>
-  </div>;
+        {/* Sticky Floating Bottom Conversion Bar */}
+        {showSticky ? (
+          <div className="fixed bottom-6 left-1/2 z-40 flex -translate-x-1/2 items-center gap-4 rounded-full border border-border bg-card/90 px-5 py-2.5 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-bottom-3 duration-300">
+            <div className="hidden sm:block">
+              <span className="label-mono text-xs text-muted-foreground">{t(service.title)}</span>
+              <p className="display-serif text-sm font-bold text-primary">
+                {t(UI.from)} {price(service.fromEur)}
+              </p>
+            </div>
+            <div className="hidden h-6 w-px bg-border sm:block" />
+            <a
+              href="#plans"
+              className="rounded-full bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-wider text-primary-foreground transition-all hover:bg-primary/90"
+            >
+              {t({ fr: "Voir les forfaits", en: "View plans", vi: "Xem các gói" })}
+            </a>
+            <a
+              href={waUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 rounded-full border border-emerald-500/50 bg-emerald-500/10 px-3.5 py-2 text-xs font-medium text-emerald-500 transition-all hover:bg-emerald-500/20"
+            >
+              <MessageCircle className="h-3.5 w-3.5" />
+              WhatsApp
+            </a>
+          </div>
+        ) : null}
+      </main>
+    </div>
+  );
 }
