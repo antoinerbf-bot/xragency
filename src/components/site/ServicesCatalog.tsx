@@ -37,7 +37,7 @@ export function ServicesCatalog() {
           <h1 className="display-serif mt-5 text-[clamp(3.2rem,8vw,8.5rem)] leading-[.82] tracking-[-.045em]">{copy.title}</h1>
           <p className="mt-8 max-w-2xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">{copy.lead}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="/#quote" className="inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold uppercase tracking-[.1em] text-primary-foreground hover:-translate-y-0.5 transition">{copy.cta}<ArrowRight className="h-4 w-4"/></a>
+            <a href={"/?service="+service.id+"#quote"} className="inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold uppercase tracking-[.1em] text-primary-foreground hover:-translate-y-0.5 transition">{copy.cta}<ArrowRight className="h-4 w-4"/></a>
             <span className="inline-flex min-h-12 items-center rounded-full border border-white/15 bg-black/25 px-5 py-3 text-sm text-white/75 backdrop-blur">01 — 07 · {lang === "fr" ? "Expertises" : lang === "en" ? "Disciplines" : "Chuyên môn"}</span>
           </div>
         </div>
@@ -71,7 +71,7 @@ export function ServicesCatalog() {
                 </div>
                 <div className="mt-10 flex flex-wrap items-center gap-3 border-t border-border/60 pt-6">
                   <a href={href} className="inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-5 py-3.5 text-sm font-semibold text-primary-foreground hover:gap-3 transition">{lang==="fr"?"Explorer la prestation":lang==="en"?"Explore service":"Khám phá dịch vụ"} <ArrowRight className="h-4 w-4"/></a>
-                  <a href="/#quote" className="inline-flex min-h-12 items-center gap-2 rounded-full border border-border px-5 py-3.5 text-sm font-semibold hover:border-primary transition">{lang==="fr"?"L'ajouter à mon plan":lang==="en"?"Add to my plan":"Thêm vào kế hoạch"} <Check className="h-4 w-4 text-primary"/></a>
+                  <a href={"/?service="+service.id+"#quote"} className="inline-flex min-h-12 items-center gap-2 rounded-full border border-border px-5 py-3.5 text-sm font-semibold hover:border-primary transition">{lang==="fr"?"L'ajouter à mon plan":lang==="en"?"Add to my plan":"Thêm vào kế hoạch"} <Check className="h-4 w-4 text-primary"/></a>
                 </div>
               </div>
             </div>
@@ -83,7 +83,7 @@ export function ServicesCatalog() {
         <p className="label-mono text-primary">XR INTELLIGENCE</p>
         <h3 className="display-serif mt-4 max-w-4xl text-4xl sm:text-6xl">{lang==="fr"?"Vous n'avez pas besoin de choisir seul.":lang==="en"?"You don't have to choose alone.":"Bạn không cần phải tự chọn một mình."}</h3>
         <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground">{lang==="fr"?"Répondez à quelques questions. Le configurateur hiérarchise les leviers, compose un plan et vous donne une estimation avant le contact.":lang==="en"?"Answer a few questions. The configurator prioritises the levers, builds a plan and gives you an estimate before contact.":"Trả lời vài câu hỏi. Bộ cấu hình ưu tiên các đòn bẩy, xây dựng kế hoạch và đưa ra ước tính trước khi liên hệ."}</p>
-        <a href="/#quote" className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground">{copy.cta}<ArrowRight className="h-4 w-4"/></a>
+        <a href={"/?service="+service.id+"#quote"} className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground">{copy.cta}<ArrowRight className="h-4 w-4"/></a>
       </div>
     </div>
   </section>;
