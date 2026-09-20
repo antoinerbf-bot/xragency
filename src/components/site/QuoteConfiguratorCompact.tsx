@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { jsPDF } from "jspdf";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Check, Globe2, Mail, MessageCircle, RotateCcw, Sparkles } from "lucide-react";
 import { UniversePresence } from "./UniversePresence";
 
