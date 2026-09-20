@@ -37,6 +37,12 @@ const IMG_MAINTENANCE =
 const IMG_AI =
   "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1600&q=85";
 
+const SERVICE_TINTS: Record<string, string> = {
+  websites: "#c58a42", branding: "#b889d6", seo: "#6f9bd1", maps: "#5f9f9a",
+  social: "#c66b87", maintenance: "#7e93ad", ai: "#b47b5c", ecommerce: "#c58a42",
+  refonte: "#8b9b72", ads: "#c47b66", strategy: "#8b7fc4",
+};
+
 const SERVICE_IMAGES: Record<string, string> = {
   websites: IMG_WEBSITES,
   branding: IMG_BRANDING,
@@ -198,82 +204,41 @@ function ServiceDetailPage() {
           </div>
         </div>
 
-        {/* Hero Section */}
-        <section className="relative overflow-hidden py-16 lg:py-24">
-          <div className="mx-auto max-w-7xl px-6 lg:px-10">
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
-              <div className="lg:col-span-7">
-                {service.id === 'seo' ? (
-                  <HeroSection
-                    title={t(service.title)}
-                    description={t(service.description)}
-                    ctaPrimary={{ label: t(UI.explorePacks), href: "#plans" }}
-                  />
-                ) : (
-                  <>
-                    <Reveal>
-                      <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-primary">
-                        <Sparkles className="h-3.5 w-3.5" />
-                        <span className="label-mono text-xs uppercase tracking-widest">
-                          {t(service.title)} · {service.num}
-                        </span>
-                      </div>
-                    </Reveal>
-                    <Reveal delay={80}>
-                      <h1 className="display-serif mt-6 text-[clamp(2.5rem,6.5vw,5.2rem)] leading-[1.02]">
-                        {t(service.title)}
-                      </h1>
-                    </Reveal>
-                    <Reveal delay={160}>
-                      <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-                        {t(service.description)}
-                      </p>
-                    </Reveal>
-                    <Reveal delay={240}>
-                      <div className="mt-8 flex flex-wrap gap-2.5">
-                        {service.highlights.map((h, idx) => (
-                          <span
-                            key={idx}
-                            className="label-mono inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-2 text-xs text-foreground backdrop-blur-sm"
-                          >
-                            <Zap className="h-3 w-3 text-primary" />
-                            {t(h)}
-                          </span>
-                        ))}
-                      </div>
-                    </Reveal>
-                    <Reveal delay={320}>
-                      <div className="mt-10 flex flex-wrap items-center gap-4">
-                        <EmberButton href="#plans">{t(UI.explorePacks)}</EmberButton>
-                        <a
-                          href={waUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-6 py-3.5 text-xs uppercase tracking-widest text-foreground transition-all duration-300 hover:border-primary hover:text-primary"
-                        >
-                          <MessageCircle className="h-4 w-4 text-emerald-500" />
-                          {t(UI.bookDirectWhatsapp)}
-                        </a>
-                        <Link
-                          to="/"
-                          hash="intelligence"
-                          className="label-mono text-xs text-muted-foreground transition-colors hover:text-primary"
-                        >
-                          {t(UI.getCustomQuote)} →
-                        </Link>
-                      </div>
-                    </Reveal>
-                  </>
-                )}
+        {/* Cinematic service hero — one visual language across the catalogue */}
+        <section className="relative overflow-hidden py-12 sm:py-16 lg:py-24" style={{ "--service-tint": SERVICE_TINTS[service.id] ?? "#c58a42" } as React.CSSProperties}>
+          <div aria-hidden className="pointer-events-none absolute inset-0 opacity-60" style={{ background: "radial-gradient(60% 55% at 72% 25%, color-mix(in srgb, var(--service-tint) 18%, transparent), transparent 72%)" }} />
+          <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-10">
+            <div className="mb-6 flex items-center justify-between gap-3 border-b border-border/60 pb-4">
+              <Link to="/services" className="inline-flex min-h-11 items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"><ArrowLeft className="h-4 w-4" />{t({ fr: "Catalogue des prestations", en: "Services catalogue", vi: "Danh mục dịch vụ" })}</Link>
+              <span className="label-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">{service.num} / {String(SERVICES.length).padStart(2, "0")}</span>
+            </div>
+            <div className="grid overflow-hidden rounded-[2rem] border border-primary/45 bg-card/60 shadow-2xl shadow-black/20 lg:grid-cols-[1.05fr_.95fr]">
+              <div className="relative flex min-h-[520px] flex-col justify-end overflow-hidden p-6 sm:p-10 lg:min-h-[640px] lg:p-14">
+                <div aria-hidden className="absolute inset-0 opacity-20" style={{ background: "radial-gradient(circle at 18% 18%, var(--service-tint), transparent 46%)" }} />
+                <div className="relative z-10">
+                  <p className="label-mono text-sm uppercase tracking-[0.2em] text-primary">XR AGENCY · {service.num}</p>
+                  <h1 className="display-serif mt-5 max-w-4xl text-[clamp(3rem,7vw,6.8rem)] leading-[0.88]">{t(service.title)}</h1>
+                  <p className="mt-7 max-w-2xl text-base leading-7 text-foreground/80 sm:text-lg">{t(service.description)}</p>
+                  <div className="mt-7 grid max-w-2xl gap-2 sm:grid-cols-3">
+                    {service.highlights.slice(0, 3).map((proof, idx) => <div key={idx} className="rounded-xl border border-border/70 bg-background/45 px-3 py-3 text-sm leading-5 text-foreground backdrop-blur"><span className="mb-2 block h-px w-7 bg-primary" />{t(proof)}</div>)}
+                  </div>
+                  <div className="mt-9 flex flex-wrap items-center gap-3">
+                    <a href="/#quote" className="inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.1em] text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5">Composer mon devis <ArrowRight className="h-4 w-4" /></a>
+                    <a href={waUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-12 items-center gap-2 rounded-full border border-border bg-background/60 px-5 py-3.5 text-sm font-semibold text-foreground transition-all hover:border-primary hover:text-primary"><MessageCircle className="h-4 w-4 text-emerald-500" />{t(UI.bookDirectWhatsapp)}</a>
+                  </div>
+                </div>
               </div>
-              <div className="lg:col-span-5">
-                <img src={heroImg} alt={t(service.title)} className="w-full rounded-lg shadow-lg" />
+              <div className="relative min-h-[360px] overflow-hidden border-t border-primary/25 lg:border-l lg:border-t-0">
+                <img src={heroImg} alt={t(service.title)} className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 hover:scale-[1.03]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+                <div className="absolute inset-4 rounded-[1.5rem] border border-white/20" />
+                <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4 text-white sm:bottom-7 sm:left-7 sm:right-7"><div><span className="label-mono text-xs uppercase tracking-[0.16em] text-white/60">XR / SERVICE</span><p className="display-serif mt-1 text-2xl sm:text-3xl">{t(service.short)}</p></div><span className="label-mono rounded-full border border-white/20 bg-black/30 px-3 py-2 text-xs text-white/80 backdrop-blur">{service.num}</span></div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Proven Metrics Section */}
+        {/* Proven Metrics Section */
         {service.metrics && service.metrics.length > 0 && (
           <section className="border-y border-border/60 bg-accent/20 py-16">
             <div className="mx-auto max-w-7xl px-6 lg:px-10">
