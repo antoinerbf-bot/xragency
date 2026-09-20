@@ -1,6 +1,6 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { ArrowRight, Check, ChevronDown, MessageCircle, Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";\nimport type { CSSProperties } from "react";
 import { SERVICES, CONTACT, PERIOD_LABEL } from "@/lib/content";
 import { useLang } from "@/lib/i18n";
 import { Nav } from "@/components/site/Nav";
@@ -66,7 +66,7 @@ function ServiceDetail(){
     vi:{back:"Tất cả dịch vụ",kicker:"XR / DỊCH VỤ",hero:"Một đòn bẩy. Một chuyển đổi. Một bước tiếp theo.",cta:"Tạo báo giá",whatsapp:"Trao đổi qua WhatsApp",why:"Tại sao dịch vụ này?",deliver:"Chúng tôi xây dựng gì",method:"Quy trình",offer:"Chọn cấp độ",proof:"Bằng chứng & bàn giao",faq:"Câu hỏi trước khi bắt đầu",next:"Tiếp tục khám phá",recommend:"Cấu hình dự án"}
   }[lang];
 
-  return <div className="min-h-screen overflow-x-hidden bg-background text-foreground" style={{"--service-tint":tint} as React.CSSProperties}>
+  return <div className="min-h-screen overflow-x-hidden bg-background text-foreground" style={{"--service-tint":tint} as CSSProperties}>
     <Nav/>
     <main>
       <section className="relative min-h-[92svh] overflow-hidden">
