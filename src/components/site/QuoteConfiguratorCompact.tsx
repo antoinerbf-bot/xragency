@@ -38,6 +38,11 @@ const DISCOVERY: Choice[] = [
 ];
 const SERVICE_ORDER: Record<string, string[]> = { restaurant: ["website","maps","social","seo","branding","maintenance"], hospitality: ["website","maps","seo","social","branding","maintenance"], realestate: ["website","maps","branding","seo","social","maintenance"], automotive: ["website","maps","conversion","seo","content","maintenance"], fashion: ["website","branding","social","content","seo","maintenance"], jewelry: ["website","branding","content","seo","social","maintenance"], beauty: ["website","maps","social","seo","branding","maintenance"], health: ["website","maps","seo","branding","content","maintenance"], architecture: ["website","branding","content","seo","maps","maintenance"], construction: ["website","maps","seo","branding","content","maintenance"], legal: ["website","seo","branding","maps","content","maintenance"], finance: ["website","seo","branding","content","maps","maintenance"], commerce: ["website","social","seo","branding","conversion","maintenance"], tourism: ["website","maps","seo","social","content","maintenance"], agency: ["website","branding","conversion","seo","content","maintenance"], other: ["website","branding","seo","maps","social","maintenance"] };
 
+const BASE_PRICES: Record<string, number> = { website: 499, branding: 199, seo: 199, maps: 99, ads: 299, social: 299, content: 399, conversion: 299, maintenance: 29 };
+const PROFILE_SERVICE_RULES: Record<string, string[]> = Object.fromEntries(
+  Object.entries(SERVICE_ORDER).map(([sectorId, services]) => [sectorId, services.slice(0, 4)])
+);
+
 const WEBSITE_TIERS = {
   showcase: { price: 499, label: "Site Vitrine Pro", detail: "Site premium jusqu'à 3 pages, responsive, contact et SEO de base" },
   business: { price: 799, label: "Site Business", detail: "Site jusqu'à 5 pages, blog, galerie, chat et analytics avancés" },
