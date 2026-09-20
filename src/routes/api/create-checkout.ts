@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 type CheckoutBody = {
   sectorId?: string;
+  currency?: "eur" | "usd" | "vnd";
   situation?: string;
   budget?: string;
   selectedServices?: string[];
@@ -27,6 +28,21 @@ const WEBSITE_PRICES = {
 };
 
 const PREMIUM_BRANDING = 399;
+
+const CURRENCY_RATES: Record<"eur" | "usd" | "vnd", number> = {
+  eur: 1,
+  usd: 1.15,
+  vnd: 29800,
+};
+
+function convertAmount(amountEur: number, currency: "eur" | "usd" | "vnd") {
+  const converted = amountEur * CURRENCY_RATES[currency];
+  return currency === "vnd" ? Math.round(converted) : Math.round(converted * 100) / 100;
+}
+
+function toMinorUnit(amount: number, currency: "eur" | "usd" | "vnd") {
+  return currency === "vnd" ? Math.round(amount) : Math.round(amount * 100);
+}
 
 function getPrice(serviceId: string, situation: string, budget: string, sectorId: string) {
   if (serviceId === "website") {
@@ -64,7 +80,7 @@ export const Route = createFileRoute("/api/create-checkout")({
       POST: async ({ request }) => {
         try {
           if (!process.env.STRIPE_SECRET_KEY) {
-            return Response.json({ error: "STRIPE_SECRET_KEY manquante dans Vercel." }, { status: 503 });
+            return Response.json({ error: "STRIPE_SECRET_KEY manquante dans Netlify." }, { status: 503 });
           }
 
           const body = await request.json() as CheckoutBody;
@@ -72,6 +88,7 @@ export const Route = createFileRoute("/api/create-checkout")({
           const situation = body.situation || "";
           const budget = body.budget || "";
           const sectorId = body.sectorId || "";
+          const currency = body.currency === "usd" || body.currency === "vnd" ? body.currency : "eur";
 
           if (!selectedServices.length) {
             return Response.json({ error: "Aucune prestation sélectionnée." }, { status: 400 });
@@ -113,10 +130,12 @@ export const Route = createFileRoute("/api/create-checkout")({
           form.set("metadata[situation]", situation);
           form.set("metadata[budget]", budget);
           form.set("metadata[services]", selectedServices.join(","));
+          form.set("metadata[currency]", currency);
 
           lineItems.forEach((item, index) => {
-            form.set(`line_items[${index}][price_data][currency]`, "eur");
-            form.set(`line_items[${index}][price_data][unit_amount]`, String(Math.round(item.amount * 100)));
+            form.set(`line_items[${index}][price_data][currency]`, currency);
+            const convertedAmount = convertAmount(item.amount, currency);
+            form.set(`line_items[${index}][price_data][unit_amount]`, String(toMinorUnit(convertedAmount, currency)));
             form.set(`line_items[${index}][price_data][product_data][name]`, item.label);
             if (item.recurring) {
               form.set(`line_items[${index}][price_data][recurring][interval]`, "month");
