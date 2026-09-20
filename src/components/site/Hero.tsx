@@ -21,7 +21,8 @@ function Stat({value,label}:{value:string;label:string}) {
 export function Hero(){
   const {t}=useLang();
   const videoRef=useRef<HTMLVideoElement>(null);
-  const [reduceMotion,setReduceMotion]=useState(false);\n  const [videoFailed,setVideoFailed]=useState(false);
+  const [reduceMotion,setReduceMotion]=useState(false);
+  const [videoFailed,setVideoFailed]=useState(false);
   useEffect(()=>{
     const mq=window.matchMedia("(prefers-reduced-motion: reduce)");
     const update=()=>{const connection=(navigator as Navigator & {connection?:{saveData?:boolean}}).connection;setReduceMotion(mq.matches||Boolean(connection?.saveData));};
