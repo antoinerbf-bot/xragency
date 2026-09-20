@@ -73,8 +73,8 @@
   --card-foreground: oklch(0.15 0.012 260);
   --popover: oklch(0.995 0.002 80);
   --popover-foreground: oklch(0.15 0.012 260);
-  --primary: oklch(0.16 0.022 260);            /* charcoal chaud teinté */
-  --primary-foreground: oklch(0.99 0.002 80);
+  --primary: oklch(0.74 0.15 72);                  /* ambre signature */
+  --primary-foreground: oklch(0.16 0.022 260);
   --secondary: oklch(0.952 0.006 80);
   --secondary-foreground: oklch(0.15 0.012 260);
   --muted: oklch(0.952 0.006 80);
@@ -85,9 +85,9 @@
   --destructive-foreground: oklch(0.99 0 0);
   --border: oklch(0.882 0.006 80);             /* bordure légèrement chaude */
   --input: oklch(0.882 0.006 80);
-  --ring: oklch(0.16 0.022 260);
+  --ring: oklch(0.74 0.15 72);
   --warm: oklch(0.75 0.06 60);                 /* accent ambré pour badges */
-  --ember: oklch(0.16 0.022 260);
+  --ember: oklch(0.74 0.15 72);
   --azure: oklch(0.42 0.04 260);
   --jade: oklch(0.62 0.06 160);
   --plum: oklch(0.75 0 0);
@@ -127,8 +127,8 @@
   --card-foreground: oklch(0.984 0.003 247.858);
   --popover: oklch(0.208 0.042 265.755);
   --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
+  --primary: oklch(0.78 0.15 72);
+  --primary-foreground: oklch(0.16 0.022 260);
   --secondary: oklch(0.279 0.041 260.031);
   --secondary-foreground: oklch(0.984 0.003 247.858);
   --muted: oklch(0.279 0.041 260.031);

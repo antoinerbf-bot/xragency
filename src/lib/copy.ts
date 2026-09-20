@@ -875,9 +875,9 @@ export const UI: Record<string, L> = {
     vi: "Audit & Ước tính trong 60s",
   },
   intelAdvisorName: {
-    fr: "Julie · Stratège Digitale Senior",
-    en: "Julie · Senior Digital Strategist",
-    vi: "Julie · Chiến lược gia Digital Cấp cao",
+    fr: "XR Intelligence · Stratège Digitale Senior",
+    en: "XR Intelligence · Senior Digital Strategist",
+    vi: "XR Intelligence · Chiến lược gia Digital Cấp cao",
   },
   intelAdvisorSub: {
     fr: "XR Agency Paris & International",
