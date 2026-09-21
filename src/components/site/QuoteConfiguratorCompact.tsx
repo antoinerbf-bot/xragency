@@ -147,10 +147,11 @@ export function QuoteConfiguratorCompact() {
     const pdfBase64 = doc.output("datauristring").split(",")[1] || "";
     doc.save("devis-xragency.pdf");
 
-    const response = await fetch("/api/send-quote", {
+    const response = await fetch("/api/create-checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        action: "send_quote",
         pdfBase64,
         client,
         summary: {
