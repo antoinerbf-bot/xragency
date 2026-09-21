@@ -104,7 +104,11 @@ export const Route = createFileRoute("/api/create-checkout")({
             if (result.error) return Response.json({ error: result.error.message || "Resend n'a pas pu envoyer l'e-mail." }, { status: 502 });
             return Response.json({ sent: true });
           }
-          if (!process.env.STRIPE_SECRET_KEY) {\n            return Response.json({ error: "STRIPE_SECRET_KEY manquante dans Vercel." }, { status: 503 });\n          }\n\n          const selectedServices = Array.isArray(body.selectedServices) ? body.selectedServices.slice(0, 10) : [];
+          if (!process.env.STRIPE_SECRET_KEY) {
+            return Response.json({ error: "STRIPE_SECRET_KEY manquante dans Vercel." }, { status: 503 });
+          }
+
+          const selectedServices = Array.isArray(body.selectedServices) ? body.selectedServices.slice(0, 10) : [];
           const situation = body.situation || "";
           const budget = body.budget || "";
           const sectorId = body.sectorId || "";
