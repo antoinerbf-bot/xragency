@@ -38,7 +38,7 @@ const SERVICE_IMG: Record<string, string> = {
 };
 
 const VILLA_IMG =
-  "https://images.unsplash.com/photo-1782413263988-11f7178cf385?auto=format&fit=crop&q=90&w=1800";
+  "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&q=90&w=2200";
 
 export function HomeServices() {
   const { t, price } = useLang();
