@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
+import { ImmersiveJourney } from "@/components/site/ImmersiveJourney";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
 import { Intelligence } from "@/components/site/Intelligence";
 import { DigitalAudit } from "@/components/site/DigitalAudit";
@@ -29,6 +30,7 @@ function Index() {
       <Nav />
       <main className="relative z-10">
         <Hero />
+        <ImmersiveJourney />
         <QuoteConfiguratorCompact />
         <HomeServices />
         <Intelligence />
