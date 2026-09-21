@@ -246,9 +246,14 @@ export function Contact() {
                 Mentions légales
               </p>
               <div className="mt-3 space-y-1.5 text-sm text-muted-foreground">
-                <p>KARMA SASU · SIREN 889 178 141</p>
-                <p>78 Avenue des Champs-Élysées, 75008 Paris</p>
-                <p>Hébergement : Vercel Inc.</p>
+                <p><strong className="text-foreground">KARMA SASU</strong> · Société par actions simplifiée unipersonnelle</p>
+                <p>SIREN 889 178 141 · RCS Paris</p>
+                <p>Siège social : 78 Avenue des Champs-Élysées, 75008 Paris, France</p>
+                <p>Directeur de la publication : Antoine Rebuffé</p>
+                <p>Hébergement : Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA</p>
+                <p>
+                  <a href="mailto:contact.xragency@gmail.com" className="transition-colors hover:text-primary">Contact légal : contact.xragency@gmail.com</a>
+                </p>
               </div>
             </div>
 
