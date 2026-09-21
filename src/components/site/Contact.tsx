@@ -243,6 +243,17 @@ export function Contact() {
 
             <div>
               <p className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">
+                Mentions légales
+              </p>
+              <div className="mt-3 space-y-1.5 text-sm text-muted-foreground">
+                <p>KARMA SASU · SIREN 889 178 141</p>
+                <p>78 Avenue des Champs-Élysées, 75008 Paris</p>
+                <p>Hébergement : Vercel Inc.</p>
+              </div>
+            </div>
+
+            <div>
+              <p className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">
                 Navigation & Services
               </p>
               <div className="mt-3 space-y-1.5">
