@@ -7,14 +7,15 @@ import type { L } from "@/lib/i18n";
 
 export function Logo({ className }: { className?: string }) {
   const handleHomeClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    // Always return to the absolute top of the homepage.
+    event.preventDefault();
     if (window.location.pathname === "/") {
-      event.preventDefault();
       window.history.replaceState(null, "", "/");
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
+      return;
     }
+    window.location.assign("/");
   };
 
   return (
