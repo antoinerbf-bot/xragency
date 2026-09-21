@@ -6,10 +6,18 @@ import { UI } from "@/lib/copy";
 import type { L } from "@/lib/i18n";
 
 export function Logo({ className }: { className?: string }) {
+  const handleHomeClick = () => {
+    // Always return to the true top of the homepage, even when the browser restores scroll position.
+    if (window.location.pathname === "/") {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <Link
       to="/"
       aria-label="XRAGENCY — Accueil"
+      onClick={handleHomeClick}
       className={cn(
         "group inline-flex min-h-11 items-center font-black text-[18px] leading-none tracking-[0.14em] text-foreground transition-opacity duration-200 hover:opacity-80 sm:text-[20px]",
         className,
