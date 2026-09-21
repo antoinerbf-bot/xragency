@@ -289,18 +289,6 @@ export function Contact() {
               </div>
             </div>
 
-            <div>
-              <p className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">
-                {t(UI.footerLegal)}
-              </p>
-              <div className="mt-3 space-y-2">
-                <p className="text-sm text-muted-foreground">KARMA SASU</p>
-                <p className="text-sm text-muted-foreground">SIREN 889 178 141 · RCS Paris</p>
-                <p className="text-sm text-muted-foreground">
-                  78 Av. des Champs-Élysées, 75008 Paris
-                </p>
-              </div>
-            </div>
           </div>
 
           <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
