@@ -138,6 +138,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  useEffect(() => {
+    // The homepage must always open at its visual starting frame.
+    if (window.location.pathname === "/" && !window.location.hash) {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
+  }, []);
+
   return (
     <html lang="fr">
       <head>
