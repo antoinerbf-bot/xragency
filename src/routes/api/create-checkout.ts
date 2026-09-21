@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Resend } from "resend";
 
 type CheckoutBody = {
   sectorId?: string;
@@ -6,6 +7,9 @@ type CheckoutBody = {
   situation?: string;
   budget?: string;
   selectedServices?: string[];
+  action?: "checkout" | "send_quote";
+  pdfBase64?: string;
+  summary?: { sector?: string; goal?: string; situation?: string; budget?: string; discovery?: string; recommendation?: string; services?: Array<{ label: string; detail: string; price: number; period: "once" | "month" }>; once?: number; monthly?: number };
   client?: { company?: string; name?: string; email?: string; whatsapp?: string; website?: string };
 };
 
@@ -84,6 +88,26 @@ export const Route = createFileRoute("/api/create-checkout")({
           }
 
           const body = await request.json() as CheckoutBody;
+
+          if (body.action === "send_quote") {
+            const email = body.client?.email?.trim();
+            const pdfBase64 = body.pdfBase64?.trim();
+            if (!email || !pdfBase64) return Response.json({ error: "E-mail et PDF requis." }, { status: 400 });
+            if (!process.env.RESEND_API_KEY) return Response.json({ error: "RESEND_API_KEY manquante dans Vercel. Le PDF a été généré, mais l'envoi automatique est indisponible." }, { status: 503 });
+            const resend = new Resend(process.env.RESEND_API_KEY);
+            const summary = body.summary || {};
+            const services = (summary.services || []).map((service) => `<li><strong>${service.label}</strong> — ${service.price.toLocaleString("fr-FR")} €${service.period === "month" ? " / mois" : ""}<br><span style="color:#666">${service.detail}</span></li>`).join("");
+            const result = await resend.emails.send({
+              from: process.env.RESEND_FROM_EMAIL || "XR Agency <onboarding@resend.dev>",
+              to: [email],
+              replyTo: "contact.xragency@gmail.com",
+              subject: "Votre devis personnalisé — XR Agency",
+              html: `<div style="font-family:Arial,sans-serif;max-width:700px;margin:auto;color:#171717"><h1>Votre devis personnalisé XR Agency</h1><p>Bonjour ${body.client?.name || ""},</p><p>Merci d'avoir terminé votre diagnostic <strong>XR Intelligence</strong>. Le PDF complet est en pièce jointe.</p><h2>Votre recherche</h2><p><strong>Activité :</strong> ${summary.sector || ""}<br><strong>Priorité :</strong> ${summary.goal || ""}<br><strong>Situation :</strong> ${summary.situation || ""}<br><strong>Budget :</strong> ${summary.budget || ""}<br><strong>Acquisition :</strong> ${summary.discovery || ""}</p><h2>Recommandation</h2><p>${summary.recommendation || ""}</p><h2>Prestations retenues</h2><ul>${services}</ul><p><strong>Total ponctuel :</strong> ${(summary.once || 0).toLocaleString("fr-FR")} €<br><strong>Total mensuel :</strong> ${(summary.monthly || 0).toLocaleString("fr-FR")} € / mois</p></div>`,
+              attachments: [{ filename: "devis-xragency.pdf", content: pdfBase64 }],
+            });
+            if (result.error) return Response.json({ error: result.error.message || "Resend n'a pas pu envoyer l'e-mail." }, { status: 502 });
+            return Response.json({ sent: true });
+          }
           const selectedServices = Array.isArray(body.selectedServices) ? body.selectedServices.slice(0, 10) : [];
           const situation = body.situation || "";
           const budget = body.budget || "";
