@@ -208,47 +208,6 @@ export function Contact() {
           </div>
         </Reveal>
 
-        {/* ── Mentions légales ── */}
-        <div className="mt-14 border-t border-border/60 pt-8">
-          <Reveal>
-            <p className="label-mono text-xs text-primary">{t(UI.legalTitle)}</p>
-          </Reveal>
-          <div className="mt-5 grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { label: t(UI.legalCompany), value: "KARMA (XR Agency 2030)" },
-              { label: t(UI.legalForm), value: "SASU — Société par actions simplifiée unipersonnelle" },
-              { label: t(UI.legalSiren), value: "889 178 141" },
-              { label: t(UI.legalSiret), value: "889 178 141 00012" },
-              { label: t(UI.legalRcs), value: "RCS Paris" },
-              { label: t(UI.legalTva), value: "FR00 889 178 141" },
-              { label: t(UI.legalDirector), value: "M. Antoine Rebuffé" },
-              { label: t(UI.legalAddress), value: "78 Avenue des Champs-Élysées, Bureau 562 — 75008 Paris" },
-              { label: t(UI.legalHosting), value: t(UI.legalHostingProvider) },
-            ].map(({ label, value }, idx) => (
-              <Reveal key={idx} delay={idx * 25}>
-                <div>
-                  <span className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                    {label}
-                  </span>
-                  <p className="mt-0.5 text-sm text-foreground">{value}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-
-        {/* ── Politique de confidentialité ── */}
-        <div className="mt-8 border-t border-border/40 pt-6">
-          <Reveal>
-            <p className="label-mono text-[10px] uppercase tracking-wider text-primary">
-              {t(UI.legalPrivacy)}
-            </p>
-            <p className="mt-2 max-w-3xl text-xs leading-relaxed text-muted-foreground/70">
-              {t(UI.legalPrivacyText)}
-            </p>
-          </Reveal>
-        </div>
-
         <footer className="mt-10 border-t border-border/40 pt-8">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <div className="lg:col-span-1">
