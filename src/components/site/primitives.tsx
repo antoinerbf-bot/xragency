@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode, type MouseEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { useLang } from "@/lib/i18n";
@@ -6,10 +6,14 @@ import { UI } from "@/lib/copy";
 import type { L } from "@/lib/i18n";
 
 export function Logo({ className }: { className?: string }) {
-  const handleHomeClick = () => {
-    // Always return to the true top of the homepage, even when the browser restores scroll position.
+  const handleHomeClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    // Always return to the absolute top of the homepage.
     if (window.location.pathname === "/") {
-      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      event.preventDefault();
+      window.history.replaceState(null, "", "/");
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
     }
   };
 
