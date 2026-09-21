@@ -30,9 +30,9 @@ const SERVICE_IMG: Record<string, string> = {
   seo:
     "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=90&w=2200",
   maps:
-    "https://images.unsplash.com/photo-1524666041070-9e3c7be7b8e0?auto=format&fit=crop&q=90&w=2200",
+    "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=90&w=2200",
   social:
-    "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&q=90&w=2200",
+    "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&q=90&w=2200",
   maintenance:
     "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=90&w=2200",
 };
