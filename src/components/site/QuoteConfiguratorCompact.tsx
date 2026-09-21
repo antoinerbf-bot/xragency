@@ -133,50 +133,59 @@ export function QuoteConfiguratorCompact() {
   const once = total - monthly;
 
   const generatePdf = async () => {
-    setSending(true); setSendMessage("");
+    setSending(true);
+    setSendMessage("");
     try {
       const { jsPDF } = await import("jspdf");
       const doc = new jsPDF();
-    doc.setFontSize(20); doc.text("XRAGENCY · DEVIS DIGITAL", 20, 22);
-    doc.setFontSize(10);
-    let y = 52; doc.setFontSize(12); doc.text("Informations société", 20, y); y += 8; doc.setFontSize(10);
-    [`Société : ${client.company}`, `Contact : ${client.name}`, `E-mail : ${client.email}`, `WhatsApp / téléphone : ${client.whatsapp}`, `Site : ${client.website || "Aucun site indiqué"}`, `Activité : ${sector?.label || ""}`, `Priorité : ${goal}`, `Situation : ${SITUATIONS.find(x => x.id === situation)?.label || ""}`, `Budget : ${budgetChoice?.label || ""}`, `Acquisition : ${discoveryChoice?.label || ""}`].forEach(line => { doc.text(line, 20, y); y += 6; });
-    y += 6; doc.setFontSize(12); doc.text("Prestations sélectionnées", 20, y); y += 8; doc.setFontSize(10);
-    selectedServices.forEach(id => { const p = proposals.find(x => x.id === id); if (p) { doc.text(`${p.label} · ${p.price ? `${p.price} €${p.period === "month" ? "/mois" : ""}` : "Sur mesure"}`, 20, y); y += 6; } });
-    y += 6; doc.text(`Total ponctuel estimé : ${once.toLocaleString("fr-FR")} €`, 20, y); y += 6;
-    doc.text(`Total mensuel estimé : ${monthly.toLocaleString("fr-FR")} € / mois`, 20, y);
-    const pdfBase64 = doc.output("datauristring").split(",")[1] || "";
-    doc.save("devis-xragency.pdf");
 
-    const response = await fetch("/api/create-checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "send_quote",
-        pdfBase64,
-        client,
-        summary: {
-          sector: sector?.label || "",
-          goal,
-          situation: situationChoice?.label || "",
-          budget: budgetChoice?.label || "",
-          discovery: discoveryChoice?.label || "",
-          recommendation,
-          services: selectedServices.map(id => {
-            const p = proposals.find(x => x.id === id);
-            return p ? { label: p.label, detail: p.detail, price: p.price, period: p.period } : null;
-          }).filter(Boolean),
-          once,
-          monthly,
-        },
-      }),
-    });
-    const data = await response.json() as { sent?: boolean; error?: string };
-    if (!response.ok || !data.sent) throw new Error(data.error || "Le PDF a été généré, mais l'envoi automatique a échoué.");
-    setGenerated(true);
-    setSendMessage("Votre devis complet a été généré et envoyé directement à votre adresse e-mail.");
+      doc.setFontSize(20);
+      doc.text("XRAGENCY · DEVIS DIGITAL", 20, 22);
+      doc.setFontSize(10);
+
+      let y = 52;
+      doc.setFontSize(12);
+      doc.text("Informations société", 20, y);
+      y += 8;
+      doc.setFontSize(10);
+
+      [
+        `E-mail : ${client.email}`,
+        `Activité : ${sector?.label || ""}`,
+        `Priorité : ${goal}`,
+        `Situation : ${SITUATIONS.find(x => x.id === situation)?.label || ""}`,
+        `Budget : ${budgetChoice?.label || ""}`,
+        `Acquisition : ${discoveryChoice?.label || ""}`,
+      ].forEach((line) => {
+        doc.text(line, 20, y);
+        y += 6;
+      });
+
+      y += 6;
+      doc.setFontSize(12);
+      doc.text("Prestations sélectionnées", 20, y);
+      y += 8;
+      doc.setFontSize(10);
+
+      selectedServices.forEach((id) => {
+        const p = proposals.find((x) => x.id === id);
+        if (p) {
+          doc.text(`${p.label} · ${p.price ? `${p.price} €${p.period === "month" ? "/mois" : ""}` : "Sur mesure"}`, 20, y);
+          y += 6;
+        }
+      });
+
+      y += 6;
+      doc.text(`Total ponctuel estimé : ${once.toLocaleString("fr-FR")} €`, 20, y);
+      y += 6;
+      doc.text(`Total mensuel estimé : ${monthly.toLocaleString("fr-FR")} € / mois`, 20, y);
+
+      // The PDF is always delivered locally. No email/API call can block the download.
+      doc.save("devis-xragency.pdf");
+      setGenerated(true);
+      setSendMessage("Votre devis PDF a été téléchargé sur votre appareil.");
     } catch (error) {
-      setSendMessage(error instanceof Error ? error.message : "Impossible de générer ou d'envoyer le devis.");
+      setSendMessage(error instanceof Error ? error.message : "Impossible de générer le devis PDF.");
     } finally {
       setSending(false);
     }
@@ -224,6 +233,6 @@ export function QuoteConfiguratorCompact() {
       {step === 4 && <div><div className="mb-3 rounded-xl border border-primary/15 bg-primary/[0.035] p-3"><div className="text-[10px] font-medium text-primary">XR Intelligence a déjà fait le premier tri</div><p className="mt-1 text-[9px] leading-4 text-muted-foreground">Voici les leviers qui ont du sens pour votre activité. Ajustez-les librement avant de valider.</p></div><div className="relative mb-3 overflow-hidden rounded-[1.25rem] border border-primary/20 bg-gradient-to-br from-primary/[0.10] via-primary/[0.025] to-transparent p-3 shadow-sm sm:p-4"><div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-primary/15 blur-2xl" /><div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-primary"><Sparkles className="h-3.5 w-3.5" /> Sélection préparée par XR Intelligence <span className="ml-1 rounded-full border border-primary/20 px-1.5 py-0.5 text-[8px]">profil + budget + objectif</span></div><p className="mt-2 text-[10px] leading-4 text-muted-foreground">XR Intelligence croise votre activité, votre objectif, votre situation, votre budget et votre acquisition pour éviter les prestations inutiles.</p></div><div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">{orderedServices.map((x) => card(x, () => toggleService(x.id), selectedServices.includes(x.id)))}</div><button type="button" disabled={!selectedServices.length} onClick={() => setStep(5)} className="mt-3 w-full rounded-full bg-primary px-5 py-3 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground disabled:opacity-40">Valider ma sélection →</button></div>}
       {step === 5 && <div><p className="mb-2 text-[9px] text-muted-foreground">Dernière question d'acquisition.</p><div className="grid grid-cols-2 gap-2 sm:grid-cols-4">{DISCOVERY.map((x) => card(x, () => choose(setDiscovery, x.id, 6)))}</div></div>}
       {step === 6 && sector && <div className="space-y-3"><div className="relative overflow-hidden rounded-[1.5rem] border border-primary/30 bg-gradient-to-br from-primary/[0.10] to-transparent p-4 shadow-sm"><div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-primary/10 blur-2xl" /><div className="flex items-center gap-2 text-xs font-semibold"><Sparkles className="h-4 w-4 text-primary" /> Le conseil de XR Intelligence</div><p className="mt-2 text-xs leading-5 sm:text-sm">{recommendation}</p></div><div className="mb-2 text-[9px] uppercase tracking-[0.16em] text-muted-foreground">Le parcours que XR Intelligence vous conseille</div><div className="grid gap-2 sm:grid-cols-2">{selectedServices.map((id) => { const p = proposals.find((x) => x.id === id); return p ? <div key={id} className="flex items-center justify-between rounded-xl border border-border bg-background p-3"><div><div className="text-xs font-medium">{p.label}</div><div className="text-[9px] text-muted-foreground">{p.detail}</div></div><div className="text-right text-xs font-semibold text-primary">À partir de {p.price.toLocaleString("fr-FR")} €{p.period === "month" ? " / mois" : ""}</div></div> : null; })}</div><div className="rounded-2xl border border-primary/15 bg-primary/[0.035] p-4 text-xs shadow-sm"><div className="flex justify-between"><span>Prestations ponctuelles</span><strong>{once.toLocaleString("fr-FR")} €</strong></div><div className="mt-1 flex justify-between"><span>Abonnements mensuels</span><strong>{monthly.toLocaleString("fr-FR")} € / mois</strong></div></div><div className="grid gap-2 sm:grid-cols-2"><button type="button" onClick={() => setStep(7)} className="w-full rounded-full bg-primary px-5 py-3.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">Recevoir mon devis PDF →</button><a href={`https://wa.me/33767566783?text=${encodeURIComponent(`Bonjour XRAGENCY, j'ai terminé mon diagnostic XR Intelligence. Secteur : ${sector.label}. Budget : ${budgetChoice?.label}. Prestations recommandées : ${selectedServices.map((id) => proposals.find((p) => p.id === id)?.label).filter(Boolean).join(", ")}. Total : ${once.toLocaleString("fr-FR")} € + ${monthly.toLocaleString("fr-FR")} €/mois.`)}`} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-5 py-3.5 text-[10px] font-semibold uppercase tracking-wider"><MessageCircle className="h-3.5 w-3.5" /> Continuer sur WhatsApp</a></div></div>}
-      {step === 7 && <div className="space-y-3"><div className="rounded-2xl border border-primary/20 bg-primary/[0.04] p-4"><p className="text-sm font-medium">Votre devis est prêt.</p><p className="mt-1 text-[10px] leading-4 text-muted-foreground">Entrez simplement votre adresse e-mail. Le PDF complet sera généré immédiatement et envoyé directement dans votre boîte de réception.</p></div><form onSubmit={(e) => { e.preventDefault(); if (!client.email || sending) return; void generatePdf(); }} className="space-y-3"><label htmlFor="quote-email" className="sr-only">Adresse e-mail</label><input id="quote-email" value={client.email} onChange={(e) => setClient({ ...client, email: e.target.value })} type="email" placeholder="Votre adresse e-mail *" autoComplete="email" autoFocus className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base outline-none focus:border-primary" required /><button type="submit" disabled={!client.email || sending} className="w-full rounded-full bg-primary px-5 py-3.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground disabled:opacity-40">{sending ? "Génération et envoi…" : generated ? "Renvoyer mon devis →" : "Recevoir mon devis PDF →"}</button></form>{sendMessage && <div aria-live="polite" className="rounded-xl border border-primary/25 bg-primary/[0.05] p-3 text-center text-[10px] leading-5 text-muted-foreground">{sendMessage}</div>}<button type="button" onClick={reset} className="mx-auto flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground"><RotateCcw className="h-3 w-3" /> Recommencer</button></div>}
+      {step === 7 && <div className="space-y-3"><div className="rounded-2xl border border-primary/20 bg-primary/[0.04] p-4"><p className="text-sm font-medium">Votre devis est prêt.</p><p className="mt-1 text-[10px] leading-4 text-muted-foreground">Entrez simplement votre adresse e-mail. Le PDF complet sera généré immédiatement et téléchargé sur votre appareil.</p></div><form onSubmit={(e) => { e.preventDefault(); if (!client.email || sending) return; void generatePdf(); }} className="space-y-3"><label htmlFor="quote-email" className="sr-only">Adresse e-mail</label><input id="quote-email" value={client.email} onChange={(e) => setClient({ ...client, email: e.target.value })} type="email" placeholder="Votre adresse e-mail *" autoComplete="email" autoFocus className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base outline-none focus:border-primary" required /><button type="submit" disabled={!client.email || sending} className="w-full rounded-full bg-primary px-5 py-3.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground disabled:opacity-40">{sending ? "Génération du PDF…" : generated ? "Télécharger à nouveau →" : "Télécharger mon devis PDF →"}</button></form>{sendMessage && <div aria-live="polite" className="rounded-xl border border-primary/25 bg-primary/[0.05] p-3 text-center text-[10px] leading-5 text-muted-foreground">{sendMessage}</div>}<button type="button" onClick={reset} className="mx-auto flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground"><RotateCcw className="h-3 w-3" /> Recommencer</button></div>}
     </div></div></section>;
 }
