@@ -17,7 +17,7 @@ const BASE_PRICES: Record<string, number> = {
   website: 499,
   branding: 199,
   seo: 199,
-  maps: 99,
+  maps: 999,
   ads: 299,
   social: 299,
   content: 399,
@@ -83,10 +83,6 @@ export const Route = createFileRoute("/api/create-checkout")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          if (!process.env.STRIPE_SECRET_KEY) {
-            return Response.json({ error: "STRIPE_SECRET_KEY manquante dans Vercel." }, { status: 503 });
-          }
-
           const body = await request.json() as CheckoutBody;
 
           if (body.action === "send_quote") {
@@ -108,7 +104,7 @@ export const Route = createFileRoute("/api/create-checkout")({
             if (result.error) return Response.json({ error: result.error.message || "Resend n'a pas pu envoyer l'e-mail." }, { status: 502 });
             return Response.json({ sent: true });
           }
-          const selectedServices = Array.isArray(body.selectedServices) ? body.selectedServices.slice(0, 10) : [];
+          if (!process.env.STRIPE_SECRET_KEY) {\n            return Response.json({ error: "STRIPE_SECRET_KEY manquante dans Vercel." }, { status: 503 });\n          }\n\n          const selectedServices = Array.isArray(body.selectedServices) ? body.selectedServices.slice(0, 10) : [];
           const situation = body.situation || "";
           const budget = body.budget || "";
           const sectorId = body.sectorId || "";
