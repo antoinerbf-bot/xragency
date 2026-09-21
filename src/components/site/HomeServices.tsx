@@ -1,36 +1,214 @@
-import { ArrowUpRight, Check, Instagram, Linkedin, Music2, Search, Globe2 } from "lucide-react";
+import { ArrowUpRight, Check, Sparkles } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
-import { Parallax } from "./primitives";
+import { Parallax, Reveal } from "./primitives";
 
 const FEATURED_IDS = ["websites", "branding", "seo", "maps", "social", "maintenance"];
-const DISPLAY_NUM: Record<string, string> = { websites: "01", branding: "02", seo: "03", maps: "04", social: "05", maintenance: "06" };
-const DISPLAY_PRICE: Record<string, number | null> = { websites: 499, branding: null, seo: null, maps: null, social: 499, maintenance: null };
-const SERVICE_IMG: Record<string, string> = {
-  websites: "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=90&w=2200",
-  branding: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=90&w=2200",
-  seo: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=90&w=2200",
-  maps: "https://images.unsplash.com/photo-1524666041070-9e3c7be7b8e0?auto=format&fit=crop&q=90&w=2200",
-  social: "https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?auto=format&fit=crop&q=90&w=2200",
-  maintenance: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=90&w=2200",
+const DISPLAY_NUM: Record<string, string> = {
+  websites: "01",
+  branding: "02",
+  seo: "03",
+  maps: "04",
+  social: "05",
+  maintenance: "06",
 };
-function ServiceMarks({ id }: { id: string }) {
-  if (id === "social") return <div className="flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-2 backdrop-blur-md"><Instagram className="h-4 w-4" /><Music2 className="h-4 w-4" /><Linkedin className="h-4 w-4" /></div>;
-  if (id === "seo") return <div className="flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-2 backdrop-blur-md"><span className="grid h-5 w-5 place-items-center rounded-full bg-white text-[11px] font-bold text-[#4285F4]">G</span><Search className="h-3.5 w-3.5" /><span className="text-[9px] font-semibold tracking-wide">ORGANIC VISIBILITY</span></div>;
-  if (id === "websites") return <div className="flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-2 backdrop-blur-md"><Globe2 className="h-4 w-4" /><span className="text-[9px] font-semibold tracking-wide">WEB · UX · CONVERSION</span></div>;
-  if (id === "maps") return <div className="rounded-full border border-white/15 bg-black/30 px-3 py-2 text-[9px] font-semibold tracking-wide backdrop-blur-md"><span className="mr-1.5 text-[#4285F4]">G</span> GOOGLE MAPS</div>;
-  return null;
-}
+const DISPLAY_PRICE: Record<string, number | null> = {
+  websites: 499,
+  branding: null,
+  seo: null,
+  maps: null,
+  social: 499,
+  maintenance: null,
+};
+
+const SERVICE_IMG: Record<string, string> = {
+  websites:
+    "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=90&w=2200",
+  branding:
+    "https://images.unsplash.com/photo-1523726491678-bf852e717f6a?auto=format&fit=crop&q=90&w=2200",
+  seo:
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=90&w=2200",
+  maps:
+    "https://images.unsplash.com/photo-1524666041070-9e3c7be7b8e0?auto=format&fit=crop&q=90&w=2200",
+  social:
+    "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&q=90&w=2200",
+  maintenance:
+    "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=90&w=2200",
+};
+
+const VILLA_IMG =
+  "https://images.unsplash.com/photo-1782413263988-11f7178cf385?auto=format&fit=crop&q=90&w=1800";
 
 export function HomeServices() {
   const { t, price } = useLang();
-  const featured = FEATURED_IDS.map((id) => SERVICES.find((service) => service.id === id)).filter(Boolean) as typeof SERVICES;
-  const hrefFor = (id: string) => id === "maintenance" ? "/services/webcare" : `/services/${id}`;
-  return <section id="homepage-services" aria-label="Les six expertises XR Agency" className="relative bg-background py-14 sm:py-20 lg:py-24"><div className="mx-auto max-w-[1500px] px-4 sm:px-8 lg:px-12">
-    <Parallax speed={-0.04} className="mb-8 lg:mb-10"><div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end"><div><span className="label-mono text-[9px] uppercase tracking-[0.3em] text-primary">XR AGENCY · 06 EXPERTISES</span><h2 className="display-serif mt-3 max-w-4xl text-5xl leading-[0.9] sm:text-7xl lg:text-[6.5rem]">Une expertise.<br/>Puis la suivante.</h2></div><div className="max-w-sm text-sm leading-6 text-muted-foreground">Création web, branding, SEO, Google Maps, Social Media et WebCare. Faites défiler pour explorer le studio.</div></div></Parallax>
-    <div className="-mx-4 overflow-x-auto px-4 pb-5 sm:-mx-8 sm:px-8 lg:-mx-12 lg:px-12" style={{ scrollbarWidth: "none" }}><div className="flex snap-x snap-mandatory gap-4 pr-10 sm:gap-5 lg:gap-6">
-      {featured.map((service, index) => { const startingPrice = DISPLAY_PRICE[service.id]; return <article key={service.id} className="group relative h-[min(68svh,660px)] min-h-[430px] w-[88vw] shrink-0 snap-start overflow-hidden rounded-[2rem] border border-white/10 bg-black shadow-[0_35px_100px_-48px_rgba(0,0,0,.82)] sm:w-[68vw] lg:w-[54vw] xl:w-[48vw]"><div className="absolute inset-[-7%] overflow-hidden"><Parallax speed={0.07} className="h-full w-full"><img src={SERVICE_IMG[service.id]} alt="" aria-hidden className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.08]" /></Parallax></div>{service.id === "social" && <div className="pointer-events-none absolute right-5 top-20 z-[2] w-[42%] max-w-[310px] overflow-hidden rounded-[1.4rem] border border-white/20 bg-[#101316]/80 p-3 shadow-2xl backdrop-blur-xl transition-transform duration-700 group-hover:-translate-y-2 group-hover:rotate-1 sm:right-9 sm:top-24"><div className="flex items-center justify-between border-b border-white/10 pb-2"><div className="flex items-center gap-1.5"><span className="grid h-5 w-5 place-items-center rounded-full bg-gradient-to-br from-primary to-fuchsia-500 text-[7px] font-bold">XR</span><span className="text-[7px] text-white/80">Content dashboard</span></div><span className="rounded-full bg-emerald-400/10 px-1.5 py-0.5 text-[6px] text-emerald-300">LIVE</span></div><div className="mt-3 grid grid-cols-3 gap-1.5"><div className="rounded-lg bg-white/5 p-2"><b className="block text-[12px] text-white">20</b><span className="text-[6px] text-white/45">posts</span></div><div className="rounded-lg bg-white/5 p-2"><b className="block text-[12px] text-white">15</b><span className="text-[6px] text-white/45">stories</span></div><div className="rounded-lg bg-white/5 p-2"><b className="block text-[12px] text-primary">+28%</b><span className="text-[6px] text-white/45">reach</span></div></div><div className="mt-2 h-14 rounded-lg bg-gradient-to-r from-primary/25 via-white/5 to-fuchsia-500/20 p-2"><div className="flex h-full items-end gap-1">{[28,42,34,56,48,72,64,82].map((h,i)=><span key={i} className="flex-1 rounded-t bg-white/35" style={{height:h+"%"}} />)}</div></div><div className="mt-2 flex gap-1"><span className="rounded-full bg-white/8 px-2 py-1 text-[6px] text-white/60">Instagram</span><span className="rounded-full bg-white/8 px-2 py-1 text-[6px] text-white/60">TikTok</span><span className="rounded-full bg-white/8 px-2 py-1 text-[6px] text-white/60">LinkedIn</span></div></div>}<div className="absolute inset-0 bg-black/30 transition-opacity duration-500 group-hover:bg-black/20"/><div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/45 to-transparent"/><div className="absolute inset-0 bg-gradient-to-t from-black/95 via-transparent to-black/5"/>
-        <div className="relative z-10 flex h-full flex-col justify-between p-5 sm:p-9 lg:p-12"><div className="flex items-center justify-between"><div className="flex items-center gap-3 label-mono text-[9px] uppercase tracking-[0.22em] text-white/50"><span className="text-primary">{DISPLAY_NUM[service.id]}</span><span className="h-px w-8 bg-white/20"/><span>XR AGENCY</span></div><span className="rounded-full border border-white/15 bg-black/25 px-3 py-2 label-mono text-[9px] tracking-[0.14em] text-white/60 backdrop-blur">{String(index + 1).padStart(2, "0")} / 06</span></div><Parallax speed={-0.035} className="max-w-3xl"><div><div className="mb-3 flex flex-wrap items-center gap-3"><p className="label-mono text-[9px] uppercase tracking-[0.2em] text-white/60">{t(service.short)}</p>{(service.id === "social" || service.id === "seo" || service.id === "websites" || service.id === "maps") && <ServiceMarks id={service.id} />}{service.id === "maps" && <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[9px] font-semibold tracking-[0.12em] text-white">TOP 3 LOCAL</span>}</div><h3 className="display-serif max-w-3xl text-4xl leading-[0.88] text-white sm:text-7xl lg:text-[6.5rem]">{t(service.title)}</h3><p className="mt-5 max-w-2xl text-sm leading-6 text-white/65 sm:text-base">{t(service.description)}</p><div className="mt-5 flex flex-wrap items-center gap-2.5"><a href={hrefFor(service.id)} className="inline-flex items-center gap-3 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-black">Découvrir <ArrowUpRight className="h-4 w-4" /></a>{startingPrice && <span className="rounded-full border border-white/15 bg-white/5 px-4 py-3 label-mono text-[9px] tracking-[0.12em] text-white/65">À partir de {price(startingPrice)}{service.fromPeriod === "month" ? " / mois" : ""}</span>}{service.id === "websites" && <span className="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-3 label-mono text-[9px] tracking-[0.1em] text-white/80"><Check className="h-3 w-3 text-primary"/> E-commerce & réservation intégrés</span>}</div></div></Parallax><div className="flex items-center justify-between border-t border-white/15 pt-4"><div className="flex gap-1.5">{featured.map((_, dot) => <span key={dot} className={`h-1 rounded-full ${dot === index ? "w-10 bg-white" : "w-2 bg-white/25"}`} />)}</div><div className="label-mono text-[9px] uppercase tracking-[0.15em] text-white/45">Glissez →</div></div></div></article>; })}
-    </div></div></div></section>;
+  const featured = FEATURED_IDS.map((id) =>
+    SERVICES.find((service) => service.id === id),
+  ).filter(Boolean) as typeof SERVICES;
+
+  const hrefFor = (id: string) =>
+    id === "maintenance" ? "/services/webcare" : `/services/${id}`;
+
+  return (
+    <section
+      id="homepage-services"
+      aria-label="Les six expertises XR Agency"
+      className="relative overflow-hidden bg-[#07090b] py-20 text-white sm:py-28 lg:py-36"
+    >
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,.07),transparent_35%),radial-gradient(circle_at_90%_45%,rgba(255,180,90,.07),transparent_32%)]" />
+
+      <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+        <Parallax speed={-0.035}>
+          <div className="mb-12 flex flex-col justify-between gap-8 border-b border-white/10 pb-10 lg:mb-16 lg:flex-row lg:items-end">
+            <div>
+              <span className="label-mono text-[9px] tracking-[0.32em] text-white/45">
+                XR AGENCY · 06 EXPERTISES
+              </span>
+              <h2 className="display-serif mt-4 max-w-4xl text-5xl leading-[0.88] text-white sm:text-7xl lg:text-[6.6rem]">
+                Des solutions sur mesure
+                <br />
+                pour chaque <em className="text-white/55">ambition.</em>
+              </h2>
+            </div>
+            <p className="max-w-md text-sm leading-6 text-white/50 lg:pb-2">
+              Six expertises pensées comme un seul écosystème : stratégie,
+              création, visibilité et performance. Faites défiler pour voir
+              chaque univers.
+            </p>
+          </div>
+        </Parallax>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:gap-5">
+          {featured.map((service, index) => {
+            const startingPrice = DISPLAY_PRICE[service.id];
+            const featuredLarge = index < 2;
+
+            return (
+              <Reveal key={service.id} delay={index * 70} className={featuredLarge ? "sm:col-span-1" : ""}>
+                <article className="group relative isolate min-h-[500px] overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#0b0e11] shadow-[0_30px_90px_-45px_rgba(0,0,0,.95)] sm:min-h-[560px]">
+                  <div className="absolute inset-[-7%]">
+                    <Parallax speed={index % 2 === 0 ? 0.055 : -0.045} className="h-full w-full">
+                      <img
+                        src={SERVICE_IMG[service.id]}
+                        alt=""
+                        aria-hidden
+                        loading={index > 1 ? "lazy" : "eager"}
+                        className="h-full w-full object-cover brightness-[0.72] saturate-[0.82] transition duration-[1200ms] ease-out group-hover:scale-[1.075] group-hover:brightness-[0.84] group-hover:saturate-100"
+                      />
+                    </Parallax>
+                  </div>
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-black/5" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-transparent to-transparent" />
+
+                  <div className="relative z-10 flex min-h-[500px] flex-col justify-between p-6 sm:min-h-[560px] sm:p-9 lg:p-10">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3 label-mono text-[9px] tracking-[0.22em] text-white/45">
+                        <span className="text-white">{DISPLAY_NUM[service.id]}</span>
+                        <span className="h-px w-8 bg-white/20" />
+                        <span>XR AGENCY</span>
+                      </div>
+                      <span className="rounded-full border border-white/15 bg-black/20 px-3 py-2 label-mono text-[8px] tracking-[0.15em] text-white/50 backdrop-blur-md">
+                        {String(index + 1).padStart(2, "0")} / 06
+                      </span>
+                    </div>
+
+                    <Parallax speed={-0.028}>
+                      <div className="max-w-2xl">
+                        <div className="mb-4 flex items-center gap-2">
+                          <Sparkles className="h-3.5 w-3.5 text-white/70" />
+                          <span className="label-mono text-[8px] tracking-[0.2em] text-white/55">
+                            {t(service.short)}
+                          </span>
+                        </div>
+
+                        <h3 className="display-serif text-4xl leading-[0.9] text-white sm:text-6xl lg:text-[5.2rem]">
+                          {t(service.title)}
+                        </h3>
+
+                        <p className="mt-5 max-w-xl text-sm leading-6 text-white/60 sm:text-[15px]">
+                          {t(service.description)}
+                        </p>
+
+                        <div className="mt-6 flex flex-wrap items-center gap-2.5">
+                          <Link
+                            to={hrefFor(service.id)}
+                            className="inline-flex items-center gap-3 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold tracking-[0.12em] text-black transition hover:-translate-y-0.5 hover:bg-white/90"
+                          >
+                            Découvrir <ArrowUpRight className="h-4 w-4" />
+                          </Link>
+
+                          {startingPrice && (
+                            <span className="rounded-full border border-white/15 bg-black/20 px-4 py-3 label-mono text-[9px] tracking-[0.12em] text-white/65 backdrop-blur-md">
+                              À partir de {price(startingPrice)}
+                              {service.fromPeriod === "month" ? " / mois" : ""}
+                            </span>
+                          )}
+
+                          {service.id === "websites" && (
+                            <span className="flex items-center gap-2 rounded-full border border-white/15 bg-black/20 px-4 py-3 label-mono text-[9px] tracking-[0.1em] text-white/70 backdrop-blur-md">
+                              <Check className="h-3 w-3" />
+                              E-commerce & réservation
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </Parallax>
+
+                    <div className="flex items-center justify-between border-t border-white/15 pt-4">
+                      <div className="flex gap-1.5">
+                        {featured.map((_, dot) => (
+                          <span
+                            key={dot}
+                            className={`h-1 rounded-full transition-all ${dot === index ? "w-10 bg-white" : "w-2 bg-white/25"}`}
+                          />
+                        ))}
+                      </div>
+                      <span className="label-mono text-[8px] tracking-[0.18em] text-white/35">
+                        PARALLAX / SCROLL
+                      </span>
+                    </div>
+                  </div>
+                </article>
+              </Reveal>
+            );
+          })}
+        </div>
+
+        <Parallax speed={0.035} className="mt-16 sm:mt-24">
+          <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] border border-white/10 bg-black">
+            <img
+              src={VILLA_IMG}
+              alt=""
+              aria-hidden
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover object-center opacity-70"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#050708] via-[#050708]/55 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050708]/90 via-transparent to-[#050708]/10" />
+
+            <div className="relative z-10 flex min-h-[360px] items-end p-7 sm:p-10 lg:p-14">
+              <div className="max-w-xl">
+                <span className="label-mono text-[9px] tracking-[0.3em] text-white/45">
+                  UNE AGENCE · UNE VISION
+                </span>
+                <h3 className="display-serif mt-4 text-4xl leading-[0.9] sm:text-6xl">
+                  Plus qu’un prestataire,
+                  <br />
+                  <em className="text-white/55">un partenaire de croissance.</em>
+                </h3>
+                <p className="mt-5 max-w-lg text-sm leading-6 text-white/55">
+                  Une direction créative forte, une technologie solide et des
+                  expériences digitales conçues pour durer.
+                </p>
+              </div>
+            </div>
+
+            <div className="pointer-events-none absolute right-[-8%] top-[-14%] hidden h-[125%] w-[55%] rounded-full border border-white/10 lg:block" />
+            <div className="pointer-events-none absolute right-[7%] top-[22%] hidden h-3 w-3 rounded-full bg-white/70 shadow-[0_0_30px_rgba(255,255,255,.7)] lg:block" />
+          </div>
+        </Parallax>
+      </div>
+    </section>
+  );
 }
