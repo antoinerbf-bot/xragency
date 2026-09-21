@@ -1,16 +1,12 @@
-import { useEffect, useRef } from "react";
+
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Parallax } from "./primitives";
 
-const HERO_VIDEO = "https://cdn.coverr.co/videos/coverr-aerial-view-of-beautiful-resort-4739/1080p.mp4";
-const HERO_POSTER = "https://images.unsplash.com/photo-1782413263988-11f7178cf385?auto=format&fit=crop&q=90&w=2200";
+const HERO_IMAGE = "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=90&w=2400";
 
 export function ImmersiveJourney() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
+  
     const video = videoRef.current;
     const section = sectionRef.current;
     if (!video || !section) return;
@@ -34,14 +30,10 @@ export function ImmersiveJourney() {
       window.removeEventListener("resize", onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, []);
-
   return (
-    <section ref={sectionRef} className="relative min-h-[190vh] overflow-hidden bg-[#050607] text-white" aria-label="Parcours immersif XR Agency">
+    <section className="relative min-h-[118vh] overflow-hidden bg-[#050607] text-white" aria-label="Parcours immersif XR Agency">
       <div className="sticky top-0 h-[100dvh] overflow-hidden">
-        <video ref={videoRef} muted playsInline preload="metadata" poster={HERO_POSTER} className="absolute inset-0 h-full w-full object-cover opacity-65">
-          <source src={HERO_VIDEO} type="video/mp4" />
-        </video>
+        <img src={HERO_IMAGE} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover object-center opacity-60" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_35%,rgba(255,255,255,.12),transparent_30%),linear-gradient(90deg,rgba(3,5,6,.96)_0%,rgba(3,5,6,.72)_43%,rgba(3,5,6,.18)_100%)]" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#050607] via-transparent to-[#050607]/30" />
 
