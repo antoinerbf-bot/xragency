@@ -132,7 +132,7 @@ export function Hero() {
           <div className="absolute inset-0 transition-transform duration-100" style={{ transform: "translate3d(var(--creature-x),var(--creature-y),0) rotate(var(--creature-tilt))" }}>
             <div className="absolute inset-[4%] rounded-full border border-primary/10 [transform:perspective(900px)_rotateX(8deg)_rotateY(-10deg)]" />
             <img
-              src="https://cdn.meshy.ai/ti_w%3A3840%2Cq%3A75%2Cf%3Awebp/uploads/prod/a64cccfe4f6f31f5f26d2966abbf32fa230b617f1ca4a0004be9dae77096cb7a/publish/cover-landscape/0199a684-e449-7a97-9289-a1e42b4d0f0e.jpg"
+              src="https://cdn.meshy.ai/ti_w%3A3840%2Cq%3A75%2Cf%3Awebp/uploads/prod/111dc8ff4476845fd63e15867efa8be2aff9a04168f329dd997bd295ec3609bf/publish/cover-square/01995910-05d1-7e58-a37f-220417aef5ea.jpg"
               alt=""
               className="absolute left-[7%] top-[13%] h-[72%] w-[92%] object-contain drop-shadow-[0_35px_45px_rgba(0,0,0,.55)]"
               style={{ filter: "saturate(.9) contrast(1.08) brightness(.82)" }}
