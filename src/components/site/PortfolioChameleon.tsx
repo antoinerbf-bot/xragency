@@ -119,7 +119,7 @@ function Chameleon({ cursor }: { cursor: THREE.Vector3 }) {
             ref={tongue}
             position={[0.55, -0.02, 0]}
             scale={[0, 1, 1]}
-            rotation={[0, 0, 0]}
+            rotation={[0, 0, Math.PI / 2]}
           >
             <cylinderGeometry args={[0.025, 0.035, 2.0, 12]} />
             <meshStandardMaterial
