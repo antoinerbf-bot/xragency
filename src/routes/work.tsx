@@ -7,6 +7,7 @@ import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { SHOWCASE } from "@/lib/content";
 import { cn } from "@/lib/utils";
+import { PortfolioChameleon } from "@/components/site/PortfolioChameleon";
 
 export const Route = createFileRoute("/work")({
   head: () => ({
@@ -172,41 +173,43 @@ function WorkPage() {
       <Nav />
 
       <main className="relative z-10">
-        <section className="relative overflow-hidden pt-20 sm:pt-24 lg:min-h-[48vh]">
-          <div className="relative mx-auto grid max-w-[1680px] items-center lg:min-h-[calc(48vh-5rem)]">
-            <div className="relative z-20 px-5 pb-10 pt-6 sm:px-8 lg:px-12 lg:pb-14 lg:pt-10">
-              <p className="label-mono text-[10px] uppercase tracking-[0.32em] text-primary">
+        <section className="relative min-h-[78vh] overflow-hidden bg-[#090a07] text-white sm:min-h-[82vh] lg:min-h-[88vh]">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_42%,rgba(142,174,66,0.18),transparent_32%),radial-gradient(circle_at_20%_80%,rgba(210,164,75,0.08),transparent_28%)]" />
+          <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.35) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.35) 1px, transparent 1px)", backgroundSize: "72px 72px" }} />
+          <div className="relative mx-auto min-h-[78vh] max-w-[1680px] sm:min-h-[82vh] lg:min-h-[88vh]">
+            <div className="relative z-20 px-5 pb-10 pt-28 sm:px-8 sm:pt-32 lg:px-12 lg:pt-36">
+              <p className="label-mono text-[10px] uppercase tracking-[0.34em] text-[#b5c968]">
                 PORTFOLIO · {SHOWCASE.length}+ WORKS
               </p>
-              <h1 className="display-serif mt-4 text-4xl leading-[0.9] sm:mt-5 sm:text-7xl lg:text-[5.7rem]">
-                {lang === "fr" && (
-                  <>
-                    Nos
-                    <br />
-                    réalisations.
-                  </>
-                )}
-                {lang === "en" && (
-                  <>
-                    Our
-                    <br />
-                    portfolio.
-                  </>
-                )}
-                {lang === "vi" && (
-                  <>
-                    Dự án
-                    <br />
-                    của chúng tôi.
-                  </>
-                )}
+              <h1 className="display-serif mt-5 max-w-[760px] text-[4.2rem] leading-[0.82] tracking-[-0.045em] sm:text-[7rem] lg:text-[9.2rem]">
+                {lang === "fr" && <>Nos<br /><span className="text-white/35">réalisations.</span></>}
+                {lang === "en" && <>Our<br /><span className="text-white/35">portfolio.</span></>}
+                {lang === "vi" && <>Dự án<br /><span className="text-white/35">của chúng tôi.</span></>}
               </h1>
-              <p className="mt-5 max-w-md text-sm leading-6 text-muted-foreground sm:mt-7 sm:text-base sm:leading-7">
+              <p className="mt-7 max-w-sm text-sm leading-6 text-white/55 sm:text-base">
                 {intro}
               </p>
             </div>
+
+            <div className="absolute inset-0 z-10">
+              <PortfolioChameleon />
+            </div>
+
+            <div className="pointer-events-none absolute bottom-8 left-5 right-5 z-20 flex items-end justify-between sm:left-8 sm:right-8 lg:left-12 lg:right-12">
+              <div className="label-mono text-[9px] uppercase tracking-[0.2em] text-white/35">
+                MOVE YOUR CURSOR
+                <br />
+                THE CREATURE IS WATCHING
+              </div>
+              <div className="hidden text-right label-mono text-[9px] uppercase tracking-[0.2em] text-white/35 sm:block">
+                10.7411°N · 106.7011°E
+                <br />
+                XRAGENCY / DIGITAL CRAFT
+              </div>
+            </div>
           </div>
         </section>
+
 
         <section className="mx-auto max-w-[1600px] px-5 py-8 sm:px-8 lg:px-12 lg:py-16">
           <div className="sticky top-14 z-30 -mx-5 mb-8 border-y border-border bg-background/92 px-5 py-4 shadow-[0_18px_50px_-35px_hsl(var(--foreground)/0.5)] backdrop-blur-2xl sm:-mx-8 sm:px-8 lg:static lg:mx-0 lg:rounded-3xl lg:border lg:px-7 lg:py-6">
