@@ -180,8 +180,8 @@ export const UI: Record<string, L> = {
     vi: "Nhận báo giá qua WhatsApp",
   },
   intelDisclaimer: {
-    fr: "Estimation indicative établie à partir de nos grilles tarifaires. Le devis définitif est confirmé sous 24 h.",
-    en: "Indicative estimate based on our published price lists. The final quote is confirmed within 24 hours.",
+    fr: "Estimation indicative établie à partir de nos grilles tarifaires. Le devis définitif est confirmé après validation du périmètre.",
+    en: "Indicative estimate based on our published price lists. The final quote is confirmed after scope validation.",
     vi: "Ước tính tham khảo dựa trên bảng giá của chúng tôi. Báo giá cuối cùng được xác nhận trong 24 giờ.",
   },
   intelWhy: { fr: "Pourquoi", en: "Why", vi: "Vì sao" },
@@ -347,7 +347,7 @@ export const UI: Record<string, L> = {
     vi: "Zoom / Google Meet / video WhatsApp",
   },
   contactPoint2: {
-    fr: "Confirmation sous 1 heure ouvrée",
+    fr: "Confirmation selon disponibilité",
     en: "Confirmation within 1 business hour",
     vi: "Xác nhận trong 1 giờ làm việc",
   },
@@ -390,8 +390,8 @@ export const UI: Record<string, L> = {
     vi: "Hãy bàn về dự án của bạn",
   },
   contactQuote: {
-    fr: "« Une correspondance vaut mille présentations. Écrivez-nous — nous répondons sous 24 h. »",
-    en: "“One letter is worth a thousand presentations. Write to us — we reply within 24 hours.”",
+    fr: "« Une correspondance vaut mille présentations. Écrivez-nous — nous vous répondrons rapidement. »",
+    en: "“One letter is worth a thousand presentations. Write to us — we’ll reply promptly.”",
     vi: "“Một lá thư giá trị hơn ngàn bài thuyết trình. Hãy viết cho chúng tôi — chúng tôi trả lời trong 24 giờ.”",
   },
   footerMade: {
