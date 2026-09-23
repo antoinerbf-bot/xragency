@@ -848,211 +848,42 @@ export const SERVICES: Service[] = [
     id: "maps",
     num: "04",
     title: { fr: "Google Maps Top 3", en: "Google Maps Top 3", vi: "Google Maps Top 3" },
-    short: {
-      fr: "Visibilité locale, fiche Google Business Profile, avis et signaux territoriaux.",
-      en: "Local pack, reviews, photos. The traffic that calls.",
-      vi: "Local pack, đánh giá, hình ảnh. Lưu lượng gọi đến.",
-    },
-    description: {
-      fr: "Nous accompagnons votre établissement pour viser le Top 3 Google Maps. La stratégie est construite sur mesure selon votre positionnement actuel, votre zone, la concurrence et les mots-clés ciblés.",
-      en: "Position your business in the top 3 Google Maps results and capture the customers actively searching for your services in your area.",
-      vi: "Đưa doanh nghiệp của bạn vào TOP 3 kết quả Google Maps và thu hút khách hàng đang tìm kiếm dịch vụ trong khu vực.",
-    },
+    short: { fr: "Visibilité locale, Google Business Profile, avis et signaux territoriaux.", en: "Local visibility, Google Business Profile, reviews and local signals.", vi: "Hiển thị địa phương, Google Business Profile, đánh giá và tín hiệu địa phương." },
+    description: { fr: "Nous accompagnons votre établissement pour viser le Top 3 Google Maps. La stratégie est construite sur mesure selon votre positionnement actuel, votre zone, la concurrence et les mots-clés ciblés.", en: "A custom local visibility strategy built around your current position, area, competition and target keywords.", vi: "Chiến lược hiển thị địa phương được thiết kế theo vị trí hiện tại, khu vực, cạnh tranh và từ khóa mục tiêu." },
     fromEur: 990,
     fromPeriod: "year",
     premium: true,
     highlights: [
-      {
-        fr: "Objectif de visibilité locale",
-        en: "90% of clicks go to the TOP 3",
-        vi: "90% lượt nhấp thuộc về TOP 3",
-      },
-      {
-        fr: "Suivi des appels et actions locales",
-        en: "Tracking of calls and local actions",
-        vi: "Theo dõi cuộc gọi và hành động địa phương",
-      },
-      {
-        fr: "Suivi des actions d'itinéraire",
-        en: "Tracking of direction requests",
-        vi: "Theo dõi yêu cầu chỉ đường",
-      },
-      { fr: "Objectif Top 3 · sans garantie de position", en: "TOP 3 guarantee", vi: "Cam kết TOP 3" },
+      { fr: "À partir de 990 € / an", en: "From €990 / year", vi: "Từ 990 € / năm" },
+      { fr: "Tarification sur mesure", en: "Custom pricing", vi: "Báo giá theo nhu cầu" },
+      { fr: "Mots-clés et zone ciblés", en: "Targeted keywords and area", vi: "Từ khóa và khu vực mục tiêu" },
+      { fr: "Objectif Top 3 · sans garantie de position", en: "Top 3 objective · no position guarantee", vi: "Mục tiêu Top 3 · không đảm bảo vị trí" },
     ],
     steps: [
-      {
-        num: "01",
-        title: {
-          fr: "Audit Local & Périmètre",
-          en: "Local Audit & Radius",
-          vi: "Kiểm toán Địa phương & Bán kính",
-        },
-        desc: {
-          fr: "Analyse précise de la zone de chalandise, des concurrents immédiats et des catégories sémantiques ciblées.",
-          en: "Precise analysis of business catchment area, direct competitors and high-intent semantic categories.",
-          vi: "Phân tích khu vực kinh doanh, đối thủ cạnh tranh trực tiếp và nhóm từ khóa trọng điểm.",
-        },
-      },
-      {
-        num: "02",
-        title: {
-          fr: "Optimisation de la Fiche Google",
-          en: "Google Profile Optimisation",
-          vi: "Tối ưu Hồ sơ Google",
-        },
-        desc: {
-          fr: "Remplissage exhaustif, géotagging des visuels HD, structuration des services et mot-clés d'ancrage local.",
-          en: "Exhaustive profile setup, HD photo geotagging, service structure and local anchor keywords.",
-          vi: "Thiết lập hồ sơ toàn diện, gắn thẻ vị trí ảnh HD, cấu trúc dịch vụ và từ khóa địa phương.",
-        },
-      },
-      {
-        num: "03",
-        title: {
-          fr: "Citations & Réputation",
-          en: "Citations & Reputation",
-          vi: "Trích dẫn & Uy tín thương hiệu",
-        },
-        desc: {
-          fr: "Inscription sur annuaires locaux de premier plan, uniformisation NAP et protocole de collecte d'avis 5 étoiles.",
-          en: "Listing on tier-one local directories, NAP consistency and 5-star review acquisition protocol.",
-          vi: "Đăng ký danh bạ địa phương uy tín, đồng bộ NAP và quy trình thu thập đánh giá 5 sao.",
-        },
-      },
-      {
-        num: "04",
-        title: {
-          fr: "Entrée dans le TOP 3 Garanti",
-          en: "Guaranteed TOP 3 Entry",
-          vi: "Vào TOP 3 Cam kết",
-        },
-        desc: {
-          fr: "Validation conjointe du classement TOP 3 en navigation privée et activation du contrat de suivi d'un an.",
-          en: "Joint confirmation of TOP 3 rankings in incognito browsing and activation of 1-year monitoring.",
-          vi: "Xác nhận thứ hạng TOP 3 ở chế độ duyệt ẩn danh và kích hoạt dịch vụ theo dõi 1 năm.",
-        },
-      },
+      { num: "01", title: { fr: "Audit local & positionnement", en: "Local audit & positioning", vi: "Audit địa phương & định vị" }, desc: { fr: "Analyse de votre position actuelle, zone de chalandise, catégories et concurrence.", en: "Analysis of your current position, area, categories and competition.", vi: "Phân tích vị trí hiện tại, khu vực, danh mục và cạnh tranh." } },
+      { num: "02", title: { fr: "Google Business Profile", en: "Google Business Profile", vi: "Google Business Profile" }, desc: { fr: "Optimisation des catégories, services, description, informations et signaux locaux.", en: "Optimisation of categories, services, description, business information and local signals.", vi: "Tối ưu danh mục, dịch vụ, mô tả, thông tin và tín hiệu địa phương." } },
+      { num: "03", title: { fr: "Mots-clés & réputation", en: "Keywords & reputation", vi: "Từ khóa & uy tín" }, desc: { fr: "Cartographie des requêtes prioritaires et accompagnement sur une stratégie d'avis authentiques.", en: "Priority keyword mapping and guidance for an authentic review strategy.", vi: "Lập bản đồ từ khóa ưu tiên và hướng dẫn chiến lược đánh giá xác thực." } },
+      { num: "04", title: { fr: "Suivi & ajustements", en: "Monitoring & adjustments", vi: "Theo dõi & điều chỉnh" }, desc: { fr: "Suivi du positionnement et ajustements selon l'évolution de la concurrence et de la zone.", en: "Position monitoring and adjustments as competition and local conditions evolve.", vi: "Theo dõi vị trí và điều chỉnh theo cạnh tranh và điều kiện địa phương." } },
     ],
-    metrics: [
-      {
-        metric: "TOP 3",
-        label: { fr: "Positionnement garanti", en: "Guaranteed ranking", vi: "Vị trí cam kết" },
-        desc: {
-          fr: "Contrat activé uniquement au résultat réel.",
-          en: "Contract only starts once results are delivered.",
-          vi: "Hợp đồng chỉ tính khi đạt kết quả thực tế.",
-        },
-      },
-      {
-        metric: "+340%",
-        label: { fr: "Appels téléphoniques", en: "Inbound calls", vi: "Cuộc gọi đến" },
-        desc: {
-          fr: "Augmentation des appels directs depuis Google.",
-          en: "Surge in direct calls from mobile Google Maps.",
-          vi: "Tăng trưởng cuộc gọi trực tiếp từ Google Maps.",
-        },
-      },
-      {
-        metric: "90%",
-        label: { fr: "Part de clics captés", en: "Clicks captured", vi: "Thị phần lượt nhấp" },
-        desc: {
-          fr: "Concentration des clics sur les 3 premiers résultats.",
-          en: "Concentration of user clicks on the first 3 results.",
-          vi: "Tập trung lượt nhấp vào 3 vị trí đầu tiên.",
-        },
-      },
-    ],
-    comparisons: [
-      {
-        feature: { fr: "Garantie de résultat", en: "Outcome guarantee", vi: "Cam kết kết quả" },
-        us: {
-          fr: "Période d'un an comptabilisée dès le TOP 3 atteint",
-          en: "1-year period starts only upon reaching TOP 3",
-          vi: "Thời hạn 1 năm chỉ bắt đầu khi đạt TOP 3",
-        },
-        them: {
-          fr: "Facturation mensuelle sans engagement de place",
-          en: "Monthly billing with zero ranking commitment",
-          vi: "Thu phí hàng tháng không cam kết thứ hạng",
-        },
-      },
-      {
-        feature: { fr: "Couverture géographique", en: "Geo Coverage", vi: "Bao phủ địa lý" },
-        us: {
-          fr: "Optimisation de l'ensemble de votre rayon de chalandise",
-          en: "Optimisation across your entire catchment radius",
-          vi: "Tối ưu toàn bộ bán kính khách hàng tiềm năng",
-        },
-        them: {
-          fr: "Visibilité limitée à quelques mètres autour du local",
-          en: "Visibility limited to a few meters from door",
-          vi: "Tầm nhìn hạn chế chỉ gần cửa hàng",
-        },
-      },
-      {
-        feature: { fr: "Gestion des avis", en: "Review Strategy", vi: "Chiến lược đánh giá" },
-        us: {
-          fr: "Système proactif pour générer des avis authentiques",
-          en: "Proactive system for authentic positive reviews",
-          vi: "Quy trình chủ động nhận đánh giá tích cực thật",
-        },
-        them: {
-          fr: "Aucun conseil ni suivi de la réputation",
-          en: "Zero reputation monitoring or assistance",
-          vi: "Không có hỗ trợ hay theo dõi danh tiếng",
-        },
-      },
-    ],
-    plans: [
-      {
-        name: {
-          fr: "Google Maps TOP 3 Garanti",
-          en: "Google Maps TOP 3 Guaranteed",
-          vi: "Google Maps TOP 3 Cam kết",
-        },
-        audience: {
-          fr: "Prix selon secteur, ville et concurrence — devis sous 24 h",
-          en: "Price based on sector, city and competition — quote within 24h",
-          vi: "Giá theo ngành, thành phố và mức cạnh tranh — báo giá trong 24 giờ",
-        },
-        eur: 999,
-        period: "year",
-        popular: true,
-        features: [
-          {
-            fr: "Positionnement TOP 3 garanti",
-            en: "Guaranteed TOP 3 positioning",
-            vi: "Cam kết vị trí TOP 3",
-          },
-          {
-            fr: "Optimisation complète de la fiche",
-            en: "Complete profile optimisation",
-            vi: "Tối ưu hồ sơ toàn diện",
-          },
-          {
-            fr: "Gestion des avis clients",
-            en: "Customer review management",
-            vi: "Quản lý đánh giá khách hàng",
-          },
-          {
-            fr: "Photos professionnelles optimisées",
-            en: "Optimised professional photos",
-            vi: "Hình ảnh chuyên nghiệp được tối ưu",
-          },
-          {
-            fr: "Reporting mensuel détaillé",
-            en: "Detailed monthly reporting",
-            vi: "Báo cáo chi tiết hàng tháng",
-          },
-          {
-            fr: "Sans engagement après 1 an",
-            en: "No commitment after 1 year",
-            vi: "Không ràng buộc sau 1 năm",
-          },
-          { fr: "Support prioritaire", en: "Priority support", vi: "Hỗ trợ ưu tiên" },
-        ],
-      },
-    ],
+    plans: [{
+      name: { fr: "Google Maps Top 3 · Sur mesure", en: "Google Maps Top 3 · Custom", vi: "Google Maps Top 3 · Theo nhu cầu" },
+      audience: { fr: "À partir de 990 € / an · devis personnalisé", en: "From €990 / year · custom quote", vi: "Từ 990 € / năm · báo giá riêng" },
+      eur: 990,
+      period: "year",
+      popular: true,
+      features: [
+        { fr: "Audit initial de la présence locale", en: "Initial local presence audit", vi: "Audit hiện diện địa phương ban đầu" },
+        { fr: "Optimisation Google Business Profile", en: "Google Business Profile optimisation", vi: "Tối ưu Google Business Profile" },
+        { fr: "Mapping des mots-clés et zones", en: "Keyword and area mapping", vi: "Lập bản đồ từ khóa và khu vực" },
+        { fr: "Conseils de stratégie d'avis authentiques", en: "Authentic review strategy guidance", vi: "Hướng dẫn chiến lược đánh giá xác thực" },
+        { fr: "Suivi et ajustements selon la formule", en: "Monitoring and adjustments according to plan", vi: "Theo dõi và điều chỉnh theo gói" },
+        { fr: "Prix final défini après analyse du positionnement et de la concurrence", en: "Final price defined after analysing positioning and competition", vi: "Giá cuối cùng xác định sau khi phân tích vị trí và cạnh tranh" },
+      ],
+    }],
+    serviceFaqs: [{
+      q: { fr: "Le Top 3 est-il garanti ?", en: "Is Top 3 guaranteed?", vi: "Có đảm bảo Top 3 không?" },
+      a: { fr: "Non. Google Maps dépend notamment de la zone, de la requête, de la concurrence et de signaux que Google contrôle. XR Agency vend un accompagnement et un objectif de visibilité, pas une garantie de position.", en: "No. Google Maps rankings depend on the area, query, competition and signals controlled by Google. XR Agency provides an optimisation service and visibility objective, not a position guarantee.", vi: "Không. Thứ hạng Google Maps phụ thuộc khu vực, truy vấn, cạnh tranh và các tín hiệu do Google kiểm soát. XR Agency cung cấp dịch vụ tối ưu và mục tiêu hiển thị, không đảm bảo vị trí." },
+    }],
   },
   {
     id: "social",
@@ -3437,7 +3268,10 @@ const ADDITIONAL_SHOWCASE = [
   }
 ];
 
-export const SHOWCASE = [...CORE_SHOWCASE, ...ADDITIONAL_SHOWCASE];
+export const SHOWCASE = [
+  { id: "xr-pok-n-ball", name: "Pok-N Ball", url: "https://pokebowlfresh.vercel.app/", sectorKey: "sectorGastronomie", services: ["website","ecommerce"], type: { fr: "site restaurant / commande", en: "restaurant / ordering site", vi: "website nhà hàng / đặt món" }, desc: { fr: "Projet XR Agency : expérience digitale orientée commande et conversion.", en: "XR Agency project focused on ordering and conversion.", vi: "Dự án XR Agency tập trung vào đặt món và chuyển đổi." }, metric: "XR AGENCY · WEBSITE + COMMANDE", image: "https://image.thum.io/get/width/1800/crop/1050/noanimate/https://pokebowlfresh.vercel.app/" },
+  { id: "xr-french-paradise", name: "French Paradise", url: "https://frenchparadise.vn/", sectorKey: "sectorGastronomie", services: ["website","branding","ecommerce"], type: { fr: "site food & restauration", en: "food & restaurant site", vi: "website ẩm thực & nhà hàng" }, desc: { fr: "Projet XR Agency : identité digitale et parcours de commande pour une marque food premium.", en: "XR Agency project: digital identity and ordering journey for a premium food brand.", vi: "Dự án XR Agency: nhận diện số và hành trình đặt món cho thương hiệu food cao cấp." }, metric: "XR AGENCY · FOOD + COMMANDE", image: "https://image.thum.io/get/width/1800/crop/1050/noanimate/https://frenchparadise.vn/" },
+];
 
 /** Legacy alias — keep PORTFOLIO pointing to showcase for backward compatibility */
 export const PORTFOLIO = SHOWCASE.map((s, i) => ({
@@ -3449,119 +3283,4 @@ export const PORTFOLIO = SHOWCASE.map((s, i) => ({
   image: s.image,
 }));
 
-export const TESTIMONIALS = [
-  {
-    num: "01",
-    rating: 5,
-    city: "Torino, IT",
-    date: { fr: "Mars 2025", en: "March 2025", vi: "Tháng 3/2025" },
-    brand: "Pininfarina",
-    field: {
-      fr: "Ingénierie & Performance",
-      en: "Engineering & Performance",
-      vi: "Kỹ thuật & Hiệu năng",
-    },
-    quote: {
-      fr: "« XRAGENCY a compris notre vision d'une élégance intemporelle et l'a parfaitement traduite en digital. »",
-      en: "“XRAGENCY understood our vision of timeless elegance and translated it perfectly into digital.”",
-      vi: "“XRAGENCY đã hiểu tầm nhìn về sự thanh lịch vượt thời gian của chúng tôi và chuyển tải hoàn hảo lên nền tảng số.”",
-    },
-    author: "Marco Rossi",
-    role: { fr: "Directeur digital", en: "Digital Director", vi: "Giám đốc Digital" },
-  },
-  {
-    num: "02",
-    rating: 5,
-    city: "Singapore, SG",
-    date: { fr: "Janvier 2025", en: "January 2025", vi: "Tháng 1/2025" },
-    brand: "Aman Resorts",
-    field: {
-      fr: "Expérience & Réservation",
-      en: "Experience & Booking",
-      vi: "Trải nghiệm & Đặt phòng",
-    },
-    quote: {
-      fr: "« Nos demandes de réservation ont augmenté de 340 % après le travail SEO de XRAGENCY. »",
-      en: "“Our booking requests increased by 340% after XRAGENCY's SEO work.”",
-      vi: "“Yêu cầu đặt phòng của chúng tôi tăng 340% sau khi XRAGENCY triển khai SEO.”",
-    },
-    author: "Sarah Chen",
-    role: { fr: "VP Marketing", en: "VP Marketing", vi: "Phó Chủ tịch Marketing" },
-  },
-  {
-    num: "03",
-    rating: 5,
-    city: "Montreux, CH",
-    date: { fr: "Février 2025", en: "February 2025", vi: "Tháng 2/2025" },
-    brand: "Clinique La Prairie",
-    field: { fr: "Santé & Longévité", en: "Health & Longevity", vi: "Sức khỏe & Trường thọ" },
-    quote: {
-      fr: "« L'assistant IA gère parfaitement les réservations, même pendant les jours fériés suisses. »",
-      en: "“The AI assistant handles reservations perfectly, even during Swiss holidays.”",
-      vi: "“Trợ lý AI xử lý đặt lịch hoàn hảo, kể cả trong các ngày lễ tại Thụy Sĩ.”",
-    },
-    author: "Dr. Isabelle Meyer",
-    role: { fr: "Directrice des opérations", en: "Operations Director", vi: "Giám đốc Vận hành" },
-  },
-  {
-    num: "04",
-    rating: 5,
-    city: "New York, US",
-    date: { fr: "Avril 2025", en: "April 2025", vi: "Tháng 4/2025" },
-    brand: "Bespoke Real Estate",
-    field: {
-      fr: "Immobilier ultra-luxe",
-      en: "Ultra-luxury real estate",
-      vi: "Bất động sản siêu sang",
-    },
-    quote: {
-      fr: "« Notre marque reflète enfin l'exclusivité des biens que nous représentons. »",
-      en: "“Our brand finally reflects the exclusivity of the properties we represent.”",
-      vi: "“Thương hiệu của chúng tôi cuối cùng đã phản ánh đúng sự độc quyền của các bất động sản mà chúng tôi đại diện.”",
-    },
-    author: "James Wellington",
-    role: { fr: "Fondateur & CEO", en: "Founder & CEO", vi: "Nhà sáng lập & CEO" },
-  },
-  {
-    num: "05",
-    rating: 5,
-    city: "Đà Nẵng, VN",
-    date: { fr: "Mai 2025", en: "May 2025", vi: "Tháng 5/2025" },
-    brand: "Maison Lumière",
-    field: {
-      fr: "Gastronomie & Réservation",
-      en: "Fine dining & Booking",
-      vi: "Ẩm thực & Đặt bàn",
-    },
-    quote: {
-      fr: "« Trois semaines après la mise en ligne, nous étions complets tous les week-ends. Le TOP 3 Google Maps a tout changé. »",
-      en: "“Three weeks after launch we were fully booked every weekend. The Google Maps TOP 3 changed everything.”",
-      vi: "“Ba tuần sau khi ra mắt, chúng tôi kín chỗ mỗi cuối tuần. TOP 3 Google Maps đã thay đổi tất cả.”",
-    },
-    author: "Élodie Renaud",
-    role: { fr: "Propriétaire", en: "Owner", vi: "Chủ nhà hàng" },
-  },
-  {
-    num: "06",
-    rating: 5,
-    city: "Dubaï, AE",
-    date: { fr: "Juin 2025", en: "June 2025", vi: "Tháng 6/2025" },
-    brand: "Neo Gear",
-    field: {
-      fr: "E-commerce & Conversion",
-      en: "E-commerce & Conversion",
-      vi: "Thương mại điện tử & Chuyển đổi",
-    },
-    quote: {
-      fr: "« Panier moyen multiplié par 2,4 en un trimestre. L'équipe livre vite, propre, sans jamais rogner sur le détail. »",
-      en: "“Average basket 2.4× in a single quarter. The team ships fast, clean, and never cuts corners on detail.”",
-      vi: "“Giá trị giỏ hàng tăng 2,4 lần chỉ trong một quý. Đội ngũ bàn giao nhanh, sạch sẽ và không bao giờ cắt xén chi tiết.”",
-    },
-    author: "Karim Haddad",
-    role: {
-      fr: "Directeur e-commerce",
-      en: "E-commerce Director",
-      vi: "Giám đốc Thương mại điện tử",
-    },
-  },
-];
+export const TESTIMONIALS = [];
