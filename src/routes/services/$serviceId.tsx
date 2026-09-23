@@ -122,6 +122,7 @@ export const Route = createFileRoute("/services/$serviceId")({
         },
         { property: "og:type", content: "website" },
       ],
+      links: [{ rel: "canonical", href: "https://xragencyai.com/services/" + loaderData.canonicalId }],
     };
   },
   component: ServiceDetailPage,
