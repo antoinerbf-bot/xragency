@@ -4,13 +4,16 @@ export type PortfolioReference = {
   sector: string;
   type: "Vitrine" | "E-commerce" | "Branding" | "SaaS" | "Portail";
   image: string;
+  origin: "XR Agency" | "Référence";
 };
 
 /** Real public homepage previews — no generic stock photography. */
 const preview = (url: string) => `https://image.thum.io/get/width/1800/crop/1050/noanimate/${url}`;
-const ref = (name: string, url: string, sector: string, type: PortfolioReference["type"]): PortfolioReference => ({ name, url, sector, type, image: preview(url) });
+const ref = (name: string, url: string, sector: string, type: PortfolioReference["type"], origin: PortfolioReference["origin"] = "Référence"): PortfolioReference => ({ name, url, sector, type, image: preview(url), origin });
 
 export const PORTFOLIO_REFERENCES: PortfolioReference[] = [
+  ref("Pok-N Ball", "https://pokebowlfresh.vercel.app/", "restaurant", "E-commerce", "XR Agency"),
+  ref("French Paradise", "https://frenchparadise.vn/", "food", "Vitrine", "XR Agency"),
   ref("Le Gramme", "https://legramme.com/", "luxe", "E-commerce"), ref("MaisonCléo", "https://maisoncleo.com/", "luxe", "E-commerce"), ref("Completedworks", "https://completedworks.com/", "luxe", "E-commerce"),
   ref("AYANA", "https://www.ayana.com/", "hotel", "Vitrine"), ref("Heckfield Place", "https://www.heckfieldplace.com/", "hotel", "Vitrine"), ref("Naman Retreat", "https://www.namanretreat.com/", "hotel", "Vitrine"),
   ref("Septime", "https://www.septime-charonne.fr/", "restaurant", "Vitrine"), ref("Burnt Ends", "https://burntends.com.sg/", "restaurant", "Vitrine"), ref("BRAT", "https://bratrestaurant.co.uk/", "restaurant", "Vitrine"),
