@@ -214,7 +214,7 @@ export function QuoteConfiguratorCompact() {
     if (step > 0) journeyRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [step]);
 
-  const reset = () => { setStep(0); setSectorId(""); setGoal(""); setSituation(""); setBudget(""); setDiscovery(""); setSelectedServices([]); setClient({ company: "", name: "", email: "", whatsapp: "", website: "" }); setGenerated(false); setSendMessage(""); };
+  useEffect(() => {\n    const params = new URLSearchParams(window.location.search);\n    const requested = params.get("service");\n    if (requested && SERVICES.some((x) => x.id === requested)) {\n      setSelectedServices((current) => current.includes(requested) ? current : [requested]);\n      setStep(4);\n    }\n  }, []);\n\n  const reset = () => { setStep(0); setSectorId(""); setGoal(""); setSituation(""); setBudget(""); setDiscovery(""); setSelectedServices([]); setClient({ company: "", name: "", email: "", whatsapp: "", website: "" }); setGenerated(false); setSendMessage(""); };
 
   const recommendation = useMemo(() => {
     if (!sector || !discoveryChoice) return "";
