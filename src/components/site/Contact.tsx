@@ -54,8 +54,8 @@ export function Contact() {
             </h2>
             <p className="mt-4 text-sm text-muted-foreground max-w-lg mx-auto">
               {t({
-                fr: "La façon la plus directe et la plus rapide de nous parler. Réponse garantie en moins de 2h.",
-                en: "The most direct and fastest way to talk to us. Guaranteed reply in under 2h.",
+                fr: "La façon la plus directe et la plus rapide de nous parler. Réponse rapide.",
+                en: "The most direct and fastest way to talk to us. Fast response.",
                 vi: "Cách trực tiếp và nhanh nhất để liên hệ với chúng tôi. Phản hồi trong 2 giờ.",
               })}
             </p>
