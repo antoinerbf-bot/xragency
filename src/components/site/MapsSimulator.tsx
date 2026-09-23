@@ -175,7 +175,7 @@ export function MapsSimulator() {
         <div>
           <SectionHeading
             label={{ fr: "Google Maps TOP 3", en: "Google Maps TOP 3", vi: "Google Maps TOP 3" }}
-            line1={{ fr: "Objectif Top 3", en: "Guaranteed TOP 3", vi: "Đảm bảo TOP 3" }}
+            line1={{ fr: "Objectif Top 3", en: "Top 3 objective", vi: "Mục tiêu Top 3" }}
             line2={{
               fr: "sur mesure selon votre situation.",
               en: "custom-built for your situation.",
@@ -333,7 +333,7 @@ export function MapsSimulator() {
                     <div className="flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-3 py-2">
                       <ShieldCheck className="h-4 w-4 shrink-0 text-primary" />
                       <span className="label-mono text-[10px] font-bold text-primary">
-                        Garantie TOP 3 ou remboursé
+                        Objectif Top 3 · étude sur mesure
                       </span>
                     </div>
                     <a
