@@ -3,8 +3,9 @@ import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
 import { Parallax, Reveal } from "./primitives";
+import { ServiceIllustration } from "./ServiceIllustration";
 
-const FEATURED_IDS = ["websites", "branding", "seo", "maps", "social", "maintenance"];
+const FEATURED_IDS = ["websites", "branding", "seo", "maps", "social", "maintenance", "ecommerce"];
 const DISPLAY_NUM: Record<string, string> = {
   websites: "01",
   branding: "02",
@@ -18,23 +19,8 @@ const DISPLAY_PRICE: Record<string, number | null> = {
   branding: null,
   seo: null,
   maps: null,
-  social: 499,
+  social: 299,
   maintenance: null,
-};
-
-const SERVICE_IMG: Record<string, string> = {
-  websites:
-    "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=90&w=2200",
-  branding:
-    "https://images.unsplash.com/photo-1523726491678-bf852e717f6a?auto=format&fit=crop&q=90&w=2200",
-  seo:
-    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=90&w=2200",
-  maps:
-    "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=90&w=2200",
-  social:
-    "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&q=90&w=2200",
-  maintenance:
-    "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=90&w=2200",
 };
 
 const VILLA_IMG =
@@ -62,7 +48,7 @@ export function HomeServices() {
           <div className="mb-12 flex flex-col justify-between gap-8 border-b border-white/10 pb-10 lg:mb-16 lg:flex-row lg:items-end">
             <div>
               <span className="label-mono text-[9px] tracking-[0.32em] text-white/45">
-                XR AGENCY · 06 EXPERTISES
+                XR AGENCY · 07 EXPERTISES
               </span>
               <h2 className="display-serif mt-4 max-w-4xl text-5xl leading-[0.88] text-white sm:text-7xl lg:text-[6.6rem]">
                 Des solutions sur mesure
@@ -71,7 +57,7 @@ export function HomeServices() {
               </h2>
             </div>
             <p className="max-w-md text-sm leading-6 text-white/50 lg:pb-2">
-              Six expertises pensées comme un seul écosystème : stratégie,
+              Sept offres pensées comme un seul écosystème : stratégie,
               création, visibilité et performance. Faites défiler pour voir
               chaque univers.
             </p>
@@ -86,19 +72,7 @@ export function HomeServices() {
             return (
               <Reveal key={service.id} delay={index * 70} className={featuredLarge ? "sm:col-span-1" : ""}>
                 <article className="group relative isolate min-h-[500px] overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#0b0e11] shadow-[0_30px_90px_-45px_rgba(0,0,0,.95)] sm:min-h-[560px]">
-                  <div className="absolute inset-[-7%]">
-                    <Parallax speed={index % 2 === 0 ? 0.055 : -0.045} className="h-full w-full">
-                      <img
-                        src={SERVICE_IMG[service.id]}
-                        alt=""
-                        aria-hidden
-                        loading={index > 1 ? "lazy" : "eager"}
-                        className="h-full w-full object-cover brightness-[0.72] saturate-[0.82] transition duration-[1200ms] ease-out group-hover:scale-[1.075] group-hover:brightness-[0.84] group-hover:saturate-100"
-                      />
-                    </Parallax>
-                  </div>
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-black/5" />
+                  <div className="absolute inset-0 flex items-center justify-center p-3 sm:p-5">\n                    <ServiceIllustration service={service.id} title={t(service.title)} />\n                  </div>\n\n                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-black/5" />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-transparent to-transparent" />
 
                   <div className="relative z-10 flex min-h-[500px] flex-col justify-between p-6 sm:min-h-[560px] sm:p-9 lg:p-10">
@@ -109,7 +83,7 @@ export function HomeServices() {
                         <span>XR AGENCY</span>
                       </div>
                       <span className="rounded-full border border-white/15 bg-black/20 px-3 py-2 label-mono text-[8px] tracking-[0.15em] text-white/50 backdrop-blur-md">
-                        {String(index + 1).padStart(2, "0")} / 06
+                        {String(index + 1).padStart(2, "0")} / 07
                       </span>
                     </div>
 
