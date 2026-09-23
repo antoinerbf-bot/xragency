@@ -103,6 +103,10 @@ export function ServicesCatalog() {
           <p className="mt-8 max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
             {copy.lead}
           </p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <a href="/#quote" className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 label-mono text-[10px] font-semibold uppercase tracking-[.14em] text-primary-foreground transition hover:-translate-y-0.5">Entrer dans l’expérience <ArrowUpRight className="h-4 w-4" /></a>
+            <a href="/#quote" className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-5 py-3 label-mono text-[10px] font-semibold uppercase tracking-[.14em] text-foreground transition hover:border-primary hover:text-primary">Faire mon devis</a>
+          </div>
           <p className="mt-6 label-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
             01 // {String(catalog.length).padStart(2, "0")}
           </p>
@@ -130,7 +134,7 @@ export function ServicesCatalog() {
                       <h2 className={cn("display-serif leading-[.9] text-white", featured ? "text-5xl sm:text-7xl" : "text-4xl sm:text-5xl")}>{t(service.title)}</h2>
                       <p className="mt-4 max-w-xl text-sm leading-6 text-white/60">{t(service.description)}</p>
                       <div className="mt-6 flex flex-wrap items-center gap-2.5">
-                        <a href={href} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold uppercase tracking-[.12em] text-black transition hover:-translate-y-0.5 hover:bg-white/90">{copy.learn}<ArrowUpRight className="h-4 w-4" /></a>
+                        <a href={`/?service=${service.id}#quote`} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold uppercase tracking-[.12em] text-black transition hover:-translate-y-0.5 hover:bg-white/90">Composer cette offre <ArrowUpRight className="h-4 w-4" /></a>
                         <span className="rounded-full border border-white/15 bg-black/30 px-4 py-3 label-mono text-[9px] text-white/70 backdrop-blur">{copy.from} {price(service.fromEur)}{service.fromPeriod === "month" ? " / mois" : service.fromPeriod === "year" ? " / an" : ""}</span>
                       </div>
                     </div>
