@@ -4,61 +4,10 @@ import { Sparkles, ShieldCheck, FileImage, Search, ArrowUpRight } from "lucide-r
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
-import { EmberButton, Parallax, FloatingBadge } from "./primitives";
+import { EmberButton, Parallax } from "./primitives";
 // import EarthGlobe from "./EarthGlobe"; // Globe removed per user request
 
-/* ── Animated counter hook ── */
-function useCountUp(target: number, duration = 1600, startDelay = 500) {
-  const [value, setValue] = useState(0);
-  const started = useRef(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      started.current = true;
-      const start = performance.now();
-      const tick = (now: number) => {
-        const elapsed = now - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        setValue(Math.round(target * eased));
-        if (progress < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    }, startDelay);
-    return () => clearTimeout(timeout);
-  }, [target, duration, startDelay]);
-
-  return value;
-}
-
-/* ── Stat card with animated counter ── */
-function AnimatedStat({
-  value,
-  suffix,
-  label,
-  delay,
-}: {
-  value: number;
-  suffix?: string;
-  label: string;
-  delay: number;
-}) {
-  const count = useCountUp(value, 1600, delay);
-  return (
-    <div
-      className="bg-card/75 px-5 py-4 backdrop-blur-md transition-all duration-300 hover:bg-accent/40 hover:-translate-y-0.5 cursor-default"
-      style={{ animation: `ember-rise 0.75s cubic-bezier(0.16,1,0.3,1) ${delay}ms both` }}
-    >
-      <dt className="display-serif text-2xl text-primary sm:text-3xl font-bold tracking-tight">
-        {count}
-        {suffix ?? ""}
-      </dt>
-      <dd className="label-mono mt-1 text-xs text-muted-foreground">{label}</dd>
-    </div>
-  );
-}
-
-export function Hero() {
+function GlobalPresence() {\n  return (\n    <div className="relative mx-auto aspect-square w-full max-w-[520px] select-none" aria-label="Présence internationale : France, Dubaï, Asie et Amérique du Nord">\n      <div className="absolute inset-[7%] rounded-full border border-primary/25 bg-black/20 shadow-[0_0_90px_-25px_rgba(242,163,58,.45)]" />\n      <div className="absolute inset-[10%] overflow-hidden rounded-full border border-white/10 bg-black">\n        <img src="/src/assets/earth_texture.jpg" alt="" aria-hidden="true" className="h-full w-full object-cover opacity-75 mix-blend-screen animate-[spin_42s_linear_infinite]" />\n        <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_35%_30%,rgba(255,255,255,.12),transparent_28%),radial-gradient(circle_at_65%_70%,rgba(242,163,58,.16),transparent_42%)]" />\n      </div>\n      <div className="absolute inset-[3%] rounded-full border border-primary/20 [transform:rotateX(68deg)]" />\n      <div className="absolute inset-[16%] rounded-full border border-white/10 [transform:rotateY(62deg)]" />\n      {[["PARIS","18%","31%"],["DUBAI","67%","48%"],["DA NANG","75%","62%"],["NEW YORK","7%","43%"]].map(([name,left,top]) => (\n        <span key={name} className="absolute flex items-center gap-1.5 label-mono text-[8px] uppercase tracking-[.16em] text-white/70" style={{left,top}}>\n          <i className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_14px_rgba(242,163,58,.9)]" />{name}\n        </span>\n      ))}\n      <div className="absolute bottom-[8%] left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-black/55 px-4 py-2 backdrop-blur-md">\n        <span className="label-mono text-[8px] tracking-[.2em] text-white/45">FRANCE · ASIE · INTERNATIONAL</span>\n      </div>\n    </div>\n  );\n}\n\nexport function Hero() {
   const { t } = useLang();
 
   return (
@@ -145,7 +94,7 @@ export function Hero() {
             </div>
           </Parallax>
 
-          {/* Right Column reserved for future visual */}
+          {/* Right Column — global presence */}\n          <Parallax speed={0.025} className="relative hidden lg:col-span-5 lg:block">\n            <GlobalPresence />\n          </Parallax>
         </div>
 
         {/* Bottom Key Stats Bar with Animated Counters */}
