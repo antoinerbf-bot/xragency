@@ -154,7 +154,8 @@ export function QuoteConfiguratorCompact() {
       doc.setFontSize(10);
 
       [
-        `E-mail : ${client.email}`,\n        `Téléphone / WhatsApp : ${client.whatsapp}`,
+        `E-mail : ${client.email}`,
+        `Téléphone / WhatsApp : ${client.whatsapp}`,
         `Activité : ${sector?.label || ""}`,
         `Priorité : ${goal}`,
         `Situation : ${SITUATIONS.find(x => x.id === situation)?.label || ""}`,
@@ -214,7 +215,16 @@ export function QuoteConfiguratorCompact() {
     if (step > 0) journeyRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [step]);
 
-  useEffect(() => {\n    const params = new URLSearchParams(window.location.search);\n    const requested = params.get("service");\n    if (requested && SERVICES.some((x) => x.id === requested)) {\n      setSelectedServices((current) => current.includes(requested) ? current : [requested]);\n      setStep(4);\n    }\n  }, []);\n\n  const reset = () => { setStep(0); setSectorId(""); setGoal(""); setSituation(""); setBudget(""); setDiscovery(""); setSelectedServices([]); setClient({ company: "", name: "", email: "", whatsapp: "", website: "" }); setGenerated(false); setSendMessage(""); };
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const requested = params.get("service");
+    if (requested && SERVICES.some((x) => x.id === requested)) {
+      setSelectedServices((current) => current.includes(requested) ? current : [requested]);
+      setStep(4);
+    }
+  }, []);
+
+  const reset = () => { setStep(0); setSectorId(""); setGoal(""); setSituation(""); setBudget(""); setDiscovery(""); setSelectedServices([]); setClient({ company: "", name: "", email: "", whatsapp: "", website: "" }); setGenerated(false); setSendMessage(""); };
 
   const recommendation = useMemo(() => {
     if (!sector || !discoveryChoice) return "";
