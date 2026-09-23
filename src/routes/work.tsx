@@ -7,7 +7,6 @@ import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { SHOWCASE } from "@/lib/content";
 import { cn } from "@/lib/utils";
-import { PortfolioChameleon } from "@/components/site/PortfolioChameleon";
 
 export const Route = createFileRoute("/work")({
   head: () => ({
@@ -191,8 +190,13 @@ function WorkPage() {
               </p>
             </div>
 
-            <div className="absolute inset-0 z-10">
-              <PortfolioChameleon />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10 overflow-hidden">
+              <div className="absolute right-[4%] top-[16%] h-[46vw] max-h-[720px] w-[46vw] max-w-[720px] rounded-full border border-[#b5c968]/20 opacity-80" />
+              <div className="absolute right-[10%] top-[23%] h-[34vw] max-h-[520px] w-[34vw] max-w-[520px] rounded-full border border-white/10" />
+              <div className="absolute right-[18%] top-[31%] h-[18vw] max-h-[280px] w-[18vw] max-w-[280px] rounded-full bg-[#b5c968]/10 blur-3xl" />
+              <div className="absolute right-[12%] top-[24%] h-[32vw] max-h-[500px] w-[32vw] max-w-[500px] rounded-full border border-[#b5c968]/10 [background:radial-gradient(circle_at_center,rgba(181,201,104,.10),transparent_58%)]" />
+              <div className="absolute inset-y-0 right-0 w-[62%] opacity-[0.07]" style={{ backgroundImage:"linear-gradient(rgba(255,255,255,.7) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.7) 1px,transparent 1px)", backgroundSize:"56px 56px", maskImage:"radial-gradient(circle at 65% 45%,black,transparent 68%)", WebkitMaskImage:"radial-gradient(circle at 65% 45%,black,transparent 68%)" }} />
+              <div className="absolute right-[26%] top-[45%] h-2 w-2 rounded-full bg-[#b5c968] shadow-[0_0_28px_8px_rgba(181,201,104,.35)]" />
             </div>
 
             <div className="pointer-events-none absolute bottom-8 left-5 right-5 z-20 flex items-end justify-between sm:left-8 sm:right-8 lg:left-12 lg:right-12">
