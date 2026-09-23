@@ -429,11 +429,11 @@ function ServiceDetailPage() {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setInstallmentSelections(prev => ({ ...prev, [i]: true }));
+                                setInstallmentSelections(prev => ({ ...prev, [i]: false }));
                               }}
                               className={cn(
                                 "flex-1 rounded-md text-[10px] sm:text-[11px] font-medium transition-all py-1.5",
-                                isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                                !isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                               )}
                             >
                               Comptant
@@ -441,11 +441,11 @@ function ServiceDetailPage() {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setInstallmentSelections(prev => ({ ...prev, [i]: false }));
+                                setInstallmentSelections(prev => ({ ...prev, [i]: true }));
                               }}
                               className={cn(
                                 "flex-1 rounded-md text-[10px] sm:text-[11px] font-medium transition-all py-1.5",
-                                !isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                                isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                               )}
                             >
                               Mensualités
