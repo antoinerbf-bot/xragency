@@ -1123,6 +1123,7 @@ export const SERVICES: Service[] = [
         { fr: "Hébergement", en: "Hosting", vi: "Hosting" },
         { fr: "Nom de domaine", en: "Domain name", vi: "Tên miền" },
         { fr: "Sécurité HTTPS / SSL", en: "HTTPS / SSL security", vi: "Bảo mật HTTPS / SSL" },
+        { fr: "Migration depuis un autre hébergeur incluse", en: "Migration from another host included", vi: "Bao gồm chuyển đổi từ nhà cung cấp hosting khác" },
       ] },
     ],
     serviceFaqs: [
