@@ -1091,7 +1091,39 @@ export const SERVICES: Service[] = [
         },
       },
     ],
-    metrics: [\n      { metric: "79 € / an", label: { fr: "Infrastructure", en: "Infrastructure", vi: "Hạ tầng" }, desc: { fr: "Hébergement + domaine + sécurité.", en: "Hosting + domain + security.", vi: "Hosting + tên miền + bảo mật." } },\n      { metric: "29 € / mois", label: { fr: "4 modifications", en: "4 edits", vi: "4 chỉnh sửa" }, desc: { fr: "Maintenance courante du site.", en: "Routine website maintenance.", vi: "Bảo trì website thường xuyên." } },\n      { metric: "49 € / mois", label: { fr: "10 modifications", en: "10 edits", vi: "10 chỉnh sửa" }, desc: { fr: "Pour les besoins de contenu plus fréquents.", en: "For more frequent content needs.", vi: "Cho nhu cầu nội dung thường xuyên hơn." } },\n    ],\n    comparisons: [\n      { feature: { fr: "Infrastructure", en: "Infrastructure", vi: "Hạ tầng" }, us: { fr: "79 € / an · hébergement + domaine + sécurité", en: "€79 / year · hosting + domain + security", vi: "79 € / năm · hosting + tên miền + bảo mật" }, them: { fr: "Facturée séparément selon le fournisseur", en: "Billed separately depending on provider", vi: "Tính riêng tùy nhà cung cấp" } },\n      { feature: { fr: "Modifications", en: "Edits", vi: "Chỉnh sửa" }, us: { fr: "4, 10 ou illimité selon la formule", en: "4, 10 or unlimited according to plan", vi: "4, 10 hoặc không giới hạn theo gói" }, them: { fr: "Interventions ponctuelles", en: "Ad-hoc interventions", vi: "Can thiệp từng lần" } },\n      { feature: { fr: "Continuité", en: "Continuity", vi: "Liên tục" }, us: { fr: "Sécurité, sauvegardes et suivi selon formule", en: "Security, backups and monitoring according to plan", vi: "Bảo mật, sao lưu và giám sát theo gói" }, them: { fr: "Maintenance non structurée", en: "Unstructured maintenance", vi: "Bảo trì không có cấu trúc" } },\n    ],\n    plans: [\n      { name: { fr: "WebCare · 4 modifications", en: "WebCare · 4 edits", vi: "WebCare · 4 chỉnh sửa" }, audience: { fr: "Maintenance courante", en: "Routine maintenance", vi: "Bảo trì thường xuyên" }, eur: 29, period: "month", features: [\n        { fr: "4 modifications de contenu / mois", en: "4 content edits / month", vi: "4 chỉnh sửa nội dung / tháng" },\n        { fr: "Mises à jour et maintenance courante", en: "Updates and routine maintenance", vi: "Cập nhật và bảo trì thường xuyên" },\n        { fr: "Sauvegardes et surveillance selon périmètre", en: "Backups and monitoring within scope", vi: "Sao lưu và giám sát theo phạm vi" },\n      ] },\n      { name: { fr: "WebCare · 10 modifications", en: "WebCare · 10 edits", vi: "WebCare · 10 chỉnh sửa" }, audience: { fr: "Accompagnement renforcé", en: "Enhanced support", vi: "Hỗ trợ tăng cường" }, eur: 49, period: "month", popular: true, features: [\n        { fr: "10 modifications de contenu / mois", en: "10 content edits / month", vi: "10 chỉnh sửa nội dung / tháng" },\n        { fr: "Maintenance et mises à jour", en: "Maintenance and updates", vi: "Bảo trì và cập nhật" },\n        { fr: "Support prioritaire", en: "Priority support", vi: "Hỗ trợ ưu tiên" },\n      ] },\n      { name: { fr: "WebCare · Illimité", en: "WebCare · Unlimited", vi: "WebCare · Không giới hạn" }, audience: { fr: "Modifications sans quota", en: "No edit quota", vi: "Không giới hạn chỉnh sửa" }, eur: 99, period: "month", features: [\n        { fr: "Modifications de contenu illimitées", en: "Unlimited content edits", vi: "Chỉnh sửa nội dung không giới hạn" },\n        { fr: "Maintenance et mises à jour", en: "Maintenance and updates", vi: "Bảo trì và cập nhật" },\n        { fr: "Support prioritaire selon périmètre", en: "Priority support within scope", vi: "Hỗ trợ ưu tiên theo phạm vi" },\n      ] },\n      { name: { fr: "Infrastructure annuelle", en: "Annual Infrastructure", vi: "Hạ tầng hàng năm" }, audience: { fr: "Hébergement + domaine + sécurité", en: "Hosting + domain + security", vi: "Hosting + tên miền + bảo mật" }, eur: 79, period: "year", features: [\n        { fr: "Hébergement", en: "Hosting", vi: "Hosting" },\n        { fr: "Nom de domaine", en: "Domain name", vi: "Tên miền" },\n        { fr: "Sécurité HTTPS / SSL", en: "HTTPS / SSL security", vi: "Bảo mật HTTPS / SSL" },\n      ] },\n    ],\n    serviceFaqs: [
+    metrics: [
+      { metric: "79 € / an", label: { fr: "Infrastructure", en: "Infrastructure", vi: "Hạ tầng" }, desc: { fr: "Hébergement + domaine + sécurité.", en: "Hosting + domain + security.", vi: "Hosting + tên miền + bảo mật." } },
+      { metric: "29 € / mois", label: { fr: "4 modifications", en: "4 edits", vi: "4 chỉnh sửa" }, desc: { fr: "Maintenance courante du site.", en: "Routine website maintenance.", vi: "Bảo trì website thường xuyên." } },
+      { metric: "49 € / mois", label: { fr: "10 modifications", en: "10 edits", vi: "10 chỉnh sửa" }, desc: { fr: "Pour les besoins de contenu plus fréquents.", en: "For more frequent content needs.", vi: "Cho nhu cầu nội dung thường xuyên hơn." } },
+    ],
+    comparisons: [
+      { feature: { fr: "Infrastructure", en: "Infrastructure", vi: "Hạ tầng" }, us: { fr: "79 € / an · hébergement + domaine + sécurité", en: "€79 / year · hosting + domain + security", vi: "79 € / năm · hosting + tên miền + bảo mật" }, them: { fr: "Facturée séparément selon le fournisseur", en: "Billed separately depending on provider", vi: "Tính riêng tùy nhà cung cấp" } },
+      { feature: { fr: "Modifications", en: "Edits", vi: "Chỉnh sửa" }, us: { fr: "4, 10 ou illimité selon la formule", en: "4, 10 or unlimited according to plan", vi: "4, 10 hoặc không giới hạn theo gói" }, them: { fr: "Interventions ponctuelles", en: "Ad-hoc interventions", vi: "Can thiệp từng lần" } },
+      { feature: { fr: "Continuité", en: "Continuity", vi: "Liên tục" }, us: { fr: "Sécurité, sauvegardes et suivi selon formule", en: "Security, backups and monitoring according to plan", vi: "Bảo mật, sao lưu và giám sát theo gói" }, them: { fr: "Maintenance non structurée", en: "Unstructured maintenance", vi: "Bảo trì không có cấu trúc" } },
+    ],
+    plans: [
+      { name: { fr: "WebCare · 4 modifications", en: "WebCare · 4 edits", vi: "WebCare · 4 chỉnh sửa" }, audience: { fr: "Maintenance courante", en: "Routine maintenance", vi: "Bảo trì thường xuyên" }, eur: 29, period: "month", features: [
+        { fr: "4 modifications de contenu / mois", en: "4 content edits / month", vi: "4 chỉnh sửa nội dung / tháng" },
+        { fr: "Mises à jour et maintenance courante", en: "Updates and routine maintenance", vi: "Cập nhật và bảo trì thường xuyên" },
+        { fr: "Sauvegardes et surveillance selon périmètre", en: "Backups and monitoring within scope", vi: "Sao lưu và giám sát theo phạm vi" },
+      ] },
+      { name: { fr: "WebCare · 10 modifications", en: "WebCare · 10 edits", vi: "WebCare · 10 chỉnh sửa" }, audience: { fr: "Accompagnement renforcé", en: "Enhanced support", vi: "Hỗ trợ tăng cường" }, eur: 49, period: "month", popular: true, features: [
+        { fr: "10 modifications de contenu / mois", en: "10 content edits / month", vi: "10 chỉnh sửa nội dung / tháng" },
+        { fr: "Maintenance et mises à jour", en: "Maintenance and updates", vi: "Bảo trì và cập nhật" },
+        { fr: "Support prioritaire", en: "Priority support", vi: "Hỗ trợ ưu tiên" },
+      ] },
+      { name: { fr: "WebCare · Illimité", en: "WebCare · Unlimited", vi: "WebCare · Không giới hạn" }, audience: { fr: "Modifications sans quota", en: "No edit quota", vi: "Không giới hạn chỉnh sửa" }, eur: 99, period: "month", features: [
+        { fr: "Modifications de contenu illimitées", en: "Unlimited content edits", vi: "Chỉnh sửa nội dung không giới hạn" },
+        { fr: "Maintenance et mises à jour", en: "Maintenance and updates", vi: "Bảo trì và cập nhật" },
+        { fr: "Support prioritaire selon périmètre", en: "Priority support within scope", vi: "Hỗ trợ ưu tiên theo phạm vi" },
+      ] },
+      { name: { fr: "Infrastructure annuelle", en: "Annual Infrastructure", vi: "Hạ tầng hàng năm" }, audience: { fr: "Hébergement + domaine + sécurité", en: "Hosting + domain + security", vi: "Hosting + tên miền + bảo mật" }, eur: 79, period: "year", features: [
+        { fr: "Hébergement", en: "Hosting", vi: "Hosting" },
+        { fr: "Nom de domaine", en: "Domain name", vi: "Tên miền" },
+        { fr: "Sécurité HTTPS / SSL", en: "HTTPS / SSL security", vi: "Bảo mật HTTPS / SSL" },
+      ] },
+    ],
+    serviceFaqs: [
       {
         q: {
           fr: "Quelle plateforme utilisez-vous ?",
@@ -1464,7 +1496,7 @@ export const SERVICES: Service[] = [
           },
           {
             fr: "SLA performance garanti",
-            en: "Guaranteed performance SLA",
+            en: "Performance SLA according to plan",
             vi: "SLA hiệu suất đảm bảo",
           },
         ],
@@ -1965,7 +1997,7 @@ const CORE_SHOWCASE = [
       en: "Artisanal e-commerce, sensory product pages, cohesive brand universe. Premium natural cosmetics.",
       vi: "TMĐT thủ công, trang sản phẩm cảm quan, vũ trụ thương hiệu nhất quán. Mỹ phẩm tự nhiên cao cấp.",
     },
-    metric: "+190% conversions",
+    metric: "Conversions à mesurer",
     image:
       "https://images.unsplash.com/photo-1596462502278-27bfdc403398?auto=format&fit=crop&q=85&w=1200",
   },
