@@ -218,8 +218,10 @@ export function QuoteConfiguratorCompact() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const requested = params.get("service");
-    if (requested && SERVICES.some((x) => x.id === requested)) {
-      setSelectedServices((current) => current.includes(requested) ? current : [requested]);
+    const normalized = requested === "ecommerce" ? "website" : requested;
+    if (normalized && SERVICES.some((x) => x.id === normalized)) {
+      if (requested === "ecommerce") setSituation("selling");
+      setSelectedServices((current) => current.includes(normalized) ? current : [normalized]);
       setStep(4);
     }
   }, []);
