@@ -865,9 +865,9 @@ export const UI: Record<string, L> = {
 
   // ── Intelligence Section Labels ──
   intelAdvisorActive: {
-    fr: "Conseiller Stratégique IA Actif · Réponses instantanées",
-    en: "AI Strategic Advisor Active · Instant responses",
-    vi: "Cố vấn Chiến lược AI Đang hoạt động · Phản hồi tức thì",
+    fr: "Conseiller Stratégique IA Actif · Analyse personnalisée",
+    en: "AI Strategic Advisor Active · Personalized analysis",
+    vi: "Cố vấn Chiến lược AI Đang hoạt động · Phân tích cá nhân hóa",
   },
   intelAuditTimer: {
     fr: "Audit & Estimation sous 60s",
@@ -875,9 +875,9 @@ export const UI: Record<string, L> = {
     vi: "Audit & Ước tính trong 60s",
   },
   intelAdvisorName: {
-    fr: "Julie · Stratège Digitale Senior",
-    en: "Julie · Senior Digital Strategist",
-    vi: "Julie · Chiến lược gia Digital Cấp cao",
+    fr: "XR Intelligence · Stratège Digitale",
+    en: "XR Intelligence · Digital Strategy",
+    vi: "XR Intelligence · Chiến lược số",
   },
   intelAdvisorSub: {
     fr: "XR Agency Paris & International",
