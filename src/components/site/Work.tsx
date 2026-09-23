@@ -101,7 +101,7 @@ export function Work() {
         <header className="grid items-end gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
           <div>
             <span className="label-mono text-[10px] uppercase tracking-[0.3em] text-primary">
-              PORTFOLIO · {SHOWCASE.length}+ WORKS
+              PORTFOLIO · {SHOWCASE.length} PROJECTS
             </span>
             <h2 className="display-serif mt-5 max-w-4xl text-5xl leading-[0.88] sm:text-7xl lg:text-[6.5rem]">
               {lang === "fr" && (
@@ -128,11 +128,11 @@ export function Work() {
             </h2>
             <p className="mt-6 max-w-lg text-sm leading-relaxed text-muted-foreground sm:text-base">
               {lang === "fr" &&
-                "Filtrez par secteur et par service. Chaque projet montre le type de prestation et le résultat — pour vous projeter concrètement."}
+                "Filtrez par secteur et par service. Chaque projet montre le type de prestation et le livrable — pour vous projeter concrètement."}
               {lang === "en" &&
-                "Filter by industry and service. Each project shows the type of work and the result — so you can project yourself clearly."}
+                "Filter by industry and service. Each project shows the type of work and deliverable — so you can project yourself clearly."}
               {lang === "vi" &&
-                "Lọc theo ngành và dịch vụ. Mỗi dự án hiển thị loại dịch vụ và kết quả — để bạn hình dung rõ ràng."}
+                "Lọc theo ngành và dịch vụ. Mỗi dự án hiển thị loại dịch vụ và hạng mục bàn giao — để bạn hình dung rõ ràng."}
             </p>
           </div>
           <div className="flex flex-col items-start justify-end gap-4 lg:items-end">
