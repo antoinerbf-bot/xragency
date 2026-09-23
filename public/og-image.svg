@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<rect width="1200" height="630" fill="#0b0b0b"/>
+<circle cx="940" cy="130" r="260" fill="#d6a35d" opacity=".12"/>
+<circle cx="1040" cy="540" r="340" fill="#d6a35d" opacity=".06"/>
+<text x="78" y="170" fill="#d6a35d" font-family="Arial, sans-serif" font-size="24" letter-spacing="8">XR AGENCY</text>
+<text x="78" y="290" fill="#f4efe6" font-family="Georgia, serif" font-size="82">Digital systems</text>
+<text x="78" y="385" fill="#f4efe6" font-family="Georgia, serif" font-size="82">built to perform.</text>
+<text x="80" y="455" fill="#a7a29a" font-family="Arial, sans-serif" font-size="24">Web · Branding · SEO · Local visibility · AI</text>
+<path d="M900 390l80 110 90-110h35l-105 145-105-145h35Z" fill="#f4efe6" opacity=".9"/>
+<circle cx="1078" cy="394" r="9" fill="#d6a35d"/>
+</svg>
