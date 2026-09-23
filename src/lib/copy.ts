@@ -242,7 +242,7 @@ export const UI: Record<string, L> = {
   mapsCompetitor: { fr: "Concurrent", en: "Competitor", vi: "Đối thủ" },
   mapsLocalPack: { fr: "Local Pack — TOP 3", en: "Local Pack — TOP 3", vi: "Local Pack — TOP 3" },
 
-  aiLabel: { fr: "Assistants IA 24/7", en: "AI Assistants 24/7", vi: "Trợ lý AI 24/7" },
+  aiLabel: { fr: "Assistants IA", en: "AI Assistants", vi: "Trợ lý AI" },
   aiCompare: {
     fr: "Humain vs Intelligence artificielle",
     en: "Human vs Artificial Intelligence",
@@ -447,8 +447,8 @@ export const UI: Record<string, L> = {
     vi: "Trao đổi qua WhatsApp",
   },
   resultsGuaranteed: {
-    fr: "Performance & satisfaction garanties",
-    en: "Guaranteed performance & satisfaction",
+    fr: "Performance et satisfaction suivies",
+    en: "Performance and satisfaction tracking",
     vi: "Cam kết hiệu suất & sự hài lòng",
   },
   featureComparison: {
@@ -853,9 +853,9 @@ export const UI: Record<string, L> = {
     vi: "Không thuế, không ràng buộc hợp đồng",
   },
   aboutPro4: {
-    fr: "Garantie de résultat et suivi continu en direct",
-    en: "Result guarantee and continuous live monitoring",
-    vi: "Đảm bảo kết quả và giám sát liên tục",
+    fr: "Objectifs définis et suivi transparent",
+    en: "Defined objectives and transparent monitoring",
+    vi: "Mục tiêu rõ ràng và theo dõi minh bạch",
   },
   aboutSimulateCta: {
     fr: "Simuler mon accompagnement externe",
