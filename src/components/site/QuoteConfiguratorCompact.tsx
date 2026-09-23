@@ -141,10 +141,13 @@ export function QuoteConfiguratorCompact() {
       const doc = new jsPDF();
 
       doc.setFontSize(20);
-      doc.text("XRAGENCY · DEVIS DIGITAL", 20, 22);
+      doc.text("XR AGENCY · DEVIS DIGITAL", 20, 22);
+      doc.setFontSize(9);
+      doc.text("KARMA SASU · contact.xragency@gmail.com · +33 7 67 56 67 83", 20, 29);
+      doc.text("https://xragencyai.com", 20, 35);
       doc.setFontSize(10);
 
-      let y = 52;
+      let y = 48;
       doc.setFontSize(12);
       doc.text("Informations société", 20, y);
       y += 8;
