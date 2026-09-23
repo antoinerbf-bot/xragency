@@ -15,7 +15,7 @@ export const CONTACT = {
   phone: "+33 7 67 56 67 83",
   instagram: "https://www.instagram.com/xragency_",
   linkedin: "https://linkedin.com/company/xragency",
-  cities: "Paris · Dubaï · Tokyo · New York",
+  cities: "France · Asie · International",
 };
 
 export type Plan = {
@@ -97,12 +97,12 @@ export const SERVICES: Service[] = [
     fromPeriod: "once",
     highlights: [
       {
-        fr: "Score PageSpeed 100/100",
+        fr: "Architecture optimisée et suivi des performances",
         en: "100/100 PageSpeed score",
         vi: "Điểm PageSpeed 100/100",
       },
-      { fr: "Chargement en moins de 2 s", en: "Under 2s load time", vi: "Tải trang dưới 2 giây" },
-      { fr: "200+ sites livrés", en: "200+ websites delivered", vi: "Hơn 200 website đã bàn giao" },
+      { fr: "Optimisation des performances et des médias", en: "Under 2s load time", vi: "Tải trang dưới 2 giây" },
+      { fr: "Expérience multi-secteurs", en: "200+ websites delivered", vi: "Hơn 200 website đã bàn giao" },
       { fr: "Hébergement 1 an inclus", en: "1 year hosting included", vi: "Bao gồm 1 năm lưu trữ" },
     ],
     steps: [
@@ -170,7 +170,7 @@ export const SERVICES: Service[] = [
         },
       },
       {
-        metric: "< 1.5s",
+        metric: "Selon environnement et contenu",
         label: { fr: "Temps d'affichage", en: "Display speed", vi: "Tốc độ hiển thị" },
         desc: {
           fr: "Zéro latence pour maximiser la rétention utilisateur.",
@@ -179,7 +179,7 @@ export const SERVICES: Service[] = [
         },
       },
       {
-        metric: "+48%",
+        metric: "Objectif de conversion à définir",
         label: { fr: "Taux de conversion", en: "Conversion rate", vi: "Tỷ lệ chuyển đổi" },
         desc: {
           fr: "Hausse moyenne des demandes générées.",
@@ -847,37 +847,37 @@ export const SERVICES: Service[] = [
   {
     id: "maps",
     num: "04",
-    title: { fr: "Google Maps TOP 3", en: "Google Maps TOP 3", vi: "Google Maps TOP 3" },
+    title: { fr: "Google Maps Top 3", en: "Google Maps Top 3", vi: "Google Maps Top 3" },
     short: {
-      fr: "Local pack, avis, photos. Le trafic qui appelle.",
+      fr: "Visibilité locale, fiche Google Business Profile, avis et signaux territoriaux.",
       en: "Local pack, reviews, photos. The traffic that calls.",
       vi: "Local pack, đánh giá, hình ảnh. Lưu lượng gọi đến.",
     },
     description: {
-      fr: "Positionnez votre établissement dans les 3 premiers résultats Google Maps et captez les clients qui recherchent activement vos services dans votre zone.",
+      fr: "Nous accompagnons votre établissement pour viser le Top 3 Google Maps. La stratégie est construite sur mesure selon votre positionnement actuel, votre zone, la concurrence et les mots-clés ciblés.",
       en: "Position your business in the top 3 Google Maps results and capture the customers actively searching for your services in your area.",
       vi: "Đưa doanh nghiệp của bạn vào TOP 3 kết quả Google Maps và thu hút khách hàng đang tìm kiếm dịch vụ trong khu vực.",
     },
-    fromEur: 999,
+    fromEur: 990,
     fromPeriod: "year",
     premium: true,
     highlights: [
       {
-        fr: "90 % des clics vont au TOP 3",
+        fr: "Objectif de visibilité locale",
         en: "90% of clicks go to the TOP 3",
         vi: "90% lượt nhấp thuộc về TOP 3",
       },
       {
-        fr: "+340 % d'appels en moyenne",
+        fr: "Suivi des appels et actions locales",
         en: "+340% calls on average",
         vi: "Trung bình +340% cuộc gọi",
       },
       {
-        fr: "+500 % de demandes d'itinéraire",
+        fr: "Suivi des actions d'itinéraire",
         en: "+500% direction requests",
         vi: "+500% yêu cầu chỉ đường",
       },
-      { fr: "Garantie TOP 3", en: "TOP 3 guarantee", vi: "Cam kết TOP 3" },
+      { fr: "Objectif Top 3 · sans garantie de position", en: "TOP 3 guarantee", vi: "Cam kết TOP 3" },
     ],
     steps: [
       {
@@ -1072,26 +1072,53 @@ export const SERVICES: Service[] = [
     fromPeriod: "month",
     plans: [
       {
-        name: { fr: "Plan de base", en: "Base Plan", vi: "Gói cơ bản" },
-        audience: { fr: "Tarif de base pour les petites entreprises", en: "Base pricing for small businesses", vi: "Giá cơ bản cho doanh nghiệp nhỏ" },
-        eur: 299,
-        period: "month",
-        popular: true,
-        features: []
+        name: { fr: "Présence Essentielle", en: "Essential Presence", vi: "Hiện diện Cơ bản" },
+        audience: { fr: "1 réseau · 8 publications / mois", en: "1 network · 8 posts / month", vi: "1 mạng · 8 bài / tháng" },
+        eur: 299, period: "month", features: [
+          { fr: "1 réseau social au choix", en: "1 social network of your choice", vi: "1 mạng xã hội tùy chọn" },
+          { fr: "8 publications / mois", en: "8 posts / month", vi: "8 posts / tháng" },
+          { fr: "Création des visuels et textes", en: "Visual and copy creation", vi: "Thiết kế hình ảnh và nội dung" },
+          { fr: "Planification des publications", en: "Content scheduling", vi: "Lên lịch nội dung" },
+          { fr: "Modération légère des commentaires", en: "Light comment moderation", vi: "Kiểm duyệt bình luận cơ bản" },
+        ]
+      },
+      {
+        name: { fr: "Croissance Active", en: "Active Growth", vi: "Tăng trưởng Chủ động" },
+        audience: { fr: "2 réseaux · 20 publications / mois", en: "2 networks · 20 posts / month", vi: "2 mạng · 20 bài / tháng" },
+        eur: 499, period: "month", popular: true, features: [
+          { fr: "2 réseaux sociaux au choix", en: "2 social networks of your choice", vi: "2 mạng xã hội tùy chọn" },
+          { fr: "20 publications / mois", en: "20 posts / month", vi: "20 bài / tháng" },
+          { fr: "Création visuelle et rédaction", en: "Visual creation and copywriting", vi: "Thiết kế và viết nội dung" },
+          { fr: "Stories et formats courts selon calendrier", en: "Stories and short formats according to schedule", vi: "Story và định dạng ngắn theo lịch" },
+          { fr: "Modération commentaires + réponses courantes", en: "Comment moderation + routine replies", vi: "Kiểm duyệt bình luận + trả lời thường quy" },
+          { fr: "Reporting mensuel", en: "Monthly reporting", vi: "Báo cáo hàng tháng" },
+        ]
+      },
+      {
+        name: { fr: "Domination Sociale", en: "Social Domination", vi: "Thống trị Mạng xã hội" },
+        audience: { fr: "3 réseaux · 30 publications / mois", en: "3 networks · 30 posts / month", vi: "3 mạng · 30 bài / tháng" },
+        eur: 699, period: "month", features: [
+          { fr: "3 réseaux sociaux au choix", en: "3 social networks of your choice", vi: "3 mạng xã hội tùy chọn" },
+          { fr: "30 publications / mois", en: "30 posts / month", vi: "30 bài / tháng" },
+          { fr: "Création, rédaction et planification", en: "Creation, copywriting and scheduling", vi: "Sáng tạo, viết và lên lịch" },
+          { fr: "Stories et formats courts selon calendrier", en: "Stories and short formats according to schedule", vi: "Story và định dạng ngắn theo lịch" },
+          { fr: "Modération renforcée des commentaires et messages courants", en: "Enhanced moderation of comments and routine messages", vi: "Kiểm duyệt nâng cao bình luận và tin nhắn thường quy" },
+          { fr: "Veille de communauté et reporting mensuel", en: "Community monitoring and monthly reporting", vi: "Theo dõi cộng đồng và báo cáo hàng tháng" },
+        ]
       }
     ],
     highlights: [
       {
-        fr: "+250 % d'engagement moyen",
+        fr: "Calendrier éditorial structuré",
         en: "+250% average engagement",
         vi: "Trung bình +250% tương tác",
       },
       {
-        fr: "+180 % de portée organique",
+        fr: "Production régulière de contenus",
         en: "+180% organic reach",
         vi: "+180% phạm vi tiếp cận tự nhiên",
       },
-      { fr: "+85 % de nouveaux abonnés", en: "+85% new followers", vi: "+85% người theo dõi mới" },
+      { fr: "Pilotage par objectifs", en: "+85% new followers", vi: "+85% người theo dõi mới" },
       {
         fr: "Calendrier validé à l'avance",
         en: "Calendar approved in advance",
@@ -1283,15 +1310,15 @@ export const SERVICES: Service[] = [
     fromEur: 29,
     fromPeriod: "month",
     highlights: [
-      { fr: "99,9 % d'uptime garanti", en: "99.9% guaranteed uptime", vi: "Cam kết uptime 99,9%" },
-      { fr: "Monitoring actif 24/7", en: "Active 24/7 monitoring", vi: "Giám sát chủ động 24/7" },
+      { fr: "Surveillance et maintenance selon formule", en: "99.9% guaranteed uptime", vi: "Cam kết uptime 99,9%" },
+      { fr: "Suivi technique selon formule", en: "Active 24/7 monitoring", vi: "Giám sát chủ động 24/7" },
       {
-        fr: "Intervention en moins de 4 h",
+        fr: "Priorité d'intervention selon formule",
         en: "Response in under 4h",
         vi: "Can thiệp trong dưới 4 giờ",
       },
       {
-        fr: "Engagement annuel = 2 mois offerts",
+        fr: "Infrastructure annuelle disponible séparément",
         en: "Yearly commitment = 2 months free",
         vi: "Cam kết theo năm = tặng 2 tháng",
       },
