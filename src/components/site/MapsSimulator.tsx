@@ -60,7 +60,7 @@ const PHASES = [
   { num: "04", name: "Optimisation GBP", title: "Restructuration Pro", desc: "Optimisation des catégories primaires/secondaires, géolocalisation des visuels HD, attributs clés et catalogue de services." },
   { num: "05", name: "Autorité Locale", title: "Signaux & Citations NAP", desc: "Déploiement de citations locales cohérentes (Nom, Adresse, Téléphone) et renforcement de votre crédibilité territoriale." },
   { num: "06", name: "Pilotage Actif", title: "Veille & Ajustements", desc: "Mises à jour stratégiques régulières, animation de posts géolocalisés et réponses optimisées aux avis clients." },
-  { num: "07", name: "Résultats & ROI", title: "Mesure transparente", desc: "Tableau de bord de suivi hebdomadaire des positions, hausse mesurée des appels téléphoniques et des itinéraires." },
+  { num: "07", name: "Résultats & ROI", title: "Mesure transparente", desc: "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire." },
 ];
 
 /* ── Animated price counter ── */
@@ -352,7 +352,7 @@ export function MapsSimulator() {
                 <div className="mt-4 flex flex-wrap gap-3 border-t border-primary/20 pt-4">
                   {[
                     { icon: CheckCircle2, text: "Audit initial offert" },
-                    { icon: CheckCircle2, text: "Contrat de résultat" },
+                    { icon: CheckCircle2, text: "Périmètre contractuel clair" },
                     { icon: CheckCircle2, text: "Rapport mensuel inclus" },
                     { icon: CheckCircle2, text: "Sans engagement minimum" },
                   ].map(({ icon: Icon, text }) => (
@@ -376,7 +376,7 @@ export function MapsSimulator() {
                 Le processus en 7 phases
               </h3>
               <p className="mt-2 text-sm text-muted-foreground max-w-xl mx-auto">
-                Une approche structurée, transparente et mesurable pour vous propulser dans le TOP 3 Google Maps.
+                Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.
               </p>
             </div>
 
