@@ -13,14 +13,16 @@ const DISPLAY_NUM: Record<string, string> = {
   maps: "04",
   social: "05",
   maintenance: "06",
+  ecommerce: "07",
 };
 const DISPLAY_PRICE: Record<string, number | null> = {
   websites: 499,
-  branding: null,
-  seo: null,
-  maps: null,
+  branding: 199,
+  seo: 299,
+  maps: 990,
   social: 299,
-  maintenance: null,
+  maintenance: 29,
+  ecommerce: 799,
 };
 
 const VILLA_IMG =
@@ -38,7 +40,7 @@ export function HomeServices() {
   return (
     <section
       id="homepage-services"
-      aria-label="Les six expertises XR Agency"
+      aria-label="Les sept offres XR Agency"
       className="relative overflow-hidden bg-[#07090b] py-20 text-white sm:py-28 lg:py-36"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,.07),transparent_35%),radial-gradient(circle_at_90%_45%,rgba(255,180,90,.07),transparent_32%)]" />
@@ -115,7 +117,7 @@ export function HomeServices() {
                           {startingPrice && (
                             <span className="rounded-full border border-white/15 bg-black/20 px-4 py-3 label-mono text-[9px] tracking-[0.12em] text-white/65 backdrop-blur-md">
                               À partir de {price(startingPrice)}
-                              {service.fromPeriod === "month" ? " / mois" : ""}
+                              {service.fromPeriod === "month" ? " / mois" : service.fromPeriod === "year" ? " / an" : ""}
                             </span>
                           )}
 
