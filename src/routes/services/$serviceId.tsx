@@ -215,6 +215,7 @@ function ServiceDetailPage() {
                     <Reveal delay={320}>
                       <div className="mt-10 flex flex-wrap items-center gap-4">
                         <EmberButton href="#plans">{t(UI.explorePacks)}</EmberButton>
+                        <EmberButton href={`/?service=${service.id}#quote`} variant="outline">Composer cette offre</EmberButton>
                         <a
                           href={waUrl}
                           target="_blank"
