@@ -449,7 +449,7 @@ export const UI: Record<string, L> = {
   resultsGuaranteed: {
     fr: "Performance et satisfaction suivies",
     en: "Performance and satisfaction tracking",
-    vi: "Cam kết hiệu suất & sự hài lòng",
+    vi: "Theo dõi hiệu suất & sự hài lòng",
   },
   featureComparison: {
     fr: "Critères d'évaluation",
@@ -473,9 +473,9 @@ export const UI: Record<string, L> = {
     vi: "Sẵn sàng bứt phá doanh nghiệp?",
   },
   contactUsNow: {
-    fr: "Contactez notre équipe senior dès aujourd'hui et recevez votre proposition d'intervention sous 24 h.",
-    en: "Contact our senior team today and receive your proposal within 24 hours.",
-    vi: "Liên hệ với đội ngũ chuyên gia của chúng tôi ngay hôm nay và nhận đề xuất trong vòng 24 giờ.",
+    fr: "Contactez notre équipe senior pour recevoir une proposition adaptée à votre projet.",
+    en: "Contact our senior team for a proposal tailored to your project.",
+    vi: "Liên hệ với đội ngũ chuyên gia để nhận đề xuất phù hợp với dự án của bạn.",
   },
 
   // ── Showcase / Portfolio ──
