@@ -98,11 +98,11 @@ export const SERVICES: Service[] = [
     highlights: [
       {
         fr: "Architecture optimisée et suivi des performances",
-        en: "100/100 PageSpeed score",
-        vi: "Điểm PageSpeed 100/100",
+        en: "Architecture optimisée PageSpeed score",
+        vi: "Điểm PageSpeed Architecture optimisée",
       },
       { fr: "Optimisation des performances et des médias", en: "Under 2s load time", vi: "Tải trang dưới 2 giây" },
-      { fr: "Expérience multi-secteurs", en: "200+ websites delivered", vi: "Hơn 200 website đã bàn giao" },
+      { fr: "Expérience multi-secteurs", en: "Multi-projets websites delivered", vi: "Hơn 200 website đã bàn giao" },
       { fr: "Hébergement 1 an inclus", en: "1 year hosting included", vi: "Bao gồm 1 năm lưu trữ" },
     ],
     steps: [
@@ -127,9 +127,9 @@ export const SERVICES: Service[] = [
           vi: "Phát triển Hiệu suất cao",
         },
         desc: {
-          fr: "Intégration d'architectures ultra-rapides, animations fluides et score Google PageSpeed 100/100.",
-          en: "Ultra-fast architecture engineering, smooth animations and 100/100 Google PageSpeed score.",
-          vi: "Lập trình kiến trúc siêu nhanh, hiệu ứng mượt mà và đạt điểm Google PageSpeed 100/100.",
+          fr: "Intégration d'architectures ultra-rapides, animations fluides et score Google PageSpeed Architecture optimisée.",
+          en: "Ultra-fast architecture engineering, smooth animations and Architecture optimisée Google PageSpeed score.",
+          vi: "Lập trình kiến trúc siêu nhanh, hiệu ứng mượt mà và đạt điểm Google PageSpeed Architecture optimisée.",
         },
       },
       {
@@ -161,7 +161,7 @@ export const SERVICES: Service[] = [
     ],
     metrics: [
       {
-        metric: "100/100",
+        metric: "Architecture optimisée",
         label: { fr: "Score PageSpeed", en: "PageSpeed Score", vi: "Điểm PageSpeed" },
         desc: {
           fr: "Chargement ultra-rapide sur mobile et desktop.",
@@ -869,13 +869,13 @@ export const SERVICES: Service[] = [
       },
       {
         fr: "Suivi des appels et actions locales",
-        en: "+340% calls on average",
-        vi: "Trung bình +340% cuộc gọi",
+        en: "Tracking of calls and local actions",
+        vi: "Theo dõi cuộc gọi và hành động địa phương",
       },
       {
         fr: "Suivi des actions d'itinéraire",
-        en: "+500% direction requests",
-        vi: "+500% yêu cầu chỉ đường",
+        en: "Tracking of direction requests",
+        vi: "Theo dõi yêu cầu chỉ đường",
       },
       { fr: "Objectif Top 3 · sans garantie de position", en: "TOP 3 guarantee", vi: "Cam kết TOP 3" },
     ],
@@ -1310,8 +1310,8 @@ export const SERVICES: Service[] = [
     fromEur: 29,
     fromPeriod: "month",
     highlights: [
-      { fr: "Surveillance et maintenance selon formule", en: "99.9% guaranteed uptime", vi: "Cam kết uptime 99,9%" },
-      { fr: "Suivi technique selon formule", en: "Active 24/7 monitoring", vi: "Giám sát chủ động 24/7" },
+      { fr: "Surveillance et maintenance selon formule", en: "Availability monitoring according to plan", vi: "Theo dõi khả dụng theo gói" },
+      { fr: "Suivi technique selon formule", en: "Monitoring according to plan", vi: "Giám sát theo gói" },
       {
         fr: "Priorité d'intervention selon formule",
         en: "Response in under 4h",
