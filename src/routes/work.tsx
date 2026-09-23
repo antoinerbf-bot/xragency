@@ -22,7 +22,7 @@ export const Route = createFileRoute("/work")({
   component: WorkPage,
 });
 
-function WorkPage() {
+export function WorkPage() {
   const [query, setQuery] = useState("");
   const [sector, setSector] = useState("all");
   const [service, setService] = useState("Tous");
