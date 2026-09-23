@@ -9,7 +9,7 @@ import { ServiceIllustration } from "./ServiceIllustration";
 import { cn } from "@/lib/utils";
 
 /* ── Premium service illustrations ── */
-/* ── Desktop: single service row ── */
+const CORE_SERVICE_IDS = ["websites", "branding", "seo", "maps", "social", "maintenance", "ecommerce"] as const;\n\n/* ── Desktop: single service row ── */
 function ServiceRow({
   s,
   isActive,
@@ -152,7 +152,7 @@ export function Services() {
           <div className="mt-14 hidden overflow-hidden rounded-3xl border border-border/60 lg:grid lg:grid-cols-[1fr_38%]">
             {/* Left — numbered list */}
             <div className="divide-y divide-border/40 bg-card/20">
-              {SERVICES.filter((s) => ["websites","branding","seo","maps","social","maintenance","ecommerce"].includes(s.id)).map((s) => (
+              {SERVICES.filter((s) => CORE_SERVICE_IDS.includes(s.id as (typeof CORE_SERVICE_IDS)[number])).map((s) => (
                 <ServiceRow
                   key={s.id}
                   s={s}
@@ -172,7 +172,7 @@ export function Services() {
                   key={`num-${activeId}`}
                   className="label-mono text-[10px] text-white/40 animate-fade-up"
                 >
-                  {activeService.num} · {String(SERVICES.length).padStart(2, "0")}
+                  {activeService.num} · {String(CORE_SERVICE_IDS.length).padStart(2, "0")}
                 </span>
                 <h4
                   key={`ttl-${activeId}`}
