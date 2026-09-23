@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Route as WorkRoute } from "./work";
+import { WorkPage } from "./work";
 
 export const Route = createFileRoute("/realisations")({
   head: () => ({
@@ -10,5 +10,5 @@ export const Route = createFileRoute("/realisations")({
     ],
     links: [{ rel: "canonical", href: "https://xragencyai.com/realisations" }],
   }),
-  component: WorkRoute.options.component!,
+  component: WorkPage,
 });
