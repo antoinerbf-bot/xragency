@@ -23,38 +23,6 @@ import { AddToCartBtn } from "@/components/site/Cart";
 import { cn } from "@/lib/utils";
 import { ServiceIllustration } from "@/components/site/ServiceIllustration";
 
-const IMG_WEBSITES =
-  "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1600&q=85";
-const IMG_BRANDING =
-  "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?auto=format&fit=crop&w=1600&q=85";
-const IMG_SEO =
-  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=85";
-const IMG_MAPS =
-  "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1600&q=85";
-const IMG_SOCIAL =
-  "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=1600&q=85";
-const IMG_MAINTENANCE =
-  "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=85";
-const IMG_AI =
-  "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1600&q=85";
-
-const SERVICE_IMAGES: Record<string, string> = {
-  websites: IMG_WEBSITES,
-  branding: IMG_BRANDING,
-  seo: IMG_SEO,
-  maps: IMG_MAPS,
-  social: IMG_SOCIAL,
-  maintenance: IMG_MAINTENANCE,
-  ai: IMG_AI,
-  ecommerce:
-    "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=85",
-  refonte:
-    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=85",
-  ads: "https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=1600&q=85",
-  strategy:
-    "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1600&q=85",
-};
-
 /* ── Human-friendly slug aliases mapping ── */
 const SERVICE_ALIASES: Record<string, string> = {
   "seo-domination": "seo",
