@@ -45,14 +45,14 @@ export const UI: Record<string, L> = {
   ctaContinue: { fr: "Continuer", en: "Continue", vi: "Tiếp tục" },
 
   trustBarLabel: {
-    fr: "Ils nous ont fait confiance",
-    en: "Trusted by leading brands",
-    vi: "Được các thương hiệu tin tưởng",
+    fr: "XR Agency · projets & expertise",
+    en: "XR Agency · projects & expertise",
+    vi: "XR Agency · dự án & chuyên môn",
   },
   trustBarClients: {
-    fr: "+500 projets livrés · 8 pays · 4 continents",
-    en: "500+ projects delivered · 8 countries · 4 continents",
-    vi: "Hơn 500 dự án bàn giao · 8 quốc gia · 4 châu lục",
+    fr: "Projets internationaux · FR / EN / VI",
+    en: "International projects · FR / EN / VI",
+    vi: "Dự án quốc tế · FR / EN / VI",
   },
   statProjects: { fr: "Projets livrés", en: "Projects delivered", vi: "Dự án bàn giao" },
   statYears: { fr: "Années d'expertise", en: "Years of expertise", vi: "Năm kinh nghiệm" },
@@ -604,9 +604,9 @@ export const UI: Record<string, L> = {
     vi: "Thông tin pháp lý",
   },
   ctaReassurance: {
-    fr: "Réponse sous 2h · FR / EN / VI · Sans engagement",
-    en: "Reply within 2h · FR / EN / VI · No commitment",
-    vi: "Phản hồi trong 2h · FR / EN / VI · Không cam kết",
+    fr: "Réponse rapide · FR / EN / VI · Sans engagement",
+    en: "Fast response · FR / EN / VI · No commitment",
+    vi: "Phản hồi nhanh · FR / EN / VI · Không cam kết",
   },
 
   // ── SaaS Dashboard ──
