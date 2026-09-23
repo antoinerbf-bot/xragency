@@ -690,7 +690,7 @@ export const SERVICES: Service[] = [
         },
       },
       {
-        metric: "TOP 10",
+        metric: "Objectif de positionnement",
         label: { fr: "Mots-clés cibles", en: "Target keywords", vi: "Từ khóa mục tiêu" },
         desc: {
           fr: "Positionnement en première page Google.",
@@ -1091,349 +1091,7 @@ export const SERVICES: Service[] = [
         },
       },
     ],
-    metrics: [
-      {
-        metric: "99.9%",
-        label: { fr: "Disponibilité serveur", en: "Server uptime", vi: "Thời gian hoạt động" },
-        desc: {
-          fr: "Infrastructure cloud haute résilience.",
-          en: "High-resilience cloud infrastructure.",
-          vi: "Hạ tầng đám mây độ tin cậy cao.",
-        },
-      },
-      {
-        metric: "< 4h",
-        label: { fr: "Délai d'intervention", en: "Response time", vi: "Thời gian phản hồi" },
-        desc: {
-          fr: "Prise en charge rapide pour les forfaits Pro.",
-          en: "Fast emergency turnaround for Pro tiers.",
-          vi: "Xử lý khẩn cấp nhanh chóng cho gói Pro.",
-        },
-      },
-      {
-        metric: "100%",
-        label: {
-          fr: "Sauvegardes automatiques",
-          en: "Automated backups",
-          vi: "Sao lưu tự động 100%",
-        },
-        desc: {
-          fr: "Restauration en un clic en cas d'incident.",
-          en: "One-click rollback in case of any incident.",
-          vi: "Khôi phục một chạm khi có bất kỳ sự cố nào.",
-        },
-      },
-    ],
-    comparisons: [
-      {
-        feature: { fr: "Temps de réaction", en: "Reaction time", vi: "Thời gian xử lý" },
-        us: {
-          fr: "Intervention sous 4h à 24h avec SLA clair",
-          en: "Turnaround in under 4h to 24h with clear SLA",
-          vi: "Xử lý trong 4h đến 24h với cam kết rõ ràng",
-        },
-        them: {
-          fr: "Délais incertains de plusieurs jours",
-          en: "Uncertain delays lasting several days",
-          vi: "Thời gian chậm trễ kéo dài nhiều ngày",
-        },
-      },
-      {
-        feature: { fr: "Sauvegardes", en: "Backups", vi: "Sao lưu" },
-        us: {
-          fr: "Sauvegardes quotidiennes externalisées",
-          en: "Daily isolated off-site backups",
-          vi: "Sao lưu tự động hàng ngày độc lập",
-        },
-        them: {
-          fr: "Aucune sauvegarde ou hébergée au même endroit",
-          en: "No backups or stored on the same broken server",
-          vi: "Không có sao lưu hoặc lưu cùng máy chủ hỏng",
-        },
-      },
-      {
-        feature: { fr: "Inclus", en: "Inclusions", vi: "Quyền lợi bao gồm" },
-        us: {
-          fr: "Modifications de contenu et support inclus",
-          en: "Content updates and continuous support included",
-          vi: "Bao gồm chỉnh sửa nội dung và hỗ trợ liên tục",
-        },
-        them: {
-          fr: "Facturation au tarif horaire à chaque demande",
-          en: "High hourly rate billed for every small request",
-          vi: "Thu phí theo giờ cho từng yêu cầu nhỏ",
-        },
-      },
-    ],
-    plans: [
-      {
-        name: { fr: "Essential", en: "Essential", vi: "Essential" },
-        eur: 29,
-        period: "month",
-        features: [
-          { fr: "Mises à jour de sécurité", en: "Security updates", vi: "Cập nhật bảo mật" },
-          { fr: "Sauvegardes régulières", en: "Regular backups", vi: "Sao lưu định kỳ" },
-          { fr: "Support par e-mail", en: "Email support", vi: "Hỗ trợ qua e-mail" },
-        ],
-      },
-      {
-        name: { fr: "Business", en: "Business", vi: "Business" },
-        eur: 59,
-        period: "month",
-        popular: true,
-        features: [
-          { fr: "Modifications de contenu", en: "Content edits", vi: "Chỉnh sửa nội dung" },
-          { fr: "Support prioritaire", en: "Priority support", vi: "Hỗ trợ ưu tiên" },
-          { fr: "Sauvegarde quotidienne", en: "Daily backup", vi: "Sao lưu hàng ngày" },
-        ],
-      },
-      {
-        name: { fr: "Illimité", en: "Unlimited", vi: "Không giới hạn" },
-        eur: 99,
-        period: "month",
-        features: [
-          { fr: "Modifications illimitées", en: "Unlimited edits", vi: "Chỉnh sửa không giới hạn" },
-          {
-            fr: "+1 article SEO par mois",
-            en: "+1 SEO article per month",
-            vi: "+1 bài viết SEO mỗi tháng",
-          },
-          { fr: "SLA prioritaire", en: "Priority SLA", vi: "SLA ưu tiên" },
-        ],
-      },
-      {
-        name: {
-          fr: "Infrastructure annuelle",
-          en: "Yearly Infrastructure",
-          vi: "Hạ tầng theo năm",
-        },
-        audience: {
-          fr: "Hébergement + domaine + SSL + e-mails",
-          en: "Hosting + domain + SSL + emails",
-          vi: "Lưu trữ + tên miền + SSL + e-mail",
-        },
-        eur: 79,
-        period: "year",
-        features: [
-          {
-            fr: "Hébergement haute performance",
-            en: "High-performance hosting",
-            vi: "Lưu trữ hiệu suất cao",
-          },
-          { fr: "Nom de domaine inclus", en: "Domain name included", vi: "Bao gồm tên miền" },
-          {
-            fr: "Certificat SSL (HTTPS)",
-            en: "SSL certificate (HTTPS)",
-            vi: "Chứng chỉ SSL (HTTPS)",
-          },
-          { fr: "E-mails professionnels", en: "Professional emails", vi: "E-mail doanh nghiệp" },
-          { fr: "Support technique", en: "Technical support", vi: "Hỗ trợ kỹ thuật" },
-        ],
-      },
-    ],
-  },
-
-  /* ── 08 · E-commerce ── */
-  {
-    id: "ecommerce",
-    num: "08",
-    title: { fr: "E-commerce", en: "E-commerce", vi: "Thương mại điện tử" },
-    short: {
-      fr: "Boutiques en ligne performantes, conçues pour convertir.",
-      en: "High-performing online stores, built to convert.",
-      vi: "Cửa hàng trực tuyến hiệu suất cao, thiết kế để chuyển đổi.",
-    },
-    description: {
-      fr: "Nous créons des boutiques en ligne sur mesure qui transforment les visiteurs en acheteurs : design premium, fiches produit sensorielles, tunnel de conversion optimisé et intégration logistique.",
-      en: "We build bespoke online stores that turn visitors into buyers: premium design, sensory product pages, optimised conversion funnels and logistics integration.",
-      vi: "Chúng tôi tạo cửa hàng trực tuyến riêng biệt biến khách truy cập thành người mua: thiết kế cao cấp, trang sản phẩm cảm quan, phễu chuyển đổi tối ưu và tích hợp vận hành.",
-    },
-    fromEur: 799,
-    fromPeriod: "once",
-    highlights: [
-      { fr: "Shopify & WooCommerce", en: "Shopify & WooCommerce", vi: "Shopify & WooCommerce" },
-      { fr: "Tunnel de conversion", en: "Conversion funnel", vi: "Phễu chuyển đổi" },
-      { fr: "Paiement sécurisé", en: "Secure payments", vi: "Thanh toán bảo mật" },
-      { fr: "Suivi logistique", en: "Logistics tracking", vi: "Theo dõi vận chuyển" },
-    ],
-    steps: [
-      {
-        num: "01",
-        title: {
-          fr: "Atelier Produit & Marque",
-          en: "Product & Brand Workshop",
-          vi: "Workshop Sản phẩm & Thương hiệu",
-        },
-        desc: {
-          fr: "Définition de l'univers de marque, de la gamme de produits et de l'expérience d'achat cible.",
-          en: "Brand universe, product range and target shopping experience definition.",
-          vi: "Xác định vũ trụ thương hiệu, dòng sản phẩm và trải nghiệm mua sắm mục tiêu.",
-        },
-      },
-      {
-        num: "02",
-        title: {
-          fr: "Design & Architecture",
-          en: "Design & Architecture",
-          vi: "Thiết kế & Kiến trúc",
-        },
-        desc: {
-          fr: "Conception de l'interface, des fiches produit et du parcours d'achat optimisé pour le mobile.",
-          en: "Interface design, product pages and mobile-first purchase journey.",
-          vi: "Thiết kế giao diện, trang sản phẩm và hành trình mua sắm ưu tiên di động.",
-        },
-      },
-      {
-        num: "03",
-        title: {
-          fr: "Développement & Intégrations",
-          en: "Development & Integrations",
-          vi: "Phát triển & Tích hợp",
-        },
-        desc: {
-          fr: "Intégration CMS, passerelles de paiement, logistique et outils marketing.",
-          en: "CMS integration, payment gateways, logistics and marketing tools.",
-          vi: "Tích hợp CMS, cổng thanh toán, vận chuyển và công cụ marketing.",
-        },
-      },
-      {
-        num: "04",
-        title: {
-          fr: "Lancement & Optimisation",
-          en: "Launch & Optimization",
-          vi: "Ra mắt & Tối ưu",
-        },
-        desc: {
-          fr: "Tests A/B, suivi des performances et itérations continues pour maximiser les ventes.",
-          en: "A/B testing, performance tracking and continuous iteration to maximise sales.",
-          vi: "Thử nghiệm A/B, theo dõi hiệu suất và cải tiến liên tục để tối đa doanh số.",
-        },
-      },
-    ],
-    metrics: [
-      {
-        metric: "+190%",
-        label: { fr: "Taux de conversion", en: "Conversion rate", vi: "Tỷ lệ chuyển đổi" },
-        desc: {
-          fr: "Optimisation continue du parcours d'achat.",
-          en: "Continuous purchase journey optimization.",
-          vi: "Tối ưu liên tục hành trình mua sắm.",
-        },
-      },
-      {
-        metric: "< 2s",
-        label: { fr: "Temps de chargement", en: "Load time", vi: "Thời gian tải" },
-        desc: {
-          fr: "Performance maximale pour zéro abandon.",
-          en: "Maximum performance for zero abandonment.",
-          vi: "Hiệu suất tối đa, không bỏ lỡ đơn hàng.",
-        },
-      },
-    ],
-    comparisons: [
-      {
-        feature: { fr: "Expérience d'achat", en: "Shopping experience", vi: "Trải nghiệm mua sắm" },
-        us: {
-          fr: "Immersion éditoriale premium",
-          en: "Premium editorial immersion",
-          vi: "Trải nghiệm biên tập cao cấp",
-        },
-        them: {
-          fr: "Template générique sans âme",
-          en: "Soulless generic template",
-          vi: "Mẫu chung không có hồn",
-        },
-      },
-      {
-        feature: { fr: "Performance", en: "Performance", vi: "Hiệu suất" },
-        us: {
-          fr: "Core Web Vitals au vert",
-          en: "All Core Web Vitals green",
-          vi: "Tất cả Core Web Vitals đạt chuẩn",
-        },
-        them: {
-          fr: "Lenteur et abandons",
-          en: "Slow and high abandonment",
-          vi: "Chậm và tỷ lệ bỏ cao",
-        },
-      },
-    ],
-    plans: [
-      {
-        name: { fr: "Starter", en: "Starter", vi: "Khởi đầu" },
-        audience: {
-          fr: "TPE & artisans",
-          en: "Small businesses & artisans",
-          vi: "Doanh nghiệp nhỏ & nghệ nhân",
-        },
-        eur: 799,
-        period: "once",
-        features: [
-          {
-            fr: "Boutique Shopify/WooCommerce",
-            en: "Shopify/WooCommerce store",
-            vi: "Cửa hàng Shopify/WooCommerce",
-          },
-          { fr: "Jusqu'à 50 produits", en: "Up to 50 products", vi: "Tối đa 50 sản phẩm" },
-          { fr: "Paiement en ligne", en: "Online payments", vi: "Thanh toán trực tuyến" },
-          { fr: "Design responsive", en: "Responsive design", vi: "Thiết kế responsive" },
-          { fr: "SEO de base", en: "Basic SEO", vi: "SEO cơ bản" },
-        ],
-      },
-      {
-        name: { fr: "Growth", en: "Growth", vi: "Tăng trưởng" },
-        audience: {
-          fr: "Marques en croissance",
-          en: "Growing brands",
-          vi: "Thương hiệu đang phát triển",
-        },
-        eur: 1499,
-        period: "month",
-        popular: true,
-        features: [
-          { fr: "Tout Starter +", en: "Everything in Starter +", vi: "Tất cả Khởi đầu +" },
-          { fr: "Produits illimités", en: "Unlimited products", vi: "Sản phẩm không giới hạn" },
-          {
-            fr: "Tunnel de conversion avancé",
-            en: "Advanced conversion funnel",
-            vi: "Phễu chuyển đổi nâng cao",
-          },
-          {
-            fr: "Email marketing intégré",
-            en: "Integrated email marketing",
-            vi: "Email marketing tích hợp",
-          },
-          { fr: "Analytics avancés", en: "Advanced analytics", vi: "Phân tích nâng cao" },
-          { fr: "Support prioritaire", en: "Priority support", vi: "Hỗ trợ ưu tiên" },
-        ],
-      },
-      {
-        name: { fr: "Enterprise", en: "Enterprise", vi: "Doanh nghiệp" },
-        audience: {
-          fr: "Marques établies",
-          en: "Established brands",
-          vi: "Thương hiệu đã khẳng định",
-        },
-        eur: 2999,
-        period: "month",
-        features: [
-          { fr: "Tout Growth +", en: "Everything in Growth +", vi: "Tất cả Tăng trưởng +" },
-          {
-            fr: "Multi-boutique / multi-langue",
-            en: "Multi-store / multi-language",
-            vi: "Đa cửa hàng / đa ngôn ngữ",
-          },
-          { fr: "ERP & CRM integration", en: "ERP & CRM integration", vi: "Tích hợp ERP & CRM" },
-          {
-            fr: "Account manager dédié",
-            en: "Dedicated account manager",
-            vi: "Quản lý tài khoản riêng",
-          },
-          { fr: "SLA garanti", en: "Guaranteed SLA", vi: "SLA đảm bảo" },
-        ],
-      },
-    ],
-    serviceFaqs: [
+    metrics: [\n      { metric: "79 € / an", label: { fr: "Infrastructure", en: "Infrastructure", vi: "Hạ tầng" }, desc: { fr: "Hébergement + domaine + sécurité.", en: "Hosting + domain + security.", vi: "Hosting + tên miền + bảo mật." } },\n      { metric: "29 € / mois", label: { fr: "4 modifications", en: "4 edits", vi: "4 chỉnh sửa" }, desc: { fr: "Maintenance courante du site.", en: "Routine website maintenance.", vi: "Bảo trì website thường xuyên." } },\n      { metric: "49 € / mois", label: { fr: "10 modifications", en: "10 edits", vi: "10 chỉnh sửa" }, desc: { fr: "Pour les besoins de contenu plus fréquents.", en: "For more frequent content needs.", vi: "Cho nhu cầu nội dung thường xuyên hơn." } },\n    ],\n    comparisons: [\n      { feature: { fr: "Infrastructure", en: "Infrastructure", vi: "Hạ tầng" }, us: { fr: "79 € / an · hébergement + domaine + sécurité", en: "€79 / year · hosting + domain + security", vi: "79 € / năm · hosting + tên miền + bảo mật" }, them: { fr: "Facturée séparément selon le fournisseur", en: "Billed separately depending on provider", vi: "Tính riêng tùy nhà cung cấp" } },\n      { feature: { fr: "Modifications", en: "Edits", vi: "Chỉnh sửa" }, us: { fr: "4, 10 ou illimité selon la formule", en: "4, 10 or unlimited according to plan", vi: "4, 10 hoặc không giới hạn theo gói" }, them: { fr: "Interventions ponctuelles", en: "Ad-hoc interventions", vi: "Can thiệp từng lần" } },\n      { feature: { fr: "Continuité", en: "Continuity", vi: "Liên tục" }, us: { fr: "Sécurité, sauvegardes et suivi selon formule", en: "Security, backups and monitoring according to plan", vi: "Bảo mật, sao lưu và giám sát theo gói" }, them: { fr: "Maintenance non structurée", en: "Unstructured maintenance", vi: "Bảo trì không có cấu trúc" } },\n    ],\n    plans: [\n      { name: { fr: "WebCare · 4 modifications", en: "WebCare · 4 edits", vi: "WebCare · 4 chỉnh sửa" }, audience: { fr: "Maintenance courante", en: "Routine maintenance", vi: "Bảo trì thường xuyên" }, eur: 29, period: "month", features: [\n        { fr: "4 modifications de contenu / mois", en: "4 content edits / month", vi: "4 chỉnh sửa nội dung / tháng" },\n        { fr: "Mises à jour et maintenance courante", en: "Updates and routine maintenance", vi: "Cập nhật và bảo trì thường xuyên" },\n        { fr: "Sauvegardes et surveillance selon périmètre", en: "Backups and monitoring within scope", vi: "Sao lưu và giám sát theo phạm vi" },\n      ] },\n      { name: { fr: "WebCare · 10 modifications", en: "WebCare · 10 edits", vi: "WebCare · 10 chỉnh sửa" }, audience: { fr: "Accompagnement renforcé", en: "Enhanced support", vi: "Hỗ trợ tăng cường" }, eur: 49, period: "month", popular: true, features: [\n        { fr: "10 modifications de contenu / mois", en: "10 content edits / month", vi: "10 chỉnh sửa nội dung / tháng" },\n        { fr: "Maintenance et mises à jour", en: "Maintenance and updates", vi: "Bảo trì và cập nhật" },\n        { fr: "Support prioritaire", en: "Priority support", vi: "Hỗ trợ ưu tiên" },\n      ] },\n      { name: { fr: "WebCare · Illimité", en: "WebCare · Unlimited", vi: "WebCare · Không giới hạn" }, audience: { fr: "Modifications sans quota", en: "No edit quota", vi: "Không giới hạn chỉnh sửa" }, eur: 99, period: "month", features: [\n        { fr: "Modifications de contenu illimitées", en: "Unlimited content edits", vi: "Chỉnh sửa nội dung không giới hạn" },\n        { fr: "Maintenance et mises à jour", en: "Maintenance and updates", vi: "Bảo trì và cập nhật" },\n        { fr: "Support prioritaire selon périmètre", en: "Priority support within scope", vi: "Hỗ trợ ưu tiên theo phạm vi" },\n      ] },\n      { name: { fr: "Infrastructure annuelle", en: "Annual Infrastructure", vi: "Hạ tầng hàng năm" }, audience: { fr: "Hébergement + domaine + sécurité", en: "Hosting + domain + security", vi: "Hosting + tên miền + bảo mật" }, eur: 79, period: "year", features: [\n        { fr: "Hébergement", en: "Hosting", vi: "Hosting" },\n        { fr: "Nom de domaine", en: "Domain name", vi: "Tên miền" },\n        { fr: "Sécurité HTTPS / SSL", en: "HTTPS / SSL security", vi: "Bảo mật HTTPS / SSL" },\n      ] },\n    ],\n    serviceFaqs: [
       {
         q: {
           fr: "Quelle plateforme utilisez-vous ?",
@@ -1485,7 +1143,7 @@ export const SERVICES: Service[] = [
         vi: "Chuyển đổi không mất SEO",
       },
       { fr: "Design system moderne", en: "Modern design system", vi: "Hệ thống thiết kế hiện đại" },
-      { fr: "Performance x2", en: "2x performance", vi: "Hiệu suất x2" },
+      { fr: "Performance à mesurer", en: "Performance to be measured", vi: "Hiệu suất cần đo lường" },
     ],
     steps: [
       {
@@ -1535,7 +1193,7 @@ export const SERVICES: Service[] = [
     ],
     metrics: [
       {
-        metric: "+240%",
+        metric: "Parcours optimisé",
         label: {
           fr: "Amélioration conversion",
           en: "Conversion improvement",
@@ -1548,7 +1206,7 @@ export const SERVICES: Service[] = [
         },
       },
       {
-        metric: "x2.5",
+        metric: "Selon environnement",
         label: { fr: "Performance", en: "Performance boost", vi: "Tăng hiệu suất" },
         desc: {
           fr: "Vitesse de chargement multipliée par 2,5.",
@@ -1652,7 +1310,7 @@ export const SERVICES: Service[] = [
     highlights: [
       { fr: "Google Ads & Meta Ads", en: "Google Ads & Meta Ads", vi: "Google Ads & Meta Ads" },
       { fr: "A/B testing continu", en: "Continuous A/B testing", vi: "Thử nghiệm A/B liên tục" },
-      { fr: "ROAS > 4x", en: "ROAS > 4x", vi: "ROAS > 4x" },
+      { fr: "Pilotage orienté ROI", en: "ROI-focused management", vi: "Quản lý tập trung vào ROI" },
       { fr: "Reporting mensuel", en: "Monthly reporting", vi: "Báo cáo hàng tháng" },
     ],
     steps: [
@@ -2070,8 +1728,8 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
   {
     category: "seo",
     q: {
-      fr: "Comment fonctionne la garantie Google Maps TOP 3 ?",
-      en: "How does the Google Maps TOP 3 guarantee work?",
+      fr: "Comment fonctionne l’accompagnement Google Maps Top 3 ?",
+      en: "How does the Google Maps Top 3 service work?",
       vi: "Cam kết Google Maps TOP 3 hoạt động như thế nào?",
     },
     a: {
@@ -2239,7 +1897,7 @@ const CORE_SHOWCASE = [
       en: "Interactive menu, dark editorial ambiance, online booking. 1-star gastronomic restaurant.",
       vi: "Thực đơn tương tác, không gian biên tập tối, đặt bàn trực tuyến. Nhà hàng ẩm thực 1 sao.",
     },
-    metric: "+180% réservations",
+    metric: "Suivi des réservations",
     image:
       "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=85&w=1200",
   },
@@ -2359,7 +2017,7 @@ const CORE_SHOWCASE = [
       en: "Conversion funnel, event registration, online program sales. Executive leadership coaching.",
       vi: "Phễu chuyển đổi, đăng ký sự kiện, bán chương trình trực tuyến. Huấn luyện lãnh đạo điều hành.",
     },
-    metric: "+180% ventes",
+    metric: "Suivi des ventes",
     image:
       "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=85&w=1200",
   },
