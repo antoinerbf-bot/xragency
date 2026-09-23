@@ -81,7 +81,7 @@ function ServiceRow({
             isActive ? "text-background/75" : "text-primary",
           )}
         >
-          Dès {price(s.fromEur)}
+          Dès {price(s.fromEur)}{s.fromPeriod === "month" ? " / mois" : s.fromPeriod === "year" ? " / an" : ""}
         </span>
         <span
           className={cn(
