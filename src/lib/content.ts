@@ -1245,7 +1245,7 @@ export const SERVICES: Service[] = [
         label: { fr: "Performance", en: "Performance boost", vi: "Tăng hiệu suất" },
         desc: {
           fr: "Vitesse de chargement multipliée par 2,5.",
-          en: "Load speed multiplied by 2.5x.",
+          en: "Load speed depends on the environment and content.",
           vi: "Tốc độ tải tăng gấp 2,5 lần.",
         },
       },
@@ -1396,7 +1396,7 @@ export const SERVICES: Service[] = [
     ],
     metrics: [
       {
-        metric: "> 4x",
+        metric: "Pilotage orienté ROI",
         label: { fr: "ROAS moyen", en: "Average ROAS", vi: "ROAS trung bình" },
         desc: {
           fr: "Retour sur investissement publicitaire.",
@@ -1405,7 +1405,7 @@ export const SERVICES: Service[] = [
         },
       },
       {
-        metric: "-35%",
+        metric: "Coût d’acquisition à mesurer",
         label: { fr: "Coût par lead", en: "Cost per lead", vi: "Chi phí mỗi lead" },
         desc: {
           fr: "Réduction du coût d'acquisition.",
@@ -1498,7 +1498,7 @@ export const SERVICES: Service[] = [
             vi: "Studio sáng tạo bao gồm",
           },
           {
-            fr: "SLA performance garanti",
+            fr: "SLA selon formule",
             en: "Performance SLA according to plan",
             vi: "SLA hiệu suất đảm bảo",
           },
@@ -1577,7 +1577,7 @@ export const SERVICES: Service[] = [
     ],
     metrics: [
       {
-        metric: "+3,2x",
+        metric: "ROI à mesurer",
         label: { fr: "ROI moyen", en: "Average ROI", vi: "ROI trung bình" },
         desc: {
           fr: "Retour sur investissement mesurable.",
@@ -1781,8 +1781,8 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
       vi: "Giá Google Maps được tính như thế nào?",
     },
     a: {
-      fr: "Il dépend de votre secteur, de votre ville et du niveau de concurrence. Nous analysons ces critères et vous transmettons un devis personnalisé sous 24 h.",
-      en: "It depends on your sector, your city and the level of competition. We analyse these criteria and send you a tailored quote within 24 hours.",
+      fr: "Il dépend de votre secteur, de votre ville et du niveau de concurrence. Nous analysons ces critères avant de vous transmettre un devis personnalisé.",
+      en: "It depends on your sector, city and competition. We analyse these criteria before sending a tailored quote.",
       vi: "Phụ thuộc vào ngành nghề, thành phố và mức độ cạnh tranh. Chúng tôi phân tích các tiêu chí này và gửi báo giá riêng trong vòng 24 giờ.",
     },
   },
@@ -1821,7 +1821,7 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
     },
     a: {
       fr: "L'IA traite 90 % des questions récurrentes (horaires, tarifs, rendez-vous). Les demandes complexes sont transférées à un humain. C'est un complément, pas un remplacement.",
-      en: "AI handles 90% of recurring questions (opening hours, pricing, appointments). Complex requests are handed over to a human. It is a complement, not a replacement.",
+      en: "AI can automate recurring questions such as opening hours, pricing and appointments. Complex requests can be handed over to a human.",
       vi: "AI xử lý 90% câu hỏi lặp lại (giờ mở cửa, giá, lịch hẹn). Yêu cầu phức tạp sẽ chuyển cho con người. Đây là sự bổ trợ, không phải thay thế.",
     },
   },
