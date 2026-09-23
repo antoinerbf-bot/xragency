@@ -36,7 +36,7 @@ export const Route = createFileRoute("/api/audit")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          const body = await request.json() as { url?: string; type?: string; types?: string[] };
+          const body = await request.json() as { url?: string; type?: string; types?: string[]; sector?: string; budget?: string };
           if (!body.url) return Response.json({ error: "URL requise." }, { status: 400 });
           const raw = body.url.trim().startsWith("http") ? body.url.trim() : "https://" + body.url.trim();
           const target = new URL(raw);
