@@ -158,6 +158,7 @@ function ServiceDetailPage() {
 
   // WhatsApp link with customized message for this service
   const planForWa = service.plans[selectedPlanIndex];
+  const isCustomMaps = service.id === "maps";
   const isInstWa = installmentSelections[selectedPlanIndex] ?? false;
   const planIsInstallmentWa = service.id === "websites" && isInstWa && planForWa?.period === "once";
   
@@ -391,7 +392,7 @@ function ServiceDetailPage() {
                 const displayPeriod = planIsInstallment ? "month" : p.period;
 
                 const planWaMessage = encodeURIComponent(
-                  `Bonjour XR Agency, je souhaite commander la formule "${p.name[lang]}" du service "${service.title[lang]}" (${price(displayPrice)}${planIsInstallment ? " / mois sur 12 mois" : ""}). Comment démarrer ?`,
+                  `Bonjour XR Agency, je souhaite commander la formule "${p.name[lang]}" du service "${service.title[lang]}" (${isCustomMaps ? "Sur mesure" : price(displayPrice)}${planIsInstallment ? " / mois sur 12 mois" : ""}). Comment démarrer ?`,
                 );
                 const planWaUrl = `${CONTACT.whatsapp}?text=${planWaMessage}`;
 
@@ -422,7 +423,7 @@ function ServiceDetailPage() {
                         ) : null}
 
                         {/* Inline Payment Selector for Websites */}
-                        {service.id === "websites" && p.period === "once" && (
+                        {service.id === "websites" && p.period === "once" && !isCustomMaps && (
                           <div className="mt-4 flex rounded-lg bg-accent/30 p-1 border border-border/50">
                             <button
                               onClick={(e) => {
@@ -456,7 +457,7 @@ function ServiceDetailPage() {
                             {price(displayPrice)}
                           </span>
                           <span className="label-mono flex flex-col items-start gap-1 text-xs text-muted-foreground">
-                            <span>{t(PERIOD_LABEL[displayPeriod])}</span>
+                            <span>{isCustomMaps ? "Nous contacter · à partir de 990 € / an" : t(PERIOD_LABEL[displayPeriod])}</span>
                             {planIsInstallment && (
                               <span className="text-[10px] text-primary/80 leading-tight max-w-[140px]">
                                 {t({ fr: "sur 12 mois (inclus domaine & hébergement 79€/m)", en: "over 12 mo (incl. domain & hosting 79€/m)", vi: "trong 12 tháng (gồm domain & hosting 79€/m)" })}
@@ -479,7 +480,7 @@ function ServiceDetailPage() {
                       </div>
 
                       <div className="mt-10 space-y-3">
-                        <AddToCartBtn
+                        {!isCustomMaps && <AddToCartBtn
                           item={{
                             serviceId: service.id,
                             serviceName: t(service.title),
@@ -489,7 +490,7 @@ function ServiceDetailPage() {
                             periodLabel: t(PERIOD_LABEL[displayPeriod]),
                           }}
                           popular={p.popular}
-                        />
+                        />}
 
                         <a
                           href={planWaUrl}
@@ -499,9 +500,9 @@ function ServiceDetailPage() {
                         >
                           <MessageCircle className="h-3.5 w-3.5 text-emerald-500" />
                           {t({
-                            fr: "Commander sur WhatsApp",
-                            en: "Order on WhatsApp",
-                            vi: "Đặt qua WhatsApp",
+                            fr: isCustomMaps ? "Construire mon étude sur mesure" : "Commander sur WhatsApp",
+                            en: isCustomMaps ? "Build my custom study" : "Order on WhatsApp",
+                            vi: isCustomMaps ? "Xây dựng nghiên cứu riêng" : "Đặt qua WhatsApp",
                           })}
                         </a>
                         <Link
