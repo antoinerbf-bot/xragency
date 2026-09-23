@@ -53,9 +53,9 @@ const ADVANTAGES = [
       vi: "Tốc độ triển khai kỷ lục",
     },
     desc: {
-      fr: "Votre projet opérationnel en 7 à 14 jours, sans délais d'attente ni réunions superflues.",
-      en: "Your project live in 7 to 14 days, with zero onboarding delays or endless meetings.",
-      vi: "Dự án vận hành trong 7 đến 14 ngày, không chậm trễ hay họp hành rườm rà.",
+      fr: "Délais définis selon le périmètre, avec un processus de réalisation structuré.",
+      en: "Delivery timelines defined by scope, with a structured production process.",
+      vi: "Thời gian triển khai được xác định theo phạm vi, với quy trình sản xuất rõ ràng.",
     },
     tag: "7 à 14 jours",
   },
@@ -76,16 +76,16 @@ const ADVANTAGES = [
   {
     icon: ShieldCheck,
     title: {
-      fr: "Garantie de Résultat & Rigueur",
-      en: "Guaranteed Results & Rigor",
-      vi: "Cam kết kết quả & Chuẩn mực",
+      fr: "Méthode & Rigueur",
+      en: "Method & Rigor",
+      vi: "Phương pháp & Chuẩn mực",
     },
     desc: {
-      fr: "Engagements contractuels fermes, Google Maps TOP 3 garanti et PageSpeed 100/100.",
-      en: "Strict contractual commitments, guaranteed Google Maps TOP 3 and 100/100 PageSpeed.",
-      vi: "Cam kết hợp đồng rõ ràng, đảm bảo TOP 3 Google Maps và PageSpeed 100/100.",
+      fr: "Objectifs définis avec méthode, suivi transparent et optimisation progressive.",
+      en: "Defined objectives, transparent monitoring and progressive optimisation.",
+      vi: "Mục tiêu rõ ràng, theo dõi minh bạch và tối ưu từng bước.",
     },
-    tag: "100% Garanti",
+    tag: "Objectifs définis",
   },
   {
     icon: BarChart3,
@@ -99,7 +99,7 @@ const ADVANTAGES = [
       en: "Agile, flexible engagement model: you only invest in tangible business growth.",
       vi: "Mô hình linh hoạt không ràng buộc: bạn chỉ đầu tư vào sự tăng trưởng thực chất.",
     },
-    tag: "+3,2x ROI moyen",
+    tag: "ROI à mesurer",
   },
 ];
 
