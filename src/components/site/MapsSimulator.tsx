@@ -134,7 +134,7 @@ export function MapsSimulator() {
 
   /* ── Dynamic price calculation ── */
   const { priceMin, priceMax } = useMemo(() => {
-    const base = 999;
+    const base = 990;
     const sizeMul = CITY_SIZES.find((c) => c.id === citySize)?.multiplier ?? 1;
     const kwFactor = KEYWORD_RANGES.find((k) => k.id === keywords)?.factor ?? 1;
     const rankPenalty = CURRENT_RANKS.find((r) => r.id === rank)?.penalty ?? 1;
@@ -151,12 +151,12 @@ export function MapsSimulator() {
   const selectedSector = SECTORS.find((s) => s.id === sector);
 
   const waPrefill = encodeURIComponent(
-    `Bonjour XR Agency, je suis intéressé par votre offre Google Maps TOP 3 garantie.\n\n` +
+    `Bonjour XR Agency, je souhaite une étude Google Maps Top 3 sur mesure.\n\n` +
     `• Secteur : ${selectedSector?.label}\n` +
     `• Taille de ville : ${CITY_SIZES.find((c) => c.id === citySize)?.label}\n` +
     `• Mots-clés : ${KEYWORD_RANGES.find((k) => k.id === keywords)?.label}\n` +
     `• Position actuelle : ${CURRENT_RANKS.find((r) => r.id === rank)?.label}\n\n` +
-    `Budget estimé configurateur : ${formatEur(priceMin)} – ${formatEur(priceMax)} / an\n\n` +
+    `Référence de départ : à partir de 990 € / an · devis sur mesure\n\n` +
     `Pouvons-nous lancer l'audit personnalisé ?`
   );
 
@@ -175,16 +175,16 @@ export function MapsSimulator() {
         <div>
           <SectionHeading
             label={{ fr: "Google Maps TOP 3", en: "Google Maps TOP 3", vi: "Google Maps TOP 3" }}
-            line1={{ fr: "Garantie TOP 3", en: "Guaranteed TOP 3", vi: "Đảm bảo TOP 3" }}
+            line1={{ fr: "Objectif Top 3", en: "Guaranteed TOP 3", vi: "Đảm bảo TOP 3" }}
             line2={{
-              fr: "ou remboursé intégral.",
-              en: "or full refund.",
-              vi: "hoặc hoàn tiền.",
+              fr: "sur mesure selon votre situation.",
+              en: "custom-built for your situation.",
+              vi: "thiết kế riêng theo tình hình.",
             }}
             lead={{
-              fr: "Le seul studio digital à proposer une garantie de résultat. Configurez votre projet et obtenez une estimation instantanée.",
-              en: "The only digital studio offering a guaranteed result. Configure your project and get an instant estimate.",
-              vi: "Studio duy nhất đảm bảo kết quả. Cấu hình dự án và nhận ước tính ngay lập tức.",
+              fr: "Une prestation locale construite sur mesure selon votre positionnement, votre zone, la concurrence et les mots-clés ciblés.",
+              en: "A local visibility service built around your current position, area, competition and target keywords.",
+              vi: "Dịch vụ hiển thị địa phương được xây dựng theo vị trí, khu vực, cạnh tranh và từ khóa mục tiêu.",
             }}
           />
 
@@ -193,7 +193,7 @@ export function MapsSimulator() {
             <div className="mt-8 inline-flex items-center gap-3 rounded-2xl border-2 border-primary/30 bg-primary px-5 py-3.5 shadow-lg">
               <Zap className="h-5 w-5 shrink-0 text-primary-foreground" />
               <p className="text-sm font-bold text-primary-foreground leading-snug">
-                Seul prestataire en France avec garantie TOP 3 ou remboursement intégral
+                Prestation sur mesure · objectif Top 3 · aucune garantie de position
               </p>
               <Award className="h-5 w-5 shrink-0 text-primary-foreground/70" />
             </div>
