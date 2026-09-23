@@ -75,7 +75,7 @@ export function Contact() {
                 <Phone className="h-4 w-4 opacity-60" />
               </a>
               <p className="label-mono text-[10px] text-muted-foreground/50">
-                +33 7 67 56 67 83 · Sans engagement · Réponse en moins de 2h
+                +33 7 67 56 67 83 · Sans engagement · Réponse rapide
               </p>
             </div>
 
@@ -94,7 +94,7 @@ export function Contact() {
               </span>
               <span className="label-mono inline-flex items-center gap-2 rounded-full border border-border px-3.5 py-2 text-xs text-muted-foreground">
                 <Clock className="h-3.5 w-3.5 text-primary" />
-                {t({ fr: "Réponse < 2 h", en: "Reply < 2h", vi: "Phản hồi < 2h" })}
+                {t({ fr: "Réponse rapide", en: "Fast response", vi: "Phản hồi nhanh" })}
               </span>
             </div>
           </div>
