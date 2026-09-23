@@ -5,30 +5,10 @@ import { UI } from "@/lib/copy";
 import { SERVICES } from "@/lib/content";
 import { Reveal, SectionHeading } from "./primitives";
 import { ArrowUpRight, Sparkles } from "lucide-react";
+import { ServiceIllustration } from "./ServiceIllustration";
 import { cn } from "@/lib/utils";
 
-/* ── Service photography ── */
-const SERVICE_IMG: Record<string, string> = {
-  websites:
-    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=85&w=1200",
-  branding:
-    "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=85&w=1200",
-  seo: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?auto=format&fit=crop&q=85&w=1200",
-  maps: "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=85&w=1200",
-  social:
-    "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&q=85&w=1200",
-  maintenance:
-    "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=85&w=1200",
-  ai: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=85&w=1200",
-  ecommerce:
-    "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=85&w=1200",
-  refonte:
-    "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=85&w=1200",
-  ads: "https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&q=85&w=1200",
-  strategy:
-    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=85&w=1200",
-};
-
+/* ── Premium service illustrations ── */
 /* ── Desktop: single service row ── */
 function ServiceRow({
   s,
@@ -128,24 +108,7 @@ function ServiceCard({ s, i }: { s: (typeof SERVICES)[number]; i: number }) {
         params={{ serviceId: s.id }}
         className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/70 bg-card transition-all duration-300 hover:border-primary/50 hover:-translate-y-1 hover:shadow-lg"
       >
-        {/* Image — compact, grayscale on idle */}
-        <div className="relative h-28 overflow-hidden">
-          {img && (
-            <img
-              src={img}
-              alt={t(s.title)}
-              loading="lazy"
-              className="h-full w-full object-cover grayscale-[25%] transition-all duration-500 group-hover:scale-105 group-hover:grayscale-0"
-            />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-          <span className="label-mono absolute left-3 top-2 rounded-full border border-white/20 bg-black/40 px-2 py-0.5 text-[9px] text-white/90 backdrop-blur-sm">
-            {s.num}
-          </span>
-          <span className="label-mono absolute right-3 top-2 rounded-full bg-background/90 px-2.5 py-0.5 text-[9px] font-semibold text-primary backdrop-blur-sm shadow-sm">
-            Dès {price(s.fromEur)}
-          </span>
-        </div>
+        <div className="relative h-36 overflow-hidden"><ServiceIllustration service={s.id} title={t(s.title)} /></div>
 
         {/* Content */}
         <div className="flex flex-1 flex-col p-3.5">
@@ -202,26 +165,7 @@ export function Services() {
 
             {/* Right — crossfading image panel */}
             <div className="relative min-h-[520px] bg-foreground">
-              {/* Images — crossfade */}
-              {SERVICES.map((s) => (
-                <div
-                  key={s.id}
-                  className={cn(
-                    "absolute inset-0 transition-opacity duration-700",
-                    activeId === s.id ? "opacity-100" : "pointer-events-none opacity-0",
-                  )}
-                >
-                  <img
-                    src={SERVICE_IMG[s.id]}
-                    alt={t(s.title)}
-                    className={cn(
-                      "h-full w-full object-cover transition-transform duration-700",
-                      activeId === s.id ? "scale-100" : "scale-105",
-                    )}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10" />
-                </div>
-              ))}
+              <ServiceIllustration service={activeService.id} title={t(activeService.title)} />
 
               {/* Metadata overlay */}
               <div className="absolute inset-x-0 bottom-0 z-10 p-7">
