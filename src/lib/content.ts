@@ -890,237 +890,120 @@ export const SERVICES: Service[] = [
     num: "05",
     title: { fr: "Community Management", en: "Community Management", vi: "Quản trị Mạng xã hội" },
     short: {
-      fr: "Direction artistique sociale et production continue.",
-      en: "Social art direction and continuous production.",
-      vi: "Định hướng nghệ thuật và sản xuất nội dung liên tục.",
+      fr: "Une présence sociale construite, publiée et animée avec méthode.",
+      en: "A social presence built, published and managed with discipline.",
+      vi: "Hiện diện mạng xã hội được xây dựng, xuất bản và vận hành có phương pháp.",
     },
     description: {
-      fr: "Contenus visuels premium, légendes engageantes, planification, modération et veille : votre présence sociale devient une machine à notoriété. Option multilingue disponible (+100 € par langue supplémentaire).",
-      en: "Premium visual content, engaging captions, scheduling, moderation and monitoring: your social presence becomes an awareness engine. Multilingual option available (+$130 per extra language).",
-      vi: "Nội dung hình ảnh cao cấp, chú thích cuốn hút, lên lịch, kiểm duyệt và theo dõi: mạng xã hội trở thành cỗ máy nhận diện. Tuỳ chọn đa ngôn ngữ (+2.200.000 ₫/ngôn ngữ phụ).",
+      fr: "Nous construisons votre présence sociale de A à Z : direction éditoriale, création des visuels, rédaction, programmation, formats courts et modération selon la formule choisie. Chaque contenu est préparé pour votre validation avant publication.",
+      en: "We build your social presence from A to Z: editorial direction, visual creation, copywriting, scheduling, short-form content and moderation according to your plan. Every content piece is prepared for your approval before publishing.",
+      vi: "Chúng tôi xây dựng hiện diện mạng xã hội từ A đến Z: định hướng nội dung, thiết kế hình ảnh, viết bài, lên lịch, định dạng ngắn và kiểm duyệt theo gói đã chọn. Mọi nội dung đều được chuẩn bị để bạn duyệt trước khi đăng.",
     },
     fromEur: 299,
     fromPeriod: "month",
+    highlights: [
+      { fr: "8 à 30 publications / mois", en: "8 to 30 posts / month", vi: "8 đến 30 bài / tháng" },
+      { fr: "Création visuelle & rédaction", en: "Visual creation & copywriting", vi: "Thiết kế & viết nội dung" },
+      { fr: "Validation avant publication", en: "Approval before publishing", vi: "Duyệt trước khi đăng" },
+      { fr: "Modération selon la formule", en: "Moderation by plan", vi: "Kiểm duyệt theo gói" },
+    ],
     plans: [
       {
         name: { fr: "Présence Essentielle", en: "Essential Presence", vi: "Hiện diện Cơ bản" },
         audience: { fr: "1 réseau · 8 publications / mois", en: "1 network · 8 posts / month", vi: "1 mạng · 8 bài / tháng" },
-        eur: 299, period: "month", features: [
+        eur: 299,
+        period: "month",
+        features: [
           { fr: "1 réseau social au choix", en: "1 social network of your choice", vi: "1 mạng xã hội tùy chọn" },
-          { fr: "8 publications / mois", en: "8 posts / month", vi: "8 posts / tháng" },
+          { fr: "8 publications / mois", en: "8 posts / month", vi: "8 bài / tháng" },
           { fr: "Création des visuels et textes", en: "Visual and copy creation", vi: "Thiết kế hình ảnh và nội dung" },
           { fr: "Planification des publications", en: "Content scheduling", vi: "Lên lịch nội dung" },
           { fr: "Modération légère des commentaires", en: "Light comment moderation", vi: "Kiểm duyệt bình luận cơ bản" },
-        ]
+        ],
       },
       {
         name: { fr: "Croissance Active", en: "Active Growth", vi: "Tăng trưởng Chủ động" },
         audience: { fr: "2 réseaux · 20 publications / mois", en: "2 networks · 20 posts / month", vi: "2 mạng · 20 bài / tháng" },
-        eur: 499, period: "month", popular: true, features: [
+        eur: 499,
+        period: "month",
+        popular: true,
+        features: [
           { fr: "2 réseaux sociaux au choix", en: "2 social networks of your choice", vi: "2 mạng xã hội tùy chọn" },
           { fr: "20 publications / mois", en: "20 posts / month", vi: "20 bài / tháng" },
           { fr: "Création visuelle et rédaction", en: "Visual creation and copywriting", vi: "Thiết kế và viết nội dung" },
           { fr: "Stories et formats courts selon calendrier", en: "Stories and short formats according to schedule", vi: "Story và định dạng ngắn theo lịch" },
-          { fr: "Modération commentaires + réponses courantes", en: "Comment moderation + routine replies", vi: "Kiểm duyệt bình luận + trả lời thường quy" },
+          { fr: "Modération + réponses courantes", en: "Moderation + routine replies", vi: "Kiểm duyệt + trả lời thường quy" },
           { fr: "Reporting mensuel", en: "Monthly reporting", vi: "Báo cáo hàng tháng" },
-        ]
+        ],
       },
       {
         name: { fr: "Domination Sociale", en: "Social Domination", vi: "Thống trị Mạng xã hội" },
         audience: { fr: "3 réseaux · 30 publications / mois", en: "3 networks · 30 posts / month", vi: "3 mạng · 30 bài / tháng" },
-        eur: 699, period: "month", features: [
+        eur: 699,
+        period: "month",
+        features: [
           { fr: "3 réseaux sociaux au choix", en: "3 social networks of your choice", vi: "3 mạng xã hội tùy chọn" },
           { fr: "30 publications / mois", en: "30 posts / month", vi: "30 bài / tháng" },
           { fr: "Création, rédaction et planification", en: "Creation, copywriting and scheduling", vi: "Sáng tạo, viết và lên lịch" },
           { fr: "Stories et formats courts selon calendrier", en: "Stories and short formats according to schedule", vi: "Story và định dạng ngắn theo lịch" },
           { fr: "Modération renforcée des commentaires et messages courants", en: "Enhanced moderation of comments and routine messages", vi: "Kiểm duyệt nâng cao bình luận và tin nhắn thường quy" },
           { fr: "Veille de communauté et reporting mensuel", en: "Community monitoring and monthly reporting", vi: "Theo dõi cộng đồng và báo cáo hàng tháng" },
-        ]
-      }
-    ],
-    highlights: [
-      {
-        fr: "Calendrier éditorial structuré",
-        en: "+250% average engagement",
-        vi: "Trung bình +250% tương tác",
-      },
-      {
-        fr: "Production régulière de contenus",
-        en: "+180% organic reach",
-        vi: "+180% phạm vi tiếp cận tự nhiên",
-      },
-      { fr: "Pilotage par objectifs", en: "+85% new followers", vi: "+85% người theo dõi mới" },
-      {
-        fr: "Calendrier validé à l'avance",
-        en: "Calendar approved in advance",
-        vi: "Lịch nội dung được duyệt trước",
+        ],
       },
     ],
     steps: [
       {
         num: "01",
-        title: {
-          fr: "Création Visuelle Premium",
-          en: "Premium Visual Creation",
-          vi: "Sáng tạo Hình ảnh Cao cấp",
-        },
+        title: { fr: "Direction éditoriale", en: "Editorial Direction", vi: "Định hướng nội dung" },
         desc: {
-          fr: "CE QUE NOUS FAISONS : Production de visuels, carrousels et courtes vidéos esthétiques. POURQUOI : Pour capter l'attention dans un flux saturé. CE QUE CELA APPORTE : Une image de marque haut de gamme qui donne confiance à vos prospects.",
-          en: "WHAT WE DO: Production of visuals, carousels, and short videos. WHY: To capture attention in a crowded feed. THE BENEFIT: A premium brand image that builds instant trust with prospects.",
-          vi: "CHÚNG TÔI LÀM GÌ: Sản xuất hình ảnh, carousel và video ngắn. TẠI SAO: Để thu hút sự chú ý trong bảng tin đông đúc. LỢI ÍCH: Hình ảnh thương hiệu cao cấp tạo niềm tin ngay lập tức.",
+          fr: "Définition des sujets, angles, rythme de publication et ligne visuelle adaptés à votre activité.",
+          en: "Defining topics, angles, publishing rhythm and visual direction adapted to your business.",
+          vi: "Xác định chủ đề, góc nội dung, nhịp đăng và định hướng hình ảnh phù hợp với doanh nghiệp.",
         },
       },
       {
         num: "02",
-        title: {
-          fr: "Rédaction Stratégique",
-          en: "Strategic Copywriting",
-          vi: "Viết bài Chiến lược",
-        },
+        title: { fr: "Création & rédaction", en: "Creation & Copywriting", vi: "Sáng tạo & Viết nội dung" },
         desc: {
-          fr: "CE QUE NOUS FAISONS : Écriture de légendes engageantes, éducatives ou divertissantes avec hashtags optimisés. POURQUOI : Une belle image ne suffit pas à vendre. CE QUE CELA APPORTE : Vous créez du lien, démontrez votre expertise et incitez à l'action.",
-          en: "WHAT WE DO: Writing engaging, educational captions with optimized hashtags. WHY: A beautiful image isn't enough to sell. THE BENEFIT: You build connection, demonstrate expertise, and drive action.",
-          vi: "CHÚNG TÔI LÀM GÌ: Viết chú thích cuốn hút, giáo dục với hashtag tối ưu. TẠI SAO: Hình ảnh đẹp chưa đủ để bán hàng. LỢI ÍCH: Bạn xây dựng sự gắn kết, chứng minh chuyên môn và thúc đẩy hành động.",
+          fr: "Production des visuels, carrousels, légendes et formats courts prévus dans votre formule.",
+          en: "Production of visuals, carousels, captions and short-form content included in your plan.",
+          vi: "Sản xuất hình ảnh, carousel, chú thích và nội dung ngắn theo gói dịch vụ.",
         },
       },
       {
         num: "03",
-        title: {
-          fr: "Programmation & Régularité",
-          en: "Scheduling & Consistency",
-          vi: "Lên lịch & Đều đặn",
-        },
+        title: { fr: "Validation & programmation", en: "Approval & Scheduling", vi: "Duyệt & Lên lịch" },
         desc: {
-          fr: "CE QUE NOUS FAISONS : Création d'un calendrier mensuel validé par vos soins, puis publication aux heures stratégiques. POURQUOI : Les algorithmes récompensent la constance. CE QUE CELA APPORTE : Une croissance organique stable et une visibilité continue sans effort de votre part.",
-          en: "WHAT WE DO: Monthly calendar creation approved by you, then scheduling at strategic times. WHY: Algorithms reward consistency. THE BENEFIT: Steady organic growth and continuous visibility with zero effort from you.",
-          vi: "CHÚNG TÔI LÀM GÌ: Lên lịch hàng tháng được bạn duyệt, sau đó đăng vào giờ vàng. TẠI SAO: Thuật toán ưu tiên sự đều đặn. LỢI ÍCH: Tăng trưởng tự nhiên ổn định và hiển thị liên tục mà bạn không cần bận tâm.",
+          fr: "Un calendrier est préparé en amont pour validation, puis les contenus approuvés sont programmés.",
+          en: "A calendar is prepared in advance for approval, then approved content is scheduled.",
+          vi: "Lịch nội dung được chuẩn bị trước để duyệt, sau đó nội dung đã duyệt được lên lịch.",
         },
       },
       {
         num: "04",
-        title: {
-          fr: "Modération & Engagement",
-          en: "Moderation & Engagement",
-          fr: "CE QUE NOUS FAISONS : Réponse aux commentaires, gestion des messages privés et interaction avec d'autres comptes. POURQUOI : Le social media doit être bidirectionnel. CE QUE CELA APPORTE : Vous fidélisez votre audience et transformez les abonnés en véritables clients.",
-          en: "WHAT WE DO: Replying to comments, handling DMs, and interacting with other accounts. WHY: Social media must be a two-way street. THE BENEFIT: You build audience loyalty and turn followers into paying customers.",
-          vi: "CHÚNG TỒI LÀM GÌ: Trả lời bình luận, xử lý tin nhắn riêng và tương tác với các tài khoản khác. TẠI SAO: Mạng xã hội cần sự giao tiếp hai chiều. LỢI ÍCH: Giữ chân khán giả và biến người theo dõi thành khách hàng thực sự.",
-        },
-      },
-    ],
-    metrics: [
-      {
-        metric: "+250%",
-        label: { fr: "Taux d'engagement", en: "Engagement rate", vi: "Tỷ lệ tương tác" },
+        title: { fr: "Publication & communauté", en: "Publishing & Community", vi: "Đăng tải & Cộng đồng" },
         desc: {
-          fr: "Multiplication des interactions et partages.",
-          en: "Boosted interactions, saves and shares.",
-          vi: "Gia tăng mạnh mẽ tương tác và chia sẻ.",
-        },
-      },
-      {
-        metric: "100%",
-        label: { fr: "Validation préalable", en: "Advance approval", vi: "Duyệt trước 100%" },
-        desc: {
-          fr: "Zéro publication sans votre accord express.",
-          en: "Zero posts published without your approval.",
-          vi: "Không đăng tải khi chưa có sự đồng ý của bạn.",
-        },
-      },
-      {
-        metric: "3+",
-        label: { fr: "Réseaux couverts", en: "Networks supported", vi: "Mạng xã hội hỗ trợ" },
-        desc: {
-          fr: "Instagram, LinkedIn, TikTok, Facebook.",
-          en: "Instagram, LinkedIn, TikTok, Facebook.",
-          vi: "Instagram, LinkedIn, TikTok, Facebook.",
+          fr: "Publication et modération selon le périmètre de votre formule, avec suivi mensuel des résultats.",
+          en: "Publishing and moderation within your plan scope, with monthly performance tracking.",
+          vi: "Đăng tải và kiểm duyệt theo phạm vi gói, kèm theo dõi hiệu quả hàng tháng.",
         },
       },
     ],
     comparisons: [
       {
-        feature: { fr: "Direction artistique", en: "Art Direction", vi: "Chỉ đạo nghệ thuật" },
-        us: {
-          fr: "Design cinématique sur-mesure et soigné",
-          en: "Bespoke cinematic aesthetics & copywriting",
-          vi: "Thiết kế cinématique riêng biệt & trau chuốt",
-        },
-        them: {
-          fr: "Visuels génériques sans valeur perçue",
-          en: "Generic Canva templates without soul",
-          vi: "Hình ảnh đại trà thiếu bản sắc",
-        },
+        feature: { fr: "Production", en: "Production", vi: "Sản xuất" },
+        us: { fr: "Contenus créés pour votre marque", en: "Content created for your brand", vi: "Nội dung được tạo riêng cho thương hiệu" },
+        them: { fr: "Templates génériques", en: "Generic templates", vi: "Mẫu nội dung đại trà" },
       },
       {
-        feature: { fr: "Régularité", en: "Consistency", vi: "Độ đều đặn" },
-        us: {
-          fr: "Planification rigoureuse et zéro oubli",
-          en: "Rigorous planning with zero missed slots",
-          vi: "Lên kế hoạch chuẩn chỉ không bỏ sót lịch",
-        },
-        them: {
-          fr: "Publications aléatoires de dernière minute",
-          en: "Random last-minute inconsistent posts",
-          vi: "Đăng bài tùy hứng và thất thường",
-        },
+        feature: { fr: "Organisation", en: "Organisation", vi: "Tổ chức" },
+        us: { fr: "Calendrier préparé et validé à l'avance", en: "Calendar prepared and approved in advance", vi: "Lịch được chuẩn bị và duyệt trước" },
+        them: { fr: "Publications improvisées", en: "Improvised publishing", vi: "Đăng bài thiếu kế hoạch" },
       },
       {
-        feature: { fr: "Écoute communauté", en: "Community care", vi: "Chăm sóc cộng đồng" },
-        us: {
-          fr: "Modération active et réponses bienveillantes",
-          en: "Active moderation and prompt responses",
-          vi: "Kiểm duyệt chủ động và phản hồi thân thiện",
-        },
-        them: {
-          fr: "Commentaires laissés sans réponse",
-          en: "Comments ignored and unmoderated",
-          vi: "Bình luận bị bỏ quên không ai trả lời",
-        },
-      },
-    ],
-    plans: [
-      {
-        name: { fr: "Présence Essentielle", en: "Essential Presence", vi: "Hiện diện Cơ bản" },
-        eur: 299,
-        period: "month",
-        features: [
-          { fr: "1 langue incluse (+100 €/langue suppl.)", en: "1 language included (+$130/extra lang)", vi: "Bao gồm 1 ngôn ngữ (+2.200.000 ₫/ngôn ngữ thêm)" },
-          { fr: "16 publications par mois (Posts & Carrousels)", en: "16 posts per month (Posts & Carousels)", vi: "16 bài đăng mỗi tháng (Post & Carousel)" },
-          { fr: "Stratégie éditoriale et visuelle", en: "Editorial and visual strategy", vi: "Chiến lược nội dung và hình ảnh" },
-          { fr: "Rédaction engageante et ciblée", en: "Engaging and targeted copywriting", vi: "Viết bài cuốn hút, đúng mục tiêu" },
-          { fr: "Recherche de hashtags optimisés", en: "Optimized hashtag research", vi: "Nghiên cứu hashtag tối ưu" },
-          { fr: "Calendrier partagé pour validation", en: "Shared calendar for approval", vi: "Chia sẻ lịch duyệt bài" },
-          { fr: "Reporting mensuel de visibilité", en: "Monthly visibility reporting", vi: "Báo cáo hiển thị hàng tháng" },
-        ],
-      },
-      {
-        name: { fr: "Croissance Active", en: "Active Growth", vi: "Tăng trưởng Tích cực" },
-        eur: 499,
-        period: "month",
-        popular: true,
-        features: [
-          { fr: "1 langue incluse (+100 €/langue suppl.)", en: "1 language included (+$130/extra lang)", vi: "Bao gồm 1 ngôn ngữ (+2.200.000 ₫/ngôn ngữ thêm)" },
-          { fr: "Tout ce qui est inclus dans Présence", en: "Everything included in Presence", vi: "Mọi thứ trong gói Cơ bản" },
-          { fr: "20 publications / mois haute qualité", en: "20 high-quality posts / month", vi: "20 bài đăng chất lượng cao / tháng" },
-          { fr: "Format Vidéos Courtes (Reels/TikTok)", en: "Short Video format (Reels/TikTok)", vi: "Định dạng video ngắn (Reels/TikTok)" },
-          { fr: "3 Stories dynamiques par semaine", en: "3 dynamic Stories per week", vi: "3 Story sinh động mỗi tuần" },
-          { fr: "Interaction proactive (like/commente d'autres comptes)", en: "Proactive engagement (liking/commenting)", vi: "Tương tác chủ động với tài khoản khác" },
-          { fr: "Reporting bimensuel des conversions", en: "Bi-monthly conversion reporting", vi: "Báo cáo chuyển đổi hai lần mỗi tháng" },
-        ],
-      },
-      {
-        name: { fr: "Domination Sociale", en: "Social Domination", vi: "Thống trị Mạng xã hội" },
-        eur: 699,
-        period: "month",
-        features: [
-          { fr: "1 langue incluse (+100 €/langue suppl.)", en: "1 language included (+$130/extra lang)", vi: "Bao gồm 1 ngôn ngữ (+2.200.000 ₫/ngôn ngữ thêm)" },
-          { fr: "Publication de contenu en continu", en: "Continuous content publishing", vi: "Đăng tải nội dung liên tục" },
-          { fr: "Story quotidienne animée", en: "Daily animated story", vi: "Story động hàng ngày" },
-          { fr: "Modération et réponse aux commentaires", en: "Comment moderation and response", vi: "Kiểm duyệt và trả lời bình luận" },
-          { fr: "Gestion intégrale des messages privés (MP)", en: "Full Direct Message (DM) management", vi: "Quản lý toàn bộ tin nhắn riêng (DM)" },
-          { fr: "Animation de la communauté (Sondages, FAQ)", en: "Community animation (Polls, Q&A)", vi: "Hoạt náo cộng đồng (Khảo sát, Hỏi đáp)" },
-          { fr: "Suivi et optimisation des performances", en: "Performance tracking and optimization", vi: "Theo dõi và tối ưu hiệu suất" },
-          { fr: "Reporting complet et stratégique", en: "Complete strategic reporting", vi: "Báo cáo chiến lược toàn diện" },
-        ],
+        feature: { fr: "Suivi", en: "Monitoring", vi: "Theo dõi" },
+        us: { fr: "Reporting adapté à la formule", en: "Reporting adapted to the plan", vi: "Báo cáo theo gói" },
+        them: { fr: "Peu de visibilité sur les actions", en: "Limited visibility on actions", vi: "Khó theo dõi hoạt động" },
       },
     ],
   },
