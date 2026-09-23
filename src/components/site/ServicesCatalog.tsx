@@ -4,6 +4,7 @@ import { SERVICES } from "@/lib/content";
 import { SurfaceDigital } from "./SurfaceDigital";
 import { cn } from "@/lib/utils";
 import { Parallax } from "./primitives";
+import { ServiceIllustration } from "./ServiceIllustration";
 
 /** Core catalog shown on /services — coherent set, not the full internal list */
 const CATALOG_IDS = [
@@ -16,16 +17,15 @@ const CATALOG_IDS = [
   "ecommerce",
 ] as const;
 
-const FIG_LABEL: Record<string, { fr: string; en: string; vi: string }> = {
+const SERVICE_KICKER: Record<string, { fr: string; en: string; vi: string }> = {
   websites: { fr: "FLAGSHIP", en: "FLAGSHIP", vi: "FLAGSHIP" },
   branding: { fr: "IDENTITÉ", en: "IDENTITY", vi: "NHẬN DIỆN" },
   seo: { fr: "VISIBILITÉ", en: "VISIBILITY", vi: "HIỂN THỊ" },
   maps: { fr: "LOCAL", en: "LOCAL", vi: "ĐỊA PHƯƠNG" },
   social: { fr: "RÉSEAUX", en: "SOCIAL", vi: "MẠNG XÃ HỘI" },
-  maintenance: { fr: "SOIN", en: "CARE", vi: "BẢO TRÌ" },
+  maintenance: { fr: "CARE", en: "CARE", vi: "BẢO TRÌ" },
   ecommerce: { fr: "COMMERCE", en: "COMMERCE", vi: "THƯƠNG MẠI" },
 };
-
 const HREF: Record<string, string> = {
   websites: "/services/websites",
   branding: "/services/branding",
@@ -109,73 +109,37 @@ export function ServicesCatalog() {
         </div>
       </div>
 
-      {/* FIG. cards — Qbenix language */}
+      {/* Seven service scenes — editorial bento */}
       <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
-        <div className="grid gap-8 lg:gap-12">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-12 lg:gap-6">
           {catalog.map((service, index) => {
-            const fig = FIG_LABEL[service.id] ?? { fr: "SERVICE", en: "SERVICE", vi: "DỊCH VỤ" };
+            const kicker = SERVICE_KICKER[service.id] ?? { fr: "SERVICE", en: "SERVICE", vi: "DỊCH VỤ" };
             const href = HREF[service.id] ?? `/services/${service.id}`;
+            const featured = index === 0;
             return (
-              <article
-                key={service.id}
-                className={cn(
-                  "group grid items-center gap-8 border-b border-border/50 pb-12 last:border-0 lg:grid-cols-[200px_1fr_auto] lg:gap-12 lg:pb-16",
-                )}
-              >
-                <div>
-                  <p className="label-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground">
-                    FIG. {String(index + 1).padStart(2, "0")}
-                  </p>
-                  <p className="mt-3 label-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-                    {fig[lang]}
-                  </p>
-                </div>
-
-                <Parallax speed={-0.025} className="max-w-2xl">
-                  <h2 className="display-serif text-3xl leading-tight sm:text-4xl lg:text-5xl">
-                    {t(service.title)}
-                  </h2>
-                  <p className="mt-4 text-sm leading-7 text-muted-foreground sm:text-base">
-                    {t(service.description)}
-                  </p>
-                  <ul className="mt-5 flex flex-wrap gap-2">
-                    {service.highlights.slice(0, 3).map((h, i) => (
-                      <li
-                        key={i}
-                        className="rounded-full border border-border/70 bg-card/40 px-3 py-1.5 label-mono text-[9px] uppercase tracking-[0.1em] text-muted-foreground"
-                      >
-                        {t(h)}
-                      </li>
-                    ))}
-                  </ul>
-                </Parallax>
-
-                <div className="relative z-10 flex flex-col items-start gap-4 lg:items-end">
-                  <p className="label-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                    {copy.from}{" "}
-                    <span className="text-base font-semibold tracking-normal text-foreground">
-                      {price(service.fromEur)}
-                    </span>
-                    {service.fromPeriod === "month" && (
-                      <span className="text-muted-foreground"> / mois</span>
-                    )}
-                    {service.fromPeriod === "year" && (
-                      <span className="text-muted-foreground"> / an</span>
-                    )}
-                  </p>
-                  <a
-                    href={href}
-                    className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-5 py-3 label-mono text-[10px] font-semibold uppercase tracking-[0.14em] transition-all duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground"
-                  >
-                    {copy.learn}
-                    <ArrowUpRight className="h-3.5 w-3.5" />
-                  </a>
+              <article key={service.id} className={cn("group relative overflow-hidden rounded-[2rem] border border-border/70 bg-card/50 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-primary/45 hover:shadow-2xl", featured ? "md:col-span-2 lg:col-span-7" : "lg:col-span-5")}>
+                <div className={cn("relative overflow-hidden", featured ? "min-h-[560px]" : "min-h-[460px]")}>
+                  <div className="absolute inset-0 p-3 sm:p-5"><ServiceIllustration service={service.id} title={t(service.title)} /></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/55 to-transparent" />
+                  <div className="relative z-10 flex h-full min-h-[460px] flex-col justify-between p-6 sm:p-8">
+                    <div className="flex items-center justify-between">
+                      <span className="label-mono rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[8px] uppercase tracking-[.2em] text-white/70 backdrop-blur">{kicker[lang]}</span>
+                      <span className="label-mono text-[8px] text-white/40">{String(index + 1).padStart(2, "0")} / 07</span>
+                    </div>
+                    <div className="max-w-2xl">
+                      <h2 className={cn("display-serif leading-[.9] text-white", featured ? "text-5xl sm:text-7xl" : "text-4xl sm:text-5xl")}>{t(service.title)}</h2>
+                      <p className="mt-4 max-w-xl text-sm leading-6 text-white/60">{t(service.description)}</p>
+                      <div className="mt-6 flex flex-wrap items-center gap-2.5">
+                        <a href={href} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold uppercase tracking-[.12em] text-black transition hover:-translate-y-0.5 hover:bg-white/90">{copy.learn}<ArrowUpRight className="h-4 w-4" /></a>
+                        <span className="rounded-full border border-white/15 bg-black/30 px-4 py-3 label-mono text-[9px] text-white/70 backdrop-blur">{copy.from} {price(service.fromEur)}{service.fromPeriod === "month" ? " / mois" : service.fromPeriod === "year" ? " / an" : ""}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </article>
             );
           })}
         </div>
-
         {/* Bottom CTA */}
         <div className="mt-20 rounded-3xl border border-primary/20 bg-primary/[0.04] px-8 py-12 sm:px-12 lg:px-16">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
