@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react";
 import { Sparkles, ShieldCheck, FileImage, Search, ArrowUpRight } from "lucide-react";
 import { useLang } from "@/lib/i18n";
@@ -58,55 +59,6 @@ function AnimatedStat({
 }
 
 export function Hero() {
-  const creatureRef = useRef<HTMLDivElement>(null);
-  const tongueRef = useRef<SVGPathElement>(null);
-  const [tongueActive, setTongueActive] = useState(false);
-
-  useEffect(() => {
-    const stage = creatureRef.current;
-    if (!stage) return;
-    let raf = 0;
-    let tx = 0, ty = 0, cx = 0, cy = 0;
-
-    const move = (event: PointerEvent) => {
-      const rect = stage.getBoundingClientRect();
-      tx = Math.max(-1, Math.min(1, (event.clientX - (rect.left + rect.width * 0.58)) / (rect.width * 0.62)));
-      ty = Math.max(-1, Math.min(1, (event.clientY - (rect.top + rect.height * 0.48)) / (rect.height * 0.62)));
-    };
-
-    const tick = () => {
-      cx += (tx - cx) * 0.055;
-      cy += (ty - cy) * 0.055;
-      stage.style.setProperty("--creature-x", String(cx * 18) + "px");
-      stage.style.setProperty("--creature-y", String(cy * 12) + "px");
-      stage.style.setProperty("--creature-tilt", String(cx * 3.5) + "deg");
-      raf = requestAnimationFrame(tick);
-    };
-
-    const tongue = () => {
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      setTongueActive(true);
-      window.setTimeout(() => setTongueActive(false), 520);
-    };
-
-    stage.addEventListener("pointermove", move);
-    const interval = window.setInterval(() => {
-      if (Math.random() > 0.48) tongue();
-    }, 5200);
-    raf = requestAnimationFrame(tick);
-
-    return () => {
-      stage.removeEventListener("pointermove", move);
-      window.clearInterval(interval);
-      window.cancelAnimationFrame(raf);
-    };
-  }, []);
-
-  useEffect(() => {
-    const path = tongueRef.current;
-    if (!path) return;
-    path.style.strokeDashoffset = tongueActive ? "0" : "150";
-  }, [tongueActive]);
   const { t } = useLang();
 
   return (
@@ -122,40 +74,6 @@ export function Hero() {
       />
 
       <div className="relative mx-auto flex min-h-[calc(92dvh-6.5rem)] max-w-7xl flex-col justify-between px-6 lg:px-10">
-        <div
-          ref={creatureRef}
-          aria-hidden="true"
-          className="pointer-events-none absolute right-[-7%] top-[10%] z-[2] hidden h-[620px] w-[620px] lg:block xl:right-[-3%] xl:h-[700px] xl:w-[700px]"
-          style={{ ["--creature-x" as string]: "0px", ["--creature-y" as string]: "0px", ["--creature-tilt" as string]: "0deg" }}
-        >
-          <div className="absolute inset-[6%] rounded-full bg-[radial-gradient(circle,rgba(211,146,47,.16),transparent_62%)] blur-3xl" />
-          <div className="absolute inset-0 transition-transform duration-100" style={{ transform: "translate3d(var(--creature-x),var(--creature-y),0) rotate(var(--creature-tilt))" }}>
-            <div className="absolute inset-[4%] rounded-full border border-primary/10 [transform:perspective(900px)_rotateX(8deg)_rotateY(-10deg)]" />
-            <img
-              src="https://cdn.meshy.ai/ti_w%3A3840%2Cq%3A75%2Cf%3Awebp/uploads/prod/111dc8ff4476845fd63e15867efa8be2aff9a04168f329dd997bd295ec3609bf/publish/cover-square/01995910-05d1-7e58-a37f-220417aef5ea.jpg"
-              alt=""
-              className="absolute left-[7%] top-[13%] h-[72%] w-[92%] object-contain drop-shadow-[0_35px_45px_rgba(0,0,0,.55)]"
-              style={{ filter: "saturate(.9) contrast(1.08) brightness(.82)" }}
-            />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_38%_44%,transparent_0%,transparent_28%,rgba(0,0,0,.2)_70%,rgba(0,0,0,.55)_100%)]" />
-            <svg className="absolute inset-0 h-full w-full overflow-visible" viewBox="0 0 700 700">
-              <path
-                ref={tongueRef}
-                d="M205 285 C145 280, 92 264, 38 248"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeLinecap="round"
-                className="text-primary"
-                style={{ strokeDasharray: 150, strokeDashoffset: 150, transition: "stroke-dashoffset 160ms cubic-bezier(.16,1,.3,1)" }}
-              />
-              <circle cx="38" cy="248" r="5" className="fill-primary" opacity=".9" />
-            </svg>
-          </div>
-          <div className="absolute bottom-[7%] right-[7%] rounded-full border border-primary/20 bg-background/60 px-3 py-1.5 backdrop-blur-xl">
-            <span className="label-mono text-[8px] tracking-[.2em] text-primary">XR · DIGITAL CREATURE</span>
-          </div>
-        </div>
         {/* Hero Main Content */}
         <div className="grid items-center gap-10 py-10 lg:grid-cols-12 lg:py-14">
           {/* Left Column: Typography & CTAs */}
