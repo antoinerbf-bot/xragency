@@ -258,6 +258,7 @@ export const SERVICES: Service[] = [
             vi: "Bao gồm 1 năm lưu trữ",
           },
           { fr: "Livraison en 7 jours", en: "Delivered in 7 days", vi: "Bàn giao trong 7 ngày" },
+          { fr: "3 mois de corrections des erreurs bloquantes liées à la livraison", en: "3 months of corrections for delivery-related blocking errors", vi: "3 tháng sửa lỗi nghiêm trọng liên quan đến bàn giao" },
           {
             fr: "Langue supplémentaire : +100 € / langue",
             en: "Extra language: +$130 / language",
@@ -291,6 +292,7 @@ export const SERVICES: Service[] = [
           { fr: "Chat en direct", en: "Live chat", vi: "Trò chuyện trực tiếp" },
           { fr: "Analytics avancés", en: "Advanced analytics", vi: "Phân tích nâng cao" },
           { fr: "Livraison en 14 jours", en: "Delivered in 14 days", vi: "Bàn giao trong 14 ngày" },
+          { fr: "3 mois de corrections des erreurs bloquantes liées à la livraison", en: "3 months of corrections for delivery-related blocking errors", vi: "3 tháng sửa lỗi nghiêm trọng liên quan đến bàn giao" },
           {
             fr: "Langue supplémentaire : +100 € / langue",
             en: "Extra language: +$130 / language",
@@ -1843,9 +1845,9 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
       vi: "Điều gì xảy ra nếu website của tôi gặp sự cố?",
     },
     a: {
-      fr: "Le monitoring selon formule détecte l'incident en temps réel. Selon votre forfait, nous intervenons sous 4 h à 48 h, et les sauvegardes permettent une restauration rapide.",
-      en: "selon formule monitoring detects the incident in real time. Depending on your plan we intervene within 4 to 48 hours, and backups allow a fast restore.",
-      vi: "Giám sát selon formule phát hiện sự cố theo thời gian thực. Tùy gói, chúng tôi xử lý trong 4 đến 48 giờ, và bản sao lưu cho phép khôi phục nhanh.",
+      fr: "Le monitoring selon formule détecte l’incident. Selon votre forfait, nous intervenons dans le délai prévu par le périmètre WebCare, et les sauvegardes permettent une restauration rapide.",
+      en: "Monitoring according to plan detects incidents. Depending on your plan, we respond within the agreed WebCare scope, and backups allow a fast restore.",
+      vi: "Giám sát theo gói phát hiện sự cố. Tùy gói, chúng tôi phản hồi theo phạm vi WebCare đã thỏa thuận và sao lưu cho phép khôi phục nhanh.",
     },
   },
   {
