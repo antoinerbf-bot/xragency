@@ -5,6 +5,7 @@ import { ImmersiveJourney } from "@/components/site/ImmersiveJourney";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
 import { Intelligence } from "@/components/site/Intelligence";
 import { DigitalAudit } from "@/components/site/DigitalAudit";
+import { MapsSimulator } from "@/components/site/MapsSimulator";
 import { HomeServices } from "@/components/site/HomeServices";
 import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
@@ -35,6 +36,7 @@ function Index() {
         <HomeServices />
         <Intelligence />
         <DigitalAudit />
+        <MapsSimulator />
         <Faq />
         <Contact />
       </main>
