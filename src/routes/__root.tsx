@@ -65,8 +65,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "XR Agency — Studio digital premium & IA" },
       { name: "twitter:description", content: "Sites web sur mesure, branding, SEO local, Google Maps TOP 3 et assistants IA. Studio digital premium — FR / EN / VI." },
-      { property: "og:image", content: "https://xragencyai.com/logo-xr-agency.svg" },
-      { name: "twitter:image", content: "https://xragencyai.com/logo-xr-agency.svg" },
+      { property: "og:image", content: "https://xragencyai.com/og-image.svg" },
+      { name: "twitter:image", content: "https://xragencyai.com/og-image.svg" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
