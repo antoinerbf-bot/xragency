@@ -429,7 +429,7 @@ function ServiceDetailPage() {
                             <span>{isCustomMaps ? "Nous contacter · à partir de 990 € / an" : t(PERIOD_LABEL[displayPeriod])}</span>
                             {planIsInstallment && (
                               <span className="text-[10px] text-primary/80 leading-tight max-w-[140px]">
-                                {t({ fr: "sur 12 mois (infrastructure annuelle 79€/an)", en: "over 12 mo (incl. domain & hosting 79€/m)", vi: "trong 12 tháng (gồm domain & hosting 79€/m)" })}
+                                {t({ fr: "sur 12 mois (infrastructure annuelle 79€/an)", en: "over 12 mo (incl. domain & hosting 79€/year)", vi: "trong 12 tháng (gồm domain & hosting 79€/năm)" })}
                               </span>
                             )}
                           </span>
