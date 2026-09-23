@@ -74,7 +74,11 @@ export function HomeServices() {
             return (
               <Reveal key={service.id} delay={index * 70} className={featuredLarge ? "sm:col-span-1" : ""}>
                 <article className="group relative isolate min-h-[500px] overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#0b0e11] shadow-[0_30px_90px_-45px_rgba(0,0,0,.95)] sm:min-h-[560px]">
-                  <div className="absolute inset-0 flex items-center justify-center p-3 sm:p-5">\n                    <ServiceIllustration service={service.id} title={t(service.title)} />\n                  </div>\n\n                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-black/5" />
+                  <div className="absolute inset-0 flex items-center justify-center p-3 sm:p-5">
+                    <ServiceIllustration service={service.id} title={t(service.title)} />
+                  </div>
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-black/5" />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-transparent to-transparent" />
 
                   <div className="relative z-10 flex min-h-[500px] flex-col justify-between p-6 sm:min-h-[560px] sm:p-9 lg:p-10">
