@@ -609,20 +609,20 @@ export const SERVICES: Service[] = [
     fromPeriod: "month",
     highlights: [
       {
-        fr: "+340 % de trafic organique",
-        en: "+340% organic traffic",
-        vi: "+340% lưu lượng tự nhiên",
+        fr: "Acquisition organique à développer",
+        en: "Organic acquisition to develop",
+        vi: "Phát triển lưu lượng tự nhiên",
       },
-      { fr: "Positionnement TOP 10", en: "TOP 10 positioning", vi: "Xếp hạng TOP 10" },
+      { fr: "Objectif de positionnement", en: "Positioning objective", vi: "Mục tiêu định vị" },
       {
-        fr: "600+ articles optimisés",
-        en: "600+ optimised articles",
-        vi: "Hơn 600 bài viết tối ưu",
+        fr: "Contenus SEO ciblés",
+        en: "Targeted SEO content",
+        vi: "Nội dung SEO mục tiêu",
       },
       {
-        fr: "Monitoring continu 24/7",
-        en: "Continuous 24/7 monitoring",
-        vi: "Giám sát liên tục 24/7",
+        fr: "Suivi technique selon formule",
+        en: "Technical monitoring according to plan",
+        vi: "Giám sát kỹ thuật theo gói",
       },
     ],
     steps: [
@@ -681,7 +681,7 @@ export const SERVICES: Service[] = [
     ],
     metrics: [
       {
-        metric: "+340%",
+        metric: "Selon objectifs",
         label: { fr: "Trafic organique", en: "Organic traffic", vi: "Lưu lượng tự nhiên" },
         desc: {
           fr: "Croissance moyenne constatée sur 6 mois.",
@@ -1134,9 +1134,9 @@ export const SERVICES: Service[] = [
       vi: "Hosting edge, sao lưu, SLA. Không điểm mù.",
     },
     description: {
-      fr: "Gardez un site rapide, sécurisé et à jour grâce à une maintenance proactive : mises à jour, sauvegardes, monitoring 24/7 et interventions rapides.",
-      en: "Keep your site fast, secure and up to date with proactive maintenance: updates, backups, 24/7 monitoring and fast interventions.",
-      vi: "Giữ website nhanh, an toàn và luôn cập nhật với bảo trì chủ động: cập nhật, sao lưu, giám sát 24/7 và xử lý nhanh.",
+      fr: "Gardez un site rapide, sécurisé et à jour grâce à une maintenance proactive : mises à jour, sauvegardes, monitoring selon formule et interventions rapides.",
+      en: "Keep your site fast, secure and up to date with proactive maintenance: updates, backups, selon formule monitoring and fast interventions.",
+      vi: "Giữ website nhanh, an toàn và luôn cập nhật với bảo trì chủ động: cập nhật, sao lưu, giám sát selon formule và xử lý nhanh.",
     },
     fromEur: 29,
     fromPeriod: "month",
@@ -1171,9 +1171,9 @@ export const SERVICES: Service[] = [
       {
         num: "02",
         title: {
-          fr: "Surveillance Active 24/7",
-          en: "24/7 Active Monitoring",
-          vi: "Giám sát Chủ động 24/7",
+          fr: "Surveillance Active selon formule",
+          en: "selon formule Active Monitoring",
+          vi: "Giám sát Chủ động selon formule",
         },
         desc: {
           fr: "Sondes temps réel pour détecter immédiatement toute indisponibilité, anomalie ou tentative d'intrusion.",
@@ -2270,9 +2270,9 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
       vi: "Điều gì xảy ra nếu website của tôi gặp sự cố?",
     },
     a: {
-      fr: "Le monitoring 24/7 détecte l'incident en temps réel. Selon votre forfait, nous intervenons sous 4 h à 48 h, et les sauvegardes permettent une restauration rapide.",
-      en: "24/7 monitoring detects the incident in real time. Depending on your plan we intervene within 4 to 48 hours, and backups allow a fast restore.",
-      vi: "Giám sát 24/7 phát hiện sự cố theo thời gian thực. Tùy gói, chúng tôi xử lý trong 4 đến 48 giờ, và bản sao lưu cho phép khôi phục nhanh.",
+      fr: "Le monitoring selon formule détecte l'incident en temps réel. Selon votre forfait, nous intervenons sous 4 h à 48 h, et les sauvegardes permettent une restauration rapide.",
+      en: "selon formule monitoring detects the incident in real time. Depending on your plan we intervene within 4 to 48 hours, and backups allow a fast restore.",
+      vi: "Giám sát selon formule phát hiện sự cố theo thời gian thực. Tùy gói, chúng tôi xử lý trong 4 đến 48 giờ, và bản sao lưu cho phép khôi phục nhanh.",
     },
   },
   {
@@ -2444,7 +2444,7 @@ const CORE_SHOWCASE = [
       en: "Full-screen immersive portfolio, cinematic transitions, project-by-project storytelling. Contemporary architecture studio.",
       vi: "Portfolio nhập vai toàn màn hình, chuyển cảnh điện ảnh, kể chuyện theo dự án. Studio kiến trúc đương đại.",
     },
-    metric: "+340% temps sur site",
+    metric: "Selon objectifs",
     image:
       "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=85&w=1200",
   },
