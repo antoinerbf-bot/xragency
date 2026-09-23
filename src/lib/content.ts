@@ -103,7 +103,7 @@ export const SERVICES: Service[] = [
       },
       { fr: "Optimisation des performances et des médias", en: "Under 2s load time", vi: "Tải trang dưới 2 giây" },
       { fr: "Expérience multi-secteurs", en: "Multi-projets websites delivered", vi: "Hơn 200 website đã bàn giao" },
-      { fr: "Hébergement 1 an inclus", en: "1 year hosting included", vi: "Bao gồm 1 năm lưu trữ" },
+      { fr: "Hébergement + domaine 1 an inclus", en: "1 year hosting + domain included", vi: "Bao gồm hosting + tên miền 1 năm" },
     ],
     steps: [
       {
