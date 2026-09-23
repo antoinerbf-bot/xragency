@@ -241,7 +241,7 @@ export function Work() {
                     />
 
                     <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/40 px-3 py-1 label-mono text-[9px] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-md">
-                      PROJECT
+                      XR PROJECT
                     </span>
 
                     <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 text-white">
