@@ -182,7 +182,7 @@ export const UI: Record<string, L> = {
   intelDisclaimer: {
     fr: "Estimation indicative établie à partir de nos grilles tarifaires. Le devis définitif est confirmé après validation du périmètre.",
     en: "Indicative estimate based on our published price lists. The final quote is confirmed after scope validation.",
-    vi: "Ước tính tham khảo dựa trên bảng giá của chúng tôi. Báo giá cuối cùng được xác nhận trong 24 giờ.",
+    vi: "Ước tính tham khảo dựa trên bảng giá của chúng tôi. Báo giá cuối cùng được xác nhận sau khi phạm vi được thống nhất.",
   },
   intelWhy: { fr: "Pourquoi", en: "Why", vi: "Vì sao" },
   intelOptionsTitle: {
@@ -392,7 +392,7 @@ export const UI: Record<string, L> = {
   contactQuote: {
     fr: "« Une correspondance vaut mille présentations. Écrivez-nous — nous vous répondrons rapidement. »",
     en: "“One letter is worth a thousand presentations. Write to us — we’ll reply promptly.”",
-    vi: "“Một lá thư giá trị hơn ngàn bài thuyết trình. Hãy viết cho chúng tôi — chúng tôi trả lời trong 24 giờ.”",
+    vi: "“Một lá thư giá trị hơn ngàn bài thuyết trình. Hãy viết cho chúng tôi — chúng tôi sẽ phản hồi sớm.”",
   },
   footerMade: {
     fr: "Fait avec obsession — Paris, France",
