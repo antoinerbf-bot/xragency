@@ -214,7 +214,7 @@ export function Services() {
 
                 {/* Progress dots — clickable */}
                 <div className="mt-5 flex items-center gap-1">
-                  {SERVICES.map((s) => (
+                  {SERVICES.filter((s) => CORE_SERVICE_IDS.includes(s.id as (typeof CORE_SERVICE_IDS)[number])).map((s) => (
                     <button
                       key={s.id}
                       onClick={() => setActiveId(s.id)}
@@ -235,7 +235,7 @@ export function Services() {
 
         {/* ── Mobile: compact card grid ── */}
         <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:hidden">
-          {SERVICES.filter((s) => ["websites","branding","seo","maps","social","maintenance","ecommerce"].includes(s.id)).map((s, i) => (
+          {SERVICES.filter((s) => CORE_SERVICE_IDS.includes(s.id as (typeof CORE_SERVICE_IDS)[number])).map((s, i) => (
             <ServiceCard key={s.id} s={s} i={i} />
           ))}
         </div>
