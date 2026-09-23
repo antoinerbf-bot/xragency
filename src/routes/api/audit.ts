@@ -54,6 +54,9 @@ export const Route = createFileRoute("/api/audit")({
           const typeScores = types.map(type => scoreAudit(html, response.headers, type));
           const score = Math.round(typeScores.reduce((sum, value) => sum + value, 0) / typeScores.length);
           const recommendations = types.map(type => TYPE_META[type]).filter(Boolean);
+          const sector = body.sector || "autre";
+          const budget = body.budget || "non renseigné";
+          recommendations.push({ service: "Priorisation " + sector, reason: "Recommandations calibrées pour le contexte déclaré et le budget " + budget + "." });
           const findings = types.flatMap(type => {
             const checks = type === "seo"
               ? [
