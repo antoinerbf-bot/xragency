@@ -435,7 +435,7 @@ function ServiceDetailPage() {
                                 isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                               )}
                             >
-                              Mensualités
+                              Comptant
                             </button>
                             <button
                               onClick={(e) => {
@@ -447,7 +447,7 @@ function ServiceDetailPage() {
                                 !isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                               )}
                             >
-                              Comptant
+                              Mensualités
                             </button>
                           </div>
                         )}
@@ -460,7 +460,7 @@ function ServiceDetailPage() {
                             <span>{isCustomMaps ? "Nous contacter · à partir de 990 € / an" : t(PERIOD_LABEL[displayPeriod])}</span>
                             {planIsInstallment && (
                               <span className="text-[10px] text-primary/80 leading-tight max-w-[140px]">
-                                {t({ fr: "sur 12 mois (inclus domaine & hébergement 79€/m)", en: "over 12 mo (incl. domain & hosting 79€/m)", vi: "trong 12 tháng (gồm domain & hosting 79€/m)" })}
+                                {t({ fr: "sur 12 mois (infrastructure annuelle 79€/an)", en: "over 12 mo (incl. domain & hosting 79€/m)", vi: "trong 12 tháng (gồm domain & hosting 79€/m)" })}
                               </span>
                             )}
                           </span>
