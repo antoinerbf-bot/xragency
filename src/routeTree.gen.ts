@@ -22,6 +22,10 @@ import { Route as ServicesIndexRouteImport } from './routes/services/index'
 import { Route as ServicesServiceIdRouteImport } from './routes/services/$serviceId'
 import { Route as ServicesSeoRouteImport } from './routes/services/seo'
 import { Route as ServicesWebcareRouteImport } from './routes/services/webcare'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as NotreHistoireRouteImport } from './routes/notre-histoire'
+import { Route as RealisationsRouteImport } from './routes/realisations'
+import { Route as SitemapXmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as DashboardAuditsAuditIdRouteImport } from './routes/dashboard/audits.$auditId'
 import { Route as DashboardProspectsProspectIdRouteImport } from './routes/dashboard/prospects.$prospectId'
 
@@ -90,6 +94,27 @@ const ServicesWebcareRoute = ServicesWebcareRouteImport.update({
   path: '/services/webcare',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotreHistoireRoute = NotreHistoireRouteImport.update({
+  id: '/notre-histoire',
+  path: '/notre-histoire',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RealisationsRoute = RealisationsRouteImport.update({
+  id: '/realisations',
+  path: '/realisations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapXmlRoute = SitemapXmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
 const DashboardAuditsAuditIdRoute = DashboardAuditsAuditIdRouteImport.update({
   id: '/$auditId',
   path: '/$auditId',
@@ -105,6 +130,14 @@ const DashboardProspectsProspectIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/work': typeof WorkRoute
+  '/faq': typeof FaqRoute
+  '/notre-histoire': typeof NotreHistoireRoute
+  '/realisations': typeof RealisationsRoute
+  '/sitemap.xml': typeof SitemapXmlRoute
+  '/faq': typeof FaqRoute
+  '/notre-histoire': typeof NotreHistoireRoute
+  '/realisations': typeof RealisationsRoute
+  '/sitemap.xml': typeof SitemapXmlRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
@@ -158,6 +191,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/work'
+    | '/faq'
+    | '/notre-histoire'
+    | '/realisations'
+    | '/sitemap.xml'
     | '/dashboard'
     | '/api/send-quote'
     | '/dashboard/audits'
@@ -209,6 +246,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   WorkRoute: typeof WorkRoute
+  FaqRoute: typeof FaqRoute
+  NotreHistoireRoute: typeof NotreHistoireRoute
+  RealisationsRoute: typeof RealisationsRoute
+  SitemapXmlRoute: typeof SitemapXmlRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   ApiSendQuoteRoute: typeof ApiSendQuoteRoute
   ServicesServiceIdRoute: typeof ServicesServiceIdRoute
@@ -303,6 +344,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesWebcareRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notre-histoire': {
+      id: '/notre-histoire'
+      path: '/notre-histoire'
+      fullPath: '/notre-histoire'
+      preLoaderRoute: typeof NotreHistoireRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/realisations': {
+      id: '/realisations'
+      path: '/realisations'
+      fullPath: '/realisations'
+      preLoaderRoute: typeof RealisationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapXmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/work': {
       id: '/work'
       path: '/work'
@@ -373,6 +442,10 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   WorkRoute: WorkRoute,
+  FaqRoute: FaqRoute,
+  NotreHistoireRoute: NotreHistoireRoute,
+  RealisationsRoute: RealisationsRoute,
+  SitemapXmlRoute: SitemapXmlRoute,
   DashboardRoute: DashboardRouteWithChildren,
   ApiSendQuoteRoute: ApiSendQuoteRoute,
   ServicesServiceIdRoute: ServicesServiceIdRoute,
