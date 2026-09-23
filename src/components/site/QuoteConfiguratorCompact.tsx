@@ -181,10 +181,20 @@ export function QuoteConfiguratorCompact() {
       y += 6;
       doc.text(`Total mensuel estimé : ${monthly.toLocaleString("fr-FR")} € / mois`, 20, y);
 
-      // The PDF is always delivered locally. No email/API call can block the download.
+      const pdfBase64 = doc.output("datauristring").split(",")[1] || "";
       doc.save("devis-xragency.pdf");
+      try {
+        const response = await fetch("/api/send-quote", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ email: client.email, name: client.name, pdfBase64, quoteNumber: "XR-" + new Date().toISOString().slice(0, 10).replace(/-/g, "") }),
+        });
+        if (!response.ok) throw new Error("PDF téléchargé. L’envoi automatique par e-mail n’est pas disponible pour le moment.");
+        setSendMessage("Votre devis PDF a été téléchargé et envoyé par e-mail. Une copie est également transmise à XR Agency.");
+      } catch (emailError) {
+        setSendMessage(emailError instanceof Error ? emailError.message : "PDF téléchargé. L’envoi automatique par e-mail a échoué.");
+      }
       setGenerated(true);
-      setSendMessage("Votre devis PDF a été téléchargé sur votre appareil.");
     } catch (error) {
       setSendMessage(error instanceof Error ? error.message : "Impossible de générer le devis PDF.");
     } finally {
