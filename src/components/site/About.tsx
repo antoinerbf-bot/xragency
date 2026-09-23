@@ -57,7 +57,7 @@ const ADVANTAGES = [
       en: "Delivery timelines defined by scope, with a structured production process.",
       vi: "Thời gian triển khai được xác định theo phạm vi, với quy trình sản xuất rõ ràng.",
     },
-    tag: "7 à 14 jours",
+    tag: "Selon périmètre",
   },
   {
     icon: Layers,
