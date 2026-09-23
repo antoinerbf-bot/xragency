@@ -40,7 +40,7 @@ export function ServiceIllustration({ service, title }: Props) {
             <rect x="155" y="145" width="210" height="18" rx="9" fill="#fff" fillOpacity=".85" />
             <rect x="155" y="185" width="360" height="10" rx="5" fill="#fff" fillOpacity=".16" />
             <rect x="155" y="215" width="280" height="10" rx="5" fill="#fff" fillOpacity=".10" />
-            {[0,1,2].map((i) => <g key={i} transform={"translate(" + (155+i*155) + " 275)"}><rect width="125" height="115" rx="14" fill="#1c1c1c" stroke="#f2a33a" strokeOpacity=".5"/><circle cx="30" cy="30" r="10" fill="#f2a33a" fillOpacity=".8"/><rect x="20" y="58" width="85" height="7" rx="3.5" fill="#fff" fillOpacity=".25"/><rect x="20" y="78" width="60" height="7" rx="3.5" fill="#fff" fillOpacity=".12"/></g>)}
+            {["Instagram","Facebook","TikTok","LinkedIn"].map((name,i) => <g key={name} transform={"translate(" + (145+i*132) + " 275)"}><rect width="108" height="115" rx="14" fill="#1c1c1c" stroke="#f2a33a" strokeOpacity=".5"/><circle cx="28" cy="28" r="9" fill="#f2a33a" fillOpacity=".85"/><text x="54" y="32" fontSize="9" textAnchor="middle" fontWeight="700" fill="#fff" fillOpacity=".8">{name}</text><rect x="16" y="58" width="76" height="7" rx="3.5" fill="#fff" fillOpacity=".25"/><rect x="16" y="78" width="55" height="7" rx="3.5" fill="#fff" fillOpacity=".12"/></g>)}
             <path d="M575 150 C625 180 640 230 610 265" fill="none" stroke={"url(#" + uid + "-line)"} strokeWidth="4" />
             <circle cx="610" cy="265" r="7" fill="#f2a33a" />
           </g>
