@@ -21,6 +21,7 @@ import { HeroSection } from "@/components/seo/HeroSection";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
 import { AddToCartBtn } from "@/components/site/Cart";
 import { cn } from "@/lib/utils";
+import { ServiceIllustration } from "@/components/site/ServiceIllustration";
 
 const IMG_WEBSITES =
   "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1600&q=85";
@@ -151,7 +152,6 @@ function ServiceDetailPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const heroImg = SERVICE_IMAGES[service.id] ?? IMG_WEBSITES;
   const otherServices = SERVICES.filter((s) => s.id !== service.id);
 
   // Filter relevant FAQs
@@ -269,7 +269,7 @@ function ServiceDetailPage() {
                 )}
               </div>
               <div className="lg:col-span-5">
-                <img src={heroImg} alt={t(service.title)} className="w-full rounded-lg shadow-lg" />
+                <ServiceIllustration service={service.id} title={t(service.title)} />
               </div>
             </div>
           </div>
