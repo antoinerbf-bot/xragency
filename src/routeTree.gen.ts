@@ -134,10 +134,6 @@ export interface FileRoutesByFullPath {
   '/notre-histoire': typeof NotreHistoireRoute
   '/realisations': typeof RealisationsRoute
   '/sitemap.xml': typeof SitemapXmlRoute
-  '/faq': typeof FaqRoute
-  '/notre-histoire': typeof NotreHistoireRoute
-  '/realisations': typeof RealisationsRoute
-  '/sitemap.xml': typeof SitemapXmlRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
@@ -155,6 +151,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/work': typeof WorkRoute
+  '/faq': typeof FaqRoute
+  '/notre-histoire': typeof NotreHistoireRoute
+  '/realisations': typeof RealisationsRoute
+  '/sitemap.xml': typeof SitemapXmlRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
@@ -172,6 +172,10 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/work': typeof WorkRoute
+  '/faq': typeof FaqRoute
+  '/notre-histoire': typeof NotreHistoireRoute
+  '/realisations': typeof RealisationsRoute
+  '/sitemap.xml': typeof SitemapXmlRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
@@ -212,6 +216,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/work'
+    | '/faq'
+    | '/notre-histoire'
+    | '/realisations'
+    | '/sitemap.xml'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
@@ -228,6 +236,10 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/work'
+    | '/faq'
+    | '/notre-histoire'
+    | '/realisations'
+    | '/sitemap.xml'
     | '/dashboard'
     | '/api/send-quote'
     | '/dashboard/audits'
@@ -342,6 +354,34 @@ declare module '@tanstack/react-router' {
       path: '/services/webcare'
       fullPath: '/services/webcare'
       preLoaderRoute: typeof ServicesWebcareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notre-histoire': {
+      id: '/notre-histoire'
+      path: '/notre-histoire'
+      fullPath: '/notre-histoire'
+      preLoaderRoute: typeof NotreHistoireRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/realisations': {
+      id: '/realisations'
+      path: '/realisations'
+      fullPath: '/realisations'
+      preLoaderRoute: typeof RealisationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapXmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
