@@ -1,12 +1,10 @@
 
-import { useEffect, useRef, useState } from "react";
 import { Sparkles, ShieldCheck, FileImage, Search, ArrowUpRight } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import earthTexture from "@/assets/earth_texture.jpg";
 import { EmberButton, Parallax } from "./primitives";
-// import EarthGlobe from "./EarthGlobe"; // Globe removed per user request
 
 function GlobalPresence() {
   return (
@@ -123,21 +121,19 @@ export function Hero() {
           </Parallax>
         </div>
 
-        {/* Bottom Key Stats Bar with Animated Counters */}
+        {/* Trust bar — factual, non-inflated */}
         <div>
           <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 sm:grid-cols-4 shadow-sm">
-            <AnimatedStat value={500} suffix="+" label={t(UI.statProjects)} delay={550} />
-            <AnimatedStat value={8} suffix="+" label={t(UI.statYears)} delay={630} />
-            <AnimatedStat value={98} suffix="%" label={t(UI.statSatisfaction)} delay={710} />
-            <AnimatedStat value={2} suffix="h" label={t(UI.statResponse)} delay={790} />
+            <div className="bg-card/75 px-5 py-4"><dt className="display-serif text-2xl text-primary sm:text-3xl font-bold">01</dt><dd className="label-mono mt-1 text-xs text-muted-foreground">Direction digitale</dd></div>
+            <div className="bg-card/75 px-5 py-4"><dt className="display-serif text-2xl text-primary sm:text-3xl font-bold">07</dt><dd className="label-mono mt-1 text-xs text-muted-foreground">Offres principales</dd></div>
+            <div className="bg-card/75 px-5 py-4"><dt className="display-serif text-2xl text-primary sm:text-3xl font-bold">FR · EN · VI</dt><dd className="label-mono mt-1 text-xs text-muted-foreground">Expérience multilingue</dd></div>
+            <div className="bg-card/75 px-5 py-4"><dt className="display-serif text-2xl text-primary sm:text-3xl font-bold">01→</dt><dd className="label-mono mt-1 text-xs text-muted-foreground">Un seul point de contact</dd></div>
           </dl>
-
           <div className="mt-5 flex items-center justify-between gap-4 border-t border-border/60 py-4">
-            <span className="label-mono text-xs text-muted-foreground/70">XR Intelligence · Devis sur mesure</span>
+            <span className="label-mono text-xs text-muted-foreground/70">XR Intelligence · Analyse · Devis sur mesure</span>
             <span className="label-mono text-xs text-primary">01 · Analyse</span>
           </div>
-        </div>
-      </div>
+        </div>      </div>
     </section>
   );
 }
