@@ -1794,9 +1794,9 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
       vi: "Mỗi tháng bao gồm bao nhiêu bài đăng?",
     },
     a: {
-      fr: "8 publications pour Essential, 16 pour Business et un volume illimité pour Premium. Chaque publication est créée sur mesure avec un visuel original.",
-      en: "8 posts for Essential, 16 for Business and unlimited for Premium. Every post is created bespoke with original visuals.",
-      vi: "8 bài cho Essential, 16 bài cho Business và không giới hạn cho Premium. Mỗi bài đăng đều được thiết kế riêng với hình ảnh gốc.",
+      fr: "8 publications pour Présence Essentielle, 20 pour Croissance Active et 30 pour Domination Sociale. La création des visuels, la rédaction et la programmation sont incluses selon la formule.",
+      en: "8 posts for Essential Presence, 20 for Active Growth and 30 for Social Domination. Visual creation, copywriting and scheduling are included according to plan.",
+      vi: "8 bài cho Hiện diện Cơ bản, 20 bài cho Tăng trưởng Chủ động và 30 bài cho Thống trị Mạng xã hội. Thiết kế hình ảnh, viết nội dung và lên lịch theo gói.",
     },
   },
   {
