@@ -114,7 +114,7 @@ export const Route = createFileRoute("/services/$serviceId")({
         { title: `${s.title.fr} — XR Agency` },
         {
           name: "description",
-          content: `${s.short.fr} — Tarifs officiels, livrables et garantie de performance.`,
+          content: `${s.short.fr} — Tarifs officiels, livrables et méthode de travail.`,
         },
         { property: "og:title", content: `${s.title.fr} — XR Agency` },
         {
