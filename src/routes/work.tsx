@@ -16,8 +16,8 @@ export const Route = createFileRoute("/work")({
       { property: "og:description", content: "Explorez les projets XR Agency et des références publiques classées par secteur et prestation." },
       { property: "og:type", content: "website" },
       { name: "robots", content: "index,follow,max-image-preview:large" },
-      { link: "canonical", href: "https://xragencyai.com/realisations" },
     ],
+    links: [{ rel: "canonical", href: "https://xragencyai.com/realisations" }],
   }),
   component: WorkPage,
 });
