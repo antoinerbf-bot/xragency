@@ -9,7 +9,9 @@ import { ServiceIllustration } from "./ServiceIllustration";
 import { cn } from "@/lib/utils";
 
 /* ── Premium service illustrations ── */
-const CORE_SERVICE_IDS = ["websites", "branding", "seo", "maps", "social", "maintenance", "ecommerce"] as const;\n\n/* ── Desktop: single service row ── */
+const CORE_SERVICE_IDS = ["websites", "branding", "seo", "maps", "social", "maintenance", "ecommerce"] as const;
+
+/* ── Desktop: single service row ── */
 function ServiceRow({
   s,
   isActive,
