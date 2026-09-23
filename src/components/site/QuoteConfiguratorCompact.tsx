@@ -105,6 +105,7 @@ export function QuoteConfiguratorCompact() {
       let price = BASE_PRICES[service.id];
       let label = service.label;
       let detail = service.detail;
+      if (service.id === "maps") { price = 990; label = "Google Maps Top 3"; detail = "SUR MESURE · à partir de 990 € / an · selon positionnement, zone, concurrence et mots-clés"; }
       if (service.id === "website") {
         if (situation === "selling") {
           price = WEBSITE_TIERS.ecommerce.price; label = WEBSITE_TIERS.ecommerce.label; detail = WEBSITE_TIERS.ecommerce.detail;
