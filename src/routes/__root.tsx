@@ -65,8 +65,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "XR Agency — Studio digital premium & IA" },
       { name: "twitter:description", content: "Sites web sur mesure, branding, SEO local, Google Maps TOP 3 et assistants IA. Studio digital premium — FR / EN / VI." },
-      { property: "og:image", content: "https://xragency.vercel.app/x-favicon.svg" },
-      { name: "twitter:image", content: "https://xragency.vercel.app/x-favicon.svg" },
+      { property: "og:image", content: "https://xragencyai.com/x-favicon.svg" },
+      { name: "twitter:image", content: "https://xragencyai.com/x-favicon.svg" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -75,7 +75,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "preconnect", href: "https://images.unsplash.com" },
       { rel: "preload", as: "style", href: "https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" },
-      { rel: "canonical", href: "https://xragency.vercel.app" },
+      { rel: "canonical", href: "https://xragencyai.com/" },
     ],
   }),
   shellComponent: RootShell,
@@ -116,12 +116,12 @@ function RootComponent() {
     "@type": "ProfessionalService",
     name: "XR Agency",
     alternateName: "KARMA SASU",
-    description: "Studio digital & IA de prestige : création de sites web sur-mesure, branding, SEO domination, Google Maps TOP 3 et assistants IA.",
-    url: "https://xragency.vercel.app",
+    description: "Agence digitale : création de sites web sur mesure, branding, SEO, visibilité locale, Google Maps et IA.",
+    url: "https://xragencyai.com",
     telephone: "+33 7 67 56 67 83",
     email: "contact.xragency@gmail.com",
-    address: { "@type": "PostalAddress", streetAddress: "78 Avenue des Champs-Élysées, Bureau 562", addressLocality: "Paris", postalCode: "75008", addressCountry: "FR" },
     priceRange: "€€€",
+    sameAs: ["https://www.instagram.com/xragency_", "https://linkedin.com/company/xragency"],
   };
   return (
     <QueryClientProvider client={queryClient}>
