@@ -81,7 +81,7 @@ function ServiceRow({
             isActive ? "text-background/75" : "text-primary",
           )}
         >
-          Dès {price(s.fromEur)}{s.fromPeriod === "month" ? " / mois" : s.fromPeriod === "year" ? " / an" : ""}
+          {t({ fr: "Dès", en: "From", vi: "Từ" })} {price(s.fromEur)}{s.fromPeriod === "month" ? " / mois" : s.fromPeriod === "year" ? " / an" : ""}
         </span>
         <span
           className={cn(
@@ -121,7 +121,7 @@ function ServiceCard({ s, i }: { s: (typeof SERVICES)[number]; i: number }) {
           </p>
           <div className="mt-3 flex items-center justify-between border-t border-border/40 pt-2.5">
             <span className="label-mono text-[10px] font-semibold text-primary">
-              Voir les formules →
+              {t({ fr: "Voir les formules", en: "View plans", vi: "Xem gói dịch vụ" })} →
             </span>
             <span className="flex h-6 w-6 items-center justify-center rounded-full border border-border transition-all duration-200 group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
               <ArrowUpRight className="h-3 w-3" />
@@ -207,7 +207,7 @@ export function Services() {
                     params={{ serviceId: activeService.id }}
                     className="label-mono inline-flex items-center gap-2 rounded-full bg-white text-black px-4 py-2 text-xs font-semibold shadow-lg transition-all duration-200 hover:bg-white/90 hover:translate-x-0.5"
                   >
-                    Consulter la prestation complète
+                    {t({ fr: "Consulter la prestation complète", en: "View full service", vi: "Xem dịch vụ đầy đủ" })}
                     <ArrowUpRight className="h-3.5 w-3.5" />
                   </Link>
                 </div>
@@ -245,7 +245,7 @@ export function Services() {
           <div className="mt-12 flex flex-col items-center gap-4 text-center">
             <p className="text-sm text-muted-foreground">
               {t({
-                fr: "Chaque projet est unique. Discutons du vôtre dès aujourd'hui.",
+                fr: "{t({ fr: "Chaque projet est unique. Discutons du vôtre dès aujourd'hui.", en: "Every project is unique. Let's discuss yours today.", vi: "Mỗi dự án đều độc nhất. Hãy thảo luận về dự án của bạn ngay hôm nay." })}",
                 en: "Every project is unique. Let's discuss yours today.",
                 vi: "Mỗi dự án đều độc nhất. Hãy thảo luận về dự án của bạn ngay hôm nay.",
               })}
@@ -255,20 +255,20 @@ export function Services() {
                 to="/services"
                 className="label-mono inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-5 py-2.5 text-xs font-semibold text-primary transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:-translate-y-0.5"
               >
-                Accéder au catalogue officiel des 7 offres →
+                {t({ fr: "Accéder au catalogue officiel des 7 offres", en: "Open the official seven-service catalogue", vi: "Mở danh mục chính thức gồm 7 dịch vụ" })} →
               </Link>
               <a
                 href="#pricing"
                 className="label-mono inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-xs text-foreground transition-all duration-300 hover:border-primary hover:text-primary hover:-translate-y-0.5"
               >
-                Grille tarifaire détaillée ↓
+                {t({ fr: "Grille tarifaire détaillée", en: "Detailed pricing", vi: "Bảng giá chi tiết" })} ↓
               </a>
               <a
                 href="#intelligence"
                 className="label-mono inline-flex items-center gap-2 rounded-full border border-primary bg-primary px-5 py-2.5 text-xs font-semibold text-primary-foreground shadow-lg transition-all duration-300 hover:bg-primary/90 hover:-translate-y-0.5"
               >
                 <Sparkles className="h-3.5 w-3.5" />
-                Lancer mon analyse stratégique IA
+                {t({ fr: "Lancer mon analyse stratégique IA", en: "Launch my AI strategy analysis", vi: "Bắt đầu phân tích chiến lược AI" })}
               </a>
             </div>
           </div>
