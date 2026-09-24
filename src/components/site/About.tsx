@@ -62,13 +62,13 @@ const ADVANTAGES = [
   {
     icon: Layers,
     title: {
-      fr: "Collectif Senior 4-en-1",
-      en: "Senior 4-in-1 Collective",
-      vi: "Đội ngũ Cấp cao 4-trong-1",
+      fr: "Collectif pluridisciplinaire",
+      en: "Multidisciplinary collective",
+      vi: "Đội ngũ đa chuyên môn",
     },
     desc: {
-      fr: "Directeur Artistique, Développeur Cloud, Expert SEO et Ingénieur IA dédiés à votre réussite.",
-      en: "Art Director, Cloud Developer, SEO Specialist and AI Engineer dedicated to your success.",
+      fr: "Une organisation pluridisciplinaire réunissant création, développement, SEO et IA selon les besoins du projet.",
+      en: "A multidisciplinary setup combining creative direction, development, SEO and AI according to project needs.",
       vi: "Chỉ đạo nghệ thuật, Lập trình viên Cloud, Chuyên gia SEO và Kỹ sư AI đồng hành cùng bạn.",
     },
     tag: "DA · DEV · SEO · IA",
@@ -90,14 +90,14 @@ const ADVANTAGES = [
   {
     icon: BarChart3,
     title: {
-      fr: "Rentabilité & Zéro Charge",
-      en: "Max ROI & Zero Payroll Tax",
-      vi: "Tối đa ROI & Không gánh nặng",
+      fr: "Budget & agilité",
+      en: "Budget & agility",
+      vi: "Ngân sách & linh hoạt",
     },
     desc: {
-      fr: "Une formule agile sans engagement lourd : vous n'investissez que dans la croissance réelle.",
-      en: "Agile, flexible engagement model: you only invest in tangible business growth.",
-      vi: "Mô hình linh hoạt không ràng buộc: bạn chỉ đầu tư vào sự tăng trưởng thực chất.",
+      fr: "Une organisation flexible : vous investissez selon le périmètre et les priorités définis ensemble.",
+      en: "A flexible model: investment follows the agreed scope and priorities.",
+      vi: "Mô hình linh hoạt: ngân sách được xác định theo phạm vi và ưu tiên đã thống nhất.",
     },
     tag: "ROI à mesurer",
   },
