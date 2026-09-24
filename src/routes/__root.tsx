@@ -16,7 +16,6 @@ import { WhatsAppWidget } from "../components/site/WhatsAppWidget";
 import { CursorGlow } from "../components/site/CursorGlow";
 import { ThemeSwitcher } from "../components/theme/ThemeSwitcher";
 import { ThemeProvider } from "../components/theme/ThemeProvider";
-import "../lib/more-showcase";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
