@@ -245,7 +245,7 @@ export function Services() {
           <div className="mt-12 flex flex-col items-center gap-4 text-center">
             <p className="text-sm text-muted-foreground">
               {t({
-                fr: "{t({ fr: "Chaque projet est unique. Discutons du vôtre dès aujourd'hui.", en: "Every project is unique. Let's discuss yours today.", vi: "Mỗi dự án đều độc nhất. Hãy thảo luận về dự án của bạn ngay hôm nay." })}",
+                fr: "Chaque projet est unique. Discutons du vôtre dès aujourd'hui.",
                 en: "Every project is unique. Let's discuss yours today.",
                 vi: "Mỗi dự án đều độc nhất. Hãy thảo luận về dự án của bạn ngay hôm nay.",
               })}
