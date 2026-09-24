@@ -708,9 +708,9 @@ export const UI: Record<string, L> = {
     vi: "Tại sao phải tuyển dụng và quản lý 5 nhân viên khi bạn có thể kết nối ngay lập tức một đội ngũ cấp cao hoàn chỉnh, phối hợp nhịp nhàng và sẵn sàng khi doanh nghiệp tăng tốc?",
   },
   aboutTeamLabel: {
-    fr: "Collectif Senior · Paris, Asie & USA",
-    en: "Senior Collective · Paris, Asia & USA",
-    vi: "Tập thể Cấp cao · Paris, Châu Á & USA",
+    fr: "Direction digitale · France · Asie · International",
+    en: "Digital direction · France · Asia · International",
+    vi: "Định hướng số · Pháp · Châu Á · Quốc tế",
   },
   aboutHubKicker: {
     fr: "Hub Modulaire d'Expertises",
@@ -718,9 +718,9 @@ export const UI: Record<string, L> = {
     vi: "Trung tâm Chuyên môn Mô-đun",
   },
   aboutHubTitle: {
-    fr: "Explorez les 6 piliers de frappe de votre agence externe",
-    en: "Explore the 6 pillars of your external agency",
-    vi: "Khám phá 6 trụ cột của agency ngoại bộ",
+    fr: "Explorez les 7 expertises de votre agence digitale",
+    en: "Explore the 7 disciplines of your digital agency",
+    vi: "Khám phá 7 chuyên môn của agency số",
   },
   aboutHubHint: {
     fr: "Cliquez sur un pôle pour voir son impact",
