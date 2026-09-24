@@ -196,7 +196,7 @@ export function About() {
                       {t(UI.aboutRecruitTitle)}
                     </h4>
                     <p className="display-serif mt-3 text-3xl text-muted-foreground/80">
-                      ~18 500 € <span className="label-mono text-xs">{t(UI.aboutRecruitCost)}</span>
+                      Coût variable <span className="label-mono text-xs">{t(UI.aboutRecruitCost)}</span>
                     </p>
                     <ul className="mt-6 space-y-3.5 text-xs text-muted-foreground">
                       <li className="flex items-start gap-2.5">
