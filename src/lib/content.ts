@@ -677,8 +677,8 @@ export const SERVICES: Service[] = [
         metric: "Selon objectifs",
         label: { fr: "Trafic organique", en: "Organic traffic", vi: "Lưu lượng tự nhiên" },
         desc: {
-          fr: "Croissance moyenne constatée sur 6 mois.",
-          en: "Average growth recorded over 6 months.",
+          fr: "Évolution à mesurer selon le site, le secteur et la stratégie.",
+          en: "Measured according to the site, sector and strategy.",
           vi: "Tăng trưởng trung bình ghi nhận trong 6 tháng.",
         },
       },
@@ -686,22 +686,22 @@ export const SERVICES: Service[] = [
         metric: "Objectif de positionnement",
         label: { fr: "Mots-clés cibles", en: "Target keywords", vi: "Từ khóa mục tiêu" },
         desc: {
-          fr: "Positionnement en première page Google.",
-          en: "First page rankings on high-intent queries.",
-          vi: "Thứ hạng trang nhất Google cho từ khóa chuyển đổi.",
+          fr: "Objectif de visibilité selon les requêtes ciblées.",
+          en: "Visibility objective according to target queries.",
+          vi: "Mục tiêu hiển thị theo từ khóa mục tiêu.",
         },
       },
       {
         metric: "0 €",
         label: {
           fr: "Coût par clic publicitaire",
-          en: "Ad cost per click",
+          en: "Paid media dependency",
           vi: "Chi phí mỗi lượt click quảng cáo",
         },
         desc: {
-          fr: "Trafic pérenne et autonome sans payer de régie.",
-          en: "Evergreen traffic without paying ad networks.",
-          vi: "Lưu lượng bền vững không phụ thuộc vào tiền quảng cáo.",
+          fr: "Acquisition organique sans achat média direct.",
+          en: "Organic acquisition without direct media spend.",
+          vi: "Thu hút tự nhiên mà không phụ thuộc chi phí quảng cáo trực tiếp.",
         },
       },
     ],
@@ -975,13 +975,13 @@ export const SERVICES: Service[] = [
       { fr: "Suivi technique selon formule", en: "Monitoring according to plan", vi: "Giám sát theo gói" },
       {
         fr: "Priorité d'intervention selon formule",
-        en: "Response in under 4h",
-        vi: "Can thiệp trong dưới 4 giờ",
+        en: "Priority response according to plan",
+        vi: "Ưu tiên xử lý theo gói",
       },
       {
         fr: "Infrastructure annuelle disponible séparément",
-        en: "Yearly commitment = 2 months free",
-        vi: "Cam kết theo năm = tặng 2 tháng",
+        en: "Yearly infrastructure billed separately",
+        vi: "Hạ tầng hàng năm được tính riêng",
       },
     ],
     steps: [
@@ -1093,7 +1093,7 @@ export const SERVICES: Service[] = [
         a: {
           fr: "Oui, nous pouvons prendre en charge la migration avec redirections, vérifications techniques et sauvegarde préalable. Les résultats dépendent de l’état du site source et du périmètre de migration.",
           en: "Yes, we can handle migration with redirects, technical checks and a prior backup. Outcomes depend on the source site and migration scope.",
-          vi: "Có, chúng tôi xử lý chuyển đổi toàn bộ không mất SEO hay dữ liệu.",
+          vi: "Có, chúng tôi có thể xử lý chuyển đổi với chuyển hướng, kiểm tra kỹ thuật và sao lưu trước. Kết quả phụ thuộc website nguồn và phạm vi chuyển đổi.",
         },
       },
     ],
@@ -1715,7 +1715,7 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
     a: {
       fr: "Le service annuel est un accompagnement d’optimisation ; le classement dépend de Google, de la requête, de la zone et de la concurrence.",
       en: "The yearly service is an optimization engagement; ranking depends on Google, search context, area and competition.",
-      vi: "Hợp đồng một năm chỉ bắt đầu khi bạn thực sự nằm trong TOP 3. Việc kiểm tra được thực hiện cùng nhau, trên nhiều thiết bị, ở chế độ duyệt trung lập.",
+      vi: "Dịch vụ hàng năm là một chương trình tối ưu hóa; thứ hạng phụ thuộc vào khu vực, truy vấn, cạnh tranh và các tín hiệu do Google kiểm soát. Không có cam kết vị trí Top 3.",
     },
   },
   {
