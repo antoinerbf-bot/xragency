@@ -1710,7 +1710,7 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
     q: {
       fr: "Comment fonctionne l’accompagnement Google Maps Top 3 ?",
       en: "How does the Google Maps Top 3 service work?",
-      vi: "Cam kết Google Maps TOP 3 hoạt động như thế nào?",
+      vi: "Dịch vụ Google Maps Top 3 hoạt động như thế nào?",
     },
     a: {
       fr: "Le service annuel est un accompagnement d’optimisation ; le classement dépend de Google, de la requête, de la zone et de la concurrence.",
