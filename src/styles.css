@@ -5,11 +5,11 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system — XR Agency Redesign v2
+ * Design system — XR Agency Redesign v2 + Motion System 2026
  *
- * Palette : charcoal chaud + crème, moins corporate, plus chaleureux.
- * Typographie : plus compacte, contrastes élégants.
- * Animations : micro-interactions soignées, prefers-reduced-motion respecté.
+ * Palette : charcoal chaud + crème
+ * Typographie : Playfair + DM Sans + JetBrains Mono
+ * Motion : intentional, textured, accessible (prefers-reduced-motion)
  */
 
 @theme inline {
@@ -67,26 +67,26 @@
   --radius: 0.75rem;
 
   /* ── Palette chaude crème-charcoal ── */
-  --background: oklch(0.982 0.004 80);         /* blanc crémeux chaud */
-  --foreground: oklch(0.15 0.012 260);          /* charcoal bleuté profond */
-  --card: oklch(0.995 0.002 80);               /* blanc cassé légèrement plus clair */
+  --background: oklch(0.982 0.004 80);
+  --foreground: oklch(0.15 0.012 260);
+  --card: oklch(0.995 0.002 80);
   --card-foreground: oklch(0.15 0.012 260);
   --popover: oklch(0.995 0.002 80);
   --popover-foreground: oklch(0.15 0.012 260);
-  --primary: oklch(0.16 0.022 260);            /* charcoal chaud teinté */
+  --primary: oklch(0.16 0.022 260);
   --primary-foreground: oklch(0.99 0.002 80);
   --secondary: oklch(0.952 0.006 80);
   --secondary-foreground: oklch(0.15 0.012 260);
   --muted: oklch(0.952 0.006 80);
   --muted-foreground: oklch(0.50 0.008 260);
-  --accent: oklch(0.938 0.008 75);             /* crème légèrement ambrée */
+  --accent: oklch(0.938 0.008 75);
   --accent-foreground: oklch(0.15 0.012 260);
   --destructive: oklch(0.45 0 0);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.882 0.006 80);             /* bordure légèrement chaude */
+  --border: oklch(0.882 0.006 80);
   --input: oklch(0.882 0.006 80);
   --ring: oklch(0.16 0.022 260);
-  --warm: oklch(0.75 0.06 60);                 /* accent ambré pour badges */
+  --warm: oklch(0.75 0.06 60);
   --ember: oklch(0.16 0.022 260);
   --azure: oklch(0.42 0.04 260);
   --jade: oklch(0.62 0.06 160);
@@ -105,7 +105,7 @@
   --sidebar-border: oklch(0.882 0.006 80);
   --sidebar-ring: oklch(0.16 0.022 260);
 
-  /* ── Gradients affinés ── */
+  /* ── Gradients ── */
   --gradient-ember:
     radial-gradient(circle at 60% 40%, oklch(0.16 0.022 260 / 0.06), transparent 62%);
   --gradient-halo:
@@ -118,6 +118,18 @@
   --shadow-ember: 0 12px 36px -16px oklch(0 0 0 / 0.18);
   --shadow-card: 0 2px 12px -4px oklch(0 0 0 / 0.08), 0 8px 32px -8px oklch(0 0 0 / 0.06);
   --shadow-card-hover: 0 8px 32px -8px oklch(0 0 0 / 0.14), 0 20px 60px -16px oklch(0 0 0 / 0.10);
+
+  /* ── Motion System 2026 ── */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  --duration-micro: 160ms;
+  --duration-fast: 240ms;
+  --duration-base: 380ms;
+  --duration-slow: 560ms;
+  --duration-reveal: 750ms;
 }
 
 .dark {
@@ -179,7 +191,7 @@
 @utility label-mono {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  letter-spacing: 0.18em;    /* réduit de 0.22em → plus élégant */
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
@@ -187,7 +199,7 @@
   font-family: var(--font-display);
   font-weight: 400;
   letter-spacing: -0.02em;
-  line-height: 0.96;          /* réduit de 0.98 → plus serré, plus vivant */
+  line-height: 0.96;
 }
 
 @utility surface-plate {
@@ -206,8 +218,14 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.04;
+    opacity: 0.045;
+    mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+
+  .dark .grain::after {
+    mix-blend-mode: soft-light;
+    opacity: 0.06;
   }
 }
 
@@ -222,8 +240,8 @@
 
 @utility card-lift {
   transition:
-    transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform var(--duration-base) var(--ease-smooth),
+    box-shadow var(--duration-base) var(--ease-smooth);
   &:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-card-hover);
@@ -234,12 +252,15 @@
 
 @utility btn-lift {
   transition:
-    transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    background-color 0.2s ease;
+    transform var(--duration-fast) var(--ease-smooth),
+    box-shadow var(--duration-fast) var(--ease-smooth),
+    background-color var(--duration-fast) ease;
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px -6px oklch(0 0 0 / 0.2);
+  }
+  &:active {
+    transform: translateY(0) scale(0.98);
   }
 }
 
@@ -254,7 +275,34 @@
 @keyframes ember-rise {
   0% {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(22px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes kinetic-in {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) skewY(1.5deg);
+    filter: blur(4px);
+  }
+  60% {
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) skewY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes word-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
   }
   100% {
     opacity: 1;
@@ -277,11 +325,10 @@
   50%       { opacity: 1; }
 }
 
-/* Reveal au scroll — fade + léger translateY */
 @keyframes fade-slide-up {
   0% {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(14px);
   }
   100% {
     opacity: 1;
@@ -289,7 +336,6 @@
   }
 }
 
-/* WhatsApp glow pulse */
 @keyframes wa-glow {
   0%, 100% {
     box-shadow: 0 0 0 0 oklch(0.16 0.022 260 / 0.20);
@@ -299,7 +345,6 @@
   }
 }
 
-/* Cart pop — item ajouté */
 @keyframes cart-pop {
   0%   { transform: scale(1); }
   40%  { transform: scale(1.12); }
@@ -307,7 +352,6 @@
   100% { transform: scale(1); }
 }
 
-/* Prix animé count-up : légère apparition */
 @keyframes price-reveal {
   0% {
     opacity: 0.2;
@@ -319,7 +363,6 @@
   }
 }
 
-/* Accordion check */
 @keyframes check-flash {
   0%   { opacity: 0; transform: scale(0.5); }
   40%  { opacity: 1; transform: scale(1.1); }
@@ -329,7 +372,11 @@
 /* ── Animation Utilities ── */
 
 @utility animate-rise {
-  animation: ember-rise 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: ember-rise var(--duration-reveal) var(--ease-out-expo) both;
+}
+
+@utility animate-kinetic {
+  animation: kinetic-in 0.9s var(--ease-out-expo) both;
 }
 
 @utility animate-slow-spin {
@@ -345,11 +392,11 @@
 }
 
 @utility animate-fade-up {
-  animation: fade-slide-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: fade-slide-up 0.55s var(--ease-out-expo) both;
 }
 
 @utility animate-cart-pop {
-  animation: cart-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: cart-pop 0.35s var(--ease-spring) both;
 }
 
 @utility animate-price-reveal {
@@ -377,6 +424,7 @@
   .animate-slow-spin,
   .animate-marquee,
   .animate-rise,
+  .animate-kinetic,
   .animate-fade-up,
   .animate-cart-pop,
   .animate-price-reveal {
