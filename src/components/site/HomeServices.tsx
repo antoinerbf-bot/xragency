@@ -155,13 +155,9 @@ export function HomeServices() {
 
         <Parallax speed={0.035} className="mt-16 sm:mt-24">
           <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] border border-white/10 bg-black">
-            <img
-              src={VILLA_IMG}
-              alt=""
-              aria-hidden
-              loading="lazy"
-              className="absolute inset-0 h-full w-full object-cover object-center opacity-70"
-            />
+            <div className="absolute inset-0 opacity-85">
+              <ServiceIllustration service="websites" title="XR Agency" />
+            </div>
             <div className="absolute inset-0 bg-gradient-to-r from-[#050708] via-[#050708]/55 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050708]/90 via-transparent to-[#050708]/10" />
 
