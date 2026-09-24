@@ -66,7 +66,6 @@
 :root {
   --radius: 0.75rem;
 
-  /* ── Palette chaude crème-charcoal ── */
   --background: oklch(0.982 0.004 80);
   --foreground: oklch(0.15 0.012 260);
   --card: oklch(0.995 0.002 80);
@@ -105,7 +104,6 @@
   --sidebar-border: oklch(0.882 0.006 80);
   --sidebar-ring: oklch(0.16 0.022 260);
 
-  /* ── Gradients ── */
   --gradient-ember:
     radial-gradient(circle at 60% 40%, oklch(0.16 0.022 260 / 0.06), transparent 62%);
   --gradient-halo:
@@ -119,7 +117,6 @@
   --shadow-card: 0 2px 12px -4px oklch(0 0 0 / 0.08), 0 8px 32px -8px oklch(0 0 0 / 0.06);
   --shadow-card-hover: 0 8px 32px -8px oklch(0 0 0 / 0.14), 0 20px 60px -16px oklch(0 0 0 / 0.10);
 
-  /* ── Motion System 2026 ── */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -186,8 +183,6 @@
   }
 }
 
-/* ── Typography Utilities ── */
-
 @utility label-mono {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
@@ -227,6 +222,29 @@
     mix-blend-mode: soft-light;
     opacity: 0.06;
   }
+
+  /* Configurator / choice cards — micro-interactions */
+  .choice-card {
+    transition:
+      transform var(--duration-fast) var(--ease-smooth),
+      border-color var(--duration-fast) ease,
+      background-color var(--duration-fast) ease,
+      box-shadow var(--duration-fast) var(--ease-smooth);
+  }
+  .choice-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in oklab, var(--primary) 45%, var(--border));
+    box-shadow: 0 8px 24px -12px oklch(0 0 0 / 0.12);
+  }
+  .choice-card:active {
+    transform: translateY(0) scale(0.985);
+  }
+  .choice-card[data-selected="true"],
+  .choice-card.is-selected {
+    border-color: var(--primary);
+    background-color: color-mix(in oklab, var(--primary) 6%, var(--card));
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--primary) 25%, transparent);
+  }
 }
 
 @utility text-aurora {
@@ -235,8 +253,6 @@
   background-clip: text;
   color: transparent;
 }
-
-/* ── Card Hover System ── */
 
 @utility card-lift {
   transition:
@@ -247,8 +263,6 @@
     box-shadow: var(--shadow-card-hover);
   }
 }
-
-/* ── Button Lift ── */
 
 @utility btn-lift {
   transition:
@@ -264,13 +278,9 @@
   }
 }
 
-/* ── WhatsApp Pulse/Glow ── */
-
 @utility wa-pulse {
   animation: wa-glow 2.8s ease-in-out infinite;
 }
-
-/* ── Keyframes ── */
 
 @keyframes ember-rise {
   0% {
@@ -369,7 +379,16 @@
   100% { opacity: 0; transform: scale(1); }
 }
 
-/* ── Animation Utilities ── */
+@keyframes step-in {
+  0% {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
 @utility animate-rise {
   animation: ember-rise var(--duration-reveal) var(--ease-out-expo) both;
@@ -407,7 +426,9 @@
   animation: check-flash 0.7s ease-out both;
 }
 
-/* ── Accessibility: prefers-reduced-motion ── */
+@utility animate-step-in {
+  animation: step-in 0.4s var(--ease-out-expo) both;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -427,7 +448,13 @@
   .animate-kinetic,
   .animate-fade-up,
   .animate-cart-pop,
-  .animate-price-reveal {
+  .animate-price-reveal,
+  .animate-step-in {
     animation: none !important;
+  }
+
+  .choice-card:hover,
+  .choice-card:active {
+    transform: none;
   }
 }
