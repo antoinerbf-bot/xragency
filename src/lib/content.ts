@@ -98,11 +98,11 @@ export const SERVICES: Service[] = [
     highlights: [
       {
         fr: "Architecture optimisée et suivi des performances",
-        en: "Architecture optimisée PageSpeed score",
+        en: "Optimized architecture and performance tracking",
         vi: "Điểm PageSpeed Architecture optimisée",
       },
-      { fr: "Optimisation des performances et des médias", en: "Under 2s load time", vi: "Tải trang dưới 2 giây" },
-      { fr: "Expérience multi-secteurs", en: "Multi-projets websites delivered", vi: "Hơn 200 website đã bàn giao" },
+      { fr: "Optimisation des performances et des médias", en: "Performance and media optimization", vi: "Tải trang dưới 2 giây" },
+      { fr: "Expérience multi-secteurs", en: "Multi-sector experience", vi: "Kinh nghiệm đa ngành" },
       { fr: "Hébergement + domaine 1 an inclus", en: "1 year hosting + domain included", vi: "Bao gồm hosting + tên miền 1 năm" },
     ],
     steps: [
@@ -173,8 +173,8 @@ export const SERVICES: Service[] = [
         metric: "Selon environnement et contenu",
         label: { fr: "Temps d'affichage", en: "Display speed", vi: "Tốc độ hiển thị" },
         desc: {
-          fr: "Zéro latence pour maximiser la rétention utilisateur.",
-          en: "Zero latency to maximize visitor retention.",
+          fr: "Objectif de chargement fluide selon l’environnement.",
+          en: "Smooth loading objective depending on the environment.",
           vi: "Không độ trễ để tối đa hóa giữ chân khách.",
         },
       },
@@ -182,8 +182,8 @@ export const SERVICES: Service[] = [
         metric: "Objectif de conversion à définir",
         label: { fr: "Taux de conversion", en: "Conversion rate", vi: "Tỷ lệ chuyển đổi" },
         desc: {
-          fr: "Hausse moyenne des demandes générées.",
-          en: "Average increase in enquiries generated.",
+          fr: "Objectif de conversion défini avec le projet.",
+          en: "Conversion objective defined with the project.",
           vi: "Tăng trưởng yêu cầu trung bình.",
         },
       },
@@ -307,11 +307,11 @@ export const SERVICES: Service[] = [
           vi: "Thương mại điện tử & Đặt chỗ",
         },
         audience: {
-          fr: "À partir de 1 499 € — selon le nombre de produits",
-          en: "From $1,943 — depending on the number of products",
-          vi: "Từ 32.978.000 ₫ — tùy theo số lượng sản phẩm",
+          fr: "À partir de 799 € — selon le nombre de produits",
+          en: "From €799 — depending on the scope and number of products",
+          vi: "Từ 799 € — tùy theo phạm vi và số lượng sản phẩm",
         },
-        eur: 1499,
+        eur: 799,
         period: "once",
         features: [
           {
@@ -1294,7 +1294,7 @@ export const SERVICES: Service[] = [
       {
         name: { fr: "Refonte", en: "Redesign", vi: "Thiết kế lại" },
         audience: { fr: "PME & startups", en: "SMEs & startups", vi: "Doanh nghiệp vừa & startup" },
-        eur: 1499,
+        eur: 799,
         period: "once",
         popular: true,
         features: [
@@ -1768,8 +1768,8 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
       vi: "Cam kết Google Maps TOP 3 hoạt động như thế nào?",
     },
     a: {
-      fr: "Le contrat d'un an ne démarre que lorsque vous êtes réellement positionné dans le TOP 3. La vérification se fait ensemble, sur plusieurs appareils, en navigation neutre.",
-      en: "The one-year contract only starts once you are genuinely ranked in the TOP 3. Verification is done together, on several devices, in neutral browsing.",
+      fr: "Le service annuel est un accompagnement d’optimisation ; le classement dépend de Google, de la requête, de la zone et de la concurrence.",
+      en: "The yearly service is an optimization engagement; ranking depends on Google, search context, area and competition.",
       vi: "Hợp đồng một năm chỉ bắt đầu khi bạn thực sự nằm trong TOP 3. Việc kiểm tra được thực hiện cùng nhau, trên nhiều thiết bị, ở chế độ duyệt trung lập.",
     },
   },
@@ -1859,9 +1859,9 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
       vi: "Có yêu cầu cam kết tối thiểu không?",
     },
     a: {
-      fr: "Les forfaits mensuels sont sans engagement. Les forfaits annuels offrent 2 mois gratuits et sont recommandés pour des résultats optimaux.",
+      fr: "Les forfaits mensuels sont sans engagement. Les prestations annuelles sont définies selon leur périmètre et leur durée.",
       en: "Monthly plans have no commitment. Yearly plans include 2 free months and are recommended for optimal results.",
-      vi: "Gói theo tháng không ràng buộc. Gói theo năm tặng 2 tháng miễn phí và được khuyến nghị để đạt kết quả tốt nhất.",
+      vi: "Gói theo tháng không ràng buộc. Dịch vụ theo năm được xác định theo phạm vi và thời lượng.",
     },
   },
   {
