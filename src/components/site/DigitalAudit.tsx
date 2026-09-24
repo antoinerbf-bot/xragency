@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { FileText, Globe2, Mail, MessageCircle, Search, ShieldCheck, Palette, Smartphone, Zap, Check, ArrowRight } from "lucide-react";
+import { FileText, Globe2, Mail, MessageCircle, Search, ShieldCheck, Palette, Sparkles, Smartphone, Zap, Check, ArrowRight } from "lucide-react";
 import { jsPDF } from "jspdf";
 import { CONTACT } from "@/lib/content";
 import { Reveal } from "./primitives";
