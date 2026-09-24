@@ -215,8 +215,12 @@ export function Work() {
                 : "aspect-[16/11]";
 
               return (
-                <article
+                <a
                   key={item.id}
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={"Voir le projet " + item.name}
                   className={cn(
                     "group relative overflow-hidden rounded-2xl border border-border/50 bg-card/20 transition-all duration-500 ease-out",
                     "hover:-translate-y-1.5 hover:border-primary/35 hover:shadow-[0_24px_60px_-20px_rgba(0,0,0,0.35)]",
@@ -279,7 +283,7 @@ export function Work() {
                       <ArrowUpRight className="h-4 w-4" />
                     </span>
                   </div>
-                </article>
+                </a>
               );
             })}
           </div>
