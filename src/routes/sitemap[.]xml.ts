@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 const urls = [
   "/", "/services", "/services/websites", "/services/branding", "/services/seo",
-  "/services/google-maps", "/services/social", "/services/webcare",
+  "/services/maps", "/services/social", "/services/ecommerce", "/services/webcare",
   "/work", "/realisations", "/notre-histoire", "/faq",
 ];
 
