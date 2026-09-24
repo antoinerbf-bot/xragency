@@ -201,7 +201,7 @@ export const UI: Record<string, L> = {
     vi: "Hệ thống đặt chỗ trực tuyến — theo báo giá",
   },
   intelOptionEcom: {
-    fr: "E-commerce à partir de 1 499 € — ajusté selon le nombre de produits",
+    fr: "E-commerce à partir de 799 € — selon le périmètre du catalogue",
     en: "E-commerce from $1,943 — adjusted to the number of products",
     vi: "Thương mại điện tử từ 32.978.000 ₫ — điều chỉnh theo số lượng sản phẩm",
   },
