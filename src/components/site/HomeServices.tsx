@@ -43,7 +43,7 @@ export function HomeServices() {
   return (
     <section
       id="homepage-services"
-      aria-label="Les sept offres XR Agency"
+      aria-label={lang === "fr" ? "Les sept offres XR Agency" : lang === "en" ? "XR Agency seven services" : "Bảy dịch vụ của XR Agency"}
       className="relative overflow-hidden bg-[#07090b] py-20 text-white sm:py-28 lg:py-36"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,.07),transparent_35%),radial-gradient(circle_at_90%_45%,rgba(255,180,90,.07),transparent_32%)]" />
@@ -122,7 +122,7 @@ export function HomeServices() {
                           {startingPrice && (
                             <span className="rounded-full border border-white/15 bg-black/20 px-4 py-3 label-mono text-[9px] tracking-[0.12em] text-white/65 backdrop-blur-md">
                               {copy.from} {price(startingPrice)}
-                              {service.fromPeriod === "month" ? " / mois" : service.fromPeriod === "year" ? " / an" : ""}
+                              {service.fromPeriod === "month" ? (lang === "fr" ? " / mois" : lang === "en" ? " / month" : " / tháng") : service.fromPeriod === "year" ? (lang === "fr" ? " / an" : lang === "en" ? " / year" : " / năm") : ""}
                             </span>
                           )}
 
@@ -175,8 +175,7 @@ export function HomeServices() {
                   <em className="text-white/55">{copy.partnerAccent}</em>
                 </h3>
                 <p className="mt-5 max-w-lg text-sm leading-6 text-white/55">
-                  Une direction créative forte, une technologie solide et des
-                  expériences digitales conçues pour durer.
+                  {copy.paragraph}
                 </p>
               </div>
             </div>
