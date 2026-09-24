@@ -81,7 +81,7 @@ function ServiceRow({
             isActive ? "text-background/75" : "text-primary",
           )}
         >
-          {t({ fr: "Dès", en: "From", vi: "Từ" })} {price(s.fromEur)}{s.fromPeriod === "month" ? " / mois" : s.fromPeriod === "year" ? " / an" : ""}
+          {t({ fr: "Dès", en: "From", vi: "Từ" })} {price(s.fromEur)}{s.fromPeriod === "month" ? (t({ fr: " / mois", en: " / month", vi: " / tháng" })) : s.fromPeriod === "year" ? (t({ fr: " / an", en: " / year", vi: " / năm" })) : ""}
         </span>
         <span
           className={cn(
