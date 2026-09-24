@@ -829,7 +829,7 @@ export const SERVICES: Service[] = [
         eur: 3300,
         period: "year",
         features: [
-          { fr: "600+ articles SEO", en: "600+ SEO articles", vi: "Hơn 600 bài viết SEO" },
+          { fr: "Contenus SEO ciblés", en: "Targeted SEO content", vi: "Nội dung SEO mục tiêu" },
           {
             fr: "Stratégie nationale complète",
             en: "Complete national strategy",
@@ -1146,8 +1146,8 @@ export const SERVICES: Service[] = [
           vi: "Bạn có thể chuyển đổi website hiện tại không?",
         },
         a: {
-          fr: "Oui, nous gérons la migration complète sans perte de SEO ni de données.",
-          en: "Yes, we handle full migration with zero SEO or data loss.",
+          fr: "Oui, nous pouvons prendre en charge la migration avec redirections, vérifications techniques et sauvegarde préalable. Les résultats dépendent de l’état du site source et du périmètre de migration.",
+          en: "Yes, we can handle migration with redirects, technical checks and a prior backup. Outcomes depend on the source site and migration scope.",
           vi: "Có, chúng tôi xử lý chuyển đổi toàn bộ không mất SEO hay dữ liệu.",
         },
       },
@@ -1164,8 +1164,8 @@ export const SERVICES: Service[] = [
       vi: "Hiện đại hóa website để tăng hình ảnh và chuyển đổi.",
     },
     description: {
-      fr: "Nous transformons votre site existant en une expérience digitale premium : audit UX complet, redesign sur-mesure, migration sans perte SEO et performance accrue.",
-      en: "We transform your existing website into a premium digital experience: full UX audit, bespoke redesign, zero-loss SEO migration and increased performance.",
+      fr: "Nous transformons votre site existant en une expérience digitale premium : audit UX complet, redesign sur-mesure, migration SEO accompagnée et optimisation des performances.",
+      en: "We transform your existing website into a premium digital experience: full UX audit, bespoke redesign, SEO-aware migration and performance optimization.",
       vi: "Chúng tôi biến website hiện tại thành trải nghiệm số cao cấp: kiểm tra UX toàn diện, thiết kế riêng, chuyển đổi không mất SEO và tăng hiệu suất.",
     },
     fromEur: 499,
@@ -1173,8 +1173,8 @@ export const SERVICES: Service[] = [
     highlights: [
       { fr: "Audit UX complet", en: "Full UX audit", vi: "Kiểm tra UX toàn diện" },
       {
-        fr: "Migration sans perte SEO",
-        en: "Zero-loss SEO migration",
+        fr: "Migration SEO accompagnée",
+        en: "SEO-aware migration",
         vi: "Chuyển đổi không mất SEO",
       },
       { fr: "Design system moderne", en: "Modern design system", vi: "Hệ thống thiết kế hiện đại" },
@@ -1263,7 +1263,7 @@ export const SERVICES: Service[] = [
       {
         feature: { fr: "SEO", en: "SEO", vi: "SEO" },
         us: {
-          fr: "Zéro perte de référencement",
+          fr: "Migration SEO accompagnée",
           en: "Zero ranking loss",
           vi: "Không mất thứ hạng",
         },
@@ -1820,9 +1820,9 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
       vi: "AI có thực sự thay thế được nhân viên không?",
     },
     a: {
-      fr: "L'IA traite 90 % des questions récurrentes (horaires, tarifs, rendez-vous). Les demandes complexes sont transférées à un humain. C'est un complément, pas un remplacement.",
-      en: "AI can automate recurring questions such as opening hours, pricing and appointments. Complex requests can be handed over to a human.",
-      vi: "AI xử lý 90% câu hỏi lặp lại (giờ mở cửa, giá, lịch hẹn). Yêu cầu phức tạp sẽ chuyển cho con người. Đây là sự bổ trợ, không phải thay thế.",
+      fr: "L'IA peut automatiser certaines questions récurrentes (horaires, tarifs, rendez-vous) et transmettre les demandes complexes à un humain. C'est un complément, pas un remplacement.",
+      en: "AI can automate selected recurring questions such as opening hours, pricing and appointments. Complex requests can be handed over to a human.",
+      vi: "AI có thể tự động hóa một số câu hỏi lặp lại (giờ mở cửa, giá, lịch hẹn). Yêu cầu phức tạp có thể chuyển cho con người. Đây là sự bổ trợ, không phải thay thế.",
     },
   },
   {
