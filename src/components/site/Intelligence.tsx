@@ -88,19 +88,19 @@ export function Intelligence() {
 
   const resultRows = {
     maps: [
-      { name: "Maison Atelier", meta: "4,9 ★ · 128 avis · Ouvert", tag: "Local 01" },
-      { name: "Studio Architecture", meta: "4,8 ★ · 94 avis · Ouvert", tag: "Local 02" },
-      { name: "Atelier Signature", meta: "4,7 ★ · 71 avis · Ouvert", tag: "Local 03" },
+      { name: "Exemple local A", meta: "4,9 ★ · 128 avis · Ouvert", tag: "Local 01" },
+      { name: "Exemple local B", meta: "4,8 ★ · 94 avis · Ouvert", tag: "Local 02" },
+      { name: "Exemple local C", meta: "4,7 ★ · 71 avis · Ouvert", tag: "Local 03" },
     ],
     seo: [
-      { name: "Studio Architecture · Site officiel", meta: "www.studio-architecture.fr", tag: "Résultat 01" },
+      { name: "Exemple local B · Site officiel", meta: "www.exemple-agence.fr", tag: "Résultat 01" },
       { name: "Architecture contemporaine à Paris", meta: "Guide · projets · expertise", tag: "Résultat 02" },
       { name: "Architectes premium · Paris", meta: "Magazine · sélection", tag: "Résultat 03" },
     ],
     ads: [
-      { name: "Studio Architecture — Architecture premium", meta: "Site officiel · Devis en ligne", tag: "ANNONCE" },
+      { name: "Exemple local B — Architecture premium", meta: "Site officiel · Devis en ligne", tag: "ANNONCE" },
       { name: "Architecture sur mesure — Paris", meta: "Consultation · Projet · Contact", tag: "ANNONCE" },
-      { name: "Atelier Signature — Architecte", meta: "Prenez rendez-vous · Paris", tag: "ANNONCE" },
+      { name: "Exemple local C — Architecte", meta: "Prenez rendez-vous · Paris", tag: "ANNONCE" },
     ],
   }[surface];
 
