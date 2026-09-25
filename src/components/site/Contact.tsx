@@ -270,14 +270,14 @@ export function Contact() {
                   to="/services"
                   className="block text-sm font-semibold text-primary transition-colors hover:underline"
                 >
-                  Tous les Services (11) →
+                  Toutes les expertises (7) →
                 </Link>
                 <Link
                   to="/services/$serviceId"
                   params={{ serviceId: "seo" }}
                   className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
-                  SEO Domination System
+                  Référencement SEO
                 </Link>
                 <Link
                   to="/services/$serviceId"
