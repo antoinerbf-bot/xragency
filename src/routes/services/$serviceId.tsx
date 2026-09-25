@@ -132,7 +132,7 @@ function ServiceDetailPage() {
   const planIsInstallmentWa = service.id === "websites" && isInstWa && planForWa?.period === "once";
   
   const waPrefilled = encodeURIComponent(
-    `Bonjour XR Agency, je suis intéressé par votre service "${service.title[lang]}" (Forfait: "${planForWa?.name[lang]}"${planIsInstallmentWa ? " en mensualités sur 12 mois" : ""}). Pouvons-nous échanger ?`,
+    `Bonjour XR Agency, je suis intéressé par votre service "${t(service.title)}" (Forfait: "${t(planForWa?.name)}"${planIsInstallmentWa ? " en mensualités sur 12 mois" : ""}). Pouvons-nous échanger ?`,
   );
   const waUrl = `${CONTACT.whatsapp}?text=${waPrefilled}`;
 
@@ -360,7 +360,7 @@ function ServiceDetailPage() {
                 const displayPeriod = planIsInstallment ? "month" : p.period;
 
                 const planWaMessage = encodeURIComponent(
-                  `Bonjour XR Agency, je souhaite commander la formule "${p.name[lang]}" du service "${service.title[lang]}" (${isCustomMaps ? "Sur mesure" : price(displayPrice)}${planIsInstallment ? " / mois sur 12 mois" : ""}). Comment démarrer ?`,
+                  `Bonjour XR Agency, je souhaite commander la formule "${t(p.name)}" du service "${service.title[lang]}" (${isCustomMaps ? "Sur mesure" : price(displayPrice)}${planIsInstallment ? " / mois sur 12 mois" : ""}). Comment démarrer ?`,
                 );
                 const planWaUrl = `${CONTACT.whatsapp}?text=${planWaMessage}`;
 
