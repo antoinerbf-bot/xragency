@@ -14,7 +14,6 @@ const CATALOG_IDS = [
   "maps",
   "social",
   "maintenance",
-  "ecommerce",
 ] as const;
 
 const SERVICE_KICKER: Record<string, { fr: string; en: string; vi: string }> = {
@@ -24,7 +23,6 @@ const SERVICE_KICKER: Record<string, { fr: string; en: string; vi: string }> = {
   maps: { fr: "LOCAL", en: "LOCAL", vi: "ĐỊA PHƯƠNG" },
   social: { fr: "RÉSEAUX", en: "SOCIAL", vi: "MẠNG XÃ HỘI" },
   maintenance: { fr: "CARE", en: "CARE", vi: "BẢO TRÌ" },
-  ecommerce: { fr: "COMMERCE", en: "COMMERCE", vi: "THƯƠNG MẠI" },
 };
 const HREF: Record<string, string> = {
   websites: "/services/websites",
@@ -33,7 +31,6 @@ const HREF: Record<string, string> = {
   maps: "/services/maps",
   social: "/services/social",
   maintenance: "/services/webcare",
-  ecommerce: "/services/ecommerce",
 };
 
 export function ServicesCatalog() {
@@ -125,7 +122,7 @@ export function ServicesCatalog() {
         </div>
       </div>
 
-      {/* Seven service scenes — editorial bento */}
+      {/* Six service scenes — editorial bento */}
       <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-12 lg:gap-6">
           {catalog.map((service, index) => {
