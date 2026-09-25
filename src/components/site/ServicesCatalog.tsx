@@ -105,7 +105,7 @@ export function ServicesCatalog() {
           }}
         />
         <div className="relative z-10 mx-auto flex min-h-[70vh] max-w-[1400px] flex-col justify-end px-5 pb-16 pt-32 sm:px-8 lg:px-12 lg:pb-24">
-          <p className="label-mono text-[10px] uppercase tracking-[0.32em] text-primary">{copy.eyebrow}</p>
+          <Parallax speed={-0.035}><p className="label-mono text-[10px] uppercase tracking-[0.32em] text-primary">{copy.eyebrow}</p>
           <h1 className="display-serif mt-5 max-w-5xl text-5xl leading-[0.9] sm:text-7xl lg:text-[6.5rem]">
             {copy.title1}
             <br />
@@ -118,6 +118,7 @@ export function ServicesCatalog() {
             <a href="/#quote" className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 label-mono text-[10px] font-semibold uppercase tracking-[.14em] text-primary-foreground transition hover:-translate-y-0.5">{copy.enter} <ArrowUpRight className="h-4 w-4" /></a>
             <a href="/#quote" className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-5 py-3 label-mono text-[10px] font-semibold uppercase tracking-[.14em] text-foreground transition hover:border-primary hover:text-primary">{copy.quote}</a>
           </div>
+          </Parallax>
           <p className="mt-6 label-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
             01 // {String(catalog.length).padStart(2, "0")}
           </p>
