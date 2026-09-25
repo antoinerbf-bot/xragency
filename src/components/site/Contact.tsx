@@ -18,6 +18,9 @@ import { EmberButton, Logo, Reveal } from "./primitives";
 
 const WA_DIRECT = `https://wa.me/33767566783`;
 
+function FacebookMark() { return <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current"><path d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5h1.7V4c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.2V10H7.3v3h2.8v8h3.4Z"/></svg>; }
+function TikTokMark() { return <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current"><path d="M15.2 3h3.1c.2 1.5 1.1 2.8 2.7 3.6v3.1c-1.4-.1-2.7-.6-3.8-1.4v6.1c0 3.8-2.7 5.8-5.8 5.8-3.1 0-5.2-2-5.2-4.8 0-2.9 2.3-5 5.4-5 .4 0 .8 0 1.2.1v3.1c-.3-.1-.6-.1-.9-.1-1.2 0-2.2.7-2.2 1.9 0 1.1.8 1.8 1.9 1.8 1.2 0 2-.8 2-2.3V3Z"/></svg>; }
+
 export function Contact() {
   const { t } = useLang();
   const [need, setNeed] = useState("");
@@ -250,7 +253,8 @@ export function Contact() {
                 <p>SIREN 889 178 141 · RCS Paris</p>
                 <p>Siège social : 78 Avenue des Champs-Élysées, 75008 Paris, France</p>
                 <p>Directeur de la publication : Antoine Rebuffé</p>
-                <p>Hébergement : Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA</p>
+                <p>Hébergement : o2switch · Chemin des Pardiaux, 63000 Clermont-Ferrand, France</p>
+                <p className="text-[11px] text-muted-foreground/60">Infrastructure en France · cadre RGPD · données traitées selon les finalités indiquées.</p>
                 <p>
                   <a href="mailto:contact.xragency@gmail.com" className="transition-colors hover:text-primary">Contact légal : contact.xragency@gmail.com</a>
                 </p>
@@ -312,21 +316,10 @@ export function Contact() {
               {t(UI.ctaReassurance)}
             </p>
             <div className="flex gap-3">
-              {[
-                { href: CONTACT.instagram, Icon: Instagram },
-                { href: CONTACT.linkedin, Icon: Linkedin },
-              ].map(({ href, Icon }, i) => (
-                <a
-                  key={i}
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all hover:-translate-y-0.5 hover:border-primary hover:text-primary"
-                >
-                  <Icon className="h-4 w-4" />
-                </a>
-              ))}
-              <a
+              <a href={CONTACT.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all hover:-translate-y-0.5 hover:border-primary hover:text-primary"><Instagram className="h-4 w-4" /></a>
+              <a href={CONTACT.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all hover:-translate-y-0.5 hover:border-primary hover:text-primary"><Linkedin className="h-4 w-4" /></a>
+              <span title="Facebook — lien à venir" aria-label="Facebook — lien à venir" className="flex h-9 w-9 items-center justify-center rounded-full border border-border/70 text-muted-foreground/50"><FacebookMark /></span>
+              <span title="TikTok — lien à venir" aria-label="TikTok — lien à venir" className="flex h-9 w-9 items-center justify-center rounded-full border border-border/70 text-muted-foreground/50"><TikTokMark /></span>            <a
                 href="#top"
                 className="flex h-9 items-center gap-2 rounded-full border border-border px-3.5 text-muted-foreground transition-all hover:-translate-y-0.5 hover:border-primary hover:text-primary"
               >
