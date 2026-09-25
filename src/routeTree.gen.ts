@@ -156,7 +156,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/prospects/$prospectId': typeof DashboardProspectsProspectIdRoute
 }
 export interface FileRoutesByTo {
-  '/mentions-legales': typeof MentionsLegalesRoute
   '/': typeof IndexRoute
   '/work': typeof WorkRoute
   '/faq': typeof FaqRoute
