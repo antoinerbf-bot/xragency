@@ -17,7 +17,7 @@ const BASE_PRICES: Record<string, number> = {
   website: 499,
   branding: 199,
   seo: 199,
-  maps: 999,
+  maps: 990,
   ads: 299,
   social: 299,
   content: 399,
