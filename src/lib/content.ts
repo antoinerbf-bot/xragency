@@ -1,4 +1,6 @@
 import type { L } from "./i18n";
+import { SERVICES_PART1 } from "./content-services-a";
+import { SERVICES_PART2 } from "./content-services-b";
 
 export const CONTACT = {
   email: "contact.xragency@gmail.com",
@@ -64,9 +66,6 @@ export const PERIOD_LABEL: Record<Plan["period"], L> = {
   month: { fr: "/ mois", en: "/ month", vi: "/ tháng" },
   year: { fr: "/ an", en: "/ year", vi: "/ năm" },
 };
-
-import { SERVICES_PART1 } from "./content-services-a";
-import { SERVICES_PART2 } from "./content-services-b";
 
 export const SERVICES: Service[] = [...SERVICES_PART1, ...SERVICES_PART2] as Service[];
 
