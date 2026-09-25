@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowUpRight, Search, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { Nav } from "@/components/site/Nav";
+import { Parallax } from "@/components/site/primitives";
 import { Contact } from "@/components/site/Contact";
 import { PORTFOLIO_REFERENCES, PORTFOLIO_SECTORS } from "@/lib/portfolioReferences";
 import { SERVICES } from "@/lib/content";
@@ -44,11 +45,11 @@ export function WorkPage() {
       <section className="relative overflow-hidden border-b border-border/60 py-20 sm:py-28 lg:py-36">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_25%,hsl(var(--primary)/.16),transparent_38%)]" />
         <div className="relative mx-auto max-w-7xl px-5 lg:px-10">
-          <div className="max-w-5xl">
+          <Parallax speed={-0.035} className="max-w-5xl">
             <p className="label-mono text-[10px] uppercase tracking-[.25em] text-primary">XR AGENCY · PORTFOLIO</p>
             <h1 className="display-serif mt-5 text-[clamp(3.4rem,9vw,8rem)] leading-[.84]">Des références<br/><em className="not-italic italic text-primary">pour vous projeter.</em></h1>
             <p className="mt-8 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">Explorez des références réelles par secteur et par prestation. Chaque projet ouvre directement sa homepage afin de vous permettre de juger le niveau visuel, l’expérience et la direction digitale.</p>
-          </div>
+          </Parallax>
           <div className="mt-12 grid gap-3 rounded-[2rem] border border-border bg-card/60 p-4 shadow-2xl backdrop-blur-xl sm:grid-cols-[1fr_auto] sm:p-5">
             <div className="relative"><Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"/><input value={query} onChange={(e)=>setQuery(e.target.value)} placeholder="Rechercher une marque, un secteur..." className="w-full rounded-2xl border border-border bg-background/80 py-3.5 pl-11 pr-4 text-sm outline-none focus:border-primary"/></div>
             <div className="flex items-center gap-2 rounded-2xl border border-border bg-background/70 px-4 py-3 text-[10px] uppercase tracking-[.15em] text-muted-foreground"><SlidersHorizontal className="h-3.5 w-3.5 text-primary"/>{filtered.length} références</div>
