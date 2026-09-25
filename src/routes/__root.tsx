@@ -56,10 +56,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "XR Agency — Studio digital premium & IA" },
-      { name: "description", content: "Sites web sur mesure, branding, SEO local, Google Maps TOP 3 et assistants IA. Studio digital premium — FR / EN / VI." },
+      { name: "description", content: "Sites web sur mesure, branding, SEO local, Google Maps TOP 3 et assistants IA. Studio digital premium — FR / EN / VI / AR / RU." },
       { name: "author", content: "XR Agency" },
       { property: "og:title", content: "XR Agency — Studio digital premium & IA" },
-      { property: "og:description", content: "Sites web sur mesure, branding, SEO local, Google Maps TOP 3 et assistants IA. Studio digital premium — FR / EN / VI." },
+      { property: "og:description", content: "Sites web sur mesure, branding, SEO local, Google Maps TOP 3 et assistants IA. Studio digital premium — FR / EN / VI / AR / RU." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "XR Agency — Studio digital premium & IA" },
@@ -85,6 +85,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   useEffect(() => {
+    const currentLang = window.localStorage.getItem("xr-lang");
+    if (currentLang === "ar") document.documentElement.dir = "rtl";
+    else document.documentElement.dir = "ltr";
     if (window.location.pathname === "/") {
       window.history.scrollRestoration = "manual";
       window.history.replaceState(null, "", "/");
