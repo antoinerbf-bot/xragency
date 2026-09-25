@@ -37,9 +37,11 @@ export const UI: Record<string, L> = {
     vi: "Một studio độc lập kiến tạo trải nghiệm số cho những thương hiệu khắt khe: nhận diện, website, SEO, Google Maps, AI.",
   },
   heroMeta: {
-    fr: "France · Asie · International",
-    en: "France · Asia · International",
-    vi: "Pháp · Châu Á · Quốc tế",
+    fr: "France · Dubaï · Asie · International",
+    en: "France · Dubai · Asia · International",
+    vi: "Pháp · Dubai · Châu Á · Quốc tế",
+    ar: "فرنسا · دبي · آسيا · دولي",
+    ru: "Франция · Дубай · Азия · Международный",
   },
   ctaAnalysis: { fr: "Lancer mon analyse", en: "Start my analysis", vi: "Bắt đầu phân tích" },
   ctaContinue: { fr: "Continuer", en: "Continue", vi: "Tiếp tục" },
@@ -54,16 +56,12 @@ export const UI: Record<string, L> = {
     en: "International projects · FR / EN / VI",
     vi: "Dự án quốc tế · FR / EN / VI",
   },
-  statProjects: { fr: "Services structurés", en: "Structured services", vi: "Dịch vụ được cấu trúc" },
-  statYears: { fr: "Années d’expérience", en: "Years of experience", vi: "Năm kinh nghiệm" },
+  statProjects: { fr: "Projets livrés", en: "Projects delivered", vi: "Dự án đã bàn giao", ar: "مشاريع مُنجزة", ru: "Выполненные проекты" },
+  statYears: { fr: "Années d’expérience", en: "Years of experience", vi: "Năm kinh nghiệm", ar: "سنوات الخبرة", ru: "Лет опыта" },
   statRemote: { fr: "Remote — 6 fuseaux", en: "Remote — 6 time zones", vi: "Remote — 6 múi giờ" },
   statProduction: { fr: "Production mondiale", en: "Global production", vi: "Sản xuất toàn cầu" },
-  statSatisfaction: {
-    fr: "Langues de service",
-    en: "Service languages",
-    vi: "Ngôn ngữ dịch vụ",
-  },
-  statResponse: { fr: "Langues de service", en: "Service languages", vi: "Ngôn ngữ dịch vụ" },
+  statSatisfaction: { fr: "Clients satisfaits", en: "Satisfied clients", vi: "Khách hàng hài lòng", ar: "عملاء راضون", ru: "Довольные клиенты" },
+  statResponse: { fr: "Langues de service", en: "Service languages", vi: "Ngôn ngữ dịch vụ", ar: "لغات الخدمة", ru: "Языки обслуживания" },
 
   chapter1: { fr: "Chapitre — I · Maison", en: "Chapter — I · House", vi: "Chương — I · Studio" },
   chapter2: {
@@ -604,9 +602,11 @@ export const UI: Record<string, L> = {
     vi: "Thông tin pháp lý",
   },
   ctaReassurance: {
-    fr: "Réponse rapide · FR / EN / VI · Sans engagement",
-    en: "Fast response · FR / EN / VI · No commitment",
-    vi: "Phản hồi nhanh · FR / EN / VI · Không cam kết",
+    fr: "Réponse rapide · FR / EN / VI / AR / RU · Sans engagement",
+    en: "Fast response · FR / EN / VI / AR / RU · No commitment",
+    vi: "Phản hồi nhanh · FR / EN / VI / AR / RU · Không cam kết",
+    ar: "استجابة سريعة · FR / EN / VI / AR / RU · بدون التزام",
+    ru: "Быстрый ответ · FR / EN / VI / AR / RU · Без обязательств",
   },
 
   // ── SaaS Dashboard ──
