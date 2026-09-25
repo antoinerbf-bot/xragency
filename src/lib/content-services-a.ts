@@ -2,16 +2,16 @@ export const SERVICES_PART1 = [
   {
     id: "websites",
     num: "01",
-    title: { fr: "Création de sites web", en: "Website Creation", vi: "Thiết kế website" },
-    short: { fr: "Sites sur-mesure, pensés comme des objets d'édition.", en: "Bespoke websites, crafted like editorial objects.", vi: "Website riêng biệt, được chế tác như một ấn phẩm." },
-    description: { fr: "Nous concevons des sites haute performance qui transforment vos visiteurs en clients : design sur-mesure, responsive et optimisé pour le référencement.", en: "We design high-performance websites that turn your visitors into customers: bespoke design, fully responsive and SEO-ready.", vi: "Chúng tôi thiết kế website hiệu suất cao biến khách truy cập thành khách hàng: thiết kế riêng, tương thích mọi thiết bị và chuẩn SEO." },
+    title: { fr: "Création de sites web", en: "Website Creation", vi: "Thiết kế website", ar: "إنشاء المواقع", ru: "Создание сайтов" },
+    short: { fr: "Sites sur-mesure, pensés comme des objets d'édition.", en: "Bespoke websites, crafted like editorial objects.", vi: "Website riêng biệt, được chế tác như một ấn phẩm.", ar: "مواقع مخصصة مصممة كأعمال تحريرية.", ru: "Индивидуальные сайты, созданные как цифровые редакционные объекты." },
+    description: { fr: "Nous concevons des sites haute performance qui transforment vos visiteurs en clients : design sur-mesure, responsive et optimisé pour le référencement.", en: "We design high-performance websites that turn your visitors into customers: bespoke design, fully responsive and SEO-ready.", vi: "Chúng tôi thiết kế website hiệu suất cao biến khách truy cập thành khách hàng: thiết kế riêng, tương thích mọi thiết bị và chuẩn SEO.", ar: "نصمم مواقع عالية الأداء لتحويل الزوار إلى عملاء: تصميم مخصص ومتجاوب ومحسن لمحركات البحث.", ru: "Мы создаём высокопроизводительные сайты, превращающие посетителей в клиентов: индивидуальный дизайн, адаптивность и SEO-оптимизация." },
     fromEur: 499,
     fromPeriod: "once",
     highlights: [
       { fr: "Architecture optimisée et suivi des performances", en: "Optimized architecture and performance tracking", vi: "Điểm PageSpeed Architecture optimisée" },
       { fr: "Optimisation des performances et des médias", en: "Performance and media optimization", vi: "Tải trang dưới 2 giây" },
       { fr: "Expérience multi-secteurs", en: "Multi-sector experience", vi: "Kinh nghiệm đa ngành" },
-      { fr: "Hébergement + domaine 1 an inclus", en: "1 year hosting + domain included", vi: "Bao gồm hosting + tên miền 1 năm" },
+      { fr: "Hébergement + domaine 1 an inclus", en: "1 year hosting + domain included", vi: "Bao gồm hosting + tên miền 1 năm", ar: "استضافة ونطاق لمدة عام مشمولان", ru: "Хостинг и домен на 1 год включены" },
     ],
     plans: [
       {
@@ -39,26 +39,35 @@ export const SERVICES_PART1 = [
       },
       {
         name: { fr: "E-commerce & Réservation", en: "E-commerce & Booking", vi: "Thương mại điện tử & Đặt chỗ" },
-        eur: 1490,
+        eur: 1499,
         period: "once",
         features: [
-          { fr: "Catalogue produits", en: "Product catalogue", vi: "Danh mục sản phẩm" },
-          { fr: "Paiement sécurisé", en: "Secure payments", vi: "Thanh toán an toàn" },
+          { fr: "Catalogue produits", en: "Product catalogue", vi: "Danh mục sản phẩm", ar: "كتالوج المنتجات", ru: "Каталог товаров" },
+          { fr: "Paiement sécurisé", en: "Secure payments", vi: "Thanh toán an toàn", ar: "دفع آمن", ru: "Безопасная оплата" },
+          { fr: "Parcours mobile optimisé", en: "Mobile-optimised journey", vi: "Hành trình tối ưu cho mobile", ar: "مسار محسن للجوال", ru: "Оптимизированный мобильный путь" },
+          { fr: "Réservation selon le projet", en: "Booking flow when required", vi: "Luồng đặt chỗ theo dự án", ar: "مسار حجز حسب المشروع", ru: "Онлайн-бронирование по проекту" },
         ],
       },
+    ],
+    steps: [
+      { num: "01", title: { fr: "Architecture", en: "Architecture", vi: "Kiến trúc", ar: "البنية", ru: "Архитектура" }, desc: { fr: "Arborescence, parcours et hiérarchie des contenus avant le design final.", en: "Sitemap, user journey and content hierarchy before final design.", vi: "Cấu trúc, hành trình và thứ tự nội dung trước thiết kế cuối.", ar: "هيكلة الموقع ومسار المستخدم وتسلسل المحتوى قبل التصميم النهائي.", ru: "Структура, пользовательский путь и иерархия контента до финального дизайна." } },
+      { num: "02", title: { fr: "Direction créative", en: "Creative direction", vi: "Định hướng sáng tạo", ar: "التوجيه الإبداعي", ru: "Креативное направление" }, desc: { fr: "Maquette premium, composants cohérents et expérience responsive.", en: "Premium mockup, coherent components and responsive experience.", vi: "Mockup cao cấp, thành phần nhất quán và trải nghiệm responsive.", ar: "ماكيت متميز ومكونات متناسقة وتجربة متجاوبة.", ru: "Премиальный макет, единая система компонентов и адаптивный опыт." } },
+      { num: "03", title: { fr: "Production", en: "Production", vi: "Triển khai", ar: "التنفيذ", ru: "Разработка" }, desc: { fr: "Intégration, performance, SEO technique et formulaires fonctionnels.", en: "Implementation, performance, technical SEO and working forms.", vi: "Lập trình, hiệu năng, SEO kỹ thuật và biểu mẫu hoạt động.", ar: "التطوير والأداء وSEO التقني والنماذج الوظيفية.", ru: "Разработка, производительность, техническое SEO и рабочие формы." } },
+      { num: "04", title: { fr: "Mise en ligne", en: "Launch", vi: "Ra mắt", ar: "الإطلاق", ru: "Запуск" }, desc: { fr: "Contrôle qualité, mise en production et transmission des accès.", en: "QA, production launch and access handover.", vi: "Kiểm tra chất lượng, đưa vào hoạt động và bàn giao quyền truy cập.", ar: "اختبارات الجودة والإطلاق وتسليم الوصول.", ru: "Контроль качества, запуск и передача доступов." } },
     ],
   },
   {
     id: "branding",
     num: "02",
-    title: { fr: "Branding & Identité", en: "Branding & Identity", vi: "Thương hiệu & Nhận diện" },
-    short: { fr: "Identités durables, systèmes complets.", en: "Lasting identities, complete systems.", vi: "Nhận diện bền vững, hệ thống hoàn chỉnh." },
-    description: { fr: "Un logo, une palette, une typographie et un système complet de déclinaisons.", en: "A logo, a palette, a typeface and a complete system of applications.", vi: "Logo, bảng màu, kiểu chữ và hệ thống ứng dụng hoàn chỉnh." },
+    title: { fr: "Branding & Identité", en: "Branding & Identity", vi: "Thương hiệu & Nhận diện", ar: "الهوية والعلامة التجارية", ru: "Брендинг и айдентика" },
+    short: { fr: "Identités durables, systèmes complets.", en: "Lasting identities, complete systems.", vi: "Nhận diện bền vững, hệ thống hoàn chỉnh.", ar: "هويات بصرية مستدامة وأنظمة متكاملة.", ru: "Выразительная айдентика и цельная система бренда." },
+    description: { fr: "Un logo, une palette, une typographie et un système complet de déclinaisons.", en: "A logo, a palette, a typeface and a complete system of applications.", vi: "Logo, bảng màu, kiểu chữ và hệ thống ứng dụng hoàn chỉnh.", ar: "شعار ولوحة ألوان وخط ونظام متكامل للتطبيقات.", ru: "Логотип, палитра, типографика и полная система бренд-приложений." },
     fromEur: 179,
     fromPeriod: "once",
     highlights: [
-      { fr: "Fichiers AI, SVG, PNG, PDF", en: "AI, SVG, PNG, PDF files", vi: "Tệp AI, SVG, PNG, PDF" },
-      { fr: "Droits commerciaux cédés", en: "Full commercial rights", vi: "Chuyển giao quyền thương mại" },
+      { fr: "Fichiers AI, SVG, PNG, PDF", en: "AI, SVG, PNG, PDF files", vi: "Tệp AI, SVG, PNG, PDF", ar: "ملفات AI وSVG وPNG وPDF", ru: "Файлы AI, SVG, PNG и PDF" },
+      { fr: "Droits commerciaux cédés", en: "Full commercial rights", vi: "Chuyển giao quyền thương mại", ar: "حقوق الاستخدام التجاري مشمولة", ru: "Коммерческие права передаются" },
+      { fr: "Système visuel cohérent", en: "Coherent visual system", vi: "Hệ thống hình ảnh nhất quán", ar: "نظام بصري متناسق", ru: "Цельная визуальная система" },
     ],
     plans: [
       {
