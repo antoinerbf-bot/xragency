@@ -4,48 +4,22 @@ import { useLang } from "@/lib/i18n";
 
 const PLANS = [
   {
-    key: "presence",
-    price: 199,
-    title: { fr: "Local Presence", en: "Local Presence", vi: "Local Presence" },
+    key: "maps",
+    price: 990,
+    title: { fr: "Google Maps Top 3", en: "Google Maps Top 3", vi: "Google Maps Top 3", ar: "Google Maps Top 3", ru: "Google Maps Top 3" },
     desc: {
-      fr: "Pour construire une présence locale solide et comprendre où vous perdez de la visibilité.",
-      en: "Build a strong local presence and understand where visibility is being lost.",
-      vi: "Xây dựng hiện diện địa phương vững chắc và hiểu nơi bạn đang mất khả năng hiển thị.",
+      fr: "Prestation annuelle sur mesure pour travailler votre visibilité locale à partir de 990 € / an.",
+      en: "Tailored annual service to improve your local visibility from €990 / year.",
+      vi: "Dịch vụ hàng năm theo nhu cầu để cải thiện khả năng hiển thị địa phương từ 990 € / năm.",
+      ar: "خدمة سنوية مخصصة لتحسين ظهورك المحلي ابتداءً من 990 € سنويًا.",
+      ru: "Индивидуальный годовой сервис для развития локальной видимости от 990 € в год.",
     },
     features: {
-      fr: ["Audit Google Business Profile", "Optimisation des informations et catégories", "Analyse locale initiale", "Recommandations d'avis et de contenu"],
-      en: ["Google Business Profile audit", "Information and category optimisation", "Initial local analysis", "Review and content recommendations"],
-      vi: ["Kiểm tra Google Business Profile", "Tối ưu thông tin và danh mục", "Phân tích địa phương ban đầu", "Đề xuất đánh giá và nội dung"],
-    },
-  },
-  {
-    key: "growth",
-    price: 399,
-    title: { fr: "Local Growth", en: "Local Growth", vi: "Local Growth" },
-    desc: {
-      fr: "Pour travailler activement votre visibilité locale mois après mois.",
-      en: "Actively develop your local visibility month after month.",
-      vi: "Phát triển khả năng hiển thị địa phương một cách chủ động theo từng tháng.",
-    },
-    features: {
-      fr: ["Tout Local Presence", "Optimisation continue de la fiche", "Stratégie de réputation", "Suivi des recherches locales", "Reporting mensuel clair"],
-      en: ["Everything in Local Presence", "Ongoing profile optimisation", "Reputation strategy", "Local search monitoring", "Clear monthly reporting"],
-      vi: ["Toàn bộ Local Presence", "Tối ưu hồ sơ liên tục", "Chiến lược danh tiếng", "Theo dõi tìm kiếm địa phương", "Báo cáo hàng tháng rõ ràng"],
-    },
-  },
-  {
-    key: "multi",
-    price: 699,
-    title: { fr: "Local Authority", en: "Local Authority", vi: "Local Authority" },
-    desc: {
-      fr: "Pour les marchés concurrentiels, établissements premium et réseaux multi-sites.",
-      en: "For competitive markets, premium venues and multi-location businesses.",
-      vi: "Dành cho thị trường cạnh tranh, thương hiệu cao cấp và doanh nghiệp nhiều địa điểm.",
-    },
-    features: {
-      fr: ["Tout Local Growth", "Stratégie locale avancée", "Travail multi-zone / multi-site", "Analyse concurrentielle approfondie", "Accompagnement stratégique"],
-      en: ["Everything in Local Growth", "Advanced local strategy", "Multi-area / multi-location work", "Deep competitor analysis", "Strategic support"],
-      vi: ["Toàn bộ Local Growth", "Chiến lược địa phương nâng cao", "Triển khai nhiều khu vực / địa điểm", "Phân tích đối thủ chuyên sâu", "Đồng hành chiến lược"],
+      fr: ["Audit Google Business Profile", "Analyse concurrentielle locale", "Optimisation de la fiche", "Suivi des requêtes et zones"],
+      en: ["Google Business Profile audit", "Local competitor analysis", "Profile optimisation", "Query and area monitoring"],
+      vi: ["Kiểm tra Google Business Profile", "Phân tích đối thủ địa phương", "Tối ưu hồ sơ", "Theo dõi truy vấn và khu vực"],
+      ar: ["تدقيق Google Business Profile", "تحليل المنافسين محليًا", "تحسين الملف", "متابعة الاستعلامات والمناطق"],
+      ru: ["Аудит Google Business Profile", "Анализ локальных конкурентов", "Оптимизация профиля", "Мониторинг запросов и зон"],
     },
   },
 ];
@@ -73,7 +47,7 @@ const COPY = {
     bridge: "Maps et SEO ne font pas la même chose.",
     bridgeDesc: "Maps travaille votre présence locale. Le SEO travaille votre visibilité dans les résultats organiques. Les deux peuvent se renforcer.",
     pricing: "Pourquoi 199 €, 399 € ou 699 € ?",
-    pricingDesc: "Le prix correspond à la profondeur du travail, au niveau de concurrence et au périmètre géographique. Nous ne vendons pas une position garantie : nous vendons un travail mesurable sur votre présence locale.",
+    pricingDesc: "Le tarif commence à 990 € / an. Le périmètre exact dépend de votre zone, de la concurrence, des requêtes ciblées et de l’état initial de votre fiche. Le Top 3 est un objectif de travail, jamais une garantie de position.",
     cta: "Recevoir mon analyse locale",
   },
   en: {
@@ -92,8 +66,8 @@ const COPY = {
     work: "What XRAGENCY works on",
     bridge: "Maps and SEO do different jobs.",
     bridgeDesc: "Maps works on local presence. SEO works on organic search visibility. The two can reinforce each other.",
-    pricing: "Why €199, €399 or €699?",
-    pricingDesc: "Pricing reflects the depth of work, competitive pressure and geographic scope. We do not sell a guaranteed position; we sell measurable work on your local presence.",
+    pricing: "Why from €990 / year?",
+    pricingDesc: "The service starts at €990 / year. The exact scope depends on your area, competition, target searches and starting profile. Top 3 is a working objective, never a guaranteed position.",
     cta: "Get my local analysis",
   },
   vi: {
@@ -112,8 +86,8 @@ const COPY = {
     work: "XRAGENCY làm gì",
     bridge: "Maps và SEO làm hai nhiệm vụ khác nhau.",
     bridgeDesc: "Maps tập trung vào hiện diện địa phương. SEO tập trung vào khả năng hiển thị tự nhiên. Hai dịch vụ có thể hỗ trợ lẫn nhau.",
-    pricing: "Vì sao 199 €, 399 € hoặc 699 €?",
-    pricingDesc: "Giá phản ánh độ sâu công việc, mức độ cạnh tranh và phạm vi địa lý. Chúng tôi không bán vị trí được đảm bảo; chúng tôi bán công việc có thể đo lường trên hiện diện địa phương.",
+    pricing: "Vì sao từ 990 € / năm?",
+    pricingDesc: "Dịch vụ bắt đầu từ 990 € / năm. Phạm vi chính xác phụ thuộc khu vực, mức cạnh tranh, truy vấn mục tiêu và trạng thái ban đầu của hồ sơ. Top 3 là mục tiêu triển khai, không phải vị trí được đảm bảo.",
     cta: "Nhận phân tích địa phương",
   },
 } as const;
@@ -138,7 +112,7 @@ export function LocalVisibilityExperience() {
   }[surface];
 
   return (
-    <section className="border-y border-border/60 bg-card/20 py-20 lg:py-28">
+    <section className="relative overflow-hidden border-y border-border/60 bg-card/20 py-20 lg:py-28"><div className="pointer-events-none absolute -right-24 top-10 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="max-w-5xl">
           <p className="label-mono text-xs uppercase tracking-widest text-primary">{copy.kicker}</p>
@@ -146,7 +120,7 @@ export function LocalVisibilityExperience() {
           <p className="mt-6 max-w-3xl text-base leading-7 text-muted-foreground sm:text-lg">{copy.intro}</p>
         </div>
 
-        <div className="mt-12 overflow-hidden rounded-[2rem] border border-border bg-background shadow-[0_35px_100px_-60px_rgba(0,0,0,.9)]">
+        <div className="mt-12 overflow-hidden rounded-[2rem] shadow-[0_35px_100px_-55px_rgba(0,0,0,.85)] border border-border bg-background shadow-[0_35px_100px_-60px_rgba(0,0,0,.9)]">
           <div className="flex flex-col gap-4 border-b border-border/70 p-5 sm:p-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center gap-3 rounded-2xl border border-border/70 bg-card/60 px-4 py-3">
               <Search className="h-4 w-4 text-primary" />
