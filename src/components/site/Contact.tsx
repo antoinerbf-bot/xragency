@@ -244,7 +244,7 @@ export function Contact() {
               </div>
             </div>
 
-            <div>
+            <div id="legal">
               <p className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">
                 Mentions légales
               </p>
