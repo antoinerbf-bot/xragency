@@ -25,6 +25,7 @@ import { Route as ServicesWebcareRouteImport } from './routes/services/webcare'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as NotreHistoireRouteImport } from './routes/notre-histoire'
 import { Route as RealisationsRouteImport } from './routes/realisations'
+import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 import { Route as SitemapXmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as DashboardAuditsAuditIdRouteImport } from './routes/dashboard/audits.$auditId'
 import { Route as DashboardProspectsProspectIdRouteImport } from './routes/dashboard/prospects.$prospectId'
@@ -107,6 +108,11 @@ const NotreHistoireRoute = NotreHistoireRouteImport.update({
 const RealisationsRoute = RealisationsRouteImport.update({
   id: '/realisations',
   path: '/realisations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
+  id: '/mentions-legales',
+  path: '/mentions-legales',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapXmlRoute = SitemapXmlRouteImport.update({
