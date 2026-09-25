@@ -50,7 +50,7 @@ const WEBSITE_TIERS = {
 } as const;
 
 const BRANDING_TIERS = {
-  starter: { price: 199, label: "Branding essentiel", detail: "Logo, palette, typographie et fichiers maîtres" },
+  starter: { price: 179, label: "Logo Signature", detail: "Logo, déclinaisons essentielles et fichiers maîtres" },
   premium: { price: 349, label: "Full Brand Suite", detail: "Système de marque étendu, direction artistique et Brand Book" },
 } as const;
 
