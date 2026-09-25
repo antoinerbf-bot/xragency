@@ -82,6 +82,16 @@ export const SERVICES_PART1 = [
           { fr: "Fichiers prêts pour le digital", en: "Digital-ready files", vi: "Tệp sẵn sàng cho digital" },
         ],
       },
+      {
+        name: { fr: "Full Brand Suite", en: "Full Brand Suite", vi: "Full Brand Suite" },
+        eur: 349,
+        period: "once",
+        features: [
+          { fr: "Tout le Brand Identity Kit", en: "Everything in Brand Identity Kit", vi: "Toàn bộ Brand Identity Kit" },
+          { fr: "Brand Book", en: "Brand Book", vi: "Brand Book" },
+          { fr: "Système de déclinaisons complet", en: "Complete brand application system", vi: "Hệ thống ứng dụng thương hiệu hoàn chỉnh" },
+        ],
+      },
     ],
   },
   {
