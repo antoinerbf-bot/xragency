@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { FormEvent } from "react";
 import { ArrowRight, Check, Globe2, MessageCircle, RotateCcw, Sparkles } from "lucide-react";
 
 type Choice = { id: string; label: string; detail: string };
@@ -228,7 +229,7 @@ export function QuoteConfiguratorCompact() {
 
   const reset = () => { setStep(0); setSectorId(""); setGoal(""); setSituation(""); setBudget(""); setDiscovery(""); setSelectedServices([]); setClient({ company: "", name: "", email: "", whatsapp: "", website: "" }); setGenerated(false); setSendMessage(""); };
   const quoteDownloadLabel = sending ? "Génération du PDF…" : generated ? "Télécharger à nouveau →" : "Télécharger mon devis PDF →";
-  const handleQuoteSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleQuoteSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!client.email || !client.whatsapp || sending) return;
     void generatePdf();
