@@ -191,10 +191,10 @@ export function MapsSimulator() {
           {/* ── Exclusivity Badge — very visible ── */}
           <Reveal delay={80}>
             <div className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-primary/30 bg-primary/10 px-5 py-3.5 shadow-lg">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-base font-black">G</span>
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white font-black shadow-sm"><svg viewBox="0 0 24 24" className="h-5 w-5" aria-label="Google" role="img"><path fill="#4285F4" d="M21.35 12.27c0-.71-.06-1.4-.18-2.06H12v3.9h5.23a4.47 4.47 0 0 1-1.94 2.94v2.44h3.14c1.84-1.69 2.92-4.18 2.92-7.22Z"/><path fill="#34A853" d="M12 21.55c2.63 0 4.84-.87 6.45-2.36l-3.14-2.44c-.87.58-1.98.92-3.31.92-2.54 0-4.7-1.72-5.47-4.03H3.28v2.52A9.74 9.74 0 0 0 12 21.55Z"/><path fill="#FBBC05" d="M6.53 13.64A5.84 5.84 0 0 1 6.23 12c0-.57.1-1.12.3-1.64V7.84H3.28A9.72 9.72 0 0 0 2.25 12c0 1.57.38 3.06 1.03 4.16l3.25-2.52Z"/><path fill="#EA4335" d="M12 6.33c1.43 0 2.7.49 3.71 1.45l2.78-2.78C16.84 3.42 14.63 2.45 12 2.45a9.74 9.74 0 0 0-8.72 5.39l3.25 2.52c.77-2.31 2.93-4.03 5.47-4.03Z"/></svg></span>
               <Zap className="h-5 w-5 shrink-0 text-primary-foreground" />
               <p className="text-sm font-semibold text-foreground leading-snug">
-                Prestation sur mesure · objectif Top 3 · aucune garantie de position
+                Google Maps · à partir de 990 € / an · objectif Top 3 sans garantie de position
               </p>
               <Award className="h-5 w-5 shrink-0 text-primary" />
             </div>
@@ -334,7 +334,7 @@ export function MapsSimulator() {
                     <div className="flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-3 py-2">
                       <ShieldCheck className="h-4 w-4 shrink-0 text-primary" />
                       <span className="label-mono text-[10px] font-bold text-primary">
-                        Objectif Top 3 · étude sur mesure
+                        Objectif Top 3 · étude locale sur mesure
                       </span>
                     </div>
                     <a
