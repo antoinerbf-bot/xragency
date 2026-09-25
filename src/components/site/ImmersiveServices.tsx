@@ -108,7 +108,7 @@ export function ImmersiveServices() {
                     <div
                       key={service.id}
                       className={cn(
-                        "label-mono text-[9px] uppercase tracking-[0.12em] transition-all duration-400",
+                        "label-mono text-[9px] uppercase tracking-[0.12em] transition-all duration-300",
                         index === active
                           ? "translate-x-2 text-foreground"
                           : "text-muted-foreground/35",
@@ -129,7 +129,7 @@ export function ImmersiveServices() {
                     <article
                       key={service.id}
                       aria-hidden={index !== active}
-                      className="absolute inset-0 transition-[opacity,transform] duration-600 ease-[cubic-bezier(.22,1,.36,1)]"
+                      className="absolute inset-0 transition-[opacity,transform] duration-500 ease-[cubic-bezier(.22,1,.36,1)]"
                       style={{
                         opacity: visible ? (index === active ? 1 : 0.12) : 0,
                         transform: `translate3d(${distance * 2.5}%, ${distance * 1.8}%, 0) scale(${index === active ? 1 : 0.97})`,

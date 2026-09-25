@@ -209,6 +209,25 @@
     opacity: 0.04;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
   }
+
+  /* Choice cards — configurator micro-interactions */
+  .choice-card {
+    transition:
+      transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      box-shadow 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+  }
+  .choice-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover);
+  }
+  .choice-card[data-active="true"],
+  .choice-card.is-active {
+    border-color: color-mix(in oklab, var(--color-primary) 55%, var(--color-border));
+    background-color: color-mix(in oklab, var(--color-primary) 6%, var(--color-card));
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-primary) 25%, transparent);
+  }
 }
 
 @utility text-aurora {
@@ -392,5 +411,9 @@
   .animate-cart-pop,
   .animate-price-reveal {
     animation: none !important;
+  }
+
+  .choice-card:hover {
+    transform: none;
   }
 }
