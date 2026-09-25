@@ -27,8 +27,8 @@ function WebCarePage() {
   return <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
     <Nav />
     <main className="pt-28">
-      <section className="relative overflow-hidden border-b border-border/60 py-16 sm:py-24 lg:py-32">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_25%,hsl(var(--primary)/.14),transparent_40%)]" />
+      <section className="relative overflow-hidden border-b border-border/60 py-16 sm:py-24 lg:py-32"><Parallax speed={0.04} className="pointer-events-none absolute -inset-[8%] opacity-30"><img src={XR_PHOTOS.maintenance} alt="" aria-hidden="true" className="h-[116%] w-full object-cover object-center blur-[1px]" /></Parallax>
+        <div className="absolute inset-0 bg-background/85" /><div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_25%,hsl(var(--primary)/.18),transparent_40%)]" />
         <div className="relative mx-auto max-w-7xl px-5 lg:px-10">
           <div className="grid items-center gap-10 lg:grid-cols-12">
           <div className="max-w-4xl lg:col-span-7">
@@ -44,7 +44,7 @@ function WebCarePage() {
             </figure>
           </Parallax>
           </div>
-          <div className="mt-10 grid gap-4 md:grid-cols-2">
+          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-[1.1fr_.9fr]">
             <div className="rounded-[2rem] border border-primary/30 bg-primary/[.06] p-7 shadow-xl">
               <div className="flex items-center gap-3"><ServerCog className="h-6 w-6 text-primary"/><span className="label-mono text-[10px] uppercase tracking-[.18em] text-primary">Infrastructure annuelle</span></div>
               <div className="mt-5 flex items-end gap-2"><span className="display-serif text-6xl text-primary">79 €</span><span className="mb-2 label-mono text-[9px] text-muted-foreground">/ an</span></div>
@@ -59,14 +59,14 @@ function WebCarePage() {
           </div>
         </div>
       </section>
-      <section className="border-b border-border/60 py-14 sm:py-20">
+      <Parallax speed={-0.025}><section className="border-b border-border/60 py-14 sm:py-20">
         <div className="mx-auto max-w-7xl px-5 lg:px-10">
           <div className="grid gap-3 md:grid-cols-3">
             {[[LifeBuoy,"Corrections","Petites modifications de contenu, visuels et sections."],[Wrench,"Évolutions","Ajustements courants pour que le site reste utile."],[ShieldCheck,"Suivi","Surveillance et interventions techniques selon la formule choisie."]].map(([Icon,title,desc])=>{const I=Icon as typeof LifeBuoy;return <div key={String(title)} className="rounded-[1.5rem] border border-border bg-card/50 p-6 transition-all hover:-translate-y-1 hover:border-primary/40"><I className="h-5 w-5 text-primary"/><h2 className="display-serif mt-6 text-3xl">{title}</h2><p className="mt-3 text-sm leading-6 text-muted-foreground">{desc}</p></div>})}
           </div>
         </div>
-      </section>
-      <section id="plans" className="py-20 lg:py-28">
+      </section></Parallax>
+      <section id="plans" className="relative overflow-hidden py-20 lg:py-28"><div className="pointer-events-none absolute -left-28 top-12 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
         <div className="mx-auto max-w-7xl px-5 lg:px-10">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"><div><span className="label-mono text-[10px] uppercase tracking-[0.25em] text-primary">Maintenance mensuelle</span><h2 className="display-serif mt-4 text-4xl sm:text-6xl">Choisissez votre niveau<br/>d'accompagnement.</h2></div><p className="max-w-md text-sm leading-6 text-muted-foreground">Les volumes concernent les demandes courantes. Les travaux hors périmètre restent séparés pour préserver une charge de travail réaliste.</p></div>
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
