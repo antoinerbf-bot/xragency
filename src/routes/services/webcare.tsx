@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowRight, Check, LifeBuoy, ShieldCheck, Sparkles, Wrench, ServerCog } from "lucide-react";
 import { Nav } from "@/components/site/Nav";
+import { Parallax } from "@/components/site/primitives";
+import { XR_PHOTOS } from "@/lib/photography";
 import { Contact } from "@/components/site/Contact";
 
 export const Route = createFileRoute("/services/webcare")({
@@ -28,10 +30,19 @@ function WebCarePage() {
       <section className="relative overflow-hidden border-b border-border/60 py-16 sm:py-24 lg:py-32">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_25%,hsl(var(--primary)/.14),transparent_40%)]" />
         <div className="relative mx-auto max-w-7xl px-5 lg:px-10">
-          <div className="max-w-4xl">
+          <div className="grid items-center gap-10 lg:grid-cols-12">
+          <div className="max-w-4xl lg:col-span-7">
             <span className="label-mono text-[10px] uppercase tracking-[0.25em] text-primary">XR AGENCY · 06 · WEBCARE</span>
             <h1 className="display-serif mt-6 text-[clamp(3.2rem,8vw,7rem)] leading-[.86]">Votre site évolue.<br/><em className="not-italic italic text-primary">Nous aussi.</em></h1>
             <p className="mt-7 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">Maintenance courante, corrections et évolutions légères : une formule claire pour garder votre site propre, à jour et exploitable sans transformer chaque petite demande en nouveau devis.</p>
+          </div>
+          <Parallax speed={-0.035} className="lg:col-span-5">
+            <figure className="relative overflow-hidden rounded-[2rem] border border-border/70 bg-card shadow-2xl">
+              <img src={XR_PHOTOS.maintenance} alt="Infrastructure et maintenance web" className="h-[360px] w-full object-cover transition-transform duration-[1600ms] hover:scale-[1.04]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-6"><span className="label-mono text-[9px] tracking-[.24em] text-white/55">XR AGENCY · WEBCARE</span><p className="display-serif mt-2 text-2xl text-white">Votre site reste exploitable.</p></div>
+            </figure>
+          </Parallax>
           </div>
           <div className="mt-10 grid gap-4 md:grid-cols-2">
             <div className="rounded-[2rem] border border-primary/30 bg-primary/[.06] p-7 shadow-xl">
