@@ -54,7 +54,7 @@ export const SERVICES_PART1 = [
     title: { fr: "Branding & Identité", en: "Branding & Identity", vi: "Thương hiệu & Nhận diện" },
     short: { fr: "Identités durables, systèmes complets.", en: "Lasting identities, complete systems.", vi: "Nhận diện bền vững, hệ thống hoàn chỉnh." },
     description: { fr: "Un logo, une palette, une typographie et un système complet de déclinaisons.", en: "A logo, a palette, a typeface and a complete system of applications.", vi: "Logo, bảng màu, kiểu chữ và hệ thống ứng dụng hoàn chỉnh." },
-    fromEur: 199,
+    fromEur: 179,
     fromPeriod: "once",
     highlights: [
       { fr: "Fichiers AI, SVG, PNG, PDF", en: "AI, SVG, PNG, PDF files", vi: "Tệp AI, SVG, PNG, PDF" },
