@@ -139,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/notre-histoire': typeof NotreHistoireRoute
   '/realisations': typeof RealisationsRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/sitemap.xml': typeof SitemapXmlRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/api/send-quote': typeof ApiSendQuoteRoute
@@ -267,6 +268,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   NotreHistoireRoute: typeof NotreHistoireRoute
   RealisationsRoute: typeof RealisationsRoute
+  MentionsLegalesRoute: typeof MentionsLegalesRoute
   SitemapXmlRoute: typeof SitemapXmlRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   ApiSendQuoteRoute: typeof ApiSendQuoteRoute
@@ -374,6 +376,13 @@ declare module '@tanstack/react-router' {
       path: '/notre-histoire'
       fullPath: '/notre-histoire'
       preLoaderRoute: typeof NotreHistoireRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mentions-legales': {
+      id: '/mentions-legales'
+      path: '/mentions-legales'
+      fullPath: '/mentions-legales'
+      preLoaderRoute: typeof MentionsLegalesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/realisations': {
