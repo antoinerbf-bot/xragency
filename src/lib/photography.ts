@@ -1,16 +1,26 @@
+/**
+ * Editorial photography direction for XR Agency.
+ *
+ * One photographic language across the whole site:
+ * architecture, craft, strategy, analytics, local visibility,
+ * social content, infrastructure, commerce and AI.
+ *
+ * These are intentionally photographic references rather than
+ * abstract illustrations or character/avatar artwork.
+ */
 export const XR_PHOTOS = {
-  websites: "https://images.unsplash.com/photo-1589466445478-bb536e11b967?auto=format&fit=crop&w=1800&q=88",
-  branding: "https://images.unsplash.com/photo-1781615851923-2f1e05d7abfa?auto=format&fit=crop&w=1800&q=88",
-  seo: "https://images.unsplash.com/photo-1781871670335-660e05ae7406?auto=format&fit=crop&w=1800&q=88",
-  maps: "https://images.unsplash.com/photo-1651438416370-39729e9d43af?auto=format&fit=crop&w=1800&q=88",
-  social: "https://images.unsplash.com/photo-1784729553958-4f8d4412b0c0?auto=format&fit=crop&w=1800&q=88",
-  maintenance: "https://images.unsplash.com/photo-1506399558188-acca6f8cbf41?auto=format&fit=crop&w=1800&q=88",
-  ecommerce: "https://images.unsplash.com/photo-1719488134786-a4c273733931?auto=format&fit=crop&w=1800&q=88",
-  refonte: "https://images.unsplash.com/photo-1589466445478-bb536e11b967?auto=format&fit=crop&w=1800&q=88",
-  ads: "https://images.unsplash.com/photo-1784729553958-4f8d4412b0c0?auto=format&fit=crop&w=1800&q=88",
-  strategy: "https://images.unsplash.com/photo-1784146929679-8f8c28438f8e?auto=format&fit=crop&w=1800&q=88",
-  ai: "https://images.unsplash.com/photo-1781871670335-660e05ae7406?auto=format&fit=crop&w=1800&q=88",
+  websites: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=2200&q=90",
+  branding: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=2200&q=90",
+  seo: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2200&q=90",
+  maps: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=2200&q=90",
+  social: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=2200&q=90",
+  maintenance: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=2200&q=90",
+  ecommerce: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=2200&q=90",
+  refonte: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=2200&q=90",
+  ads: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=2200&q=90",
+  strategy: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=2200&q=90",
+  ai: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=2200&q=90",
 } as const;
 
-export const XR_HERO_PHOTO = "https://images.unsplash.com/photo-1589466445478-bb536e11b967?auto=format&fit=crop&w=2200&q=90";
-export const XR_JOURNEY_PHOTO = "https://images.unsplash.com/photo-1784146929679-8f8c28438f8e?auto=format&fit=crop&w=2200&q=88";
+export const XR_HERO_PHOTO = "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=2400&q=92";
+export const XR_JOURNEY_PHOTO = "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=2400&q=92";
