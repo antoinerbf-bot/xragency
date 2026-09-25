@@ -37,9 +37,9 @@ export const UI: Record<string, L> = {
     vi: "Một studio độc lập kiến tạo trải nghiệm số cho những thương hiệu khắt khe: nhận diện, website, SEO, Google Maps, AI.",
   },
   heroMeta: {
-    fr: "Paris — Sur rendez-vous.",
-    en: "Paris — By appointment.",
-    vi: "Paris — Theo lịch hẹn.",
+    fr: "France · Asie · International",
+    en: "France · Asia · International",
+    vi: "Pháp · Châu Á · Quốc tế",
   },
   ctaAnalysis: { fr: "Lancer mon analyse", en: "Start my analysis", vi: "Bắt đầu phân tích" },
   ctaContinue: { fr: "Continuer", en: "Continue", vi: "Tiếp tục" },
@@ -59,11 +59,11 @@ export const UI: Record<string, L> = {
   statRemote: { fr: "Remote — 6 fuseaux", en: "Remote — 6 time zones", vi: "Remote — 6 múi giờ" },
   statProduction: { fr: "Production mondiale", en: "Global production", vi: "Sản xuất toàn cầu" },
   statSatisfaction: {
-    fr: "Satisfaction client",
-    en: "Client satisfaction",
-    vi: "Hài lòng khách hàng",
+    fr: "Offres structurées",
+    en: "Structured offers",
+    vi: "Gói dịch vụ rõ ràng",
   },
-  statResponse: { fr: "Temps de réponse", en: "Response time", vi: "Thời gian phản hồi" },
+  statResponse: { fr: "Langues de service", en: "Service languages", vi: "Ngôn ngữ dịch vụ" },
 
   chapter1: { fr: "Chapitre — I · Maison", en: "Chapter — I · House", vi: "Chương — I · Studio" },
   chapter2: {
