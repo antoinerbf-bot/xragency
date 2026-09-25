@@ -85,7 +85,9 @@ export function ServicesCatalog() {
       quote: "Tạo báo giá",
       compose: "Chọn gói này",
     },
-  }[lang];
+  }[lang] ?? ({
+    eyebrow: "SERVICES", title1: "Multiple disciplines.", title2: "One system.", lead: "Explore our digital services.", learn: "Learn more", from: "From", ctaTitle: "Not sure where to start?", ctaLead: "Tell us about your situation.", cta: "Start my analysis", enter: "Enter the experience", quote: "Build my quote", compose: "Build this offer",
+  });
 
   return (
     <section className="relative">
@@ -136,7 +138,7 @@ export function ServicesCatalog() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/55 to-transparent" />
                   <div className="relative z-10 flex h-full min-h-[460px] flex-col justify-between p-6 sm:p-8">
                     <div className="flex items-center justify-between">
-                      <span className="label-mono rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[8px] uppercase tracking-[.2em] text-white/70 backdrop-blur">{kicker[lang]}</span>
+                      <span className="label-mono rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[8px] uppercase tracking-[.2em] text-white/70 backdrop-blur">{kicker[lang] ?? kicker.en}</span>
                       <span className="label-mono text-[8px] text-white/40">{String(index + 1).padStart(2, "0")} / 07</span>
                     </div>
                     <div className="max-w-2xl">
