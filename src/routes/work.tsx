@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowUpRight, Search, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { ArrowUpRight, Search, SlidersHorizontal, ChevronDown, ExternalLink } from "lucide-react";
 import { Nav } from "@/components/site/Nav";
 import { Parallax } from "@/components/site/primitives";
 import { Contact } from "@/components/site/Contact";
@@ -8,7 +8,6 @@ import { PORTFOLIO_REFERENCES, PORTFOLIO_SECTORS } from "@/lib/portfolioReferenc
 import { SERVICES } from "@/lib/content";
 import { useLang } from "@/lib/i18n";
 
-const SERVICES = ["Tous", "Vitrine", "E-commerce", "Branding", "SaaS", "Portail"] as const;
 
 export const Route = createFileRoute("/work")({
   head: () => ({
@@ -31,7 +30,7 @@ export function WorkPage() {
   const { t } = useLang();
   const [service, setService] = useState("Tous");
   const serviceOptions = [{ id: "Tous", label: t({ fr: "Toutes les prestations", en: "All services", vi: "Tất cả dịch vụ", ar: "جميع الخدمات", ru: "Все услуги" }) }, ...SERVICES.map((x) => ({ id: x.id, label: t(x.title) }))];
-  const serviceForReference = (type: string) => type === "E-commerce" ? "ecommerce" : type === "Branding" ? "branding" : type === "SaaS" ? "ai" : "websites";
+  const serviceForReference = (type: string) => type === "E-commerce" ? "ecommerce" : type === "Branding" ? "branding" : type === "SaaS" ? "ai" : type === "Portail" ? "websites" : "websites";
   const filtered = useMemo(() => PORTFOLIO_REFERENCES.filter((item) => {
     const q = query.toLowerCase().trim();
     return (!q || [item.name,item.sector,item.type].join(" ").toLowerCase().includes(q))
@@ -47,12 +46,12 @@ export function WorkPage() {
         <div className="relative mx-auto max-w-7xl px-5 lg:px-10">
           <Parallax speed={-0.035} className="max-w-5xl">
             <p className="label-mono text-[10px] uppercase tracking-[.25em] text-primary">XR AGENCY · PORTFOLIO</p>
-            <h1 className="display-serif mt-5 text-[clamp(3.4rem,9vw,8rem)] leading-[.84]">Des références<br/><em className="not-italic italic text-primary">pour vous projeter.</em></h1>
-            <p className="mt-8 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">Explorez des références réelles par secteur et par prestation. Chaque projet ouvre directement sa homepage afin de vous permettre de juger le niveau visuel, l’expérience et la direction digitale.</p>
+            <h1 className="display-serif mt-5 text-[clamp(3.4rem,9vw,8rem)] leading-[.84]">Des réalisations<br/><em className="not-italic italic text-primary">qui donnent envie d’entrer.</em></h1>
+            <p className="mt-8 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">Explorez les références par secteur et par prestation. Chaque carte affiche son identité, son type de projet et un accès direct à la homepage pour évaluer le rendu réel, l’expérience et la direction digitale.</p>
           </Parallax>
           <div className="mt-12 grid gap-3 rounded-[2rem] border border-border bg-card/60 p-4 shadow-2xl backdrop-blur-xl sm:grid-cols-[1fr_auto] sm:p-5">
-            <div className="relative"><Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"/><input value={query} onChange={(e)=>setQuery(e.target.value)} placeholder="Rechercher une marque, un secteur..." className="w-full rounded-2xl border border-border bg-background/80 py-3.5 pl-11 pr-4 text-sm outline-none focus:border-primary"/></div>
-            <div className="flex items-center gap-2 rounded-2xl border border-border bg-background/70 px-4 py-3 text-[10px] uppercase tracking-[.15em] text-muted-foreground"><SlidersHorizontal className="h-3.5 w-3.5 text-primary"/>{filtered.length} références</div>
+            <div className="relative"><Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"/><input value={query} onChange={(e)=>setQuery(e.target.value)} placeholder={t({ fr: "Rechercher une marque, un secteur…", en: "Search a brand or sector…", vi: "Tìm thương hiệu hoặc lĩnh vực…", ar: "ابحث عن علامة أو قطاع…", ru: "Найти бренд или отрасль…" })} className="w-full rounded-2xl border border-border bg-background/80 py-3.5 pl-11 pr-4 text-sm outline-none focus:border-primary"/></div>
+            <div className="flex items-center gap-2 rounded-2xl border border-border bg-background/70 px-4 py-3 text-[10px] uppercase tracking-[.15em] text-muted-foreground"><SlidersHorizontal className="h-3.5 w-3.5 text-primary"/>{filtered.length} {t({ fr: "références", en: "references", vi: "tham chiếu", ar: "مرجع", ru: "референсов" })}</div>
           </div>
         </div>
       </section>
@@ -60,15 +59,15 @@ export function WorkPage() {
         <div className="mx-auto max-w-7xl px-5 lg:px-10">
           <div className="mb-10 grid gap-3 md:grid-cols-2">
             <label className="relative block">
-              <span className="mb-2 block label-mono text-[9px] uppercase tracking-[.2em] text-muted-foreground">Secteur d’activité</span>
+              <span className="mb-2 block label-mono text-[9px] uppercase tracking-[.2em] text-muted-foreground">{t({ fr: "Secteur d’activité", en: "Industry", vi: "Lĩnh vực", ar: "القطاع", ru: "Отрасль" })}</span>
               <select value={sector} onChange={(e)=>setSector(e.target.value)} className="w-full appearance-none rounded-2xl border border-border bg-card/70 px-4 py-3.5 pr-10 text-sm outline-none focus:border-primary">
-                <option value="all">Tous les secteurs</option>
+                <option value="all">{t({ fr: "Tous les secteurs", en: "All industries", vi: "Tất cả lĩnh vực", ar: "جميع القطاعات", ru: "Все отрасли" })}</option>
                 {PORTFOLIO_SECTORS.map(([id,label])=><option key={id} value={id}>{label}</option>)}
               </select>
               <ChevronDown className="pointer-events-none absolute right-4 bottom-4 h-4 w-4 text-muted-foreground" />
             </label>
             <label className="relative block">
-              <span className="mb-2 block label-mono text-[9px] uppercase tracking-[.2em] text-muted-foreground">Prestation</span>
+              <span className="mb-2 block label-mono text-[9px] uppercase tracking-[.2em] text-muted-foreground">{t({ fr: "Prestation", en: "Service", vi: "Dịch vụ", ar: "الخدمة", ru: "Услуга" })}</span>
               <select value={service} onChange={(e)=>setService(e.target.value)} className="w-full appearance-none rounded-2xl border border-border bg-card/70 px-4 py-3.5 pr-10 text-sm outline-none focus:border-primary">
                 {serviceOptions.map((x)=><option key={x.id} value={x.id}>{x.label}</option>)}
               </select>
@@ -82,14 +81,14 @@ export function WorkPage() {
                 <div className={`relative overflow-hidden ${feature?"aspect-[16/10]":"aspect-[16/11]"}`}>
                   <img src={item.image} alt={item.name+" — référence "+item.sector} loading={index<4?"eager":"lazy"} decoding="async" className="h-full w-full object-cover transition duration-[1400ms] group-hover:scale-105"/>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"/>
-                  <div className="absolute left-5 top-5 flex flex-wrap items-center gap-2"><span className="flex items-center gap-2 rounded-full border border-white/20 bg-black/45 px-2.5 py-1.5 label-mono text-[8px] uppercase tracking-[.12em] text-white backdrop-blur"><img src={`https://www.google.com/s2/favicons?domain=${new URL(item.url).hostname}&sz=64`} alt="" className="h-4 w-4 rounded-sm" />{item.name}</span><span className="rounded-full border border-white/20 bg-black/40 px-3 py-1 label-mono text-[8px] uppercase tracking-[.16em] text-white backdrop-blur">{item.type}</span></div>
+                  <div className="absolute left-5 top-5 flex flex-wrap items-center gap-2"><span className="flex items-center gap-2 rounded-full border border-white/20 bg-black/45 px-2.5 py-1.5 label-mono text-[8px] uppercase tracking-[.12em] text-white backdrop-blur"><img src={`https://www.google.com/s2/favicons?domain=${new URL(item.url).hostname}&sz=64`} alt="" className="h-4 w-4 rounded-sm bg-white" />{item.name}</span><span className="rounded-full border border-white/20 bg-black/40 px-3 py-1 label-mono text-[8px] uppercase tracking-[.16em] text-white backdrop-blur">{item.type}</span></div>
                   <div className="absolute inset-x-0 bottom-0 p-5 sm:p-7 text-white"><p className="label-mono text-[8px] uppercase tracking-[.2em] text-white/55">{item.sector} · {item.type}</p><div className="mt-2 flex items-end justify-between gap-4"><h2 className={feature?"display-serif text-4xl sm:text-5xl":"display-serif text-3xl"}>{item.name}</h2><span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/25 bg-white/10 transition group-hover:rotate-6 group-hover:bg-primary group-hover:text-primary-foreground"><ArrowUpRight className="h-4 w-4"/></span></div></div>
                 </div>
-                <div className="flex items-center justify-between gap-4 px-5 py-4 sm:px-6"><span className="text-xs text-muted-foreground">{item.origin==="XR Agency"?"Projet XR Agency":"Référence publique / inspiration"}</span><span className="label-mono text-[8px] uppercase tracking-[.15em] text-primary">Visiter le site ↗</span></div>
+                <div className="flex items-center justify-between gap-4 px-5 py-4 sm:px-6"><span className="text-xs text-muted-foreground">{item.origin==="XR Agency"?t({fr:"Projet XR Agency",en:"XR Agency project",vi:"Dự án XR Agency",ar:"مشروع XR Agency",ru:"Проект XR Agency"}):t({fr:"Référence publique / inspiration",en:"Public reference / inspiration",vi:"Tham chiếu công khai / cảm hứng",ar:"مرجع عام / إلهام",ru:"Публичный референс / вдохновение"})}</span><span className="inline-flex items-center gap-1.5 label-mono text-[8px] uppercase tracking-[.15em] text-primary">{t({fr:"Visiter la homepage",en:"Visit homepage",vi:"Xem trang chủ",ar:"زيارة الصفحة الرئيسية",ru:"Открыть главную"})}<ExternalLink className="h-3 w-3"/></span></div>
               </a>
             })}
           </div>
-          {!filtered.length && <div className="py-20 text-center"><p className="display-serif text-3xl">Aucune référence pour cette sélection.</p><button onClick={()=>{setQuery("");setSector("all");setService("Tous")}} className="mt-4 text-xs text-primary">Réinitialiser</button></div>}
+          {!filtered.length && <div className="py-20 text-center"><p className="display-serif text-3xl">{t({ fr: "Aucune référence pour cette sélection.", en: "No reference matches this selection.", vi: "Không có tham chiếu phù hợp.", ar: "لا توجد مراجع لهذا الاختيار.", ru: "Для этого выбора нет референсов." })}</p><button onClick={()=>{setQuery("");setSector("all");setService("Tous")}} className="mt-4 text-xs text-primary">{t({ fr:"Réinitialiser", en:"Reset", vi:"Đặt lại", ar:"إعادة ضبط", ru:"Сбросить" })}</button></div>}
         </div>
       </section>
     </main>
