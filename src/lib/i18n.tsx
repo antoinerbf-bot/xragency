@@ -65,7 +65,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setLang = useCallback((l: string) => {
-    setLangState(l);
+    setLangState(l as Lang);
     window.localStorage.setItem("xr-lang", l);
     document.documentElement.lang = l;
     document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
