@@ -39,7 +39,7 @@ export const SERVICES_PART1 = [
       },
       {
         name: { fr: "E-commerce & Réservation", en: "E-commerce & Booking", vi: "Thương mại điện tử & Đặt chỗ" },
-        eur: 799,
+        eur: 1490,
         period: "once",
         features: [
           { fr: "Catalogue produits", en: "Product catalogue", vi: "Danh mục sản phẩm" },
