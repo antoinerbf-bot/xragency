@@ -22,5 +22,5 @@ export const XR_PHOTOS = {
   ai: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=2200&q=90",
 } as const;
 
-export const XR_HERO_PHOTO = "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=2400&q=92";
-export const XR_JOURNEY_PHOTO = "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=2400&q=92";
+export const XR_HERO_PHOTO = "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=2400&q=92";
+export const XR_JOURNEY_PHOTO = "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=2400&q=92";
