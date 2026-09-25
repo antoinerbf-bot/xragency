@@ -44,7 +44,7 @@ export function ServicesCatalog() {
       eyebrow: "SERVICES",
       title1: "Plusieurs expertises.",
       title2: "Un seul système.",
-      lead: "Sites, e-commerce, identité, SEO, Google Maps, réseaux et maintenance. Chaque prestation travaille seule — ensemble, elles construisent une présence digitale qui convertit.",
+      lead: "Sites vitrines, sites business et e-commerce, identité, SEO, Google Maps, réseaux et maintenance. Chaque prestation répond à un besoin précis — ensemble, elles construisent une présence digitale qui convertit.",
       learn: "En savoir plus",
       from: "À partir de",
       ctaTitle: "Pas sûr par où commencer ?",
@@ -58,7 +58,7 @@ export function ServicesCatalog() {
       eyebrow: "SERVICES",
       title1: "Multiple disciplines.",
       title2: "One system.",
-      lead: "Websites, e-commerce, identity, SEO, Google Maps, social and maintenance. Each service works on its own — together they build a digital presence that converts.",
+      lead: "Showcase, business and e-commerce websites, identity, SEO, Google Maps, social and maintenance. Each service solves a specific need — together they build a digital presence that converts.",
       learn: "Learn more",
       from: "From",
       ctaTitle: "Not sure where to start?",
@@ -72,7 +72,7 @@ export function ServicesCatalog() {
       eyebrow: "DỊCH VỤ",
       title1: "Nhiều chuyên môn.",
       title2: "Một hệ thống.",
-      lead: "Website, e-commerce, nhận diện, SEO, Google Maps, mạng xã hội và bảo trì. Mỗi dịch vụ hoạt động riêng — cùng nhau tạo nên hiện diện số chuyển đổi.",
+      lead: "Website giới thiệu, website doanh nghiệp và e-commerce, nhận diện, SEO, Google Maps, mạng xã hội và bảo trì. Mỗi dịch vụ giải quyết một nhu cầu cụ thể — cùng nhau tạo nên hiện diện số có khả năng chuyển đổi.",
       learn: "Tìm hiểu thêm",
       from: "Từ",
       ctaTitle: "Chưa chắc bắt đầu từ đâu?",
@@ -137,7 +137,7 @@ export function ServicesCatalog() {
                   <div className="relative z-10 flex h-full min-h-[460px] flex-col justify-between p-6 sm:p-8">
                     <div className="flex items-center justify-between">
                       <span className="label-mono rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[8px] uppercase tracking-[.2em] text-white/70 backdrop-blur">{kicker[lang] ?? kicker.en}</span>
-                      <span className="label-mono text-[8px] text-white/40">{String(index + 1).padStart(2, "0")} / 07</span>
+                      <span className="label-mono text-[8px] text-white/40">{String(index + 1).padStart(2, "0")} / 06</span>
                     </div>
                     <div className="max-w-2xl">
                       <h2 className={cn("display-serif leading-[.9] text-white", featured ? "text-5xl sm:text-7xl" : "text-4xl sm:text-5xl")}>{t(service.title)}</h2>
