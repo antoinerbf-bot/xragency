@@ -255,6 +255,7 @@ export function Contact() {
                 <p>TVA intracommunautaire : FR00889178141 · Président : Antoine REBUFFÉ</p>
                 <p>Hébergement : o2switch · Chemin des Pardiaux, 63000 Clermont-Ferrand, France</p>
                 <p className="text-[11px] text-muted-foreground/60">Infrastructure en France · cadre RGPD · données traitées selon les finalités indiquées.</p>
+                <a href="#legal" className="inline-flex text-xs font-semibold text-primary hover:underline">Mentions légales & RGPD →</a>
                 <p>
                   <a href="mailto:contact.xragency@gmail.com" className="transition-colors hover:text-primary">Contact légal : contact.xragency@gmail.com</a>
                 </p>
