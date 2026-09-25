@@ -11,7 +11,7 @@ export type PortfolioReference = {
 const preview = (url: string) => `https://image.thum.io/get/width/1800/crop/1050/noanimate/${url}`;
 const ref = (name: string, url: string, sector: string, type: PortfolioReference["type"], origin: PortfolioReference["origin"] = "Référence"): PortfolioReference => ({ name, url, sector, type, image: preview(url), origin });
 
-export const PORTFOLIO_REFERENCES: PortfolioReference[] = [
+const RAW_PORTFOLIO_REFERENCES: PortfolioReference[] = [
   ref("Pok-N Ball", "https://pokebowlfresh.vercel.app/", "restaurant", "E-commerce", "XR Agency"),
   ref("French Paradise", "https://frenchparadise.vn/", "food", "Vitrine", "XR Agency"),
   ref("Le Gramme", "https://legramme.com/", "luxe", "E-commerce"), ref("MaisonCléo", "https://maisoncleo.com/", "luxe", "E-commerce"), ref("Completedworks", "https://completedworks.com/", "luxe", "E-commerce"),
@@ -34,7 +34,12 @@ export const PORTFOLIO_REFERENCES: PortfolioReference[] = [
   ref("Graza", "https://www.graza.co/", "food", "E-commerce"), ref("Fishwife", "https://fishwife.com/", "food", "E-commerce"), ref("Fly By Jing", "https://flybyjing.com/", "food", "E-commerce"),
   ref("TIA Wellness Resort", "https://tiawellnessresort.com/", "spa", "Vitrine"), ref("Alba Wellness Valley", "https://www.albawellnessvalley.com/", "spa", "Vitrine"), ref("La Spa Ma May", "https://laspamamay.com/", "spa", "Vitrine"),
   ref("Ridgeway Construction", "https://www.ridgewayconstruction.co.uk/", "construction", "Vitrine"), ref("Mackenzie Construction", "https://mackenzieconstruction.co.uk/", "construction", "Vitrine"), ref("Barnes Construction", "https://www.barnesconstruction.co.uk/", "construction", "Vitrine"),
+  
 ];
+
+export const PORTFOLIO_REFERENCES: PortfolioReference[] = Array.from(
+  new Map(RAW_PORTFOLIO_REFERENCES.map((item) => [`${item.name}|${item.url}`, item])).values(),
+);
 
 export const PORTFOLIO_SECTORS = [
   ["luxe", "Luxe"], ["hotel", "Hôtellerie"], ["restaurant", "Restauration"], ["immobilier", "Immobilier"], ["auto", "Automobile"],
