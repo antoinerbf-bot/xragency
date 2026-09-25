@@ -77,6 +77,7 @@ export const SERVICES_PART2 = [
         ],
       },
     ],
+  },
   {
     id: "maintenance",
     num: "06",
@@ -127,6 +128,7 @@ export const SERVICES_PART2 = [
         ],
       },
     ],
+  },
   {
     id: "ecommerce",
     num: "07",
