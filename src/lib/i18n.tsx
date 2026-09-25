@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from "react";
 
-export type Lang = "fr" | "en" | "vi";
+export type Lang = "fr" | "en" | "vi" | "ar" | "ru";
 export type L = Record<string, string>;
 
 export const LANGS: { code: string; label: string; flag: string }[] = [
