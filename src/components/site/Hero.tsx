@@ -5,6 +5,7 @@ import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax } from "./primitives";
+import { XR_HERO_PHOTO } from "@/lib/photography";
 
 /* ── Animated counter hook ── */
 function useCountUp(target: number, duration = 1600, startDelay = 500) {
@@ -144,6 +145,21 @@ export function Hero() {
               </p>
             </div>
           </Parallax>
+
+          <div className="relative hidden lg:col-span-5 lg:block" aria-hidden="true">
+            <div className="absolute -inset-8 rounded-[3rem] bg-primary/10 blur-3xl" />
+            <figure className="relative overflow-hidden rounded-[2rem] border border-border/70 bg-card shadow-2xl">
+              <img src={XR_HERO_PHOTO} alt="" className="h-[560px] w-full object-cover object-center transition-transform duration-[1800ms] hover:scale-[1.025]" />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_42%,rgba(3,4,5,.86)_100%)]" />
+              <div className="absolute inset-x-0 bottom-0 p-6">
+                <span className="label-mono text-[9px] tracking-[.24em] text-white/55">XR AGENCY · DIGITAL CRAFT</span>
+                <div className="mt-2 flex items-end justify-between gap-4">
+                  <span className="display-serif text-2xl text-white">Design, produit &amp; visibilité</span>
+                  <span className="label-mono text-[9px] text-primary">01</span>
+                </div>
+              </div>
+            </figure>
+          </div>
         </div>
 
         <div>
