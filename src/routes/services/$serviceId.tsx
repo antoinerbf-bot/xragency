@@ -242,6 +242,62 @@ function ServiceDetailPage() {
           </div>
         </section>
 
+        {/* Conversion Architecture — turn curiosity into a concrete next step */}
+        <section className="relative border-y border-border/60 bg-card/[.22] py-14 lg:py-20">
+          <div className="mx-auto max-w-7xl px-6 lg:px-10">
+            <div className="grid gap-4 lg:grid-cols-[1.1fr_.9fr] lg:items-stretch">
+              <div className="rounded-[2rem] border border-border bg-background/70 p-7 shadow-[0_30px_80px_-55px_rgba(0,0,0,.9)] sm:p-9">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="label-mono text-[9px] uppercase tracking-[.22em] text-primary">{t({ fr: "L'offre en clair", en: "The offer, clearly", vi: "Tóm tắt dịch vụ", ar: "العرض بوضوح", ru: "Услуга без лишнего" })}</p>
+                    <h2 className="display-serif mt-3 text-3xl sm:text-4xl">{t({ fr: "Pas juste une prestation. Un système de travail.", en: "Not just a service. A working system.", vi: "Không chỉ là dịch vụ. Một hệ thống triển khai.", ar: "ليست مجرد خدمة. بل نظام عمل.", ru: "Не просто услуга. Рабочая система." })}</h2>
+                  </div>
+                  <span className="hidden rounded-full border border-primary/25 bg-primary/[.06] px-3 py-1 label-mono text-[8px] text-primary sm:inline-flex">{service.num} · XR SYSTEM</span>
+                </div>
+                <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                  {[
+                    { n: "01", title: { fr: "Diagnostic", en: "Diagnosis", vi: "Chẩn đoán", ar: "التشخيص", ru: "Диагностика" }, text: { fr: "Nous partons de votre situation réelle, pas d'un forfait générique.", en: "We start from your real situation, not a generic package.", vi: "Bắt đầu từ tình trạng thực tế, không phải gói chung chung.", ar: "نبدأ من وضعك الفعلي، لا من باقة عامة.", ru: "Мы начинаем с вашей реальной ситуации, а не с шаблонного пакета." } },
+                    { n: "02", title: { fr: "Exécution", en: "Execution", vi: "Triển khai", ar: "التنفيذ", ru: "Реализация" }, text: { fr: "Chaque étape produit un livrable concret et mesurable.", en: "Every step produces a concrete, measurable deliverable.", vi: "Mỗi bước tạo ra một đầu ra cụ thể và đo được.", ar: "كل خطوة تنتج مخرَجًا ملموسًا وقابلًا للقياس.", ru: "Каждый этап даёт конкретный измеримый результат." } },
+                    { n: "03", title: { fr: "Pilotage", en: "Steering", vi: "Điều hành", ar: "المتابعة", ru: "Управление" }, text: { fr: "Nous suivons les signaux utiles et ajustons le plan.", en: "We track useful signals and adjust the plan.", vi: "Theo dõi tín hiệu hữu ích và điều chỉnh kế hoạch.", ar: "نتابع الإشارات المهمة ونعدّل الخطة.", ru: "Мы отслеживаем ключевые сигналы и корректируем план." } },
+                  ].map((item, i) => (
+                    <div key={item.n} className="rounded-2xl border border-border/70 bg-card/45 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-primary/35">
+                      <span className="label-mono text-[9px] text-primary">{item.n}</span>
+                      <h3 className="mt-5 text-sm font-semibold">{t(item.title)}</h3>
+                      <p className="mt-2 text-xs leading-5 text-muted-foreground">{t(item.text)}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className={cn(
+                "relative overflow-hidden rounded-[2rem] border p-7 sm:p-9",
+                isCustomMaps ? "border-primary/40 bg-primary/[.07]" : "border-border bg-card/50"
+              )}>
+                <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-primary/15 blur-3xl" />
+                <div className="relative">
+                  <div className="flex items-center gap-3">
+                    {isCustomMaps ? <ShieldCheck className="h-5 w-5 text-primary" /> : <Sparkles className="h-5 w-5 text-primary" />}
+                    <span className="label-mono text-[9px] uppercase tracking-[.2em] text-primary">{isCustomMaps ? t({ fr: "Garantie commerciale", en: "Commercial guarantee", vi: "Cam kết thương mại", ar: "ضمان تجاري", ru: "Коммерческая гарантия" }) : t({ fr: "Prochaine étape", en: "Next step", vi: "Bước tiếp theo", ar: "الخطوة التالية", ru: "Следующий шаг" })}</span>
+                  </div>
+                  <h3 className="display-serif mt-5 text-3xl sm:text-4xl">{isCustomMaps ? t({ fr: "Top 3 ou remboursé.", en: "Top 3 or money back.", vi: "Top 3 hoặc hoàn tiền.", ar: "Top 3 أو استرداد المبلغ.", ru: "Top 3 или возврат." }) : t({ fr: "Votre projet mérite un plan précis.", en: "Your project deserves a precise plan.", vi: "Dự án của bạn cần một kế hoạch rõ ràng.", ar: "مشروعك يستحق خطة دقيقة.", ru: "Вашему проекту нужен точный план." })}</h3>
+                  <p className="mt-4 text-sm leading-6 text-muted-foreground">
+                    {isCustomMaps
+                      ? t({ fr: "Le diagnostic fixe les requêtes, la zone, le niveau de concurrence, le délai cible et les conditions d'éligibilité avant tout engagement.", en: "The diagnosis defines searches, area, competition level, target timeframe and eligibility conditions before commitment.", vi: "Chẩn đoán xác định truy vấn, khu vực, mức cạnh tranh, thời hạn mục tiêu và điều kiện đủ điều kiện trước khi cam kết.", ar: "يحدد التشخيص الاستعلامات والمنطقة ومستوى المنافسة والمدة المستهدفة وشروط الأهلية قبل الالتزام.", ru: "Диагностика определяет запросы, зону, уровень конкуренции, целевой срок и условия участия до начала работ." })
+                      : t({ fr: "Choisissez votre formule, puis laissez-nous cadrer le périmètre, les livrables et les priorités avant le démarrage.", en: "Choose your plan, then let us define scope, deliverables and priorities before work starts.", vi: "Chọn gói, sau đó chúng tôi xác định phạm vi, đầu ra và ưu tiên trước khi bắt đầu.", ar: "اختر الباقة ثم نحدد النطاق والمخرجات والأولويات قبل البدء.", ru: "Выберите пакет, после чего мы определим объём, результаты и приоритеты до старта." })}
+                  </p>
+                  <div className="mt-7 flex flex-wrap gap-2">
+                    {service.highlights.slice(0, 3).map((h, i) => <span key={i} className="rounded-full border border-border/70 bg-background/60 px-3 py-2 label-mono text-[8px] text-muted-foreground">{t(h)}</span>)}
+                  </div>
+                  <a href={isCustomMaps ? "#plans" : waUrl} target={isCustomMaps ? undefined : "_blank"} rel={isCustomMaps ? undefined : "noreferrer"} className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3.5 text-[10px] font-semibold uppercase tracking-[.14em] text-primary-foreground transition-transform hover:-translate-y-0.5">
+                    {isCustomMaps ? t({ fr: "Voir la garantie & le tarif", en: "See guarantee & pricing", vi: "Xem bảo đảm & giá", ar: "عرض الضمان والسعر", ru: "Гарантия и цена" }) : t({ fr: "Parler de mon projet", en: "Discuss my project", vi: "Trao đổi dự án", ar: "ناقش مشروعي", ru: "Обсудить проект" })}
+                    <ArrowRight className="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Proven Metrics Section */}
         {service.metrics && service.metrics.length > 0 && (
           <section className="border-y border-border/60 bg-accent/20 py-16">
