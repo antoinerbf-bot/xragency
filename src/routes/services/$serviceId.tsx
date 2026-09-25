@@ -44,10 +44,6 @@ const SERVICE_ALIASES: Record<string, string> = {
   "maintenance": "maintenance",
   "webcare": "maintenance",
   "maintenance-cloud": "maintenance",
-  
-  "ecommerce": "ecommerce",
-  "e-commerce": "ecommerce",
-  "boutique-en-ligne": "ecommerce",
   "refonte": "refonte",
   "refonte-site": "refonte",
   "refonte-de-site-web": "refonte",
