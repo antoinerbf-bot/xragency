@@ -4,12 +4,25 @@ export type PortfolioReference = {
   sector: string;
   type: "Vitrine" | "E-commerce" | "Branding" | "SaaS" | "Portail";
   image: string;
+  services: string[];
   origin: "XR Agency" | "Référence";
 };
 
 /** Real public homepage previews — no generic stock photography. */
 const preview = (url: string) => `https://image.thum.io/get/width/1800/crop/1050/noanimate/${url}`;
-const ref = (name: string, url: string, sector: string, type: PortfolioReference["type"], origin: PortfolioReference["origin"] = "Référence"): PortfolioReference => ({ name, url, sector, type, image: preview(url), origin });
+const ref = (name: string, url: string, sector: string, type: PortfolioReference["type"], origin: PortfolioReference["origin"] = "Référence"): PortfolioReference => ({
+  name,
+  url,
+  sector,
+  type,
+  image: preview(url),
+  services:
+    type === "E-commerce" ? ["websites", "ecommerce"] :
+    type === "Branding" ? ["branding"] :
+    type === "SaaS" ? ["websites"] :
+    ["websites"],
+  origin,
+});
 
 const RAW_PORTFOLIO_REFERENCES: PortfolioReference[] = [
   ref("Pok-N Ball", "https://pokebowlfresh.vercel.app/", "restaurant", "E-commerce", "XR Agency"),
