@@ -28,7 +28,7 @@ export function Logo({ className }: { className?: string }) {
         className,
       )}
     >
-      <span className="text-primary">X</span><span>RAGENCY</span>
+      <span className="flex items-center gap-2.5"><span><span className="text-primary">X</span><span>RAGENCY</span></span><span className="hidden h-5 w-px bg-border sm:block" /><span className="hidden text-[7px] font-semibold uppercase tracking-[0.18em] text-muted-foreground sm:block">Premium Digital Agency</span></span>
     </Link>
   );
 }
