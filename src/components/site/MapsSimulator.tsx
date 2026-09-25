@@ -174,28 +174,29 @@ export function MapsSimulator() {
         {/* ── Section Header ── */}
         <div>
           <SectionHeading
-            label={{ fr: "Google Maps TOP 3", en: "Google Maps TOP 3", vi: "Google Maps TOP 3" }}
-            line1={{ fr: "Objectif Top 3", en: "Top 3 objective", vi: "Mục tiêu Top 3" }}
+            label={{ fr: "GOOGLE BUSINESS PROFILE · LOCAL SEO", en: "GOOGLE BUSINESS PROFILE · LOCAL SEO", vi: "GOOGLE BUSINESS PROFILE · LOCAL SEO" }}
+            line1={{ fr: "Construisons votre visibilité", en: "Build your local visibility", vi: "Xây dựng khả năng hiển thị địa phương" }}
             line2={{
-              fr: "sur mesure selon votre situation.",
-              en: "custom-built for your situation.",
-              vi: "thiết kế riêng theo tình hình.",
+              fr: "sur Google Maps, sur mesure.",
+              en: "on Google Maps, built around you.",
+              vi: "trên Google Maps, theo nhu cầu của bạn.",
             }}
             lead={{
-              fr: "Une prestation locale construite sur mesure selon votre positionnement, votre zone, la concurrence et les mots-clés ciblés.",
-              en: "A local visibility service built around your current position, area, competition and target keywords.",
-              vi: "Dịch vụ hiển thị địa phương được xây dựng theo vị trí, khu vực, cạnh tranh và từ khóa mục tiêu.",
+              fr: "À partir de 990 € / an. Audit, optimisation Google Business Profile, stratégie locale et suivi adaptés à votre zone, votre concurrence et vos requêtes.",
+              en: "From €990 / year. Audit, Google Business Profile optimisation, local strategy and monitoring adapted to your area, competition and target searches.",
+              vi: "Từ 990 € / năm. Kiểm toán, tối ưu Google Business Profile, chiến lược địa phương và theo dõi theo khu vực, đối thủ và truy vấn mục tiêu.",
             }}
           />
 
           {/* ── Exclusivity Badge — very visible ── */}
           <Reveal delay={80}>
-            <div className="mt-8 inline-flex items-center gap-3 rounded-2xl border-2 border-primary/30 bg-primary px-5 py-3.5 shadow-lg">
+            <div className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-primary/30 bg-primary/10 px-5 py-3.5 shadow-lg">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-base font-black">G</span>
               <Zap className="h-5 w-5 shrink-0 text-primary-foreground" />
-              <p className="text-sm font-bold text-primary-foreground leading-snug">
+              <p className="text-sm font-semibold text-foreground leading-snug">
                 Prestation sur mesure · objectif Top 3 · aucune garantie de position
               </p>
-              <Award className="h-5 w-5 shrink-0 text-primary-foreground/70" />
+              <Award className="h-5 w-5 shrink-0 text-primary" />
             </div>
           </Reveal>
         </div>
@@ -306,7 +307,7 @@ export function MapsSimulator() {
               <div className="rounded-2xl border-2 border-primary/30 bg-primary/5 p-5 sm:p-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="label-mono text-xs text-muted-foreground">Investissement annuel estimé</p>
+                    <p className="label-mono text-xs text-muted-foreground">Budget indicatif · à partir de 990 € / an</p>
                     <div className="mt-1 flex items-baseline gap-2">
                       <span
                         key={animMin}
@@ -324,7 +325,7 @@ export function MapsSimulator() {
                       <span className="label-mono text-xs text-muted-foreground">/ an</span>
                     </div>
                     <p className="mt-1.5 text-xs text-muted-foreground/70">
-                      Estimation indicative · Tarif exact après audit personnalisé gratuit
+                      Estimation indicative · tarif exact après audit personnalisé
                     </p>
                   </div>
 
