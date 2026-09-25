@@ -148,14 +148,14 @@ export function Hero() {
 
         <div>
           <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 sm:grid-cols-4 shadow-sm">
-            <AnimatedStat value={500} suffix="+" label={t(UI.statProjects)} delay={550} />
-            <AnimatedStat value={8} suffix="+" label={t(UI.statYears)} delay={630} />
-            <AnimatedStat value={98} suffix="%" label={t(UI.statSatisfaction)} delay={710} />
-            <AnimatedStat value={2} suffix="h" label={t(UI.statResponse)} delay={790} />
+            <AnimatedStat value={7} suffix="+" label={t(UI.statProjects)} delay={550} />
+            <AnimatedStat value={7} suffix="+" label={t(UI.statYears)} delay={630} />
+            <AnimatedStat value={3} suffix="" label={t(UI.statSatisfaction)} delay={710} />
+            <AnimatedStat value={3} suffix="" label={t(UI.statResponse)} delay={790} />
           </dl>
 
           <div className="mt-5 flex items-center justify-between gap-4 border-t border-border/60 py-4">
-            <span className="label-mono text-xs text-muted-foreground/70">XR Intelligence · Julie · Devis sur mesure</span>
+            <span className="label-mono text-xs text-muted-foreground/70">XR Intelligence · Analyse digitale · Devis sur mesure</span>
             <span className="label-mono text-xs text-primary">01 · Analyse</span>
           </div>
         </div>
