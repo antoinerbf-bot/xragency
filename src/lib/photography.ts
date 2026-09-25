@@ -10,7 +10,7 @@
  */
 export const XR_PHOTOS = {
   websites: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=2200&q=90",
-  branding: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=2200&q=90",
+  branding: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=2200&q=90",
   seo: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2200&q=90",
   maps: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=2200&q=90",
   social: "https://images.unsplash.com/photo-1759932021109-ffbec9251f9b?auto=format&fit=crop&w=2200&q=90",
