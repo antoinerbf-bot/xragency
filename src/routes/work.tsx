@@ -30,12 +30,12 @@ export function WorkPage() {
   const { t } = useLang();
   const [service, setService] = useState("Tous");
   const serviceOptions = [{ id: "Tous", label: t({ fr: "Toutes les prestations", en: "All services", vi: "Tất cả dịch vụ", ar: "جميع الخدمات", ru: "Все услуги" }) }, ...SERVICES.map((x) => ({ id: x.id, label: t(x.title) }))];
-  const serviceForReference = (type: string) => type === "E-commerce" ? "ecommerce" : type === "Branding" ? "branding" : type === "SaaS" ? "ai" : type === "Portail" ? "websites" : "websites";
+  const serviceForReference = (item: (typeof PORTFOLIO_REFERENCES)[number]) => item.services;
   const filtered = useMemo(() => PORTFOLIO_REFERENCES.filter((item) => {
     const q = query.toLowerCase().trim();
     return (!q || [item.name,item.sector,item.type].join(" ").toLowerCase().includes(q))
       && (sector === "all" || item.sector === sector)
-      && (service === "Tous" || serviceForReference(item.type) === service);
+      && (service === "Tous" || serviceForReference(item).includes(service));
   }), [query, sector, service]);
 
   return <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
