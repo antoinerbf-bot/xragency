@@ -4,15 +4,19 @@ import { Sparkles, ShieldCheck, FileImage, Search, ArrowUpRight } from "lucide-r
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
-import { EmberButton, Parallax, FloatingBadge } from "./primitives";
-// import EarthGlobe from "./EarthGlobe"; // Globe removed per user request
+import { EmberButton, Parallax } from "./primitives";
 
 /* ── Animated counter hook ── */
 function useCountUp(target: number, duration = 1600, startDelay = 500) {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(target);
   const started = useRef(false);
 
   useEffect(() => {
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setValue(target);
+      return;
+    }
+    setValue(0);
     const timeout = setTimeout(() => {
       started.current = true;
       const start = performance.now();
@@ -63,7 +67,6 @@ export function Hero() {
 
   return (
     <section id="top" className="grain relative min-h-[92dvh] overflow-hidden pt-20 sm:pt-24">
-      {/* Atmospheric lighting depth layers */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -74,9 +77,7 @@ export function Hero() {
       />
 
       <div className="relative mx-auto flex min-h-[calc(92dvh-6.5rem)] max-w-7xl flex-col justify-between px-6 lg:px-10">
-        {/* Hero Main Content */}
         <div className="grid items-center gap-10 py-10 lg:grid-cols-12 lg:py-14">
-          {/* Left Column: Typography & CTAs */}
           <Parallax speed={-0.03} className="relative z-10 lg:col-span-7">
             <div
               className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/5 px-4 py-1.5"
@@ -90,7 +91,7 @@ export function Hero() {
 
             <h1
               className="display-serif mt-5 text-[clamp(2.4rem,6vw,5.2rem)] leading-[0.96] tracking-tight"
-              style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 200ms both" }}
+              style={{ animation: "kinetic-in 0.95s cubic-bezier(0.16,1,0.3,1) 160ms both" }}
             >
               {t(UI.heroTitle1)}
               <br />
@@ -110,7 +111,6 @@ export function Hero() {
               </p>
             </div>
 
-            {/* Direct CTAs */}
             <div
               className="mt-8 flex flex-wrap items-center gap-3.5"
               style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 400ms both" }}
@@ -144,11 +144,8 @@ export function Hero() {
               </p>
             </div>
           </Parallax>
-
-          {/* Right Column reserved for future visual */}
         </div>
 
-        {/* Bottom Key Stats Bar with Animated Counters */}
         <div>
           <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 sm:grid-cols-4 shadow-sm">
             <AnimatedStat value={500} suffix="+" label={t(UI.statProjects)} delay={550} />
