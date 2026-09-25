@@ -8,10 +8,10 @@ import {
   type ReactNode,
 } from "react";
 
-export type Lang = "fr" | "en" | "vi" | "ar" | "ru";
+export type Lang = "fr" | "en" | "vi";
 export type L = Record<string, string>;
 
-export const LANGS: { code: Lang; label: string; flag: string }[] = [
+export const LANGS: { code: string; label: string; flag: string }[] = [
   { code: "fr", label: "FR", flag: "🇫🇷" },
   { code: "en", label: "EN", flag: "🇬🇧" },
   { code: "vi", label: "VI", flag: "🇻🇳" },
@@ -41,7 +41,7 @@ export function formatPrice(eur: number, lang: Lang): string {
 
 type Ctx = {
   lang: Lang;
-  setLang: (l: Lang) => void;
+  setLang: (l: string) => void;
   t: (value: L) => string;
   price: (eur: number) => string;
 };
@@ -52,19 +52,19 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("fr");
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("xr-lang") as Lang | null;
+    const stored = window.localStorage.getItem("xr-lang") as string | null;
     if (stored && ["fr", "en", "vi", "ar", "ru"].includes(stored)) {
-      setLangState(stored);
+      setLangState(stored as Lang);
       return;
     }
     const nav = window.navigator.language.slice(0, 2).toLowerCase();
     if (nav === "vi") setLangState("vi");
-    else if (nav === "ar") setLangState("ar");
-    else if (nav === "ru") setLangState("ru");
+    else if (nav === "ar") setLangState("ar" as Lang);
+    else if (nav === "ru") setLangState("ru" as Lang);
     else if (nav !== "fr") setLangState("en");
   }, []);
 
-  const setLang = useCallback((l: Lang) => {
+  const setLang = useCallback((l: string) => {
     setLangState(l);
     window.localStorage.setItem("xr-lang", l);
     document.documentElement.lang = l;
@@ -77,7 +77,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       setLang,
       t: (v: L | undefined) => {
         if (!v) return "";
-        return v[lang] ?? v.en ?? v.fr ?? Object.values(v)[0] ?? "";
+        const value = (v as Record<string, string>)[lang];
+        return value ?? v.en ?? v.fr ?? Object.values(v)[0] ?? "";
       },
       price: (eur: number) => formatPrice(eur, lang),
     }),
