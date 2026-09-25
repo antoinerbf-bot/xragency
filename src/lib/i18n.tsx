@@ -8,13 +8,15 @@ import {
   type ReactNode,
 } from "react";
 
-export type Lang = "fr" | "en" | "vi";
-export type L = Record<Lang, string>;
+export type Lang = "fr" | "en" | "vi" | "ar" | "ru";
+export type L = Record<string, string>;
 
 export const LANGS: { code: Lang; label: string; flag: string }[] = [
   { code: "fr", label: "FR", flag: "🇫🇷" },
   { code: "en", label: "EN", flag: "🇬🇧" },
   { code: "vi", label: "VI", flag: "🇻🇳" },
+  { code: "ar", label: "AR", flag: "🇦🇪" },
+  { code: "ru", label: "RU", flag: "🇷🇺" },
 ];
 
 /**
@@ -51,12 +53,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const stored = window.localStorage.getItem("xr-lang") as Lang | null;
-    if (stored && ["fr", "en", "vi"].includes(stored)) {
+    if (stored && ["fr", "en", "vi", "ar", "ru"].includes(stored)) {
       setLangState(stored);
       return;
     }
     const nav = window.navigator.language.slice(0, 2).toLowerCase();
     if (nav === "vi") setLangState("vi");
+    else if (nav === "ar") setLangState("ar");
+    else if (nav === "ru") setLangState("ru");
     else if (nav !== "fr") setLangState("en");
   }, []);
 
@@ -64,6 +68,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setLangState(l);
     window.localStorage.setItem("xr-lang", l);
     document.documentElement.lang = l;
+    document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
   }, []);
 
   const value = useMemo<Ctx>(
@@ -72,7 +77,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       setLang,
       t: (v: L | undefined) => {
         if (!v) return "";
-        return v[lang] ?? Object.values(v)[0] ?? "";
+        return v[lang] ?? v.en ?? v.fr ?? Object.values(v)[0] ?? "";
       },
       price: (eur: number) => formatPrice(eur, lang),
     }),
