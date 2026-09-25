@@ -384,34 +384,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapXmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/faq': {
-      id: '/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof FaqRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notre-histoire': {
-      id: '/notre-histoire'
-      path: '/notre-histoire'
-      fullPath: '/notre-histoire'
-      preLoaderRoute: typeof NotreHistoireRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/realisations': {
-      id: '/realisations'
-      path: '/realisations'
-      fullPath: '/realisations'
-      preLoaderRoute: typeof RealisationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapXmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/work': {
       id: '/work'
       path: '/work'
