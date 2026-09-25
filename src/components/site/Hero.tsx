@@ -1,7 +1,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Sparkles, ShieldCheck, FileImage, Search, ArrowUpRight } from "lucide-react";
-import { useLang } from "@/lib/i18n";
+import { LANGS, useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax } from "./primitives";
@@ -77,8 +77,8 @@ export function Hero() {
         }}
       />
 
-      <div className="relative mx-auto flex min-h-[calc(92dvh-6.5rem)] max-w-7xl flex-col justify-between px-6 lg:px-10">
-        <div className="grid items-center gap-10 py-10 lg:grid-cols-12 lg:py-14">
+      <div className="relative mx-auto flex min-h-[calc(92dvh-5.5rem)] max-w-7xl flex-col justify-between px-6 lg:px-10">
+        <div className="grid items-center gap-8 py-7 lg:grid-cols-12 lg:py-9">
           <Parallax speed={-0.03} className="relative z-10 lg:col-span-7">
             <div
               className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/5 px-4 py-1.5"
@@ -149,7 +149,7 @@ export function Hero() {
           <div className="relative hidden lg:col-span-5 lg:block" aria-hidden="true">
             <div className="absolute -inset-8 rounded-[3rem] bg-primary/10 blur-3xl" />
             <figure className="relative overflow-hidden rounded-[2rem] border border-border/70 bg-card shadow-2xl">
-              <img src={XR_HERO_PHOTO} alt="" className="h-[560px] w-full object-cover object-center transition-transform duration-[1800ms] hover:scale-[1.025]" />
+              <img src={XR_HERO_PHOTO} alt="" className="h-[520px] w-full object-cover object-center transition-transform duration-[1800ms] hover:scale-[1.035]" />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_42%,rgba(3,4,5,.86)_100%)]" />
               <div className="absolute inset-x-0 bottom-0 p-6">
                 <span className="label-mono text-[9px] tracking-[.24em] text-white/55">XR AGENCY · DIGITAL CRAFT</span>
@@ -164,11 +164,13 @@ export function Hero() {
 
         <div>
           <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 sm:grid-cols-4 shadow-sm">
-            <AnimatedStat value={7} suffix="+" label={t(UI.statProjects)} delay={550} />
-            <AnimatedStat value={7} suffix="+" label={t(UI.statYears)} delay={630} />
-            <AnimatedStat value={3} suffix="" label={t(UI.statSatisfaction)} delay={710} />
-            <AnimatedStat value={3} suffix="" label={t(UI.statResponse)} delay={790} />
+            <AnimatedStat value={500} suffix="+" label={t(UI.statProjects)} delay={550} />
+            <AnimatedStat value={8} suffix="" label={t(UI.statYears)} delay={630} />
+            <AnimatedStat value={90} suffix="%" label={t(UI.statSatisfaction)} delay={710} />
+            <AnimatedStat value={5} suffix="" label={t(UI.statResponse)} delay={790} />
           </dl>
+
+          <div className="mt-4 flex items-center justify-between gap-4 border-t border-border/60 pt-4"><span className="label-mono text-[9px] text-muted-foreground/60">SERVICE LANGUAGES</span><div className="flex items-center gap-1.5" aria-label="Français, anglais, vietnamien, arabe et russe">{LANGS.map((l) => <span key={l.code} title={l.label} className="flex h-7 w-7 items-center justify-center rounded-full border border-border/70 bg-card/70 text-sm shadow-sm">{l.flag}</span>)}</div></div>
 
           <div className="mt-5 flex items-center justify-between gap-4 border-t border-border/60 py-4">
             <span className="label-mono text-xs text-muted-foreground/70">XR Intelligence · Analyse digitale · Devis sur mesure</span>
