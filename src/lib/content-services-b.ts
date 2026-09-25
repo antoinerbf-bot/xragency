@@ -2,15 +2,32 @@ export const SERVICES_PART2 = [
   {
     id: "maps",
     num: "04",
-    title: { fr: "Google Maps Top 3", en: "Google Maps Top 3", vi: "Google Maps Top 3" },
-    short: { fr: "Visibilité locale et positionnement carte.", en: "Local visibility and map ranking.", vi: "Hiển thị địa phương và xếp hạng bản đồ." },
+    title: { fr: "Google Maps Top 3", en: "Google Maps Top 3", vi: "Google Maps Top 3", ar: "Google Maps Top 3", ru: "Google Maps Top 3" },
+    short: { fr: "Visibilité locale et positionnement carte.", en: "Local visibility and map ranking.", vi: "Hiển thị địa phương và xếp hạng bản đồ.", ar: "ظهور محلي وتحسين الحضور على الخرائط.", ru: "Локальная видимость и присутствие на карте." },
     description: { fr: "Optimisation de votre fiche Google Business Profile et stratégie locale pour travailler votre visibilité sur les recherches pertinentes. Le Top 3 reste un objectif, jamais une garantie.", en: "Google Business Profile optimisation and local strategy to improve visibility on relevant searches. Top 3 is an objective, never a guarantee.", vi: "Tối ưu Google Business Profile và chiến lược địa phương để cải thiện khả năng hiển thị. Top 3 là mục tiêu, không phải cam kết." },
     fromEur: 990,
     fromPeriod: "year",
     highlights: [
-      { fr: "Fiche Google optimisée", en: "Optimised Google profile", vi: "Hồ sơ Google tối ưu" },
-      { fr: "Suivi de positionnement", en: "Ranking monitoring", vi: "Theo dõi thứ hạng" },
+      { fr: "Fiche Google optimisée", en: "Optimised Google profile", vi: "Hồ sơ Google tối ưu", ar: "ملف Google محسّن", ru: "Оптимизированный профиль Google" },
+      { fr: "Suivi de positionnement", en: "Ranking monitoring", vi: "Theo dõi thứ hạng", ar: "متابعة الظهور والترتيب", ru: "Мониторинг позиций" },
+      { fr: "Stratégie locale sur mesure", en: "Tailored local strategy", vi: "Chiến lược địa phương theo nhu cầu", ar: "استراتيجية محلية مخصصة", ru: "Индивидуальная локальная стратегия" },
     ],
+    steps: [
+      { num: "01", title: { fr: "Audit & benchmark", en: "Audit & benchmark", vi: "Kiểm toán & benchmark", ar: "التدقيق والمقارنة", ru: "Аудит и benchmark" }, desc: { fr: "Analyse de la fiche, des concurrents et des requêtes locales qui comptent.", en: "Analysis of the profile, competitors and relevant local searches.", vi: "Phân tích hồ sơ, đối thủ và các truy vấn địa phương quan trọng.", ar: "تحليل الملف والمنافسين وعمليات البحث المحلية المهمة.", ru: "Анализ профиля, конкурентов и целевых локальных запросов." } },
+      { num: "02", title: { fr: "Optimisation GBP", en: "GBP optimisation", vi: "Tối ưu GBP", ar: "تحسين ملف GBP", ru: "Оптимизация GBP" }, desc: { fr: "Catégories, services, informations, contenus et signaux du profil sont retravaillés.", en: "Categories, services, information, content and profile signals are refined.", vi: "Danh mục, dịch vụ, thông tin, nội dung và tín hiệu hồ sơ được tối ưu.", ar: "إعادة ضبط الفئات والخدمات والمعلومات والمحتوى وإشارات الملف.", ru: "Категории, услуги, информация, контент и сигналы профиля дорабатываются." } },
+      { num: "03", title: { fr: "Autorité locale", en: "Local authority", vi: "Uy tín địa phương", ar: "السلطة المحلية", ru: "Локальный авторитет" }, desc: { fr: "Cohérence locale, réputation et signaux externes renforcent la pertinence.", en: "Local consistency, reputation and external signals reinforce relevance.", vi: "Tính nhất quán địa phương, uy tín và tín hiệu bên ngoài củng cố mức độ liên quan.", ar: "الاتساق المحلي والسمعة والإشارات الخارجية تعزز الصلة.", ru: "Локальная согласованность, репутация и внешние сигналы усиливают релевантность." } },
+      { num: "04", title: { fr: "Pilotage & reporting", en: "Monitoring & reporting", vi: "Theo dõi & báo cáo", ar: "المتابعة والتقارير", ru: "Мониторинг и отчётность" }, desc: { fr: "Suivi des requêtes, zones et signaux utiles avec reporting clair.", en: "Track relevant searches, areas and signals with clear reporting.", vi: "Theo dõi truy vấn, khu vực và tín hiệu với báo cáo rõ ràng.", ar: "متابعة الاستعلامات والمناطق والإشارات مع تقارير واضحة.", ru: "Отслеживание запросов, зон и сигналов с понятной отчётностью." } },
+    ],
+    metrics: [
+      { metric: "990 €", label: { fr: "à partir de / an", en: "starting / year", vi: "từ / năm", ar: "ابتداءً من / سنة", ru: "от / год" }, desc: { fr: "Le tarif dépend du périmètre réel après audit.", en: "Pricing depends on the actual scope after audit.", vi: "Giá phụ thuộc phạm vi thực tế sau kiểm toán.", ar: "يعتمد السعر على النطاق الفعلي بعد التدقيق.", ru: "Цена зависит от фактического объёма после аудита." } },
+      { metric: "Top 3", label: { fr: "objectif", en: "objective", vi: "mục tiêu", ar: "الهدف", ru: "цель" }, desc: { fr: "Travailler vers le Top 3 sur les requêtes retenues.", en: "Work toward Top 3 visibility for selected searches.", vi: "Hướng tới Top 3 cho các truy vấn đã chọn.", ar: "العمل نحو الظهور ضمن Top 3 للاستعلامات المحددة.", ru: "Работа над видимостью в Top 3 по выбранным запросам." } },
+      { metric: "100%", label: { fr: "sur mesure", en: "tailored", vi: "tùy chỉnh", ar: "مخصص", ru: "индивидуально" }, desc: { fr: "Zone, concurrence et état initial déterminent le plan d'action.", en: "Area, competition and starting state shape the action plan.", vi: "Khu vực, cạnh tranh và trạng thái ban đầu xác định kế hoạch.", ar: "تحدد المنطقة والمنافسة والحالة الأولية خطة العمل.", ru: "Зона, конкуренция и исходное состояние определяют план действий." } },
+    ],
+    serviceFaqs: [
+      { q: { fr: "Le Top 3 est-il garanti ?", en: "Is Top 3 guaranteed?", vi: "Top 3 có được đảm bảo không?", ar: "هل Top 3 مضمون؟", ru: "Гарантируется ли Top 3?" }, a: { fr: "Non. Le Top 3 est un objectif de travail. Le périmètre et le tarif sont définis selon votre situation réelle.", en: "No. Top 3 is a working objective. Scope and pricing are defined from your real situation.", vi: "Không. Top 3 là mục tiêu triển khai. Phạm vi và giá được xác định theo tình trạng thực tế.", ar: "لا. Top 3 هدف للعمل وليس ضمانًا. يتم تحديد النطاق والسعر وفق وضعك الفعلي.", ru: "Нет. Top 3 — рабочая цель, а не гарантия. Объём и цена определяются по вашей ситуации." } },
+      { q: { fr: "Pourquoi commencer à 990 € / an ?", en: "Why start at €990 / year?", vi: "Vì sao từ 990 € / năm?", ar: "لماذا يبدأ السعر من 990 € سنويًا؟", ru: "Почему от 990 € в год?" }, a: { fr: "Parce que le service inclut audit, optimisation et suivi. Les environnements concurrentiels peuvent nécessiter un périmètre supérieur.", en: "Because the service includes audit, optimisation and monitoring. Competitive markets may require a broader scope.", vi: "Vì dịch vụ bao gồm kiểm toán, tối ưu và theo dõi. Thị trường cạnh tranh có thể cần phạm vi rộng hơn.", ar: "لأن الخدمة تشمل التدقيق والتحسين والمتابعة. الأسواق شديدة التنافس قد تتطلب نطاقًا أوسع.", ru: "Потому что услуга включает аудит, оптимизацию и мониторинг. В конкурентных рынках объём может быть больше." } },
+    ],
+
     plans: [
       {
         name: { fr: "Maps Top 3", en: "Maps Top 3", vi: "Maps Top 3" },
@@ -27,14 +44,15 @@ export const SERVICES_PART2 = [
   {
     id: "social",
     num: "05",
-    title: { fr: "Social Media & Contenu", en: "Social Media & Content", vi: "Mạng xã hội & Nội dung" },
-    short: { fr: "Stratégie, contenus et animation des réseaux.", en: "Strategy, content and community management.", vi: "Chiến lược, nội dung và quản lý cộng đồng." },
+    title: { fr: "Social Media & Contenu", en: "Social Media & Content", vi: "Mạng xã hội & Nội dung", ar: "وسائل التواصل والمحتوى", ru: "Соцсети и контент" },
+    short: { fr: "Stratégie, contenus et animation des réseaux.", en: "Strategy, content and community management.", vi: "Chiến lược, nội dung và quản lý cộng đồng.", ar: "استراتيجية ومحتوى وإدارة للمجتمعات الرقمية.", ru: "Стратегия, контент и управление социальными сетями." },
     description: { fr: "Calendrier éditorial, création de contenus et animation Instagram, Facebook, LinkedIn et TikTok.", en: "Editorial calendar, content creation and management of Instagram, Facebook, LinkedIn and TikTok.", vi: "Lịch biên tập, sáng tạo nội dung và quản lý Instagram, Facebook, LinkedIn, TikTok." },
     fromEur: 299,
     fromPeriod: "month",
     highlights: [
-      { fr: "4 réseaux principaux", en: "4 main networks", vi: "4 mạng chính" },
-      { fr: "Calendrier éditorial", en: "Editorial calendar", vi: "Lịch biên tập" },
+      { fr: "4 réseaux principaux", en: "4 main networks", vi: "4 mạng chính", ar: "4 شبكات رئيسية", ru: "4 основные сети" },
+      { fr: "Calendrier éditorial", en: "Editorial calendar", vi: "Lịch biên tập", ar: "تقويم تحريري", ru: "Контент-план" },
+      { fr: "Création + animation", en: "Creation + community management", vi: "Sáng tạo + quản lý cộng đồng", ar: "إنشاء المحتوى + إدارة المجتمع", ru: "Создание + комьюнити-менеджмент" },
     ],
     plans: [
       {
@@ -76,6 +94,16 @@ export const SERVICES_PART2 = [
           { fr: "Veille + reporting mensuel", en: "Monitoring + monthly reporting", vi: "Theo dõi + báo cáo hàng tháng" },
         ],
       },
+    ],
+    steps: [
+      { num: "01", title: { fr: "Positionnement", en: "Positioning", vi: "Định vị", ar: "التموضع", ru: "Позиционирование" }, desc: { fr: "Objectifs, audiences, ton, piliers éditoriaux et direction visuelle.", en: "Goals, audiences, tone, content pillars and visual direction.", vi: "Mục tiêu, đối tượng, giọng điệu, trụ cột nội dung và hướng hình ảnh.", ar: "الأهداف والجمهور والنبرة ومحاور المحتوى والتوجه البصري.", ru: "Цели, аудитории, тон, контентные направления и визуальная подача." } },
+      { num: "02", title: { fr: "Production", en: "Production", vi: "Sản xuất", ar: "الإنتاج", ru: "Производство" }, desc: { fr: "Création des publications, carrousels, stories et formats courts selon la formule.", en: "Creation of posts, carousels, stories and short formats according to the plan.", vi: "Tạo bài đăng, carousel, story và nội dung ngắn theo gói.", ar: "إنتاج المنشورات والكاروُسيل والقصص والمقاطع القصيرة حسب الباقة.", ru: "Создание постов, каруселей, stories и коротких форматов по пакету." } },
+      { num: "03", title: { fr: "Animation", en: "Community management", vi: "Quản lý cộng đồng", ar: "إدارة المجتمع", ru: "Комьюнити-менеджмент" }, desc: { fr: "Modération et réponses selon le niveau de délégation choisi.", en: "Moderation and replies according to the selected delegation level.", vi: "Kiểm duyệt và phản hồi theo mức độ ủy quyền.", ar: "إدارة التعليقات والردود وفق مستوى التفويض المختار.", ru: "Модерация и ответы в соответствии с выбранным уровнем делегирования." } },
+      { num: "04", title: { fr: "Pilotage", en: "Reporting", vi: "Báo cáo", ar: "التقارير", ru: "Отчётность" }, desc: { fr: "Lecture des signaux, recommandations et ajustements éditoriaux.", en: "Review signals, recommendations and editorial adjustments.", vi: "Phân tích tín hiệu, đề xuất và điều chỉnh nội dung.", ar: "قراءة المؤشرات والتوصيات والتعديلات التحريرية.", ru: "Анализ сигналов, рекомендации и редакционные корректировки." } },
+    ],
+    serviceFaqs: [
+      { q: { fr: "Que comprend chaque niveau ?", en: "What does each level include?", vi: "Mỗi cấp độ bao gồm gì?", ar: "ماذا يتضمن كل مستوى؟", ru: "Что входит в каждый уровень?" }, a: { fr: "Chaque formule définit le nombre de réseaux, de publications, de stories et le niveau de modération. Les trois niveaux augmentent progressivement la délégation.", en: "Each plan defines networks, posts, stories and moderation level. The three levels progressively increase delegation.", vi: "Mỗi gói xác định số mạng, bài đăng, story và mức độ quản lý. Ba cấp độ tăng dần khả năng ủy quyền.", ar: "كل باقة تحدد عدد الشبكات والمنشورات والقصص ومستوى الإدارة. المستويات الثلاثة تزيد التفويض تدريجيًا.", ru: "Каждый пакет задаёт количество сетей, публикаций, stories и уровень модерации. Три уровня постепенно увеличивают делегирование." } },
+      { q: { fr: "Les tournages sont-ils inclus ?", en: "Are shoots included?", vi: "Quay chụp có bao gồm không?", ar: "هل التصوير مشمول؟", ru: "Включены ли съёмки?" }, a: { fr: "Non. Shooting photo/vidéo, déplacement, studio, mannequins et production sur site font l'objet d'un devis séparé.", en: "No. Photo/video shoots, travel, studio, models and on-site production are quoted separately.", vi: "Không. Quay chụp, di chuyển, studio, người mẫu và sản xuất tại chỗ báo giá riêng.", ar: "لا. يتم تسعير التصوير والتنقل والاستوديو والموديلات والإنتاج الميداني بشكل منفصل.", ru: "Нет. Фото/видеосъёмка, выезды, студия, модели и производство на месте считаются отдельно." } },
     ],
   },
   {
