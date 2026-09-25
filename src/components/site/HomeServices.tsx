@@ -159,25 +159,30 @@ export function HomeServices() {
           })}
         </div>
 
-        <Parallax speed={0.035} className="mt-16 sm:mt-24">
-          <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] border border-white/10 bg-black">
-            <div className="absolute inset-0 opacity-85"><img src={XR_JOURNEY_PHOTO} alt="" aria-hidden="true" className="h-full w-full object-cover object-center transition-transform duration-[1800ms] hover:scale-[1.04]" /></div>
+        <Parallax speed={0.055} className="mt-16 sm:mt-24">
+          <div className="relative min-h-[390px] overflow-hidden rounded-[2rem] border border-white/10 bg-black">
+            <div className="absolute -inset-[8%] opacity-90"><img src={XR_JOURNEY_PHOTO} alt="" aria-hidden="true" className="h-[116%] w-full object-cover object-center scale-[1.06] transition-transform duration-[1800ms] hover:scale-[1.11]" /></div>
             <div className="absolute inset-0 bg-gradient-to-r from-[#050708] via-[#050708]/55 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050708]/90 via-transparent to-[#050708]/10" />
 
             <div className="relative z-10 flex min-h-[360px] items-end p-7 sm:p-10 lg:p-14">
               <div className="max-w-xl">
                 <span className="label-mono text-[9px] tracking-[0.3em] text-white/45">
-                  {copy.kicker}
+                  {copy.kicker} · GROWTH
                 </span>
-                <h3 className="display-serif mt-4 text-4xl leading-[0.9] sm:text-6xl">
+                <h3 className="display-serif mt-4 max-w-3xl text-4xl leading-[0.88] sm:text-6xl lg:text-7xl">
                   {copy.partner}
                   <br />
                   <em className="text-white/55">{copy.partnerAccent}</em>
                 </h3>
-                <p className="mt-5 max-w-lg text-sm leading-6 text-white/55">
+                <p className="mt-5 max-w-xl text-sm leading-6 text-white/60">
                   {copy.paragraph}
                 </p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["Strategy","Design","Technology","Growth"].map((item) => (
+                    <span key={item} className="rounded-full border border-white/15 bg-black/20 px-3 py-1.5 label-mono text-[8px] tracking-[.14em] text-white/55 backdrop-blur-md">{item}</span>
+                  ))}
+                </div>
               </div>
             </div>
 
