@@ -23,7 +23,7 @@ const DISPLAY_PRICE: Record<string, number | null> = {
   maps: 990,
   social: 299,
   maintenance: 29,
-  ecommerce: 799,
+  ecommerce: 1490,
 };
 
 
