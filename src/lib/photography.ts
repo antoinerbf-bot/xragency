@@ -13,7 +13,7 @@ export const XR_PHOTOS = {
   branding: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=2200&q=90",
   seo: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2200&q=90",
   maps: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=2200&q=90",
-  social: "https://images.unsplash.com/photo-1675352161865-27816c76141a?auto=format&fit=crop&w=2200&q=90",
+  social: "https://images.unsplash.com/photo-1759932021109-ffbec9251f9b?auto=format&fit=crop&w=2200&q=90",
   maintenance: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=2200&q=90",
   ecommerce: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=2200&q=90",
   refonte: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=2200&q=90",
