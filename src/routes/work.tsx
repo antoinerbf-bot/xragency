@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowUpRight, Search, SlidersHorizontal } from "lucide-react";
+import { ArrowUpRight, Search, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
 import { PORTFOLIO_REFERENCES, PORTFOLIO_SECTORS } from "@/lib/portfolioReferences";
+import { SERVICES } from "@/lib/content";
+import { useLang } from "@/lib/i18n";
 
 const SERVICES = ["Tous", "Vitrine", "E-commerce", "Branding", "SaaS", "Portail"] as const;
 
@@ -25,12 +27,15 @@ export const Route = createFileRoute("/work")({
 export function WorkPage() {
   const [query, setQuery] = useState("");
   const [sector, setSector] = useState("all");
+  const { lang, t } = useLang();
   const [service, setService] = useState("Tous");
+  const serviceOptions = [{ id: "Tous", label: lang === "fr" ? "Toutes les prestations" : lang === "en" ? "All services" : "Tất cả dịch vụ" }, ...SERVICES.map((x) => ({ id: x.id, label: t(x.title) }))];
+  const serviceForReference = (type: string) => type === "E-commerce" ? "ecommerce" : type === "Branding" ? "branding" : type === "SaaS" ? "ai" : "websites";
   const filtered = useMemo(() => PORTFOLIO_REFERENCES.filter((item) => {
     const q = query.toLowerCase().trim();
     return (!q || [item.name,item.sector,item.type].join(" ").toLowerCase().includes(q))
       && (sector === "all" || item.sector === sector)
-      && (service === "Tous" || item.type === service);
+      && (service === "Tous" || serviceForReference(item.type) === service);
   }), [query, sector, service]);
 
   return <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
@@ -41,8 +46,8 @@ export function WorkPage() {
         <div className="relative mx-auto max-w-7xl px-5 lg:px-10">
           <div className="max-w-5xl">
             <p className="label-mono text-[10px] uppercase tracking-[.25em] text-primary">XR AGENCY · PORTFOLIO</p>
-            <h1 className="display-serif mt-5 text-[clamp(3.4rem,9vw,8rem)] leading-[.84]">Des expériences<br/><em className="not-italic italic text-primary">qui donnent envie d'entrer.</em></h1>
-            <p className="mt-8 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">Sélectionnez votre secteur et la prestation qui vous intéresse pour voir des références cohérentes. Chaque carte ouvre le site correspondant dans un nouvel onglet.</p>
+            <h1 className="display-serif mt-5 text-[clamp(3.4rem,9vw,8rem)] leading-[.84]">Des références<br/><em className="not-italic italic text-primary">pour vous projeter.</em></h1>
+            <p className="mt-8 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">Explorez des références réelles par secteur et par prestation. Chaque projet ouvre directement sa homepage afin de vous permettre de juger le niveau visuel, l’expérience et la direction digitale.</p>
           </div>
           <div className="mt-12 grid gap-3 rounded-[2rem] border border-border bg-card/60 p-4 shadow-2xl backdrop-blur-xl sm:grid-cols-[1fr_auto] sm:p-5">
             <div className="relative"><Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"/><input value={query} onChange={(e)=>setQuery(e.target.value)} placeholder="Rechercher une marque, un secteur..." className="w-full rounded-2xl border border-border bg-background/80 py-3.5 pl-11 pr-4 text-sm outline-none focus:border-primary"/></div>
@@ -52,12 +57,22 @@ export function WorkPage() {
       </section>
       <section className="py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-5 lg:px-10">
-          <div className="mb-8 flex flex-wrap gap-2">
-            <button onClick={()=>setSector("all")} className={`rounded-full border px-4 py-2 text-[10px] uppercase tracking-[.12em] ${sector==="all"?"border-primary bg-primary text-primary-foreground":"border-border text-muted-foreground hover:border-primary/40"}`}>Tous les secteurs</button>
-            {PORTFOLIO_SECTORS.map(([id,label])=><button key={id} onClick={()=>setSector(id)} className={`rounded-full border px-4 py-2 text-[10px] uppercase tracking-[.12em] ${sector===id?"border-primary bg-primary text-primary-foreground":"border-border text-muted-foreground hover:border-primary/40"}`}>{label}</button>)}
-          </div>
-          <div className="mb-10 flex gap-2 overflow-x-auto pb-2">
-            {SERVICES.map(x=><button key={x} onClick={()=>setService(x)} className={`shrink-0 rounded-full border px-4 py-2 text-[10px] uppercase tracking-[.12em] ${service===x?"border-primary bg-primary text-primary-foreground":"border-border text-muted-foreground hover:border-primary/40"}`}>{x}</button>)}
+          <div className="mb-10 grid gap-3 md:grid-cols-2">
+            <label className="relative block">
+              <span className="mb-2 block label-mono text-[9px] uppercase tracking-[.2em] text-muted-foreground">Secteur d’activité</span>
+              <select value={sector} onChange={(e)=>setSector(e.target.value)} className="w-full appearance-none rounded-2xl border border-border bg-card/70 px-4 py-3.5 pr-10 text-sm outline-none focus:border-primary">
+                <option value="all">Tous les secteurs</option>
+                {PORTFOLIO_SECTORS.map(([id,label])=><option key={id} value={id}>{label}</option>)}
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-4 bottom-4 h-4 w-4 text-muted-foreground" />
+            </label>
+            <label className="relative block">
+              <span className="mb-2 block label-mono text-[9px] uppercase tracking-[.2em] text-muted-foreground">Prestation</span>
+              <select value={service} onChange={(e)=>setService(e.target.value)} className="w-full appearance-none rounded-2xl border border-border bg-card/70 px-4 py-3.5 pr-10 text-sm outline-none focus:border-primary">
+                {serviceOptions.map((x)=><option key={x.id} value={x.id}>{x.label}</option>)}
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-4 bottom-4 h-4 w-4 text-muted-foreground" />
+            </label>
           </div>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-12 lg:gap-6">
             {filtered.map((item,index)=>{
@@ -66,8 +81,8 @@ export function WorkPage() {
                 <div className={`relative overflow-hidden ${feature?"aspect-[16/10]":"aspect-[16/11]"}`}>
                   <img src={item.image} alt={item.name+" — référence "+item.sector} loading={index<4?"eager":"lazy"} decoding="async" className="h-full w-full object-cover transition duration-[1400ms] group-hover:scale-105"/>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"/>
-                  <div className="absolute left-5 top-5 flex flex-wrap gap-2"><span className="rounded-full border border-white/20 bg-black/40 px-3 py-1 label-mono text-[8px] uppercase tracking-[.16em] text-white backdrop-blur">{item.origin}</span><span className="rounded-full border border-white/20 bg-black/40 px-3 py-1 label-mono text-[8px] uppercase tracking-[.16em] text-white backdrop-blur">{item.type}</span></div>
-                  <div className="absolute inset-x-0 bottom-0 p-5 sm:p-7 text-white"><p className="label-mono text-[8px] uppercase tracking-[.2em] text-white/55">{item.sector}</p><div className="mt-2 flex items-end justify-between gap-4"><h2 className={feature?"display-serif text-4xl sm:text-5xl":"display-serif text-3xl"}>{item.name}</h2><span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/25 bg-white/10 transition group-hover:rotate-6 group-hover:bg-primary group-hover:text-primary-foreground"><ArrowUpRight className="h-4 w-4"/></span></div></div>
+                  <div className="absolute left-5 top-5 flex flex-wrap items-center gap-2"><span className="flex items-center gap-2 rounded-full border border-white/20 bg-black/45 px-2.5 py-1.5 label-mono text-[8px] uppercase tracking-[.12em] text-white backdrop-blur"><img src={`https://www.google.com/s2/favicons?domain=${new URL(item.url).hostname}&sz=64`} alt="" className="h-4 w-4 rounded-sm" />{item.name}</span><span className="rounded-full border border-white/20 bg-black/40 px-3 py-1 label-mono text-[8px] uppercase tracking-[.16em] text-white backdrop-blur">{item.type}</span></div>
+                  <div className="absolute inset-x-0 bottom-0 p-5 sm:p-7 text-white"><p className="label-mono text-[8px] uppercase tracking-[.2em] text-white/55">{item.sector} · {item.type}</p><div className="mt-2 flex items-end justify-between gap-4"><h2 className={feature?"display-serif text-4xl sm:text-5xl":"display-serif text-3xl"}>{item.name}</h2><span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/25 bg-white/10 transition group-hover:rotate-6 group-hover:bg-primary group-hover:text-primary-foreground"><ArrowUpRight className="h-4 w-4"/></span></div></div>
                 </div>
                 <div className="flex items-center justify-between gap-4 px-5 py-4 sm:px-6"><span className="text-xs text-muted-foreground">{item.origin==="XR Agency"?"Projet XR Agency":"Référence publique / inspiration"}</span><span className="label-mono text-[8px] uppercase tracking-[.15em] text-primary">Visiter le site ↗</span></div>
               </a>
