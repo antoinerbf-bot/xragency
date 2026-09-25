@@ -1,6 +1,7 @@
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Parallax } from "./primitives";
+import { XR_JOURNEY_PHOTO } from "@/lib/photography";
 
 export function ImmersiveJourney() {
   return (
@@ -9,13 +10,10 @@ export function ImmersiveJourney() {
       aria-label="Parcours immersif XR Agency"
     >
       <div className="relative min-h-[760px] sm:min-h-[820px] lg:min-h-[900px]">
-        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_78%_42%,rgba(242,163,58,.18),transparent_22%),radial-gradient(circle_at_75%_45%,rgba(255,255,255,.07),transparent_8%),linear-gradient(135deg,#050607,#0b0d10_55%,#050607)]" />
-        <div aria-hidden className="absolute right-[-12%] top-[8%] h-[84%] w-[62%] rounded-full border border-primary/15 shadow-[0_0_140px_-45px_rgba(242,163,58,.65)] lg:right-[-4%] lg:w-[52%]" />
-        <div aria-hidden className="absolute right-[5%] top-[18%] h-[64%] w-[46%] rounded-full border border-white/10 [transform:rotateX(68deg)]" />
-        <div aria-hidden className="absolute right-[16%] top-[29%] h-[42%] w-[25%] rounded-full border border-white/10 [transform:rotateY(58deg)]" />
-        <div aria-hidden className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,.35)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.35)_1px,transparent_1px)] [background-size:52px_52px]" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,5,6,.94)_0%,rgba(3,5,6,.70)_45%,rgba(3,5,6,.20)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,6,7,1)_0%,transparent_35%,rgba(5,6,7,.28)_100%)]" />
+        <img src={XR_JOURNEY_PHOTO} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover object-center" />
+        <div aria-hidden className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,5,6,.96)_0%,rgba(3,5,6,.76)_42%,rgba(3,5,6,.28)_100%)]" />
+        <div aria-hidden className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,6,7,.96)_0%,transparent_38%,rgba(5,6,7,.22)_100%)]" />
+        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_78%_35%,rgba(242,163,58,.20),transparent_26%)]" />
 
         <div className="relative mx-auto flex min-h-[760px] max-w-[1500px] items-center px-5 py-24 sm:min-h-[820px] sm:px-8 lg:min-h-[900px] lg:px-12">
           <Parallax speed={-0.03}>
