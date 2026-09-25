@@ -71,7 +71,7 @@ export const SERVICES_PART1 = [
     ],
     plans: [
       {
-        name: { fr: "Logo Signature", en: "Signature Logo", vi: "Logo Signature" },
+        name: { fr: "Logo Signature", en: "Signature Logo", vi: "Logo Signature", ar: "شعار Signature", ru: "Логотип Signature" },
         eur: 179,
         period: "once",
         features: [
@@ -102,18 +102,26 @@ export const SERVICES_PART1 = [
         ],
       },
     ],
+    steps: [
+      { num: "01", title: { fr: "Plateforme de marque", en: "Brand platform", vi: "Nền tảng thương hiệu", ar: "منصة العلامة", ru: "Платформа бренда" }, desc: { fr: "Positionnement, territoire visuel, ton et principes de cohérence.", en: "Positioning, visual territory, tone and consistency principles.", vi: "Định vị, lãnh địa hình ảnh, giọng điệu và nguyên tắc nhất quán.", ar: "التموضع والهوية البصرية والنبرة ومبادئ الاتساق.", ru: "Позиционирование, визуальная территория, тон и принципы целостности." } },
+      { num: "02", title: { fr: "Système visuel", en: "Visual system", vi: "Hệ thống hình ảnh", ar: "النظام البصري", ru: "Визуальная система" }, desc: { fr: "Logo, palette, typographie et déclinaisons pensées ensemble.", en: "Logo, palette, typography and applications designed as one system.", vi: "Logo, bảng màu, kiểu chữ và các ứng dụng được thiết kế đồng bộ.", ar: "الشعار والألوان والخطوط والتطبيقات ضمن نظام واحد.", ru: "Логотип, палитра, типографика и носители как единая система." } },
+      { num: "03", title: { fr: "Déploiement", en: "Rollout", vi: "Triển khai", ar: "التطبيق", ru: "Развёртывание" }, desc: { fr: "Fichiers maîtres et règles d'utilisation pour garder une identité stable.", en: "Master files and usage rules to keep the identity consistent.", vi: "Tệp gốc và quy tắc sử dụng để giữ nhận diện nhất quán.", ar: "الملفات الأساسية وقواعد الاستخدام للحفاظ على الاتساق.", ru: "Исходники и правила использования для единого образа." } },
+    ],
+    serviceFaqs: [
+      { q: { fr: "Quelle différence entre les trois niveaux ?", en: "What differs between the three levels?", vi: "Ba cấp độ khác nhau thế nào?", ar: "ما الفرق بين المستويات الثلاثة؟", ru: "Чем отличаются три уровня?" }, a: { fr: "Le niveau choisi détermine la profondeur du système : logo seul, identité complète, puis suite de marque avec Brand Book et déclinaisons.", en: "The level determines system depth: logo only, complete identity, then a full brand suite with Brand Book and applications.", vi: "Cấp độ quyết định độ sâu của hệ thống: logo, nhận diện hoàn chỉnh rồi bộ thương hiệu đầy đủ với Brand Book và ứng dụng.", ar: "يحدد المستوى عمق النظام: شعار فقط، هوية كاملة، ثم حزمة علامة متكاملة مع Brand Book وتطبيقات.", ru: "Уровень определяет глубину системы: только логотип, полная айдентика, затем бренд-пакет с Brand Book и носителями." } },
+    ],
   },
   {
     id: "seo",
     num: "03",
-    title: { fr: "Référencement SEO", en: "SEO Optimization", vi: "Tối ưu hóa SEO" },
-    short: { fr: "Visibilité durable sur Google.", en: "Sustainable Google visibility.", vi: "Hiển thị bền vững trên Google." },
-    description: { fr: "Une stratégie SEO pédagogique et transparente pour le long terme.", en: "An educational and transparent long-term SEO strategy.", vi: "Chiến lược SEO minh bạch dài hạn." },
+    title: { fr: "Référencement SEO", en: "SEO Optimization", vi: "Tối ưu hóa SEO", ar: "تحسين محركات البحث", ru: "SEO-оптимизация" },
+    short: { fr: "Visibilité durable sur Google.", en: "Sustainable Google visibility.", vi: "Hiển thị bền vững trên Google.", ar: "ظهور مستدام على Google.", ru: "Устойчивая видимость в Google." },
+    description: { fr: "Une stratégie SEO pédagogique et transparente pour le long terme.", en: "An educational and transparent long-term SEO strategy.", vi: "Chiến lược SEO minh bạch dài hạn.", ar: "استراتيجية SEO واضحة وشفافة لبناء ظهور طويل الأمد.", ru: "Понятная и прозрачная SEO-стратегия для долгосрочной видимости." },
     fromEur: 299,
     fromPeriod: "month",
     highlights: [
-      { fr: "Acquisition organique", en: "Organic acquisition", vi: "Lưu lượng tự nhiên" },
-      { fr: "Contenus SEO ciblés", en: "Targeted SEO content", vi: "Nội dung SEO mục tiêu" },
+      { fr: "Acquisition organique", en: "Organic acquisition", vi: "Lưu lượng tự nhiên", ar: "اكتساب عضوي", ru: "Органический трафик" },
+      { fr: "Contenus SEO ciblés", en: "Targeted SEO content", vi: "Nội dung SEO mục tiêu", ar: "محتوى SEO مستهدف", ru: "Таргетированный SEO-контент" },
     ],
     plans: [
       {
