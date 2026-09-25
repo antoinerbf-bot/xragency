@@ -1,18 +1,20 @@
 import type { L } from "./i18n";
 
 export const UI: Record<string, L> = {
-  navServices: { fr: "Services", en: "Services", vi: "Dịch vụ" },
+  navServices: { fr: "Services", en: "Services", vi: "Dịch vụ", ar: "الخدمات", ru: "Услуги" },
   navPricing: { fr: "Tarifs", en: "Pricing", vi: "Bảng giá" },
-  navWork: { fr: "Réalisations", en: "Work", vi: "Dự án" },
+  navWork: { fr: "Réalisations", en: "Work", vi: "Dự án", ar: "الأعمال", ru: "Проекты" },
   navIntelligence: { fr: "Intelligence", en: "Intelligence", vi: "Intelligence" },
-  navFaq: { fr: "FAQ", en: "FAQ", vi: "Hỏi đáp" },
-  navContact: { fr: "Contact", en: "Contact", vi: "Liên hệ" },
-  bookCall: { fr: "Réserver un appel", en: "Book a call", vi: "Đặt lịch gọi" },
+  navFaq: { fr: "FAQ", en: "FAQ", vi: "Hỏi đáp", ar: "الأسئلة", ru: "FAQ" },
+  navContact: { fr: "Contact", en: "Contact", vi: "Liên hệ", ar: "اتصل بنا", ru: "Контакты" },
+  bookCall: { fr: "Réserver un appel", en: "Book a call", vi: "Đặt lịch gọi", ar: "حجز مكالمة", ru: "Забронировать звонок" },
 
   heroKicker: {
     fr: "Agence digitale premium",
     en: "Premium Digital Agency",
     vi: "Agencе kỹ thuật số cao cấp",
+    ar: "وكالة رقمية فاخرة",
+    ru: "Премиальное digital-агентство",
   },
   heroEdition: { fr: "Édition MMXXVI", en: "Edition MMXXVI", vi: "Ấn bản MMXXVI" },
   heroReadTime: { fr: "Lecture 4 min", en: "4 min read", vi: "Đọc 4 phút" },
@@ -28,9 +30,9 @@ export const UI: Record<string, L> = {
     en: "— Art direction, MMXXVI",
     vi: "— Chỉ đạo nghệ thuật, MMXXVI",
   },
-  heroTitle1: { fr: "L'Art du", en: "The Art of", vi: "The Art of" },
-  heroTitleAccent: { fr: "Digital", en: "Digital", vi: "Digital" },
-  heroTitle2: { fr: "Sur-Mesure.", en: "Craftsmanship.", vi: "Craftsmanship." },
+  heroTitle1: { fr: "L’Art du", en: "The Art of", vi: "The Art of", ar: "فن", ru: "Искусство" },
+  heroTitleAccent: { fr: "Digital", en: "Digital", vi: "Digital", ar: "الرقمي", ru: "Digital" },
+  heroTitle2: { fr: "Sur-Mesure.", en: "Craftsmanship.", vi: "Craftsmanship.", ar: "المصمم حسب الطلب.", ru: "Индивидуальная работа." },
   heroLead: {
     fr: "Une maison indépendante qui compose des expériences digitales pour marques exigeantes : identité, sites, référencement, Google Maps, IA.",
     en: "An independent house composing digital experiences for demanding brands: identity, websites, SEO, Google Maps, AI.",
