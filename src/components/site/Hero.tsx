@@ -47,61 +47,6 @@ function GlobalPresence() {
   );
 }
 
-/** Kinetic word-by-word title for 2026 motion */
-function KineticTitle({ line1, accent, line2 }: { line1: string; accent: string; line2: string }) {
-  const words1 = line1.split(" ");
-  const words2 = line2.split(" ");
-  let delay = 180;
-
-  return (
-    <h1 className="display-serif mt-5 text-[clamp(2.4rem,6vw,5.2rem)] leading-[0.96] tracking-tight">
-      <span className="block overflow-hidden">
-        {words1.map((w, i) => {
-          const d = delay + i * 55;
-          return (
-            <span
-              key={`a-${i}`}
-              className="inline-block"
-              style={{
-                animation: `kinetic-in 0.85s cubic-bezier(0.16,1,0.3,1) ${d}ms both`,
-              }}
-            >
-              {w}
-              {i < words1.length - 1 ? "\u00A0" : ""}
-            </span>
-          );
-        })}
-      </span>
-      <span className="block overflow-hidden">
-        <em
-          className="not-italic italic text-primary inline-block"
-          style={{
-            animation: `kinetic-in 0.9s cubic-bezier(0.16,1,0.3,1) ${delay + words1.length * 55 + 40}ms both`,
-          }}
-        >
-          {accent}
-        </em>
-        {" "}
-        {words2.map((w, i) => {
-          const d = delay + words1.length * 55 + 80 + i * 55;
-          return (
-            <span
-              key={`b-${i}`}
-              className="inline-block"
-              style={{
-                animation: `kinetic-in 0.85s cubic-bezier(0.16,1,0.3,1) ${d}ms both`,
-              }}
-            >
-              {w}
-              {i < words2.length - 1 ? "\u00A0" : ""}
-            </span>
-          );
-        })}
-      </span>
-    </h1>
-  );
-}
-
 export function Hero() {
   const { t } = useLang();
 
@@ -124,29 +69,33 @@ export function Hero() {
               style={{ animation: "ember-rise 0.7s cubic-bezier(0.16,1,0.3,1) 80ms both" }}
             >
               <Sparkles className="h-3.5 w-3.5 text-primary animate-pulse" />
-              <span className="label-mono text-xs text-primary font-medium">{t(UI.heroKicker)}</span>
+              <span className="label-mono text-xs font-medium text-primary">{t(UI.heroKicker)}</span>
             </div>
 
-            <KineticTitle
-              line1={t(UI.heroTitle1)}
-              accent={t(UI.heroTitleAccent)}
-              line2={t(UI.heroTitle2)}
-            />
+            <h1
+              className="display-serif mt-5 text-[clamp(2.4rem,6vw,5.2rem)] leading-[0.96] tracking-tight"
+              style={{ animation: "kinetic-in 0.95s cubic-bezier(0.16,1,0.3,1) 160ms both" }}
+            >
+              {t(UI.heroTitle1)}
+              <br />
+              <em className="not-italic italic text-primary">{t(UI.heroTitleAccent)}</em>{" "}
+              {t(UI.heroTitle2)}
+            </h1>
 
             <div
               className="mt-6 max-w-xl"
-              style={{ animation: "ember-rise 0.8s cubic-bezier(0.16,1,0.3,1) 520ms both" }}
+              style={{ animation: "ember-rise 0.8s cubic-bezier(0.16,1,0.3,1) 320ms both" }}
             >
               <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">{t(UI.heroLead)}</p>
-              <p className="mt-2 text-xs leading-relaxed text-muted-foreground/80 font-mono">{t(UI.heroMeta)}</p>
+              <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground/80">{t(UI.heroMeta)}</p>
             </div>
 
             <div
               className="mt-8 flex flex-wrap items-center gap-3.5"
-              style={{ animation: "ember-rise 0.8s cubic-bezier(0.16,1,0.3,1) 620ms both" }}
+              style={{ animation: "ember-rise 0.8s cubic-bezier(0.16,1,0.3,1) 420ms both" }}
             >
               <div className="grid w-full max-w-3xl grid-cols-1 gap-2 sm:grid-cols-3 [perspective:900px]">
-                <div className="group sm:-translate-y-1 sm:hover:-translate-y-2 transition-transform duration-500">
+                <div className="group transition-transform duration-500 sm:-translate-y-1 sm:hover:-translate-y-2">
                   <EmberButton
                     href="#quote"
                     className="relative w-full justify-center overflow-hidden rounded-2xl py-3.5 shadow-[0_18px_45px_-24px_rgba(0,0,0,.8)]"
@@ -184,7 +133,7 @@ export function Hero() {
                   href="#audit"
                   className="group relative overflow-hidden rounded-2xl border border-primary/45 bg-primary/[.07] px-4 py-3 text-left backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-primary hover:bg-primary/[.11] hover:shadow-[0_18px_45px_-24px_rgba(0,0,0,.7)] sm:translate-y-1"
                 >
-                  <span className="absolute -left-5 -bottom-5 h-16 w-16 rounded-full bg-primary/10 blur-xl transition group-hover:scale-150" />
+                  <span className="absolute -bottom-5 -left-5 h-16 w-16 rounded-full bg-primary/10 blur-xl transition group-hover:scale-150" />
                   <span className="relative flex items-center gap-2">
                     <Search className="h-4 w-4 text-primary" />
                     <span>
@@ -205,7 +154,7 @@ export function Hero() {
 
             <div
               className="mt-4 flex items-center gap-2"
-              style={{ animation: "ember-rise 0.8s cubic-bezier(0.16,1,0.3,1) 720ms both" }}
+              style={{ animation: "ember-rise 0.8s cubic-bezier(0.16,1,0.3,1) 520ms both" }}
             >
               <ShieldCheck className="h-3.5 w-3.5 text-primary" />
               <p className="label-mono text-[11px] text-muted-foreground/70">
@@ -215,28 +164,28 @@ export function Hero() {
           </Parallax>
 
           <Parallax speed={0.025} className="relative hidden lg:col-span-5 lg:block">
-            <div style={{ animation: "ember-rise 1s cubic-bezier(0.16,1,0.3,1) 400ms both" }}>
+            <div style={{ animation: "ember-rise 1s cubic-bezier(0.16,1,0.3,1) 280ms both" }}>
               <GlobalPresence />
             </div>
           </Parallax>
         </div>
 
-        <div style={{ animation: "ember-rise 0.8s cubic-bezier(0.16,1,0.3,1) 800ms both" }}>
-          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 sm:grid-cols-4 shadow-sm">
+        <div style={{ animation: "ember-rise 0.8s cubic-bezier(0.16,1,0.3,1) 600ms both" }}>
+          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 shadow-sm sm:grid-cols-4">
             <div className="bg-card/75 px-5 py-4">
-              <dt className="display-serif text-2xl text-primary sm:text-3xl font-bold">01</dt>
+              <dt className="display-serif text-2xl font-bold text-primary sm:text-3xl">01</dt>
               <dd className="label-mono mt-1 text-xs text-muted-foreground">Direction digitale</dd>
             </div>
             <div className="bg-card/75 px-5 py-4">
-              <dt className="display-serif text-2xl text-primary sm:text-3xl font-bold">07</dt>
+              <dt className="display-serif text-2xl font-bold text-primary sm:text-3xl">07</dt>
               <dd className="label-mono mt-1 text-xs text-muted-foreground">Offres principales</dd>
             </div>
             <div className="bg-card/75 px-5 py-4">
-              <dt className="display-serif text-2xl text-primary sm:text-3xl font-bold">FR · EN · VI</dt>
+              <dt className="display-serif text-2xl font-bold text-primary sm:text-3xl">FR · EN · VI</dt>
               <dd className="label-mono mt-1 text-xs text-muted-foreground">Expérience multilingue</dd>
             </div>
             <div className="bg-card/75 px-5 py-4">
-              <dt className="display-serif text-2xl text-primary sm:text-3xl font-bold">01→</dt>
+              <dt className="display-serif text-2xl font-bold text-primary sm:text-3xl">01→</dt>
               <dd className="label-mono mt-1 text-xs text-muted-foreground">Un seul point de contact</dd>
             </div>
           </dl>
