@@ -19,6 +19,8 @@ const icons: Record<string, { label: string; accent: string }> = {
 export function ServiceIllustration({ service, title }: Props) {
   const uid = useId().replace(/:/g, "");
   const meta = icons[service] ?? icons.websites;
+  const gradFill = "url(#" + uid + "-g)";
+  const lineStroke = "url(#" + uid + "-line)";
 
   return (
     <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[28px] border border-border/60 bg-[#0d0d0d] shadow-2xl grain">
@@ -33,37 +35,28 @@ export function ServiceIllustration({ service, title }: Props) {
             <stop offset="0%" stopColor="#f2a33a" stopOpacity=".9" />
             <stop offset="100%" stopColor="#fff" stopOpacity=".18" />
           </linearGradient>
-          <filter id={uid + "-soft"}>
-            <feGaussianBlur stdDeviation="1.2" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
         </defs>
 
         <rect width="800" height="600" fill="#0d0d0d" />
-        <rect width="800" height="600" fill={`url(#${uid}-g)`} />
+        <rect width="800" height="600" fill={gradFill} />
 
-        {/* Subtle grid */}
         <g opacity=".11" stroke="#fff" strokeWidth="1">
           {Array.from({ length: 11 }).map((_, i) => (
-            <line key={`h${i}`} x1="0" y1={70 + i * 48} x2="800" y2={70 + i * 48} />
+            <line key={"h" + i} x1="0" y1={70 + i * 48} x2="800" y2={70 + i * 48} />
           ))}
           {Array.from({ length: 15 }).map((_, i) => (
-            <line key={`v${i}`} x1={40 + i * 55} y1="0" x2={40 + i * 55} y2="600" />
+            <line key={"v" + i} x1={40 + i * 55} y1="0" x2={40 + i * 55} y2="600" />
           ))}
         </g>
 
-        {/* ── SOCIAL : platform cards ── */}
         {service === "social" ? (
           <g>
             <rect x="125" y="105" width="550" height="350" rx="24" fill="#151515" stroke="#fff" strokeOpacity=".18" />
             <rect x="155" y="145" width="210" height="18" rx="9" fill="#fff" fillOpacity=".85" />
             <rect x="155" y="185" width="360" height="10" rx="5" fill="#fff" fillOpacity=".16" />
-            <rect x="155" y="215" width="280" height="10" rx="5" fill="#fff" fillOpacity=".10" />
+            <rect x="155" y="215" width="280" height="10" rx="5" fill="#fff" fillOpacity=".1" />
             {["Instagram", "Facebook", "TikTok", "LinkedIn"].map((name, i) => (
-              <g key={name} transform={`translate(${145 + i * 132} 275)`}>
+              <g key={name} transform={"translate(" + (145 + i * 132) + " 275)"}>
                 <rect width="108" height="115" rx="14" fill="#1c1c1c" stroke="#f2a33a" strokeOpacity=".5" />
                 <circle cx="28" cy="28" r="9" fill="#f2a33a" fillOpacity=".85" />
                 <text x="54" y="32" fontSize="9" textAnchor="middle" fontWeight="700" fill="#fff" fillOpacity=".8">
@@ -73,11 +66,10 @@ export function ServiceIllustration({ service, title }: Props) {
                 <rect x="16" y="78" width="55" height="7" rx="3.5" fill="#fff" fillOpacity=".12" />
               </g>
             ))}
-            <path d="M575 150 C625 180 640 230 610 265" fill="none" stroke={`url(#${uid}-line)`} strokeWidth="4" />
+            <path d="M575 150 C625 180 640 230 610 265" fill="none" stroke={lineStroke} strokeWidth="4" />
             <circle cx="610" cy="265" r="7" fill="#f2a33a" />
           </g>
         ) : service === "maps" ? (
-          /* ── MAPS : route + pins ── */
           <g>
             <path d="M155 125 H645 V475 H155 Z" fill="#141414" stroke="#fff" strokeOpacity=".18" />
             <path
@@ -108,7 +100,6 @@ export function ServiceIllustration({ service, title }: Props) {
             ))}
           </g>
         ) : service === "branding" ? (
-          /* ── BRANDING : type specimens + color system ── */
           <g>
             <rect x="120" y="110" width="560" height="360" rx="22" fill="#141414" stroke="#fff" strokeOpacity=".15" />
             <text x="160" y="200" fontFamily="Georgia, serif" fontSize="72" fill="#fff" fillOpacity=".92">
@@ -120,7 +111,6 @@ export function ServiceIllustration({ service, title }: Props) {
             <text x="320" y="220" fontFamily="system-ui" fontSize="14" fill="#fff" fillOpacity=".5" letterSpacing="4">
               IDENTITY SYSTEM
             </text>
-            {/* Color swatches */}
             <rect x="160" y="280" width="70" height="70" rx="12" fill="#f2a33a" />
             <rect x="245" y="280" width="70" height="70" rx="12" fill="#1a1a1a" stroke="#fff" strokeOpacity=".25" />
             <rect x="330" y="280" width="70" height="70" rx="12" fill="#f5f0e8" />
@@ -130,14 +120,12 @@ export function ServiceIllustration({ service, title }: Props) {
             <rect x="160" y="415" width="190" height="8" rx="4" fill="#fff" fillOpacity=".12" />
           </g>
         ) : service === "maintenance" || service === "webcare" ? (
-          /* ── WEBCARE : status + uptime ── */
           <g>
             <rect x="140" y="120" width="520" height="340" rx="22" fill="#141414" stroke="#fff" strokeOpacity=".15" />
             <circle cx="200" cy="190" r="14" fill="#22c55e" />
             <text x="230" y="196" fontSize="16" fill="#fff" fillOpacity=".85" fontWeight="600">
               All systems operational
             </text>
-            {/* Status bars */}
             {[
               ["Uptime", 99.9, 240],
               ["Security", 100, 290],
@@ -165,12 +153,10 @@ export function ServiceIllustration({ service, title }: Props) {
             ))}
           </g>
         ) : service === "ecommerce" ? (
-          /* ── E-COMMERCE : product cards + conversion ── */
           <g>
             <rect x="110" y="100" width="580" height="380" rx="22" fill="#141414" stroke="#fff" strokeOpacity=".15" />
-            {/* Product cards */}
             {[0, 1, 2].map((i) => (
-              <g key={i} transform={`translate(${150 + i * 180} 150)`}>
+              <g key={i} transform={"translate(" + (150 + i * 180) + " 150)"}>
                 <rect width="150" height="180" rx="16" fill="#1c1c1c" stroke="#fff" strokeOpacity=".12" />
                 <rect x="16" y="16" width="118" height="90" rx="10" fill="#2a2a2a" />
                 <rect x="16" y="120" width="80" height="8" rx="4" fill="#fff" fillOpacity=".5" />
@@ -181,19 +167,18 @@ export function ServiceIllustration({ service, title }: Props) {
             <path
               d="M180 420 L280 380 L380 400 L500 340 L620 370"
               fill="none"
-              stroke={`url(#${uid}-line)`}
+              stroke={lineStroke}
               strokeWidth="5"
               strokeLinecap="round"
             />
           </g>
         ) : (
-          /* ── DEFAULT (websites / seo / ai…) : growth chart ── */
           <g>
             <rect x="145" y="125" width="510" height="350" rx="26" fill="#141414" stroke="#fff" strokeOpacity=".18" />
             <path
               d="M185 405 L275 320 L350 355 L455 220 L600 310"
               fill="none"
-              stroke={`url(#${uid}-line)`}
+              stroke={lineStroke}
               strokeWidth="7"
               strokeLinecap="round"
               strokeLinejoin="round"
