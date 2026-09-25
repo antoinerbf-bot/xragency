@@ -123,7 +123,10 @@ function RootComponent() {
     telephone: "+33 7 67 56 67 83",
     email: "contact.xragency@gmail.com",
     priceRange: "€€€",
+    areaServed: ["FR", "AE", "VN", "SG", "TH", "Worldwide"],
+    serviceType: ["Web design", "Brand identity", "SEO", "Local SEO", "Google Business Profile", "Social Media", "WebCare"],
     sameAs: ["https://www.instagram.com/xragency_", "https://linkedin.com/company/xragency"],
+    knowsAbout: ["Conversion design", "Search engine optimisation", "Local search", "Brand strategy", "Digital experiences"],
   };
   return (
     <QueryClientProvider client={queryClient}>
