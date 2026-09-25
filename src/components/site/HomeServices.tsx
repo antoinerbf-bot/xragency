@@ -18,7 +18,7 @@ const DISPLAY_NUM: Record<string, string> = {
 };
 const DISPLAY_PRICE: Record<string, number | null> = {
   websites: 499,
-  branding: 199,
+  branding: 179,
   seo: 299,
   maps: 990,
   social: 299,
