@@ -156,12 +156,12 @@ function ServiceDetailPage() {
               className="label-mono inline-flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
             >
               <ArrowLeft className="h-4 w-4" />
-              {t({ fr: "Catalogue des Prestations", en: "Services Catalogue", vi: "Danh mục Dịch vụ" })}
+              {t({ fr: "Catalogue des Prestations", en: "Services Catalogue", vi: "Danh mục Dịch vụ", ar: "كتالوج الخدمات", ru: "Каталог услуг" })}
             </Link>
             <div className="label-mono flex items-center gap-2 text-xs text-muted-foreground">
-              <Link to="/" className="hover:text-primary transition-colors">Accueil</Link>
+              <Link to="/" className="hover:text-primary transition-colors">{t({ fr: "Accueil", en: "Home", vi: "Trang chủ", ar: "الرئيسية", ru: "Главная" })}</Link>
               <span>/</span>
-              <Link to="/services" className="hover:text-primary transition-colors">Services</Link>
+              <Link to="/services" className="hover:text-primary transition-colors">{t(UI.navServices)}</Link>
               <span>/</span>
               <span className="text-foreground font-semibold">{t(service.title)}</span>
             </div>
@@ -215,7 +215,7 @@ function ServiceDetailPage() {
                     <Reveal delay={320}>
                       <div className="mt-10 flex flex-wrap items-center gap-4">
                         <EmberButton href="#plans">{t(UI.explorePacks)}</EmberButton>
-                        <EmberButton href={`/?service=${service.id}#quote`} variant="outline">Composer cette offre</EmberButton>
+                        <EmberButton href={`/?service=${service.id}#quote`} variant="outline">{t({ fr: "Composer cette offre", en: "Build this offer", vi: "Tạo gói này", ar: "تكوين هذا العرض", ru: "Собрать это предложение" })}</EmberButton>
                         <a
                           href={waUrl}
                           target="_blank"
@@ -237,9 +237,7 @@ function ServiceDetailPage() {
                   </>
                 )}
               </div>
-              <div className="lg:col-span-5">
-                <ServiceIllustration service={service.id} title={t(service.title)} />
-              </div>
+              <div className="lg:col-span-5"><Parallax speed={-0.04}><ServiceIllustration service={service.id} title={t(service.title)} /></Parallax></div>
             </div>
           </div>
         </section>
@@ -427,7 +425,7 @@ function ServiceDetailPage() {
                             {price(displayPrice)}
                           </span>
                           <span className="label-mono flex flex-col items-start gap-1 text-xs text-muted-foreground">
-                            <span>{isCustomMaps ? "Nous contacter · à partir de 990 € / an" : t(PERIOD_LABEL[displayPeriod])}</span>
+                            <span>{isCustomMaps ? t({ fr: "à partir de 990 € / an", en: "from €990 / year", vi: "từ 990 € / năm", ar: "ابتداءً من 990 € / سنة", ru: "от 990 € / год" }) : t(PERIOD_LABEL[displayPeriod])}</span>
                             {planIsInstallment && (
                               <span className="text-[10px] text-primary/80 leading-tight max-w-[140px]">
                                 {t({ fr: "sur 12 mois (infrastructure annuelle 79€/an)", en: "over 12 mo (incl. domain & hosting 79€/year)", vi: "trong 12 tháng (gồm domain & hosting 79€/năm)" })}
