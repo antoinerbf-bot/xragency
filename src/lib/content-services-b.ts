@@ -157,33 +157,4 @@ export const SERVICES_PART2 = [
       },
     ],
   },
-  {
-    id: "ecommerce",
-    num: "07",
-    title: { fr: "E-commerce & Réservation", en: "E-commerce & Booking", vi: "Thương mại điện tử & Đặt chỗ" },
-    short: { fr: "Vendre, réserver et convertir en ligne.", en: "Sell, book and convert online.", vi: "Bán hàng, đặt chỗ và chuyển đổi trực tuyến." },
-    description: { fr: "Une expérience e-commerce ou de réservation pensée pour le mobile, le paiement et la conversion.", en: "An e-commerce or booking experience designed for mobile, payments and conversion.", vi: "Trải nghiệm thương mại điện tử hoặc đặt chỗ được thiết kế cho mobile, thanh toán và chuyển đổi." },
-    fromEur: 1499,
-    fromPeriod: "once",
-    highlights: [
-      { fr: "Catalogue, panier et commande", en: "Catalogue, cart and checkout", vi: "Danh mục, giỏ hàng và thanh toán" },
-      { fr: "Paiement sécurisé", en: "Secure payments", vi: "Thanh toán an toàn" },
-      { fr: "Réservation selon besoin", en: "Booking when needed", vi: "Đặt chỗ theo nhu cầu" },
-    ],
-    plans: [
-      {
-        name: { fr: "E-commerce & Réservation", en: "E-commerce & Booking", vi: "Thương mại điện tử & Đặt chỗ" },
-        eur: 1499,
-        period: "once",
-        popular: true,
-        features: [
-          { fr: "Catalogue produits ou services", en: "Product or service catalogue", vi: "Danh mục sản phẩm hoặc dịch vụ" },
-          { fr: "Panier, commande et paiement sécurisé", en: "Cart, checkout and secure payment", vi: "Giỏ hàng, đặt hàng và thanh toán an toàn" },
-          { fr: "Parcours mobile optimisé", en: "Mobile-optimised journey", vi: "Hành trình tối ưu cho mobile" },
-          { fr: "Réservation selon le projet", en: "Booking flow when required", vi: "Luồng đặt chỗ theo dự án" },
-          { fr: "SEO de base + analytics", en: "Basic SEO + analytics", vi: "SEO cơ bản + analytics" },
-        ],
-      },
-    ],
-  },
 ];
