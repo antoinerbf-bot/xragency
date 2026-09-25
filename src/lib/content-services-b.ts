@@ -4,7 +4,7 @@ export const SERVICES_PART2 = [
     num: "04",
     title: { fr: "Google Maps Top 3", en: "Google Maps Top 3", vi: "Google Maps Top 3" },
     short: { fr: "Visibilité locale et positionnement carte.", en: "Local visibility and map ranking.", vi: "Hiển thị địa phương và xếp hạng bản đồ." },
-    description: { fr: "Optimisation de votre fiche Google Business Profile et stratégie locale pour apparaître dans le Top 3 des recherches pertinentes.", en: "Optimisation of your Google Business Profile and local strategy to appear in the Top 3 of relevant searches.", vi: "Tối ưu Google Business Profile và chiến lược địa phương để xuất hiện Top 3." },
+    description: { fr: "Optimisation de votre fiche Google Business Profile et stratégie locale pour travailler votre visibilité sur les recherches pertinentes. Le Top 3 reste un objectif, jamais une garantie.", en: "Google Business Profile optimisation and local strategy to improve visibility on relevant searches. Top 3 is an objective, never a guarantee.", vi: "Tối ưu Google Business Profile và chiến lược địa phương để cải thiện khả năng hiển thị. Top 3 là mục tiêu, không phải cam kết." },
     fromEur: 990,
     fromPeriod: "year",
     highlights: [
