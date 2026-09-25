@@ -132,7 +132,7 @@ function ServiceDetailPage() {
   const planIsInstallmentWa = service.id === "websites" && isInstWa && planForWa?.period === "once";
   
   const waPrefilled = encodeURIComponent(
-    `Bonjour XR Agency, je suis intéressé par votre service "${t(service.title)}" (Forfait: "${t(planForWa?.name)}"${planIsInstallmentWa ? " en mensualités sur 12 mois" : ""}). Pouvons-nous échanger ?`,
+    `Bonjour XR Agency, je suis intéressé par votre service "${t(service.title)}" (Forfait: "${planForWa ? t(planForWa.name) : ""}"${planIsInstallmentWa ? " en mensualités sur 12 mois" : ""}). Pouvons-nous échanger ?`,
   );
   const waUrl = `${CONTACT.whatsapp}?text=${waPrefilled}`;
 
