@@ -39,8 +39,8 @@ const COPY = {
     work: "Ce que XRAGENCY travaille",
     bridge: "Maps et SEO ne font pas la même chose.",
     bridgeDesc: "Maps travaille votre présence locale. Le SEO travaille votre visibilité dans les résultats organiques. Les deux peuvent se renforcer.",
-    pricing: "Pourquoi à partir de 990 € / an ?",
-    pricingDesc: "Le tarif commence à 990 € / an. Le périmètre exact dépend de votre zone, de la concurrence, des requêtes ciblées et de l’état initial de votre fiche. Le Top 3 est un objectif de travail, jamais une garantie de position.",
+    pricing: "990 € / an · Garantie Top 3 ou remboursé",
+    pricingDesc: "À partir de 990 € / an. Le délai dépend de la concurrence, de la zone, des requêtes ciblées et de l’état initial de la fiche. Le diagnostic définit le périmètre, le délai cible et les conditions de la garantie Top 3 ou remboursé.",
     cta: "Recevoir mon analyse locale",
   },
   en: {
@@ -58,7 +58,7 @@ const COPY = {
     bridge: "Maps and SEO do different jobs.",
     bridgeDesc: "Maps works on local presence. SEO works on organic search visibility. The two can reinforce each other.",
     pricing: "Why from €990 / year?",
-    pricingDesc: "The service starts at €990 / year. The exact scope depends on your area, competition, target searches and starting profile. Top 3 is a working objective, never a guaranteed position.",
+    pricingDesc: "From €990 / year. Delivery time depends on competition, area, target searches and starting profile. The diagnosis defines scope, target timeframe and the Top 3 or money-back guarantee conditions.",
     cta: "Get my local analysis",
   },
   vi: {
@@ -76,7 +76,7 @@ const COPY = {
     bridge: "Maps và SEO làm hai nhiệm vụ khác nhau.",
     bridgeDesc: "Maps tập trung vào hiện diện địa phương. SEO tập trung vào khả năng hiển thị tự nhiên. Hai dịch vụ có thể hỗ trợ lẫn nhau.",
     pricing: "Vì sao từ 990 € / năm?",
-    pricingDesc: "Dịch vụ bắt đầu từ 990 € / năm. Phạm vi chính xác phụ thuộc khu vực, mức cạnh tranh, truy vấn mục tiêu và trạng thái ban đầu của hồ sơ. Top 3 là mục tiêu triển khai, không phải vị trí được đảm bảo.",
+    pricingDesc: "Từ 990 € / năm. Thời gian triển khai phụ thuộc mức cạnh tranh, khu vực, truy vấn mục tiêu và trạng thái ban đầu của hồ sơ. Chẩn đoán xác định phạm vi, thời hạn mục tiêu và điều kiện bảo đảm Top 3 hoặc hoàn tiền.",
     cta: "Nhận phân tích địa phương",
   },
   ar: {
@@ -94,7 +94,7 @@ const COPY = {
     bridge: "Maps وSEO يؤديان وظيفتين مختلفتين.",
     bridgeDesc: "Maps يركز على الظهور المحلي، وSEO على نتائج البحث العضوية، ويمكن للخدمتين تعزيز بعضهما.",
     pricing: "لماذا يبدأ السعر من 990 € سنويًا؟",
-    pricingDesc: "تبدأ الخدمة من 990 € سنويًا. يعتمد النطاق على منطقتك والمنافسة والبحث المستهدف وحالة الملف الحالية. Top 3 هدف عمل وليس ترتيبًا مضمونًا.",
+    pricingDesc: "تبدأ من 990 € سنويًا. تعتمد مدة التنفيذ على المنافسة والمنطقة والاستعلامات المستهدفة وحالة الملف الحالية. يحدد التشخيص النطاق والمدة المستهدفة وشروط ضمان Top 3 أو استرداد المبلغ.",
     cta: "احصل على تحليلي المحلي",
   },
   ru: {
@@ -112,7 +112,7 @@ const COPY = {
     bridge: "Maps и SEO выполняют разные задачи.",
     bridgeDesc: "Maps работает с локальным присутствием, SEO — с органической выдачей. Они могут усиливать друг друга.",
     pricing: "Почему от 990 € в год?",
-    pricingDesc: "Услуга начинается от 990 € в год. Точный объём зависит от зоны, конкуренции, запросов и исходного состояния профиля. Top 3 — рабочая цель, а не гарантия позиции.",
+    pricingDesc: "От 990 € в год. Срок зависит от конкуренции, зоны, целевых запросов и исходного состояния профиля. Диагностика определяет объём, целевой срок и условия гарантии Top 3 или возврата.",
     cta: "Получить локальный анализ",
   },
 } as const;
@@ -142,7 +142,7 @@ export function LocalVisibilityExperience() {
         <div className="max-w-5xl">
           <p className="label-mono text-xs uppercase tracking-widest text-primary">{copy.kicker}</p>
           <h2 className="display-serif mt-4 text-4xl leading-[.92] sm:text-6xl">{t({ fr: "Comprenez Google", en: "Understand Google", vi: "Hiểu Google", ar: "افهم Google", ru: "Поймите Google" })} <em className="text-primary not-italic italic">{t({ fr: "visuellement.", en: "visually.", vi: "bằng hình ảnh.", ar: "بصريًا.", ru: "визуально." })}</em></h2>
-          <p className="mt-6 max-w-3xl text-base leading-7 text-muted-foreground sm:text-lg">{copy.intro}</p>
+          <p className="mt-6 max-w-3xl text-base leading-7 text-muted-foreground sm:text-lg">{copy.intro}</p><div className="mt-7 inline-flex flex-wrap items-center gap-3 rounded-2xl border border-primary/35 bg-primary/[.07] px-5 py-4 shadow-[0_20px_60px_-35px_hsl(var(--primary)/.7)]"><span className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground"><Check className="h-4 w-4" /></span><div><p className="label-mono text-[9px] uppercase tracking-[.18em] text-primary">GARANTIE</p><p className="mt-1 text-sm font-semibold text-foreground">{t({fr:"Top 3 ou remboursé",en:"Top 3 or money back",vi:"Top 3 hoặc hoàn tiền",ar:"Top 3 أو استرداد المبلغ",ru:"Top 3 или возврат"})}</p></div></div>
         </div>
 
         <div className="mt-12 overflow-hidden rounded-[2rem] shadow-[0_35px_100px_-55px_rgba(0,0,0,.85)] border border-border bg-background shadow-[0_35px_100px_-60px_rgba(0,0,0,.9)]">
