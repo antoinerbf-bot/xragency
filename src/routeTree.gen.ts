@@ -156,11 +156,13 @@ export interface FileRoutesByFullPath {
   '/dashboard/prospects/$prospectId': typeof DashboardProspectsProspectIdRoute
 }
 export interface FileRoutesByTo {
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/': typeof IndexRoute
   '/work': typeof WorkRoute
   '/faq': typeof FaqRoute
   '/notre-histoire': typeof NotreHistoireRoute
   '/realisations': typeof RealisationsRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/sitemap.xml': typeof SitemapXmlRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
@@ -182,6 +184,7 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/notre-histoire': typeof NotreHistoireRoute
   '/realisations': typeof RealisationsRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/sitemap.xml': typeof SitemapXmlRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/api/send-quote': typeof ApiSendQuoteRoute
@@ -205,6 +208,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/notre-histoire'
     | '/realisations'
+    | '/mentions-legales'
     | '/sitemap.xml'
     | '/dashboard'
     | '/api/send-quote'
@@ -212,6 +216,7 @@ export interface FileRouteTypes {
     | '/dashboard/login'
     | '/dashboard/new'
     | '/dashboard/prospects'
+    | '/mentions-legales'
     | '/services/$serviceId'
     | '/services/seo'
     | '/services/webcare'
