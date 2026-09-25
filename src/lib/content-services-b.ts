@@ -163,7 +163,7 @@ export const SERVICES_PART2 = [
     title: { fr: "E-commerce & Réservation", en: "E-commerce & Booking", vi: "Thương mại điện tử & Đặt chỗ" },
     short: { fr: "Vendre, réserver et convertir en ligne.", en: "Sell, book and convert online.", vi: "Bán hàng, đặt chỗ và chuyển đổi trực tuyến." },
     description: { fr: "Une expérience e-commerce ou de réservation pensée pour le mobile, le paiement et la conversion.", en: "An e-commerce or booking experience designed for mobile, payments and conversion.", vi: "Trải nghiệm thương mại điện tử hoặc đặt chỗ được thiết kế cho mobile, thanh toán và chuyển đổi." },
-    fromEur: 1490,
+    fromEur: 1499,
     fromPeriod: "once",
     highlights: [
       { fr: "Catalogue, panier et commande", en: "Catalogue, cart and checkout", vi: "Danh mục, giỏ hàng và thanh toán" },
@@ -173,7 +173,7 @@ export const SERVICES_PART2 = [
     plans: [
       {
         name: { fr: "E-commerce & Réservation", en: "E-commerce & Booking", vi: "Thương mại điện tử & Đặt chỗ" },
-        eur: 1490,
+        eur: 1499,
         period: "once",
         popular: true,
         features: [
