@@ -27,9 +27,9 @@ export const Route = createFileRoute("/work")({
 export function WorkPage() {
   const [query, setQuery] = useState("");
   const [sector, setSector] = useState("all");
-  const { lang, t } = useLang();
+  const { t } = useLang();
   const [service, setService] = useState("Tous");
-  const serviceOptions = [{ id: "Tous", label: lang === "fr" ? "Toutes les prestations" : lang === "en" ? "All services" : "Tất cả dịch vụ" }, ...SERVICES.map((x) => ({ id: x.id, label: t(x.title) }))];
+  const serviceOptions = [{ id: "Tous", label: t({ fr: "Toutes les prestations", en: "All services", vi: "Tất cả dịch vụ", ar: "جميع الخدمات", ru: "Все услуги" }) }, ...SERVICES.map((x) => ({ id: x.id, label: t(x.title) }))];
   const serviceForReference = (type: string) => type === "E-commerce" ? "ecommerce" : type === "Branding" ? "branding" : type === "SaaS" ? "ai" : "websites";
   const filtered = useMemo(() => PORTFOLIO_REFERENCES.filter((item) => {
     const q = query.toLowerCase().trim();
