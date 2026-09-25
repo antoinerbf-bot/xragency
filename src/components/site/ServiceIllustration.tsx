@@ -1,4 +1,4 @@
-import { ArrowUpRight, BarChart3, Bot, Brush, Globe2, Layers3, MapPinned, Megaphone, ShieldCheck, ShoppingBag, Sparkles, Users, Wrench } from "lucide-react";
+import { ArrowUpRight, BarChart3, Bot, Brush, Globe2, Layers3, MapPinned, Megaphone, ShieldCheck, Sparkles, Users, Wrench } from "lucide-react";
 import { XR_PHOTOS } from "@/lib/photography";
 
 type Props = { service: string; title?: string };
@@ -11,7 +11,6 @@ const meta: Record<string, { label: string; accent: string; icon: typeof Globe2;
   social: { label: "SOCIAL MEDIA", accent: "05", icon: Users, metric: "CONTENT", caption: "REACH · COMMUNITY" },
   maintenance: { label: "WEBCARE", accent: "06", icon: Wrench, metric: "24/7", caption: "CARE · SECURITY" },
   ai: { label: "AI & STRATEGY", accent: "07", icon: Bot, metric: "AI", caption: "AUTOMATION · INTELLIGENCE" },
-  ecommerce: { label: "E-COMMERCE", accent: "08", icon: ShoppingBag, metric: "SELL", caption: "CHECKOUT · CONVERSION" },
   refonte: { label: "REDESIGN", accent: "09", icon: Layers3, metric: "REBUILD", caption: "UX · PERFORMANCE" },
   ads: { label: "CAMPAIGNS", accent: "10", icon: Megaphone, metric: "PAID", caption: "ACQUISITION · ROAS" },
   strategy: { label: "STRATEGY", accent: "11", icon: Sparkles, metric: "PLAN", caption: "POSITIONING · ROADMAP" },
