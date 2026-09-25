@@ -250,9 +250,9 @@ export function Contact() {
               </p>
               <div className="mt-3 space-y-1.5 text-sm text-muted-foreground">
                 <p><strong className="text-foreground">KARMA SASU</strong> · Société par actions simplifiée unipersonnelle</p>
-                <p>SIREN 889 178 141 · RCS Paris</p>
-                <p>Siège social : 78 Avenue des Champs-Élysées, 75008 Paris, France</p>
-                <p>Directeur de la publication : Antoine Rebuffé</p>
+                <p>SIREN 889 178 141 · SIRET 889 178 141 00012 · RCS Paris</p>
+                <p>Siège social : 78 Avenue des Champs-Élysées · Bureau 562 · 75008 Paris, France</p>
+                <p>TVA intracommunautaire : FR00889178141 · Président : Antoine REBUFFÉ</p>
                 <p>Hébergement : o2switch · Chemin des Pardiaux, 63000 Clermont-Ferrand, France</p>
                 <p className="text-[11px] text-muted-foreground/60">Infrastructure en France · cadre RGPD · données traitées selon les finalités indiquées.</p>
                 <p>
