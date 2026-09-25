@@ -26,38 +26,29 @@ const PLANS = [
 
 const COPY = {
   fr: {
-    kicker: "Google Maps · Local Visibility",
-    title: "Votre client vous cherche. Google décide où vous placer.",
-    intro: "Découvrez visuellement ce que Google regarde, ce que XRAGENCY travaille et pourquoi une optimisation locale n'est pas une simple modification de votre fiche.",
+    kicker: "Google Maps · Visibilité locale",
+    title: "Comprenez Google visuellement.",
+    intro: "Découvrez ce que Google regarde, ce que XRAGENCY travaille et pourquoi l’optimisation locale va bien au-delà d’une simple modification de fiche.",
     query: "restaurant français à Da Nang",
-    maps: "Google Maps",
-    organic: "SEO",
-    ads: "Google Ads",
-    mapsDesc: "Être visible lorsqu'un client cherche une entreprise près de lui.",
+    maps: "Google Maps", organic: "SEO", ads: "Google Ads",
+    mapsDesc: "Être visible lorsqu’un client cherche une entreprise près de lui.",
     organicDesc: "Être visible dans les résultats naturels pour vos services et vos sujets.",
     adsDesc: "Acheter de la visibilité publicitaire immédiate. Non proposé par XRAGENCY.",
     why: "Pourquoi Google vous place ici ?",
-    factors: [
-      ["Pertinence", "Votre fiche doit correspondre à la recherche."],
-      ["Distance", "Google tient compte de la proximité avec la recherche locale."],
-      ["Prominence", "Réputation, notoriété et signaux publics comptent."],
-      ["Qualité du profil", "Catégories, services, informations, photos et activité doivent être cohérents."],
-    ],
+    factors: [["Pertinence", "Votre fiche doit correspondre à la recherche."], ["Distance", "Google tient compte de la proximité avec la recherche locale."], ["Prominence", "Réputation, notoriété et signaux publics comptent."], ["Qualité du profil", "Catégories, services, informations, photos et activité doivent être cohérents."]],
     work: "Ce que XRAGENCY travaille",
     bridge: "Maps et SEO ne font pas la même chose.",
     bridgeDesc: "Maps travaille votre présence locale. Le SEO travaille votre visibilité dans les résultats organiques. Les deux peuvent se renforcer.",
-    pricing: "Pourquoi 199 €, 399 € ou 699 € ?",
+    pricing: "Pourquoi à partir de 990 € / an ?",
     pricingDesc: "Le tarif commence à 990 € / an. Le périmètre exact dépend de votre zone, de la concurrence, des requêtes ciblées et de l’état initial de votre fiche. Le Top 3 est un objectif de travail, jamais une garantie de position.",
     cta: "Recevoir mon analyse locale",
   },
   en: {
-    kicker: "Google Maps · Local Visibility",
-    title: "Your customer searches. Google decides where to place you.",
+    kicker: "Google Maps · Local visibility",
+    title: "Understand Google visually.",
     intro: "See what Google looks at, what XRAGENCY works on and why local optimisation is more than editing a business profile.",
     query: "French restaurant in Da Nang",
-    maps: "Google Maps",
-    organic: "SEO",
-    ads: "Google Ads",
+    maps: "Google Maps", organic: "SEO", ads: "Google Ads",
     mapsDesc: "Be visible when a customer searches for a business nearby.",
     organicDesc: "Be visible in organic results for your services and topics.",
     adsDesc: "Buy immediate paid visibility. Not offered by XRAGENCY.",
@@ -71,18 +62,16 @@ const COPY = {
     cta: "Get my local analysis",
   },
   vi: {
-    kicker: "Google Maps · Local Visibility",
-    title: "Khách hàng đang tìm kiếm. Google quyết định vị trí của bạn.",
-    intro: "Xem Google đánh giá điều gì, XRAGENCY làm gì và vì sao tối ưu địa phương không chỉ là sửa hồ sơ doanh nghiệp.",
+    kicker: "Google Maps · Hiển thị địa phương",
+    title: "Hiểu Google bằng hình ảnh.",
+    intro: "Xem Google đánh giá điều gì, XRAGENCY làm gì và vì sao tối ưu địa phương không chỉ là chỉnh sửa hồ sơ doanh nghiệp.",
     query: "nhà hàng Pháp tại Đà Nẵng",
-    maps: "Google Maps",
-    organic: "SEO",
-    ads: "Google Ads",
+    maps: "Google Maps", organic: "SEO", ads: "Google Ads",
     mapsDesc: "Xuất hiện khi khách hàng tìm doanh nghiệp gần họ.",
     organicDesc: "Xuất hiện trong kết quả tự nhiên cho dịch vụ và chủ đề của bạn.",
     adsDesc: "Mua khả năng hiển thị trả phí ngay lập tức. XRAGENCY không cung cấp dịch vụ này.",
     why: "Vì sao Google đặt bạn ở đây?",
-    factors: [["Mức độ liên quan", "Hồ sơ phải phù hợp với tìm kiếm địa phương."], ["Khoảng cách", "Google xem xét khoảng cách trong tìm kiếm địa phương."], ["Độ nổi bật", "Uy tín, nhận diện và các tín hiệu công khai đều quan trọng."], ["Chất lượng hồ sơ", "Danh mục, dịch vụ, thông tin, hình ảnh và hoạt động cần nhất quán."]],
+    factors: [["Mức độ liên quan", "Hồ sơ phải phù hợp với tìm kiếm địa phương."], ["Khoảng cách", "Google xem xét khoảng cách trong tìm kiếm địa phương."], ["Độ nổi bật", "Uy tín, nhận diện và tín hiệu công khai đều quan trọng."], ["Chất lượng hồ sơ", "Danh mục, dịch vụ, thông tin, hình ảnh và hoạt động cần nhất quán."]],
     work: "XRAGENCY làm gì",
     bridge: "Maps và SEO làm hai nhiệm vụ khác nhau.",
     bridgeDesc: "Maps tập trung vào hiện diện địa phương. SEO tập trung vào khả năng hiển thị tự nhiên. Hai dịch vụ có thể hỗ trợ lẫn nhau.",
@@ -90,11 +79,47 @@ const COPY = {
     pricingDesc: "Dịch vụ bắt đầu từ 990 € / năm. Phạm vi chính xác phụ thuộc khu vực, mức cạnh tranh, truy vấn mục tiêu và trạng thái ban đầu của hồ sơ. Top 3 là mục tiêu triển khai, không phải vị trí được đảm bảo.",
     cta: "Nhận phân tích địa phương",
   },
+  ar: {
+    kicker: "Google Maps · الظهور المحلي",
+    title: "افهم Google بصريًا.",
+    intro: "تعرّف على ما يراجعه Google، وما تعمل عليه XRAGENCY، ولماذا يتجاوز تحسين الظهور المحلي مجرد تعديل ملف النشاط التجاري.",
+    query: "مطعم فرنسي في دا نانغ",
+    maps: "Google Maps", organic: "SEO", ads: "Google Ads",
+    mapsDesc: "الظهور عندما يبحث العميل عن نشاط قريب منه.",
+    organicDesc: "الظهور في النتائج الطبيعية لخدماتك ومواضيعك.",
+    adsDesc: "شراء ظهور إعلاني فوري. لا تقدمه XRAGENCY.",
+    why: "لماذا يضعك Google هنا؟",
+    factors: [["الملاءمة", "يجب أن يتوافق ملفك مع البحث المحلي."], ["المسافة", "يأخذ Google القرب في الاعتبار في البحث المحلي."], ["البروز", "السمعة والوعي والإشارات العامة مهمة."], ["جودة الملف", "يجب أن تكون الفئات والخدمات والمعلومات والصور والنشاط متسقة."]],
+    work: "ما الذي تعمل عليه XRAGENCY",
+    bridge: "Maps وSEO يؤديان وظيفتين مختلفتين.",
+    bridgeDesc: "Maps يركز على الظهور المحلي، وSEO على نتائج البحث العضوية، ويمكن للخدمتين تعزيز بعضهما.",
+    pricing: "لماذا يبدأ السعر من 990 € سنويًا؟",
+    pricingDesc: "تبدأ الخدمة من 990 € سنويًا. يعتمد النطاق على منطقتك والمنافسة والبحث المستهدف وحالة الملف الحالية. Top 3 هدف عمل وليس ترتيبًا مضمونًا.",
+    cta: "احصل على تحليلي المحلي",
+  },
+  ru: {
+    kicker: "Google Maps · Локальная видимость",
+    title: "Поймите Google визуально.",
+    intro: "Посмотрите, на что обращает внимание Google, что делает XRAGENCY и почему локальная оптимизация — это больше, чем редактирование карточки.",
+    query: "французский ресторан в Дананге",
+    maps: "Google Maps", organic: "SEO", ads: "Google Ads",
+    mapsDesc: "Быть заметным, когда клиент ищет компанию рядом.",
+    organicDesc: "Быть заметным в органической выдаче по вашим услугам и темам.",
+    adsDesc: "Покупка платной видимости. XRAGENCY не предоставляет эту услугу.",
+    why: "Почему Google показывает вас здесь?",
+    factors: [["Релевантность", "Профиль должен соответствовать локальному запросу."], ["Расстояние", "Google учитывает близость в локальном поиске."], ["Известность", "Репутация и публичные сигналы имеют значение."], ["Качество профиля", "Категории, услуги, информация, фото и активность должны быть согласованы."]],
+    work: "Что делает XRAGENCY",
+    bridge: "Maps и SEO выполняют разные задачи.",
+    bridgeDesc: "Maps работает с локальным присутствием, SEO — с органической выдачей. Они могут усиливать друг друга.",
+    pricing: "Почему от 990 € в год?",
+    pricingDesc: "Услуга начинается от 990 € в год. Точный объём зависит от зоны, конкуренции, запросов и исходного состояния профиля. Top 3 — рабочая цель, а не гарантия позиции.",
+    cta: "Получить локальный анализ",
+  },
 } as const;
 
 export function LocalVisibilityExperience() {
-  const { lang } = useLang();
-  const copy = COPY[lang];
+  const { lang, t } = useLang();
+  const copy = COPY[lang] ?? COPY.en;
   const [surface, setSurface] = useState<"maps" | "organic" | "ads">("maps");
   const [plan, setPlan] = useState(1);
   const selected = PLANS[plan];
@@ -116,7 +141,7 @@ export function LocalVisibilityExperience() {
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="max-w-5xl">
           <p className="label-mono text-xs uppercase tracking-widest text-primary">{copy.kicker}</p>
-          <h2 className="display-serif mt-4 text-4xl leading-[.92] sm:text-6xl">Comprenez Google <em className="text-primary not-italic italic">visuellement.</em></h2>
+          <h2 className="display-serif mt-4 text-4xl leading-[.92] sm:text-6xl">{t({ fr: "Comprenez Google", en: "Understand Google", vi: "Hiểu Google", ar: "افهم Google", ru: "Поймите Google" })} <em className="text-primary not-italic italic">{t({ fr: "visuellement.", en: "visually.", vi: "bằng hình ảnh.", ar: "بصريًا.", ru: "визуально." })}</em></h2>
           <p className="mt-6 max-w-3xl text-base leading-7 text-muted-foreground sm:text-lg">{copy.intro}</p>
         </div>
 
