@@ -216,7 +216,6 @@ export interface FileRouteTypes {
     | '/dashboard/login'
     | '/dashboard/new'
     | '/dashboard/prospects'
-    | '/mentions-legales'
     | '/services/$serviceId'
     | '/services/seo'
     | '/services/webcare'
