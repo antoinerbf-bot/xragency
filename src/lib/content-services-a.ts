@@ -62,22 +62,24 @@ export const SERVICES_PART1 = [
     ],
     plans: [
       {
-        name: { fr: "Branding essentiel", en: "Essential branding", vi: "Branding cơ bản" },
-        eur: 199,
+        name: { fr: "Logo Signature", en: "Signature Logo", vi: "Logo Signature" },
+        eur: 179,
         period: "once",
         features: [
           { fr: "Logo principal", en: "Main logo", vi: "Logo chính" },
-          { fr: "Palette & typographie", en: "Palette & typography", vi: "Bảng màu & kiểu chữ" },
+          { fr: "Déclinaisons essentielles", en: "Essential variations", vi: "Các phiên bản thiết yếu" },
+          { fr: "Fichiers AI, SVG, PNG, PDF", en: "AI, SVG, PNG, PDF files", vi: "Tệp AI, SVG, PNG, PDF" },
         ],
       },
       {
-        name: { fr: "Identité complète", en: "Full identity", vi: "Nhận diện đầy đủ" },
-        eur: 399,
+        name: { fr: "Brand Identity Kit", en: "Brand Identity Kit", vi: "Brand Identity Kit" },
+        eur: 229,
         period: "once",
         popular: true,
         features: [
-          { fr: "Système de marque étendu", en: "Extended brand system", vi: "Hệ thống thương hiệu mở rộng" },
-          { fr: "Brand Book", en: "Brand Book", vi: "Brand Book" },
+          { fr: "Logo + palette + typographie", en: "Logo + palette + typography", vi: "Logo + bảng màu + kiểu chữ" },
+          { fr: "Système visuel cohérent", en: "Coherent visual system", vi: "Hệ thống hình ảnh nhất quán" },
+          { fr: "Fichiers prêts pour le digital", en: "Digital-ready files", vi: "Tệp sẵn sàng cho digital" },
         ],
       },
     ],
