@@ -4,6 +4,7 @@ import { useLang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
 import { Parallax, Reveal } from "./primitives";
 import { ServiceIllustration } from "./ServiceIllustration";
+import { XR_JOURNEY_PHOTO } from "@/lib/photography";
 
 const FEATURED_IDS = ["websites", "branding", "seo", "maps", "social", "maintenance", "ecommerce"];
 const DISPLAY_NUM: Record<string, string> = {
@@ -158,9 +159,7 @@ export function HomeServices() {
 
         <Parallax speed={0.035} className="mt-16 sm:mt-24">
           <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] border border-white/10 bg-black">
-            <div className="absolute inset-0 opacity-85">
-              <ServiceIllustration service="websites" title="XR Agency" />
-            </div>
+            <div className="absolute inset-0 opacity-85"><img src={XR_JOURNEY_PHOTO} alt="" aria-hidden="true" className="h-full w-full object-cover object-center transition-transform duration-[1800ms] hover:scale-[1.04]" /></div>
             <div className="absolute inset-0 bg-gradient-to-r from-[#050708] via-[#050708]/55 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050708]/90 via-transparent to-[#050708]/10" />
 
