@@ -18,15 +18,6 @@ export const Route = createFileRoute("/mentions-legales")({
 
 function LegalPage() {
   const { t } = useLang();
-  const copy = {
-    fr: { company: "Société", hosting: "Hébergement", privacy: "Protection des données", address: "Siège social", director: "Directeur de la publication" },
-    en: { company: "Company", hosting: "Hosting", privacy: "Data protection", address: "Registered office", director: "Publication director" },
-    vi: { company: "Công ty", hosting: "Lưu trữ", privacy: "Bảo vệ dữ liệu", address: "Trụ sở chính", director: "Giám đốc xuất bản" },
-    ar: { company: "الشركة", hosting: "الاستضافة", privacy: "حماية البيانات", address: "المقر المسجل", director: "مدير النشر" },
-    ru: { company: "Компания", hosting: "Хостинг", privacy: "Защита данных", address: "Юридический адрес", director: "Ответственный за публикацию" },
-  }[t({ fr: "fr", en: "en", vi: "vi", ar: "ar", ru: "ru" }) as never] ?? {
-    company: "Company", hosting: "Hosting", privacy: "Data protection", address: "Registered office", director: "Publication director",
-  };
   return (
     <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
       <Nav />
