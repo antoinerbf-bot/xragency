@@ -41,13 +41,13 @@ export const Route = createFileRoute("/api/audit")({
           const raw = body.url.trim().startsWith("http") ? body.url.trim() : "https://" + body.url.trim();
           const target = new URL(raw);
           if (!["http:", "https:"].includes(target.protocol)) return Response.json({ error: "URL invalide." }, { status: 400 });
-          const response = await fetch(target.toString(), { redirect: "follow", signal: AbortSignal.timeout(12000), headers: { "user-agent": "XRAGENCY-Julie-Audit/1.0" } });
+          const response = await fetch(target.toString(), { redirect: "follow", signal: AbortSignal.timeout(12000), headers: { "user-agent": "XRAGENCY-Audit/1.0" } });
           const html = await response.text();
           const title = text(html, /<title[^>]*>([^<]+)<\/title>/i);
           const description = text(html, /<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i);
           const h1 = text(html, /<h1[^>]*>([\s\S]*?)<\/h1>/i).replace(/<[^>]+>/g, "");
           const hasViewport = /<meta[^>]+name=["']viewport["']/i.test(html);
-          const images = (html.match(/<img\\b/gi) || []).length;
+          const images = (html.match(/<img\b/gi) || []).length;
           const alt = (html.match(/<img[^>]+alt=["'][^"']*["']/gi) || []).length;
           const types = [...new Set((body.types?.length ? body.types : [body.type || "design"]).filter((x): x is string => ["design","seo","security","conversion","technical"].includes(x)))];
           if (!types.length) return Response.json({ error: "Sélectionnez au moins un axe d'audit." }, { status: 400 });
@@ -75,7 +75,7 @@ export const Route = createFileRoute("/api/audit")({
                 ]
               : type === "conversion"
               ? [
-                  { label: "Point d'action", status: /<button|<a\\b/i.test(html), detail: /<button|<a\\b/i.test(html) ? "Liens ou boutons détectés." : "Aucun CTA évident détecté." },
+                  { label: "Point d'action", status: /<button|<a\b/i.test(html), detail: /<button|<a\b/i.test(html) ? "Liens ou boutons détectés." : "Aucun CTA évident détecté." },
                   { label: "Parcours mobile", status: hasViewport, detail: hasViewport ? "Viewport détecté." : "Viewport non détecté." },
                 ]
               : [
