@@ -67,26 +67,26 @@
   --radius: 0.75rem;
 
   /* ── Palette chaude crème-charcoal ── */
-  --background: oklch(0.982 0.004 80);
-  --foreground: oklch(0.15 0.012 260);
-  --card: oklch(0.995 0.002 80);
+  --background: oklch(0.982 0.004 80);         /* blanc crémeux chaud */
+  --foreground: oklch(0.15 0.012 260);          /* charcoal bleuté profond */
+  --card: oklch(0.995 0.002 80);               /* blanc cassé légèrement plus clair */
   --card-foreground: oklch(0.15 0.012 260);
   --popover: oklch(0.995 0.002 80);
   --popover-foreground: oklch(0.15 0.012 260);
-  --primary: oklch(0.16 0.022 260);
+  --primary: oklch(0.16 0.022 260);            /* charcoal chaud teinté */
   --primary-foreground: oklch(0.99 0.002 80);
   --secondary: oklch(0.952 0.006 80);
   --secondary-foreground: oklch(0.15 0.012 260);
   --muted: oklch(0.952 0.006 80);
   --muted-foreground: oklch(0.50 0.008 260);
-  --accent: oklch(0.938 0.008 75);
+  --accent: oklch(0.938 0.008 75);             /* crème légèrement ambrée */
   --accent-foreground: oklch(0.15 0.012 260);
   --destructive: oklch(0.45 0 0);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.882 0.006 80);
+  --border: oklch(0.882 0.006 80);             /* bordure légèrement chaude */
   --input: oklch(0.882 0.006 80);
   --ring: oklch(0.16 0.022 260);
-  --warm: oklch(0.75 0.06 60);
+  --warm: oklch(0.75 0.06 60);                 /* accent ambré pour badges */
   --ember: oklch(0.16 0.022 260);
   --azure: oklch(0.42 0.04 260);
   --jade: oklch(0.62 0.06 160);
@@ -179,7 +179,7 @@
 @utility label-mono {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.18em;    /* réduit de 0.22em → plus élégant */
   text-transform: uppercase;
 }
 
@@ -187,7 +187,7 @@
   font-family: var(--font-display);
   font-weight: 400;
   letter-spacing: -0.02em;
-  line-height: 0.96;
+  line-height: 0.96;          /* réduit de 0.98 → plus serré, plus vivant */
 }
 
 @utility surface-plate {
@@ -208,25 +208,6 @@
     pointer-events: none;
     opacity: 0.04;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-  }
-
-  /* Choice cards — configurator micro-interactions */
-  .choice-card {
-    transition:
-      transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-      box-shadow 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-      border-color 0.2s ease,
-      background-color 0.2s ease;
-  }
-  .choice-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-card-hover);
-  }
-  .choice-card[data-active="true"],
-  .choice-card.is-active {
-    border-color: color-mix(in oklab, var(--color-primary) 55%, var(--color-border));
-    background-color: color-mix(in oklab, var(--color-primary) 6%, var(--color-card));
-    box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-primary) 25%, transparent);
   }
 }
 
@@ -281,17 +262,6 @@
   }
 }
 
-@keyframes kinetic-in {
-  0% {
-    opacity: 0;
-    transform: translateY(24px) skewY(1deg);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) skewY(0);
-  }
-}
-
 @keyframes slow-spin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
@@ -307,6 +277,7 @@
   50%       { opacity: 1; }
 }
 
+/* Reveal au scroll — fade + léger translateY */
 @keyframes fade-slide-up {
   0% {
     opacity: 0;
@@ -318,6 +289,7 @@
   }
 }
 
+/* WhatsApp glow pulse */
 @keyframes wa-glow {
   0%, 100% {
     box-shadow: 0 0 0 0 oklch(0.16 0.022 260 / 0.20);
@@ -327,6 +299,7 @@
   }
 }
 
+/* Cart pop — item ajouté */
 @keyframes cart-pop {
   0%   { transform: scale(1); }
   40%  { transform: scale(1.12); }
@@ -334,6 +307,7 @@
   100% { transform: scale(1); }
 }
 
+/* Prix animé count-up : légère apparition */
 @keyframes price-reveal {
   0% {
     opacity: 0.2;
@@ -345,6 +319,7 @@
   }
 }
 
+/* Accordion check */
 @keyframes check-flash {
   0%   { opacity: 0; transform: scale(0.5); }
   40%  { opacity: 1; transform: scale(1.1); }
@@ -355,10 +330,6 @@
 
 @utility animate-rise {
   animation: ember-rise 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-@utility animate-kinetic {
-  animation: kinetic-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @utility animate-slow-spin {
@@ -406,14 +377,9 @@
   .animate-slow-spin,
   .animate-marquee,
   .animate-rise,
-  .animate-kinetic,
   .animate-fade-up,
   .animate-cart-pop,
   .animate-price-reveal {
     animation: none !important;
-  }
-
-  .choice-card:hover {
-    transform: none;
   }
 }
