@@ -226,7 +226,7 @@ function ServiceDetailPage() {
                         </a>
                         <Link
                           to="/"
-                          hash="intelligence"
+                          hash="quote"
                           className="label-mono text-xs text-muted-foreground transition-colors hover:text-primary"
                         >
                           {t(UI.getCustomQuote)} →
