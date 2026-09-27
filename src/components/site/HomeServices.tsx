@@ -32,7 +32,7 @@ export function HomeServices() {
     en: { expertise: "06 DISCIPLINES", title: "Bespoke digital solutions", titleAccent: "for every ambition.", lead: "Six offers designed as one ecosystem: strategy, creation, visibility and performance. Scroll to explore each discipline.", discover: "Discover", from: "From", scroll: "PARALLAX / SCROLL", kicker: "ONE AGENCY · ONE VISION", partner: "More than a provider,", partnerAccent: "a growth partner.", paragraph: "Strong creative direction, solid technology and digital experiences built to last." },
     vi: { expertise: "06 CHUYÊN MÔN", title: "Giải pháp số theo yêu cầu", titleAccent: "cho mọi tham vọng.", lead: "Sáu dịch vụ trong một hệ sinh thái: chiến lược, sáng tạo, hiển thị và hiệu suất. Cuộn để khám phá từng chuyên môn.", discover: "Khám phá", from: "Từ", scroll: "PARALLAX / SCROLL", kicker: "MỘT AGENCY · MỘT TẦM NHÌN", partner: "Hơn cả một nhà cung cấp,", partnerAccent: "một đối tác tăng trưởng.", paragraph: "Định hướng sáng tạo mạnh, công nghệ vững và trải nghiệm số được xây dựng để bền lâu." },
   }[lang] ?? {
-    expertise: "06 DISCIPLINES", title: "Bespoke digital solutions", titleAccent: "for every ambition.", lead: "Seven offers designed as one ecosystem.", discover: "Discover", from: "From", scroll: "PARALLAX / SCROLL", kicker: "ONE AGENCY · ONE VISION", partner: "More than a provider,", partnerAccent: "a growth partner.", paragraph: "Strong creative direction, solid technology and digital experiences built to last.",
+    expertise: "06 DISCIPLINES", title: "Bespoke digital solutions", titleAccent: "for every ambition.", lead: "Six offers designed as one ecosystem.", discover: "Discover", from: "From", scroll: "PARALLAX / SCROLL", kicker: "ONE AGENCY · ONE VISION", partner: "More than a provider,", partnerAccent: "a growth partner.", paragraph: "Strong creative direction, solid technology and digital experiences built to last.",
   };
   const featured = FEATURED_IDS.map((id) =>
     SERVICES.find((service) => service.id === id),
@@ -44,7 +44,7 @@ export function HomeServices() {
   return (
     <section
       id="homepage-services"
-      aria-label={lang === "fr" ? "Les sept offres XR Agency" : lang === "en" ? "XR Agency seven services" : "Bảy dịch vụ của XR Agency"}
+      aria-label={lang === "fr" ? "Les six offres XR Agency" : lang === "en" ? "XR Agency six services" : "Sáu dịch vụ của XR Agency"}
       className="relative overflow-hidden bg-[#07090b] py-20 text-white sm:py-28 lg:py-36"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,.07),transparent_35%),radial-gradient(circle_at_90%_45%,rgba(255,180,90,.07),transparent_32%)]" />
