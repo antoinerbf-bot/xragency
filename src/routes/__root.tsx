@@ -8,8 +8,6 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
-import { FileImage, Search, MessageCircle } from "lucide-react";
-import { CONTACT } from "../lib/content";
 
 import { LanguageProvider } from "../lib/i18n";
 import { CartProvider } from "../hooks/useCart";
@@ -113,23 +111,6 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-function ConversionRail() {
-  const mockupUrl = CONTACT.whatsapp + "?text=" + encodeURIComponent("Bonjour XRAGENCY, je souhaite ma maquette gratuite (valeur 200 €).");
-  return (
-    <div className="fixed bottom-4 left-1/2 z-[70] flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-border/80 bg-background/92 p-1.5 shadow-[0_20px_70px_-25px_rgba(0,0,0,.55)] backdrop-blur-2xl sm:bottom-6 sm:left-auto sm:right-6 sm:translate-x-0">
-      <a href={mockupUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-2 rounded-full bg-primary px-4 py-2 label-mono text-[8px] font-semibold tracking-[.1em] text-primary-foreground transition hover:-translate-y-0.5 hover:brightness-110">
-        <FileImage className="h-3.5 w-3.5" /> <span className="hidden sm:inline">MAQUETTE</span><span className="sm:hidden">MAQUETTE</span>
-      </a>
-      <a href="/#audit" className="inline-flex min-h-10 items-center gap-2 rounded-full border border-border bg-background px-4 py-2 label-mono text-[8px] font-semibold tracking-[.1em] transition hover:-translate-y-0.5 hover:border-primary/40">
-        <Search className="h-3.5 w-3.5 text-primary" /> AUDIT
-      </a>
-      <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp XRAGENCY" className="grid h-10 w-10 place-items-center rounded-full border border-border bg-background transition hover:-translate-y-0.5 hover:border-primary/40">
-        <MessageCircle className="h-4 w-4 text-emerald-500" />
-      </a>
-    </div>
-  );
-}
-
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const schemaData = {
@@ -158,7 +139,6 @@ function RootComponent() {
             <ThemeSwitcher />
             <Outlet />
             <WhatsAppWidget />
-            <ConversionRail />
           </CartProvider>
         </LanguageProvider>
       </ThemeProvider>
