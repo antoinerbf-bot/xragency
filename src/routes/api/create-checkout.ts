@@ -142,10 +142,10 @@ export const Route = createFileRoute("/api/create-checkout")({
           form.set("success_url", `${process.env.SITE_URL || new URL(request.url).origin}/?payment=success&session_id={CHECKOUT_SESSION_ID}`);
           form.set("cancel_url", `${process.env.SITE_URL || new URL(request.url).origin}/#quote`);
           form.set("billing_address_collection", "auto");
-          form.set("allow_promotion_codes", "true");
+          form.set("allow_promotion_codes", "true");\n          if (mode === "payment") form.set("invoice_creation[enabled]", "true");
           form.set("locale", "auto");
 
-          if (body.client?.email) form.set("customer_email", body.client.email);
+          if (body.client?.email) { form.set("customer_email", body.client.email); if (mode === "payment") form.set("payment_intent_data[receipt_email]", body.client.email); }
           if (body.client?.name) form.set("metadata[customer_name]", body.client.name);
           if (body.client?.company) form.set("metadata[company]", body.client.company);
           if (body.client?.whatsapp) form.set("metadata[whatsapp]", body.client.whatsapp);
