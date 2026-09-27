@@ -6,6 +6,7 @@ import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax } from "./primitives";
 import { XR_HERO_PHOTO } from "@/lib/photography";
+import heroStudioVideo from "@/assets/hero-studio.mp4";
 
 /* ── Animated counter hook ── */
 function useCountUp(target: number, duration = 1600, startDelay = 500) {
@@ -67,17 +68,26 @@ export function Hero() {
   const { t } = useLang();
 
   return (
-    <section id="top" className="grain relative min-h-[92dvh] overflow-hidden pt-16 sm:pt-20">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(120% 100% at 10% 40%, var(--background) 30%, color-mix(in oklab, var(--background) 65%, transparent) 60%, color-mix(in oklab, var(--background) 85%, transparent) 100%), linear-gradient(180deg, color-mix(in oklab, var(--background) 60%, transparent) 0%, transparent 45%, var(--background) 98%)",
-        }}
-      />
+    <section id="top" className="grain relative min-h-[92dvh] overflow-hidden bg-black pt-16 sm:pt-20">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <video
+          className="absolute inset-0 h-full w-full object-cover scale-[1.04]"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={XR_HERO_PHOTO}
+          aria-hidden="true"
+        >
+          <source src={heroStudioVideo} type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-black/48" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_32%,rgba(242,163,58,.18),transparent_34%),linear-gradient(90deg,rgba(3,4,5,.96)_0%,rgba(3,4,5,.82)_42%,rgba(3,4,5,.48)_72%,rgba(3,4,5,.72)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,4,5,.78)_0%,rgba(3,4,5,.18)_35%,rgba(3,4,5,.52)_78%,rgba(3,4,5,.96)_100%)]" />
+      </div>
 
-      <div className="relative mx-auto flex min-h-[calc(92dvh-4.75rem)] max-w-7xl flex-col justify-between px-6 lg:px-10">
+      <div className="relative z-10 mx-auto flex min-h-[calc(92dvh-4.75rem)] max-w-7xl flex-col justify-between px-6 lg:px-10">
         <div className="grid items-center gap-7 py-5 lg:grid-cols-12 lg:py-7">
           <Parallax speed={-0.03} className="relative z-10 lg:col-span-7">
             <div
@@ -146,17 +156,25 @@ export function Hero() {
             </div>
           </Parallax>
 
-          <div className="relative hidden lg:col-span-5 lg:block" aria-hidden="true">
-            <div className="absolute -inset-8 rounded-[3rem] bg-primary/10 blur-3xl" />
+          <div className="relative hidden lg:block lg:col-span-5" aria-hidden="true">
             <Parallax speed={-0.045}>
-              <figure className="relative overflow-hidden rounded-[2rem] border border-border/70 bg-card shadow-2xl">
-                <div className="absolute -inset-8 rounded-[3rem] bg-primary/20 blur-3xl" />
-                <div className="relative m-2 overflow-hidden rounded-[1.7rem]">
-                  <img src={XR_HERO_PHOTO} alt="" className="h-[480px] w-full object-cover object-center scale-[1.08] transition-transform duration-[1800ms] ease-out hover:scale-[1.14]" />
-                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,4,5,.02)_20%,rgba(3,4,5,.82)_100%)]" />
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_26%,rgba(242,163,58,.20),transparent_28%)]" />
+              <div className="relative ml-auto max-w-[520px] overflow-hidden rounded-[2rem] border border-white/15 bg-black/20 shadow-[0_40px_120px_-40px_rgba(0,0,0,.9)] backdrop-blur-sm">
+                <div className="absolute -inset-10 bg-primary/10 blur-3xl" />
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[1.7rem]">
+                  <video
+                    className="absolute inset-0 h-full w-full object-cover scale-[1.08]"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    poster={XR_HERO_PHOTO}
+                  >
+                    <source src={heroStudioVideo} type="video/mp4" />
+                  </video>
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,4,5,.08)_0%,rgba(3,4,5,.18)_35%,rgba(3,4,5,.88)_100%)]" />
                   <div className="absolute left-5 top-5 rounded-full border border-white/20 bg-black/35 px-3 py-2 backdrop-blur-md">
-                    <span className="label-mono text-[8px] tracking-[.2em] text-white/70">XR / DIGITAL SYSTEM</span>
+                    <span className="label-mono text-[8px] tracking-[.2em] text-white/75">XR / DIGITAL SYSTEM</span>
                   </div>
                   <div className="absolute right-5 top-16 h-24 w-24 rounded-full border border-white/20 animate-float" />
                   <div className="absolute right-10 top-28 h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_28px_rgba(242,163,58,.9)]" />
@@ -168,7 +186,7 @@ export function Hero() {
                     </div>
                   </div>
                 </div>
-              </figure>
+              </div>
             </Parallax>
           </div>
         </div>
