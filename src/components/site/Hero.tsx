@@ -146,27 +146,23 @@ export function Hero() {
 
           <div className="relative mt-8 block lg:col-span-5 lg:mt-0" aria-hidden="true">
             <Parallax speed={-0.045}>
-              <div className="relative mx-auto ml-auto w-full max-w-[420px] overflow-hidden lg:max-w-[520px] rounded-[2rem] border border-white/15 bg-black/20 shadow-[0_40px_120px_-40px_rgba(0,0,0,.9)] backdrop-blur-sm">
-                <div className="absolute -inset-10 bg-primary/10 blur-3xl" />
-                <div className="relative aspect-[16/10] overflow-hidden rounded-[1.7rem] sm:aspect-[4/3] lg:aspect-[4/5]">
-                  <img
-                    src={XR_HERO_PHOTO}
-                    alt=""
-                    className="absolute inset-0 h-full w-full object-cover scale-[1.08] motion-safe:animate-[pulse_12s_ease-in-out_infinite]"
-                  />
-                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,4,5,.08)_0%,rgba(3,4,5,.18)_35%,rgba(3,4,5,.88)_100%)]" />
-                  <div className="absolute left-5 top-5 rounded-full border border-white/20 bg-black/35 px-3 py-2 backdrop-blur-md">
-                    <span className="label-mono text-[8px] tracking-[.2em] text-white/75">XR / DIGITAL SYSTEM</span>
-                  </div>
-                  <div className="absolute right-5 top-16 h-24 w-24 rounded-full border border-white/20 animate-float" />
-                  <div className="absolute right-10 top-28 h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_28px_rgba(242,163,58,.9)]" />
-                  <div className="absolute inset-x-0 bottom-0 p-6">
-                    <span className="label-mono text-[9px] tracking-[.24em] text-white/55">XR AGENCY · DIGITAL CRAFT</span>
-                    <div className="mt-2 flex items-end justify-between gap-4">
-                      <span className="display-serif text-2xl text-white">Design, produit &amp; visibilité</span>
-                      <span className="label-mono text-[9px] text-primary">01</span>
+              <div className="relative mx-auto w-full max-w-[560px] overflow-hidden rounded-[2rem] border border-border/80 bg-card/75 p-3 shadow-[0_35px_100px_-45px_rgba(0,0,0,.28)] backdrop-blur-xl">
+                <div className="relative aspect-[16/12] overflow-hidden rounded-[1.5rem] bg-[#0b0e12]">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(214,164,93,.25),transparent_30%),linear-gradient(135deg,#171b22,#080a0d)]"/>
+                  <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:34px_34px]"/>
+                  <div className="absolute left-[8%] top-[13%] w-[84%] overflow-hidden rounded-2xl border border-white/15 bg-white shadow-2xl transition-transform duration-700 hover:scale-[1.02]">
+                    <div className="flex h-8 items-center gap-1.5 border-b border-black/10 bg-[#f5f5f3] px-3"><i className="h-2 w-2 rounded-full bg-black/15"/><i className="h-2 w-2 rounded-full bg-black/15"/><i className="h-2 w-2 rounded-full bg-black/15"/><span className="ml-2 h-2 w-32 rounded-full bg-black/8"/></div>
+                    <div className="grid min-h-[220px] grid-cols-[1.1fr_.9fr] gap-4 p-5">
+                      <div className="flex flex-col justify-center"><span className="text-[8px] font-semibold tracking-[.25em] text-[#a2763d]">XR / DIGITAL CRAFT</span><h3 className="mt-3 text-3xl font-serif leading-none text-black">L’Art du<br/><em className="text-[#a2763d]">Digital</em></h3><p className="mt-3 max-w-[180px] text-[8px] leading-4 text-black/45">Identity · Web · Visibility · Growth</p><div className="mt-5 h-7 w-24 rounded-full bg-black"/></div>
+                      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#d8cfc1] via-[#b7c0c6] to-[#747d84]"><div className="absolute inset-5 rounded-lg border border-white/50"/><div className="absolute bottom-5 left-5 h-2 w-20 rounded-full bg-white/80"/></div>
                     </div>
                   </div>
+                  <div className="absolute bottom-[8%] left-[8%] rounded-xl border border-white/15 bg-black/65 px-4 py-3 backdrop-blur-xl">
+                    <span className="label-mono text-[8px] tracking-[.22em] text-white/45">XR AGENCY · MMXXVI</span>
+                    <p className="mt-1 text-sm font-medium text-white">Digital sur mesure</p>
+                  </div>
+                  <div className="absolute right-[9%] bottom-[9%] h-20 w-20 rounded-full border border-[#d6a45d]/45"/>
+                  <div className="absolute right-[14%] bottom-[14%] h-2 w-2 rounded-full bg-[#d6a45d] shadow-[0_0_25px_rgba(214,164,93,.9)]"/>
                 </div>
               </div>
             </Parallax>
