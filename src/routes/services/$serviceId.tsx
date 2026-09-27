@@ -17,6 +17,7 @@ import { SERVICES, PERIOD_LABEL, CONTACT, FAQ } from "@/lib/content";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
 import { EmberButton, Reveal, Parallax } from "@/components/site/primitives";
+import { HeroSection } from "@/components/seo/HeroSection";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
 import { AddToCartBtn } from "@/components/site/Cart";
 import { cn } from "@/lib/utils";
@@ -171,7 +172,14 @@ function ServiceDetailPage() {
           <div className="mx-auto max-w-7xl px-6 lg:px-10">
             <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-7">
-                <>
+                {service.id === 'seo' ? (
+                  <HeroSection
+                    title={t(service.title)}
+                    description={t(service.description)}
+                    ctaPrimary={{ label: t(UI.explorePacks), href: "#plans" }}
+                  />
+                ) : (
+                  <>
                     <Reveal>
                       <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-primary">
                         <Sparkles className="h-3.5 w-3.5" />
@@ -218,7 +226,7 @@ function ServiceDetailPage() {
                         </a>
                         <Link
                           to="/"
-                          hash="quote"
+                          hash="intelligence"
                           className="label-mono text-xs text-muted-foreground transition-colors hover:text-primary"
                         >
                           {t(UI.getCustomQuote)} →
@@ -226,6 +234,7 @@ function ServiceDetailPage() {
                       </div>
                     </Reveal>
                   </>
+                )}
               </div>
               <div className="lg:col-span-5"><Parallax speed={-0.04}><ServiceIllustration service={service.id} title={t(service.title)} /></Parallax></div>
             </div>
