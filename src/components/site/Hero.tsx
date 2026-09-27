@@ -75,8 +75,8 @@ export function Hero() {
           className="absolute inset-0 h-full w-full object-cover scale-[1.04] motion-safe:animate-[pulse_12s_ease-in-out_infinite]"
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-black/48" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_32%,rgba(242,163,58,.18),transparent_34%),linear-gradient(90deg,rgba(3,4,5,.96)_0%,rgba(3,4,5,.82)_42%,rgba(3,4,5,.48)_72%,rgba(3,4,5,.72)_100%)]" />
+        <div className="absolute inset-0 bg-black/35 sm:bg-black/40 lg:bg-black/48" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_32%,rgba(242,163,58,.22),transparent_34%),linear-gradient(90deg,rgba(3,4,5,.82)_0%,rgba(3,4,5,.62)_42%,rgba(3,4,5,.28)_72%,rgba(3,4,5,.58)_100%)] lg:bg-[radial-gradient(circle_at_72%_32%,rgba(242,163,58,.18),transparent_34%),linear-gradient(90deg,rgba(3,4,5,.96)_0%,rgba(3,4,5,.82)_42%,rgba(3,4,5,.48)_72%,rgba(3,4,5,.72)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,4,5,.78)_0%,rgba(3,4,5,.18)_35%,rgba(3,4,5,.52)_78%,rgba(3,4,5,.96)_100%)]" />
       </div>
 
@@ -149,11 +149,11 @@ export function Hero() {
             </div>
           </Parallax>
 
-          <div className="relative hidden lg:block lg:col-span-5" aria-hidden="true">
+          <div className="relative mt-8 block lg:col-span-5 lg:mt-0" aria-hidden="true">
             <Parallax speed={-0.045}>
-              <div className="relative ml-auto max-w-[520px] overflow-hidden rounded-[2rem] border border-white/15 bg-black/20 shadow-[0_40px_120px_-40px_rgba(0,0,0,.9)] backdrop-blur-sm">
+              <div className="relative mx-auto ml-auto w-full max-w-[420px] overflow-hidden lg:max-w-[520px] rounded-[2rem] border border-white/15 bg-black/20 shadow-[0_40px_120px_-40px_rgba(0,0,0,.9)] backdrop-blur-sm">
                 <div className="absolute -inset-10 bg-primary/10 blur-3xl" />
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[1.7rem]">
+                <div className="relative aspect-[16/10] overflow-hidden rounded-[1.7rem] sm:aspect-[4/3] lg:aspect-[4/5]">
                   <img
                     src={XR_HERO_PHOTO}
                     alt=""
