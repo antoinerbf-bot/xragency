@@ -211,122 +211,68 @@ export function Contact() {
           </div>
         </Reveal>
 
-        <footer className="mt-10 border-t border-border/40 pt-8">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <footer className="mt-16 border-t border-border/40 pt-10">
+          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
             <div className="lg:col-span-1">
               <Logo />
-              <p className="label-mono mt-3 text-xs text-muted-foreground/70">{t(UI.footerMade)}</p>
-              <p className="label-mono mt-1 text-xs text-muted-foreground/50">
-                {t(UI.legalCopyright)}
+              <p className="mt-4 max-w-xs text-sm leading-6 text-muted-foreground">
+                Studio digital premium pour les marques, entreprises et projets qui veulent transformer leur présence en véritable actif commercial.
               </p>
-            </div>
-
-            <div>
-              <p className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">
-                {t(UI.footerContact)}
-              </p>
-              <div className="mt-3 space-y-2">
-                <a
-                  href={`mailto:${CONTACT.email}`}
-                  className="block text-sm text-foreground transition-colors hover:text-primary"
-                >
-                  {CONTACT.email}
-                </a>
-                <a
-                  href={WA_DIRECT}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block text-sm text-foreground transition-colors hover:text-primary"
-                >
-                  WhatsApp · {CONTACT.phone}
-                </a>
-                <p className="text-sm text-muted-foreground">{CONTACT.cities}</p>
-              </div>
-            </div>
-
-            <div id="legal">
-              <p className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">
-                Mentions légales
-              </p>
-              <div className="mt-3 space-y-1.5 text-sm text-muted-foreground">
-                <p><strong className="text-foreground">KARMA SASU</strong> · Société par actions simplifiée unipersonnelle</p>
-                <p>SIREN 889 178 141 · SIRET 889 178 141 00012 · RCS Paris</p>
-                <p>Siège social : 78 Avenue des Champs-Élysées · Bureau 562 · 75008 Paris, France</p>
-                <p>TVA intracommunautaire : FR00889178141 · Président : Antoine REBUFFÉ</p>
-                <p>Hébergement : o2switch · Chemin des Pardiaux, 63000 Clermont-Ferrand, France</p>
-                <p className="text-[11px] text-muted-foreground/60">Infrastructure en France · cadre RGPD · données traitées selon les finalités indiquées.</p>
-                <Link to="/mentions-legales" className="inline-flex text-xs font-semibold text-primary hover:underline">Mentions légales & RGPD →</Link>
-                <p>
-                  <a href="mailto:contact.xragency@gmail.com" className="transition-colors hover:text-primary">Contact légal : contact.xragency@gmail.com</a>
-                </p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {["FR", "EN", "VI", "AR", "RU"].map((lang) => (
+                  <span key={lang} className="rounded-full border border-border/60 px-2.5 py-1 font-mono text-[9px] tracking-wider text-muted-foreground">{lang}</span>
+                ))}
               </div>
             </div>
 
             <div>
-              <p className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">
-                Navigation & Services
-              </p>
-              <div className="mt-3 space-y-1.5">
-                <Link
-                  to="/services"
-                  className="block text-sm font-semibold text-primary transition-colors hover:underline"
-                >
-                  Toutes les expertises (7) →
-                </Link>
-                <Link
-                  to="/services/$serviceId"
-                  params={{ serviceId: "seo" }}
-                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  Référencement SEO
-                </Link>
-                <Link
-                  to="/services/$serviceId"
-                  params={{ serviceId: "websites" }}
-                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  Création de Sites Web
-                </Link>
-                <Link
-                  to="/services/$serviceId"
-                  params={{ serviceId: "maps" }}
-                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  Google Maps TOP 3
-                </Link>
-
-                <a
-                  href="/#pricing"
-                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {t(UI.navPricing)}
-                </a>
-                <a
-                  href="/#intelligence"
-                  className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {t(UI.navIntelligence)}
-                </a>
+              <p className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">Contact</p>
+              <div className="mt-4 space-y-3 text-sm">
+                <a href="mailto:contact.xragency@gmail.com" className="block text-foreground hover:text-primary">contact.xragency@gmail.com</a>
+                <a href={WA_DIRECT} target="_blank" rel="noreferrer" className="block text-foreground hover:text-primary">WhatsApp · +33 7 67 56 67 83</a>
+                <p className="text-muted-foreground">Paris · Europe · Asia · International</p>
+                <p className="text-xs text-muted-foreground/60">Réponse commerciale · projets web · SEO · branding · visibilité locale</p>
               </div>
             </div>
 
+            <div>
+              <p className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">Entreprise</p>
+              <div className="mt-4 space-y-2 text-sm text-muted-foreground">
+                <p><strong className="text-foreground">KARMA SASU</strong></p>
+                <p>SIREN 889 178 141</p>
+                <p>SIRET 889 178 141 00012</p>
+                <p>TVA FR00889178141</p>
+                <p>RCS Paris · Président : Antoine REBUFFÉ</p>
+                <p className="leading-5">78 Avenue des Champs-Élysées · Bureau 562<br />75008 Paris · France</p>
+                <Link to="/mentions-legales" className="inline-flex pt-2 text-xs font-semibold text-primary hover:underline">Mentions légales & RGPD →</Link>
+              </div>
+            </div>
+
+            <div>
+              <p className="label-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">Expertises</p>
+              <div className="mt-4 grid gap-2 text-sm">
+                <Link to="/services/$serviceId" params={{ serviceId: "websites" }} className="text-muted-foreground hover:text-foreground">Création de sites web</Link>
+                <Link to="/services/$serviceId" params={{ serviceId: "seo" }} className="text-muted-foreground hover:text-foreground">SEO & acquisition</Link>
+                <Link to="/services/$serviceId" params={{ serviceId: "maps" }} className="text-muted-foreground hover:text-foreground">Google Maps TOP 3</Link>
+                <a href="/#intelligence" className="text-muted-foreground hover:text-foreground">XR Intelligence</a>
+                <a href="/#pricing" className="text-muted-foreground hover:text-foreground">Tarifs & solutions</a>
+                <Link to="/work" className="text-muted-foreground hover:text-foreground">Portfolio</Link>
+                <Link to="/contact" className="text-muted-foreground hover:text-foreground">Contact</Link>
+              </div>
+            </div>
           </div>
 
-          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="label-mono text-[10px] text-muted-foreground/40">
-              {t(UI.ctaReassurance)}
-            </p>
-            <div className="flex gap-3">
-              <a href={CONTACT.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all hover:-translate-y-0.5 hover:border-primary hover:text-primary"><Instagram className="h-4 w-4" /></a>
-              <a href={CONTACT.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all hover:-translate-y-0.5 hover:border-primary hover:text-primary"><Linkedin className="h-4 w-4" /></a>
-              <span title="Facebook — lien à venir" aria-label="Facebook — lien à venir" className="flex h-9 w-9 items-center justify-center rounded-full border border-border/70 text-muted-foreground/50"><FacebookMark /></span>
-              <span title="TikTok — lien à venir" aria-label="TikTok — lien à venir" className="flex h-9 w-9 items-center justify-center rounded-full border border-border/70 text-muted-foreground/50"><TikTokMark /></span>            <a
-                href="#top"
-                className="flex h-9 items-center gap-2 rounded-full border border-border px-3.5 text-muted-foreground transition-all hover:-translate-y-0.5 hover:border-primary hover:text-primary"
-              >
-                <span className="label-mono text-xs">Top</span>
-                <ArrowUpRight className="h-3.5 w-3.5" />
-              </a>
+          <div className="mt-10 flex flex-col gap-5 border-t border-border/40 pt-6 md:flex-row md:items-center md:justify-between">
+            <div className="space-y-1">
+              <p className="label-mono text-[10px] text-muted-foreground/50">KARMA SASU · XRAGENCY</p>
+              <p className="text-xs text-muted-foreground/60">Hébergement : o2switch · Clermont-Ferrand, France · Infrastructure en France · cadre RGPD</p>
+              <p className="text-[10px] text-muted-foreground/40">© {new Date().getFullYear()} XRAGENCY. Tous droits réservés.</p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <a href={CONTACT.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground hover:border-primary hover:text-primary"><Instagram className="h-4 w-4" /></a>
+              <a href={CONTACT.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground hover:border-primary hover:text-primary"><Linkedin className="h-4 w-4" /></a>
+              <a href="mailto:contact.xragency@gmail.com" aria-label="Email" className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground hover:border-primary hover:text-primary"><Send className="h-4 w-4" /></a>
+              <a href="#top" className="flex h-9 items-center gap-2 rounded-full border border-border px-3.5 text-muted-foreground hover:border-primary hover:text-primary"><span className="label-mono text-xs">Top</span><ArrowUpRight className="h-3.5 w-3.5" /></a>
             </div>
           </div>
         </footer>
