@@ -26,7 +26,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
+    <div data-sync-test="xragency-github-2026-09-27" className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
       <div aria-hidden className="pointer-events-none fixed inset-0 z-0 opacity-40" style={{ background: "var(--gradient-halo)" }} />
       <Nav />
       <main className="relative z-10">
