@@ -6,7 +6,7 @@ export const Route = createFileRoute("/api/send-quote")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          const body = await request.json() as { email?: string; name?: string; pdfBase64?: string; quoteNumber?: string; whatsapp?: string };
+          const body = await request.json() as { email?: string; name?: string; pdfBase64?: string; quoteNumber?: string; whatsapp?: string; company?: string; website?: string };
           const email = body.email?.trim();
           const pdfBase64 = body.pdfBase64?.trim();
           if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !pdfBase64) return Response.json({ error: "Email et PDF requis." }, { status: 400 });
@@ -18,8 +18,8 @@ export const Route = createFileRoute("/api/send-quote")({
             from,
             to: [email],
             bcc: ["contact.xragency@gmail.com"],
-            subject: `Votre devis XR Agency${body.quoteNumber ? ` · ${body.quoteNumber}` : ""}`,
-            html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#111"><h2>Votre devis XR Agency</h2><p>Bonjour ${body.name || ""},</p><p>Votre devis personnalisé XRAGENCY est joint à cet e-mail.</p><p>Contact : ${body.whatsapp || "non renseigné"}</p><p>Merci pour votre confiance.<br/>XR Agency</p></div>`,
+            subject: `Votre devis définitif XRAGENCY${body.quoteNumber ? ` · ${body.quoteNumber}` : ""}`,
+            html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#111"><h2>Votre devis XR Agency</h2><p>Bonjour ${body.name || ""},</p><p>Votre devis définitif XRAGENCY est joint à cet e-mail.</p><p><strong>Entreprise :</strong> ${body.company || "—"}<br/><strong>Site :</strong> ${body.website || "—"}</p><p>Contact : ${body.whatsapp || "non renseigné"}</p><p>Merci pour votre confiance.<br/>XR Agency</p></div>`,
             attachments: [{ content: pdfBase64, filename: `${body.quoteNumber || "devis-xragency"}.pdf` }],
           });
           if (error) return Response.json({ error: error.message }, { status: 502 });
