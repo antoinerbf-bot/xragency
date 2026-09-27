@@ -226,7 +226,7 @@ function ServiceDetailPage() {
                         </a>
                         <Link
                           to="/"
-                          hash="intelligence"
+                          hash="quote"
                           className="label-mono text-xs text-muted-foreground transition-colors hover:text-primary"
                         >
                           {t(UI.getCustomQuote)} →
@@ -530,13 +530,13 @@ function ServiceDetailPage() {
                         </a>
                         <Link
                           to="/"
-                          hash="intelligence"
+                          hash="quote"
                           className="block text-center text-xs text-muted-foreground hover:text-primary pt-1"
                         >
                           {t({
-                            fr: "Ou calculer dans l'estimateur IA →",
-                            en: "Or calculate in the AI estimator →",
-                            vi: "Hoặc tính trong bộ ước tính AI →",
+                            fr: "Ou composer votre devis sur mesure →",
+                            en: "Or build your custom quote →",
+                            vi: "Hoặc tạo báo giá riêng →",
                           })}
                         </Link>
                       </div>
