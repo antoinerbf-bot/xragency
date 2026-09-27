@@ -89,7 +89,7 @@ export const Route = createFileRoute("/api/create-checkout")({
             const email = body.client?.email?.trim();
             const pdfBase64 = body.pdfBase64?.trim();
             if (!email || !pdfBase64) return Response.json({ error: "E-mail et PDF requis." }, { status: 400 });
-            if (!process.env.RESEND_API_KEY) return Response.json({ error: "RESEND_API_KEY manquante dans Vercel. Le PDF a été généré, mais l'envoi automatique est indisponible." }, { status: 503 });
+            if (!process.env.RESEND_API_KEY) return Response.json({ error: "RESEND_API_KEY manquante dans Cloudflare. Le PDF a été généré, mais l'envoi automatique est indisponible." }, { status: 503 });
             const resend = new Resend(process.env.RESEND_API_KEY);
             const summary = body.summary || {};
             const services = (summary.services || []).map((service) => `<li><strong>${service.label}</strong> — ${service.price.toLocaleString("fr-FR")} €${service.period === "month" ? " / mois" : ""}<br><span style="color:#666">${service.detail}</span></li>`).join("");
@@ -105,7 +105,7 @@ export const Route = createFileRoute("/api/create-checkout")({
             return Response.json({ sent: true });
           }
           if (!process.env.STRIPE_SECRET_KEY) {
-            return Response.json({ error: "STRIPE_SECRET_KEY manquante dans Vercel." }, { status: 503 });
+            return Response.json({ error: "STRIPE_SECRET_KEY manquante dans Cloudflare." }, { status: 503 });
           }
 
           const selectedServices = Array.isArray(body.selectedServices) ? body.selectedServices.slice(0, 10) : [];
@@ -142,7 +142,8 @@ export const Route = createFileRoute("/api/create-checkout")({
           form.set("success_url", `${process.env.SITE_URL || new URL(request.url).origin}/?payment=success&session_id={CHECKOUT_SESSION_ID}`);
           form.set("cancel_url", `${process.env.SITE_URL || new URL(request.url).origin}/#quote`);
           form.set("billing_address_collection", "auto");
-          form.set("allow_promotion_codes", "true");\n          if (mode === "payment") form.set("invoice_creation[enabled]", "true");
+          form.set("allow_promotion_codes", "true");
+          if (mode === "payment") form.set("invoice_creation[enabled]", "true");
           form.set("locale", "auto");
 
           if (body.client?.email) { form.set("customer_email", body.client.email); if (mode === "payment") form.set("payment_intent_data[receipt_email]", body.client.email); }
