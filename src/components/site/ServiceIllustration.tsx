@@ -27,7 +27,7 @@ export function ServiceIllustration({ service, title }: Props) {
   const item = meta[service] ?? meta.websites;
   const Icon = item.icon;
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const handleMove = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMove = (event: MouseEvent<HTMLDivElement>) => {
     if (window.innerWidth < 768) return;
     const rect = event.currentTarget.getBoundingClientRect();
     setTilt({
