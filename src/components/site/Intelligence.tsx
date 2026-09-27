@@ -20,7 +20,7 @@ const copy = {
     seoTitle: "SEO · être trouvé naturellement",
     seoText: "Le SEO travaille votre site, ses contenus et sa structure pour aider Google à comprendre vos pages et les faire apparaître sur les recherches pertinentes.",
     adsTitle: "Google Ads · acheter de la visibilité",
-    adsText: "Ads correspond à des annonces payantes. Le budget, le ciblage et les enchères jouent notamment sur la diffusion. XRAGENCY ne vend pas cette prestation.",
+    adsText: "Google Ads place des annonces sponsorisées devant des recherches pertinentes. Le ciblage, les enchères, la qualité de l’annonce et la page de destination influencent la diffusion et le coût.",
     why: "Ce qui influence cette surface",
     mapsSignals: ["Pertinence de la fiche", "Zone et distance", "Avis & réputation", "Qualité des informations"],
     seoSignals: ["Pertinence des pages", "Structure technique", "Contenu utile", "Autorité & concurrence"],
@@ -42,7 +42,7 @@ const copy = {
     seoTitle: "SEO · be found organically",
     seoText: "SEO works on your website, content and structure so Google can understand your pages and surface them for relevant searches.",
     adsTitle: "Google Ads · buy visibility",
-    adsText: "Ads uses paid placements. Budget, targeting and bidding affect delivery. XRAGENCY does not offer this service.",
+    adsText: "Google Ads uses sponsored placements for relevant searches. Targeting, bidding, ad quality and landing pages influence delivery and cost.",
     why: "What influences this surface",
     mapsSignals: ["Profile relevance", "Area and distance", "Reviews & reputation", "Information quality"],
     seoSignals: ["Page relevance", "Technical structure", "Useful content", "Authority & competition"],
@@ -64,7 +64,7 @@ const copy = {
     seoTitle: "SEO · được tìm thấy tự nhiên",
     seoText: "SEO tối ưu website, nội dung và cấu trúc để Google hiểu các trang và hiển thị chúng cho những tìm kiếm phù hợp.",
     adsTitle: "Google Ads · mua khả năng hiển thị",
-    adsText: "Ads sử dụng vị trí quảng cáo trả phí. Ngân sách, nhắm mục tiêu và đấu giá ảnh hưởng đến việc phân phối. XRAGENCY không cung cấp dịch vụ này.",
+    adsText: "Google Ads sử dụng vị trí quảng cáo trả phí cho các tìm kiếm phù hợp. Nhắm mục tiêu, đấu giá, chất lượng quảng cáo và trang đích ảnh hưởng đến phân phối và chi phí.",
     why: "Điều gì ảnh hưởng đến bề mặt này",
     mapsSignals: ["Mức độ liên quan hồ sơ", "Khu vực và khoảng cách", "Đánh giá & uy tín", "Chất lượng thông tin"],
     seoSignals: ["Mức độ liên quan trang", "Cấu trúc kỹ thuật", "Nội dung hữu ích", "Uy tín & cạnh tranh"],
@@ -141,12 +141,10 @@ export function Intelligence() {
 
             <div className="grid gap-3 p-3 md:grid-cols-[1.05fr_.95fr] md:p-4">
               <div className="overflow-hidden rounded-xl border border-border bg-background">
-                {surface === "maps" && <div className="relative h-[190px] overflow-hidden bg-[#e8eee8]">
-                  <div className="absolute inset-0 opacity-70" style={{backgroundImage:"linear-gradient(35deg,transparent 47%,rgba(70,90,70,.22) 48%,rgba(70,90,70,.22) 50%,transparent 51%),linear-gradient(110deg,transparent 47%,rgba(70,90,70,.16) 48%,rgba(70,90,70,.16) 50%,transparent 51%)",backgroundSize:"76px 76px"}}/>
-                  <div className="absolute left-[24%] top-[30%] h-3 w-3 rounded-full bg-primary ring-4 ring-primary/15"/><div className="absolute left-[53%] top-[48%] h-3 w-3 rounded-full bg-foreground ring-4 ring-foreground/10"/><div className="absolute left-[72%] top-[26%] h-3 w-3 rounded-full bg-foreground ring-4 ring-foreground/10"/>
-                  <div className="absolute bottom-3 left-3 rounded-lg border border-white/70 bg-white/90 px-2 py-1 text-[7px] uppercase tracking-[.14em] text-slate-700 shadow-sm">Google Maps · recherche locale</div>
-                </div>}
-                {surface !== "maps" && <div className="border-b border-border bg-background px-3 py-2 text-[8px] uppercase tracking-[.14em] text-muted-foreground">google.com · page de résultats</div>}
+<div className="relative h-[300px] overflow-hidden bg-white">
+                  <img src={surface === "maps" ? "https://s3.amazonaws.com/images.seroundtable.com/t-google-local-pack-normal-map-1626952021.png" : surface === "seo" ? "https://img.labra.com.br/2026/serp-do-google-o-que-e-5.jpg" : "https://www.tribalism.com.au/img/services/images/google-ads-search-results.png"} alt={surface === "maps" ? "Exemple réel Google Maps Local Pack" : surface === "seo" ? "Exemple réel Google Search SEO" : "Exemple réel Google Ads"} className="h-full w-full object-cover object-top" loading="lazy" />
+                  <div className="absolute bottom-3 left-3 rounded-lg border border-black/10 bg-white/95 px-2.5 py-1.5 text-[7px] uppercase tracking-[.12em] text-black/65 shadow-lg">Exemple réel · interface Google</div>
+                </div>
                 <div className="divide-y divide-border/70">
                   {resultRows.map((row,i) => <div key={row.name} className="flex items-center gap-2.5 px-3 py-3">
                     <div className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-muted text-[8px] font-semibold">{i+1}</div>
