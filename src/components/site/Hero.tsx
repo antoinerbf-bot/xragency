@@ -67,17 +67,12 @@ export function Hero() {
   const { t } = useLang();
 
   return (
-    <section id="top" className="grain relative min-h-[92dvh] overflow-hidden bg-black pt-16 sm:pt-20">
+    <section id="top" className="grain relative min-h-[92dvh] overflow-hidden bg-background pt-16 sm:pt-20">
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <img
-          src={XR_HERO_PHOTO}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover scale-[1.04] motion-safe:animate-[pulse_12s_ease-in-out_infinite]"
-          aria-hidden="true"
-        />
-        <div className="absolute inset-0 bg-black/35 sm:bg-black/40 lg:bg-black/48" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_32%,rgba(242,163,58,.22),transparent_34%),linear-gradient(90deg,rgba(3,4,5,.82)_0%,rgba(3,4,5,.62)_42%,rgba(3,4,5,.28)_72%,rgba(3,4,5,.58)_100%)] lg:bg-[radial-gradient(circle_at_72%_32%,rgba(242,163,58,.18),transparent_34%),linear-gradient(90deg,rgba(3,4,5,.96)_0%,rgba(3,4,5,.82)_42%,rgba(3,4,5,.48)_72%,rgba(3,4,5,.72)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,4,5,.78)_0%,rgba(3,4,5,.18)_35%,rgba(3,4,5,.52)_78%,rgba(3,4,5,.96)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_22%,hsl(var(--primary)/.18),transparent_30%),linear-gradient(135deg,hsl(var(--background))_0%,hsl(var(--card))_52%,hsl(var(--background))_100%)]" />
+        <div className="absolute inset-0 opacity-[.22] [background-image:linear-gradient(hsl(var(--foreground)/.07)_1px,transparent_1px),linear-gradient(90deg,hsl(var(--foreground)/.07)_1px,transparent_1px)] [background-size:64px_64px] [mask-image:linear-gradient(to_bottom,black,transparent_85%)]" />
+        <div className="absolute -right-32 top-[-10%] h-[560px] w-[560px] rounded-full border border-primary/15 bg-primary/[.04] shadow-[0_0_180px_hsl(var(--primary)/.10)]" />
+        <div className="absolute right-[8%] top-[17%] h-2 w-2 rounded-full bg-primary shadow-[0_0_35px_hsl(var(--primary)/.9)]" />
       </div>
 
       <div className="relative z-10 mx-auto flex min-h-[calc(92dvh-4.75rem)] max-w-7xl flex-col justify-between px-6 lg:px-10">
