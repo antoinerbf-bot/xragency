@@ -139,66 +139,196 @@ export function QuoteConfiguratorCompact() {
     setSendMessage("");
     try {
       const { jsPDF } = await import("jspdf");
-      const doc = new jsPDF();
+      const doc = new jsPDF({ unit: "mm", format: "a4" });
+      const pageWidth = 210;
+      const margin = 18;
+      const right = pageWidth - margin;
+      const accent = [198, 164, 92] as const;
+      const dark = [20, 24, 31] as const;
+      const muted = [105, 110, 120] as const;
+      const light = [244, 244, 242] as const;
 
-      doc.setFontSize(20);
-      doc.text("XR AGENCY · DEVIS DIGITAL", 20, 22);
-      doc.setFontSize(9);
-      doc.text("XR AGENCY · contact.xragency@gmail.com · +33 7 67 56 67 83", 20, 29);
-      doc.text("https://xragencyai.com", 20, 35);
-      doc.setFontSize(10);
+      let page = 1;
+      let y = 18;
+      const quoteNumber = "XR-" + new Date().toISOString().slice(0, 10).replace(/-/g, "") + "-" + Math.floor(1000 + Math.random() * 9000);
+      const issueDate = new Date();
+      const validity = new Date(issueDate);
+      validity.setDate(validity.getDate() + 15);
+      const formatDate = (date: Date) => date.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
 
-      let y = 48;
-      doc.setFontSize(12);
-      doc.text("Informations société", 20, y);
-      y += 8;
-      doc.setFontSize(10);
+      const header = () => {
+        doc.setFillColor(...dark);
+        doc.rect(0, 0, pageWidth, 34, "F");
+        doc.setTextColor(255, 255, 255);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(17);
+        doc.text("XRAGENCY", margin, 14);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7.5);
+        doc.text("DIGITAL STUDIO · STRATEGY · DESIGN · GROWTH", margin, 20);
+        doc.setTextColor(...accent);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(15);
+        doc.text("DEVIS", right, 14, { align: "right" });
+        doc.setTextColor(220, 220, 220);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7);
+        doc.text(quoteNumber, right, 20, { align: "right" });
+        doc.text(formatDate(issueDate), right, 25, { align: "right" });
+        y = 45;
+      };
 
-      [
-        `E-mail : ${client.email}`,
-        `Téléphone / WhatsApp : ${client.whatsapp}`,
-        `Activité : ${sector?.label || ""}`,
-        `Priorité : ${goal}`,
-        `Situation : ${SITUATIONS.find(x => x.id === situation)?.label || ""}`,
-        `Budget : ${budgetChoice?.label || ""}`,
-        `Acquisition : ${discoveryChoice?.label || ""}`,
-      ].forEach((line) => {
-        doc.text(line, 20, y);
-        y += 6;
-      });
+      const footer = () => {
+        doc.setDrawColor(220, 220, 220);
+        doc.line(margin, 285, right, 285);
+        doc.setTextColor(...muted);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(6.5);
+        doc.text("KARMA SASU · SIREN 889 178 141 · SIRET 889 178 141 00012 · RCS Paris", margin, 291);
+        doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83 · xragencyai.com", margin, 295);
+        doc.text("Page " + page, right, 295, { align: "right" });
+      };
 
-      y += 6;
-      doc.setFontSize(12);
-      doc.text("Prestations sélectionnées", 20, y);
-      y += 8;
-      doc.setFontSize(10);
+      const newPage = () => {
+        footer();
+        doc.addPage();
+        page += 1;
+        header();
+      };
+
+      const ensure = (height = 18) => {
+        if (y + height > 275) newPage();
+      };
+
+      const sectionTitle = (title: string) => {
+        ensure(14);
+        doc.setFillColor(...light);
+        doc.roundedRect(margin, y - 4, right - margin, 10, 2, 2, "F");
+        doc.setTextColor(...dark);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9);
+        doc.text(title.toUpperCase(), margin + 4, y + 2);
+        y += 14;
+      };
+
+      const row = (label: string, value: string, x = margin, width = right - margin) => {
+        ensure(9);
+        doc.setTextColor(...muted);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7.5);
+        doc.text(label, x, y);
+        doc.setTextColor(...dark);
+        doc.setFont("helvetica", "bold");
+        doc.text(value || "—", x + 34, y, { maxWidth: width - 34 });
+        y += 7;
+      };
+
+      header();
+
+      sectionTitle("Émetteur");
+      row("Société", "KARMA SASU");
+      row("Activité", "XRAGENCY — studio digital premium");
+      row("SIREN", "889 178 141");
+      row("SIRET", "889 178 141 00012");
+      row("Siège", "78 Avenue des Champs-Élysées · Bureau 562 · 75008 Paris · France");
+      row("TVA", "FR00889178141");
+      row("Président", "Antoine REBUFFÉ");
+      y += 2;
+
+      sectionTitle("Client / prospect");
+      row("Entreprise", client.company || "À compléter");
+      row("Contact", client.name || "À compléter");
+      row("E-mail", client.email || "À compléter");
+      row("WhatsApp", client.whatsapp || "À compléter");
+      row("Site web", client.website || "Non renseigné");
+      row("Activité", sector?.label || "À définir");
+      y += 2;
+
+      sectionTitle("Projet analysé");
+      row("Objectif", goal || "À définir");
+      row("Situation", situationChoice?.label || "À définir");
+      row("Budget", budgetChoice?.label || "À définir");
+      row("Acquisition", discoveryChoice?.label || "À définir");
+      y += 2;
+
+      sectionTitle("Prestations proposées");
+      doc.setFillColor(...dark);
+      doc.rect(margin, y - 4, right - margin, 8, "F");
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(7);
+      doc.text("PRESTATION", margin + 3, y + 1);
+      doc.text("TYPE", 130, y + 1);
+      doc.text("MONTANT", right - 3, y + 1, { align: "right" });
+      y += 10;
 
       selectedServices.forEach((id) => {
         const p = proposals.find((x) => x.id === id);
-        if (p) {
-          doc.text(`${p.label} · ${p.custom ? "SUR MESURE — Nous contacter" : `${p.price} €${p.period === "month" ? "/mois" : ""}`}`, 20, y);
-          y += 6;
-        }
+        if (!p) return;
+        ensure(12);
+        doc.setTextColor(...dark);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(7.5);
+        doc.text(p.label, margin + 3, y);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(...muted);
+        doc.setFontSize(6.5);
+        const detailLines = doc.splitTextToSize(p.detail, 82);
+        doc.text(detailLines.slice(0, 2), margin + 3, y + 4);
+        doc.text(p.period === "month" ? "RÉCURRENT" : p.custom ? "SUR MESURE" : "PONCTUEL", 130, y);
+        doc.setTextColor(...dark);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(7.5);
+        doc.text(p.custom ? "Sur devis" : p.price.toLocaleString("fr-FR") + " €" + (p.period === "month" ? " / mois" : ""), right - 3, y, { align: "right" });
+        y += Math.max(12, 5 + detailLines.slice(0, 2).length * 3.5);
+        doc.setDrawColor(232, 232, 232);
+        doc.line(margin, y - 2, right, y - 2);
       });
 
-      y += 6;
-      doc.text(`Total ponctuel estimé : ${once.toLocaleString("fr-FR")} €`, 20, y);
-      y += 6;
-      doc.text(`Total mensuel estimé : ${monthly.toLocaleString("fr-FR")} € / mois`, 20, y);
+      ensure(30);
+      y += 4;
+      doc.setFillColor(...light);
+      doc.roundedRect(112, y - 4, right - 112, 26, 2, 2, "F");
+      doc.setTextColor(...muted);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7);
+      doc.text("ESTIMATION PONCTUELLE", 116, y + 3);
+      doc.text("ABONNEMENTS / MOIS", 116, y + 12);
+      doc.setTextColor(...dark);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      doc.text(once.toLocaleString("fr-FR") + " €", right - 4, y + 3, { align: "right" });
+      doc.text(monthly.toLocaleString("fr-FR") + " € / mois", right - 4, y + 12, { align: "right" });
+      y += 31;
 
-      const pdfBase64 = doc.output("datauristring").split(",")[1] || "";
-      doc.save("devis-xragency.pdf");
-      try {
-        const response = await fetch("/api/send-quote", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ email: client.email, name: client.name, whatsapp: client.whatsapp, pdfBase64, quoteNumber: "XR-" + new Date().toISOString().slice(0, 10).replace(/-/g, "") }),
-        });
-        if (!response.ok) throw new Error("PDF téléchargé. L’envoi automatique par e-mail n’est pas disponible pour le moment.");
-        setSendMessage("Votre devis PDF a été téléchargé et envoyé par e-mail. Une copie est également transmise à XR Agency.");
-      } catch (emailError) {
-        setSendMessage(emailError instanceof Error ? emailError.message : "PDF téléchargé. L’envoi automatique par e-mail a échoué.");
-      }
+      sectionTitle("Conditions commerciales");
+      row("Validité", "15 jours · jusqu'au " + formatDate(validity));
+      row("Démarrage", "Après validation du devis et réception des éléments nécessaires");
+      row("Paiement", "Virement bancaire · coordonnées ci-dessous");
+      row("Nature", "Pré-devis généré automatiquement · proposition à valider par XRAGENCY");
+      y += 2;
+
+      sectionTitle("Règlement par virement");
+      row("Titulaire", "Antoine Rebuffe");
+      row("Banque", "Wise");
+      row("IBAN", "BE65 9677 0075 0796");
+      row("BIC / SWIFT", "TRWIBEB1XXX");
+      row("Banque", "Rue du Trône 100 · 3rd floor · Brussels · 1050 · Belgium");
+
+      ensure(28);
+      y += 5;
+      doc.setTextColor(...muted);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(6.5);
+      const legal = doc.splitTextToSize(
+        "Ce document constitue un pré-devis commercial établi à partir des informations saisies par le prospect. Les prestations sur mesure, Google Maps, campagnes publicitaires et certains frais externes peuvent faire l'objet d'un ajustement après analyse. Le montant définitif est confirmé par XRAGENCY avant engagement. Les conditions contractuelles, la facturation et les éventuels frais tiers sont précisés lors de la validation.",
+        right - margin
+      );
+      doc.text(legal, margin, y);
+
+      footer();
+      doc.save("XRAGENCY-Devis-" + quoteNumber + ".pdf");
+      setSendMessage("Votre pré-devis professionnel a été généré et téléchargé. Vous pouvez maintenant l'utiliser pour poursuivre l'échange avec XRAGENCY.");
       setGenerated(true);
     } catch (error) {
       setSendMessage(error instanceof Error ? error.message : "Impossible de générer le devis PDF.");
