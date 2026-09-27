@@ -1,4 +1,4 @@
-import { ArrowUpRight, Check, Sparkles } from "lucide-react";
+import { ArrowUpRight, Sparkles } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
@@ -6,7 +6,7 @@ import { Parallax, Reveal } from "./primitives";
 import { ServiceIllustration } from "./ServiceIllustration";
 import { XR_JOURNEY_PHOTO } from "@/lib/photography";
 
-const FEATURED_IDS = ["websites", "branding", "seo", "maps", "social", "maintenance", "ecommerce"];
+const FEATURED_IDS = ["websites", "branding", "seo", "maps", "social", "maintenance"];
 const DISPLAY_NUM: Record<string, string> = {
   websites: "01",
   branding: "02",
@@ -14,7 +14,6 @@ const DISPLAY_NUM: Record<string, string> = {
   maps: "04",
   social: "05",
   maintenance: "06",
-  ecommerce: "07",
 };
 const DISPLAY_PRICE: Record<string, number | null> = {
   websites: 499,
@@ -23,18 +22,17 @@ const DISPLAY_PRICE: Record<string, number | null> = {
   maps: 990,
   social: 299,
   maintenance: 29,
-  ecommerce: 1490,
 };
 
 
 export function HomeServices() {
   const { t, price, lang } = useLang();
   const copy = {
-    fr: { expertise: "07 EXPERTISES", title: "Des solutions sur mesure", titleAccent: "pour chaque ambition.", lead: "Sept offres pensées comme un seul écosystème : stratégie, création, visibilité et performance. Faites défiler pour voir chaque univers.", discover: "Découvrir", from: "À partir de", ecommerce: "E-commerce & réservation", scroll: "PARALLAX / SCROLL", kicker: "UNE AGENCE · UNE VISION", partner: "Plus qu’un prestataire,", partnerAccent: "un partenaire de croissance.", paragraph: "Une direction créative forte, une technologie solide et des expériences digitales conçues pour durer." },
-    en: { expertise: "07 DISCIPLINES", title: "Bespoke digital solutions", titleAccent: "for every ambition.", lead: "Seven offers designed as one ecosystem: strategy, creation, visibility and performance. Scroll to explore each discipline.", discover: "Discover", from: "From", ecommerce: "E-commerce & booking", scroll: "PARALLAX / SCROLL", kicker: "ONE AGENCY · ONE VISION", partner: "More than a provider,", partnerAccent: "a growth partner.", paragraph: "Strong creative direction, solid technology and digital experiences built to last." },
-    vi: { expertise: "07 CHUYÊN MÔN", title: "Giải pháp số theo yêu cầu", titleAccent: "cho mọi tham vọng.", lead: "Bảy dịch vụ trong một hệ sinh thái: chiến lược, sáng tạo, hiển thị và hiệu suất. Cuộn để khám phá từng chuyên môn.", discover: "Khám phá", from: "Từ", ecommerce: "E-commerce & đặt chỗ", scroll: "PARALLAX / SCROLL", kicker: "MỘT AGENCY · MỘT TẦM NHÌN", partner: "Hơn cả một nhà cung cấp,", partnerAccent: "một đối tác tăng trưởng.", paragraph: "Định hướng sáng tạo mạnh, công nghệ vững và trải nghiệm số được xây dựng để bền lâu." },
+    fr: { expertise: "06 EXPERTISES", title: "Des solutions sur mesure", titleAccent: "pour chaque ambition.", lead: "Six offres pensées comme un seul écosystème : stratégie, création, visibilité et performance. Faites défiler pour voir chaque univers.", discover: "Découvrir", from: "À partir de", scroll: "PARALLAX / SCROLL", kicker: "UNE AGENCE · UNE VISION", partner: "Plus qu’un prestataire,", partnerAccent: "un partenaire de croissance.", paragraph: "Une direction créative forte, une technologie solide et des expériences digitales conçues pour durer." },
+    en: { expertise: "06 DISCIPLINES", title: "Bespoke digital solutions", titleAccent: "for every ambition.", lead: "Six offers designed as one ecosystem: strategy, creation, visibility and performance. Scroll to explore each discipline.", discover: "Discover", from: "From", scroll: "PARALLAX / SCROLL", kicker: "ONE AGENCY · ONE VISION", partner: "More than a provider,", partnerAccent: "a growth partner.", paragraph: "Strong creative direction, solid technology and digital experiences built to last." },
+    vi: { expertise: "06 CHUYÊN MÔN", title: "Giải pháp số theo yêu cầu", titleAccent: "cho mọi tham vọng.", lead: "Sáu dịch vụ trong một hệ sinh thái: chiến lược, sáng tạo, hiển thị và hiệu suất. Cuộn để khám phá từng chuyên môn.", discover: "Khám phá", from: "Từ", scroll: "PARALLAX / SCROLL", kicker: "MỘT AGENCY · MỘT TẦM NHÌN", partner: "Hơn cả một nhà cung cấp,", partnerAccent: "một đối tác tăng trưởng.", paragraph: "Định hướng sáng tạo mạnh, công nghệ vững và trải nghiệm số được xây dựng để bền lâu." },
   }[lang] ?? {
-    expertise: "07 DISCIPLINES", title: "Bespoke digital solutions", titleAccent: "for every ambition.", lead: "Seven offers designed as one ecosystem.", discover: "Discover", from: "From", ecommerce: "E-commerce & booking", scroll: "PARALLAX / SCROLL", kicker: "ONE AGENCY · ONE VISION", partner: "More than a provider,", partnerAccent: "a growth partner.", paragraph: "Strong creative direction, solid technology and digital experiences built to last.",
+    expertise: "06 DISCIPLINES", title: "Bespoke digital solutions", titleAccent: "for every ambition.", lead: "Seven offers designed as one ecosystem.", discover: "Discover", from: "From", scroll: "PARALLAX / SCROLL", kicker: "ONE AGENCY · ONE VISION", partner: "More than a provider,", partnerAccent: "a growth partner.", paragraph: "Strong creative direction, solid technology and digital experiences built to last.",
   };
   const featured = FEATURED_IDS.map((id) =>
     SERVICES.find((service) => service.id === id),
@@ -93,7 +91,7 @@ export function HomeServices() {
                         <span>XR AGENCY</span>
                       </div>
                       <span className="rounded-full border border-white/15 bg-black/20 px-3 py-2 label-mono text-[8px] tracking-[0.15em] text-white/50 backdrop-blur-md">
-                        {String(index + 1).padStart(2, "0")} / 07
+                        {String(index + 1).padStart(2, "0")} / 06
                       </span>
                     </div>
 
@@ -126,13 +124,6 @@ export function HomeServices() {
                             <span className="rounded-full border border-white/15 bg-black/20 px-4 py-3 label-mono text-[9px] tracking-[0.12em] text-white/65 backdrop-blur-md">
                               {copy.from} {price(startingPrice)}
                               {service.fromPeriod === "month" ? (lang === "fr" ? " / mois" : lang === "en" ? " / month" : " / tháng") : service.fromPeriod === "year" ? (lang === "fr" ? " / an" : lang === "en" ? " / year" : " / năm") : ""}
-                            </span>
-                          )}
-
-                          {service.id === "websites" && (
-                            <span className="flex items-center gap-2 rounded-full border border-white/15 bg-black/20 px-4 py-3 label-mono text-[9px] tracking-[0.1em] text-white/70 backdrop-blur-md">
-                              <Check className="h-3 w-3" />
-                              {copy.ecommerce}
                             </span>
                           )}
                         </div>
