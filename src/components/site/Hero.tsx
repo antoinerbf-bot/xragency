@@ -1,197 +1,138 @@
-
 import { useEffect, useRef, useState } from "react";
-import { Sparkles, ShieldCheck, FileImage, Search, ArrowUpRight } from "lucide-react";
+import { ArrowRight, FileImage, Globe2, MapPin, Search, Sparkles, Zap } from "lucide-react";
 import { LANGS, useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax } from "./primitives";
-import { XR_HERO_PHOTO } from "@/lib/photography";
 
-/* ── Animated counter hook ── */
-function useCountUp(target: number, duration = 1600, startDelay = 500) {
+function useCountUp(target: number, duration = 1400, delay = 450) {
   const [value, setValue] = useState(target);
-  const started = useRef(false);
-
   useEffect(() => {
-    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setValue(target);
-      return;
-    }
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     setValue(0);
     const timeout = setTimeout(() => {
-      started.current = true;
       const start = performance.now();
       const tick = (now: number) => {
-        const elapsed = now - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        setValue(Math.round(target * eased));
-        if (progress < 1) requestAnimationFrame(tick);
+        const p = Math.min((now - start) / duration, 1);
+        setValue(Math.round(target * (1 - Math.pow(1 - p, 3))));
+        if (p < 1) requestAnimationFrame(tick);
       };
       requestAnimationFrame(tick);
-    }, startDelay);
+    }, delay);
     return () => clearTimeout(timeout);
-  }, [target, duration, startDelay]);
-
+  }, [target, duration, delay]);
   return value;
 }
 
-/* ── Stat card with animated counter ── */
-function AnimatedStat({
-  value,
-  suffix,
-  label,
-  delay,
-}: {
-  value: number;
-  suffix?: string;
-  label: string;
-  delay: number;
-}) {
-  const count = useCountUp(value, 1600, delay);
-  return (
-    <div
-      className="bg-card/75 px-5 py-4 backdrop-blur-md transition-all duration-300 hover:bg-accent/40 hover:-translate-y-0.5 cursor-default"
-      style={{ animation: `ember-rise 0.75s cubic-bezier(0.16,1,0.3,1) ${delay}ms both` }}
-    >
-      <dt className="display-serif text-2xl text-primary sm:text-3xl font-bold tracking-tight">
-        {count}
-        {suffix ?? ""}
-      </dt>
-      <dd className="label-mono mt-1 text-xs text-muted-foreground">{label}</dd>
-    </div>
-  );
+function Stat({ value, suffix = "", label }: { value: number; suffix?: string; label: string }) {
+  const count = useCountUp(value);
+  return <div className="border-l border-border/70 pl-4 first:border-l-0 first:pl-0"><strong className="display-serif text-2xl sm:text-3xl">{count}{suffix}</strong><span className="mt-1 block label-mono text-[8px] tracking-[.12em] text-muted-foreground">{label}</span></div>;
 }
 
 export function Hero() {
   const { t } = useLang();
+  const mockupUrl = CONTACT.whatsapp + "?text=" + encodeURIComponent("Bonjour XRAGENCY, je souhaite ma maquette gratuite (valeur 200 €).");
 
   return (
-    <section id="top" className="grain relative min-h-[92dvh] overflow-hidden bg-black pt-16 sm:pt-20">
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <img
-          src={XR_HERO_PHOTO}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover scale-[1.04] motion-safe:animate-[pulse_12s_ease-in-out_infinite]"
-          aria-hidden="true"
-        />
-        <div className="absolute inset-0 bg-black/35 sm:bg-black/40 lg:bg-black/48" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_32%,rgba(242,163,58,.22),transparent_34%),linear-gradient(90deg,rgba(3,4,5,.82)_0%,rgba(3,4,5,.62)_42%,rgba(3,4,5,.28)_72%,rgba(3,4,5,.58)_100%)] lg:bg-[radial-gradient(circle_at_72%_32%,rgba(242,163,58,.18),transparent_34%),linear-gradient(90deg,rgba(3,4,5,.96)_0%,rgba(3,4,5,.82)_42%,rgba(3,4,5,.48)_72%,rgba(3,4,5,.72)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,4,5,.78)_0%,rgba(3,4,5,.18)_35%,rgba(3,4,5,.52)_78%,rgba(3,4,5,.96)_100%)]" />
+    <section id="top" className="relative overflow-hidden bg-background pt-20 sm:pt-24">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden>
+        <div className="absolute -right-40 -top-40 h-[620px] w-[620px] rounded-full border border-primary/20 bg-primary/[.06] shadow-[0_0_180px_hsl(var(--primary)/.12)]" />
+        <div className="absolute inset-x-0 top-0 h-[620px] bg-[radial-gradient(circle_at_75%_25%,hsl(var(--primary)/.15),transparent_30%),linear-gradient(180deg,hsl(var(--card)/.65),transparent)]" />
+        <div className="absolute inset-x-0 top-0 h-[600px] opacity-[.13] [background-image:linear-gradient(hsl(var(--foreground)/.08)_1px,transparent_1px),linear-gradient(90deg,hsl(var(--foreground)/.08)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       </div>
 
-      <div className="relative z-10 mx-auto flex min-h-[calc(92dvh-4.75rem)] max-w-7xl flex-col justify-between px-6 lg:px-10">
-        <div className="grid items-center gap-7 py-5 lg:grid-cols-12 lg:py-7">
-          <Parallax speed={-0.03} className="relative z-10 lg:col-span-7">
-            <div
-              className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/5 px-4 py-1.5"
-              style={{ animation: "ember-rise 0.75s cubic-bezier(0.16,1,0.3,1) 120ms both" }}
-            >
-              <Sparkles className="h-3.5 w-3.5 text-primary animate-pulse" />
-              <span className="label-mono text-xs text-primary font-medium">
-                {t(UI.heroKicker)}
-              </span>
-            </div>
+      <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+        <div className="grid min-h-[calc(100dvh-5rem)] items-center gap-12 py-12 lg:grid-cols-[1.02fr_.98fr] lg:gap-16 lg:py-16">
+          <Parallax speed={-0.025}>
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/35 bg-primary/[.06] px-3.5 py-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_14px_hsl(var(--primary))]" />
+                <span className="label-mono text-[9px] font-semibold tracking-[.2em] text-primary">{t(UI.heroKicker)}</span>
+              </div>
 
-            <h1
-              className="display-serif mt-5 text-[clamp(2.4rem,6vw,5.2rem)] leading-[0.96] tracking-tight"
-              style={{ animation: "kinetic-in 0.95s cubic-bezier(0.16,1,0.3,1) 160ms both" }}
-            >
-              {t(UI.heroTitle1)}
-              <br />
-              <em className="not-italic italic text-primary">{t(UI.heroTitleAccent)}</em>{" "}
-              {t(UI.heroTitle2)}
-            </h1>
+              <h1 className="display-serif mt-6 text-[clamp(3.25rem,8vw,7.5rem)] leading-[.82] tracking-[-.055em]">
+                {t(UI.heroTitle1)}
+                <br />
+                <em className="text-primary">{t(UI.heroTitleAccent)}</em>{" "}
+                {t(UI.heroTitle2)}
+              </h1>
 
-            <div
-              className="mt-6 max-w-xl"
-              style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 300ms both" }}
-            >
-              <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
+              <p className="mt-7 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
                 {t(UI.heroLead)}
               </p>
-              <p className="mt-2 text-xs leading-relaxed text-muted-foreground/80 font-mono">
-                {t(UI.heroMeta)}
-              </p>
-            </div>
 
-            <div
-              className="mt-8 flex flex-wrap items-center gap-3.5"
-              style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 400ms both" }}
-            >
-              <div className="grid w-full max-w-3xl grid-cols-1 gap-2 sm:grid-cols-3 [perspective:900px]">
-                <div className="group sm:-translate-y-1 sm:hover:-translate-y-2 transition-transform duration-500">
-                  <EmberButton href="#quote" className="relative w-full justify-center overflow-hidden rounded-2xl py-3.5 shadow-[0_18px_45px_-24px_rgba(0,0,0,.8)]">
-                    <span className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
-                    <span className="relative flex items-center gap-2">{t({ fr: "Faire mon devis gratuit", en: "Get my free quote", vi: "Nhận báo giá miễn phí", ar: "احصل على عرض سعر مجاني", ru: "Получить бесплатный расчёт" })} <ArrowUpRight className="h-3.5 w-3.5" /></span>
-                  </EmberButton>
-                </div>
-                <a href={CONTACT.whatsapp + "?text=" + encodeURIComponent("Bonjour XRAGENCY, je souhaite ma maquette gratuite (valeur 200 €). Je vais vous envoyer mon logo, les éléments que j'ai déjà et le lien de mon site si j'en ai un. Merci de me dire où les envoyer.")} target="_blank" rel="noreferrer" className="group relative overflow-hidden rounded-2xl border border-primary/25 bg-card/60 px-4 py-3 text-left backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-primary/60 hover:shadow-[0_18px_45px_-24px_rgba(0,0,0,.7)] sm:translate-y-2">
-                  <span className="absolute -right-5 -top-5 h-16 w-16 rounded-full bg-primary/15 blur-xl transition group-hover:scale-150" />
-                  <span className="relative flex items-center gap-2"><FileImage className="h-4 w-4 text-primary" /><span><b className="block text-[10px] uppercase tracking-[.12em]">{t({ fr: "Maquette gratuite", en: "Free mockup", vi: "Mockup miễn phí", ar: "نموذج مجاني", ru: "Бесплатный макет" })}</b><small className="mt-0.5 block text-[9px] text-muted-foreground">{t({ fr: "Valeur 200 € · sans engagement", en: "€200 value · no commitment", vi: "Giá trị 200 € · không ràng buộc", ar: "بقيمة 200 € · دون التزام", ru: "Ценность 200 € · без обязательств" })}</small></span></span>
-                </a>
-                <a href="#audit" className="group relative overflow-hidden rounded-2xl border border-primary/45 bg-primary/[.07] px-4 py-3 text-left backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-primary hover:bg-primary/[.11] hover:shadow-[0_18px_45px_-24px_rgba(0,0,0,.7)] sm:translate-y-1">
-                  <span className="absolute -left-5 -bottom-5 h-16 w-16 rounded-full bg-primary/10 blur-xl transition group-hover:scale-150" />
-                  <span className="relative flex items-center gap-2"><Search className="h-4 w-4 text-primary" /><span><b className="block text-[10px] uppercase tracking-[.12em]">{t({ fr: "Lancer mon analyse personnalisée", en: "Start my tailored analysis", vi: "Bắt đầu phân tích cá nhân hóa", ar: "ابدأ تحليلي المخصص", ru: "Запустить персональный анализ" })}</b><small className="mt-0.5 block text-[9px] text-muted-foreground">{t({ fr: "Instantanée · PDF + recommandations", en: "Instant · PDF + recommendations", vi: "Tức thì · PDF + đề xuất", ar: "فوري · PDF + توصيات", ru: "Мгновенно · PDF + рекомендации" })}</small></span></span>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <EmberButton href="#quote" className="justify-center rounded-full px-6 py-3.5">
+                  {t({ fr: "Construire mon projet", en: "Build my project", vi: "Xây dựng dự án", ar: "ابدأ مشروعي", ru: "Создать мой проект" })}
+                  <ArrowRight className="h-4 w-4" />
+                </EmberButton>
+                <a href="#audit" className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-card/70 px-6 py-3.5 label-mono text-[9px] font-semibold tracking-[.12em] backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-primary/50">
+                  <Search className="h-3.5 w-3.5 text-primary" />
+                  {t({ fr: "Analyser mon site", en: "Audit my website", vi: "Phân tích website", ar: "حلل موقعي", ru: "Аудит сайта" })}
                 </a>
               </div>
-              <span className="label-mono hidden text-xs text-muted-foreground/80 sm:inline">{t(UI.intelDuration)}</span>
-            </div>
 
-            <div
-              className="mt-4 flex items-center gap-2"
-              style={{ animation: "ember-rise 0.85s cubic-bezier(0.16,1,0.3,1) 500ms both" }}
-            >
-              <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-              <p className="label-mono text-[11px] text-muted-foreground/70">
-                {t(UI.ctaReassurance)}
-              </p>
+              <div className="mt-8 grid max-w-2xl grid-cols-3 gap-5 border-y border-border/70 py-5">
+                <Stat value={500} suffix="+" label={t(UI.statProjects)} />
+                <Stat value={8} label={t(UI.statYears)} />
+                <Stat value={90} suffix="%" label={t(UI.statSatisfaction)} />
+              </div>
+
+              <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-muted-foreground">
+                <span className="label-mono text-[8px] tracking-[.18em]">WEB · BRAND · SEO · LOCAL · SOCIAL</span>
+                <span className="h-px w-8 bg-border" />
+                <div className="flex gap-1.5">{LANGS.map(l => <span key={l.code} title={l.label} className="text-sm">{l.flag}</span>)}</div>
+              </div>
             </div>
           </Parallax>
 
-          <div className="relative mt-8 block lg:col-span-5 lg:mt-0" aria-hidden="true">
-            <Parallax speed={-0.045}>
-              <div className="relative mx-auto ml-auto w-full max-w-[420px] overflow-hidden lg:max-w-[520px] rounded-[2rem] border border-white/15 bg-black/20 shadow-[0_40px_120px_-40px_rgba(0,0,0,.9)] backdrop-blur-sm">
-                <div className="absolute -inset-10 bg-primary/10 blur-3xl" />
-                <div className="relative aspect-[16/10] overflow-hidden rounded-[1.7rem] sm:aspect-[4/3] lg:aspect-[4/5]">
-                  <img
-                    src={XR_HERO_PHOTO}
-                    alt=""
-                    className="absolute inset-0 h-full w-full object-cover scale-[1.08] motion-safe:animate-[pulse_12s_ease-in-out_infinite]"
-                  />
-                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,4,5,.08)_0%,rgba(3,4,5,.18)_35%,rgba(3,4,5,.88)_100%)]" />
-                  <div className="absolute left-5 top-5 rounded-full border border-white/20 bg-black/35 px-3 py-2 backdrop-blur-md">
-                    <span className="label-mono text-[8px] tracking-[.2em] text-white/75">XR / DIGITAL SYSTEM</span>
+          <Parallax speed={0.035}>
+            <div className="relative mx-auto w-full max-w-[650px]">
+              <div className="absolute -inset-8 rounded-[3rem] bg-primary/[.08] blur-3xl" />
+              <div className="relative overflow-hidden rounded-[2.2rem] border border-border bg-card/80 p-2 shadow-[0_45px_120px_-45px_rgba(0,0,0,.45)] backdrop-blur-xl">
+                <div className="rounded-[1.8rem] border border-white/10 bg-[#0b0e12] p-3">
+                  <div className="flex items-center gap-2 border-b border-white/10 pb-3">
+                    <span className="h-2 w-2 rounded-full bg-white/20" /><span className="h-2 w-2 rounded-full bg-white/20" /><span className="h-2 w-2 rounded-full bg-white/20" />
+                    <span className="ml-2 h-2 w-28 rounded-full bg-white/10" />
+                    <span className="ml-auto label-mono text-[7px] text-white/30">xragencyai.com</span>
                   </div>
-                  <div className="absolute right-5 top-16 h-24 w-24 rounded-full border border-white/20 animate-float" />
-                  <div className="absolute right-10 top-28 h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_28px_rgba(242,163,58,.9)]" />
-                  <div className="absolute inset-x-0 bottom-0 p-6">
-                    <span className="label-mono text-[9px] tracking-[.24em] text-white/55">XR AGENCY · DIGITAL CRAFT</span>
-                    <div className="mt-2 flex items-end justify-between gap-4">
-                      <span className="display-serif text-2xl text-white">Design, produit &amp; visibilité</span>
-                      <span className="label-mono text-[9px] text-primary">01</span>
+                  <div className="grid min-h-[420px] gap-3 p-3 sm:grid-cols-[1.12fr_.88fr]">
+                    <div className="relative overflow-hidden rounded-2xl bg-[#f5f2eb] p-6 text-black sm:p-8">
+                      <span className="label-mono text-[8px] font-semibold tracking-[.25em] text-[#a2763d]">XR / DIGITAL STUDIO</span>
+                      <h2 className="mt-6 font-serif text-5xl leading-[.86] tracking-[-.05em] sm:text-6xl">L’Art<br/><em className="text-[#a2763d]">du Digital.</em></h2>
+                      <p className="mt-5 max-w-[220px] text-xs leading-5 text-black/50">Web · identité · visibilité · conversion</p>
+                      <div className="absolute bottom-7 left-7 right-7 flex items-center justify-between border-t border-black/10 pt-4">
+                        <span className="text-[8px] font-semibold tracking-[.18em]">XRAGENCY</span>
+                        <ArrowRight className="h-3 w-3" />
+                      </div>
+                    </div>
+                    <div className="grid gap-3 sm:grid-rows-2">
+                      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/30 via-primary/10 to-background p-5">
+                        <Globe2 className="h-5 w-5 text-primary" />
+                        <div className="absolute bottom-5 left-5"><span className="label-mono text-[7px] text-muted-foreground">01</span><p className="mt-1 text-sm font-semibold">Web sur mesure</p></div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="relative rounded-2xl border border-border bg-background p-4"><Search className="h-4 w-4 text-primary" /><span className="absolute bottom-4 left-4 label-mono text-[7px] text-muted-foreground">SEO</span></div>
+                        <div className="relative rounded-2xl border border-border bg-background p-4"><MapPin className="h-4 w-4 text-primary" /><span className="absolute bottom-4 left-4 label-mono text-[7px] text-muted-foreground">LOCAL</span></div>
+                      </div>
                     </div>
                   </div>
                 </div>
+                <div className="flex items-center justify-between px-4 py-3">
+                  <span className="label-mono text-[8px] tracking-[.18em] text-muted-foreground">DIGITAL SYSTEM · BUILT AROUND YOU</span>
+                  <span className="flex items-center gap-1.5 text-[8px] font-semibold text-primary"><Zap className="h-3 w-3" /> SUR MESURE</span>
+                </div>
               </div>
-            </Parallax>
-          </div>
-        </div>
 
-        <div>
-          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border/60 bg-border/60 sm:grid-cols-4 shadow-sm">
-            <AnimatedStat value={500} suffix="+" label={t(UI.statProjects)} delay={550} />
-            <AnimatedStat value={8} suffix="" label={t(UI.statYears)} delay={630} />
-            <AnimatedStat value={90} suffix="%" label={t(UI.statSatisfaction)} delay={710} />
-            <AnimatedStat value={5} suffix="" label={t(UI.statResponse)} delay={790} />
-          </dl>
-
-          <div className="mt-4 flex items-center justify-between gap-4 border-t border-border/60 pt-4"><span className="label-mono text-[9px] text-muted-foreground/60">{t({ fr: "Langues de service", en: "Service languages", vi: "Ngôn ngữ dịch vụ", ar: "لغات الخدمة", ru: "Языки обслуживания" })}</span><div className="flex items-center gap-1.5" aria-label="Français, anglais, vietnamien, arabe et russe">{LANGS.map((l) => <span key={l.code} title={l.label} className="flex h-7 w-7 items-center justify-center rounded-full border border-border/70 bg-card/70 text-sm shadow-sm">{l.flag}</span>)}</div></div>
-
-          <div className="mt-5 flex items-center justify-between gap-4 border-t border-border/60 py-4">
-            <span className="label-mono text-xs text-muted-foreground/70">{t({ fr: "XR Intelligence · Analyse digitale · Devis sur mesure", en: "XR Intelligence · Digital analysis · Tailored quote", vi: "XR Intelligence · Phân tích số · Báo giá riêng", ar: "XR Intelligence · تحليل رقمي · عرض مخصص", ru: "XR Intelligence · Цифровой анализ · Индивидуальный расчёт" })}</span>
-            <span className="label-mono text-xs text-primary">01 · Analyse</span>
-          </div>
+              <a href={mockupUrl} target="_blank" rel="noreferrer" className="absolute -bottom-5 -left-3 hidden items-center gap-3 rounded-2xl border border-primary/30 bg-background/90 px-4 py-3 shadow-xl backdrop-blur-xl sm:flex">
+                <FileImage className="h-4 w-4 text-primary" />
+                <span><b className="block text-[9px] uppercase tracking-[.12em]">Maquette gratuite</b><small className="text-[8px] text-muted-foreground">Valeur 200 € · sans engagement</small></span>
+              </a>
+              <div className="absolute -right-3 -top-5 hidden items-center gap-2 rounded-full border border-border bg-background/90 px-4 py-2 shadow-lg backdrop-blur-xl sm:flex">
+                <Sparkles className="h-3 w-3 text-primary" /><span className="label-mono text-[8px]">DESIGN · STRATÉGIE · PERFORMANCE</span>
+              </div>
+            </div>
+          </Parallax>
         </div>
       </div>
     </section>

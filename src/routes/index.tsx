@@ -3,7 +3,6 @@ import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
 import { ImmersiveJourney } from "@/components/site/ImmersiveJourney";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
-import { Intelligence } from "@/components/site/Intelligence";
 import { DigitalAudit } from "@/components/site/DigitalAudit";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
 import { HomeServices } from "@/components/site/HomeServices";
@@ -34,7 +33,6 @@ function Index() {
         <ImmersiveJourney />
         <QuoteConfiguratorCompact />
         <HomeServices />
-        <Intelligence />
         <DigitalAudit />
         <MapsSimulator />
         <Faq />
