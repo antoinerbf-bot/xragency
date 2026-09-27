@@ -5,7 +5,6 @@ import { LANGS, useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax } from "./primitives";
-import { XR_HERO_PHOTO } from "@/lib/photography";
 
 /* ── Animated counter hook ── */
 function useCountUp(target: number, duration = 1600, startDelay = 500) {
@@ -179,10 +178,6 @@ export function Hero() {
 
           <div className="mt-4 flex items-center justify-between gap-4 border-t border-border/60 pt-4"><span className="label-mono text-[9px] text-muted-foreground/60">{t({ fr: "Langues de service", en: "Service languages", vi: "Ngôn ngữ dịch vụ", ar: "لغات الخدمة", ru: "Языки обслуживания" })}</span><div className="flex items-center gap-1.5" aria-label="Français, anglais, vietnamien, arabe et russe">{LANGS.map((l) => <span key={l.code} title={l.label} className="flex h-7 w-7 items-center justify-center rounded-full border border-border/70 bg-card/70 text-sm shadow-sm">{l.flag}</span>)}</div></div>
 
-          <div className="mt-5 flex items-center justify-between gap-4 border-t border-border/60 py-4">
-            <span className="label-mono text-xs text-muted-foreground/70">{t({ fr: "XR Intelligence · Analyse digitale · Devis sur mesure", en: "XR Intelligence · Digital analysis · Tailored quote", vi: "XR Intelligence · Phân tích số · Báo giá riêng", ar: "XR Intelligence · تحليل رقمي · عرض مخصص", ru: "XR Intelligence · Цифровой анализ · Индивидуальный расчёт" })}</span>
-            <span className="label-mono text-xs text-primary">01 · Analyse</span>
-          </div>
         </div>
       </div>
     </section>
