@@ -15,6 +15,8 @@ export const XR_PHOTOS = {
 } as const;
 
 export const XR_HERO_PHOTO = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2400&q=92";
-export const XR_HERO_VIDEO = "https://videos.pexels.com/video-files/6561920/6561920-uhd_3840_2160_25fps.mp4";
-export const XR_HERO_POSTER = "https://images.pexels.com/videos/6561920/business-computer-coworker-office-6561920.jpeg?auto=compress&dpr=1&h=1200&w=2000";
+// Lightweight 1080p hero: deliberately chosen for reliable autoplay on mobile Safari/Chrome.
+export const XR_HERO_VIDEO = "https://videos.pexels.com/video-files/6563897/6563897-hd_1920_1080_25fps.mp4";
+// Stable photographic fallback remains visible until the video can actually play.
+export const XR_HERO_POSTER = XR_HERO_PHOTO;
 export const XR_JOURNEY_PHOTO = "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=2400&q=92";
