@@ -110,7 +110,7 @@ export function Hero() {
                     </div>
                   </div>
                   <div className="hidden rounded-[1.4rem] border border-border bg-card/80 p-5 backdrop-blur-xl sm:block dark:border-white/15 dark:bg-white/[.07]">
-                    <div className="flex items-center justify-between"><span className="label-mono text-[8px] text-white/45">CONVERSION</span><ArrowRight className="h-4 w-4 text-primary" /></div>
+                    <div className="flex items-center justify-between"><span className="label-mono text-[8px] text-muted-foreground dark:text-white/45">CONVERSION</span><ArrowRight className="h-4 w-4 text-primary" /></div>
                     <div className="mt-8 text-5xl font-semibold tracking-[-.05em] text-foreground dark:text-white">98%</div>
                     <p className="mt-2 text-xs leading-5 text-muted-foreground dark:text-white/45">satisfaction annoncée par XRAGENCY</p>
                   </div>
