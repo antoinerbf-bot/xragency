@@ -37,19 +37,28 @@ function Stat({ value, suffix = "", label }: { value: number; suffix?: string; l
 
 export function Hero() {
   const { t } = useLang();
+  const [videoReady, setVideoReady] = useState(false);
   const mockupUrl = CONTACT.whatsapp + "?text=" + encodeURIComponent("Bonjour XRAGENCY, je souhaite ma maquette gratuite (valeur 200 €).");
 
   return (
-    <section id="top" className="relative isolate min-h-[100svh] overflow-hidden bg-[#08090b] text-white">
-      <div className="absolute inset-0 -z-10" aria-hidden="true">
+    <section id="top" className="relative isolate min-h-[100svh] overflow-hidden bg-[#08090b] text-white [color-scheme:dark]">
+      <div className="absolute inset-0 -z-10 bg-[#08090b]" aria-hidden="true">
+        <img
+          src={XR_HERO_POSTER}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover object-[58%_center] scale-[1.04] saturate-[.8]"
+        />
         <video
-          className="h-full w-full object-cover object-center opacity-70 saturate-[.82]"
+          className={`absolute inset-0 h-full w-full object-cover object-[58%_center] scale-[1.04] saturate-[.82] transition-opacity duration-700 ${videoReady ? "opacity-100" : "opacity-0"}`}
           autoPlay
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="auto"
           poster={XR_HERO_POSTER}
+          onCanPlay={() => setVideoReady(true)}
+          onError={() => setVideoReady(false)}
           aria-hidden="true"
         >
           <source src={XR_HERO_VIDEO} type="video/mp4" />
