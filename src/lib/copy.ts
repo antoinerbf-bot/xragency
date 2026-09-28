@@ -46,6 +46,7 @@ export const UI: Record<string, L> = {
     ru: "Франция · Дубай · Азия · Международный",
   },
   ctaAnalysis: { fr: "Lancer mon analyse", en: "Start my analysis", vi: "Bắt đầu phân tích", ar: "ابدأ تحليلي", ru: "Запустить анализ" },
+  freeAuditCta: { fr: "Demander mon audit gratuit", en: "Request my free audit", vi: "Yêu cầu audit miễn phí", ar: "اطلب التدقيق المجاني", ru: "Запросить бесплатный аудит" },
   ctaContinue: { fr: "Continuer", en: "Continue", vi: "Tiếp tục", ar: "متابعة", ru: "Продолжить" },
   heroCtaProject: { fr: "Construire mon projet", en: "Build my project", vi: "Xây dựng dự án", ar: "ابدأ مشروعي", ru: "Создать мой проект" },
   heroCtaMockup: { fr: "Maquette gratuite · 200 €", en: "Free mockup · €200 value", vi: "Thiết kế mẫu miễn phí · trị giá 200 €", ar: "نموذج مجاني · بقيمة 200 يورو", ru: "Бесплатный макет · стоимостью 200 €" },

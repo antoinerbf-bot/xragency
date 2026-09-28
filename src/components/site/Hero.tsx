@@ -77,7 +77,7 @@ export function Hero() {
               </EmberButton>
 
               <a href="#audit" className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[.08] px-6 py-4 label-mono text-[9px] font-semibold tracking-[.12em] text-white backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-primary/60 hover:bg-white/[.12]">
-                <Search className="h-3.5 w-3.5 text-primary" /> {t(UI.ctaAnalysis)}
+                <Search className="h-3.5 w-3.5 text-primary" /> {t(UI.freeAuditCta)}
               </a>
 
               <a href={mockupUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full border border-primary/45 bg-primary/[.10] px-6 py-4 label-mono text-[9px] font-semibold tracking-[.12em] text-primary backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-primary hover:bg-primary/[.16]">
