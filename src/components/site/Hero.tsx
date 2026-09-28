@@ -4,7 +4,7 @@ import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax } from "./primitives";
-import { XR_HERO_PHOTO, XR_HERO_VIDEO } from "@/lib/photography";
+import { XR_HERO_VIDEO } from "@/lib/photography";
 
 function useCountUp(target: number, duration = 1400, delay = 450) {
   const [value, setValue] = useState(target);
@@ -54,7 +54,6 @@ export function Hero() {
           loop
           playsInline
           preload="metadata"
-          poster={XR_HERO_PHOTO}
         >
           <source src={XR_HERO_VIDEO} type="video/mp4" />
         </video>
