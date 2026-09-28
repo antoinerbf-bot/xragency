@@ -4,7 +4,7 @@ import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax } from "./primitives";
-import { XR_HERO_POSTER, XR_HERO_VIDEO } from "@/lib/photography";
+import { XR_HERO_POSTER } from "@/lib/photography";
 
 function useCountUp(target: number, duration = 1400, delay = 450) {
   const [value, setValue] = useState(target);
@@ -30,14 +30,13 @@ function Stat({ value, suffix = "", label }: { value: number; suffix?: string; l
   return (
     <div className="border-l border-white/20 pl-4 first:border-l-0 first:pl-0">
       <strong className="display-serif text-2xl text-white sm:text-3xl">{count}{suffix}</strong>
-      <span className="mt-1 block label-mono text-[8px] tracking-[.12em] text-white/55">{label}</span>
+      <span className="mt-1 block label-mono text-[8px] tracking-[.12em] text-white/70">{label}</span>
     </div>
   );
 }
 
 export function Hero() {
   const { t } = useLang();
-  const [videoReady, setVideoReady] = useState(false);
   const mockupUrl = CONTACT.whatsapp + "?text=" + encodeURIComponent("Bonjour XRAGENCY, je souhaite ma maquette gratuite (valeur 200 €).");
 
   return (
@@ -47,23 +46,9 @@ export function Hero() {
           src={XR_HERO_POSTER}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover object-[58%_center] scale-[1.04] saturate-[.8]"
+          className="absolute inset-0 h-full w-full object-cover object-[62%_center] scale-[1.03] saturate-[.72] contrast-[.96]"
         />
-        <video
-          className={`absolute inset-0 h-full w-full object-cover object-[58%_center] scale-[1.04] saturate-[.82] transition-opacity duration-700 ${videoReady ? "opacity-100" : "opacity-0"}`}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster={XR_HERO_POSTER}
-          onCanPlay={() => setVideoReady(true)}
-          onError={() => setVideoReady(false)}
-          aria-hidden="true"
-        >
-          <source src={XR_HERO_VIDEO} type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-[#08090b]/45" />
+        <div className="absolute inset-0 bg-[#08090b]/58" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_35%,rgba(214,164,93,.28),transparent_34%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,9,11,.94)_0%,rgba(8,9,11,.76)_38%,rgba(8,9,11,.34)_72%,rgba(8,9,11,.18)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,9,11,.60)_0%,transparent_28%,transparent_68%,rgba(8,9,11,.88)_100%)]" />
@@ -77,14 +62,14 @@ export function Hero() {
               <span className="label-mono text-[9px] font-semibold tracking-[.2em] text-primary">{t(UI.heroKicker)}</span>
             </div>
 
-            <h1 className="display-serif mt-7 max-w-4xl text-[clamp(3.35rem,8vw,8.2rem)] leading-[.82] tracking-[-.06em] text-white">
+            <h1 className="display-serif mt-7 max-w-4xl text-[clamp(3.35rem,8vw,8.2rem)] leading-[.82] tracking-[-.06em] text-white drop-shadow-[0_3px_18px_rgba(0,0,0,.45)]">
               {t(UI.heroTitle1)}
               <br />
               <em className="not-italic text-primary">{t(UI.heroTitleAccent)}</em>{" "}
               {t(UI.heroTitle2)}
             </h1>
 
-            <p className="mt-7 max-w-2xl text-base leading-7 text-white/72 sm:text-lg sm:leading-8">{t(UI.heroLead)}</p>
+            <p className="mt-7 max-w-2xl text-base leading-7 text-white/90 sm:text-lg sm:leading-8">{t(UI.heroLead)}</p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <EmberButton href="#quote" className="justify-center rounded-full px-7 py-4 shadow-[0_15px_50px_rgba(214,164,93,.22)]">
@@ -100,7 +85,7 @@ export function Hero() {
               </a>
             </div>
 
-            <p className="mt-7 max-w-2xl text-[11px] leading-5 text-white/58 sm:text-xs">{t(UI.heroProofLine)}</p>
+            <p className="mt-7 max-w-2xl text-[11px] leading-5 text-white/75 sm:text-xs">{t(UI.heroProofLine)}</p>
 
             <div className="mt-8 grid max-w-2xl grid-cols-3 gap-5 border-y border-white/15 py-5">
               <Stat value={500} suffix="+" label={t(UI.statProjects)} />
