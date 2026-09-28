@@ -14,9 +14,6 @@ export const XR_PHOTOS = {
   ai: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=2200&q=90",
 } as const;
 
-export const XR_HERO_PHOTO = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2400&q=92";
-// Lightweight 1080p hero: deliberately chosen for reliable autoplay on mobile Safari/Chrome.
-export const XR_HERO_VIDEO = "https://videos.pexels.com/video-files/6563897/6563897-hd_1920_1080_25fps.mp4";
-// Stable photographic fallback remains visible until the video can actually play.
-export const XR_HERO_POSTER = XR_HERO_PHOTO;
+export const XR_HERO_PHOTO = "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=2400&q=92";
+// Hero is intentionally static: one controlled editorial image avoids incoherent video transitions on mobile.\nexport const XR_HERO_VIDEO = "";\nexport const XR_HERO_POSTER = XR_HERO_PHOTO;
 export const XR_JOURNEY_PHOTO = "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=2400&q=92";
