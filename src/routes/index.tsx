@@ -31,9 +31,9 @@ function Index() {
       <main className="relative z-10">
         <Hero />
         <ImmersiveJourney />
+        <DigitalAudit />
         <QuoteConfiguratorCompact />
         <HomeServices />
-        <DigitalAudit />
         <MapsSimulator />
         <Faq />
         <Contact />
