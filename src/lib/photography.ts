@@ -22,4 +22,5 @@ export const XR_PHOTOS = {
 } as const;
 
 export const XR_HERO_PHOTO = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2400&q=92";
+export const XR_HERO_VIDEO = "https://videos.pexels.com/video-files/34645269/14683985_3840_2160_30fps.mp4";
 export const XR_JOURNEY_PHOTO = "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=2400&q=92";

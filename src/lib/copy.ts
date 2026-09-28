@@ -45,8 +45,12 @@ export const UI: Record<string, L> = {
     ar: "فرنسا · دبي · آسيا · دولي",
     ru: "Франция · Дубай · Азия · Международный",
   },
-  ctaAnalysis: { fr: "Lancer mon analyse", en: "Start my analysis", vi: "Bắt đầu phân tích" },
-  ctaContinue: { fr: "Continuer", en: "Continue", vi: "Tiếp tục" },
+  ctaAnalysis: { fr: "Lancer mon analyse", en: "Start my analysis", vi: "Bắt đầu phân tích", ar: "ابدأ تحليلي", ru: "Запустить анализ" },
+  ctaContinue: { fr: "Continuer", en: "Continue", vi: "Tiếp tục", ar: "متابعة", ru: "Продолжить" },
+  heroCtaProject: { fr: "Construire mon projet", en: "Build my project", vi: "Xây dựng dự án", ar: "ابدأ مشروعي", ru: "Создать мой проект" },
+  heroCtaMockup: { fr: "Maquette gratuite · 200 €", en: "Free mockup · €200 value", vi: "Thiết kế mẫu miễn phí · trị giá 200 €", ar: "نموذج مجاني · بقيمة 200 يورو", ru: "Бесплатный макет · стоимостью 200 €" },
+  heroServicesLine: { fr: "Web · Branding · SEO · Google Maps · Social · IA", en: "Web · Branding · SEO · Google Maps · Social · AI", vi: "Web · Thương hiệu · SEO · Google Maps · Social · AI", ar: "الويب · الهوية · SEO · Google Maps · التواصل · الذكاء الاصطناعي", ru: "Web · Брендинг · SEO · Google Maps · Social · AI" },
+  heroProofLine: { fr: "Une direction digitale premium, pensée pour transformer l’attention en demande.", en: "A premium digital direction designed to turn attention into demand.", vi: "Định hướng kỹ thuật số cao cấp được thiết kế để biến sự chú ý thành nhu cầu.", ar: "توجيه رقمي فاخر مصمم لتحويل الانتباه إلى طلب.", ru: "Премиальное цифровое направление, созданное для превращения внимания в спрос." },
 
   trustBarLabel: {
     fr: "XR Agency · projets & expertise",

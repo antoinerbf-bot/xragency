@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
-type Theme = 'light' | 'dark';
+type Theme = "light" | "dark";
 
 type ThemeContextType = {
   theme: Theme;
@@ -11,21 +11,19 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window === "undefined") return "light";
+    const stored = window.localStorage.getItem("xr-theme");
+    return stored === "dark" ? "dark" : "light";
+  });
 
-
-  // Always open the client-facing site in light mode.
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-    window.localStorage.setItem('xr-theme', theme);
+    root.classList.toggle("dark", theme === "dark");
+    window.localStorage.setItem("xr-theme", theme);
   }, [theme]);
 
-  const toggleTheme = () => setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+  const toggleTheme = () => setTheme(prev => (prev === "light" ? "dark" : "light"));
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
@@ -36,6 +34,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
 export function useTheme() {
   const ctx = useContext(ThemeContext);
-  if (!ctx) throw new Error('useTheme must be used within ThemeProvider');
+  if (!ctx) throw new Error("useTheme must be used within ThemeProvider");
   return ctx;
 }
