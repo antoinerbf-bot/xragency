@@ -30,10 +30,10 @@ function Index() {
       <Nav />
       <main className="relative z-10">
         <Hero />
-        <DigitalAudit />
         <ImmersiveJourney />
         <QuoteConfiguratorCompact />
         <HomeServices />
+        <DigitalAudit />
         <MapsSimulator />
         <Faq />
         <Contact />
