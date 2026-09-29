@@ -6,7 +6,7 @@ import { Parallax, Reveal } from "./primitives";
 import { ServiceIllustration } from "./ServiceIllustration";
 import { XR_JOURNEY_PHOTO } from "@/lib/photography";
 
-const FEATURED_IDS = ["websites", "branding", "seo", "maps", "social", "maintenance", "ecommerce"];
+const FEATURED_IDS = ["websites", "branding", "seo", "maps", "social", "maintenance"];
 const DISPLAY_NUM: Record<string, string> = {
   websites: "01",
   branding: "02",
@@ -14,7 +14,6 @@ const DISPLAY_NUM: Record<string, string> = {
   maps: "04",
   social: "05",
   maintenance: "06",
-  ecommerce: "07",
 };
 const DISPLAY_PRICE: Record<string, number | null> = {
   websites: 499,
@@ -23,20 +22,19 @@ const DISPLAY_PRICE: Record<string, number | null> = {
   maps: 990,
   social: 299,
   maintenance: 29,
-  ecommerce: 1490,
 };
 
 
 export function HomeServices() {
   const { t, price, lang } = useLang();
   const copy = {
-    fr: { expertise: "07 EXPERTISES", title: "Des solutions sur mesure", titleAccent: "pour chaque ambition.", lead: "Six offres pensées comme un seul écosystème : stratégie, création, visibilité et performance. Faites défiler pour voir chaque univers.", discover: "Découvrir", from: "À partir de", scroll: "PARALLAX / SCROLL", kicker: "UNE AGENCE · UNE VISION", partner: "Plus qu’un prestataire,", partnerAccent: "un partenaire de croissance.", paragraph: "Une direction créative forte, une technologie solide et des expériences digitales conçues pour durer." },
-    en: { expertise: "06 DISCIPLINES", title: "Bespoke digital solutions", titleAccent: "for every ambition.", lead: "Seven offers designed as one ecosystem: strategy, creation, visibility and performance. Scroll to explore each discipline.", discover: "Discover", from: "From", scroll: "PARALLAX / SCROLL", kicker: "ONE AGENCY · ONE VISION", partner: "More than a provider,", partnerAccent: "a growth partner.", paragraph: "Strong creative direction, solid technology and digital experiences built to last." },
+    fr: { expertise: "06 EXPERTISES", title: "Des solutions sur mesure", titleAccent: "pour chaque ambition.", lead: "Six offres pensées comme un seul écosystème : stratégie, création, visibilité et performance. Faites défiler pour voir chaque univers.", discover: "Découvrir", from: "À partir de", scroll: "PARALLAX / SCROLL", kicker: "UNE AGENCE · UNE VISION", partner: "Plus qu’un prestataire,", partnerAccent: "un partenaire de croissance.", paragraph: "Une direction créative forte, une technologie solide et des expériences digitales conçues pour durer." },
+    en: { expertise: "06 DISCIPLINES", title: "Bespoke digital solutions", titleAccent: "for every ambition.", lead: "Six offers designed as one ecosystem: strategy, creation, visibility and performance. Scroll to explore each discipline.", discover: "Discover", from: "From", scroll: "PARALLAX / SCROLL", kicker: "ONE AGENCY · ONE VISION", partner: "More than a provider,", partnerAccent: "a growth partner.", paragraph: "Strong creative direction, solid technology and digital experiences built to last." },
     vi: { expertise: "06 CHUYÊN MÔN", title: "Giải pháp số theo yêu cầu", titleAccent: "cho mọi tham vọng.", lead: "Sáu dịch vụ trong một hệ sinh thái: chiến lược, sáng tạo, hiển thị và hiệu suất. Cuộn để khám phá từng chuyên môn.", discover: "Khám phá", from: "Từ", scroll: "PARALLAX / SCROLL", kicker: "MỘT AGENCY · MỘT TẦM NHÌN", partner: "Hơn cả một nhà cung cấp,", partnerAccent: "một đối tác tăng trưởng.", paragraph: "Định hướng sáng tạo mạnh, công nghệ vững và trải nghiệm số được xây dựng để bền lâu." },
     ar: { expertise: "06 تخصصات", title: "حلول رقمية مصممة", titleAccent: "لكل طموح.", lead: "ستة عروض ضمن منظومة واحدة: استراتيجية، إبداع، ظهور وأداء. استكشف كل تخصص.", discover: "اكتشف", from: "ابتداءً من", scroll: "PARALLAX / SCROLL", kicker: "وكالة واحدة · رؤية واحدة", partner: "أكثر من مزود خدمة،", partnerAccent: "شريك للنمو.", paragraph: "توجيه إبداعي قوي، تقنية متينة وتجارب رقمية مصممة لتدوم." },
     ru: { expertise: "06 НАПРАВЛЕНИЙ", title: "Цифровые решения", titleAccent: "под каждую задачу.", lead: "Шесть предложений в одной системе: стратегия, креатив, видимость и результат. Изучите каждое направление.", discover: "Открыть", from: "От", scroll: "PARALLAX / SCROLL", kicker: "ОДНО АГЕНТСТВО · ОДНО ВИДЕНИЕ", partner: "Больше, чем подрядчик,", partnerAccent: "партнёр для роста.", paragraph: "Сильное креативное направление, надёжная технология и цифровые продукты, созданные надолго." },
   }[lang] ?? {
-    expertise: "06 DISCIPLINES", title: "Bespoke digital solutions", titleAccent: "for every ambition.", lead: "Seven offers designed as one ecosystem.", discover: "Discover", from: "From", scroll: "PARALLAX / SCROLL", kicker: "ONE AGENCY · ONE VISION", partner: "More than a provider,", partnerAccent: "a growth partner.", paragraph: "Strong creative direction, solid technology and digital experiences built to last.",
+    expertise: "06 DISCIPLINES", title: "Bespoke digital solutions", titleAccent: "for every ambition.", lead: "Six offers designed as one ecosystem.", discover: "Discover", from: "From", scroll: "PARALLAX / SCROLL", kicker: "ONE AGENCY · ONE VISION", partner: "More than a provider,", partnerAccent: "a growth partner.", paragraph: "Strong creative direction, solid technology and digital experiences built to last.",
   };
   const featured = FEATURED_IDS.map((id) =>
     SERVICES.find((service) => service.id === id),
