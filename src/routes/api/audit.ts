@@ -45,7 +45,7 @@ export const Route = createFileRoute("/api/audit")({
             const h = hostname.toLowerCase().replace(/\.$/, "");
             if (h === "localhost" || h === "localhost.localdomain" || h.endsWith(".localhost") || h === "metadata.google.internal") return true;
             if (h === "0.0.0.0" || h === "::" || h === "[::1]" || h === "127.0.0.1" || h === "::1") return true;
-            if (/^127(?:\\.\\d{1,3}){3}$/.test(h) || /^10(?:\\.\\d{1,3}){3}$/.test(h) || /^192\\.168(?:\\.\\d{1,3}){2}$/.test(h) || /^169\\.254(?:\\.\\d{1,3}){2}$/.test(h) || /^172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2}$/.test(h)) return true;
+            if (/^127(?:\.\d{1,3}){3}$/.test(h) || /^10(?:\.\d{1,3}){3}$/.test(h) || /^192\.168(?:\.\d{1,3}){2}$/.test(h) || /^169\.254(?:\.\d{1,3}){2}$/.test(h) || /^172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2}$/.test(h)) return true;
             return false;
           };
           if (isBlockedHostname(target.hostname)) return Response.json({ error: "URL non autorisée." }, { status: 400 });
