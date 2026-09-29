@@ -15,5 +15,5 @@ export const XR_PHOTOS = {
 } as const;
 
 export const XR_HERO_PHOTO = "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=2400&q=92";
-// Hero is intentionally static: one controlled editorial image avoids incoherent video transitions on mobile.\nexport const XR_HERO_VIDEO = "";\nexport const XR_HERO_POSTER = XR_HERO_PHOTO;
+export const XR_HERO_POSTER = XR_HERO_PHOTO;
 export const XR_JOURNEY_PHOTO = "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=2400&q=92";
