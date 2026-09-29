@@ -41,7 +41,27 @@ export const Route = createFileRoute("/api/audit")({
           const raw = body.url.trim().startsWith("http") ? body.url.trim() : "https://" + body.url.trim();
           const target = new URL(raw);
           if (!["http:", "https:"].includes(target.protocol)) return Response.json({ error: "URL invalide." }, { status: 400 });
-          const response = await fetch(target.toString(), { redirect: "follow", signal: AbortSignal.timeout(12000), headers: { "user-agent": "XRAGENCY-Audit/1.0" } });
+          const isBlockedHostname = (hostname: string) => {
+            const h = hostname.toLowerCase().replace(/\.$/, "");
+            if (h === "localhost" || h === "localhost.localdomain" || h.endsWith(".localhost") || h === "metadata.google.internal") return true;
+            if (h === "0.0.0.0" || h === "::" || h === "[::1]" || h === "127.0.0.1" || h === "::1") return true;
+            if (/^127(?:\\.\\d{1,3}){3}$/.test(h) || /^10(?:\\.\\d{1,3}){3}$/.test(h) || /^192\\.168(?:\\.\\d{1,3}){2}$/.test(h) || /^169\\.254(?:\\.\\d{1,3}){2}$/.test(h) || /^172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2}$/.test(h)) return true;
+            return false;
+          };
+          if (isBlockedHostname(target.hostname)) return Response.json({ error: "URL non autorisée." }, { status: 400 });
+
+          let currentUrl = target;
+          let response: Response;
+          for (let redirects = 0; redirects <= 3; redirects++) {
+            if (isBlockedHostname(currentUrl.hostname)) return Response.json({ error: "Redirection vers une URL non autorisée." }, { status: 400 });
+            response = await fetch(currentUrl.toString(), { redirect: "manual", signal: AbortSignal.timeout(12000), headers: { "user-agent": "XRAGENCY-Audit/1.0" } });
+            if (![301, 302, 303, 307, 308].includes(response.status)) break;
+            const location = response.headers.get("location");
+            if (!location) break;
+            currentUrl = new URL(location, currentUrl);
+            if (!["http:", "https:"].includes(currentUrl.protocol)) return Response.json({ error: "Redirection vers un protocole non autorisé." }, { status: 400 });
+            if (redirects === 3) return Response.json({ error: "Trop de redirections." }, { status: 400 });
+          }
           const html = await response.text();
           const title = text(html, /<title[^>]*>([^<]+)<\/title>/i);
           const description = text(html, /<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i);
