@@ -1,5 +1,12 @@
 /**
  * Editorial photography direction for XR Agency.
+ *
+ * One photographic language across the whole site:
+ * architecture, craft, strategy, analytics, local visibility,
+ * social content, infrastructure, commerce and AI.
+ *
+ * These are intentionally photographic references rather than
+ * abstract illustrations or character/avatar artwork.
  */
 export const XR_PHOTOS = {
   websites: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=2200&q=90",
@@ -14,6 +21,5 @@ export const XR_PHOTOS = {
   ai: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=2200&q=90",
 } as const;
 
-export const XR_HERO_PHOTO = "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=2400&q=92";
-export const XR_HERO_POSTER = XR_HERO_PHOTO;
+export const XR_HERO_PHOTO = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2400&q=92";
 export const XR_JOURNEY_PHOTO = "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=2400&q=92";
