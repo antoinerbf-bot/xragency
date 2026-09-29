@@ -105,10 +105,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
   return (
     <html lang="fr">
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem("xr-theme");if(t==="dark")document.documentElement.classList.add("dark");else if(t==="light")document.documentElement.classList.remove("dark");}catch(e){}})()` }} />
-        <HeadContent />
-      </head>
+      <head><HeadContent /></head>
       <body>{children}<Scripts /></body>
     </html>
   );
