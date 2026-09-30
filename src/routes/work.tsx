@@ -52,7 +52,17 @@ export function WorkPage() {
   const [query,setQuery]=useState("");
   const [sector,setSector]=useState("all");
   const [service,setService]=useState("all");
-  const [active,setActive]=useState<(typeof PORTFOLIO_REFERENCES)[number] | null>(null);\n  const featured = useMemo(() => FEATURED_NAMES.map(name => PORTFOLIO_REFERENCES.find(item => item.name === name)).filter(Boolean) as (typeof PORTFOLIO_REFERENCES[number])[], []);\n  const [reelIndex,setReelIndex]=useState(0);\n\n  useEffect(() => {\n    if (!featured.length) return;\n    const timer = window.setInterval(() => setReelIndex(i => (i + 1) % featured.length), 4200);\n    return () => window.clearInterval(timer);\n  }, [featured.length]);\n\n  const reelItem = featured[reelIndex] ?? featured[0];
+  const [active,setActive]=useState<(typeof PORTFOLIO_REFERENCES)[number] | null>(null);
+  const featured = useMemo(() => FEATURED_NAMES.map(name => PORTFOLIO_REFERENCES.find(item => item.name === name)).filter(Boolean) as (typeof PORTFOLIO_REFERENCES[number])[], []);
+  const [reelIndex,setReelIndex]=useState(0);
+
+  useEffect(() => {
+    if (!featured.length) return;
+    const timer = window.setInterval(() => setReelIndex(i => (i + 1) % featured.length), 4200);
+    return () => window.clearInterval(timer);
+  }, [featured.length]);
+
+  const reelItem = featured[reelIndex] ?? featured[0];
 
   const serviceOptions=[{id:"all",label:tx.all},...SERVICES.filter(x=>x.id!=="ecommerce").map(x=>({id:x.id,label:x.title[lang] ?? x.title.en ?? x.title.fr}))];
   const filtered=useMemo(()=>PORTFOLIO_REFERENCES.filter(item=>{
