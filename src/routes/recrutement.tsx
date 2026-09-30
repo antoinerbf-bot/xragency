@@ -54,15 +54,17 @@ function RecruitmentPage(){
             <p className="mt-8 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">{t(COPY.intro)}</p>
             <a href={mailto} className="mt-9 inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-4 label-mono text-[9px] font-semibold tracking-[.12em] text-background">{t(COPY.send)} <ArrowRight className="h-4 w-4"/></a>
           </div>
-          <div className="relative min-h-[440px] overflow-hidden rounded-[2.5rem] border border-border/70 bg-[#08090b]">
-            <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,.08),transparent_35%),radial-gradient(circle_at_65%_35%,rgba(255,255,255,.1),transparent_28%)]" />
-            <div className="absolute left-[12%] top-[15%] h-[70%] w-px bg-white/10" />
-            <div className="absolute left-[12%] top-[15%] h-px w-[45%] bg-white/10" />
-            <div className="absolute right-[10%] bottom-[14%] h-px w-[38%] bg-white/10" />
-            <div className="absolute right-[15%] top-[18%] h-52 w-52 rounded-full border border-white/10" />
-            <div className="absolute inset-x-8 bottom-8 rounded-[1.5rem] border border-white/10 bg-black/55 p-6 backdrop-blur-xl">
-              <span className="label-mono text-[8px] tracking-[.25em] text-white/35">XR AGENCY / TEAM</span>
-              <p className="display-serif mt-3 text-3xl text-white sm:text-4xl">Talents partout.<br/><span className="text-white/35">Une même exigence.</span></p>
+          <div className="group relative min-h-[520px] overflow-hidden rounded-[2.5rem] border border-border/70 bg-[#08090b]">
+            <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=2200&q=90" alt="" className="absolute inset-0 h-full w-full object-cover grayscale contrast-[1.05] brightness-[.58] transition duration-[1400ms] group-hover:scale-[1.04] group-hover:brightness-[.7]" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-black/25" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_20%,rgba(255,255,255,.18),transparent_25%)]" />
+            <div className="absolute left-[9%] top-[12%] h-[62%] w-px bg-white/15" />
+            <div className="absolute left-[9%] top-[12%] h-px w-[32%] bg-white/15" />
+            <div className="absolute right-[10%] top-[15%] h-40 w-40 rounded-full border border-white/15 transition duration-1000 group-hover:scale-125" />
+            <div className="absolute inset-x-7 bottom-7 rounded-[1.5rem] border border-white/12 bg-black/65 p-6 backdrop-blur-xl">
+              <span className="label-mono text-[8px] tracking-[.25em] text-white/35">XR AGENCY / TEAM / 2026</span>
+              <p className="display-serif mt-3 text-3xl text-white sm:text-4xl">Des talents partout.<br/><span className="text-white/35">Une même direction.</span></p>
+              <div className="mt-5 flex flex-wrap gap-2">{["DESIGN","GROWTH","SALES","TECH","AI"].map(x=><span key={x} className="rounded-full border border-white/12 bg-white/[.05] px-2.5 py-1.5 label-mono text-[7px] text-white/55">{x}</span>)}</div>
             </div>
           </div>
         </div>
