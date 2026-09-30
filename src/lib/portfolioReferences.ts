@@ -40,13 +40,13 @@ const RAW_PORTFOLIO_REFERENCES: PortfolioReference[] = [
   ref("Plum", "https://withplum.com/", "finance", "Vitrine"), ref("Yotta", "https://www.withyotta.com/", "finance", "Vitrine"), ref("Tide", "https://www.tide.co/", "finance", "Vitrine"),
   ref("Raycast", "https://www.raycast.com/", "tech", "SaaS"), ref("Spline", "https://spline.design/", "tech", "SaaS"), ref("LottieFiles", "https://lottiefiles.com/", "tech", "SaaS"),
   ref("The School of Life", "https://www.theschooloflife.com/", "education", "E-commerce"), ref("Minerva University", "https://www.minerva.edu/", "education", "Vitrine"), ref("Hyper Island", "https://hyperisland.com/", "education", "Vitrine"),
-  ref("Kettlebell Kings", "https://www.kettlebellkings.com/", "sport", "E-commerce"), ref("WOD Nation", "https://wodnationgear.com/", "sport", "E-commerce"), ref("The Athlete Lab", "https://www.theathletelab.com/", "sport", "Vitrine"),
+  ref("The Athlete Lab", "https://www.theathletelab.com/", "sport", "Vitrine"),
   ref("Jacada Travel", "https://www.jacadatravel.com/", "voyage", "Vitrine"), ref("Black Tomato", "https://www.blacktomato.com/", "voyage", "Vitrine"), ref("Original Travel", "https://www.originaltravel.co.uk/", "voyage", "Vitrine"),
   ref("Audo Copenhagen", "https://audocph.com/", "maison", "E-commerce"), ref("Ferm Living", "https://fermliving.com/", "maison", "E-commerce"), ref("Muuto", "https://www.muuto.com/", "maison", "E-commerce"),
   ref("Le Gramme", "https://legramme.com/", "joaillerie", "E-commerce"), ref("Viltier", "https://www.viltier.com/", "joaillerie", "E-commerce"), ref("Sophie Bille Brahe", "https://sophiebillebrahe.com/", "joaillerie", "E-commerce"),
   ref("Graza", "https://www.graza.co/", "food", "E-commerce"), ref("Fishwife", "https://fishwife.com/", "food", "E-commerce"), ref("Fly By Jing", "https://flybyjing.com/", "food", "E-commerce"),
   ref("TIA Wellness Resort", "https://tiawellnessresort.com/", "spa", "Vitrine"), ref("Alba Wellness Valley", "https://www.albawellnessvalley.com/", "spa", "Vitrine"), ref("La Spa Ma May", "https://laspamamay.com/", "spa", "Vitrine"),
-  ref("Ridgeway Construction", "https://www.ridgewayconstruction.co.uk/", "construction", "Vitrine"), ref("Mackenzie Construction", "https://mackenzieconstruction.co.uk/", "construction", "Vitrine"), ref("Barnes Construction", "https://www.barnesconstruction.co.uk/", "construction", "Vitrine"),
+  ref("Ridgeway Construction", "https://www.ridgewayconstruction.co.uk/", "construction", "Vitrine"), ref("Mackenzie Construction", "https://www.mackenzieconstruction.com/", "construction", "Vitrine"), ref("Barnes Construction", "https://www.barnesconstruction.co.uk/", "construction", "Vitrine"),
   
 ];
 
