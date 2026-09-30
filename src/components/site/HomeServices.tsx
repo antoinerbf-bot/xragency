@@ -11,11 +11,11 @@ const ICONS = { websites: Globe2, branding: Palette, seo: BarChart3, maps: MapPi
 const PRICES: Record<string, number> = { websites:499, branding:179, seo:299, maps:990, social:299, maintenance:29, robotics:499 };
 
 const COPY = {
-  fr: { eyebrow:"06 EXPERTISES · UN SEUL ÉCOSYSTÈME", title:"Vous n’achetez pas un service.", accent:"Vous construisez un système.", lead:"Explorez les briques XRAGENCY et composez une présence digitale cohérente : attirer, convaincre, convertir, fidéliser.", discover:"Voir l’expertise", from:"À partir de", hint:"Cliquez sur une expertise" },
-  en: { eyebrow:"06 DISCIPLINES · ONE ECOSYSTEM", title:"You don't buy a service.", accent:"You build a system.", lead:"Explore the XRAGENCY building blocks and compose a coherent digital presence: attract, convince, convert, retain.", discover:"Explore", from:"From", hint:"Choose a discipline" },
-  vi: { eyebrow:"06 CHUYÊN MÔN · MỘT HỆ SINH THÁI", title:"Bạn không mua một dịch vụ.", accent:"Bạn xây dựng một hệ thống.", lead:"Khám phá các mảnh ghép XRAGENCY để xây dựng hiện diện số nhất quán: thu hút, thuyết phục, chuyển đổi, giữ chân.", discover:"Khám phá", from:"Từ", hint:"Chọn một chuyên môn" },
-  ar: { eyebrow:"06 تخصصات · منظومة واحدة", title:"أنت لا تشتري خدمة.", accent:"بل تبني منظومة.", lead:"استكشف مكونات XRAGENCY وابنِ حضوراً رقمياً متكاملاً: جذب، إقناع، تحويل، واحتفاظ.", discover:"اكتشف", from:"ابتداءً من", hint:"اختر تخصصاً" },
-  ru: { eyebrow:"06 НАПРАВЛЕНИЙ · ОДНА СИСТЕМА", title:"Вы не покупаете услугу.", accent:"Вы строите систему.", lead:"Изучите блоки XRAGENCY и соберите цельное цифровое присутствие: привлечь, убедить, конвертировать, удержать.", discover:"Открыть", from:"От", hint:"Выберите направление" },
+  fr: { eyebrow:"07 EXPERTISES · UN SEUL ÉCOSYSTÈME", title:"Vous n’achetez pas un service.", accent:"Vous construisez un système.", lead:"Explorez les briques XRAGENCY et composez une présence digitale cohérente : attirer, convaincre, convertir, fidéliser.", discover:"Voir l’expertise", from:"À partir de", hint:"Cliquez sur une expertise" },
+  en: { eyebrow:"07 DISCIPLINES · ONE ECOSYSTEM", title:"You don't buy a service.", accent:"You build a system.", lead:"Explore the XRAGENCY building blocks and compose a coherent digital presence: attract, convince, convert, retain.", discover:"Explore", from:"From", hint:"Choose a discipline" },
+  vi: { eyebrow:"07 CHUYÊN MÔN · MỘT HỆ SINH THÁI", title:"Bạn không mua một dịch vụ.", accent:"Bạn xây dựng một hệ thống.", lead:"Khám phá các mảnh ghép XRAGENCY để xây dựng hiện diện số nhất quán: thu hút, thuyết phục, chuyển đổi, giữ chân.", discover:"Khám phá", from:"Từ", hint:"Chọn một chuyên môn" },
+  ar: { eyebrow:"07 تخصصات · منظومة واحدة", title:"أنت لا تشتري خدمة.", accent:"بل تبني منظومة.", lead:"استكشف مكونات XRAGENCY وابنِ حضوراً رقمياً متكاملاً: جذب، إقناع، تحويل، واحتفاظ.", discover:"اكتشف", from:"ابتداءً من", hint:"اختر تخصصاً" },
+  ru: { eyebrow:"07 НАПРАВЛЕНИЙ · ОДНА СИСТЕМА", title:"Вы не покупаете услугу.", accent:"Вы строите систему.", lead:"Изучите блоки XRAGENCY и соберите цельное цифровое присутствие: привлечь, убедить, конвертировать, удержать.", discover:"Открыть", from:"От", hint:"Выберите направление" },
 } as const;
 
 export function HomeServices() {
