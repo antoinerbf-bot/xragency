@@ -26,8 +26,8 @@ export function ServiceIllustration({ service, title }: Props) {
         <img src={src} alt="" className="h-full w-full object-cover scale-[1.08] transition duration-[1800ms] ease-out group-hover:scale-[1.16] group-hover:rotate-[0.35deg]" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/5" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-transparent to-black/25" />
-        <div className="absolute inset-0 opacity-60 mix-blend-screen bg-[radial-gradient(circle_at_72%_28%,rgba(255,255,255,.16),transparent_28%)] transition-opacity duration-700 group-hover:opacity-90" />
-        <div className="absolute -right-16 top-1/2 h-56 w-56 -translate-y-1/2 rounded-full border border-white/10 transition-transform duration-[1400ms] ease-out group-hover:scale-125 group-hover:translate-x-4" />
+        <div className="absolute inset-0 opacity-60 mix-blend-screen bg-[radial-gradient(circle_at_72%_28%,rgba(255,255,255,.13),transparent_28%)] transition-opacity duration-700 group-hover:opacity-90" />
+        <div className="absolute left-[12%] top-[12%] h-[70%] w-px bg-white/10" /><div className="absolute left-[12%] top-[12%] h-px w-[28%] bg-white/10" /><div className="absolute -right-16 top-1/2 h-56 w-56 -translate-y-1/2 rounded-full border border-white/10 transition-transform duration-[1400ms] ease-out group-hover:scale-125 group-hover:translate-x-4" />
         <div className="absolute -right-2 top-1/2 h-32 w-32 -translate-y-1/2 rounded-full border border-white/15 transition-transform duration-[1400ms] ease-out group-hover:scale-110" />
       </div>
       <div className="absolute left-5 top-5 right-5 flex items-center justify-between">
