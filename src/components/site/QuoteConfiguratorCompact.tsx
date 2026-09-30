@@ -24,7 +24,7 @@ const SECTORS: Sector[] = [
   { id: "other", label: "Autre activité", detail: "Votre activité ne figure pas ici ? XR Quote Studio s'adapte.", goals: ["Développer mon activité", "Professionnaliser mon image", "Construire une présence forte"] },
 ];
 const SERVICES: Choice[] = [
-  { id: "website", label: "Site web", detail: "Vitrine, Business, e-commerce ou réservation" }, { id: "branding", label: "Branding", detail: "Logo, identité, direction artistique et univers" }, { id: "seo", label: "SEO", detail: "Positionnement organique et acquisition Google" }, { id: "maps", label: "Google Maps", detail: "Fiche locale, visibilité et optimisation locale" }, { id: "ads", label: "Google Ads", detail: "Campagnes sponsorisées et acquisition payante" }, { id: "social", label: "Social Media", detail: "Stratégie, contenus et animation des réseaux" }, { id: "content", label: "Contenu · photo · vidéo", detail: "Direction de contenu, visuels et formats de campagne" }, { id: "conversion", label: "Conversion & parcours", detail: "UX, landing pages, CTA et optimisation commerciale" }, { id: "maintenance", label: "WebCare", detail: "Corrections, évolutions et suivi du site" },
+  { id: "website", label: "Site web", detail: "Vitrine, Business, e-commerce ou réservation" }, { id: "branding", label: "Branding", detail: "Logo, identité, direction artistique et univers" }, { id: "seo", label: "SEO", detail: "Positionnement organique et acquisition Google" }, { id: "maps", label: "Google Maps", detail: "Fiche locale, visibilité et optimisation locale" }, { id: "ads", label: "Google Ads", detail: "Campagnes sponsorisées et acquisition payante" }, { id: "social", label: "Social Media", detail: "Stratégie, contenus et animation des réseaux" }, { id: "content", label: "Contenu · photo · vidéo", detail: "Direction de contenu, visuels et formats de campagne" }, { id: "conversion", label: "Conversion & parcours", detail: "UX, landing pages, CTA et optimisation commerciale" }, { id: "maintenance", label: "WebCare", detail: "Corrections, évolutions et suivi du site" }, { id: "robotics", label: "Robotique & IA", detail: "Robots de service, location, achat et intégration" },
 ];
 const SITUATIONS: Choice[] = [
   { id: "none", label: "Pas encore de site", detail: "Créer un socle digital propre dès le départ" }, { id: "existing", label: "J'ai déjà un site", detail: "Le conserver et l'améliorer" }, { id: "redesign", label: "Mon site doit être refait", detail: "Design, structure, mobile ou conversion à revoir" }, { id: "outdated", label: "Il fonctionne mais il est daté", detail: "Moderniser sans repartir de zéro" }, { id: "invisible", label: "J'ai peu de visibilité", detail: "Le problème est surtout l'acquisition" }, { id: "selling", label: "Je vends / prends des réservations", detail: "Catalogue, paiement, réservation ou rendez-vous" }, { id: "international", label: "Je vise l'international", detail: "Langues, image premium et acquisition internationale" }, { id: "launch", label: "Je lance une nouvelle activité", detail: "Construire l'offre et la présence dès le départ" },
@@ -37,7 +37,7 @@ const DISCOVERY: Choice[] = [
 ];
 const SERVICE_ORDER: Record<string, string[]> = { restaurant: ["website","maps","social","seo","branding","maintenance"], hospitality: ["website","maps","seo","social","branding","maintenance"], realestate: ["website","maps","branding","seo","social","maintenance"], automotive: ["website","maps","conversion","seo","content","maintenance"], fashion: ["website","branding","social","content","seo","maintenance"], jewelry: ["website","branding","content","seo","social","maintenance"], beauty: ["website","maps","social","seo","branding","maintenance"], health: ["website","maps","seo","branding","content","maintenance"], architecture: ["website","branding","content","seo","maps","maintenance"], construction: ["website","maps","seo","branding","content","maintenance"], legal: ["website","seo","branding","maps","content","maintenance"], finance: ["website","seo","branding","content","maps","maintenance"], commerce: ["website","social","seo","branding","conversion","maintenance"], tourism: ["website","maps","seo","social","content","maintenance"], agency: ["website","branding","conversion","seo","content","maintenance"], other: ["website","branding","seo","maps","social","maintenance"] };
 
-const BASE_PRICES: Record<string, number> = { website: 499, branding: 179, seo: 299, maps: 990, ads: 299, social: 299, content: 399, conversion: 299, maintenance: 29 };
+const BASE_PRICES: Record<string, number> = { website: 499, branding: 179, seo: 299, maps: 990, ads: 299, social: 299, content: 399, conversion: 299, maintenance: 29, robotics: 499 };
 // Keep recommendation rules defined before the configurator render so SSR bundles always include them.
 const PROFILE_SERVICE_RULES: Record<string, string[]> = Object.fromEntries(
   Object.entries(SERVICE_ORDER).map(([sectorId, services]) => [sectorId, services.slice(0, 4)])
@@ -141,201 +141,71 @@ export function QuoteConfiguratorCompact() {
     try {
       const { jsPDF } = await import("jspdf");
       const doc = new jsPDF({ unit: "mm", format: "a4" });
-      const pageWidth = 210;
-      const margin = 18;
-      const right = pageWidth - margin;
+      const W = 210, M = 14, R = W - M;
+      const dark = [18, 21, 27] as const;
       const accent = [198, 164, 92] as const;
-      const dark = [20, 24, 31] as const;
       const muted = [105, 110, 120] as const;
       const light = [244, 244, 242] as const;
-
-      let page = 1;
-      let y = 18;
-      const quoteNumber = "XR-" + new Date().toISOString().slice(0, 10).replace(/-/g, "") + "-" + Math.floor(1000 + Math.random() * 9000);
       const issueDate = new Date();
-      const validity = new Date(issueDate);
-      validity.setDate(validity.getDate() + 15);
-      const formatDate = (date: Date) => date.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
+      const validity = new Date(issueDate); validity.setDate(validity.getDate() + 15);
+      const quoteNumber = "XR-" + issueDate.toISOString().slice(0,10).replace(/-/g,"") + "-" + Math.floor(1000 + Math.random() * 9000);
+      const date = (d: Date) => d.toLocaleDateString("fr-FR", { day:"2-digit", month:"2-digit", year:"numeric" });
 
-      const header = () => {
-        doc.setFillColor(...dark);
-        doc.rect(0, 0, pageWidth, 34, "F");
-        doc.setTextColor(255, 255, 255);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(17);
-        doc.text("XRAGENCY", margin, 14);
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(7.5);
-        doc.text("DIGITAL STUDIO · STRATEGY · DESIGN · GROWTH", margin, 20);
-        doc.setTextColor(...accent);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(15);
-        doc.text("DEVIS", right, 14, { align: "right" });
-        doc.setTextColor(220, 220, 220);
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(7);
-        doc.text(quoteNumber, right, 20, { align: "right" });
-        doc.text(formatDate(issueDate), right, 25, { align: "right" });
-        y = 45;
-      };
+      doc.setFillColor(...dark); doc.rect(0,0,W,30,"F");
+      doc.setTextColor(255,255,255); doc.setFont("helvetica","bold"); doc.setFontSize(17); doc.text("XRAGENCY",M,13);
+      doc.setFont("helvetica","normal"); doc.setFontSize(7); doc.text("DIGITAL STUDIO · STRATEGY · DESIGN · GROWTH",M,19);
+      doc.setTextColor(...accent); doc.setFont("helvetica","bold"); doc.setFontSize(14); doc.text("DEVIS",R,12,{align:"right"});
+      doc.setTextColor(220,220,220); doc.setFontSize(6.5); doc.text(quoteNumber,R,18,{align:"right"}); doc.text(date(issueDate),R,23,{align:"right"});
 
-      const footer = () => {
-        doc.setDrawColor(220, 220, 220);
-        doc.line(margin, 285, right, 285);
-        doc.setTextColor(...muted);
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(6.5);
-        doc.text("KARMA SASU · SIREN 889 178 141 · SIRET 889 178 141 00012 · RCS Paris", margin, 291);
-        doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83 · xragencyai.com", margin, 295);
-        doc.text("Page " + page, right, 295, { align: "right" });
-      };
+      let y = 38;
+      const title = (s:string) => { doc.setFillColor(...light); doc.roundedRect(M,y-4,R-M,8,1.5,1.5,"F"); doc.setTextColor(...dark); doc.setFont("helvetica","bold"); doc.setFontSize(7.5); doc.text(s.toUpperCase(),M+3,y+1); y += 11; };
+      const line = (label:string,value:string) => { doc.setTextColor(...muted); doc.setFont("helvetica","normal"); doc.setFontSize(6.5); doc.text(label,M,y); doc.setTextColor(...dark); doc.setFont("helvetica","bold"); doc.text(value || "—",M+28,y,{maxWidth:R-M-28}); y += 5.2; };
 
-      const newPage = () => {
-        footer();
-        doc.addPage();
-        page += 1;
-        header();
-      };
+      title("Client");
+      line("Entreprise",client.company); line("Contact",client.name); line("E-mail",client.email); line("WhatsApp",client.whatsapp); line("Site",client.website || "—");
 
-      const ensure = (height = 18) => {
-        if (y + height > 275) newPage();
-      };
+      title("Projet");
+      line("Activité",sector?.label || "—"); line("Objectif",goal || "—"); line("Situation",situationChoice?.label || "—"); line("Budget",budgetChoice?.label || "—"); line("Acquisition",discoveryChoice?.label || "—");
 
-      const sectionTitle = (title: string) => {
-        ensure(14);
-        doc.setFillColor(...light);
-        doc.roundedRect(margin, y - 4, right - margin, 10, 2, 2, "F");
-        doc.setTextColor(...dark);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(9);
-        doc.text(title.toUpperCase(), margin + 4, y + 2);
-        y += 14;
-      };
-
-      const row = (label: string, value: string, x = margin, width = right - margin) => {
-        ensure(9);
-        doc.setTextColor(...muted);
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(7.5);
-        doc.text(label, x, y);
-        doc.setTextColor(...dark);
-        doc.setFont("helvetica", "bold");
-        doc.text(value || "—", x + 34, y, { maxWidth: width - 34 });
-        y += 7;
-      };
-
-      header();
-
-      sectionTitle("Émetteur");
-      row("Société", "KARMA SASU");
-      row("Activité", "XRAGENCY — studio digital premium");
-      row("SIREN", "889 178 141");
-      row("SIRET", "889 178 141 00012");
-      row("Siège", "78 Avenue des Champs-Élysées · Bureau 562 · 75008 Paris · France");
-      row("TVA", "FR00889178141");
-      row("Président", "Antoine REBUFFÉ");
-      y += 2;
-
-      sectionTitle("Client / prospect");
-      row("Entreprise", client.company || "À compléter");
-      row("Contact", client.name || "À compléter");
-      row("E-mail", client.email || "À compléter");
-      row("WhatsApp", client.whatsapp || "À compléter");
-      row("Site web", client.website || "Non renseigné");
-      row("Activité", sector?.label || "À définir");
-      y += 2;
-
-      sectionTitle("Projet analysé");
-      row("Objectif", goal || "À définir");
-      row("Situation", situationChoice?.label || "À définir");
-      row("Budget", budgetChoice?.label || "À définir");
-      row("Acquisition", discoveryChoice?.label || "À définir");
-      y += 2;
-
-      sectionTitle("Prestations proposées");
-      doc.setFillColor(...dark);
-      doc.rect(margin, y - 4, right - margin, 8, "F");
-      doc.setTextColor(255, 255, 255);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(7);
-      doc.text("PRESTATION", margin + 3, y + 1);
-      doc.text("TYPE", 130, y + 1);
-      doc.text("MONTANT", right - 3, y + 1, { align: "right" });
-      y += 10;
+      title("Prestations & produits sélectionnés");
+      doc.setFillColor(...dark); doc.rect(M,y-4,R-M,7,"F"); doc.setTextColor(255,255,255); doc.setFont("helvetica","bold"); doc.setFontSize(6.5);
+      doc.text("PRESTATION / PRODUIT",M+3,y); doc.text("MODÈLE",128,y); doc.text("MONTANT",R-3,y,{align:"right"}); y += 9;
 
       selectedServices.forEach((id) => {
-        const p = proposals.find((x) => x.id === id);
-        if (!p) return;
-        ensure(12);
-        doc.setTextColor(...dark);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(7.5);
-        doc.text(p.label, margin + 3, y);
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(...muted);
-        doc.setFontSize(6.5);
-        const detailLines = doc.splitTextToSize(p.detail, 82);
-        doc.text(detailLines.slice(0, 2), margin + 3, y + 4);
-        doc.text(p.period === "month" ? "RÉCURRENT" : p.custom ? "SUR MESURE" : "PONCTUEL", 130, y);
-        doc.setTextColor(...dark);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(7.5);
-        doc.text(p.custom ? "Sur devis" : p.price.toLocaleString("fr-FR") + " €" + (p.period === "month" ? " / mois" : ""), right - 3, y, { align: "right" });
-        y += Math.max(12, 5 + detailLines.slice(0, 2).length * 3.5);
-        doc.setDrawColor(232, 232, 232);
-        doc.line(margin, y - 2, right, y - 2);
+        const p = proposals.find(x => x.id === id); if (!p) return;
+        doc.setTextColor(...dark); doc.setFont("helvetica","bold"); doc.setFontSize(7.2); doc.text(p.label,M+3,y);
+        doc.setFont("helvetica","normal"); doc.setTextColor(...muted); doc.setFontSize(6);
+        const detail = p.id === "robotics" ? "Location robot de service dès 499 €/mois · achat selon modèle · événement dès 250 €" : p.detail;
+        doc.text(doc.splitTextToSize(detail,86).slice(0,2),M+3,y+3.5);
+        doc.text(p.period === "month" ? "RÉCURRENT" : p.custom ? "SUR MESURE" : "PONCTUEL",128,y);
+        doc.setTextColor(...dark); doc.setFont("helvetica","bold"); doc.setFontSize(7.2);
+        doc.text(p.custom ? "Sur devis" : p.price.toLocaleString("fr-FR")+" €"+(p.period==="month" ? " / mois" : ""),R-3,y,{align:"right"});
+        y += 11; doc.setDrawColor(232,232,232); doc.line(M,y-2,R,y-2);
       });
 
-      ensure(30);
-      y += 4;
-      doc.setFillColor(...light);
-      doc.roundedRect(112, y - 4, right - 112, 26, 2, 2, "F");
-      doc.setTextColor(...muted);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(7);
-      doc.text("ESTIMATION PONCTUELLE", 116, y + 3);
-      doc.text("ABONNEMENTS / MOIS", 116, y + 12);
-      doc.setTextColor(...dark);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(11);
-      doc.text(once.toLocaleString("fr-FR") + " €", right - 4, y + 3, { align: "right" });
-      doc.text(monthly.toLocaleString("fr-FR") + " € / mois", right - 4, y + 12, { align: "right" });
-      y += 31;
+      y += 2; doc.setFillColor(...dark); doc.roundedRect(112,y-4,R-112,20,2,2,"F");
+      doc.setTextColor(190,190,190); doc.setFont("helvetica","normal"); doc.setFontSize(6.5); doc.text("TOTAL PONCTUEL",116,y+3); doc.text("TOTAL MENSUEL",116,y+11);
+      doc.setTextColor(255,255,255); doc.setFont("helvetica","bold"); doc.setFontSize(9); doc.text(once.toLocaleString("fr-FR")+" €",R-4,y+3,{align:"right"}); doc.text(monthly.toLocaleString("fr-FR")+" € / mois",R-4,y+11,{align:"right"});
+      y += 27;
 
-      sectionTitle("Conditions commerciales");
-      row("Validité", "15 jours · jusqu'au " + formatDate(validity));
-      row("Démarrage", "Après validation du devis et réception des éléments nécessaires");
-      row("Paiement", "Virement bancaire · coordonnées ci-dessous");
-      row("Nature", "Pré-devis généré automatiquement · proposition à valider par XRAGENCY");
-      y += 2;
+      title("Conditions");
+      line("Validité","15 jours · jusqu’au " + date(validity)); line("Démarrage","Après validation du devis et réception des éléments"); line("Nature","Pré-devis généré automatiquement · à confirmer par XRAGENCY");
 
-      sectionTitle("Règlement par virement");
-      row("Titulaire", "Antoine Rebuffe");
-      row("Banque", "Wise");
-      row("IBAN", "BE65 9677 0075 0796");
-      row("BIC / SWIFT", "TRWIBEB1XXX");
-      row("Banque", "Rue du Trône 100 · 3rd floor · Brussels · 1050 · Belgium");
+      doc.setTextColor(...muted); doc.setFont("helvetica","normal"); doc.setFontSize(5.8);
+      const legal = "Les prestations sur mesure et certains frais tiers peuvent être ajustés après analyse. Le montant définitif est confirmé par XRAGENCY avant engagement.";
+      doc.text(doc.splitTextToSize(legal,R-M),M,y+2);
 
-      ensure(28);
-      y += 5;
-      doc.setTextColor(...muted);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(6.5);
-      const legal = doc.splitTextToSize(
-        "Ce document constitue un pré-devis commercial établi à partir des informations saisies par le prospect. Les prestations sur mesure, Google Maps, campagnes publicitaires et certains frais externes peuvent faire l'objet d'un ajustement après analyse. Le montant définitif est confirmé par XRAGENCY avant engagement. Les conditions contractuelles, la facturation et les éventuels frais tiers sont précisés lors de la validation.",
-        right - margin
-      );
-      doc.text(legal, margin, y);
+      doc.setDrawColor(220,220,220); doc.line(M,281,R,281);
+      doc.setFontSize(5.7); doc.text("KARMA SASU · SIREN 889 178 141 · SIRET 889 178 141 00012 · RCS Paris",M,287);
+      doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83 · xragencyai.com",M,291);
+      doc.setTextColor(...accent); doc.setFont("helvetica","bold"); doc.text(quoteNumber,R,291,{align:"right"});
 
-      footer();
       doc.save("XRAGENCY-Devis-" + quoteNumber + ".pdf");
       setGenerated(true);
-      setSendMessage("Votre devis PDF a été généré et téléchargé. Le montant définitif sera confirmé par XRAGENCY avant engagement.");
+      setSendMessage("Votre devis PDF 1 page a été généré.");
     } catch (error) {
       setSendMessage(error instanceof Error ? error.message : "Impossible de générer le devis PDF.");
-    } finally {
-      setSending(false);
-    }
+    } finally { setSending(false); }
   };
 
   const choose = (setter: (value: string) => void, value: string, next: number) => {
