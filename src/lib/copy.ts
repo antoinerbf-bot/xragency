@@ -531,7 +531,7 @@ export const UI: Record<string, L> = {
     vi: "Khách sạn & Du lịch",
   },
   sectorImmobilier: { fr: "Immobilier", en: "Real Estate", vi: "Bất động sản" },
-  sectorSante: { fr: "Santé & Bien-être", en: "Health & Wellness", vi: "Sức khỏe & Sức khỏe" },
+  sectorSante: { fr: "Santé & Bien-être", en: "Health & Wellness", vi: "Sức khỏe & Chăm sóc" },
   sectorBeaute: { fr: "Beauté & Cosmétique", en: "Beauty & Cosmetics", vi: "Làm đẹp & Mỹ phẩm" },
   sectorAuto: { fr: "Automobile", en: "Automotive", vi: "Ô tô" },
   sectorMode: { fr: "Mode & Prêt-à-porter", en: "Fashion & Ready-to-wear", vi: "Thời trang" },
@@ -698,8 +698,8 @@ export const UI: Record<string, L> = {
   },
   aboutHeading: {
     fr: "Votre direction digitale & studio d'élite,",
-    en: "Your digital direction & elite studio,",
-    vi: "Hướng dẫn số & studio đẳng cấp của bạn,",
+    en: "Your digital direction & premium studio,",
+    vi: "Định hướng số & studio cao cấp của bạn,",
   },
   aboutHeadingAccent: {
     fr: "activés à la demande.",
@@ -722,9 +722,9 @@ export const UI: Record<string, L> = {
     vi: "Trung tâm Chuyên môn Mô-đun",
   },
   aboutHubTitle: {
-    fr: "Explorez les 7 expertises de votre agence digitale",
-    en: "Explore the 7 disciplines of your digital agency",
-    vi: "Khám phá 7 chuyên môn của agency số",
+    fr: "Explorez les 6 expertises de votre agence digitale",
+    en: "Explore the 6 disciplines of your digital agency",
+    vi: "Khám phá 6 chuyên môn của agency số",
   },
   aboutHubHint: {
     fr: "Cliquez sur un pôle pour voir son impact",
@@ -834,7 +834,7 @@ export const UI: Record<string, L> = {
   aboutDigitalTitle: {
     fr: "Votre Direction Digitale & IA Immédiate",
     en: "Your Immediate Digital & AI Direction",
-    vi: "Hướng dẫn Số & AI Ngay lập tức",
+    vi: "Định hướng Số & AI ngay lập tức",
   },
   aboutFromLabel: {
     fr: "/mois ou au forfait",
