@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowRight, Check, LifeBuoy, ShieldCheck, Sparkles, Wrench, ServerCog } from "lucide-react";
 import { Nav } from "@/components/site/Nav";
+import { ServiceIllustration } from "@/components/site/ServiceIllustration";
 import { Parallax } from "@/components/site/primitives";
 import { XR_PHOTOS } from "@/lib/photography";
 import { Contact } from "@/components/site/Contact";
@@ -37,11 +38,9 @@ function WebCarePage() {
             <p className="mt-7 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">Maintenance courante, corrections et évolutions légères : une formule claire pour garder votre site propre, à jour et exploitable sans transformer chaque petite demande en nouveau devis.</p>
           </div>
           <Parallax speed={-0.035} className="lg:col-span-5">
-            <figure className="relative overflow-hidden rounded-[2rem] border border-border/70 bg-card shadow-2xl">
-              <img src={XR_PHOTOS.maintenance} alt="Infrastructure et maintenance web" className="h-[360px] w-full object-cover transition-transform duration-[1600ms] hover:scale-[1.04]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-6"><span className="label-mono text-[9px] tracking-[.24em] text-white/55">XR AGENCY · WEBCARE</span><p className="display-serif mt-2 text-2xl text-white">Votre site reste exploitable.</p></div>
-            </figure>
+            <div className="relative">
+              <ServiceIllustration service="maintenance" title="WEBCARE" />
+            </div>
           </Parallax>
           </div>
           <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-[1.1fr_.9fr]">
