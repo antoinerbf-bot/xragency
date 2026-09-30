@@ -2,10 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
 import { ImmersiveJourney } from "@/components/site/ImmersiveJourney";
+import { HomeServices } from "@/components/site/HomeServices";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
 import { DigitalAudit } from "@/components/site/DigitalAudit";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
-import { HomeServices } from "@/components/site/HomeServices";
 import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
 
@@ -26,13 +26,13 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
-      <div aria-hidden className="pointer-events-none fixed inset-0 z-0 opacity-40" style={{ background: "var(--gradient-halo)" }} />
+      <div aria-hidden className="pointer-events-none fixed inset-0 z-0 opacity-30" style={{ background: "var(--gradient-halo)" }} />
       <Nav />
       <main className="relative z-10">
         <Hero />
         <ImmersiveJourney />
-        <QuoteConfiguratorCompact />
         <HomeServices />
+        <QuoteConfiguratorCompact />
         <DigitalAudit />
         <MapsSimulator />
         <Faq />
