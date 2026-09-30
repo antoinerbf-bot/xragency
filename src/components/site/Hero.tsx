@@ -4,7 +4,7 @@ import { LANGS, useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax } from "./primitives";
-import { XR_HERO_PHOTO, XR_PHOTOS } from "@/lib/photography";
+import { XR_PHOTOS } from "@/lib/photography";
 
 function useCountUp(target: number, duration = 1200, delay = 300) {
   const [value, setValue] = useState(target);
