@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { ArrowUpRight, BarChart3, Globe2, MapPinned, Palette, ShieldCheck, Sparkles, Users } from "lucide-react";
+import { ArrowUpRight, BarChart3, Globe2, MapPinned, Palette, ShieldCheck, Sparkles, Users, Bot } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
 import { ServiceIllustration } from "./ServiceIllustration";
 import { Parallax, Reveal } from "./primitives";
 
-const IDS = ["websites","branding","seo","maps","social","maintenance"] as const;
-const ICONS = { websites: Globe2, branding: Palette, seo: BarChart3, maps: MapPinned, social: Users, maintenance: ShieldCheck };
-const PRICES: Record<string, number> = { websites:499, branding:179, seo:299, maps:990, social:299, maintenance:29 };
+const IDS = ["websites","branding","seo","maps","social","maintenance","robotics"] as const;
+const ICONS = { websites: Globe2, branding: Palette, seo: BarChart3, maps: MapPinned, social: Users, maintenance: ShieldCheck, robotics: Bot };
+const PRICES: Record<string, number> = { websites:499, branding:179, seo:299, maps:990, social:299, maintenance:29, robotics:499 };
 
 const COPY = {
   fr: { eyebrow:"06 EXPERTISES · UN SEUL ÉCOSYSTÈME", title:"Vous n’achetez pas un service.", accent:"Vous construisez un système.", lead:"Explorez les briques XRAGENCY et composez une présence digitale cohérente : attirer, convaincre, convertir, fidéliser.", discover:"Voir l’expertise", from:"À partir de", hint:"Cliquez sur une expertise" },
@@ -75,7 +75,7 @@ export function HomeServices() {
                   <div className="hidden text-right sm:block"><span className="label-mono text-[8px] text-white/35">{copy.from}</span><div className="mt-1 text-2xl font-semibold text-white/85">{price(PRICES[active])}</div></div>
                 </div>
                 <div className="mt-6 flex flex-wrap gap-2">
-                  <Link to={active === "maintenance" ? "/services/webcare" : "/services/" + active} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold tracking-[.12em] text-black">{copy.discover}<ArrowUpRight className="h-4 w-4" /></Link>
+                  <Link to={active === "maintenance" ? "/services/webcare" : active === "robotics" ? "/services/robotique" : "/services/" + active} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold tracking-[.12em] text-black">{copy.discover}<ArrowUpRight className="h-4 w-4" /></Link>
                   <a href="#quote" className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[.05] px-5 py-3 label-mono text-[9px] tracking-[.12em] text-white/70 hover:border-white/30"><Sparkles className="h-3.5 w-3.5 text-white/60" />Ajouter à mon projet</a>
                 </div>
               </div>
