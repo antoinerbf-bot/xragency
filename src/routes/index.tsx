@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "XR Agency — Studio digital premium & IA" },
-      { name: "description", content: "Sites web sur mesure, branding, SEO, visibilité locale, social media, webcare et e-commerce intégré. Studio digital premium — FR / EN / VI." },
+      { name: "description", content: "Sites web sur mesure, branding, SEO, visibilité locale, social media et webcare. Studio digital premium — FR / EN / VI / AR / RU." },
       { property: "og:title", content: "XR Agency — Studio digital premium & IA" },
       { property: "og:description", content: "Sites web sur mesure, branding, SEO, visibilité locale, social media, webcare et e-commerce intégré. Studio digital premium — FR / EN / VI." },
       { property: "og:type", content: "website" },
