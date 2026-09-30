@@ -4,21 +4,19 @@
  * One photographic language across the whole site:
  * architecture, craft, strategy, analytics, local visibility,
  * social content, infrastructure, commerce and AI.
- *
- * These are intentionally photographic references rather than
- * abstract illustrations or character/avatar artwork.
  */
 export const XR_PHOTOS = {
-  websites: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=2200&q=90",
-  branding: "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=2200&q=90",
-  seo: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2200&q=90",
-  maps: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=2200&q=90",
-  social: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=2200&q=90",
-  maintenance: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=2200&q=90",
-  refonte: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=2200&q=90",
-  ads: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=2200&q=90",
-  strategy: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=2200&q=90",
-  ai: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=2200&q=90",
+  // Dark editorial / architectural imagery rather than generic SaaS stock.
+  websites: "https://images.unsplash.com/photo-1643267514395-b36b3f7e8281?auto=format&fit=crop&w=2200&q=88",
+  branding: "https://images.unsplash.com/photo-1599420187429-774dbfc6ba5d?auto=format&fit=crop&w=2200&q=88",
+  seo: "https://images.unsplash.com/photo-1771923082503-0a3381c46cef?auto=format&fit=crop&w=2200&q=88",
+  maps: "https://images.unsplash.com/photo-1559557114-c7ce7527188c?auto=format&fit=crop&w=2200&q=88",
+  social: "https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=2200&q=88",
+  maintenance: "https://images.unsplash.com/photo-1590856029620-9b5a4825d3c5?auto=format&fit=crop&w=2200&q=88",
+  refonte: "https://images.unsplash.com/photo-1643267514395-b36b3f7e8281?auto=format&fit=crop&w=2200&q=88",
+  ads: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=2200&q=88",
+  strategy: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=2200&q=88",
+  ai: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=2200&q=88",
   robotics: "https://www.korbenforpeople.com/wp-content/uploads/2025/08/DELIVERY-BOTS-2-VUE-01-scaled.png",
 } as const;
 
