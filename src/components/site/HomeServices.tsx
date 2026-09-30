@@ -32,8 +32,8 @@ export function HomeServices() {
         <Parallax speed={-0.025}>
           <div className="grid gap-8 border-b border-white/10 pb-12 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
             <div>
-              <span className="label-mono text-[9px] tracking-[.3em] text-[#d6a45d]">{copy.eyebrow}</span>
-              <h2 className="display-serif mt-4 max-w-5xl text-5xl leading-[.86] sm:text-7xl lg:text-[6.5rem]">{copy.title}<br /><em className="text-[#d6a45d] not-italic">{copy.accent}</em></h2>
+              <span className="label-mono text-[9px] tracking-[.3em] text-white/65">{copy.eyebrow}</span>
+              <h2 className="display-serif mt-4 max-w-5xl text-5xl leading-[.86] sm:text-7xl lg:text-[6.5rem]">{copy.title}<br /><em className="text-white not-italic">{copy.accent}</em></h2>
             </div>
             <p className="max-w-xl text-sm leading-7 text-white/52 lg:pb-1">{copy.lead}</p>
           </div>
@@ -50,10 +50,10 @@ export function HomeServices() {
                   const I = ICONS[id];
                   const selected = active === id;
                   return (
-                    <button key={id} type="button" onClick={() => setActive(id)} className={"group flex items-center gap-3 rounded-2xl border px-4 py-4 text-left transition duration-300 " + (selected ? "border-[#d6a45d]/45 bg-[#d6a45d]/10" : "border-white/8 bg-black/10 hover:-translate-y-0.5 hover:border-white/18")}>
-                      <span className={"grid h-10 w-10 shrink-0 place-items-center rounded-xl border " + (selected ? "border-[#d6a45d]/40 bg-[#d6a45d]/10 text-[#d6a45d]" : "border-white/10 bg-white/[.03] text-white/45")}><I className="h-4 w-4" /></span>
+                    <button key={id} type="button" onClick={() => setActive(id)} className={"group flex items-center gap-3 rounded-2xl border px-4 py-4 text-left transition duration-300 " + (selected ? "border-white/25 bg-white/[.09]" : "border-white/8 bg-black/10 hover:-translate-y-0.5 hover:border-white/18")}>
+                      <span className={"grid h-10 w-10 shrink-0 place-items-center rounded-xl border " + (selected ? "border-white/20 bg-white/[.08] text-white" : "border-white/10 bg-white/[.03] text-white/45")}><I className="h-4 w-4" /></span>
                       <span className="min-w-0 flex-1"><span className="label-mono text-[8px] tracking-[.18em] text-white/35">0{index+1}</span><span className="mt-1 block text-sm font-semibold text-white">{t(s.title)}</span><span className="mt-0.5 block truncate text-[10px] text-white/38">{t(s.short)}</span></span>
-                      <ArrowUpRight className={"h-4 w-4 shrink-0 transition " + (selected ? "text-[#d6a45d]" : "text-white/20 group-hover:text-white/60")} />
+                      <ArrowUpRight className={"h-4 w-4 shrink-0 transition " + (selected ? "text-white/55" : "text-white/20 group-hover:text-white/60")} />
                     </button>
                   );
                 })}
@@ -63,7 +63,7 @@ export function HomeServices() {
 
           <Reveal delay={80}>
             <div className="relative min-h-[600px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0e12]">
-              <div className="absolute -inset-10 bg-[#d6a45d]/10 blur-3xl" />
+              <div className="absolute -inset-10 bg-white/[.04] blur-3xl" />
               <div className="absolute inset-4"><ServiceIllustration service={active} title={t(service.title)} /></div>
               <div className="absolute inset-x-7 bottom-7 z-20 rounded-[1.5rem] border border-white/12 bg-black/72 p-6 backdrop-blur-xl sm:p-8">
                 <div className="flex items-start justify-between gap-5">
@@ -72,11 +72,11 @@ export function HomeServices() {
                     <h3 className="display-serif mt-3 text-4xl leading-[.9] sm:text-6xl">{t(service.title)}</h3>
                     <p className="mt-4 max-w-2xl text-sm leading-6 text-white/52">{t(service.description)}</p>
                   </div>
-                  <div className="hidden text-right sm:block"><span className="label-mono text-[8px] text-white/35">{copy.from}</span><div className="mt-1 text-2xl font-semibold text-[#f0d49f]">{price(PRICES[active])}</div></div>
+                  <div className="hidden text-right sm:block"><span className="label-mono text-[8px] text-white/35">{copy.from}</span><div className="mt-1 text-2xl font-semibold text-white/85">{price(PRICES[active])}</div></div>
                 </div>
                 <div className="mt-6 flex flex-wrap gap-2">
                   <Link to={active === "maintenance" ? "/services/webcare" : "/services/" + active} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold tracking-[.12em] text-black">{copy.discover}<ArrowUpRight className="h-4 w-4" /></Link>
-                  <a href="#quote" className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[.05] px-5 py-3 label-mono text-[9px] tracking-[.12em] text-white/70 hover:border-[#d6a45d]/40"><Sparkles className="h-3.5 w-3.5 text-[#d6a45d]" />Ajouter à mon projet</a>
+                  <a href="#quote" className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[.05] px-5 py-3 label-mono text-[9px] tracking-[.12em] text-white/70 hover:border-white/30"><Sparkles className="h-3.5 w-3.5 text-[#d6a45d]" />Ajouter à mon projet</a>
                 </div>
               </div>
             </div>
