@@ -157,4 +157,52 @@ export const SERVICES_PART2 = [
       },
     ],
   },
+  {
+    id: "robotics",
+    num: "07",
+    title: { fr: "Robotique de service & IA", en: "Service Robotics & AI", vi: "Robot dịch vụ & AI", ar: "الروبوتات الخدمية والذكاء الاصطناعي", ru: "Сервисная робототехника и ИИ" },
+    short: { fr: "Robots Korben pour automatiser, accueillir, livrer et nettoyer.", en: "Korben robots to automate, welcome, deliver and clean.", vi: "Robot Korben để tự động hóa, đón tiếp, giao hàng và vệ sinh.", ar: "روبوتات Korben للأتمتة والاستقبال والتوصيل والتنظيف.", ru: "Роботы Korben для автоматизации, приёма, доставки и уборки." },
+    description: { fr: "Une gamme professionnelle de robots autonomes Korben pour l'hôtellerie, la restauration, le retail, la santé, la logistique et les entreprises. XR Agency vous aide à identifier le modèle, cadrer le déploiement et générer les demandes de démonstration.", en: "A professional range of Korben autonomous robots for hospitality, catering, retail, healthcare, logistics and business. XR Agency helps identify the model, scope deployment and generate demo requests.", vi: "Danh mục robot tự hành Korben cho khách sạn, nhà hàng, bán lẻ, y tế, logistics và doanh nghiệp. XR Agency giúp xác định mẫu, triển khai và tạo yêu cầu demo.", ar: "مجموعة احترافية من روبوتات Korben المستقلة للفنادق والمطاعم والتجزئة والصحة واللوجستيات والشركات.", ru: "Профессиональная линейка автономных роботов Korben для отелей, ресторанов, ритейла, медицины, логистики и бизнеса." },
+    fromEur: 499,
+    fromPeriod: "month",
+    highlights: [
+      { fr: "Location à partir de 499 €/mois", en: "Leasing from €499/month", vi: "Thuê từ 499 €/tháng", ar: "إيجار ابتداءً من 499€/شهر", ru: "Аренда от 499 €/мес." },
+      { fr: "Achat annoncé : 8 000–21 000 € HT", en: "Published purchase range: €8,000–€21,000 excl. tax", vi: "Giá mua công bố: 8.000–21.000 € chưa VAT", ar: "شراء معلن: 8,000–21,000 € قبل الضريبة", ru: "Заявленный диапазон покупки: 8 000–21 000 € без НДС" },
+      { fr: "SAV français & normes CE", en: "French support & CE standards", vi: "Hỗ trợ Pháp & tiêu chuẩn CE", ar: "دعم فرنسي ومعايير CE", ru: "Французский сервис и стандарты CE" },
+    ],
+    plans: [
+      { name: { fr: "Location sur mesure", en: "Tailored leasing", vi: "Thuê theo nhu cầu" }, eur: 499, period: "month", popular: true, features: [
+        { fr: "Robot adapté au scénario", en: "Robot matched to the use case", vi: "Robot phù hợp nhu cầu" },
+        { fr: "Location à partir de 499 €/mois", en: "Leasing from €499/month", vi: "Thuê từ 499 €/tháng" },
+        { fr: "Maintenance et mises à jour incluses selon offre", en: "Maintenance and updates included according to offer", vi: "Bảo trì và cập nhật theo gói" },
+        { fr: "Accompagnement au déploiement", en: "Deployment support", vi: "Hỗ trợ triển khai" },
+      ] },
+      { name: { fr: "Achat professionnel", en: "Professional purchase", vi: "Mua chuyên nghiệp" }, eur: 8000, period: "once", features: [
+        { fr: "Gamme annoncée de 8 000 à 21 000 € HT selon modèle", en: "Published range €8,000–€21,000 excl. tax depending on model", vi: "8.000–21.000 € chưa VAT tùy mẫu" },
+        { fr: "Configuration et personnalisation selon projet", en: "Configuration and customisation by project", vi: "Cấu hình và tùy chỉnh theo dự án" },
+        { fr: "Déploiement et accompagnement sur devis", en: "Deployment and support quoted by project", vi: "Triển khai và hỗ trợ báo giá riêng" },
+      ] },
+      { name: { fr: "Démonstration / événement", en: "Demo / event", vi: "Demo / sự kiện" }, eur: 250, period: "month", features: [
+        { fr: "Location événementielle annoncée à partir de 250 €", en: "Event rental published from €250", vi: "Thuê sự kiện công bố từ 250 €" },
+        { fr: "Robot adapté à l'animation ou démonstration", en: "Robot matched to demo or activation", vi: "Robot phù hợp demo / activation" },
+        { fr: "Modalités à confirmer selon durée et lieu", en: "Terms confirmed by duration and location", vi: "Xác nhận theo thời lượng và địa điểm" },
+      ] },
+    ],
+    steps: [
+      { num: "01", title: { fr: "Diagnostic", en: "Diagnosis", vi: "Chẩn đoán" }, desc: { fr: "Nous identifions les tâches répétitives, les flux et les contraintes du site.", en: "We identify repetitive tasks, flows and site constraints.", vi: "Xác định tác vụ lặp lại, luồng vận hành và giới hạn mặt bằng." } },
+      { num: "02", title: { fr: "Sélection", en: "Selection", vi: "Lựa chọn" }, desc: { fr: "Accueil, livraison, nettoyage, logistique ou humanoïde : nous orientons vers la famille adaptée.", en: "Welcome, delivery, cleaning, logistics or humanoid: we match the right family.", vi: "Đón tiếp, giao hàng, vệ sinh, logistics hoặc humanoid: chọn đúng nhóm robot." } },
+      { num: "03", title: { fr: "Déploiement", en: "Deployment", vi: "Triển khai" }, desc: { fr: "Cartographie, configuration, contenus et intégration selon le scénario.", en: "Mapping, configuration, content and integration by scenario.", vi: "Lập bản đồ, cấu hình, nội dung và tích hợp theo kịch bản." } },
+      { num: "04", title: { fr: "Pilotage", en: "Operations", vi: "Vận hành" }, desc: { fr: "Suivi de l'usage, optimisation et accompagnement commercial.", en: "Usage monitoring, optimisation and commercial support.", vi: "Theo dõi sử dụng, tối ưu và hỗ trợ thương mại." } },
+    ],
+    metrics: [
+      { metric: "499 €", label: { fr: "à partir de / mois", en: "starting / month", vi: "từ / tháng" }, desc: { fr: "Location sur mesure annoncée par Korben.", en: "Tailored leasing published by Korben.", vi: "Mức thuê theo nhu cầu do Korben công bố." } },
+      { metric: "8–21K €", label: { fr: "achat HT", en: "purchase excl. tax", vi: "mua chưa VAT" }, desc: { fr: "Fourchette d'achat publiée, selon le modèle.", en: "Published purchase range depending on model.", vi: "Khoảng giá mua công bố tùy mẫu." } },
+      { metric: "4", label: { fr: "familles", en: "families", vi: "nhóm" }, desc: { fr: "Accueil, livraison, nettoyage, humanoïdes / polyvalents.", en: "Welcome, delivery, cleaning, humanoid / versatile.", vi: "Đón tiếp, giao hàng, vệ sinh, humanoid / đa năng." } },
+    ],
+    serviceFaqs: [
+      { q: { fr: "Quel est le prix d'un robot Korben ?", en: "How much does a Korben robot cost?", vi: "Robot Korben giá bao nhiêu?" }, a: { fr: "Korben indique une fourchette d'achat de 8 000 à 21 000 € HT selon le modèle. La location sur mesure commence à 499 €/mois. Les tarifs exacts dépendent du robot et du projet.", en: "Korben publishes a purchase range of €8,000–€21,000 excl. tax depending on model. Tailored leasing starts at €499/month. Exact pricing depends on robot and project.", vi: "Korben công bố giá mua 8.000–21.000 € chưa VAT tùy mẫu. Thuê theo nhu cầu từ 499 €/tháng. Giá chính xác phụ thuộc robot và dự án." } },
+      { q: { fr: "Le robot remplace-t-il les équipes ?", en: "Does the robot replace staff?", vi: "Robot có thay thế nhân viên không?" }, a: { fr: "Korben présente ses robots comme des assistants destinés à prendre en charge les tâches répétitives et à laisser les équipes se concentrer sur les missions à valeur ajoutée.", en: "Korben presents its robots as assistants handling repetitive tasks so teams can focus on higher-value work.", vi: "Korben định vị robot như trợ lý xử lý tác vụ lặp lại để nhân viên tập trung vào công việc có giá trị cao hơn." } },
+      { q: { fr: "Peut-on tester avant de s'engager ?", en: "Can we test before committing?", vi: "Có thể thử trước khi quyết định không?" }, a: { fr: "Oui. Korben propose de tester un robot adapté au besoin pendant quelques jours, selon disponibilité et modalités.", en: "Yes. Korben offers short trials of a robot matched to the use case, subject to availability and terms.", vi: "Có. Korben đề xuất thử robot phù hợp trong vài ngày tùy khả năng cung cấp và điều kiện." } },
+    ],
+  },
 ];

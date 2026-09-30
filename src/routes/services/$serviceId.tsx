@@ -236,7 +236,21 @@ function ServiceDetailPage() {
                   </>
                 )}
               </div>
-              <div className="lg:col-span-5"><Parallax speed={-0.04}><ServiceIllustration service={service.id} title={t(service.title)} /></Parallax></div>
+              <div className="relative lg:col-span-5">
+                <Parallax speed={-0.06}>
+                  <div className="relative">
+                    <ServiceIllustration service={service.id} title={t(service.title)} />
+                    <div className="pointer-events-none absolute -left-3 top-8 hidden rounded-2xl border border-white/10 bg-black/55 px-4 py-3 shadow-2xl backdrop-blur-xl sm:block lg:-left-8">
+                      <span className="label-mono text-[8px] uppercase tracking-[.2em] text-white/45">{t({ fr: "À partir de", en: "Starting from", vi: "Từ", ar: "ابتداءً من", ru: "От" })}</span>
+                      <p className="display-serif mt-1 text-xl text-white">{price(service.fromEur)}</p>
+                    </div>
+                    <div className="pointer-events-none absolute -bottom-5 right-4 hidden rounded-2xl border border-white/10 bg-white/[.07] px-4 py-3 shadow-2xl backdrop-blur-xl sm:block lg:right-0">
+                      <span className="label-mono text-[8px] uppercase tracking-[.2em] text-white/45">{t({ fr: "XR SYSTEM", en: "XR SYSTEM", vi: "XR SYSTEM", ar: "XR SYSTEM", ru: "XR SYSTEM" })}</span>
+                      <p className="mt-1 text-xs font-medium text-white">{t({ fr: "Choisissez · Configurez · Lancez", en: "Choose · Configure · Launch", vi: "Chọn · Cấu hình · Khởi chạy", ar: "اختر · خصّص · ابدأ", ru: "Выберите · Настройте · Запустите" })}</p>
+                    </div>
+                  </div>
+                </Parallax>
+              </div>
             </div>
           </div>
         </section>
