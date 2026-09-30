@@ -1,0 +1,7 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/puzo3938/public_html/
+    - npm install --no-package-lock
+    - npm run build
+    - /bin/cp -R .output/public/. $DEPLOYPATH
