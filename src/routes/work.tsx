@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ArrowUpRight, Search, ChevronDown, ExternalLink, X, Sparkles, FileImage } from "lucide-react";
+import { ArrowUpRight, Search, ChevronDown, ExternalLink, X } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/site/Nav";
 import { Reveal } from "@/components/site/primitives";
