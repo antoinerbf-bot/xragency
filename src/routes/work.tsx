@@ -7,7 +7,6 @@ import { Contact } from "@/components/site/Contact";
 import { PORTFOLIO_REFERENCES, PORTFOLIO_SECTORS } from "@/lib/portfolioReferences";
 import { SERVICES } from "@/lib/content";
 import { useLang } from "@/lib/i18n";
-import { XR_PHOTOS } from "@/lib/photography";
 
 export const Route = createFileRoute("/work")({
   head: () => ({
