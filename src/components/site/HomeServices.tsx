@@ -27,13 +27,13 @@ export function HomeServices() {
 
   return (
     <section id="homepage-services" className="relative overflow-hidden bg-[#07090c] py-20 text-white sm:py-28 lg:py-36">
-      <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_80%_15%,rgba(214,164,93,.10),transparent_30%),radial-gradient(circle_at_10%_85%,rgba(70,80,160,.10),transparent_30%)]" />
+      <div aria-hidden className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,.018),transparent_42%,rgba(255,255,255,.025))]" />
       <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
         <Parallax speed={-0.025}>
           <div className="grid gap-8 border-b border-white/10 pb-12 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
             <div>
               <span className="label-mono text-[9px] tracking-[.3em] text-white/65">{copy.eyebrow}</span>
-              <h2 className="display-serif mt-4 max-w-5xl text-5xl leading-[.86] sm:text-7xl lg:text-[6.5rem]">{copy.title}<br /><em className="text-white not-italic">{copy.accent}</em></h2>
+              <h2 className="display-serif mt-4 max-w-5xl text-5xl leading-[.86] sm:text-7xl lg:text-[6.5rem]">{copy.title}<br /><em className="text-white/42 not-italic">{copy.accent}</em></h2>
             </div>
             <p className="max-w-xl text-sm leading-7 text-white/52 lg:pb-1">{copy.lead}</p>
           </div>
@@ -41,8 +41,8 @@ export function HomeServices() {
 
         <div className="mt-10 grid gap-5 lg:grid-cols-[.68fr_1.32fr]">
           <Reveal>
-            <div className="rounded-[2rem] border border-white/10 bg-white/[.035] p-3 backdrop-blur-xl">
-              <div className="px-4 pb-3 pt-3 label-mono text-[8px] tracking-[.2em] text-white/35">{copy.hint}</div>
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[.025] p-3 backdrop-blur-xl">
+              <div className="absolute left-0 top-0 h-full w-px bg-white/10" /><div className="px-4 pb-3 pt-3 label-mono text-[8px] tracking-[.2em] text-white/32">{copy.hint}</div>
               <div className="grid gap-2">
                 {IDS.map((id, index) => {
                   const s = SERVICES.find(x => x.id === id);
@@ -50,7 +50,7 @@ export function HomeServices() {
                   const I = ICONS[id];
                   const selected = active === id;
                   return (
-                    <button key={id} type="button" onClick={() => setActive(id)} className={"group flex items-center gap-3 rounded-2xl border px-4 py-4 text-left transition duration-300 " + (selected ? "border-white/25 bg-white/[.09]" : "border-white/8 bg-black/10 hover:-translate-y-0.5 hover:border-white/18")}>
+                    <button key={id} type="button" onClick={() => setActive(id)} className={"group flex items-center gap-3 rounded-2xl border px-4 py-4 text-left transition duration-300 " + (selected ? "border-white/22 bg-white/[.075] translate-x-1" : "border-white/8 bg-black/10 hover:-translate-y-0.5 hover:border-white/18")}>
                       <span className={"grid h-10 w-10 shrink-0 place-items-center rounded-xl border " + (selected ? "border-white/20 bg-white/[.08] text-white" : "border-white/10 bg-white/[.03] text-white/45")}><I className="h-4 w-4" /></span>
                       <span className="min-w-0 flex-1"><span className="label-mono text-[8px] tracking-[.18em] text-white/35">0{index+1}</span><span className="mt-1 block text-sm font-semibold text-white">{t(s.title)}</span><span className="mt-0.5 block truncate text-[10px] text-white/38">{t(s.short)}</span></span>
                       <ArrowUpRight className={"h-4 w-4 shrink-0 transition " + (selected ? "text-white/55" : "text-white/20 group-hover:text-white/60")} />
@@ -63,12 +63,12 @@ export function HomeServices() {
 
           <Reveal delay={80}>
             <div className="relative min-h-[600px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0e12]">
-              <div className="absolute -inset-10 bg-white/[.04] blur-3xl" />
+              <div className="absolute -left-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full border border-white/[.06]" /><div className="absolute -left-8 top-1/2 h-40 w-40 -translate-y-1/2 rounded-full border border-white/[.08]" />
               <div className="absolute inset-4"><ServiceIllustration service={active} title={t(service.title)} /></div>
               <div className="absolute inset-x-7 bottom-7 z-20 rounded-[1.5rem] border border-white/12 bg-black/72 p-6 backdrop-blur-xl sm:p-8">
                 <div className="flex items-start justify-between gap-5">
                   <div>
-                    <div className="flex items-center gap-2"><Sparkles className="h-3.5 w-3.5 text-[#d6a45d]" /><span className="label-mono text-[8px] tracking-[.22em] text-[#d6a45d]">{t(service.short)}</span></div>
+                    <div className="flex items-center gap-2"><Sparkles className="h-3.5 w-3.5 text-white/65" /><span className="label-mono text-[8px] tracking-[.22em] text-[#d6a45d]">{t(service.short)}</span></div>
                     <h3 className="display-serif mt-3 text-4xl leading-[.9] sm:text-6xl">{t(service.title)}</h3>
                     <p className="mt-4 max-w-2xl text-sm leading-6 text-white/52">{t(service.description)}</p>
                   </div>
