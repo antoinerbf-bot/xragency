@@ -3,7 +3,6 @@ import { ArrowRight, Check, LifeBuoy, ShieldCheck, Sparkles, Wrench, ServerCog }
 import { Nav } from "@/components/site/Nav";
 import { ServiceIllustration } from "@/components/site/ServiceIllustration";
 import { Parallax } from "@/components/site/primitives";
-import { XR_PHOTOS } from "@/lib/photography";
 import { Contact } from "@/components/site/Contact";
 
 export const Route = createFileRoute("/services/webcare")({
