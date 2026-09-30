@@ -62,7 +62,7 @@ function RoboticsVisual() {
 
 export function ServiceIllustration({ service, title }: Props) {
   const info = META[service] ?? META.websites;
-  const src = XR_PHOTOS[info.photo];
+  const src = info.photo ? XR_PHOTOS[info.photo] : undefined;
 
   return (
     <figure className="group relative aspect-[4/3] w-full overflow-hidden rounded-[2rem] border border-white/10 bg-[#070809] shadow-[0_55px_140px_-60px_rgba(0,0,0,.98)]">
