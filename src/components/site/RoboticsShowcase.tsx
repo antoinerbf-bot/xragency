@@ -9,6 +9,7 @@ type Product = {
 };
 
 const PRODUCTS: Product[] = [
+  { id:"tribot", name:"TriBot", family:"Collecte & tri", use:"Hôtel · retail · espaces publics", image:"https://www.korbenforpeople.com/wp-content/uploads/2026/01/S3J0900-scaled.png", url:"https://www.korbenforpeople.com/robot/tribot/", stats:["24 h","120 L","18,5\" écran"], desc:"Robot intelligent de collecte et de tri avec deux bacs de 60 L, batterie interchangeable et écran publicitaire." },
   { id:"welcome-plus", name:"Welcome Plus", family:"Accueil", use:"Hôtel · entreprise · retail · accueil", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/ROBOT-ACCUEIL-02-scaled.png", url:"https://www.korbenforpeople.com/robot/welcome-plus/", stats:["9 h","30+ langues","Écran 27\""], desc:"Robot d’accueil haut de gamme avec grand écran HD, interaction et assistance aux visiteurs." },
   { id:"welcome-mini", name:"Welcome Mini", family:"Accueil", use:"Accueil · retail · événement", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/GREETING-BOT-MINI.png", url:"https://www.korbenforpeople.com/robot/welcome-mini/", stats:["12 h","30+ langues","Voix"], desc:"Format compact pour accueillir, informer et interagir dans les espaces recevant du public." },
   { id:"welcome-nova", name:"Welcome Nova", family:"Accueil", use:"Hôtel · santé · entreprise", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/GREETING-BOT-MINI.png", url:"https://www.korbenforpeople.com/robot/welcome-nova/", tech:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/korben-Greeting-Nova-FR-Fiche-Technique.pptx.pdf", stats:["12 h","≤ 5 000 m²","14\" FHD"], desc:"Robot d’accueil avec navigation LiDAR, positionnement visuel, reconnaissance vocale et personnalisation." },
@@ -25,7 +26,7 @@ const PRODUCTS: Product[] = [
   { id:"atlas-o2", name:"Atlas O2", family:"Quadrupède", use:"Inspection · R&D · environnements complexes", image:"https://image.thum.io/get/width/1200/noanimate/https://www.korbenforpeople.com/robot/robot-atlas-o2/", url:"https://www.korbenforpeople.com/robot/robot-atlas-o2/", stats:["45 Nm","≈5 m/s","4D LiDAR"], desc:"Plateforme quadrupède agile avec perception avancée et connectivité Wi-Fi 6, Bluetooth et 4G." },
 ];
 
-const FAMILIES = ["Tous","Accueil","Livraison","Livraison sécurisée","Logistique","Nettoyage","Humanoïde","Quadrupède"];
+const FAMILIES = ["Tous","Accueil","Livraison","Livraison sécurisée","Logistique","Nettoyage","Humanoïde","Quadrupède","Collecte & tri"];
 
 function wa(message:string){ return CONTACT.whatsapp + "?text=" + encodeURIComponent(message); }
 
