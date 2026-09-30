@@ -10,7 +10,7 @@ const META: Record<string, { label: string; number: string; photo: keyof typeof 
   maps: { label: "GOOGLE MAPS", number: "04", photo: "maps", position: "50% 50%", mark: "04" },
   social: { label: "SOCIAL MEDIA", number: "05", photo: "social", position: "50% 46%", mark: "05" },
   maintenance: { label: "WEBCARE", number: "06", photo: "maintenance", position: "50% 50%", mark: "06" },
-  ai: { label: "AI & STRATEGY", number: "07", photo: "ai", position: "50% 50%", mark: "07" },
+  ai: { label: "AI & STRATEGY", number: "08", photo: "ai", position: "50% 50%", mark: "08" },
   refonte: { label: "REDESIGN", number: "09", photo: "refonte", position: "50% 48%", mark: "09" },
   ads: { label: "GOOGLE ADS", number: "10", photo: "ads", position: "50% 48%", mark: "10" },
   strategy: { label: "STRATEGY", number: "11", photo: "strategy", position: "50% 44%", mark: "11" },
