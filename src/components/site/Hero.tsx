@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, FileImage, MousePointer2, Search, Sparkles } from "lucide-react";
+import { ArrowRight, MousePointer2, Search } from "lucide-react";
 import { LANGS, useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
-import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax } from "./primitives";
 import { XR_PHOTOS } from "@/lib/photography";
 
@@ -37,7 +36,6 @@ function Stat({ value, suffix = "", label }: { value: number; suffix?: string; l
 
 export function Hero() {
   const { t } = useLang();
-  const mockupUrl = CONTACT.whatsapp + "?text=" + encodeURIComponent("Bonjour XRAGENCY, je souhaite ma maquette gratuite (valeur 200 €).");
 
   return (
     <section id="top" className="relative isolate overflow-hidden bg-[#050608] text-white">
@@ -69,9 +67,6 @@ export function Hero() {
                 <EmberButton href="#quote" className="justify-center rounded-full bg-white px-7 py-4 text-[#080a0d] shadow-[0_18px_55px_rgba(0,0,0,.25)] hover:bg-white">
                   Construire mon projet <ArrowRight className="h-4 w-4" />
                 </EmberButton>
-                <a href={mockupUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/18 bg-white/[.045] px-7 py-4 label-mono text-[9px] font-semibold tracking-[.12em] text-white/80 transition hover:-translate-y-0.5 hover:bg-white/[.09]">
-                  <FileImage className="h-3.5 w-3.5" />Maquette gratuite
-                </a>
                 <a href="#audit" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-transparent px-6 py-4 label-mono text-[9px] tracking-[.12em] text-white/65 transition hover:-translate-y-0.5 hover:border-white/25 hover:text-white">
                   <Search className="h-3.5 w-3.5" />Lancer mon audit
                 </a>
