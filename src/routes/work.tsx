@@ -44,7 +44,7 @@ const sectorLabels: Record<string, Record<string,string>> = {
   spa:{fr:"Spa / Wellness",en:"Spa / Wellness",vi:"Spa / Wellness",ar:"سبا / عافية",ru:"Spa / Wellness"}, construction:{fr:"Construction",en:"Construction",vi:"Xây dựng",ar:"إنشاءات",ru:"Строительство"},
 };
 
-const FEATURED_NAMES = ["Pok-N Ball", "French Paradise", "Le Gramme", "AYANA", "Raycast", "Audo Copenhagen"] as const;
+const FEATURED_NAMES = ["Pok-N Ball", "Le Gramme", "AYANA", "Raycast", "Audo Copenhagen", "Typology"] as const;
 
 export function WorkPage() {
   const { lang } = useLang();
@@ -117,32 +117,75 @@ export function WorkPage() {
         </div>
       </section>
 
-      <section className="relative py-16 sm:py-24">
+      <section className="relative border-t border-border bg-background py-16 sm:py-24">
         <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
-          <div className="mb-9 flex items-end justify-between gap-4"><div><p className="label-mono text-[9px] tracking-[.28em] text-primary">01 / {tx.catalogue}</p><h2 className="display-serif mt-3 text-4xl sm:text-6xl">Tout le travail, <em className="not-italic text-muted-foreground">au même endroit.</em></h2></div><button type="button" onClick={()=>{setQuery("");setSector("all");setService("all")}} className="hidden rounded-full border border-border px-4 py-2 label-mono text-[8px] text-muted-foreground hover:border-primary/40 sm:block">{tx.reset}</button></div>
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-12">
-            {filtered.map((item,index)=>{
-              const featured=index<2;
-              return <Reveal key={item.name+item.url} delay={Math.min(index,10)*30}>
-                <button type="button" onClick={()=>setActive(item)} className={"group relative block w-full overflow-hidden rounded-[2rem] border border-border bg-card text-left transition duration-700 hover:-translate-y-1 hover:border-primary/35 hover:shadow-2xl " + (featured?"xl:col-span-6":"xl:col-span-4")}>
-                  <div className={"relative overflow-hidden bg-[#080b0f] "+(featured?"aspect-[16/10]":"aspect-[4/3]")}>
-                    <img src={item.image} alt={item.name+" homepage"} loading={index<6?"eager":"lazy"} className="h-full w-full object-cover transition duration-[1400ms] ease-out group-hover:scale-[1.045]"/>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/10 to-transparent"/>
-                    <div className="absolute left-5 right-5 top-5 flex items-center justify-between gap-3"><span className="rounded-full border border-white/15 bg-black/45 px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-white/55 backdrop-blur">{tx.homepage} / {String(index+1).padStart(2,"0")}</span><span className="rounded-full border border-white/15 bg-black/45 px-3 py-1.5 label-mono text-[7px] text-white/55 backdrop-blur">{item.origin === "XR Agency" ? tx.agency : tx.reference}</span></div>
-                    <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-7"><p className="label-mono text-[7px] tracking-[.18em] text-white/42">{sectorLabels[item.sector]?.[lang] ?? item.sector} · {item.type}</p><div className="mt-2 flex items-end justify-between gap-4 text-white"><h3 className={"display-serif leading-[.86] "+(featured?"text-5xl sm:text-6xl":"text-3xl sm:text-4xl")}>{item.name}</h3><span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/20 bg-white/10 backdrop-blur transition group-hover:bg-white group-hover:text-black"><ArrowUpRight className="h-4 w-4"/></span></div></div>
-                  </div>
-                  <div className="flex items-center justify-between gap-4 px-5 py-4"><span className="text-xs text-muted-foreground">{item.services.map(s=>s==="ecommerce"?"E-commerce":s).join(" · ")}</span><span className="label-mono text-[8px] text-primary">{tx.visit} →</span></div>
-                </button>
-              </Reveal>;
-            })}
+          <div className="mb-10 flex flex-col gap-6 border-b border-border pb-8 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="label-mono text-[9px] tracking-[.28em] text-primary">01 / {tx.catalogue}</p>
+              <h2 className="display-serif mt-3 max-w-5xl text-4xl leading-[.86] sm:text-6xl">Chaque référence, <em className="not-italic text-muted-foreground">en image.</em></h2>
+              <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground">Les références sont présentées avec leur homepage comme première matière visuelle : structure, rythme, direction artistique et expérience.</p>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
+              <span className="rounded-full border border-border px-3 py-2 label-mono text-[8px] text-muted-foreground">{filtered.length} {tx.index}</span>
+              <button type="button" onClick={()=>{setQuery("");setSector("all");setService("all")}} className="rounded-full border border-border px-4 py-2 label-mono text-[8px] text-muted-foreground transition hover:border-primary/40 hover:text-foreground">{tx.reset}</button>
+            </div>
           </div>
+
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {filtered.map((item,index)=>(
+              <Reveal key={item.name+item.url} delay={Math.min(index,12)*25}>
+                <button
+                  type="button"
+                  onClick={()=>setActive(item)}
+                  className="group block w-full overflow-hidden rounded-[1.8rem] border border-border bg-card text-left transition duration-700 hover:-translate-y-1 hover:border-primary/35 hover:shadow-2xl"
+                >
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#080b0f]">
+                    <img
+                      src={item.image}
+                      alt={item.name+" homepage"}
+                      loading={index<9?"eager":"lazy"}
+                      className="h-full w-full object-cover object-top transition duration-[1400ms] ease-out group-hover:scale-[1.04]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/5 to-transparent" />
+                    <div className="absolute inset-x-4 top-4 flex items-center justify-between gap-2">
+                      <span className="rounded-full border border-white/15 bg-black/50 px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-white/60 backdrop-blur-xl">{tx.homepage} / {String(index+1).padStart(2,"0")}</span>
+                      <span className="rounded-full border border-white/15 bg-black/50 px-3 py-1.5 label-mono text-[7px] tracking-[.12em] text-white/55 backdrop-blur-xl">{item.origin === "XR Agency" ? tx.agency : tx.reference}</span>
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+                      <p className="label-mono text-[7px] tracking-[.18em] text-white/42">{sectorLabels[item.sector]?.[lang] ?? item.sector} · {item.type}</p>
+                      <div className="mt-2 flex items-end justify-between gap-4 text-white">
+                        <h3 className="display-serif text-4xl leading-[.86] sm:text-5xl">{item.name}</h3>
+                        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/20 bg-white/10 backdrop-blur transition duration-500 group-hover:bg-white group-hover:text-black">
+                          <ArrowUpRight className="h-4 w-4"/>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex min-h-[62px] items-center justify-between gap-4 px-5 py-4">
+                    <div className="min-w-0">
+                      <p className="truncate text-xs text-muted-foreground">{item.services.map(s=>s==="ecommerce"?"E-commerce":s).join(" · ")}</p>
+                      <p className="mt-1 label-mono text-[7px] tracking-[.15em] text-muted-foreground/50">{item.url.replace(/^https?:\/\//,"").replace(/\/$/,"")}</p>
+                    </div>
+                    <span className="shrink-0 label-mono text-[8px] text-primary opacity-70 transition group-hover:opacity-100">{tx.visit} →</span>
+                  </div>
+                </button>
+              </Reveal>
+            ))}
+          </div>
+
+          {!filtered.length && (
+            <div className="rounded-[1.8rem] border border-dashed border-border px-6 py-16 text-center">
+              <p className="display-serif text-3xl">Aucune référence ne correspond à ces filtres.</p>
+              <button type="button" onClick={()=>{setQuery("");setSector("all");setService("all")}} className="mt-5 rounded-full border border-border px-4 py-2 label-mono text-[8px] text-muted-foreground hover:border-primary/40">{tx.reset}</button>
+            </div>
+          )}
         </div>
       </section>
     </main>
     {active && <div className="fixed inset-0 z-[100] grid place-items-center bg-black/80 p-4 backdrop-blur-md" role="dialog" aria-modal="true">
       <div className="relative max-h-[92vh] w-full max-w-6xl overflow-auto rounded-[2rem] border border-white/15 bg-background shadow-2xl">
         <button type="button" onClick={()=>setActive(null)} aria-label={tx.close} className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-black/65 text-white"><X className="h-4 w-4"/></button>
-        <div className="grid lg:grid-cols-[1.4fr_.6fr]"><div className="min-h-[420px] bg-[#080b0f]"><div className="relative h-full min-h-[420px] overflow-hidden"><img src={active.image} alt={active.name+" homepage"} className="h-full min-h-[420px] w-full object-cover"/><div className="absolute left-5 top-5 rounded-full border border-white/15 bg-black/50 px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-white/55 backdrop-blur-xl">{tx.homepage}</div></div></div><div className="p-7 sm:p-10"><span className="label-mono text-[8px] tracking-[.24em] text-primary">{sectorLabels[active.sector]?.[lang] ?? active.sector} · {active.type}</span><h2 className="display-serif mt-4 text-5xl leading-[.86]">{active.name}</h2><p className="mt-4 text-sm leading-6 text-muted-foreground">Aperçu de la homepage actuelle. Les images sont des captures du site public ; le bouton ouvre ensuite le site réel dans un nouvel onglet.</p><div className="mt-6 flex flex-wrap gap-2">{active.services.map(s=><span key={s} className="rounded-full border border-border px-3 py-1.5 text-[9px] text-muted-foreground">{s==="ecommerce"?"E-commerce":s}</span>)}</div><a href={active.url} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-xs font-semibold text-background">{tx.open}<ExternalLink className="h-3.5 w-3.5"/></a></div></div>
+        <div className="grid lg:grid-cols-[1.4fr_.6fr]"><div className="min-h-[420px] bg-[#080b0f]"><div className="relative h-full min-h-[420px] overflow-hidden"><img src={active.image} alt={active.name+" homepage"} className="h-full min-h-[420px] w-full object-cover"/><div className="absolute left-5 top-5 rounded-full border border-white/15 bg-black/50 px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-white/55 backdrop-blur-xl">{tx.homepage}</div></div></div><div className="p-7 sm:p-10"><span className="label-mono text-[8px] tracking-[.24em] text-primary">{sectorLabels[active.sector]?.[lang] ?? active.sector} · {active.type}</span><h2 className="display-serif mt-4 text-5xl leading-[.86]">{active.name}</h2><p className="mt-4 text-sm leading-6 text-muted-foreground">Capture visuelle de la homepage publique. Le bouton ouvre le site réel dans un nouvel onglet.</p><div className="mt-6 flex flex-wrap gap-2">{active.services.map(s=><span key={s} className="rounded-full border border-border px-3 py-1.5 text-[9px] text-muted-foreground">{s==="ecommerce"?"E-commerce":s}</span>)}</div><a href={active.url} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-xs font-semibold text-background">{tx.open}<ExternalLink className="h-3.5 w-3.5"/></a></div></div>
       </div>
     </div>}
     <Contact/>
