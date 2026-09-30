@@ -2,11 +2,10 @@ import { useMemo, useState } from "react";
 import { ArrowUpRight, Search, ChevronDown, ExternalLink, X, Sparkles, FileImage } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/site/Nav";
-import { Parallax, Reveal } from "@/components/site/primitives";
+import { Reveal } from "@/components/site/primitives";
 import { Contact } from "@/components/site/Contact";
 import { PORTFOLIO_REFERENCES, PORTFOLIO_SECTORS } from "@/lib/portfolioReferences";
 import { SERVICES } from "@/lib/content";
-import { CONTACT } from "@/lib/content";
 import { useLang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/work")({
