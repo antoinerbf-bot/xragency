@@ -89,7 +89,7 @@ export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
             <div className="absolute left-6 top-6 right-6 flex justify-between"><span className="label-mono text-[8px] tracking-[.25em] text-white/45">{active.family.toUpperCase()}</span><span className="label-mono text-[8px] text-white/30">XR / KORBEN</span></div>
             <div className="absolute bottom-6 left-6 right-6 rounded-[1.5rem] border border-white/12 bg-black/70 p-5 backdrop-blur-xl">
               <div className="flex items-end justify-between gap-4"><div><span className="label-mono text-[8px] text-white/40">MODÈLE</span><h2 className="display-serif mt-1 text-3xl">{active.name}</h2></div><span className="grid h-10 w-10 place-items-center rounded-full border border-white/15"><Bot className="h-4 w-4"/></span></div>
-              <div className="mt-4 flex flex-wrap gap-2">{active.stats.map(x=><span key={x} className="rounded-full border border-white/10 bg-white/[.05] px-3 py-2 label-mono text-[8px] text-white/65">{x}</span>)}</div>
+              <div className="mt-4 flex flex-wrap gap-2">{active.stats.map(x=><span key={x} className="rounded-full border border-white/10 bg-white/[.05] px-3 py-2 label-mono text-[8px] text-white/65">{x}</span>)}</div><p className="mt-4 max-w-2xl text-xs leading-5 text-white/45">{active.desc}</p><div className="mt-4 flex flex-wrap gap-2"><a href={active.url} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()} className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2.5 label-mono text-[8px] tracking-[.1em] text-white/70 hover:border-white/30 hover:text-white">Fiche / produit officiel <ExternalLink className="h-3 w-3"/></a></div>
             </div>
           </div>
         </div>
