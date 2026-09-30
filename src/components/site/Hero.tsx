@@ -91,62 +91,40 @@ export function Hero() {
             </div>
           </Parallax>
 
-          <Parallax speed={0.045}>
-            <div className="relative mx-auto w-full max-w-[820px] [perspective:1600px]">
-              <div className="absolute -inset-12 rounded-full bg-white/[.025] blur-3xl" />
-              <div className="relative rotate-[1deg] transition-transform duration-1000 hover:rotate-0">
-                <div className="absolute -inset-3 rounded-[2.8rem] border border-white/[.08] bg-white/[.015]" />
-                <div className="relative overflow-hidden rounded-[2.4rem] border border-white/14 bg-[#0a0d11] p-2 shadow-[0_70px_160px_-65px_rgba(0,0,0,.98)]">
-                  <div className="relative aspect-[1.06/1] overflow-hidden rounded-[2rem]">
-                    <img src={XR_HERO_PHOTO} alt="" className="absolute inset-0 h-full w-full scale-[1.08] object-cover grayscale contrast-[1.08] brightness-[.72] transition duration-[1800ms] hover:scale-[1.15] hover:brightness-[.84]" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#050608] via-black/15 to-transparent" />
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_65%_25%,rgba(255,255,255,.17),transparent_25%)]" />
-                    <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(0,0,0,.72)_0%,rgba(0,0,0,.12)_48%,rgba(0,0,0,.42)_100%)]" />
-                    <div className="absolute inset-0 opacity-50 mix-blend-soft-light bg-[repeating-linear-gradient(0deg,rgba(255,255,255,.045)_0px,rgba(255,255,255,.045)_1px,transparent_1px,transparent_6px)]" />
-
-                    <div className="absolute inset-x-5 top-5 flex items-center justify-between">
-                      <span className="label-mono text-[8px] tracking-[.25em] text-white/65">XRAGENCY / DIGITAL STUDIO</span>
-                      <span className="flex items-center gap-2 label-mono text-[7px] text-white/45"><span className="h-1.5 w-1.5 rounded-full bg-white/70" /> LIVE SYSTEM</span>
-                    </div>
-
-                    <div className="absolute left-[9%] top-[15%] hidden h-[58%] w-px bg-white/15 sm:block" />
-                    <div className="absolute right-[13%] top-[10%] hidden h-[35%] w-px bg-white/10 sm:block" />
-                    <div className="absolute left-[9%] top-[15%] hidden h-px w-[24%] bg-white/15 sm:block" />
-                    <div className="absolute bottom-[22%] right-[13%] hidden h-px w-[28%] bg-white/10 sm:block" />
-
-                    <div className="absolute left-6 top-1/2 hidden -translate-y-1/2 sm:block">
-                      <div className="h-40 w-px bg-white/15" />
-                      <div className="mt-3 label-mono text-[7px] tracking-[.28em] text-white/35 [writing-mode:vertical-rl]">ART DIRECTION · XR / 2026</div>
-                    </div>
-
-                    <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4">
-                      <div className="max-w-[560px] rounded-[1.6rem] border border-white/15 bg-black/65 p-5 backdrop-blur-xl sm:p-7">
-                        <div className="flex items-center justify-between gap-4">
-                          <span className="label-mono text-[8px] tracking-[.24em] text-white/55">01 · STRATEGY → DESIGN → GROWTH</span>
-                          <Sparkles className="h-4 w-4 text-white/65" />
-                        </div>
-                        <p className="display-serif mt-4 text-3xl leading-[.9] sm:text-5xl">Une présence digitale pensée pour faire agir.</p>
-                        <div className="mt-5 flex flex-wrap gap-2">{["Site","Identité","Google","IA"].map(x => <span key={x} className="rounded-full border border-white/12 bg-white/[.06] px-2.5 py-1.5 label-mono text-[7px] tracking-[.12em] text-white/58">{x}</span>)}</div>
-                      </div>
-                    </div>
+          <Parallax speed={0.025}>
+            <div className="relative mx-auto w-full max-w-[900px]">
+              <div className="absolute -inset-16 rounded-full bg-white/[.025] blur-[90px]" />
+              <div className="relative grid grid-cols-12 gap-2 sm:gap-3">
+                <div className="relative col-span-8 row-span-2 min-h-[540px] overflow-hidden rounded-[2.2rem] border border-white/12 bg-[#090c10] shadow-[0_60px_140px_-60px_rgba(0,0,0,.98)]">
+                  <img src={XR_PHOTOS.websites} alt="" className="absolute inset-0 h-full w-full object-cover grayscale contrast-[1.08] brightness-[.68] transition duration-[1600ms] hover:scale-[1.06] hover:brightness-[.82]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#050608] via-black/10 to-transparent" />
+                  <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(0,0,0,.58),transparent_55%,rgba(0,0,0,.25))]" />
+                  <span className="absolute left-5 top-5 label-mono text-[7px] tracking-[.25em] text-white/55">01 / WEB EXPERIENCE</span>
+                  <div className="absolute bottom-5 left-5 right-5 rounded-[1.4rem] border border-white/12 bg-black/60 p-5 backdrop-blur-xl">
+                    <span className="label-mono text-[7px] tracking-[.22em] text-white/38">STRATEGY → DESIGN → CONVERSION</span>
+                    <p className="display-serif mt-3 text-3xl leading-[.88] sm:text-5xl">Des expériences qui donnent envie d'agir.</p>
                   </div>
                 </div>
-              </div>
 
-              <div className="absolute -bottom-10 -right-2 hidden h-28 w-44 overflow-hidden rounded-2xl border border-white/15 bg-[#090b0e] p-1 shadow-2xl backdrop-blur-xl lg:block">
-                <div className="relative h-full overflow-hidden rounded-xl">
-                  <img src={XR_PHOTOS.seo} alt="" className="h-full w-full object-cover grayscale contrast-[1.12] brightness-[.62] transition duration-1000 hover:scale-110 hover:brightness-[.8]" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent" />
-                  <span className="absolute bottom-3 left-3 label-mono text-[7px] tracking-[.2em] text-white/65">DATA / PERFORMANCE</span>
+                <div className="relative col-span-4 min-h-[265px] overflow-hidden rounded-[2rem] border border-white/12 bg-[#090c10]">
+                  <img src={XR_PHOTOS.branding} alt="" className="absolute inset-0 h-full w-full object-cover grayscale contrast-[1.08] brightness-[.62] transition duration-[1400ms] hover:scale-[1.08]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 to-transparent" />
+                  <span className="absolute bottom-4 left-4 label-mono text-[7px] tracking-[.2em] text-white/55">02 / BRAND</span>
+                </div>
+
+                <div className="relative col-span-4 min-h-[265px] overflow-hidden rounded-[2rem] border border-white/12 bg-[#090c10]">
+                  <img src={XR_PHOTOS.maps} alt="" className="absolute inset-0 h-full w-full object-cover grayscale-[.1] contrast-[1.05] brightness-[.65] transition duration-[1400ms] hover:scale-[1.08]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 to-transparent" />
+                  <span className="absolute bottom-4 left-4 label-mono text-[7px] tracking-[.2em] text-white/55">03 / LOCAL VISIBILITY</span>
                 </div>
               </div>
-              <div className="absolute -bottom-6 -left-3 hidden items-center gap-3 rounded-2xl border border-white/12 bg-[#090b0e]/92 px-4 py-3 shadow-xl backdrop-blur-xl sm:flex">
-                <FileImage className="h-4 w-4 text-white/45" />
-                <span><b className="block text-[9px] uppercase tracking-[.12em]">Maquette gratuite</b><small className="text-[8px] text-white/42">Valeur 200 € · sans engagement</small></span>
-              </div>
-              <div className="absolute -right-5 -top-5 hidden items-center gap-2 rounded-full border border-white/15 bg-[#090b0e]/92 px-4 py-2 shadow-lg backdrop-blur-xl sm:flex">
+
+              <div className="absolute -right-4 -top-5 hidden items-center gap-2 rounded-full border border-white/15 bg-[#090b0e]/92 px-4 py-2 shadow-lg backdrop-blur-xl sm:flex">
                 <MousePointer2 className="h-3 w-3 text-white/60" />
-                <span className="label-mono text-[8px] text-white/58">INTERACTIF · SUR MESURE</span>
+                <span className="label-mono text-[8px] text-white/58">WEB · BRAND · SEO · MAPS · SOCIAL · IA</span>
+              </div>
+              <div className="absolute -bottom-5 left-4 hidden rounded-2xl border border-white/12 bg-[#090b0e]/92 px-4 py-3 shadow-xl backdrop-blur-xl lg:block">
+                <span className="label-mono text-[7px] tracking-[.18em] text-white/42">XRAGENCY / DIGITAL SYSTEM</span>
               </div>
             </div>
           </Parallax>
