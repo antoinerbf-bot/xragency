@@ -7,6 +7,7 @@ import { Contact } from "@/components/site/Contact";
 import { PORTFOLIO_REFERENCES, PORTFOLIO_SECTORS } from "@/lib/portfolioReferences";
 import { SERVICES } from "@/lib/content";
 import { useLang } from "@/lib/i18n";
+import { XR_PHOTOS } from "@/lib/photography";
 
 export const Route = createFileRoute("/work")({
   head: () => ({
@@ -64,8 +65,10 @@ export function WorkPage() {
     <Nav/>
     <main className="pt-20 sm:pt-24">
       <section className="relative min-h-[72vh] overflow-hidden bg-[#050608] text-white">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_12%,rgba(255,255,255,.10),transparent_26%),linear-gradient(120deg,#050608,#0b1117_55%,#050608)]"/>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_78%,rgba(255,255,255,.05),transparent_28%)]"/>
+        <img src={XR_PHOTOS.websites} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover grayscale contrast-[1.05] brightness-[.28]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_12%,rgba(255,255,255,.12),transparent_26%),linear-gradient(120deg,rgba(5,6,8,.96),rgba(11,17,23,.72)_55%,rgba(5,6,8,.94))]"/>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_78%,rgba(255,255,255,.07),transparent_28%)]"/>
+        <div aria-hidden className="absolute inset-0 opacity-30 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,.08)_50%,transparent_100%)]"/>
         <div className="relative mx-auto flex min-h-[72vh] max-w-[1500px] flex-col justify-end px-5 pb-12 pt-28 sm:px-8 sm:pb-16 lg:px-12 lg:pb-20">
           <p className="label-mono text-[9px] tracking-[.32em] text-white/42">{tx.kicker}</p>
           <h1 className="display-serif mt-5 max-w-6xl text-[clamp(4rem,9vw,9rem)] leading-[.76] tracking-[-.075em]">{tx.title}<br/><em className="not-italic text-white/35">{tx.accent}</em></h1>
