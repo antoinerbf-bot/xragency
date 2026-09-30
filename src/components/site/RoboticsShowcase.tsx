@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ArrowRight, Bot, Building2, Check, ChevronDown, ExternalLink, Hotel, MapPin, Play, Sparkles, Truck, Users, Zap } from "lucide-react";
+import { ArrowRight, Bot, ExternalLink, Sparkles } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { CONTACT } from "@/lib/content";
 
@@ -21,8 +21,8 @@ const PRODUCTS: Product[] = [
   { id:"phantas", name:"Cleaning Phantas", family:"Nettoyage", use:"Hôtel · bureaux · espaces publics", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/PHANTAS-VUE-02.png", url:"https://www.korbenforpeople.com/robot/cleaning-phantas/", stats:["10 h","0,8 m/s","500 m²/h"], desc:"Solution de nettoyage autonome compacte pour maintenir les sols propres sans interrompre l’activité." },
   { id:"cleaning55", name:"Cleaning 55", family:"Nettoyage", use:"Hôtel · bureaux · retail", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/CLEANING-BOOT55-VUE-01.png", url:"https://www.korbenforpeople.com/robot/cleaning-55/", stats:["9 h","1 200 m²/h","2,5 L"], desc:"Robot de nettoyage compact pour les opérations quotidiennes." },
   { id:"aura-g1", name:"Aura G1", family:"Humanoïde", use:"R&D · accueil · innovation", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/ROBOT-ACCUEIL-02-scaled.png", url:"https://www.korbenforpeople.com/robot/robot-x/", stats:["43 DOF","120 Nm","ROS2"], desc:"Humanoïde compact à plateforme ouverte, destiné à l’interaction, la perception et le développement." },
-  { id:"aura-e", name:"Aura E", family:"Humanoïde", use:"Hôtel · santé · événement · R&D", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/11/Korben-Aura-E-FR-Fiche-Technique.pdf", url:"https://www.korbenforpeople.com/robot/robot-x/", stats:["42 DOF","300 Nm","550 TOPS"], desc:"Humanoïde grandeur nature orienté recherche, développement et intelligence incarnée." },
-  { id:"atlas-o2", name:"Atlas O2", family:"Quadrupède", use:"Inspection · R&D · environnements complexes", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/LUCKI-PRO-scaled.png", url:"https://www.korbenforpeople.com/robot/robot-atlas-o2/", stats:["45 Nm","≈5 m/s","4D LiDAR"], desc:"Plateforme quadrupède agile avec perception avancée et connectivité Wi-Fi 6, Bluetooth et 4G." },
+  { id:"aura-e", name:"Aura E", family:"Humanoïde", use:"Hôtel · santé · événement · R&D", image:"https://image.thum.io/get/width/1200/noanimate/https://www.korbenforpeople.com/robot/korben-aura-e/", url:"https://www.korbenforpeople.com/robot/robot-x/", stats:["42 DOF","300 Nm","550 TOPS"], desc:"Humanoïde grandeur nature orienté recherche, développement et intelligence incarnée." },
+  { id:"atlas-o2", name:"Atlas O2", family:"Quadrupède", use:"Inspection · R&D · environnements complexes", image:"https://image.thum.io/get/width/1200/noanimate/https://www.korbenforpeople.com/robot/robot-atlas-o2/", url:"https://www.korbenforpeople.com/robot/robot-atlas-o2/", stats:["45 Nm","≈5 m/s","4D LiDAR"], desc:"Plateforme quadrupède agile avec perception avancée et connectivité Wi-Fi 6, Bluetooth et 4G." },
 ];
 
 const FAMILIES = ["Tous","Accueil","Livraison","Livraison sécurisée","Logistique","Nettoyage","Humanoïde","Quadrupède"];
