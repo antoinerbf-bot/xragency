@@ -14,6 +14,7 @@ const META: Record<string, { label: string; number: string; photo: keyof typeof 
   refonte: { label: "REDESIGN", number: "09", photo: "refonte", position: "50% 48%", mark: "09" },
   ads: { label: "GOOGLE ADS", number: "10", photo: "ads", position: "50% 48%", mark: "10" },
   strategy: { label: "STRATEGY", number: "11", photo: "strategy", position: "50% 44%", mark: "11" },
+  robotics: { label: "XR ROBOTICS", number: "07", photo: "robotics", position: "50% 50%", mark: "07" },
 };
 
 export function ServiceIllustration({ service, title }: Props) {
