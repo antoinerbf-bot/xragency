@@ -21,6 +21,7 @@ export function HomeServices() {
   }[lang] ?? undefined;
   const copySafe = copy ?? { expertise:"06 DISCIPLINES", title:"Six disciplines.", titleAccent:"One digital system.", lead:"Creation, identity, visibility and care.", discover:"Explore", from:"From", scroll:"DIRECTION · PRODUCTION · MEASURE", kicker:"XRAGENCY · BESPOKE", cta:"Let's discuss your project", ctaSub:"Tell us what you need.", mockup:"Request a free mockup" };
   const featured = FEATURED_IDS.map(id => SERVICES.find(service => service.id === id)).filter(Boolean) as typeof SERVICES;
+  const hrefFor = (id: string) => id === "maintenance" ? "/services/webcare" : `/services/${id}`;
   const mockupUrl = CONTACT.whatsapp + "?text=" + encodeURIComponent("Bonjour XRAGENCY, je souhaite une maquette gratuite.");
 
   const periodLabel = (period: string) => period === "month" ? (lang === "fr" ? " / mois" : lang === "en" ? " / month" : lang === "vi" ? " / tháng" : lang === "ar" ? " / شهر" : " / месяц") : period === "year" ? (lang === "fr" ? " / an" : lang === "en" ? " / year" : lang === "vi" ? " / năm" : lang === "ar" ? " / سنة" : " / год") : "";
@@ -57,7 +58,7 @@ export function HomeServices() {
                       <h3 className="display-serif text-4xl leading-[.9] text-white sm:text-6xl lg:text-[5rem]">{t(service.title)}</h3>
                       <p className="mt-5 max-w-xl text-sm leading-6 text-white/60 sm:text-[15px]">{t(service.description)}</p>
                       <div className="mt-6 flex flex-wrap items-center gap-2.5">
-                        <Link to={service.id==="maintenance"?"/services/webcare":"/services/$serviceId"} params={service.id==="maintenance"?undefined:{serviceId:service.id}} className="inline-flex items-center gap-3 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold tracking-[.12em] text-black transition hover:-translate-y-0.5">{copySafe.discover}<ArrowUpRight className="h-4 w-4"/></Link>
+                        <Link to={hrefFor(service.id)} className="inline-flex items-center gap-3 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold tracking-[.12em] text-black transition hover:-translate-y-0.5">{copySafe.discover}<ArrowUpRight className="h-4 w-4"/></Link>
                         {startingPrice && <span className="rounded-full border border-white/15 bg-black/25 px-4 py-3 label-mono text-[9px] tracking-[.12em] text-white/65 backdrop-blur-md">{copySafe.from} {price(startingPrice)}{periodLabel(service.fromPeriod)}</span>}
                       </div>
                     </div>
