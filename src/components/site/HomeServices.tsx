@@ -1,188 +1,87 @@
-import { ArrowUpRight, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { ArrowUpRight, BarChart3, Globe2, MapPinned, Palette, ShieldCheck, Sparkles, Users } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
-import { Parallax, Reveal } from "./primitives";
 import { ServiceIllustration } from "./ServiceIllustration";
-import { XR_JOURNEY_PHOTO } from "@/lib/photography";
+import { Parallax, Reveal } from "./primitives";
 
-const FEATURED_IDS = ["websites", "branding", "seo", "maps", "social", "maintenance"];
-const DISPLAY_NUM: Record<string, string> = {
-  websites: "01",
-  branding: "02",
-  seo: "03",
-  maps: "04",
-  social: "05",
-  maintenance: "06",
-};
-const DISPLAY_PRICE: Record<string, number | null> = {
-  websites: 499,
-  branding: 179,
-  seo: 299,
-  maps: 990,
-  social: 299,
-  maintenance: 29,
-};
+const IDS = ["websites","branding","seo","maps","social","maintenance"] as const;
+const ICONS = { websites: Globe2, branding: Palette, seo: BarChart3, maps: MapPinned, social: Users, maintenance: ShieldCheck };
+const PRICES: Record<string, number> = { websites:499, branding:179, seo:299, maps:990, social:299, maintenance:29 };
 
+const COPY = {
+  fr: { eyebrow:"06 EXPERTISES · UN SEUL ÉCOSYSTÈME", title:"Vous n’achetez pas un service.", accent:"Vous construisez un système.", lead:"Explorez les briques XRAGENCY et composez une présence digitale cohérente : attirer, convaincre, convertir, fidéliser.", discover:"Voir l’expertise", from:"À partir de", hint:"Cliquez sur une expertise" },
+  en: { eyebrow:"06 DISCIPLINES · ONE ECOSYSTEM", title:"You don't buy a service.", accent:"You build a system.", lead:"Explore the XRAGENCY building blocks and compose a coherent digital presence: attract, convince, convert, retain.", discover:"Explore", from:"From", hint:"Choose a discipline" },
+  vi: { eyebrow:"06 CHUYÊN MÔN · MỘT HỆ SINH THÁI", title:"Bạn không mua một dịch vụ.", accent:"Bạn xây dựng một hệ thống.", lead:"Khám phá các mảnh ghép XRAGENCY để xây dựng hiện diện số nhất quán: thu hút, thuyết phục, chuyển đổi, giữ chân.", discover:"Khám phá", from:"Từ", hint:"Chọn một chuyên môn" },
+  ar: { eyebrow:"06 تخصصات · منظومة واحدة", title:"أنت لا تشتري خدمة.", accent:"بل تبني منظومة.", lead:"استكشف مكونات XRAGENCY وابنِ حضوراً رقمياً متكاملاً: جذب، إقناع، تحويل، واحتفاظ.", discover:"اكتشف", from:"ابتداءً من", hint:"اختر تخصصاً" },
+  ru: { eyebrow:"06 НАПРАВЛЕНИЙ · ОДНА СИСТЕМА", title:"Вы не покупаете услугу.", accent:"Вы строите систему.", lead:"Изучите блоки XRAGENCY и соберите цельное цифровое присутствие: привлечь, убедить, конвертировать, удержать.", discover:"Открыть", from:"От", hint:"Выберите направление" },
+} as const;
 
 export function HomeServices() {
   const { t, price, lang } = useLang();
-  const copy = {
-    fr: { expertise: "06 EXPERTISES", title: "Des solutions sur mesure", titleAccent: "pour chaque ambition.", lead: "Six offres pensées comme un seul écosystème : stratégie, création, visibilité et performance. Faites défiler pour voir chaque univers.", discover: "Découvrir", from: "À partir de", scroll: "PARALLAX / SCROLL", kicker: "UNE AGENCE · UNE VISION", partner: "Plus qu’un prestataire,", partnerAccent: "un partenaire de croissance.", paragraph: "Une direction créative forte, une technologie solide et des expériences digitales conçues pour durer." },
-    en: { expertise: "06 DISCIPLINES", title: "Bespoke digital solutions", titleAccent: "for every ambition.", lead: "Six offers designed as one ecosystem: strategy, creation, visibility and performance. Scroll to explore each discipline.", discover: "Discover", from: "From", scroll: "PARALLAX / SCROLL", kicker: "ONE AGENCY · ONE VISION", partner: "More than a provider,", partnerAccent: "a growth partner.", paragraph: "Strong creative direction, solid technology and digital experiences built to last." },
-    vi: { expertise: "06 CHUYÊN MÔN", title: "Giải pháp số theo yêu cầu", titleAccent: "cho mọi tham vọng.", lead: "Sáu dịch vụ trong một hệ sinh thái: chiến lược, sáng tạo, hiển thị và hiệu suất. Cuộn để khám phá từng chuyên môn.", discover: "Khám phá", from: "Từ", scroll: "PARALLAX / SCROLL", kicker: "MỘT AGENCY · MỘT TẦM NHÌN", partner: "Hơn cả một nhà cung cấp,", partnerAccent: "một đối tác tăng trưởng.", paragraph: "Định hướng sáng tạo mạnh, công nghệ vững và trải nghiệm số được xây dựng để bền lâu." },
-    ar: { expertise: "06 تخصصات", title: "حلول رقمية مصممة", titleAccent: "لكل طموح.", lead: "ستة عروض ضمن منظومة واحدة: استراتيجية، إبداع، ظهور وأداء. استكشف كل تخصص.", discover: "اكتشف", from: "ابتداءً من", scroll: "PARALLAX / SCROLL", kicker: "وكالة واحدة · رؤية واحدة", partner: "أكثر من مزود خدمة،", partnerAccent: "شريك للنمو.", paragraph: "توجيه إبداعي قوي، تقنية متينة وتجارب رقمية مصممة لتدوم." },
-    ru: { expertise: "06 НАПРАВЛЕНИЙ", title: "Цифровые решения", titleAccent: "под каждую задачу.", lead: "Шесть предложений в одной системе: стратегия, креатив, видимость и результат. Изучите каждое направление.", discover: "Открыть", from: "От", scroll: "PARALLAX / SCROLL", kicker: "ОДНО АГЕНТСТВО · ОДНО ВИДЕНИЕ", partner: "Больше, чем подрядчик,", partnerAccent: "партнёр для роста.", paragraph: "Сильное креативное направление, надёжная технология и цифровые продукты, созданные надолго." },
-  }[lang] ?? {
-    expertise: "06 DISCIPLINES", title: "Bespoke digital solutions", titleAccent: "for every ambition.", lead: "Six offers designed as one ecosystem.", discover: "Discover", from: "From", scroll: "PARALLAX / SCROLL", kicker: "ONE AGENCY · ONE VISION", partner: "More than a provider,", partnerAccent: "a growth partner.", paragraph: "Strong creative direction, solid technology and digital experiences built to last.",
-  };
-  const featured = FEATURED_IDS.map((id) =>
-    SERVICES.find((service) => service.id === id),
-  ).filter(Boolean) as typeof SERVICES;
-
-  const hrefFor = (id: string) =>
-    id === "maintenance" ? "/services/webcare" : `/services/${id}`;
+  const copy = COPY[lang as keyof typeof COPY] ?? COPY.fr;
+  const [active, setActive] = useState<(typeof IDS)[number]>("websites");
+  const service = SERVICES.find(s => s.id === active) ?? SERVICES[0];
+  const Icon = ICONS[active];
 
   return (
-    <section
-      id="homepage-services"
-      aria-label={lang === "fr" ? "Les six offres XR Agency" : lang === "en" ? "XR Agency six services" : "Sáu dịch vụ của XR Agency"}
-      className="relative overflow-hidden bg-[#07090b] py-20 text-white sm:py-28 lg:py-36"
-    >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,.07),transparent_35%),radial-gradient(circle_at_90%_45%,rgba(255,180,90,.07),transparent_32%)]" />
-
+    <section id="homepage-services" className="relative overflow-hidden bg-[#07090c] py-20 text-white sm:py-28 lg:py-36">
+      <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_80%_15%,rgba(214,164,93,.10),transparent_30%),radial-gradient(circle_at_10%_85%,rgba(70,80,160,.10),transparent_30%)]" />
       <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
-        <Parallax speed={-0.035}>
-          <div className="mb-12 flex flex-col justify-between gap-8 border-b border-white/10 pb-10 lg:mb-16 lg:flex-row lg:items-end">
+        <Parallax speed={-0.025}>
+          <div className="grid gap-8 border-b border-white/10 pb-12 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
             <div>
-              <span className="label-mono text-[9px] tracking-[0.32em] text-white/45">
-                XR AGENCY · {copy.expertise}
-              </span>
-              <h2 className="display-serif mt-4 max-w-4xl text-5xl leading-[0.88] text-white sm:text-7xl lg:text-[6.6rem]">
-                {copy.title}
-                <br />
-                {copy.titleAccent}
-              </h2>
+              <span className="label-mono text-[9px] tracking-[.3em] text-[#d6a45d]">{copy.eyebrow}</span>
+              <h2 className="display-serif mt-4 max-w-5xl text-5xl leading-[.86] sm:text-7xl lg:text-[6.5rem]">{copy.title}<br /><em className="text-[#d6a45d] not-italic">{copy.accent}</em></h2>
             </div>
-            <p className="max-w-md text-sm leading-6 text-white/50 lg:pb-2">
-              {copy.lead}
-            </p>
+            <p className="max-w-xl text-sm leading-7 text-white/52 lg:pb-1">{copy.lead}</p>
           </div>
         </Parallax>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:gap-5">
-          {featured.map((service, index) => {
-            const startingPrice = DISPLAY_PRICE[service.id];
-            const featuredLarge = index < 2;
+        <div className="mt-10 grid gap-5 lg:grid-cols-[.68fr_1.32fr]">
+          <Reveal>
+            <div className="rounded-[2rem] border border-white/10 bg-white/[.035] p-3 backdrop-blur-xl">
+              <div className="px-4 pb-3 pt-3 label-mono text-[8px] tracking-[.2em] text-white/35">{copy.hint}</div>
+              <div className="grid gap-2">
+                {IDS.map((id, index) => {
+                  const s = SERVICES.find(x => x.id === id);
+                  if (!s) return null;
+                  const I = ICONS[id];
+                  const selected = active === id;
+                  return (
+                    <button key={id} type="button" onClick={() => setActive(id)} className={"group flex items-center gap-3 rounded-2xl border px-4 py-4 text-left transition duration-300 " + (selected ? "border-[#d6a45d]/45 bg-[#d6a45d]/10" : "border-white/8 bg-black/10 hover:-translate-y-0.5 hover:border-white/18")}>
+                      <span className={"grid h-10 w-10 shrink-0 place-items-center rounded-xl border " + (selected ? "border-[#d6a45d]/40 bg-[#d6a45d]/10 text-[#d6a45d]" : "border-white/10 bg-white/[.03] text-white/45")}><I className="h-4 w-4" /></span>
+                      <span className="min-w-0 flex-1"><span className="label-mono text-[8px] tracking-[.18em] text-white/35">0{index+1}</span><span className="mt-1 block text-sm font-semibold text-white">{t(s.title)}</span><span className="mt-0.5 block truncate text-[10px] text-white/38">{t(s.short)}</span></span>
+                      <ArrowUpRight className={"h-4 w-4 shrink-0 transition " + (selected ? "text-[#d6a45d]" : "text-white/20 group-hover:text-white/60")} />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </Reveal>
 
-            return (
-              <Reveal key={service.id} delay={index * 70} className={featuredLarge ? "sm:col-span-1" : ""}>
-                <article className="group relative isolate min-h-[500px] overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#0b0e11] shadow-[0_30px_90px_-45px_rgba(0,0,0,.95)] sm:min-h-[560px]">
-                  <div className="absolute inset-0 flex items-center justify-center p-3 sm:p-5">
-                    <ServiceIllustration service={service.id} title={t(service.title)} />
+          <Reveal delay={80}>
+            <div className="relative min-h-[600px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0e12]">
+              <div className="absolute -inset-10 bg-[#d6a45d]/10 blur-3xl" />
+              <div className="absolute inset-4"><ServiceIllustration service={active} title={t(service.title)} /></div>
+              <div className="absolute inset-x-7 bottom-7 z-20 rounded-[1.5rem] border border-white/12 bg-black/72 p-6 backdrop-blur-xl sm:p-8">
+                <div className="flex items-start justify-between gap-5">
+                  <div>
+                    <div className="flex items-center gap-2"><Sparkles className="h-3.5 w-3.5 text-[#d6a45d]" /><span className="label-mono text-[8px] tracking-[.22em] text-[#d6a45d]">{t(service.short)}</span></div>
+                    <h3 className="display-serif mt-3 text-4xl leading-[.9] sm:text-6xl">{t(service.title)}</h3>
+                    <p className="mt-4 max-w-2xl text-sm leading-6 text-white/52">{t(service.description)}</p>
                   </div>
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-black/5" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-transparent to-transparent" />
-
-                  <div className="relative z-10 flex min-h-[500px] flex-col justify-between p-6 sm:min-h-[560px] sm:p-9 lg:p-10">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 label-mono text-[9px] tracking-[0.22em] text-white/45">
-                        <span className="text-white">{DISPLAY_NUM[service.id]}</span>
-                        <span className="h-px w-8 bg-white/20" />
-                        <span>XR AGENCY</span>
-                      </div>
-                      <span className="rounded-full border border-white/15 bg-black/20 px-3 py-2 label-mono text-[8px] tracking-[0.15em] text-white/50 backdrop-blur-md">
-                        {String(index + 1).padStart(2, "0")} / 06
-                      </span>
-                    </div>
-
-                    <Parallax speed={-0.028}>
-                      <div className="max-w-2xl">
-                        <div className="mb-4 flex items-center gap-2">
-                          <Sparkles className="h-3.5 w-3.5 text-white/70" />
-                          <span className="label-mono text-[8px] tracking-[0.2em] text-white/55">
-                            {t(service.short)}
-                          </span>
-                        </div>
-
-                        <h3 className="display-serif text-4xl leading-[0.9] text-white sm:text-6xl lg:text-[5.2rem]">
-                          {t(service.title)}
-                        </h3>
-
-                        <p className="mt-5 max-w-xl text-sm leading-6 text-white/60 sm:text-[15px]">
-                          {t(service.description)}
-                        </p>
-
-                        <div className="mt-6 flex flex-wrap items-center gap-2.5">
-                          <Link
-                            to={hrefFor(service.id)}
-                            className="inline-flex items-center gap-3 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold tracking-[0.12em] text-black transition hover:-translate-y-0.5 hover:bg-white/90"
-                          >
-                            {copy.discover} <ArrowUpRight className="h-4 w-4" />
-                          </Link>
-
-                          {startingPrice && (
-                            <span className="rounded-full border border-white/15 bg-black/20 px-4 py-3 label-mono text-[9px] tracking-[0.12em] text-white/65 backdrop-blur-md">
-                              {copy.from} {price(startingPrice)}
-                              {service.fromPeriod === "month" ? (lang === "fr" ? " / mois" : lang === "en" ? " / month" : " / tháng") : service.fromPeriod === "year" ? (lang === "fr" ? " / an" : lang === "en" ? " / year" : " / năm") : ""}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </Parallax>
-
-                    <div className="flex items-center justify-between border-t border-white/15 pt-4">
-                      <div className="flex gap-1.5">
-                        {featured.map((_, dot) => (
-                          <span
-                            key={dot}
-                            className={`h-1 rounded-full transition-all ${dot === index ? "w-10 bg-white" : "w-2 bg-white/25"}`}
-                          />
-                        ))}
-                      </div>
-                      <span className="label-mono text-[8px] tracking-[0.18em] text-white/35">
-                        {copy.scroll}
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              </Reveal>
-            );
-          })}
-        </div>
-
-        <Parallax speed={0.055} className="mt-16 sm:mt-24">
-          <div className="relative min-h-[390px] overflow-hidden rounded-[2rem] border border-white/10 bg-black">
-            <div className="absolute -inset-[8%] opacity-90"><img src={XR_JOURNEY_PHOTO} alt="" aria-hidden="true" className="h-[116%] w-full object-cover object-center scale-[1.06] transition-transform duration-[1800ms] hover:scale-[1.11]" /></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-[#050708] via-[#050708]/55 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050708]/90 via-transparent to-[#050708]/10" />
-
-            <div className="relative z-10 flex min-h-[360px] items-end p-7 sm:p-10 lg:p-14">
-              <div className="max-w-xl">
-                <span className="label-mono text-[9px] tracking-[0.3em] text-white/45">
-                  {copy.kicker} · GROWTH
-                </span>
-                <h3 className="display-serif mt-4 max-w-3xl text-4xl leading-[0.88] sm:text-6xl lg:text-7xl">
-                  {copy.partner}
-                  <br />
-                  <em className="text-white/55">{copy.partnerAccent}</em>
-                </h3>
-                <p className="mt-5 max-w-xl text-sm leading-6 text-white/60">
-                  {copy.paragraph}
-                </p>
+                  <div className="hidden text-right sm:block"><span className="label-mono text-[8px] text-white/35">{copy.from}</span><div className="mt-1 text-2xl font-semibold text-[#f0d49f]">{price(PRICES[active])}</div></div>
+                </div>
                 <div className="mt-6 flex flex-wrap gap-2">
-                  {["Strategy","Design","Technology","Growth"].map((item) => (
-                    <span key={item} className="rounded-full border border-white/15 bg-black/20 px-3 py-1.5 label-mono text-[8px] tracking-[.14em] text-white/55 backdrop-blur-md">{item}</span>
-                  ))}
+                  <Link to={active === "maintenance" ? "/services/webcare" : "/services/" + active} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold tracking-[.12em] text-black">{copy.discover}<ArrowUpRight className="h-4 w-4" /></Link>
+                  <a href="#quote" className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[.05] px-5 py-3 label-mono text-[9px] tracking-[.12em] text-white/70 hover:border-[#d6a45d]/40"><Sparkles className="h-3.5 w-3.5 text-[#d6a45d]" />Ajouter à mon projet</a>
                 </div>
               </div>
             </div>
-
-            <div className="pointer-events-none absolute right-[-8%] top-[-14%] hidden h-[125%] w-[55%] rounded-full border border-white/10 lg:block" />
-            <div className="pointer-events-none absolute right-[7%] top-[22%] hidden h-3 w-3 rounded-full bg-white/70 shadow-[0_0_30px_rgba(255,255,255,.7)] lg:block" />
-          </div>
-        </Parallax>
+          </Reveal>
+        </div>
       </div>
     </section>
   );
