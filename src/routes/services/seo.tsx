@@ -3,6 +3,7 @@ import { ArrowRight, Check, ChevronDown, Search, ShieldCheck, Sparkles, Trending
 import { useState, type ReactNode } from "react";
 import { useLang, type Lang } from "@/lib/i18n";
 import { Nav } from "@/components/site/Nav";
+import { ServiceIllustration } from "@/components/site/ServiceIllustration";
 
 export const Route = createFileRoute("/services/seo")({ component: SEOPage });
 
