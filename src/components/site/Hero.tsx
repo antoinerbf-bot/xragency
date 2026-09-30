@@ -3,7 +3,7 @@ import { ArrowRight, MousePointer2, Search } from "lucide-react";
 import { LANGS, useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { EmberButton, Parallax } from "./primitives";
-import { XR_PHOTOS } from "@/lib/photography";
+import { ServiceIllustration } from "./ServiceIllustration";
 
 function useCountUp(target: number, duration = 1200, delay = 300) {
   const [value, setValue] = useState(target);
@@ -90,27 +90,27 @@ export function Hero() {
             <div className="relative mx-auto w-full max-w-[900px]">
               <div className="absolute -inset-16 rounded-full bg-white/[.025] blur-[90px]" />
               <div className="relative grid grid-cols-12 gap-2 sm:gap-3">
-                <div className="relative col-span-8 row-span-2 min-h-[540px] overflow-hidden rounded-[2.2rem] border border-white/12 bg-[#090c10] shadow-[0_60px_140px_-60px_rgba(0,0,0,.98)]">
-                  <img src={XR_PHOTOS.websites} alt="" className="absolute inset-0 h-full w-full object-cover grayscale contrast-[1.08] brightness-[.68] transition duration-[1600ms] hover:scale-[1.06] hover:brightness-[.82]" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#050608] via-black/10 to-transparent" />
-                  <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(0,0,0,.58),transparent_55%,rgba(0,0,0,.25))]" />
-                  <span className="absolute left-5 top-5 label-mono text-[7px] tracking-[.25em] text-white/55">01 / WEB EXPERIENCE</span>
-                  <div className="absolute bottom-5 left-5 right-5 rounded-[1.4rem] border border-white/12 bg-black/60 p-5 backdrop-blur-xl">
+                <div className="relative col-span-8 row-span-2 overflow-hidden rounded-[2.2rem] border border-white/12 bg-[#090c10] shadow-[0_60px_140px_-60px_rgba(0,0,0,.98)]">
+                  <div className="absolute -inset-20 bg-white/[.025] blur-[80px]" />
+                  <div className="relative p-2 sm:p-3">
+                    <ServiceIllustration service="websites" title="WEB EXPERIENCE" />
+                  </div>
+                  <div className="absolute inset-x-6 bottom-6 z-20 rounded-[1.3rem] border border-white/12 bg-black/65 p-4 backdrop-blur-xl">
                     <span className="label-mono text-[7px] tracking-[.22em] text-white/38">STRATEGY → DESIGN → CONVERSION</span>
-                    <p className="display-serif mt-3 text-3xl leading-[.88] sm:text-5xl">Des expériences qui donnent envie d'agir.</p>
+                    <p className="display-serif mt-2 text-2xl leading-[.9] sm:text-4xl">Des expériences qui donnent envie d'agir.</p>
                   </div>
                 </div>
 
-                <div className="relative col-span-4 min-h-[265px] overflow-hidden rounded-[2rem] border border-white/12 bg-[#090c10]">
-                  <img src={XR_PHOTOS.branding} alt="" className="absolute inset-0 h-full w-full object-cover grayscale contrast-[1.08] brightness-[.62] transition duration-[1400ms] hover:scale-[1.08]" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 to-transparent" />
-                  <span className="absolute bottom-4 left-4 label-mono text-[7px] tracking-[.2em] text-white/55">02 / BRAND</span>
+                <div className="relative col-span-4 overflow-hidden rounded-[2rem] border border-white/12 bg-[#090c10]">
+                  <div className="p-1.5">
+                    <ServiceIllustration service="branding" title="BRAND" />
+                  </div>
                 </div>
 
-                <div className="relative col-span-4 min-h-[265px] overflow-hidden rounded-[2rem] border border-white/12 bg-[#090c10]">
-                  <img src={XR_PHOTOS.maps} alt="" className="absolute inset-0 h-full w-full object-cover grayscale-[.1] contrast-[1.05] brightness-[.65] transition duration-[1400ms] hover:scale-[1.08]" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 to-transparent" />
-                  <span className="absolute bottom-4 left-4 label-mono text-[7px] tracking-[.2em] text-white/55">03 / LOCAL VISIBILITY</span>
+                <div className="relative col-span-4 overflow-hidden rounded-[2rem] border border-white/12 bg-[#090c10]">
+                  <div className="p-1.5">
+                    <ServiceIllustration service="maps" title="LOCAL VISIBILITY" />
+                  </div>
                 </div>
               </div>
 
