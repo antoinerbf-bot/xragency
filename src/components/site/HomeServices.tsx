@@ -68,7 +68,7 @@ export function HomeServices() {
               <div className="absolute inset-x-7 bottom-7 z-20 rounded-[1.5rem] border border-white/12 bg-black/72 p-6 backdrop-blur-xl sm:p-8">
                 <div className="flex items-start justify-between gap-5">
                   <div>
-                    <div className="flex items-center gap-2"><Sparkles className="h-3.5 w-3.5 text-white/65" /><span className="label-mono text-[8px] tracking-[.22em] text-[#d6a45d]">{t(service.short)}</span></div>
+                    <div className="flex items-center gap-2"><Sparkles className="h-3.5 w-3.5 text-white/65" /><span className="label-mono text-[8px] tracking-[.22em] text-white/60">{t(service.short)}</span></div>
                     <h3 className="display-serif mt-3 text-4xl leading-[.9] sm:text-6xl">{t(service.title)}</h3>
                     <p className="mt-4 max-w-2xl text-sm leading-6 text-white/52">{t(service.description)}</p>
                   </div>
@@ -76,7 +76,7 @@ export function HomeServices() {
                 </div>
                 <div className="mt-6 flex flex-wrap gap-2">
                   <Link to={active === "maintenance" ? "/services/webcare" : "/services/" + active} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold tracking-[.12em] text-black">{copy.discover}<ArrowUpRight className="h-4 w-4" /></Link>
-                  <a href="#quote" className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[.05] px-5 py-3 label-mono text-[9px] tracking-[.12em] text-white/70 hover:border-white/30"><Sparkles className="h-3.5 w-3.5 text-[#d6a45d]" />Ajouter à mon projet</a>
+                  <a href="#quote" className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[.05] px-5 py-3 label-mono text-[9px] tracking-[.12em] text-white/70 hover:border-white/30"><Sparkles className="h-3.5 w-3.5 text-white/60" />Ajouter à mon projet</a>
                 </div>
               </div>
             </div>
