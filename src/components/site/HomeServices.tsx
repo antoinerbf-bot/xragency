@@ -62,7 +62,7 @@ export function HomeServices() {
           </Reveal>
 
           <Reveal delay={80}>
-            <div className="relative min-h-[600px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0e12]">
+            <div className="relative min-h-[520px] sm:min-h-[600px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0e12]">
               <div className="absolute -left-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full border border-white/[.06]" /><div className="absolute -left-8 top-1/2 h-40 w-40 -translate-y-1/2 rounded-full border border-white/[.08]" />
               <div className="absolute inset-4"><ServiceIllustration service={active} title={t(service.title)} /></div>
               <div className="absolute inset-x-7 bottom-7 z-20 rounded-[1.5rem] border border-white/12 bg-black/72 p-6 backdrop-blur-xl sm:p-8">
