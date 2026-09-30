@@ -9,6 +9,7 @@ import { MapsSimulator } from "@/components/site/MapsSimulator";
 import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
 import { RoboticsShowcase } from "@/components/site/RoboticsShowcase";
+import { RecruitmentTeaser } from "@/components/site/RecruitmentTeaser";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -38,6 +39,7 @@ function Index() {
         <DigitalAudit />
         <MapsSimulator />
         <Faq />
+        <RecruitmentTeaser />
         <Contact />
       </main>
     </div>
