@@ -7,11 +7,11 @@
  */
 export const XR_PHOTOS = {
   // Dark editorial / architectural imagery rather than generic SaaS stock.
-  websites: "https://images.unsplash.com/photo-1643267514395-b36b3f7e8281?auto=format&fit=crop&w=2200&q=88",
+  websites: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=2200&q=88",
   branding: "https://images.unsplash.com/photo-1599420187429-774dbfc6ba5d?auto=format&fit=crop&w=2200&q=88",
-  seo: "https://images.unsplash.com/photo-1771923082503-0a3381c46cef?auto=format&fit=crop&w=2200&q=88",
-  maps: "https://images.unsplash.com/photo-1559557114-c7ce7527188c?auto=format&fit=crop&w=2200&q=88",
-  social: "https://images.unsplash.com/photo-1765285262680-1175453963d5?auto=format&fit=crop&w=2200&q=88",
+  seo: "https://dihvqaqvsppqkfxtaiyj.supabase.co/storage/v1/object/public/featured-images/image-tableau-de-bord-de-suivi-des-positions-seo-a-1768576575589_575742.webp",
+  maps: "https://image.thum.io/get/width/2200/crop/1100/noanimate/https://www.google.com/search?q=restaurants+Da+Nang",
+  social: "https://silconectacreator.com/assets/hero-creators-CFC7teuc.jpg",
   maintenance: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=2200&q=88",
   refonte: "https://images.unsplash.com/photo-1643267514395-b36b3f7e8281?auto=format&fit=crop&w=2200&q=88",
   ads: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=2200&q=88",
