@@ -3,6 +3,7 @@ import { ArrowRight, Bot, Check, Globe2, Search, Sparkles, Target, Wand2 } from 
 import { useLang } from "@/lib/i18n";
 import { Link } from "@tanstack/react-router";
 import { Parallax, Reveal } from "./primitives";
+import { XR_JOURNEY_PHOTO } from "@/lib/photography";
 
 const OPTIONS = [
   { id:"start", icon:Wand2, label:{fr:"Je pars de zéro",en:"I'm starting from zero",vi:"Tôi bắt đầu từ con số 0",ar:"أبدأ من الصفر",ru:"Начинаю с нуля"}, text:{fr:"Construire une base solide : identité + site + visibilité.",en:"Build the foundation: identity + website + visibility.",vi:"Xây nền tảng: nhận diện + website + hiển thị.",ar:"بناء الأساس: الهوية + الموقع + الظهور.",ru:"Основа: айдентика + сайт + видимость."}, stack:["Branding","Site web","SEO"]},
