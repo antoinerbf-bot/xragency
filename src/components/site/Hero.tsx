@@ -4,7 +4,7 @@ import { LANGS, useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { CONTACT } from "@/lib/content";
 import { EmberButton, Parallax } from "./primitives";
-import { XR_PHOTOS } from "@/lib/photography";
+import { XR_HERO_PHOTO, XR_PHOTOS } from "@/lib/photography";
 
 function useCountUp(target: number, duration = 1200, delay = 300) {
   const [value, setValue] = useState(target);
@@ -98,9 +98,11 @@ export function Hero() {
                 <div className="absolute -inset-3 rounded-[2.8rem] border border-white/[.08] bg-white/[.015]" />
                 <div className="relative overflow-hidden rounded-[2.4rem] border border-white/14 bg-[#0a0d11] p-2 shadow-[0_70px_160px_-65px_rgba(0,0,0,.98)]">
                   <div className="relative aspect-[1.06/1] overflow-hidden rounded-[2rem]">
-                    <img src={XR_PHOTOS.branding} alt="" className="absolute inset-0 h-full w-full scale-[1.06] object-cover transition duration-[1800ms] hover:scale-[1.12]" />
+                    <img src={XR_HERO_PHOTO} alt="" className="absolute inset-0 h-full w-full scale-[1.08] object-cover grayscale contrast-[1.08] brightness-[.72] transition duration-[1800ms] hover:scale-[1.15] hover:brightness-[.84]" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050608] via-black/15 to-transparent" />
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_65%_25%,rgba(255,255,255,.15),transparent_28%)]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_65%_25%,rgba(255,255,255,.17),transparent_25%)]" />
+                    <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(0,0,0,.72)_0%,rgba(0,0,0,.12)_48%,rgba(0,0,0,.42)_100%)]" />
+                    <div className="absolute inset-0 opacity-50 mix-blend-soft-light bg-[repeating-linear-gradient(0deg,rgba(255,255,255,.045)_0px,rgba(255,255,255,.045)_1px,transparent_1px,transparent_6px)]" />
 
                     <div className="absolute inset-x-5 top-5 flex items-center justify-between">
                       <span className="label-mono text-[8px] tracking-[.25em] text-white/65">XRAGENCY / DIGITAL STUDIO</span>
@@ -111,6 +113,11 @@ export function Hero() {
                     <div className="absolute right-[13%] top-[10%] hidden h-[35%] w-px bg-white/10 sm:block" />
                     <div className="absolute left-[9%] top-[15%] hidden h-px w-[24%] bg-white/15 sm:block" />
                     <div className="absolute bottom-[22%] right-[13%] hidden h-px w-[28%] bg-white/10 sm:block" />
+
+                    <div className="absolute left-6 top-1/2 hidden -translate-y-1/2 sm:block">
+                      <div className="h-40 w-px bg-white/15" />
+                      <div className="mt-3 label-mono text-[7px] tracking-[.28em] text-white/35 [writing-mode:vertical-rl]">ART DIRECTION · XR / 2026</div>
+                    </div>
 
                     <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4">
                       <div className="max-w-[560px] rounded-[1.6rem] border border-white/15 bg-black/65 p-5 backdrop-blur-xl sm:p-7">
@@ -126,6 +133,13 @@ export function Hero() {
                 </div>
               </div>
 
+              <div className="absolute -bottom-10 -right-2 hidden h-28 w-44 overflow-hidden rounded-2xl border border-white/15 bg-[#090b0e] p-1 shadow-2xl backdrop-blur-xl lg:block">
+                <div className="relative h-full overflow-hidden rounded-xl">
+                  <img src={XR_PHOTOS.seo} alt="" className="h-full w-full object-cover grayscale contrast-[1.12] brightness-[.62] transition duration-1000 hover:scale-110 hover:brightness-[.8]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent" />
+                  <span className="absolute bottom-3 left-3 label-mono text-[7px] tracking-[.2em] text-white/65">DATA / PERFORMANCE</span>
+                </div>
+              </div>
               <div className="absolute -bottom-6 -left-3 hidden items-center gap-3 rounded-2xl border border-white/12 bg-[#090b0e]/92 px-4 py-3 shadow-xl backdrop-blur-xl sm:flex">
                 <FileImage className="h-4 w-4 text-white/45" />
                 <span><b className="block text-[9px] uppercase tracking-[.12em]">Maquette gratuite</b><small className="text-[8px] text-white/42">Valeur 200 € · sans engagement</small></span>
