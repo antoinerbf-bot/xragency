@@ -25,6 +25,8 @@ const ref = (name: string, url: string, sector: string, type: PortfolioReference
 });
 
 const RAW_PORTFOLIO_REFERENCES: PortfolioReference[] = [
+  ref("Pok-N Ball", "https://pokebowlfresh.vercel.app/", "restaurant", "Vitrine", "XR Agency"),
+  ref("French Paradise", "https://frenchparadise.vn/", "restaurant", "Vitrine", "XR Agency"),
   ref("Le Gramme", "https://legramme.com/", "luxe", "E-commerce"), ref("MaisonCléo", "https://maisoncleo.com/", "luxe", "E-commerce"), ref("Completedworks", "https://completedworks.com/", "luxe", "E-commerce"),
   ref("AYANA", "https://www.ayana.com/", "hotel", "Vitrine"), ref("Heckfield Place", "https://www.heckfieldplace.com/", "hotel", "Vitrine"), ref("Naman Retreat", "https://www.namanretreat.com/", "hotel", "Vitrine"),
   ref("Septime", "https://www.septime-charonne.fr/", "restaurant", "Vitrine"), ref("Burnt Ends", "https://burntends.com.sg/", "restaurant", "Vitrine"), ref("BRAT", "https://bratrestaurant.co.uk/", "restaurant", "Vitrine"),
