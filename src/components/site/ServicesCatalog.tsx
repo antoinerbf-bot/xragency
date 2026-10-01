@@ -145,7 +145,12 @@ export function ServicesCatalog() {
                       <h2 className={cn("display-serif leading-[.9] text-white", featured ? "text-5xl sm:text-7xl" : "text-4xl sm:text-5xl")}>{t(service.title)}</h2>
                       <p className="mt-4 max-w-xl text-sm leading-6 text-white/60">{t(service.description)}</p>
                       <div className="mt-6 flex flex-wrap items-center gap-2.5">
-                        <a href={`/?service=${service.id}#quote`} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold uppercase tracking-[.12em] text-black transition hover:-translate-y-0.5 hover:bg-white/90">{copy.compose} <ArrowUpRight className="h-4 w-4" /></a>
+                        <a href={href} className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/35 px-5 py-3 label-mono text-[9px] font-semibold uppercase tracking-[.12em] text-white transition hover:-translate-y-0.5 hover:border-white/40">
+                          {copy.learn} <ArrowUpRight className="h-4 w-4" />
+                        </a>
+                        <a href={`/?service=${service.id}#quote`} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold uppercase tracking-[.12em] text-black transition hover:-translate-y-0.5 hover:bg-white/90">
+                          {copy.compose} <ArrowUpRight className="h-4 w-4" />
+                        </a>
                         <span className="rounded-full border border-white/15 bg-black/30 px-4 py-3 label-mono text-[9px] text-white/70 backdrop-blur">{copy.from} {price(service.fromEur)}{service.fromPeriod === "month" ? " / mois" : service.fromPeriod === "year" ? " / an" : ""}</span>
                       </div>
                     </div>
