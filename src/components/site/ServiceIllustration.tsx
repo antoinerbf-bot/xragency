@@ -1,4 +1,5 @@
 import { ArrowUpRight, ExternalLink, Search } from "lucide-react";
+import type { ReactNode } from "react";
 import { XR_PHOTOS } from "@/lib/photography";
 
 type Props = { service: string; title?: string };
@@ -17,7 +18,7 @@ const META: Record<string, { label: string; number: string; photo?: keyof typeof
   strategy: { label: "STRATEGY", number: "11", photo: "strategy", position: "50% 44%" },
 };
 
-function Frame({ children }: { children: React.ReactNode }) {
+function Frame({ children }: { children: ReactNode }) {
   return (
     <div className="relative h-full min-h-[360px] overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#080b0f] shadow-[0_55px_140px_-65px_rgba(0,0,0,.98)]">
       {children}
