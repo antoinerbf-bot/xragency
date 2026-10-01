@@ -4,6 +4,7 @@ import { Nav } from "@/components/site/Nav";
 import { ServiceIllustration } from "@/components/site/ServiceIllustration";
 import { Parallax } from "@/components/site/primitives";
 import { Contact } from "@/components/site/Contact";
+import { XR_PHOTOS } from "@/lib/photography";
 
 export const Route = createFileRoute("/services/webcare")({
   head: () => ({
@@ -69,6 +70,33 @@ function WebCarePage() {
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"><div><span className="label-mono text-[10px] uppercase tracking-[0.25em] text-primary">Maintenance mensuelle</span><h2 className="display-serif mt-4 text-4xl sm:text-6xl">Choisissez votre niveau<br/>d'accompagnement.</h2></div><p className="max-w-md text-sm leading-6 text-muted-foreground">Les volumes concernent les demandes courantes. Les travaux hors périmètre restent séparés pour préserver une charge de travail réaliste.</p></div>
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
             {plans.map((plan,index)=><article key={plan.name} className={`rounded-[1.75rem] border p-7 transition-all hover:-translate-y-1 hover:shadow-2xl sm:p-8 ${index===1?"border-primary/50 bg-primary/[0.05]":"border-border bg-card/60"}`}><div className="flex items-center justify-between"><span className="label-mono text-[9px] text-primary">0{index+1}</span>{index===1&&<span className="label-mono rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[8px] text-primary">ÉQUILIBRE</span>}</div><h3 className="display-serif mt-7 text-3xl">{plan.name}</h3><p className="mt-2 text-xs text-muted-foreground">{plan.badge}</p><div className="mt-6 flex items-end gap-2 border-y border-border py-5"><span className="display-serif text-5xl text-primary">{plan.price} €</span><span className="label-mono mb-1 text-[9px] text-muted-foreground">/ mois</span></div><ul className="mt-6 space-y-3">{plan.features.map(feature=><li key={feature} className="flex gap-3 text-sm leading-5 text-muted-foreground"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary"/>{feature}</li>)}</ul><a href={`https://wa.me/33767566783?text=${encodeURIComponent(`Bonjour XR Agency, je souhaite parler du forfait WebCare « ${plan.name} » à ${plan.price} €/mois.`)}`} target="_blank" rel="noreferrer" className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-5 py-3.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">Parler à XR Agency <ArrowRight className="h-4 w-4"/></a></article>)}
+          </div>
+        </div>
+      </section>
+      <section className="border-t border-border/60 py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-5 lg:px-10">
+          <div className="mb-8">
+            <span className="label-mono text-[10px] uppercase tracking-[.25em] text-primary">Lecture rapide</span>
+            <h2 className="display-serif mt-4 text-4xl sm:text-5xl">Ce que chaque niveau couvre.</h2>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-muted-foreground">Les points ci-dessous reprennent les éléments de chaque formule, afin de rendre le périmètre lisible avant de choisir.</p>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-3">
+            {plans.map((plan,index) => (
+              <article key={plan.name + "-detail"} className="rounded-[1.5rem] border border-border bg-card/45 p-6 sm:p-7">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="label-mono text-[8px] tracking-[.18em] text-primary">0{index + 1} · {plan.name.toUpperCase()}</span>
+                  <span className="label-mono text-[8px] text-muted-foreground">{plan.features.length} éléments</span>
+                </div>
+                <div className="mt-6 space-y-3">
+                  {plan.features.map(feature => (
+                    <div key={feature} className="flex gap-3 text-sm leading-5 text-muted-foreground">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary"/>
+                      {feature}
+                    </div>
+                  ))}
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
