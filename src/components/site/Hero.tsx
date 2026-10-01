@@ -3,7 +3,6 @@ import { ArrowRight, MousePointer2, Search } from "lucide-react";
 import { LANGS, useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { EmberButton, Parallax } from "./primitives";
-import { ServiceIllustration } from "./ServiceIllustration";
 
 function useCountUp(target: number, duration = 1200, delay = 300) {
   const [value, setValue] = useState(target);
@@ -90,39 +89,68 @@ export function Hero() {
           </Parallax>
 
           <Parallax speed={0.025}>
-            <div className="relative mx-auto w-full max-w-[900px]">
-              <div className="absolute -inset-16 rounded-full bg-white/[.025] blur-[90px]" />
-              <div className="relative grid grid-cols-12 gap-2 sm:gap-3">
-                <div className="relative col-span-8 row-span-2 overflow-hidden rounded-[2.2rem] border border-white/12 bg-[#090c10] shadow-[0_60px_140px_-60px_rgba(0,0,0,.98)]">
-                  <div className="absolute -inset-20 bg-white/[.025] blur-[80px]" />
-                  <div className="relative p-2 sm:p-3">
-                    <ServiceIllustration service="websites" title="WEB EXPERIENCE" />
-                  </div>
-                  <div className="absolute inset-x-6 bottom-6 z-20 rounded-[1.3rem] border border-white/12 bg-black/65 p-4 backdrop-blur-xl">
-                    <span className="label-mono text-[7px] tracking-[.22em] text-white/38">STRATEGY → DESIGN → CONVERSION</span>
-                    <p className="display-serif mt-2 text-2xl leading-[.9] sm:text-4xl">Des expériences qui donnent envie d'agir.</p>
-                  </div>
+            <div className="relative mx-auto h-[540px] w-full max-w-[920px] sm:h-[660px]">
+              <div className="absolute -inset-10 rounded-full bg-white/[.025] blur-[100px]" />
+
+              <div className="absolute left-0 top-10 h-[78%] w-[72%] overflow-hidden rounded-[2.4rem] border border-white/12 bg-[#080b0f] shadow-[0_60px_150px_-70px_rgba(0,0,0,.98)]">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(255,255,255,.12),transparent_23%),radial-gradient(circle_at_10%_90%,rgba(255,255,255,.055),transparent_28%),linear-gradient(145deg,#11161b,#080a0d_62%,#10151a)]" />
+                <div className="absolute inset-0 opacity-30 bg-[linear-gradient(115deg,transparent_0%,rgba(255,255,255,.08)_47%,transparent_62%)]" />
+
+                <div className="absolute left-6 right-6 top-6 flex items-center justify-between">
+                  <span className="label-mono text-[7px] tracking-[.22em] text-white/38">XRAGENCY / CREATIVE SYSTEM</span>
+                  <span className="label-mono text-[7px] text-white/30">01 — 06</span>
                 </div>
 
-                <div className="relative col-span-4 overflow-hidden rounded-[2rem] border border-white/12 bg-[#090c10]">
-                  <div className="p-1.5">
-                    <ServiceIllustration service="branding" title="BRAND" />
-                  </div>
+                <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                  <div className="absolute h-[62%] w-[62%] rounded-full border border-white/[.06]" />
+                  <div className="absolute h-[46%] w-[46%] rounded-full border border-white/[.08]" />
+                  <span className="display-serif absolute -translate-x-8 -translate-y-3 text-[16rem] leading-none tracking-[-.14em] text-white/[.06] sm:text-[20rem]">X</span>
+                  <span className="display-serif absolute translate-x-10 translate-y-7 text-[13rem] leading-none tracking-[-.14em] text-white/[.2] sm:text-[17rem]">R</span>
                 </div>
 
-                <div className="relative col-span-4 overflow-hidden rounded-[2rem] border border-white/12 bg-[#090c10]">
-                  <div className="p-1.5">
-                    <ServiceIllustration service="maps" title="LOCAL VISIBILITY" />
+                <div className="absolute bottom-6 left-6 right-6 rounded-[1.4rem] border border-white/10 bg-black/55 p-4 backdrop-blur-xl sm:p-5">
+                  <span className="label-mono text-[7px] tracking-[.22em] text-white/35">STRATEGY → DESIGN → CONVERSION</span>
+                  <div className="mt-3 flex items-end justify-between gap-4">
+                    <p className="display-serif max-w-[10ch] text-3xl leading-[.88] sm:text-4xl">Des idées qui deviennent désirables.</p>
+                    <span className="hidden text-right label-mono text-[7px] leading-4 text-white/28 sm:block">WEB<br/>BRAND<br/>SEO<br/>IA</span>
                   </div>
                 </div>
               </div>
 
-              <div className="absolute -right-4 -top-5 hidden items-center gap-2 rounded-full border border-white/15 bg-[#090b0e]/92 px-4 py-2 shadow-lg backdrop-blur-xl sm:flex">
-                <MousePointer2 className="h-3 w-3 text-white/60" />
-                <span className="label-mono text-[8px] text-white/58">WEB · BRAND · SEO · MAPS · SOCIAL · IA</span>
+              <div className="absolute right-0 top-0 w-[31%] rounded-[2rem] border border-white/12 bg-white/[.035] p-5 backdrop-blur-xl sm:p-6">
+                <div className="flex items-center justify-between">
+                  <span className="label-mono text-[7px] tracking-[.18em] text-white/35">01 / POSITION</span>
+                  <ArrowRight className="h-3.5 w-3.5 rotate-[-45deg] text-white/35" />
+                </div>
+                <p className="mt-8 text-[clamp(2rem,4vw,3.6rem)] font-light leading-none tracking-[-.08em] text-white/90">+500</p>
+                <p className="mt-2 label-mono text-[7px] leading-4 text-white/32">PROJECTS /<br/>DIGITAL EXPERIENCES</p>
               </div>
-              <div className="absolute -bottom-5 left-4 hidden rounded-2xl border border-white/12 bg-[#090b0e]/92 px-4 py-3 shadow-xl backdrop-blur-xl lg:block">
-                <span className="label-mono text-[7px] tracking-[.18em] text-white/42">XRAGENCY / DIGITAL SYSTEM</span>
+
+              <div className="absolute bottom-0 right-[3%] w-[46%] overflow-hidden rounded-[2rem] border border-white/12 bg-[#0b0e12] shadow-2xl">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_18%,rgba(255,255,255,.12),transparent_25%),linear-gradient(135deg,#11151a,#080a0d)]" />
+                <div className="relative p-6 sm:p-7">
+                  <div className="flex items-center justify-between">
+                    <span className="label-mono text-[7px] tracking-[.2em] text-white/35">02 / MOTION</span>
+                    <span className="h-2 w-2 rounded-full bg-white/70 shadow-[0_0_16px_rgba(255,255,255,.35)]" />
+                  </div>
+                  <h3 className="display-serif mt-10 text-4xl leading-[.84] sm:text-5xl">Make it<br/><em className="not-italic text-white/35">felt.</em></h3>
+                  <div className="mt-8 space-y-2">
+                    <div className="h-px w-full bg-white/10" />
+                    <div className="flex justify-between label-mono text-[7px] text-white/30"><span>EDITORIAL</span><span>86%</span></div>
+                    <div className="h-px w-[86%] bg-white/35" />
+                    <div className="flex justify-between label-mono text-[7px] text-white/30"><span>CONVERSION</span><span>94%</span></div>
+                    <div className="h-px w-[94%] bg-white/25" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="absolute bottom-20 left-[58%] hidden items-center gap-2 rounded-full border border-white/15 bg-[#090b0e]/92 px-4 py-2 shadow-lg backdrop-blur-xl lg:flex">
+                <MousePointer2 className="h-3 w-3 text-white/55" />
+                <span className="label-mono text-[7px] tracking-[.15em] text-white/42">MOVE · EXPLORE · CONVERT</span>
+              </div>
+
+              <div className="absolute left-5 top-[3%] hidden rounded-2xl border border-white/10 bg-[#090b0e]/90 px-4 py-3 shadow-xl backdrop-blur-xl sm:block">
+                <span className="label-mono text-[7px] tracking-[.18em] text-white/30">XRAGENCY / DIGITAL DIRECTION</span>
               </div>
             </div>
           </Parallax>
