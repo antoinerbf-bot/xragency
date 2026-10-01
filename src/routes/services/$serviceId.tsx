@@ -525,7 +525,7 @@ function ServiceDetailPage() {
                           {p.features?.length ?? 0} {t({ fr: "éléments inclus", en: "included items", vi: "hạng mục" })}
                         </span>
                         <span className="label-mono text-[8px] text-primary transition-transform duration-300 group-hover:translate-x-1">
-                          {isSelected ? "SELECTED" : "VIEW"} →
+                          {isSelected ? t({ fr: "SÉLECTIONNÉ", en: "SELECTED", vi: "ĐÃ CHỌN", ar: "محدد", ru: "ВЫБРАНО" }) : t({ fr: "VOIR", en: "VIEW", vi: "XEM", ar: "عرض", ru: "СМОТРЕТЬ" })} →
                         </span>
                       </div>
 
