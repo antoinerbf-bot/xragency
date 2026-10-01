@@ -14,6 +14,7 @@ const CATALOG_IDS = [
   "maps",
   "social",
   "maintenance",
+  "robotics",
 ] as const;
 
 const SERVICE_KICKER: Record<string, { fr: string; en: string; vi: string }> = {
@@ -23,6 +24,7 @@ const SERVICE_KICKER: Record<string, { fr: string; en: string; vi: string }> = {
   maps: { fr: "LOCAL", en: "LOCAL", vi: "ĐỊA PHƯƠNG" },
   social: { fr: "RÉSEAUX", en: "SOCIAL", vi: "MẠNG XÃ HỘI" },
   maintenance: { fr: "CARE", en: "CARE", vi: "BẢO TRÌ" },
+  robotics: { fr: "ROBOTICS", en: "ROBOTICS", vi: "ROBOT" },
 };
 const HREF: Record<string, string> = {
   websites: "/services/websites",
