@@ -46,6 +46,149 @@ const sectorLabels: Record<string, Record<string,string>> = {
 
 const FEATURED_NAMES = ["Pok-N Ball", "Le Gramme", "AYANA", "Raycast", "Audo Copenhagen", "Typology"] as const;
 
+
+type PortfolioItem = (typeof PORTFOLIO_REFERENCES)[number];
+
+const ALWAYS_FALLBACK_HOSTS = new Set([
+  "completedworks.com",
+  "www.completedworks.com",
+  "ayana.com",
+  "www.ayana.com",
+  "dior.com",
+  "www.dior.com",
+  "chanel.com",
+  "www.chanel.com",
+  "cartier.com",
+  "www.cartier.com",
+  "vancleefarpels.com",
+  "www.vancleefarpels.com",
+  "tiffany.com",
+  "www.tiffany.com",
+  "bulgari.com",
+  "www.bulgari.com",
+  "messika.com",
+  "www.messika.com",
+  "repossi.com",
+  "www.repossi.com",
+  "bottegaveneta.com",
+  "www.bottegaveneta.com",
+  "loewe.com",
+  "www.loewe.com",
+  "jacquemus.com",
+  "www.jacquemus.com",
+  "toteme-studio.com",
+  "www.toteme-studio.com",
+  "prada.com",
+  "www.prada.com",
+  "ysl.com",
+  "www.ysl.com",
+  "moncler.com",
+  "www.moncler.com",
+  "rimowa.com",
+  "www.rimowa.com",
+  "porsche.com",
+  "www.porsche.com",
+  "ferrari.com",
+  "www.ferrari.com",
+  "lamborghini.com",
+  "www.lamborghini.com",
+  "astonmartin.com",
+  "www.astonmartin.com",
+  "mclaren.com",
+  "www.mclaren.com",
+  "nike.com",
+  "www.nike.com",
+  "arcteryx.com",
+  "www.arcteryx.com",
+  "patagonia.com",
+  "www.patagonia.com",
+  "webflow.com",
+  "www.webflow.com",
+  "notion.so",
+  "www.notion.so",
+  "stripe.com",
+  "stripe.com",
+  "spotify.com",
+  "www.spotify.com",
+  "revolut.com",
+  "www.revolut.com",
+  "wise.com",
+  "www.wise.com",
+  "monzo.com",
+  "monzo.com",
+  "polestar.com",
+  "www.polestar.com",
+]);
+
+const shouldUseReferenceFallback = (url: string) => {
+  try {
+    return ALWAYS_FALLBACK_HOSTS.has(new URL(url).hostname.toLowerCase());
+  } catch {
+    return false;
+  }
+};
+
+function ReferencePreview({
+  item,
+  alt,
+  loading,
+  className = "",
+}: {
+  item?: PortfolioItem | null;
+  alt?: string;
+  loading?: "eager" | "lazy";
+  className?: string;
+}) {
+  const [fallback, setFallback] = useState(() => Boolean(item && shouldUseReferenceFallback(item.url)));
+
+  useEffect(() => {
+    setFallback(Boolean(item && shouldUseReferenceFallback(item.url)));
+  }, [item?.url]);
+
+  if (!item) {
+    return <div aria-hidden className={`relative h-full w-full overflow-hidden bg-[#0b0e12] ${className}`} />;
+  }
+
+  if (fallback) {
+    const initial = item.name.trim().charAt(0).toUpperCase();
+
+    return (
+      <div
+        className={`relative h-full w-full overflow-hidden bg-[#0b0e12] ${className}`}
+        aria-label={alt ?? item.name}
+        role="img"
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_28%,rgba(255,255,255,.13),transparent_28%),radial-gradient(circle_at_18%_82%,rgba(255,255,255,.07),transparent_32%),linear-gradient(135deg,#12161b,#080a0d_58%,#10141a)]" />
+        <div className="absolute inset-0 opacity-40 bg-[linear-gradient(115deg,transparent_0%,rgba(255,255,255,.07)_48%,transparent_62%)]" />
+        <div className="absolute inset-0 flex flex-col justify-between p-6 sm:p-8">
+          <div className="flex items-start justify-between gap-4">
+            <span className="label-mono text-[7px] tracking-[.22em] text-white/35">VISUAL REFERENCE</span>
+            <span className="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/[.04] text-white/55 backdrop-blur-xl">
+              <span className="display-serif text-xl leading-none">{initial}</span>
+            </span>
+          </div>
+          <div>
+            <div className="mb-3 h-px w-20 bg-white/20" />
+            <p className="label-mono text-[7px] tracking-[.18em] text-white/35">{item.sector} · {item.type}</p>
+            <h3 className="display-serif mt-2 max-w-[12ch] text-4xl leading-[.9] text-white/92 sm:text-5xl">{item.name}</h3>
+            <p className="mt-3 max-w-md text-[11px] leading-5 text-white/35">{item.url.replace(/^https?:\/\//, "").replace(/\/$/, "")}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={item.image}
+      alt={alt ?? item.name + " homepage"}
+      loading={loading}
+      onError={() => setFallback(true)}
+      className={`h-full w-full object-cover ${className}`}
+    />
+  );
+}
+
 export function WorkPage() {
   const { lang } = useLang();
   const tx = copy[lang] ?? copy.fr;
@@ -81,7 +224,7 @@ export function WorkPage() {
     <Nav/>
     <main className="pt-20 sm:pt-24">
       <section className="relative min-h-[72vh] overflow-hidden bg-[#050608] text-white">
-        <div className="absolute inset-0 bg-[#050608]"><img key={reelItem?.url} src={reelItem?.image} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover opacity-35 grayscale contrast-[1.05] brightness-[.42] transition-opacity duration-1000" /><div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(5,6,8,.98),rgba(5,6,8,.58)_54%,rgba(5,6,8,.88))]" /></div>
+        <div className="absolute inset-0 bg-[#050608]"><ReferencePreview item={reelItem} alt="" loading="eager" className="absolute inset-0 opacity-35 grayscale contrast-[1.05] brightness-[.42] transition-opacity duration-1000" /><div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(5,6,8,.98),rgba(5,6,8,.58)_54%,rgba(5,6,8,.88))]" /></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_12%,rgba(255,255,255,.12),transparent_26%),linear-gradient(120deg,rgba(5,6,8,.96),rgba(11,17,23,.72)_55%,rgba(5,6,8,.94))]"/>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_78%,rgba(255,255,255,.07),transparent_28%)]"/>
         <div aria-hidden className="absolute inset-0 opacity-30 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,.08)_50%,transparent_100%)]"/>
@@ -107,7 +250,7 @@ export function WorkPage() {
           <div className="grid gap-5 lg:grid-cols-[1.4fr_.6fr]">
             <button type="button" onClick={()=>reelItem && setActive(reelItem)} className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-black text-left">
               <div className="aspect-[16/9] overflow-hidden bg-[#0d1116]">
-                <img key={reelItem?.url} src={reelItem?.image} alt={reelItem?.name+" homepage"} className="h-full w-full object-cover transition duration-[1600ms] group-hover:scale-[1.025]"/>
+                <ReferencePreview item={reelItem} alt={reelItem?.name+" homepage"} loading="eager" className="transition duration-[1600ms] group-hover:scale-[1.025]"/>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/5"/>
                 <div className="absolute left-5 right-5 top-5 flex items-center justify-between"><span className="rounded-full border border-white/15 bg-black/45 px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-white/55 backdrop-blur-xl">{tx.homepage} / {String(reelIndex+1).padStart(2,"0")}</span><span className="rounded-full border border-white/15 bg-black/45 px-3 py-1.5 label-mono text-[7px] text-white/55 backdrop-blur-xl">{reelItem?.origin === "XR Agency" ? tx.agency : tx.reference}</span></div>
                 <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8"><p className="label-mono text-[8px] tracking-[.18em] text-white/38">{sectorLabels[reelItem?.sector ?? ""]?.[lang] ?? reelItem?.sector} · {reelItem?.type}</p><div className="mt-2 flex items-end justify-between gap-4"><h3 className="display-serif text-5xl leading-[.86] sm:text-7xl">{reelItem?.name}</h3><span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-white/20 bg-white/10 backdrop-blur-xl transition group-hover:bg-white group-hover:text-black"><ArrowUpRight className="h-4 w-4"/></span></div></div>
@@ -115,7 +258,7 @@ export function WorkPage() {
             </button>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
               {featured.slice(1,4).map((item,i)=><button key={item.url} type="button" onClick={()=>{setReelIndex(i+1);setActive(item)}} className="group relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[.025] text-left">
-                <div className="aspect-[16/9] overflow-hidden bg-[#0d1116] sm:aspect-[16/7] lg:aspect-[16/7]"><img src={item.image} alt={item.name+" homepage"} loading="lazy" className="h-full w-full object-cover opacity-75 transition duration-[1200ms] group-hover:scale-[1.04] group-hover:opacity-100"/><div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/25 to-transparent"/><div className="absolute inset-y-0 left-4 flex items-center"><div><p className="label-mono text-[7px] tracking-[.18em] text-white/35">{item.origin === "XR Agency" ? tx.agency : tx.reference} · {tx.homepage}</p><h3 className="display-serif mt-1 text-2xl">{item.name}</h3></div></div></div>
+                <div className="aspect-[16/9] overflow-hidden bg-[#0d1116] sm:aspect-[16/7] lg:aspect-[16/7]"><ReferencePreview item={item} alt={item.name+" homepage"} loading="lazy" className="opacity-75 transition duration-[1200ms] group-hover:scale-[1.04] group-hover:opacity-100"/><div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/25 to-transparent"/><div className="absolute inset-y-0 left-4 flex items-center"><div><p className="label-mono text-[7px] tracking-[.18em] text-white/35">{item.origin === "XR Agency" ? tx.agency : tx.reference} · {tx.homepage}</p><h3 className="display-serif mt-1 text-2xl">{item.name}</h3></div></div></div>
               </button>)}
             </div>
           </div>
@@ -145,11 +288,11 @@ export function WorkPage() {
                   className="group block w-full overflow-hidden rounded-[1.8rem] border border-border bg-card text-left transition duration-700 hover:-translate-y-1 hover:border-primary/35 hover:shadow-2xl"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-[#080b0f]">
-                    <img
-                      src={item.image}
+                    <ReferencePreview
+                      item={item}
                       alt={item.name+" homepage"}
                       loading={index<9?"eager":"lazy"}
-                      className="h-full w-full object-cover object-top transition duration-[1400ms] ease-out group-hover:scale-[1.04]"
+                      className="object-top transition duration-[1400ms] ease-out group-hover:scale-[1.04]"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/5 to-transparent" />
                     <div className="absolute inset-x-4 top-4 flex items-center justify-between gap-2">
@@ -202,7 +345,7 @@ export function WorkPage() {
     {active && <div className="fixed inset-0 z-[100] grid place-items-center bg-black/80 p-4 backdrop-blur-md" role="dialog" aria-modal="true">
       <div className="relative max-h-[92vh] w-full max-w-6xl overflow-auto rounded-[2rem] border border-white/15 bg-background shadow-2xl">
         <button type="button" onClick={()=>setActive(null)} aria-label={tx.close} className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-black/65 text-white"><X className="h-4 w-4"/></button>
-        <div className="grid lg:grid-cols-[1.4fr_.6fr]"><div className="min-h-[420px] bg-[#080b0f]"><div className="relative h-full min-h-[420px] overflow-hidden"><img src={active.image} alt={active.name+" homepage"} className="h-full min-h-[420px] w-full object-cover"/><div className="absolute left-5 top-5 rounded-full border border-white/15 bg-black/50 px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-white/55 backdrop-blur-xl">{tx.homepage}</div></div></div><div className="p-7 sm:p-10"><span className="label-mono text-[8px] tracking-[.24em] text-primary">{sectorLabels[active.sector]?.[lang] ?? active.sector} · {active.type}</span><h2 className="display-serif mt-4 text-5xl leading-[.86]">{active.name}</h2><p className="mt-4 text-sm leading-6 text-muted-foreground">Capture visuelle de la homepage publique. Le bouton ouvre le site réel dans un nouvel onglet.</p><div className="mt-6 flex flex-wrap gap-2">{active.services.map(s=><span key={s} className="rounded-full border border-border px-3 py-1.5 text-[9px] text-muted-foreground">{s==="ecommerce"?"E-commerce":s}</span>)}</div><a href={active.url} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-xs font-semibold text-background">{tx.open}<ExternalLink className="h-3.5 w-3.5"/></a></div></div>
+        <div className="grid lg:grid-cols-[1.4fr_.6fr]"><div className="min-h-[420px] bg-[#080b0f]"><div className="relative h-full min-h-[420px] overflow-hidden"><ReferencePreview item={active} alt={active.name+" homepage"} loading="eager" className="min-h-[420px] object-top"/><div className="absolute left-5 top-5 rounded-full border border-white/15 bg-black/50 px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-white/55 backdrop-blur-xl">{tx.homepage}</div></div></div><div className="p-7 sm:p-10"><span className="label-mono text-[8px] tracking-[.24em] text-primary">{sectorLabels[active.sector]?.[lang] ?? active.sector} · {active.type}</span><h2 className="display-serif mt-4 text-5xl leading-[.86]">{active.name}</h2><p className="mt-4 text-sm leading-6 text-muted-foreground">Capture visuelle de la homepage publique. Le bouton ouvre le site réel dans un nouvel onglet.</p><div className="mt-6 flex flex-wrap gap-2">{active.services.map(s=><span key={s} className="rounded-full border border-border px-3 py-1.5 text-[9px] text-muted-foreground">{s==="ecommerce"?"E-commerce":s}</span>)}</div><a href={active.url} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-xs font-semibold text-background">{tx.open}<ExternalLink className="h-3.5 w-3.5"/></a></div></div>
       </div>
     </div>}
     <Contact/>
