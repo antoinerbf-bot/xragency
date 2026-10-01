@@ -37,6 +37,17 @@ export const SERVICES_PART1 = [
           { fr: "Blog intégré", en: "Integrated blog", vi: "Tích hợp blog" },
         ],
       },
+      {
+        name: { fr: "E-commerce & Réservation", en: "E-commerce & Booking", vi: "Thương mại điện tử & Đặt chỗ", ar: "التجارة الإلكترونية والحجز", ru: "E-commerce & Buchungen" },
+        eur: 1499,
+        period: "once",
+        features: [
+          { fr: "Catalogue produits", en: "Product catalogue", vi: "Danh mục sản phẩm", ar: "كتالوج المنتجات", ru: "Каталог товаров" },
+          { fr: "Paiement sécurisé", en: "Secure payments", vi: "Thanh toán an toàn", ar: "دفع آمن", ru: "Безопасная оплата" },
+          { fr: "Parcours mobile optimisé", en: "Mobile-optimised journey", vi: "Hành trình tối ưu cho mobile", ar: "مسار محسن للجوال", ru: "Оптимизированный мобильный путь" },
+          { fr: "Réservation selon le projet", en: "Booking flow when required", vi: "Luồng đặt chỗ theo dự án", ar: "مسار حجز حسب المشروع", ru: "Онлайн-бронирование по проекту" },
+        ],
+      },
     ],
     steps: [
       { num: "01", title: { fr: "Architecture", en: "Architecture", vi: "Kiến trúc", ar: "البنية", ru: "Архитектура" }, desc: { fr: "Arborescence, parcours et hiérarchie des contenus avant le design final.", en: "Sitemap, user journey and content hierarchy before final design.", vi: "Cấu trúc, hành trình và thứ tự nội dung trước thiết kế cuối.", ar: "هيكلة الموقع ومسار المستخدم وتسلسل المحتوى قبل التصميم النهائي.", ru: "Структура, пользовательский путь и иерархия контента до финального дизайна." } },
