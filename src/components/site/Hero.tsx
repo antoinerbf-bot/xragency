@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, MousePointer2, Search } from "lucide-react";
+import { ArrowRight, Bot, ChevronDown, CircleDot, Globe2, Layers3, MousePointer2, Palette, Search, Sparkles } from "lucide-react";
 import { LANGS, useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { EmberButton, Parallax } from "./primitives";
+import { XR_HERO_PHOTO } from "@/lib/photography";
 
 function useCountUp(target: number, duration = 1200, delay = 300) {
   const [value, setValue] = useState(target);
@@ -26,9 +27,88 @@ function useCountUp(target: number, duration = 1200, delay = 300) {
 function Stat({ value, suffix = "", label }: { value: number; suffix?: string; label: string }) {
   const count = useCountUp(value);
   return (
-    <div className="border-l border-white/15 pl-4 first:border-l-0 first:pl-0">
+    <div className="group border-l border-white/15 pl-4 first:border-l-0 first:pl-0">
       <strong className="display-serif text-2xl sm:text-3xl">{count}{suffix}</strong>
       <span className="mt-1 block label-mono text-[8px] tracking-[.12em] text-white/45">{label}</span>
+    </div>
+  );
+}
+
+const MODULES = [
+  { code: "01", name: "WEB", icon: Globe2 },
+  { code: "02", name: "BRAND", icon: Palette },
+  { code: "03", name: "SEARCH", icon: Search },
+  { code: "04", name: "SOCIAL", icon: Layers3 },
+  { code: "05", name: "WEBCARE", icon: CircleDot },
+  { code: "06", name: "ROBOTICS", icon: Bot },
+  { code: "07", name: "IA", icon: Sparkles },
+] as const;
+
+function SystemVisual() {
+  return (
+    <div className="relative h-[510px] w-full sm:h-[620px]">
+      <div aria-hidden className="absolute inset-0 rounded-[3rem] bg-[radial-gradient(circle_at_65%_28%,rgba(126,151,255,.22),transparent_28%),radial-gradient(circle_at_30%_80%,rgba(255,255,255,.08),transparent_28%)] blur-2xl" />
+      <Parallax speed={0.045}>
+        <div className="absolute right-0 top-[4%] h-[82%] w-[86%] overflow-hidden rounded-[2.8rem] border border-white/14 bg-[#090c12] shadow-[0_70px_180px_-80px_rgba(0,0,0,.98)]">
+          <img src={XR_HERO_PHOTO} alt="" className="absolute inset-0 h-full w-full object-cover grayscale-[.28] brightness-[.52] contrast-[1.06] transition duration-[1400ms] hover:scale-[1.03] hover:brightness-[.64]" />
+          <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(0,0,0,.78),rgba(0,0,0,.12)_46%,rgba(0,0,0,.9))]" />
+          <div className="absolute inset-0 opacity-50 bg-[linear-gradient(115deg,transparent_0%,rgba(255,255,255,.09)_47%,transparent_62%)]" />
+
+          <div className="absolute left-6 right-6 top-6 flex items-center justify-between">
+            <span className="label-mono text-[7px] tracking-[.24em] text-white/40">XRAGENCY / SYSTEM DESIGN</span>
+            <span className="label-mono text-[7px] text-white/32">07 MODULES</span>
+          </div>
+
+          <div className="absolute inset-0 grid place-items-center">
+            <div className="absolute h-[52%] w-[52%] rounded-full border border-white/12 animate-slow-spin" />
+            <div className="absolute h-[34%] w-[34%] rounded-full border border-white/18 border-dashed" />
+            <div className="absolute h-[10%] w-[10%] rounded-full border border-white/45 bg-white/[.08] shadow-[0_0_70px_rgba(255,255,255,.18)] backdrop-blur-xl" />
+            <div className="relative z-10 grid h-20 w-20 place-items-center rounded-[1.7rem] border border-white/18 bg-black/45 text-white shadow-2xl backdrop-blur-2xl sm:h-24 sm:w-24">
+              <span className="display-serif text-4xl tracking-[-.08em] sm:text-5xl">XR</span>
+            </div>
+          </div>
+
+          <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between gap-6">
+            <div>
+              <span className="label-mono text-[7px] tracking-[.2em] text-white/40">STRATEGY → DESIGN → ACQUISITION</span>
+              <p className="display-serif mt-3 max-w-[11ch] text-3xl leading-[.88] sm:text-5xl">Tout doit fonctionner ensemble.</p>
+            </div>
+            <div className="hidden text-right sm:block">
+              <span className="label-mono text-[7px] text-white/32">ARCHITECTURE</span>
+              <div className="mt-2 h-px w-24 bg-white/24" />
+              <span className="mt-2 block label-mono text-[7px] text-white/32">EXPÉRIENCE</span>
+            </div>
+          </div>
+        </div>
+      </Parallax>
+
+      <div className="absolute left-0 top-[10%] z-20 hidden w-[24%] flex-col gap-2 sm:flex">
+        {MODULES.slice(0,4).map((item, index) => {
+          const Icon = item.icon;
+          return (
+            <Parallax key={item.code} speed={-0.018 - index * 0.004} direction="both">
+              <div className="flex items-center gap-3 rounded-2xl border border-white/12 bg-[#080b10]/78 px-3 py-3 shadow-xl backdrop-blur-xl">
+                <span className="grid h-8 w-8 place-items-center rounded-xl border border-white/10 bg-white/[.04]"><Icon className="h-3.5 w-3.5 text-white/65" /></span>
+                <span><span className="block label-mono text-[6px] tracking-[.18em] text-white/32">{item.code}</span><span className="text-[9px] font-semibold text-white/72">{item.name}</span></span>
+              </div>
+            </Parallax>
+          );
+        })}
+      </div>
+
+      <div className="absolute bottom-0 left-[8%] z-20 flex max-w-[86%] items-center gap-3 rounded-[1.5rem] border border-white/14 bg-black/65 px-4 py-3 shadow-2xl backdrop-blur-2xl sm:left-[14%] sm:px-5">
+        <span className="grid h-9 w-9 place-items-center rounded-xl bg-white text-black"><MousePointer2 className="h-4 w-4" /></span>
+        <div>
+          <span className="label-mono text-[7px] tracking-[.18em] text-white/42">UNE SEULE LOGIQUE</span>
+          <p className="mt-0.5 text-[10px] text-white/72">Chaque brique renforce la suivante.</p>
+        </div>
+      </div>
+
+      <div className="absolute right-[2%] top-[13%] z-20 w-[31%] rounded-[1.7rem] border border-white/14 bg-white/[.06] p-4 shadow-2xl backdrop-blur-2xl sm:right-[3%] sm:w-[28%] sm:p-5">
+        <div className="flex items-center justify-between"><span className="label-mono text-[7px] text-white/34">XR / DIRECTION</span><Sparkles className="h-3.5 w-3.5 text-white/60" /></div>
+        <p className="mt-7 text-sm leading-5 text-white/75">Un dispositif construit autour de votre activité, pas autour d'un catalogue.</p>
+        <div className="mt-5 flex gap-1.5">{[0,1,2,3,4].map(i => <span key={i} className="h-1.5 flex-1 rounded-full bg-white/12"><span className={i < 3 ? "block h-full w-full rounded-full bg-white/42" : "block h-full w-1/2 rounded-full bg-white/20"} /></span>)}</div>
+      </div>
     </div>
   );
 }
@@ -37,23 +117,23 @@ export function Hero() {
   const { t } = useLang();
 
   return (
-    <section id="top" className="relative isolate overflow-hidden bg-[#050608] text-white">
+    <section id="top" className="relative isolate overflow-hidden bg-[#05070b] text-white">
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[-12%] top-[-30%] h-[70vw] w-[70vw] rounded-full bg-white/[.035] blur-[140px]" />
-        <div className="absolute bottom-[-35%] right-[-15%] h-[60vw] w-[60vw] rounded-full bg-slate-500/[.055] blur-[150px]" />
-        <div className="absolute inset-0 bg-[linear-gradient(115deg,transparent_0%,rgba(255,255,255,.025)_45%,transparent_70%)]" />
+        <div className="absolute left-[-18%] top-[-25%] h-[70vw] w-[70vw] rounded-full bg-indigo-400/[.06] blur-[140px]" />
+        <div className="absolute bottom-[-35%] right-[-15%] h-[60vw] w-[60vw] rounded-full bg-white/[.035] blur-[150px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,.18)_65%,rgba(0,0,0,.4)_100%)]" />
       </div>
 
-      <div className="relative mx-auto max-w-[1680px] px-5 pb-10 pt-28 sm:px-8 lg:px-12 lg:pb-16 lg:pt-32">
-        <div className="grid min-h-[calc(100dvh-5rem)] items-center gap-14 lg:grid-cols-[.9fr_1.1fr] lg:gap-16">
-          <Parallax speed={-0.022}>
+      <div className="relative mx-auto max-w-[1680px] px-5 pb-12 pt-28 sm:px-8 lg:px-12 lg:pb-16 lg:pt-32">
+        <div className="grid min-h-[calc(100dvh-5rem)] items-center gap-12 lg:grid-cols-[.82fr_1.18fr] lg:gap-16">
+          <Parallax speed={-0.028}>
             <div className="max-w-3xl">
               <div className="flex items-center gap-3">
-                <span className="h-px w-12 bg-white/55" />
+                <span className="h-px w-12 bg-white/50" />
                 <span className="label-mono text-[9px] font-semibold tracking-[.28em] text-white/60">{t(UI.heroKicker)}</span>
               </div>
 
-              <h1 className="display-serif mt-7 max-w-5xl text-[clamp(3.7rem,7.5vw,8.2rem)] leading-[.8] tracking-[-.07em]">
+              <h1 className="display-serif mt-7 max-w-4xl text-[clamp(3.3rem,6.4vw,7.2rem)] leading-[.83] tracking-[-.065em]">
                 {t(UI.heroTitle1)}
                 <br />
                 <span className="text-white">{t(UI.heroTitleAccent)}</span>{" "}
@@ -66,17 +146,14 @@ export function Hero() {
                 <EmberButton href="#quote" className="justify-center rounded-full bg-white px-7 py-4 text-[#080a0d] shadow-[0_18px_55px_rgba(0,0,0,.25)] hover:bg-white">
                   Construire mon projet <ArrowRight className="h-4 w-4" />
                 </EmberButton>
-                <a href="#audit" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-transparent px-6 py-4 label-mono text-[9px] tracking-[.12em] text-white/65 transition hover:-translate-y-0.5 hover:border-white/25 hover:text-white">
+                <a href="#audit" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[.03] px-6 py-4 label-mono text-[9px] tracking-[.12em] text-white/68 transition hover:-translate-y-0.5 hover:border-white/30 hover:bg-white/[.06] hover:text-white">
                   <Search className="h-3.5 w-3.5" />Lancer mon audit
-                </a>
-                <a href="#contact" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[.045] px-6 py-4 label-mono text-[9px] tracking-[.12em] text-white/55 transition hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[.08] hover:text-white">
-                  Demander une maquette gratuite <ArrowRight className="h-3.5 w-3.5" />
                 </a>
               </div>
 
               <div className="mt-11 grid max-w-2xl grid-cols-3 gap-5 border-y border-white/12 py-5">
                 <Stat value={500} suffix="+" label={t(UI.statProjects)} />
-                <Stat value={8} label={t(UI.statYears)} />
+                <Stat value={8} suffix="+" label={t(UI.statYears)} />
                 <Stat value={98} suffix="%" label={t(UI.statSatisfaction)} />
               </div>
 
@@ -88,85 +165,25 @@ export function Hero() {
             </div>
           </Parallax>
 
-          <Parallax speed={0.025}>
-            <div className="relative mx-auto h-[540px] w-full max-w-[920px] sm:h-[660px]">
-              <div className="absolute -inset-10 rounded-full bg-white/[.025] blur-[100px]" />
-
-              <div className="absolute left-0 top-10 h-[78%] w-[72%] overflow-hidden rounded-[2.4rem] border border-white/12 bg-[#080b0f] shadow-[0_60px_150px_-70px_rgba(0,0,0,.98)]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(255,255,255,.12),transparent_23%),radial-gradient(circle_at_10%_90%,rgba(255,255,255,.055),transparent_28%),linear-gradient(145deg,#11161b,#080a0d_62%,#10151a)]" />
-                <div className="absolute inset-0 opacity-30 bg-[linear-gradient(115deg,transparent_0%,rgba(255,255,255,.08)_47%,transparent_62%)]" />
-
-                <div className="absolute left-6 right-6 top-6 flex items-center justify-between">
-                  <span className="label-mono text-[7px] tracking-[.22em] text-white/38">XRAGENCY / CREATIVE SYSTEM</span>
-                  <span className="label-mono text-[7px] text-white/30">01 — 06</span>
-                </div>
-
-                <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-                  <div className="absolute h-[62%] w-[62%] rounded-full border border-white/[.06]" />
-                  <div className="absolute h-[46%] w-[46%] rounded-full border border-white/[.08]" />
-                  <span className="display-serif absolute -translate-x-8 -translate-y-3 text-[16rem] leading-none tracking-[-.14em] text-white/[.06] sm:text-[20rem]">X</span>
-                  <span className="display-serif absolute translate-x-10 translate-y-7 text-[13rem] leading-none tracking-[-.14em] text-white/[.2] sm:text-[17rem]">R</span>
-                </div>
-
-                <div className="absolute bottom-6 left-6 right-6 rounded-[1.4rem] border border-white/10 bg-black/55 p-4 backdrop-blur-xl sm:p-5">
-                  <span className="label-mono text-[7px] tracking-[.22em] text-white/35">STRATEGY → DESIGN → CONVERSION</span>
-                  <div className="mt-3 flex items-end justify-between gap-4">
-                    <p className="display-serif max-w-[10ch] text-3xl leading-[.88] sm:text-4xl">Des idées qui deviennent désirables.</p>
-                    <span className="hidden text-right label-mono text-[7px] leading-4 text-white/28 sm:block">WEB<br/>BRAND<br/>SEO<br/>IA</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute right-0 top-0 w-[31%] rounded-[2rem] border border-white/12 bg-white/[.035] p-5 backdrop-blur-xl sm:p-6">
-                <div className="flex items-center justify-between">
-                  <span className="label-mono text-[7px] tracking-[.18em] text-white/35">01 / POSITION</span>
-                  <ArrowRight className="h-3.5 w-3.5 rotate-[-45deg] text-white/35" />
-                </div>
-                <p className="mt-8 text-[clamp(2rem,4vw,3.6rem)] font-light leading-none tracking-[-.08em] text-white/90">+500</p>
-                <p className="mt-2 label-mono text-[7px] leading-4 text-white/32">PROJECTS /<br/>DIGITAL EXPERIENCES</p>
-              </div>
-
-              <div className="absolute bottom-0 right-[3%] w-[46%] overflow-hidden rounded-[2rem] border border-white/12 bg-[#0b0e12] shadow-2xl">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_18%,rgba(255,255,255,.12),transparent_25%),linear-gradient(135deg,#11151a,#080a0d)]" />
-                <div className="relative p-6 sm:p-7">
-                  <div className="flex items-center justify-between">
-                    <span className="label-mono text-[7px] tracking-[.2em] text-white/35">02 / MOTION</span>
-                    <span className="h-2 w-2 rounded-full bg-white/70 shadow-[0_0_16px_rgba(255,255,255,.35)]" />
-                  </div>
-                  <h3 className="display-serif mt-10 text-4xl leading-[.84] sm:text-5xl">Make it<br/><em className="not-italic text-white/35">felt.</em></h3>
-                  <div className="mt-8 space-y-2">
-                    <div className="h-px w-full bg-white/10" />
-                    <div className="flex justify-between label-mono text-[7px] text-white/30"><span>EDITORIAL</span><span>86%</span></div>
-                    <div className="h-px w-[86%] bg-white/35" />
-                    <div className="flex justify-between label-mono text-[7px] text-white/30"><span>CONVERSION</span><span>94%</span></div>
-                    <div className="h-px w-[94%] bg-white/25" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute bottom-20 left-[58%] hidden items-center gap-2 rounded-full border border-white/15 bg-[#090b0e]/92 px-4 py-2 shadow-lg backdrop-blur-xl lg:flex">
-                <MousePointer2 className="h-3 w-3 text-white/55" />
-                <span className="label-mono text-[7px] tracking-[.15em] text-white/42">MOVE · EXPLORE · CONVERT</span>
-              </div>
-
-              <div className="absolute left-5 top-[3%] hidden rounded-2xl border border-white/10 bg-[#090b0e]/90 px-4 py-3 shadow-xl backdrop-blur-xl sm:block">
-                <span className="label-mono text-[7px] tracking-[.18em] text-white/30">XRAGENCY / DIGITAL DIRECTION</span>
-              </div>
-            </div>
-          </Parallax>
+          <SystemVisual />
         </div>
       </div>
 
-      <div className="relative overflow-hidden border-t border-white/10 bg-white/[.02]">
+      <div className="relative overflow-hidden border-t border-white/10 bg-white/[.018]">
         <div className="flex min-w-max animate-marquee items-center gap-10 py-4 label-mono text-[9px] tracking-[.28em] text-white/38">
           {Array.from({ length: 2 }).flatMap((_, row) =>
-            ["WEB DESIGN","BRANDING","SEO","GOOGLE MAPS","SOCIAL MEDIA","IA & AUTOMATION","WEBCARE"].map((x, i) => (
+            ["WEB DESIGN","BRANDING","SEO","GOOGLE MAPS","SOCIAL MEDIA","IA & AUTOMATION","WEBCARE","ROBOTICS"].map((x, i) => (
               <span key={row + "-" + i} className="inline-flex items-center gap-10">
-                <span>{x}</span><span className="text-white/25">✦</span>
+                <span>{x}</span><span className="text-white/22">✦</span>
               </span>
             ))
           )}
         </div>
+      </div>
+
+      <div className="pointer-events-none absolute bottom-8 left-1/2 hidden -translate-x-1/2 items-center gap-2 opacity-35 lg:flex">
+        <ChevronDown className="h-3.5 w-3.5 animate-pulse-soft" />
+        <span className="label-mono text-[7px] tracking-[.3em]">SCROLL TO EXPLORE</span>
       </div>
     </section>
   );
