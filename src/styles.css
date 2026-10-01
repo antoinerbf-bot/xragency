@@ -415,3 +415,40 @@
     box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-primary) 25%, transparent);
   }
 }
+
+
+@keyframes xr-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -8px, 0); }
+}
+
+@keyframes xr-scan {
+  0% { transform: translateX(-120%); opacity: 0; }
+  18%, 82% { opacity: .8; }
+  100% { transform: translateX(120%); opacity: 0; }
+}
+
+@keyframes xr-pulse-line {
+  0%, 100% { opacity: .2; }
+  50% { opacity: .8; }
+}
+
+@utility animate-xr-drift {
+  animation: xr-drift 7s ease-in-out infinite;
+}
+
+@utility animate-xr-scan {
+  animation: xr-scan 5.5s ease-in-out infinite;
+}
+
+@utility animate-xr-pulse-line {
+  animation: xr-pulse-line 2.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-xr-drift,
+  .animate-xr-scan,
+  .animate-xr-pulse-line {
+    animation: none !important;
+  }
+}
