@@ -72,6 +72,11 @@ export function WorkPage() {
       && (service==="all" || item.services.includes(service));
   }),[query,sector,service]);
 
+  // Keep the large reference catalogue lightweight: only mount a small window
+  // of cards initially; more cards are revealed as the visitor scrolls.
+  const [visibleCount,setVisibleCount]=useState(18);
+  useEffect(() => { setVisibleCount(18); }, [query,sector,service]);
+
   return <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
     <Nav/>
     <main className="pt-20 sm:pt-24">
@@ -132,7 +137,7 @@ export function WorkPage() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {filtered.map((item,index)=>(
+            {filtered.slice(0,visibleCount).map((item,index)=>(
               <Reveal key={item.name+item.url} delay={Math.min(index,12)*25}>
                 <button
                   type="button"
@@ -172,6 +177,18 @@ export function WorkPage() {
               </Reveal>
             ))}
           </div>
+
+          {visibleCount < filtered.length && (
+            <div className="mt-10 flex justify-center">
+              <button
+                type="button"
+                onClick={()=>setVisibleCount(count=>Math.min(count+18,filtered.length))}
+                className="rounded-full border border-border bg-card px-6 py-3 label-mono text-[8px] tracking-[.16em] text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+              >
+                AFFICHER 18 RÉFÉRENCES DE PLUS · {filtered.length-visibleCount} RESTANTES
+              </button>
+            </div>
+          )}
 
           {!filtered.length && (
             <div className="rounded-[1.8rem] border border-dashed border-border px-6 py-16 text-center">
