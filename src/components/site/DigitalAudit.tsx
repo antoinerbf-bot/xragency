@@ -24,32 +24,6 @@ const UI = {
 } as const;
 
 
-const RESULT_TEXT: Record<string, Record<string,string>> = {
-  en: {
-    "Website / UX":"Website / UX","SEO":"SEO","WebCare":"WebCare","Website / Conversion":"Website / Conversion","Website + WebCare":"Website + WebCare",
-    "Structure SEO":"SEO structure","H1 principal":"Main H1","Responsive":"Responsive","Images accessibles":"Accessible images","HTTPS":"HTTPS","Headers de sécurité":"Security headers","Point d'action":"Call to action","Parcours mobile":"Mobile journey","Performance de page":"Page performance","Cache":"Cache",
-    "Titre et meta description détectés.":"Title and meta description detected.","Titre ou meta description à améliorer.":"Title or meta description needs improvement.","Aucun H1 détecté.":"No H1 detected.","Viewport détecté.":"Viewport detected.","Viewport non détecté.":"Viewport not detected.","Aucune image détectée.":"No images detected.","Connexion HTTPS utilisée.":"HTTPS connection is used.","Le site est appelé en HTTP.":"The site is served over HTTP.","Vérification des principaux headers disponibles.":"Main available security headers checked.","Liens ou boutons détectés.":"Links or buttons detected.","Aucun CTA évident détecté.":"No obvious CTA detected.","Cache-Control non détecté.":"Cache-Control not detected."
-  },
-  vi: {
-    "Website / UX":"Website / UX","SEO":"SEO","WebCare":"WebCare","Website / Conversion":"Website / Chuyển đổi","Website + WebCare":"Website + WebCare","Structure SEO":"Cấu trúc SEO","H1 principal":"H1 chính","Responsive":"Responsive","Images accessibles":"Hình ảnh có alt","HTTPS":"HTTPS","Headers de sécurité":"Header bảo mật","Point d'action":"Điểm hành động","Parcours mobile":"Hành trình mobile","Performance de page":"Hiệu năng trang","Cache":"Bộ nhớ đệm",
-    "Titre et meta description détectés.":"Đã phát hiện title và meta description.","Titre ou meta description à améliorer.":"Cần cải thiện title hoặc meta description.","Aucun H1 détecté.":"Không phát hiện H1.","Viewport détecté.":"Đã phát hiện viewport.","Viewport non détecté.":"Không phát hiện viewport.","Aucune image détectée.":"Không phát hiện hình ảnh.","Connexion HTTPS utilisée.":"Đang sử dụng kết nối HTTPS.","Le site est appelé en HTTP.":"Website đang dùng HTTP.","Vérification des principaux headers disponibles.":"Đã kiểm tra các security header chính.","Liens ou boutons détectés.":"Đã phát hiện liên kết hoặc nút.","Aucun CTA évident détecté.":"Không phát hiện CTA rõ ràng.","Cache-Control non détecté.":"Không phát hiện Cache-Control."
-  },
-  ar: {
-    "Website / UX":"الموقع / تجربة المستخدم","SEO":"SEO","WebCare":"WebCare","Website / Conversion":"الموقع / التحويل","Website + WebCare":"الموقع + WebCare","Structure SEO":"بنية SEO","H1 principal":"H1 الرئيسي","Responsive":"متجاوب","Images accessibles":"صور قابلة للوصول","HTTPS":"HTTPS","Headers de sécurité":"رؤوس الأمان","Point d'action":"نقطة إجراء","Parcours mobile":"مسار الهاتف","Performance de page":"أداء الصفحة","Cache":"التخزين المؤقت",
-    "Titre et meta description détectés.":"تم اكتشاف العنوان والوصف التعريفي.","Titre ou meta description à améliorer.":"يحتاج العنوان أو الوصف التعريفي إلى تحسين.","Aucun H1 détecté.":"لم يتم اكتشاف H1.","Viewport détecté.":"تم اكتشاف viewport.","Viewport non détecté.":"لم يتم اكتشاف viewport.","Aucune image détectée.":"لم يتم اكتشاف صور.","Connexion HTTPS utilisée.":"يستخدم الموقع اتصال HTTPS.","Le site est appelé en HTTP.":"يتم استدعاء الموقع عبر HTTP.","Vérification des principaux headers disponibles.":"تم فحص رؤوس الأمان الرئيسية المتاحة.","Liens ou boutons détectés.":"تم اكتشاف روابط أو أزرار.","Aucun CTA évident détecté.":"لم يتم اكتشاف CTA واضح.","Cache-Control non détecté.":"لم يتم اكتشاف Cache-Control."
-  },
-  ru: {
-    "Website / UX":"Сайт / UX","SEO":"SEO","WebCare":"WebCare","Website / Conversion":"Сайт / конверсия","Website + WebCare":"Сайт + WebCare","Structure SEO":"SEO-структура","H1 principal":"Главный H1","Responsive":"Адаптивность","Images accessibles":"Доступные изображения","HTTPS":"HTTPS","Headers de sécurité":"Заголовки безопасности","Point d'action":"Призыв к действию","Parcours mobile":"Мобильный путь","Performance de page":"Производительность страницы","Cache":"Кэш",
-    "Titre et meta description détectés.":"Заголовок и meta description обнаружены.","Titre ou meta description à améliorer.":"Заголовок или meta description требуют улучшения.","Aucun H1 détecté.":"H1 не обнаружен.","Viewport détecté.":"Viewport обнаружен.","Viewport non détecté.":"Viewport не обнаружен.","Aucune image détectée.":"Изображения не обнаружены.","Connexion HTTPS utilisée.":"Используется HTTPS.","Le site est appelé en HTTP.":"Сайт вызывается по HTTP.","Vérification des principaux headers disponibles.":"Проверены основные доступные заголовки безопасности.","Liens ou boutons détectés.":"Обнаружены ссылки или кнопки.","Aucun CTA évident détecté.":"Очевидный CTA не обнаружен.","Cache-Control non détecté.":"Cache-Control не обнаружен."
-  }
-};
-const resultText = (lang:string, value:string) => RESULT_TEXT[lang]?.[value] ?? value;
-const resultFinding = (lang:string, item:any) => {
-  const [prefix,...rest] = String(item.label).split(" · ");
-  const label = rest.length ? resultText(lang,prefix) + " · " + resultText(lang,rest.join(" · ")) : resultText(lang,prefix);
-  return { ...item, label, detail: resultText(lang,String(item.detail)) };
-};
-
 const score=(seed:string,offset:number)=>58+((Array.from(seed).reduce((n,ch,i)=>(n+ch.charCodeAt(0)*(i+1))%97,0)+offset*13)%36);
 
 export function DigitalAudit(){
