@@ -126,6 +126,7 @@ function ServiceDetailPage() {
 
   // WhatsApp link with customized message for this service
   const planForWa = service.plans[selectedPlanIndex];
+  const selectedPlan = service.plans[selectedPlanIndex] ?? service.plans[0];
   const isCustomMaps = service.id === "maps";
   const isInstWa = installmentSelections[selectedPlanIndex] ?? false;
   const planIsInstallmentWa = service.id === "websites" && isInstWa && planForWa?.period === "once";
@@ -392,173 +393,252 @@ function ServiceDetailPage() {
           </section>
         )}
 
-        {/* Interactive Pricing Grid */}
+        {/* Detailed offers & pricing */}
         <section id="plans" className="relative border-t border-border/60 py-24 lg:py-32">
           <div className="mx-auto max-w-7xl px-6 lg:px-10">
-            <div className="text-center">
-              <Reveal>
-                <p className="label-mono text-xs uppercase tracking-widest text-primary">
+            <div className="grid gap-10 lg:grid-cols-[.78fr_1.22fr] lg:items-end">
+              <div>
+                <p className="label-mono text-xs uppercase tracking-[.24em] text-primary">
                   {t(UI.navPricing)} · {t(service.title)}
                 </p>
-                <h2 className="display-serif mt-4 text-3xl sm:text-5xl">
-                  {t({
-                    fr: "Formules & Tarification Officielle",
-                    en: "Plans & Official Pricing",
-                    vi: "Gói & Bảng giá Chính thức",
-                  })}
+                <h2 className="display-serif mt-4 text-4xl leading-[.92] sm:text-6xl">
+                  Des offres lisibles.<br />
+                  <em className="not-italic text-muted-foreground">Chaque détail compte.</em>
                 </h2>
-                <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-                  {t({
-                    fr: "Choisissez la formule la plus adaptée à vos ambitions. Tarifs clairs, transparents et sans frais cachés.",
-                    en: "Choose the plan best suited to your ambitions. Clear, transparent pricing with no hidden fees.",
-                    vi: "Chọn gói phù hợp nhất với mục tiêu của bạn. Giá rõ ràng, minh bạch, không phí ẩn.",
-                  })}
-                </p>
-              </Reveal>
+              </div>
+              <p className="max-w-2xl text-sm leading-7 text-muted-foreground lg:justify-self-end">
+                {t({
+                  fr: "Chaque formule reprend précisément son périmètre, son prix et les éléments inclus. Sélectionnez une offre pour afficher son contenu en détail avant de passer commande.",
+                  en: "Each plan clearly shows its scope, price and included items. Select a plan to review every included element before ordering.",
+                  vi: "Mỗi gói hiển thị rõ phạm vi, giá và các hạng mục bao gồm. Chọn một gói để xem chi tiết trước khi đặt.",
+                })}
+              </p>
             </div>
 
-
-
-            <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {service.plans.map((p, i) => {
                 const isSelected = selectedPlanIndex === i;
-                
                 const isInst = installmentSelections[i] ?? false;
                 const planIsInstallment = service.id === "websites" && isInst && p.period === "once";
                 const displayPrice = planIsInstallment ? Math.round((p.eur * 1.4) / 12) : p.eur;
                 const displayPeriod = planIsInstallment ? "month" : p.period;
-
                 const planWaMessage = encodeURIComponent(
-                  `Bonjour XR Agency, je souhaite commander la formule "${t(p.name)}" du service "${service.title[lang]}" (${isCustomMaps ? "Sur mesure" : price(displayPrice)}${planIsInstallment ? " / mois sur 12 mois" : ""}). Comment démarrer ?`,
+                  "Bonjour XR Agency, je souhaite commander la formule \"" +
+                    t(p.name) +
+                    "\" du service \"" +
+                    t(service.title) +
+                    "\" (" +
+                    (isCustomMaps ? "Sur mesure" : price(displayPrice)) +
+                    (planIsInstallment ? " / mois sur 12 mois" : "") +
+                    "). Comment démarrer ?",
                 );
-                const planWaUrl = `${CONTACT.whatsapp}?text=${planWaMessage}`;
+                const planWaUrl = CONTACT.whatsapp + "?text=" + planWaMessage;
 
                 return (
-                  <Reveal key={i} delay={i * 80}>
+                  <Reveal key={i} delay={i * 70}>
                     <article
                       onClick={() => setSelectedPlanIndex(i)}
                       className={cn(
-                        "surface-plate relative flex h-full flex-col justify-between rounded-3xl p-8 transition-all duration-300 cursor-pointer",
-                        p.popular
-                          ? "border-primary shadow-[0_0_30px_rgba(0,0,0,0.1)]"
-                          : "hover:border-primary/50",
-                        isSelected && "ring-2 ring-primary",
+                        "group relative flex h-full cursor-pointer flex-col rounded-[1.8rem] border p-7 transition-all duration-500 sm:p-8",
+                        isSelected
+                          ? "border-primary bg-primary/[.055] shadow-[0_25px_80px_-45px_rgba(0,0,0,.75)] ring-1 ring-primary/30"
+                          : "border-border bg-card/50 hover:-translate-y-1 hover:border-primary/40",
                       )}
                     >
-                      {p.popular ? (
-                        <span className="label-mono absolute -top-3.5 left-8 rounded-full bg-primary px-3.5 py-1 text-xs text-primary-foreground">
-                          {t(UI.popular)}
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="label-mono text-[9px] tracking-[.18em] text-primary">
+                          {String(i + 1).padStart(2, "0")} / {String(service.plans.length).padStart(2, "0")}
                         </span>
-                      ) : null}
-
-                      <div>
-                        <h3 className="display-serif text-2xl text-foreground">{t(p.name)}</h3>
-                        {p.audience ? (
-                          <p className="label-mono mt-2 text-xs text-muted-foreground">
-                            {t(p.audience)}
-                          </p>
+                        {p.popular ? (
+                          <span className="label-mono rounded-full bg-primary px-3 py-1 text-[8px] text-primary-foreground">
+                            {t(UI.popular)}
+                          </span>
                         ) : null}
+                      </div>
 
-                        {/* Inline Payment Selector for Websites */}
-                        {service.id === "websites" && p.period === "once" && !isCustomMaps && (
-                          <div className="mt-4 flex rounded-lg bg-accent/30 p-1 border border-border/50">
+                      <h3 className="display-serif mt-8 text-3xl leading-none sm:text-4xl">{t(p.name)}</h3>
+                      {p.audience ? (
+                        <p className="mt-3 text-xs leading-5 text-muted-foreground">{t(p.audience)}</p>
+                      ) : (
+                        <p className="mt-3 text-xs leading-5 text-muted-foreground">
+                          {t({
+                            fr: "Une formule définie par les éléments inclus ci-dessous.",
+                            en: "A plan defined by the included items below.",
+                            vi: "Gói được xác định bởi các hạng mục bên dưới.",
+                          })}
+                        </p>
+                      )}
+
+                      <div className="mt-7 border-y border-border/70 py-5">
+                        {service.id === "websites" && p.period === "once" ? (
+                          <div className="mb-4 flex rounded-xl border border-border/70 bg-background/50 p-1">
                             <button
+                              type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setInstallmentSelections(prev => ({ ...prev, [i]: false }));
                               }}
                               className={cn(
-                                "flex-1 rounded-md text-[10px] sm:text-[11px] font-medium transition-all py-1.5",
-                                !isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                                "flex-1 rounded-lg py-2 text-[9px] font-semibold uppercase tracking-[.13em] transition-all",
+                                !isInst ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground",
                               )}
                             >
                               Comptant
                             </button>
                             <button
+                              type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setInstallmentSelections(prev => ({ ...prev, [i]: true }));
                               }}
                               className={cn(
-                                "flex-1 rounded-md text-[10px] sm:text-[11px] font-medium transition-all py-1.5",
-                                isInst ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                                "flex-1 rounded-lg py-2 text-[9px] font-semibold uppercase tracking-[.13em] transition-all",
+                                isInst ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground",
                               )}
                             >
                               Mensualités
                             </button>
                           </div>
-                        )}
+                        ) : null}
 
-                        <p className="mt-6 flex items-baseline gap-2 border-b border-border/60 pb-6">
-                          <span className="display-serif text-4xl text-primary">
-                            {price(displayPrice)}
+                        <div className="flex items-end gap-2">
+                          <span className="display-serif text-5xl text-primary">{price(displayPrice)}</span>
+                          <span className="label-mono pb-1 text-[9px] text-muted-foreground">
+                            {isCustomMaps
+                              ? t({ fr: "à partir de 990 € / an", en: "from €990 / year", vi: "từ 990 € / năm", ar: "ابتداءً من 990 € / سنة", ru: "от 990 € / год" })
+                              : t(PERIOD_LABEL[displayPeriod])}
                           </span>
-                          <span className="label-mono flex flex-col items-start gap-1 text-xs text-muted-foreground">
-                            <span>{isCustomMaps ? t({ fr: "à partir de 990 € / an", en: "from €990 / year", vi: "từ 990 € / năm", ar: "ابتداءً من 990 € / سنة", ru: "от 990 € / год" }) : t(PERIOD_LABEL[displayPeriod])}</span>
-                            {planIsInstallment && (
-                              <span className="text-[10px] text-primary/80 leading-tight max-w-[140px]">
-                                {t({ fr: "sur 12 mois (infrastructure annuelle 79€/an)", en: "over 12 mo (incl. domain & hosting 79€/year)", vi: "trong 12 tháng (gồm domain & hosting 79€/năm)" })}
-                              </span>
-                            )}
-                          </span>
-                        </p>
-
-                        <ul className="mt-6 space-y-3.5">
-                          {(p.features || []).map((f, k) => (
-                            <li
-                              key={k}
-                              className="flex items-start gap-3 text-sm text-muted-foreground"
-                            >
-                              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                              <span>{t(f)}</span>
-                            </li>
-                          ))}
-                        </ul>
+                        </div>
+                        {planIsInstallment ? (
+                          <p className="mt-2 max-w-[220px] text-[10px] leading-4 text-primary/80">
+                            {t({
+                              fr: "Mensualités calculées sur 12 mois.",
+                              en: "Monthly instalments calculated over 12 months.",
+                              vi: "Thanh toán hàng tháng tính trên 12 tháng.",
+                            })}
+                          </p>
+                        ) : null}
                       </div>
 
-                      <div className="mt-10 space-y-3">
-                        {!isCustomMaps && <AddToCartBtn
-                          item={{
-                            serviceId: service.id,
-                            serviceName: t(service.title),
-                            planName: t(p.name) + (planIsInstallment ? " (12 mois)" : ""),
-                            priceEur: displayPrice,
-                            period: displayPeriod,
-                            periodLabel: t(PERIOD_LABEL[displayPeriod]),
-                          }}
-                          popular={p.popular}
-                        />}
+                      <div className="mt-6 flex items-center justify-between">
+                        <span className="label-mono text-[8px] uppercase tracking-[.16em] text-muted-foreground">
+                          {p.features?.length ?? 0} {t({ fr: "éléments inclus", en: "included items", vi: "hạng mục" })}
+                        </span>
+                        <span className="label-mono text-[8px] text-primary transition-transform duration-300 group-hover:translate-x-1">
+                          {isSelected ? "SELECTED" : "VIEW"} →
+                        </span>
+                      </div>
 
+                      <ul className="mt-5 space-y-3">
+                        {(p.features || []).map((f, k) => (
+                          <li key={k} className="flex items-start gap-3 text-sm leading-5 text-muted-foreground">
+                            <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                            <span>{t(f)}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div className="mt-8">
+                        {!isCustomMaps && (
+                          <AddToCartBtn
+                            item={{
+                              serviceId: service.id,
+                              serviceName: t(service.title),
+                              planName: t(p.name) + (planIsInstallment ? " (12 mois)" : ""),
+                              priceEur: displayPrice,
+                              period: displayPeriod,
+                              periodLabel: t(PERIOD_LABEL[displayPeriod]),
+                            }}
+                            popular={p.popular}
+                          />
+                        )}
                         <a
                           href={planWaUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="flex w-full items-center justify-center gap-2 rounded-full border border-border/80 bg-card/60 py-3 text-xs text-muted-foreground transition-all duration-300 hover:border-emerald-500/60 hover:text-emerald-500 hover:bg-emerald-500/5"
+                          className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-border/80 bg-background/50 py-3 text-[10px] font-semibold uppercase tracking-[.13em] text-muted-foreground transition hover:border-emerald-500/60 hover:text-emerald-500"
                         >
                           <MessageCircle className="h-3.5 w-3.5 text-emerald-500" />
                           {t({
-                            fr: isCustomMaps ? "Construire mon étude sur mesure" : "Commander sur WhatsApp",
-                            en: isCustomMaps ? "Build my custom study" : "Order on WhatsApp",
-                            vi: isCustomMaps ? "Xây dựng nghiên cứu riêng" : "Đặt qua WhatsApp",
+                            fr: isCustomMaps ? "Parler de cette étude" : "Parler de cette formule",
+                            en: isCustomMaps ? "Discuss this study" : "Discuss this plan",
+                            vi: isCustomMaps ? "Trao đổi về nghiên cứu" : "Trao đổi về gói này",
                           })}
                         </a>
-                        <Link
-                          to="/"
-                          hash="intelligence"
-                          className="block text-center text-xs text-muted-foreground hover:text-primary pt-1"
-                        >
-                          {t({
-                            fr: "Ou calculer dans l'estimateur IA →",
-                            en: "Or calculate in the AI estimator →",
-                            vi: "Hoặc tính trong bộ ước tính AI →",
-                          })}
-                        </Link>
                       </div>
                     </article>
                   </Reveal>
                 );
               })}
             </div>
+
+            {selectedPlan ? (
+              <Reveal delay={120}>
+                <div className="mt-7 overflow-hidden rounded-[2rem] border border-primary/25 bg-card/60 shadow-[0_35px_100px_-60px_rgba(0,0,0,.9)]">
+                  <div className="grid lg:grid-cols-[.72fr_1.28fr]">
+                    <div className="relative overflow-hidden border-b border-border bg-[#080b0f] p-7 text-white lg:border-b-0 lg:border-r sm:p-9">
+                      <div className="absolute right-[-12%] top-[-20%] h-64 w-64 rounded-full bg-primary/15 blur-3xl" />
+                      <div className="relative">
+                        <p className="label-mono text-[8px] tracking-[.22em] text-white/40">
+                          {t({ fr: "FORMULE SÉLECTIONNÉE", en: "SELECTED PLAN", vi: "GÓI ĐÃ CHỌN", ar: "الخطة المختارة", ru: "ВЫБРАННЫЙ ПАКЕТ" })}
+                        </p>
+                        <h3 className="display-serif mt-5 text-4xl leading-[.88] sm:text-5xl">{t(selectedPlan.name)}</h3>
+                        <div className="mt-8 flex items-end gap-2 border-y border-white/10 py-5">
+                          <span className="display-serif text-5xl">{price(selectedPlan.eur)}</span>
+                          <span className="label-mono pb-1 text-[9px] text-white/45">{t(PERIOD_LABEL[selectedPlan.period])}</span>
+                        </div>
+                        <p className="mt-5 max-w-sm text-sm leading-6 text-white/50">
+                          {t({
+                            fr: "Le détail ci-contre reprend les éléments publiés pour cette formule, sans ajout de prestation non annoncée.",
+                            en: "The details alongside reproduce the published items for this plan without adding unlisted services.",
+                            vi: "Chi tiết bên cạnh phản ánh các hạng mục đã công bố cho gói này, không thêm dịch vụ ngoài phạm vi.",
+                          })}
+                        </p>
+                        <a
+                          href={waUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="mt-7 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3.5 text-[10px] font-semibold uppercase tracking-[.13em] text-black transition hover:-translate-y-0.5"
+                        >
+                          <MessageCircle className="h-3.5 w-3.5" />
+                          {t(UI.bookDirectWhatsapp)}
+                        </a>
+                      </div>
+                    </div>
+                    <div className="p-7 sm:p-9">
+                      <div className="flex items-end justify-between gap-4">
+                        <div>
+                          <p className="label-mono text-[8px] uppercase tracking-[.2em] text-primary">
+                            {t({ fr: "Ce que comprend réellement la formule", en: "What this plan actually includes", vi: "Gói này thực sự bao gồm gì", ar: "ما الذي تتضمنه الخطة فعليًا", ru: "Что действительно входит в пакет" })}
+                          </p>
+                          <h4 className="display-serif mt-3 text-3xl sm:text-4xl">{t(selectedPlan.name)}</h4>
+                        </div>
+                        <span className="hidden rounded-full border border-border px-3 py-2 label-mono text-[8px] text-muted-foreground sm:inline-flex">
+                          {selectedPlan.features.length} {t({ fr: "inclus", en: "included", vi: "bao gồm" })}
+                        </span>
+                      </div>
+                      <div className="mt-7 grid gap-3 sm:grid-cols-2">
+                        {selectedPlan.features.map((feature, i) => (
+                          <div key={i} className="group flex gap-4 rounded-[1.25rem] border border-border/70 bg-background/45 p-4 transition hover:border-primary/35">
+                            <span className="label-mono text-[8px] text-primary">{String(i + 1).padStart(2, "0")}</span>
+                            <p className="text-sm leading-6 text-muted-foreground">{t(feature)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-7 border-t border-border pt-6">
+                        <p className="text-xs leading-5 text-muted-foreground">
+                          {t({
+                            fr: "Le périmètre exact est ensuite cadré selon votre projet, notamment lorsque le service est vendu sur mesure.",
+                            en: "The exact scope is then defined around your project, especially where the service is sold on a tailored basis.",
+                            vi: "Phạm vi chính xác sau đó được xác định theo dự án, đặc biệt với các dịch vụ theo nhu cầu.",
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            ) : null}
           </div>
         </section>
 
