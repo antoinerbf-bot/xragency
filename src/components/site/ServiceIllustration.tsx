@@ -112,17 +112,28 @@ function SeoVisual() {
 function MapsVisual() {
   return (
     <Frame>
-      <img src={XR_PHOTOS.maps} alt="" className="absolute inset-0 h-full w-full object-cover brightness-[.5] grayscale-[.25] transition duration-[1400ms] group-hover:scale-[1.04]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/35" />
-      <div className="absolute left-[8%] top-[9%] w-[72%] overflow-hidden rounded-[1.2rem] border border-white/14 bg-[#10151a]/75 shadow-2xl backdrop-blur-xl">
-        <div className="flex items-center gap-2 border-b border-white/10 px-3 py-3">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(255,255,255,.11),transparent_25%),linear-gradient(145deg,#11171c,#07090c_68%,#10151a)]" />
+      <div className="absolute inset-[8%] overflow-hidden rounded-[1.2rem] border border-white/10 bg-[#141b21]">
+        <div className="flex items-center gap-2 border-b border-white/10 bg-black/20 px-3 py-3">
           <Search className="h-3.5 w-3.5 text-white/55" />
-          <span className="text-[9px] text-white/55">Google Business Profile</span>
+          <span className="text-[9px] text-white/55">Google Business Profile · zone locale</span>
         </div>
-        <div className="relative h-44 bg-[#172027]">
-          <div className="absolute left-[17%] top-[25%] h-px w-[70%] rotate-12 bg-white/12" />
-          <div className="absolute left-[9%] top-[59%] h-px w-[78%] -rotate-6 bg-white/10" />
-          {[["1","left-[60%] top-[33%]"],["2","left-[28%] top-[58%]"],["3","left-[72%] top-[70%]"]].map(([n,pos]) => <span key={n} className={"absolute "+pos+" grid h-7 w-7 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/40 bg-white text-[8px] font-bold text-black shadow-lg"}>{n}</span>)}
+        <div className="relative h-[calc(100%-2.8rem)] overflow-hidden">
+          <div className="absolute inset-0 opacity-70">
+            <div className="absolute left-[14%] top-[12%] h-px w-[72%] rotate-[8deg] bg-white/10" />
+            <div className="absolute left-[4%] top-[42%] h-px w-[92%] -rotate-[6deg] bg-white/10" />
+            <div className="absolute left-[11%] top-[72%] h-px w-[80%] rotate-[3deg] bg-white/10" />
+            <div className="absolute left-[27%] top-[-8%] h-[118%] w-px rotate-[18deg] bg-white/8" />
+            <div className="absolute left-[67%] top-[-8%] h-[118%] w-px -rotate-[12deg] bg-white/8" />
+          </div>
+          <div className="absolute left-[9%] top-[18%] h-20 w-20 rounded-full border border-white/8" />
+          <div className="absolute right-[12%] bottom-[14%] h-28 w-28 rounded-full border border-white/6" />
+          {[["01","left-[58%] top-[32%]"],["02","left-[27%] top-[55%]"],["03","left-[73%] top-[70%]"]].map(([n,pos]) => (
+            <div key={n} className={"absolute "+pos+" grid h-8 w-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/40 bg-white text-[8px] font-bold text-black shadow-[0_0_30px_rgba(255,255,255,.18)]"}>{n}</div>
+          ))}
+          <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-white/10 bg-black/55 p-3 backdrop-blur-xl">
+            <p className="label-mono text-[7px] tracking-[.18em] text-white/40">SEARCH · ZONE · COMPETITION · PROFILE</p>
+          </div>
         </div>
       </div>
       <div className="absolute bottom-[8%] left-[8%] max-w-[82%]">
@@ -132,7 +143,6 @@ function MapsVisual() {
     </Frame>
   );
 }
-
 function SocialVisual() {
   return (
     <Frame>
