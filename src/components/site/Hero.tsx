@@ -70,6 +70,9 @@ export function Hero() {
                 <a href="#audit" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-transparent px-6 py-4 label-mono text-[9px] tracking-[.12em] text-white/65 transition hover:-translate-y-0.5 hover:border-white/25 hover:text-white">
                   <Search className="h-3.5 w-3.5" />Lancer mon audit
                 </a>
+                <a href="#contact" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[.045] px-6 py-4 label-mono text-[9px] tracking-[.12em] text-white/55 transition hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[.08] hover:text-white">
+                  Demander une maquette gratuite <ArrowRight className="h-3.5 w-3.5" />
+                </a>
               </div>
 
               <div className="mt-11 grid max-w-2xl grid-cols-3 gap-5 border-y border-white/12 py-5">
