@@ -222,7 +222,7 @@ export function Contact() {
               <p className="label-mono text-[9px] uppercase tracking-[.18em] text-muted-foreground/50">Navigation</p>
               <div className="mt-4 grid gap-2.5 text-sm">
                 <Link to="/services" className="text-muted-foreground hover:text-foreground">Services</Link>
-                <Link to="/work" className="text-muted-foreground hover:text-foreground">Réalisations</Link>
+                <Link to="/realisations" className="text-muted-foreground hover:text-foreground">Réalisations</Link>
                 <Link to="/faq" className="text-muted-foreground hover:text-foreground">FAQ</Link>
                 <a href="#quote" className="text-muted-foreground hover:text-foreground">Devis sur mesure</a>
               </div>
