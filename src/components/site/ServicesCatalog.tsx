@@ -139,7 +139,7 @@ export function ServicesCatalog() {
                   <div className="relative z-10 flex h-full min-h-[460px] flex-col justify-between p-6 sm:p-8">
                     <div className="flex items-center justify-between">
                       <span className="label-mono rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[8px] uppercase tracking-[.2em] text-white/70 backdrop-blur">{kicker[lang] ?? kicker.en}</span>
-                      <span className="label-mono text-[8px] text-white/40">{String(index + 1).padStart(2, "0")} / 06</span>
+                      <span className="label-mono text-[8px] text-white/40">{String(index + 1).padStart(2, "0")} / {String(catalog.length).padStart(2, "0")}</span>
                     </div>
                     <div className="max-w-2xl">
                       <h2 className={cn("display-serif leading-[.9] text-white", featured ? "text-5xl sm:text-7xl" : "text-4xl sm:text-5xl")}>{t(service.title)}</h2>
