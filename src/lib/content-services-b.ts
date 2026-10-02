@@ -44,8 +44,8 @@ export const SERVICES_PART2 = [
   {
     id: "social",
     num: "05",
-    title: { fr: "Social Media & Contenu", en: "Social Media & Content", vi: "Mạng xã hội & Nội dung", ar: "وسائل التواصل والمحتوى", ru: "Соцсети и контент" },
-    short: { fr: "Stratégie, contenus et animation des réseaux.", en: "Strategy, content and community management.", vi: "Chiến lược, nội dung và quản lý cộng đồng.", ar: "استراتيجية ومحتوى وإدارة للمجتمعات الرقمية.", ru: "Стратегия, контент и управление социальными сетями." },
+    title: { fr: "Social Media", en: "Social Media", vi: "Mạng xã hội", ar: "وسائل التواصل الاجتماعي", ru: "Социальные сети" },
+    short: { fr: "Stratégie, création et animation des réseaux.", en: "Strategy, creation and community management.", vi: "Chiến lược, sáng tạo và quản lý mạng xã hội.", ar: "استراتيجية وإنشاء وإدارة الشبكات الاجتماعية.", ru: "Стратегия, создание и ведение социальных сетей." },
     description: { fr: "Calendrier éditorial, création de contenus et animation Instagram, Facebook, LinkedIn et TikTok.", en: "Editorial calendar, content creation and management of Instagram, Facebook, LinkedIn and TikTok.", vi: "Lịch biên tập, sáng tạo nội dung và quản lý Instagram, Facebook, LinkedIn, TikTok." },
     fromEur: 299,
     fromPeriod: "month",
