@@ -71,16 +71,13 @@ function SeoVisual(){
   </Stage>;
 }
 function MapsVisual(){
-  return <Stage>
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_22%,var(--xr-accent-soft),transparent_28%),linear-gradient(145deg,#ece9e2,#d9d4ca)] dark:bg-[radial-gradient(circle_at_70%_22%,var(--xr-accent-soft),transparent_28%),linear-gradient(145deg,#161616,#08090b)]"/>
-    <div className="absolute inset-[7%] overflow-hidden rounded-[1.8rem] border xr-line bg-[var(--xr-surface-strong)] shadow-[var(--xr-shadow)] backdrop-blur-xl">
-      <div className="flex items-center gap-2 border-b xr-line px-4 py-3"><MapPin className="h-3.5 w-3.5 xr-accent"/><span className="text-[9px] font-semibold">Votre établissement</span><span className="ml-auto label-mono text-[6px] xr-muted-2">LOCAL SEARCH</span></div>
-      <div className="relative h-[calc(100%-3rem)]">
-        <div className="absolute inset-0 opacity-50"><div className="absolute left-[10%] top-[18%] h-px w-[78%] bg-current opacity-10 rotate-[8deg]"/><div className="absolute left-[4%] top-[54%] h-px w-[90%] bg-current opacity-10 -rotate-[4deg]"/><div className="absolute left-[38%] top-[6%] h-[84%] w-px bg-current opacity-10 rotate-[11deg]"/><div className="absolute left-[72%] top-[8%] h-[82%] w-px bg-current opacity-10 -rotate-[13deg]"/></div>
-        {[[59,31,"1"],[34,56,"2"],[77,70,"3"]].map(([x,y,n],i)=><div key={String(n)} className={"absolute grid place-items-center rounded-full border xr-line "+(i===0?"h-12 w-12 bg-[var(--xr-accent)] text-white shadow-2xl":"h-10 w-10 bg-[var(--xr-surface-strong)]")} style={{left:x+"%",top:y+"%",transform:"translate(-50%,-50%)"}}><span className="text-xs font-black">{n}</span></div>)}
-        <div className="absolute bottom-4 left-4 right-4 grid grid-cols-3 gap-2">{["TOP 3","PROFIL","AVIS"].map(x=><div key={x} className="rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3 py-3 text-center"><span className="label-mono text-[6px]">{x}</span></div>)}</div>
-      </div>
-    </div>
+  return <Stage className="bg-black">
+    <Photo src={XR_PHOTOS.maps} position="50% 18%" className="opacity-[.9]"/>
+    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/10"/>
+    <div className="absolute left-5 right-5 top-5 flex items-center justify-between text-white"><Label>GOOGLE SEARCH / LOCAL PACK</Label><span className="label-mono text-[6px] text-white/45">REAL QUERY</span></div>
+    <ParallaxCard speed={0.018} className="absolute bottom-[7%] left-[7%] right-[7%]">
+      <div className="flex flex-wrap items-center gap-3 p-4 sm:p-5"><span className="grid h-9 w-9 place-items-center rounded-xl xr-accent-bg"><MapPin className="h-4 w-4 xr-accent"/></span><div className="min-w-0 flex-1"><Label>GOOGLE MAPS TOP 3</Label><p className="mt-1 text-[10px] font-semibold sm:text-xs">Être visible parmi les premiers établissements.</p></div><div className="flex gap-1.5"><span className="grid h-8 w-8 place-items-center rounded-full bg-[var(--xr-ink)] text-[9px] font-black text-[var(--xr-bg)]">1</span><span className="grid h-8 w-8 place-items-center rounded-full border xr-line text-[9px] font-black">2</span><span className="grid h-8 w-8 place-items-center rounded-full border xr-line text-[9px] font-black">3</span></div></div>
+    </ParallaxCard>
   </Stage>;
 }
 function SocialVisual(){
@@ -88,7 +85,7 @@ function SocialVisual(){
     <Photo src={XR_PHOTOS.social} position="50% 45%" className="opacity-[.62] saturate-[.72]"/>
     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/12 to-black/15"/>
     <div className="relative z-10 h-full p-[7%] text-white">
-      <div className="flex items-center justify-between"><div><Label>SOCIAL / CONTENT</Label><h3 className="display-serif mt-3 text-4xl sm:text-5xl">Une présence qui ressemble à une marque.</h3></div><Sparkles className="h-5 w-5 text-white/45"/></div>
+      <div className="flex items-center justify-between"><div><Label>SOCIAL MEDIA / NETWORKS</Label><h3 className="display-serif mt-3 text-4xl sm:text-5xl">Une présence qui ressemble à une marque.</h3></div><Sparkles className="h-5 w-5 text-white/45"/></div>
       <div className="absolute bottom-[8%] left-[7%] right-[7%] grid grid-cols-3 gap-2">
         <Platform name="Instagram" letter="IG"/><Platform name="Facebook" letter="f"/><Platform name="TikTok" letter="TK"/>
       </div>
