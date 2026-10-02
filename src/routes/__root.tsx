@@ -14,7 +14,6 @@ import { CartProvider } from "../hooks/useCart";
 import { Cart } from "../components/site/Cart";
 import { WhatsAppWidget } from "../components/site/WhatsAppWidget";
 import { CursorGlow } from "../components/site/CursorGlow";
-import { ThemeSwitcher } from "../components/theme/ThemeSwitcher";
 import { ThemeProvider } from "../components/theme/ThemeProvider";
 import appCss from "../styles.css?url";
 
@@ -136,7 +135,6 @@ function RootComponent() {
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }} />
             <CursorGlow />
             <Cart />
-            <ThemeSwitcher />
             <Outlet />
             <WhatsAppWidget />
           </CartProvider>
