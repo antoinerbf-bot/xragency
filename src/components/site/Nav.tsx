@@ -7,7 +7,6 @@ import { UI } from "@/lib/copy";
 import { SERVICES } from "@/lib/content";
 import { Logo, EmberButton } from "./primitives";
 import { CartFloatingButton } from "./Cart";
-import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 
 const IDS=["websites","branding","seo","maps","social","maintenance","robotics"] as const;
 const ICONS={websites:Monitor,branding:Palette,seo:Search,maps:MapPinned,social:Share2,maintenance:ShieldCheck,robotics:Bot};
@@ -37,7 +36,6 @@ export function Nav(){
       </div>
     </div>
     <div className="ml-auto flex items-center gap-1.5">
-      <ThemeSwitcher className="h-9 w-9 rounded-full border-0 bg-transparent shadow-none"/>
       <div className="hidden items-center gap-1 rounded-full border xr-line bg-[var(--xr-surface)] p-1 sm:flex">{LANGS.map(l=><button key={l.code} type="button" onClick={()=>setLang(l.code)} className={cn("label-mono rounded-full px-2 py-1 text-[7px] transition",lang===l.code?"bg-[var(--xr-ink)] text-[var(--xr-bg)]":"xr-muted hover:text-[var(--xr-ink)]")}>{l.label}</button>)}</div>
       <CartFloatingButton/>
       <EmberButton href="/#quote" className="hidden min-h-9 px-4 py-2 text-[8px] md:inline-flex">Faire mon devis</EmberButton>
