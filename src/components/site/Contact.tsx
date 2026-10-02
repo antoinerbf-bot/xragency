@@ -36,7 +36,7 @@ export function Contact() {
   ];
 
   return (
-    <section id="contact" className="relative py-12 sm:py-18 lg:py-24">
+    <section id="contact" className="xr-section relative py-20 sm:py-28 lg:py-32">
       {/* Warm ambient background */}
       <div
         aria-hidden
