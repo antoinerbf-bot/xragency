@@ -1,6 +1,7 @@
 import { ArrowUpRight, Bot, CalendarDays, Gauge, Globe2, MapPin, Megaphone, Palette, Search, ShieldCheck, Sparkles } from "lucide-react";
 import type { ReactNode } from "react";
 import { XR_PHOTOS } from "@/lib/photography";
+import { Parallax } from "./primitives";
 
 type Props = { service: string; title?: string };
 type Meta = { number: string; label: string; photo?: keyof typeof XR_PHOTOS; position?: string };
@@ -152,13 +153,6 @@ function GenericVisual({info}:{info:Meta}){
 }
 function ParallaxCard({children,speed=0.02,className=""}:{children:ReactNode;speed?:number;className?:string}){
   return <Parallax speed={speed} direction="both" className={className}><Chrome>{children}</Chrome></Parallax>;
-}
-function Parallax({children,speed=0.02,direction="y",className=""}:{children:ReactNode;speed?:number;direction?:"y"|"x"|"both";className?:string}){
-  const ref = require("react").useRef<HTMLDivElement>(null);
-  require("react").useEffect(()=>{
-    const el=ref.current;if(!el||window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
-    let frame=0;const update=()=>{frame=0;const rect=el.getBoundingClientRect();const center=rect.top+rect.height/2-window.innerHeight/2;const amount=-center*speed;if(direction==="y")el.style.transform=`translate3d(0,${amount.toFixed(2)}px,0)`;else if(direction==="x")el.style.transform=`translate3d(${amount.toFixed(2)}px,0,0)`;else el.style.transform=`translate3d(${(amount*.4).toFixed(2)}px,${amount.toFixed(2)}px,0)`};const onScroll=()=>{if(!frame)frame=requestAnimationFrame(update)};update();window.addEventListener("scroll",onScroll,{passive:true});window.addEventListener("resize",onScroll);return()=>{window.removeEventListener("scroll",onScroll);window.removeEventListener("resize",onScroll);if(frame)cancelAnimationFrame(frame)}},[speed,direction]);
-  return <div ref={ref} className={"will-change-transform "+className}>{children}</div>;
 }
 
 export function ServiceIllustration({service,title}:Props){
