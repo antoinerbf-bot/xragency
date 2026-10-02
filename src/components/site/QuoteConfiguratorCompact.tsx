@@ -403,11 +403,6 @@ export function QuoteConfiguratorCompact() {
         ? monthly.toLocaleString("fr-FR") + " €/mois"
         : "Sélection en cours";
 
-  const Parallax = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
-  const Reveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
-    <div style={{ animationDelay: delay + "ms" }} className="animate-[xr-drift_9s_ease-in-out_infinite]">{children}</div>
-  );
-
   const SystemStack = () => (
     <div className="relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-black/25 p-4 sm:p-5">
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-70 [background-image:linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] [background-size:28px_28px]" />
