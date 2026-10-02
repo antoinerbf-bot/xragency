@@ -36,7 +36,7 @@ const REEL=[
 function ReelCard({item,index}:{item:(typeof REEL)[number];index:number}){
   return <Parallax speed={index===1?-0.035:index===0?0.018:0.04} direction="both" className="h-full">
     <article className={"xr-depth-card group relative h-full overflow-hidden rounded-[2rem] border xr-line bg-black "+(index===1?"min-h-[430px] sm:min-h-[540px]":"min-h-[320px] sm:min-h-[420px]")}>
-      <img src={item.photo} alt="" className="absolute inset-0 h-full w-full object-cover grayscale-[.12] transition duration-[1400ms] group-hover:scale-[1.045] group-hover:grayscale-0"/>
+      <img src={item.photo} alt="" className="absolute inset-0 h-full w-full object-cover grayscale transition duration-[1400ms] group-hover:scale-[1.045] group-hover:grayscale-0"/>
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-black/5"/>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(255,255,255,.16),transparent_32%)]"/>
       <div className="relative z-10 flex h-full flex-col justify-between p-5 sm:p-7">
@@ -57,7 +57,7 @@ function HeroVisual(){
         <Parallax speed={-0.025} className="h-full">
           <div className="relative h-full overflow-hidden rounded-[2.35rem] border xr-line bg-[var(--xr-ink)] p-3 shadow-[var(--xr-shadow)]">
             <div className="relative h-full min-h-[480px] overflow-hidden rounded-[1.9rem] bg-black sm:min-h-[620px]">
-              <img src={XR_PHOTOS.branding} alt="" className="absolute inset-0 h-full w-full object-cover opacity-70 grayscale-[.08]"/>
+              <img src={XR_PHOTOS.branding} alt="" className="absolute inset-0 h-full w-full object-cover opacity-70 grayscale"/>
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.25)_42%,rgba(0,0,0,.92))]"/>
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(198,83,63,.32),transparent_26%)]"/>
               <div className="absolute left-5 right-5 top-5 flex items-center justify-between sm:left-7 sm:right-7 sm:top-7"><span className="label-mono text-[6px] tracking-[.24em] text-white/50">XRAGENCY / MOTION REEL</span><span className="label-mono text-[6px] text-white/35">2026</span></div>
