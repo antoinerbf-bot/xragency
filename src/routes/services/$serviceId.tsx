@@ -125,7 +125,6 @@ function ServiceDetailPage() {
 
   // WhatsApp link with customized message for this service
   const planForWa = service.plans[selectedPlanIndex];
-  const selectedPlan = service.plans[selectedPlanIndex] ?? service.plans[0];
   const isCustomMaps = service.id === "maps";
   const isInstWa = installmentSelections[selectedPlanIndex] ?? false;
   const planIsInstallmentWa = service.id === "websites" && isInstWa && planForWa?.period === "once";
