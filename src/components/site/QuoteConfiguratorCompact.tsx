@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { FormEvent } from "react";
+import type { FormEvent, ReactNode } from "react";
 import { ArrowRight, Check, ChevronRight, Globe2, Layers3, MessageCircle, RotateCcw, Sparkles } from "lucide-react";
 
 type Choice = { id: string; label: string; detail: string };
@@ -139,6 +139,7 @@ export function QuoteConfiguratorCompact() {
     setSending(true);
     setSendMessage("");
     try {
+      const { jsPDF } = await import("jspdf");
       const doc = new jsPDF({ unit: "mm", format: "a4" });
       const W = 210, M = 14, R = 196;
       const ink = [18, 22, 29] as const;
@@ -394,8 +395,61 @@ export function QuoteConfiguratorCompact() {
     </button>
   );
 
+  const totalLabel = once > 0 && monthly > 0
+    ? once.toLocaleString("fr-FR") + " € + " + monthly.toLocaleString("fr-FR") + " €/mois"
+    : once > 0
+      ? once.toLocaleString("fr-FR") + " €"
+      : monthly > 0
+        ? monthly.toLocaleString("fr-FR") + " €/mois"
+        : "Sélection en cours";
+
+  const Parallax = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+  const Reveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
+    <div style={{ animationDelay: delay + "ms" }} className="animate-[xr-drift_9s_ease-in-out_infinite]">{children}</div>
+  );
+
   const SystemStack = () => (
-    <div className="relative overflow-hidden ro  return (
+    <div className="relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-black/25 p-4 sm:p-5">
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-70 [background-image:linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] [background-size:28px_28px]" />
+      <div className="relative flex items-center justify-between gap-4">
+        <div>
+          <span className="label-mono text-[7px] tracking-[.18em] text-white/25">ARCHITECTURE XR</span>
+          <p className="mt-1 text-xs font-semibold text-white/82">Votre dispositif digital</p>
+        </div>
+        <span className="rounded-full border border-white/10 px-2.5 py-1 label-mono text-[6px] tracking-[.16em] text-white/35">{selectedServices.length} BRIQUE{selectedServices.length > 1 ? "S" : ""}</span>
+      </div>
+      <div className="relative mt-5 grid grid-cols-1 gap-2 sm:grid-cols-3">
+        <div className="rounded-2xl border border-white/12 bg-white/[.06] p-4 sm:col-span-1">
+          <span className="label-mono text-[6px] text-white/25">CORE</span>
+          <div className="mt-3 flex items-center gap-3">
+            <div className="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-white text-black font-black tracking-[-.08em]">XR</div>
+            <div><p className="text-[10px] font-semibold text-white/82">XRAGENCY</p><p className="mt-1 text-[7px] text-white/30">Stratégie · Design · Croissance</p></div>
+          </div>
+        </div>
+        <div className="relative sm:col-span-2">
+          <div aria-hidden className="absolute left-0 top-1/2 hidden h-px w-6 bg-white/10 sm:block" />
+          <div className="grid gap-2 sm:grid-cols-2">
+            {(selectedServices.length ? selectedServices : ["website", "seo", "social", "branding"]).slice(0,4).map((id, index) => {
+              const service = SERVICES.find((x) => x.id === id);
+              return (
+                <div key={id} className="group rounded-2xl border border-white/9 bg-white/[.025] p-3 transition hover:-translate-y-0.5 hover:border-white/18 hover:bg-white/[.05]">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="label-mono text-[6px] text-white/24">0{index + 1}</span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/50 transition group-hover:scale-150" />
+                  </div>
+                  <p className="mt-2 text-[9px] font-semibold text-white/75">{service?.label ?? id}</p>
+                  <p className="mt-1 text-[7px] leading-4 text-white/28">{service?.detail ?? "Brique sur mesure du dispositif."}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      <div className="relative mt-4 flex items-center justify-between border-t border-white/8 pt-3">
+        <span className="label-mono text-[6px] tracking-[.14em] text-white/22">INVESTISSEMENT ESTIMÉ</span>
+        <span className="text-[9px] font-semibold text-white/72">{totalLabel}</span>
+      </div>
+    </div>
     <section id="quote" className="relative overflow-hidden border-y border-white/10 bg-[#07090d] py-20 text-white sm:py-28 lg:py-32">
       <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_12%_12%,rgba(126,151,255,.08),transparent_25%),radial-gradient(circle_at_92%_72%,rgba(255,255,255,.035),transparent_26%)]" />
       <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
