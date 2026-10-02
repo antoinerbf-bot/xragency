@@ -17,7 +17,6 @@ import { SERVICES, PERIOD_LABEL, CONTACT, FAQ } from "@/lib/content";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
 import { EmberButton, Reveal, Parallax } from "@/components/site/primitives";
-import { HeroSection } from "@/components/seo/HeroSection";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
 import { AddToCartBtn } from "@/components/site/Cart";
 import { cn } from "@/lib/utils";
@@ -168,90 +167,47 @@ function ServiceDetailPage() {
           </div>
         </div>
 
-        {/* Hero Section */}
-        <section className="relative overflow-hidden py-16 lg:py-24">
-          <div className="mx-auto max-w-7xl px-6 lg:px-10">
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
-              <div className="lg:col-span-7">
-                {service.id === 'seo' ? (
-                  <HeroSection
-                    title={t(service.title)}
-                    description={t(service.description)}
-                    ctaPrimary={{ label: t(UI.explorePacks), href: "#plans" }}
-                  />
-                ) : (
-                  <>
-                    <Reveal>
-                      <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-primary">
-                        <Sparkles className="h-3.5 w-3.5" />
-                        <span className="label-mono text-xs uppercase tracking-widest">
-                          {t(service.title)} · {service.num}
-                        </span>
-                      </div>
-                    </Reveal>
-                    <Reveal delay={80}>
-                      <h1 className="display-serif mt-6 text-[clamp(2.5rem,6.5vw,5.2rem)] leading-[1.02]">
-                        {t(service.title)}
-                      </h1>
-                    </Reveal>
-                    <Reveal delay={160}>
-                      <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-                        {t(service.description)}
-                      </p>
-                    </Reveal>
-                    <Reveal delay={240}>
-                      <div className="mt-8 flex flex-wrap gap-2.5">
-                        {service.highlights.map((h, idx) => (
-                          <span
-                            key={idx}
-                            className="label-mono inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-2 text-xs text-foreground backdrop-blur-sm"
-                          >
-                            <Zap className="h-3 w-3 text-primary" />
-                            {t(h)}
-                          </span>
-                        ))}
-                      </div>
-                    </Reveal>
-                    <Reveal delay={320}>
-                      <div className="mt-10 flex flex-wrap items-center gap-4">
-                        <EmberButton href="#plans">{t(UI.explorePacks)}</EmberButton>
-                        <EmberButton href={`/?service=${service.id}#quote`} variant="outline">{t({ fr: "Composer cette offre", en: "Build this offer", vi: "Tạo gói này", ar: "تكوين هذا العرض", ru: "Собрать это предложение" })}</EmberButton>
-                        <a
-                          href={waUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-6 py-3.5 text-xs uppercase tracking-widest text-foreground transition-all duration-300 hover:border-primary hover:text-primary"
-                        >
-                          <MessageCircle className="h-4 w-4 text-emerald-500" />
-                          {t(UI.bookDirectWhatsapp)}
-                        </a>
-                        <Link
-                          to="/"
-                          hash="intelligence"
-                          className="label-mono text-xs text-muted-foreground transition-colors hover:text-primary"
-                        >
-                          {t(UI.getCustomQuote)} →
-                        </Link>
-                      </div>
-                    </Reveal>
-                  </>
-                )}
-              </div>
-              <div className="relative lg:col-span-5">
-                <Parallax speed={-0.06}>
-                  <div className="relative">
-                    <ServiceIllustration service={service.id} title={t(service.title)} />
-                    <div className="pointer-events-none absolute -left-3 top-8 hidden rounded-2xl border border-white/10 bg-black/55 px-4 py-3 shadow-2xl backdrop-blur-xl sm:block lg:-left-8">
-                      <span className="label-mono text-[8px] uppercase tracking-[.2em] text-white/45">{t({ fr: "À partir de", en: "Starting from", vi: "Từ", ar: "ابتداءً من", ru: "От" })}</span>
-                      <p className="display-serif mt-1 text-xl text-white">{price(service.fromEur)}</p>
-                    </div>
-                    <div className="pointer-events-none absolute -bottom-5 right-4 hidden rounded-2xl border border-white/10 bg-white/[.07] px-4 py-3 shadow-2xl backdrop-blur-xl sm:block lg:right-0">
-                      <span className="label-mono text-[8px] uppercase tracking-[.2em] text-white/45">{t({ fr: "XR SYSTEM", en: "XR SYSTEM", vi: "XR SYSTEM", ar: "XR SYSTEM", ru: "XR SYSTEM" })}</span>
-                      <p className="mt-1 text-xs font-medium text-white">{t({ fr: "Choisissez · Configurez · Lancez", en: "Choose · Configure · Launch", vi: "Chọn · Cấu hình · Khởi chạy", ar: "اختر · خصّص · ابدأ", ru: "Выберите · Настройте · Запустите" })}</p>
-                    </div>
+        {/* Cinematic service hero */}
+        <section className="xr-section relative overflow-hidden border-b xr-line py-14 lg:py-20">
+          <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_75%_22%,var(--xr-accent-soft),transparent_25%),radial-gradient(circle_at_8%_80%,rgba(20,20,24,.06),transparent_30%)]" />
+          <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
+            <div className="grid gap-10 lg:grid-cols-[.84fr_1.16fr] lg:items-center lg:gap-14">
+              <div>
+                <Reveal>
+                  <Link to="/services" className="label-mono inline-flex items-center gap-2 xr-muted-2 transition hover:xr-accent"><ArrowLeft className="h-3.5 w-3.5" /> Catalogue des services</Link>
+                </Reveal>
+                <Reveal delay={60}>
+                  <div className="mt-8 flex items-center gap-3"><span className="grid h-9 w-9 place-items-center rounded-full xr-accent-bg"><Sparkles className="h-4 w-4 xr-accent" /></span><span className="label-mono text-[7px] tracking-[.24em] xr-accent">XR / {service.num} · {t(service.title)}</span></div>
+                </Reveal>
+                <Reveal delay={110}>
+                  <h1 className="display-serif mt-6 text-[clamp(3.2rem,6vw,6.8rem)] leading-[.8] tracking-[-.065em]">{t(service.title)}</h1>
+                </Reveal>
+                <Reveal delay={170}>
+                  <p className="mt-7 max-w-2xl text-base leading-7 xr-muted sm:text-lg">{t(service.description)}</p>
+                </Reveal>
+                <Reveal delay={230}>
+                  <div className="mt-7 flex flex-wrap gap-2">{service.highlights.slice(0,4).map((h,idx)=><span key={idx} className="rounded-full border xr-line bg-[var(--xr-surface)] px-3.5 py-2 label-mono text-[7px] xr-muted backdrop-blur-xl"><span className="mr-2 xr-accent">{String(idx+1).padStart(2,"0")}</span>{t(h)}</span>)}</div>
+                </Reveal>
+                <Reveal delay={290}>
+                  <div className="mt-9 flex flex-wrap items-center gap-3">
+                    <EmberButton href="#plans">{t(UI.explorePacks)}</EmberButton>
+                    <EmberButton href={`/?service=${service.id}#quote`} variant="outline">{t({ fr:"Composer cette offre", en:"Build this offer", vi:"Tạo gói này", ar:"تكوين هذا العرض", ru:"Собрать это предложение" })}</EmberButton>
+                    <a href={waUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border xr-line px-5 py-3.5 label-mono text-[7px] xr-muted transition hover:xr-accent hover:border-[var(--xr-accent)]"><MessageCircle className="h-3.5 w-3.5" /> WhatsApp</a>
                   </div>
-                </Parallax>
+                </Reveal>
+                <Reveal delay={350}>
+                  <div className="mt-9 flex items-end gap-5 border-t xr-line pt-5"><div><span className="label-mono text-[6px] xr-muted-2">À PARTIR DE</span><p className="display-serif mt-1 text-4xl">{isCustomMaps ? "990 €" : price(service.fromEur)}</p></div><span className="label-mono pb-1 text-[6px] xr-muted-2">{isCustomMaps ? "/ AN" : t(PERIOD_LABEL[service.fromPeriod])}</span></div>
+                </Reveal>
               </div>
+              <Reveal delay={120}>
+                <div className="relative">
+                  <Parallax speed={-0.04}>
+                    <ServiceIllustration service={service.id} title={t(service.title)} />
+                  </Parallax>
+                  <div className="absolute -left-4 top-6 hidden rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3 shadow-xl backdrop-blur-xl sm:block lg:-left-8"><span className="label-mono text-[6px] xr-muted-2">01</span><p className="mt-1 text-[9px] font-semibold">Voir. Comprendre. Décider.</p></div>
+                  <div className="absolute -bottom-5 right-5 hidden rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3 shadow-xl backdrop-blur-xl sm:block"><span className="label-mono text-[6px] xr-muted-2">XR SYSTEM</span><p className="mt-1 text-[9px] font-semibold">Une expertise → une action.</p></div>
+                </div>
+              </Reveal>
             </div>
           </div>
         </section>
