@@ -24,7 +24,7 @@ function Stage({children,className=""}:{children:ReactNode;className?:string}){
   return <div className={"xr-depth relative min-h-[460px] overflow-hidden rounded-[2rem] border xr-line bg-[var(--xr-bg-elev)] "+className}>{children}</div>;
 }
 function Photo({src,position="50% 50%",className=""}:{src:string;position?:string;className?:string}){
-  return <img src={src} alt="" style={{objectPosition:position}} className={"absolute inset-0 h-full w-full object-cover "+className}/>;
+  return <img src={src} alt="" style={{objectPosition:position}} className={"absolute inset-0 h-full w-full object-cover grayscale "+className}/>;
 }
 function Chrome({children,className=""}:{children:ReactNode;className?:string}){
   return <div className={"xr-depth-card rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)] shadow-[var(--xr-shadow)] backdrop-blur-2xl "+className}>{children}</div>;
@@ -109,7 +109,7 @@ function RoboticsVisual(){
     <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_24%,var(--xr-accent-soft),transparent_30%),linear-gradient(145deg,#ece9e2,#cfd0ce)] dark:bg-[radial-gradient(circle_at_50%_24%,var(--xr-accent-soft),transparent_30%),linear-gradient(145deg,#171717,#08090b)]"/>
     <ParallaxCard speed={-0.018} className="absolute inset-x-[10%] bottom-[3%] top-[3%]">
       <div className="relative h-full overflow-hidden rounded-[1.35rem]">
-        <img src={XR_PHOTOS.robotics} alt="" className="absolute inset-0 h-full w-full object-contain drop-shadow-[0_35px_60px_rgba(0,0,0,.38)] dark:drop-shadow-[0_40px_75px_rgba(0,0,0,.82)]"/>
+        <img src={XR_PHOTOS.robotics} alt="" className="absolute inset-0 h-full w-full object-contain grayscale drop-shadow-[0_35px_60px_rgba(0,0,0,.38)] dark:drop-shadow-[0_40px_75px_rgba(0,0,0,.82)]"/>
         <div className="absolute left-4 top-4 rounded-full border xr-line bg-[var(--xr-surface-strong)] px-3 py-2 backdrop-blur-xl"><Label>ROBOTIQUE DE SERVICE</Label></div>
       </div>
     </ParallaxCard>
