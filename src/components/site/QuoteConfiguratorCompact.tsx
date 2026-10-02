@@ -450,6 +450,9 @@ export function QuoteConfiguratorCompact() {
         <span className="text-[9px] font-semibold text-white/72">{totalLabel}</span>
       </div>
     </div>
+  );
+
+  return (
     <section id="quote" className="relative overflow-hidden border-y border-white/10 bg-[#07090d] py-20 text-white sm:py-28 lg:py-32">
       <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_12%_12%,rgba(126,151,255,.08),transparent_25%),radial-gradient(circle_at_92%_72%,rgba(255,255,255,.035),transparent_26%)]" />
       <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
