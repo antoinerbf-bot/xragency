@@ -161,7 +161,7 @@ export function MapsSimulator() {
   );
 
   return (
-    <section id="maps" className="relative py-12 sm:py-18 lg:py-24">
+    <section id="maps" className="xr-section-elevated relative border-y xr-line py-20 sm:py-28 lg:py-32">
       {/* Background Glow */}
       <div
         aria-hidden
