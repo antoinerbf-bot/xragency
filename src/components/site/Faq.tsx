@@ -32,7 +32,7 @@ export function Faq() {
   const hasMore = filtered.length > INITIAL_VISIBLE;
 
   return (
-    <section id="faq" className="relative py-12 sm:py-16 lg:py-20">
+    <section id="faq" className="xr-section relative py-20 sm:py-28 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <SectionHeading label={UI.faqLabel} line1={UI.faqTitle1} line2={UI.faqTitle2} />
 
