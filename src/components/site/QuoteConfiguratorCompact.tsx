@@ -412,14 +412,14 @@ export function QuoteConfiguratorCompact() {
           <span className="label-mono text-[7px] tracking-[.18em] xr-muted-2">ARCHITECTURE XR</span>
           <p className="mt-1 text-xs font-semibold text-[var(--xr-ink)]">Votre dispositif digital</p>
         </div>
-        <span className="rounded-full border border-white/10 px-2.5 py-1 label-mono text-[6px] tracking-[.16em] text-white/35">{selectedServices.length} BRIQUE{selectedServices.length > 1 ? "S" : ""}</span>
+        <span className="rounded-full border xr-line bg-[var(--xr-bg)] px-2.5 py-1 label-mono text-[6px] tracking-[.16em] xr-muted-2">{selectedServices.length} BRIQUE{selectedServices.length > 1 ? "S" : ""}</span>
       </div>
       <div className="relative mt-5 grid grid-cols-1 gap-2 sm:grid-cols-3">
         <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)] p-4 sm:col-span-1">
-          <span className="label-mono text-[6px] text-white/25">CORE</span>
+          <span className="label-mono text-[6px] xr-muted-2">CORE</span>
           <div className="mt-3 flex items-center gap-3">
-            <div className="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-white text-black font-black tracking-[-.08em]">XR</div>
-            <div><p className="text-[10px] font-semibold text-white/82">XRAGENCY</p><p className="mt-1 text-[7px] text-white/30">Stratégie · Design · Croissance</p></div>
+            <div className="grid h-11 w-11 place-items-center rounded-full border xr-line bg-[var(--xr-ink)] text-[var(--xr-bg)] font-black tracking-[-.08em]">XR</div>
+            <div><p className="text-[10px] font-semibold text-[var(--xr-ink)]">XRAGENCY</p><p className="mt-1 text-[7px] xr-muted-2">Stratégie · Design · Croissance</p></div>
           </div>
         </div>
         <div className="relative sm:col-span-2">
@@ -428,9 +428,9 @@ export function QuoteConfiguratorCompact() {
             {(selectedServices.length ? selectedServices : ["website", "seo", "social", "branding"]).slice(0,4).map((id, index) => {
               const service = SERVICES.find((x) => x.id === id);
               return (
-                <div key={id} className="group rounded-2xl border border-[var(--xr-line)] bg-[var(--xr-surface-strong)] p-3 transition hover:-translate-y-0.5 hover:border-white/18 hover:bg-white/[.05]">
+                <div key={id} className="group rounded-2xl border xr-line bg-[var(--xr-surface-strong)] p-3 transition hover:-translate-y-0.5 hover:border-[var(--xr-ink)]/18 hover:bg-[var(--xr-accent-soft)]">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="label-mono text-[6px] text-white/24">0{index + 1}</span>
+                    <span className="label-mono text-[6px] xr-muted-2">0{index + 1}</span>
                     <span className="h-1.5 w-1.5 rounded-full bg-[var(--xr-ink)]/50 transition group-hover:scale-150" />
                   </div>
                   <p className="mt-2 text-[9px] font-semibold text-[var(--xr-ink)]">{service?.label ?? id}</p>
