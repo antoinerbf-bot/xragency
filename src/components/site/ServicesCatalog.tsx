@@ -17,7 +17,7 @@ const CATALOG_IDS = [
   "robotics",
 ] as const;
 
-const SERVICE_KICKER: Record<string, { fr: string; en: string; vi: string; ar: string; ru: string }> = {
+const SERVICE_KICKER: Record<string, { fr: string; en: string; vi: string; ar?: string; ru?: string }> = {
   websites: { fr: "FLAGSHIP", en: "FLAGSHIP", vi: "FLAGSHIP" },
   branding: { fr: "IDENTITÉ", en: "IDENTITY", vi: "NHẬN DIỆN" },
   seo: { fr: "VISIBILITÉ", en: "VISIBILITY", vi: "HIỂN THỊ" },
