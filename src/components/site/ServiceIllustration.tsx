@@ -20,7 +20,7 @@ const META: Record<string, Meta> = {
   ai: { number: "11", label: "IA", photo: "ai", position: "50% 50%" },
 };
 
-function Stage({ children, className = "" }: { children: ReactNode; className?: string }) {
+function Stage({ children, className = "", accent = "#d9b48c" }: { children: ReactNode; className?: string; accent?: string }) {
   return (
     <div
       className={
@@ -28,7 +28,13 @@ function Stage({ children, className = "" }: { children: ReactNode; className?: 
         className
       }
     >
-      {children}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-20 -top-20 z-[1] h-72 w-72 rounded-full blur-3xl opacity-25"
+        style={{ background: accent }}
+      />
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(135deg,transparent_0%,rgba(255,255,255,.08)_46%,transparent_62%)]" />
+      <div className="relative z-[2] h-full">{children}</div>
     </div>
   );
 }
@@ -77,7 +83,7 @@ function Glass({
 
 function WebVisual() {
   return (
-    <Stage className="bg-[#e9e4dc]">
+    <Stage className="bg-[#e9e4dc]" accent="#d9b48c">
       <Photo src={XR_PHOTOS.websites} position="52% 45%" className="scale-[1.04] opacity-[.92]" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/58 via-black/8 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
@@ -103,7 +109,7 @@ function WebVisual() {
 
 function BrandingVisual() {
   return (
-    <Stage className="bg-[#e9e4dc]">
+    <Stage className="bg-[#e9e4dc]" accent="#c7b5df">
       <Photo src={XR_PHOTOS.branding} position="50% 45%" className="scale-[1.05] opacity-[.84]" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/8 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
@@ -134,7 +140,7 @@ function BrandingVisual() {
 
 function SeoVisual() {
   return (
-    <Stage className="bg-[#e9e4dc]">
+    <Stage className="bg-[#e9e4dc]" accent="#a9c7d8">
       <Photo src={XR_PHOTOS.seo} position="50% 45%" className="scale-[1.03] opacity-[.82]" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/7 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
@@ -162,7 +168,7 @@ function SeoVisual() {
 
 function MapsVisual() {
   return (
-    <Stage className="bg-[#e9e4dc]">
+    <Stage className="bg-[#e9e4dc]" accent="#e2b2aa">
       <Photo src={XR_PHOTOS.maps} position="50% 18%" className="scale-[1.04] opacity-[.94]" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/7 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
@@ -199,7 +205,7 @@ function MapsVisual() {
 
 function SocialVisual() {
   return (
-    <Stage className="bg-[#e9e4dc]">
+    <Stage className="bg-[#e9e4dc]" accent="#b7d6c4">
       <Photo src={XR_PHOTOS.social} position="50% 45%" className="scale-[1.04] opacity-[.88]" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/6 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
@@ -227,7 +233,7 @@ function SocialVisual() {
 
 function WebcareVisual() {
   return (
-    <Stage className="bg-[#e9e4dc]">
+    <Stage className="bg-[#e9e4dc]" accent="#d4c49a">
       <Photo src={XR_PHOTOS.maintenance} position="50% 50%" className="scale-[1.04] opacity-[.82]" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/7 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
@@ -251,7 +257,7 @@ function WebcareVisual() {
 
 function RoboticsVisual() {
   return (
-    <Stage className="bg-[#e9e4dc]">
+    <Stage className="bg-[#e9e4dc]" accent="#aeb6bf">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_22%,rgba(255,255,255,.16),transparent_26%),linear-gradient(145deg,#d8d8d8,#111)]" />
       <Parallax speed={-0.018} className="absolute inset-4 sm:inset-7">
         <div className="relative h-full overflow-hidden rounded-[1.7rem]">
