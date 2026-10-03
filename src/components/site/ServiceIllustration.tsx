@@ -24,7 +24,7 @@ function Stage({ children, className = "", accent = "#d9b48c" }: { children: Rea
   return (
     <div
       className={
-        "xr-depth relative min-h-[430px] overflow-hidden rounded-[2rem] border xr-line bg-[var(--xr-bg-elev)] " +
+        "xr-depth relative min-h-[360px] overflow-hidden rounded-[2rem] border xr-line bg-[var(--xr-bg-elev)] sm:min-h-[430px] " +
         className
       }
     >
