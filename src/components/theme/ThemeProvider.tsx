@@ -4,25 +4,22 @@ type Theme = "light" | "dark";
 type ThemeContextType = { theme: Theme; setTheme: (theme: Theme) => void; toggleTheme: () => void };
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-function systemTheme(): Theme {
-  return typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+function initialTheme(): Theme {
+  if (typeof window === "undefined") return "light";
+  const stored = window.localStorage.getItem("xr-theme");
+  return stored === "dark" ? "dark" : "light";
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(systemTheme);
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const sync = () => setTheme(media.matches ? "dark" : "light");
-    sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
-  }, []);
+  // XR defaults to the bright editorial theme regardless of the operating-system theme.
+  // Visitors can still switch manually and the choice is remembered for this browser.
+  const [theme, setTheme] = useState<Theme>(initialTheme);
 
   useEffect(() => {
     const root = document.documentElement;
     root.classList.toggle("dark", theme === "dark");
     root.style.colorScheme = theme;
+    window.localStorage.setItem("xr-theme", theme);
   }, [theme]);
 
   const toggleTheme = () => setTheme((prev) => (prev === "light" ? "dark" : "light"));
