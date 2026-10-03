@@ -25,7 +25,7 @@ export function Globe({ className }: GlobeProps) {
     };
     window.addEventListener("resize", onResize);
 
-    globeRef.current = createGlobe(canvas, {
+    const globeOptions = {
       devicePixelRatio: 2,
       width: width * 2,
       height: width * 2,
@@ -53,7 +53,9 @@ export function Globe({ className }: GlobeProps) {
         state.width = width * 2;
         state.height = width * 2;
       },
-    });
+    } as any;
+
+    globeRef.current = createGlobe(canvas, globeOptions);
 
     return () => {
       window.removeEventListener("resize", onResize);
