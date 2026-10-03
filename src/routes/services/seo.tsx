@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowRight, Check, ChevronDown, Search, ShieldCheck, Sparkles, TrendingUp } from "lucide-react";
 import { useState, type ReactNode } from "react";
-import { useLang, type Lang } from "@/lib/i18n";
+import { useLang, type Lang, type L } from "@/lib/i18n";
 import { Nav } from "@/components/site/Nav";
 import { ServiceIllustration } from "@/components/site/ServiceIllustration";
 
 export const Route = createFileRoute("/services/seo")({ component: SEOPage });
 
-type Copy = Record<Lang, string>;
+type Copy = L;
 type Plan = { name: Copy; price: Copy; period: Copy; audience: Copy; features: Copy[]; popular?: boolean; annual?: boolean };
 const c = (fr: string, en: string, vi: string): Copy => ({ fr, en, vi });
 
