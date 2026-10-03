@@ -2,7 +2,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/puzo3938/public_html/
-    - export APPROOT="$HOME/xragency"
+    - export APPROOT="$HOME/repositories/xragency"
     - git restore -- src/routeTree.gen.ts
     - rm -rf "$APPROOT/tmp" "$HOME/tmp"
     - npm install --include=dev --no-package-lock --legacy-peer-deps
