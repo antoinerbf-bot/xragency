@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { CSSProperties } from "react";
 import { ArrowRight, ArrowUpRight, BarChart3, Bot, Globe2, MapPinned, Palette, ShieldCheck, Users } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
@@ -127,7 +128,7 @@ export function HomeServices() {
                   key={id}
                   type="button"
                   onClick={() => setActive(id)}
-                  style={{ "--service-accent": ACCENTS[id] } as React.CSSProperties}
+                  style={{ "--service-accent": ACCENTS[id] } as CSSProperties}
                   className={
                     "group flex min-w-[150px] items-center gap-3 rounded-full border px-4 py-3 text-left transition duration-400 sm:min-w-0 sm:flex-1 " +
                     (selected
