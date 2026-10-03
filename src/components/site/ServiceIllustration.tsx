@@ -47,7 +47,7 @@ function Photo({
       src={src}
       alt=""
       style={{ objectPosition: position }}
-      className={"absolute inset-0 h-full w-full object-cover grayscale " + className}
+      className={"absolute inset-0 h-full w-full object-cover " + className}
     />
   );
 }
@@ -77,9 +77,9 @@ function Glass({
 
 function WebVisual() {
   return (
-    <Stage className="bg-black">
+    <Stage className="bg-[#e9e4dc]">
       <Photo src={XR_PHOTOS.websites} position="52% 45%" className="scale-[1.04] opacity-[.92]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/12 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/58 via-black/8 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
         <Label>01 / WEB DESIGN</Label>
         <Label>REAL PROJECT VIEW</Label>
@@ -103,9 +103,9 @@ function WebVisual() {
 
 function BrandingVisual() {
   return (
-    <Stage className="bg-black">
+    <Stage className="bg-[#e9e4dc]">
       <Photo src={XR_PHOTOS.branding} position="50% 45%" className="scale-[1.05] opacity-[.84]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/18 to-black/10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/8 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
         <Label>02 / BRANDING</Label>
         <Label>IDENTITY SYSTEM</Label>
@@ -134,9 +134,9 @@ function BrandingVisual() {
 
 function SeoVisual() {
   return (
-    <Stage className="bg-black">
+    <Stage className="bg-[#e9e4dc]">
       <Photo src={XR_PHOTOS.seo} position="50% 45%" className="scale-[1.03] opacity-[.82]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/16 to-black/10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/7 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
         <Label>03 / SEO</Label>
         <Label>SEARCH VISIBILITY</Label>
@@ -162,9 +162,9 @@ function SeoVisual() {
 
 function MapsVisual() {
   return (
-    <Stage className="bg-black">
+    <Stage className="bg-[#e9e4dc]">
       <Photo src={XR_PHOTOS.maps} position="50% 18%" className="scale-[1.04] opacity-[.94]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/16 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/7 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
         <Label>04 / GOOGLE MAPS</Label>
         <Label>REAL GOOGLE SEARCH</Label>
@@ -199,9 +199,9 @@ function MapsVisual() {
 
 function SocialVisual() {
   return (
-    <Stage className="bg-black">
+    <Stage className="bg-[#e9e4dc]">
       <Photo src={XR_PHOTOS.social} position="50% 45%" className="scale-[1.04] opacity-[.88]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/14 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/6 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
         <Label>05 / SOCIAL MEDIA</Label>
         <Label>INSTAGRAM · FACEBOOK · TIKTOK</Label>
@@ -227,9 +227,9 @@ function SocialVisual() {
 
 function WebcareVisual() {
   return (
-    <Stage className="bg-black">
+    <Stage className="bg-[#e9e4dc]">
       <Photo src={XR_PHOTOS.maintenance} position="50% 50%" className="scale-[1.04] opacity-[.82]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/16 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/7 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
         <Label>06 / WEBCARE</Label>
         <Label>KEEP IT LIVE</Label>
@@ -251,14 +251,14 @@ function WebcareVisual() {
 
 function RoboticsVisual() {
   return (
-    <Stage className="bg-black">
+    <Stage className="bg-[#e9e4dc]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_22%,rgba(255,255,255,.16),transparent_26%),linear-gradient(145deg,#d8d8d8,#111)]" />
       <Parallax speed={-0.018} className="absolute inset-4 sm:inset-7">
         <div className="relative h-full overflow-hidden rounded-[1.7rem]">
           <img
             src={XR_PHOTOS.robotics}
             alt=""
-            className="absolute inset-0 h-full w-full object-contain grayscale drop-shadow-[0_35px_60px_rgba(0,0,0,.48)]"
+            className="absolute inset-0 h-full w-full object-contain drop-shadow-[0_35px_60px_rgba(0,0,0,.48)]"
           />
           <div className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/45 px-3 py-2 backdrop-blur-xl">
             <Label>07 / ROBOTIQUE</Label>
@@ -274,9 +274,9 @@ function RoboticsVisual() {
 
 function RefonteVisual() {
   return (
-    <Stage className="bg-black">
+    <Stage className="bg-[#e9e4dc]">
       <Photo src={XR_PHOTOS.refonte} position="50% 46%" className="scale-[1.04] opacity-[.86]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/12 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/7 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
         <Label>08 / REFONTE</Label>
         <Label>REBUILD THE EXPERIENCE</Label>
@@ -293,9 +293,9 @@ function RefonteVisual() {
 
 function AdsVisual() {
   return (
-    <Stage className="bg-black">
+    <Stage className="bg-[#e9e4dc]">
       <Photo src={XR_PHOTOS.ads} position="50% 48%" className="scale-[1.04] opacity-[.84]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/15 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/7 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
         <Label>09 / GOOGLE ADS</Label>
         <Label>PAID ACQUISITION</Label>
@@ -322,9 +322,9 @@ function AdsVisual() {
 
 function StrategyVisual() {
   return (
-    <Stage className="bg-black">
+    <Stage className="bg-[#e9e4dc]">
       <Photo src={XR_PHOTOS.strategy} position="50% 42%" className="scale-[1.04] opacity-[.8]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/58 via-black/6 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
         <Label>10 / STRATÉGIE</Label>
         <Label>DIRECTION</Label>
@@ -346,9 +346,9 @@ function StrategyVisual() {
 
 function AiVisual() {
   return (
-    <Stage className="bg-black">
+    <Stage className="bg-[#e9e4dc]">
       <Photo src={XR_PHOTOS.ai} position="50% 50%" className="scale-[1.04] opacity-[.84]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/14 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/7 to-transparent" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
         <Label>11 / IA</Label>
         <Label>AUTOMATION</Label>
@@ -371,9 +371,9 @@ function AiVisual() {
 function GenericVisual({ info }: { info: Meta }) {
   const src = info.photo ? XR_PHOTOS[info.photo] : undefined;
   return (
-    <Stage className="bg-black">
+    <Stage className="bg-[#e9e4dc]">
       {src ? <Photo src={src} position={info.position} className="opacity-[.9]" /> : null}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/58 via-black/6 to-transparent" />
       <div className="absolute left-5 top-5 sm:left-7 sm:top-7">
         <Label>{info.number} / {info.label}</Label>
       </div>
