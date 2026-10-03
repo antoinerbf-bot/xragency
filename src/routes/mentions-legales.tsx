@@ -85,7 +85,7 @@ function LegalPage() {
           </div>
         </section>
       </main>
-      <Contact />
+      <Contact showFooter={false} />
     </div>
   );
 }
