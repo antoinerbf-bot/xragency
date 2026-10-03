@@ -6,14 +6,16 @@ deployment:
     - export NODE_ENV=development
     - cd "$APPROOT"
     - git restore -- src/routeTree.gen.ts
-    - rm -rf "$APPROOT/tmp" "$HOME/tmp" "$APPROOT/.output" "$HOME/.output"
+    - rm -rf "$APPROOT/tmp" "$HOME/tmp" "$APPROOT/.output" "$HOME/.output.next"
     - npm install --include=dev --no-package-lock --legacy-peer-deps --no-audit --no-fund
     - NITRO_PRESET=node_server npm run build
     - test -f "$APPROOT/.output/server/index.mjs"
     - test -d "$APPROOT/.output/public"
     - git restore -- src/routeTree.gen.ts
     - printf 'XRAGENCY_DEPLOY_SHA=%s\nXRAGENCY_DEPLOY_UTC=%s\n' "$(git -C "$APPROOT" rev-parse HEAD)" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > "$APPROOT/.output/public/__xr-deploy.txt"
-    - /bin/cp -R "$APPROOT/.output" "$HOME/.output"
+    - /bin/cp -R "$APPROOT/.output" "$HOME/.output.next"
+    - rm -rf "$HOME/.output"
+    - /bin/mv "$HOME/.output.next" "$HOME/.output"
     - /bin/cp -f "$APPROOT/app.js" "$HOME/app.js"
     - mkdir -p "$HOME/tmp" "$APPROOT/tmp"
     - touch "$HOME/tmp/restart.txt"
