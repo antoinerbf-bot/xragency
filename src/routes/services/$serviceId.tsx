@@ -232,23 +232,32 @@ function ServiceDetailPage() {
           </div>
         </section>
 
-        <section className="border-b xr-line py-12 sm:py-16">
+        <section className="border-b xr-line py-14 sm:py-20">
           <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
-            <Reveal>
-              <p className="label-mono text-[7px] tracking-[.24em] xr-accent">01 / OVERVIEW</p>
-              <h2 className="display-serif mt-3 max-w-4xl text-3xl sm:text-5xl">{t(copy.overview)}</h2>
-            </Reveal>
+            <div className="grid gap-10 lg:grid-cols-[.72fr_1.28fr] lg:items-start">
+              <Reveal>
+                <p className="label-mono text-[7px] tracking-[.24em] xr-accent">01 / ESSENTIAL</p>
+                <h2 className="display-serif mt-4 max-w-xl text-4xl leading-[.9] sm:text-6xl">
+                  {t({ fr: "Ce que ce service change concrètement.", en: "What this service changes.", vi: "Dịch vụ này thay đổi điều gì.", ar: "ما الذي يغيّره هذا الخِيار.", ru: "Что меняет эта услуга." })}
+                </h2>
+                <p className="mt-5 max-w-md text-sm leading-6 xr-muted">
+                  {t({ fr: "Pas de répétition : trois points essentiels pour comprendre la valeur de la prestation.", en: "No repetition: three essential points to understand the value of the service.", vi: "Không lặp lại: ba điểm chính để hiểu giá trị dịch vụ.", ar: "بدون تكرار: ثلاث نقاط أساسية لفهم قيمة الخدمة.", ru: "Без повторов: три ключевых пункта, чтобы понять ценность услуги." })}
+                </p>
+              </Reveal>
 
-            <div className="mt-8 grid gap-3 md:grid-cols-3">
-              {service.highlights.slice(0, 3).map((item, i) => (
-                <Reveal key={i} delay={i * 70}>
-                  <article className="group h-full rounded-[1.5rem] border xr-line bg-[var(--xr-surface)] p-5 transition hover:-translate-y-1 sm:p-6">
-                    <span className="label-mono text-[6px] xr-muted-2">0{i + 1}</span>
-                    <h3 className="display-serif mt-7 text-2xl">{t(copy.included)}</h3>
-                    <p className="mt-3 text-sm leading-6 xr-muted">{t(item)}</p>
-                  </article>
-                </Reveal>
-              ))}
+              <div className="divide-y xr-line border-y xr-line">
+                {service.highlights.slice(0, 3).map((item, i) => (
+                  <Reveal key={i} delay={i * 80}>
+                    <article className="group grid gap-5 py-7 sm:grid-cols-[72px_1fr] sm:items-start sm:py-8">
+                      <span className="label-mono text-[8px] xr-muted-2">0{i + 1}</span>
+                      <div className="flex items-start justify-between gap-6">
+                        <h3 className="display-serif max-w-2xl text-2xl leading-tight sm:text-3xl">{t(item)}</h3>
+                        <ArrowRight className="mt-1 h-4 w-4 shrink-0 opacity-35 transition-transform duration-300 group-hover:translate-x-1" />
+                      </div>
+                    </article>
+                  </Reveal>
+                ))}
+              </div>
             </div>
           </div>
         </section>
