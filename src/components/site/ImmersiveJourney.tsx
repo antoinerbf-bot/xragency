@@ -21,7 +21,7 @@ export function ImmersiveJourney(){
   const copy=option.text[lang as keyof typeof option.text]??option.text.fr;
   return <section id="journey" className="xr-section-elevated xr-noise relative overflow-hidden border-b xr-line py-16 sm:py-20 lg:py-24">
     <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
-      <Parallax speed={-0.02}><Reveal><div className="flex flex-col gap-6 border-b xr-line pb-8 lg:flex-row lg:items-end lg:justify-between"><div><span className="label-mono xr-accent text-[8px] tracking-[.28em]">XRAGENCY · COMMENCEZ ICI</span><h2 className="display-serif mt-4 max-w-4xl text-[clamp(2.7rem,5vw,5.3rem)] leading-[.86] tracking-[-.06em]">{lang==="fr"?"Votre projet commence par votre situation.":lang==="vi"?"Dự án bắt đầu từ tình hình hiện tại của bạn.":lang==="ar"?"مشروعك يبدأ من وضعك الحالي.":lang==="ru"?"Ваш проект начинается с вашей ситуации.":"Your project starts with your situation."}</h2></div><p className="max-w-md text-sm leading-6 xr-muted">{lang==="fr"?"Choisissez simplement ce qui vous ressemble. Le reste du parcours s'adapte.":"Choose the situation that fits you. The rest of the path adapts."}</p></div></Reveal></Parallax>
+      <Parallax speed={-0.02}><Reveal><div className="flex flex-col gap-6 border-b xr-line pb-8 lg:flex-row lg:items-end lg:justify-between"><div><span className="label-mono xr-accent text-[8px] tracking-[.28em]">01 · IDENTIFIER LE BESOIN</span><h2 className="display-serif mt-4 max-w-4xl text-[clamp(2.7rem,5vw,5.3rem)] leading-[.86] tracking-[-.06em]">{lang==="fr"?"On ne vous fait pas choisir un service. On commence par le problème.":lang==="vi"?"Chúng tôi không bắt bạn chọn dịch vụ. Chúng tôi bắt đầu từ vấn đề.":lang==="ar"?"لن نطلب منك اختيار خدمة. نبدأ بالمشكلة.":lang==="ru"?"Мы не заставляем вас выбирать услугу. Начинаем с проблемы.":"We don't ask you to pick a service. We start with the problem."}</h2></div><p className="max-w-md text-sm leading-6 xr-muted">{lang==="fr"?"Choisissez votre situation. XR transforme ensuite ce besoin en priorités, en dispositif et en prochaine étape.":"Choose your situation. XR then turns that need into priorities, a system and a next step."}</p></div></Reveal></Parallax>
 
       <div className="mt-7 overflow-hidden rounded-[2.4rem] border xr-line bg-[var(--xr-bg)] shadow-[var(--xr-shadow)]">
         <div className="xr-rail flex gap-2 overflow-x-auto border-b xr-line p-2 sm:p-3">
@@ -35,7 +35,7 @@ export function ImmersiveJourney(){
             </button>;
           })}
         </div>
-        <div className="grid min-h-[360px] lg:grid-cols-[1.1fr_.9fr]">
+        <div className="grid min-h-[360px] lg:grid-cols-[1.08fr_.92fr]">
           <div className="relative overflow-hidden p-6 sm:p-9 lg:p-11">
             <div className="absolute -right-24 -top-28 h-72 w-72 rounded-full bg-[var(--xr-accent-soft)] blur-3xl"/>
             <Parallax speed={0.02} direction="x" className="relative z-10 max-w-2xl">
@@ -46,8 +46,11 @@ export function ImmersiveJourney(){
                 {option.stack.map((x,i)=><span key={x} className="rounded-full border xr-line bg-[var(--xr-surface)] px-3 py-2 label-mono text-[6px] backdrop-blur-xl"><span className="mr-2 xr-accent">0{i+1}</span>{x}</span>)}
               </div>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <Link to="/#quote" className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-3.5 label-mono text-[8px] font-semibold text-[var(--xr-bg)]">Construire mon parcours <ArrowRight className="h-4 w-4"/></Link>
-                <a href="#homepage-services" className="inline-flex items-center justify-center gap-2 rounded-full border xr-line px-4 py-3.5 label-mono text-[7px] xr-muted">Voir les 7 services</a>
+                <Link to="/#quote" className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-3.5 label-mono text-[8px] font-semibold text-[var(--xr-bg)] transition hover:-translate-y-0.5">Construire mon projet <ArrowRight className="h-4 w-4"/></Link>
+                <a href="#homepage-services" className="inline-flex items-center justify-center gap-2 rounded-full border xr-line px-4 py-3.5 label-mono text-[7px] xr-muted transition hover:-translate-y-0.5">Explorer les 7 expertises</a>
+              </div>
+              <div className="mt-8 grid gap-2 sm:grid-cols-3">
+                {[["DIRECTION","Une priorité claire"],["DISPOSITIF","Les expertises utiles"],["ACTION","La prochaine étape"]].map(([label,value])=><div key={label} className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5"><span className="label-mono text-[6px] tracking-[.16em] xr-muted-2">{label}</span><span className="mt-2 block text-[9px] font-semibold">{value}</span></div>)}
               </div>
             </Parallax>
           </div>
