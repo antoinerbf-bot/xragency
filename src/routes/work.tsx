@@ -224,8 +224,8 @@ export function WorkPage() {
     <Nav/>
     <main className="pt-20 sm:pt-24">
       <section className="relative min-h-[72vh] overflow-hidden bg-[#050608] text-white">
-        <div className="absolute inset-0 bg-[#050608]"><ReferencePreview item={reelItem} alt="" loading="eager" className="absolute inset-0 opacity-35 grayscale contrast-[1.05] brightness-[.42] transition-opacity duration-1000" /><div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(5,6,8,.98),rgba(5,6,8,.58)_54%,rgba(5,6,8,.88))]" /></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_12%,rgba(255,255,255,.12),transparent_26%),linear-gradient(120deg,rgba(5,6,8,.96),rgba(11,17,23,.72)_55%,rgba(5,6,8,.94))]"/>
+        <div className="absolute inset-0 bg-[#050608]"><ReferencePreview item={reelItem} alt="" loading="eager" className="absolute inset-0 opacity-52 contrast-[1.02] brightness-[.58] transition-opacity duration-1000" /><div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(5,6,8,.90),rgba(5,6,8,.42)_54%,rgba(5,6,8,.72))]" /></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_12%,rgba(220,185,113,.18),transparent_26%),linear-gradient(120deg,rgba(5,6,8,.86),rgba(11,17,23,.48)_55%,rgba(5,6,8,.78))]"/>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_78%,rgba(255,255,255,.07),transparent_28%)]"/>
         <div aria-hidden className="absolute inset-0 opacity-30 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,.08)_50%,transparent_100%)]"/>
         <div className="relative mx-auto flex min-h-[72vh] max-w-[1500px] flex-col justify-end px-5 pb-12 pt-28 sm:px-8 sm:pb-16 lg:px-12 lg:pb-20">
