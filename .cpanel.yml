@@ -2,6 +2,12 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/puzo3938/public_html/
-    - npm install --no-package-lock
-    - npm run build
-    - /bin/cp -R .output/public/. $DEPLOYPATH
+    - export APPROOT="$HOME/xragency"
+    - npm install --no-package-lock --legacy-peer-deps
+    - NITRO_PRESET=node_server npm run build
+    - rm -rf "$HOME/.output"
+    - /bin/cp -R .output "$HOME/.output"
+    - /bin/cp -f app.js "$HOME/app.js"
+    - mkdir -p "$HOME/tmp"
+    - touch "$HOME/tmp/restart.txt"
+    - /bin/cp -R .output/public/. "$DEPLOYPATH"
