@@ -72,7 +72,7 @@ function RecruitmentPage(){
 
       <section className="mx-auto max-w-[1500px] px-5 py-24 sm:px-8 lg:px-12">
         <div className="grid gap-4 sm:grid-cols-3">
-          {[[Globe2,COPY.remote,"France · Asie · international"],[Users,COPY.international,"Clients et projets internationaux"],[Sparkles,COPY.flexible,"Freelance · mission · collaboration"]].map(([Icon,label,sub])=>{const I=Icon as typeof Globe2; return <div key={String(label.fr)} className="rounded-[1.7rem] border border-border/70 bg-card/40 p-6"><I className="h-5 w-5 text-primary"/><h2 className="mt-6 text-lg font-semibold">{t(label as any)}</h2><p className="mt-2 text-xs leading-5 text-muted-foreground">{sub as string}</p></div>})}
+          {[[Globe2,COPY.remote,"France · Asie · international"],[Users,COPY.international,"Clients et projets internationaux"],[Sparkles,COPY.flexible,"Freelance · mission · collaboration"]].map(([Icon,label,sub])=>{const I=Icon as typeof Globe2; return <div key={String(label)} className="rounded-[1.7rem] border border-border/70 bg-card/40 p-6"><I className="h-5 w-5 text-primary"/><h2 className="mt-6 text-lg font-semibold">{t(label as any)}</h2><p className="mt-2 text-xs leading-5 text-muted-foreground">{sub as string}</p></div>})}
         </div>
 
         <div className="mt-24">
