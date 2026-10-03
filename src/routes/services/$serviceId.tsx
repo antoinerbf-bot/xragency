@@ -35,6 +35,8 @@ const SERVICE_ALIASES: Record<string, string> = {
   maintenance: "maintenance",
   webcare: "maintenance",
   "maintenance-cloud": "maintenance",
+  robotique: "robotics",
+  robots: "robotics",
   refonte: "refonte",
   "refonte-site": "refonte",
   "refonte-de-site-web": "refonte",
@@ -44,6 +46,8 @@ const SERVICE_ALIASES: Record<string, string> = {
   strategy: "strategy",
   "strategie-digitale": "strategy",
   conseil: "strategy",
+  ai: "ai",
+  ia: "ai",
 };
 
 export const Route = createFileRoute("/services/$serviceId")({
@@ -73,7 +77,7 @@ export const Route = createFileRoute("/services/$serviceId")({
 
 function ServiceDetailPage() {
   const { service } = Route.useLoaderData();
-  const { t, price, lang } = useLang();
+  const { t, price } = useLang();
   const [selectedPlanIndex, setSelectedPlanIndex] = useState(
     Math.max(0, service.plans.findIndex((p) => p.popular)),
   );
