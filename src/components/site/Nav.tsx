@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ChevronDown, X, Monitor, Palette, Search, MapPinned, Share2, ShieldCheck, Bot, ArrowRight } from "lucide-react";
+import { ChevronDown, X, Monitor, Palette, Search, MapPinned, Share2, ShieldCheck, Bot, ArrowRight, Sun, Moon } from "lucide-react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { LANGS, useLang } from "@/lib/i18n";
@@ -7,12 +7,13 @@ import { UI } from "@/lib/copy";
 import { SERVICES } from "@/lib/content";
 import { Logo, EmberButton } from "./primitives";
 import { CartFloatingButton } from "./Cart";
+import { useTheme } from "@/components/theme/ThemeProvider";
 
 const IDS=["websites","branding","seo","maps","social","maintenance","robotics"] as const;
 const ICONS={websites:Monitor,branding:Palette,seo:Search,maps:MapPinned,social:Share2,maintenance:ShieldCheck,robotics:Bot};
 
 export function Nav(){
- const {t,lang,setLang}=useLang(); const location=useLocation(); const isHome=location.pathname==="/";
+ const {t,lang,setLang}=useLang(); const {theme,toggleTheme}=useTheme(); const location=useLocation(); const isHome=location.pathname==="/";
  const [scrolled,setScrolled]=useState(false); const [open,setOpen]=useState(false); const [servicesOpen,setServicesOpen]=useState(false); const [progress,setProgress]=useState(0); const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
  const onScroll=useCallback(()=>{setScrolled(window.scrollY>24);const total=document.documentElement.scrollHeight-window.innerHeight;setProgress(total>0?Math.min(window.scrollY/total,1):0)},[]);
  useEffect(()=>{onScroll();window.addEventListener("scroll",onScroll,{passive:true});return()=>window.removeEventListener("scroll",onScroll)},[onScroll]);
@@ -38,6 +39,7 @@ export function Nav(){
     <div className="ml-auto flex items-center gap-1.5">
       <div className="hidden items-center gap-1 rounded-full border xr-line bg-[var(--xr-surface)] p-1 sm:flex">{LANGS.map(l=><button key={l.code} type="button" onClick={()=>setLang(l.code)} className={cn("label-mono rounded-full px-2 py-1 text-[7px] transition",lang===l.code?"bg-[var(--xr-ink)] text-[var(--xr-bg)]":"xr-muted hover:text-[var(--xr-ink)]")}>{l.label}</button>)}</div>
       <CartFloatingButton/>
+      <button type="button" aria-label={theme==="dark"?"Passer en mode clair":"Passer en mode sombre"} title={theme==="dark"?"Mode clair":"Mode sombre"} onClick={toggleTheme} className="grid h-9 w-9 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] transition hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)]">{theme==="dark"?<Sun className="h-3.5 w-3.5"/>:<Moon className="h-3.5 w-3.5"/>}</button>
       <EmberButton href="/#quote" className="hidden min-h-9 px-4 py-2 text-[8px] md:inline-flex">Faire mon devis</EmberButton>
       <button type="button" aria-label="Menu" onClick={()=>setOpen(v=>!v)} className="grid h-10 w-10 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] lg:hidden">{open?<X className="h-4 w-4"/>:<span className="space-y-1"><span className="block h-px w-4 bg-current"/><span className="block h-px w-4 bg-current"/><span className="block h-px w-3 bg-current"/></span>}</button>
     </div>
