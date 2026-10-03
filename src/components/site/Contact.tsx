@@ -21,7 +21,7 @@ const WA_DIRECT = `https://wa.me/33767566783`;
 function FacebookMark() { return <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current"><path d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5h1.7V4c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.2V10H7.3v3h2.8v8h3.4Z"/></svg>; }
 function TikTokMark() { return <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current"><path d="M15.2 3h3.1c.2 1.5 1.1 2.8 2.7 3.6v3.1c-1.4-.1-2.7-.6-3.8-1.4v6.1c0 3.8-2.7 5.8-5.8 5.8-3.1 0-5.2-2-5.2-4.8 0-2.9 2.3-5 5.4-5 .4 0 .8 0 1.2.1v3.1c-.3-.1-.6-.1-.9-.1-1.2 0-2.2.7-2.2 1.9 0 1.1.8 1.8 1.9 1.8 1.2 0 2-.8 2-2.3V3Z"/></svg>; }
 
-export function Contact() {
+export function Contact({ showFooter = true }: { showFooter?: boolean }) {
   const { t } = useLang();
   const [need, setNeed] = useState("");
 
@@ -211,7 +211,7 @@ export function Contact() {
           </div>
         </Reveal>
 
-        <footer className="mt-14 border-t border-border/50 pt-8 sm:mt-16 sm:pt-10">
+        {showFooter ? <footer className="mt-14 border-t border-border/50 pt-8 sm:mt-16 sm:pt-10">
           <div className="grid gap-8 lg:grid-cols-[1.4fr_.8fr_.8fr_1fr]">
             <div>
               <Logo />
@@ -256,7 +256,7 @@ export function Contact() {
               <a href="#top" className="flex h-8 items-center gap-1.5 rounded-full border border-border px-3 text-muted-foreground hover:border-primary hover:text-primary"><span className="label-mono text-[9px]">TOP</span><ArrowUpRight className="h-3 w-3"/></a>
             </div>
           </div>
-        </footer>
+        </footer> : null}
       </div>
     </section>
   );
