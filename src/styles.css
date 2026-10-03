@@ -538,19 +538,12 @@
 }
 
 
-/* XR strict monochrome */
+/* XR visual media: preserve photography and interface color */
 img,
-video,
-svg {
-  filter: grayscale(1);
+video {
+  filter: none;
 }
-button[aria-label*="mode sombre" i],
-button[aria-label*="mode clair" i],
-button[title="Mode sombre"],
-button[title="Mode clair"],
-.xr-theme-switcher {
-  display: none !important;
-}
+
 .dark .xr-panel,
 .dark .xr-panel-strong {
   color: #f5f5f5;
@@ -610,7 +603,7 @@ button[title="Mode clair"],
   transform-origin: center;
   animation: xr-hero-pan 18s ease-in-out infinite alternate;
   will-change: transform;
-  filter: saturate(.92) contrast(1.03);
+  filter: saturate(1.04) contrast(1.01);
 }
 
 @keyframes xr-hero-pan {
