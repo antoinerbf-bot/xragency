@@ -47,7 +47,7 @@ export function Globe({ className }: GlobeProps) {
         { location: [35.6895, 139.6917], size: 0.05 }, // Tokyo
         { location: [1.3521, 103.8198], size: 0.04 },  // Singapore
       ],
-      onRender: (state) => {
+      onRender: (state: any) => {
         phiRef.current += 0.003;
         state.phi = phiRef.current;
         state.width = width * 2;
