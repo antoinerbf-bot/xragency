@@ -8,6 +8,7 @@ deployment:
     - rm -rf "$HOME/.output"
     - /bin/cp -R .output "$HOME/.output"
     - /bin/cp -f app.js "$HOME/app.js"
-    - mkdir -p "$HOME/tmp"
+    - mkdir -p "$HOME/tmp" "$APPROOT/tmp"
     - touch "$HOME/tmp/restart.txt"
+    - touch "$APPROOT/tmp/restart.txt"
     - /bin/cp -R .output/public/. "$DEPLOYPATH"
