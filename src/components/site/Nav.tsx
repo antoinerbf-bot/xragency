@@ -52,7 +52,7 @@ export function Nav(){
       </div>
       <button
         type="button"
-        aria-label={theme==="dark"?"Passer en mode clair":"Passer en mode sombre"
+        aria-label={theme==="dark"?"Passer en mode clair":"Passer en mode sombre"}
         title={theme==="dark"?"Mode clair":"Mode sombre"}
         onClick={toggleTheme}
         className={cn(
