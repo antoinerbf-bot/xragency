@@ -201,6 +201,48 @@ export function MapsSimulator() {
           </Reveal>
         </div>
 
+        <Reveal delay={40}>
+          <div className="overflow-hidden rounded-[2.2rem] border xr-line bg-white shadow-[0_34px_90px_-55px_rgba(18,19,22,.3)]">
+            <div className="flex items-center justify-between border-b xr-line bg-[#f4f0e9] px-5 py-4 sm:px-7">
+              <div className="flex items-center gap-3">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#f1dfda]"><MapPinned className="h-4 w-4 text-[#9a5147]"/></span>
+                <div>
+                  <span className="label-mono text-[6px] tracking-[.18em] text-[#17181a]/40">SIMULATION EN DIRECT</span>
+                  <p className="mt-0.5 text-sm font-semibold text-[#17181a]">{selectedSector?.label} · {CITY_SIZES.find(c=>c.id===citySize)?.label}</p>
+                </div>
+              </div>
+              <span className="rounded-full border border-[#17181a]/10 bg-white px-3 py-1.5 label-mono text-[6px] text-[#17181a]/45">LOCAL PACK</span>
+            </div>
+            <div className="relative h-[280px] overflow-hidden bg-[#eef0ea] sm:h-[330px]">
+              <div aria-hidden className="absolute inset-0 opacity-60 [background-image:linear-gradient(rgba(76,91,78,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(76,91,78,.12)_1px,transparent_1px)] [background-size:42px_42px]"/>
+              <div aria-hidden className="absolute -left-16 -top-24 h-72 w-72 rounded-full border-[38px] border-white/55"/>
+              <div aria-hidden className="absolute right-[-90px] top-[-35px] h-80 w-80 rounded-[42%] border-[48px] border-white/55 rotate-12"/>
+              <div aria-hidden className="absolute bottom-[-120px] left-[26%] h-80 w-80 rounded-[45%] border-[48px] border-white/50 -rotate-12"/>
+              <div className="absolute left-[42%] top-[20%] h-20 w-20 rounded-full border-[14px] border-[#b9c8bb]/60"/>
+              {[["34%","34%","#da8e77","01"],["51%","48%","#7a9f87","02"],["67%","30%","#8b9dba","03"]].map(([left,top,bg,num])=>
+                <div key={num} className="absolute" style={{left,top}}>
+                  <div className="grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-4 border-white bg-[var(--pin)] shadow-[0_10px_30px_-12px_rgba(18,19,22,.5)]" style={{"--pin":bg} as React.CSSProperties}}>
+                    <span className="text-[8px] font-black text-white">{num}</span>
+                  </div>
+                </div>
+              )}
+              <div className="absolute left-4 right-4 top-4 flex items-center justify-between gap-3 sm:left-6 sm:right-6">
+                <div className="rounded-xl border border-white/60 bg-white/90 px-3 py-2 shadow-lg backdrop-blur-xl">
+                  <span className="label-mono text-[5px] tracking-[.16em] text-[#17181a]/40">RECHERCHE CIBLE</span>
+                  <p className="mt-1 text-[10px] font-semibold text-[#17181a]">{selectedSector?.label} · {KEYWORD_RANGES.find(k=>k.id===keywords)?.label} mots-clés</p>
+                </div>
+                <div className="hidden rounded-xl border border-white/60 bg-white/90 px-3 py-2 text-right shadow-lg backdrop-blur-xl sm:block">
+                  <span className="label-mono text-[5px] tracking-[.16em] text-[#17181a]/40">POSITION ACTUELLE</span>
+                  <p className="mt-1 text-[10px] font-semibold text-[#17181a]">{CURRENT_RANKS.find(r=>r.id===rank)?.label}</p>
+                </div>
+              </div>
+              <div className="absolute bottom-4 left-4 rounded-full border border-white/60 bg-white/90 px-3 py-2 label-mono text-[5px] tracking-[.14em] text-[#17181a]/48 shadow-lg backdrop-blur-xl sm:left-6">
+                {rank === "absent" ? "VISIBILITÉ À CONSTRUIRE" : rank === "below20" ? "SIGNAL À RENFORCER" : "POSITIONNEMENT À DÉVELOPPER"}
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
         {/* ── Intelligent Configurator ── */}
         <Reveal delay={60}>
           <div className="rounded-3xl border border-border bg-card shadow-xl overflow-hidden">
