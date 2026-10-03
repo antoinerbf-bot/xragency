@@ -17,7 +17,7 @@ const CATALOG_IDS = [
   "robotics",
 ] as const;
 
-const SERVICE_KICKER: Record<string, { fr: string; en: string; vi: string }> = {
+const SERVICE_KICKER: Record<string, { fr: string; en: string; vi: string; ar: string; ru: string }> = {
   websites: { fr: "FLAGSHIP", en: "FLAGSHIP", vi: "FLAGSHIP" },
   branding: { fr: "IDENTITÉ", en: "IDENTITY", vi: "NHẬN DIỆN" },
   seo: { fr: "VISIBILITÉ", en: "VISIBILITY", vi: "HIỂN THỊ" },
@@ -84,7 +84,7 @@ export function ServicesCatalog() {
       quote: "Tạo báo giá",
       compose: "Chọn gói này",
     },
-  }[lang] ?? ({
+  }[lang as "fr" | "en" | "vi"] ?? ({
     eyebrow: "SERVICES", title1: "Multiple disciplines.", title2: "One system.", lead: "Explore our digital services.", learn: "Learn more", from: "From", ctaTitle: "Not sure where to start?", ctaLead: "Tell us about your situation.", cta: "Start my analysis", enter: "Enter the experience", quote: "Build my quote", compose: "Build this offer",
   });
 
