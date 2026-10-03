@@ -51,7 +51,7 @@ export const Route = createFileRoute("/api/audit")({
           if (isBlockedHostname(target.hostname)) return Response.json({ error: "URL non autorisée." }, { status: 400 });
 
           let currentUrl = target;
-          let response: Response;
+          let response: Response | undefined;
           for (let redirects = 0; redirects <= 3; redirects++) {
             if (isBlockedHostname(currentUrl.hostname)) return Response.json({ error: "Redirection vers une URL non autorisée." }, { status: 400 });
             response = await fetch(currentUrl.toString(), { redirect: "manual", signal: AbortSignal.timeout(12000), headers: { "user-agent": "XRAGENCY-Audit/1.0" } });
@@ -62,6 +62,7 @@ export const Route = createFileRoute("/api/audit")({
             if (!["http:", "https:"].includes(currentUrl.protocol)) return Response.json({ error: "Redirection vers un protocole non autorisé." }, { status: 400 });
             if (redirects === 3) return Response.json({ error: "Trop de redirections." }, { status: 400 });
           }
+          if (!response) return Response.json({ error: "Impossible de récupérer la page." }, { status: 502 });
           const html = await response.text();
           const title = text(html, /<title[^>]*>([^<]+)<\/title>/i);
           const description = text(html, /<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i);
