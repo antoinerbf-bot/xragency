@@ -46,7 +46,7 @@ export function ImmersiveJourney(){
                 {option.stack.map((x,i)=><span key={x} className="rounded-full border xr-line bg-[var(--xr-surface)] px-3 py-2 label-mono text-[6px] backdrop-blur-xl"><span className="mr-2 xr-accent">0{i+1}</span>{x}</span>)}
               </div>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <Link to="/#quote" className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-3.5 label-mono text-[8px] font-semibold text-[var(--xr-bg)] transition hover:-translate-y-0.5">Construire mon projet <ArrowRight className="h-4 w-4"/></Link>
+                <a href="/#quote" className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-3.5 label-mono text-[8px] font-semibold text-[var(--xr-bg)] transition hover:-translate-y-0.5">Construire mon projet <ArrowRight className="h-4 w-4"/></a>
                 <a href="#homepage-services" className="inline-flex items-center justify-center gap-2 rounded-full border xr-line px-4 py-3.5 label-mono text-[7px] xr-muted transition hover:-translate-y-0.5">Explorer les 7 expertises</a>
               </div>
               <div className="mt-8 grid gap-2 sm:grid-cols-3">
