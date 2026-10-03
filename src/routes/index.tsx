@@ -61,15 +61,15 @@ function ServiceRibbon() {
             const service = SERVICES.find((s) => s.id === id);
             if (!service) return null;
             return (
-              <Link
+              <a
                 key={id}
-                to={href}
+                href={href}
                 className="group inline-flex shrink-0 items-center gap-2 rounded-full border border-[#17181a]/10 bg-[#f7f4ee] px-4 py-2.5 transition duration-300 hover:-translate-y-0.5 hover:border-[#17181a]/20 hover:bg-white"
               >
                 <span className="font-mono text-[7px] text-[#17181a]/35">0{index + 1}</span>
                 <span className="text-[9px] font-semibold text-[#17181a]">{t(service.title)}</span>
                 <ArrowUpRight className="h-3 w-3 text-[#17181a]/30 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </Link>
+              </a>
             );
           })}
         </div>
