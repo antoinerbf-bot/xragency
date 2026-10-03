@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { useLang } from "@/lib/i18n";
+import { useLang, type L } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { SHOWCASE } from "@/lib/content";
 import { cn } from "@/lib/utils";
@@ -36,7 +36,7 @@ type ShowcaseItem = (typeof SHOWCASE)[number] & { services?: string[] };
 
 function sectorLabel(
   key: string,
-  t: (v: { fr: string; en: string; vi: string }) => string,
+  t: (v: L) => string,
 ) {
   if (key === "all") return t(UI.showcaseAllSectors);
   const entry = UI[key as keyof typeof UI];
