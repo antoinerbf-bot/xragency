@@ -17,6 +17,8 @@ deployment:
     - rm -rf "$HOME/.output"
     - /bin/mv "$HOME/.output.next" "$HOME/.output"
     - /bin/cp -f "$APPROOT/app.js" "$HOME/app.js"
+    - test -f "$APPROOT/app.js"
+    - test -f "$APPROOT/.output/server/index.mjs"
     - mkdir -p "$HOME/tmp" "$APPROOT/tmp"
     - touch "$HOME/tmp/restart.txt"
     - touch "$APPROOT/tmp/restart.txt"
