@@ -1,9 +1,9 @@
 ---
 deployment:
   tasks:
+    - set -e
     - export DEPLOYPATH=/home/puzo3938/public_html/
     - export APPROOT="$HOME/repositories/xragency"
-    - export NODE_ENV=development
     - cd "$APPROOT"
     - git restore -- src/routeTree.gen.ts
     - rm -rf "$APPROOT/tmp" "$HOME/tmp" "$APPROOT/.output" "$HOME/.output.next"
