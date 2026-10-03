@@ -64,7 +64,7 @@ function WebsiteRedesignPage() {
       <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
           <div><p className="label-mono text-[10px] uppercase tracking-[0.28em] text-primary">POURQUOI REFAIRE VOTRE SITE</p><h2 className="display-serif mt-4 text-4xl leading-none sm:text-5xl">Pas simplement plus joli.<br /><em className="not-italic italic text-primary">Plus utile.</em></h2></div>
-          <div className="grid gap-4 sm:grid-cols-2">{reasons.map(([Icon,title,text]) => <article key={title as string} className="rounded-3xl border border-border/70 bg-card/40 p-6 transition-all hover:-translate-y-1 hover:border-primary/35"><Icon className="h-5 w-5 text-primary" /><h3 className="mt-5 text-base font-semibold tracking-tight">{title}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{text}</p></article>)}</div>
+          <div className="grid gap-4 sm:grid-cols-2">{reasons.map(([Icon,title,text]) => <article key={title as string} className="rounded-3xl border border-border/70 bg-card/40 p-6 transition-all hover:-translate-y-1 hover:border-primary/35"><Icon className="h-5 w-5 text-primary" /><h3 className="mt-5 text-base font-semibold tracking-tight">{String(title)}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{String(text)}</p></article>)}</div>
         </div>
       </section>
 
