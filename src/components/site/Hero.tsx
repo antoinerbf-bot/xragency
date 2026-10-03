@@ -169,8 +169,8 @@ export function Hero() {
           className="xr-hero-bg absolute inset-0 h-full w-full object-cover"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,7,7,.78)_0%,rgba(7,7,7,.55)_32%,rgba(7,7,7,.10)_70%,rgba(7,7,7,.04)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,.30)_0%,transparent_34%,rgba(5,5,5,.42)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,7,7,.60)_0%,rgba(7,7,7,.40)_32%,rgba(7,7,7,.10)_70%,rgba(7,7,7,.03)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,.18)_0%,transparent_34%,rgba(5,5,5,.28)_100%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_40%,rgba(220,178,106,.12),transparent_24%)]" />
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#101010] to-transparent" />
       </div>
