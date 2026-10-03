@@ -404,7 +404,7 @@ export function ServiceIllustration({ service, title }: Props) {
     <GenericVisual info={info} />;
 
   return (
-    <figure className="group relative w-full overflow-hidden rounded-[2.2rem] border xr-line bg-black shadow-[var(--xr-shadow)]">
+    <figure className="group relative w-full overflow-hidden rounded-[2.2rem] border xr-line bg-[var(--xr-bg-elev)] shadow-[var(--xr-shadow)]">
       {visual}
       <div className="pointer-events-none absolute inset-0 z-20">
         <div className="absolute left-[5%] top-[5%] h-8 w-8 rounded-tl-xl border-l border-t border-white/20" />
