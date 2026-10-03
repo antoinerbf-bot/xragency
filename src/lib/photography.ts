@@ -1,20 +1,30 @@
+import maisonLumiere from "@/assets/pf-01-maison-lumiere.jpg";
+import villaAzur from "@/assets/pf-02-villa-azur.jpg";
+import serviceBranding from "@/assets/svc-branding.jpg";
+import serviceMaps from "@/assets/svc-maps.jpg";
+import serviceSeo from "@/assets/svc-seo.jpg";
+import serviceSocial from "@/assets/svc-social.jpg";
+import serviceMaintenance from "@/assets/svc-maintenance.jpg";
+import serviceAi from "@/assets/svc-ai.jpg";
+
 /**
  * Service photography / screenshots.
- * Concrete visual proof first; all imagery is rendered monochrome by the global visual system.
+ * The primary catalogue uses local, stable assets so the visual language stays
+ * consistent and the page does not depend on third-party screenshot services.
  */
 export const XR_PHOTOS = {
-  websites: "https://image.thum.io/get/width/2200/crop/1200/noanimate/https://pokebowlfresh.vercel.app/",
-  branding: "https://images.unsplash.com/photo-1523726491678-bf852e717f6a?auto=format&fit=crop&w=2200&q=88",
-  seo: "https://image.thum.io/get/width/2200/crop/1200/noanimate/https://www.google.com/search?q=agence+digitale+Da+Nang",
-  maps: "https://image.thum.io/get/width/2200/crop/1200/noanimate/https://www.google.com/search?q=restaurants+Da+Nang",
-  social: "https://image.thum.io/get/width/2200/crop/1200/noanimate/https://www.instagram.com/xragency_/",
-  maintenance: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2200&q=88",
-  refonte: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=2200&q=88",
-  ads: "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=2200&q=88",
-  strategy: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=2200&q=88",
-  ai: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=2200&q=88",
+  websites: maisonLumiere,
+  branding: serviceBranding,
+  seo: serviceSeo,
+  maps: serviceMaps,
+  social: serviceSocial,
+  maintenance: serviceMaintenance,
   robotics: "https://www.korbenforpeople.com/wp-content/uploads/2025/08/DELIVERY-BOTS-2-VUE-01-scaled.png",
+  refonte: villaAzur,
+  ads: serviceSeo,
+  strategy: maisonLumiere,
+  ai: serviceAi,
 } as const;
 
-export const XR_HERO_PHOTO = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2400&q=92";
-export const XR_JOURNEY_PHOTO = "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=2400&q=92";
+export const XR_HERO_PHOTO = villaAzur;
+export const XR_JOURNEY_PHOTO = maisonLumiere;
