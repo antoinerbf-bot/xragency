@@ -3,7 +3,9 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/puzo3938/public_html/
     - export APPROOT="$HOME/xragency"
-    - npm install --no-package-lock --legacy-peer-deps
+    - git restore -- src/routeTree.gen.ts
+    - rm -rf "$APPROOT/tmp" "$HOME/tmp"
+    - npm install --include=dev --no-package-lock --legacy-peer-deps
     - NITRO_PRESET=node_server npm run build
     - rm -rf "$HOME/.output"
     - /bin/cp -R .output "$HOME/.output"
