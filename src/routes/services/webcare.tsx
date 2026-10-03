@@ -61,7 +61,7 @@ function WebCarePage() {
       <Parallax speed={-0.025}><section className="border-b border-border/60 py-14 sm:py-20">
         <div className="mx-auto max-w-7xl px-5 lg:px-10">
           <div className="grid gap-3 md:grid-cols-3">
-            {[[LifeBuoy,"Corrections","Petites modifications de contenu, visuels et sections."],[Wrench,"Évolutions","Ajustements courants pour que le site reste utile."],[ShieldCheck,"Suivi","Surveillance et interventions techniques selon la formule choisie."]].map(([Icon,title,desc])=>{const I=Icon as typeof LifeBuoy;return <div key={String(title)} className="rounded-[1.5rem] border border-border bg-card/50 p-6 transition-all hover:-translate-y-1 hover:border-primary/40"><I className="h-5 w-5 text-primary"/><h2 className="display-serif mt-6 text-3xl">{title}</h2><p className="mt-3 text-sm leading-6 text-muted-foreground">{desc}</p></div>})}
+            {[[LifeBuoy,"Corrections","Petites modifications de contenu, visuels et sections."],[Wrench,"Évolutions","Ajustements courants pour que le site reste utile."],[ShieldCheck,"Suivi","Surveillance et interventions techniques selon la formule choisie."]].map(([Icon,title,desc])=>{const I=Icon as typeof LifeBuoy;return <div key={String(title)} className="rounded-[1.5rem] border border-border bg-card/50 p-6 transition-all hover:-translate-y-1 hover:border-primary/40"><I className="h-5 w-5 text-primary"/><h2 className="display-serif mt-6 text-3xl">{String(title)}</h2><p className="mt-3 text-sm leading-6 text-muted-foreground">{String(desc)}</p></div>})}
           </div>
         </div>
       </section></Parallax>
