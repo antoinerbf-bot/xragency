@@ -142,7 +142,7 @@ export function HomeServices() {
                   <span className="min-w-0">
                     <span className="block truncate text-[9px] font-semibold">{t(S?.title ?? { fr: id, en: id, vi: id, ar: id, ru: id })}</span>
                     {selected ? <span className="mt-1 block h-0.5 w-8 rounded-full" style={{ background: ACCENTS[id] }} /> : null}
-                    <span className={"mt-0.5 block label-mono text-[6px] " + (selected ? "text-white/45" : "xr-muted-2")}>
+                    <span className={"mt-0.5 block label-mono text-[6px] " + (selected ? "xr-muted-2" : "xr-muted-2")}>
                       0{i + 1}
                     </span>
                   </span>
@@ -155,7 +155,7 @@ export function HomeServices() {
         <div className="mt-5 grid gap-5 lg:grid-cols-[1.32fr_.68fr]">
           <Reveal>
             <Parallax speed={-0.022}>
-              <div className="overflow-hidden rounded-[2.35rem] border xr-line bg-black shadow-[var(--xr-shadow)]">
+              <div className="overflow-hidden rounded-[2.35rem] border xr-line bg-[var(--xr-bg-elev)] shadow-[var(--xr-shadow)]">
                 <ServiceIllustration service={active} title={t(service.title)} />
               </div>
             </Parallax>
