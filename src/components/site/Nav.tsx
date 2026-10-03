@@ -38,18 +38,54 @@ export function Nav(){
       </div>
     </div>
     <div className={cn("ml-auto flex items-center gap-1.5",heroTop&&"text-white")}>
-      <div className="hidden items-center gap-1 rounded-full border xr-line bg-[var(--xr-surface)] p-1 sm:flex">{LANGS.map(l=><button key={l.code} type="button" onClick={()=>setLang(l.code)} className={cn("label-mono rounded-full px-2 py-1 text-[7px] transition",lang===l.code?"bg-[var(--xr-ink)] text-[var(--xr-bg)]":"xr-muted hover:text-[var(--xr-ink)]")}>{l.label}</button>)}</div>
+      <div className="hidden items-center gap-1 rounded-full border xr-line bg-[var(--xr-surface)] p-1 sm:flex" aria-label="Langues">
+        {LANGS.map(l=>
+          <button
+            key={l.code}
+            type="button"
+            onClick={()=>setLang(l.code)}
+            className={cn("label-mono rounded-full px-2.5 py-1.5 text-[7px] transition",lang===l.code?"bg-[var(--xr-ink)] text-[var(--xr-bg)]":"xr-muted hover:text-[var(--xr-ink)]")}
+          >
+            {l.label}
+          </button>
+        )}
+      </div>
       <CartFloatingButton/>
-      <button type="button" aria-label={theme==="dark"?"Passer en mode clair":"Passer en mode sombre"} title={theme==="dark"?"Mode clair":"Mode sombre"} onClick={toggleTheme} className="grid h-9 w-9 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] transition hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)]">{theme==="dark"?<Sun className="h-3.5 w-3.5"/>:<Moon className="h-3.5 w-3.5"/>}</button>
+      <button
+        type="button"
+        aria-label={theme==="dark"?"Passer en mode clair":"Passer en mode sombre"}
+        title={theme==="dark"?"Mode clair":"Mode sombre"}
+        onClick={toggleTheme}
+        className={cn(
+          "group grid h-10 w-10 shrink-0 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] shadow-[0_8px_28px_-18px_rgba(0,0,0,.35)] transition duration-300 hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)]",
+          heroTop && "border-white/20 bg-black/20 text-white backdrop-blur-xl"
+        )}
+      >
+        <span className="relative grid place-items-center">
+          {theme==="dark"?<Sun className="h-4 w-4"/>:<Moon className="h-4 w-4"/>}
+          <span className="sr-only">{theme==="dark"?"Mode clair":"Mode sombre"}</span>
+        </span>
+      </button>
       <EmberButton href="/#audit" className={cn("hidden min-h-9 px-4 py-2 text-[8px] md:inline-flex", heroTop && "!bg-[#e0b971] !text-[#17110a] hover:!bg-[#e7c486]")}>Lancer mon analyse</EmberButton>
-      <button type="button" aria-label="Menu" onClick={()=>setOpen(v=>!v)} className="grid h-10 w-10 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] lg:hidden">{open?<X className="h-4 w-4"/>:<span className="space-y-1"><span className="block h-px w-4 bg-current"/><span className="block h-px w-4 bg-current"/><span className="block h-px w-3 bg-current"/></span>}</button>
+      <button type="button" aria-label="Menu" onClick={()=>setOpen(v=>!v)} className="grid h-10 w-10 shrink-0 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] lg:hidden">{open?<X className="h-4 w-4"/>:<span className="space-y-1"><span className="block h-px w-4 bg-current"/><span className="block h-px w-4 bg-current"/><span className="block h-px w-3 bg-current"/></span>}</button>
     </div>
     <div aria-hidden className="absolute bottom-0 left-3 right-3 h-px bg-[var(--xr-line)]"><div className="h-full origin-left bg-[var(--xr-accent)] transition-transform duration-200" style={{transform:"scaleX("+progress+")"}}/></div>
    </nav>
    {open&&<div className="mt-2 rounded-[1.6rem] border xr-line bg-[var(--xr-bg-elev)] p-3 shadow-2xl lg:hidden">
      <div className="grid grid-cols-2 gap-2"><a href="/services" onClick={()=>setOpen(false)} className="rounded-2xl border xr-line p-4"><span className="label-mono text-[6px] xr-accent">01</span><span className="mt-2 block text-sm font-semibold">Expertises</span></a><a href="/realisations" onClick={()=>setOpen(false)} className="rounded-2xl border xr-line p-4"><span className="label-mono text-[6px] xr-accent">02</span><span className="mt-2 block text-sm font-semibold">Réalisations</span></a></div>
      <div className="mt-2 grid grid-cols-2 gap-2">{IDS.map(id=>{const s=SERVICES.find(x=>x.id===id);return s?<a key={id} href={href(id)} onClick={()=>setOpen(false)} className="rounded-xl border xr-line px-3 py-3 text-[9px]">{t(s.title)}</a>:null})}</div>
-     <div className="mt-3 flex items-center justify-between border-t xr-line pt-3"><span className="label-mono text-[7px] xr-muted-2">LANGUE</span><div className="flex gap-1">{LANGS.map(l=><button type="button" key={l.code} onClick={()=>setLang(l.code)} className={cn("rounded-full border px-2 py-1 text-[7px]",lang===l.code?"bg-[var(--xr-ink)] text-[var(--xr-bg)]":"xr-line xr-muted")}>{l.label}</button>)}</div></div>
+     <div className="mt-3 grid grid-cols-[1fr_auto] gap-3 border-t xr-line pt-3">
+      <div>
+        <span className="label-mono block text-[7px] xr-muted-2">LANGUE</span>
+        <div className="mt-2 flex flex-wrap gap-1">{LANGS.map(l=><button type="button" key={l.code} onClick={()=>setLang(l.code)} className={cn("rounded-full border px-2.5 py-1.5 text-[7px]",lang===l.code?"bg-[var(--xr-ink)] text-[var(--xr-bg)]":"xr-line xr-muted")}>{l.label}</button>)}</div>
+      </div>
+      <div className="flex flex-col items-center gap-1">
+        <span className="label-mono text-[6px] xr-muted-2">THÈME</span>
+        <button type="button" aria-label={theme==="dark"?"Passer en mode clair":"Passer en mode sombre"} onClick={toggleTheme} className="grid h-10 w-10 place-items-center rounded-full border xr-line bg-[var(--xr-surface-strong)]">
+          {theme==="dark"?<Sun className="h-4 w-4"/>:<Moon className="h-4 w-4"/>}
+        </button>
+      </div>
+    </div>
    </div>}
   </div>
  </header>;
