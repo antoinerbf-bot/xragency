@@ -166,7 +166,7 @@ export function LocalVisibilityExperience() {
               <p className="label-mono text-[9px] uppercase tracking-[.18em] text-muted-foreground">Ce que vous regardez</p>
               <div className="mt-5 space-y-2">
                 {(["maps", "organic", "ads"] as const).map((key) => {
-                  const item = surfaceContentFor(key, copy);
+                  const item = surfaceContent;
                   const active = surface === key;
                   return (
                     <button key={key} type="button" onClick={() => setSurface(key)} className={`group w-full rounded-2xl border p-4 text-left transition-all ${active ? "border-primary/40 bg-primary/[.07] shadow-sm" : "border-border/70 hover:border-primary/30"}`}>
