@@ -47,7 +47,7 @@ function sectorLabel(
 
 function serviceLabel(
   key: string,
-  t: (v: { fr: string; en: string; vi: string }) => string,
+  t: (v: L) => string,
 ) {
   if (key === "all") return t(UI.showcaseAllServices);
   const map: Record<string, keyof typeof UI> = {
