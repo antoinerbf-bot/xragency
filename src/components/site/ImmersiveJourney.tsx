@@ -56,7 +56,7 @@ export function ImmersiveJourney(){
           </div>
           <div className="relative min-h-[260px] overflow-hidden border-t xr-line lg:border-l lg:border-t-0">
             <Parallax speed={0.035} direction="y" className="absolute inset-0">
-              <img src={XR_JOURNEY_PHOTO} alt="" className="h-full w-full object-cover grayscale-[.2] opacity-45 dark:opacity-60"/>
+              <img src={XR_JOURNEY_PHOTO} alt="" className="h-full w-full object-cover opacity-65 transition-transform duration-[1400ms] hover:scale-[1.035]"/>
               <div className="absolute inset-0 bg-gradient-to-tr from-[var(--xr-bg)]/95 via-[var(--xr-bg)]/25 to-transparent"/>
             </Parallax>
             <div className="absolute bottom-5 left-5 right-5 rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)] p-4 backdrop-blur-xl">
