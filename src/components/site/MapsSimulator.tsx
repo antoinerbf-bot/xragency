@@ -221,7 +221,7 @@ export function MapsSimulator() {
               <div className="absolute left-[42%] top-[20%] h-20 w-20 rounded-full border-[14px] border-[#b9c8bb]/60"/>
               {[["34%","34%","#da8e77","01"],["51%","48%","#7a9f87","02"],["67%","30%","#8b9dba","03"]].map(([left,top,bg,num])=>
                 <div key={num} className="absolute" style={{left,top}}>
-                  <div className="grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-4 border-white bg-[var(--pin)] shadow-[0_10px_30px_-12px_rgba(18,19,22,.5)]" style={{"--pin":bg} as React.CSSProperties}}>
+                  <div className="grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-4 border-white bg-[var(--pin)] shadow-[0_10px_30px_-12px_rgba(18,19,22,.5)]" style={{left: 0, top: 0, background: bg}}}>
                     <span className="text-[8px] font-black text-white">{num}</span>
                   </div>
                 </div>
