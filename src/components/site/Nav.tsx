@@ -50,10 +50,9 @@ export function Nav(){
           </button>
         )}
       </div>
-      <CartFloatingButton/>
       <button
         type="button"
-        aria-label={theme==="dark"?"Passer en mode clair":"Passer en mode sombre"}
+        aria-label={theme==="dark"?"Passer en mode clair":"Passer en mode sombre"
         title={theme==="dark"?"Mode clair":"Mode sombre"}
         onClick={toggleTheme}
         className={cn(
@@ -66,6 +65,7 @@ export function Nav(){
           <span className="sr-only">{theme==="dark"?"Mode clair":"Mode sombre"}</span>
         </span>
       </button>
+      <CartFloatingButton/>
       <EmberButton href="/#audit" className={cn("hidden min-h-9 px-4 py-2 text-[8px] md:inline-flex", heroTop && "!bg-[#e0b971] !text-[#17110a] hover:!bg-[#e7c486]")}>Lancer mon analyse</EmberButton>
       <button type="button" aria-label="Menu" onClick={()=>setOpen(v=>!v)} className="grid h-10 w-10 shrink-0 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] lg:hidden">{open?<X className="h-4 w-4"/>:<span className="space-y-1"><span className="block h-px w-4 bg-current"/><span className="block h-px w-4 bg-current"/><span className="block h-px w-3 bg-current"/></span>}</button>
     </div>
