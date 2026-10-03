@@ -18,10 +18,11 @@ export function Nav(){
  const onScroll=useCallback(()=>{setScrolled(window.scrollY>24);const total=document.documentElement.scrollHeight-window.innerHeight;setProgress(total>0?Math.min(window.scrollY/total,1):0)},[]);
  useEffect(()=>{onScroll();window.addEventListener("scroll",onScroll,{passive:true});return()=>window.removeEventListener("scroll",onScroll)},[onScroll]);
  const href=(id:string)=>id==="maintenance"?"/services/webcare":id==="robotics"?"/services/robotique":"/services/"+id;
+ const heroTop=isHome&&!scrolled;
  return <header className={cn("fixed inset-x-0 top-0 z-50 transition-all duration-500",scrolled?"py-2 sm:py-3":"py-3 sm:py-5")}>
   <div className="mx-auto max-w-[1640px] px-4 sm:px-6 lg:px-10">
-   <nav className={cn("relative flex items-center gap-2 rounded-full border px-2.5 py-2.5 transition-all duration-500 sm:px-3",scrolled?"xr-panel-strong shadow-[var(--xr-shadow)]":"bg-[var(--xr-surface)] border-[var(--xr-line)] backdrop-blur-xl")}>
-    <Logo className="min-w-0 px-2 sm:px-1"/>
+   <nav className={cn("relative flex items-center gap-2 rounded-full border px-2.5 py-2.5 transition-all duration-500 sm:px-3",scrolled?"xr-panel-strong shadow-[var(--xr-shadow)]":heroTop?"xr-nav-top":"bg-[var(--xr-surface)] border-[var(--xr-line)] backdrop-blur-xl")}>
+    <Logo className={cn("min-w-0 px-2 sm:px-1", heroTop && "text-white hover:text-white")} />
     <div className="hidden min-w-0 flex-1 justify-center lg:flex">
       <div className="flex items-center rounded-full border xr-line bg-[var(--xr-surface)] p-1">
         <div className="relative" onMouseEnter={()=>{if(timer.current)clearTimeout(timer.current);setServicesOpen(true)}} onMouseLeave={()=>{timer.current=setTimeout(()=>setServicesOpen(false),180)}}>
@@ -36,11 +37,11 @@ export function Nav(){
         <button type="button" onClick={()=>isHome?document.getElementById("faq")?.scrollIntoView({behavior:"smooth"}):window.location.assign("/#faq")} className="rounded-full px-4 py-2.5 text-[8px] font-semibold uppercase tracking-[.16em] xr-muted hover:bg-[var(--xr-accent-soft)] hover:text-[var(--xr-ink)]">{t(UI.navFaq)}</button>
       </div>
     </div>
-    <div className="ml-auto flex items-center gap-1.5">
+    <div className={cn("ml-auto flex items-center gap-1.5",heroTop&&"text-white")}>
       <div className="hidden items-center gap-1 rounded-full border xr-line bg-[var(--xr-surface)] p-1 sm:flex">{LANGS.map(l=><button key={l.code} type="button" onClick={()=>setLang(l.code)} className={cn("label-mono rounded-full px-2 py-1 text-[7px] transition",lang===l.code?"bg-[var(--xr-ink)] text-[var(--xr-bg)]":"xr-muted hover:text-[var(--xr-ink)]")}>{l.label}</button>)}</div>
       <CartFloatingButton/>
       <button type="button" aria-label={theme==="dark"?"Passer en mode clair":"Passer en mode sombre"} title={theme==="dark"?"Mode clair":"Mode sombre"} onClick={toggleTheme} className="grid h-9 w-9 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] transition hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)]">{theme==="dark"?<Sun className="h-3.5 w-3.5"/>:<Moon className="h-3.5 w-3.5"/>}</button>
-      <EmberButton href="/#quote" className="hidden min-h-9 px-4 py-2 text-[8px] md:inline-flex">Faire mon devis</EmberButton>
+      <EmberButton href="/#audit" className={cn("hidden min-h-9 px-4 py-2 text-[8px] md:inline-flex", heroTop && "!bg-[#e0b971] !text-[#17110a] hover:!bg-[#e7c486]")}>Lancer mon analyse</EmberButton>
       <button type="button" aria-label="Menu" onClick={()=>setOpen(v=>!v)} className="grid h-10 w-10 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] lg:hidden">{open?<X className="h-4 w-4"/>:<span className="space-y-1"><span className="block h-px w-4 bg-current"/><span className="block h-px w-4 bg-current"/><span className="block h-px w-3 bg-current"/></span>}</button>
     </div>
     <div aria-hidden className="absolute bottom-0 left-3 right-3 h-px bg-[var(--xr-line)]"><div className="h-full origin-left bg-[var(--xr-accent)] transition-transform duration-200" style={{transform:"scaleX("+progress+")"}}/></div>
