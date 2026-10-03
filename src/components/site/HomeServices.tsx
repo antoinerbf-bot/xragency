@@ -26,6 +26,16 @@ const PRICES: Record<string, number> = {
   robotics: 499,
 };
 
+const ACCENTS: Record<(typeof IDS)[number], string> = {
+  websites: "#d9b48c",
+  branding: "#c7b5df",
+  seo: "#a9c7d8",
+  maps: "#e2b2aa",
+  social: "#b7d6c4",
+  maintenance: "#d4c49a",
+  robotics: "#aeb6bf",
+};
+
 const COPY = {
   fr: {
     eyebrow: "07 SERVICES · 07 ENTRÉES",
@@ -90,7 +100,7 @@ export function HomeServices() {
   const next = IDS[(index + 1) % IDS.length];
 
   return (
-    <section id="homepage-services" className="xr-section relative overflow-hidden border-y xr-line py-16 sm:py-20 lg:py-28">
+    <section id="homepage-services" className="xr-section relative overflow-hidden border-y xr-line bg-[#f4f0e9] py-16 sm:py-20 lg:py-28">
       <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,var(--xr-accent-soft),transparent_28%)]" />
 
       <div className="relative mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
@@ -117,18 +127,20 @@ export function HomeServices() {
                   key={id}
                   type="button"
                   onClick={() => setActive(id)}
+                  style={{ "--service-accent": ACCENTS[id] } as React.CSSProperties}
                   className={
                     "group flex min-w-[150px] items-center gap-3 rounded-full border px-4 py-3 text-left transition duration-400 sm:min-w-0 sm:flex-1 " +
                     (selected
-                      ? "border-[var(--xr-ink)] bg-[var(--xr-ink)] text-[var(--xr-bg)] shadow-[var(--xr-shadow)]"
-                      : "xr-line bg-[var(--xr-surface)] hover:-translate-y-0.5")
+                      ? "border-[var(--service-accent)] bg-white text-[var(--xr-ink)] shadow-[var(--xr-shadow)]"
+                      : "xr-line bg-[var(--xr-surface)] hover:-translate-y-0.5 hover:bg-white")
                   }
                 >
-                  <span className={"grid h-8 w-8 shrink-0 place-items-center rounded-full border " + (selected ? "border-white/15 bg-white/10" : "xr-line")}>
+                  <span className={"grid h-8 w-8 shrink-0 place-items-center rounded-full border " + (selected ? "border-transparent" : "xr-line")} style={selected ? { background: ACCENTS[id] } : undefined}>
                     <I className="h-3.5 w-3.5" />
                   </span>
                   <span className="min-w-0">
                     <span className="block truncate text-[9px] font-semibold">{t(S?.title ?? { fr: id, en: id, vi: id, ar: id, ru: id })}</span>
+                    {selected ? <span className="mt-1 block h-0.5 w-8 rounded-full" style={{ background: ACCENTS[id] }} /> : null}
                     <span className={"mt-0.5 block label-mono text-[6px] " + (selected ? "text-white/45" : "xr-muted-2")}>
                       0{i + 1}
                     </span>
@@ -149,13 +161,13 @@ export function HomeServices() {
           </Reveal>
 
           <Reveal delay={90}>
-            <div className="flex h-full min-h-[430px] flex-col justify-between rounded-[2.35rem] border xr-line bg-[var(--xr-surface)] p-7 sm:p-9 lg:p-10">
+            <div className="flex h-full min-h-[430px] flex-col justify-between rounded-[2.35rem] border xr-line bg-white/92 p-7 shadow-[0_24px_80px_-45px_rgba(18,19,22,.22)] backdrop-blur-xl sm:p-9 lg:p-10">
               <div>
                 <div className="flex items-center justify-between gap-4">
                   <span className="label-mono text-[7px] tracking-[.22em] xr-muted-2">
                     CHAPTER {String(index + 1).padStart(2, "0")} / 07
                   </span>
-                  <span className="grid h-10 w-10 place-items-center rounded-full bg-[var(--xr-ink)] text-[var(--xr-bg)]">
+                  <span className="grid h-10 w-10 place-items-center rounded-full text-[var(--xr-ink)]" style={{ background: ACCENTS[active] }}>
                     <Icon className="h-4 w-4" />
                   </span>
                 </div>
