@@ -2,12 +2,14 @@
 deployment:
   tasks:
     - set -e
-    - echo "[XRAGENCY] starting O2switch deployment"
+    - echo "[XRAGENCY] starting safe O2switch deployment"
     - export DEPLOYPATH=/home/puzo3938/public_html/
     - export APPROOT="$HOME/repositories/xragency"
     - cd "$APPROOT"
     - git restore -- src/routeTree.gen.ts
-    - rm -rf "$APPROOT/tmp" "$HOME/tmp" "$APPROOT/.output" "$HOME/.output.next"
+    - rm -rf "$APPROOT/.output.next" "$HOME/.output.next"
+    - if [ -d "$APPROOT/.output" ]; then mv "$APPROOT/.output" "$APPROOT/.output.previous"; fi
+    - trap 'status=$?; if [ "$status" -ne 0 ] && [ -d "$APPROOT/.output.previous" ] && [ ! -d "$APPROOT/.output" ]; then mv "$APPROOT/.output.previous" "$APPROOT/.output"; fi; exit "$status"' EXIT
     - npm install --include=dev --no-package-lock --legacy-peer-deps --no-audit --no-fund
     - NITRO_PRESET=node_server npm run build
     - test -f "$APPROOT/.output/server/index.mjs"
@@ -18,9 +20,10 @@ deployment:
     - rm -rf "$HOME/.output"
     - /bin/mv "$HOME/.output.next" "$HOME/.output"
     - /bin/cp -f "$APPROOT/app.js" "$HOME/app.js"
-    - test -f "$APPROOT/app.js"
-    - test -f "$APPROOT/.output/server/index.mjs"
+    - test -f "$HOME/app.js"
+    - test -f "$HOME/.output/server/index.mjs"
     - mkdir -p "$HOME/tmp" "$APPROOT/tmp"
     - touch "$HOME/tmp/restart.txt"
     - touch "$APPROOT/tmp/restart.txt"
     - /bin/cp -R "$APPROOT/.output/public/." "$DEPLOYPATH"
+    - rm -rf "$APPROOT/.output.previous"
