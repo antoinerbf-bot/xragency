@@ -2,7 +2,7 @@
 deployment:
   tasks:
     - set -e
-    - echo "[XRAGENCY] starting O2switch deployment"
+    - echo "[XRAGENCY] production redeploy from known-good O2switch state"
     - export DEPLOYPATH=/home/puzo3938/public_html/
     - export APPROOT="$HOME/repositories/xragency"
     - cd "$APPROOT"
