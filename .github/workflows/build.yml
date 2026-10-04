@@ -17,6 +17,6 @@ jobs:
         with:
           node-version: 24
       - name: Install dependencies
-        run: npm install --no-package-lock --legacy-peer-deps --no-audit --no-fund
+        run: npm install --include=dev --no-package-lock --legacy-peer-deps --no-audit --no-fund
       - name: Build
         run: NITRO_PRESET=node_server npm run build
