@@ -108,7 +108,7 @@ function DeviceStage() {
         <div className="rounded-[1.25rem] border border-white/12 bg-[#111]/78 p-3 shadow-[0_25px_80px_-30px_rgba(0,0,0,.92)] backdrop-blur-xl">
           <div className="flex items-center justify-between">
             <span className="label-mono text-[6px] tracking-[.18em] text-white/45">SOCIAL</span>
-            <span className="h-2 w-2 rounded-full bg-[#dcb26a] shadow-[0_0_16px_rgba(220,178,106,.65)]" />
+            <span className="h-2 w-2 rounded-full bg-white shadow-[0_0_16px_rgba(255,255,255,.65)]" />
           </div>
           <img
             src={XR_PHOTOS.social}
@@ -122,7 +122,7 @@ function DeviceStage() {
       <Parallax speed={0.026} direction="both" className="absolute bottom-[7%] left-[10%] w-[24%] min-w-[130px] max-w-[190px]">
         <div className="rounded-[1.3rem] border border-white/12 bg-[#101010]/82 p-3 shadow-[0_24px_80px_-30px_rgba(0,0,0,.9)] backdrop-blur-xl">
           <div className="flex items-center gap-2">
-            <Bot className="h-4 w-4 text-[#e0b971]" />
+            <Bot className="h-4 w-4 text-white/90" />
             <div>
               <span className="label-mono block text-[6px] tracking-[.16em] text-white/45">IA & ROBOTIQUE</span>
               <span className="mt-0.5 block text-[8px] font-semibold text-white/85">Automation & terrain</span>
@@ -147,7 +147,7 @@ function DeviceStage() {
 
       <div className="absolute right-[18%] top-[32%] hidden sm:block">
         <div className="grid h-12 w-12 place-items-center rounded-full border border-white/20 bg-black/45 text-white backdrop-blur-xl">
-          <Sparkles className="h-4 w-4 text-[#e0b971]" />
+          <Sparkles className="h-4 w-4 text-white/90" />
         </div>
       </div>
     </div>
@@ -181,8 +181,8 @@ export function Hero() {
             <div className="relative z-20 max-w-3xl">
               <Reveal>
                 <div className="flex items-center gap-3">
-                  <span className="h-px w-10 bg-[#e0b971]" />
-                  <span className="label-mono text-[8px] tracking-[.28em] text-white/55">
+                  <span className="h-px w-10 bg-white/40" />
+                  <span className="label-mono text-[8px] tracking-[.28em] text-white/70">
                     {t(UI.heroKicker)}
                   </span>
                 </div>
@@ -191,42 +191,72 @@ export function Hero() {
               <Reveal delay={80}>
                 <h1 className="display-serif mt-6 max-w-[860px] text-[clamp(3.35rem,6.7vw,7.4rem)] leading-[.82] tracking-[-.075em] text-white">
                   {t(UI.heroTitle1)}{" "}
-                  <span className="text-[#e0b971]">{t(UI.heroTitleAccent)}</span>
+                  <span className="text-white underline decoration-white/30 underline-offset-8">{t(UI.heroTitleAccent)}</span>
                   <br />
-                  <em className="not-italic text-white/72">{t(UI.heroTitle2)}</em>
+                  <em className="not-italic text-white/75">{t(UI.heroTitle2)}</em>
                 </h1>
               </Reveal>
 
               <Reveal delay={150}>
-                <p className="mt-7 max-w-2xl text-[15px] leading-7 text-white/72 sm:text-lg">
+                <p className="mt-7 max-w-2xl text-[15px] leading-7 text-white/80 sm:text-lg">
                   {t(UI.heroLead)}
                 </p>
               </Reveal>
 
-              <Reveal delay={220}>
+              {/* ── BANNIÈRE OFFRE 400 € OFFERTS ── */}
+              <Reveal delay={190}>
+                <div className="mt-7 rounded-2xl border border-white/20 bg-white/[0.07] p-4 backdrop-blur-2xl shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8)] sm:p-5">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="label-mono text-[7px] font-semibold tracking-[0.2em] text-white/90 uppercase">
+                        Offre de bienvenue exclusive
+                      </span>
+                    </div>
+                    <span className="label-mono rounded-full border border-white/20 bg-white/10 px-2.5 py-0.5 text-[8px] font-bold tracking-wider text-white">
+                      400 € DE VALEUR OFFERTE · 0 € ENGAGEMENT
+                    </span>
+                  </div>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                    <div className="flex items-start gap-2.5 rounded-xl border border-white/10 bg-black/40 p-2.5">
+                      <span className="label-mono text-[8px] font-bold text-white/50">01</span>
+                      <div>
+                        <strong className="block text-[11px] font-semibold text-white">Maquette de site sur-mesure</strong>
+                        <span className="block text-[9px] text-white/60">Proposition visuelle personnalisée (Valeur : 200 €)</span>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2.5 rounded-xl border border-white/10 bg-black/40 p-2.5">
+                      <span className="label-mono text-[8px] font-bold text-white/50">02</span>
+                      <div>
+                        <strong className="block text-[11px] font-semibold text-white">Audit digital & visibilité complet</strong>
+                        <span className="block text-[9px] text-white/60">Analyse SEO, UX, Maps & conversion (Valeur : 200 €)</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+
+              <Reveal delay={240}>
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <a
                     href="#audit"
-                    className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-[#e0b971] px-6 py-3.5 text-[9px] font-bold uppercase tracking-[.13em] text-[#17110a] shadow-[0_14px_45px_-18px_rgba(224,185,113,.9)] transition duration-300 hover:-translate-y-1 hover:bg-[#e7c486]"
+                    className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-white px-7 py-3.5 text-[10px] font-bold uppercase tracking-[.14em] text-black shadow-[0_16px_45px_-15px_rgba(255,255,255,.45)] transition duration-300 hover:-translate-y-1 hover:bg-neutral-200"
                   >
-                    Lancer mon analyse gratuite
-                    <Search className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                    Obtenir mes 400 € offerts
+                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </a>
                   <a
                     href="#homepage-services"
-                    className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-white/22 bg-white/[.055] px-6 py-3.5 text-[9px] font-semibold uppercase tracking-[.13em] text-white backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-white/[.10]"
+                    className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-white/25 bg-white/[.08] px-6 py-3.5 text-[9px] font-semibold uppercase tracking-[.13em] text-white backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-white/[.15]"
                   >
-                    Découvrir nos 7 expertises
-                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                    Découvrir nos 7 expertises & prix
+                    <Search className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                   </a>
                   <a
-                    href="#journey"
-                    className="group inline-flex min-h-12 items-center justify-center gap-2 px-2 py-3 text-[8px] font-semibold uppercase tracking-[.14em] text-white/60 transition hover:text-white"
+                    href="#quote"
+                    className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/15 px-4 py-3 text-[9px] font-semibold uppercase tracking-[.12em] text-white/70 transition hover:border-white/30 hover:text-white"
                   >
-                    <span className="grid h-9 w-9 place-items-center rounded-full border border-white/18 bg-black/25 backdrop-blur">
-                      <Play className="ml-0.5 h-3.5 w-3.5 fill-current" />
-                    </span>
-                    Voir comment XR vous accompagne
+                    Calculer mon projet en direct
                   </a>
                 </div>
               </Reveal>

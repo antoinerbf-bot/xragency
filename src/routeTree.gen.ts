@@ -10,8 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as WorkRouteImport } from './routes/work'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
+import { Route as NotreHistoireRouteImport } from './routes/notre-histoire'
+import { Route as RealisationsRouteImport } from './routes/realisations'
+import { Route as RecrutementRouteImport } from './routes/recrutement'
+import { Route as RefonteSiteInternetRouteImport } from './routes/refonte-site-internet'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as WorkRouteImport } from './routes/work'
+import { Route as ApiAuditRouteImport } from './routes/api/audit'
+import { Route as ApiCreateCheckoutRouteImport } from './routes/api/create-checkout'
 import { Route as ApiSendQuoteRouteImport } from './routes/api/send-quote'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardAuditsRouteImport } from './routes/dashboard/audits'
@@ -20,13 +29,9 @@ import { Route as DashboardNewRouteImport } from './routes/dashboard/new'
 import { Route as DashboardProspectsRouteImport } from './routes/dashboard/prospects'
 import { Route as ServicesIndexRouteImport } from './routes/services/index'
 import { Route as ServicesServiceIdRouteImport } from './routes/services/$serviceId'
+import { Route as ServicesRobotiqueRouteImport } from './routes/services/robotique'
 import { Route as ServicesSeoRouteImport } from './routes/services/seo'
 import { Route as ServicesWebcareRouteImport } from './routes/services/webcare'
-import { Route as FaqRouteImport } from './routes/faq'
-import { Route as NotreHistoireRouteImport } from './routes/notre-histoire'
-import { Route as RealisationsRouteImport } from './routes/realisations'
-import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
-import { Route as SitemapXmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as DashboardAuditsAuditIdRouteImport } from './routes/dashboard/audits.$auditId'
 import { Route as DashboardProspectsProspectIdRouteImport } from './routes/dashboard/prospects.$prospectId'
 
@@ -35,14 +40,59 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
+  id: '/mentions-legales',
+  path: '/mentions-legales',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotreHistoireRoute = NotreHistoireRouteImport.update({
+  id: '/notre-histoire',
+  path: '/notre-histoire',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RealisationsRoute = RealisationsRouteImport.update({
+  id: '/realisations',
+  path: '/realisations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecrutementRoute = RecrutementRouteImport.update({
+  id: '/recrutement',
+  path: '/recrutement',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefonteSiteInternetRoute = RefonteSiteInternetRouteImport.update({
+  id: '/refonte-site-internet',
+  path: '/refonte-site-internet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkRoute = WorkRouteImport.update({
   id: '/work',
   path: '/work',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const ApiAuditRoute = ApiAuditRouteImport.update({
+  id: '/api/audit',
+  path: '/api/audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCreateCheckoutRoute = ApiCreateCheckoutRouteImport.update({
+  id: '/api/create-checkout',
+  path: '/api/create-checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSendQuoteRoute = ApiSendQuoteRouteImport.update({
@@ -85,6 +135,11 @@ const ServicesServiceIdRoute = ServicesServiceIdRouteImport.update({
   path: '/services/$serviceId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServicesRobotiqueRoute = ServicesRobotiqueRouteImport.update({
+  id: '/services/robotique',
+  path: '/services/robotique',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesSeoRoute = ServicesSeoRouteImport.update({
   id: '/services/seo',
   path: '/services/seo',
@@ -95,32 +150,6 @@ const ServicesWebcareRoute = ServicesWebcareRouteImport.update({
   path: '/services/webcare',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FaqRoute = FaqRouteImport.update({
-  id: '/faq',
-  path: '/faq',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotreHistoireRoute = NotreHistoireRouteImport.update({
-  id: '/notre-histoire',
-  path: '/notre-histoire',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RealisationsRoute = RealisationsRouteImport.update({
-  id: '/realisations',
-  path: '/realisations',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
-  id: '/mentions-legales',
-  path: '/mentions-legales',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapXmlRoute = SitemapXmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-
 const DashboardAuditsAuditIdRoute = DashboardAuditsAuditIdRouteImport.update({
   id: '/$auditId',
   path: '/$auditId',
@@ -135,19 +164,24 @@ const DashboardProspectsProspectIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/work': typeof WorkRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/faq': typeof FaqRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/notre-histoire': typeof NotreHistoireRoute
   '/realisations': typeof RealisationsRoute
-  '/mentions-legales': typeof MentionsLegalesRoute
-  '/sitemap.xml': typeof SitemapXmlRoute
-  '/dashboard': typeof DashboardRouteWithChildren
+  '/recrutement': typeof RecrutementRoute
+  '/refonte-site-internet': typeof RefonteSiteInternetRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/work': typeof WorkRoute
+  '/api/audit': typeof ApiAuditRoute
+  '/api/create-checkout': typeof ApiCreateCheckoutRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
   '/dashboard/new': typeof DashboardNewRoute
   '/dashboard/prospects': typeof DashboardProspectsRouteWithChildren
   '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/services/robotique': typeof ServicesRobotiqueRoute
   '/services/seo': typeof ServicesSeoRoute
   '/services/webcare': typeof ServicesWebcareRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -157,18 +191,23 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/work': typeof WorkRoute
   '/faq': typeof FaqRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/notre-histoire': typeof NotreHistoireRoute
   '/realisations': typeof RealisationsRoute
-  '/mentions-legales': typeof MentionsLegalesRoute
-  '/sitemap.xml': typeof SitemapXmlRoute
+  '/recrutement': typeof RecrutementRoute
+  '/refonte-site-internet': typeof RefonteSiteInternetRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/work': typeof WorkRoute
+  '/api/audit': typeof ApiAuditRoute
+  '/api/create-checkout': typeof ApiCreateCheckoutRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
   '/dashboard/new': typeof DashboardNewRoute
   '/dashboard/prospects': typeof DashboardProspectsRouteWithChildren
   '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/services/robotique': typeof ServicesRobotiqueRoute
   '/services/seo': typeof ServicesSeoRoute
   '/services/webcare': typeof ServicesWebcareRoute
   '/dashboard': typeof DashboardIndexRoute
@@ -179,19 +218,24 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/work': typeof WorkRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/faq': typeof FaqRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/notre-histoire': typeof NotreHistoireRoute
   '/realisations': typeof RealisationsRoute
-  '/mentions-legales': typeof MentionsLegalesRoute
-  '/sitemap.xml': typeof SitemapXmlRoute
-  '/dashboard': typeof DashboardRouteWithChildren
+  '/recrutement': typeof RecrutementRoute
+  '/refonte-site-internet': typeof RefonteSiteInternetRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/work': typeof WorkRoute
+  '/api/audit': typeof ApiAuditRoute
+  '/api/create-checkout': typeof ApiCreateCheckoutRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
   '/dashboard/new': typeof DashboardNewRoute
   '/dashboard/prospects': typeof DashboardProspectsRouteWithChildren
   '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/services/robotique': typeof ServicesRobotiqueRoute
   '/services/seo': typeof ServicesSeoRoute
   '/services/webcare': typeof ServicesWebcareRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -203,19 +247,24 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/work'
+    | '/dashboard'
     | '/faq'
+    | '/mentions-legales'
     | '/notre-histoire'
     | '/realisations'
-    | '/mentions-legales'
+    | '/recrutement'
+    | '/refonte-site-internet'
     | '/sitemap.xml'
-    | '/dashboard'
+    | '/work'
+    | '/api/audit'
+    | '/api/create-checkout'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
     | '/dashboard/new'
     | '/dashboard/prospects'
     | '/services/$serviceId'
+    | '/services/robotique'
     | '/services/seo'
     | '/services/webcare'
     | '/dashboard/'
@@ -225,17 +274,23 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/work'
     | '/faq'
+    | '/mentions-legales'
     | '/notre-histoire'
     | '/realisations'
+    | '/recrutement'
+    | '/refonte-site-internet'
     | '/sitemap.xml'
+    | '/work'
+    | '/api/audit'
+    | '/api/create-checkout'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
     | '/dashboard/new'
     | '/dashboard/prospects'
     | '/services/$serviceId'
+    | '/services/robotique'
     | '/services/seo'
     | '/services/webcare'
     | '/dashboard'
@@ -245,18 +300,24 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/work'
+    | '/dashboard'
     | '/faq'
+    | '/mentions-legales'
     | '/notre-histoire'
     | '/realisations'
+    | '/recrutement'
+    | '/refonte-site-internet'
     | '/sitemap.xml'
-    | '/dashboard'
+    | '/work'
+    | '/api/audit'
+    | '/api/create-checkout'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
     | '/dashboard/new'
     | '/dashboard/prospects'
     | '/services/$serviceId'
+    | '/services/robotique'
     | '/services/seo'
     | '/services/webcare'
     | '/dashboard/'
@@ -267,15 +328,20 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  WorkRoute: typeof WorkRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   FaqRoute: typeof FaqRoute
+  MentionsLegalesRoute: typeof MentionsLegalesRoute
   NotreHistoireRoute: typeof NotreHistoireRoute
   RealisationsRoute: typeof RealisationsRoute
-  MentionsLegalesRoute: typeof MentionsLegalesRoute
-  SitemapXmlRoute: typeof SitemapXmlRoute
-  DashboardRoute: typeof DashboardRouteWithChildren
+  RecrutementRoute: typeof RecrutementRoute
+  RefonteSiteInternetRoute: typeof RefonteSiteInternetRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  WorkRoute: typeof WorkRoute
+  ApiAuditRoute: typeof ApiAuditRoute
+  ApiCreateCheckoutRoute: typeof ApiCreateCheckoutRoute
   ApiSendQuoteRoute: typeof ApiSendQuoteRoute
   ServicesServiceIdRoute: typeof ServicesServiceIdRoute
+  ServicesRobotiqueRoute: typeof ServicesRobotiqueRoute
   ServicesSeoRoute: typeof ServicesSeoRoute
   ServicesWebcareRoute: typeof ServicesWebcareRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
@@ -295,6 +361,76 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mentions-legales': {
+      id: '/mentions-legales'
+      path: '/mentions-legales'
+      fullPath: '/mentions-legales'
+      preLoaderRoute: typeof MentionsLegalesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notre-histoire': {
+      id: '/notre-histoire'
+      path: '/notre-histoire'
+      fullPath: '/notre-histoire'
+      preLoaderRoute: typeof NotreHistoireRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/realisations': {
+      id: '/realisations'
+      path: '/realisations'
+      fullPath: '/realisations'
+      preLoaderRoute: typeof RealisationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recrutement': {
+      id: '/recrutement'
+      path: '/recrutement'
+      fullPath: '/recrutement'
+      preLoaderRoute: typeof RecrutementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refonte-site-internet': {
+      id: '/refonte-site-internet'
+      path: '/refonte-site-internet'
+      fullPath: '/refonte-site-internet'
+      preLoaderRoute: typeof RefonteSiteInternetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/work': {
+      id: '/work'
+      path: '/work'
+      fullPath: '/work'
+      preLoaderRoute: typeof WorkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/audit': {
+      id: '/api/audit'
+      path: '/api/audit'
+      fullPath: '/api/audit'
+      preLoaderRoute: typeof ApiAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/create-checkout': {
+      id: '/api/create-checkout'
+      path: '/api/create-checkout'
+      fullPath: '/api/create-checkout'
+      preLoaderRoute: typeof ApiCreateCheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/send-quote': {
@@ -353,6 +489,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesServiceIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/services/robotique': {
+      id: '/services/robotique'
+      path: '/services/robotique'
+      fullPath: '/services/robotique'
+      preLoaderRoute: typeof ServicesRobotiqueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services/seo': {
       id: '/services/seo'
       path: '/services/seo'
@@ -365,48 +508,6 @@ declare module '@tanstack/react-router' {
       path: '/services/webcare'
       fullPath: '/services/webcare'
       preLoaderRoute: typeof ServicesWebcareRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/faq': {
-      id: '/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof FaqRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notre-histoire': {
-      id: '/notre-histoire'
-      path: '/notre-histoire'
-      fullPath: '/notre-histoire'
-      preLoaderRoute: typeof NotreHistoireRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mentions-legales': {
-      id: '/mentions-legales'
-      path: '/mentions-legales'
-      fullPath: '/mentions-legales'
-      preLoaderRoute: typeof MentionsLegalesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/realisations': {
-      id: '/realisations'
-      path: '/realisations'
-      fullPath: '/realisations'
-      preLoaderRoute: typeof RealisationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapXmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/work': {
-      id: '/work'
-      path: '/work'
-      fullPath: '/work'
-      preLoaderRoute: typeof WorkRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/audits/$auditId': {
@@ -471,14 +572,20 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  WorkRoute: WorkRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   FaqRoute: FaqRoute,
+  MentionsLegalesRoute: MentionsLegalesRoute,
   NotreHistoireRoute: NotreHistoireRoute,
   RealisationsRoute: RealisationsRoute,
-  SitemapXmlRoute: SitemapXmlRoute,
-  DashboardRoute: DashboardRouteWithChildren,
+  RecrutementRoute: RecrutementRoute,
+  RefonteSiteInternetRoute: RefonteSiteInternetRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  WorkRoute: WorkRoute,
+  ApiAuditRoute: ApiAuditRoute,
+  ApiCreateCheckoutRoute: ApiCreateCheckoutRoute,
   ApiSendQuoteRoute: ApiSendQuoteRoute,
   ServicesServiceIdRoute: ServicesServiceIdRoute,
+  ServicesRobotiqueRoute: ServicesRobotiqueRoute,
   ServicesSeoRoute: ServicesSeoRoute,
   ServicesWebcareRoute: ServicesWebcareRoute,
   ServicesIndexRoute: ServicesIndexRoute,

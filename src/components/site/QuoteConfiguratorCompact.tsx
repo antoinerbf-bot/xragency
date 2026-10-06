@@ -454,12 +454,12 @@ export function QuoteConfiguratorCompact() {
   );
 
   return (
-    <section id="quote" className="xr-section-elevated relative overflow-hidden border-y xr-line bg-[#f3efe7] py-20 sm:py-28 lg:py-36 dark:bg-[#0d0f12]">
+    <section id="quote" className="xr-section-elevated relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-20 sm:py-28 lg:py-36">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,var(--xr-accent-soft),transparent_26%),radial-gradient(circle_at_82%_78%,rgba(120,120,140,.08),transparent_24%)]"/>
       <div className="relative mx-auto max-w-[1560px] px-5 sm:px-8 lg:px-12">
         <Parallax speed={-0.025}><Reveal><div className="grid gap-7 border-b xr-line pb-10 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
-          <div><span className="label-mono xr-accent text-[8px] tracking-[.28em]">XR QUOTE STUDIO · DEVIS SUR MESURE</span><h2 className="display-serif mt-5 max-w-5xl text-[clamp(3rem,5.8vw,6.3rem)] leading-[.84] tracking-[-.065em]">Construisons votre <em className="not-italic opacity-45">projet</em>, étape par étape.</h2><p className="mt-5 max-w-2xl text-sm leading-7 xr-muted sm:text-base">Vous choisissez votre activité, votre priorité et votre budget. XR Quote Studio vous guide ensuite vers une sélection claire, puis un devis professionnel.</p></div>
-          <div className="xr-panel-strong rounded-[1.7rem] p-5"><span className="label-mono text-[6px] tracking-[.2em] xr-muted-2">ESTIMATION EN DIRECT</span><p className="mt-2 display-serif text-3xl">{totalLabel}</p><p className="mt-2 text-[8px] leading-4 xr-muted">Le montant se met à jour au fil du parcours.</p></div>
+          <div><span className="label-mono xr-accent text-[8px] tracking-[.28em]">CONFIGURATEUR DE PROJET · TRANSPARENCE TOTALE</span><h2 className="display-serif mt-5 max-w-5xl text-[clamp(3rem,5.8vw,6.3rem)] leading-[.84] tracking-[-.065em]">Calculez votre <em className="not-italic opacity-45">investissement</em> en temps réel.</h2><p className="mt-5 max-w-2xl text-sm leading-7 xr-muted sm:text-base">Sélectionnez votre métier, vos priorités et vos objectifs. Obtenez une estimation claire et téléchargez votre devis officiel PDF sans engagement.</p></div>
+          <div className="xr-panel-strong rounded-[1.7rem] p-5"><span className="label-mono text-[6px] tracking-[.2em] xr-muted-2">ESTIMATION IMMÉDIATE</span><p className="mt-2 display-serif text-3xl">{totalLabel}</p><p className="mt-2 text-[8px] leading-4 xr-muted">Le montant se recalcule dynamiquement selon vos choix.</p></div>
         </div></Reveal></Parallax>
         <div className="mt-6 overflow-x-auto pb-1">
           <div className="flex min-w-max gap-2 rounded-[1.4rem] border xr-line bg-[var(--xr-surface)] p-2 shadow-[var(--xr-shadow)]">
