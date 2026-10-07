@@ -17,6 +17,7 @@ function useCountUp(target: number, duration = 1100, delay = 220) {
   const [value, setValue] = useState(target);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     setValue(0);
     const timeout = window.setTimeout(() => {
@@ -171,7 +172,7 @@ export function Hero() {
         />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,7,7,.60)_0%,rgba(7,7,7,.40)_32%,rgba(7,7,7,.10)_70%,rgba(7,7,7,.03)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,.18)_0%,transparent_34%,rgba(5,5,5,.28)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_40%,rgba(220,178,106,.12),transparent_24%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_40%,rgba(255,255,255,.06),transparent_28%)]" />
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#101010] to-transparent" />
       </div>
 
@@ -205,31 +206,31 @@ export function Hero() {
 
               {/* ── BANNIÈRE OFFRE 400 € OFFERTS ── */}
               <Reveal delay={190}>
-                <div className="mt-7 rounded-2xl border border-white/20 bg-white/[0.07] p-4 backdrop-blur-2xl shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8)] sm:p-5">
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+                <div className="mt-7 rounded-2xl border border-white/20 bg-white/[0.06] p-5 backdrop-blur-2xl shadow-[0_24px_60px_-24px_rgba(0,0,0,0.9)] sm:p-6">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3.5 mb-4">
                     <div className="flex items-center gap-2">
                       <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
                       <span className="label-mono text-[7px] font-semibold tracking-[0.2em] text-white/90 uppercase">
-                        Offre de bienvenue exclusive
+                        Offre de bienvenue · Sans engagement
                       </span>
                     </div>
-                    <span className="label-mono rounded-full border border-white/20 bg-white/10 px-2.5 py-0.5 text-[8px] font-bold tracking-wider text-white">
-                      400 € DE VALEUR OFFERTE · 0 € ENGAGEMENT
+                    <span className="label-mono rounded-full border border-white/25 bg-white/[0.12] px-3 py-1 text-[8px] font-bold tracking-wider text-white">
+                      400 € DE VALEUR OFFERTE
                     </span>
                   </div>
-                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                    <div className="flex items-start gap-2.5 rounded-xl border border-white/10 bg-black/40 p-2.5">
-                      <span className="label-mono text-[8px] font-bold text-white/50">01</span>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="flex items-start gap-3 rounded-xl border border-white/12 bg-black/50 p-3.5">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/10 label-mono text-[7px] font-bold text-white/60">01</span>
                       <div>
-                        <strong className="block text-[11px] font-semibold text-white">Maquette de site sur-mesure</strong>
-                        <span className="block text-[9px] text-white/60">Proposition visuelle personnalisée (Valeur : 200 €)</span>
+                        <strong className="block text-[12px] font-semibold leading-tight text-white">Maquette de site sur-mesure</strong>
+                        <span className="mt-0.5 block text-[9px] leading-5 text-white/55">Proposition visuelle personnalisée — Valeur : 200 €</span>
                       </div>
                     </div>
-                    <div className="flex items-start gap-2.5 rounded-xl border border-white/10 bg-black/40 p-2.5">
-                      <span className="label-mono text-[8px] font-bold text-white/50">02</span>
+                    <div className="flex items-start gap-3 rounded-xl border border-white/12 bg-black/50 p-3.5">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/10 label-mono text-[7px] font-bold text-white/60">02</span>
                       <div>
-                        <strong className="block text-[11px] font-semibold text-white">Audit digital & visibilité complet</strong>
-                        <span className="block text-[9px] text-white/60">Analyse SEO, UX, Maps & conversion (Valeur : 200 €)</span>
+                        <strong className="block text-[12px] font-semibold leading-tight text-white">Audit digital complet</strong>
+                        <span className="mt-0.5 block text-[9px] leading-5 text-white/55">SEO, UX, Maps & conversion — Valeur : 200 €</span>
                       </div>
                     </div>
                   </div>
@@ -240,23 +241,23 @@ export function Hero() {
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <a
                     href="#audit"
-                    className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-white px-7 py-3.5 text-[10px] font-bold uppercase tracking-[.14em] text-black shadow-[0_16px_45px_-15px_rgba(255,255,255,.45)] transition duration-300 hover:-translate-y-1 hover:bg-neutral-200"
+                    className="group inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full bg-white px-8 py-4 text-[10px] font-bold uppercase tracking-[.15em] text-black shadow-[0_18px_55px_-18px_rgba(255,255,255,.5)] transition duration-300 hover:-translate-y-1 hover:bg-neutral-100 hover:shadow-[0_24px_65px_-18px_rgba(255,255,255,.6)]"
                   >
                     Obtenir mes 400 € offerts
                     <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </a>
                   <a
                     href="#homepage-services"
-                    className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-white/25 bg-white/[.08] px-6 py-3.5 text-[9px] font-semibold uppercase tracking-[.13em] text-white backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-white/[.15]"
+                    className="group inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full border border-white/25 bg-white/[.07] px-6 py-4 text-[9px] font-semibold uppercase tracking-[.14em] text-white backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-white/[.14]"
                   >
-                    Découvrir nos 7 expertises & prix
+                    Voir nos 7 expertises & prix
                     <Search className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                   </a>
                   <a
                     href="#quote"
-                    className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/15 px-4 py-3 text-[9px] font-semibold uppercase tracking-[.12em] text-white/70 transition hover:border-white/30 hover:text-white"
+                    className="group inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full border border-white/15 px-5 py-3 text-[9px] font-semibold uppercase tracking-[.12em] text-white/65 transition hover:border-white/35 hover:text-white"
                   >
-                    Calculer mon projet en direct
+                    Calculer mon projet
                   </a>
                 </div>
               </Reveal>

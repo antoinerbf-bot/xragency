@@ -7,6 +7,7 @@ import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
 import { ImmersiveJourney } from "@/components/site/ImmersiveJourney";
 import { HomeServices } from "@/components/site/HomeServices";
+import { SocialProof } from "@/components/site/SocialProof";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
 import { DigitalAudit } from "@/components/site/DigitalAudit";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
@@ -36,8 +37,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-
-
 function ServiceRibbon() {
   const { t } = useLang();
   const items = [
@@ -51,9 +50,9 @@ function ServiceRibbon() {
   ] as const;
 
   return (
-    <section aria-label="Les 7 expertises XR Agency" className="relative overflow-hidden border-b xr-line bg-white">
+    <section aria-label="Les 7 expertises XR Agency" className="relative overflow-hidden border-b xr-line bg-card/60 backdrop-blur-md">
       <div className="mx-auto flex max-w-[1640px] items-center gap-5 px-5 py-4 sm:px-8 lg:px-12">
-        <span className="hidden shrink-0 label-mono text-[7px] tracking-[.22em] text-[#17181a]/40 lg:block">
+        <span className="hidden shrink-0 label-mono text-[7px] tracking-[.22em] text-muted-foreground lg:block">
           XR / EXPERTISES
         </span>
         <div className="xr-rail flex min-w-0 flex-1 gap-2 overflow-x-auto pb-0.5">
@@ -64,11 +63,11 @@ function ServiceRibbon() {
               <a
                 key={id}
                 href={href}
-                className="group inline-flex shrink-0 items-center gap-2 rounded-full border border-[#17181a]/10 bg-[#f7f4ee] px-4 py-2.5 transition duration-300 hover:-translate-y-0.5 hover:border-[#17181a]/20 hover:bg-white"
+                className="group inline-flex shrink-0 items-center gap-2 rounded-full border border-border/80 bg-background/80 px-4 py-2.5 transition duration-300 hover:-translate-y-0.5 hover:border-border hover:bg-card shadow-sm"
               >
-                <span className="font-mono text-[7px] text-[#17181a]/35">0{index + 1}</span>
-                <span className="text-[9px] font-semibold text-[#17181a]">{t(service.title)}</span>
-                <ArrowUpRight className="h-3 w-3 text-[#17181a]/30 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                <span className="font-mono text-[7px] text-muted-foreground/60">0{index + 1}</span>
+                <span className="text-[9px] font-semibold text-foreground">{t(service.title)}</span>
+                <ArrowUpRight className="h-3 w-3 text-muted-foreground/50 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </a>
             );
           })}
@@ -93,6 +92,7 @@ function Index() {
         <ImmersiveJourney />
         <DigitalAudit />
         <HomeServices />
+        <SocialProof />
         <QuoteConfiguratorCompact />
         <MapsSimulator />
         <Faq />

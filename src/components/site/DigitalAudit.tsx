@@ -38,41 +38,41 @@ export function DigitalAudit(){
     <Reveal><div className="xr-depth-card rounded-[2.2rem] border xr-line bg-[var(--xr-surface)] p-5 sm:p-7"><div className="flex items-center gap-3"><span className="grid h-11 w-11 place-items-center rounded-2xl border xr-line xr-accent-bg"><Globe2 className="h-5 w-5 xr-accent"/></span><div><span className="label-mono text-[6px] xr-muted-2">01 · SOURCE</span><p className="mt-1 text-sm font-semibold">{t.url}</p></div><Activity className="ml-auto h-4 w-4 opacity-35"/></div><input value={url} onChange={e=>setUrl(e.target.value)} placeholder="https://votresite.com" className="mt-5 w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-4 text-sm outline-none"/><div className="mt-3 grid gap-2 sm:grid-cols-2"><select value={sector} onChange={e=>setSector(e.target.value)} className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-3 py-3 text-[9px] outline-none"><option value="other">Secteur · autre</option><option value="restaurant">Restaurant</option><option value="hospitality">Hospitality</option><option value="realestate">Immobilier</option><option value="commerce">Commerce</option><option value="service">Service</option></select><select value={budget} onChange={e=>setBudget(e.target.value)} className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-3 py-3 text-[9px] outline-none"><option value="under500">&lt; 500 €</option><option value="500_1000">500 – 1 000 €</option><option value="1000_2500">1 000 – 2 500 €</option><option value="2500_5000">2 500 – 5 000 €</option><option value="5000_plus">5 000 € +</option></select></div><div className="mt-5 grid gap-2 sm:grid-cols-2">{(Object.entries(TYPES) as [AuditType,typeof TYPES[AuditType]][]).map(([id,x])=>{const I=x.icon;return <button key={id} type="button" onClick={()=>toggle(id)} className={"rounded-[1.35rem] border p-4 text-left transition "+(types.includes(id)?"border-[var(--xr-accent)] bg-[var(--xr-accent-soft)]":"xr-line bg-[var(--xr-surface-strong)] hover:-translate-y-0.5")}><div className="flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-xl border xr-line"><I className="h-3.5 w-3.5 opacity-55"/></span><span className="text-[10px] font-semibold">{x.label[lang]??x.label.fr}</span>{types.includes(id)&&<Check className="ml-auto h-3.5 w-3.5 xr-accent"/>}</div><p className="mt-2 text-[8px] leading-4 xr-muted">{x.detail[lang]??x.detail.fr}</p></button>})}</div><button type="button" onClick={run} disabled={!url.trim()||loading} className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-4 label-mono text-[8px] font-semibold text-[var(--xr-bg)] disabled:opacity-30">{loading?t.running:t.run}<ArrowRight className="h-4 w-4"/></button><p className="mt-3 text-center label-mono text-[5px] xr-muted-2">ANALYSE DES SIGNAUX PUBLICS ACCESSIBLES</p></div></Reveal>
     <Reveal delay={90}><div className="xr-panel-strong relative min-h-[470px] overflow-hidden rounded-[2.2rem] p-5 sm:p-7">
       <div aria-hidden className="absolute -right-20 -top-20 h-60 w-60 rounded-full border xr-line xr-float-slower"/>
-      <div className="relative mb-6 overflow-hidden rounded-[1.7rem] border xr-line bg-white shadow-[0_30px_80px_-55px_rgba(18,19,22,.45)]">
-        <div className="flex items-center gap-2 border-b xr-line bg-[#f5f1e9] px-4 py-3">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#d7a4a0]"/>
-          <span className="h-2.5 w-2.5 rounded-full bg-[#d9c994]"/>
-          <span className="h-2.5 w-2.5 rounded-full bg-[#aac6b2]"/>
-          <div className="ml-2 min-w-0 flex-1 rounded-lg border xr-line bg-white px-3 py-1.5 font-mono text-[7px] text-[#17181a]/45">
+      <div className="relative mb-6 overflow-hidden rounded-[1.7rem] border xr-line bg-[var(--xr-surface)] shadow-[0_30px_80px_-55px_rgba(0,0,0,.45)]">
+        <div className="flex items-center gap-2 border-b xr-line bg-[var(--xr-bg)] px-4 py-3">
+          <span className="h-2.5 w-2.5 rounded-full bg-red-400/80"/>
+          <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80"/>
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80"/>
+          <div className="ml-2 min-w-0 flex-1 rounded-lg border xr-line bg-[var(--xr-surface-strong)] px-3 py-1.5 font-mono text-[7px] xr-muted">
             {url || "https://votre-site.fr"}
           </div>
-          <span className="hidden rounded-full bg-[#eef2ff] px-2.5 py-1 label-mono text-[6px] text-[#5267a8] sm:block">LIVE AUDIT</span>
+          <span className="hidden rounded-full border xr-line bg-[var(--xr-accent-soft)] px-2.5 py-1 label-mono text-[6px] xr-accent sm:block">LIVE AUDIT</span>
         </div>
-        <div className="relative h-[190px] overflow-hidden bg-[#fbfaf7] p-4 sm:h-[205px]">
-          <div aria-hidden className="absolute inset-0 opacity-35 [background-image:linear-gradient(rgba(18,19,22,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(18,19,22,.08)_1px,transparent_1px)] [background-size:28px_28px]"/>
-          <div className="relative h-full rounded-xl border border-[#17181a]/10 bg-white/90 p-4">
+        <div className="relative h-[190px] overflow-hidden bg-[var(--xr-bg-elev)] p-4 sm:h-[205px]">
+          <div aria-hidden className="absolute inset-0 opacity-20 [background-image:linear-gradient(currentColor_1px,transparent_1px),linear-gradient(90deg,currentColor_1px,transparent_1px)] [background-size:28px_28px]"/>
+          <div className="relative h-full rounded-xl border xr-line bg-[var(--xr-surface-strong)] p-4">
             <div className="flex items-center justify-between">
-              <span className="h-2.5 w-28 rounded-full bg-[#d9d4ca]"/>
-              <span className="h-7 w-20 rounded-full bg-[#ece7de]"/>
+              <span className="h-2.5 w-28 rounded-full bg-[var(--xr-line)]"/>
+              <span className="h-7 w-20 rounded-full bg-[var(--xr-accent-soft)]"/>
             </div>
             <div className="mt-5 grid grid-cols-[1.2fr_.8fr] gap-3">
               <div className="space-y-2">
-                <span className="block h-10 w-[84%] rounded-lg bg-[#e7e1d7]"/>
-                <span className="block h-3 w-[62%] rounded-full bg-[#efebe4]"/>
-                <span className="block h-3 w-[74%] rounded-full bg-[#efebe4]"/>
-                <span className="mt-4 block h-8 w-28 rounded-full bg-[#17181a]"/>
+                <span className="block h-10 w-[84%] rounded-lg bg-[var(--xr-accent-soft)]"/>
+                <span className="block h-3 w-[62%] rounded-full bg-[var(--xr-line)]"/>
+                <span className="block h-3 w-[74%] rounded-full bg-[var(--xr-line)]"/>
+                <span className="mt-4 block h-8 w-28 rounded-full bg-[var(--xr-ink)]"/>
               </div>
-              <div className="rounded-xl bg-[#f2f6f1] p-3">
+              <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3">
                 <div className="flex items-end gap-1.5">
-                  {[35,58,44,76,63,86].map((h,i)=><span key={i} className="flex-1 rounded-t-sm bg-[#9fb5a5]" style={{height:h}}/> )}
+                  {[35,58,44,76,63,86].map((h,i)=><span key={i} className="flex-1 rounded-t-sm bg-[var(--xr-accent)] opacity-40" style={{height:h}}/> )}
                 </div>
-                <span className="mt-2 block label-mono text-[5px] text-[#5d6c61]">SIGNALS / 06</span>
+                <span className="mt-2 block label-mono text-[5px] xr-muted-2">SIGNALS / 06</span>
               </div>
             </div>
           </div>
-          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-xl border border-black/10 bg-white/85 px-3 py-2 backdrop-blur-xl">
-            <span className="label-mono text-[5px] tracking-[.18em] text-[#17181a]/45">STRUCTURE · UX · SEO · TECHNIQUE</span>
-            <span className="text-[7px] font-semibold text-[#17181a]/65">{loading ? "SCAN EN COURS…" : "PRÊT À ANALYSER"}</span>
+          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3 py-2 backdrop-blur-xl">
+            <span className="label-mono text-[5px] tracking-[.18em] xr-muted">STRUCTURE · UX · SEO · TECHNIQUE</span>
+            <span className="text-[7px] font-semibold xr-accent">{loading ? "SCAN EN COURS…" : "PRÊT À ANALYSER"}</span>
           </div>
         </div>
       </div>

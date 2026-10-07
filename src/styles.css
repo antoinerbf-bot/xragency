@@ -594,7 +594,7 @@ video {
 }
 
 .xr-hero {
-  --xr-hero-gold: #ffffff;
+  --xr-hero-gold: #f3f1ed;
   isolation: isolate;
 }
 
@@ -721,4 +721,45 @@ video {
   #homepage-services .xr-rail > * {
     scroll-snap-align: start;
   }
+}
+
+/* ── Premium scroll reveal ── */
+@keyframes xr-slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes xr-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@utility animate-xr-slide-up {
+  animation: xr-slide-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@utility animate-xr-fade-in {
+  animation: xr-fade-in 0.6s ease both;
+}
+
+/* ── Marquee for social proof ── */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@utility animate-marquee-scroll {
+  animation: marquee-scroll 30s linear infinite;
+}
+
+/* ── Trust badge glow ── */
+.xr-trust-badge {
+  background: var(--xr-surface-strong);
+  border: 1px solid var(--xr-line);
+  backdrop-filter: blur(16px);
+  border-radius: 9999px;
+  padding: 0.35rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
