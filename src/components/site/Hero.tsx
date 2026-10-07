@@ -204,35 +204,78 @@ export function Hero() {
                 </p>
               </Reveal>
 
-              {/* ── BANNIÈRE OFFRE 400 € OFFERTS ── */}
+              {/* ── BANNIÈRE OFFRE 400 € OFFERTS · VISUEL IMMÉDIAT ── */}
               <Reveal delay={190}>
-                <div className="mt-7 rounded-2xl border border-white/20 bg-white/[0.06] p-5 backdrop-blur-2xl shadow-[0_24px_60px_-24px_rgba(0,0,0,0.9)] sm:p-6">
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3.5 mb-4">
+                <div className="mt-7 overflow-hidden rounded-2xl border border-white/20 bg-gradient-to-b from-white/[0.10] to-white/[0.03] p-5 backdrop-blur-2xl shadow-[0_25px_60px_-20px_rgba(0,0,0,0.9)] sm:p-6">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3 mb-4">
                     <div className="flex items-center gap-2">
                       <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                      <span className="label-mono text-[7px] font-semibold tracking-[0.2em] text-white/90 uppercase">
-                        Offre de bienvenue · Sans engagement
+                      <span className="label-mono text-[7px] font-bold tracking-[0.22em] text-white/90 uppercase">
+                        Accès Découverte · 400 € de valeur offerte
                       </span>
                     </div>
-                    <span className="label-mono rounded-full border border-white/25 bg-white/[0.12] px-3 py-1 text-[8px] font-bold tracking-wider text-white">
-                      400 € DE VALEUR OFFERTE
+                    <span className="label-mono rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-[8px] font-bold tracking-wider text-emerald-300">
+                      0 € DÉPENSÉ · SANS ENGAGEMENT
                     </span>
                   </div>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="flex items-start gap-3 rounded-xl border border-white/12 bg-black/50 p-3.5">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/10 label-mono text-[7px] font-bold text-white/60">01</span>
-                      <div>
-                        <strong className="block text-[12px] font-semibold leading-tight text-white">Maquette de site sur-mesure</strong>
-                        <span className="mt-0.5 block text-[9px] leading-5 text-white/55">Proposition visuelle personnalisée — Valeur : 200 €</span>
+
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {/* Carte 1 : Maquette */}
+                    <a
+                      href="#offre-exclusive"
+                      className="group flex flex-col justify-between overflow-hidden rounded-xl border border-white/12 bg-black/60 p-3.5 transition-all duration-300 hover:border-white/30 hover:bg-black/80"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="relative h-12 w-14 shrink-0 overflow-hidden rounded-lg border border-white/15">
+                          <img
+                            src={XR_PHOTOS.websites}
+                            alt="Aperçu maquette"
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          />
+                          <div className="absolute inset-0 bg-black/30" />
+                          <span className="absolute bottom-0.5 right-1 label-mono text-[5px] text-white/80 font-bold">FIGMA</span>
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="label-mono text-[6px] text-white/50">01</span>
+                            <strong className="block text-[11px] font-semibold text-white">Maquette de site sur-mesure</strong>
+                          </div>
+                          <span className="mt-0.5 block text-[9px] leading-4 text-white/60">
+                            Design complet de votre page d'accueil adapté à votre secteur.
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-start gap-3 rounded-xl border border-white/12 bg-black/50 p-3.5">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/10 label-mono text-[7px] font-bold text-white/60">02</span>
-                      <div>
-                        <strong className="block text-[12px] font-semibold leading-tight text-white">Audit digital complet</strong>
-                        <span className="mt-0.5 block text-[9px] leading-5 text-white/55">SEO, UX, Maps & conversion — Valeur : 200 €</span>
+                      <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2 text-[8px]">
+                        <span className="label-mono text-white/40 line-through">200 €</span>
+                        <span className="font-semibold text-emerald-400 group-hover:underline">Voir l'exemple →</span>
                       </div>
-                    </div>
+                    </a>
+
+                    {/* Carte 2 : Audit */}
+                    <a
+                      href="#audit"
+                      className="group flex flex-col justify-between overflow-hidden rounded-xl border border-white/12 bg-black/60 p-3.5 transition-all duration-300 hover:border-white/30 hover:bg-black/80"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="grid h-12 w-14 shrink-0 place-items-center rounded-lg border border-white/15 bg-white/5 text-center">
+                          <span className="text-xs font-black text-white">96%</span>
+                          <span className="label-mono text-[5px] text-emerald-400">SCORE</span>
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="label-mono text-[6px] text-white/50">02</span>
+                            <strong className="block text-[11px] font-semibold text-white">Audit digital & SEO complet</strong>
+                          </div>
+                          <span className="mt-0.5 block text-[9px] leading-4 text-white/60">
+                            Analyse concrète de votre vitesse, Google Maps & conversion.
+                          </span>
+                        </div>
+                      </div>
+                      <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2 text-[8px]">
+                        <span className="label-mono text-white/40 line-through">200 €</span>
+                        <span className="font-semibold text-emerald-400 group-hover:underline">Lancer le scan →</span>
+                      </div>
+                    </a>
                   </div>
                 </div>
               </Reveal>

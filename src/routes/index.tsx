@@ -6,6 +6,7 @@ import { SERVICES } from "@/lib/content";
 import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
 import { ImmersiveJourney } from "@/components/site/ImmersiveJourney";
+import { OfferShowcase } from "@/components/site/OfferShowcase";
 import { HomeServices } from "@/components/site/HomeServices";
 import { SocialProof } from "@/components/site/SocialProof";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
@@ -89,6 +90,7 @@ function Index() {
       <main className="relative z-10">
         <Hero />
         <ServiceRibbon />
+        <OfferShowcase />
         <ImmersiveJourney />
         <DigitalAudit />
         <HomeServices />
