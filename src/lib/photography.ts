@@ -1,5 +1,6 @@
 import maisonLumiere from "@/assets/pf-01-maison-lumiere.jpg";
 import villaAzur from "@/assets/pf-02-villa-azur.jpg";
+import webLuxuryShowcase from "@/assets/web-luxury-showcase.jpg";
 import heroCinematic from "@/assets/hero-cinematic.jpg";
 import serviceBrandingCinematic from "@/assets/svc-branding-cinematic.jpg";
 import serviceMapsCinematic from "@/assets/svc-maps-cinematic.jpg";
@@ -14,7 +15,7 @@ import serviceAi from "@/assets/svc-ai.jpg";
  * Authentic, cinematic 35mm photography shot with professional DP direction.
  */
 export const XR_PHOTOS = {
-  websites: maisonLumiere,
+  websites: webLuxuryShowcase,
   branding: serviceBrandingCinematic,
   seo: serviceSeoCinematic,
   maps: serviceMapsCinematic,

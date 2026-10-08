@@ -60,94 +60,86 @@ function Stat({
 
 function DeviceStage() {
   return (
-    <div className="relative mx-auto h-full min-h-[520px] w-full max-w-[760px] sm:min-h-[640px] lg:min-h-[700px]">
-      <div aria-hidden className="xr-hero-orbit xr-hero-orbit-a border-neutral-400/25 dark:border-white/12" />
-      <div aria-hidden className="xr-hero-orbit xr-hero-orbit-b border-neutral-400/25 dark:border-white/12" />
+    <div className="relative mx-auto flex h-full w-full max-w-[680px] items-center justify-center py-6 lg:py-0">
+      {/* Halo d'ambiance */}
+      <div aria-hidden className="pointer-events-none absolute h-[340px] w-[340px] rounded-full bg-white/5 blur-3xl" />
 
-      <Parallax speed={-0.014} direction="both" className="absolute inset-x-0 top-[8%]">
-        <div className="relative mx-auto w-[86%] max-w-[650px] [transform:perspective(1400px)_rotateY(-7deg)_rotateX(2deg)] transition-transform duration-700 hover:[transform:perspective(1400px)_rotateY(-2deg)_rotateX(0deg)]">
-          <div className="overflow-hidden rounded-[1.4rem] border border-neutral-300/70 bg-white/90 p-2 shadow-[0_35px_100px_-35px_rgba(0,0,0,.25)] backdrop-blur-xl dark:border-white/15 dark:bg-[#121212]/90 dark:shadow-[0_35px_120px_-45px_rgba(0,0,0,.95)] sm:rounded-[1.8rem] sm:p-2.5">
-            <div className="relative overflow-hidden rounded-[1rem] bg-neutral-950 sm:rounded-[1.35rem]">
-              <img
-                src={XR_PHOTOS.websites}
-                alt="Aperçu d'un site web XR Agency"
-                className="aspect-[16/10] w-full object-cover object-center transition duration-1000 hover:scale-[1.03]"
-                loading="eager"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-white/5" />
-              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-xl border border-white/15 bg-black/55 px-3 py-2 backdrop-blur-xl">
-                <span className="label-mono text-[6px] tracking-[.2em] text-white/80">WEB EXPERIENCE</span>
-                <span className="text-[7px] text-white/60">01 / 07</span>
-              </div>
+      {/* Carte principale Web Luxury Showcase */}
+      <div className="relative w-full max-w-[620px] transition-all duration-700">
+        <div className="overflow-hidden rounded-[1.8rem] border border-neutral-300/80 bg-white/95 p-3 shadow-[0_30px_90px_-25px_rgba(0,0,0,.25)] backdrop-blur-2xl dark:border-white/18 dark:bg-[#121316]/95 dark:shadow-[0_40px_110px_-30px_rgba(0,0,0,.95)] sm:p-4">
+          {/* Header de la fenêtre navigateur */}
+          <div className="mb-3 flex items-center justify-between border-b border-neutral-200/80 pb-2.5 dark:border-white/10">
+            <div className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
+              <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
+              <span className="ml-2 label-mono text-[7px] tracking-[.18em] text-neutral-400 dark:text-white/45">
+                XRAGENCY.COM / BESPOKE DIGITAL
+              </span>
             </div>
+            <span className="label-mono text-[7px] font-bold text-emerald-500">SCORE 100/100</span>
           </div>
-          <div aria-hidden className="mx-auto mt-1 h-1.5 w-[60%] rounded-full bg-neutral-300/60 dark:bg-white/15" />
-        </div>
-      </Parallax>
 
-      <Parallax speed={0.018} direction="both" className="absolute right-[1%] top-[42%] w-[27%] min-w-[135px] max-w-[190px]">
-        <div className="overflow-hidden rounded-[1.35rem] border border-neutral-300/70 bg-white/95 p-2 shadow-[0_28px_80px_-25px_rgba(0,0,0,.2)] backdrop-blur-xl dark:border-white/15 dark:bg-black/80 dark:shadow-[0_28px_90px_-35px_rgba(0,0,0,.95)] [transform:perspective(900px)_rotateY(-14deg)_rotateX(4deg)_rotateZ(3deg)]">
-          <div className="relative overflow-hidden rounded-[.95rem] border border-neutral-200 dark:border-white/10">
+          {/* Image principale : site web d'architecture & luxe */}
+          <div className="relative overflow-hidden rounded-[1.2rem] bg-black">
             <img
-              src={XR_PHOTOS.maps}
-              alt="Aperçu Google Maps"
-              className="aspect-[9/16] w-full object-cover"
-              loading="lazy"
+              src={XR_PHOTOS.websites}
+              alt="Conception web haut de gamme par XR Agency"
+              className="aspect-[16/10] w-full object-cover object-center transition duration-700 hover:scale-[1.02]"
+              loading="eager"
             />
-            <div className="absolute inset-x-2 bottom-2 rounded-lg border border-white/20 bg-black/65 px-2 py-1.5 backdrop-blur-md">
-              <div className="flex items-center gap-1.5 text-white">
-                <MapPinned className="h-3 w-3" />
-                <span className="text-[7px] font-semibold">Google Maps</span>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+              <div>
+                <span className="label-mono text-[6.5px] tracking-[.2em] text-white/70">ARCHITECTURAL WEB DESIGN</span>
+                <p className="text-[10.5px] font-semibold text-white">Sites Vitrine, Business & E-commerce sur-mesure</p>
               </div>
+              <span className="rounded-full bg-white/15 px-3 py-1 label-mono text-[7px] text-white backdrop-blur-md">
+                Dès 499 €
+              </span>
+            </div>
+          </div>
+
+          {/* Mini-barre de synthèse des expertises */}
+          <div className="mt-3 grid grid-cols-3 gap-2 border-t border-neutral-200/80 pt-3 dark:border-white/10">
+            <div className="flex items-center gap-2 rounded-xl bg-neutral-100/80 p-2 dark:bg-white/[.04]">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              <span className="text-[8px] font-medium text-neutral-700 dark:text-white/80">SEO #1 Google</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-xl bg-neutral-100/80 p-2 dark:bg-white/[.04]">
+              <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+              <span className="text-[8px] font-medium text-neutral-700 dark:text-white/80">Local Maps 5.0★</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-xl bg-neutral-100/80 p-2 dark:bg-white/[.04]">
+              <span className="h-1.5 w-1.5 rounded-full bg-indigo-500" />
+              <span className="text-[8px] font-medium text-neutral-700 dark:text-white/80">IA & Robotique</span>
             </div>
           </div>
         </div>
-      </Parallax>
 
-      <Parallax speed={-0.022} direction="x" className="absolute left-[0%] top-[51%] w-[24%] min-w-[125px] max-w-[180px]">
-        <div className="rounded-[1.25rem] border border-neutral-300/70 bg-white/95 p-3 shadow-[0_25px_70px_-25px_rgba(0,0,0,.2)] backdrop-blur-xl dark:border-white/12 dark:bg-[#111]/78 dark:shadow-[0_25px_80px_-30px_rgba(0,0,0,.92)]">
-          <div className="flex items-center justify-between">
-            <span className="label-mono text-[6px] tracking-[.18em] text-neutral-500 dark:text-white/45">SOCIAL</span>
-            <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,.7)]" />
-          </div>
-          <img
-            src={XR_PHOTOS.social}
-            alt="Aperçu des réseaux sociaux"
-            className="mt-2 aspect-[4/3] w-full rounded-lg object-cover opacity-90"
-            loading="lazy"
-          />
-        </div>
-      </Parallax>
-
-      <Parallax speed={0.026} direction="both" className="absolute bottom-[7%] left-[10%] w-[24%] min-w-[130px] max-w-[190px]">
-        <div className="rounded-[1.3rem] border border-neutral-300/70 bg-white/95 p-3 shadow-[0_24px_70px_-25px_rgba(0,0,0,.2)] backdrop-blur-xl dark:border-white/12 dark:bg-[#101010]/82 dark:shadow-[0_24px_80px_-30px_rgba(0,0,0,.9)]">
+        {/* Badge satellite Google Maps flottant élégant */}
+        <div className="absolute -bottom-5 -right-3 sm:-right-5 z-20 w-[180px] sm:w-[210px] rounded-2xl border border-neutral-300/80 bg-white/95 p-2.5 shadow-[0_20px_60px_-15px_rgba(0,0,0,.3)] backdrop-blur-xl dark:border-white/20 dark:bg-[#15171b]/95">
           <div className="flex items-center gap-2">
-            <Bot className="h-4 w-4 text-neutral-900 dark:text-white/90" />
-            <div>
-              <span className="label-mono block text-[6px] tracking-[.16em] text-neutral-500 dark:text-white/45">IA & ROBOTIQUE</span>
-              <span className="mt-0.5 block text-[8px] font-semibold text-neutral-800 dark:text-white/85">Automation</span>
+            <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl border border-neutral-200 dark:border-white/10">
+              <img src={XR_PHOTOS.maps} alt="" className="h-full w-full object-cover" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1">
+                <MapPinned className="h-3 w-3 text-red-500" />
+                <span className="truncate text-[8px] font-bold text-neutral-900 dark:text-white">Google Maps Pack</span>
+              </div>
+              <span className="mt-0.5 block text-[7px] text-amber-500 font-semibold">5.0 ★★★★★ (Top 1)</span>
+              <span className="label-mono text-[6px] text-emerald-500 font-bold">+320% d'appels</span>
             </div>
           </div>
-          <div className="mt-3 overflow-hidden rounded-lg border border-neutral-200 bg-neutral-900 dark:border-white/10 dark:bg-black">
-            <img
-              src={XR_PHOTOS.robotics}
-              alt="Aperçu robotique"
-              className="aspect-[4/3] w-full object-contain object-center"
-              loading="lazy"
-            />
-          </div>
         </div>
-      </Parallax>
 
-      <Parallax speed={-0.012} className="absolute right-[27%] bottom-[3%]">
-        <div className="rounded-full border border-neutral-300/70 bg-white/80 px-3 py-2 shadow-sm backdrop-blur-xl dark:border-white/12 dark:bg-black/45">
-          <span className="label-mono text-[6px] tracking-[.17em] text-neutral-600 dark:text-white/55">07 EXPERTISES · 1 ÉCOSYSTÈME</span>
-        </div>
-      </Parallax>
-
-      <div className="absolute right-[18%] top-[32%] hidden sm:block">
-        <div className="grid h-12 w-12 place-items-center rounded-full border border-neutral-300/70 bg-white/80 text-neutral-900 shadow-md backdrop-blur-xl dark:border-white/20 dark:bg-black/45 dark:text-white">
-          <Sparkles className="h-4 w-4 text-neutral-800 dark:text-white/90" />
+        {/* Badge satellite Tournage & Réseaux sociaux */}
+        <div className="absolute -top-4 -left-3 sm:-left-5 z-20 flex items-center gap-2 rounded-full border border-neutral-300/80 bg-white/95 py-1.5 px-3 shadow-[0_15px_50px_-10px_rgba(0,0,0,.2)] backdrop-blur-xl dark:border-white/20 dark:bg-[#15171b]/95">
+          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="label-mono text-[7px] font-semibold text-neutral-800 dark:text-white/90">
+            STUDIO CRÉATIF · PARIS
+          </span>
         </div>
       </div>
     </div>
@@ -166,17 +158,17 @@ export function Hero() {
         <img
           src={XR_HERO_PHOTO}
           alt="XR Agency Creative Studio Paris"
-          className="xr-hero-bg absolute inset-0 h-full w-full object-cover opacity-35 dark:opacity-55 filter brightness-95 contrast-105"
+          className="xr-hero-bg absolute inset-0 h-full w-full object-cover opacity-25 dark:opacity-45 filter brightness-95 contrast-105"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#f8f6f0] via-[#f8f6f0]/75 to-transparent dark:from-[#090a0d] dark:via-[#090a0d]/70 dark:to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#f8f6f0] via-[#f8f6f0]/85 to-[#f8f6f0]/60 dark:from-[#090a0d] dark:via-[#090a0d]/85 dark:to-[#090a0d]/60" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#f8f6f0]/20 to-[#f8f6f0] dark:via-transparent dark:to-[#090a0d]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_40%,rgba(0,0,0,.02),transparent_26%)] dark:bg-[radial-gradient(circle_at_72%_40%,rgba(255,255,255,.08),transparent_26%)]" />
         <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[var(--xr-bg)] to-transparent" />
       </div>
 
       <div className="relative mx-auto flex min-h-[100svh] max-w-[1640px] flex-col px-5 pb-8 pt-28 sm:px-8 sm:pb-10 sm:pt-32 lg:px-12 lg:pt-36">
-        <div className="grid flex-1 items-center gap-8 lg:grid-cols-[.88fr_1.12fr] lg:gap-4">
+        <div className="grid flex-1 items-center gap-10 lg:grid-cols-[.92fr_1.08fr] lg:gap-8">
           <Parallax speed={-0.014}>
             <div className="relative z-20 max-w-3xl">
               <Reveal>
@@ -189,13 +181,13 @@ export function Hero() {
               </Reveal>
 
               <Reveal delay={80}>
-                <h1 className="display-serif mt-6 max-w-[860px] text-[clamp(3.35rem,6.7vw,7.4rem)] leading-[.82] tracking-[-.075em] text-neutral-900 dark:text-white">
+                <h1 className="display-serif mt-6 max-w-[860px] text-[clamp(2.8rem,5.5vw,6.5rem)] leading-[.92] tracking-[-.055em] text-neutral-900 dark:text-white">
                   {t(UI.heroTitle1)}{" "}
-                  <span className="bg-gradient-to-r from-neutral-900 via-neutral-700 to-neutral-900 bg-clip-text text-transparent italic font-normal dark:from-white dark:via-white/90 dark:to-white/70">
+                  <span className="italic font-normal text-neutral-900 dark:text-white inline-block">
                     {t(UI.heroTitleAccent)}
                   </span>
                   <br />
-                  <em className="not-italic text-neutral-700 dark:text-white/72">{t(UI.heroTitle2)}</em>
+                  <em className="not-italic text-neutral-700 dark:text-white/80">{t(UI.heroTitle2)}</em>
                 </h1>
               </Reveal>
 
@@ -259,7 +251,7 @@ export function Hero() {
             </div>
           </Parallax>
 
-          <Parallax speed={-0.008} className="relative z-10 h-full min-h-[520px] lg:min-h-[700px]">
+          <Parallax speed={-0.008} className="relative z-10 h-full w-full">
             <DeviceStage />
           </Parallax>
         </div>
