@@ -4,6 +4,7 @@ import {
   MapPin,
   Instagram,
   Linkedin,
+  Facebook,
   ArrowUpRight,
   Clock,
   Send,
@@ -306,6 +307,7 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
             <div><p>KARMA SASU · XRAGENCY · © {new Date().getFullYear()} Tous droits réservés.</p><p className="mt-1 text-[10px] text-muted-foreground/50">Hébergement : o2switch · France · cadre RGPD</p></div>
             <div className="flex items-center gap-2">
               <a href={CONTACT.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground hover:border-primary hover:text-primary"><Instagram className="h-4 w-4"/></a>
+              <a href="https://facebook.com/xragency" target="_blank" rel="noreferrer" aria-label="Facebook" className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground hover:border-primary hover:text-primary"><Facebook className="h-4 w-4"/></a>
               <a href={CONTACT.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground hover:border-primary hover:text-primary"><Linkedin className="h-4 w-4"/></a>
               <a href="mailto:contact.xragency@gmail.com" aria-label="Email" className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground hover:border-primary hover:text-primary"><Send className="h-4 w-4"/></a>
               <a href="#top" className="flex h-8 items-center gap-1.5 rounded-full border border-border px-3 text-muted-foreground hover:border-primary hover:text-primary"><span className="label-mono text-[9px]">TOP</span><ArrowUpRight className="h-3 w-3"/></a>

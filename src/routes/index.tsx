@@ -89,12 +89,11 @@ function Index() {
       <Nav />
       <main className="relative z-10">
         <Hero />
-        <ServiceRibbon />
-        <ImmersiveJourney />
-        <DigitalAudit />
-        <HomeServices />
         <QuoteConfiguratorCompact />
+        <HomeServices />
+        <DigitalAudit />
         <MapsSimulator />
+        <ImmersiveJourney />
         <Faq />
         <Contact />
       </main>
