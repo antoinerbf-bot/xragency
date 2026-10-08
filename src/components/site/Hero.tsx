@@ -165,13 +165,13 @@ export function Hero() {
       <div aria-hidden className="absolute inset-0">
         <img
           src={XR_HERO_PHOTO}
-          alt=""
-          className="xr-hero-bg absolute inset-0 h-full w-full object-cover opacity-15 dark:opacity-40"
+          alt="XR Agency Creative Studio Paris"
+          className="xr-hero-bg absolute inset-0 h-full w-full object-cover opacity-35 dark:opacity-55 filter brightness-95 contrast-105"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#f8f6f0]/95 via-[#f8f6f0]/80 to-transparent dark:from-[#090a0d]/95 dark:via-[#090a0d]/75 dark:to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#f8f6f0]/30 to-[#f8f6f0] dark:via-transparent dark:to-[#090a0d]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_40%,rgba(0,0,0,.03),transparent_26%)] dark:bg-[radial-gradient(circle_at_72%_40%,rgba(255,255,255,.07),transparent_26%)]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#f8f6f0] via-[#f8f6f0]/75 to-transparent dark:from-[#090a0d] dark:via-[#090a0d]/70 dark:to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#f8f6f0]/20 to-[#f8f6f0] dark:via-transparent dark:to-[#090a0d]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_40%,rgba(0,0,0,.02),transparent_26%)] dark:bg-[radial-gradient(circle_at_72%_40%,rgba(255,255,255,.08),transparent_26%)]" />
         <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[var(--xr-bg)] to-transparent" />
       </div>
 

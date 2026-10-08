@@ -156,22 +156,26 @@ function BrandingVisual() {
           <Label>02 / BRANDING</Label>
         </div>
 
-        <div className="my-auto py-3 grid gap-4 sm:grid-cols-2 items-center">
-          <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-4 shadow-lg backdrop-blur-md">
-            <span className="label-mono text-[6px] xr-muted-2">SPECIMEN TYPOGRAPHIQUE</span>
-            <div className="mt-2 flex items-baseline justify-between border-b xr-line pb-3">
-              <span className="display-serif text-5xl font-light text-[var(--xr-ink)]">Aa</span>
-              <span className="label-mono text-[8px] xr-muted">Playfair Display / Serif</span>
-            </div>
-            <div className="mt-2 flex items-baseline justify-between pt-1">
-              <span className="font-sans text-3xl font-bold text-[var(--xr-ink)]">Gg</span>
-              <span className="label-mono text-[8px] xr-muted">DM Sans / Modern</span>
+        <div className="my-auto py-3 grid gap-4 lg:grid-cols-[1.1fr_.9fr] items-center">
+          <div className="relative overflow-hidden rounded-2xl border xr-line shadow-lg group">
+            <img
+              src={XR_PHOTOS.branding}
+              alt="Atelier Branding & Charte graphique de prestige"
+              className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+              <div>
+                <span className="label-mono text-[7px] text-white/90">ATELIER DIRECTION ARTISTIQUE</span>
+                <p className="text-[10px] font-semibold text-white">Papeterie, Dorure à chaud & Typographie</p>
+              </div>
+              <span className="rounded-full bg-white/10 px-2 py-0.5 text-[7px] text-white backdrop-blur-md">Dès 179 €</span>
             </div>
           </div>
 
           <div className="space-y-3">
             <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5 backdrop-blur-md">
-              <span className="label-mono text-[6px] xr-muted-2">PALETTE CHROMATIQUE</span>
+              <span className="label-mono text-[6px] xr-muted-2">PALETTE CHROMATIQUE & ÉLÉGANCE</span>
               <div className="mt-2 flex gap-2">
                 {[
                   { hex: "#090A0D", label: "Obsidian" },
@@ -181,7 +185,7 @@ function BrandingVisual() {
                 ].map((c) => (
                   <div key={c.hex} className="flex-1 text-center">
                     <div
-                      className="h-10 w-full rounded-lg border border-black/10 dark:border-white/20 shadow-sm"
+                      className="h-9 w-full rounded-lg border border-black/10 dark:border-white/20 shadow-sm"
                       style={{ background: c.hex }}
                     />
                     <span className="mt-1 block text-[7px] font-mono font-medium xr-muted truncate">{c.hex}</span>
@@ -191,8 +195,8 @@ function BrandingVisual() {
             </div>
 
             <div className="flex items-center justify-between rounded-xl border xr-line bg-[var(--xr-surface)] px-3 py-2 text-[9px]">
-              <span className="xr-muted">Logo vectoriel + Favicon + Déclinaisons</span>
-              <span className="label-mono text-[7px] font-bold xr-accent">Dès 179 €</span>
+              <span className="xr-muted">Logo vectoriel + Favicon + Brand Book</span>
+              <span className="label-mono text-[7px] font-bold xr-accent">Livré vectoriel HD</span>
             </div>
           </div>
         </div>
@@ -221,34 +225,41 @@ function SeoVisual() {
           </div>
         </div>
 
-        <div className="my-auto py-3 space-y-3">
-          <div className="flex items-center gap-2 rounded-full border xr-line bg-[var(--xr-surface)] px-4 py-2 text-[9px] shadow-sm">
-            <Search className="h-3.5 w-3.5 text-neutral-400 shrink-0" />
-            <span className="font-medium text-[var(--xr-ink)]">agence web et référencement naturel</span>
-            <span className="ml-auto label-mono text-[6px] xr-muted">GOOGLE RECHERCHE</span>
+        <div className="my-auto py-3 grid gap-4 lg:grid-cols-[1.1fr_.9fr] items-center">
+          <div className="relative overflow-hidden rounded-2xl border xr-line shadow-lg group">
+            <img
+              src={XR_PHOTOS.seo}
+              alt="Dashboard SEO & Positionnement Google Top 1"
+              className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+              <div>
+                <span className="label-mono text-[7px] text-white/90">PILOTAGE ACQUISITION ORGANIQUE</span>
+                <p className="text-[10px] font-semibold text-white">Top 1 Google · Croissance +184%</p>
+              </div>
+              <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[7px] text-emerald-300 backdrop-blur-md">Certifié A+</span>
+            </div>
           </div>
 
-          <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-4 shadow-md backdrop-blur-md">
-            <div className="flex items-center gap-2 text-[8px] xr-muted">
-              <span className="grid h-4 w-4 place-items-center rounded-full bg-neutral-900 text-[6px] font-black text-white">XR</span>
-              <span>https://xragencyai.com</span>
-              <span className="label-mono text-[6px] text-emerald-500 font-bold ml-auto">POSITION #1</span>
+          <div className="space-y-3">
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5 backdrop-blur-md">
+              <div className="flex items-center gap-2 text-[8px] xr-muted">
+                <span className="grid h-4 w-4 place-items-center rounded-full bg-neutral-900 text-[6px] font-black text-white">XR</span>
+                <span>https://xragencyai.com</span>
+                <span className="label-mono text-[6px] text-emerald-500 font-bold ml-auto">POSITION #1</span>
+              </div>
+              <h4 className="mt-1 text-xs font-semibold text-sky-600 dark:text-sky-400">
+                XR Agency | Agence Web & Performance Digitale
+              </h4>
+              <p className="mt-1 text-[8.5px] leading-relaxed xr-muted line-clamp-2">
+                Création de sites internet haut de gamme, branding & acquisition locale.
+              </p>
             </div>
-            <h4 className="mt-1 text-sm font-semibold text-blue-600 dark:text-sky-400 hover:underline cursor-pointer">
-              XR Agency | Agence Web Moderne & Performance Digitale
-            </h4>
-            <p className="mt-1 text-[9px] leading-relaxed xr-muted">
-              Création de sites internet haut de gamme, branding & acquisition locale. Atteignez la première page Google grâce à un audit technique, sémantique et netlinking éprouvé.
-            </p>
-            <div className="mt-3 grid grid-cols-2 gap-2 border-t xr-line pt-2 text-[8px]">
-              <div>
-                <span className="font-semibold text-blue-600 dark:text-sky-400">Audit SEO Gratuit</span>
-                <p className="xr-muted-2 text-[7px]">Analyse des mots-clés et backlinks</p>
-              </div>
-              <div>
-                <span className="font-semibold text-blue-600 dark:text-sky-400">Stratégie Top 1</span>
-                <p className="xr-muted-2 text-[7px]">Optimisation continue et suivi mensuel</p>
-              </div>
+
+            <div className="flex items-center justify-between rounded-xl border xr-line bg-[var(--xr-surface)] px-3 py-2 text-[9px]">
+              <span className="xr-muted">Audit sémantique + Cocon SEO + Backlinks</span>
+              <span className="label-mono text-[7px] font-bold xr-accent">Dès 299 €/m</span>
             </div>
           </div>
         </div>
@@ -277,31 +288,41 @@ function MapsVisual() {
           </div>
         </div>
 
-        <div className="my-auto py-3 space-y-3">
-          <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-4 shadow-md backdrop-blur-md">
-            <div className="flex items-start justify-between gap-3">
+        <div className="my-auto py-3 grid gap-4 lg:grid-cols-[1.1fr_.9fr] items-center">
+          <div className="relative overflow-hidden rounded-2xl border xr-line shadow-lg group">
+            <img
+              src={XR_PHOTOS.maps}
+              alt="Boutique et localisation Google Maps Top 1 à Paris"
+              className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
               <div>
-                <div className="flex items-center gap-1.5">
-                  <span className="grid h-5 w-5 place-items-center rounded-full bg-red-500 text-[8px] font-black text-white">1</span>
-                  <span className="text-xs font-bold text-[var(--xr-ink)]">Votre Entreprise — Emplacement N°1</span>
-                </div>
-                <div className="mt-1 flex items-center gap-1.5 text-[8.5px]">
-                  <span className="font-bold text-amber-500">5.0 ★★★★★</span>
-                  <span className="xr-muted">(84 avis vérifiés)</span>
-                  <span className="xr-muted">· Ouvert actuellement</span>
-                </div>
-                <p className="mt-1 text-[8px] xr-muted">Fiche Google Business Profile 100% optimisée, photos pros & citations</p>
+                <span className="label-mono text-[7px] text-white/90">LOCAL PACK GOOGLE MAPS #1</span>
+                <p className="text-[10px] font-semibold text-white">5.0 ★★★★★ · 420 avis clients vérifiés</p>
               </div>
+              <span className="rounded-full bg-red-500/20 px-2 py-0.5 text-[7px] text-red-200 backdrop-blur-md">Zone prioritaire</span>
+            </div>
+          </div>
 
-              <div className="flex flex-col gap-1.5 shrink-0">
-                <span className="rounded-full bg-blue-600 px-2.5 py-1 text-[7px] font-bold text-white text-center">Itinéraire</span>
-                <span className="rounded-full border xr-line px-2.5 py-1 text-[7px] font-semibold text-[var(--xr-ink)] text-center">Appeler</span>
+          <div className="space-y-3">
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5 backdrop-blur-md">
+              <div className="flex items-center gap-1.5">
+                <span className="grid h-5 w-5 place-items-center rounded-full bg-red-500 text-[8px] font-black text-white">1</span>
+                <span className="text-xs font-bold text-[var(--xr-ink)]">Votre Entreprise — Emplacement N°1</span>
+              </div>
+              <p className="mt-1 text-[8.5px] leading-relaxed xr-muted">
+                Fiche Google Business Profile 100% optimisée, géoréférencement et afflux d'appels clients en continu.
+              </p>
+              <div className="mt-2.5 flex items-center justify-between border-t xr-line pt-2 text-[8px]">
+                <span className="xr-muted">Impact local direct :</span>
+                <span className="label-mono font-bold text-emerald-500">+320% D'APPELS</span>
               </div>
             </div>
 
-            <div className="mt-3 flex items-center justify-between rounded-xl border xr-line bg-[var(--xr-bg-elev)] px-3 py-2 text-[8px]">
-              <span className="xr-muted">Objectif : Dominer votre zone de chalandise locale</span>
-              <span className="label-mono font-bold text-emerald-500">+320% D'APPELS</span>
+            <div className="flex items-center justify-between rounded-xl border xr-line bg-[var(--xr-surface)] px-3 py-2 text-[9px]">
+              <span className="xr-muted">Abonnement annuel clé en main</span>
+              <span className="label-mono text-[7px] font-bold xr-accent">Dès 990 €/an</span>
             </div>
           </div>
         </div>
@@ -327,39 +348,37 @@ function SocialVisual() {
           <Label>05 / SOCIAL MEDIA</Label>
         </div>
 
-        <div className="my-auto py-3 grid gap-3 sm:grid-cols-[1.1fr_.9fr] items-center">
-          <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-4 shadow-md backdrop-blur-md">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full border-2 border-emerald-500 p-0.5">
-                <div className="h-full w-full rounded-full bg-neutral-900 grid place-items-center text-white text-[9px] font-bold">XR</div>
-              </div>
+        <div className="my-auto py-3 grid gap-4 lg:grid-cols-[1.1fr_.9fr] items-center">
+          <div className="relative overflow-hidden rounded-2xl border xr-line shadow-lg group">
+            <img
+              src={XR_PHOTOS.social}
+              alt="Tournage et production de contenus vidéo de marque à Paris"
+              className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
               <div>
-                <span className="text-[10px] font-bold text-[var(--xr-ink)]">votre_marque_officielle</span>
-                <span className="block text-[8px] xr-muted">Création de contenu vidéo & photo</span>
+                <span className="label-mono text-[7px] text-white/90">TOURNAGE & EDITORIAL LUXE</span>
+                <p className="text-[10px] font-semibold text-white">Reels & TikTok cinéma · 4K 60fps</p>
               </div>
-            </div>
-
-            <div className="mt-3 grid grid-cols-3 gap-1.5 text-center text-[8px] border-y xr-line py-2">
-              <div><strong className="block font-bold">24</strong><span className="text-[6.5px] xr-muted">Posts/mois</span></div>
-              <div><strong className="block font-bold">14.8k</strong><span className="text-[6.5px] xr-muted">Abonnés</span></div>
-              <div><strong className="block font-bold text-emerald-500">6.4%</strong><span className="text-[6.5px] xr-muted">Engagement</span></div>
-            </div>
-
-            <div className="mt-3 flex gap-1.5">
-              <div className="flex-1 rounded-lg border xr-line bg-black/5 dark:bg-white/5 p-2 text-center text-[7px] font-semibold">Reels & TikTok</div>
-              <div className="flex-1 rounded-lg border xr-line bg-black/5 dark:bg-white/5 p-2 text-center text-[7px] font-semibold">Stories quotidiennes</div>
+              <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[7px] text-emerald-300 backdrop-blur-md">Engagement ×3</span>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <span className="label-mono text-[6px] xr-muted-2">STRATÉGIE DE MARQUE</span>
-              <p className="mt-1 text-[9px] font-semibold text-[var(--xr-ink)]">Direction artistique & copywriting soigné</p>
-              <p className="mt-0.5 text-[7.5px] xr-muted">Fini les posts amateurs : un flux visuel premium cohérent.</p>
+          <div className="space-y-3">
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5 backdrop-blur-md">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold text-[var(--xr-ink)]">Direction Artistique & Réseaux</span>
+                <span className="label-mono text-[6px] text-emerald-500 font-bold">RÉGULARITÉ</span>
+              </div>
+              <p className="mt-1 text-[8.5px] leading-relaxed xr-muted">
+                Scripts sur mesure, captation pro, étalonnage soigné et diffusion planifiée pour captiver votre audience.
+              </p>
             </div>
-            <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md flex items-center justify-between">
-              <span className="label-mono text-[7px] xr-muted">Formule mensuelle</span>
-              <span className="label-mono text-[8px] font-bold xr-accent">Dès 299 €/m</span>
+
+            <div className="flex items-center justify-between rounded-xl border xr-line bg-[var(--xr-surface)] px-3 py-2 text-[9px]">
+              <span className="xr-muted">Accompagnement mensuel créatif</span>
+              <span className="label-mono text-[7px] font-bold xr-accent">Dès 299 €/m</span>
             </div>
           </div>
         </div>
@@ -388,33 +407,36 @@ function WebcareVisual() {
           </div>
         </div>
 
-        <div className="my-auto py-3 space-y-3">
-          <div className="grid grid-cols-3 gap-2.5">
-            <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 text-center shadow-sm">
-              <span className="label-mono text-[6px] xr-muted-2">SÉCURITÉ SSL</span>
-              <p className="mt-1 text-xs font-bold text-emerald-500">Active (TLS 1.3)</p>
-              <span className="mt-0.5 block text-[7px] xr-muted">Firewall WAF</span>
-            </div>
-            <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 text-center shadow-sm">
-              <span className="label-mono text-[6px] xr-muted-2">SAUVEGARDES</span>
-              <p className="mt-1 text-xs font-bold text-[var(--xr-ink)]">Quotidiennes</p>
-              <span className="mt-0.5 block text-[7px] xr-muted">Cloud redondant</span>
-            </div>
-            <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 text-center shadow-sm">
-              <span className="label-mono text-[6px] xr-muted-2">LATENCE SERVEUR</span>
-              <p className="mt-1 text-xs font-bold text-emerald-500">&lt; 180 ms</p>
-              <span className="mt-0.5 block text-[7px] xr-muted">CDN Mondial</span>
+        <div className="my-auto py-3 grid gap-4 lg:grid-cols-[1.1fr_.9fr] items-center">
+          <div className="relative overflow-hidden rounded-2xl border xr-line shadow-lg group">
+            <img
+              src={XR_PHOTOS.maintenance}
+              alt="Supervision serveurs et infrastructure cloud haute disponibilité"
+              className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+              <div>
+                <span className="label-mono text-[7px] text-white/90">INFRASTRUCTURE REDONDANTE</span>
+                <p className="text-[10px] font-semibold text-white">SSL TLS 1.3 · Sauvegardes cloud 24/7</p>
+              </div>
+              <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[7px] text-emerald-300 backdrop-blur-md">&lt; 180ms</span>
             </div>
           </div>
 
-          <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-4 shadow-md backdrop-blur-md">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-semibold text-[var(--xr-ink)]">Tranquillité absolue pour votre activité</span>
-              <span className="label-mono text-[7px] font-bold text-emerald-500">ZÉRO PANNE</span>
+          <div className="space-y-3">
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5 backdrop-blur-md">
+              <span className="label-mono text-[6px] xr-muted-2">MAINTENANCE ET SÉRÉNITÉ</span>
+              <p className="mt-1 text-[10px] font-semibold text-[var(--xr-ink)]">Protection anti-panne & mises à jour</p>
+              <p className="mt-0.5 text-[8px] leading-relaxed xr-muted">
+                Restaurations d'urgence en 1h, modifications incluses et monitoring continu.
+              </p>
             </div>
-            <p className="mt-1 text-[8.5px] leading-relaxed xr-muted">
-              Mises à jour des modules, protection anti-malware, restaurations d'urgence en 1h et modifications mineures incluses chaque mois.
-            </p>
+
+            <div className="flex items-center justify-between rounded-xl border xr-line bg-[var(--xr-surface)] px-3 py-2 text-[9px]">
+              <span className="xr-muted">Abonnement maintenance préventive</span>
+              <span className="label-mono text-[7px] font-bold xr-accent">Dès 29 €/m</span>
+            </div>
           </div>
         </div>
 
@@ -439,28 +461,35 @@ function RoboticsVisual() {
           <Label>07 / ROBOTIQUE DE TERRAIN</Label>
         </div>
 
-        <div className="my-auto py-3 grid gap-4 sm:grid-cols-[1.1fr_.9fr] items-center">
-          <div className="relative overflow-hidden rounded-2xl border xr-line bg-black/40 p-2 shadow-lg">
+        <div className="my-auto py-3 grid gap-4 lg:grid-cols-[1.1fr_.9fr] items-center">
+          <div className="relative overflow-hidden rounded-2xl border xr-line shadow-lg group">
             <img
               src={XR_PHOTOS.robotics}
-              alt="Robot de service et livraison autonome XR Agency"
-              className="aspect-[4/3] w-full object-contain"
+              alt="Robot de service de luxe dans un hôtel 5 étoiles à Paris"
+              className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
             />
-            <div className="mt-2 flex items-center justify-between px-2 pb-1">
-              <span className="label-mono text-[6px] text-white/70">NAVIGATION LIDAR 3D</span>
-              <span className="label-mono text-[7px] text-emerald-400 font-bold">12H AUTONOMIE</span>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+              <div>
+                <span className="label-mono text-[7px] text-white/90">NAVIGATION LIDAR 3D ET SERVICE</span>
+                <p className="text-[10px] font-semibold text-white">Autonomie 12h · Déploiement sur site</p>
+              </div>
+              <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[7px] text-emerald-300 backdrop-blur-md">Prêt à l'emploi</span>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <span className="label-mono text-[6px] xr-muted-2">CAS D'USAGE CONCRETS</span>
-              <p className="mt-1 text-[10px] font-semibold text-[var(--xr-ink)]">Accueil, Service en salle & Nettoyage</p>
-              <p className="mt-0.5 text-[8px] xr-muted">Déchargez vos équipes des tâches répétitives dans votre établissement.</p>
+          <div className="space-y-3">
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5 backdrop-blur-md">
+              <span className="label-mono text-[6px] xr-muted-2">APPLICATIONS OPÉRATIONNELLES</span>
+              <p className="mt-1 text-[10px] font-semibold text-[var(--xr-ink)]">Hôtellerie, Restauration & Salons</p>
+              <p className="mt-0.5 text-[8px] leading-relaxed xr-muted">
+                Service en salle, port de plateaux et accueil client pour décharger vos équipes.
+              </p>
             </div>
-            <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <span className="label-mono text-[6px] xr-muted-2">DÉPLOIEMENT COMPLET</span>
-              <p className="mt-0.5 text-[8.5px] xr-muted">Installation sur site, formation du personnel & SAV garanti.</p>
+
+            <div className="flex items-center justify-between rounded-xl border xr-line bg-[var(--xr-surface)] px-3 py-2 text-[9px]">
+              <span className="xr-muted">Location & Vente avec installation</span>
+              <span className="label-mono text-[7px] font-bold xr-accent">Dès 499 €</span>
             </div>
           </div>
         </div>

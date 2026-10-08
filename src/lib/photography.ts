@@ -1,30 +1,32 @@
 import maisonLumiere from "@/assets/pf-01-maison-lumiere.jpg";
 import villaAzur from "@/assets/pf-02-villa-azur.jpg";
-import serviceBranding from "@/assets/svc-branding.jpg";
-import serviceMaps from "@/assets/svc-maps.jpg";
-import serviceSeo from "@/assets/svc-seo.jpg";
-import serviceSocial from "@/assets/svc-social.jpg";
-import serviceMaintenance from "@/assets/svc-maintenance.jpg";
+import heroCinematic from "@/assets/hero-cinematic.jpg";
+import serviceBrandingCinematic from "@/assets/svc-branding-cinematic.jpg";
+import serviceMapsCinematic from "@/assets/svc-maps-cinematic.jpg";
+import serviceSeoCinematic from "@/assets/svc-seo-cinematic.jpg";
+import serviceSocialCinematic from "@/assets/svc-social-cinematic.jpg";
+import serviceMaintenanceCinematic from "@/assets/svc-maintenance-cinematic.jpg";
+import serviceRoboticsCinematic from "@/assets/svc-robotics-cinematic.jpg";
 import serviceAi from "@/assets/svc-ai.jpg";
 
 /**
  * Service photography / screenshots.
- * The primary catalogue uses local, stable assets so the visual language stays
- * consistent and the page does not depend on third-party screenshot services.
+ * Authentic, cinematic 35mm photography shot with professional DP direction.
  */
 export const XR_PHOTOS = {
   websites: maisonLumiere,
-  branding: serviceBranding,
-  seo: serviceSeo,
-  maps: serviceMaps,
-  social: serviceSocial,
-  maintenance: serviceMaintenance,
-  robotics: "https://www.korbenforpeople.com/wp-content/uploads/2025/08/DELIVERY-BOTS-2-VUE-01-scaled.png",
+  branding: serviceBrandingCinematic,
+  seo: serviceSeoCinematic,
+  maps: serviceMapsCinematic,
+  social: serviceSocialCinematic,
+  maintenance: serviceMaintenanceCinematic,
+  robotics: serviceRoboticsCinematic,
   refonte: villaAzur,
-  ads: serviceSeo,
+  ads: serviceSeoCinematic,
   strategy: maisonLumiere,
   ai: serviceAi,
 } as const;
 
-export const XR_HERO_PHOTO = villaAzur;
-export const XR_JOURNEY_PHOTO = maisonLumiere;
+export const XR_HERO_PHOTO = heroCinematic;
+export const XR_JOURNEY_PHOTO = heroCinematic;
+
