@@ -202,16 +202,16 @@ export function MapsSimulator() {
         </div>
 
         <Reveal delay={40}>
-          <div className="overflow-hidden rounded-[2.2rem] border xr-line bg-white shadow-[0_34px_90px_-55px_rgba(18,19,22,.3)]">
-            <div className="flex items-center justify-between border-b xr-line bg-[#f4f0e9] px-5 py-4 sm:px-7">
+          <div className="overflow-hidden rounded-[2.2rem] border xr-line bg-[var(--xr-bg-elev)] text-[var(--xr-ink)] shadow-[var(--xr-shadow)]">
+            <div className="flex items-center justify-between border-b xr-line bg-[var(--xr-surface)] px-5 py-4 sm:px-7">
               <div className="flex items-center gap-3">
-                <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#f1dfda]"><MapPinned className="h-4 w-4 text-[#9a5147]"/></span>
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-red-500/10"><MapPinned className="h-4 w-4 text-red-500"/></span>
                 <div>
-                  <span className="label-mono text-[6px] tracking-[.18em] text-[#17181a]/40">SIMULATION EN DIRECT</span>
-                  <p className="mt-0.5 text-sm font-semibold text-[#17181a]">{selectedSector?.label} · {CITY_SIZES.find(c=>c.id===citySize)?.label}</p>
+                  <span className="label-mono text-[6px] tracking-[.18em] xr-muted-2">SIMULATION EN DIRECT</span>
+                  <p className="mt-0.5 text-sm font-semibold text-[var(--xr-ink)]">{selectedSector?.label} · {CITY_SIZES.find(c=>c.id===citySize)?.label}</p>
                 </div>
               </div>
-              <span className="rounded-full border border-[#17181a]/10 bg-white px-3 py-1.5 label-mono text-[6px] text-[#17181a]/45">LOCAL PACK</span>
+              <span className="rounded-full border xr-line bg-[var(--xr-surface)] px-3 py-1.5 label-mono text-[6px] xr-muted">LOCAL PACK</span>
             </div>
             <div className="relative h-[280px] overflow-hidden bg-[#eef0ea] sm:h-[330px]">
               <div aria-hidden className="absolute inset-0 opacity-60 [background-image:linear-gradient(rgba(76,91,78,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(76,91,78,.12)_1px,transparent_1px)] [background-size:42px_42px]"/>

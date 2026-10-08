@@ -130,10 +130,10 @@ export function HomeServices() {
                   onClick={() => setActive(id)}
                   style={{ "--service-accent": ACCENTS[id] } as CSSProperties}
                   className={
-                    "group flex min-w-[150px] items-center gap-3 rounded-full border px-4 py-3 text-left transition duration-400 sm:min-w-0 sm:flex-1 " +
+                    "group flex min-w-[150px] items-center gap-3 rounded-full border px-4 py-3 text-left transition duration-300 sm:min-w-0 sm:flex-1 " +
                     (selected
-                      ? "border-[var(--service-accent)] bg-white text-[var(--xr-ink)] shadow-[var(--xr-shadow)]"
-                      : "xr-line bg-[var(--xr-surface)] hover:-translate-y-0.5 hover:bg-white")
+                      ? "border-[var(--service-accent)] bg-[var(--xr-bg-elev)] text-[var(--xr-ink)] shadow-[var(--xr-shadow)]"
+                      : "xr-line bg-[var(--xr-surface)] text-[var(--xr-ink)] hover:-translate-y-0.5 hover:bg-[var(--xr-surface-strong)]")
                   }
                 >
                   <span className={"grid h-8 w-8 shrink-0 place-items-center rounded-full border " + (selected ? "border-transparent" : "xr-line")} style={selected ? { background: ACCENTS[id] } : undefined}>
@@ -162,7 +162,7 @@ export function HomeServices() {
           </Reveal>
 
           <Reveal delay={90}>
-            <div className="flex h-full min-h-[430px] flex-col justify-between rounded-[2.35rem] border xr-line bg-white/92 p-7 shadow-[0_24px_80px_-45px_rgba(18,19,22,.22)] backdrop-blur-xl sm:p-9 lg:p-10">
+            <div className="flex h-full min-h-[430px] flex-col justify-between rounded-[2.35rem] border xr-line bg-[var(--xr-bg-elev)] text-[var(--xr-ink)] p-7 shadow-[var(--xr-shadow)] backdrop-blur-xl sm:p-9 lg:p-10">
               <div>
                 <div className="flex items-center justify-between gap-4">
                   <span className="label-mono text-[7px] tracking-[.22em] xr-muted-2">

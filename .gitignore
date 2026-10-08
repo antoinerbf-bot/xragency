@@ -32,3 +32,4 @@ dist-ssr
 *.sw?
 .env*
 \n# Local cPanel runtime files\n/tmp/\n
+.vercel

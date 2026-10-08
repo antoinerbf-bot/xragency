@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @source "../src";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 /*
  * Design system — XR Agency Redesign v2
@@ -66,75 +66,75 @@
 :root {
   --radius: 0.75rem;
 
-  /* ── Palette chaude crème-charcoal ── */
-  --background: #f7f7f7;
-  --foreground: #111111;
+  /* ── Light Mode : ivoire chaleureux, contrastes nets, zéro jaune ── */
+  --background: #f8f6f0;
+  --foreground: #101114;
   --card: #ffffff;
-  --card-foreground: #111111;
+  --card-foreground: #101114;
   --popover: #ffffff;
-  --popover-foreground: #111111;
-  --primary: #151515;
-  --primary-foreground: #fafafa;
-  --secondary: #eeeeee;
-  --secondary-foreground: #111111;
-  --muted: #eeeeee;
-  --muted-foreground: #5f5f5f;
-  --accent: #e7e7e7;
-  --accent-foreground: #111111;
-  --destructive: #686868;
-  --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.82 0.008 80);
-  --input: oklch(0.82 0.008 80);
-  --ring: #151515;
-  --warm: #686868;
-  --ember: #151515;
-  --azure: #151515;
-  --jade: #777777;
-  --plum: #aaaaaa;
-  --chart-1: #151515;
-  --chart-2: #3d3d3d;
-  --chart-3: #777777;
-  --chart-4: #a6a6a6;
-  --chart-5: #d2d2d2;
+  --popover-foreground: #101114;
+  --primary: #111215;
+  --primary-foreground: #ffffff;
+  --secondary: #eeebe3;
+  --secondary-foreground: #101114;
+  --muted: #eeebe3;
+  --muted-foreground: #5a5c62;
+  --accent: #e5e2d8;
+  --accent-foreground: #101114;
+  --destructive: #55575c;
+  --destructive-foreground: #ffffff;
+  --border: rgba(17, 18, 21, 0.12);
+  --input: rgba(17, 18, 21, 0.14);
+  --ring: #111215;
+  --warm: #5a5c62;
+  --ember: #111215;
+  --azure: #111215;
+  --jade: #4b5563;
+  --plum: #6b7280;
+  --chart-1: #111215;
+  --chart-2: #374151;
+  --chart-3: #6b7280;
+  --chart-4: #9ca3af;
+  --chart-5: #d1d5db;
   --sidebar: #ffffff;
-  --sidebar-foreground: #1b1b1b;
-  --sidebar-primary: #151515;
-  --sidebar-primary-foreground: #fafafa;
-  --sidebar-accent: #eeeeee;
-  --sidebar-accent-foreground: #1b1b1b;
-  --sidebar-border: #dddddd;
-  --sidebar-ring: #151515;
+  --sidebar-foreground: #101114;
+  --sidebar-primary: #111215;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eeebe3;
+  --sidebar-accent-foreground: #101114;
+  --sidebar-border: rgba(17, 18, 21, 0.12);
+  --sidebar-ring: #111215;
 
   /* ── Gradients affinés ── */
   --gradient-ember:
-    radial-gradient(circle at 60% 40%, rgba(255,255,255,.06), transparent 62%);
+    radial-gradient(circle at 60% 40%, rgba(17,18,21,.05), transparent 62%);
   --gradient-halo:
-    radial-gradient(ellipse at 12% 0%, rgba(80,80,80,.055), transparent 58%),
-    radial-gradient(ellipse at 88% 8%, rgba(80,80,80,.035), transparent 58%),
-    radial-gradient(ellipse at 55% 100%, rgba(80,80,80,.04), transparent 62%);
+    radial-gradient(ellipse at 12% 0%, rgba(17,18,21,.04), transparent 58%),
+    radial-gradient(ellipse at 88% 8%, rgba(17,18,21,.03), transparent 58%),
+    radial-gradient(ellipse at 55% 100%, rgba(17,18,21,.035), transparent 62%);
   --gradient-aurora:
-    linear-gradient(120deg, #111111, #6b6b6b, #111111);
-  --shadow-plate: 0 20px 50px -36px rgba(0,0,0,.22);
-  --shadow-ember: 0 12px 36px -16px rgba(0,0,0,.18);
-  --shadow-card: 0 2px 12px -4px rgba(0,0,0,.08), 0 8px 32px -8px rgba(0,0,0,.06);
-  --shadow-card-hover: 0 8px 32px -8px rgba(0,0,0,.14), 0 20px 60px -16px rgba(0,0,0,.10);
+    linear-gradient(120deg, #111215, #55575c, #111215);
+  --shadow-plate: 0 20px 50px -36px rgba(0,0,0,.18);
+  --shadow-ember: 0 12px 36px -16px rgba(0,0,0,.15);
+  --shadow-card: 0 2px 12px -4px rgba(0,0,0,.06), 0 8px 32px -8px rgba(0,0,0,.04);
+  --shadow-card-hover: 0 8px 32px -8px rgba(0,0,0,.12), 0 20px 60px -16px rgba(0,0,0,.08);
 }
 
 .dark {
-  --background: #0b0b0b;
-  --foreground: #f5f5f5;
-  --card: #151515;
-  --card-foreground: #f5f5f5;
-  --popover: #151515;
-  --popover-foreground: #f5f5f5;
-  --primary: #f2f2f2;
-  --primary-foreground: #111111;
-  --secondary: #1d1d1d;
-  --secondary-foreground: #f5f5f5;
-  --muted: #1d1d1d;
-  --muted-foreground: #aaaaaa;
-  --accent: #222222;
-  --accent-foreground: #f5f5f5;
+  --background: #090a0d;
+  --foreground: #f3f3f3;
+  --card: #121318;
+  --card-foreground: #f3f3f3;
+  --popover: #121318;
+  --popover-foreground: #f3f3f3;
+  --primary: #f5f5f5;
+  --primary-foreground: #090a0d;
+  --secondary: #1a1b22;
+  --secondary-foreground: #f3f3f3;
+  --muted: #1a1b22;
+  --muted-foreground: #9ca3af;
+  --accent: #22232c;
+  --accent-foreground: #f3f3f3;
   --destructive: #777777;
   --destructive-foreground: #ffffff;
   --border: rgba(255,255,255,.11);
@@ -460,29 +460,29 @@
 
 /* ── XR premium visual system v4 ── */
 :root {
-  --xr-bg: #f5f2ec;
-  --xr-bg-elev: #fbfaf7;
-  --xr-surface: rgba(255,255,255,.74);
-  --xr-surface-strong: rgba(255,255,255,.94);
-  --xr-line: rgba(17,18,20,.11);
-  --xr-ink: #121316;
-  --xr-muted: rgba(18,19,22,.56);
-  --xr-muted-2: rgba(18,19,22,.34);
-  --xr-accent: #17181a;
-  --xr-accent-soft: rgba(17,18,20,.07);
-  --xr-shadow: 0 34px 100px -50px rgba(18,19,22,.30);
+  --xr-bg: #f8f6f0;
+  --xr-bg-elev: #ffffff;
+  --xr-surface: rgba(255,255,255,.86);
+  --xr-surface-strong: #ffffff;
+  --xr-line: rgba(17,18,21,.11);
+  --xr-ink: #101114;
+  --xr-muted: rgba(16,17,20,.62);
+  --xr-muted-2: rgba(16,17,20,.38);
+  --xr-accent: #111215;
+  --xr-accent-soft: rgba(17,18,21,.06);
+  --xr-shadow: 0 24px 70px -40px rgba(16,17,20,.20);
 }
 .dark {
-  --xr-bg: #08090b;
-  --xr-bg-elev: #0d0f12;
-  --xr-surface: rgba(255,255,255,.045);
-  --xr-surface-strong: rgba(255,255,255,.075);
+  --xr-bg: #090a0d;
+  --xr-bg-elev: #111218;
+  --xr-surface: rgba(255,255,255,.05);
+  --xr-surface-strong: rgba(255,255,255,.085);
   --xr-line: rgba(255,255,255,.11);
-  --xr-ink: #f3f1ed;
-  --xr-muted: rgba(243,241,237,.56);
-  --xr-muted-2: rgba(243,241,237,.32);
-  --xr-accent: #f0f0f0;
-  --xr-accent-soft: rgba(255,255,255,.09);
+  --xr-ink: #f4f4f5;
+  --xr-muted: rgba(244,244,245,.60);
+  --xr-muted-2: rgba(244,244,245,.36);
+  --xr-accent: #f4f4f5;
+  --xr-accent-soft: rgba(255,255,255,.08);
   --xr-shadow: 0 38px 120px -55px rgba(0,0,0,.92);
 }
 .xr-section { background: var(--xr-bg); color: var(--xr-ink); }
