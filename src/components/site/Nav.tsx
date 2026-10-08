@@ -12,18 +12,18 @@ import { useTheme } from "@/components/theme/ThemeProvider";
 const IDS=["websites","branding","seo","maps","social","maintenance","robotics"] as const;
 const ICONS={websites:Monitor,branding:Palette,seo:Search,maps:MapPinned,social:Share2,maintenance:ShieldCheck,robotics:Bot};
 
-const PRICES: Record<string, string> = {
-  websites: "499 €",
-  branding: "179 €",
-  seo: "299 €/m",
-  maps: "990 €",
-  social: "299 €/m",
-  maintenance: "29 €/m",
-  robotics: "499 €",
+const BASE_PRICES: Record<string, { eur: number; period?: string }> = {
+  websites: { eur: 499 },
+  branding: { eur: 179 },
+  seo: { eur: 299, period: "/m" },
+  maps: { eur: 990, period: "/an" },
+  social: { eur: 299, period: "/m" },
+  maintenance: { eur: 29, period: "/m" },
+  robotics: { eur: 499 },
 };
 
 export function Nav() {
-  const { t, lang, setLang } = useLang();
+  const { t, lang, setLang, price } = useLang();
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const isHome = location.pathname === "/";
@@ -127,7 +127,9 @@ export function Nav() {
                             </div>
                             <div className="mt-3 pt-2 border-t xr-line flex items-center justify-between">
                               <span className="label-mono text-[6px] xr-muted-2">dès</span>
-                              <span className="label-mono text-[7px] font-bold xr-accent">{PRICES[id]}</span>
+                              <span className="label-mono text-[7px] font-bold xr-accent">
+                                {price(BASE_PRICES[id].eur)}{BASE_PRICES[id].period ?? ""}
+                              </span>
                             </div>
                           </a>
                         );
@@ -263,7 +265,9 @@ export function Nav() {
                       <I className="h-3.5 w-3.5 opacity-60" />
                       <span className="font-semibold">{t(s.title)}</span>
                     </div>
-                    <span className="label-mono text-[7px] font-bold xr-muted-2">{PRICES[id]}</span>
+                    <span className="label-mono text-[7px] font-bold xr-muted-2">
+                      {price(BASE_PRICES[id].eur)}{BASE_PRICES[id].period ?? ""}
+                    </span>
                   </a>
                 );
               })}

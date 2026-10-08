@@ -20,6 +20,7 @@ import { Route as RefonteSiteInternetRouteImport } from './routes/refonte-site-i
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as WorkRouteImport } from './routes/work'
 import { Route as ApiAuditRouteImport } from './routes/api/audit'
+import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiCreateCheckoutRouteImport } from './routes/api/create-checkout'
 import { Route as ApiSendQuoteRouteImport } from './routes/api/send-quote'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
@@ -88,6 +89,11 @@ const WorkRoute = WorkRouteImport.update({
 const ApiAuditRoute = ApiAuditRouteImport.update({
   id: '/api/audit',
   path: '/api/audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiContactRoute = ApiContactRouteImport.update({
+  id: '/api/contact',
+  path: '/api/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiCreateCheckoutRoute = ApiCreateCheckoutRouteImport.update({
@@ -174,6 +180,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/work': typeof WorkRoute
   '/api/audit': typeof ApiAuditRoute
+  '/api/contact': typeof ApiContactRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
@@ -200,6 +207,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/work': typeof WorkRoute
   '/api/audit': typeof ApiAuditRoute
+  '/api/contact': typeof ApiContactRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
@@ -228,6 +236,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/work': typeof WorkRoute
   '/api/audit': typeof ApiAuditRoute
+  '/api/contact': typeof ApiContactRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
@@ -257,6 +266,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/work'
     | '/api/audit'
+    | '/api/contact'
     | '/api/create-checkout'
     | '/api/send-quote'
     | '/dashboard/audits'
@@ -283,6 +293,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/work'
     | '/api/audit'
+    | '/api/contact'
     | '/api/create-checkout'
     | '/api/send-quote'
     | '/dashboard/audits'
@@ -310,6 +321,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/work'
     | '/api/audit'
+    | '/api/contact'
     | '/api/create-checkout'
     | '/api/send-quote'
     | '/dashboard/audits'
@@ -338,6 +350,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   WorkRoute: typeof WorkRoute
   ApiAuditRoute: typeof ApiAuditRoute
+  ApiContactRoute: typeof ApiContactRoute
   ApiCreateCheckoutRoute: typeof ApiCreateCheckoutRoute
   ApiSendQuoteRoute: typeof ApiSendQuoteRoute
   ServicesServiceIdRoute: typeof ServicesServiceIdRoute
@@ -424,6 +437,13 @@ declare module '@tanstack/react-router' {
       path: '/api/audit'
       fullPath: '/api/audit'
       preLoaderRoute: typeof ApiAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/contact': {
+      id: '/api/contact'
+      path: '/api/contact'
+      fullPath: '/api/contact'
+      preLoaderRoute: typeof ApiContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/create-checkout': {
@@ -582,6 +602,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   WorkRoute: WorkRoute,
   ApiAuditRoute: ApiAuditRoute,
+  ApiContactRoute: ApiContactRoute,
   ApiCreateCheckoutRoute: ApiCreateCheckoutRoute,
   ApiSendQuoteRoute: ApiSendQuoteRoute,
   ServicesServiceIdRoute: ServicesServiceIdRoute,
