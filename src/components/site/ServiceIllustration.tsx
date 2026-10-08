@@ -466,55 +466,61 @@ function SocialVisual() {
 
 function WebcareVisual() {
   return (
-    <Stage accent="rgba(129,140,248,.18)">
+    <Stage accent="rgba(99,102,241,.12)">
       <div className="relative h-full min-h-[380px] p-5 sm:min-h-[430px] sm:p-7 flex flex-col justify-between">
         <div className="flex items-center justify-between border-b xr-line pb-3">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="h-3.5 w-3.5 text-indigo-500" />
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">SITE MONITORING & HEALTH CHECK</span>
+            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-500/10 text-emerald-500">
+              <ShieldCheck className="h-3 w-3" />
+            </span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">CLOUD INFRASTRUCTURE · HEALTH & SECURITY</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="label-mono text-[7px] text-emerald-500 font-bold">99.98% UPTIME</span>
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="label-mono text-[7px] text-emerald-500 font-bold">100% OPÉRATIONNEL</span>
             <Label>06 / WEBCARE</Label>
           </div>
         </div>
 
-        <div className="my-auto py-3 grid gap-4 lg:grid-cols-[1.1fr_.9fr] items-center">
-          <div className="relative overflow-hidden rounded-2xl border xr-line shadow-lg group">
-            <img
-              src={XR_PHOTOS.maintenance}
-              alt="Supervision serveurs et infrastructure cloud haute disponibilité"
-              className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-              <div>
-                <span className="label-mono text-[7px] text-white/90">INFRASTRUCTURE REDONDANTE</span>
-                <p className="text-[10px] font-semibold text-white">SSL TLS 1.3 · Sauvegardes cloud 24/7</p>
-              </div>
-              <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[7px] text-emerald-300 backdrop-blur-md">&lt; 180ms</span>
+        {/* Live System Status Dashboard */}
+        <div className="my-auto py-3 space-y-3">
+          <div className="grid grid-cols-3 gap-2.5">
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
+              <span className="label-mono text-[6.5px] xr-muted-2">TEMPS DE RÉPONSE</span>
+              <p className="mt-1 text-base font-bold text-emerald-500">142 ms</p>
+              <span className="label-mono text-[6px] text-emerald-400 font-medium">Ultra-rapide</span>
+            </div>
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
+              <span className="label-mono text-[6.5px] xr-muted-2">DISPONIBILITÉ</span>
+              <p className="mt-1 text-base font-bold text-[var(--xr-ink)]">99.99%</p>
+              <span className="label-mono text-[6px] text-emerald-400 font-medium">SLA Respecté</span>
+            </div>
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
+              <span className="label-mono text-[6.5px] xr-muted-2">SÉCURITÉ SSL</span>
+              <p className="mt-1 text-base font-bold text-emerald-500">TLS 1.3</p>
+              <span className="label-mono text-[6px] text-emerald-400 font-medium">Chiffrement A+</span>
             </div>
           </div>
 
-          <div className="space-y-3">
-            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5 backdrop-blur-md">
-              <span className="label-mono text-[6px] xr-muted-2">MAINTENANCE ET SÉRÉNITÉ</span>
-              <p className="mt-1 text-[10px] font-semibold text-[var(--xr-ink)]">Protection anti-panne & mises à jour</p>
-              <p className="mt-0.5 text-[8px] leading-relaxed xr-muted">
-                Restaurations d'urgence en 1h, modifications incluses et monitoring continu.
-              </p>
+          <div className="rounded-2xl border border-emerald-500/25 bg-[var(--xr-surface-strong)] p-3.5 backdrop-blur-md ring-1 ring-emerald-500/15">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                <span className="text-xs font-bold text-[var(--xr-ink)]">Supervision & Sauvegardes Proactives</span>
+              </div>
+              <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 label-mono text-[6.5px] font-bold text-emerald-400">
+                24/7 DÉDIÉ
+              </span>
             </div>
-
-            <div className="flex items-center justify-between rounded-xl border xr-line bg-[var(--xr-surface)] px-3 py-2 text-[9px]">
-              <span className="xr-muted">Abonnement maintenance préventive</span>
-              <span className="label-mono text-[7px] font-bold xr-accent">Dès 29 €/m</span>
-            </div>
+            <p className="mt-1.5 text-[8.5px] leading-relaxed xr-muted">
+              Sauvegardes journalières redondantes, correctifs de failles en temps réel, modifications de contenu intégrées et assistance d'urgence sans surcoût.
+            </p>
           </div>
         </div>
 
         <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">MAINTENANCE PRÉVENTIVE · SUPPORT DÉDIÉ</span>
-          <span className="label-mono text-[7px] xr-accent font-semibold">À PARTIR DE 29 €/MOIS</span>
+          <span className="label-mono text-[7px] xr-muted">SAUVEGARDES AUTOMATIQUES · MISES À JOUR · RESTAURATION 1H</span>
+          <span className="label-mono text-[7px] text-emerald-500 font-semibold">SÉRÉNITÉ TOTALE DÈS 29 €/MOIS</span>
         </div>
       </div>
     </Stage>
