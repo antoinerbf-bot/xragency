@@ -332,36 +332,36 @@ function ServiceDetailPage() {
                       className={cn(
                         "group flex h-full cursor-pointer flex-col rounded-[1.8rem] border p-6 transition-all duration-400 sm:p-7",
                         isSelected
-                          ? "border-[var(--xr-ink)] bg-[var(--xr-ink)] text-[var(--xr-bg)] shadow-[var(--xr-shadow)]"
-                          : "xr-line bg-[var(--xr-surface)] hover:-translate-y-1",
+                          ? "border-emerald-500/80 bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] shadow-[0_20px_50px_-20px_rgba(16,185,129,0.25)] ring-1 ring-emerald-500/30"
+                          : "xr-line bg-[var(--xr-surface)] hover:-translate-y-1 hover:border-white/20",
                       )}
                     >
                       <div className="flex items-center justify-between gap-3">
-                        <span className={cn("label-mono text-[7px]", isSelected ? "text-white/45" : "xr-muted-2")}>
+                        <span className={cn("label-mono text-[7px]", isSelected ? "text-emerald-500 font-bold" : "xr-muted-2")}>
                           {String(i + 1).padStart(2, "0")} / {String(service.plans.length).padStart(2, "0")}
                         </span>
                         {p.popular ? (
-                          <span className={cn("rounded-full border px-3 py-1 label-mono text-[6px]", isSelected ? "border-white/15 bg-white/10 text-white/70" : "xr-line")}>
+                          <span className={cn("rounded-full border px-3 py-1 label-mono text-[6px]", isSelected ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400 font-bold" : "xr-line")}>
                             {t(UI.popular)}
                           </span>
                         ) : null}
                       </div>
 
                       <h3 className="display-serif mt-8 text-3xl leading-none sm:text-4xl">{t(p.name)}</h3>
-                      <p className={cn("mt-3 text-xs leading-5", isSelected ? "text-white/52" : "xr-muted")}>
+                      <p className="mt-3 text-xs leading-5 xr-muted">
                         {p.audience ? t(p.audience) : t({ fr: "Formule définie par les éléments inclus.", en: "Plan defined by the items included.", vi: "Gói được xác định bởi các hạng mục.", ar: "باقة محددة بالعناصر المشمولة.", ru: "Состав пакета определён включёнными элементами." })}
                       </p>
 
-                      <div className={cn("mt-7 border-y py-5", isSelected ? "border-white/12" : "xr-line")}>
+                      <div className={cn("mt-7 border-y py-5", isSelected ? "border-emerald-500/20" : "xr-line")}>
                         {service.id === "websites" && p.period === "once" ? (
-                          <div className={cn("mb-4 flex rounded-xl border p-1", isSelected ? "border-white/12 bg-white/5" : "xr-line bg-[var(--xr-bg)]")}>
+                          <div className={cn("mb-4 flex rounded-xl border p-1", isSelected ? "border-emerald-500/30 bg-[var(--xr-bg)]" : "xr-line bg-[var(--xr-bg)]")}>
                             <button
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setInstallmentSelections((prev) => ({ ...prev, [i]: false }));
                               }}
-                              className={cn("flex-1 rounded-lg py-2 text-[8px] font-semibold uppercase tracking-[.12em]", !isInst ? "bg-[var(--xr-bg)] text-[var(--xr-ink)]" : isSelected ? "text-white/45" : "xr-muted")}
+                              className={cn("flex-1 rounded-lg py-2 text-[8px] font-semibold uppercase tracking-[.12em]", !isInst ? "bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] shadow-sm" : "xr-muted")}
                             >
                               Comptant
                             </button>
@@ -371,7 +371,7 @@ function ServiceDetailPage() {
                                 e.stopPropagation();
                                 setInstallmentSelections((prev) => ({ ...prev, [i]: true }));
                               }}
-                              className={cn("flex-1 rounded-lg py-2 text-[8px] font-semibold uppercase tracking-[.12em]", isInst ? "bg-[var(--xr-bg)] text-[var(--xr-ink)]" : isSelected ? "text-white/45" : "xr-muted")}
+                              className={cn("flex-1 rounded-lg py-2 text-[8px] font-semibold uppercase tracking-[.12em]", isInst ? "bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] shadow-sm" : "xr-muted")}
                             >
                               Mensualités
                             </button>
@@ -380,14 +380,14 @@ function ServiceDetailPage() {
 
                         <div className="flex items-end gap-2">
                           <span className="display-serif text-5xl">{price(displayPrice)}</span>
-                          <span className={cn("label-mono pb-1 text-[8px]", isSelected ? "text-white/45" : "xr-muted-2")}>
+                          <span className={cn("label-mono pb-1 text-[8px]", isSelected ? "xr-muted" : "xr-muted-2")}>
                             {isCustomMaps
                               ? t({ fr: "à partir de 990 € / an", en: "from €990 / year", vi: "từ 990 € / năm", ar: "ابتداءً من 990 € / سنة", ru: "от 990 € / год" })
                               : t(PERIOD_LABEL[displayPeriod])}
                           </span>
                         </div>
                         {planIsInstallment ? (
-                          <p className={cn("mt-2 text-[10px] leading-4", isSelected ? "text-white/50" : "xr-muted")}>
+                          <p className={cn("mt-2 text-[10px] leading-4", isSelected ? "text-emerald-400 font-medium" : "xr-muted")}>
                             {t({ fr: "Mensualités calculées sur 12 mois.", en: "Monthly instalments calculated over 12 months.", vi: "Thanh toán hàng tháng tính trên 12 tháng.", ar: "أقساط شهرية على 12 شهراً.", ru: "Ежемесячный платёж рассчитан на 12 месяцев." })}
                           </p>
                         ) : null}
@@ -395,8 +395,8 @@ function ServiceDetailPage() {
 
                       <ul className="mt-5 space-y-3">
                         {(p.features ?? []).map((feature, k) => (
-                          <li key={k} className={cn("flex items-start gap-3 text-sm leading-5", isSelected ? "text-white/68" : "xr-muted")}>
-                            <Check className="mt-0.5 h-4 w-4 shrink-0" />
+                          <li key={k} className={cn("flex items-start gap-3 text-sm leading-5", isSelected ? "text-[var(--xr-ink)] font-normal" : "xr-muted")}>
+                            <Check className={cn("mt-0.5 h-4 w-4 shrink-0", isSelected ? "text-emerald-500" : "xr-muted-2")} />
                             <span>{t(feature)}</span>
                           </li>
                         ))}
@@ -423,7 +423,7 @@ function ServiceDetailPage() {
                           className={cn(
                             "mt-3 flex w-full items-center justify-center gap-2 rounded-full border py-3 text-[9px] font-semibold uppercase tracking-[.12em] transition",
                             isSelected
-                              ? "border-white/15 bg-white/8 text-white/75 hover:bg-white/12"
+                              ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
                               : "xr-line bg-[var(--xr-bg)] xr-muted hover:bg-[var(--xr-surface-strong)]",
                           )}
                         >
