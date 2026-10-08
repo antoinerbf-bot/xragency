@@ -66,7 +66,7 @@ export function Nav(){
         </span>
       </button>
       <CartFloatingButton/>
-      <EmberButton href="/#audit" className={cn("hidden min-h-9 px-4 py-2 text-[8px] md:inline-flex", heroTop && "!bg-white !text-black hover:!bg-neutral-200")}>400 € offerts · Audit</EmberButton>
+      <EmberButton href="/#audit" className={cn("hidden min-h-9 px-4 py-2 text-[8px] md:inline-flex", heroTop && "!bg-white !text-black hover:!bg-neutral-100 shadow-[0_4px_20px_rgba(255,255,255,0.2)]")}>Lancer mon analyse</EmberButton>
       <button type="button" aria-label="Menu" onClick={()=>setOpen(v=>!v)} className="grid h-10 w-10 shrink-0 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] lg:hidden">{open?<X className="h-4 w-4"/>:<span className="space-y-1"><span className="block h-px w-4 bg-current"/><span className="block h-px w-4 bg-current"/><span className="block h-px w-3 bg-current"/></span>}</button>
     </div>
     <div aria-hidden className="absolute bottom-0 left-3 right-3 h-px bg-[var(--xr-line)]"><div className="h-full origin-left bg-[var(--xr-accent)] transition-transform duration-200" style={{transform:"scaleX("+progress+")"}}/></div>

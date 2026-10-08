@@ -28,13 +28,13 @@ const PRICES: Record<string, number> = {
 };
 
 const ACCENTS: Record<(typeof IDS)[number], string> = {
-  websites: "#d9b48c",
+  websites: "#94a3b8",
   branding: "#c7b5df",
-  seo: "#a9c7d8",
-  maps: "#e2b2aa",
-  social: "#b7d6c4",
-  maintenance: "#d4c49a",
-  robotics: "#aeb6bf",
+  seo: "#38bdf8",
+  maps: "#f87171",
+  social: "#34d399",
+  maintenance: "#818cf8",
+  robotics: "#cbd5e1",
 };
 
 const COPY = {
@@ -132,11 +132,11 @@ export function HomeServices() {
                   className={
                     "group flex min-w-[150px] items-center gap-3 rounded-full border px-4 py-3 text-left transition duration-400 sm:min-w-0 sm:flex-1 " +
                     (selected
-                      ? "border-[var(--service-accent)] bg-[var(--xr-bg-elev)] text-[var(--xr-ink)] shadow-[var(--xr-shadow)]"
-                      : "xr-line bg-[var(--xr-surface)] hover:-translate-y-0.5 hover:bg-[var(--xr-bg-elev)]")
+                      ? "border-[var(--service-accent)] bg-white text-[var(--xr-ink)] shadow-[var(--xr-shadow)]"
+                      : "xr-line bg-[var(--xr-surface)] hover:-translate-y-0.5 hover:bg-white")
                   }
                 >
-                  <span className={"grid h-8 w-8 shrink-0 place-items-center rounded-full border " + (selected ? "border-transparent text-black" : "xr-line")} style={selected ? { background: ACCENTS[id] } : undefined}>
+                  <span className={"grid h-8 w-8 shrink-0 place-items-center rounded-full border " + (selected ? "border-transparent" : "xr-line")} style={selected ? { background: ACCENTS[id] } : undefined}>
                     <I className="h-3.5 w-3.5" />
                   </span>
                   <span className="min-w-0">
@@ -162,13 +162,13 @@ export function HomeServices() {
           </Reveal>
 
           <Reveal delay={90}>
-            <div className="flex h-full min-h-[430px] flex-col justify-between rounded-[2.35rem] border xr-line bg-[var(--xr-surface)] p-7 shadow-[0_24px_80px_-45px_rgba(18,19,22,.22)] backdrop-blur-xl sm:p-9 lg:p-10">
+            <div className="flex h-full min-h-[430px] flex-col justify-between rounded-[2.35rem] border xr-line bg-white/92 p-7 shadow-[0_24px_80px_-45px_rgba(18,19,22,.22)] backdrop-blur-xl sm:p-9 lg:p-10">
               <div>
                 <div className="flex items-center justify-between gap-4">
                   <span className="label-mono text-[7px] tracking-[.22em] xr-muted-2">
-                    EXPERTISES {String(index + 1).padStart(2, "0")} / 07
+                    CHAPTER {String(index + 1).padStart(2, "0")} / 07
                   </span>
-                  <span className="grid h-10 w-10 place-items-center rounded-full text-black" style={{ background: ACCENTS[active] }}>
+                  <span className="grid h-10 w-10 place-items-center rounded-full text-[var(--xr-ink)]" style={{ background: ACCENTS[active] }}>
                     <Icon className="h-4 w-4" />
                   </span>
                 </div>
@@ -191,11 +191,11 @@ export function HomeServices() {
               <div className="mt-8">
                 <div className="flex items-end justify-between gap-5 border-y xr-line py-5">
                   <div>
-                    <span className="label-mono text-[6px] xr-muted-2">PRIX DU PROJET ({copy.from.toUpperCase()})</span>
+                    <span className="label-mono text-[6px] xr-muted-2">{copy.from}</span>
                     <p className="display-serif mt-1 text-4xl">{active === "maps" ? "990 €" : price(PRICES[active])}</p>
                   </div>
                   <span className="label-mono pb-1 text-[6px] xr-muted-2">
-                    {service.fromPeriod === "month" ? "FORFAIT MENSUEL" : "PRIX UNIQUE PROJET"}
+                    {service.fromPeriod === "month" ? "/ MOIS" : service.fromPeriod === "year" ? "/ AN" : ""}
                   </span>
                 </div>
 
