@@ -20,6 +20,7 @@ export type Plan = {
   period: "once" | "month" | "year";
   features: L[];
   popular?: boolean;
+  isQuoteOnly?: boolean;
 };
 
 export type ServiceStep = {

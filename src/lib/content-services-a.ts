@@ -45,7 +45,10 @@ export const SERVICES_PART1 = [
         name: { fr: "E-commerce & Réservation", en: "E-commerce & Booking", vi: "Thương mại điện tử & Đặt chỗ", ar: "التجارة الإلكترونية والحجز", ru: "E-commerce & Buchungen" },
         eur: 1499,
         period: "once",
+        isQuoteOnly: true,
         features: [
+          { fr: "Tarif indicatif à partir de 1 499 € (sur devis personnalisé)", en: "Indicative starting price from €1,499 (custom quote required)", vi: "Giá khởi điểm từ 1.499 € (báo giá riêng)" },
+          { fr: "Échange préalable obligatoire avec un expert pour cadrer le projet", en: "Mandatory scoping discussion with a specialist", vi: "Trao đổi bắt buộc với chuyên viên" },
           { fr: "Tout le Site Business inclus", en: "Everything in Business Site included", vi: "Bao gồm toàn bộ gói Business" },
           { fr: "Catalogue produits illimité & gestion des stocks", en: "Unlimited product catalog & inventory management", vi: "Danh mục sản phẩm không giới hạn & quản lý kho" },
           { fr: "Paiement sécurisé par CB, Apple Pay & Google Pay (Stripe)", en: "Secure checkout via Card, Apple Pay & Google Pay (Stripe)", vi: "Thanh toán bảo mật qua Thẻ, Apple Pay & Google Pay" },
@@ -68,7 +71,7 @@ export const SERVICES_PART1 = [
     title: { fr: "Branding & Identité", en: "Branding & Identity", vi: "Thương hiệu & Nhận diện", ar: "الهوية والعلامة التجارية", ru: "Брендинг и айдентика" },
     short: { fr: "Identités durables, systèmes complets.", en: "Lasting identities, complete systems.", vi: "Nhận diện bền vững, hệ thống hoàn chỉnh.", ar: "هويات بصرية مستدامة وأنظمة متكاملة.", ru: "Выразительная айдентика и цельная система бренда." },
     description: { fr: "Un logo, une palette, une typographie et un système complet de déclinaisons de prestige.", en: "A logo, a palette, a typeface and a complete system of applications.", vi: "Logo, bảng màu, kiểu chữ và hệ thống ứng dụng hoàn chỉnh.", ar: "شعار ولوحة ألوان وخط ونظام متكامل للتطبيقات.", ru: "Логотип, палитра, типографика и полная система бренд-приложений." },
-    fromEur: 179,
+    fromEur: 199,
     fromPeriod: "once",
     highlights: [
       { fr: "Fichiers vectoriels AI, SVG, PNG, PDF", en: "Vector AI, SVG, PNG, PDF files", vi: "Tệp vector AI, SVG, PNG, PDF", ar: "ملفات AI وSVG وPNG وPDF", ru: "Векторные файлы AI, SVG, PNG и PDF" },
@@ -78,7 +81,7 @@ export const SERVICES_PART1 = [
     plans: [
       {
         name: { fr: "Logo Signature", en: "Signature Logo", vi: "Logo Signature", ar: "شعار Signature", ru: "Логотип Signature" },
-        eur: 179,
+        eur: 199,
         period: "once",
         features: [
           { fr: "Logo principal sur-mesure", en: "Main bespoke logo", vi: "Logo chính thiết kế độc quyền" },
@@ -90,7 +93,7 @@ export const SERVICES_PART1 = [
       },
       {
         name: { fr: "Brand Identity Kit", en: "Brand Identity Kit", vi: "Brand Identity Kit" },
-        eur: 229,
+        eur: 299,
         period: "once",
         popular: true,
         features: [
@@ -103,7 +106,7 @@ export const SERVICES_PART1 = [
       },
       {
         name: { fr: "Full Brand Suite", en: "Full Brand Suite", vi: "Full Brand Suite" },
-        eur: 349,
+        eur: 399,
         period: "once",
         features: [
           { fr: "Tout le Brand Identity Kit inclus", en: "Everything in Brand Identity Kit included", vi: "Bao gồm trọn bộ Brand Identity Kit" },

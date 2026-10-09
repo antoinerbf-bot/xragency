@@ -316,255 +316,269 @@ function SeoVisual() {
 
 function MapsVisual() {
   return (
-    <Stage accent="rgba(239,68,68,.12)">
-      <div className="relative h-full min-h-[380px] p-5 sm:min-h-[430px] sm:p-7 flex flex-col justify-between">
-        <div className="flex items-center justify-between border-b xr-line pb-3">
-          <div className="flex items-center gap-2">
-            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-red-500/10 text-red-500">
-              <MapPin className="h-3 w-3" />
-            </span>
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">GOOGLE SEARCH · LOCAL PACK TOP 3</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="label-mono text-[7px] text-emerald-500 font-bold">1ÈRE POSITION</span>
-            <Label>04 / GOOGLE MAPS</Label>
-          </div>
+    <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[var(--xr-surface)] via-[var(--xr-bg)] to-[var(--xr-surface)] p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
+      {/* Halos locaux subtils */}
+      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
+
+      <div className="flex items-center justify-between border-b xr-line pb-4">
+        <div className="flex items-center gap-2">
+          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-red-500/15 text-red-500">
+            <MapPin className="h-3.5 w-3.5" />
+          </span>
+          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">GOOGLE SEARCH & MAPS · PACK LOCAL 3-PACK</span>
         </div>
-
-        {/* Real Google Maps Top 3 Local Pack Component */}
-        <div className="my-auto py-3 space-y-2.5">
-          {/* Top 1 result - Highlighted as Client */}
-          <div className="relative overflow-hidden rounded-2xl border border-emerald-500/40 bg-[var(--xr-surface-strong)] p-3.5 shadow-lg backdrop-blur-md ring-1 ring-emerald-500/20">
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-start gap-2.5">
-                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-lg bg-emerald-500 text-[10px] font-black text-white shadow-sm">
-                  1
-                </span>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h4 className="text-xs font-bold text-[var(--xr-ink)]">Votre Établissement (Leader Local)</h4>
-                    <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[6.5px] font-bold text-emerald-400">
-                      TOP 1 GARANTI
-                    </span>
-                  </div>
-                  <div className="mt-1 flex items-center gap-2 text-[8.5px]">
-                    <span className="font-bold text-amber-400">5.0 ★★★★★</span>
-                    <span className="xr-muted">(428 avis vérifiés)</span>
-                    <span className="xr-muted-2">· Restaurant & Bar Gastronomique</span>
-                  </div>
-                  <p className="mt-1 text-[8px] xr-muted">
-                    📍 12 Rue de Rivoli, Paris · Ouvert · <span className="text-emerald-500 font-medium">Recommandé par 98% des clients</span>
-                  </p>
-                </div>
-              </div>
-              <div className="flex shrink-0 flex-col gap-1">
-                <span className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2 py-1 text-center label-mono text-[6.5px] font-bold text-emerald-400">
-                  ITINÉRAIRE
-                </span>
-                <span className="rounded-lg border xr-line bg-[var(--xr-bg)] px-2 py-1 text-center label-mono text-[6.5px] text-[var(--xr-ink)]">
-                  APPELER
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Top 2 result - Competitor */}
-          <div className="rounded-xl border xr-line bg-[var(--xr-surface)]/60 p-3 opacity-75 backdrop-blur-sm">
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-start gap-2.5">
-                <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md bg-neutral-500/20 text-[9px] font-bold text-neutral-400">
-                  2
-                </span>
-                <div>
-                  <h5 className="text-[11px] font-medium text-[var(--xr-ink)]">Concurrent Direct B</h5>
-                  <div className="mt-0.5 flex items-center gap-2 text-[8px] xr-muted">
-                    <span className="text-amber-400">4.3 ★★★★☆</span>
-                    <span>(112 avis)</span>
-                    <span>· 0.4 km</span>
-                  </div>
-                </div>
-              </div>
-              <span className="label-mono text-[6.5px] xr-muted-2">POSITION #2</span>
-            </div>
-          </div>
-
-          {/* Top 3 result - Competitor */}
-          <div className="rounded-xl border xr-line bg-[var(--xr-surface)]/40 p-3 opacity-55 backdrop-blur-sm">
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-start gap-2.5">
-                <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md bg-neutral-500/20 text-[9px] font-bold text-neutral-400">
-                  3
-                </span>
-                <div>
-                  <h5 className="text-[11px] font-medium text-[var(--xr-ink)]">Concurrent Local C</h5>
-                  <div className="mt-0.5 flex items-center gap-2 text-[8px] xr-muted">
-                    <span className="text-amber-400">4.0 ★★★★☆</span>
-                    <span>(64 avis)</span>
-                    <span>· 0.8 km</span>
-                  </div>
-                </div>
-              </div>
-              <span className="label-mono text-[6.5px] xr-muted-2">POSITION #3</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">GÉOLOCALISATION · GESTION D'AVIS · CONTRAT DE RÉSULTAT</span>
-          <span className="label-mono text-[7px] text-emerald-500 font-semibold">« TOP 3 OU REMBOURSÉ »</span>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
+            POSITION #1 GARANTIE
+          </span>
+          <Label>04 / GOOGLE MAPS</Label>
         </div>
       </div>
-    </Stage>
+
+      {/* Console interactive Google Maps Top 1 */}
+      <div className="py-6 space-y-3">
+        {/* Top 1 result - Client */}
+        <div className="relative overflow-hidden rounded-[1.6rem] border border-emerald-500/50 bg-[var(--xr-surface-strong)] p-4 shadow-xl backdrop-blur-xl ring-1 ring-emerald-500/30">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-xl bg-emerald-500 text-xs font-black text-white shadow-md">
+                1
+              </span>
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h4 className="text-sm font-bold text-[var(--xr-ink)]">Votre Établissement (Leader Local)</h4>
+                  <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[7px] font-bold text-emerald-500">
+                    TOP 1 VÉRIFIÉ
+                  </span>
+                </div>
+                <div className="mt-1 flex items-center gap-2 text-[9px]">
+                  <span className="font-bold text-amber-400">5.0 ★★★★★</span>
+                  <span className="xr-muted">(480+ avis Google vérifiés)</span>
+                  <span className="xr-muted-2">· Restaurant / Entreprise d'exception</span>
+                </div>
+                <p className="mt-1 text-[8.5px] xr-muted">
+                  📍 Paris & Île-de-France · Ouvert · <span className="text-emerald-500 font-semibold">+340% d'appels et d'itinéraires générés</span>
+                </p>
+              </div>
+            </div>
+            <div className="flex shrink-0 flex-col gap-1.5">
+              <span className="rounded-lg border border-emerald-500/40 bg-emerald-500/15 px-3 py-1.5 text-center label-mono text-[7px] font-bold text-emerald-500 shadow-sm">
+                ITINÉRAIRE
+              </span>
+              <span className="rounded-lg border xr-line bg-[var(--xr-bg)] px-3 py-1.5 text-center label-mono text-[7px] text-[var(--xr-ink)] font-semibold">
+                APPELER
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Top 2 result - Competitor */}
+        <div className="rounded-xl border xr-line bg-[var(--xr-surface)]/60 p-3.5 opacity-70 backdrop-blur-sm">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-start gap-2.5">
+              <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md bg-neutral-500/20 text-[9px] font-bold text-neutral-400">
+                2
+              </span>
+              <div>
+                <h5 className="text-xs font-medium text-[var(--xr-ink)]">Concurrent Direct B</h5>
+                <div className="mt-0.5 flex items-center gap-2 text-[8px] xr-muted">
+                  <span className="text-amber-400">4.3 ★★★★☆</span>
+                  <span>(112 avis)</span>
+                  <span>· 0.4 km</span>
+                </div>
+              </div>
+            </div>
+            <span className="label-mono text-[6.5px] xr-muted-2">POSITION #2</span>
+          </div>
+        </div>
+
+        {/* Top 3 result - Competitor */}
+        <div className="rounded-xl border xr-line bg-[var(--xr-surface)]/40 p-3.5 opacity-50 backdrop-blur-sm">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-start gap-2.5">
+              <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md bg-neutral-500/20 text-[9px] font-bold text-neutral-400">
+                3
+              </span>
+              <div>
+                <h5 className="text-xs font-medium text-[var(--xr-ink)]">Concurrent Local C</h5>
+                <div className="mt-0.5 flex items-center gap-2 text-[8px] xr-muted">
+                  <span className="text-amber-400">4.0 ★★★★☆</span>
+                  <span>(64 avis)</span>
+                  <span>· 0.8 km</span>
+                </div>
+              </div>
+            </div>
+            <span className="label-mono text-[6.5px] xr-muted-2">POSITION #3</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between border-t xr-line pt-4">
+        <span className="label-mono text-[7px] xr-muted">GÉOLOCALISATION · GESTION DES AVIS · CITATIONS LOCALES</span>
+        <span className="label-mono text-[7px] font-bold text-emerald-500">ENGAGEMENT « TOP 3 OU REMBOURSÉ »</span>
+      </div>
+    </div>
   );
 }
 
 function SocialVisual() {
   return (
-    <Stage accent="rgba(52,211,153,.14)">
-      <div className="relative h-full min-h-[380px] p-5 sm:min-h-[430px] sm:p-7 flex flex-col justify-between">
-        <div className="flex items-center justify-between border-b xr-line pb-3">
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">RÉSEAUX SOCIAUX · GESTION MULTI-CANAL</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="label-mono text-[7px] text-emerald-500 font-bold">COMMUNAUTÉ ACTIVE</span>
-            <Label>05 / SOCIAL MEDIA</Label>
-          </div>
+    <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[var(--xr-surface)] via-[var(--xr-bg)] to-[var(--xr-surface)] p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
+      {/* Halos sociaux dynamiques */}
+      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-pink-500/10 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" />
+
+      <div className="flex items-center justify-between border-b xr-line pb-4">
+        <div className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">STUDIO COMMUNITY MANAGEMENT · TOURNAGES & REELS 4K</span>
         </div>
-
-        {/* Social channels preview */}
-        <div className="my-auto py-3 space-y-3">
-          <div className="grid grid-cols-3 gap-2.5">
-            {/* Instagram Card */}
-            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <div className="flex items-center justify-between">
-                <span className="label-mono text-[6.5px] font-bold text-pink-500">INSTAGRAM</span>
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              </div>
-              <p className="mt-2 text-[11px] font-bold text-[var(--xr-ink)]">Feed & Reels 4K</p>
-              <div className="mt-2 flex items-baseline justify-between text-[8px] xr-muted">
-                <span>Engagement</span>
-                <span className="label-mono font-bold text-emerald-500">+14.2%</span>
-              </div>
-              <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
-                <div className="h-full w-[78%] rounded-full bg-gradient-to-r from-pink-500 to-purple-500" />
-              </div>
-            </div>
-
-            {/* TikTok Card */}
-            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <div className="flex items-center justify-between">
-                <span className="label-mono text-[6.5px] font-bold text-cyan-500">TIKTOK</span>
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              </div>
-              <p className="mt-2 text-[11px] font-bold text-[var(--xr-ink)]">Formats Verticaux</p>
-              <div className="mt-2 flex items-baseline justify-between text-[8px] xr-muted">
-                <span>Vues mensuelles</span>
-                <span className="label-mono font-bold text-emerald-500">185K+</span>
-              </div>
-              <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
-                <div className="h-full w-[92%] rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" />
-              </div>
-            </div>
-
-            {/* LinkedIn / Facebook Card */}
-            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <div className="flex items-center justify-between">
-                <span className="label-mono text-[6.5px] font-bold text-blue-500">LINKEDIN / FB</span>
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              </div>
-              <p className="mt-2 text-[11px] font-bold text-[var(--xr-ink)]">B2B & Local</p>
-              <div className="mt-2 flex items-baseline justify-between text-[8px] xr-muted">
-                <span>Portée qualifiée</span>
-                <span className="label-mono font-bold text-emerald-500">×2.8</span>
-              </div>
-              <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
-                <div className="h-full w-[65%] rounded-full bg-blue-500" />
-              </div>
-            </div>
-          </div>
-
-          {/* Social Editorial Workflow preview */}
-          <div className="flex items-center justify-between rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 text-[9px]">
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              <span className="font-semibold text-[var(--xr-ink)]">Planning éditorial automatisé :</span>
-              <span className="xr-muted">Prises de vue, rédaction, hashtags & publication programmée</span>
-            </div>
-            <span className="label-mono text-[7px] text-emerald-400 font-bold shrink-0">100% DÉLÉGUÉ</span>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">INSTAGRAM · TIKTOK · LINKEDIN · FACEBOOK</span>
-          <span className="label-mono text-[7px] text-emerald-500 font-semibold">GESTION CLÉ EN MAIN DÈS 299 €/MOIS</span>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
+            GESTION 100% DÉLÉGUÉE
+          </span>
+          <Label>05 / SOCIAL MEDIA</Label>
         </div>
       </div>
-    </Stage>
+
+      <div className="py-6 space-y-4">
+        <div className="grid grid-cols-3 gap-3">
+          {/* Instagram Card */}
+          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
+            <div className="flex items-center justify-between">
+              <span className="label-mono text-[7px] font-bold text-pink-500">INSTAGRAM</span>
+              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+            </div>
+            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]">Feed & Reels 4K</p>
+            <div className="mt-2.5 flex items-baseline justify-between text-[8px] xr-muted">
+              <span>Engagement</span>
+              <span className="label-mono font-bold text-emerald-500">+18.4%</span>
+            </div>
+            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+              <div className="h-full w-[82%] rounded-full bg-gradient-to-r from-pink-500 to-purple-500" />
+            </div>
+          </div>
+
+          {/* TikTok Card */}
+          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
+            <div className="flex items-center justify-between">
+              <span className="label-mono text-[7px] font-bold text-cyan-500">TIKTOK</span>
+              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+            </div>
+            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]">Formats Verticaux</p>
+            <div className="mt-2.5 flex items-baseline justify-between text-[8px] xr-muted">
+              <span>Vues vidéo</span>
+              <span className="label-mono font-bold text-emerald-500">240K+</span>
+            </div>
+            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+              <div className="h-full w-[94%] rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" />
+            </div>
+          </div>
+
+          {/* LinkedIn / Facebook Card */}
+          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
+            <div className="flex items-center justify-between">
+              <span className="label-mono text-[7px] font-bold text-blue-500">LINKEDIN / FB</span>
+              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+            </div>
+            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]">B2B & Local</p>
+            <div className="mt-2.5 flex items-baseline justify-between text-[8px] xr-muted">
+              <span>Portée qualifiée</span>
+              <span className="label-mono font-bold text-emerald-500">×3.2</span>
+            </div>
+            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+              <div className="h-full w-[70%] rounded-full bg-blue-500" />
+            </div>
+          </div>
+        </div>
+
+        {/* Workflow & Engagement badge */}
+        <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 backdrop-blur-md">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div className="flex items-center gap-2 text-[10px]">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="font-bold text-[var(--xr-ink)]">Accompagnement avec engagement garanti</span>
+              <span className="xr-muted">· Planning éditorial, tournages, montage et modération active</span>
+            </div>
+            <span className="rounded-full bg-emerald-500/20 px-3 py-1 label-mono text-[7px] font-bold text-emerald-400 shrink-0 self-start sm:self-center">
+              DÈS 299 € / MOIS
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between border-t xr-line pt-4">
+        <span className="label-mono text-[7px] xr-muted">INSTAGRAM · TIKTOK · LINKEDIN · FACEBOOK</span>
+        <span className="label-mono text-[7px] font-bold text-emerald-500">ENGAGEMENT MINIMUM SUR-MESURE</span>
+      </div>
+    </div>
   );
 }
 
 function WebcareVisual() {
   return (
-    <Stage accent="rgba(99,102,241,.12)">
-      <div className="relative h-full min-h-[380px] p-5 sm:min-h-[430px] sm:p-7 flex flex-col justify-between">
-        <div className="flex items-center justify-between border-b xr-line pb-3">
-          <div className="flex items-center gap-2">
-            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-500/10 text-emerald-500">
-              <ShieldCheck className="h-3 w-3" />
-            </span>
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">CLOUD INFRASTRUCTURE · HEALTH & SECURITY</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="label-mono text-[7px] text-emerald-500 font-bold">100% OPÉRATIONNEL</span>
-            <Label>06 / WEBCARE</Label>
-          </div>
+    <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[var(--xr-surface)] via-[var(--xr-bg)] to-[var(--xr-surface)] p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
+      {/* Halos cloud subtils */}
+      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-indigo-500/10 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
+
+      <div className="flex items-center justify-between border-b xr-line pb-4">
+        <div className="flex items-center gap-2">
+          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-500/15 text-emerald-500">
+            <ShieldCheck className="h-3.5 w-3.5" />
+          </span>
+          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">SUPERVISION CLOUD DÉDIÉE · SÉCURITÉ & MAINTENANCE</span>
         </div>
-
-        {/* Live System Status Dashboard */}
-        <div className="my-auto py-3 space-y-3">
-          <div className="grid grid-cols-3 gap-2.5">
-            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <span className="label-mono text-[6.5px] xr-muted-2">TEMPS DE RÉPONSE</span>
-              <p className="mt-1 text-base font-bold text-emerald-500">142 ms</p>
-              <span className="label-mono text-[6px] text-emerald-400 font-medium">Ultra-rapide</span>
-            </div>
-            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <span className="label-mono text-[6.5px] xr-muted-2">DISPONIBILITÉ</span>
-              <p className="mt-1 text-base font-bold text-[var(--xr-ink)]">99.99%</p>
-              <span className="label-mono text-[6px] text-emerald-400 font-medium">SLA Respecté</span>
-            </div>
-            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <span className="label-mono text-[6.5px] xr-muted-2">SÉCURITÉ SSL</span>
-              <p className="mt-1 text-base font-bold text-emerald-500">TLS 1.3</p>
-              <span className="label-mono text-[6px] text-emerald-400 font-medium">Chiffrement A+</span>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-emerald-500/25 bg-[var(--xr-surface-strong)] p-3.5 backdrop-blur-md ring-1 ring-emerald-500/15">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                <span className="text-xs font-bold text-[var(--xr-ink)]">Supervision & Sauvegardes Proactives</span>
-              </div>
-              <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 label-mono text-[6.5px] font-bold text-emerald-400">
-                24/7 DÉDIÉ
-              </span>
-            </div>
-            <p className="mt-1.5 text-[8.5px] leading-relaxed xr-muted">
-              Sauvegardes journalières redondantes, correctifs de failles en temps réel, modifications de contenu intégrées et assistance d'urgence sans surcoût.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">SAUVEGARDES AUTOMATIQUES · MISES À JOUR · RESTAURATION 1H</span>
-          <span className="label-mono text-[7px] text-emerald-500 font-semibold">SÉRÉNITÉ TOTALE DÈS 29 €/MOIS</span>
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
+            99.99% UPTIME
+          </span>
+          <Label>06 / WEBCARE</Label>
         </div>
       </div>
-    </Stage>
+
+      <div className="py-6 space-y-4">
+        <div className="grid grid-cols-3 gap-3">
+          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
+            <span className="label-mono text-[6.5px] xr-muted-2">TEMPS DE RÉPONSE</span>
+            <p className="mt-1 text-xl font-bold text-emerald-500">&lt; 150 ms</p>
+            <span className="label-mono text-[6px] text-emerald-400 font-medium">Performance A+</span>
+          </div>
+          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
+            <span className="label-mono text-[6.5px] xr-muted-2">DISPONIBILITÉ</span>
+            <p className="mt-1 text-xl font-bold text-[var(--xr-ink)]">99.99%</p>
+            <span className="label-mono text-[6px] text-emerald-400 font-medium">SLA Contractuel</span>
+          </div>
+          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
+            <span className="label-mono text-[6.5px] xr-muted-2">SÉCURITÉ SSL</span>
+            <p className="mt-1 text-xl font-bold text-emerald-500">TLS 1.3</p>
+            <span className="label-mono text-[6px] text-emerald-400 font-medium">Protection WAF</span>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-emerald-500/25 bg-[var(--xr-surface-strong)] p-4 shadow-sm backdrop-blur-xl ring-1 ring-emerald-500/15">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              <span className="text-xs font-bold text-[var(--xr-ink)]">Intervention Proactive & Mises à Jour Mensuelles</span>
+            </div>
+            <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-400">
+              SUPPORT 24/7
+            </span>
+          </div>
+          <p className="mt-1.5 text-[8.5px] leading-relaxed xr-muted">
+            Sauvegardes quotidiennes redondantes, restauration immédiate, modifications régulières de contenus et surveillance continue contre les cybermenaces.
+          </p>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between border-t xr-line pt-4">
+        <span className="label-mono text-[7px] xr-muted">SAUVEGARDES · MISES À JOUR DU CŒUR · MODIFICATIONS INCLUSES</span>
+        <span className="label-mono text-[7px] font-bold text-emerald-500">SÉRÉNITÉ TOTALE DÈS 29 €/MOIS</span>
+      </div>
+    </div>
   );
 }
 

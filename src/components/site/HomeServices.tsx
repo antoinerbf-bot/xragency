@@ -19,7 +19,7 @@ const ICONS = {
 };
 const PRICES: Record<string, number> = {
   websites: 499,
-  branding: 179,
+  branding: 199,
   seo: 299,
   maps: 990,
   social: 299,

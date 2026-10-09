@@ -47,7 +47,7 @@ function ProductVisual({ product, large=false }: { product: Product; large?: boo
 
 export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
   const [family,setFamily]=useState("Tous");
-  const [active,setActive]=useState(PRODUCTS[1]);
+  const [active,setActive]=useState(PRODUCTS[0]); // TriBot en vedette par défaut
   const filtered=useMemo(()=>family==="Tous"?PRODUCTS:PRODUCTS.filter(p=>p.family===family),[family]);
 
   if(compact) return (
@@ -117,10 +117,34 @@ export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
             <div className="flex max-w-3xl flex-wrap gap-2">{FAMILIES.map(f=><button key={f} onClick={()=>setFamily(f)} className={`rounded-full border px-3 py-2 label-mono text-[8px] tracking-[.1em] transition ${family===f ? "border-white bg-white text-black" : "border-white/10 bg-white/[.02] text-white/45 hover:border-white/25 hover:text-white"}`}>{f}</button>)}</div>
           </div>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map(p=><button key={p.id} onClick={()=>setActive(p)} className={`group overflow-hidden rounded-[1.8rem] border text-left transition duration-500 ${active.id===p.id ? "border-white/30 bg-white/[.07]" : "border-white/10 bg-white/[.018] hover:-translate-y-1 hover:border-white/20"}`}>
-              <ProductVisual product={p}/>
-              <div className="p-5"><div className="flex items-start justify-between gap-3"><div><span className="label-mono text-[7px] text-white/30">{p.family}</span><h3 className="display-serif mt-1 text-2xl">{p.name}</h3><p className="mt-1 text-xs text-white/38">{p.use}</p></div><ArrowRight className="mt-1 h-4 w-4 text-white/25 transition group-hover:translate-x-1 group-hover:text-white"/></div><div className="mt-4 flex flex-wrap gap-1.5">{p.stats.map(s=><span key={s} className="rounded-full bg-white/[.05] px-2 py-1 label-mono text-[7px] text-white/50">{s}</span>)}</div></div>
-            </button>)}
+            {filtered.map(p=>(
+              <div key={p.id} className={`group flex flex-col justify-between overflow-hidden rounded-[1.8rem] border text-left transition duration-500 ${active.id===p.id ? "border-white/30 bg-white/[.07]" : "border-white/10 bg-white/[.018] hover:-translate-y-1 hover:border-white/20"}`}>
+                <div onClick={()=>setActive(p)} className="cursor-pointer">
+                  <ProductVisual product={p}/>
+                  <div className="p-5">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <span className="label-mono text-[7px] text-white/30">{p.family}</span>
+                        <h3 className="display-serif mt-1 text-2xl">{p.name}</h3>
+                        <p className="mt-1 text-xs text-white/38">{p.use}</p>
+                      </div>
+                      <ArrowRight className="mt-1 h-4 w-4 text-white/25 transition group-hover:translate-x-1 group-hover:text-white"/>
+                    </div>
+                    <div className="mt-4 flex flex-wrap gap-1.5">
+                      {p.stats.map(s=><span key={s} className="rounded-full bg-white/[.05] px-2 py-1 label-mono text-[7px] text-white/50">{s}</span>)}
+                    </div>
+                  </div>
+                </div>
+                <div className="border-t border-white/10 px-5 py-3 flex items-center justify-between bg-black/40">
+                  <button type="button" onClick={()=>setActive(p)} className="label-mono text-[7px] text-white/60 hover:text-white">
+                    Voir les détails
+                  </button>
+                  <a href={p.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 label-mono text-[7.5px] font-semibold text-emerald-400 hover:text-emerald-300">
+                    Fiche officielle site <ExternalLink className="h-3 w-3"/>
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 

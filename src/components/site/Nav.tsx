@@ -14,7 +14,7 @@ const ICONS={websites:Monitor,branding:Palette,seo:Search,maps:MapPinned,social:
 
 const BASE_PRICES: Record<string, { eur: number; period?: string }> = {
   websites: { eur: 499 },
-  branding: { eur: 179 },
+  branding: { eur: 199 },
   seo: { eur: 299, period: "/m" },
   maps: { eur: 990, period: "/an" },
   social: { eur: 299, period: "/m" },
@@ -145,17 +145,6 @@ export function Nav() {
               >
                 {t(UI.navWork)}
               </Link>
-              <button
-                type="button"
-                onClick={() =>
-                  isHome
-                    ? document.getElementById("audit")?.scrollIntoView({ behavior: "smooth" })
-                    : window.location.assign("/#audit")
-                }
-                className="rounded-full px-4 py-2.5 text-[8px] font-semibold uppercase tracking-[.16em] xr-muted hover:bg-[var(--xr-accent-soft)] hover:text-[var(--xr-ink)] transition"
-              >
-                Audit
-              </button>
               <button
                 type="button"
                 onClick={() =>

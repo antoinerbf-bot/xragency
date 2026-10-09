@@ -284,7 +284,7 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
               <p className="label-mono text-[9px] uppercase tracking-[.18em] text-muted-foreground/50">07 Expertises</p>
               <div className="mt-4 grid gap-2.5 text-sm">
                 <Link to="/services/$serviceId" params={{ serviceId: "websites" }} className="text-muted-foreground hover:text-foreground">01 · Sites web (dès 499 €)</Link>
-                <Link to="/services/$serviceId" params={{ serviceId: "branding" }} className="text-muted-foreground hover:text-foreground">02 · Branding (dès 179 €)</Link>
+                <Link to="/services/$serviceId" params={{ serviceId: "branding" }} className="text-muted-foreground hover:text-foreground">02 · Branding (dès 199 €)</Link>
                 <Link to="/services/$serviceId" params={{ serviceId: "seo" }} className="text-muted-foreground hover:text-foreground">03 · SEO (dès 299 €/m)</Link>
                 <Link to="/services/$serviceId" params={{ serviceId: "maps" }} className="text-muted-foreground hover:text-foreground">04 · Google Maps (dès 990 €/an)</Link>
                 <Link to="/services/$serviceId" params={{ serviceId: "social" }} className="text-muted-foreground hover:text-foreground">05 · Social Media (dès 299 €/m)</Link>

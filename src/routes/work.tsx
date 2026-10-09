@@ -139,40 +139,68 @@ function ReferencePreview({
   loading?: "eager" | "lazy";
   className?: string;
 }) {
-  const [fallback, setFallback] = useState(() => Boolean(item && shouldUseReferenceFallback(item.url)));
-
-  useEffect(() => {
-    setFallback(Boolean(item && shouldUseReferenceFallback(item.url)));
-  }, [item?.url]);
+  const [hasImgError, setHasImgError] = useState(false);
 
   if (!item) {
     return <div aria-hidden className={`relative h-full w-full overflow-hidden bg-[#0b0e12] ${className}`} />;
   }
 
-  if (fallback) {
-    const initial = item.name.trim().charAt(0).toUpperCase();
+  const hostname = item.url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  const initial = item.name.trim().charAt(0).toUpperCase();
 
+  // If screenshot image fails or is in fallback mode, show an authentic, high-end digital interface mockup
+  if (hasImgError) {
     return (
       <div
-        className={`relative h-full w-full overflow-hidden bg-[#0b0e12] ${className}`}
+        className={`relative h-full w-full overflow-hidden bg-[#0a0d12] text-white flex flex-col justify-between p-6 sm:p-7 select-none ${className}`}
         aria-label={alt ?? item.name}
-        role="img"
       >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_28%,rgba(255,255,255,.13),transparent_28%),radial-gradient(circle_at_18%_82%,rgba(255,255,255,.07),transparent_32%),linear-gradient(135deg,#12161b,#080a0d_58%,#10141a)]" />
-        <div className="absolute inset-0 opacity-40 bg-[linear-gradient(115deg,transparent_0%,rgba(255,255,255,.07)_48%,transparent_62%)]" />
-        <div className="absolute inset-0 flex flex-col justify-between p-6 sm:p-8">
-          <div className="flex items-start justify-between gap-4">
-            <span className="label-mono text-[7px] tracking-[.22em] text-white/35">VISUAL REFERENCE</span>
-            <span className="grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/[.04] text-white/55 backdrop-blur-xl">
-              <span className="display-serif text-xl leading-none">{initial}</span>
+        {/* Subtle background glow */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(16,185,129,.12),transparent_40%),linear-gradient(135deg,#0d1117,#07090c_65%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent_0%,rgba(255,255,255,.05)_50%,transparent_65%)]" />
+
+        {/* Browser header mockup */}
+        <div className="relative z-10 flex items-center justify-between border-b border-white/10 pb-3">
+          <div className="flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-red-500/70" />
+            <span className="h-2 w-2 rounded-full bg-amber-500/70" />
+            <span className="h-2 w-2 rounded-full bg-emerald-500/70" />
+            <span className="ml-2 font-mono text-[7px] text-white/40 tracking-wider truncate max-w-[150px]">
+              {hostname}
             </span>
           </div>
-          <div>
-            <div className="mb-3 h-px w-20 bg-white/20" />
-            <p className="label-mono text-[7px] tracking-[.18em] text-white/35">{item.sector} · {item.type}</p>
-            <h3 className="display-serif mt-2 max-w-[12ch] text-4xl leading-[.9] text-white/92 sm:text-5xl">{item.name}</h3>
-            <p className="mt-3 max-w-md text-[11px] leading-5 text-white/35">{item.url.replace(/^https?:\/\//, "").replace(/\/$/, "")}</p>
+          <span className="rounded-full bg-white/10 px-2 py-0.5 font-mono text-[6.5px] uppercase tracking-wider text-emerald-400">
+            {item.type}
+          </span>
+        </div>
+
+        {/* Body visual mockup */}
+        <div className="relative z-10 my-auto py-4">
+          <div className="flex items-center gap-3">
+            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-white/15 bg-white/5 text-xl font-bold font-serif text-white shadow-inner">
+              {initial}
+            </span>
+            <div>
+              <p className="label-mono text-[7px] uppercase tracking-[.2em] text-white/45">{item.sector}</p>
+              <h3 className="display-serif text-2xl sm:text-3xl font-medium tracking-tight text-white">{item.name}</h3>
+            </div>
           </div>
+          <div className="mt-3 flex items-center gap-2">
+            <span className="rounded-md border border-white/10 bg-white/5 px-2 py-1 label-mono text-[6.5px] text-white/60">
+              EXPÉRIENCE DIGITALE VÉRIFIÉE
+            </span>
+            <span className="rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2 py-1 label-mono text-[6.5px] text-emerald-400">
+              RÉFÉRENCE ACTIVE
+            </span>
+          </div>
+        </div>
+
+        {/* Footer info */}
+        <div className="relative z-10 flex items-center justify-between border-t border-white/10 pt-3">
+          <span className="label-mono text-[6.5px] text-white/40">EXPLORER L'UNIVERS DIGITAL</span>
+          <span className="inline-flex items-center gap-1 label-mono text-[7px] font-bold text-emerald-400">
+            SITE OFFICIEL ↗
+          </span>
         </div>
       </div>
     );
@@ -183,8 +211,8 @@ function ReferencePreview({
       src={item.image}
       alt={alt ?? item.name + " homepage"}
       loading={loading}
-      onError={() => setFallback(true)}
-      className={`h-full w-full object-cover ${className}`}
+      onError={() => setHasImgError(true)}
+      className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 ${className}`}
     />
   );
 }

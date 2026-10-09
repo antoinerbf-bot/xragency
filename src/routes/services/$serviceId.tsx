@@ -403,7 +403,17 @@ function ServiceDetailPage() {
                       </ul>
 
                       <div className="mt-8">
-                        {!isCustomMaps ? (
+                        {p.isQuoteOnly ? (
+                          <a
+                            href={planWaUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-3.5 text-[9px] font-bold uppercase tracking-[.14em] text-white shadow-lg transition hover:bg-emerald-500"
+                          >
+                            <MessageCircle className="h-4 w-4" />
+                            Cadrer mon projet sur devis
+                          </a>
+                        ) : !isCustomMaps ? (
                           <AddToCartBtn
                             item={{
                               serviceId: service.id,
@@ -416,20 +426,22 @@ function ServiceDetailPage() {
                             popular={p.popular}
                           />
                         ) : null}
-                        <a
-                          href={planWaUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className={cn(
-                            "mt-3 flex w-full items-center justify-center gap-2 rounded-full border py-3 text-[9px] font-semibold uppercase tracking-[.12em] transition",
-                            isSelected
-                              ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
-                              : "xr-line bg-[var(--xr-bg)] xr-muted hover:bg-[var(--xr-surface-strong)]",
-                          )}
-                        >
-                          <MessageCircle className="h-3.5 w-3.5" />
-                          {t({ fr: "Parler de cette formule", en: "Discuss this plan", vi: "Trao đổi về gói này", ar: "ناقش هذه الباقة", ru: "Обсудить пакет" })}
-                        </a>
+                        {!p.isQuoteOnly && (
+                          <a
+                            href={planWaUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className={cn(
+                              "mt-3 flex w-full items-center justify-center gap-2 rounded-full border py-3 text-[9px] font-semibold uppercase tracking-[.12em] transition",
+                              isSelected
+                                ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
+                                : "xr-line bg-[var(--xr-bg)] xr-muted hover:bg-[var(--xr-surface-strong)]",
+                            )}
+                          >
+                            <MessageCircle className="h-3.5 w-3.5" />
+                            {t({ fr: "Parler de cette formule", en: "Discuss this plan", vi: "Trao đổi về gói này", ar: "ناقش هذه الباقة", ru: "Обсудить пакет" })}
+                          </a>
+                        )}
                       </div>
                     </article>
                   </Reveal>
