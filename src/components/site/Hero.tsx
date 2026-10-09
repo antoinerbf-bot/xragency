@@ -123,15 +123,6 @@ export function Hero() {
                     Découvrir nos 7 expertises
                     <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                   </a>
-                  <a
-                    href="#journey"
-                    className="group inline-flex min-h-12 items-center justify-center gap-2 px-2 py-3 text-[8px] font-semibold uppercase tracking-[.14em] text-neutral-700 transition hover:text-neutral-900 dark:text-white/70 dark:hover:text-white"
-                  >
-                    <span className="grid h-9 w-9 place-items-center rounded-full border border-neutral-300/80 bg-white/70 backdrop-blur dark:border-white/18 dark:bg-black/35">
-                      <Play className="ml-0.5 h-3.5 w-3.5 fill-current" />
-                    </span>
-                    Voir comment XR vous accompagne
-                  </a>
                 </div>
               </Reveal>
 

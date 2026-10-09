@@ -5,7 +5,6 @@ import { useLang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
 import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
-import { ImmersiveJourney } from "@/components/site/ImmersiveJourney";
 import { HomeServices } from "@/components/site/HomeServices";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
 import { DigitalAudit } from "@/components/site/DigitalAudit";
@@ -93,7 +92,6 @@ function Index() {
         <HomeServices />
         <DigitalAudit />
         <MapsSimulator />
-        <ImmersiveJourney />
         <Faq />
         <Contact />
       </main>
