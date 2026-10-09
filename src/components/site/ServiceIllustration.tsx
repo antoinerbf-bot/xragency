@@ -600,96 +600,211 @@ function RoboticsVisual() {
 
 function RefonteVisual() {
   return (
-    <Stage accent="#94a3b8">
-      <Photo src={XR_PHOTOS.refonte} position="50% 46%" className="scale-[1.04] opacity-[.86]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/7 to-transparent" />
-      <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
-        <Label>08 / REFONTE</Label>
-        <Label>REBUILD THE EXPERIENCE</Label>
+    <Stage accent="rgba(148,163,184,.14)">
+      <div className="relative h-full min-h-[380px] p-5 sm:min-h-[430px] sm:p-7 flex flex-col justify-between">
+        <div className="flex items-center justify-between border-b xr-line pb-3">
+          <div className="flex items-center gap-2">
+            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-neutral-500/10 text-neutral-300">
+              <Globe2 className="h-3 w-3" />
+            </span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">AUDIT & TRANSFORMATION DIGITALE</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="label-mono text-[7px] text-emerald-500 font-bold">REBUILD A+</span>
+            <Label>08 / REFONTE</Label>
+          </div>
+        </div>
+
+        {/* Before / After comparison matrix */}
+        <div className="my-auto py-3 space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-3.5 backdrop-blur-md">
+              <div className="flex items-center justify-between">
+                <span className="label-mono text-[6.5px] font-bold text-red-400">AVANT REFONTE</span>
+                <span className="text-[10px] text-red-400">✕</span>
+              </div>
+              <p className="mt-1.5 text-xs font-semibold text-[var(--xr-ink)]">Site Obsolète</p>
+              <div className="mt-2 space-y-1 text-[8px] xr-muted">
+                <p>• Temps de chargement : 4.8s</p>
+                <p>• Mobile non optimisé</p>
+                <p>• Taux de conversion : 0.8%</p>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 backdrop-blur-md ring-1 ring-emerald-500/20">
+              <div className="flex items-center justify-between">
+                <span className="label-mono text-[6.5px] font-bold text-emerald-400">APRÈS XR REFONTE</span>
+                <span className="text-[10px] text-emerald-400 font-bold">✓</span>
+              </div>
+              <p className="mt-1.5 text-xs font-bold text-[var(--xr-ink)]">Architecture Next-Gen</p>
+              <div className="mt-2 space-y-1 text-[8px] font-medium text-emerald-300">
+                <p>• Temps de chargement : 0.3s</p>
+                <p>• 100% Mobile-First & Fluide</p>
+                <p>• Taux de conversion : 4.6% (×5.7)</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border xr-line bg-[var(--xr-surface)] px-3 py-2 text-[9px] flex items-center justify-between">
+            <span className="xr-muted">Migration sans perte de trafic ni de SEO existant</span>
+            <span className="label-mono text-[7px] text-emerald-400 font-bold">ZÉRO REGRESSION</span>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between border-t xr-line pt-3">
+          <span className="label-mono text-[7px] xr-muted">AUDIT UX · REFONTE CODE · CONVERSIONS BOOSTÉES</span>
+          <span className="label-mono text-[7px] text-emerald-500 font-semibold">ON RECONSTRUIT POUR GAGNER</span>
+        </div>
       </div>
-      <Parallax speed={0.018} className="absolute bottom-6 left-5 right-5 sm:bottom-7 sm:left-7 sm:right-7">
-        <Glass className="p-5 sm:p-6">
-          <Label>REFONTE</Label>
-          <h3 className="display-serif mt-2 max-w-xl text-3xl text-white sm:text-4xl">On ne repeint pas. On reconstruit.</h3>
-        </Glass>
-      </Parallax>
     </Stage>
   );
 }
 
 function AdsVisual() {
   return (
-    <Stage accent="#38bdf8">
-      <Photo src={XR_PHOTOS.ads} position="50% 48%" className="scale-[1.04] opacity-[.84]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/7 to-transparent" />
-      <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
-        <Label>09 / GOOGLE ADS</Label>
-        <Label>PAID ACQUISITION</Label>
+    <Stage accent="rgba(56,189,248,.14)">
+      <div className="relative h-full min-h-[380px] p-5 sm:min-h-[430px] sm:p-7 flex flex-col justify-between">
+        <div className="flex items-center justify-between border-b xr-line pb-3">
+          <div className="flex items-center gap-2">
+            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-sky-500/10 text-sky-400">
+              <Megaphone className="h-3 w-3" />
+            </span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">GOOGLE ADS & META ADS CAMPAIGNS</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="label-mono text-[7px] text-emerald-500 font-bold">ROAS 4.8×</span>
+            <Label>09 / ADS</Label>
+          </div>
+        </div>
+
+        {/* Paid acquisition metrics console */}
+        <div className="my-auto py-3 space-y-3">
+          <div className="grid grid-cols-3 gap-2.5">
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
+              <span className="label-mono text-[6.5px] xr-muted-2">CTR MOYEN</span>
+              <p className="mt-1 text-base font-bold text-sky-400">8.4%</p>
+              <span className="label-mono text-[6px] text-emerald-400 font-medium">+140% vs marché</span>
+            </div>
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
+              <span className="label-mono text-[6.5px] xr-muted-2">COÛT PAR LEAD</span>
+              <p className="mt-1 text-base font-bold text-[var(--xr-ink)]">12.50 €</p>
+              <span className="label-mono text-[6px] text-emerald-400 font-medium">-42% CPA</span>
+            </div>
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
+              <span className="label-mono text-[6.5px] xr-muted-2">RETOUR / INVEST.</span>
+              <p className="mt-1 text-base font-bold text-emerald-500">4.8× ROAS</p>
+              <span className="label-mono text-[6px] text-emerald-400 font-medium">Rentabilité nette</span>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-sky-500/20 bg-[var(--xr-surface-strong)] p-3.5 backdrop-blur-md">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-[var(--xr-ink)]">Campagnes Précises & Mots-Clés Intentionnistes</span>
+              <span className="label-mono text-[6.5px] font-bold text-sky-400">TRACKING SERVER-SIDE</span>
+            </div>
+            <p className="mt-1 text-[8.5px] leading-relaxed xr-muted">
+              Ciblage ultra-qualifié à fort pouvoir d'achat, A/B testing continu des accroches et landing pages dédiées à forte conversion.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between border-t xr-line pt-3">
+          <span className="label-mono text-[7px] xr-muted">SEARCH · SHOPPING · REMARKETING · SCALING</span>
+          <span className="label-mono text-[7px] text-emerald-500 font-semibold">ACQUISITION RENTABLE & MESURABLE</span>
+        </div>
       </div>
-      <Parallax speed={0.02} className="absolute bottom-6 left-5 right-5 sm:bottom-7 sm:left-7 sm:right-7">
-        <Glass className="p-5 sm:p-6">
-          <div className="flex items-center gap-3">
-            <Megaphone className="h-4 w-4 text-white/75" />
-            <Label>GOOGLE ADS</Label>
-          </div>
-          <div className="mt-4 grid grid-cols-3 gap-2">
-            {[["CTR", "↑"], ["CPA", "↓"], ["ROAS", "×"]].map(([a, b]) => (
-              <div key={a} className="rounded-xl border border-white/12 bg-white/6 p-3 text-white">
-                <span className="label-mono text-[5px] text-white/45">{a}</span>
-                <span className="mt-2 block text-lg font-semibold">{b}</span>
-              </div>
-            ))}
-          </div>
-        </Glass>
-      </Parallax>
     </Stage>
   );
 }
 
 function StrategyVisual() {
   return (
-    <Stage accent="#818cf8">
-      <Photo src={XR_PHOTOS.strategy} position="50% 42%" className="scale-[1.04] opacity-[.8]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/58 via-black/6 to-transparent" />
-      <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
-        <Label>10 / STRATÉGIE</Label>
-        <Label>DIRECTION</Label>
-      </div>
-      <Parallax speed={-0.02} className="absolute bottom-6 left-5 right-5 sm:bottom-7 sm:left-7 sm:right-7">
-        <Glass className="p-5 sm:p-6">
-          <div className="flex items-center gap-3">
-            <Gauge className="h-4 w-4 text-white/75" />
-            <div>
-              <Label>STRATEGY</Label>
-              <p className="mt-1 text-xs font-semibold text-white sm:text-sm">Positionnement → parcours → priorités.</p>
-            </div>
+    <Stage accent="rgba(129,140,248,.14)">
+      <div className="relative h-full min-h-[380px] p-5 sm:min-h-[430px] sm:p-7 flex flex-col justify-between">
+        <div className="flex items-center justify-between border-b xr-line pb-3">
+          <div className="flex items-center gap-2">
+            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-indigo-500/10 text-indigo-400">
+              <Gauge className="h-3 w-3" />
+            </span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">STRATÉGIE DIGITALE & EXPANSION</span>
           </div>
-        </Glass>
-      </Parallax>
+          <Label>10 / STRATÉGIE</Label>
+        </div>
+
+        {/* Strategy Roadmap */}
+        <div className="my-auto py-3 space-y-2.5">
+          {[
+            { phase: "PHASE 1", label: "Diagnostic d'Opportunité & Concurrence", status: "Terminé", color: "text-emerald-400" },
+            { phase: "PHASE 2", label: "Positionnement de Prestige & Offre Irrésistible", status: "En cours", color: "text-indigo-400" },
+            { phase: "PHASE 3", label: "Tunnel de Vente & Canaux d'Acquisition Directe", status: "Prévu", color: "xr-muted" },
+          ].map((item, idx) => (
+            <div key={idx} className="flex items-center justify-between rounded-xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
+              <div className="flex items-center gap-2.5">
+                <span className="label-mono text-[6.5px] font-bold text-indigo-300">{item.phase}</span>
+                <span className="text-[11px] font-semibold text-[var(--xr-ink)]">{item.label}</span>
+              </div>
+              <span className={`label-mono text-[6.5px] font-bold ${item.color}`}>{item.status}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex items-center justify-between border-t xr-line pt-3">
+          <span className="label-mono text-[7px] xr-muted">PLAN D'ACTION CONCRET · KPIS CHIFFRÉS · ROADMAP 90J</span>
+          <span className="label-mono text-[7px] text-emerald-500 font-semibold">DIRECTION STRATÉGIQUE CLAIRE</span>
+        </div>
+      </div>
     </Stage>
   );
 }
 
 function AiVisual() {
   return (
-    <Stage accent="#c084fc">
-      <Photo src={XR_PHOTOS.ai} position="50% 50%" className="scale-[1.04] opacity-[.84]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/7 to-transparent" />
-      <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
-        <Label>11 / IA</Label>
-        <Label>AUTOMATION</Label>
-      </div>
-      <Parallax speed={0.02} className="absolute bottom-6 left-5 right-5 sm:bottom-7 sm:left-7 sm:right-7">
-        <Glass className="p-5 sm:p-6">
-          <div className="flex items-center gap-3">
-            <Sparkles className="h-4 w-4 text-white/75" />
-            <div>
-              <Label>AI SYSTEM</Label>
-              <p className="mt-1 text-xs font-semibold text-white sm:text-sm">Données → IA → action.</p>
+    <Stage accent="rgba(192,132,252,.14)">
+      <div className="relative h-full min-h-[380px] p-5 sm:min-h-[430px] sm:p-7 flex flex-col justify-between">
+        <div className="flex items-center justify-between border-b xr-line pb-3">
+          <div className="flex items-center gap-2">
+            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-purple-500/10 text-purple-400">
+              <Sparkles className="h-3 w-3" />
+            </span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">INTELLIGENCE ARTIFICIELLE & AUTOMATISATION</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="label-mono text-[7px] text-emerald-500 font-bold">IA ACTIVE</span>
+            <Label>11 / IA</Label>
+          </div>
+        </div>
+
+        {/* AI Workflow Agents */}
+        <div className="my-auto py-3 space-y-3">
+          <div className="grid grid-cols-3 gap-2.5">
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
+              <span className="label-mono text-[6.5px] text-purple-400 font-bold">AGENT 01</span>
+              <p className="mt-1 text-[11px] font-bold text-[var(--xr-ink)]">Capture & Triage</p>
+              <p className="mt-1 text-[7.5px] xr-muted">Qualification automatique des leads entrants 24/7</p>
+            </div>
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
+              <span className="label-mono text-[6.5px] text-purple-400 font-bold">AGENT 02</span>
+              <p className="mt-1 text-[11px] font-bold text-[var(--xr-ink)]">RAG & Connaissance</p>
+              <p className="mt-1 text-[7.5px] xr-muted">Réponses ultra-précises basées sur vos documents</p>
+            </div>
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
+              <span className="label-mono text-[6.5px] text-purple-400 font-bold">AGENT 03</span>
+              <p className="mt-1 text-[11px] font-bold text-[var(--xr-ink)]">Workflows Métier</p>
+              <p className="mt-1 text-[7.5px] xr-muted">Génération automatique de devis et synchronisation</p>
             </div>
           </div>
-        </Glass>
-      </Parallax>
+
+          <div className="flex items-center justify-between rounded-xl border border-purple-500/20 bg-purple-500/5 p-3 text-[9px]">
+            <span className="font-semibold text-[var(--xr-ink)]">Gain de productivité constaté : <span className="text-emerald-400 font-bold">15 à 25h / semaine</span> par collaborateur</span>
+            <span className="label-mono text-[7px] text-purple-300 font-bold shrink-0">100% INTÉGRÉ</span>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between border-t xr-line pt-3">
+          <span className="label-mono text-[7px] xr-muted">LLMS SUR-MESURE · EMBEDDINGS · AUTOMATION N8N/MAKE</span>
+          <span className="label-mono text-[7px] text-emerald-500 font-semibold">TRANSFORMATION IA IMMÉDIATE</span>
+        </div>
+      </div>
     </Stage>
   );
 }
