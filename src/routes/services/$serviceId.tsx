@@ -232,7 +232,7 @@ function ServiceDetailPage() {
           </div>
         </section>
 
-        <section className="border-b xr-line py-14 sm:py-20">
+        <section className="border-b border-white/[0.06] py-14 sm:py-20">
           <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
             <div className="grid gap-10 lg:grid-cols-[.72fr_1.28fr] lg:items-start">
               <Reveal>
@@ -245,7 +245,7 @@ function ServiceDetailPage() {
                 </p>
               </Reveal>
 
-              <div className="divide-y xr-line border-y xr-line">
+              <div className="divide-y divide-white/[0.06] border-y border-white/[0.06]">
                 {service.highlights.slice(0, 3).map((item, i) => (
                   <Reveal key={i} delay={i * 80}>
                     <article className="group grid gap-5 py-7 sm:grid-cols-[72px_1fr] sm:items-start sm:py-8">
