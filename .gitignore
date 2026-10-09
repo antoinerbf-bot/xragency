@@ -33,3 +33,5 @@ dist-ssr
 .env*
 \n# Local cPanel runtime files\n/tmp/\n
 .vercel
+
+.o2switch-token
