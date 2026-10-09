@@ -9,6 +9,7 @@ import { HomeServices } from "@/components/site/HomeServices";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
 import { DigitalAudit } from "@/components/site/DigitalAudit";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
+import { RecruitmentTeaser } from "@/components/site/RecruitmentTeaser";
 import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
 
@@ -92,6 +93,7 @@ function Index() {
         <HomeServices />
         <DigitalAudit />
         <MapsSimulator />
+        <RecruitmentTeaser />
         <Faq />
         <Contact />
       </main>

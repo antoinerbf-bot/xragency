@@ -4,14 +4,14 @@ import { useLang } from "@/lib/i18n";
 import { CONTACT } from "@/lib/content";
 
 const COPY = {
-  eyebrow: { fr: "XR / RECRUTEMENT", en: "XR / CAREERS", vi: "XR / TUYỂN DỤNG" },
-  title: { fr: "Construisons la suite.", en: "Let's build what comes next.", vi: "Cùng xây dựng điều tiếp theo." },
+  eyebrow: { fr: "XR / AFFILIATION & RECRUTEMENT", en: "XR / AFFILIATES & CAREERS", vi: "XR / ĐỐI TÁC & TUYỂN DỤNG" },
+  title: { fr: "10% à 20% de commission. Recrutement mondial.", en: "10% to 20% commission. Global recruitment.", vi: "Hoa hồng 10% đến 20%. Tuyển dụng toàn cầu." },
   text: {
-    fr: "XR Agency grandit autour de profils créatifs, commerciaux et techniques capables de travailler à distance sur des projets internationaux.",
-    en: "XR Agency is growing around creative, commercial and technical profiles able to work remotely on international projects.",
-    vi: "XR Agency đang phát triển với các vị trí sáng tạo, kinh doanh và kỹ thuật có thể làm việc từ xa cho các dự án quốc tế.",
+    fr: "Recommandez nos services et gagnez 10% (jusqu'à 20% sur grands comptes) du CA généré, déductible sur vos offres ou versé immédiatement. Nous recrutons également des commerciaux indépendants multilingues dans le monde entier.",
+    en: "Refer our services and earn 10% (up to 20% on enterprise) commission, deductible or paid directly. We also hire multilingual independent sales partners worldwide.",
+    vi: "Giới thiệu dịch vụ và nhận hoa hồng 10% đến 20%. Chúng tôi cũng đang tuyển dụng nhân viên kinh doanh đa ngôn ngữ trên toàn thế giới.",
   },
-  cta: { fr: "Voir les opportunités", en: "See opportunities", vi: "Xem cơ hội" },
+  cta: { fr: "Découvrir le programme & Postuler", en: "Explore program & Apply", vi: "Khám phá chương trình & Ứng tuyển" },
 };
 
 export function RecruitmentTeaser() {

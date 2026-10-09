@@ -275,6 +275,7 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
               <div className="mt-4 grid gap-2.5 text-sm">
                 <Link to="/services" className="text-muted-foreground hover:text-foreground">Services</Link>
                 <Link to="/realisations" className="text-muted-foreground hover:text-foreground">Réalisations</Link>
+                <Link to="/recrutement" className="font-semibold text-emerald-500 hover:text-emerald-400">Recrutement & Affiliation (10-20%)</Link>
                 <Link to="/faq" className="text-muted-foreground hover:text-foreground">FAQ</Link>
                 <a href="/#quote" className="text-muted-foreground hover:text-foreground">Devis sur mesure</a>
                 <a href="/#audit" className="text-muted-foreground hover:text-foreground">Audit gratuit</a>
