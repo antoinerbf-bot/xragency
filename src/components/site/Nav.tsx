@@ -198,7 +198,7 @@ export function Nav() {
             <CartFloatingButton />
 
             <EmberButton
-              href="/#audit"
+              href="/#quote"
               className="hidden min-h-9 px-4 py-2 text-[8px] md:inline-flex"
             >
               Lancer mon analyse
