@@ -83,130 +83,171 @@ function Glass({
 
 function WebVisual() {
   return (
-    <Stage accent="rgba(148,163,184,.15)">
-      <div className="relative h-full min-h-[380px] p-5 sm:min-h-[430px] sm:p-7 flex flex-col justify-between">
-        <div className="flex items-center justify-between border-b xr-line pb-3">
-          <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
-            <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
-            <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
-            <span className="ml-3 label-mono text-[7px] tracking-[.18em] xr-muted">HTTPS://XRAGENCYAI.COM</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="label-mono text-[7px] text-emerald-500 font-bold">100/100 PERF</span>
-            <Label>01 / WEB DESIGN</Label>
-          </div>
+    <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[var(--xr-surface)] via-[var(--xr-bg)] to-[var(--xr-surface)] p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
+      {/* Halo immersif subtil */}
+      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-slate-500/10 blur-3xl" />
+
+      {/* Barre supérieure fluide type navigateur de luxe */}
+      <div className="flex items-center justify-between border-b xr-line pb-4">
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-red-400/80" />
+          <span className="h-2 w-2 rounded-full bg-amber-400/80" />
+          <span className="h-2 w-2 rounded-full bg-emerald-400/80" />
+          <span className="ml-3 label-mono text-[7px] tracking-[.18em] xr-muted">HTTPS://XRAGENCYAI.COM</span>
         </div>
-
-        <div className="my-auto py-4 grid gap-4 lg:grid-cols-[1.2fr_.8fr] items-center">
-          <div className="relative overflow-hidden rounded-2xl border xr-line bg-black/60 shadow-xl">
-            <img
-              src={XR_PHOTOS.websites}
-              alt="Site web vitrine et e-commerce"
-              className="aspect-[16/10] w-full object-cover transition-transform duration-700 hover:scale-[1.03]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-              <span className="label-mono text-[7px] text-white/90">SUR-MESURE · MOBILE-FIRST</span>
-              <span className="rounded-full bg-white/10 px-2 py-0.5 text-[7px] text-white">499 € - 1499 €</span>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <div className="flex items-center justify-between">
-                <span className="label-mono text-[6px] xr-muted-2">LIVRABLE</span>
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              </div>
-              <p className="mt-1 text-[11px] font-semibold text-[var(--xr-ink)]">Vitrine, Business & E-commerce</p>
-              <p className="mt-0.5 text-[8px] xr-muted">Design sur-mesure, CMS intuitif, paiement Stripe/Apple Pay</p>
-            </div>
-            <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <div className="flex items-center justify-between">
-                <span className="label-mono text-[6px] xr-muted-2">AUDIT TECHNIQUE</span>
-                <span className="label-mono text-[7px] text-emerald-500 font-bold">A+</span>
-              </div>
-              <div className="mt-2 flex items-center justify-between gap-1 text-[8px]">
-                <span className="rounded bg-black/5 dark:bg-white/10 px-2 py-1">SEO 100</span>
-                <span className="rounded bg-black/5 dark:bg-white/10 px-2 py-1">Vitesse 0.4s</span>
-                <span className="rounded bg-black/5 dark:bg-white/10 px-2 py-1">RGPD Ok</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">REACT · TANSTACK · TAILWIND · NEXT GEN</span>
-          <span className="label-mono text-[7px] xr-accent font-semibold">LIVRÉ CLÉ EN MAIN</span>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
+            PERFORMANCE 100/100
+          </span>
+          <Label>01 / WEB DESIGN</Label>
         </div>
       </div>
-    </Stage>
+
+      {/* Contenu immersif sans coupure brutale */}
+      <div className="py-6 grid gap-6 lg:grid-cols-[1.25fr_.75fr] items-center">
+        <div className="group relative overflow-hidden rounded-[1.8rem] border xr-line shadow-xl">
+          <img
+            src={XR_PHOTOS.websites}
+            alt="Site web vitrine, business et e-commerce sur-mesure"
+            className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+            <div>
+              <span className="label-mono text-[7px] text-emerald-400 font-bold">ARCHITECTURE ULTRA-RAPIDE</span>
+              <p className="text-xs font-semibold text-white">Vitesse &lt; 0.4s · Mobile-First</p>
+            </div>
+            <span className="rounded-full bg-white/15 px-3 py-1 label-mono text-[7px] font-bold text-white backdrop-blur-md">
+              DÈS 499 €
+            </span>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)]/80 p-4 shadow-sm backdrop-blur-xl">
+            <div className="flex items-center justify-between">
+              <span className="label-mono text-[6.5px] xr-muted-2">LIVRABLES CLÉ EN MAIN</span>
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            </div>
+            <h4 className="mt-1 text-xs font-bold text-[var(--xr-ink)]">Vitrine, Business & E-commerce</h4>
+            <p className="mt-1 text-[8.5px] leading-relaxed xr-muted">
+              Design unique 100% sur-mesure, CMS moderne, formulaires interactifs et paiements Stripe intégrés.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)]/80 p-4 shadow-sm backdrop-blur-xl">
+            <div className="flex items-center justify-between">
+              <span className="label-mono text-[6.5px] xr-muted-2">SCORE TECHNIQUE</span>
+              <span className="label-mono text-[7px] font-bold text-emerald-500">GRADE A+</span>
+            </div>
+            <div className="mt-2.5 grid grid-cols-3 gap-1.5 text-center text-[7.5px]">
+              <div className="rounded-lg bg-[var(--xr-bg)] p-2 border xr-line">
+                <span className="block font-bold text-emerald-500">100/100</span>
+                <span className="label-mono text-[5.5px] xr-muted">SEO SCORE</span>
+              </div>
+              <div className="rounded-lg bg-[var(--xr-bg)] p-2 border xr-line">
+                <span className="block font-bold text-[var(--xr-ink)]">&lt; 0.4s</span>
+                <span className="label-mono text-[5.5px] xr-muted">CHARGEMENT</span>
+              </div>
+              <div className="rounded-lg bg-[var(--xr-bg)] p-2 border xr-line">
+                <span className="block font-bold text-[var(--xr-ink)]">100%</span>
+                <span className="label-mono text-[5.5px] xr-muted">RGPD OK</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between border-t xr-line pt-4">
+        <span className="label-mono text-[7px] xr-muted">REACT · TANSTACK · TAILWIND · HÉBERGEMENT 1 AN INCLUS</span>
+        <span className="label-mono text-[7px] font-bold text-emerald-500">PRÊT À CONVERTIR</span>
+      </div>
+    </div>
   );
 }
 
 function BrandingVisual() {
   return (
-    <Stage accent="rgba(199,181,223,.18)">
-      <div className="relative h-full min-h-[380px] p-5 sm:min-h-[430px] sm:p-7 flex flex-col justify-between">
-        <div className="flex items-center justify-between border-b xr-line pb-3">
-          <div className="flex items-center gap-2">
-            <Palette className="h-3.5 w-3.5 xr-muted" />
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">BRAND GUIDELINES & CHARTE</span>
-          </div>
+    <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[var(--xr-surface)] via-[var(--xr-bg)] to-[var(--xr-surface)] p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
+      {/* Halo d'ambiance subtil */}
+      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-purple-500/10 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
+
+      {/* Entête épurée */}
+      <div className="flex items-center justify-between border-b xr-line pb-4">
+        <div className="flex items-center gap-2">
+          <Palette className="h-4 w-4 text-emerald-500" />
+          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">STUDIO BRANDING & DIRECTION ARTISTIQUE</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
+            CESSION 100% DROITS
+          </span>
           <Label>02 / BRANDING</Label>
         </div>
+      </div>
 
-        <div className="my-auto py-3 grid gap-4 lg:grid-cols-[1.1fr_.9fr] items-center">
-          <div className="relative overflow-hidden rounded-2xl border xr-line shadow-lg group">
-            <img
-              src={XR_PHOTOS.branding}
-              alt="Atelier Branding & Charte graphique de prestige"
-              className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-              <div>
-                <span className="label-mono text-[7px] text-white/90">ATELIER DIRECTION ARTISTIQUE</span>
-                <p className="text-[10px] font-semibold text-white">Papeterie, Dorure à chaud & Typographie</p>
-              </div>
-              <span className="rounded-full bg-white/10 px-2 py-0.5 text-[7px] text-white backdrop-blur-md">Dès 179 €</span>
+      {/* Contenu visuel intégré et fluide */}
+      <div className="py-6 grid gap-6 lg:grid-cols-[1.2fr_.8fr] items-center">
+        <div className="group relative overflow-hidden rounded-[1.8rem] border xr-line shadow-xl">
+          <img
+            src={XR_PHOTOS.branding}
+            alt="Direction artistique, Brand Book et papeterie de prestige"
+            className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+            <div>
+              <span className="label-mono text-[7px] text-emerald-400 font-bold">ATELIER TYPOGRAPHIE & COULEURS</span>
+              <p className="text-xs font-semibold text-white">Papeterie, Packaging & Brand Book</p>
             </div>
-          </div>
-
-          <div className="space-y-3">
-            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5 backdrop-blur-md">
-              <span className="label-mono text-[6px] xr-muted-2">PALETTE CHROMATIQUE & ÉLÉGANCE</span>
-              <div className="mt-2 flex gap-2">
-                {[
-                  { hex: "#090A0D", label: "Obsidian" },
-                  { hex: "#F8F6F0", label: "Warm White" },
-                  { hex: "#4B5563", label: "Titanium" },
-                  { hex: "#10B981", label: "Emerald" },
-                ].map((c) => (
-                  <div key={c.hex} className="flex-1 text-center">
-                    <div
-                      className="h-9 w-full rounded-lg border border-black/10 dark:border-white/20 shadow-sm"
-                      style={{ background: c.hex }}
-                    />
-                    <span className="mt-1 block text-[7px] font-mono font-medium xr-muted truncate">{c.hex}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between rounded-xl border xr-line bg-[var(--xr-surface)] px-3 py-2 text-[9px]">
-              <span className="xr-muted">Logo vectoriel + Favicon + Brand Book</span>
-              <span className="label-mono text-[7px] font-bold xr-accent">Livré vectoriel HD</span>
-            </div>
+            <span className="rounded-full bg-white/15 px-3 py-1 label-mono text-[7px] font-bold text-white backdrop-blur-md">
+              DÈS 179 €
+            </span>
           </div>
         </div>
 
-        <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">SVG · PNG · PDF PRINT · GUIDES SOCIAUX</span>
-          <span className="label-mono text-[7px] xr-accent font-semibold">IDENTITÉ UNIQUE</span>
+        <div className="space-y-3">
+          <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)]/80 p-4 shadow-sm backdrop-blur-xl">
+            <span className="label-mono text-[6.5px] xr-muted-2">HARMONIE CHROMATIQUE EXCLUSIVE</span>
+            <div className="mt-3 flex gap-2">
+              {[
+                { hex: "#090A0D", label: "Obsidian" },
+                { hex: "#F8F6F0", label: "Warm White" },
+                { hex: "#4B5563", label: "Titanium" },
+                { hex: "#10B981", label: "Emerald" },
+              ].map((c) => (
+                <div key={c.hex} className="flex-1 text-center">
+                  <div
+                    className="h-10 w-full rounded-xl border border-black/10 dark:border-white/20 shadow-sm"
+                    style={{ background: c.hex }}
+                  />
+                  <span className="mt-1 block text-[7px] font-mono font-medium xr-muted truncate">{c.hex}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)]/80 p-4 shadow-sm backdrop-blur-xl">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-bold text-[var(--xr-ink)]">Livrables Vectoriels HD</span>
+              <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
+                PRÊT À IMPRIMER
+              </span>
+            </div>
+            <p className="mt-1.5 text-[8.5px] leading-relaxed xr-muted">
+              Logo vectoriel (AI, SVG, PNG), favicon, Brand Book 20+ pages et gabarits réseaux sociaux.
+            </p>
+          </div>
         </div>
       </div>
-    </Stage>
+
+      <div className="flex items-center justify-between border-t xr-line pt-4">
+        <span className="label-mono text-[7px] xr-muted">AI · SVG · PDF PRINT 300 DPI · GABARITS RÉSEAUX SOCIAUX</span>
+        <span className="label-mono text-[7px] font-bold text-emerald-500">IDENTITÉ DE PRESTIGE</span>
+      </div>
+    </div>
   );
 }
 
