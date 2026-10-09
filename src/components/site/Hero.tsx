@@ -58,87 +58,65 @@ function Stat({
   );
 }
 
-function DeviceStage() {
+function HeroFeaturesOverview() {
+  const { t } = useLang();
   return (
-    <div className="relative mx-auto flex h-full w-full max-w-[680px] items-center justify-center py-6 lg:py-0">
-      {/* Halo d'ambiance */}
-      <div aria-hidden className="pointer-events-none absolute h-[340px] w-[340px] rounded-full bg-white/5 blur-3xl" />
+    <div className="relative mx-auto flex h-full w-full max-w-[620px] flex-col justify-center py-6 lg:py-0">
+      {/* Halo d'ambiance raffiné */}
+      <div aria-hidden className="pointer-events-none absolute h-[400px] w-[400px] rounded-full bg-emerald-500/5 blur-3xl" />
 
-      {/* Carte principale Web Luxury Showcase */}
-      <div className="relative w-full max-w-[620px] transition-all duration-700">
-        <div className="overflow-hidden rounded-[1.8rem] border border-neutral-300/80 bg-white/95 p-3 shadow-[0_30px_90px_-25px_rgba(0,0,0,.25)] backdrop-blur-2xl dark:border-white/18 dark:bg-[#121316]/95 dark:shadow-[0_40px_110px_-30px_rgba(0,0,0,.95)] sm:p-4">
-          {/* Header de la fenêtre navigateur */}
-          <div className="mb-3 flex items-center justify-between border-b border-neutral-200/80 pb-2.5 dark:border-white/10">
-            <div className="flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
-              <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
-              <span className="ml-2 label-mono text-[7px] tracking-[.18em] text-neutral-400 dark:text-white/45">
-                XRAGENCY.COM / BESPOKE DIGITAL
+      {/* Cartes d'impact en verre dépoli ultra-élégantes & aériennes */}
+      <div className="relative space-y-4">
+        {/* Carte 1 : Excellence Web & Performance */}
+        <div className="group rounded-[1.8rem] border border-neutral-300/80 bg-white/80 p-5 shadow-[0_20px_60px_-15px_rgba(0,0,0,.08)] backdrop-blur-2xl transition duration-500 hover:-translate-y-1 dark:border-white/12 dark:bg-[#121316]/75 dark:shadow-[0_30px_90px_-20px_rgba(0,0,0,.7)] sm:p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="label-mono text-[7px] tracking-[.2em] text-neutral-500 dark:text-white/50">
+                HAUTE CRÉATION DIGITALE
               </span>
             </div>
-            <span className="label-mono text-[7px] font-bold text-emerald-500">SCORE 100/100</span>
+            <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
+              PARIS · SUR-MESURE
+            </span>
           </div>
 
-          {/* Image principale : site web d'architecture & luxe */}
-          <div className="relative overflow-hidden rounded-[1.2rem] bg-black">
-            <img
-              src={XR_PHOTOS.websites}
-              alt="Conception web haut de gamme par XR Agency"
-              className="aspect-[16/10] w-full object-cover object-center transition duration-700 hover:scale-[1.02]"
-              loading="eager"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-              <div>
-                <span className="label-mono text-[6.5px] tracking-[.2em] text-white/70">ARCHITECTURAL WEB DESIGN</span>
-                <p className="text-[10.5px] font-semibold text-white">Sites Vitrine, Business & E-commerce sur-mesure</p>
-              </div>
-              <span className="rounded-full bg-white/15 px-3 py-1 label-mono text-[7px] text-white backdrop-blur-md">
-                Dès 499 €
-              </span>
-            </div>
-          </div>
+          <h3 className="display-serif mt-3 text-2xl text-neutral-900 dark:text-white sm:text-3xl">
+            L'Alliance de l'Édition & de la Technologie
+          </h3>
+          <p className="mt-2 text-xs leading-relaxed text-neutral-600 dark:text-white/65">
+            Architecture sur-mesure, identités de marque remarquables, acquisition Google Maps Top 1 et déploiement d'intelligences artificielles opérationnelles.
+          </p>
 
-          {/* Mini-barre de synthèse des expertises */}
-          <div className="mt-3 grid grid-cols-3 gap-2 border-t border-neutral-200/80 pt-3 dark:border-white/10">
-            <div className="flex items-center gap-2 rounded-xl bg-neutral-100/80 p-2 dark:bg-white/[.04]">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              <span className="text-[8px] font-medium text-neutral-700 dark:text-white/80">SEO #1 Google</span>
+          <div className="mt-4 grid grid-cols-3 gap-2.5 border-t border-neutral-200/80 pt-4 dark:border-white/10 text-center">
+            <div className="rounded-xl bg-neutral-100/70 p-2.5 dark:bg-white/[.04]">
+              <span className="display-serif block text-lg font-bold text-neutral-900 dark:text-white">&lt; 0.4s</span>
+              <span className="label-mono text-[6px] text-neutral-500 dark:text-white/45">CHARGEMENT</span>
             </div>
-            <div className="flex items-center gap-2 rounded-xl bg-neutral-100/80 p-2 dark:bg-white/[.04]">
-              <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-              <span className="text-[8px] font-medium text-neutral-700 dark:text-white/80">Local Maps 5.0★</span>
+            <div className="rounded-xl bg-neutral-100/70 p-2.5 dark:bg-white/[.04]">
+              <span className="display-serif block text-lg font-bold text-emerald-500">#1</span>
+              <span className="label-mono text-[6px] text-neutral-500 dark:text-white/45">GOOGLE MAPS</span>
             </div>
-            <div className="flex items-center gap-2 rounded-xl bg-neutral-100/80 p-2 dark:bg-white/[.04]">
-              <span className="h-1.5 w-1.5 rounded-full bg-indigo-500" />
-              <span className="text-[8px] font-medium text-neutral-700 dark:text-white/80">IA & Robotique</span>
+            <div className="rounded-xl bg-neutral-100/70 p-2.5 dark:bg-white/[.04]">
+              <span className="display-serif block text-lg font-bold text-neutral-900 dark:text-white">100%</span>
+              <span className="label-mono text-[6px] text-neutral-500 dark:text-white/45">SUR-MESURE</span>
             </div>
           </div>
         </div>
 
-        {/* Badge satellite Google Maps flottant élégant */}
-        <div className="absolute -bottom-5 -right-3 sm:-right-5 z-20 w-[180px] sm:w-[210px] rounded-2xl border border-neutral-300/80 bg-white/95 p-2.5 shadow-[0_20px_60px_-15px_rgba(0,0,0,.3)] backdrop-blur-xl dark:border-white/20 dark:bg-[#15171b]/95">
-          <div className="flex items-center gap-2">
-            <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl border border-neutral-200 dark:border-white/10">
-              <img src={XR_PHOTOS.maps} alt="" className="h-full w-full object-cover" />
+        {/* Carte 2 : Badge direct Local Pack Top 3 */}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-neutral-300/80 bg-white/70 p-4 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-[#121316]/60">
+          <div className="flex items-center gap-3">
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-red-500/10 text-red-500">
+              <MapPinned className="h-5 w-5" />
             </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-1">
-                <MapPinned className="h-3 w-3 text-red-500" />
-                <span className="truncate text-[8px] font-bold text-neutral-900 dark:text-white">Google Maps Pack</span>
-              </div>
-              <span className="mt-0.5 block text-[7px] text-amber-500 font-semibold">5.0 ★★★★★ (Top 1)</span>
-              <span className="label-mono text-[6px] text-emerald-500 font-bold">+320% d'appels</span>
+            <div>
+              <p className="text-xs font-bold text-neutral-900 dark:text-white">Google Maps Local Pack Top 3</p>
+              <p className="text-[9px] text-neutral-500 dark:text-white/50">Engagement contractuel avec garantie « Top 3 ou remboursé »</p>
             </div>
           </div>
-        </div>
-
-        {/* Badge satellite Tournage & Réseaux sociaux */}
-        <div className="absolute -top-4 -left-3 sm:-left-5 z-20 flex items-center gap-2 rounded-full border border-neutral-300/80 bg-white/95 py-1.5 px-3 shadow-[0_15px_50px_-10px_rgba(0,0,0,.2)] backdrop-blur-xl dark:border-white/20 dark:bg-[#15171b]/95">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="label-mono text-[7px] font-semibold text-neutral-800 dark:text-white/90">
-            STUDIO CRÉATIF · PARIS
+          <span className="rounded-full bg-emerald-500/15 px-3 py-1 label-mono text-[7px] font-bold text-emerald-500 self-start sm:self-center">
+            DÈS 990 € / AN
           </span>
         </div>
       </div>
@@ -158,17 +136,16 @@ export function Hero() {
         <img
           src={XR_HERO_PHOTO}
           alt="XR Agency Creative Studio Paris"
-          className="xr-hero-bg absolute inset-0 h-full w-full object-cover opacity-25 dark:opacity-45 filter brightness-95 contrast-105"
+          className="xr-hero-bg absolute inset-0 h-full w-full object-cover opacity-35 dark:opacity-55 filter brightness-100 contrast-105"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#f8f6f0] via-[#f8f6f0]/85 to-[#f8f6f0]/60 dark:from-[#090a0d] dark:via-[#090a0d]/85 dark:to-[#090a0d]/60" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#f8f6f0]/20 to-[#f8f6f0] dark:via-transparent dark:to-[#090a0d]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_40%,rgba(0,0,0,.02),transparent_26%)] dark:bg-[radial-gradient(circle_at_72%_40%,rgba(255,255,255,.08),transparent_26%)]" />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[var(--xr-bg)] to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#f8f6f0]/95 via-[#f8f6f0]/80 to-[#f8f6f0]/40 dark:from-[#090a0d]/95 dark:via-[#090a0d]/80 dark:to-[#090a0d]/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#f8f6f0] dark:to-[#090a0d]" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[var(--xr-bg)] to-transparent" />
       </div>
 
       <div className="relative mx-auto flex min-h-[100svh] max-w-[1640px] flex-col px-5 pb-8 pt-28 sm:px-8 sm:pb-10 sm:pt-32 lg:px-12 lg:pt-36">
-        <div className="grid flex-1 items-center gap-10 lg:grid-cols-[.92fr_1.08fr] lg:gap-8">
+        <div className="grid flex-1 items-center gap-10 lg:grid-cols-[1fr_1fr] lg:gap-12">
           <Parallax speed={-0.014}>
             <div className="relative z-20 max-w-3xl">
               <Reveal>
@@ -181,8 +158,8 @@ export function Hero() {
               </Reveal>
 
               <Reveal delay={80}>
-                <h1 className="display-serif mt-6 max-w-[860px] text-[clamp(2.8rem,5.5vw,6.5rem)] leading-[.92] tracking-[-.055em] text-neutral-900 dark:text-white">
-                  {t(UI.heroTitle1)}{" "}
+                <h1 className="display-serif mt-6 max-w-[860px] text-[clamp(2.8rem,5.5vw,6.5rem)] leading-[.92] tracking-[-.055em] text-neutral-900 dark:text-white break-words">
+                  <span className="inline-block whitespace-nowrap">{t(UI.heroTitle1)}</span>{" "}
                   <span className="italic font-normal text-neutral-900 dark:text-white inline-block">
                     {t(UI.heroTitleAccent)}
                   </span>
@@ -252,7 +229,7 @@ export function Hero() {
           </Parallax>
 
           <Parallax speed={-0.008} className="relative z-10 h-full w-full">
-            <DeviceStage />
+            <HeroFeaturesOverview />
           </Parallax>
         </div>
 
