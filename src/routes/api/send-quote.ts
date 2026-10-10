@@ -13,7 +13,7 @@ export const Route = createFileRoute("/api/send-quote")({
           if (pdfBase64.length > 12000000) return Response.json({ error: "PDF trop volumineux." }, { status: 413 });
           if (!process.env.RESEND_API_KEY) return Response.json({ error: "RESEND_API_KEY manquante." }, { status: 503 });
           const resend = new Resend(process.env.RESEND_API_KEY);
-          const from = process.env.RESEND_FROM_EMAIL || "XR Agency <contact.xragency@gmail.com>";
+          const from = process.env.RESEND_FROM_EMAIL || "XR Agency <onboarding@resend.dev>";
           const { data, error } = await resend.emails.send({
             from,
             to: [email],

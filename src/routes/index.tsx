@@ -32,6 +32,7 @@ export const Route = createFileRoute("/")({
       { property: "og:site_name", content: "XR Agency" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://xragencyai.com/" }],
   }),
   component: Index,
 });

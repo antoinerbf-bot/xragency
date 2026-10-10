@@ -51,6 +51,7 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
       website: fd.get("website") as string,
       need: fd.get("need") as string,
       message: fd.get("message") as string,
+      hp: fd.get("hp") as string,
     };
 
     try {
@@ -170,6 +171,7 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <input type="text" name="hp" tabIndex={-1} autoComplete="off" style={{ display: "none" }} aria-hidden="true" />
                 {status === "error" && (
                   <div className="sm:col-span-2 lg:col-span-3 rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-center text-xs text-destructive">
                     {errorMessage || "Une erreur est survenue lors de l'envoi. Veuillez réessayer ou nous écrire sur WhatsApp."}

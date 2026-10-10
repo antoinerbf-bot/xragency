@@ -22,28 +22,44 @@ export function WhatsAppWidget() {
     fr: "Besoin d'un devis sous 24 h ?",
     en: "Need a quote within 24h?",
     vi: "Cần báo giá trong 24 giờ?",
+    ar: "هل تحتاج إلى عرض سعر خلال 24 ساعة؟",
+    ru: "Нужна смета в течение 24 часов?",
   };
 
   const texts = {
     fr: "Échangez directement avec notre équipe senior sur WhatsApp. Audit et estimations sans engagement.",
     en: "Chat directly with our senior team on WhatsApp. No-obligation audit & estimates.",
     vi: "Trao đổi trực tiếp với đội ngũ chuyên gia trên WhatsApp. Báo giá & tư vấn miễn phí.",
+    ar: "تواصل مباشرة مع فريقنا عبر WhatsApp. استشارات وتقديرات مجانية.",
+    ru: "Общайтесь напрямую с экспертами через WhatsApp. Бесплатный аудит и смета.",
   };
 
   const ctas = {
     fr: "Démarrer la conversation",
     en: "Start conversation",
     vi: "Bắt đầu cuộc trò chuyện",
+    ar: "بدء المحادثة",
+    ru: "Начать разговор",
   };
 
   const onlineText = {
     fr: "En ligne · Réponse sous 2 h",
     en: "Online · Reply in under 2h",
     vi: "Trực tuyến · Phản hồi dưới 2h",
+    ar: "متصل · الرد خلال ساعتين",
+    ru: "В сети · Ответ в течение 2 часов",
+  };
+
+  const waMessages: Record<string, string> = {
+    fr: "Bonjour XR Agency, je souhaite échanger sur un projet digital.",
+    en: "Hello XR Agency, I would like to discuss a digital project.",
+    vi: "Xin chào XR Agency, tôi muốn trao đổi về một dự án kỹ thuật số.",
+    ar: "مرحبا XR Agency، أود مناقشة مشروع رقمي.",
+    ru: "Здравствуйте XR Agency, я хочу обсудить digital-проект.",
   };
 
   const waPrefill = encodeURIComponent(
-    `Bonjour XR Agency, je souhaite échanger sur un projet digital.`,
+    waMessages[lang] ?? waMessages.fr,
   );
   const waUrl = `${CONTACT.whatsapp}?text=${waPrefill}`;
 

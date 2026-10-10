@@ -105,7 +105,10 @@ export const Route = createFileRoute("/api/create-checkout")({
             return Response.json({ sent: true });
           }
           if (!process.env.STRIPE_SECRET_KEY) {
-            return Response.json({ error: "STRIPE_SECRET_KEY manquante dans Cloudflare." }, { status: 503 });
+            return Response.json(
+              { error: "Paiement en ligne temporairement indisponible. Veuillez finaliser par virement ou sur WhatsApp." },
+              { status: 503 }
+            );
           }
 
           const selectedServices = Array.isArray(body.selectedServices) ? body.selectedServices.slice(0, 10) : [];
@@ -135,7 +138,12 @@ export const Route = createFileRoute("/api/create-checkout")({
             return Response.json({ error: "Impossible de calculer le devis." }, { status: 400 });
           }
 
-          const mode = lineItems.some((item) => item.recurring) ? "subscription" : "payment";
+          const hasRecurring = lineItems.some((item) => item.recurring);
+          const hasOneTime = lineItems.some((item) => !item.recurring);
+          // Stripe interdit le mélange de price_data ponctuel et récurrent dans une même session ad-hoc
+          const isSubscriptionOnly = hasRecurring && !hasOneTime;
+          const mode = isSubscriptionOnly ? "subscription" : "payment";
+
           const form = new URLSearchParams();
 
           form.set("mode", mode);
@@ -161,8 +169,9 @@ export const Route = createFileRoute("/api/create-checkout")({
             form.set(`line_items[${index}][price_data][currency]`, currency);
             const convertedAmount = convertAmount(item.amount, currency);
             form.set(`line_items[${index}][price_data][unit_amount]`, String(toMinorUnit(convertedAmount, currency)));
-            form.set(`line_items[${index}][price_data][product_data][name]`, item.label);
-            if (item.recurring) {
+            const labelSuffix = !isSubscriptionOnly && item.recurring ? " (1er mois)" : "";
+            form.set(`line_items[${index}][price_data][product_data][name]`, item.label + labelSuffix);
+            if (isSubscriptionOnly && item.recurring) {
               form.set(`line_items[${index}][price_data][recurring][interval]`, "month");
             }
             form.set(`line_items[${index}][quantity]`, "1");

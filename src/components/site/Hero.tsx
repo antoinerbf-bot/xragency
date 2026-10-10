@@ -113,27 +113,27 @@ export function Hero() {
                     href="#quote"
                     className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-neutral-950 px-7 py-3.5 text-[9px] font-bold uppercase tracking-[.14em] text-white shadow-[0_12px_40px_-15px_rgba(0,0,0,.45)] transition duration-300 hover:-translate-y-1 hover:bg-neutral-800 dark:bg-white dark:text-black dark:shadow-[0_12px_40px_-15px_rgba(255,255,255,.4)] dark:hover:bg-neutral-100"
                   >
-                    Lancer mon analyse personnalisée
+                    {t(UI.heroCtaAnalyze)}
                     <Search className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                   </a>
                   <a
                     href="#quote"
                     className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-emerald-500/50 bg-emerald-500/10 px-6 py-3.5 text-[9px] font-bold uppercase tracking-[.13em] text-emerald-600 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-emerald-500 hover:text-white dark:border-emerald-400/40 dark:bg-emerald-500/15 dark:text-emerald-400 dark:hover:bg-emerald-500 dark:hover:text-black"
                   >
-                    Demander ma maquette gratuite
+                    {t(UI.heroCtaMockup)}
                     <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                   </a>
                   <a
                     href="#audit"
                     className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-neutral-300/90 bg-white/80 px-5 py-3.5 text-[9px] font-semibold uppercase tracking-[.12em] text-neutral-800 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-white dark:border-white/20 dark:bg-white/[.08] dark:text-white dark:hover:bg-white/[.15]"
                   >
-                    Audit de visibilité immédiat
+                    {t(UI.heroCtaAudit)}
                   </a>
                   <a
                     href="#homepage-services"
                     className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-neutral-300/80 bg-white/60 px-5 py-3.5 text-[8.5px] font-semibold uppercase tracking-[.12em] text-neutral-700 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:bg-white dark:border-white/15 dark:bg-white/[.05] dark:text-white/80 dark:hover:bg-white/[.10]"
                   >
-                    Nos 7 expertises
+                    {t(UI.heroCtaExpertises)}
                   </a>
                 </div>
               </Reveal>
@@ -171,7 +171,7 @@ export function Hero() {
               <span className="grid h-8 w-8 place-items-center rounded-full border border-neutral-300/80 dark:border-white/15">
                 <ArrowDown className="h-3.5 w-3.5 animate-pulse-soft" />
               </span>
-              <span className="label-mono text-[6px] tracking-[.22em]">SCROLLER POUR EXPLORER</span>
+              <span className="label-mono text-[6px] tracking-[.22em]">{t(UI.heroScrollNotice)}</span>
             </div>
             <span className="hidden label-mono text-[6px] tracking-[.18em] text-neutral-400 dark:text-white/40 sm:block">
               XRAGENCY / DIGITAL EXPERIENCES

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { X, Trash2, MessageCircle, ShoppingBag, Check } from "lucide-react";
 import { useCart, type CartItem } from "@/hooks/useCart";
 import { CONTACT } from "@/lib/content";
+import { useLang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 /* ── Animated counter for total ── */
@@ -28,24 +29,16 @@ function useCountUpTo(target: number, duration = 400) {
   return val;
 }
 
-function formatPrice(eur: number) {
-  return new Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "EUR",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(eur);
-}
-
-const PERIOD_SHORT: Record<string, string> = {
-  once: "",
-  month: "/mois",
-  year: "/an",
-};
-
 export function Cart() {
   const { items, isOpen, close, removeItem, total, count } = useCart();
+  const { lang, price } = useLang();
   const animatedTotal = useCountUpTo(total, 400);
+
+  const periodShort: Record<string, string> = {
+    once: "",
+    month: lang === "en" ? "/mo" : lang === "vi" ? "/tháng" : "/mois",
+    year: lang === "en" ? "/yr" : lang === "vi" ? "/năm" : "/an",
+  };
 
   // Build WhatsApp message from cart
   const waMessage = encodeURIComponent(
@@ -54,9 +47,9 @@ export function Cart() {
       : `Bonjour XR Agency, je suis intéressé par les services suivants :\n\n${items
           .map(
             (i) =>
-              `• ${i.serviceName} — ${i.planName} : ${formatPrice(i.priceEur)}${PERIOD_SHORT[i.period]}`,
+              `• ${i.serviceName} — ${i.planName} : ${price(i.priceEur)}${periodShort[i.period]}`,
           )
-          .join("\n")}\n\nTotal estimé : ${formatPrice(total)}\n\nPouvons-nous planifier un échange ?`,
+          .join("\n")}\n\nTotal estimé : ${price(total)}\n\nPouvons-nous planifier un échange ?`,
   );
 
   return (
@@ -147,8 +140,8 @@ export function Cart() {
                     </p>
                     <p className="display-serif mt-0.5 text-base text-foreground">{item.planName}</p>
                     <p className="label-mono mt-1 text-xs font-semibold text-primary">
-                      {formatPrice(item.priceEur)}
-                      {PERIOD_SHORT[item.period]}
+                      {price(item.priceEur)}
+                      {periodShort[item.period]}
                     </p>
                   </div>
                   <button
@@ -173,7 +166,7 @@ export function Cart() {
                 key={animatedTotal}
                 className="display-serif text-2xl text-primary animate-price-reveal"
               >
-                {formatPrice(animatedTotal)}
+                {price(animatedTotal)}
               </span>
             </div>
           )}

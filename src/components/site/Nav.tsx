@@ -101,7 +101,7 @@ export function Nav() {
                         onClick={() => setServicesOpen(false)}
                         className="inline-flex items-center gap-1.5 label-mono text-[7px] xr-accent hover:underline"
                       >
-                        Catalogue complet <ArrowRight className="h-3 w-3" />
+                        {t(UI.navFullCatalog)} <ArrowRight className="h-3 w-3" />
                       </Link>
                     </div>
 
@@ -126,7 +126,7 @@ export function Nav() {
                               <span className="mt-1 block text-[7px] leading-3.5 xr-muted line-clamp-2">{t(s.short)}</span>
                             </div>
                             <div className="mt-3 pt-2 border-t xr-line flex items-center justify-between">
-                              <span className="label-mono text-[6px] xr-muted-2">dès</span>
+                              <span className="label-mono text-[6px] xr-muted-2">{t(UI.navFromPrice)}</span>
                               <span className="label-mono text-[7px] font-bold xr-accent">
                                 {price(BASE_PRICES[id].eur)}{BASE_PRICES[id].period ?? ""}
                               </span>
@@ -149,7 +149,7 @@ export function Nav() {
                 to="/recrutement"
                 className="rounded-full px-4 py-2.5 text-[8px] font-semibold uppercase tracking-[.16em] text-emerald-500 hover:bg-[var(--xr-accent-soft)] transition"
               >
-                Affiliation & Recrutement
+                {t(UI.navAffiliation)}
               </Link>
               <button
                 type="button"
@@ -201,7 +201,7 @@ export function Nav() {
               href="/#quote"
               className="hidden min-h-9 px-4 py-2 text-[8px] md:inline-flex"
             >
-              Lancer mon analyse
+              {t(UI.navLaunchAnalyze)}
             </EmberButton>
 
             <button

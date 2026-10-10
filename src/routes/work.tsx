@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowUpRight, Search, ChevronDown, ExternalLink, X } from "lucide-react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Nav } from "@/components/site/Nav";
 import { Reveal } from "@/components/site/primitives";
 import { Contact } from "@/components/site/Contact";
@@ -9,17 +9,12 @@ import { SERVICES } from "@/lib/content";
 import { useLang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/work")({
-  head: () => ({
-    meta: [
-      { title: "Nos réalisations — XRAGENCY" },
-      { name: "description", content: "Réalisations XRAGENCY, projets digitaux et références publiques sélectionnées par secteur." },
-      { property: "og:title", content: "Nos réalisations — XRAGENCY" },
-      { property: "og:description", content: "Découvrez les projets XRAGENCY et une sélection de références digitales par secteur." },
-      { property: "og:type", content: "website" },
-      { name: "robots", content: "index,follow,max-image-preview:large" },
-    ],
-    links: [{ rel: "canonical", href: "https://xragencyai.com/realisations" }],
-  }),
+  beforeLoad: () => {
+    throw redirect({
+      to: "/realisations",
+      statusCode: 301,
+    });
+  },
   component: WorkPage,
 });
 

@@ -1,4 +1,4 @@
-﻿import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Resend } from "resend";
 
 export const Route = createFileRoute("/api/contact")({
@@ -13,7 +13,13 @@ export const Route = createFileRoute("/api/contact")({
             website?: string;
             need?: string;
             message?: string;
+            hp?: string;
           };
+
+          // Protection honeypot silencieuse anti-robots
+          if (body.hp) {
+            return Response.json({ ok: true, message: "Message transmis." });
+          }
 
           const name = body.name?.trim();
           const email = body.email?.trim();
@@ -33,7 +39,7 @@ export const Route = createFileRoute("/api/contact")({
           if (process.env.RESEND_API_KEY) {
             try {
               const resend = new Resend(process.env.RESEND_API_KEY);
-              const from = process.env.RESEND_FROM_EMAIL || "XR Agency <contact.xragency@gmail.com>";
+              const from = process.env.RESEND_FROM_EMAIL || "XR Agency <onboarding@resend.dev>";
 
               await resend.emails.send({
                 from,

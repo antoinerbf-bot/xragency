@@ -44,18 +44,37 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+function attachSecurityHeaders(response: Response): Response {
+  const headers = new Headers(response.headers);
+  if (!headers.has("x-content-type-options")) headers.set("x-content-type-options", "nosniff");
+  if (!headers.has("x-frame-options")) headers.set("x-frame-options", "SAMEORIGIN");
+  if (!headers.has("referrer-policy")) headers.set("referrer-policy", "strict-origin-when-cross-origin");
+  if (!headers.has("permissions-policy")) headers.set("permissions-policy", "camera=(), microphone=(), geolocation=()");
+  if (!headers.has("strict-transport-security")) {
+    headers.set("strict-transport-security", "max-age=31536000; includeSubDomains; preload");
+  }
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      const normalized = await normalizeCatastrophicSsrResponse(response);
+      return attachSecurityHeaders(normalized);
     } catch (error) {
       console.error(error);
-      return new Response(renderErrorPage(), {
+      const errorResponse = new Response(renderErrorPage(), {
         status: 500,
         headers: { "content-type": "text/html; charset=utf-8" },
       });
+      return attachSecurityHeaders(errorResponse);
     }
   },
 };

@@ -5,7 +5,26 @@ import { useLang, type Lang, type L } from "@/lib/i18n";
 import { Nav } from "@/components/site/Nav";
 import { ServiceIllustration } from "@/components/site/ServiceIllustration";
 
-export const Route = createFileRoute("/services/seo")({ component: SEOPage });
+export const Route = createFileRoute("/services/seo")({
+  head: () => ({
+    meta: [
+      { title: "SEO & Domination Google — Stratégie & Référencement Naturel | XR Agency" },
+      {
+        name: "description",
+        content:
+          "Programmes SEO mensuels et annuels pour positionner durablement votre marque sur Google : audit technique, mots-clés, netlinking et reporting.",
+      },
+      { property: "og:title", content: "SEO & Référencement Naturel — XR Agency" },
+      {
+        property: "og:description",
+        content: "Faites de Google votre principal canal d'acquisition organique qualifié.",
+      },
+      { property: "og:type", content: "website" },
+    ],
+    links: [{ rel: "canonical", href: "https://xragencyai.com/services/seo" }],
+  }),
+  component: SEOPage,
+});
 
 type Copy = L;
 type Plan = { name: Copy; price: Copy; period: Copy; audience: Copy; features: Copy[]; popular?: boolean; annual?: boolean };
