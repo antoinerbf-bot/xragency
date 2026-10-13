@@ -72,7 +72,7 @@ export function Hero() {
           fetchPriority="high"
         />
         {/* Voile photographique raffiné préservant la netteté des bureaux parisiens et de la Tour Eiffel */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#f8f6f0]/95 via-[#f8f6f0]/78 to-[#f8f6f0]/10 dark:from-[#090a0d]/92 dark:via-[#090a0d]/68 dark:to-[#090a0d]/12" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#f8f6f0]/15 via-[#f8f6f0]/58 to-[#f8f6f0]/96 dark:from-[#090a0d]/20 dark:via-[#090a0d]/62 dark:to-[#090a0d]/96 sm:bg-gradient-to-r sm:from-[#f8f6f0]/95 sm:via-[#f8f6f0]/78 sm:to-[#f8f6f0]/10 sm:dark:from-[#090a0d]/92 sm:dark:via-[#090a0d]/68 sm:dark:to-[#090a0d]/12" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#f8f6f0]/95 via-transparent to-[#f8f6f0]/15 dark:from-[#090a0d]/95 dark:via-transparent dark:to-[#090a0d]/15" />
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[var(--xr-bg)] to-transparent" />
       </div>
