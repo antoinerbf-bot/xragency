@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import {
   ArrowDown,
   ArrowRight,
-  Play,
   Search,
 } from "lucide-react";
-import { LANGS, useLang } from "@/lib/i18n";
+import { useLang } from "@/lib/i18n";
 import { XR_HERO_PHOTO } from "@/lib/photography";
 import { UI } from "@/lib/copy";
 import { Parallax, Reveal } from "./primitives";
