@@ -68,19 +68,19 @@ export function Hero() {
         <img
           src={XR_HERO_PHOTO}
           alt="XR Agency Creative Studio Paris"
-          className="xr-hero-bg absolute inset-0 h-full w-full object-cover object-center transition-all duration-700 opacity-70 brightness-[1.02] contrast-[1.05] dark:opacity-75 dark:brightness-95 dark:contrast-115"
+          className="xr-hero-bg absolute inset-0 h-full w-full object-cover object-[62%_center] opacity-90 brightness-[1.02] contrast-[1.04] dark:opacity-85 dark:brightness-90 dark:contrast-110 sm:object-[60%_center]"
           fetchPriority="high"
         />
         {/* Voile photographique raffiné préservant la netteté des bureaux parisiens et de la Tour Eiffel */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#f8f6f0]/90 via-[#f8f6f0]/60 to-transparent dark:from-[#090a0d]/90 dark:via-[#090a0d]/65 dark:to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#f8f6f0] via-transparent to-[#f8f6f0]/30 dark:from-[#090a0d] dark:via-transparent dark:to-[#090a0d]/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#f8f6f0]/95 via-[#f8f6f0]/78 to-[#f8f6f0]/10 dark:from-[#090a0d]/92 dark:via-[#090a0d]/68 dark:to-[#090a0d]/12" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#f8f6f0]/95 via-transparent to-[#f8f6f0]/15 dark:from-[#090a0d]/95 dark:via-transparent dark:to-[#090a0d]/15" />
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[var(--xr-bg)] to-transparent" />
       </div>
 
-      <div className="relative mx-auto flex min-h-[100svh] max-w-[1640px] flex-col justify-between px-5 pb-8 pt-28 sm:px-8 sm:pb-10 sm:pt-32 lg:px-12 lg:pt-36">
+      <div className="relative mx-auto flex min-h-[100svh] max-w-[1640px] flex-col justify-between px-5 pb-7 pt-28 sm:px-8 sm:pb-10 sm:pt-32 lg:px-12 lg:pt-36">
         <div className="flex flex-1 items-center">
           <Parallax speed={-0.014} className="w-full">
-            <div className="relative z-20 max-w-3xl rounded-[2.5rem] border border-neutral-300/40 bg-white/40 p-6 shadow-xl backdrop-blur-md dark:border-white/10 dark:bg-black/35 sm:p-10">
+            <div className="relative z-20 max-w-3xl py-2 sm:py-4">
               <Reveal>
                 <div className="flex items-center gap-3">
                   <span className="h-px w-10 bg-neutral-400 dark:bg-white/40" />
@@ -91,7 +91,7 @@ export function Hero() {
               </Reveal>
 
               <Reveal delay={80}>
-                <h1 className="display-serif mt-6 max-w-[900px] text-[clamp(2.8rem,5.8vw,6.5rem)] leading-[.92] tracking-[-.055em] text-neutral-900 dark:text-white break-words drop-shadow-sm">
+                <h1 className="display-serif mt-6 max-w-[900px] text-[clamp(2.55rem,6.2vw,6.5rem)] leading-[.94] tracking-[-.055em] text-neutral-950 dark:text-white break-words [text-shadow:0_1px_18px_rgba(255,255,255,.12)] dark:[text-shadow:0_2px_24px_rgba(0,0,0,.22)]">
                   <span className="inline-block whitespace-nowrap">{t(UI.heroTitle1)}</span>{" "}
                   <span className="italic font-normal text-neutral-900 dark:text-white inline-block">
                     {t(UI.heroTitleAccent)}
