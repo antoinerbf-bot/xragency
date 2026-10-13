@@ -112,14 +112,14 @@ export function Hero() {
                 <div className="mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                   <a
                     href="#quote"
-                    className="group relative inline-flex min-h-14 items-center justify-center gap-3 overflow-hidden rounded-full border border-emerald-500/70 bg-emerald-600 px-8 py-4 text-[10px] font-bold uppercase tracking-[.15em] text-white shadow-[0_14px_45px_-12px_rgba(5,150,105,.72)] transition duration-300 hover:-translate-y-1 hover:bg-emerald-500 hover:shadow-[0_18px_50px_-12px_rgba(5,150,105,.8)] dark:border-emerald-300/50 dark:bg-emerald-400 dark:text-neutral-950 dark:shadow-[0_14px_45px_-12px_rgba(52,211,153,.45)] dark:hover:bg-emerald-300 sm:min-h-14"
+                    className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-neutral-900/20 bg-white/65 px-6 py-3.5 text-[9px] font-semibold uppercase tracking-[.13em] text-neutral-900 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white dark:border-white/30 dark:bg-black/25 dark:text-white dark:hover:bg-black/45"
                   >
                     {t(UI.heroCtaAnalyze)}
                     <Search className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                   </a>
                   <a
                     href="#quote"
-                    className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-neutral-900/20 bg-white/65 px-6 py-3.5 text-[9px] font-semibold uppercase tracking-[.13em] text-neutral-900 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white dark:border-white/30 dark:bg-black/25 dark:text-white dark:hover:bg-black/45"
+                    className="group relative inline-flex min-h-14 items-center justify-center gap-3 overflow-hidden rounded-full border border-emerald-500/70 bg-emerald-600 px-8 py-4 text-[10px] font-bold uppercase tracking-[.15em] text-white shadow-[0_14px_45px_-12px_rgba(5,150,105,.72)] transition duration-300 hover:-translate-y-1 hover:bg-emerald-500 hover:shadow-[0_18px_50px_-12px_rgba(5,150,105,.8)] dark:border-emerald-300/50 dark:bg-emerald-400 dark:text-neutral-950 dark:shadow-[0_14px_45px_-12px_rgba(52,211,153,.45)] dark:hover:bg-emerald-300 sm:min-h-14"
                   >
                     {t(UI.heroCtaMockup)}
                     <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
