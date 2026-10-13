@@ -12,11 +12,11 @@ export type Lang = "fr" | "en" | "vi" | "ar" | "ru";
 export type L = Record<string, string>;
 
 export const LANGS: { code: string; label: string; flag: string }[] = [
-  { code: "fr", label: "FR", flag: "🇫🇷" },
-  { code: "en", label: "EN", flag: "🇬🇧" },
-  { code: "vi", label: "VI", flag: "🇻🇳" },
-  { code: "ar", label: "AR", flag: "🇦🇪" },
-  { code: "ru", label: "RU", flag: "🇷🇺" },
+  { code: "fr", label: "Français", flag: "🇫🇷" },
+  { code: "en", label: "English", flag: "🇬🇧" },
+  { code: "vi", label: "Tiếng Việt", flag: "🇻🇳" },
+  { code: "ar", label: "العربية", flag: "🇸🇦" },
+  { code: "ru", label: "Русский", flag: "🇷🇺" },
 ];
 
 /**
