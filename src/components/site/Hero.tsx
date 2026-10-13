@@ -81,7 +81,7 @@ export function Hero() {
           className="xr-hero-video absolute inset-0 h-full w-full object-cover object-[58%_center] sm:object-center"
           onError={(event) => { event.currentTarget.style.display = "none"; }}
         >
-          <source src="/__l5e/assets-v1/22bc4b57-f585-4301-9b43-db26f682e9a7/hero-studio.mp4" type="video/mp4" />
+          <source src="https://videos.pexels.com/video-files/1350205/1350205-hd_1920_1080_30fps.mp4" type="video/mp4" />
         </video>
         {/* Voiles légers : conserver le contraste du texte sans blanchir la photo ni masquer la Tour Eiffel */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#f8f6f0]/20 via-[#f8f6f0]/5 to-[#f8f6f0]/48 dark:from-[#090a0d]/24 dark:via-[#090a0d]/8 dark:to-[#090a0d]/58" />
@@ -89,98 +89,123 @@ export function Hero() {
         <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#f8f6f0]/70 to-transparent dark:from-[#090a0d]/75" />
       </div>
 
-      <div className="relative mx-auto flex min-h-[100svh] max-w-[1640px] flex-col justify-between px-5 pb-7 pt-28 sm:px-8 sm:pb-10 sm:pt-32 lg:px-12 lg:pt-36">
-        <div className="flex flex-1 items-end justify-center pb-8 pt-20 sm:pb-12 sm:pt-28">
-          <Parallax speed={-0.008} className="w-full">
-            <div className="relative z-20 mx-auto max-w-4xl py-2 text-center sm:py-4">
-              <Reveal>
-                <div className="flex items-center justify-center gap-3">
-                  <span className="h-px w-8 bg-emerald-600/80 dark:bg-emerald-400/80" />
-                  <span className="label-mono text-[8px] tracking-[.28em] text-neutral-700 dark:text-white/75">
-                    {t(UI.heroKicker)}
-                  </span>
-                  <span className="h-px w-8 bg-emerald-600/80 dark:bg-emerald-400/80" />
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-[#08090b]/85 via-[#08090b]/55 to-[#08090b]/10 dark:from-[#050608]/88 dark:via-[#050608]/55 dark:to-[#050608]/15" />
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-[#08090b]/75 via-transparent to-[#08090b]/15" />
+
+      <div className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-[1640px] flex-col justify-between px-5 pb-6 pt-28 sm:px-8 sm:pb-9 sm:pt-32 lg:px-12 lg:pt-36">
+        <div className="grid flex-1 items-center gap-9 py-10 lg:grid-cols-[1.08fr_.92fr] lg:gap-12 xl:gap-16">
+          <div className="relative z-10 min-w-0 max-w-4xl">
+            <Reveal>
+              <div className="mb-6 flex items-center gap-3">
+                <span className="h-px w-9 bg-emerald-400" />
+                <span className="label-mono text-[8px] tracking-[.25em] text-white/80 sm:text-[9px]">{t(UI.heroKicker)}</span>
+                <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1 label-mono text-[7px] tracking-[.12em] text-white/85 backdrop-blur-md">STUDIO DIGITAL · INTERNATIONAL</span>
+              </div>
+            </Reveal>
+            <Reveal delay={90}>
+              <h1 className="display-serif max-w-[900px] break-words text-left text-[clamp(3.15rem,7.3vw,7.5rem)] leading-[.91] tracking-[-.065em] text-white [text-shadow:0_4px_34px_rgba(0,0,0,.35)]">
+                <span>{t(UI.heroTitle1)} </span><em className="font-normal text-white/75">{t(UI.heroTitleAccent)}</em>
+                <br />
+                <span className="relative inline-block pb-2">
+                  {t(UI.heroTitle2)}
+                  <span aria-hidden="true" className="absolute -bottom-1 left-0 h-[3px] w-[68%] origin-left animate-film-pulse bg-emerald-400/90" />
+                </span>
+              </h1>
+            </Reveal>
+            <Reveal delay={160}>
+              <p className="mt-6 max-w-xl text-left text-sm leading-6 text-white/85 sm:mt-7 sm:text-base sm:leading-7 lg:text-lg">
+                {t(UI.heroLead)}
+              </p>
+            </Reveal>
+            <Reveal delay={230}>
+              <div className="mt-7 flex max-w-2xl flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center">
+                <a href="#quote" className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-emerald-400 px-7 py-4 text-[10px] font-bold uppercase tracking-[.15em] text-[#07110d] shadow-[0_14px_44px_-14px_rgba(52,211,153,.75)] transition duration-300 hover:-translate-y-1 hover:bg-emerald-300 sm:min-w-[250px]">
+                  {t(UI.heroCtaMockup)} <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </a>
+                <a href="#audit" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/35 bg-black/20 px-5 py-3.5 text-[9px] font-semibold uppercase tracking-[.13em] text-white backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:bg-white/10">
+                  {t(UI.heroCtaAudit)} <Search className="h-3.5 w-3.5" />
+                </a>
+                <a href="#homepage-services" className="inline-flex min-h-12 items-center justify-center gap-2 self-start px-2 py-3 text-[9px] font-semibold uppercase tracking-[.13em] text-white/75 transition hover:text-white">
+                  Explorer les expertises <ArrowDown className="h-3.5 w-3.5" />
+                </a>
+              </div>
+            </Reveal>
+            <Reveal delay={300}>
+              <div className="mt-8 grid max-w-lg grid-cols-3 gap-4 border-t border-white/25 pt-5 sm:mt-10 sm:gap-7 sm:pt-6">
+                <Stat value={500} suffix="+" label={t(UI.statProjects)} />
+                <Stat value={98} suffix="%" label={t(UI.statSatisfaction)} />
+                <Stat value={8} suffix="+" label={t(UI.statYears)} />
+              </div>
+            </Reveal>
+          </div>
+
+          <Reveal delay={220}>
+            <div className="relative mx-auto w-full max-w-[570px] lg:ml-auto">
+              <div aria-hidden="true" className="absolute -inset-8 rounded-[3rem] bg-emerald-300/10 blur-3xl" />
+              <div className="relative overflow-hidden rounded-[1.6rem] border border-white/25 bg-[#101216]/70 p-3 shadow-[0_35px_120px_-35px_rgba(0,0,0,.8)] backdrop-blur-2xl sm:rounded-[2rem] sm:p-4">
+                <div className="flex items-center justify-between border-b border-white/15 px-2 pb-3 sm:px-3">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#ff6b66]" /><span className="h-2.5 w-2.5 rounded-full bg-[#ffd166]" /><span className="h-2.5 w-2.5 rounded-full bg-[#4ade80]" />
+                    <span className="ml-2 label-mono text-[7px] tracking-[.15em] text-white/55 sm:text-[8px]">XR CREATIVE STUDIO / LIVE</span>
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300/25 bg-emerald-300/10 px-2 py-1 label-mono text-[6px] text-emerald-200 sm:text-[7px]"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-300" /> EN CRÉATION</span>
                 </div>
-              </Reveal>
-
-              <Reveal delay={80}>
-                <h1 className="display-serif mx-auto mt-5 max-w-[950px] text-[clamp(2.35rem,6.2vw,6.2rem)] leading-[.98] tracking-[-.055em] text-neutral-950 dark:text-white break-words [text-shadow:0_2px_22px_rgba(248,246,240,.72)] dark:[text-shadow:0_3px_28px_rgba(0,0,0,.68)]">
-                  <span className="inline-block">{t(UI.heroTitle1)}</span>{" "}
-                  <span className="italic font-normal text-neutral-900 dark:text-white inline-block">
-                    {t(UI.heroTitleAccent)}
-                  </span>
-                  <br />
-                  <em className="not-italic text-neutral-800 dark:text-white/90">{t(UI.heroTitle2)}</em>
-                </h1>
-              </Reveal>
-
-              <Reveal delay={150}>
-                <p className="mx-auto mt-5 max-w-xl text-[14px] leading-6 text-neutral-800 dark:text-white/90 sm:mt-6 sm:text-base sm:leading-7">
-                  {t(UI.heroLead)}
-                </p>
-              </Reveal>
-
-              <Reveal delay={220}>
-                <div className="mx-auto mt-7 flex w-full max-w-4xl flex-col items-stretch justify-center gap-2.5 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
-                  <a
-                    href="#quote"
-                    className="group relative inline-flex min-h-14 w-full items-center justify-center gap-3 overflow-hidden rounded-full border border-emerald-500/70 bg-emerald-600 px-7 py-4 text-[10px] font-bold uppercase tracking-[.15em] text-white shadow-[0_12px_32px_-12px_rgba(5,150,105,.62)] transition duration-300 hover:-translate-y-1 hover:bg-emerald-500 hover:shadow-[0_16px_40px_-12px_rgba(5,150,105,.72)] dark:border-emerald-300/50 dark:bg-emerald-400 dark:text-neutral-950 dark:shadow-[0_12px_32px_-12px_rgba(52,211,153,.38)] dark:hover:bg-emerald-300 sm:w-auto sm:min-w-[280px]"
-                  >
-                    {t(UI.heroCtaMockup)}
-                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-                  </a>
-                  <a
-                    href="#quote"
-                    className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-neutral-900/20 bg-white/75 px-5 py-3 text-[9px] font-semibold uppercase tracking-[.12em] text-neutral-900 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white dark:border-white/30 dark:bg-black/45 dark:text-white dark:hover:bg-black/60"
-                  >
-                    {t(UI.heroCtaAnalyze)}
-                    <Search className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-                  </a>
-                  <a
-                    href="#audit"
-                    className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-neutral-900/20 bg-white/55 px-5 py-3.5 text-[9px] font-semibold uppercase tracking-[.12em] text-neutral-800 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white/90 dark:border-white/25 dark:bg-black/20 dark:text-white dark:hover:bg-black/40"
-                  >
-                    {t(UI.heroCtaAudit)}
-                  </a>
-                  <a
-                    href="#homepage-services"
-                    className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-neutral-900/15 bg-white/40 px-5 py-3.5 text-[8.5px] font-semibold uppercase tracking-[.12em] text-neutral-700 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white/80 dark:border-white/20 dark:bg-black/15 dark:text-white/85 dark:hover:bg-black/35"
-                  >
-                    {t(UI.heroCtaExpertises)}
-                  </a>
+                <div className="grid gap-3 p-2 pt-3 sm:grid-cols-[.72fr_1.28fr] sm:gap-4 sm:p-3">
+                  <div className="flex flex-col justify-between gap-4 rounded-xl border border-white/10 bg-white/[.04] p-3 sm:p-4">
+                    <div>
+                      <span className="label-mono text-[6px] tracking-[.16em] text-emerald-200/80">01 / DIRECTION</span>
+                      <p className="mt-2 display-serif text-xl leading-tight text-white sm:text-2xl">Une idée.<br />Un univers.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10"><div className="h-full w-[82%] rounded-full bg-emerald-300 animate-pulse" /></div>
+                      <div className="h-1.5 w-[72%] rounded-full bg-white/15" />
+                      <div className="h-1.5 w-[55%] rounded-full bg-white/10" />
+                      <span className="block pt-1 label-mono text-[6px] text-white/45">IDENTITÉ · UX · STRATÉGIE</span>
+                    </div>
+                  </div>
+                  <div className="relative min-h-[150px] overflow-hidden rounded-xl border border-white/15 bg-[#e9e7df] p-3 text-[#15171b] sm:min-h-[235px] sm:p-4">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_12%,rgba(52,211,153,.38),transparent_35%),linear-gradient(145deg,#f8f7f2,#d9dedb)]" />
+                    <div className="relative flex items-center justify-between border-b border-black/10 pb-3">
+                      <span className="text-[9px] font-black tracking-[.16em]">YOUR BRAND.</span>
+                      <span className="text-[7px] uppercase tracking-[.14em] opacity-55">Digital experience</span>
+                    </div>
+                    <div className="relative grid h-[112px] grid-cols-[1fr_.72fr] items-center gap-2 sm:h-[170px]">
+                      <div>
+                        <span className="text-[6px] font-semibold uppercase tracking-[.2em] text-emerald-800">Made to stand out</span>
+                        <p className="mt-2 display-serif text-[clamp(1.35rem,3vw,2.7rem)] leading-[.94] tracking-[-.06em]">Make<br />it matter.</p>
+                        <div className="mt-3 inline-flex rounded-full bg-[#15171b] px-3 py-2 text-[6px] font-bold uppercase tracking-[.12em] text-white">Discover more ↗</div>
+                      </div>
+                      <div className="relative h-[82%] overflow-hidden rounded-lg bg-[#c5d5cc]">
+                        <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(255,255,255,.15),transparent_55%),radial-gradient(ellipse_at_50%_20%,#f1e4d4,#a5bcb0_70%)]" />
+                        <div className="absolute inset-x-[15%] bottom-0 top-[18%] rounded-t-full border border-white/35 bg-[linear-gradient(120deg,rgba(255,255,255,.65),rgba(20,40,32,.12))]" />
+                        <div className="absolute inset-x-0 bottom-0 h-[35%] bg-[#263d34]/15" />
+                      </div>
+                    </div>
+                    <div aria-hidden="true" className="absolute inset-x-0 top-0 h-full w-1/3 -translate-x-full animate-xr-scan bg-gradient-to-r from-transparent via-white/35 to-transparent" />
+                  </div>
                 </div>
-              </Reveal>
-
-              <Reveal delay={290}>
-                <div className="mx-auto mt-7 grid max-w-2xl grid-cols-3 gap-5 border-y border-neutral-300/60 bg-white/20 py-4 backdrop-blur-[2px] dark:border-white/20 dark:bg-black/10 sm:mt-8 sm:gap-8 sm:py-5">
-                  <Stat value={500} suffix="+" label={t(UI.statProjects)} />
-                  <Stat value={98} suffix="%" label={t(UI.statSatisfaction)} />
-                  <Stat value={8} suffix="+" label={t(UI.statYears)} />
+                <div className="flex items-center justify-between border-t border-white/15 px-2 pt-3 sm:px-3">
+                  <span className="label-mono text-[6px] tracking-[.14em] text-white/50 sm:text-[7px]">DESIGN · WEB · ACQUISITION · IA</span>
+                  <span className="label-mono text-[6px] tracking-[.12em] text-emerald-200 sm:text-[7px]">EN MOUVEMENT ↗</span>
                 </div>
-              </Reveal>
-
-              <Reveal delay={350}>
-                <div className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
-                  <span className="label-mono text-[7px] tracking-[.2em] text-neutral-600 dark:text-white/65">
-                    WEB · BRAND · SEO · LOCAL · SOCIAL · WEBCARE · ROBOTIQUE
-                  </span>
-                </div>
-              </Reveal>
+              </div>
+              <div className="absolute -left-2 top-[18%] hidden animate-xr-drift rounded-2xl border border-white/25 bg-[#111318]/85 px-4 py-3 text-white shadow-xl backdrop-blur-xl sm:block lg:-left-8">
+                <span className="label-mono text-[6px] text-white/45">EN DIRECT</span><p className="mt-1 text-xs font-semibold">Votre prochaine idée prend forme.</p>
+              </div>
+              <div className="absolute -right-2 bottom-[9%] hidden animate-xr-drift rounded-2xl border border-emerald-200/35 bg-emerald-300 px-4 py-3 text-[#07110d] shadow-xl sm:block lg:-right-5">
+                <span className="label-mono text-[6px]">PROCHAIN OBJECTIF</span><p className="mt-1 text-xs font-bold">Plus de visibilité. Plus de clients.</p>
+              </div>
             </div>
-          </Parallax>
+          </Reveal>
         </div>
 
-        <Reveal delay={460}>
-          <div className="relative z-20 mt-4 flex items-center justify-between border-t border-neutral-300/50 pt-4 dark:border-white/15 sm:mt-2 sm:pt-5">
-            <div className="flex items-center gap-3 text-neutral-500 dark:text-white/50">
-              <span className="grid h-8 w-8 place-items-center rounded-full border border-neutral-300/80 dark:border-white/15">
-                <ArrowDown className="h-3.5 w-3.5 animate-pulse-soft" />
-              </span>
-              <span className="label-mono text-[6px] tracking-[.22em]">{t(UI.heroScrollNotice)}</span>
+        <Reveal delay={390}>
+          <div className="flex items-center justify-between border-t border-white/20 pt-4">
+            <div className="flex items-center gap-3 text-white/65">
+              <span className="grid h-8 w-8 place-items-center rounded-full border border-white/25"><ArrowDown className="h-3.5 w-3.5 animate-pulse-soft" /></span>
+              <span className="label-mono text-[6px] tracking-[.22em]">SCROLL POUR EXPLORER · XRAGENCY</span>
             </div>
-            <span className="hidden label-mono text-[6px] tracking-[.18em] text-neutral-400 dark:text-white/40 sm:block">
-              XRAGENCY / DIGITAL EXPERIENCES
-            </span>
+            <span className="hidden label-mono text-[6px] tracking-[.18em] text-white/40 sm:block">DES IDÉES AU RÉSULTAT / 2026</span>
           </div>
         </Reveal>
       </div>
