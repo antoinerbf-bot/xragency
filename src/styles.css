@@ -607,7 +607,7 @@ video {
 }
 
 .xr-hero-video {
-  z-index: 1;
+  z-index: 0;
   filter: saturate(1.04) contrast(1.03);
 }
 
