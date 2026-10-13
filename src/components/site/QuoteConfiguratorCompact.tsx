@@ -382,24 +382,37 @@ export function QuoteConfiguratorCompact() {
 
   const titles = ["Votre activité", "Votre priorité", "Votre situation aujourd'hui", "L'investissement envisagé", "Les prestations à activer", "Comment vos clients vous trouvent", "Votre recommandation", "Vos informations"];
   const progress = ((step + 1) / 8) * 100;
-  const card = (item: Choice, onClick: () => void, selected = false) => (
-    <button
-      key={item.id}
-      type="button"
-      onClick={onClick}
-      className={"choice-card group relative w-full overflow-hidden rounded-[1.45rem] border p-4 text-left transition-all duration-300 " + (selected ? "is-active border-[var(--xr-ink)] bg-[var(--xr-accent-soft)] text-[var(--xr-ink)]" : "border-[var(--xr-line)] bg-[var(--xr-surface-strong)] text-[var(--xr-ink)]")}
-    >
-      <span className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[var(--xr-accent-soft)] blur-2xl transition-transform duration-500 group-hover:scale-150" />
-      <div className="relative flex items-start justify-between gap-3">
-        <div>
-          <span className="mb-2 inline-flex rounded-full border xr-line bg-[var(--xr-bg)] px-2 py-1 label-mono text-[7px] tracking-[.14em] xr-muted-2">XR / OPTION</span>
-          <span className="block text-[11px] font-semibold leading-4 text-[var(--xr-ink)] sm:text-sm">{item.label}</span>
-          <span className="mt-1.5 block text-[9px] leading-4 xr-muted">{item.detail}</span>
+  const card = (item: Choice, onClick: () => void, selected = false) => {
+    const icons: Record<string, string> = {
+      restaurant: "🍽️", hospitality: "🏨", realestate: "🏡", automotive: "🚘", fashion: "👜", jewelry: "💎", beauty: "✨", health: "🩺", architecture: "🏛️", construction: "🛠️", legal: "⚖️", finance: "📈", commerce: "🛍️", tourism: "✈️", agency: "🎨", other: "💡",
+      website: "🖥️", branding: "🎨", seo: "🔎", maps: "📍", ads: "🚀", social: "💬", content: "🎬", conversion: "🧭", maintenance: "🛠️", robotics: "🤖",
+      none: "🌱", existing: "🧩", redesign: "✨", outdated: "🕰️", invisible: "👀", selling: "🛒", international: "🌍", launch: "🚀",
+      under500: "🌿", "500_1000": "🧱", "1000_2500": "🚀", "2500_5000": "💎", "5000_plus": "🏆",
+      google: "🔍", referral: "🤝", mixed: "🌐",
+    };
+    return (
+      <button
+        key={item.id}
+        type="button"
+        aria-pressed={selected}
+        onClick={onClick}
+        className={"choice-card group relative min-h-[132px] w-full overflow-hidden rounded-[1.4rem] border p-4 text-left transition-all duration-300 sm:min-h-[148px] sm:p-5 " + (selected ? "is-active border-emerald-500/70 bg-emerald-500/[.09] text-[var(--xr-ink)] shadow-[0_12px_34px_-20px_rgba(16,185,129,.55)]" : "border-[var(--xr-line)] bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] hover:border-emerald-500/40")}
+      >
+        <span className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-emerald-400/10 blur-2xl transition-transform duration-500 group-hover:scale-150" />
+        <div className="relative flex h-full flex-col justify-between gap-5">
+          <div className="flex items-start justify-between gap-3">
+            <span aria-hidden="true" className={"grid h-11 w-11 shrink-0 place-items-center rounded-2xl text-xl transition-transform duration-300 group-hover:rotate-[-4deg] group-hover:scale-110 " + (selected ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20" : "bg-[var(--xr-accent-soft)]")}>{icons[item.id] ?? "✦"}</span>
+            <span className={"grid h-7 w-7 shrink-0 place-items-center rounded-full border transition-all " + (selected ? "border-emerald-500 bg-emerald-500 text-white" : "xr-line bg-[var(--xr-bg)] xr-muted-2 group-hover:border-emerald-500/50 group-hover:text-emerald-600")}>{selected ? <Check className="h-3.5 w-3.5" /> : <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />}</span>
+          </div>
+          <div>
+            <span className="block text-sm font-semibold leading-5 text-[var(--xr-ink)] sm:text-[15px]">{item.label}</span>
+            <span className="mt-1.5 block text-[11px] leading-[1.55] xr-muted sm:text-xs">{item.detail}</span>
+          </div>
+          {selected && <span className="label-mono text-[7px] tracking-[.15em] text-emerald-600 dark:text-emerald-300">✓ AJOUTÉ À VOTRE PROJET</span>}
         </div>
-        <span className={"mt-1 grid h-7 w-7 shrink-0 place-items-center rounded-full border transition-all " + (selected ? "border-[var(--xr-ink)] bg-[var(--xr-ink)] text-[var(--xr-bg)]" : "xr-line bg-[var(--xr-bg)] xr-muted-2 group-hover:bg-[var(--xr-accent-soft)] group-hover:text-[var(--xr-ink)]")}>{selected ? <Check className="h-3.5 w-3.5" /> : <ArrowRight className="h-3.5 w-3.5" />}</span>
-      </div>
-    </button>
-  );
+      </button>
+    );
+  };
 
   const totalLabel = once > 0 && monthly > 0
     ? once.toLocaleString("fr-FR") + " € + " + monthly.toLocaleString("fr-FR") + " €/mois"
@@ -523,9 +536,9 @@ export function QuoteConfiguratorCompact() {
             <div className="mt-2 rounded-xl border xr-line bg-[var(--xr-surface)] p-3"><span className="label-mono text-[6px] xr-muted-2">SYSTÈME</span><p className="mt-1 text-[9px] font-semibold">{selectedServices.length} brique(s) active(s)</p><p className="mt-1 text-[7px] xr-muted">{totalLabel}</p></div>
           </aside></Reveal>
           <Reveal delay={70}><div className="xr-depth-card rounded-[2.2rem] border xr-line bg-[var(--xr-surface)] p-4 sm:p-6 lg:p-8">
-            <div className="flex items-end justify-between gap-4 border-b xr-line pb-5"><div><span className="label-mono text-[6px] tracking-[.22em] xr-muted-2">{step===7?"FINALISATION":"QUESTION "+String(step+1).padStart(2,"0")}</span><h3 className="mt-2 max-w-3xl break-words text-balance text-xl font-semibold leading-tight tracking-[-.025em] sm:text-2xl">{titles[step]}</h3></div>{step>0&&<button type="button" onClick={()=>goToStep(step-1)} className="rounded-full border xr-line px-4 py-2 label-mono text-[7px] xr-muted">← Retour</button>}</div>
+            <div className="flex items-center justify-between gap-3 border-b xr-line pb-5"><div className="min-w-0"><span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-emerald-700 dark:text-emerald-300"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"/>{step===7?"DERNIÈRE LIGNE DROITE":"ÉTAPE "+String(step+1).padStart(2,"0")+" / 08"}</span><h3 className="mt-3 max-w-3xl break-words text-balance text-2xl font-semibold leading-[1.12] tracking-[-.03em] sm:text-3xl">{titles[step]}</h3><p className="mt-2 text-xs leading-5 xr-muted sm:text-sm">{["On commence simplement : quel est votre univers ?","Qu’aimeriez-vous améliorer en premier ?","Où en êtes-vous aujourd’hui ?","On adapte la proposition à votre investissement.","Composez votre équipe digitale à la carte.","Comment les clients vous découvrent-ils ?","Voici une piste claire, avec les coûts détaillés.","Encore quelques coordonnées pour finaliser votre brief."][step]}</p></div>{step>0&&<button type="button" onClick={()=>goToStep(step-1)} className="shrink-0 rounded-full border xr-line px-4 py-2 text-xs font-semibold transition hover:bg-[var(--xr-accent-soft)]">← Retour</button>}</div>
             <div className="mt-7">
-              {step===0&&<div className="space-y-4"><div className="rounded-[1.6rem] border xr-line bg-[var(--xr-surface-strong)] p-5"><span className="label-mono text-[6px] xr-accent">01 · VOTRE ACTIVITÉ</span><p className="mt-2 text-sm xr-muted">Choisissez votre univers. Les recommandations s'adaptent ensuite à votre objectif, situation et budget.</p></div><div className="grid grid-cols-2 gap-2 sm:grid-cols-3">{(showAllSectors?SECTORS:SECTORS.slice(0,6)).map((x,i)=><button key={x.id} type="button" onClick={()=>{setSectorId(x.id);goToStep(1)}} className="xr-depth-card rounded-2xl border xr-line bg-[var(--xr-surface-strong)] p-4 text-left hover:bg-[var(--xr-accent-soft)]"><span className="label-mono text-[6px] xr-muted-2">0{String(i+1)}</span><span className="mt-2 block text-[10px] font-semibold">{x.label}</span><span className="mt-1 block text-[8px] leading-4 xr-muted">{x.detail}</span></button>)}</div><button type="button" onClick={()=>setShowAllSectors(v=>!v)} className="w-full rounded-full border xr-line py-3 label-mono text-[7px] xr-muted">{showAllSectors?"Réduire les activités":"Voir toutes les activités"}</button></div>}
+              {step===0&&<div className="space-y-4"><div className="rounded-[1.6rem] border xr-line bg-[var(--xr-surface-strong)] p-5"><span className="label-mono text-[6px] xr-accent">01 · VOTRE ACTIVITÉ</span><p className="mt-2 text-sm xr-muted">Choisissez votre univers. Les recommandations s'adaptent ensuite à votre objectif, situation et budget.</p></div><div className="grid grid-cols-2 gap-3 sm:grid-cols-3">{(showAllSectors?SECTORS:SECTORS.slice(0,6)).map((x,i)=><button key={x.id} type="button" aria-label={"Choisir "+x.label} onClick={()=>{setSectorId(x.id);goToStep(1)}} className="choice-card xr-depth-card group min-h-[140px] rounded-2xl border xr-line bg-[var(--xr-surface-strong)] p-4 text-left transition hover:border-emerald-500/50 hover:bg-emerald-500/[.06] sm:min-h-[155px] sm:p-5"><span className="flex items-center justify-between"><span className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--xr-accent-soft)] text-xl transition group-hover:scale-110">{({"restaurant":"🍽️","hospitality":"🏨","realestate":"🏡","automotive":"🚘","fashion":"👜","jewelry":"💎","beauty":"✨","health":"🩺","architecture":"🏛️","construction":"🛠️","legal":"⚖️","finance":"📈","commerce":"🛍️","tourism":"✈️","agency":"🎨","other":"💡"} as Record<string,string>)[x.id]||"✦"}</span><span className="label-mono text-[7px] xr-muted-2">{String(i+1).padStart(2,"0")}</span></span><span className="mt-4 block text-xs font-semibold leading-5 sm:text-sm">{x.label}</span><span className="mt-1.5 block text-[10px] leading-4 xr-muted">{x.detail}</span></button>)}</div><button type="button" onClick={()=>setShowAllSectors(v=>!v)} className="w-full rounded-full border xr-line py-3 label-mono text-[7px] xr-muted">{showAllSectors?"Réduire les activités":"Voir toutes les activités"}</button></div>}
               {step===1&&sector&&<div className="space-y-4"><div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-5"><span className="label-mono text-[6px] xr-muted-2">ACTIVITÉ</span><p className="mt-2 text-xl font-semibold">{sector.label}</p><p className="mt-1 text-[9px] leading-4 xr-muted">{sector.detail}</p></div><div className="grid gap-2 sm:grid-cols-3">{sector.goals.map(x=>card({id:x,label:x,detail:"Priorité adaptée à votre secteur"},()=>choose(setGoal,x,2)))}</div></div>}
               {step===2&&<div className="grid gap-2 sm:grid-cols-2">{SITUATIONS.map(x=>card(x,()=>choose(setSituation,x.id,3),x.id===situation))}</div>}
               {step===3&&<div className="grid gap-2 sm:grid-cols-3">{BUDGETS.map(x=>card(x,()=>{setBudget(x.id);setSelectedServices([]);window.setTimeout(()=>setStep(4),180)},x.id===budget))}</div>}
