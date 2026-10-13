@@ -78,9 +78,9 @@ export function Hero() {
       </div>
 
       <div className="relative mx-auto flex min-h-[100svh] max-w-[1640px] flex-col justify-between px-5 pb-7 pt-28 sm:px-8 sm:pb-10 sm:pt-32 lg:px-12 lg:pt-36">
-        <div className="flex flex-1 items-center justify-center py-10 sm:py-12">
+        <div className="flex flex-1 items-end justify-center pb-8 pt-20 sm:pb-12 sm:pt-28">
           <Parallax speed={-0.008} className="w-full">
-            <div className="relative z-20 mx-auto max-w-5xl py-2 text-center sm:py-4">
+            <div className="relative z-20 mx-auto max-w-4xl py-2 text-center sm:py-4">
               <Reveal>
                 <div className="flex items-center justify-center gap-3">
                   <span className="h-px w-8 bg-emerald-600/80 dark:bg-emerald-400/80" />
@@ -92,7 +92,7 @@ export function Hero() {
               </Reveal>
 
               <Reveal delay={80}>
-                <h1 className="display-serif mx-auto mt-6 max-w-[1100px] text-[clamp(2.7rem,7.2vw,7.2rem)] leading-[.94] tracking-[-.06em] text-neutral-950 dark:text-white break-words [text-shadow:0_2px_28px_rgba(248,246,240,.48)] dark:[text-shadow:0_3px_32px_rgba(0,0,0,.52)]">
+                <h1 className="display-serif mx-auto mt-5 max-w-[950px] text-[clamp(2.35rem,6.2vw,6.2rem)] leading-[.98] tracking-[-.055em] text-neutral-950 dark:text-white break-words [text-shadow:0_2px_22px_rgba(248,246,240,.72)] dark:[text-shadow:0_3px_28px_rgba(0,0,0,.68)]">
                   <span className="inline-block">{t(UI.heroTitle1)}</span>{" "}
                   <span className="italic font-normal text-neutral-900 dark:text-white inline-block">
                     {t(UI.heroTitleAccent)}
@@ -103,26 +103,26 @@ export function Hero() {
               </Reveal>
 
               <Reveal delay={150}>
-                <p className="mx-auto mt-7 max-w-2xl text-[15px] leading-7 text-neutral-800 dark:text-white/85 sm:text-lg">
+                <p className="mx-auto mt-5 max-w-xl text-[14px] leading-6 text-neutral-800 dark:text-white/90 sm:mt-6 sm:text-base sm:leading-7">
                   {t(UI.heroLead)}
                 </p>
               </Reveal>
 
               <Reveal delay={220}>
-                <div className="mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                <div className="mx-auto mt-7 flex w-full max-w-4xl flex-col items-stretch justify-center gap-2.5 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
                   <a
                     href="#quote"
-                    className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-neutral-900/20 bg-white/65 px-6 py-3.5 text-[9px] font-semibold uppercase tracking-[.13em] text-neutral-900 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white dark:border-white/30 dark:bg-black/25 dark:text-white dark:hover:bg-black/45"
-                  >
-                    {t(UI.heroCtaAnalyze)}
-                    <Search className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-                  </a>
-                  <a
-                    href="#quote"
-                    className="group relative inline-flex min-h-14 items-center justify-center gap-3 overflow-hidden rounded-full border border-emerald-500/70 bg-emerald-600 px-8 py-4 text-[10px] font-bold uppercase tracking-[.15em] text-white shadow-[0_14px_45px_-12px_rgba(5,150,105,.72)] transition duration-300 hover:-translate-y-1 hover:bg-emerald-500 hover:shadow-[0_18px_50px_-12px_rgba(5,150,105,.8)] dark:border-emerald-300/50 dark:bg-emerald-400 dark:text-neutral-950 dark:shadow-[0_14px_45px_-12px_rgba(52,211,153,.45)] dark:hover:bg-emerald-300 sm:min-h-14"
+                    className="group relative inline-flex min-h-14 w-full items-center justify-center gap-3 overflow-hidden rounded-full border border-emerald-500/70 bg-emerald-600 px-7 py-4 text-[10px] font-bold uppercase tracking-[.15em] text-white shadow-[0_12px_32px_-12px_rgba(5,150,105,.62)] transition duration-300 hover:-translate-y-1 hover:bg-emerald-500 hover:shadow-[0_16px_40px_-12px_rgba(5,150,105,.72)] dark:border-emerald-300/50 dark:bg-emerald-400 dark:text-neutral-950 dark:shadow-[0_12px_32px_-12px_rgba(52,211,153,.38)] dark:hover:bg-emerald-300 sm:w-auto sm:min-w-[280px]"
                   >
                     {t(UI.heroCtaMockup)}
                     <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                  </a>
+                  <a
+                    href="#quote"
+                    className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-neutral-900/20 bg-white/75 px-5 py-3 text-[9px] font-semibold uppercase tracking-[.12em] text-neutral-900 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white dark:border-white/30 dark:bg-black/45 dark:text-white dark:hover:bg-black/60"
+                  >
+                    {t(UI.heroCtaAnalyze)}
+                    <Search className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                   </a>
                   <a
                     href="#audit"
@@ -140,7 +140,7 @@ export function Hero() {
               </Reveal>
 
               <Reveal delay={290}>
-                <div className="mx-auto mt-10 grid max-w-2xl grid-cols-3 gap-5 border-y border-neutral-300/60 py-5 dark:border-white/20 sm:mt-12 sm:gap-8">
+                <div className="mx-auto mt-7 grid max-w-2xl grid-cols-3 gap-5 border-y border-neutral-300/60 bg-white/20 py-4 backdrop-blur-[2px] dark:border-white/20 dark:bg-black/10 sm:mt-8 sm:gap-8 sm:py-5">
                   <Stat value={500} suffix="+" label={t(UI.statProjects)} />
                   <Stat value={98} suffix="%" label={t(UI.statSatisfaction)} />
                   <Stat value={8} suffix="+" label={t(UI.statYears)} />
@@ -148,18 +148,10 @@ export function Hero() {
               </Reveal>
 
               <Reveal delay={350}>
-                <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-                  <span className="label-mono text-[6px] tracking-[.2em] text-neutral-500 dark:text-white/50">
+                <div className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+                  <span className="label-mono text-[7px] tracking-[.2em] text-neutral-600 dark:text-white/65">
                     WEB · BRAND · SEO · LOCAL · SOCIAL · WEBCARE · ROBOTIQUE
                   </span>
-                  <span className="h-px w-8 bg-neutral-400/70 dark:bg-white/25" />
-                  <div className="flex gap-1.5">
-                    {LANGS.map((lang) => (
-                      <span key={lang.code} className="text-sm opacity-80" title={lang.label}>
-                        {lang.flag}
-                      </span>
-                    ))}
-                  </div>
                 </div>
               </Reveal>
             </div>
