@@ -22,6 +22,17 @@ const BASE_PRICES: Record<string, { eur: number; period?: string }> = {
   robotics: { eur: 499 },
 };
 
+
+function FlagIcon({ code }: { code: string }) {
+  const common = { width: 24, height: 16, viewBox: "0 0 30 20", role: "img" as const, focusable: "false" as const, className: "block shrink-0 overflow-hidden rounded-[2px] shadow-[0_1px_3px_rgba(0,0,0,.22)]" };
+  if (code === "fr") return <svg {...common} aria-label="Français"><rect width="10" height="20" fill="#1b3f8b" /><rect x="10" width="10" height="20" fill="#fff" /><rect x="20" width="10" height="20" fill="#ed2939" /></svg>;
+  if (code === "en") return <svg {...common} aria-label="English"><rect width="30" height="20" fill="#17336b" /><path d="M0 0 30 20 M30 0 0 20" stroke="#fff" strokeWidth="4.5" /><path d="M0 0 30 20 M30 0 0 20" stroke="#c8102e" strokeWidth="1.8" /><path d="M15 0 V20 M0 10 H30" stroke="#fff" strokeWidth="7" /><path d="M15 0 V20 M0 10 H30" stroke="#c8102e" strokeWidth="3.5" /></svg>;
+  if (code === "vi") return <svg {...common} aria-label="Tiếng Việt"><rect width="30" height="20" fill="#da251d" /><path d="m15 3 2.1 4.3 4.7.7-3.4 3.3.8 4.7-4.2-2.2-4.2 2.2.8-4.7-3.4-3.3 4.7-.7Z" fill="#ffdf00" /></svg>;
+  if (code === "ar") return <svg {...common} aria-label="العربية"><rect width="30" height="20" fill="#006c35" /><path d="M6 12.4 H21.5" stroke="#fff" strokeWidth="1.25" strokeLinecap="round" /><path d="M8 10.7 H21.5" stroke="#fff" strokeWidth=".8" strokeLinecap="round" /><path d="M7 13.8 H22" stroke="#fff" strokeWidth=".65" strokeLinecap="round" /></svg>;
+  if (code === "ru") return <svg {...common} aria-label="Русский"><rect width="30" height="6.67" fill="#fff" /><rect y="6.67" width="30" height="6.66" fill="#2457a7" /><rect y="13.33" width="30" height="6.67" fill="#d52b1e" /></svg>;
+  return <svg {...common} aria-label="Language"><rect width="30" height="20" fill="#e5e7eb" /></svg>;
+}
+
 export function Nav() {
   const { t, lang, setLang, price } = useLang();
   const { theme, toggleTheme } = useTheme();
@@ -182,7 +193,7 @@ export function Nav() {
                       lang === l.code && "bg-[var(--xr-accent-soft)] ring-1 ring-emerald-500/50"
                     )}
                   >
-                    <span aria-hidden="true">{l.flag}</span>
+                    <FlagIcon code={l.code} />
                   </button>
                 ))}
               </div>
@@ -194,7 +205,7 @@ export function Nav() {
                 onClick={() => setLanguageOpen((value) => !value)}
                 className="grid h-10 w-10 shrink-0 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] text-xl shadow-sm transition hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)] sm:hidden"
               >
-                <span aria-hidden="true">{LANGS.find((item) => item.code === lang)?.flag ?? "🌐"}</span>
+                <FlagIcon code={lang} />
               </button>
               {languageOpen && (
                 <div className="absolute right-0 top-full z-[70] mt-2 flex gap-1.5 rounded-2xl border xr-line bg-[var(--xr-bg-elev)] p-2 shadow-xl backdrop-blur-2xl sm:hidden">
@@ -214,7 +225,7 @@ export function Nav() {
                         lang === l.code && "bg-[var(--xr-accent-soft)] ring-1 ring-emerald-500/50"
                       )}
                     >
-                      {l.flag}
+                      <FlagIcon code={l.code} />
                     </button>
                   ))}
                 </div>
