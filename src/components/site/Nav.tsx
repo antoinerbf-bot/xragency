@@ -30,6 +30,7 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [languageOpen, setLanguageOpen] = useState(false);
   const [progress, setProgress] = useState(0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -166,20 +167,40 @@ export function Nav() {
           </div>
 
           <div className="ml-auto flex items-center gap-1.5">
-            <div className="hidden items-center gap-1 rounded-full border xr-line bg-[var(--xr-surface)] p-1 sm:flex" aria-label="Langues">
-              {LANGS.map((l) => (
-                <button
-                  key={l.code}
-                  type="button"
-                  onClick={() => setLang(l.code)}
-                  className={cn(
-                    "label-mono rounded-full px-2.5 py-1.5 text-[7px] transition",
-                    lang === l.code ? "bg-[var(--xr-ink)] text-[var(--xr-bg)]" : "xr-muted hover:text-[var(--xr-ink)]"
-                  )}
-                >
-                  {l.label}
-                </button>
-              ))}
+            <div className="relative">
+              <button
+                type="button"
+                aria-label="Changer la langue"
+                aria-expanded={languageOpen}
+                title="Changer la langue"
+                onClick={() => setLanguageOpen((value) => !value)}
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] text-xl shadow-sm transition hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)]"
+              >
+                <span aria-hidden="true">{LANGS.find((item) => item.code === lang)?.flag ?? "🌐"}</span>
+              </button>
+              {languageOpen && (
+                <div className="absolute right-0 top-full z-[70] mt-2 flex gap-1.5 rounded-2xl border xr-line bg-[var(--xr-bg-elev)] p-2 shadow-xl backdrop-blur-2xl">
+                  {LANGS.map((l) => (
+                    <button
+                      key={l.code}
+                      type="button"
+                      aria-label={l.label}
+                      aria-pressed={lang === l.code}
+                      title={l.label}
+                      onClick={() => {
+                        setLang(l.code);
+                        setLanguageOpen(false);
+                      }}
+                      className={cn(
+                        "grid h-9 w-9 place-items-center rounded-xl text-xl transition hover:bg-[var(--xr-accent-soft)]",
+                        lang === l.code && "bg-[var(--xr-accent-soft)] ring-1 ring-emerald-500/50"
+                      )}
+                    >
+                      {l.flag}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             <button
@@ -299,28 +320,9 @@ export function Nav() {
               </a>
             </div>
 
-            <div className="mt-3 flex items-center justify-between border-t xr-line pt-3">
-              <div>
-                <span className="label-mono block text-[6px] xr-muted-2 mb-1.5">LANGUE</span>
-                <div className="flex flex-wrap gap-1">
-                  {LANGS.map((l) => (
-                    <button
-                      type="button"
-                      key={l.code}
-                      onClick={() => setLang(l.code)}
-                      className={cn(
-                        "rounded-full border px-2 py-1 text-[7px] font-medium",
-                        lang === l.code ? "bg-[var(--xr-ink)] text-[var(--xr-bg)]" : "xr-line xr-muted text-[var(--xr-ink)]"
-                      )}
-                    >
-                      {l.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
+            <div className="mt-3 flex items-center justify-end border-t xr-line pt-3">
               <div className="flex flex-col items-center">
-                <span className="label-mono block text-[6px] xr-muted-2 mb-1.5">THÈME</span>
+                <span className="label-mono mb-1.5 block text-[6px] xr-muted-2">THÈME</span>
                 <button
                   type="button"
                   aria-label={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
