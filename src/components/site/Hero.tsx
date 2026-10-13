@@ -70,6 +70,19 @@ export function Hero() {
           className="xr-hero-bg absolute inset-0 h-full w-full object-cover object-[54%_center] opacity-100 brightness-[1.02] contrast-[1.06] dark:opacity-100 dark:brightness-[0.88] dark:contrast-[1.08] sm:object-center"
           fetchPriority="high"
         />
+        <video
+          aria-hidden="true"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          poster={XR_HERO_PHOTO}
+          className="xr-hero-video absolute inset-0 h-full w-full object-cover object-center"
+          onError={(event) => { event.currentTarget.style.display = "none"; }}
+        >
+          <source src="/__l5e/assets-v1/22bc4b57-f585-4301-9b43-db26f682e9a7/hero-studio.mp4" type="video/mp4" />
+        </video>
         {/* Voiles légers : conserver le contraste du texte sans blanchir la photo ni masquer la Tour Eiffel */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#f8f6f0]/20 via-[#f8f6f0]/5 to-[#f8f6f0]/48 dark:from-[#090a0d]/24 dark:via-[#090a0d]/8 dark:to-[#090a0d]/58" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(248,246,240,0.36)_0%,rgba(248,246,240,0.14)_34%,transparent_72%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(9,10,13,0.48)_0%,rgba(9,10,13,0.20)_38%,transparent_74%)]" />
