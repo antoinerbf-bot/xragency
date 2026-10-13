@@ -78,7 +78,7 @@ export function Hero() {
           playsInline
           preload="metadata"
           poster={XR_HERO_PHOTO}
-          className="xr-hero-video absolute inset-0 h-full w-full object-cover object-center"
+          className="xr-hero-video absolute inset-0 h-full w-full object-cover object-[58%_center] sm:object-center"
           onError={(event) => { event.currentTarget.style.display = "none"; }}
         >
           <source src="/__l5e/assets-v1/22bc4b57-f585-4301-9b43-db26f682e9a7/hero-studio.mp4" type="video/mp4" />
