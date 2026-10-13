@@ -606,6 +606,15 @@ video {
   filter: saturate(1.04) contrast(1.01);
 }
 
+.xr-hero-video {
+  z-index: 1;
+  filter: saturate(1.04) contrast(1.03);
+}
+
+.xr-hero > div[aria-hidden] > .xr-hero-bg {
+  z-index: 0;
+}
+
 @keyframes xr-hero-pan {
   from { transform: scale(1.045) translate3d(0,0,0); }
   to   { transform: scale(1.085) translate3d(-0.8%, -0.5%, 0); }
@@ -677,6 +686,10 @@ video {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .xr-hero-video {
+    display: none !important;
+  }
+
   .xr-hero-bg,
   .xr-hero-orbit-a,
   .xr-hero-orbit-b {
