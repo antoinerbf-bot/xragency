@@ -454,12 +454,47 @@ export function QuoteConfiguratorCompact() {
   );
 
   return (
-    <section id="quote" className="xr-section-elevated relative overflow-hidden border-y xr-line bg-[#f3efe7] py-20 sm:py-28 lg:py-36 dark:bg-[#0d0f12]">
+    <section id="quote" className="xr-section-elevated relative overflow-hidden border-y xr-line bg-[#f3efe7] py-14 sm:py-20 lg:py-28 dark:bg-[#0d0f12]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,var(--xr-accent-soft),transparent_26%),radial-gradient(circle_at_82%_78%,rgba(120,120,140,.08),transparent_24%)]"/>
       <div className="relative mx-auto max-w-[1560px] px-5 sm:px-8 lg:px-12">
         <Parallax speed={-0.025}><Reveal><div className="grid gap-7 border-b xr-line pb-10 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
-          <div><span className="label-mono xr-accent text-[8px] tracking-[.28em]">XR QUOTE STUDIO · DEVIS SUR MESURE</span><h2 className="display-serif mt-5 max-w-5xl text-[clamp(3rem,5.8vw,6.3rem)] leading-[.84] tracking-[-.065em]">Construisons votre <em className="not-italic opacity-45">projet</em>, étape par étape.</h2><p className="mt-5 max-w-2xl text-sm leading-7 xr-muted sm:text-base">Vous choisissez votre activité, votre priorité et votre budget. XR Quote Studio vous guide ensuite vers une sélection claire, puis un devis professionnel.</p></div>
-          <div className="xr-panel-strong rounded-[1.7rem] p-5"><span className="label-mono text-[6px] tracking-[.2em] xr-muted-2">ESTIMATION EN DIRECT</span><p className="mt-2 display-serif text-3xl">{totalLabel}</p><p className="mt-2 text-[8px] leading-4 xr-muted">Le montant se met à jour au fil du parcours.</p></div>
+          <div className="min-w-0">
+            <span className="label-mono xr-accent text-[8px] tracking-[.22em] sm:tracking-[.28em]">XR QUOTE STUDIO · DEVIS SUR MESURE</span>
+            <h2 className="display-serif mt-4 max-w-5xl break-words text-balance text-[clamp(2.35rem,5.2vw,5.6rem)] leading-[.98] tracking-[-.045em] sm:mt-5">Construisons votre <em className="not-italic opacity-55">projet</em>, étape par étape.</h2>
+            <p className="mt-5 max-w-2xl text-sm leading-7 xr-muted sm:text-base">Répondez à quelques questions : votre conseiller vous aide à définir les bonnes priorités, à composer votre dispositif digital et à préparer une proposition cohérente avec votre budget.</p>
+          </div>
+          <div className="relative overflow-hidden rounded-[1.7rem] border xr-line bg-[var(--xr-surface)] p-4 shadow-[var(--xr-shadow)] sm:p-5">
+            <div aria-hidden="true" className="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full bg-[var(--xr-accent-soft)] blur-3xl" />
+            <div className="relative flex items-center gap-3">
+              <div className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[var(--xr-ink)] text-[var(--xr-bg)] shadow-lg">
+                <Sparkles className="h-5 w-5" />
+                <span className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-[var(--xr-surface)] bg-emerald-500" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-[var(--xr-ink)]">Alexandre</p>
+                <p className="mt-0.5 label-mono text-[7px] tracking-[.15em] xr-muted-2">VOTRE CONSEILLER DIGITAL</p>
+              </div>
+              <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-1 label-mono text-[6px] text-emerald-600 dark:text-emerald-400"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" /> EN LIGNE</span>
+            </div>
+            <div aria-live="polite" className="relative mt-4 rounded-2xl rounded-tl-sm border xr-line bg-[var(--xr-surface-strong)] p-4">
+              <div className="mb-2 flex items-center gap-2 label-mono text-[6px] tracking-[.16em] xr-muted-2"><MessageCircle className="h-3 w-3" /> MESSAGE D’ALEXANDRE</div>
+              <p className="text-[11px] leading-5 text-[var(--xr-ink)] sm:text-xs">{[
+                "Bonjour ! Je suis Alexandre. Je vais vous guider pour construire un projet adapté à votre activité.",
+                "Quel résultat compte le plus pour vous ? Je m’en servirai pour prioriser les bonnes actions.",
+                "Je prends en compte votre situation actuelle pour éviter de vous proposer des solutions inutiles.",
+                "Parlons budget : je vais ajuster le périmètre à votre investissement envisagé.",
+                "Je prépare une combinaison de services cohérente. Vous gardez le contrôle de chaque choix.",
+                "Dernière question sur votre acquisition : elle m’aide à identifier les leviers les plus pertinents.",
+                "Je croise vos réponses pour vous présenter une recommandation personnalisée et transparente.",
+                "Votre brief est prêt. Ajoutez vos coordonnées pour recevoir la proposition détaillée."
+              ][step]}</p>
+              <div className="mt-3 flex items-center gap-1" aria-hidden="true"><span className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" /><span className="h-1 w-1 rounded-full bg-emerald-500/70 animate-pulse [animation-delay:150ms]" /><span className="h-1 w-1 rounded-full bg-emerald-500/40 animate-pulse [animation-delay:300ms]" /><span className="ml-1 label-mono text-[6px] xr-muted-2">ACCOMPAGNEMENT PERSONNALISÉ</span></div>
+            </div>
+            <div className="relative mt-4 flex items-end justify-between gap-3 border-t xr-line pt-3">
+              <div><span className="label-mono text-[6px] tracking-[.18em] xr-muted-2">ESTIMATION EN DIRECT</span><p className="mt-1 display-serif text-2xl text-[var(--xr-ink)] sm:text-3xl">{totalLabel}</p></div>
+              <span className="shrink-0 rounded-full border xr-line px-3 py-1.5 label-mono text-[6px] xr-muted-2">{String(step+1).padStart(2,"0")} / 08 ÉTAPES</span>
+            </div>
+          </div>
         </div></Reveal></Parallax>
         <div className="mt-6 overflow-x-auto pb-1">
           <div className="flex min-w-max gap-2 rounded-[1.4rem] border xr-line bg-[var(--xr-surface)] p-2 shadow-[var(--xr-shadow)]">
@@ -488,7 +523,7 @@ export function QuoteConfiguratorCompact() {
             <div className="mt-2 rounded-xl border xr-line bg-[var(--xr-surface)] p-3"><span className="label-mono text-[6px] xr-muted-2">SYSTÈME</span><p className="mt-1 text-[9px] font-semibold">{selectedServices.length} brique(s) active(s)</p><p className="mt-1 text-[7px] xr-muted">{totalLabel}</p></div>
           </aside></Reveal>
           <Reveal delay={70}><div className="xr-depth-card rounded-[2.2rem] border xr-line bg-[var(--xr-surface)] p-4 sm:p-6 lg:p-8">
-            <div className="flex items-end justify-between gap-4 border-b xr-line pb-5"><div><span className="label-mono text-[6px] tracking-[.22em] xr-muted-2">{step===7?"FINALISATION":"QUESTION "+String(step+1).padStart(2,"0")}</span><h3 className="mt-2 text-2xl font-semibold tracking-[-.04em]">{titles[step]}</h3></div>{step>0&&<button type="button" onClick={()=>goToStep(step-1)} className="rounded-full border xr-line px-4 py-2 label-mono text-[7px] xr-muted">← Retour</button>}</div>
+            <div className="flex items-end justify-between gap-4 border-b xr-line pb-5"><div><span className="label-mono text-[6px] tracking-[.22em] xr-muted-2">{step===7?"FINALISATION":"QUESTION "+String(step+1).padStart(2,"0")}</span><h3 className="mt-2 max-w-3xl break-words text-balance text-xl font-semibold leading-tight tracking-[-.025em] sm:text-2xl">{titles[step]}</h3></div>{step>0&&<button type="button" onClick={()=>goToStep(step-1)} className="rounded-full border xr-line px-4 py-2 label-mono text-[7px] xr-muted">← Retour</button>}</div>
             <div className="mt-7">
               {step===0&&<div className="space-y-4"><div className="rounded-[1.6rem] border xr-line bg-[var(--xr-surface-strong)] p-5"><span className="label-mono text-[6px] xr-accent">01 · VOTRE ACTIVITÉ</span><p className="mt-2 text-sm xr-muted">Choisissez votre univers. Les recommandations s'adaptent ensuite à votre objectif, situation et budget.</p></div><div className="grid grid-cols-2 gap-2 sm:grid-cols-3">{(showAllSectors?SECTORS:SECTORS.slice(0,6)).map((x,i)=><button key={x.id} type="button" onClick={()=>{setSectorId(x.id);goToStep(1)}} className="xr-depth-card rounded-2xl border xr-line bg-[var(--xr-surface-strong)] p-4 text-left hover:bg-[var(--xr-accent-soft)]"><span className="label-mono text-[6px] xr-muted-2">0{String(i+1)}</span><span className="mt-2 block text-[10px] font-semibold">{x.label}</span><span className="mt-1 block text-[8px] leading-4 xr-muted">{x.detail}</span></button>)}</div><button type="button" onClick={()=>setShowAllSectors(v=>!v)} className="w-full rounded-full border xr-line py-3 label-mono text-[7px] xr-muted">{showAllSectors?"Réduire les activités":"Voir toutes les activités"}</button></div>}
               {step===1&&sector&&<div className="space-y-4"><div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-5"><span className="label-mono text-[6px] xr-muted-2">ACTIVITÉ</span><p className="mt-2 text-xl font-semibold">{sector.label}</p><p className="mt-1 text-[9px] leading-4 xr-muted">{sector.detail}</p></div><div className="grid gap-2 sm:grid-cols-3">{sector.goals.map(x=>card({id:x,label:x,detail:"Priorité adaptée à votre secteur"},()=>choose(setGoal,x,2)))}</div></div>}
