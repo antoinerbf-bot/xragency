@@ -168,23 +168,41 @@ export function Nav() {
 
           <div className="ml-auto flex items-center gap-1.5">
             <div className="relative">
+              <div className="hidden items-center gap-0.5 rounded-full border xr-line bg-[var(--xr-surface)] p-1 sm:flex">
+                {LANGS.map((l) => (
+                  <button
+                    key={l.code}
+                    type="button"
+                    aria-label={"Langue : " + l.label}
+                    aria-pressed={lang === l.code}
+                    title={l.label}
+                    onClick={() => setLang(l.code)}
+                    className={cn(
+                      "grid h-8 w-8 place-items-center rounded-full text-xl transition hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)]",
+                      lang === l.code && "bg-[var(--xr-accent-soft)] ring-1 ring-emerald-500/50"
+                    )}
+                  >
+                    <span aria-hidden="true">{l.flag}</span>
+                  </button>
+                ))}
+              </div>
               <button
                 type="button"
-                aria-label="Changer la langue"
+                aria-label="Choisir la langue"
                 aria-expanded={languageOpen}
-                title="Changer la langue"
+                title="Choisir la langue"
                 onClick={() => setLanguageOpen((value) => !value)}
-                className="grid h-10 w-10 shrink-0 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] text-xl shadow-sm transition hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)]"
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] text-xl shadow-sm transition hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)] sm:hidden"
               >
                 <span aria-hidden="true">{LANGS.find((item) => item.code === lang)?.flag ?? "🌐"}</span>
               </button>
               {languageOpen && (
-                <div className="absolute right-0 top-full z-[70] mt-2 flex gap-1.5 rounded-2xl border xr-line bg-[var(--xr-bg-elev)] p-2 shadow-xl backdrop-blur-2xl">
+                <div className="absolute right-0 top-full z-[70] mt-2 flex gap-1.5 rounded-2xl border xr-line bg-[var(--xr-bg-elev)] p-2 shadow-xl backdrop-blur-2xl sm:hidden">
                   {LANGS.map((l) => (
                     <button
                       key={l.code}
                       type="button"
-                      aria-label={l.label}
+                      aria-label={"Langue : " + l.label}
                       aria-pressed={lang === l.code}
                       title={l.label}
                       onClick={() => {
