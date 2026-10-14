@@ -235,11 +235,13 @@ export function MapsSimulator() {
         <div>
           <SectionHeading
             label={{ fr: "GOOGLE BUSINESS PROFILE · LOCAL SEO", en: "GOOGLE BUSINESS PROFILE · LOCAL SEO", vi: "GOOGLE BUSINESS PROFILE · LOCAL SEO", ar: "Google Business Profile · تحسين محلي", ru: "Google Business Profile · локальное SEO" }}
-            line1={{ fr: "Construisons votre visibilité", en: "Build your local visibility", vi: "Xây dựng khả năng hiển thị địa phương" }}
+            line1={{ fr: "Construisons votre visibilité", en: "Build your local visibility", vi: "Xây dựng khả năng hiển thị địa phương", ar: "لنبنِ ظهورك المحلي", ru: "Улучшим вашу локальную видимость" }}
             line2={{
               fr: "sur Google Maps, sur mesure.",
               en: "on Google Maps, built around you.",
               vi: "trên Google Maps, theo nhu cầu của bạn.",
+              ar: "على Google Maps، وفق احتياجاتك.",
+              ru: "в Google Maps — под ваши задачи.",
               ar: "على Google Maps، وفق احتياجاتك.",
               ru: "в Google Maps — под ваши задачи.",
             }}
@@ -247,6 +249,8 @@ export function MapsSimulator() {
               fr: "À partir de 990 € / an. Audit, optimisation Google Business Profile, stratégie locale et suivi adaptés à votre zone, votre concurrence et vos requêtes.",
               en: "From €990 / year. Audit, Google Business Profile optimisation, local strategy and monitoring adapted to your area, competition and target searches.",
               vi: "Từ 990 € / năm. Kiểm toán, tối ưu Google Business Profile, chiến lược địa phương và theo dõi theo khu vực, đối thủ và truy vấn mục tiêu.",
+              ar: "ابتداءً من 990 € سنويًا. تدقيق وتحسين Google Business Profile واستراتيجية محلية ومتابعة وفق منطقتك ومنافسيك وعبارات البحث المستهدفة.",
+              ru: "От 990 € в год. Аудит, оптимизация Google Business Profile, локальная стратегия и мониторинг с учётом региона, конкурентов и целевых запросов.",
               ar: "ابتداءً من 990 € سنويًا. تدقيق وتحسين Google Business Profile واستراتيجية محلية ومتابعة وفق منطقتك ومنافسيك وعبارات البحث المستهدفة.",
               ru: "От 990 € в год. Аудит, оптимизация Google Business Profile, локальная стратегия и мониторинг с учётом региона, конкурентов и целевых запросов.",
             }}
@@ -271,7 +275,7 @@ export function MapsSimulator() {
               <div className="flex items-center gap-3">
                 <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--xr-accent-soft)]"><MapPinned className="h-4 w-4 text-[var(--xr-ink)]"/></span>
                 <div>
-                  <span className="label-mono text-[6px] tracking-[.18em] xr-muted-2">SIMULATION EN DIRECT</span>
+                  <span className="label-mono text-[6px] tracking-[.18em] xr-muted-2">{t({fr:"SIMULATION EN DIRECT",en:"LIVE SIMULATION",vi:"MÔ PHỎNG TRỰC TIẾP",ar:"محاكاة مباشرة",ru:"ЖИВАЯ СИМУЛЯЦИЯ"})}</span>
                   <p className="mt-0.5 text-sm font-semibold text-[var(--xr-ink)]">{selectedSector ? mapsText(selectedSector.label,lang) : ""} · {mapsText(CITY_SIZES.find(c=>c.id===citySize)?.label ?? "",lang)}</p>
                 </div>
               </div>
@@ -313,11 +317,11 @@ export function MapsSimulator() {
               )}
               <div className="absolute left-4 right-4 top-4 flex items-center justify-between gap-3 sm:left-6 sm:right-6">
                 <div className="rounded-xl border border-white/60 bg-white/90 px-3 py-2 shadow-lg backdrop-blur-xl">
-                  <span className="label-mono text-[5px] tracking-[.16em] text-[#17181a]/40">RECHERCHE CIBLE</span>
+                  <span className="label-mono text-[5px] tracking-[.16em] text-[#17181a]/40">{t({fr:"RECHERCHE CIBLE",en:"TARGET SEARCH",vi:"TRUY VẤN MỤC TIÊU",ar:"بحث مستهدف",ru:"ЦЕЛЕВОЙ ПОИСК"})}</span>
                   <p className="mt-1 text-[10px] font-semibold text-[#17181a]">{selectedSector ? mapsText(selectedSector.label,lang) : ""} · {KEYWORD_RANGES.find(k=>k.id===keywords)?.label} {t({fr:"mots-clés",en:"keywords",vi:"từ khóa",ar:"كلمات مفتاحية",ru:"ключевых слов"})}</p>
                 </div>
                 <div className="hidden rounded-xl border border-white/60 bg-white/90 px-3 py-2 text-right shadow-lg backdrop-blur-xl sm:block">
-                  <span className="label-mono text-[5px] tracking-[.16em] text-[#17181a]/40">POSITION ACTUELLE</span>
+                  <span className="label-mono text-[5px] tracking-[.16em] text-[#17181a]/40">{t({fr:"POSITION ACTUELLE",en:"CURRENT POSITION",vi:"VỊ TRÍ HIỆN TẠI",ar:"الترتيب الحالي",ru:"ТЕКУЩАЯ ПОЗИЦИЯ"})}</span>
                   <p className="mt-1 text-[10px] font-semibold text-[#17181a]">{mapsText(CURRENT_RANKS.find(r=>r.id===rank)?.label ?? "",lang)}</p>
                 </div>
               </div>
@@ -351,7 +355,7 @@ export function MapsSimulator() {
               <div>
                 <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--xr-ink)] text-[10px] font-bold text-[var(--xr-bg)]">1</span>
-                  Votre secteur d'activité
+                  {t({fr:"Votre secteur d'activité",en:"Your industry",vi:"Lĩnh vực của bạn",ar:"قطاع نشاطك",ru:"Ваша отрасль"})}
                 </p>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                   {SECTORS.map((s) => (
@@ -392,7 +396,7 @@ export function MapsSimulator() {
               <div>
                 <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--xr-ink)] text-[10px] font-bold text-[var(--xr-bg)]">3</span>
-                  Nombre de mots-clés principaux
+                  {t({fr:"Nombre de mots-clés principaux",en:"Number of main keywords",vi:"Số lượng từ khóa chính",ar:"عدد الكلمات المفتاحية الرئيسية",ru:"Количество основных ключевых слов"})}
                 </p>
                 <div className="grid grid-cols-3 gap-2">
                   {KEYWORD_RANGES.map((k) => (
@@ -413,7 +417,7 @@ export function MapsSimulator() {
               <div>
                 <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--xr-ink)] text-[10px] font-bold text-[var(--xr-bg)]">4</span>
-                  Votre positionnement actuel sur Google Maps
+                  {t({fr:"Votre positionnement actuel sur Google Maps",en:"Your current Google Maps position",vi:"Vị trí hiện tại trên Google Maps",ar:"ترتيبك الحالي على Google Maps",ru:"Ваша текущая позиция в Google Maps"})}
                 </p>
                 <div className="grid grid-cols-3 gap-2">
                   {CURRENT_RANKS.map((r) => (
@@ -434,7 +438,7 @@ export function MapsSimulator() {
               <div className="rounded-2xl border-2 border-primary/30 bg-[var(--xr-ink)]/5 p-5 sm:p-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="label-mono text-xs text-muted-foreground">Budget indicatif · à partir de 990 € / an</p>
+                    <p className="label-mono text-xs text-muted-foreground">{t({fr:"Budget indicatif · à partir de",en:"Indicative budget · from",vi:"Ngân sách tham khảo · từ",ar:"ميزانية تقديرية · ابتداءً من",ru:"Ориентировочный бюджет · от"})} {formatPrice(990)} / {t({fr:"an",en:"year",vi:"năm",ar:"سنة",ru:"год"})}</p>
                     <div className="mt-1 flex items-baseline gap-2">
                       <span
                         key={animMin}
@@ -449,10 +453,10 @@ export function MapsSimulator() {
                       >
                         {formatPrice(animMax)}
                       </span>
-                      <span className="label-mono text-xs text-muted-foreground">/ an</span>
+                      <span className="label-mono text-xs text-muted-foreground">/ {t({fr:"an",en:"year",vi:"năm",ar:"سنة",ru:"год"})}</span>
                     </div>
                     <p className="mt-1.5 text-xs text-muted-foreground/70">
-                      Estimation indicative · tarif exact après audit personnalisé
+                      {t({fr:"Estimation indicative · tarif exact après audit personnalisé",en:"Indicative estimate · exact price after a tailored audit",vi:"Ước tính tham khảo · giá chính xác sau khi audit riêng",ar:"تقدير إرشادي · السعر النهائي بعد تدقيق مخصص",ru:"Ориентировочная оценка · точная цена после индивидуального аудита"})}
                     </p>
                   </div>
 
@@ -461,7 +465,7 @@ export function MapsSimulator() {
                     <div className="flex items-center gap-2 rounded-xl border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-3 py-2">
                       <ShieldCheck className="h-4 w-4 shrink-0 text-[var(--xr-ink)]" />
                       <span className="label-mono text-[10px] font-bold text-[var(--xr-ink)]">
-                        Objectif Top 3 · étude locale sur mesure
+                        {t({fr:"Objectif Top 3 · étude locale sur mesure",en:"Top 3 target · tailored local study",vi:"Mục tiêu Top 3 · nghiên cứu địa phương riêng",ar:"هدف أفضل 3 نتائج · دراسة محلية مخصصة",ru:"Цель — топ-3 · индивидуальное локальное исследование"})}
                       </span>
                     </div>
                     <a
@@ -471,7 +475,7 @@ export function MapsSimulator() {
                       className="label-mono inline-flex items-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-2.5 text-xs font-semibold text-[var(--xr-bg)] transition-all duration-200 hover:bg-[var(--xr-ink)]/90 hover:-translate-y-0.5 hover:shadow-lg"
                     >
                       <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
-                      Lancer mon audit gratuit
+                      {t({fr:"Lancer mon audit gratuit",en:"Start my free audit",vi:"Bắt đầu audit miễn phí",ar:"ابدأ التدقيق المجاني",ru:"Запустить бесплатный аудит"})}
                     </a>
                   </div>
                 </div>
@@ -501,10 +505,10 @@ export function MapsSimulator() {
             <div className="mb-8 text-center">
               <p className="label-mono text-xs text-[var(--xr-ink)]">{t({fr:"Méthodologie exclusive",en:"Exclusive methodology",vi:"Phương pháp độc quyền",ar:"منهجية حصرية",ru:"Эксклюзивная методология"})}</p>
               <h3 className="display-serif mt-2 text-2xl sm:text-3xl text-foreground">
-                Le processus en 7 phases
+                {t({fr:"Le processus en 7 phases",en:"The 7-phase process",vi:"Quy trình 7 giai đoạn",ar:"العملية في 7 مراحل",ru:"Процесс из 7 этапов"})}
               </h3>
               <p className="mt-2 text-sm text-muted-foreground max-w-xl mx-auto">
-                Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.
+                {t({fr:"Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.",en:"A structured, transparent and measurable approach to improving local visibility.",vi:"Cách tiếp cận có cấu trúc, minh bạch và đo lường được để cải thiện hiển thị địa phương.",ar:"نهج منظم وشفاف وقابل للقياس لتحسين الظهور المحلي.",ru:"Структурированный, прозрачный и измеримый подход к улучшению локальной видимости."})}
               </p>
             </div>
 
@@ -526,9 +530,9 @@ export function MapsSimulator() {
                   key={ph.num}
                   className="rounded-2xl border border-border/80 bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--xr-ink)]/30"
                 >
-                  <p className="label-mono text-xs text-[var(--xr-ink)]">{ph.num} · {ph.name}</p>
-                  <p className="display-serif mt-1.5 text-base text-foreground">{ph.title}</p>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{ph.desc}</p>
+                  <p className="label-mono text-xs text-[var(--xr-ink)]">{ph.num} · {mapsText(ph.name,lang)}</p>
+                  <p className="display-serif mt-1.5 text-base text-foreground">{mapsText(ph.title,lang)}</p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{mapsText(ph.desc,lang)}</p>
                 </div>
               ))}
             </div>
