@@ -121,7 +121,7 @@ export function Hero() {
     <section ref={sectionRef} id="top" className="xr-hero relative isolate overflow-hidden bg-[#080808] text-white">
       {/* Desktop: one continuous cinematic frame. Mobile: image and copy remain distinct for clarity. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden md:block">
-        <img ref={imageRef} src={XR_HERO_PHOTO} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover object-center" style={{ transform: "scale(1.07)" }} />
+        <img ref={imageRef} src={XR_HERO_PHOTO} alt="" fetchPriority="high" className="xr-hero-photo-motion absolute inset-0 h-full w-full object-cover object-center" style={{ transform: "scale(1.07)" }} />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.96)_0%,rgba(5,5,5,.86)_28%,rgba(5,5,5,.43)_54%,rgba(5,5,5,.05)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,5,5,.72)_0%,transparent_28%,rgba(5,5,5,.12)_100%)]" />
         <div className="absolute inset-0 opacity-[.10] [background-image:linear-gradient(rgba(255,255,255,.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.18)_1px,transparent_1px)] [background-size:90px_90px] [mask-image:linear-gradient(90deg,black,transparent_78%)]" />
@@ -176,7 +176,7 @@ export function Hero() {
           </div>
 
           <div className="relative hidden h-full min-h-[500px] md:block">
-            <div className="absolute right-[4%] top-[22%] max-w-[250px] border-l border-white/60 pl-4" style={{ transform: motionAllowed ? "translateY(0)" : undefined }}>
+            <div className={"absolute right-[4%] top-[22%] max-w-[250px] border-l border-white/60 pl-4 " + (motionAllowed ? "animate-[fade-slide-up_1.2s_cubic-bezier(.16,1,.3,1)_both]" : "")}>
               <span className="label-mono text-[8px] tracking-[.18em] text-white/65">{copy.scene}</span>
               <div className="mt-4 space-y-3">
                 {["01", "02", "03"].map((n, i) => (
@@ -190,7 +190,7 @@ export function Hero() {
             </div>
             <div className="absolute bottom-[14%] right-[5%] flex items-center gap-4">
               <div className="grid h-14 w-14 place-items-center rounded-full border border-white/50">
-                <ArrowDown className="h-4 w-4 animate-bounce" />
+                <ArrowDown className={"h-4 w-4 " + (motionAllowed ? "animate-bounce" : "")} />
               </div>
               <span className="max-w-[125px] label-mono text-[7px] leading-4 tracking-[.18em] text-white/70">{copy.scroll}</span>
             </div>
