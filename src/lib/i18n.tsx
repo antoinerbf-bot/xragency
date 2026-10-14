@@ -61,7 +61,8 @@ export function localizePriceText(value: string, lang: Lang): string {
     return Number.isFinite(amount) ? formatPrice(amount, lang) : raw;
   };
 
-  let result = value.replace(/€\s*([\d][\d\s\u00a0\u202f.,]*)/g, (_match, amount: string) => convert(amount));
+  let result = value.replace(/([\d][\d\s\u00a0\u202f.,]*)\s*[–—-]\s*([\d][\d\s\u00a0\u202f.,]*)\s*€/g, (_match, low: string, high: string) => `${convert(low.trim())} – ${convert(high.trim())}`);
+  result = result.replace(/€\s*([\d][\d\s\u00a0\u202f.,]*)/g, (_match, amount: string) => convert(amount));
   result = result.replace(/([\d][\d\s\u00a0\u202f.,]*)\s*€/g, (_match, amount: string) => convert(amount));
   return result;
 }
