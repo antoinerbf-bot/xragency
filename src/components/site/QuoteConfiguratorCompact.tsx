@@ -171,6 +171,32 @@ const BRANDING_TIERS = {
   premium: { price: 399, label: "Full Brand Suite", detail: "Système de marque étendu, direction artistique et Brand Book" },
 } as const;
 
+const PDF_FONT_URLS = {
+  latin: "https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosans/NotoSans%5Bwdth%2Cwght%5D.ttf",
+  arabic: "https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansarabic/NotoSansArabic%5Bwdth%2Cwght%5D.ttf",
+} as const;
+const PDF_FONT_CACHE: Partial<Record<keyof typeof PDF_FONT_URLS, Promise<string>>> = {};
+
+async function loadPdfFontBase64(kind: keyof typeof PDF_FONT_URLS): Promise<string> {
+  if (!PDF_FONT_CACHE[kind]) {
+    PDF_FONT_CACHE[kind] = (async () => {
+      const response = await fetch(PDF_FONT_URLS[kind], { mode: "cors", credentials: "omit" });
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      let binary = "";
+      const chunkSize = 0x8000;
+      for (let i = 0; i < bytes.length; i += chunkSize) {
+        binary += String.fromCharCode(...bytes.subarray(i, Math.min(i + chunkSize, bytes.length)));
+      }
+      return btoa(binary);
+    })().catch((error) => {
+      delete PDF_FONT_CACHE[kind];
+      throw error;
+    });
+  }
+  return PDF_FONT_CACHE[kind]!;
+}
+
 export function QuoteConfiguratorCompact() {
   const { lang, price: localizedPrice, t } = useLang();
   const journeyRef = useRef<HTMLDivElement>(null);
@@ -249,7 +275,8 @@ export function QuoteConfiguratorCompact() {
       setSelectedServices(activeRecommended);
     }
   }, [step, activeRecommended.join(",")]);
-  const total = selectedServices.reduce((sum, id) => { const p = proposals.find((x) => x.id === id); return sum + (p?.custom ? 0 : (p?.price ?? 0)); }, 0);
+  const total = selectedServices.reduce((sum, id) => { const baseProposal = proposals.find((x) => x.id === id);
+        const p = baseProposal ? localizeProposal(baseProposal, lang) : undefined; return sum + (p?.custom ? 0 : (p?.price ?? 0)); }, 0);
   const monthly = selectedServices.reduce((sum, id) => { const p = proposals.find((x) => x.id === id); return sum + (p?.custom ? 0 : (p?.period === "month" ? p.price : 0)); }, 0);
   const once = total - monthly;
 
@@ -259,6 +286,27 @@ export function QuoteConfiguratorCompact() {
     try {
       const { jsPDF } = await import("jspdf");
       const doc = new jsPDF({ unit: "mm", format: "a4" });
+      const fontKind = lang === "ar" ? "arabic" : "latin";
+      const fontName = lang === "ar" ? "XRArabic" : "XRUnicode";
+      try {
+        const fontData = await loadPdfFontBase64(fontKind);
+        const fontFile = fontName + ".ttf";
+        doc.addFileToVFS(fontFile, fontData);
+        doc.addFont(fontFile, fontName, "normal");
+        doc.addFont(fontFile, fontName, "bold");
+        doc.setFont(fontName, "normal");
+        if (typeof doc.setR2L === "function") doc.setR2L(lang === "ar");
+      } catch {
+        throw new Error(t({
+          fr: "Impossible de charger la police Unicode du devis. Vérifiez la connexion puis réessayez.",
+          en: "The quote's Unicode font could not be loaded. Check your connection and try again.",
+          vi: "Không thể tải phông Unicode cho báo giá. Hãy kiểm tra kết nối rồi thử lại.",
+          ar: "تعذر تحميل خط Unicode لعرض السعر. تحقق من الاتصال ثم أعد المحاولة.",
+          ru: "Не удалось загрузить Unicode-шрифт сметы. Проверьте подключение и повторите попытку."
+        }));
+      }
+      const pdfText = (fr: string, en: string, vi: string, ar: string, ru: string) =>
+        ({ fr, en, vi, ar, ru } as const)[lang] ?? fr;
       const W = 210, M = 14, R = 196;
       const ink = [18, 22, 29] as const;
       const soft = [241, 244, 247] as const;
@@ -271,24 +319,25 @@ export function QuoteConfiguratorCompact() {
       validity.setDate(validity.getDate() + 15);
       const stamp = issueDate.toISOString().slice(0, 10).replace(/-/g, "");
       const quoteNumber = "XR-" + stamp + "-" + String(Math.floor(1000 + Math.random() * 9000));
-      const date = (d: Date) => d.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
+      const dateLocale = ({ fr: "fr-FR", en: "en-GB", vi: "vi-VN", ar: "ar", ru: "ru-RU" } as const)[lang];
+      const date = (d: Date) => d.toLocaleDateString(dateLocale, { day: "2-digit", month: "2-digit", year: "numeric" });
 
       const section = (label: string, y: number) => {
         doc.setFillColor(...soft);
         doc.roundedRect(M, y - 4, W - M * 2, 8, 1.5, 1.5, "F");
         doc.setTextColor(...ink);
-        doc.setFont("helvetica", "bold");
+        doc.setFont(fontName, "bold");
         doc.setFontSize(7.5);
-        doc.text(label.toUpperCase(), M + 3, y + 1);
+        doc.text(label.toLocaleUpperCase(({fr:"fr-FR",en:"en-US",vi:"vi-VN",ar:"ar",ru:"ru-RU"} as const)[lang]), M + 3, y + 1);
         return y + 12;
       };
 
       const infoRow = (label: string, value: string, y: number, x = M, maxWidth = 150) => {
-        doc.setFont("helvetica", "normal");
+        doc.setFont(fontName, "normal");
         doc.setFontSize(6.7);
         doc.setTextColor(...muted);
         doc.text(label, x, y);
-        doc.setFont("helvetica", "bold");
+        doc.setFont(fontName, "bold");
         doc.setTextColor(...ink);
         const lines = doc.splitTextToSize(value || "—", maxWidth);
         doc.text(lines, x + 30, y);
@@ -298,72 +347,72 @@ export function QuoteConfiguratorCompact() {
       doc.setFillColor(...ink);
       doc.rect(0, 0, W, 33, "F");
       doc.setTextColor(...white);
-      doc.setFont("helvetica", "bold");
+      doc.setFont(fontName, "bold");
       doc.setFontSize(18);
       doc.text("XRAGENCY", M, 14);
-      doc.setFont("helvetica", "normal");
+      doc.setFont(fontName, "normal");
       doc.setFontSize(7);
       doc.setTextColor(198, 203, 211);
-      doc.text("STUDIO DIGITAL · STRATÉGIE · DESIGN · CROISSANCE", M, 21);
+      doc.text(pdfText("STUDIO DIGITAL · STRATÉGIE · DESIGN · CROISSANCE", "DIGITAL STUDIO · STRATEGY · DESIGN · GROWTH", "STUDIO SỐ · CHIẾN LƯỢC · THIẾT KẾ · TĂNG TRƯỞNG", "استوديو رقمي · استراتيجية · تصميم · نمو", "ЦИФРОВАЯ СТУДИЯ · СТРАТЕГИЯ · ДИЗАЙН · РОСТ"), M, 21);
       doc.setTextColor(...white);
-      doc.setFont("helvetica", "bold");
+      doc.setFont(fontName, "bold");
       doc.setFontSize(13);
-      doc.text("DEVIS", R - M, 13, { align: "right" });
-      doc.setFont("helvetica", "normal");
+      doc.text(pdfText("DEVIS", "QUOTE", "BÁO GIÁ", "عرض سعر", "СМЕТА"), R - M, 13, { align: "right" });
+      doc.setFont(fontName, "normal");
       doc.setFontSize(6.5);
       doc.setTextColor(198, 203, 211);
       doc.text(quoteNumber, R - M, 20, { align: "right" });
       doc.text(date(issueDate), R - M, 26, { align: "right" });
 
       let y = 44;
-      y = section("Client", y);
-      y = infoRow("Entreprise", client.company, y);
-      y = infoRow("Contact", client.name, y);
-      y = infoRow("E-mail", client.email, y);
-      y = infoRow("WhatsApp", client.whatsapp, y);
-      y = infoRow("Site", client.website || "—", y);
+      y = section(pdfText("Client", "Client", "Khách hàng", "العميل", "Клиент"), y);
+      y = infoRow(pdfText("Entreprise", "Company", "Doanh nghiệp", "الشركة", "Компания"), client.company, y);
+      y = infoRow(pdfText("Contact", "Contact", "Người liên hệ", "جهة الاتصال", "Контакт"), client.name, y);
+      y = infoRow(pdfText("E-mail", "Email", "Email", "البريد الإلكتروني", "Эл. почта"), client.email, y);
+      y = infoRow("WhatsApp", "WhatsApp", "WhatsApp", "واتساب", "WhatsApp"), client.whatsapp, y);
+      y = infoRow(pdfText("Site", "Website", "Website", "الموقع الإلكتروني", "Сайт"), client.website || "—", y);
       y += 4;
 
-      y = section("Projet", y);
-      y = infoRow("Activité", sector?.label || "—", y);
-      y = infoRow("Priorité", goal || "—", y);
-      y = infoRow("Situation", situationChoice?.label || "—", y);
-      y = infoRow("Budget", budgetChoice?.label || "—", y);
-      y = infoRow("Acquisition", discoveryChoice?.label || "—", y);
+      y = section(pdfText("Projet", "Project", "Dự án", "المشروع", "Проект"), y);
+      y = infoRow(pdfText("Activité", "Industry", "Lĩnh vực", "النشاط", "Сфера деятельности"), sector ? localizeChoice(sector, lang).label : "—", y);
+      y = infoRow(pdfText("Priorité", "Priority", "Ưu tiên", "الأولوية", "Приоритет"), goal ? localizeGoal(goal, lang).label : "—", y);
+      y = infoRow(pdfText("Situation", "Current situation", "Tình trạng hiện tại", "الوضع الحالي", "Текущая ситуация"), situationChoice ? localizeChoice(situationChoice, lang).label : "—", y);
+      y = infoRow(pdfText("Budget", "Budget", "Ngân sách", "الميزانية", "Бюджет"), budgetChoice ? localizeChoice(budgetChoice, lang).label : "—", y);
+      y = infoRow(pdfText("Acquisition", "Acquisition", "Thu hút khách hàng", "اكتساب العملاء", "Привлечение клиентов"), discoveryChoice ? localizeChoice(discoveryChoice, lang).label : "—", y);
       y += 5;
 
-      y = section("Prestations sélectionnées", y);
+      y = section(pdfText("Prestations sélectionnées", "Selected services", "Dịch vụ đã chọn", "الخدمات المختارة", "Выбранные услуги"), y);
       doc.setFillColor(...ink);
       doc.roundedRect(M, y - 4, W - M * 2, 8, 1.2, 1.2, "F");
       doc.setTextColor(...white);
-      doc.setFont("helvetica", "bold");
+      doc.setFont(fontName, "bold");
       doc.setFontSize(6.5);
-      doc.text("PRESTATION", M + 3, y + 1);
-      doc.text("MODE", 124, y + 1);
-      doc.text("MONTANT", R - 3, y + 1, { align: "right" });
+      doc.text(pdfText("PRESTATION", "SERVICE", "DỊCH VỤ", "الخدمة", "УСЛУГА"), M + 3, y + 1);
+      doc.text(pdfText("MODE", "BILLING", "HÌNH THỨC", "نوع الفوترة", "ОПЛАТА"), 124, y + 1);
+      doc.text(pdfText("MONTANT", "AMOUNT", "SỐ TIỀN", "المبلغ", "СУММА"), R - 3, y + 1, { align: "right" });
       y += 10;
 
       selectedServices.forEach((id) => {
         const p = proposals.find((x) => x.id === id);
         if (!p) return;
         const detail = p.id === "robotics"
-          ? "Location robot de service dès 499 € / mois · achat selon modèle · événement dès 250 €."
+          ? pdfText("Location robot de service dès 499 € / mois · achat selon modèle · événement dès 250 €.", "Service robot rental from 499 € / month · purchase depends on model · events from 250 €.", "Thuê robot dịch vụ từ 499 € / tháng · giá mua tùy mẫu · sự kiện từ 250 €.", "تأجير روبوت الخدمة ابتداءً من 499 € شهريًا · الشراء حسب الطراز · الفعاليات ابتداءً من 250 €.", "Аренда сервисного робота от 499 € в месяц · покупка зависит от модели · мероприятия от 250 €.")
           : p.detail;
         if (y > 255) {
           doc.addPage();
           y = 22;
         }
-        doc.setFont("helvetica", "bold");
+        doc.setFont(fontName, "bold");
         doc.setFontSize(7.4);
         doc.setTextColor(...ink);
         doc.text(p.label, M + 3, y);
-        doc.setFont("helvetica", "normal");
+        doc.setFont(fontName, "normal");
         doc.setFontSize(5.9);
         doc.setTextColor(...muted);
         doc.text(doc.splitTextToSize(detail, 86).slice(0, 2), M + 3, y + 3.5);
         doc.setFontSize(6.4);
-        doc.text(p.period === "month" ? "RÉCURRENT" : p.custom ? "SUR MESURE" : "PONCTUEL", 124, y);
-        doc.setFont("helvetica", "bold");
+        doc.text(p.period === "month" ? pdfText("RÉCURRENT", "RECURRING", "ĐỊNH KỲ", "متكرر", "РЕГУЛЯРНО") : p.custom ? pdfText("SUR MESURE", "CUSTOM QUOTE", "BÁO GIÁ RIÊNG", "عرض مخصص", "ИНДИВИДУАЛЬНО") : pdfText("PONCTUEL", "ONE-OFF", "MỘT LẦN", "مرة واحدة", "РАЗОВО"), 124, y);
+        doc.setFont(fontName, "bold");
         doc.setFontSize(7.2);
         doc.setTextColor(...ink);
         doc.text(
@@ -384,61 +433,61 @@ export function QuoteConfiguratorCompact() {
       }
       doc.setFillColor(...ink);
       doc.roundedRect(110, y - 4, 86, 28, 2.5, 2.5, "F");
-      doc.setFont("helvetica", "normal");
+      doc.setFont(fontName, "normal");
       doc.setFontSize(6.7);
       doc.setTextColor(186, 192, 202);
-      doc.text("TOTAL PONCTUEL", 114, y + 3);
-      doc.text("TOTAL MENSUEL", 114, y + 12);
-      doc.setFont("helvetica", "bold");
+      doc.text(pdfText("TOTAL PONCTUEL", "ONE-OFF TOTAL", "TỔNG MỘT LẦN", "الإجمالي لمرة واحدة", "РАЗОВЫЙ ИТОГ"), 114, y + 3);
+      doc.text(pdfText("TOTAL MENSUEL", "MONTHLY TOTAL", "TỔNG HÀNG THÁNG", "الإجمالي الشهري", "ЕЖЕМЕСЯЧНЫЙ ИТОГ"), 114, y + 12);
+      doc.setFont(fontName, "bold");
       doc.setFontSize(9.4);
       doc.setTextColor(...white);
       doc.text(localizedPrice(once), 192, y + 3, { align: "right" });
       doc.text(localizedPrice(monthly) + t({ fr: " / mois", en: " / month", vi: " / tháng", ar: " / شهر", ru: " / месяц" }), 192, y + 12, { align: "right" });
       y += 36;
 
-      y = section("Cadre du devis", y);
-      y = infoRow("Validité", "15 jours · jusqu’au " + date(validity), y);
-      y = infoRow("Démarrage", "Après validation du devis et réception des éléments nécessaires au projet.", y);
-      y = infoRow("Nature", "Pré-devis généré automatiquement à partir de votre configuration XR Quote Studio.", y, M, 150);
+      y = section(pdfText("Cadre du devis", "Quote terms", "Điều khoản báo giá", "شروط عرض السعر", "Условия сметы"), y);
+      y = infoRow(pdfText("Validité", "Validity", "Hiệu lực", "الصلاحية", "Срок действия"), pdfText("15 jours · jusqu’au ", "15 days · until ", "15 ngày · đến ", "15 يومًا · حتى ", "15 дней · до ") + date(validity), y);
+      y = infoRow(pdfText("Démarrage", "Start", "Bắt đầu", "بدء العمل", "Начало работ"), pdfText("Après validation du devis et réception des éléments nécessaires au projet.", "After quote approval and receipt of the materials required for the project.", "Sau khi duyệt báo giá và nhận đủ tài liệu cần thiết cho dự án.", "بعد الموافقة على عرض السعر واستلام المواد اللازمة للمشروع.", "После утверждения сметы и получения необходимых материалов для проекта."), y);
+      y = infoRow(pdfText("Nature", "Document type", "Loại tài liệu", "نوع المستند", "Тип документа"), pdfText("Pré-devis généré automatiquement à partir de votre configuration XR Quote Studio.", "Preliminary quote generated automatically from your XR Quote Studio configuration.", "Báo giá sơ bộ được tạo tự động từ cấu hình XR Quote Studio của bạn.", "عرض سعر أولي تم إنشاؤه تلقائيًا من إعدادات XR Quote Studio.", "Предварительная смета, автоматически созданная на основе конфигурации XR Quote Studio."), y, M, 150);
       y += 5;
 
       doc.setFillColor(247, 249, 252);
       doc.roundedRect(M, y - 3, W - M * 2, 29, 2.5, 2.5, "F");
       doc.setTextColor(...ink);
-      doc.setFont("helvetica", "bold");
+      doc.setFont(fontName, "bold");
       doc.setFontSize(7.5);
-      doc.text("Validation client", M + 4, y + 5);
-      doc.setFont("helvetica", "normal");
+      doc.text(pdfText("Validation client", "Client approval", "Xác nhận của khách hàng", "اعتماد العميل", "Подтверждение клиента"), M + 4, y + 5);
+      doc.setFont(fontName, "normal");
       doc.setFontSize(6.4);
       doc.setTextColor(...muted);
-      doc.text("Ce document récapitule les prestations sélectionnées et leur modèle de facturation.", M + 4, y + 11);
-      doc.text("Le périmètre définitif est confirmé avec XRAGENCY avant engagement.", M + 4, y + 16);
+      doc.text(pdfText("Ce document récapitule les prestations sélectionnées et leur modèle de facturation.", "This document summarizes the selected services and their billing model.", "Tài liệu này tóm tắt các dịch vụ đã chọn và hình thức tính phí.", "يلخص هذا المستند الخدمات المختارة وطريقة فوترة كل منها.", "В документе перечислены выбранные услуги и модель их оплаты."), M + 4, y + 11);
+      doc.text(pdfText("Le périmètre définitif est confirmé avec XRAGENCY avant engagement.", "The final scope is confirmed with XRAGENCY before commitment.", "Phạm vi cuối cùng sẽ được xác nhận với XRAGENCY trước khi triển khai.", "يتم تأكيد النطاق النهائي مع XRAGENCY قبل الالتزام.", "Окончательный объём работ согласуется с XRAGENCY до начала сотрудничества."), M + 4, y + 16);
       doc.setDrawColor(...lineColor);
       doc.line(111, y + 8, 188, y + 8);
       doc.line(111, y + 21, 188, y + 21);
       doc.setFontSize(5.9);
-      doc.text("Date / signature", 111, y + 6);
-      doc.text("Nom / qualité", 111, y + 19);
+      doc.text(pdfText("Date / signature", "Date / signature", "Ngày / chữ ký", "التاريخ / التوقيع", "Дата / подпись"), 111, y + 6);
+      doc.text(pdfText("Nom / qualité", "Name / title", "Họ tên / chức vụ", "الاسم / الصفة", "Имя / должность"), 111, y + 19);
 
       doc.setDrawColor(...lineColor);
       doc.line(M, 281, R, 281);
-      doc.setFont("helvetica", "bold");
+      doc.setFont(fontName, "bold");
       doc.setFontSize(6.3);
       doc.setTextColor(...ink);
       doc.text("KARMA SASU · XRAGENCY", M, 287);
-      doc.setFont("helvetica", "normal");
+      doc.setFont(fontName, "normal");
       doc.setFontSize(5.7);
       doc.setTextColor(...muted);
       doc.text("SIREN 889 178 141 · SIRET 889 178 141 00012 · RCS Paris", M, 292);
       doc.text("78 Avenue des Champs-Élysées · Bureau 562 · 75008 Paris · France", M, 296);
       doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83 · xragencyai.com", M, 300);
       doc.setTextColor(...blue);
-      doc.setFont("helvetica", "bold");
+      doc.setFont(fontName, "bold");
       doc.text(quoteNumber, R, 300, { align: "right" });
 
       doc.save("XRAGENCY-Devis-" + quoteNumber + ".pdf");
       setGenerated(true);
-      setSendMessage("Votre devis professionnel a été généré.");
+      setSendMessage(t({fr:"Votre devis professionnel a été généré.",en:"Your professional quote has been generated.",vi:"Báo giá chuyên nghiệp của bạn đã được tạo.",ar:"تم إنشاء عرض السعر الاحترافي.",ru:"Профессиональная смета сформирована."}));
     } catch (error) {
       setSendMessage(error instanceof Error ? error.message : "Impossible de générer le devis PDF.");
     } finally {
