@@ -22,7 +22,7 @@ export function Hero() {
       frame = 0;
       const rect = section.getBoundingClientRect();
       const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
-      image.style.transform = `scale(1.015) translate3d(0, ${((progress - 0.5) * -12).toFixed(2)}px, 0)`;
+      image.style.transform = `scale(1) translate3d(0, ${((progress - 0.5) * -12).toFixed(2)}px, 0)`;
     };
     const requestUpdate = () => { if (!frame) frame = window.requestAnimationFrame(updateDepth); };
     updateDepth();
@@ -38,7 +38,7 @@ export function Hero() {
   return (
     <section ref={sectionRef} id="top" className="xr-hero xr-hero-refined relative isolate overflow-hidden bg-[#080808] text-white">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden md:block">
-        <img ref={imageRef} src={XR_HERO_PHOTO} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[center_42%]" style={{ transform: "scale(1.015)" }} />
+        <img ref={imageRef} src={XR_HERO_PHOTO} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[center_42%]" style={{ transform: "scale(1)" }} />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.78)_0%,rgba(5,5,5,.56)_32%,rgba(5,5,5,.18)_62%,rgba(5,5,5,.04)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,5,5,.58)_0%,transparent_24%,rgba(5,5,5,.08)_100%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_73%_38%,transparent_0%,rgba(0,0,0,.08)_54%,rgba(0,0,0,.28)_100%)]" />
@@ -55,6 +55,8 @@ export function Hero() {
           <img src={XR_HERO_PHOTO} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[center_42%]" />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.06)_0%,rgba(0,0,0,.02)_48%,#080808_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,.18),transparent_65%)]" />
+          <div aria-hidden className="xr-hero-orbit absolute right-[-24px] top-[8%] h-48 w-48 rounded-full border border-white/25" />
+          <div aria-hidden className="xr-hero-orbit xr-hero-orbit-delayed absolute right-[14px] top-[17%] h-32 w-32 rounded-full border border-white/15" />
           <div aria-hidden className="xr-hero-grain absolute inset-0 opacity-[.14]" />
         </div>
 
