@@ -73,6 +73,10 @@ const MAPS_COPY: Record<string, Partial<Record<Lang, string>>> = {
   "Artisan / BTP": { en:"Trades / Construction",vi:"Thợ thủ công / Xây dựng",ar:"الحرف / البناء",ru:"Ремесло / строительство" },
   "Beauté / Bien-être": { en:"Beauty / Wellness",vi:"Làm đẹp / Chăm sóc sức khỏe",ar:"الجمال / العافية",ru:"Красота / здоровье" },
   "Autre commerce": { en:"Other business",vi:"Lĩnh vực khác",ar:"نشاط آخر",ru:"Другой бизнес" },
+  "< 50 000 hab.": { en:"< 50,000 residents",vi:"< 50.000 cư dân",ar:"أقل من 50 ألف نسمة",ru:"Менее 50 000 жителей" },
+  "1 à 3": { en:"1–3",vi:"1–3",ar:"1–3",ru:"1–3" },
+  "4 à 6": { en:"4–6",vi:"4–6",ar:"4–6",ru:"4–6" },
+  "7 à 10": { en:"7–10",vi:"7–10",ar:"7–10",ru:"7–10" },
   "Petite ville": { en:"Small town",vi:"Thị trấn nhỏ",ar:"بلدة صغيرة",ru:"Небольшой город" },
   "Ville moyenne": { en:"Mid-sized city",vi:"Thành phố vừa",ar:"مدينة متوسطة",ru:"Средний город" },
   "Grande ville": { en:"Large city",vi:"Thành phố lớn",ar:"مدينة كبيرة",ru:"Крупный город" },
@@ -371,7 +375,7 @@ export function MapsSimulator() {
               <div>
                 <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--xr-ink)] text-[10px] font-bold text-[var(--xr-bg)]">2</span>
-                  Taille de votre ville
+                  {t({fr:"Taille de votre ville",en:"City size",vi:"Quy mô thành phố",ar:"حجم المدينة",ru:"Размер города"})}
                 </p>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                   {CITY_SIZES.map((c) => (
