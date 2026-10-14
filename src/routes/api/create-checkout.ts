@@ -3,7 +3,8 @@ import { Resend } from "resend";
 
 type CheckoutBody = {
   sectorId?: string;
-  currency?: "eur" | "usd" | "vnd";
+  currency?: "eur" | "usd" | "vnd" | "aed";
+  lang?: "fr" | "en" | "vi" | "ar" | "ru";
   situation?: string;
   budget?: string;
   selectedServices?: string[];
@@ -33,18 +34,25 @@ const WEBSITE_PRICES = {
 
 const PREMIUM_BRANDING = 399;
 
-const CURRENCY_RATES: Record<"eur" | "usd" | "vnd", number> = {
+const CURRENCY_RATES: Record<"eur" | "usd" | "vnd" | "aed", number> = {
   eur: 1,
-  usd: 1.15,
-  vnd: 29800,
+  usd: 1.12,
+  vnd: 27500,
+  aed: 4.1165,
 };
 
-function convertAmount(amountEur: number, currency: "eur" | "usd" | "vnd") {
+function marketMultiplier(lang: CheckoutBody["lang"]) {
+  if (lang === "vi") return 0.8;
+  if (lang === "en" || lang === "ar" || lang === "ru") return 1.2;
+  return 1;
+}
+
+function convertAmount(amountEur: number, currency: "eur" | "usd" | "vnd" | "aed") {
   const converted = amountEur * CURRENCY_RATES[currency];
   return currency === "vnd" ? Math.round(converted) : Math.round(converted * 100) / 100;
 }
 
-function toMinorUnit(amount: number, currency: "eur" | "usd" | "vnd") {
+function toMinorUnit(amount: number, currency: "eur" | "usd" | "vnd" | "aed") {
   return currency === "vnd" ? Math.round(amount) : Math.round(amount * 100);
 }
 
@@ -115,7 +123,8 @@ export const Route = createFileRoute("/api/create-checkout")({
           const situation = body.situation || "";
           const budget = body.budget || "";
           const sectorId = body.sectorId || "";
-          const currency = body.currency === "usd" || body.currency === "vnd" ? body.currency : "eur";
+          const lang = body.lang === "en" || body.lang === "vi" || body.lang === "ar" || body.lang === "ru" ? body.lang : "fr";
+          const currency: "eur" | "usd" | "vnd" | "aed" = body.currency === "usd" || body.currency === "vnd" || body.currency === "aed" ? body.currency : "eur";
 
           if (!selectedServices.length) {
             return Response.json({ error: "Aucune prestation sélectionnée." }, { status: 400 });
@@ -164,10 +173,12 @@ export const Route = createFileRoute("/api/create-checkout")({
           form.set("metadata[budget]", budget);
           form.set("metadata[services]", selectedServices.join(","));
           form.set("metadata[currency]", currency);
+          form.set("metadata[display_language]", lang);
+          form.set("metadata[market_markup]", String(marketMultiplier(lang)));
 
           lineItems.forEach((item, index) => {
             form.set(`line_items[${index}][price_data][currency]`, currency);
-            const convertedAmount = convertAmount(item.amount, currency);
+            const convertedAmount = convertAmount(item.amount * marketMultiplier(lang), currency);
             form.set(`line_items[${index}][price_data][unit_amount]`, String(toMinorUnit(convertedAmount, currency)));
             const labelSuffix = !isSubscriptionOnly && item.recurring ? " (1er mois)" : "";
             form.set(`line_items[${index}][price_data][product_data][name]`, item.label + labelSuffix);
