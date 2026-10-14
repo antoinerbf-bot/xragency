@@ -106,7 +106,7 @@ export function HomeServices() {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       const rect = section.getBoundingClientRect();
       if (rect.bottom <= 0 || rect.top >= window.innerHeight) return;
-      const progress = Math.max(0, Math.min(0.999, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
+      const progress = Math.max(0, Math.min(0.999, -rect.top / Math.max(1, section.offsetHeight)));
       const nextIndex = Math.min(IDS.length - 1, Math.floor(progress * IDS.length));
       setActive((current) => current === IDS[nextIndex] ? current : IDS[nextIndex]);
     };
