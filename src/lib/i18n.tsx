@@ -93,6 +93,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     else if (nav !== "fr") setLangState("en");
   }, []);
 
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  }, [lang]);
+
   const setLang = useCallback((l: string) => {
     setLangState(l as Lang);
     window.localStorage.setItem("xr-lang", l);
