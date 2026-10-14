@@ -172,23 +172,37 @@ const BRANDING_TIERS = {
 } as const;
 
 const PDF_FONT_URLS = {
-  latin: "https://cdn.jsdelivr.net/gh/openmaptiles/fonts@master/noto-sans/NotoSans-Regular.ttf",
-  arabic: "https://cdn.jsdelivr.net/gh/hotosm/HDM-CartoCSS@master/fonts/NotoSansArabic-Regular.ttf",
+  latin: [
+    "https://cdn.jsdelivr.net/gh/openmaptiles/fonts@master/noto-sans/NotoSans-Regular.ttf",
+    "https://raw.githubusercontent.com/openmaptiles/fonts/master/noto-sans/NotoSans-Regular.ttf",
+  ],
+  arabic: [
+    "https://cdn.jsdelivr.net/gh/hotosm/HDM-CartoCSS@master/fonts/NotoSansArabic-Regular.ttf",
+    "https://raw.githubusercontent.com/hotosm/HDM-CartoCSS/master/fonts/NotoSansArabic-Regular.ttf",
+  ],
 } as const;
 const PDF_FONT_CACHE: Partial<Record<keyof typeof PDF_FONT_URLS, Promise<string>>> = {};
 
 async function loadPdfFontBase64(kind: keyof typeof PDF_FONT_URLS): Promise<string> {
   if (!PDF_FONT_CACHE[kind]) {
     PDF_FONT_CACHE[kind] = (async () => {
-      const response = await fetch(PDF_FONT_URLS[kind], { mode: "cors", credentials: "omit" });
-      if (!response.ok) throw new Error("HTTP " + response.status);
-      const bytes = new Uint8Array(await response.arrayBuffer());
-      let binary = "";
-      const chunkSize = 0x8000;
-      for (let i = 0; i < bytes.length; i += chunkSize) {
-        binary += String.fromCharCode(...bytes.subarray(i, Math.min(i + chunkSize, bytes.length)));
+      let lastError: unknown;
+      for (const url of PDF_FONT_URLS[kind]) {
+        try {
+          const response = await fetch(url, { mode: "cors", credentials: "omit" });
+          if (!response.ok) throw new Error("HTTP " + response.status);
+          const bytes = new Uint8Array(await response.arrayBuffer());
+          let binary = "";
+          const chunkSize = 0x8000;
+          for (let i = 0; i < bytes.length; i += chunkSize) {
+            binary += String.fromCharCode(...bytes.subarray(i, Math.min(i + chunkSize, bytes.length)));
+          }
+          return btoa(binary);
+        } catch (error) {
+          lastError = error;
+        }
       }
-      return btoa(binary);
+      throw lastError instanceof Error ? lastError : new Error("Unicode font download failed");
     })().catch((error) => {
       delete PDF_FONT_CACHE[kind];
       throw error;
