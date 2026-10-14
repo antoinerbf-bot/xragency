@@ -13,7 +13,7 @@ import {
   BarChart3,
   Gauge,
 } from "lucide-react";
-import { useLang } from "@/lib/i18n";
+import { useLang, type Lang } from "@/lib/i18n";
 import { CONTACT } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { Reveal, SectionHeading } from "./primitives";
@@ -62,6 +62,76 @@ const PHASES = [
   { num: "06", name: "Pilotage Actif", title: "Veille & Ajustements", desc: "Mises à jour stratégiques régulières, animation de posts géolocalisés et réponses optimisées aux avis clients." },
   { num: "07", name: "Résultats & ROI", title: "Mesure transparente", desc: "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire." },
 ];
+
+
+const MAPS_COPY: Record<string, Partial<Record<Lang, string>>> = {
+  "Restaurant / Bar": { en:"Restaurant / Bar",vi:"Nhà hàng / Bar",ar:"مطعم / بار",ru:"Ресторан / бар" },
+  "Hôtel / Spa": { en:"Hotel / Spa",vi:"Khách sạn / Spa",ar:"فندق / سبا",ru:"Отель / спа" },
+  "Santé / Médecin": { en:"Healthcare / Doctor",vi:"Y tế / Bác sĩ",ar:"الصحة / طبيب",ru:"Медицина / врач" },
+  "Avocat / Notaire": { en:"Lawyer / Notary",vi:"Luật sư / Công chứng",ar:"محامٍ / موثق",ru:"Юрист / нотариус" },
+  "Immobilier": { en:"Real estate",vi:"Bất động sản",ar:"العقارات",ru:"Недвижимость" },
+  "Artisan / BTP": { en:"Trades / Construction",vi:"Thợ thủ công / Xây dựng",ar:"الحرف / البناء",ru:"Ремесло / строительство" },
+  "Beauté / Bien-être": { en:"Beauty / Wellness",vi:"Làm đẹp / Chăm sóc sức khỏe",ar:"الجمال / العافية",ru:"Красота / здоровье" },
+  "Autre commerce": { en:"Other business",vi:"Lĩnh vực khác",ar:"نشاط آخر",ru:"Другой бизнес" },
+  "Petite ville": { en:"Small town",vi:"Thị trấn nhỏ",ar:"بلدة صغيرة",ru:"Небольшой город" },
+  "Ville moyenne": { en:"Mid-sized city",vi:"Thành phố vừa",ar:"مدينة متوسطة",ru:"Средний город" },
+  "Grande ville": { en:"Large city",vi:"Thành phố lớn",ar:"مدينة كبيرة",ru:"Крупный город" },
+  "Métropole": { en:"Metropolitan area",vi:"Đô thị lớn",ar:"منطقة حضرية كبرى",ru:"Мегаполис" },
+  "mots-clés principaux": { en:"main keywords",vi:"từ khóa chính",ar:"كلمات مفتاحية رئيسية",ru:"основных ключевых слов" },
+  "Absent de Maps": { en:"Not on Maps",vi:"Chưa có trên Maps",ar:"غير موجود على الخرائط",ru:"Отсутствует на Картах" },
+  "Fiche non créée ou invisible": { en:"Profile not created or not visible",vi:"Hồ sơ chưa tạo hoặc không hiển thị",ar:"الملف غير موجود أو غير ظاهر",ru:"Профиль не создан или не виден" },
+  "Hors Top 20": { en:"Outside the Top 20",vi:"Ngoài Top 20",ar:"خارج أفضل 20 نتيجة",ru:"За пределами топ-20" },
+  "Très peu visible": { en:"Very low visibility",vi:"Khả năng hiển thị rất thấp",ar:"ظهور ضعيف جدًا",ru:"Очень низкая видимость" },
+  "Position 4 – 10": { en:"Position 4–10",vi:"Vị trí 4–10",ar:"المركز 4–10",ru:"Позиция 4–10" },
+  "Visible mais pas dans le Pack": { en:"Visible but outside the Local Pack",vi:"Có hiển thị nhưng ngoài Local Pack",ar:"ظاهر لكن خارج النتائج المحلية",ru:"Видимость есть, но вне локального блока" },
+  "Analyse Initiale": { en:"Initial analysis",vi:"Phân tích ban đầu",ar:"التحليل الأولي",ru:"Первичный анализ" },
+  "Diagnostic de présence": { en:"Presence assessment",vi:"Đánh giá hiện diện",ar:"تقييم الحضور",ru:"Оценка присутствия" },
+  "Audit technique complet de votre fiche actuelle, historique des avis, cohérence des données et pénalités éventuelles.": { en:"Full technical audit of your current profile, review history, data consistency and possible penalties.",vi:"Kiểm tra kỹ thuật hồ sơ hiện tại, lịch sử đánh giá, tính nhất quán dữ liệu và các hình phạt có thể có.",ar:"تدقيق تقني كامل للملف الحالي وسجل التقييمات واتساق البيانات والعقوبات المحتملة.",ru:"Полный технический аудит текущего профиля, истории отзывов, согласованности данных и возможных санкций." },
+  "Audit Concurrentiel": { en:"Competitive audit",vi:"Phân tích đối thủ",ar:"تدقيق تنافسي",ru:"Конкурентный аудит" },
+  "Décryptage du TOP 3": { en:"Top 3 analysis",vi:"Phân tích Top 3",ar:"تحليل أفضل 3 نتائج",ru:"Анализ топ-3" },
+  "Analyse chirurgicale des 3 concurrents occupant actuellement le Local Pack : volume d'avis, mots-clés et autorité.": { en:"Detailed analysis of the three competitors currently in the Local Pack: review volume, keywords and authority.",vi:"Phân tích chi tiết 3 đối thủ trong Local Pack: số lượng đánh giá, từ khóa và độ uy tín.",ar:"تحليل دقيق للمنافسين الثلاثة في النتائج المحلية: عدد التقييمات والكلمات المفتاحية والموثوقية.",ru:"Подробный анализ трёх конкурентов в Local Pack: количество отзывов, ключевые слова и авторитетность." },
+  "Stratégie Ciblée": { en:"Targeted strategy",vi:"Chiến lược mục tiêu",ar:"استراتيجية موجهة",ru:"Целевая стратегия" },
+  "Mots-clés & Zones": { en:"Keywords & areas",vi:"Từ khóa & khu vực",ar:"الكلمات المفتاحية والمناطق",ru:"Ключевые слова и зоны" },
+  "Sélection rigoureuse des requêtes à fort volume de conversion et cartographie des rayons géographiques prioritaires.": { en:"Select high-conversion searches and map the priority geographic areas.",vi:"Chọn truy vấn có khả năng chuyển đổi cao và lập bản đồ khu vực ưu tiên.",ar:"اختيار عبارات البحث ذات التحويل المرتفع وتحديد المناطق الجغرافية ذات الأولوية.",ru:"Подбор запросов с высокой конверсией и картирование приоритетных географических зон." },
+  "Optimisation GBP": { en:"Google Business Profile optimisation",vi:"Tối ưu Google Business Profile",ar:"تحسين Google Business Profile",ru:"Оптимизация Google Business Profile" },
+  "Restructuration Pro": { en:"Professional restructuring",vi:"Tái cấu trúc chuyên nghiệp",ar:"إعادة هيكلة احترافية",ru:"Профессиональная реструктуризация" },
+  "Optimisation des catégories primaires/secondaires, géolocalisation des visuels HD, attributs clés et catalogue de services.": { en:"Optimise primary and secondary categories, geolocate HD visuals, refine key attributes and service catalogue.",vi:"Tối ưu danh mục chính/phụ, định vị hình ảnh HD, thuộc tính quan trọng và danh mục dịch vụ.",ar:"تحسين الفئات الرئيسية والثانوية وتحديد مواقع الصور عالية الدقة والسمات الأساسية وكتالوج الخدمات.",ru:"Оптимизация основных и дополнительных категорий, геолокация HD-изображений, ключевые атрибуты и каталог услуг." },
+  "Autorité Locale": { en:"Local authority",vi:"Uy tín địa phương",ar:"السلطة المحلية",ru:"Локальный авторитет" },
+  "Signaux & Citations NAP": { en:"Signals & NAP citations",vi:"Tín hiệu & trích dẫn NAP",ar:"الإشارات واستشهادات NAP",ru:"Сигналы и упоминания NAP" },
+  "Déploiement de citations locales cohérentes (Nom, Adresse, Téléphone) et renforcement de votre crédibilité territoriale.": { en:"Build consistent local citations (Name, Address, Phone) and strengthen local credibility.",vi:"Xây dựng trích dẫn địa phương nhất quán (Tên, Địa chỉ, Điện thoại) và tăng độ tin cậy.",ar:"إنشاء إشارات محلية متسقة (الاسم والعنوان والهاتف) وتعزيز المصداقية في المنطقة.",ru:"Создание согласованных локальных упоминаний (название, адрес, телефон) и укрепление местной репутации." },
+  "Pilotage Actif": { en:"Active management",vi:"Quản lý chủ động",ar:"إدارة نشطة",ru:"Активное управление" },
+  "Veille & Ajustements": { en:"Monitoring & adjustments",vi:"Theo dõi & điều chỉnh",ar:"المتابعة والتعديلات",ru:"Мониторинг и корректировки" },
+  "Mises à jour stratégiques régulières, animation de posts géolocalisés et réponses optimisées aux avis clients.": { en:"Regular strategic updates, geotargeted posts and optimised responses to customer reviews.",vi:"Cập nhật chiến lược định kỳ, đăng bài theo vị trí và phản hồi đánh giá khách hàng.",ar:"تحديثات استراتيجية منتظمة ومنشورات محددة جغرافيًا وردود محسّنة على تقييمات العملاء.",ru:"Регулярные стратегические обновления, геолокализованные публикации и оптимизированные ответы на отзывы." },
+  "Résultats & ROI": { en:"Results & ROI",vi:"Kết quả & ROI",ar:"النتائج والعائد",ru:"Результаты и ROI" },
+  "Mesure transparente": { en:"Transparent measurement",vi:"Đo lường minh bạch",ar:"قياس شفاف",ru:"Прозрачное измерение" },
+  "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire.": { en:"Weekly position dashboard, phone-call tracking and direction-request monitoring.",vi:"Bảng theo dõi thứ hạng hàng tuần, cuộc gọi và yêu cầu chỉ đường.",ar:"لوحة متابعة أسبوعية للترتيب ومراقبة المكالمات وطلبات الاتجاهات.",ru:"Еженедельная панель позиций, отслеживание звонков и запросов маршрута." },
+  "SIMULATION EN DIRECT": { en:"LIVE SIMULATION",vi:"MÔ PHỎNG TRỰC TIẾP",ar:"محاكاة مباشرة",ru:"ЖИВАЯ СИМУЛЯЦИЯ" },
+  "RECHERCHE CIBLE": { en:"TARGET SEARCH",vi:"TRUY VẤN MỤC TIÊU",ar:"بحث مستهدف",ru:"ЦЕЛЕВОЙ ПОИСК" },
+  "POSITION ACTUELLE": { en:"CURRENT POSITION",vi:"VỊ TRÍ HIỆN TẠI",ar:"الترتيب الحالي",ru:"ТЕКУЩАЯ ПОЗИЦИЯ" },
+  "VISIBILITÉ À CONSTRUIRE": { en:"VISIBILITY TO BUILD",vi:"CẦN XÂY DỰNG HIỂN THỊ",ar:"الظهور بحاجة إلى بناء",ru:"ВИДИМОСТЬ НУЖНО СОЗДАТЬ" },
+  "SIGNAL À RENFORCER": { en:"SIGNAL TO STRENGTHEN",vi:"CẦN TĂNG CƯỜNG TÍN HIỆU",ar:"إشارة تحتاج إلى تعزيز",ru:"СИГНАЛ НУЖНО УСИЛИТЬ" },
+  "POSITIONNEMENT À DÉVELOPPER": { en:"POSITIONING TO DEVELOP",vi:"CẦN PHÁT TRIỂN ĐỊNH VỊ",ar:"التموضع بحاجة إلى تطوير",ru:"ПОЗИЦИОНИРОВАНИЕ НУЖНО РАЗВИВАТЬ" },
+  "Configurateur de projet": { en:"Project configurator",vi:"Cấu hình dự án",ar:"مُهيئ المشروع",ru:"Конфигуратор проекта" },
+  "Estimez votre investissement Google Maps": { en:"Estimate your Google Maps investment",vi:"Ước tính ngân sách Google Maps",ar:"قدّر استثمارك في Google Maps",ru:"Оцените инвестиции в Google Maps" },
+  "Votre secteur d'activité": { en:"Your industry",vi:"Lĩnh vực của bạn",ar:"قطاع نشاطك",ru:"Ваша отрасль" },
+  "Taille de la ville": { en:"City size",vi:"Quy mô thành phố",ar:"حجم المدينة",ru:"Размер города" },
+  "Mots-clés ciblés": { en:"Target keywords",vi:"Từ khóa mục tiêu",ar:"الكلمات المفتاحية المستهدفة",ru:"Целевые ключевые слова" },
+  "Position actuelle": { en:"Current position",vi:"Vị trí hiện tại",ar:"الترتيب الحالي",ru:"Текущая позиция" },
+  "Budget indicatif · à partir de 990 € / an": { en:"Indicative budget · from €990 / year",vi:"Ngân sách tham khảo · từ 990 € / năm",ar:"ميزانية تقديرية · ابتداءً من 990 € سنويًا",ru:"Ориентировочный бюджет · от 990 € в год" },
+  "Estimation indicative · tarif exact après audit personnalisé": { en:"Indicative estimate · exact price after a tailored audit",vi:"Ước tính tham khảo · giá chính xác sau khi audit riêng",ar:"تقدير إرشادي · السعر النهائي بعد تدقيق مخصص",ru:"Ориентировочная оценка · точная цена после индивидуального аудита" },
+  "Objectif Top 3 · étude locale sur mesure": { en:"Top 3 target · tailored local study",vi:"Mục tiêu Top 3 · nghiên cứu địa phương riêng",ar:"هدف أفضل 3 نتائج · دراسة محلية مخصصة",ru:"Цель — топ-3 · индивидуальное локальное исследование" },
+  "Lancer mon audit gratuit": { en:"Start my free audit",vi:"Bắt đầu audit miễn phí",ar:"ابدأ التدقيق المجاني",ru:"Запустить бесплатный аудит" },
+  "Audit initial offert": { en:"Initial audit included",vi:"Miễn phí audit ban đầu",ar:"التدقيق الأولي مجاني",ru:"Первичный аудит бесплатно" },
+  "Périmètre contractuel clair": { en:"Clear contractual scope",vi:"Phạm vi hợp đồng rõ ràng",ar:"نطاق تعاقدي واضح",ru:"Чёткий договорной объём" },
+  "Rapport mensuel inclus": { en:"Monthly report included",vi:"Bao gồm báo cáo hàng tháng",ar:"تقرير شهري مشمول",ru:"Ежемесячный отчёт включён" },
+  "Sans engagement minimum": { en:"No minimum commitment",vi:"Không yêu cầu cam kết tối thiểu",ar:"دون حد أدنى للالتزام",ru:"Без минимального срока обязательств" },
+  "Méthodologie exclusive": { en:"Exclusive methodology",vi:"Phương pháp độc quyền",ar:"منهجية حصرية",ru:"Эксклюзивная методология" },
+  "Le processus en 7 phases": { en:"The 7-phase process",vi:"Quy trình 7 giai đoạn",ar:"العملية في 7 مراحل",ru:"Процесс из 7 этапов" },
+  "Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.": { en:"A structured, transparent and measurable approach to improving local visibility.",vi:"Cách tiếp cận có cấu trúc, minh bạch và đo lường được để cải thiện hiển thị địa phương.",ar:"نهج منظم وشفاف وقابل للقياس لتحسين الظهور المحلي.",ru:"Структурированный, прозрачный и измеримый подход к улучшению локальной видимости." },
+};
+function mapsText(value: string, lang: Lang) {
+  return MAPS_COPY[value]?.[lang] ?? value;
+}
 
 /* ── Animated price counter ── */
 function useAnimatedPrice(target: number, duration = 500) {
@@ -125,7 +195,7 @@ function SelectorBtn({
 }
 
 export function MapsSimulator() {
-  const { price: formatPrice } = useLang();
+  const { price: formatPrice, lang, t } = useLang();
 
   const [sector, setSector] = useState(SECTORS[0].id);
   const [citySize, setCitySize] = useState(CITY_SIZES[0].id);
@@ -376,14 +446,14 @@ export function MapsSimulator() {
                         key={animMin}
                         className="display-serif text-3xl font-bold text-[var(--xr-ink)] sm:text-4xl animate-price-reveal"
                       >
-                        {formatEur(animMin)}
+                        {formatPrice(animMin)}
                       </span>
                       <span className="display-serif text-xl text-[var(--xr-ink)]/60">–</span>
                       <span
                         key={animMax}
                         className="display-serif text-3xl font-bold text-[var(--xr-ink)] sm:text-4xl animate-price-reveal"
                       >
-                        {formatEur(animMax)}
+                        {formatPrice(animMax)}
                       </span>
                       <span className="label-mono text-xs text-muted-foreground">/ an</span>
                     </div>
