@@ -72,21 +72,15 @@ function getPrice(serviceId: string, situation: string, budget: string, sectorId
   return BASE_PRICES[serviceId] ?? 0;
 }
 
-function getLabel(serviceId: string, situation: string) {
-  if (serviceId === "website" && situation === "selling") return "E-commerce & Réservation";
-  if (serviceId === "website") return "Site web XRAGENCY";
-  const labels: Record<string, string> = {
-    branding: "Branding",
-    seo: "SEO",
-    maps: "Google Maps",
-    ads: "Google Ads",
-    social: "Social Media",
-    content: "Contenu · photo · vidéo",
-    conversion: "Conversion & parcours",
-    maintenance: "WebCare",
-    robotics: "Robotique & IA",
+function getLabel(serviceId: string, situation: string, lang: NonNullable<CheckoutBody["lang"]>) {
+  const labels: Record<NonNullable<CheckoutBody["lang"]>, Record<string, string>> = {
+    fr: { website: situation === "selling" ? "E-commerce & Réservation" : "Site web XRAGENCY", branding: "Branding", seo: "SEO", maps: "Google Maps", ads: "Google Ads", social: "Social Media", content: "Contenu · photo · vidéo", conversion: "Conversion & parcours", maintenance: "WebCare", robotics: "Robotique & IA" },
+    en: { website: situation === "selling" ? "E-commerce & Booking" : "XRAGENCY Website", branding: "Branding", seo: "SEO", maps: "Google Maps", ads: "Google Ads", social: "Social Media", content: "Content · photo · video", conversion: "Conversion & customer journey", maintenance: "WebCare", robotics: "Robotics & AI" },
+    vi: { website: situation === "selling" ? "Thương mại điện tử & đặt chỗ" : "Website XRAGENCY", branding: "Thương hiệu", seo: "SEO", maps: "Google Maps", ads: "Google Ads", social: "Mạng xã hội", content: "Nội dung · ảnh · video", conversion: "Chuyển đổi & hành trình khách hàng", maintenance: "WebCare", robotics: "Robot & AI" },
+    ar: { website: situation === "selling" ? "التجارة الإلكترونية والحجوزات" : "موقع XRAGENCY", branding: "الهوية التجارية", seo: "تحسين محركات البحث", maps: "خرائط Google", ads: "إعلانات Google", social: "وسائل التواصل الاجتماعي", content: "المحتوى · الصور · الفيديو", conversion: "التحويل ورحلة العميل", maintenance: "WebCare", robotics: "الروبوتات والذكاء الاصطناعي" },
+    ru: { website: situation === "selling" ? "Интернет-магазин и бронирование" : "Сайт XRAGENCY", branding: "Брендинг", seo: "SEO", maps: "Google Maps", ads: "Google Ads", social: "Социальные сети", content: "Контент · фото · видео", conversion: "Конверсия и путь клиента", maintenance: "WebCare", robotics: "Робототехника и ИИ" },
   };
-  return labels[serviceId] ?? serviceId;
+  return labels[lang][serviceId] ?? serviceId;
 }
 
 export const Route = createFileRoute("/api/create-checkout")({
@@ -142,7 +136,7 @@ export const Route = createFileRoute("/api/create-checkout")({
               const recurring = serviceId === "seo" || serviceId === "social" || serviceId === "maintenance" || serviceId === "robotics";
               return {
                 amount,
-                label: getLabel(serviceId, situation),
+                label: getLabel(serviceId, situation, lang),
                 recurring,
               };
             })
