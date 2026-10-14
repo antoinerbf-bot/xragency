@@ -295,7 +295,8 @@ export function QuoteConfiguratorCompact() {
         doc.addFont(fontFile, fontName, "normal");
         doc.addFont(fontFile, fontName, "bold");
         doc.setFont(fontName, "normal");
-        if (typeof doc.setR2L === "function") doc.setR2L(lang === "ar");
+        const rtlDoc = doc as typeof doc & { setR2L?: (enabled: boolean) => void };
+        rtlDoc.setR2L?.(lang === "ar");
       } catch {
         throw new Error(t({
           fr: "Impossible de charger la police Unicode du devis. Vérifiez la connexion puis réessayez.",
