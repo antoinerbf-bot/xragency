@@ -1,52 +1,90 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowRight, Search, Sparkles } from "lucide-react";
+import { ArrowDown, ArrowRight, Search } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { XR_HERO_PHOTO } from "@/lib/photography";
-import { UI } from "@/lib/copy";
-import { Reveal } from "./primitives";
 
-function useCountUp(target: number, duration = 950, delay = 180) {
-  const [value, setValue] = useState(target);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    setValue(0);
-    let frame = 0;
-    const timeout = window.setTimeout(() => {
-      const start = performance.now();
-      const tick = (now: number) => {
-        const progress = Math.min((now - start) / duration, 1);
-        setValue(Math.round(target * (1 - Math.pow(1 - progress, 3))));
-        if (progress < 1) frame = window.requestAnimationFrame(tick);
-      };
-      frame = window.requestAnimationFrame(tick);
-    }, delay);
-    return () => {
-      window.clearTimeout(timeout);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, [target, duration, delay]);
-
-  return value;
-}
-
-function Stat({ value, suffix = "", label }: { value: number; suffix?: string; label: string }) {
-  return (
-    <div className="min-w-0 border-l border-white/15 pl-3 first:border-l-0 first:pl-0 sm:pl-5">
-      <strong className="display-serif block text-2xl tracking-[-.045em] text-white sm:text-3xl lg:text-4xl">
-        {useCountUp(value)}{suffix}
-      </strong>
-      <span className="mt-1 block text-[8px] leading-4 tracking-[.12em] text-white/55 sm:text-[9px] sm:tracking-[.16em]">
-        {label}
-      </span>
-    </div>
-  );
-}
+const COPY = {
+  fr: {
+    kicker: "XR AGENCY · STUDIO DIGITAL INDÉPENDANT",
+    locations: "FRANCE · DUBAÏ · ASIE · INTERNATIONAL",
+    line1: "Votre présence",
+    line2: "digitale mérite",
+    line3: "mieux.",
+    lead: "Sites web, identité de marque, référencement et acquisition : nous construisons une présence digitale pensée pour attirer, convaincre et faire grandir votre activité.",
+    primary: "Recevoir ma maquette gratuite",
+    secondary: "Auditer ma visibilité",
+    note: "Sans engagement · Une réponse adaptée à votre projet",
+    services: ["STRATÉGIE", "DIRECTION ARTISTIQUE", "WEB & E-COMMERCE", "SEO & ACQUISITION"],
+    scroll: "DÉCOUVRIR XR AGENCY",
+    scene: "UN STUDIO. PLUSIEURS EXPERTISES.",
+    stamp: "CONÇU POUR VOUS",
+  },
+  en: {
+    kicker: "XR AGENCY · INDEPENDENT DIGITAL STUDIO",
+    locations: "FRANCE · DUBAI · ASIA · INTERNATIONAL",
+    line1: "Your digital",
+    line2: "presence deserves",
+    line3: "better.",
+    lead: "Websites, brand identity, search visibility and acquisition: we build a digital presence designed to attract, convince and grow your business.",
+    primary: "Get my free mockup",
+    secondary: "Audit my visibility",
+    note: "No commitment · Tailored to your project",
+    services: ["STRATEGY", "ART DIRECTION", "WEB & E-COMMERCE", "SEO & ACQUISITION"],
+    scroll: "DISCOVER XR AGENCY",
+    scene: "ONE STUDIO. MULTIPLE DISCIPLINES.",
+    stamp: "MADE FOR YOU",
+  },
+  vi: {
+    kicker: "XR AGENCY · STUDIO KỸ THUẬT SỐ ĐỘC LẬP",
+    locations: "PHÁP · DUBAI · CHÂU Á · QUỐC TẾ",
+    line1: "Hiện diện số",
+    line2: "của bạn xứng đáng",
+    line3: "tốt hơn.",
+    lead: "Website, nhận diện thương hiệu, SEO và thu hút khách hàng: chúng tôi xây dựng sự hiện diện số giúp doanh nghiệp thu hút, thuyết phục và phát triển.",
+    primary: "Nhận bản mẫu miễn phí",
+    secondary: "Kiểm tra khả năng hiển thị",
+    note: "Không ràng buộc · Theo sát dự án của bạn",
+    services: ["CHIẾN LƯỢC", "ĐỊNH HƯỚNG NGHỆ THUẬT", "WEB & THƯƠNG MẠI ĐIỆN TỬ", "SEO & THU HÚT"],
+    scroll: "KHÁM PHÁ XR AGENCY",
+    scene: "MỘT STUDIO. NHIỀU CHUYÊN MÔN.",
+    stamp: "THIẾT KẾ CHO BẠN",
+  },
+  ar: {
+    kicker: "XR AGENCY · استوديو رقمي مستقل",
+    locations: "فرنسا · دبي · آسيا · دولي",
+    line1: "حضورك",
+    line2: "الرقمي يستحق",
+    line3: "الأفضل.",
+    lead: "المواقع والهوية البصرية وتحسين الظهور والاستحواذ: نبني حضورًا رقميًا يساعدك على جذب العملاء وإقناعهم وتنمية أعمالك.",
+    primary: "احصل على نموذج مجاني",
+    secondary: "تدقيق الظهور الرقمي",
+    note: "دون التزام · مصمم وفق مشروعك",
+    services: ["الاستراتيجية", "التوجيه الفني", "الويب والتجارة الإلكترونية", "الظهور والاستحواذ"],
+    scroll: "اكتشف XR AGENCY",
+    scene: "استوديو واحد. تخصصات متعددة.",
+    stamp: "مصمم لك",
+  },
+  ru: {
+    kicker: "XR AGENCY · НЕЗАВИСИМАЯ DIGITAL-СТУДИЯ",
+    locations: "ФРАНЦИЯ · ДУБАЙ · АЗИЯ · МЕЖДУНАРОДНЫЕ ПРОЕКТЫ",
+    line1: "Ваше цифровое",
+    line2: "присутствие",
+    line3: "может больше.",
+    lead: "Сайты, айдентика, поисковая видимость и привлечение клиентов: создаём цифровое присутствие, которое помогает привлекать, убеждать и развивать бизнес.",
+    primary: "Получить бесплатный макет",
+    secondary: "Проверить видимость",
+    note: "Без обязательств · Под ваш проект",
+    services: ["СТРАТЕГИЯ", "АРТ-ДИРЕКШН", "ВЕБ И E-COMMERCE", "SEO И ПРИВЛЕЧЕНИЕ"],
+    scroll: "ОТКРЫТЬ XR AGENCY",
+    scene: "ОДНА СТУДИЯ. НЕСКОЛЬКО ЭКСПЕРТИЗ.",
+    stamp: "СОЗДАНО ДЛЯ ВАС",
+  },
+} as const;
 
 export function Hero() {
-  const { t } = useLang();
+  const { lang } = useLang();
+  const copy = COPY[lang as keyof typeof COPY] ?? COPY.fr;
   const sectionRef = useRef<HTMLElement>(null);
-  const sceneRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const [motionAllowed, setMotionAllowed] = useState(false);
 
@@ -56,26 +94,19 @@ export function Hero() {
     setMotionAllowed(!reducedMotion && !saveData);
 
     const section = sectionRef.current;
-    const scene = sceneRef.current;
     const image = imageRef.current;
-    if (!section || !scene || !image || reducedMotion || saveData) return;
+    if (!section || !image || reducedMotion || saveData) return;
 
     let frame = 0;
     const updateDepth = () => {
       frame = 0;
       const rect = section.getBoundingClientRect();
       const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
-      const offset = (progress - 0.5) * 54;
-      image.style.transform = `scale(1.09) translate3d(0, ${(-offset * 0.32).toFixed(2)}px, 0)`;
-      scene.querySelectorAll<HTMLElement>("[data-depth]").forEach((layer) => {
-        const depth = Number(layer.dataset.depth || 0);
-        layer.style.transform = `translate3d(0, ${(offset * depth).toFixed(2)}px, 0)`;
-      });
+      image.style.transform = `scale(1.07) translate3d(0, ${((progress - 0.5) * -24).toFixed(2)}px, 0)`;
     };
     const requestUpdate = () => {
       if (!frame) frame = window.requestAnimationFrame(updateDepth);
     };
-
     updateDepth();
     window.addEventListener("scroll", requestUpdate, { passive: true });
     window.addEventListener("resize", requestUpdate);
@@ -87,129 +118,93 @@ export function Hero() {
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      id="top"
-      className="xr-hero relative isolate overflow-hidden border-b border-white/10 bg-[#080b10] text-white"
-    >
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-40 top-[8%] h-[420px] w-[420px] rounded-full bg-cyan-400/[.07] blur-[100px]" />
-        <div className="absolute bottom-[-140px] right-[22%] h-[340px] w-[340px] rounded-full bg-indigo-500/[.08] blur-[110px]" />
-        <div className="absolute inset-0 opacity-[.13] [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:72px_72px] [mask-image:linear-gradient(to_right,black,transparent_78%)]" />
+    <section ref={sectionRef} id="top" className="xr-hero relative isolate overflow-hidden bg-[#080808] text-white">
+      {/* Desktop: one continuous cinematic frame. Mobile: image and copy remain distinct for clarity. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden md:block">
+        <img ref={imageRef} src={XR_HERO_PHOTO} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover object-center" style={{ transform: "scale(1.07)" }} />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.96)_0%,rgba(5,5,5,.86)_28%,rgba(5,5,5,.43)_54%,rgba(5,5,5,.05)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,5,5,.72)_0%,transparent_28%,rgba(5,5,5,.12)_100%)]" />
+        <div className="absolute inset-0 opacity-[.10] [background-image:linear-gradient(rgba(255,255,255,.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.18)_1px,transparent_1px)] [background-size:90px_90px] [mask-image:linear-gradient(90deg,black,transparent_78%)]" />
       </div>
 
-      <div className="relative mx-auto grid min-h-0 w-full max-w-[1600px] grid-cols-1 md:min-h-[100svh] md:grid-cols-[minmax(0,1.02fr)_minmax(320px,.98fr)] md:items-center">
-        <div className="relative z-20 min-w-0 px-5 pb-9 pt-28 sm:px-8 sm:pb-12 sm:pt-32 md:px-10 md:py-36 lg:px-14 xl:px-20">
-          <Reveal>
-            <div className="mb-5 flex flex-wrap items-center gap-x-3 gap-y-2 sm:mb-7">
-              <span className="h-px w-8 bg-cyan-300" />
-              <span className="label-mono text-[9px] tracking-[.22em] text-white/70 sm:text-[10px]">{t(UI.heroKicker)}</span>
-              <span className="rounded-full border border-cyan-200/20 bg-cyan-200/[.06] px-2.5 py-1 label-mono text-[8px] tracking-[.12em] text-cyan-100/80">FRANCE · DUBAÏ · ASIE</span>
+      <div className="relative mx-auto min-h-0 max-w-[1800px] md:min-h-[100svh]">
+        <div className="relative h-[48svh] min-h-[330px] max-h-[560px] overflow-hidden md:hidden">
+          <img src={XR_HERO_PHOTO} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover object-center" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.24)_0%,rgba(0,0,0,.04)_35%,#080808_100%)]" />
+          <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-3">
+            <span className="label-mono max-w-[230px] text-[8px] leading-4 tracking-[.18em] text-white/75">{copy.locations}</span>
+            <span className="shrink-0 border border-white/35 px-2.5 py-2 label-mono text-[7px] tracking-[.15em] text-white/90">{copy.stamp}</span>
+          </div>
+        </div>
+
+        <div className="relative z-10 grid min-h-0 items-center px-5 pb-12 pt-7 sm:px-8 md:min-h-[100svh] md:grid-cols-[minmax(0,1.08fr)_minmax(220px,.92fr)] md:px-10 md:pb-32 md:pt-36 lg:px-16 xl:px-24">
+          <div className="max-w-[860px]">
+            <div className="mb-5 flex flex-wrap items-center gap-3 sm:mb-7">
+              <span className="h-px w-9 bg-white/75" />
+              <span className="label-mono text-[8px] tracking-[.2em] text-white/75 sm:text-[9px]">{copy.kicker}</span>
             </div>
-          </Reveal>
 
-          <Reveal delay={70}>
-            <h1 className="display-serif max-w-[760px] text-left text-[clamp(2.75rem,5.8vw,6.1rem)] leading-[.93] tracking-[-.06em] text-white [text-wrap:balance]">
-              <span className="block">{t(UI.heroTitle1)}</span>
-              <span className="mt-1 block text-white/75"><em className="font-normal not-italic">{t(UI.heroTitleAccent)}</em></span>
-              <span className="mt-1 block text-cyan-200">{t(UI.heroTitle2)}</span>
+            <h1 className="max-w-[900px] text-[clamp(3.2rem,7.2vw,7.8rem)] font-medium leading-[.86] tracking-[-.075em] text-white [text-wrap:balance]">
+              <span className="block">{copy.line1}</span>
+              <span className="mt-1 block font-serif font-normal italic tracking-[-.065em] text-white/80">{copy.line2}</span>
+              <span className="mt-1 block">{copy.line3}</span>
             </h1>
-          </Reveal>
 
-          <Reveal delay={140}>
-            <p className="mt-6 max-w-xl text-[15px] leading-7 text-white/70 sm:mt-7 sm:text-base sm:leading-8 lg:text-lg">
-              {t(UI.heroLead)}
+            <p className="mt-6 max-w-[600px] text-[14px] leading-6 text-white/75 sm:mt-8 sm:text-base sm:leading-7 lg:text-[17px]">
+              {copy.lead}
             </p>
-          </Reveal>
 
-          <Reveal delay={210}>
-            <div className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center">
-              <a href="#quote" className="group inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-full bg-cyan-200 px-6 py-4 text-[10px] font-bold uppercase tracking-[.14em] text-[#071116] transition duration-300 hover:-translate-y-0.5 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200 sm:w-auto sm:min-w-[220px]">
-                {t(UI.heroCtaMockup)}
+            <div className="mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center">
+              <a href="#quote" className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-white px-6 py-4 text-[10px] font-bold uppercase tracking-[.1em] text-[#090909] transition duration-300 hover:-translate-y-1 hover:bg-neutral-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:min-w-[245px]">
+                {copy.primary}
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </a>
-              <a href="#audit" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-3 text-[10px] font-semibold uppercase tracking-[.12em] text-white/85 transition duration-300 hover:border-cyan-200/70 hover:bg-white/[.04] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200 sm:w-auto">
-                {t(UI.heroCtaAudit)} <Search className="h-3.5 w-3.5 text-cyan-200" />
+              <a href="#audit" className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/35 px-5 py-3 text-[10px] font-semibold uppercase tracking-[.1em] text-white/90 transition duration-300 hover:-translate-y-0.5 hover:border-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:min-w-[190px]">
+                {copy.secondary}<Search className="h-3.5 w-3.5 transition-transform group-hover:scale-110" />
               </a>
             </div>
-          </Reveal>
 
-          <Reveal delay={260}>
-            <div className="mt-7 flex flex-wrap gap-2 sm:mt-9" aria-label="Domaines d'expertise">
-              {[
-                { label: "Sites & e-commerce", target: "#quote" },
-                { label: "Branding", target: "#quote" },
-                { label: "SEO & Google Maps", target: "#quote" },
-                { label: "Social media", target: "#quote" },
-              ].map((item) => (
-                <a key={item.label} href={item.target} className="inline-flex min-h-10 items-center rounded-full border border-white/12 bg-white/[.035] px-3.5 py-2 text-[10px] tracking-[.04em] text-white/60 transition hover:border-cyan-200/45 hover:bg-cyan-200/[.05] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200">
-                  {item.label}
-                </a>
+            <p className="mt-4 text-[10px] tracking-[.03em] text-white/50">{copy.note}</p>
+
+            <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-white/20 pt-4 sm:mt-10 sm:gap-x-6 sm:pt-5">
+              {copy.services.map((item, index) => (
+                <span key={item} className="inline-flex items-center gap-2 label-mono text-[7px] tracking-[.12em] text-white/65 sm:text-[8px]">
+                  <span className="text-white/35">0{index + 1}</span>{item}
+                </span>
               ))}
             </div>
-          </Reveal>
-
-          <Reveal delay={320}>
-            <div className="mt-8 grid max-w-lg grid-cols-3 gap-3 border-t border-white/12 pt-5 sm:mt-10 sm:gap-6 sm:pt-6">
-              <Stat value={500} suffix="+" label={t(UI.statProjects)} />
-              <Stat value={98} suffix="%" label={t(UI.statSatisfaction)} />
-              <Stat value={8} suffix="+" label={t(UI.statYears)} />
-            </div>
-          </Reveal>
-
-          <Reveal delay={380}>
-            <a href="#homepage-services" className="mt-7 inline-flex min-h-11 items-center gap-3 text-white/50 transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">
-              <span className="grid h-9 w-9 place-items-center rounded-full border border-white/20"><ArrowDown className="h-4 w-4" /></span>
-              <span className="label-mono text-[8px] tracking-[.2em]">{t(UI.heroScrollNotice)}</span>
-            </a>
-          </Reveal>
-        </div>
-
-        <div ref={sceneRef} aria-hidden="true" className="xr-immersive-scene relative isolate order-2 mb-8 h-[390px] overflow-hidden sm:mx-4 sm:rounded-[2rem] md:absolute md:inset-y-0 md:right-0 md:order-none md:mb-0 md:mr-0 md:h-full md:w-[53%] md:rounded-none">
-          <img ref={imageRef} src={XR_HERO_PHOTO} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover object-[58%_center] md:object-center" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#080b10]/5 via-[#080b10]/10 to-[#080b10]/75 md:bg-gradient-to-r md:from-[#080b10]/75 md:via-[#080b10]/15 md:to-[#080b10]/15" />
-          <div className="absolute inset-0 mix-blend-screen opacity-40 [background:radial-gradient(ellipse_at_70%_30%,rgba(103,232,249,.22),transparent_40%),radial-gradient(ellipse_at_30%_80%,rgba(129,140,248,.24),transparent_42%)]" />
-          <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,.22)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.22)_1px,transparent_1px)] [background-size:54px_54px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]" />
-
-          <div data-depth="0.72" className="absolute left-[9%] top-[10%] flex items-center gap-2 rounded-full border border-white/20 bg-[#080b10]/55 px-3 py-2.5 shadow-2xl backdrop-blur-xl sm:left-[12%] sm:top-[12%]">
-            <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-200 opacity-50" /><span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-200" /></span>
-            <span className="label-mono text-[8px] tracking-[.18em] text-white/80">CREATIVE SYSTEM / 01</span>
           </div>
 
-          <div data-depth="-0.4" className="absolute right-[8%] top-[26%] w-[min(70%,280px)] rotate-[3deg] rounded-2xl border border-white/25 bg-[#0c1017]/65 p-3 shadow-[0_30px_100px_-25px_rgba(0,0,0,.9)] backdrop-blur-2xl transition-transform duration-500 sm:p-4">
-            <div className="flex items-center justify-between border-b border-white/12 pb-3">
-              <div className="flex gap-1.5"><span className="h-2 w-2 rounded-full bg-white/35" /><span className="h-2 w-2 rounded-full bg-white/35" /><span className="h-2 w-2 rounded-full bg-cyan-200" /></div>
-              <span className="label-mono text-[7px] tracking-[.16em] text-white/45">XR / DIGITAL EXPERIENCE</span>
-            </div>
-            <div className="grid grid-cols-[1.1fr_.9fr] gap-3 pt-3">
-              <div className="flex flex-col justify-between py-1">
-                <div><span className="label-mono text-[7px] tracking-[.18em] text-cyan-100/70">MAKE IT MATTER</span><p className="display-serif mt-2 text-2xl leading-[.95] tracking-[-.04em] text-white sm:text-3xl">Ideas into<br />experiences.</p></div>
-                <div className="mt-5 flex gap-1.5"><span className="h-1 w-10 rounded-full bg-cyan-200" /><span className="h-1 w-5 rounded-full bg-white/25" /><span className="h-1 w-5 rounded-full bg-white/15" /></div>
-              </div>
-              <div className="relative min-h-[130px] overflow-hidden rounded-xl border border-white/15 bg-gradient-to-br from-[#152d3c] via-[#263a52] to-[#10141d]">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_60%_20%,rgba(103,232,249,.65),transparent_38%),radial-gradient(ellipse_at_40%_70%,rgba(129,140,248,.65),transparent_45%)]" />
-                <div className="absolute left-[18%] top-[18%] h-[64%] w-[64%] rotate-12 rounded-[35%] border border-white/55 bg-white/[.06] shadow-[0_0_50px_rgba(103,232,249,.18)] backdrop-blur-sm" />
-                <div className="absolute left-[29%] top-[28%] h-[44%] w-[44%] -rotate-12 rounded-full border border-cyan-100/55" />
+          <div className="relative hidden h-full min-h-[500px] md:block">
+            <div className="absolute right-[4%] top-[22%] max-w-[250px] border-l border-white/60 pl-4" style={{ transform: motionAllowed ? "translateY(0)" : undefined }}>
+              <span className="label-mono text-[8px] tracking-[.18em] text-white/65">{copy.scene}</span>
+              <div className="mt-4 space-y-3">
+                {["01", "02", "03"].map((n, i) => (
+                  <div key={n} className="flex items-center gap-3 text-white/90">
+                    <span className="font-serif text-2xl italic text-white/45">{n}</span>
+                    <span className="h-px w-10 bg-white/45" />
+                    <span className="text-[10px] uppercase tracking-[.16em]">{copy.services[i + 1] ?? copy.services[0]}</span>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-
-          <div data-depth="0.95" className="absolute bottom-[13%] left-[7%] max-w-[240px] rounded-2xl border border-white/20 bg-[#0a0e14]/70 p-4 shadow-2xl backdrop-blur-xl sm:left-[12%] sm:p-5">
-            <div className="flex items-center gap-2"><Sparkles className="h-3.5 w-3.5 text-cyan-200" /><span className="label-mono text-[7px] tracking-[.2em] text-white/55">FROM STRATEGY TO IMPACT</span></div>
-            <p className="mt-3 display-serif text-xl leading-tight text-white sm:text-2xl">A digital presence<br /><span className="text-cyan-200">with a point of view.</span></p>
-          </div>
-
-          <div data-depth="-0.8" className="absolute bottom-[8%] right-[8%] hidden h-24 w-24 place-items-center rounded-full border border-cyan-100/40 bg-[#101823]/30 shadow-[0_0_60px_rgba(103,232,249,.12)] backdrop-blur-sm sm:grid">
-            <div className="absolute inset-3 rounded-full border border-white/15" />
-            <div className="absolute inset-6 rounded-full border border-white/15" />
-            <span className="h-2 w-2 rounded-full bg-cyan-100 shadow-[0_0_20px_rgba(103,232,249,.9)]" />
-          </div>
-
-          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between border-t border-white/15 bg-[#080b10]/45 px-4 py-3 backdrop-blur-md sm:px-5">
-            <span className="label-mono text-[7px] tracking-[.2em] text-white/60">XR CREATIVE STUDIO</span>
-            <span className="label-mono text-[7px] tracking-[.2em] text-cyan-100/80">DESIGN · WEB · GROWTH</span>
+            <div className="absolute bottom-[14%] right-[5%] flex items-center gap-4">
+              <div className="grid h-14 w-14 place-items-center rounded-full border border-white/50">
+                <ArrowDown className="h-4 w-4 animate-bounce" />
+              </div>
+              <span className="max-w-[125px] label-mono text-[7px] leading-4 tracking-[.18em] text-white/70">{copy.scroll}</span>
+            </div>
+            <div className="absolute bottom-[11%] left-[2%] h-28 w-px bg-gradient-to-b from-transparent via-white/60 to-transparent" />
+            <div className="absolute right-[4%] top-[13%] label-mono text-[7px] tracking-[.2em] text-white/55">{copy.locations}</div>
           </div>
         </div>
+      </div>
+
+      <div className="relative z-10 flex items-center justify-between gap-4 border-t border-white/15 bg-[#080808] px-5 py-4 sm:px-8 md:absolute md:bottom-0 md:left-0 md:right-0 md:bg-black/35 md:px-10 md:py-5 lg:px-16 xl:px-24">
+        <span className="label-mono text-[7px] tracking-[.18em] text-white/55 sm:text-[8px]">XR AGENCY / DIGITAL MADE PERSONAL</span>
+        <a href="#homepage-services" className="group inline-flex items-center gap-2 label-mono text-[7px] tracking-[.16em] text-white/75 transition hover:text-white sm:text-[8px]">
+          {copy.scroll}<ArrowDown className="h-3.5 w-3.5 transition-transform group-hover:translate-y-1" />
+        </a>
       </div>
     </section>
   );
