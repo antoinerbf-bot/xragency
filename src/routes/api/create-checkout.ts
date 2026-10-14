@@ -134,9 +134,11 @@ export const Route = createFileRoute("/api/create-checkout")({
 
           const lineItems = selectedServices
             .map((serviceId) => {
+              // Google Maps Top 3 is explicitly quoted after a local audit, not charged at a fixed checkout price.
+              if (serviceId === "maps") return null;
               const amount = getPrice(serviceId, situation, budget, sectorId);
               if (!amount || amount < 1) return null;
-              const recurring = serviceId === "seo" || serviceId === "social" || serviceId === "maintenance";
+              const recurring = serviceId === "seo" || serviceId === "social" || serviceId === "maintenance" || serviceId === "robotics";
               return {
                 amount,
                 label: getLabel(serviceId, situation),
@@ -146,7 +148,7 @@ export const Route = createFileRoute("/api/create-checkout")({
             .filter(Boolean) as Array<{ amount: number; label: string; recurring: boolean }>;
 
           if (!lineItems.length) {
-            return Response.json({ error: "Impossible de calculer le devis." }, { status: 400 });
+            return Response.json({ error: selectedServices.includes("maps") ? "Google Maps Top 3 nécessite un devis personnalisé après audit. Contactez XR Agency pour finaliser cette prestation." : "Impossible de calculer le devis." }, { status: 400 });
           }
 
           const hasRecurring = lineItems.some((item) => item.recurring);
