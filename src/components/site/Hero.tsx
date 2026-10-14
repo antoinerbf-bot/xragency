@@ -39,9 +39,9 @@ export function Hero() {
     <section ref={sectionRef} id="top" className="xr-hero xr-hero-refined relative isolate overflow-hidden bg-[#080808] text-white">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden md:block">
         <img ref={imageRef} src={XR_HERO_PHOTO} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[center_42%]" style={{ transform: "scale(1)" }} />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.78)_0%,rgba(5,5,5,.56)_32%,rgba(5,5,5,.18)_62%,rgba(5,5,5,.04)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,5,5,.58)_0%,transparent_24%,rgba(5,5,5,.08)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_73%_38%,transparent_0%,rgba(0,0,0,.08)_54%,rgba(0,0,0,.28)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.60)_0%,rgba(5,5,5,.36)_32%,rgba(5,5,5,.06)_62%,rgba(5,5,5,0)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,5,5,.38)_0%,transparent_24%,rgba(5,5,5,.04)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_73%_38%,transparent_0%,rgba(0,0,0,.02)_54%,rgba(0,0,0,.08)_100%)]" />
         <div className="xr-hero-grain absolute inset-0 opacity-[.14]" />
         <div className="xr-hero-orbit absolute right-[8%] top-[14%] h-[min(62vw,680px)] w-[min(62vw,680px)] rounded-full border border-white/20" />
         <div className="xr-hero-orbit xr-hero-orbit-delayed absolute right-[14%] top-[21%] h-[min(48vw,530px)] w-[min(48vw,530px)] rounded-full border border-white/15" />
@@ -55,9 +55,7 @@ export function Hero() {
           <img src={XR_HERO_PHOTO} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[center_42%]" />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.06)_0%,rgba(0,0,0,.02)_48%,#080808_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,.18),transparent_65%)]" />
-          <div aria-hidden className="xr-hero-orbit absolute right-[-24px] top-[8%] h-48 w-48 rounded-full border border-white/25" />
-          <div aria-hidden className="xr-hero-orbit xr-hero-orbit-delayed absolute right-[14px] top-[17%] h-32 w-32 rounded-full border border-white/15" />
-          <div aria-hidden className="xr-hero-grain absolute inset-0 opacity-[.14]" />
+          <div aria-hidden className="xr-hero-grain absolute inset-0 opacity-[.08]" />
         </div>
 
         <div className="relative z-10 flex items-center px-5 pb-12 pt-5 sm:px-8 md:px-10 md:pb-32 md:pt-36 lg:px-16 xl:px-24">
@@ -68,7 +66,7 @@ export function Hero() {
             </div>
             <h1 className="xr-hero-heading max-w-[920px] text-[clamp(3.45rem,7.2vw,7.9rem)] font-medium leading-[.86] tracking-[-.075em] text-white [text-wrap:balance]">
               <span className="block">{t(UI.heroTitle1)}</span>
-              <span className="mt-1 block font-serif font-normal italic tracking-[-.065em] text-white/80">{t(UI.heroTitleAccent)}</span>
+              <span className="mt-1 block font-serif font-normal italic tracking-[-.055em] text-white/95 [text-shadow:0_2px_28px_rgba(0,0,0,.16)]">{t(UI.heroTitleAccent)}</span>
               <span className="mt-1 block">{t(UI.heroTitle2)}</span>
             </h1>
             <p className="mt-6 max-w-[590px] text-[14px] leading-6 text-white/80 sm:mt-8 sm:text-base sm:leading-7 lg:text-[17px]">{t(UI.heroLead)}</p>
@@ -81,13 +79,17 @@ export function Hero() {
                 {t(UI.heroCtaAudit)}<Search className="h-3.5 w-3.5 transition-transform group-hover:scale-110" />
               </a>
             </div>
+            <div className="mt-8 grid max-w-[620px] grid-cols-2 gap-x-6 gap-y-4 border-t border-white/25 pt-5 sm:grid-cols-4">
+              <div><p className="font-serif text-2xl leading-none sm:text-3xl">500+</p><p className="mt-2 label-mono text-[6px] tracking-[.12em] text-white/70 sm:text-[7px]">{t({fr:"CLIENTS ACCOMPAGNÉS",en:"CLIENTS SUPPORTED",vi:"KHÁCH HÀNG ĐỒNG HÀNH",ar:"عميل تمت مرافقتهم",ru:"КЛИЕНТОВ СОПРОВОЖДАЛИ"})}</p></div>
+              <div><p className="font-serif text-2xl leading-none sm:text-3xl">5</p><p className="mt-2 label-mono text-[6px] tracking-[.12em] text-white/70 sm:text-[7px]">{t({fr:"LANGUES",en:"LANGUAGES",vi:"NGÔN NGỮ",ar:"لغات",ru:"ЯЗЫКОВ"})}</p></div>
+              <div><p className="font-serif text-2xl leading-none sm:text-3xl">5</p><p className="mt-2 label-mono text-[6px] tracking-[.12em] text-white/70 sm:text-[7px]">{t({fr:"PAYS CIBLES",en:"TARGET COUNTRIES",vi:"THỊ TRƯỜNG QUỐC GIA",ar:"أسواق دولية",ru:"СТРАН ЦЕЛЕВОГО РЫНКА"})}</p></div>
+              <div><p className="font-serif text-lg leading-none sm:text-xl">{t({fr:"Satisfaction",en:"Satisfaction",vi:"Hài lòng",ar:"رضا العملاء",ru:"Удовлетворённость"})}</p><p className="mt-2 label-mono text-[6px] tracking-[.12em] text-white/70 sm:text-[7px]">{t({fr:"SUIVIE À CHAQUE PROJET",en:"TRACKED PER PROJECT",vi:"THEO DÕI TỪNG DỰ ÁN",ar:"تُتابَع في كل مشروع",ru:"ОТСЛЕЖИВАЕТСЯ ПО ПРОЕКТАМ"})}</p></div>
+            </div>
           </div>
         </div>
 
         <div aria-hidden="true" className="pointer-events-none relative hidden min-h-[500px] md:block">
-          <div className="xr-hero-glass absolute right-[9%] top-[22%] h-[min(31vw,340px)] w-[min(31vw,340px)] rounded-full border border-white/20" />
-          <div className="xr-hero-glass xr-hero-glass-delayed absolute right-[18%] top-[32%] h-[min(17vw,190px)] w-[min(17vw,190px)] rounded-full border border-white/25" />
-          <div className="absolute right-[22%] top-[36%] h-[min(9vw,100px)] w-[min(9vw,100px)] rounded-full border border-white/35 bg-white/[.035] shadow-[0_0_100px_rgba(255,255,255,.07)] backdrop-blur-sm" />
+
           <div className="absolute bottom-[16%] right-[8%] flex items-center gap-3 text-white/75">
             <span className="label-mono text-[7px] tracking-[.2em]">{t(UI.heroScrollNotice)}</span>
             <span className="grid h-11 w-11 place-items-center rounded-full border border-white/45 transition-transform duration-500"><ArrowDown className={motionAllowed ? "h-4 w-4 animate-bounce" : "h-4 w-4"} /></span>
