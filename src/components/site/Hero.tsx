@@ -78,9 +78,9 @@ export function Hero() {
               </a>
             </div>
             <div className="mt-8 grid max-w-[620px] grid-cols-2 gap-x-6 gap-y-4 border-t border-white/25 pt-5 sm:grid-cols-4">
-              <div><p className="font-serif text-2xl leading-none sm:text-3xl">500+</p><p className="mt-2 label-mono text-[6px] tracking-[.12em] text-white/70 sm:text-[7px]">{t({fr:"CLIENTS ACCOMPAGNÉS",en:"CLIENTS SUPPORTED",vi:"KHÁCH HÀNG ĐỒNG HÀNH",ar:"عميل تمت مرافقتهم",ru:"КЛИЕНТОВ СОПРОВОЖДАЛИ"})}</p></div>
+              <div><p className="font-serif text-2xl leading-none sm:text-3xl">7</p><p className="mt-2 label-mono text-[6px] tracking-[.12em] text-white/70 sm:text-[7px]">{t({fr:"EXPERTISES",en:"EXPERTISES",vi:"CHUYÊN MÔN",ar:"تخصصات",ru:"НАПРАВЛЕНИЙ"})}</p></div>
               <div><p className="font-serif text-2xl leading-none sm:text-3xl">5</p><p className="mt-2 label-mono text-[6px] tracking-[.12em] text-white/70 sm:text-[7px]">{t({fr:"LANGUES",en:"LANGUAGES",vi:"NGÔN NGỮ",ar:"لغات",ru:"ЯЗЫКОВ"})}</p></div>
-              <div><p className="font-serif text-2xl leading-none sm:text-3xl">5</p><p className="mt-2 label-mono text-[6px] tracking-[.12em] text-white/70 sm:text-[7px]">{t({fr:"PAYS CIBLES",en:"TARGET COUNTRIES",vi:"THỊ TRƯỜNG QUỐC GIA",ar:"أسواق دولية",ru:"СТРАН ЦЕЛЕВОГО РЫНКА"})}</p></div>
+              <div><p className="font-serif text-2xl leading-none sm:text-3xl">6</p><p className="mt-2 label-mono text-[6px] tracking-[.12em] text-white/70 sm:text-[7px]">{t({fr:"FUSEAUX HORAIRES",en:"TIME ZONES",vi:"MÚI GIỜ",ar:"مناطق زمنية",ru:"ЧАСОВЫХ ПОЯСОВ"})}</p></div>
               <div><p className="font-serif text-lg leading-none sm:text-xl">{t({fr:"Satisfaction",en:"Satisfaction",vi:"Hài lòng",ar:"رضا العملاء",ru:"Удовлетворённость"})}</p><p className="mt-2 label-mono text-[6px] tracking-[.12em] text-white/70 sm:text-[7px]">{t({fr:"SUIVIE À CHAQUE PROJET",en:"TRACKED PER PROJECT",vi:"THEO DÕI TỪNG DỰ ÁN",ar:"تُتابَع في كل مشروع",ru:"ОТСЛЕЖИВАЕТСЯ ПО ПРОЕКТАМ"})}</p></div>
             </div>
           </div>
