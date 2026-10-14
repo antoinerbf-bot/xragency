@@ -474,7 +474,7 @@ export function QuoteConfiguratorCompact() {
   const createCheckout = async () => {
     if (!client.email || !selectedServices.length || paying) return;
     setPaying(true); setSendMessage("");
-    const currency = lang === "vi" ? "vnd" : lang === "ar" ? "aed" : lang === "fr" ? "eur" : "usd";
+    const currency = lang === "vi" ? "vnd" : lang === "ar" ? "aed" : lang === "ru" ? "rub" : lang === "fr" ? "eur" : "usd";
     try {
       const response = await fetch("/api/create-checkout", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ action: "checkout", sectorId, situation, budget, selectedServices, client, lang, currency }) });
       const data = await response.json() as { url?: string; error?: string };
