@@ -172,8 +172,8 @@ const BRANDING_TIERS = {
 } as const;
 
 const PDF_FONT_URLS = {
-  latin: "https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosans/NotoSans%5Bwdth%2Cwght%5D.ttf",
-  arabic: "https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansarabic/NotoSansArabic%5Bwdth%2Cwght%5D.ttf",
+  latin: "https://cdn.jsdelivr.net/gh/openmaptiles/fonts@master/noto-sans/NotoSans-Regular.ttf",
+  arabic: "https://cdn.jsdelivr.net/gh/hotosm/HDM-CartoCSS@master/fonts/NotoSansArabic-Regular.ttf",
 } as const;
 const PDF_FONT_CACHE: Partial<Record<keyof typeof PDF_FONT_URLS, Promise<string>>> = {};
 
@@ -396,8 +396,10 @@ export function QuoteConfiguratorCompact() {
         const baseProposal = proposals.find((x) => x.id === id);
         const p = baseProposal ? localizeProposal(baseProposal, lang) : undefined;
         if (!p) return;
+        const robotMonthly = localizedPrice(499);
+        const robotEvent = localizedPrice(250);
         const detail = p.id === "robotics"
-          ? pdfText("Location robot de service dès 499 € / mois · achat selon modèle · événement dès 250 €.", "Service robot rental from 499 € / month · purchase depends on model · events from 250 €.", "Thuê robot dịch vụ từ 499 € / tháng · giá mua tùy mẫu · sự kiện từ 250 €.", "تأجير روبوت الخدمة ابتداءً من 499 € شهريًا · الشراء حسب الطراز · الفعاليات ابتداءً من 250 €.", "Аренда сервисного робота от 499 € в месяц · покупка зависит от модели · мероприятия от 250 €.")
+          ? pdfText(`Location robot de service dès ${robotMonthly} / mois · achat selon modèle · événement dès ${robotEvent}.`, `Service robot rental from ${robotMonthly} / month · purchase depends on model · events from ${robotEvent}.`, `Thuê robot dịch vụ từ ${robotMonthly} / tháng · giá mua tùy mẫu · sự kiện từ ${robotEvent}.`, `تأجير روبوت الخدمة ابتداءً من ${robotMonthly} شهريًا · الشراء حسب الطراز · الفعاليات ابتداءً من ${robotEvent}.`, `Аренда сервисного робота от ${robotMonthly} в месяц · покупка зависит от модели · мероприятия от ${robotEvent}.`)
           : p.detail;
         if (y > 255) {
           doc.addPage();
@@ -417,7 +419,7 @@ export function QuoteConfiguratorCompact() {
         doc.setFontSize(7.2);
         doc.setTextColor(...ink);
         doc.text(
-          p.custom ? "Sur devis" : localizedPrice(p.price) + (p.period === "month" ? t({ fr: " / mois", en: " / month", vi: " / tháng", ar: " / شهر", ru: " / месяц" }) : ""),
+          p.custom ? pdfText("Sur devis", "Custom quote", "Báo giá riêng", "عرض سعر مخصص", "По индивидуальной смете") : localizedPrice(p.price) + (p.period === "month" ? t({ fr: " / mois", en: " / month", vi: " / tháng", ar: " / شهر", ru: " / месяц" }) : ""),
           R - 3,
           y,
           { align: "right" }
