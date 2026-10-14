@@ -154,7 +154,7 @@ function localizeProposal(proposal: Proposal, lang: Lang): Proposal {
 
 const SERVICE_ORDER: Record<string, string[]> = { restaurant: ["website","maps","social","seo","branding","maintenance","robotics"], hospitality: ["website","maps","seo","social","branding","maintenance","robotics"], realestate: ["website","maps","branding","seo","social","maintenance","robotics"], automotive: ["website","maps","conversion","seo","content","maintenance","robotics"], fashion: ["website","branding","social","content","seo","maintenance","robotics"], jewelry: ["website","branding","content","seo","social","maintenance","robotics"], beauty: ["website","maps","social","seo","branding","maintenance","robotics"], health: ["website","maps","seo","branding","content","maintenance","robotics"], architecture: ["website","branding","content","seo","maps","maintenance","robotics"], construction: ["website","maps","seo","branding","content","maintenance","robotics"], legal: ["website","seo","branding","maps","content","maintenance","robotics"], finance: ["website","seo","branding","content","maps","maintenance","robotics"], commerce: ["website","social","seo","branding","conversion","maintenance","robotics"], tourism: ["website","maps","seo","social","content","maintenance","robotics"], agency: ["website","branding","conversion","seo","content","maintenance","robotics"], other: ["website","branding","seo","maps","social","maintenance","robotics"] };
 
-const BASE_PRICES: Record<string, number> = { website: 499, branding: 179, seo: 299, maps: 990, ads: 299, social: 299, content: 399, conversion: 299, maintenance: 29, robotics: 499 };
+const BASE_PRICES: Record<string, number> = { website: 499, branding: 199, seo: 299, maps: 990, ads: 299, social: 299, content: 399, conversion: 299, maintenance: 29, robotics: 499 };
 // Keep recommendation rules defined before the configurator render so SSR bundles always include them.
 const PROFILE_SERVICE_RULES: Record<string, string[]> = Object.fromEntries(
   Object.entries(SERVICE_ORDER).map(([sectorId, services]) => [sectorId, services.slice(0, 4)])
@@ -167,8 +167,8 @@ const WEBSITE_TIERS = {
 } as const;
 
 const BRANDING_TIERS = {
-  starter: { price: 179, label: "Logo Signature", detail: "Logo, déclinaisons essentielles et fichiers maîtres" },
-  premium: { price: 349, label: "Full Brand Suite", detail: "Système de marque étendu, direction artistique et Brand Book" },
+  starter: { price: 199, label: "Logo Signature", detail: "Logo, déclinaisons essentielles et fichiers maîtres" },
+  premium: { price: 399, label: "Full Brand Suite", detail: "Système de marque étendu, direction artistique et Brand Book" },
 } as const;
 
 export function QuoteConfiguratorCompact() {
