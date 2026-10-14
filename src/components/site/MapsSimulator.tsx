@@ -242,15 +242,11 @@ export function MapsSimulator() {
               vi: "trên Google Maps, theo nhu cầu của bạn.",
               ar: "على Google Maps، وفق احتياجاتك.",
               ru: "в Google Maps — под ваши задачи.",
-              ar: "على Google Maps، وفق احتياجاتك.",
-              ru: "в Google Maps — под ваши задачи.",
             }}
             lead={{
               fr: "À partir de 990 € / an. Audit, optimisation Google Business Profile, stratégie locale et suivi adaptés à votre zone, votre concurrence et vos requêtes.",
               en: "From €990 / year. Audit, Google Business Profile optimisation, local strategy and monitoring adapted to your area, competition and target searches.",
               vi: "Từ 990 € / năm. Kiểm toán, tối ưu Google Business Profile, chiến lược địa phương và theo dõi theo khu vực, đối thủ và truy vấn mục tiêu.",
-              ar: "ابتداءً من 990 € سنويًا. تدقيق وتحسين Google Business Profile واستراتيجية محلية ومتابعة وفق منطقتك ومنافسيك وعبارات البحث المستهدفة.",
-              ru: "От 990 € в год. Аудит, оптимизация Google Business Profile, локальная стратегия и мониторинг с учётом региона, конкурентов и целевых запросов.",
               ar: "ابتداءً من 990 € سنويًا. تدقيق وتحسين Google Business Profile واستراتيجية محلية ومتابعة وفق منطقتك ومنافسيك وعبارات البحث المستهدفة.",
               ru: "От 990 € в год. Аудит, оптимизация Google Business Profile, локальная стратегия и мониторинг с учётом региона, конкурентов и целевых запросов.",
             }}
