@@ -40,8 +40,8 @@ const ACCENTS: Record<(typeof IDS)[number], string> = {
 const COPY = {
   fr: {
     eyebrow: "07 SERVICES · 07 ENTRÉES",
-    title: "Une expertise à la fois. Un seul cap : vous faire avancer.",
-    lead: "Du premier regard à la prise de contact, chaque levier travaille pour la même chose : faire grandir votre activité.",
+    title: "Choisissez le besoin. Nous montrons le dispositif.",
+    lead: "Chaque expertise dispose de sa propre image, de son prix de départ et d'un parcours clair.",
     from: "À partir de",
     open: "Voir le service",
     quote: "Ajouter au projet",
@@ -49,8 +49,8 @@ const COPY = {
   },
   en: {
     eyebrow: "07 SERVICES · 07 ENTRY POINTS",
-    title: "One discipline at a time. One goal: move you forward.",
-    lead: "From first impression to conversion, every discipline works toward the same goal: growing your business.",
+    title: "Choose the need. See the system.",
+    lead: "Each expertise has its own visual, starting price and clear path.",
     from: "From",
     open: "View service",
     quote: "Add to project",
@@ -58,8 +58,8 @@ const COPY = {
   },
   vi: {
     eyebrow: "07 DỊCH VỤ · 07 ĐIỂM BẮT ĐẦU",
-    title: "Từng chuyên môn một. Cùng hướng đến sự phát triển.",
-    lead: "Từ ấn tượng đầu tiên đến chuyển đổi, mọi giải pháp đều hướng đến sự phát triển của doanh nghiệp.",
+    title: "Chọn nhu cầu. Xem toàn bộ giải pháp.",
+    lead: "Mỗi chuyên môn có hình ảnh, giá khởi điểm và lộ trình rõ ràng.",
     from: "Từ",
     open: "Xem dịch vụ",
     quote: "Thêm vào dự án",
@@ -67,8 +67,8 @@ const COPY = {
   },
   ar: {
     eyebrow: "07 خدمات · 07 نقاط انطلاق",
-    title: "تخصص واحد في كل مرة. هدف واحد: نمو أعمالك.",
-    lead: "من الانطباع الأول إلى التحويل، تعمل كل الخبرات لتحقيق هدف واحد: تنمية أعمالك.",
+    title: "اختر الحاجة. شاهد المنظومة.",
+    lead: "لكل خبرة صورتها وسعرها الابتدائي ومسار واضح.",
     from: "ابتداءً من",
     open: "شاهد الخدمة",
     quote: "أضف للمشروع",
@@ -76,8 +76,8 @@ const COPY = {
   },
   ru: {
     eyebrow: "07 УСЛУГ · 07 ТОЧЕК ВХОДА",
-    title: "Каждая экспертиза работает на одну цель — рост вашего бизнеса.",
-    lead: "От первого впечатления до заявки — каждый инструмент помогает развивать ваш бизнес.",
+    title: "Выберите задачу. Увидьте систему.",
+    lead: "У каждой экспертизы есть свой визуальный образ, стартовая цена и понятный путь.",
     from: "От",
     open: "Открыть услугу",
     quote: "Добавить в проект",

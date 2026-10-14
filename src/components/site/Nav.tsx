@@ -8,6 +8,7 @@ import { SERVICES } from "@/lib/content";
 import { Logo, EmberButton } from "./primitives";
 import { CartFloatingButton } from "./Cart";
 import { useTheme } from "@/components/theme/ThemeProvider";
+import { XR_PHOTOS } from "@/lib/photography";
 
 const IDS=["websites","branding","seo","maps","social","maintenance","robotics"] as const;
 const ICONS={websites:Monitor,branding:Palette,seo:Search,maps:MapPinned,social:Share2,maintenance:ShieldCheck,robotics:Bot};
@@ -100,10 +101,10 @@ export function Nav() {
                 </button>
 
                 {servicesOpen && (
-                  <div className="absolute left-1/2 top-full mt-2 w-[820px] -translate-x-1/2 rounded-[1.75rem] border xr-line bg-[var(--xr-bg-elev)] p-4 shadow-2xl text-[var(--xr-ink)] backdrop-blur-2xl">
+                  <div className="absolute left-1/2 top-full mt-2 w-[min(960px,calc(100vw-3rem))] -translate-x-1/2 rounded-[1.35rem] border xr-line bg-[var(--xr-bg-elev)]/95 p-4 shadow-[0_36px_100px_-30px_rgba(0,0,0,.65)] text-[var(--xr-ink)] backdrop-blur-2xl animate-in fade-in slide-in-from-top-2 duration-200">
                     <div className="mb-3 flex items-center justify-between border-b xr-line px-2 pb-2.5">
                       <div className="flex items-center gap-2">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                        <span className="h-px w-8 bg-current opacity-60" />
                         <span className="label-mono text-[7px] tracking-[.22em] xr-muted-2">
                           XRAGENCY · 07 EXPERTISES DIGITALES
                         </span>
@@ -117,7 +118,7 @@ export function Nav() {
                       </Link>
                     </div>
 
-                    <div className="grid grid-cols-4 gap-2.5">
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
                       {IDS.map((id, i) => {
                         const s = SERVICES.find((x) => x.id === id);
                         const I = ICONS[id];
@@ -127,21 +128,22 @@ export function Nav() {
                             key={id}
                             href={href(id)}
                             onClick={() => setServicesOpen(false)}
-                            className="group flex flex-col justify-between rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5 transition duration-300 hover:-translate-y-1 hover:border-neutral-400 dark:hover:border-white/30 hover:bg-[var(--xr-surface-strong)] hover:shadow-md"
+                            className="group relative isolate flex min-h-[176px] flex-col justify-end overflow-hidden rounded-xl border xr-line bg-[#101010] text-white transition duration-500 hover:-translate-y-1 hover:shadow-[0_24px_50px_-28px_rgba(0,0,0,.8)]"
                           >
-                            <div>
-                              <div className="flex items-center justify-between">
-                                <span className="label-mono text-[6px] xr-muted-2">0{i + 1}</span>
-                                <I className="h-3.5 w-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
-                              </div>
-                              <span className="mt-2.5 block text-[9.5px] font-semibold leading-tight">{t(s.title)}</span>
-                              <span className="mt-1 block text-[7px] leading-3.5 xr-muted line-clamp-2">{t(s.short)}</span>
+                            <img src={XR_PHOTOS[id]} alt="" loading="lazy" decoding="async" className="absolute inset-0 -z-20 h-full w-full object-cover opacity-65 transition duration-700 group-hover:scale-[1.06] group-hover:opacity-85" />
+                            <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-black via-black/55 to-black/5 transition-opacity duration-500 group-hover:from-black/95" />
+                            <div className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full border border-white/35 bg-black/25 backdrop-blur-md transition-transform duration-500 group-hover:rotate-45">
+                              <I className="h-3.5 w-3.5" />
                             </div>
-                            <div className="mt-3 pt-2 border-t xr-line flex items-center justify-between">
-                              <span className="label-mono text-[6px] xr-muted-2">{t(UI.navFromPrice)}</span>
-                              <span className="label-mono text-[7px] font-bold xr-accent">
-                                {price(BASE_PRICES[id].eur)}{BASE_PRICES[id].period ?? ""}
-                              </span>
+                            <div className="p-3.5">
+                              <span className="block text-[11px] font-semibold leading-tight tracking-[-.01em]">{t(s.title)}</span>
+                              <span className="mt-1.5 block text-[8px] leading-4 text-white/65 line-clamp-2">{t(s.short)}</span>
+                              <div className="mt-3 flex items-center justify-between border-t border-white/20 pt-2.5">
+                                <span className="label-mono text-[6px] tracking-[.14em] text-white/55">{t(UI.navFromPrice)}</span>
+                                <span className="label-mono text-[8px] font-semibold text-white">
+                                  {price(BASE_PRICES[id].eur)}{BASE_PRICES[id].period ?? ""}
+                                </span>
+                              </div>
                             </div>
                           </a>
                         );
@@ -159,7 +161,7 @@ export function Nav() {
               </Link>
               <Link
                 to="/recrutement"
-                className="rounded-full px-4 py-2.5 text-[8px] font-semibold uppercase tracking-[.16em] text-emerald-500 hover:bg-[var(--xr-accent-soft)] transition"
+                className="rounded-full px-4 py-2.5 text-[8px] font-semibold uppercase tracking-[.16em] xr-muted hover:bg-[var(--xr-accent-soft)] hover:text-[var(--xr-ink)] transition"
               >
                 {t(UI.navAffiliation)}
               </Link>
@@ -190,7 +192,7 @@ export function Nav() {
                     onClick={() => setLang(l.code)}
                     className={cn(
                       "grid h-8 w-8 place-items-center rounded-full text-xl transition hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)]",
-                      lang === l.code && "bg-[var(--xr-accent-soft)] ring-1 ring-emerald-500/50"
+                      lang === l.code && "bg-[var(--xr-accent-soft)] ring-1 ring-[var(--xr-ink)]/35"
                     )}
                   >
                     <FlagIcon code={l.code} />
@@ -329,7 +331,7 @@ export function Nav() {
               <a
                 href="/recrutement"
                 onClick={() => setOpen(false)}
-                className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-2.5 text-center text-[9px] font-bold text-emerald-500"
+                className="rounded-xl border xr-line bg-[var(--xr-surface)] p-2.5 text-center text-[9px] font-semibold text-[var(--xr-ink)]"
               >
                 Affiliation 10-20%
               </a>
