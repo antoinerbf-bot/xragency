@@ -160,7 +160,7 @@ export const Route = createFileRoute("/api/create-checkout")({
           form.set("billing_address_collection", "auto");
           form.set("allow_promotion_codes", "true");
           if (mode === "payment") form.set("invoice_creation[enabled]", "true");
-          form.set("locale", "auto");
+          form.set("locale", lang === "ar" ? "auto" : lang);
 
           if (body.client?.email) { form.set("customer_email", body.client.email); if (mode === "payment") form.set("payment_intent_data[receipt_email]", body.client.email); }
           if (body.client?.name) form.set("metadata[customer_name]", body.client.name);
