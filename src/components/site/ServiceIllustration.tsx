@@ -149,7 +149,7 @@ function VisualText({ children }: { children: ReactNode }) {
   if (typeof children !== "string") return <>{children}</>;
   const key = children.trim();
   const translated = VISUAL_COPY[key];
-  return <>{translated ? t({ fr: key, en: translated.en ?? key, vi: translated.vi ?? key, ar: translated.ar ?? key, ru: translated.ru ?? key }) : children}</>;
+  return <>{translated ? t({ fr: translated.fr ?? key, en: translated.en ?? key, vi: translated.vi ?? key, ar: translated.ar ?? key, ru: translated.ru ?? key }) : children}</>;
 }
 
 function Stage({ children, className = "", accent = "rgba(255,255,255,.08)" }: { children: ReactNode; className?: string; accent?: string }) {
