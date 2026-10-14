@@ -105,29 +105,29 @@ const MAPS_COPY: Record<string, Partial<Record<Lang, string>>> = {
   "Résultats & ROI": { en:"Results & ROI",vi:"Kết quả & ROI",ar:"النتائج والعائد",ru:"Результаты и ROI" },
   "Mesure transparente": { en:"Transparent measurement",vi:"Đo lường minh bạch",ar:"قياس شفاف",ru:"Прозрачное измерение" },
   "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire.": { en:"Weekly position dashboard, phone-call tracking and direction-request monitoring.",vi:"Bảng theo dõi thứ hạng hàng tuần, cuộc gọi và yêu cầu chỉ đường.",ar:"لوحة متابعة أسبوعية للترتيب ومراقبة المكالمات وطلبات الاتجاهات.",ru:"Еженедельная панель позиций, отслеживание звонков и запросов маршрута." },
-  "SIMULATION EN DIRECT": { en:"LIVE SIMULATION",vi:"MÔ PHỎNG TRỰC TIẾP",ar:"محاكاة مباشرة",ru:"ЖИВАЯ СИМУЛЯЦИЯ" },
-  "RECHERCHE CIBLE": { en:"TARGET SEARCH",vi:"TRUY VẤN MỤC TIÊU",ar:"بحث مستهدف",ru:"ЦЕЛЕВОЙ ПОИСК" },
-  "POSITION ACTUELLE": { en:"CURRENT POSITION",vi:"VỊ TRÍ HIỆN TẠI",ar:"الترتيب الحالي",ru:"ТЕКУЩАЯ ПОЗИЦИЯ" },
+  "{t({fr:"SIMULATION EN DIRECT",en:"LIVE SIMULATION",vi:"MÔ PHỎNG TRỰC TIẾP",ar:"محاكاة مباشرة",ru:"ЖИВАЯ СИМУЛЯЦИЯ"})}": { en:"LIVE SIMULATION",vi:"MÔ PHỎNG TRỰC TIẾP",ar:"محاكاة مباشرة",ru:"ЖИВАЯ СИМУЛЯЦИЯ" },
+  "{t({fr:"RECHERCHE CIBLE",en:"TARGET SEARCH",vi:"TRUY VẤN MỤC TIÊU",ar:"بحث مستهدف",ru:"ЦЕЛЕВОЙ ПОИСК"})}": { en:"TARGET SEARCH",vi:"TRUY VẤN MỤC TIÊU",ar:"بحث مستهدف",ru:"ЦЕЛЕВОЙ ПОИСК" },
+  "{t({fr:"POSITION ACTUELLE",en:"CURRENT POSITION",vi:"VỊ TRÍ HIỆN TẠI",ar:"الترتيب الحالي",ru:"ТЕКУЩАЯ ПОЗИЦИЯ"})}": { en:"CURRENT POSITION",vi:"VỊ TRÍ HIỆN TẠI",ar:"الترتيب الحالي",ru:"ТЕКУЩАЯ ПОЗИЦИЯ" },
   "VISIBILITÉ À CONSTRUIRE": { en:"VISIBILITY TO BUILD",vi:"CẦN XÂY DỰNG HIỂN THỊ",ar:"الظهور بحاجة إلى بناء",ru:"ВИДИМОСТЬ НУЖНО СОЗДАТЬ" },
   "SIGNAL À RENFORCER": { en:"SIGNAL TO STRENGTHEN",vi:"CẦN TĂNG CƯỜNG TÍN HIỆU",ar:"إشارة تحتاج إلى تعزيز",ru:"СИГНАЛ НУЖНО УСИЛИТЬ" },
   "POSITIONNEMENT À DÉVELOPPER": { en:"POSITIONING TO DEVELOP",vi:"CẦN PHÁT TRIỂN ĐỊNH VỊ",ar:"التموضع بحاجة إلى تطوير",ru:"ПОЗИЦИОНИРОВАНИЕ НУЖНО РАЗВИВАТЬ" },
   "Configurateur de projet": { en:"Project configurator",vi:"Cấu hình dự án",ar:"مُهيئ المشروع",ru:"Конфигуратор проекта" },
-  "Estimez votre investissement Google Maps": { en:"Estimate your Google Maps investment",vi:"Ước tính ngân sách Google Maps",ar:"قدّر استثمارك في Google Maps",ru:"Оцените инвестиции в Google Maps" },
-  "Votre secteur d'activité": { en:"Your industry",vi:"Lĩnh vực của bạn",ar:"قطاع نشاطك",ru:"Ваша отрасль" },
-  "Taille de la ville": { en:"City size",vi:"Quy mô thành phố",ar:"حجم المدينة",ru:"Размер города" },
-  "Mots-clés ciblés": { en:"Target keywords",vi:"Từ khóa mục tiêu",ar:"الكلمات المفتاحية المستهدفة",ru:"Целевые ключевые слова" },
+  "{t({fr:"Estimez votre investissement Google Maps",en:"Estimate your Google Maps investment",vi:"Ước tính ngân sách Google Maps",ar:"قدّر استثمارك في Google Maps",ru:"Оцените инвестиции в Google Maps"})}": { en:"Estimate your Google Maps investment",vi:"Ước tính ngân sách Google Maps",ar:"قدّر استثمارك في Google Maps",ru:"Оцените инвестиции в Google Maps" },
+  "{t({fr:"Votre secteur d'activité",en:"Your industry",vi:"Lĩnh vực của bạn",ar:"قطاع نشاطك",ru:"Ваша отрасль"})}": { en:"Your industry",vi:"Lĩnh vực của bạn",ar:"قطاع نشاطك",ru:"Ваша отрасль" },
+  "{t({fr:"Taille de la ville",en:"City size",vi:"Quy mô thành phố",ar:"حجم المدينة",ru:"Размер города"})}": { en:"City size",vi:"Quy mô thành phố",ar:"حجم المدينة",ru:"Размер города" },
+  "{t({fr:"Mots-clés ciblés",en:"Target keywords",vi:"Từ khóa mục tiêu",ar:"الكلمات المفتاحية المستهدفة",ru:"Целевые ключевые слова"})}": { en:"Target keywords",vi:"Từ khóa mục tiêu",ar:"الكلمات المفتاحية المستهدفة",ru:"Целевые ключевые слова" },
   "Position actuelle": { en:"Current position",vi:"Vị trí hiện tại",ar:"الترتيب الحالي",ru:"Текущая позиция" },
-  "Budget indicatif · à partir de 990 € / an": { en:"Indicative budget · from €990 / year",vi:"Ngân sách tham khảo · từ 990 € / năm",ar:"ميزانية تقديرية · ابتداءً من 990 € سنويًا",ru:"Ориентировочный бюджет · от 990 € в год" },
-  "Estimation indicative · tarif exact après audit personnalisé": { en:"Indicative estimate · exact price after a tailored audit",vi:"Ước tính tham khảo · giá chính xác sau khi audit riêng",ar:"تقدير إرشادي · السعر النهائي بعد تدقيق مخصص",ru:"Ориентировочная оценка · точная цена после индивидуального аудита" },
-  "Objectif Top 3 · étude locale sur mesure": { en:"Top 3 target · tailored local study",vi:"Mục tiêu Top 3 · nghiên cứu địa phương riêng",ar:"هدف أفضل 3 نتائج · دراسة محلية مخصصة",ru:"Цель — топ-3 · индивидуальное локальное исследование" },
-  "Lancer mon audit gratuit": { en:"Start my free audit",vi:"Bắt đầu audit miễn phí",ar:"ابدأ التدقيق المجاني",ru:"Запустить бесплатный аудит" },
+  "{t({fr:"Budget indicatif · à partir de",en:"Indicative budget · from",vi:"Ngân sách tham khảo · từ",ar:"ميزانية تقديرية · ابتداءً من",ru:"Ориентировочный бюджет · от"})} {formatPrice(990)} / {t({fr:"an",en:"year",vi:"năm",ar:"سنة",ru:"год"})}": { en:"Indicative budget · from €990 / year",vi:"Ngân sách tham khảo · từ 990 € / năm",ar:"ميزانية تقديرية · ابتداءً من 990 € سنويًا",ru:"Ориентировочный бюджет · от 990 € в год" },
+  "{t({fr:"Estimation indicative · tarif exact après audit personnalisé",en:"Indicative estimate · exact price after a tailored audit",vi:"Ước tính tham khảo · giá chính xác sau khi audit riêng",ar:"تقدير إرشادي · السعر النهائي بعد تدقيق مخصص",ru:"Ориентировочная оценка · точная цена после индивидуального аудита"})}": { en:"Indicative estimate · exact price after a tailored audit",vi:"Ước tính tham khảo · giá chính xác sau khi audit riêng",ar:"تقدير إرشادي · السعر النهائي بعد تدقيق مخصص",ru:"Ориентировочная оценка · точная цена после индивидуального аудита" },
+  "{t({fr:"Objectif Top 3 · étude locale sur mesure",en:"Top 3 target · tailored local study",vi:"Mục tiêu Top 3 · nghiên cứu địa phương riêng",ar:"هدف أفضل 3 نتائج · دراسة محلية مخصصة",ru:"Цель — топ-3 · индивидуальное локальное исследование"})}": { en:"Top 3 target · tailored local study",vi:"Mục tiêu Top 3 · nghiên cứu địa phương riêng",ar:"هدف أفضل 3 نتائج · دراسة محلية مخصصة",ru:"Цель — топ-3 · индивидуальное локальное исследование" },
+  "{t({fr:"Lancer mon audit gratuit",en:"Start my free audit",vi:"Bắt đầu audit miễn phí",ar:"ابدأ التدقيق المجاني",ru:"Запустить бесплатный аудит"})}": { en:"Start my free audit",vi:"Bắt đầu audit miễn phí",ar:"ابدأ التدقيق المجاني",ru:"Запустить бесплатный аудит" },
   "Audit initial offert": { en:"Initial audit included",vi:"Miễn phí audit ban đầu",ar:"التدقيق الأولي مجاني",ru:"Первичный аудит бесплатно" },
   "Périmètre contractuel clair": { en:"Clear contractual scope",vi:"Phạm vi hợp đồng rõ ràng",ar:"نطاق تعاقدي واضح",ru:"Чёткий договорной объём" },
   "Rapport mensuel inclus": { en:"Monthly report included",vi:"Bao gồm báo cáo hàng tháng",ar:"تقرير شهري مشمول",ru:"Ежемесячный отчёт включён" },
   "Sans engagement minimum": { en:"No minimum commitment",vi:"Không yêu cầu cam kết tối thiểu",ar:"دون حد أدنى للالتزام",ru:"Без минимального срока обязательств" },
   "Méthodologie exclusive": { en:"Exclusive methodology",vi:"Phương pháp độc quyền",ar:"منهجية حصرية",ru:"Эксклюзивная методология" },
-  "Le processus en 7 phases": { en:"The 7-phase process",vi:"Quy trình 7 giai đoạn",ar:"العملية في 7 مراحل",ru:"Процесс из 7 этапов" },
-  "Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.": { en:"A structured, transparent and measurable approach to improving local visibility.",vi:"Cách tiếp cận có cấu trúc, minh bạch và đo lường được để cải thiện hiển thị địa phương.",ar:"نهج منظم وشفاف وقابل للقياس لتحسين الظهور المحلي.",ru:"Структурированный, прозрачный и измеримый подход к улучшению локальной видимости." },
+  "{t({fr:"Le processus en 7 phases",en:"The 7-phase process",vi:"Quy trình 7 giai đoạn",ar:"العملية في 7 مراحل",ru:"Процесс из 7 этапов"})}": { en:"The 7-phase process",vi:"Quy trình 7 giai đoạn",ar:"العملية في 7 مراحل",ru:"Процесс из 7 этапов" },
+  "{t({fr:"Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.",en:"A structured, transparent and measurable approach to improving local visibility.",vi:"Cách tiếp cận có cấu trúc, minh bạch và đo lường được để cải thiện hiển thị địa phương.",ar:"نهج منظم وشفاف وقابل للقياس لتحسين الظهور المحلي.",ru:"Структурированный, прозрачный и измеримый подход к улучшению локальной видимости."})}": { en:"A structured, transparent and measurable approach to improving local visibility.",vi:"Cách tiếp cận có cấu trúc, minh bạch và đo lường được để cải thiện hiển thị địa phương.",ar:"نهج منظم وشفاف وقابل للقياس لتحسين الظهور المحلي.",ru:"Структурированный, прозрачный и измеримый подход к улучшению локальной видимости." },
 };
 function mapsText(value: string, lang: Lang) {
   return MAPS_COPY[value]?.[lang] ?? value;
@@ -157,14 +157,6 @@ function useAnimatedPrice(target: number, duration = 500) {
   return val;
 }
 
-function formatEur(n: number) {
-  return new Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "EUR",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(n);
-}
 
 /* ── Selector Button ── */
 function SelectorBtn({
@@ -220,15 +212,13 @@ export function MapsSimulator() {
 
   const selectedSector = SECTORS.find((s) => s.id === sector);
 
-  const waPrefill = encodeURIComponent(
-    `Bonjour XR Agency, je souhaite une étude Google Maps Top 3 sur mesure.\n\n` +
-    `• Secteur : ${selectedSector?.label}\n` +
-    `• Taille de ville : ${CITY_SIZES.find((c) => c.id === citySize)?.label}\n` +
-    `• Mots-clés : ${KEYWORD_RANGES.find((k) => k.id === keywords)?.label}\n` +
-    `• Position actuelle : ${CURRENT_RANKS.find((r) => r.id === rank)?.label}\n\n` +
-    `Référence de départ : à partir de 990 € / an · devis sur mesure\n\n` +
-    `Pouvons-nous lancer l'audit personnalisé ?`
-  );
+  const waPrefill = encodeURIComponent({
+    fr: `Bonjour XR Agency, je souhaite une étude Google Maps Top 3 sur mesure.\n\nSecteur : ${selectedSector?.label}\nTaille de ville : ${CITY_SIZES.find((c) => c.id === citySize)?.label}\nMots-clés : ${KEYWORD_RANGES.find((k) => k.id === keywords)?.label}\nPosition actuelle : ${CURRENT_RANKS.find((r) => r.id === rank)?.label}\nRéférence : à partir de ${formatPrice(990)} / an, sur devis.\nPouvons-nous lancer l’audit personnalisé ?`,
+    en: `Hello XR Agency, I’d like a tailored Google Maps Top 3 study.\n\nIndustry: ${selectedSector ? mapsText(selectedSector.label,lang) : ""}\nCity size: ${mapsText(CITY_SIZES.find((c) => c.id === citySize)?.label ?? "",lang)}\nKeywords: ${KEYWORD_RANGES.find((k) => k.id === keywords)?.label}\nCurrent position: ${mapsText(CURRENT_RANKS.find((r) => r.id === rank)?.label ?? "",lang)}\nStarting point: from ${formatPrice(990)} / year, custom quote.\nCan we start the tailored audit?`,
+    vi: `Xin chào XR Agency, tôi muốn nghiên cứu Google Maps Top 3 theo nhu cầu.\n\nLĩnh vực: ${selectedSector ? mapsText(selectedSector.label,lang) : ""}\nQuy mô thành phố: ${mapsText(CITY_SIZES.find((c) => c.id === citySize)?.label ?? "",lang)}\nTừ khóa: ${KEYWORD_RANGES.find((k) => k.id === keywords)?.label}\nVị trí hiện tại: ${mapsText(CURRENT_RANKS.find((r) => r.id === rank)?.label ?? "",lang)}\nGiá khởi điểm: ${formatPrice(990)} / năm, báo giá riêng.\nChúng ta có thể bắt đầu audit không?`,
+    ar: `مرحبًا XR Agency، أود دراسة مخصصة للوصول إلى أفضل 3 نتائج في Google Maps.\n\nالقطاع: ${selectedSector ? mapsText(selectedSector.label,lang) : ""}\nحجم المدينة: ${mapsText(CITY_SIZES.find((c) => c.id === citySize)?.label ?? "",lang)}\nالكلمات المفتاحية: ${KEYWORD_RANGES.find((k) => k.id === keywords)?.label}\nالترتيب الحالي: ${mapsText(CURRENT_RANKS.find((r) => r.id === rank)?.label ?? "",lang)}\nالسعر المبدئي: ${formatPrice(990)} سنويًا، بعرض سعر مخصص.\nهل يمكننا بدء التدقيق المخصص؟`,
+    ru: `Здравствуйте, XR Agency! Я хотел(а) бы заказать индивидуальное исследование Google Maps Top 3.\n\nОтрасль: ${selectedSector ? mapsText(selectedSector.label,lang) : ""}\nРазмер города: ${mapsText(CITY_SIZES.find((c) => c.id === citySize)?.label ?? "",lang)}\nКлючевые слова: ${KEYWORD_RANGES.find((k) => k.id === keywords)?.label}\nТекущая позиция: ${mapsText(CURRENT_RANKS.find((r) => r.id === rank)?.label ?? "",lang)}\nСтартовая цена: ${formatPrice(990)} в год, индивидуальная смета.\nМожем начать аудит?`,
+  }[lang]);
 
   return (
     <section id="maps" className="xr-section-elevated relative border-y xr-line py-20 sm:py-28 lg:py-32">
@@ -244,17 +234,21 @@ export function MapsSimulator() {
         {/* ── Section Header ── */}
         <div>
           <SectionHeading
-            label={{ fr: "GOOGLE BUSINESS PROFILE · LOCAL SEO", en: "GOOGLE BUSINESS PROFILE · LOCAL SEO", vi: "GOOGLE BUSINESS PROFILE · LOCAL SEO" }}
+            label={{ fr: "GOOGLE BUSINESS PROFILE · LOCAL SEO", en: "GOOGLE BUSINESS PROFILE · LOCAL SEO", vi: "GOOGLE BUSINESS PROFILE · LOCAL SEO", ar: "Google Business Profile · تحسين محلي", ru: "Google Business Profile · локальное SEO" }}
             line1={{ fr: "Construisons votre visibilité", en: "Build your local visibility", vi: "Xây dựng khả năng hiển thị địa phương" }}
             line2={{
               fr: "sur Google Maps, sur mesure.",
               en: "on Google Maps, built around you.",
               vi: "trên Google Maps, theo nhu cầu của bạn.",
+              ar: "على Google Maps، وفق احتياجاتك.",
+              ru: "в Google Maps — под ваши задачи.",
             }}
             lead={{
               fr: "À partir de 990 € / an. Audit, optimisation Google Business Profile, stratégie locale et suivi adaptés à votre zone, votre concurrence et vos requêtes.",
               en: "From €990 / year. Audit, Google Business Profile optimisation, local strategy and monitoring adapted to your area, competition and target searches.",
               vi: "Từ 990 € / năm. Kiểm toán, tối ưu Google Business Profile, chiến lược địa phương và theo dõi theo khu vực, đối thủ và truy vấn mục tiêu.",
+              ar: "ابتداءً من 990 € سنويًا. تدقيق وتحسين Google Business Profile واستراتيجية محلية ومتابعة وفق منطقتك ومنافسيك وعبارات البحث المستهدفة.",
+              ru: "От 990 € в год. Аудит, оптимизация Google Business Profile, локальная стратегия и мониторинг с учётом региона, конкурентов и целевых запросов.",
             }}
           />
 
@@ -264,7 +258,7 @@ export function MapsSimulator() {
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white font-black shadow-sm"><svg viewBox="0 0 24 24" className="h-5 w-5" aria-label="Google" role="img"><path fill="#4285F4" d="M21.35 12.27c0-.71-.06-1.4-.18-2.06H12v3.9h5.23a4.47 4.47 0 0 1-1.94 2.94v2.44h3.14c1.84-1.69 2.92-4.18 2.92-7.22Z"/><path fill="#34A853" d="M12 21.55c2.63 0 4.84-.87 6.45-2.36l-3.14-2.44c-.87.58-1.98.92-3.31.92-2.54 0-4.7-1.72-5.47-4.03H3.28v2.52A9.74 9.74 0 0 0 12 21.55Z"/><path fill="#FBBC05" d="M6.53 13.64A5.84 5.84 0 0 1 6.23 12c0-.57.1-1.12.3-1.64V7.84H3.28A9.72 9.72 0 0 0 2.25 12c0 1.57.38 3.06 1.03 4.16l3.25-2.52Z"/><path fill="#EA4335" d="M12 6.33c1.43 0 2.7.49 3.71 1.45l2.78-2.78C16.84 3.42 14.63 2.45 12 2.45a9.74 9.74 0 0 0-8.72 5.39l3.25 2.52c.77-2.31 2.93-4.03 5.47-4.03Z"/></svg></span>
               <Zap className="h-5 w-5 shrink-0 text-[var(--xr-bg)]" />
               <p className="text-sm font-semibold text-foreground leading-snug">
-                Google Maps · à partir de 990 € / an · objectif Top 3 sans garantie de position
+                {t({fr:"Google Maps · à partir de",en:"Google Maps · from",vi:"Google Maps · từ",ar:"Google Maps · ابتداءً من",ru:"Google Maps · от"})} {formatPrice(990)} / {t({fr:"an",en:"year",vi:"năm",ar:"سنة",ru:"год"})} · {t({fr:"objectif Top 3 sans garantie de position",en:"Top 3 target, no position guarantee",vi:"mục tiêu Top 3, không bảo đảm thứ hạng",ar:"هدف أفضل 3 نتائج دون ضمان ترتيب",ru:"цель — топ-3 без гарантии позиции"})}
               </p>
               <Award className="h-5 w-5 shrink-0 text-[var(--xr-ink)]" />
             </div>
@@ -278,7 +272,7 @@ export function MapsSimulator() {
                 <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--xr-accent-soft)]"><MapPinned className="h-4 w-4 text-[var(--xr-ink)]"/></span>
                 <div>
                   <span className="label-mono text-[6px] tracking-[.18em] xr-muted-2">SIMULATION EN DIRECT</span>
-                  <p className="mt-0.5 text-sm font-semibold text-[var(--xr-ink)]">{selectedSector?.label} · {CITY_SIZES.find(c=>c.id===citySize)?.label}</p>
+                  <p className="mt-0.5 text-sm font-semibold text-[var(--xr-ink)]">{selectedSector ? mapsText(selectedSector.label,lang) : ""} · {mapsText(CITY_SIZES.find(c=>c.id===citySize)?.label ?? "",lang)}</p>
                 </div>
               </div>
               <span className="rounded-full border xr-line bg-[var(--xr-surface)] px-3 py-1.5 label-mono text-[6px] xr-muted">LOCAL PACK</span>
@@ -320,15 +314,15 @@ export function MapsSimulator() {
               <div className="absolute left-4 right-4 top-4 flex items-center justify-between gap-3 sm:left-6 sm:right-6">
                 <div className="rounded-xl border border-white/60 bg-white/90 px-3 py-2 shadow-lg backdrop-blur-xl">
                   <span className="label-mono text-[5px] tracking-[.16em] text-[#17181a]/40">RECHERCHE CIBLE</span>
-                  <p className="mt-1 text-[10px] font-semibold text-[#17181a]">{selectedSector?.label} · {KEYWORD_RANGES.find(k=>k.id===keywords)?.label} mots-clés</p>
+                  <p className="mt-1 text-[10px] font-semibold text-[#17181a]">{selectedSector ? mapsText(selectedSector.label,lang) : ""} · {KEYWORD_RANGES.find(k=>k.id===keywords)?.label} {t({fr:"mots-clés",en:"keywords",vi:"từ khóa",ar:"كلمات مفتاحية",ru:"ключевых слов"})}</p>
                 </div>
                 <div className="hidden rounded-xl border border-white/60 bg-white/90 px-3 py-2 text-right shadow-lg backdrop-blur-xl sm:block">
                   <span className="label-mono text-[5px] tracking-[.16em] text-[#17181a]/40">POSITION ACTUELLE</span>
-                  <p className="mt-1 text-[10px] font-semibold text-[#17181a]">{CURRENT_RANKS.find(r=>r.id===rank)?.label}</p>
+                  <p className="mt-1 text-[10px] font-semibold text-[#17181a]">{mapsText(CURRENT_RANKS.find(r=>r.id===rank)?.label ?? "",lang)}</p>
                 </div>
               </div>
               <div className="absolute bottom-4 left-4 rounded-full border border-white/60 bg-white/90 px-3 py-2 label-mono text-[5px] tracking-[.14em] text-[#17181a]/48 shadow-lg backdrop-blur-xl sm:left-6">
-                {rank === "absent" ? "VISIBILITÉ À CONSTRUIRE" : rank === "below20" ? "SIGNAL À RENFORCER" : "POSITIONNEMENT À DÉVELOPPER"}
+                {t(rank === "absent" ? {fr:"VISIBILITÉ À CONSTRUIRE",en:"VISIBILITY TO BUILD",vi:"CẦN XÂY DỰNG HIỂN THỊ",ar:"الظهور بحاجة إلى بناء",ru:"ВИДИМОСТЬ НУЖНО СОЗДАТЬ"} : rank === "below20" ? {fr:"SIGNAL À RENFORCER",en:"SIGNAL TO STRENGTHEN",vi:"CẦN TĂNG CƯỜNG TÍN HIỆU",ar:"إشارة تحتاج إلى تعزيز",ru:"СИГНАЛ НУЖНО УСИЛИТЬ"} : {fr:"POSITIONNEMENT À DÉVELOPPER",en:"POSITIONING TO DEVELOP",vi:"CẦN PHÁT TRIỂN ĐỊNH VỊ",ar:"التموضع بحاجة إلى تطوير",ru:"ПОЗИЦИОНИРОВАНИЕ НУЖНО РАЗВИВАТЬ"})}
               </div>
             </div>
           </div>
@@ -344,7 +338,7 @@ export function MapsSimulator() {
                   <Gauge className="h-4.5 w-4.5" />
                 </div>
                 <div>
-                  <p className="label-mono text-xs text-[var(--xr-ink)]">Configurateur de projet</p>
+                  <p className="label-mono text-xs text-[var(--xr-ink)]">{t({fr:"Configurateur de projet",en:"Project configurator",vi:"Cấu hình dự án",ar:"مُهيئ المشروع",ru:"Конфигуратор проекта"})}</p>
                   <p className="display-serif text-lg text-foreground mt-0.5">
                     Estimez votre investissement Google Maps
                   </p>
@@ -367,7 +361,7 @@ export function MapsSimulator() {
                       onClick={() => setSector(s.id)}
                     >
                       <span className="text-2xl">{s.icon}</span>
-                      <span className="text-[11px] leading-tight">{s.label}</span>
+                      <span className="text-[11px] leading-tight">{mapsText(s.label,lang)}</span>
                     </SelectorBtn>
                   ))}
                 </div>
@@ -387,8 +381,8 @@ export function MapsSimulator() {
                       onClick={() => setCitySize(c.id)}
                     >
                       <Building2 className="h-4 w-4" />
-                      <span className="font-semibold text-[12px]">{c.label}</span>
-                      <span className="text-[10px] opacity-60">{c.sub}</span>
+                      <span className="font-semibold text-[12px]">{mapsText(c.label,lang)}</span>
+                      <span className="text-[10px] opacity-60">{mapsText(c.sub,lang)}</span>
                     </SelectorBtn>
                   ))}
                 </div>
@@ -409,7 +403,7 @@ export function MapsSimulator() {
                     >
                       <BarChart3 className="h-4 w-4" />
                       <span className="font-bold text-base">{k.label}</span>
-                      <span className="text-[10px] opacity-60">{k.sub}</span>
+                      <span className="text-[10px] opacity-60">{mapsText(k.sub,lang)}</span>
                     </SelectorBtn>
                   ))}
                 </div>
@@ -429,8 +423,8 @@ export function MapsSimulator() {
                       onClick={() => setRank(r.id)}
                     >
                       <MapPinned className="h-4 w-4" />
-                      <span className="font-semibold text-[12px] leading-tight">{r.label}</span>
-                      <span className="text-[10px] opacity-60 leading-tight">{r.sub}</span>
+                      <span className="font-semibold text-[12px] leading-tight">{mapsText(r.label,lang)}</span>
+                      <span className="text-[10px] opacity-60 leading-tight">{mapsText(r.sub,lang)}</span>
                     </SelectorBtn>
                   ))}
                 </div>
@@ -485,10 +479,10 @@ export function MapsSimulator() {
                 {/* Trust signals */}
                 <div className="mt-4 flex flex-wrap gap-3 border-t border-[var(--xr-ink)]/20 pt-4">
                   {[
-                    { icon: CheckCircle2, text: "Audit initial offert" },
-                    { icon: CheckCircle2, text: "Périmètre contractuel clair" },
-                    { icon: CheckCircle2, text: "Rapport mensuel inclus" },
-                    { icon: CheckCircle2, text: "Sans engagement minimum" },
+                    { icon: CheckCircle2, text: t({fr:"Audit initial offert",en:"Initial audit included",vi:"Miễn phí audit ban đầu",ar:"التدقيق الأولي مجاني",ru:"Первичный аудит бесплатно"}) },
+                    { icon: CheckCircle2, text: t({fr:"Périmètre contractuel clair",en:"Clear contractual scope",vi:"Phạm vi hợp đồng rõ ràng",ar:"نطاق تعاقدي واضح",ru:"Чёткий договорной объём"}) },
+                    { icon: CheckCircle2, text: t({fr:"Rapport mensuel inclus",en:"Monthly report included",vi:"Bao gồm báo cáo hàng tháng",ar:"تقرير شهري مشمول",ru:"Ежемесячный отчёт включён"}) },
+                    { icon: CheckCircle2, text: t({fr:"Sans engagement minimum",en:"No minimum commitment",vi:"Không yêu cầu cam kết tối thiểu",ar:"دون حد أدنى للالتزام",ru:"Без минимального срока обязательств"}) },
                   ].map(({ icon: Icon, text }) => (
                     <div key={text} className="flex items-center gap-1.5">
                       <Icon className="h-3.5 w-3.5 shrink-0 text-[var(--xr-ink)]" />
@@ -505,7 +499,7 @@ export function MapsSimulator() {
         <Reveal delay={80}>
           <div>
             <div className="mb-8 text-center">
-              <p className="label-mono text-xs text-[var(--xr-ink)]">Méthodologie exclusive</p>
+              <p className="label-mono text-xs text-[var(--xr-ink)]">{t({fr:"Méthodologie exclusive",en:"Exclusive methodology",vi:"Phương pháp độc quyền",ar:"منهجية حصرية",ru:"Эксклюзивная методология"})}</p>
               <h3 className="display-serif mt-2 text-2xl sm:text-3xl text-foreground">
                 Le processus en 7 phases
               </h3>
@@ -520,9 +514,9 @@ export function MapsSimulator() {
                   key={ph.num}
                   className="rounded-2xl border border-border/80 bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--xr-ink)]/30"
                 >
-                  <p className="label-mono text-xs text-[var(--xr-ink)]">{ph.num} · {ph.name}</p>
-                  <p className="display-serif mt-1.5 text-base text-foreground">{ph.title}</p>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{ph.desc}</p>
+                  <p className="label-mono text-xs text-[var(--xr-ink)]">{ph.num} · {mapsText(ph.name,lang)}</p>
+                  <p className="display-serif mt-1.5 text-base text-foreground">{mapsText(ph.title,lang)}</p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{mapsText(ph.desc,lang)}</p>
                 </div>
               ))}
             </div>
