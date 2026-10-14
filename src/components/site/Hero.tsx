@@ -62,7 +62,7 @@ export function Hero() {
               <span className="h-px w-10 bg-white/75" />
               <span className="label-mono text-[8px] tracking-[.24em] text-white/75 sm:text-[9px]">{t(UI.heroKicker)}</span>
             </div>
-            <h1 className="xr-hero-heading max-w-[920px] text-[clamp(3.45rem,7.2vw,7.9rem)] font-medium leading-[.86] tracking-[-.075em] text-white [text-wrap:balance]">
+            <h1 className="xr-hero-heading max-w-[920px] break-words text-[clamp(2.7rem,7.2vw,7.9rem)] font-medium leading-[.92] tracking-[-.065em] text-white [text-wrap:balance]">
               <span className="block">{t(UI.heroTitle1)}</span>
               <span className="mt-1 block font-serif font-normal italic tracking-[-.055em] text-white/95 [text-shadow:0_2px_28px_rgba(0,0,0,.16)]">{t(UI.heroTitleAccent)}</span>
               <span className="mt-1 block">{t(UI.heroTitle2)}</span>
