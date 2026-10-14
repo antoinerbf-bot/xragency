@@ -146,9 +146,9 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
             {status === "success" ? (
               <div className="mx-auto max-w-xl rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-6 text-center shadow-lg">
                 <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500 text-white font-bold text-lg mb-3">✓</span>
-                <h3 className="display-serif text-2xl text-foreground">Message envoyé avec succès</h3>
+                <h3 className="display-serif text-2xl text-foreground">{t({fr:"Message envoyé avec succès",en:"Message sent successfully",vi:"Đã gửi tin nhắn thành công",ar:"تم إرسال الرسالة بنجاح",ru:"Сообщение успешно отправлено"})}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Merci pour votre confiance. Notre équipe étudie votre demande et vous répond dans un délai garanti de moins de 2 heures.
+                  {t({fr:"Merci pour votre confiance. Notre équipe étudie votre demande et vous répond dans un délai garanti de moins de 2 heures.",en:"Thank you for your trust. Our team will review your request and reply within a guaranteed two hours.",vi:"Cảm ơn bạn đã tin tưởng. Đội ngũ sẽ xem xét yêu cầu và phản hồi trong vòng tối đa hai giờ.",ar:"شكرًا لثقتك. سيراجع فريقنا طلبك ويرد خلال ساعتين كحد أقصى.",ru:"Спасибо за доверие. Наша команда изучит запрос и ответит в течение гарантированных двух часов."})}
                 </p>
                 <div className="mt-5 flex justify-center gap-3">
                   <a
@@ -158,7 +158,7 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
                     className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-xs font-semibold text-white hover:bg-emerald-500"
                   >
                     <MessageCircle className="h-4 w-4" />
-                    Échanger directement sur WhatsApp
+                    {t({fr:"Échanger directement sur WhatsApp",en:"Chat directly on WhatsApp",vi:"Trao đổi trực tiếp qua WhatsApp",ar:"تواصل مباشرة عبر WhatsApp",ru:"Написать напрямую в WhatsApp"})}
                   </a>
                   <button
                     type="button"
@@ -270,7 +270,6 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
             <div>
               <Logo />
               <p className="mt-4 max-w-sm text-sm leading-6 text-muted-foreground">Studio digital premium pour les marques, entreprises et projets qui veulent transformer leur présence digitale en actif commercial.</p>
-              <div className="mt-5 flex flex-wrap gap-2">{["FR","EN","VI","AR","RU"].map((lang)=><span key={lang} className="rounded-full border border-border/60 px-2.5 py-1 font-mono text-[9px] tracking-wider text-muted-foreground">{lang}</span>)}</div>
             </div>
             <div>
               <p className="label-mono text-[9px] uppercase tracking-[.18em] text-muted-foreground/50">KARMA SASU</p>

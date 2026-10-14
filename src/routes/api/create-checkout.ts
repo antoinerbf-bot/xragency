@@ -3,7 +3,8 @@ import { Resend } from "resend";
 
 type CheckoutBody = {
   sectorId?: string;
-  currency?: "eur" | "usd" | "vnd";
+  currency?: "eur" | "usd" | "vnd" | "aed" | "rub";
+  lang?: "fr" | "en" | "vi" | "ar" | "ru";
   situation?: string;
   budget?: string;
   selectedServices?: string[];
@@ -16,13 +17,14 @@ type CheckoutBody = {
 const BASE_PRICES: Record<string, number> = {
   website: 499,
   branding: 199,
-  seo: 199,
+  seo: 299,
   maps: 990,
   ads: 299,
   social: 299,
   content: 399,
   conversion: 299,
   maintenance: 29,
+  robotics: 499,
 };
 
 const WEBSITE_PRICES = {
@@ -33,18 +35,28 @@ const WEBSITE_PRICES = {
 
 const PREMIUM_BRANDING = 399;
 
-const CURRENCY_RATES: Record<"eur" | "usd" | "vnd", number> = {
+const CURRENCY_RATES: Record<"eur" | "usd" | "vnd" | "aed" | "rub", number> = {
   eur: 1,
-  usd: 1.15,
-  vnd: 29800,
+  usd: 1.12,
+  vnd: 27500,
+  aed: 4.1165,
+  rub: 94.16,
 };
 
-function convertAmount(amountEur: number, currency: "eur" | "usd" | "vnd") {
-  const converted = amountEur * CURRENCY_RATES[currency];
-  return currency === "vnd" ? Math.round(converted) : Math.round(converted * 100) / 100;
+function marketMultiplier(lang: CheckoutBody["lang"]) {
+  if (lang === "vi") return 0.8;
+  if (lang === "en" || lang === "ar" || lang === "ru") return 1.2;
+  return 1;
 }
 
-function toMinorUnit(amount: number, currency: "eur" | "usd" | "vnd") {
+function convertAmount(amountEur: number, currency: "eur" | "usd" | "vnd" | "aed" | "rub") {
+  const converted = amountEur * CURRENCY_RATES[currency];
+  if (currency === "vnd") return Math.round(converted / 1000) * 1000;
+  if (currency === "rub") return Math.round(converted / 100) * 100;
+  return Math.round(converted);
+}
+
+function toMinorUnit(amount: number, currency: "eur" | "usd" | "vnd" | "aed" | "rub") {
   return currency === "vnd" ? Math.round(amount) : Math.round(amount * 100);
 }
 
@@ -62,20 +74,15 @@ function getPrice(serviceId: string, situation: string, budget: string, sectorId
   return BASE_PRICES[serviceId] ?? 0;
 }
 
-function getLabel(serviceId: string, situation: string) {
-  if (serviceId === "website" && situation === "selling") return "E-commerce & Réservation";
-  if (serviceId === "website") return "Site web XRAGENCY";
-  const labels: Record<string, string> = {
-    branding: "Branding",
-    seo: "SEO",
-    maps: "Google Maps",
-    ads: "Google Ads",
-    social: "Social Media",
-    content: "Contenu · photo · vidéo",
-    conversion: "Conversion & parcours",
-    maintenance: "WebCare",
+function getLabel(serviceId: string, situation: string, lang: NonNullable<CheckoutBody["lang"]>) {
+  const labels: Record<NonNullable<CheckoutBody["lang"]>, Record<string, string>> = {
+    fr: { website: situation === "selling" ? "E-commerce & Réservation" : "Site web XRAGENCY", branding: "Branding", seo: "SEO", maps: "Google Maps", ads: "Google Ads", social: "Social Media", content: "Contenu · photo · vidéo", conversion: "Conversion & parcours", maintenance: "WebCare", robotics: "Robotique & IA" },
+    en: { website: situation === "selling" ? "E-commerce & Booking" : "XRAGENCY Website", branding: "Branding", seo: "SEO", maps: "Google Maps", ads: "Google Ads", social: "Social Media", content: "Content · photo · video", conversion: "Conversion & customer journey", maintenance: "WebCare", robotics: "Robotics & AI" },
+    vi: { website: situation === "selling" ? "Thương mại điện tử & đặt chỗ" : "Website XRAGENCY", branding: "Thương hiệu", seo: "SEO", maps: "Google Maps", ads: "Google Ads", social: "Mạng xã hội", content: "Nội dung · ảnh · video", conversion: "Chuyển đổi & hành trình khách hàng", maintenance: "WebCare", robotics: "Robot & AI" },
+    ar: { website: situation === "selling" ? "التجارة الإلكترونية والحجوزات" : "موقع XRAGENCY", branding: "الهوية التجارية", seo: "تحسين محركات البحث", maps: "خرائط Google", ads: "إعلانات Google", social: "وسائل التواصل الاجتماعي", content: "المحتوى · الصور · الفيديو", conversion: "التحويل ورحلة العميل", maintenance: "WebCare", robotics: "الروبوتات والذكاء الاصطناعي" },
+    ru: { website: situation === "selling" ? "Интернет-магазин и бронирование" : "Сайт XRAGENCY", branding: "Брендинг", seo: "SEO", maps: "Google Maps", ads: "Google Ads", social: "Социальные сети", content: "Контент · фото · видео", conversion: "Конверсия и путь клиента", maintenance: "WebCare", robotics: "Робототехника и ИИ" },
   };
-  return labels[serviceId] ?? serviceId;
+  return labels[lang][serviceId] ?? serviceId;
 }
 
 export const Route = createFileRoute("/api/create-checkout")({
@@ -115,7 +122,8 @@ export const Route = createFileRoute("/api/create-checkout")({
           const situation = body.situation || "";
           const budget = body.budget || "";
           const sectorId = body.sectorId || "";
-          const currency = body.currency === "usd" || body.currency === "vnd" ? body.currency : "eur";
+          const lang = body.lang === "en" || body.lang === "vi" || body.lang === "ar" || body.lang === "ru" ? body.lang : "fr";
+          const currency: "eur" | "usd" | "vnd" | "aed" | "rub" = body.currency === "usd" || body.currency === "vnd" || body.currency === "aed" || body.currency === "rub" ? body.currency : "eur";
 
           if (!selectedServices.length) {
             return Response.json({ error: "Aucune prestation sélectionnée." }, { status: 400 });
@@ -123,19 +131,21 @@ export const Route = createFileRoute("/api/create-checkout")({
 
           const lineItems = selectedServices
             .map((serviceId) => {
+              // Google Maps Top 3 is explicitly quoted after a local audit, not charged at a fixed checkout price.
+              if (serviceId === "maps") return null;
               const amount = getPrice(serviceId, situation, budget, sectorId);
               if (!amount || amount < 1) return null;
-              const recurring = serviceId === "seo" || serviceId === "social" || serviceId === "maintenance";
+              const recurring = serviceId === "seo" || serviceId === "social" || serviceId === "maintenance" || serviceId === "robotics";
               return {
                 amount,
-                label: getLabel(serviceId, situation),
+                label: getLabel(serviceId, situation, lang),
                 recurring,
               };
             })
             .filter(Boolean) as Array<{ amount: number; label: string; recurring: boolean }>;
 
           if (!lineItems.length) {
-            return Response.json({ error: "Impossible de calculer le devis." }, { status: 400 });
+            return Response.json({ error: selectedServices.includes("maps") ? "Google Maps Top 3 nécessite un devis personnalisé après audit. Contactez XR Agency pour finaliser cette prestation." : "Impossible de calculer le devis." }, { status: 400 });
           }
 
           const hasRecurring = lineItems.some((item) => item.recurring);
@@ -152,7 +162,7 @@ export const Route = createFileRoute("/api/create-checkout")({
           form.set("billing_address_collection", "auto");
           form.set("allow_promotion_codes", "true");
           if (mode === "payment") form.set("invoice_creation[enabled]", "true");
-          form.set("locale", "auto");
+          form.set("locale", lang === "ar" ? "auto" : lang);
 
           if (body.client?.email) { form.set("customer_email", body.client.email); if (mode === "payment") form.set("payment_intent_data[receipt_email]", body.client.email); }
           if (body.client?.name) form.set("metadata[customer_name]", body.client.name);
@@ -164,10 +174,12 @@ export const Route = createFileRoute("/api/create-checkout")({
           form.set("metadata[budget]", budget);
           form.set("metadata[services]", selectedServices.join(","));
           form.set("metadata[currency]", currency);
+          form.set("metadata[display_language]", lang);
+          form.set("metadata[market_markup]", String(marketMultiplier(lang)));
 
           lineItems.forEach((item, index) => {
             form.set(`line_items[${index}][price_data][currency]`, currency);
-            const convertedAmount = convertAmount(item.amount, currency);
+            const convertedAmount = convertAmount(item.amount * marketMultiplier(lang), currency);
             form.set(`line_items[${index}][price_data][unit_amount]`, String(toMinorUnit(convertedAmount, currency)));
             const labelSuffix = !isSubscriptionOnly && item.recurring ? " (1er mois)" : "";
             form.set(`line_items[${index}][price_data][product_data][name]`, item.label + labelSuffix);
