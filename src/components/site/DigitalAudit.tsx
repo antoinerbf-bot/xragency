@@ -40,13 +40,13 @@ export function DigitalAudit(){
       <div aria-hidden className="absolute -right-20 -top-20 h-60 w-60 rounded-full border xr-line xr-float-slower"/>
       <div className="xr-audit-browser relative mb-6 overflow-hidden rounded-[1rem] border border-black/10 bg-white shadow-[0_36px_90px_-48px_rgba(0,0,0,.55)] transition-transform duration-700 hover:-translate-y-1">
         <div className="flex items-center gap-2 border-b border-black/10 bg-[#f4f2ed] px-4 py-3">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#d7a4a0]"/>
-          <span className="h-2.5 w-2.5 rounded-full bg-[#d9c994]"/>
-          <span className="h-2.5 w-2.5 rounded-full bg-[#aac6b2]"/>
+          <span className="h-2.5 w-2.5 rounded-full bg-[#bdbab2]"/>
+          <span className="h-2.5 w-2.5 rounded-full bg-[#d0cdc5]"/>
+          <span className="h-2.5 w-2.5 rounded-full bg-[#a6a39b]"/>
           <div className="ml-2 min-w-0 flex-1 rounded-lg border xr-line bg-white px-3 py-1.5 font-mono text-[7px] text-[#17181a]/45">
             {url || "https://votre-site.fr"}
           </div>
-          <span className="hidden rounded-full bg-[#eef2ff] px-2.5 py-1 label-mono text-[6px] text-[#5267a8] sm:block">LIVE AUDIT</span>
+          <span className="hidden rounded-full bg-[#e9e7e1] px-2.5 py-1 label-mono text-[6px] text-[#363633] sm:block">LIVE AUDIT</span>
         </div>
         <div className="relative h-[215px] overflow-hidden bg-[#f5f4f0] p-4 sm:h-[235px]">
           <div aria-hidden className="absolute inset-0 opacity-35 [background-image:linear-gradient(rgba(18,19,22,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(18,19,22,.08)_1px,transparent_1px)] [background-size:28px_28px]"/>
