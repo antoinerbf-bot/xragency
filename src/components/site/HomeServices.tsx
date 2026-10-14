@@ -96,6 +96,7 @@ export function HomeServices() {
   const copy = COPY[lang as keyof typeof COPY] ?? COPY.fr;
   const [active, setActive] = useState<(typeof IDS)[number]>("websites");
   const sectionRef = useRef<HTMLElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -106,8 +107,11 @@ export function HomeServices() {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       const rect = section.getBoundingClientRect();
       if (rect.bottom <= 0 || rect.top >= window.innerHeight) return;
-      const progress = Math.max(0, Math.min(0.999, -rect.top / Math.max(1, section.offsetHeight)));
+      // Map the complete section crossing to the seven service chapters, so scrolling down
+      // and back up always drives the same active illustration and service copy.
+      const progress = Math.max(0, Math.min(0.999, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
       const nextIndex = Math.min(IDS.length - 1, Math.floor(progress * IDS.length));
+      setScrollProgress((current) => Math.abs(current - progress) > 0.015 ? progress : current);
       setActive((current) => current === IDS[nextIndex] ? current : IDS[nextIndex]);
     };
     const onScroll = () => { if (!frame) frame = window.requestAnimationFrame(updateFromScroll); };
@@ -136,6 +140,10 @@ export function HomeServices() {
             <p className="max-w-md text-sm leading-6 xr-muted">{copy.lead}</p>
           </div>
         </Reveal>
+
+        <div aria-hidden="true" className="mt-5 h-px w-full overflow-hidden bg-[var(--xr-line)]">
+          <div className="h-full origin-left bg-[var(--xr-accent)] transition-transform duration-300 ease-out" style={{ transform: `scaleX(${scrollProgress})` }} />
+        </div>
 
         <Reveal delay={70}>
           <div className="xr-rail mt-6 flex gap-2 overflow-x-auto pb-2">
@@ -176,13 +184,13 @@ export function HomeServices() {
           <Reveal>
             <Parallax speed={-0.022}>
               <div className="overflow-hidden rounded-[1.15rem] border xr-line bg-[var(--xr-bg-elev)] shadow-[var(--xr-shadow)]">
-                <ServiceIllustration service={active} title={t(service.title)} />
+                <div key={active} className="animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out"><ServiceIllustration service={active} title={t(service.title)} /></div>
               </div>
             </Parallax>
           </Reveal>
 
           <Reveal delay={90}>
-            <div className="flex h-full min-h-[430px] flex-col justify-between rounded-[1.15rem] border xr-line bg-[var(--xr-bg-elev)] text-[var(--xr-ink)] p-7 shadow-[var(--xr-shadow)] backdrop-blur-xl sm:p-9 lg:p-10">
+            <div key={active} aria-live="polite" className="animate-in fade-in slide-in-from-right-3 duration-700 ease-out flex h-full min-h-[430px] flex-col justify-between rounded-[1.15rem] border xr-line bg-[var(--xr-bg-elev)] text-[var(--xr-ink)] p-7 shadow-[var(--xr-shadow)] backdrop-blur-xl sm:p-9 lg:p-10">
               <div>
                 <div className="flex items-center justify-between gap-4">
                   <span className="label-mono text-[7px] tracking-[.22em] xr-muted-2">
