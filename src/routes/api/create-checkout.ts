@@ -3,7 +3,7 @@ import { Resend } from "resend";
 
 type CheckoutBody = {
   sectorId?: string;
-  currency?: "eur" | "usd" | "vnd" | "aed";
+  currency?: "eur" | "usd" | "vnd" | "aed" | "rub";
   lang?: "fr" | "en" | "vi" | "ar" | "ru";
   situation?: string;
   budget?: string;
@@ -35,11 +35,12 @@ const WEBSITE_PRICES = {
 
 const PREMIUM_BRANDING = 399;
 
-const CURRENCY_RATES: Record<"eur" | "usd" | "vnd" | "aed", number> = {
+const CURRENCY_RATES: Record<"eur" | "usd" | "vnd" | "aed" | "rub", number> = {
   eur: 1,
   usd: 1.12,
   vnd: 27500,
   aed: 4.1165,
+  rub: 94.16,
 };
 
 function marketMultiplier(lang: CheckoutBody["lang"]) {
@@ -48,12 +49,12 @@ function marketMultiplier(lang: CheckoutBody["lang"]) {
   return 1;
 }
 
-function convertAmount(amountEur: number, currency: "eur" | "usd" | "vnd" | "aed") {
+function convertAmount(amountEur: number, currency: "eur" | "usd" | "vnd" | "aed" | "rub") {
   const converted = amountEur * CURRENCY_RATES[currency];
   return currency === "vnd" ? Math.round(converted) : Math.round(converted * 100) / 100;
 }
 
-function toMinorUnit(amount: number, currency: "eur" | "usd" | "vnd" | "aed") {
+function toMinorUnit(amount: number, currency: "eur" | "usd" | "vnd" | "aed" | "rub") {
   return currency === "vnd" ? Math.round(amount) : Math.round(amount * 100);
 }
 
@@ -126,7 +127,7 @@ export const Route = createFileRoute("/api/create-checkout")({
           const budget = body.budget || "";
           const sectorId = body.sectorId || "";
           const lang = body.lang === "en" || body.lang === "vi" || body.lang === "ar" || body.lang === "ru" ? body.lang : "fr";
-          const currency: "eur" | "usd" | "vnd" | "aed" = body.currency === "usd" || body.currency === "vnd" || body.currency === "aed" ? body.currency : "eur";
+          const currency: "eur" | "usd" | "vnd" | "aed" | "rub" = body.currency === "usd" || body.currency === "vnd" || body.currency === "aed" || body.currency === "rub" ? body.currency : "eur";
 
           if (!selectedServices.length) {
             return Response.json({ error: "Aucune prestation sélectionnée." }, { status: 400 });
