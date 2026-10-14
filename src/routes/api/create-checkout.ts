@@ -16,7 +16,7 @@ type CheckoutBody = {
 
 const BASE_PRICES: Record<string, number> = {
   website: 499,
-  branding: 179,
+  branding: 199,
   seo: 299,
   maps: 990,
   ads: 299,
@@ -33,7 +33,7 @@ const WEBSITE_PRICES = {
   ecommerce: 1499,
 };
 
-const PREMIUM_BRANDING = 349;
+const PREMIUM_BRANDING = 399;
 
 const CURRENCY_RATES: Record<"eur" | "usd" | "vnd" | "aed", number> = {
   eur: 1,
