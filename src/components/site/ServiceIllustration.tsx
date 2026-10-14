@@ -2,6 +2,7 @@ import { ArrowUpRight, Bot, Gauge, Globe2, MapPin, Megaphone, Palette, Search, S
 import type { ReactNode } from "react";
 import { XR_PHOTOS } from "@/lib/photography";
 import { Parallax } from "./primitives";
+import { useLang } from "@/lib/i18n";
 
 type Props = { service: string; title?: string };
 type Meta = { number: string; label: string; photo?: keyof typeof XR_PHOTOS; position?: string };
@@ -315,7 +316,9 @@ function SeoVisual() {
 }
 
 function MapsVisual() {
-  const searchUrl = "https://www.google.com/maps/search/agence+web+Paris/";
+  const { lang, t } = useLang();
+  const searchTerm = lang === "vi" ? "công ty thiết kế website Đà Nẵng" : lang === "ar" ? "وكالة تصميم مواقع دبي" : lang === "ru" ? "веб-агентство Дубай" : lang === "en" ? "web design agency Dubai" : "agence web Paris";
+  const searchUrl = "https://www.google.com/maps/search/" + encodeURIComponent(searchTerm).replace(/%20/g, "+") + "/";
   const screenshotUrl = "https://image.thum.io/get/width/1600/crop/1000/noanimate/" + searchUrl;
   return (
     <div className="relative isolate overflow-hidden rounded-[1.5rem] border xr-line bg-[var(--xr-bg-elev)] p-4 shadow-[var(--xr-shadow)] sm:p-7">
@@ -323,28 +326,28 @@ function MapsVisual() {
         <div className="flex items-center gap-3">
           <span className="grid h-9 w-9 place-items-center rounded-xl border xr-line bg-[var(--xr-surface)]"><MapPin className="h-4 w-4" /></span>
           <div>
-            <span className="label-mono block text-[7px] tracking-[.18em] xr-muted">GOOGLE MAPS · RECHERCHE RÉELLE</span>
-            <span className="mt-1 block text-xs font-medium">Agence web à Paris</span>
+            <span className="label-mono block text-[7px] tracking-[.18em] xr-muted">{t({fr:"GOOGLE MAPS · RECHERCHE RÉELLE",en:"GOOGLE MAPS · LIVE SEARCH",vi:"GOOGLE MAPS · TÌM KIẾM THỰC TẾ",ar:"خرائط Google · بحث فعلي",ru:"GOOGLE MAPS · РЕАЛЬНЫЙ ПОИСК"})}</span>
+            <span className="mt-1 block text-xs font-medium">{searchTerm}</span>
           </div>
         </div>
         <a href={searchUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border xr-line px-3 py-2 label-mono text-[7px] xr-muted transition hover:bg-[var(--xr-surface)]">
-          OUVRIR LA RECHERCHE <ArrowUpRight className="h-3.5 w-3.5" />
+          {t({fr:"OUVRIR LA RECHERCHE",en:"OPEN SEARCH",vi:"MỞ TÌM KIẾM",ar:"فتح البحث",ru:"ОТКРЫТЬ ПОИСК"})} <ArrowUpRight className="h-3.5 w-3.5" />
         </a>
       </div>
       <a href={searchUrl} target="_blank" rel="noreferrer" className="group relative mt-4 block overflow-hidden rounded-xl border xr-line bg-white">
         <img
           src={screenshotUrl}
-          alt="Capture de l'interface Google Maps montrant une recherche réelle d'agences web à Paris"
+          alt={t({fr:"Capture de l’interface Google Maps montrant une recherche réelle d’agences web à Paris",en:"Capture of the Google Maps interface showing a real web agency search in Dubai",vi:"Ảnh chụp giao diện Google Maps với kết quả tìm kiếm công ty thiết kế website thực tế",ar:"لقطة من واجهة خرائط Google تعرض بحثًا فعليًا عن وكالات تصميم المواقع",ru:"Снимок интерфейса Google Maps с реальным поиском веб-агентств"})}
           loading="lazy"
           className="block h-auto max-h-[640px] min-h-[320px] w-full object-cover object-top transition duration-500 group-hover:scale-[1.01]"
           onError={(event) => { event.currentTarget.style.display = "none"; }}
         />
         <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 bg-white/95 px-4 py-3 text-[#202124] shadow-[0_-8px_30px_rgba(0,0,0,.08)]">
-          <span className="text-xs font-medium">Résultats publics Google Maps</span>
-          <span className="label-mono text-[7px] text-[#5f6368]">CAPTURE EXTERNE · RÉSULTATS VARIABLES</span>
+          <span className="text-xs font-medium">{t({fr:"Résultats publics Google Maps",en:"Public Google Maps results",vi:"Kết quả Google Maps công khai",ar:"نتائج خرائط Google العامة",ru:"Открытые результаты Google Maps"})}</span>
+          <span className="label-mono text-[7px] text-[#5f6368]">{t({fr:"CAPTURE EXTERNE · RÉSULTATS VARIABLES",en:"EXTERNAL CAPTURE · RESULTS VARY",vi:"ẢNH CHỤP BÊN NGOÀI · KẾT QUẢ THAY ĐỔI",ar:"لقطة خارجية · النتائج متغيرة",ru:"ВНЕШНЯЯ КАПЧА · РЕЗУЛЬТАТЫ МЕНЯЮТСЯ"})}</span>
         </div>
       </a>
-      <p className="mt-3 text-[9px] leading-5 xr-muted">Les positions et résultats évoluent selon la requête, la zone géographique et le contexte de recherche. Cette capture illustre une recherche réelle, sans simuler de classement ni de performance client.</p>
+      <p className="mt-3 text-[9px] leading-5 xr-muted">{t({fr:"Les positions et résultats évoluent selon la requête, la zone géographique et le contexte de recherche. Cette capture illustre une recherche réelle, sans simuler de classement ni de performance client.",en:"Positions and results vary by query, geographic area and search context. This is a real search capture, not a simulated ranking or client-performance claim.",vi:"Vị trí và kết quả thay đổi theo truy vấn, khu vực địa lý và ngữ cảnh tìm kiếm. Đây là ảnh chụp tìm kiếm thực tế, không mô phỏng thứ hạng hay hiệu quả khách hàng.",ar:"تختلف المواقع والنتائج بحسب عبارة البحث والمنطقة والسياق. تعرض هذه اللقطة بحثًا فعليًا ولا تحاكي ترتيبًا أو أداءً لعميل.",ru:"Позиции и результаты зависят от запроса, региона и контекста поиска. Это снимок реального поиска, а не имитация рейтинга или результатов клиента."})}</p>
     </div>
   );
 }
