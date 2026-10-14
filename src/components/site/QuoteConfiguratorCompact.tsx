@@ -217,7 +217,7 @@ export function QuoteConfiguratorCompact() {
       if (service.id === "branding" && (budget === "2500_5000" || budget === "5000_plus" || sectorId === "realestate")) {
         price = BRANDING_TIERS.premium.price; label = BRANDING_TIERS.premium.label; detail = BRANDING_TIERS.premium.detail;
       }
-      return { id: service.id, label, detail, price, period: service.id === "seo" || service.id === "social" || service.id === "maintenance" ? "month" : "once", custom: service.id === "maps" };
+      return { id: service.id, label, detail, price, period: service.id === "seo" || service.id === "social" || service.id === "maintenance" || service.id === "robotics" ? "month" : "once", custom: service.id === "maps" };
     });
   }, [orderedServices, situation, budget, sectorId]);
 
