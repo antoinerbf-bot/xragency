@@ -261,7 +261,7 @@ export const UI: Record<string, L> = {
   },
   intelOptionLang: {
     fr: "Langue supplémentaire — +100 € par langue",
-    en: "Extra language — +$130 per language",
+    en: "Extra language — +100 € per language",
     vi: "Ngôn ngữ bổ sung — +2.200.000 ₫ mỗi ngôn ngữ",
   },
   intelOptionBooking: {
@@ -271,8 +271,8 @@ export const UI: Record<string, L> = {
   },
   intelOptionEcom: {
     fr: "E-commerce à partir de 799 € — selon le périmètre du catalogue",
-    en: "E-commerce from $1,943 — adjusted to the number of products",
-    vi: "Thương mại điện tử từ 32.978.000 ₫ — điều chỉnh theo số lượng sản phẩm",
+    en: "E-commerce from 799 € — adjusted to the number of products",
+    vi: "Thương mại điện tử từ 799 € — điều chỉnh theo số lượng sản phẩm",
   },
   intelTimeline: { fr: "Mise en ligne estimée", en: "Estimated go-live", vi: "Dự kiến ra mắt" },
   intelTimelineValue: { fr: "7 à 21 jours", en: "7 to 21 days", vi: "7 đến 21 ngày" },
