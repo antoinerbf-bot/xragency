@@ -550,7 +550,7 @@ export function QuoteConfiguratorCompact() {
             <span className="block text-sm font-semibold leading-5 text-[var(--xr-ink)] sm:text-[15px]">{localizedItem.label}</span>
             <span className="mt-1.5 block text-[11px] leading-[1.55] xr-muted sm:text-xs">{localizedItem.detail}</span>
           </div>
-          {selected && <span className="label-mono text-[7px] tracking-[.15em] text-[var(--xr-ink)]">✓ AJOUTÉ À VOTRE PROJET</span>}
+          {selected && <span className="label-mono text-[7px] tracking-[.15em] text-[var(--xr-ink)]">{t({fr:"✓ AJOUTÉ À VOTRE PROJET",en:"✓ ADDED TO YOUR PROJECT",vi:"✓ ĐÃ THÊM VÀO DỰ ÁN",ar:"✓ أُضيف إلى مشروعك",ru:"✓ ДОБАВЛЕНО В ПРОЕКТ"})}</span>}
         </div>
       </button>
     );
@@ -594,7 +594,7 @@ export function QuoteConfiguratorCompact() {
                     <span className="h-1.5 w-1.5 rounded-full bg-[var(--xr-ink)]/50 transition group-hover:scale-150" />
                   </div>
                   <p className="mt-2 text-[9px] font-semibold text-[var(--xr-ink)]">{service?.label ?? id}</p>
-                  <p className="mt-1 text-[7px] leading-4 xr-muted-2">{service?.detail ?? "Brique sur mesure du dispositif."}</p>
+                  <p className="mt-1 text-[7px] leading-4 xr-muted-2">{service ? localizeChoice(service,lang).detail : t({fr:"Brique sur mesure du dispositif.",en:"A tailored component of your setup.",vi:"Thành phần được thiết kế riêng cho hệ thống.",ar:"عنصر مخصص ضمن منظومتك.",ru:"Индивидуальный элемент вашей системы."})}</p>
                 </div>
               );
             })}
@@ -602,7 +602,7 @@ export function QuoteConfiguratorCompact() {
         </div>
       </div>
       <div className="relative mt-4 flex items-center justify-between border-t border-[var(--xr-line)] pt-3">
-        <span className="label-mono text-[6px] tracking-[.14em] xr-muted-2">INVESTISSEMENT ESTIMÉ</span>
+        <span className="label-mono text-[6px] tracking-[.14em] xr-muted-2">{t({fr:"INVESTISSEMENT ESTIMÉ",en:"ESTIMATED INVESTMENT",vi:"NGÂN SÁCH ƯỚC TÍNH",ar:"الاستثمار التقديري",ru:"ПРЕДВАРИТЕЛЬНЫЕ ИНВЕСТИЦИИ"})}</span>
         <span className="text-[9px] font-semibold text-[var(--xr-ink)]">{totalLabel}</span>
       </div>
     </div>
@@ -614,7 +614,7 @@ export function QuoteConfiguratorCompact() {
       <div className="relative mx-auto max-w-[1560px] px-5 sm:px-8 lg:px-12">
         <Parallax speed={-0.025}><Reveal><div className="grid gap-7 border-b xr-line pb-10 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
           <div className="min-w-0">
-            <span className="label-mono xr-accent text-[8px] tracking-[.22em] sm:tracking-[.28em]">XR QUOTE STUDIO · DEVIS SUR MESURE</span>
+            <span className="label-mono xr-accent text-[8px] tracking-[.22em] sm:tracking-[.28em]">{t({fr:"XR QUOTE STUDIO · DEVIS SUR MESURE",en:"XR QUOTE STUDIO · TAILORED QUOTE",vi:"XR QUOTE STUDIO · BÁO GIÁ RIÊNG",ar:"XR QUOTE STUDIO · عرض سعر مخصص",ru:"XR QUOTE STUDIO · ИНДИВИДУАЛЬНАЯ СМЕТА"})}</span>
             <h2 className="display-serif mt-4 max-w-5xl break-words text-balance text-[clamp(2.35rem,5.2vw,5.6rem)] leading-[.98] tracking-[-.045em] sm:mt-5">{t({fr:"Construisons votre",en:"Let’s build your",vi:"Hãy cùng xây dựng",ar:"لنبنِ",ru:"Давайте создадим"})} <em className="not-italic opacity-55">{t({fr:"projet",en:"project",vi:"dự án",ar:"مشروعك",ru:"проект"})}</em>, {t({fr:"étape par étape.",en:"step by step.",vi:"từng bước một.",ar:"خطوة بخطوة.",ru:"шаг за шагом."})}</h2>
             <p className="mt-5 max-w-2xl text-sm leading-7 xr-muted sm:text-base">{t({fr:"Répondez à quelques questions : votre conseiller vous aide à définir les bonnes priorités, à composer votre dispositif digital et à préparer une proposition cohérente avec votre budget.",en:"Answer a few questions. Your advisor will help set priorities, build the right digital mix and prepare a proposal that fits your budget.",vi:"Trả lời một vài câu hỏi để xác định ưu tiên, lựa chọn giải pháp số phù hợp và chuẩn bị đề xuất theo ngân sách của bạn.",ar:"أجب عن بضعة أسئلة لمساعدتك على تحديد الأولويات واختيار الحلول الرقمية المناسبة وإعداد عرض يتوافق مع ميزانيتك.",ru:"Ответьте на несколько вопросов: консультант поможет определить приоритеты, подобрать цифровые решения и подготовить предложение в рамках бюджета."})}</p>
           </div>
