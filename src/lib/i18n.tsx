@@ -56,7 +56,8 @@ export function localizePriceText(value: string, lang: Lang): string {
   if (lang === "fr" || !value.includes("€")) return value;
 
   const convert = (raw: string) => {
-    const normalized = raw.replace(/[\s\u00a0\u202f]/g, "").replace(",", ".");
+    const compact = raw.replace(/[\s\u00a0\u202f]/g, "").replace(/[.,](?=\d{3}(?:\D|$))/g, "");
+    const normalized = compact.replace(",", ".");
     const amount = Number(normalized);
     return Number.isFinite(amount) ? formatPrice(amount, lang) : raw;
   };
