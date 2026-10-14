@@ -25,7 +25,7 @@ export const LANGS: { code: string; label: string; flag: string }[] = [
  * EN/RU/AR: one shared +20% international price grid, displayed in USD/RUB/AED.
  * Exchange rates are presentation estimates and should be reviewed periodically.
  */
-export const EUR_TO_USD = 1.08;
+export const EUR_TO_USD = 1.12;
 export const EUR_TO_VND = 27500;
 export const EUR_TO_RUB = 94.16;
 export const EUR_TO_AED = 4.1165;
