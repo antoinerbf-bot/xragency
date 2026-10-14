@@ -133,6 +133,7 @@ Object.assign(SERVICE_TEXT_TRANSLATIONS, {
   "Deployment": { ar: "التنفيذ", ru: "Внедрение" },
   "Mapping, configuration, content and integration by scenario.": { ar: "رسم الخرائط والتهيئة والمحتوى والتكامل وفق السيناريو.", ru: "Картографирование, настройка, контент и интеграция под конкретный сценарий." },
   "Operations": { ar: "التشغيل", ru: "Эксплуатация" },
+  "Usage monitoring, optimisation and commercial support.": { ar: "متابعة الاستخدام والتحسين والدعم التجاري.", ru: "Мониторинг использования, оптимизация и коммерческая поддержка." },
   "starting / month": { ar: "ابتداءً من / شهر", ru: "от / месяц" },
   "Tailored leasing published by Korben.": { ar: "سعر التأجير المخصص المنشور من Korben.", ru: "Опубликованный тариф индивидуальной аренды Korben." },
   "purchase excl. tax": { ar: "سعر الشراء قبل الضريبة", ru: "Покупка без налога" },
