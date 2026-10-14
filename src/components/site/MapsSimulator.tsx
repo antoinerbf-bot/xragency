@@ -114,7 +114,7 @@ function SelectorBtn({
       className={cn(
         "flex w-full flex-col items-center gap-1.5 rounded-xl border px-3 py-3 text-center text-xs transition-all duration-200",
         selected
-          ? "border-primary bg-[var(--xr-accent-soft)] text-[var(--xr-ink)] shadow-sm ring-1 ring-[var(--xr-ink)]/15"
+          ? "border-[var(--xr-ink)] bg-[var(--xr-accent-soft)] text-[var(--xr-ink)] shadow-sm ring-1 ring-[var(--xr-ink)]/15"
           : "border-border bg-card/60 text-muted-foreground hover:border-[var(--xr-ink)]/40 hover:text-foreground",
         className,
       )}
@@ -413,7 +413,7 @@ export function MapsSimulator() {
                 </div>
 
                 {/* Trust signals */}
-                <div className="mt-4 flex flex-wrap gap-3 border-t border-primary/20 pt-4">
+                <div className="mt-4 flex flex-wrap gap-3 border-t border-[var(--xr-ink)]/20 pt-4">
                   {[
                     { icon: CheckCircle2, text: "Audit initial offert" },
                     { icon: CheckCircle2, text: "Périmètre contractuel clair" },
@@ -448,7 +448,7 @@ export function MapsSimulator() {
               {PHASES.slice(0, 4).map((ph) => (
                 <div
                   key={ph.num}
-                  className="rounded-2xl border border-border/80 bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary/30"
+                  className="rounded-2xl border border-border/80 bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--xr-ink)]/30"
                 >
                   <p className="label-mono text-xs text-[var(--xr-ink)]">{ph.num} · {ph.name}</p>
                   <p className="display-serif mt-1.5 text-base text-foreground">{ph.title}</p>
@@ -460,7 +460,7 @@ export function MapsSimulator() {
               {PHASES.slice(4).map((ph) => (
                 <div
                   key={ph.num}
-                  className="rounded-2xl border border-border/80 bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary/30"
+                  className="rounded-2xl border border-border/80 bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--xr-ink)]/30"
                 >
                   <p className="label-mono text-xs text-[var(--xr-ink)]">{ph.num} · {ph.name}</p>
                   <p className="display-serif mt-1.5 text-base text-foreground">{ph.title}</p>
