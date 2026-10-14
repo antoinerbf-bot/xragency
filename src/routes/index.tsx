@@ -45,8 +45,8 @@ function Index() {
       <Nav />
       <main className="relative z-10">
         <Hero />
-        <QuoteConfiguratorCompact />
         <HomeServices />
+        <QuoteConfiguratorCompact />
         <DigitalAudit />
         <MapsSimulator />
         <Faq />
