@@ -2,7 +2,7 @@ import { ArrowUpRight, Bot, Gauge, Globe2, MapPin, Megaphone, Palette, Search, S
 import type { ReactNode } from "react";
 import { XR_PHOTOS } from "@/lib/photography";
 import { Parallax } from "./primitives";
-import { useLang } from "@/lib/i18n";
+import { useLang, type Lang } from "@/lib/i18n";
 
 type Props = { service: string; title?: string };
 type Meta = { number: string; label: string; photo?: keyof typeof XR_PHOTOS; position?: string };
@@ -20,6 +20,117 @@ const META: Record<string, Meta> = {
   strategy: { number: "10", label: "STRATÉGIE", photo: "strategy", position: "50% 42%" },
   ai: { number: "11", label: "IA", photo: "ai", position: "50% 50%" },
 };
+
+
+const VISUAL_COPY: Record<string, Partial<Record<Lang, string>>> = {
+  "01 / WEB DESIGN": { en:"01 / WEB DESIGN",vi:"01 / THIẾT KẾ WEB",ar:"01 / تصميم المواقع",ru:"01 / ВЕБ-ДИЗАЙН" },
+  "02 / BRANDING": { en:"02 / BRANDING",vi:"02 / THƯƠNG HIỆU",ar:"02 / الهوية التجارية",ru:"02 / БРЕНДИНГ" },
+  "03 / SEO NATUREL": { en:"03 / ORGANIC SEO",vi:"03 / SEO TỰ NHIÊN",ar:"03 / تحسين البحث العضوي",ru:"03 / ОРГАНИЧЕСКОЕ SEO" },
+  "05 / SOCIAL MEDIA": { en:"05 / SOCIAL MEDIA",vi:"05 / MẠNG XÃ HỘI",ar:"05 / وسائل التواصل الاجتماعي",ru:"05 / СОЦСЕТИ" },
+  "06 / WEBCARE": { en:"06 / WEBCARE",vi:"06 / WEBCARE",ar:"06 / الصيانة التقنية",ru:"06 / WEBCARE" },
+  "07 / ROBOTIQUE": { en:"07 / ROBOTICS",vi:"07 / ROBOT",ar:"07 / الروبوتات",ru:"07 / РОБОТОТЕХНИКА" },
+  "08 / REFONTE": { en:"08 / REDESIGN",vi:"08 / THIẾT KẾ LẠI",ar:"08 / إعادة التصميم",ru:"08 / РЕДИЗАЙН" },
+  "09 / ADS": { en:"09 / ADS",vi:"09 / QUẢNG CÁO",ar:"09 / الإعلانات",ru:"09 / РЕКЛАМА" },
+  "10 / STRATÉGIE": { en:"10 / STRATEGY",vi:"10 / CHIẾN LƯỢC",ar:"10 / الاستراتيجية",ru:"10 / СТРАТЕГИЯ" },
+  "11 / IA": { en:"11 / AI",vi:"11 / AI",ar:"11 / الذكاء الاصطناعي",ru:"11 / ИИ" },
+  "ARCHITECTURE ULTRA-RAPIDE": { en:"ULTRA-FAST ARCHITECTURE",vi:"KIẾN TRÚC SIÊU NHANH",ar:"بنية فائقة السرعة",ru:"СВЕРХБЫСТРАЯ АРХИТЕКТУРА" },
+  "Vitesse < 0.4s · Mobile-First": { en:"Load < 0.4s · Mobile-first",vi:"Tải < 0,4 giây · Ưu tiên di động",ar:"تحميل أقل من 0.4 ثانية · أولوية للهاتف",ru:"Загрузка < 0,4 с · Сначала мобильные" },
+  "LIVRABLES CLÉ EN MAIN": { en:"READY-TO-USE DELIVERABLES",vi:"SẢN PHẨM BÀN GIAO SẴN SÀNG",ar:"مخرجات جاهزة للاستخدام",ru:"ГОТОВЫЕ РЕЗУЛЬТАТЫ" },
+  "Vitrine, Business & E-commerce": { en:"Showcase, business & e-commerce",vi:"Website giới thiệu, doanh nghiệp & thương mại điện tử",ar:"موقع تعريفي وأعمال وتجارة إلكترونية",ru:"Сайт-визитка, бизнес-сайт и интернет-магазин" },
+  "Design unique 100% sur-mesure, CMS moderne, formulaires interactifs et paiements Stripe intégrés.": { en:"Fully bespoke design, modern CMS, interactive forms and integrated Stripe payments.",vi:"Thiết kế riêng hoàn toàn, CMS hiện đại, biểu mẫu tương tác và thanh toán Stripe tích hợp.",ar:"تصميم مخصص بالكامل ونظام إدارة محتوى حديث ونماذج تفاعلية ومدفوعات Stripe مدمجة.",ru:"Полностью индивидуальный дизайн, современная CMS, интерактивные формы и встроенные платежи Stripe." },
+  "SCORE TECHNIQUE": { en:"TECHNICAL SCORE",vi:"ĐIỂM KỸ THUẬT",ar:"التقييم التقني",ru:"ТЕХНИЧЕСКАЯ ОЦЕНКА" },
+  "CHARGEMENT": { en:"LOAD TIME",vi:"THỜI GIAN TẢI",ar:"وقت التحميل",ru:"ВРЕМЯ ЗАГРУЗКИ" },
+  "RGPD OK": { en:"GDPR READY",vi:"ĐẠT GDPR",ar:"متوافق مع GDPR",ru:"СООТВЕТСТВИЕ GDPR" },
+  "PRÊT À CONVERTIR": { en:"READY TO CONVERT",vi:"SẴN SÀNG CHUYỂN ĐỔI",ar:"جاهز للتحويل",ru:"ГОТОВ К КОНВЕРСИИ" },
+  "STUDIO BRANDING & DIRECTION ARTISTIQUE": { en:"BRANDING & ART DIRECTION STUDIO",vi:"STUDIO THƯƠNG HIỆU & ĐỊNH HƯỚNG NGHỆ THUẬT",ar:"استوديو الهوية والتوجيه الفني",ru:"СТУДИЯ БРЕНДИНГА И АРТ-ДИРЕКШНА" },
+  "ATELIER TYPOGRAPHIE & COULEURS": { en:"TYPE & COLOUR STUDIO",vi:"XƯỞNG KIỂU CHỮ & MÀU SẮC",ar:"استوديو الخطوط والألوان",ru:"СТУДИЯ ТИПОГРАФИКИ И ЦВЕТА" },
+  "Papeterie, Packaging & Brand Book": { en:"Stationery, packaging & brand book",vi:"Văn phòng phẩm, bao bì & Brand Book",ar:"المطبوعات والتغليف ودليل العلامة",ru:"Полиграфия, упаковка и брендбук" },
+  "HARMONIE CHROMATIQUE EXCLUSIVE": { en:"EXCLUSIVE COLOUR HARMONY",vi:"HÒA SẮC ĐỘC QUYỀN",ar:"تناغم لوني حصري",ru:"ЭКСКЛЮЗИВНАЯ ЦВЕТОВАЯ ГАРМОНИЯ" },
+  "Livrables Vectoriels HD": { en:"HD vector deliverables",vi:"Tệp vector HD bàn giao",ar:"ملفات متجهة عالية الدقة",ru:"Векторные материалы HD" },
+  "PRÊT À IMPRIMER": { en:"PRINT-READY",vi:"SẴN SÀNG IN",ar:"جاهز للطباعة",ru:"ГОТОВ К ПЕЧАТИ" },
+  "IDENTITÉ DE PRESTIGE": { en:"PREMIUM IDENTITY",vi:"NHẬN DIỆN CAO CẤP",ar:"هوية متميزة",ru:"ПРЕМИАЛЬНАЯ АЙДЕНТИКА" },
+  "PILOTAGE ACQUISITION ORGANIQUE": { en:"ORGANIC ACQUISITION MANAGEMENT",vi:"QUẢN LÝ THU HÚT TỰ NHIÊN",ar:"إدارة الاكتساب العضوي",ru:"УПРАВЛЕНИЕ ОРГАНИЧЕСКИМ ПРИВЛЕЧЕНИЕМ" },
+  "Top 1 Google · Croissance +184%": { en:"Google #1 · Growth +184%",vi:"Top 1 Google · Tăng trưởng +184%",ar:"المركز الأول على Google · نمو +184%",ru:"Google №1 · Рост +184%" },
+  "Certifié A+": { en:"A+ rated",vi:"Xếp hạng A+",ar:"تصنيف A+",ru:"Рейтинг A+" },
+  "Audit sémantique + Cocon SEO + Backlinks": { en:"Semantic audit + SEO silo + backlinks",vi:"Audit ngữ nghĩa + cấu trúc SEO + backlink",ar:"تدقيق دلالي + هيكلة SEO + روابط خلفية",ru:"Семантический аудит + SEO-кластер + обратные ссылки" },
+  "Dès 299 €/m": { en:"From 299 € / month",vi:"Từ 299 € / tháng",ar:"ابتداءً من 299 € شهريًا",ru:"От 299 € в месяц" },
+  "À PARTIR DE 299 €/MOIS": { en:"FROM 299 € / MONTH",vi:"TỪ 299 € / THÁNG",ar:"ابتداءً من 299 € شهريًا",ru:"ОТ 299 € В МЕСЯЦ" },
+  "STUDIO COMMUNITY MANAGEMENT · TOURNAGES & REELS 4K": { en:"COMMUNITY MANAGEMENT · 4K FILMING & REELS",vi:"QUẢN LÝ CỘNG ĐỒNG · QUAY & REELS 4K",ar:"إدارة المجتمع · تصوير ومقاطع Reels بدقة 4K",ru:"КОМЬЮНИТИ-МЕНЕДЖМЕНТ · СЪЁМКА И REELS 4K" },
+  "Feed & Reels 4K": { en:"Feed & 4K Reels",vi:"Feed & Reels 4K",ar:"المنشورات وReels بدقة 4K",ru:"Лента и Reels 4K" },
+  "Engagement": { en:"Engagement",vi:"Tương tác",ar:"التفاعل",ru:"Вовлечённость" },
+  "Formats Verticaux": { en:"Vertical formats",vi:"Định dạng dọc",ar:"تنسيقات عمودية",ru:"Вертикальные форматы" },
+  "Vues vidéo": { en:"Video views",vi:"Lượt xem video",ar:"مشاهدات الفيديو",ru:"Просмотры видео" },
+  "B2B & Local": { en:"B2B & local",vi:"B2B & địa phương",ar:"الأعمال بين الشركات والمحلي",ru:"B2B и локальный рынок" },
+  "Portée qualifiée": { en:"Qualified reach",vi:"Phạm vi tiếp cận chất lượng",ar:"وصول مؤهل",ru:"Целевой охват" },
+  "Accompagnement avec engagement garanti": { en:"Managed support with a clear commitment",vi:"Đồng hành với cam kết rõ ràng",ar:"مرافقة مع التزام واضح",ru:"Сопровождение с чёткими обязательствами" },
+  "· Planning éditorial, tournages, montage et modération active": { en:"· Editorial planning, filming, editing and active moderation",vi:"· Lịch nội dung, quay phim, dựng và quản lý tương tác",ar:"· تخطيط تحريري وتصوير ومونتاج وإدارة نشطة",ru:"· Контент-план, съёмка, монтаж и активная модерация" },
+  "ENGAGEMENT MINIMUM SUR-MESURE": { en:"TAILORED MINIMUM COMMITMENT",vi:"CAM KẾT TỐI THIỂU THEO NHU CẦU",ar:"الحد الأدنى للالتزام حسب الحاجة",ru:"ИНДИВИДУАЛЬНЫЙ МИНИМАЛЬНЫЙ СРОК" },
+  "SUPERVISION CLOUD DÉDIÉE · SÉCURITÉ & MAINTENANCE": { en:"DEDICATED CLOUD MONITORING · SECURITY & MAINTENANCE",vi:"GIÁM SÁT CLOUD RIÊNG · BẢO MẬT & BẢO TRÌ",ar:"مراقبة سحابية مخصصة · الأمان والصيانة",ru:"ВЫДЕЛЕННЫЙ ОБЛАЧНЫЙ МОНИТОРИНГ · БЕЗОПАСНОСТЬ И ОБСЛУЖИВАНИЕ" },
+  "TEMPS DE RÉPONSE": { en:"RESPONSE TIME",vi:"THỜI GIAN PHẢN HỒI",ar:"زمن الاستجابة",ru:"ВРЕМЯ ОТКЛИКА" },
+  "DISPONIBILITÉ": { en:"AVAILABILITY",vi:"TÍNH SẴN SÀNG",ar:"التوافر",ru:"ДОСТУПНОСТЬ" },
+  "SÉCURITÉ SSL": { en:"SSL SECURITY",vi:"BẢO MẬT SSL",ar:"أمان SSL",ru:"БЕЗОПАСНОСТЬ SSL" },
+  "SLA Contractuel": { en:"Contractual SLA",vi:"SLA theo hợp đồng",ar:"اتفاقية مستوى خدمة تعاقدية",ru:"Договорный SLA" },
+  "Protection WAF": { en:"WAF protection",vi:"Bảo vệ WAF",ar:"حماية WAF",ru:"Защита WAF" },
+  "Intervention Proactive & Mises à Jour Mensuelles": { en:"Proactive intervention & monthly updates",vi:"Can thiệp chủ động & cập nhật hàng tháng",ar:"تدخل استباقي وتحديثات شهرية",ru:"Проактивное обслуживание и ежемесячные обновления" },
+  "Sauvegardes quotidiennes redondantes, restauration immédiate, modifications régulières de contenus et surveillance continue contre les cybermenaces.": { en:"Redundant daily backups, immediate recovery, regular content updates and continuous cyber-threat monitoring.",vi:"Sao lưu hàng ngày dự phòng, khôi phục tức thì, cập nhật nội dung định kỳ và giám sát mối đe dọa liên tục.",ar:"نسخ احتياطية يومية مكررة واستعادة فورية وتحديثات محتوى منتظمة ومراقبة مستمرة للتهديدات.",ru:"Ежедневные резервные копии с дублированием, быстрое восстановление, регулярные обновления контента и постоянный мониторинг киберугроз." },
+  "SÉRÉNITÉ TOTALE DÈS 29 €/MOIS": { en:"PEACE OF MIND FROM 29 € / MONTH",vi:"AN TÂM TỪ 29 € / THÁNG",ar:"راحة بال ابتداءً من 29 € شهريًا",ru:"СПОКОЙСТВИЕ ОТ 29 € В МЕСЯЦ" },
+  "ROBOTS DE SERVICE · ÉLÉGANCE OPÉRATIONNELLE": { en:"SERVICE ROBOTS · OPERATIONAL ELEGANCE",vi:"ROBOT DỊCH VỤ · VẬN HÀNH TINH TẾ",ar:"روبوتات الخدمة · أناقة تشغيلية",ru:"СЕРВИСНЫЕ РОБОТЫ · ЭФФЕКТИВНАЯ ЭЛЕГАНТНОСТЬ" },
+  "DISPONIBLE DÉMO": { en:"DEMO AVAILABLE",vi:"CÓ BẢN DEMO",ar:"عرض تجريبي متاح",ru:"ДЕМО ДОСТУПНО" },
+  "NAVIGATION LIDAR 3D DYNAMIQUE": { en:"DYNAMIC 3D LIDAR NAVIGATION",vi:"ĐIỀU HƯỚNG LIDAR 3D ĐỘNG",ar:"ملاحة LIDAR ثلاثية الأبعاد ديناميكية",ru:"ДИНАМИЧЕСКАЯ 3D-НАВИГАЦИЯ LIDAR" },
+  "Évitement d'obstacles en temps réel": { en:"Real-time obstacle avoidance",vi:"Tránh chướng ngại vật theo thời gian thực",ar:"تجنب العوائق في الوقت الفعلي",ru:"Объезд препятствий в реальном времени" },
+  "Prêt à l'emploi": { en:"Ready to deploy",vi:"Sẵn sàng sử dụng",ar:"جاهز للاستخدام",ru:"Готов к работе" },
+  "Capacités de Terrain": { en:"Operational capabilities",vi:"Khả năng vận hành",ar:"القدرات التشغيلية",ru:"Рабочие возможности" },
+  "Service en salle, port de plateaux lourds (jusqu'à 40 kg), accueil VIP et guidage interactif des clients.": { en:"Table service, carrying heavy trays (up to 40 kg), VIP reception and interactive guest guidance.",vi:"Phục vụ bàn, mang khay nặng (tối đa 40 kg), đón tiếp VIP và hướng dẫn khách tương tác.",ar:"خدمة الطاولات وحمل الصواني الثقيلة (حتى 40 كجم) واستقبال كبار الشخصيات وإرشاد الضيوف.",ru:"Обслуживание в зале, перенос тяжёлых подносов (до 40 кг), VIP-встреча и интерактивная навигация гостей." },
+  "0 Bruit": { en:"Zero noise",vi:"Không tiếng ồn",ar:"دون ضوضاء",ru:"Без шума" },
+  "Moteurs silencieux": { en:"Silent motors",vi:"Động cơ yên tĩnh",ar:"محركات صامتة",ru:"Бесшумные двигатели" },
+  "100% Sûr": { en:"100% safe",vi:"An toàn 100%",ar:"آمن بنسبة 100%",ru:"100% безопасно" },
+  "Capteurs 360°": { en:"360° sensors",vi:"Cảm biến 360°",ar:"مستشعرات 360°",ru:"Датчики 360°" },
+  "Location événementielle ou vente": { en:"Event rental or purchase",vi:"Thuê sự kiện hoặc mua",ar:"تأجير للفعاليات أو شراء",ru:"Аренда для мероприятий или покупка" },
+  "HÔTELLERIE · RESTAURATION · ÉVÉNEMENTS VIP · SALONS": { en:"HOSPITALITY · RESTAURANTS · VIP EVENTS · TRADE SHOWS",vi:"LƯU TRÚ · NHÀ HÀNG · SỰ KIỆN VIP · TRIỂN LÃM",ar:"الضيافة · المطاعم · فعاليات VIP · المعارض",ru:"ОТЕЛИ · РЕСТОРАНЫ · VIP-МЕРОПРИЯТИЯ · ВЫСТАВКИ" },
+  "ESSAI GRATUIT SUR SITE POSSIBLE": { en:"ON-SITE TRIAL MAY BE AVAILABLE",vi:"CÓ THỂ THỬ NGHIỆM TẠI CHỖ",ar:"قد تتوفر تجربة مجانية في الموقع",ru:"ВОЗМОЖНО БЕСПЛАТНОЕ ТЕСТИРОВАНИЕ НА МЕСТЕ" },
+  "AUDIT & TRANSFORMATION DIGITALE": { en:"DIGITAL AUDIT & TRANSFORMATION",vi:"AUDIT & CHUYỂN ĐỔI SỐ",ar:"التدقيق والتحول الرقمي",ru:"ЦИФРОВОЙ АУДИТ И ТРАНСФОРМАЦИЯ" },
+  "AVANT REFONTE": { en:"BEFORE REDESIGN",vi:"TRƯỚC KHI THIẾT KẾ LẠI",ar:"قبل إعادة التصميم",ru:"ДО РЕДИЗАЙНА" },
+  "Site Obsolète": { en:"Outdated website",vi:"Website lỗi thời",ar:"موقع قديم",ru:"Устаревший сайт" },
+  "• Temps de chargement : 4.8s": { en:"• Load time: 4.8s",vi:"• Thời gian tải: 4,8 giây",ar:"• وقت التحميل: 4.8 ثانية",ru:"• Время загрузки: 4,8 с" },
+  "• Mobile non optimisé": { en:"• Mobile not optimised",vi:"• Chưa tối ưu di động",ar:"• غير محسّن للهاتف",ru:"• Не оптимизирован для мобильных" },
+  "• Taux de conversion : 0.8%": { en:"• Conversion rate: 0.8%",vi:"• Tỷ lệ chuyển đổi: 0,8%",ar:"• معدل التحويل: 0.8%",ru:"• Конверсия: 0,8%" },
+  "APRÈS XR REFONTE": { en:"AFTER XR REDESIGN",vi:"SAU KHI XR THIẾT KẾ LẠI",ar:"بعد إعادة تصميم XR",ru:"ПОСЛЕ РЕДИЗАЙНА XR" },
+  "Architecture Next-Gen": { en:"Next-gen architecture",vi:"Kiến trúc thế hệ mới",ar:"بنية الجيل التالي",ru:"Архитектура нового поколения" },
+  "• Temps de chargement : 0.3s": { en:"• Load time: 0.3s",vi:"• Thời gian tải: 0,3 giây",ar:"• وقت التحميل: 0.3 ثانية",ru:"• Время загрузки: 0,3 с" },
+  "• 100% Mobile-First & Fluide": { en:"• 100% mobile-first & fluid",vi:"• 100% ưu tiên di động & mượt mà",ar:"• أولوية كاملة للهاتف وتجربة سلسة",ru:"• Полный приоритет мобильным устройствам и плавность" },
+  "• Taux de conversion : 4.6% (×5.7)": { en:"• Conversion rate: 4.6% (×5.7)",vi:"• Tỷ lệ chuyển đổi: 4,6% (×5,7)",ar:"• معدل التحويل: 4.6% (×5.7)",ru:"• Конверсия: 4,6% (×5,7)" },
+  "Migration sans perte de trafic ni de SEO existant": { en:"Migration without losing traffic or existing SEO",vi:"Di chuyển mà không mất lưu lượng hoặc SEO hiện có",ar:"نقل دون فقدان الزيارات أو تحسين البحث الحالي",ru:"Миграция без потери трафика и существующего SEO" },
+  "ZÉRO REGRESSION": { en:"ZERO REGRESSION",vi:"KHÔNG SUY GIẢM",ar:"دون تراجع",ru:"БЕЗ РЕГРЕССИИ" },
+  "AUDIT UX · REFONTE CODE · CONVERSIONS BOOSTÉES": { en:"UX AUDIT · CODE REDESIGN · IMPROVED CONVERSIONS",vi:"AUDIT UX · VIẾT LẠI CODE · TĂNG CHUYỂN ĐỔI",ar:"تدقيق UX · إعادة بناء الكود · تحسين التحويل",ru:"UX-АУДИТ · ПЕРЕРАБОТКА КОДА · РОСТ КОНВЕРСИИ" },
+  "ON RECONSTRUIT POUR GAGNER": { en:"REBUILD TO WIN",vi:"XÂY DỰNG LẠI ĐỂ BỨT PHÁ",ar:"نعيد البناء لتحقيق النجاح",ru:"ПЕРЕСОЗДАЁМ ДЛЯ РЕЗУЛЬТАТА" },
+  "CTR MOYEN": { en:"AVERAGE CTR",vi:"CTR TRUNG BÌNH",ar:"متوسط CTR",ru:"СРЕДНИЙ CTR" },
+  "COÛT PAR LEAD": { en:"COST PER LEAD",vi:"CHI PHÍ MỖI LEAD",ar:"تكلفة العميل المحتمل",ru:"СТОИМОСТЬ ЛИДА" },
+  "RETOUR / INVEST.": { en:"RETURN / INVESTMENT",vi:"LỢI NHUẬN / ĐẦU TƯ",ar:"العائد / الاستثمار",ru:"ОТДАЧА / ИНВЕСТИЦИИ" },
+  "Rentabilité nette": { en:"Net profitability",vi:"Khả năng sinh lời ròng",ar:"الربحية الصافية",ru:"Чистая рентабельность" },
+  "Campagnes Précises & Mots-Clés Intentionnistes": { en:"Precise campaigns & high-intent keywords",vi:"Chiến dịch chính xác & từ khóa có ý định mua",ar:"حملات دقيقة وكلمات مفتاحية ذات نية عالية",ru:"Точные кампании и ключевые слова с высоким намерением" },
+  "TRACKING SERVER-SIDE": { en:"SERVER-SIDE TRACKING",vi:"THEO DÕI PHÍA MÁY CHỦ",ar:"تتبع من جانب الخادم",ru:"СЕРВЕРНОЕ ОТСЛЕЖИВАНИЕ" },
+  "Ciblage ultra-qualifié à fort pouvoir d'achat, A/B testing continu des accroches et landing pages dédiées à forte conversion.": { en:"Highly qualified targeting, continuous A/B testing of messages and dedicated high-conversion landing pages.",vi:"Nhắm mục tiêu chất lượng cao, A/B testing liên tục và landing page tối ưu chuyển đổi.",ar:"استهداف عالي الجودة واختبارات A/B مستمرة للرسائل وصفحات هبوط مخصصة للتحويل.",ru:"Точный таргетинг, постоянные A/B-тесты сообщений и посадочные страницы с высокой конверсией." },
+  "SEARCH · SHOPPING · REMARKETING · SCALING": { en:"SEARCH · SHOPPING · REMARKETING · SCALING",vi:"SEARCH · SHOPPING · REMARKETING · MỞ RỘNG",ar:"البحث · التسوق · إعادة الاستهداف · التوسع",ru:"ПОИСК · SHOPPING · РЕТАРГЕТИНГ · МАСШТАБИРОВАНИЕ" },
+  "ACQUISITION RENTABLE & MESURABLE": { en:"PROFITABLE, MEASURABLE ACQUISITION",vi:"THU HÚT KHÁCH HÀNG CÓ LỜI & ĐO LƯỜNG ĐƯỢC",ar:"اكتساب عملاء مربح وقابل للقياس",ru:"РЕНТАБЕЛЬНОЕ И ИЗМЕРИМОЕ ПРИВЛЕЧЕНИЕ" },
+  "STRATÉGIE DIGITALE & EXPANSION": { en:"DIGITAL STRATEGY & EXPANSION",vi:"CHIẾN LƯỢC SỐ & MỞ RỘNG",ar:"الاستراتيجية الرقمية والتوسع",ru:"ЦИФРОВАЯ СТРАТЕГИЯ И РАСШИРЕНИЕ" },
+  "PLAN D'ACTION CONCRET · KPIS CHIFFRÉS · ROADMAP 90J": { en:"CONCRETE ACTION PLAN · MEASURABLE KPIS · 90-DAY ROADMAP",vi:"KẾ HOẠCH HÀNH ĐỘNG · KPI CỤ THỂ · LỘ TRÌNH 90 NGÀY",ar:"خطة عمل واضحة · مؤشرات أداء رقمية · خارطة طريق 90 يومًا",ru:"КОНКРЕТНЫЙ ПЛАН · ИЗМЕРИМЫЕ KPI · ДОРОЖНАЯ КАРТА НА 90 ДНЕЙ" },
+  "DIRECTION STRATÉGIQUE CLAIRE": { en:"CLEAR STRATEGIC DIRECTION",vi:"ĐỊNH HƯỚNG CHIẾN LƯỢC RÕ RÀNG",ar:"توجيه استراتيجي واضح",ru:"ЧЁТКОЕ СТРАТЕГИЧЕСКОЕ НАПРАВЛЕНИЕ" },
+  "INTELLIGENCE ARTIFICIELLE & AUTOMATISATION": { en:"ARTIFICIAL INTELLIGENCE & AUTOMATION",vi:"TRÍ TUỆ NHÂN TẠO & TỰ ĐỘNG HÓA",ar:"الذكاء الاصطناعي والأتمتة",ru:"ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ И АВТОМАТИЗАЦИЯ" },
+  "Capture & Triage": { en:"Capture & triage",vi:"Thu thập & phân loại",ar:"الالتقاط والفرز",ru:"Сбор и сортировка" },
+  "Qualification automatique des leads entrants 24/7": { en:"Automatic qualification of inbound leads 24/7",vi:"Tự động phân loại lead đầu vào 24/7",ar:"تأهيل تلقائي للعملاء المحتملين الواردين على مدار الساعة",ru:"Автоматическая квалификация входящих лидов 24/7" },
+  "RAG & Connaissance": { en:"RAG & knowledge",vi:"RAG & tri thức",ar:"RAG والمعرفة",ru:"RAG и база знаний" },
+  "Réponses ultra-précises basées sur vos documents": { en:"Highly precise answers based on your documents",vi:"Câu trả lời chính xác dựa trên tài liệu của bạn",ar:"إجابات دقيقة للغاية تستند إلى مستنداتك",ru:"Точные ответы на основе ваших документов" },
+  "Workflows Métier": { en:"Business workflows",vi:"Quy trình nghiệp vụ",ar:"سير العمل التجاري",ru:"Бизнес-процессы" },
+  "Génération automatique de devis et synchronisation": { en:"Automatic quote generation and synchronisation",vi:"Tự động tạo báo giá và đồng bộ hóa",ar:"إنشاء عروض الأسعار والمزامنة تلقائيًا",ru:"Автоматическое создание смет и синхронизация" },
+  "TRANSFORMATION IA IMMÉDIATE": { en:"IMMEDIATE AI TRANSFORMATION",vi:"CHUYỂN ĐỔI AI NGAY LẬP TỨC",ar:"تحول فوري بالذكاء الاصطناعي",ru:"НЕМЕДЛЕННАЯ ТРАНСФОРМАЦИЯ С ИИ" },
+};
+function VisualText({ children }: { children: ReactNode }) {
+  const { lang, t } = useLang();
+  if (typeof children !== "string") return <>{children}</>;
+  const key = children.trim();
+  const translated = VISUAL_COPY[key];
+  return <>{translated ? t({ fr: key, en: translated.en ?? key, vi: translated.vi ?? key, ar: translated.ar ?? key, ru: translated.ru ?? key }) : children}</>;
+}
 
 function Stage({ children, className = "", accent = "rgba(255,255,255,.08)" }: { children: ReactNode; className?: string; accent?: string }) {
   return (
@@ -95,13 +206,13 @@ function WebVisual() {
           <span className="h-2 w-2 rounded-full bg-red-400/80" />
           <span className="h-2 w-2 rounded-full bg-amber-400/80" />
           <span className="h-2 w-2 rounded-full bg-emerald-400/80" />
-          <span className="ml-3 label-mono text-[7px] tracking-[.18em] xr-muted">HTTPS://XRAGENCYAI.COM</span>
+          <span className="ml-3 label-mono text-[7px] tracking-[.18em] xr-muted"><VisualText>HTTPS://XRAGENCYAI.COM</VisualText></span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
+          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500"><VisualText>
             PERFORMANCE 100/100
-          </span>
-          <Label>01 / WEB DESIGN</Label>
+          </VisualText></span>
+          <Label><VisualText>01 / WEB DESIGN</VisualText></Label>
         </div>
       </div>
 
@@ -116,44 +227,44 @@ function WebVisual() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
           <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
             <div>
-              <span className="label-mono text-[7px] text-emerald-400 font-bold">ARCHITECTURE ULTRA-RAPIDE</span>
-              <p className="text-xs font-semibold text-white">Vitesse &lt; 0.4s · Mobile-First</p>
+              <span className="label-mono text-[7px] text-emerald-400 font-bold"><VisualText>ARCHITECTURE ULTRA-RAPIDE</VisualText></span>
+              <p className="text-xs font-semibold text-white"><VisualText>Vitesse &lt; 0.4s · Mobile-First</VisualText></p>
             </div>
-            <span className="rounded-full bg-white/15 px-3 py-1 label-mono text-[7px] font-bold text-white backdrop-blur-md">
+            <span className="rounded-full bg-white/15 px-3 py-1 label-mono text-[7px] font-bold text-white backdrop-blur-md"><VisualText>
               DÈS 499 €
-            </span>
+            </VisualText></span>
           </div>
         </div>
 
         <div className="space-y-3">
           <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)]/80 p-4 shadow-sm backdrop-blur-xl">
             <div className="flex items-center justify-between">
-              <span className="label-mono text-[6.5px] xr-muted-2">LIVRABLES CLÉ EN MAIN</span>
+              <span className="label-mono text-[6.5px] xr-muted-2"><VisualText>LIVRABLES CLÉ EN MAIN</VisualText></span>
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             </div>
-            <h4 className="mt-1 text-xs font-bold text-[var(--xr-ink)]">Vitrine, Business & E-commerce</h4>
-            <p className="mt-1 text-[8.5px] leading-relaxed xr-muted">
+            <h4 className="mt-1 text-xs font-bold text-[var(--xr-ink)]"><VisualText>Vitrine, Business & E-commerce</VisualText></h4>
+            <p className="mt-1 text-[8.5px] leading-relaxed xr-muted"><VisualText>
               Design unique 100% sur-mesure, CMS moderne, formulaires interactifs et paiements Stripe intégrés.
-            </p>
+            </VisualText></p>
           </div>
 
           <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)]/80 p-4 shadow-sm backdrop-blur-xl">
             <div className="flex items-center justify-between">
-              <span className="label-mono text-[6.5px] xr-muted-2">SCORE TECHNIQUE</span>
-              <span className="label-mono text-[7px] font-bold text-emerald-500">GRADE A+</span>
+              <span className="label-mono text-[6.5px] xr-muted-2"><VisualText>SCORE TECHNIQUE</VisualText></span>
+              <span className="label-mono text-[7px] font-bold text-emerald-500"><VisualText>GRADE A+</VisualText></span>
             </div>
             <div className="mt-2.5 grid grid-cols-3 gap-1.5 text-center text-[7.5px]">
               <div className="rounded-lg bg-[var(--xr-bg)] p-2 border xr-line">
-                <span className="block font-bold text-emerald-500">100/100</span>
-                <span className="label-mono text-[5.5px] xr-muted">SEO SCORE</span>
+                <span className="block font-bold text-emerald-500"><VisualText>100/100</VisualText></span>
+                <span className="label-mono text-[5.5px] xr-muted"><VisualText>SEO SCORE</VisualText></span>
               </div>
               <div className="rounded-lg bg-[var(--xr-bg)] p-2 border xr-line">
-                <span className="block font-bold text-[var(--xr-ink)]">&lt; 0.4s</span>
-                <span className="label-mono text-[5.5px] xr-muted">CHARGEMENT</span>
+                <span className="block font-bold text-[var(--xr-ink)]"><VisualText>&lt; 0.4s</VisualText></span>
+                <span className="label-mono text-[5.5px] xr-muted"><VisualText>CHARGEMENT</VisualText></span>
               </div>
               <div className="rounded-lg bg-[var(--xr-bg)] p-2 border xr-line">
-                <span className="block font-bold text-[var(--xr-ink)]">100%</span>
-                <span className="label-mono text-[5.5px] xr-muted">RGPD OK</span>
+                <span className="block font-bold text-[var(--xr-ink)]"><VisualText>100%</VisualText></span>
+                <span className="label-mono text-[5.5px] xr-muted"><VisualText>RGPD OK</VisualText></span>
               </div>
             </div>
           </div>
@@ -161,8 +272,8 @@ function WebVisual() {
       </div>
 
       <div className="flex items-center justify-between border-t xr-line pt-4">
-        <span className="label-mono text-[7px] xr-muted">REACT · TANSTACK · TAILWIND · HÉBERGEMENT 1 AN INCLUS</span>
-        <span className="label-mono text-[7px] font-bold text-emerald-500">PRÊT À CONVERTIR</span>
+        <span className="label-mono text-[7px] xr-muted"><VisualText>REACT · TANSTACK · TAILWIND · HÉBERGEMENT 1 AN INCLUS</VisualText></span>
+        <span className="label-mono text-[7px] font-bold text-emerald-500"><VisualText>PRÊT À CONVERTIR</VisualText></span>
       </div>
     </div>
   );
@@ -179,13 +290,13 @@ function BrandingVisual() {
       <div className="flex items-center justify-between border-b xr-line pb-4">
         <div className="flex items-center gap-2">
           <Palette className="h-4 w-4 text-emerald-500" />
-          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">STUDIO BRANDING & DIRECTION ARTISTIQUE</span>
+          <span className="label-mono text-[7px] tracking-[.18em] xr-muted"><VisualText>STUDIO BRANDING & DIRECTION ARTISTIQUE</VisualText></span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
+          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500"><VisualText>
             CESSION 100% DROITS
-          </span>
-          <Label>02 / BRANDING</Label>
+          </VisualText></span>
+          <Label><VisualText>02 / BRANDING</VisualText></Label>
         </div>
       </div>
 
@@ -200,18 +311,18 @@ function BrandingVisual() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
           <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
             <div>
-              <span className="label-mono text-[7px] text-emerald-400 font-bold">ATELIER TYPOGRAPHIE & COULEURS</span>
-              <p className="text-xs font-semibold text-white">Papeterie, Packaging & Brand Book</p>
+              <span className="label-mono text-[7px] text-emerald-400 font-bold"><VisualText>ATELIER TYPOGRAPHIE & COULEURS</VisualText></span>
+              <p className="text-xs font-semibold text-white"><VisualText>Papeterie, Packaging & Brand Book</VisualText></p>
             </div>
-            <span className="rounded-full bg-white/15 px-3 py-1 label-mono text-[7px] font-bold text-white backdrop-blur-md">
+            <span className="rounded-full bg-white/15 px-3 py-1 label-mono text-[7px] font-bold text-white backdrop-blur-md"><VisualText>
               DÈS 179 €
-            </span>
+            </VisualText></span>
           </div>
         </div>
 
         <div className="space-y-3">
           <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)]/80 p-4 shadow-sm backdrop-blur-xl">
-            <span className="label-mono text-[6.5px] xr-muted-2">HARMONIE CHROMATIQUE EXCLUSIVE</span>
+            <span className="label-mono text-[6.5px] xr-muted-2"><VisualText>HARMONIE CHROMATIQUE EXCLUSIVE</VisualText></span>
             <div className="mt-3 flex gap-2">
               {[
                 { hex: "#090A0D", label: "Obsidian" },
@@ -232,21 +343,21 @@ function BrandingVisual() {
 
           <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)]/80 p-4 shadow-sm backdrop-blur-xl">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-[var(--xr-ink)]">Livrables Vectoriels HD</span>
-              <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
+              <span className="text-[10px] font-bold text-[var(--xr-ink)]"><VisualText>Livrables Vectoriels HD</VisualText></span>
+              <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500"><VisualText>
                 PRÊT À IMPRIMER
-              </span>
+              </VisualText></span>
             </div>
-            <p className="mt-1.5 text-[8.5px] leading-relaxed xr-muted">
+            <p className="mt-1.5 text-[8.5px] leading-relaxed xr-muted"><VisualText>
               Logo vectoriel (AI, SVG, PNG), favicon, Brand Book 20+ pages et gabarits réseaux sociaux.
-            </p>
+            </VisualText></p>
           </div>
         </div>
       </div>
 
       <div className="flex items-center justify-between border-t xr-line pt-4">
-        <span className="label-mono text-[7px] xr-muted">AI · SVG · PDF PRINT 300 DPI · GABARITS RÉSEAUX SOCIAUX</span>
-        <span className="label-mono text-[7px] font-bold text-emerald-500">IDENTITÉ DE PRESTIGE</span>
+        <span className="label-mono text-[7px] xr-muted"><VisualText>AI · SVG · PDF PRINT 300 DPI · GABARITS RÉSEAUX SOCIAUX</VisualText></span>
+        <span className="label-mono text-[7px] font-bold text-emerald-500"><VisualText>IDENTITÉ DE PRESTIGE</VisualText></span>
       </div>
     </div>
   );
@@ -259,11 +370,11 @@ function SeoVisual() {
         <div className="flex items-center justify-between border-b xr-line pb-3">
           <div className="flex items-center gap-2">
             <Search className="h-3.5 w-3.5 text-sky-500" />
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">GOOGLE SERP PREVIEW</span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted"><VisualText>GOOGLE SERP PREVIEW</VisualText></span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="label-mono text-[7px] text-emerald-500 font-bold">+184% TRAFIC</span>
-            <Label>03 / SEO NATUREL</Label>
+            <span className="label-mono text-[7px] text-emerald-500 font-bold"><VisualText>+184% TRAFIC</VisualText></span>
+            <Label><VisualText>03 / SEO NATUREL</VisualText></Label>
           </div>
         </div>
 
@@ -277,38 +388,38 @@ function SeoVisual() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
               <div>
-                <span className="label-mono text-[7px] text-white/90">PILOTAGE ACQUISITION ORGANIQUE</span>
-                <p className="text-[10px] font-semibold text-white">Top 1 Google · Croissance +184%</p>
+                <span className="label-mono text-[7px] text-white/90"><VisualText>PILOTAGE ACQUISITION ORGANIQUE</VisualText></span>
+                <p className="text-[10px] font-semibold text-white"><VisualText>Top 1 Google · Croissance +184%</VisualText></p>
               </div>
-              <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[7px] text-emerald-300 backdrop-blur-md">Certifié A+</span>
+              <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[7px] text-emerald-300 backdrop-blur-md"><VisualText>Certifié A+</VisualText></span>
             </div>
           </div>
 
           <div className="space-y-3">
             <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5 backdrop-blur-md">
               <div className="flex items-center gap-2 text-[8px] xr-muted">
-                <span className="grid h-4 w-4 place-items-center rounded-full bg-neutral-900 text-[6px] font-black text-white">XR</span>
-                <span>https://xragencyai.com</span>
-                <span className="label-mono text-[6px] text-emerald-500 font-bold ml-auto">POSITION #1</span>
+                <span className="grid h-4 w-4 place-items-center rounded-full bg-neutral-900 text-[6px] font-black text-white"><VisualText>XR</VisualText></span>
+                <span><VisualText>https://xragencyai.com</VisualText></span>
+                <span className="label-mono text-[6px] text-emerald-500 font-bold ml-auto"><VisualText>POSITION #1</VisualText></span>
               </div>
-              <h4 className="mt-1 text-xs font-semibold text-sky-600 dark:text-sky-400">
+              <h4 className="mt-1 text-xs font-semibold text-sky-600 dark:text-sky-400"><VisualText>
                 XR Agency | Agence Web & Performance Digitale
-              </h4>
-              <p className="mt-1 text-[8.5px] leading-relaxed xr-muted line-clamp-2">
+              </VisualText></h4>
+              <p className="mt-1 text-[8.5px] leading-relaxed xr-muted line-clamp-2"><VisualText>
                 Création de sites internet haut de gamme, branding & acquisition locale.
-              </p>
+              </VisualText></p>
             </div>
 
             <div className="flex items-center justify-between rounded-xl border xr-line bg-[var(--xr-surface)] px-3 py-2 text-[9px]">
-              <span className="xr-muted">Audit sémantique + Cocon SEO + Backlinks</span>
-              <span className="label-mono text-[7px] font-bold xr-accent">Dès 299 €/m</span>
+              <span className="xr-muted"><VisualText>Audit sémantique + Cocon SEO + Backlinks</VisualText></span>
+              <span className="label-mono text-[7px] font-bold xr-accent"><VisualText>Dès 299 €/m</VisualText></span>
             </div>
           </div>
         </div>
 
         <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">NETLINKING · COCON SÉMANTIQUE · CORE WEB VITALS</span>
-          <span className="label-mono text-[7px] xr-accent font-semibold">À PARTIR DE 299 €/MOIS</span>
+          <span className="label-mono text-[7px] xr-muted"><VisualText>NETLINKING · COCON SÉMANTIQUE · CORE WEB VITALS</VisualText></span>
+          <span className="label-mono text-[7px] xr-accent font-semibold"><VisualText>À PARTIR DE 299 €/MOIS</VisualText></span>
         </div>
       </div>
     </Stage>
@@ -362,13 +473,13 @@ function SocialVisual() {
       <div className="flex items-center justify-between border-b xr-line pb-4">
         <div className="flex items-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">STUDIO COMMUNITY MANAGEMENT · TOURNAGES & REELS 4K</span>
+          <span className="label-mono text-[7px] tracking-[.18em] xr-muted"><VisualText>STUDIO COMMUNITY MANAGEMENT · TOURNAGES & REELS 4K</VisualText></span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
+          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500"><VisualText>
             GESTION 100% DÉLÉGUÉE
-          </span>
-          <Label>05 / SOCIAL MEDIA</Label>
+          </VisualText></span>
+          <Label><VisualText>05 / SOCIAL MEDIA</VisualText></Label>
         </div>
       </div>
 
@@ -377,13 +488,13 @@ function SocialVisual() {
           {/* Instagram Card */}
           <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
             <div className="flex items-center justify-between">
-              <span className="label-mono text-[7px] font-bold text-pink-500">INSTAGRAM</span>
+              <span className="label-mono text-[7px] font-bold text-pink-500"><VisualText>INSTAGRAM</VisualText></span>
               <span className="h-2 w-2 rounded-full bg-emerald-500" />
             </div>
-            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]">Feed & Reels 4K</p>
+            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]"><VisualText>Feed & Reels 4K</VisualText></p>
             <div className="mt-2.5 flex items-baseline justify-between text-[8px] xr-muted">
-              <span>Engagement</span>
-              <span className="label-mono font-bold text-emerald-500">+18.4%</span>
+              <span><VisualText>Engagement</VisualText></span>
+              <span className="label-mono font-bold text-emerald-500"><VisualText>+18.4%</VisualText></span>
             </div>
             <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
               <div className="h-full w-[82%] rounded-full bg-gradient-to-r from-pink-500 to-purple-500" />
@@ -393,13 +504,13 @@ function SocialVisual() {
           {/* TikTok Card */}
           <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
             <div className="flex items-center justify-between">
-              <span className="label-mono text-[7px] font-bold text-cyan-500">TIKTOK</span>
+              <span className="label-mono text-[7px] font-bold text-cyan-500"><VisualText>TIKTOK</VisualText></span>
               <span className="h-2 w-2 rounded-full bg-emerald-500" />
             </div>
-            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]">Formats Verticaux</p>
+            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]"><VisualText>Formats Verticaux</VisualText></p>
             <div className="mt-2.5 flex items-baseline justify-between text-[8px] xr-muted">
-              <span>Vues vidéo</span>
-              <span className="label-mono font-bold text-emerald-500">240K+</span>
+              <span><VisualText>Vues vidéo</VisualText></span>
+              <span className="label-mono font-bold text-emerald-500"><VisualText>240K+</VisualText></span>
             </div>
             <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
               <div className="h-full w-[94%] rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" />
@@ -409,13 +520,13 @@ function SocialVisual() {
           {/* LinkedIn / Facebook Card */}
           <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
             <div className="flex items-center justify-between">
-              <span className="label-mono text-[7px] font-bold text-blue-500">LINKEDIN / FB</span>
+              <span className="label-mono text-[7px] font-bold text-blue-500"><VisualText>LINKEDIN / FB</VisualText></span>
               <span className="h-2 w-2 rounded-full bg-emerald-500" />
             </div>
-            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]">B2B & Local</p>
+            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]"><VisualText>B2B & Local</VisualText></p>
             <div className="mt-2.5 flex items-baseline justify-between text-[8px] xr-muted">
-              <span>Portée qualifiée</span>
-              <span className="label-mono font-bold text-emerald-500">×3.2</span>
+              <span><VisualText>Portée qualifiée</VisualText></span>
+              <span className="label-mono font-bold text-emerald-500"><VisualText>×3.2</VisualText></span>
             </div>
             <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
               <div className="h-full w-[70%] rounded-full bg-blue-500" />
@@ -428,19 +539,19 @@ function SocialVisual() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <div className="flex items-center gap-2 text-[10px]">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="font-bold text-[var(--xr-ink)]">Accompagnement avec engagement garanti</span>
-              <span className="xr-muted">· Planning éditorial, tournages, montage et modération active</span>
+              <span className="font-bold text-[var(--xr-ink)]"><VisualText>Accompagnement avec engagement garanti</VisualText></span>
+              <span className="xr-muted"><VisualText>· Planning éditorial, tournages, montage et modération active</VisualText></span>
             </div>
-            <span className="rounded-full bg-emerald-500/20 px-3 py-1 label-mono text-[7px] font-bold text-emerald-400 shrink-0 self-start sm:self-center">
+            <span className="rounded-full bg-emerald-500/20 px-3 py-1 label-mono text-[7px] font-bold text-emerald-400 shrink-0 self-start sm:self-center"><VisualText>
               DÈS 299 € / MOIS
-            </span>
+            </VisualText></span>
           </div>
         </div>
       </div>
 
       <div className="flex items-center justify-between border-t xr-line pt-4">
-        <span className="label-mono text-[7px] xr-muted">INSTAGRAM · TIKTOK · LINKEDIN · FACEBOOK</span>
-        <span className="label-mono text-[7px] font-bold text-emerald-500">ENGAGEMENT MINIMUM SUR-MESURE</span>
+        <span className="label-mono text-[7px] xr-muted"><VisualText>INSTAGRAM · TIKTOK · LINKEDIN · FACEBOOK</VisualText></span>
+        <span className="label-mono text-[7px] font-bold text-emerald-500"><VisualText>ENGAGEMENT MINIMUM SUR-MESURE</VisualText></span>
       </div>
     </div>
   );
@@ -458,33 +569,33 @@ function WebcareVisual() {
           <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-500/15 text-emerald-500">
             <ShieldCheck className="h-3.5 w-3.5" />
           </span>
-          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">SUPERVISION CLOUD DÉDIÉE · SÉCURITÉ & MAINTENANCE</span>
+          <span className="label-mono text-[7px] tracking-[.18em] xr-muted"><VisualText>SUPERVISION CLOUD DÉDIÉE · SÉCURITÉ & MAINTENANCE</VisualText></span>
         </div>
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
+          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500"><VisualText>
             99.99% UPTIME
-          </span>
-          <Label>06 / WEBCARE</Label>
+          </VisualText></span>
+          <Label><VisualText>06 / WEBCARE</VisualText></Label>
         </div>
       </div>
 
       <div className="py-6 space-y-4">
         <div className="grid grid-cols-3 gap-3">
           <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
-            <span className="label-mono text-[6.5px] xr-muted-2">TEMPS DE RÉPONSE</span>
-            <p className="mt-1 text-xl font-bold text-emerald-500">&lt; 150 ms</p>
-            <span className="label-mono text-[6px] text-emerald-400 font-medium">Performance A+</span>
+            <span className="label-mono text-[6.5px] xr-muted-2"><VisualText>TEMPS DE RÉPONSE</VisualText></span>
+            <p className="mt-1 text-xl font-bold text-emerald-500"><VisualText>&lt; 150 ms</VisualText></p>
+            <span className="label-mono text-[6px] text-emerald-400 font-medium"><VisualText>Performance A+</VisualText></span>
           </div>
           <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
-            <span className="label-mono text-[6.5px] xr-muted-2">DISPONIBILITÉ</span>
-            <p className="mt-1 text-xl font-bold text-[var(--xr-ink)]">99.99%</p>
-            <span className="label-mono text-[6px] text-emerald-400 font-medium">SLA Contractuel</span>
+            <span className="label-mono text-[6.5px] xr-muted-2"><VisualText>DISPONIBILITÉ</VisualText></span>
+            <p className="mt-1 text-xl font-bold text-[var(--xr-ink)]"><VisualText>99.99%</VisualText></p>
+            <span className="label-mono text-[6px] text-emerald-400 font-medium"><VisualText>SLA Contractuel</VisualText></span>
           </div>
           <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
-            <span className="label-mono text-[6.5px] xr-muted-2">SÉCURITÉ SSL</span>
-            <p className="mt-1 text-xl font-bold text-emerald-500">TLS 1.3</p>
-            <span className="label-mono text-[6px] text-emerald-400 font-medium">Protection WAF</span>
+            <span className="label-mono text-[6.5px] xr-muted-2"><VisualText>SÉCURITÉ SSL</VisualText></span>
+            <p className="mt-1 text-xl font-bold text-emerald-500"><VisualText>TLS 1.3</VisualText></p>
+            <span className="label-mono text-[6px] text-emerald-400 font-medium"><VisualText>Protection WAF</VisualText></span>
           </div>
         </div>
 
@@ -492,21 +603,21 @@ function WebcareVisual() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              <span className="text-xs font-bold text-[var(--xr-ink)]">Intervention Proactive & Mises à Jour Mensuelles</span>
+              <span className="text-xs font-bold text-[var(--xr-ink)]"><VisualText>Intervention Proactive & Mises à Jour Mensuelles</VisualText></span>
             </div>
-            <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-400">
+            <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-400"><VisualText>
               SUPPORT 24/7
-            </span>
+            </VisualText></span>
           </div>
-          <p className="mt-1.5 text-[8.5px] leading-relaxed xr-muted">
+          <p className="mt-1.5 text-[8.5px] leading-relaxed xr-muted"><VisualText>
             Sauvegardes quotidiennes redondantes, restauration immédiate, modifications régulières de contenus et surveillance continue contre les cybermenaces.
-          </p>
+          </VisualText></p>
         </div>
       </div>
 
       <div className="flex items-center justify-between border-t xr-line pt-4">
-        <span className="label-mono text-[7px] xr-muted">SAUVEGARDES · MISES À JOUR DU CŒUR · MODIFICATIONS INCLUSES</span>
-        <span className="label-mono text-[7px] font-bold text-emerald-500">SÉRÉNITÉ TOTALE DÈS 29 €/MOIS</span>
+        <span className="label-mono text-[7px] xr-muted"><VisualText>SAUVEGARDES · MISES À JOUR DU CŒUR · MODIFICATIONS INCLUSES</VisualText></span>
+        <span className="label-mono text-[7px] font-bold text-emerald-500"><VisualText>SÉRÉNITÉ TOTALE DÈS 29 €/MOIS</VisualText></span>
       </div>
     </div>
   );
@@ -521,11 +632,11 @@ function RoboticsVisual() {
             <span className="flex h-5 w-5 items-center justify-center rounded-md bg-neutral-500/10 text-neutral-400">
               <Bot className="h-3 w-3" />
             </span>
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">ROBOTS DE SERVICE · ÉLÉGANCE OPÉRATIONNELLE</span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted"><VisualText>ROBOTS DE SERVICE · ÉLÉGANCE OPÉRATIONNELLE</VisualText></span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="label-mono text-[7px] text-emerald-500 font-bold">DISPONIBLE DÉMO</span>
-            <Label>07 / ROBOTIQUE</Label>
+            <span className="label-mono text-[7px] text-emerald-500 font-bold"><VisualText>DISPONIBLE DÉMO</VisualText></span>
+            <Label><VisualText>07 / ROBOTIQUE</VisualText></Label>
           </div>
         </div>
 
@@ -539,44 +650,44 @@ function RoboticsVisual() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
               <div>
-                <span className="label-mono text-[7px] text-white/90">NAVIGATION LIDAR 3D DYNAMIQUE</span>
-                <p className="text-[10px] font-semibold text-white">Évitement d'obstacles en temps réel</p>
+                <span className="label-mono text-[7px] text-white/90"><VisualText>NAVIGATION LIDAR 3D DYNAMIQUE</VisualText></span>
+                <p className="text-[10px] font-semibold text-white"><VisualText>Évitement d'obstacles en temps réel</VisualText></p>
               </div>
-              <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[7px] font-bold text-emerald-300 backdrop-blur-md">Prêt à l'emploi</span>
+              <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[7px] font-bold text-emerald-300 backdrop-blur-md"><VisualText>Prêt à l'emploi</VisualText></span>
             </div>
           </div>
 
           <div className="space-y-2.5">
             <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5 backdrop-blur-md">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-[var(--xr-ink)]">Capacités de Terrain</span>
-                <span className="label-mono text-[6px] text-emerald-500 font-bold">12H AUTONOMIE</span>
+                <span className="text-[10px] font-bold text-[var(--xr-ink)]"><VisualText>Capacités de Terrain</VisualText></span>
+                <span className="label-mono text-[6px] text-emerald-500 font-bold"><VisualText>12H AUTONOMIE</VisualText></span>
               </div>
-              <p className="mt-1 text-[8.5px] leading-relaxed xr-muted">
+              <p className="mt-1 text-[8.5px] leading-relaxed xr-muted"><VisualText>
                 Service en salle, port de plateaux lourds (jusqu'à 40 kg), accueil VIP et guidage interactif des clients.
-              </p>
+              </VisualText></p>
               <div className="mt-2.5 grid grid-cols-2 gap-1.5 text-center text-[7.5px]">
                 <div className="rounded-lg border xr-line bg-[var(--xr-bg)] p-1.5">
-                  <span className="block font-bold text-[var(--xr-ink)]">0 Bruit</span>
-                  <span className="xr-muted-2">Moteurs silencieux</span>
+                  <span className="block font-bold text-[var(--xr-ink)]"><VisualText>0 Bruit</VisualText></span>
+                  <span className="xr-muted-2"><VisualText>Moteurs silencieux</VisualText></span>
                 </div>
                 <div className="rounded-lg border xr-line bg-[var(--xr-bg)] p-1.5">
-                  <span className="block font-bold text-[var(--xr-ink)]">100% Sûr</span>
-                  <span className="xr-muted-2">Capteurs 360°</span>
+                  <span className="block font-bold text-[var(--xr-ink)]"><VisualText>100% Sûr</VisualText></span>
+                  <span className="xr-muted-2"><VisualText>Capteurs 360°</VisualText></span>
                 </div>
               </div>
             </div>
 
             <div className="flex items-center justify-between rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-[9px]">
-              <span className="xr-muted">Location événementielle ou vente</span>
-              <span className="label-mono text-[7px] font-bold text-emerald-400">Dès 499 €</span>
+              <span className="xr-muted"><VisualText>Location événementielle ou vente</VisualText></span>
+              <span className="label-mono text-[7px] font-bold text-emerald-400"><VisualText>Dès 499 €</VisualText></span>
             </div>
           </div>
         </div>
 
         <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">HÔTELLERIE · RESTAURATION · ÉVÉNEMENTS VIP · SALONS</span>
-          <span className="label-mono text-[7px] text-emerald-500 font-semibold">ESSAI GRATUIT SUR SITE POSSIBLE</span>
+          <span className="label-mono text-[7px] xr-muted"><VisualText>HÔTELLERIE · RESTAURATION · ÉVÉNEMENTS VIP · SALONS</VisualText></span>
+          <span className="label-mono text-[7px] text-emerald-500 font-semibold"><VisualText>ESSAI GRATUIT SUR SITE POSSIBLE</VisualText></span>
         </div>
       </div>
     </Stage>
@@ -592,11 +703,11 @@ function RefonteVisual() {
             <span className="flex h-5 w-5 items-center justify-center rounded-md bg-neutral-500/10 text-neutral-300">
               <Globe2 className="h-3 w-3" />
             </span>
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">AUDIT & TRANSFORMATION DIGITALE</span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted"><VisualText>AUDIT & TRANSFORMATION DIGITALE</VisualText></span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="label-mono text-[7px] text-emerald-500 font-bold">REBUILD A+</span>
-            <Label>08 / REFONTE</Label>
+            <span className="label-mono text-[7px] text-emerald-500 font-bold"><VisualText>REBUILD A+</VisualText></span>
+            <Label><VisualText>08 / REFONTE</VisualText></Label>
           </div>
         </div>
 
@@ -605,40 +716,40 @@ function RefonteVisual() {
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-3.5 backdrop-blur-md">
               <div className="flex items-center justify-between">
-                <span className="label-mono text-[6.5px] font-bold text-red-400">AVANT REFONTE</span>
-                <span className="text-[10px] text-red-400">✕</span>
+                <span className="label-mono text-[6.5px] font-bold text-red-400"><VisualText>AVANT REFONTE</VisualText></span>
+                <span className="text-[10px] text-red-400"><VisualText>✕</VisualText></span>
               </div>
-              <p className="mt-1.5 text-xs font-semibold text-[var(--xr-ink)]">Site Obsolète</p>
+              <p className="mt-1.5 text-xs font-semibold text-[var(--xr-ink)]"><VisualText>Site Obsolète</VisualText></p>
               <div className="mt-2 space-y-1 text-[8px] xr-muted">
-                <p>• Temps de chargement : 4.8s</p>
-                <p>• Mobile non optimisé</p>
-                <p>• Taux de conversion : 0.8%</p>
+                <p><VisualText>• Temps de chargement : 4.8s</VisualText></p>
+                <p><VisualText>• Mobile non optimisé</VisualText></p>
+                <p><VisualText>• Taux de conversion : 0.8%</VisualText></p>
               </div>
             </div>
 
             <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 backdrop-blur-md ring-1 ring-emerald-500/20">
               <div className="flex items-center justify-between">
-                <span className="label-mono text-[6.5px] font-bold text-emerald-400">APRÈS XR REFONTE</span>
-                <span className="text-[10px] text-emerald-400 font-bold">✓</span>
+                <span className="label-mono text-[6.5px] font-bold text-emerald-400"><VisualText>APRÈS XR REFONTE</VisualText></span>
+                <span className="text-[10px] text-emerald-400 font-bold"><VisualText>✓</VisualText></span>
               </div>
-              <p className="mt-1.5 text-xs font-bold text-[var(--xr-ink)]">Architecture Next-Gen</p>
+              <p className="mt-1.5 text-xs font-bold text-[var(--xr-ink)]"><VisualText>Architecture Next-Gen</VisualText></p>
               <div className="mt-2 space-y-1 text-[8px] font-medium text-emerald-300">
-                <p>• Temps de chargement : 0.3s</p>
-                <p>• 100% Mobile-First & Fluide</p>
-                <p>• Taux de conversion : 4.6% (×5.7)</p>
+                <p><VisualText>• Temps de chargement : 0.3s</VisualText></p>
+                <p><VisualText>• 100% Mobile-First & Fluide</VisualText></p>
+                <p><VisualText>• Taux de conversion : 4.6% (×5.7)</VisualText></p>
               </div>
             </div>
           </div>
 
           <div className="rounded-xl border xr-line bg-[var(--xr-surface)] px-3 py-2 text-[9px] flex items-center justify-between">
-            <span className="xr-muted">Migration sans perte de trafic ni de SEO existant</span>
-            <span className="label-mono text-[7px] text-emerald-400 font-bold">ZÉRO REGRESSION</span>
+            <span className="xr-muted"><VisualText>Migration sans perte de trafic ni de SEO existant</VisualText></span>
+            <span className="label-mono text-[7px] text-emerald-400 font-bold"><VisualText>ZÉRO REGRESSION</VisualText></span>
           </div>
         </div>
 
         <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">AUDIT UX · REFONTE CODE · CONVERSIONS BOOSTÉES</span>
-          <span className="label-mono text-[7px] text-emerald-500 font-semibold">ON RECONSTRUIT POUR GAGNER</span>
+          <span className="label-mono text-[7px] xr-muted"><VisualText>AUDIT UX · REFONTE CODE · CONVERSIONS BOOSTÉES</VisualText></span>
+          <span className="label-mono text-[7px] text-emerald-500 font-semibold"><VisualText>ON RECONSTRUIT POUR GAGNER</VisualText></span>
         </div>
       </div>
     </Stage>
@@ -654,11 +765,11 @@ function AdsVisual() {
             <span className="flex h-5 w-5 items-center justify-center rounded-md bg-sky-500/10 text-sky-400">
               <Megaphone className="h-3 w-3" />
             </span>
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">GOOGLE ADS & META ADS CAMPAIGNS</span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted"><VisualText>GOOGLE ADS & META ADS CAMPAIGNS</VisualText></span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="label-mono text-[7px] text-emerald-500 font-bold">ROAS 4.8×</span>
-            <Label>09 / ADS</Label>
+            <span className="label-mono text-[7px] text-emerald-500 font-bold"><VisualText>ROAS 4.8×</VisualText></span>
+            <Label><VisualText>09 / ADS</VisualText></Label>
           </div>
         </div>
 
@@ -666,36 +777,36 @@ function AdsVisual() {
         <div className="my-auto py-3 space-y-3">
           <div className="grid grid-cols-3 gap-2.5">
             <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <span className="label-mono text-[6.5px] xr-muted-2">CTR MOYEN</span>
-              <p className="mt-1 text-base font-bold text-sky-400">8.4%</p>
-              <span className="label-mono text-[6px] text-emerald-400 font-medium">+140% vs marché</span>
+              <span className="label-mono text-[6.5px] xr-muted-2"><VisualText>CTR MOYEN</VisualText></span>
+              <p className="mt-1 text-base font-bold text-sky-400"><VisualText>8.4%</VisualText></p>
+              <span className="label-mono text-[6px] text-emerald-400 font-medium"><VisualText>+140% vs marché</VisualText></span>
             </div>
             <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <span className="label-mono text-[6.5px] xr-muted-2">COÛT PAR LEAD</span>
-              <p className="mt-1 text-base font-bold text-[var(--xr-ink)]">12.50 €</p>
-              <span className="label-mono text-[6px] text-emerald-400 font-medium">-42% CPA</span>
+              <span className="label-mono text-[6.5px] xr-muted-2"><VisualText>COÛT PAR LEAD</VisualText></span>
+              <p className="mt-1 text-base font-bold text-[var(--xr-ink)]"><VisualText>12.50 €</VisualText></p>
+              <span className="label-mono text-[6px] text-emerald-400 font-medium"><VisualText>-42% CPA</VisualText></span>
             </div>
             <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <span className="label-mono text-[6.5px] xr-muted-2">RETOUR / INVEST.</span>
-              <p className="mt-1 text-base font-bold text-emerald-500">4.8× ROAS</p>
-              <span className="label-mono text-[6px] text-emerald-400 font-medium">Rentabilité nette</span>
+              <span className="label-mono text-[6.5px] xr-muted-2"><VisualText>RETOUR / INVEST.</VisualText></span>
+              <p className="mt-1 text-base font-bold text-emerald-500"><VisualText>4.8× ROAS</VisualText></p>
+              <span className="label-mono text-[6px] text-emerald-400 font-medium"><VisualText>Rentabilité nette</VisualText></span>
             </div>
           </div>
 
           <div className="rounded-2xl border border-sky-500/20 bg-[var(--xr-surface-strong)] p-3.5 backdrop-blur-md">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-[var(--xr-ink)]">Campagnes Précises & Mots-Clés Intentionnistes</span>
-              <span className="label-mono text-[6.5px] font-bold text-sky-400">TRACKING SERVER-SIDE</span>
+              <span className="text-xs font-bold text-[var(--xr-ink)]"><VisualText>Campagnes Précises & Mots-Clés Intentionnistes</VisualText></span>
+              <span className="label-mono text-[6.5px] font-bold text-sky-400"><VisualText>TRACKING SERVER-SIDE</VisualText></span>
             </div>
-            <p className="mt-1 text-[8.5px] leading-relaxed xr-muted">
+            <p className="mt-1 text-[8.5px] leading-relaxed xr-muted"><VisualText>
               Ciblage ultra-qualifié à fort pouvoir d'achat, A/B testing continu des accroches et landing pages dédiées à forte conversion.
-            </p>
+            </VisualText></p>
           </div>
         </div>
 
         <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">SEARCH · SHOPPING · REMARKETING · SCALING</span>
-          <span className="label-mono text-[7px] text-emerald-500 font-semibold">ACQUISITION RENTABLE & MESURABLE</span>
+          <span className="label-mono text-[7px] xr-muted"><VisualText>SEARCH · SHOPPING · REMARKETING · SCALING</VisualText></span>
+          <span className="label-mono text-[7px] text-emerald-500 font-semibold"><VisualText>ACQUISITION RENTABLE & MESURABLE</VisualText></span>
         </div>
       </div>
     </Stage>
@@ -711,9 +822,9 @@ function StrategyVisual() {
             <span className="flex h-5 w-5 items-center justify-center rounded-md bg-indigo-500/10 text-indigo-400">
               <Gauge className="h-3 w-3" />
             </span>
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">STRATÉGIE DIGITALE & EXPANSION</span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted"><VisualText>STRATÉGIE DIGITALE & EXPANSION</VisualText></span>
           </div>
-          <Label>10 / STRATÉGIE</Label>
+          <Label><VisualText>10 / STRATÉGIE</VisualText></Label>
         </div>
 
         {/* Strategy Roadmap */}
@@ -734,8 +845,8 @@ function StrategyVisual() {
         </div>
 
         <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">PLAN D'ACTION CONCRET · KPIS CHIFFRÉS · ROADMAP 90J</span>
-          <span className="label-mono text-[7px] text-emerald-500 font-semibold">DIRECTION STRATÉGIQUE CLAIRE</span>
+          <span className="label-mono text-[7px] xr-muted"><VisualText>PLAN D'ACTION CONCRET · KPIS CHIFFRÉS · ROADMAP 90J</VisualText></span>
+          <span className="label-mono text-[7px] text-emerald-500 font-semibold"><VisualText>DIRECTION STRATÉGIQUE CLAIRE</VisualText></span>
         </div>
       </div>
     </Stage>
@@ -751,11 +862,11 @@ function AiVisual() {
             <span className="flex h-5 w-5 items-center justify-center rounded-md bg-purple-500/10 text-purple-400">
               <Sparkles className="h-3 w-3" />
             </span>
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">INTELLIGENCE ARTIFICIELLE & AUTOMATISATION</span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted"><VisualText>INTELLIGENCE ARTIFICIELLE & AUTOMATISATION</VisualText></span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="label-mono text-[7px] text-emerald-500 font-bold">IA ACTIVE</span>
-            <Label>11 / IA</Label>
+            <span className="label-mono text-[7px] text-emerald-500 font-bold"><VisualText>IA ACTIVE</VisualText></span>
+            <Label><VisualText>11 / IA</VisualText></Label>
           </div>
         </div>
 
@@ -763,31 +874,31 @@ function AiVisual() {
         <div className="my-auto py-3 space-y-3">
           <div className="grid grid-cols-3 gap-2.5">
             <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <span className="label-mono text-[6.5px] text-purple-400 font-bold">AGENT 01</span>
-              <p className="mt-1 text-[11px] font-bold text-[var(--xr-ink)]">Capture & Triage</p>
-              <p className="mt-1 text-[7.5px] xr-muted">Qualification automatique des leads entrants 24/7</p>
+              <span className="label-mono text-[6.5px] text-purple-400 font-bold"><VisualText>AGENT 01</VisualText></span>
+              <p className="mt-1 text-[11px] font-bold text-[var(--xr-ink)]"><VisualText>Capture & Triage</VisualText></p>
+              <p className="mt-1 text-[7.5px] xr-muted"><VisualText>Qualification automatique des leads entrants 24/7</VisualText></p>
             </div>
             <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <span className="label-mono text-[6.5px] text-purple-400 font-bold">AGENT 02</span>
-              <p className="mt-1 text-[11px] font-bold text-[var(--xr-ink)]">RAG & Connaissance</p>
-              <p className="mt-1 text-[7.5px] xr-muted">Réponses ultra-précises basées sur vos documents</p>
+              <span className="label-mono text-[6.5px] text-purple-400 font-bold"><VisualText>AGENT 02</VisualText></span>
+              <p className="mt-1 text-[11px] font-bold text-[var(--xr-ink)]"><VisualText>RAG & Connaissance</VisualText></p>
+              <p className="mt-1 text-[7.5px] xr-muted"><VisualText>Réponses ultra-précises basées sur vos documents</VisualText></p>
             </div>
             <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <span className="label-mono text-[6.5px] text-purple-400 font-bold">AGENT 03</span>
-              <p className="mt-1 text-[11px] font-bold text-[var(--xr-ink)]">Workflows Métier</p>
-              <p className="mt-1 text-[7.5px] xr-muted">Génération automatique de devis et synchronisation</p>
+              <span className="label-mono text-[6.5px] text-purple-400 font-bold"><VisualText>AGENT 03</VisualText></span>
+              <p className="mt-1 text-[11px] font-bold text-[var(--xr-ink)]"><VisualText>Workflows Métier</VisualText></p>
+              <p className="mt-1 text-[7.5px] xr-muted"><VisualText>Génération automatique de devis et synchronisation</VisualText></p>
             </div>
           </div>
 
           <div className="flex items-center justify-between rounded-xl border border-purple-500/20 bg-purple-500/5 p-3 text-[9px]">
-            <span className="font-semibold text-[var(--xr-ink)]">Gain de productivité constaté : <span className="text-emerald-400 font-bold">15 à 25h / semaine</span> par collaborateur</span>
-            <span className="label-mono text-[7px] text-purple-300 font-bold shrink-0">100% INTÉGRÉ</span>
+            <span className="font-semibold text-[var(--xr-ink)]">Gain de productivité constaté : <span className="text-emerald-400 font-bold"><VisualText>15 à 25h / semaine</VisualText></span> par collaborateur</span>
+            <span className="label-mono text-[7px] text-purple-300 font-bold shrink-0"><VisualText>100% INTÉGRÉ</VisualText></span>
           </div>
         </div>
 
         <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">LLMS SUR-MESURE · EMBEDDINGS · AUTOMATION N8N/MAKE</span>
-          <span className="label-mono text-[7px] text-emerald-500 font-semibold">TRANSFORMATION IA IMMÉDIATE</span>
+          <span className="label-mono text-[7px] xr-muted"><VisualText>LLMS SUR-MESURE · EMBEDDINGS · AUTOMATION N8N/MAKE</VisualText></span>
+          <span className="label-mono text-[7px] text-emerald-500 font-semibold"><VisualText>TRANSFORMATION IA IMMÉDIATE</VisualText></span>
         </div>
       </div>
     </Stage>
