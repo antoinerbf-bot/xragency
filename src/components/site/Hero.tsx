@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { ArrowDown, ArrowRight, Search } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
@@ -8,12 +8,10 @@ export function Hero() {
   const { t } = useLang();
   const sectionRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
-  const [motionAllowed, setMotionAllowed] = useState(false);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
-    setMotionAllowed(!reducedMotion && !saveData);
     const section = sectionRef.current;
     const image = imageRef.current;
     if (!section || !image || reducedMotion || saveData) return;
@@ -92,10 +90,8 @@ export function Hero() {
 
           <div className="absolute bottom-[16%] right-[8%] flex items-center gap-3 text-white/75">
             <span className="label-mono text-[7px] tracking-[.2em]">{t(UI.heroScrollNotice)}</span>
-            <span className="grid h-11 w-11 place-items-center rounded-full border border-white/45 transition-transform duration-500"><ArrowDown className={motionAllowed ? "h-4 w-4 animate-bounce" : "h-4 w-4"} /></span>
+            <span className="grid h-11 w-11 place-items-center rounded-full border border-white/45 transition-transform duration-500"><ArrowDown className="h-4 w-4" /></span>
           </div>
-          <div className="absolute bottom-[18%] left-[7%] h-32 w-px bg-gradient-to-b from-transparent via-white/50 to-transparent" />
-          <div className="absolute right-[6%] top-[13%] h-2 w-2 rounded-full bg-white/70 shadow-[0_0_22px_6px_rgba(255,255,255,.18)]" />
         </div>
       </div>
 
