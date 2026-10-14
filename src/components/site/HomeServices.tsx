@@ -186,7 +186,7 @@ export function HomeServices() {
               <div>
                 <div className="flex items-center justify-between gap-4">
                   <span className="label-mono text-[7px] tracking-[.22em] xr-muted-2">
-                    CHAPTER {String(index + 1).padStart(2, "0")} / 07
+                    {t({ fr: "CHAPITRE", en: "CHAPTER", vi: "CHƯƠNG", ar: "الفصل", ru: "ГЛАВА" })} {String(index + 1).padStart(2, "0")} / 07
                   </span>
                   <span className="grid h-10 w-10 place-items-center rounded-full text-[var(--xr-ink)]" style={{ background: ACCENTS[active] }}>
                     <Icon className="h-4 w-4" />
