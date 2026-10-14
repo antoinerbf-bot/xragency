@@ -51,7 +51,9 @@ function marketMultiplier(lang: CheckoutBody["lang"]) {
 
 function convertAmount(amountEur: number, currency: "eur" | "usd" | "vnd" | "aed" | "rub") {
   const converted = amountEur * CURRENCY_RATES[currency];
-  return currency === "vnd" ? Math.round(converted) : Math.round(converted * 100) / 100;
+  if (currency === "vnd") return Math.round(converted / 1000) * 1000;
+  if (currency === "rub") return Math.round(converted / 100) * 100;
+  return Math.round(converted);
 }
 
 function toMinorUnit(amount: number, currency: "eur" | "usd" | "vnd" | "aed" | "rub") {
