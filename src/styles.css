@@ -751,3 +751,19 @@ video {
 @media (prefers-reduced-motion: reduce) {
   .xr-hero-photo-motion { animation: none !important; }
 }
+
+
+/* Refined cinematic hero — keep the photograph crisp and let the composition move. */
+.xr-hero-refined .xr-hero-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+}
+.xr-hero-refined .xr-hero-orbit { animation: xr-orbit-drift 26s ease-in-out infinite alternate; transform-origin: center; }
+.xr-hero-refined .xr-hero-orbit-delayed { animation-delay: -11s; animation-duration: 32s; }
+.xr-hero-refined .xr-hero-glass { animation: xr-glass-float 10s ease-in-out infinite alternate; }
+.xr-hero-refined .xr-hero-glass-delayed { animation-delay: -4s; animation-duration: 13s; }
+@keyframes xr-orbit-drift { from { transform: translate3d(0,0,0) rotate(-7deg) scale(.98); } to { transform: translate3d(-10px,8px,0) rotate(5deg) scale(1.02); } }
+@keyframes xr-glass-float { from { transform: translate3d(0,0,0); } to { transform: translate3d(-8px,12px,0); } }
+@media (prefers-reduced-motion: reduce) {
+  .xr-hero-refined .xr-hero-orbit, .xr-hero-refined .xr-hero-glass { animation: none !important; }
+}
