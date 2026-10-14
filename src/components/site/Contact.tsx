@@ -270,7 +270,6 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
             <div>
               <Logo />
               <p className="mt-4 max-w-sm text-sm leading-6 text-muted-foreground">Studio digital premium pour les marques, entreprises et projets qui veulent transformer leur présence digitale en actif commercial.</p>
-              <div className="mt-5 flex flex-wrap gap-2">{["FR","EN","VI","AR","RU"].map((lang)=><span key={lang} className="rounded-full border border-border/60 px-2.5 py-1 font-mono text-[9px] tracking-wider text-muted-foreground">{lang}</span>)}</div>
             </div>
             <div>
               <p className="label-mono text-[9px] uppercase tracking-[.18em] text-muted-foreground/50">KARMA SASU</p>
