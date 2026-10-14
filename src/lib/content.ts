@@ -2,6 +2,79 @@ import type { L } from "./i18n";
 import { SERVICES_PART1 } from "./content-services-a";
 import { SERVICES_PART2 } from "./content-services-b";
 
+
+const SERVICE_TEXT_TRANSLATIONS: Record<string, { ar: string; ru: string }> = {
+  "Optimized architecture and performance tracking": { ar: "بنية محسّنة ومتابعة الأداء", ru: "Оптимизированная архитектура и отслеживание производительности" },
+  "Performance and media optimization": { ar: "تحسين الأداء والوسائط", ru: "Оптимизация производительности и медиа" },
+  "Multi-sector experience": { ar: "خبرة في قطاعات متعددة", ru: "Опыт работы в разных отраслях" },
+  "Pro Showcase Site": { ar: "موقع تعريفي احترافي", ru: "Премиальный сайт-визитка" },
+  "Bespoke responsive mobile-first design": { ar: "تصميم مخصص ومتجاوب مع أولوية للهواتف", ru: "Индивидуальный адаптивный дизайн с приоритетом мобильных устройств" },
+  "Up to 3 complete structured pages": { ar: "حتى 3 صفحات متكاملة ومنظمة", ru: "До 3 полноценных структурированных страниц" },
+  "Contact form & direct WhatsApp button": { ar: "نموذج اتصال وزر WhatsApp مباشر", ru: "Форма обратной связи и прямая кнопка WhatsApp" },
+  "On-page SEO & semantic tags": { ar: "تحسين SEO داخل الصفحة والوسوم الدلالية", ru: "Внутренняя SEO-оптимизация и семантическая разметка" },
+  "1 year high-speed hosting + SSL included": { ar: "استضافة عالية السرعة لمدة عام وشهادة SSL مشمولة", ru: "Высокоскоростной хостинг на год и SSL включены" },
+  "Business Site": { ar: "موقع أعمال", ru: "Бизнес-сайт" },
+  "Everything in Pro Showcase included": { ar: "يشمل جميع مزايا الموقع التعريفي الاحترافي", ru: "Включает всё из пакета Pro Showcase" },
+  "Up to 5 bespoke premium pages": { ar: "حتى 5 صفحات متميزة مصممة حسب الطلب", ru: "До 5 премиальных страниц по индивидуальному дизайну" },
+  "Integrated blog & news module with intuitive CMS": { ar: "مدونة مدمجة وقسم أخبار مع نظام إدارة محتوى سهل", ru: "Встроенный блог и новости с удобной CMS" },
+  "Advanced SEO architecture & internal linking": { ar: "بنية SEO متقدمة وروابط داخلية", ru: "Продвинутая SEO-архитектура и внутренняя перелинковка" },
+  "Lead capture & qualified quote form": { ar: "نموذج عرض سعر مؤهل وجمع بيانات العملاء المحتملين", ru: "Форма запроса сметы и сбор квалифицированных лидов" },
+  "Ultra-fast loading speed (<0.5s)": { ar: "سرعة تحميل فائقة (أقل من 0.5 ثانية)", ru: "Сверхбыстрая загрузка (менее 0,5 с)" },
+  "Google Analytics & Search Console setup": { ar: "إعداد Google Analytics وSearch Console", ru: "Настройка Google Analytics и Search Console" },
+  "Indicative starting price from €1,499 (custom quote required)": { ar: "سعر إرشادي يبدأ من 1,499 € (يتطلب عرض سعر مخصصًا)", ru: "Ориентировочная цена от 1 499 € (требуется индивидуальная смета)" },
+  "Mandatory scoping discussion with a specialist": { ar: "جلسة إلزامية مع مختص لتحديد نطاق المشروع", ru: "Обязательное обсуждение объёма проекта со специалистом" },
+  "Everything in Business Site included": { ar: "يشمل جميع مزايا موقع الأعمال", ru: "Включает всё из пакета Business Site" },
+  "Unlimited product catalog & inventory management": { ar: "كتالوج منتجات غير محدود وإدارة المخزون", ru: "Неограниченный каталог товаров и управление запасами" },
+  "Secure checkout via Card, Apple Pay & Google Pay (Stripe)": { ar: "دفع آمن بالبطاقة وApple Pay وGoogle Pay عبر Stripe", ru: "Безопасная оплата картой, Apple Pay и Google Pay через Stripe" },
+  "Online booking module with dynamic calendar": { ar: "نظام حجز عبر الإنترنت مع تقويم تفاعلي", ru: "Модуль онлайн-бронирования с динамическим календарём" },
+  "Ultra-smooth mobile checkout journey optimized for conversion": { ar: "مسار شراء سلس على الهاتف ومحسّن للتحويل", ru: "Удобный мобильный путь оформления заказа, оптимизированный для конверсии" },
+  "Secure customer account & automated order tracking": { ar: "حساب عميل آمن وتتبع تلقائي للطلبات", ru: "Защищённый аккаунт клиента и автоматическое отслеживание заказов" },
+  "Main bespoke logo": { ar: "الشعار الرئيسي المصمم حسب الطلب", ru: "Основной логотип по индивидуальному дизайну" },
+  "Essential variations (dark, light, monochrome)": { ar: "نسخ أساسية داكنة وفاتحة وأحادية اللون", ru: "Основные варианты: тёмный, светлый и монохромный" },
+  "High-resolution vector files (AI, SVG, PNG, PDF)": { ar: "ملفات متجهة عالية الدقة بصيغ AI وSVG وPNG وPDF", ru: "Векторные файлы высокого разрешения в форматах AI, SVG, PNG и PDF" },
+  "Optimized favicon & app icon": { ar: "أيقونة موقع وأيقونة تطبيق محسّنتان", ru: "Оптимизированные фавикон и иконка приложения" },
+  "Full commercial usage rights": { ar: "نقل كامل لحقوق الاستخدام التجاري", ru: "Полные права на коммерческое использование" },
+  "Brand Identity Kit": { ar: "حزمة الهوية التجارية", ru: "Комплект фирменной айдентики" },
+  "Everything in Signature Logo included": { ar: "يشمل جميع مزايا شعار Signature", ru: "Включает всё из пакета Signature Logo" },
+  "Luxury color palette (HEX, RGB, CMYK codes)": { ar: "لوحة ألوان فاخرة مع رموز HEX وRGB وCMYK", ru: "Премиальная палитра с кодами HEX, RGB и CMYK" },
+  "Premium typography pairing & visual hierarchy": { ar: "اختيار خطوط متميز وتسلسل بصري واضح", ru: "Премиальный подбор шрифтов и визуальная иерархия" },
+  "Brand patterns, graphic elements & textures": { ar: "أنماط العلامة وعناصر رسومية وخامات", ru: "Фирменные паттерны, графические элементы и текстуры" },
+  "Ready-to-use social media templates (Instagram/LinkedIn)": { ar: "قوالب جاهزة لوسائل التواصل (Instagram وLinkedIn)", ru: "Готовые шаблоны для соцсетей (Instagram/LinkedIn)" },
+  "Full Brand Suite": { ar: "حزمة هوية متكاملة", ru: "Полный комплект брендинга" },
+  "Everything in Brand Identity Kit included": { ar: "يشمل جميع مزايا حزمة الهوية التجارية", ru: "Включает всё из Brand Identity Kit" },
+  "Complete Brand Book & visual identity guidelines (20+ pages PDF)": { ar: "دليل علامة تجارية كامل وإرشادات الهوية (PDF بأكثر من 20 صفحة)", ru: "Полный брендбук и руководство по айдентике (PDF более 20 страниц)" },
+  "Luxury stationery kit (business cards, letterheads, invoice templates)": { ar: "حزمة مطبوعات فاخرة تشمل بطاقات العمل والترويسات وقوالب الفواتير", ru: "Премиальный комплект деловой полиграфии: визитки, бланки и шаблоны счетов" },
+  "Corporate & animated email signatures pack": { ar: "حزمة توقيعات بريد إلكتروني احترافية ومتحركة", ru: "Комплект корпоративных и анимированных email-подписей" },
+  "Dedicated art director support & priority revisions": { ar: "دعم مباشر من مدير فني ومراجعات ذات أولوية", ru: "Персональная поддержка арт-директора и приоритетные правки" },
+  "SEO Starter": { ar: "باقة SEO الأساسية", ru: "Базовый SEO-пакет" },
+  "Audit & keywords": { ar: "تدقيق وبحث الكلمات المفتاحية", ru: "Аудит и подбор ключевых слов" },
+  "On-page optimisation": { ar: "تحسين صفحات الموقع", ru: "Внутренняя оптимизация страниц" },
+  "SEO Growth": { ar: "باقة نمو SEO", ru: "SEO Growth" },
+  "Everything in Starter": { ar: "يشمل جميع مزايا الباقة الأساسية", ru: "Включает всё из пакета Starter" },
+  "Monthly content": { ar: "محتوى شهري", ru: "Ежемесячный контент" },
+  "Reporting": { ar: "التقارير", ru: "Отчётность" },
+};
+
+function completeServiceTranslations(value: unknown): void {
+  if (Array.isArray(value)) {
+    value.forEach(completeServiceTranslations);
+    return;
+  }
+  if (!value || typeof value !== "object") return;
+  const entry = value as Record<string, unknown>;
+  if (typeof entry.en === "string" && typeof entry.fr === "string") {
+    const translated = SERVICE_TEXT_TRANSLATIONS[entry.en];
+    if (translated) {
+      if (typeof entry.ar !== "string") entry.ar = translated.ar;
+      if (typeof entry.ru !== "string") entry.ru = translated.ru;
+    }
+  }
+  Object.values(entry).forEach(completeServiceTranslations);
+}
+
+completeServiceTranslations(SERVICES_PART1);
+completeServiceTranslations(SERVICES_PART2);
+
 export const CONTACT = {
   email: "contact.xragency@gmail.com",
   whatsapp: "https://wa.me/33767566783",
