@@ -143,6 +143,15 @@ const VISUAL_COPY: Record<string, Partial<Record<Lang, string>>> = {
   "15 à 25h / semaine": { en:"15–25h / week",vi:"15–25 giờ / tuần",ar:"15–25 ساعة أسبوعيًا",ru:"15–25 часов в неделю" },
   "100% INTÉGRÉ": { en:"100% INTEGRATED",vi:"TÍCH HỢP 100%",ar:"تكامل كامل",ru:"100% ИНТЕГРИРОВАНО" },
   "LLMS SUR-MESURE · EMBEDDINGS · AUTOMATION N8N/MAKE": { en:"CUSTOM LLMS · EMBEDDINGS · N8N/MAKE AUTOMATION",vi:"LLM TÙY CHỈNH · EMBEDDING · TỰ ĐỘNG HÓA N8N/MAKE",ar:"نماذج لغوية مخصصة · Embeddings · أتمتة N8N/MAKE",ru:"КАСТОМНЫЕ LLM · ЭМБЕДДИНГИ · АВТОМАТИЗАЦИЯ N8N/MAKE" },
+  "+184% TRAFIC": { en:"+184% TRAFFIC",vi:"+184% LƯU LƯỢNG",ar:"+184٪ حركة الزيارات",ru:"+184% ТРАФИКА" },
+  "SEO SCORE": { en:"SEO SCORE",vi:"ĐIỂM SEO",ar:"نتيجة SEO",ru:"SEO-ОЦЕНКА" },
+  "GOOGLE SERP PREVIEW": { en:"GOOGLE SERP PREVIEW",vi:"XEM TRƯỚC SERP GOOGLE",ar:"معاينة نتائج بحث Google",ru:"ПРЕДПРОСМОТР SERP GOOGLE" },
+  "POSITION #1": { en:"POSITION #1",vi:"VỊ TRÍ #1",ar:"المركز الأول",ru:"ПОЗИЦИЯ №1" },
+  "Performance A+": { en:"A+ performance",vi:"Hiệu năng A+",ar:"أداء A+",ru:"Производительность A+" },
+  "99.99% UPTIME": { en:"99.99% UPTIME",vi:"THỜI GIAN HOẠT ĐỘNG 99,99%",ar:"توافر بنسبة 99.99٪",ru:"ДОСТУПНОСТЬ 99,99%" },
+  "REBUILD A+": { en:"REBUILD A+",vi:"TÁI XÂY DỰNG A+",ar:"إعادة بناء A+",ru:"ПЕРЕСТРОЙКА A+" },
+  "IA ACTIVE": { en:"AI ACTIVE",vi:"AI ĐANG HOẠT ĐỘNG",ar:"الذكاء الاصطناعي نشط",ru:"ИИ АКТИВЕН" },
+  "XR Agency | Agence Web & Performance Digitale": { en:"XR Agency | Web Design & Digital Performance",vi:"XR Agency | Thiết kế web & hiệu suất số",ar:"XR Agency | تصميم المواقع والأداء الرقمي",ru:"XR Agency | Веб-дизайн и цифровая эффективность" },
 };
 function VisualText({ children }: { children: ReactNode }) {
   const { lang, t } = useLang();
