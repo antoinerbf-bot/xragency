@@ -20,23 +20,50 @@ export const LANGS: { code: string; label: string; flag: string }[] = [
 ];
 
 /**
- * All prices are stored once in EUR (source of truth).
- * EN = +20% vs EU price, then converted to USD (rate ~1.08).
- * VI = -20% vs EU price, then converted to VND (rate ~27 500).
+ * Prices use EUR as the source of truth.
+ * FR: unchanged EUR prices. VI: 20% local-market reduction, displayed in VND.
+ * EN/RU/AR: one shared +20% international price grid, displayed in USD/RUB/AED.
+ * Exchange rates are presentation estimates and should be reviewed periodically.
  */
 export const EUR_TO_USD = 1.08;
 export const EUR_TO_VND = 27500;
+export const EUR_TO_RUB = 94.16;
+export const EUR_TO_AED = 4.1165;
+const INTERNATIONAL_MARKUP = 1.2;
 
 export function formatPrice(eur: number, lang: Lang): string {
   if (lang === "en") {
-    const usd = Math.round(eur * 1.2 * EUR_TO_USD);
-    return `$${usd.toLocaleString("en-US")}`;
+    const value = Math.round(eur * INTERNATIONAL_MARKUP * EUR_TO_USD);
+    return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value);
   }
   if (lang === "vi") {
-    const vnd = Math.round((eur * 0.8 * EUR_TO_VND) / 1000) * 1000;
-    return `${vnd.toLocaleString("vi-VN")} ₫`;
+    const value = Math.round((eur * 0.8 * EUR_TO_VND) / 1000) * 1000;
+    return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND", maximumFractionDigits: 0 }).format(value);
   }
-  return `${Math.round(eur).toLocaleString("fr-FR")} €`;
+  if (lang === "ru") {
+    const value = Math.round(eur * INTERNATIONAL_MARKUP * EUR_TO_RUB / 100) * 100;
+    return new Intl.NumberFormat("ru-RU", { style: "currency", currency: "RUB", maximumFractionDigits: 0 }).format(value);
+  }
+  if (lang === "ar") {
+    const value = Math.round(eur * INTERNATIONAL_MARKUP * EUR_TO_AED);
+    return new Intl.NumberFormat("ar-AE", { style: "currency", currency: "AED", maximumFractionDigits: 0 }).format(value);
+  }
+  return new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(eur);
+}
+
+/** Localize explicit euro amounts embedded in translated service copy as well as numeric price components. */
+export function localizePriceText(value: string, lang: Lang): string {
+  if (lang === "fr" || !value.includes("€")) return value;
+
+  const convert = (raw: string) => {
+    const normalized = raw.replace(/[\s\u00a0\u202f]/g, "").replace(",", ".");
+    const amount = Number(normalized);
+    return Number.isFinite(amount) ? formatPrice(amount, lang) : raw;
+  };
+
+  let result = value.replace(/€\s*([\d][\d\s\u00a0\u202f.,]*)/g, (_match, amount: string) => convert(amount));
+  result = result.replace(/([\d][\d\s\u00a0\u202f.,]*)\s*€/g, (_match, amount: string) => convert(amount));
+  return result;
 }
 
 type Ctx = {
@@ -78,7 +105,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       t: (v: L | undefined) => {
         if (!v) return "";
         const value = (v as Record<string, string>)[lang];
-        return value ?? v.en ?? v.fr ?? Object.values(v)[0] ?? "";
+        return localizePriceText(value ?? v.en ?? v.fr ?? Object.values(v)[0] ?? "", lang);
       },
       price: (eur: number) => formatPrice(eur, lang),
     }),
