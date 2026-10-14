@@ -320,20 +320,13 @@ export function Nav() {
               })}
             </div>
 
-            <div className="mt-3 grid grid-cols-2 gap-2 border-t xr-line pt-3 sm:grid-cols-4">
+            <div className="mt-3 grid grid-cols-2 gap-2 border-t xr-line pt-3 sm:grid-cols-3">
               <a
                 href="/realisations"
                 onClick={() => setOpen(false)}
                 className="rounded-xl border xr-line bg-[var(--xr-surface)] p-2.5 text-center text-[9px] font-semibold text-[var(--xr-ink)]"
               >
                 Réalisations
-              </a>
-              <a
-                href="/recrutement"
-                onClick={() => setOpen(false)}
-                className="rounded-xl border xr-line bg-[var(--xr-surface)] p-2.5 text-center text-[9px] font-semibold text-[var(--xr-ink)]"
-              >
-                Affiliation 10-20%
               </a>
               <a
                 href="/#audit"
