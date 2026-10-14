@@ -275,8 +275,7 @@ export function QuoteConfiguratorCompact() {
       setSelectedServices(activeRecommended);
     }
   }, [step, activeRecommended.join(",")]);
-  const total = selectedServices.reduce((sum, id) => { const baseProposal = proposals.find((x) => x.id === id);
-        const p = baseProposal ? localizeProposal(baseProposal, lang) : undefined; return sum + (p?.custom ? 0 : (p?.price ?? 0)); }, 0);
+  const total = selectedServices.reduce((sum, id) => { const p = proposals.find((x) => x.id === id); return sum + (p?.custom ? 0 : (p?.price ?? 0)); }, 0);
   const monthly = selectedServices.reduce((sum, id) => { const p = proposals.find((x) => x.id === id); return sum + (p?.custom ? 0 : (p?.period === "month" ? p.price : 0)); }, 0);
   const once = total - monthly;
 
@@ -370,7 +369,7 @@ export function QuoteConfiguratorCompact() {
       y = infoRow(pdfText("Entreprise", "Company", "Doanh nghiệp", "الشركة", "Компания"), client.company, y);
       y = infoRow(pdfText("Contact", "Contact", "Người liên hệ", "جهة الاتصال", "Контакт"), client.name, y);
       y = infoRow(pdfText("E-mail", "Email", "Email", "البريد الإلكتروني", "Эл. почта"), client.email, y);
-      y = infoRow("WhatsApp", "WhatsApp", "WhatsApp", "واتساب", "WhatsApp"), client.whatsapp, y);
+      y = infoRow(pdfText("WhatsApp", "WhatsApp", "WhatsApp", "واتساب", "WhatsApp"), client.whatsapp, y);
       y = infoRow(pdfText("Site", "Website", "Website", "الموقع الإلكتروني", "Сайт"), client.website || "—", y);
       y += 4;
 
@@ -394,7 +393,8 @@ export function QuoteConfiguratorCompact() {
       y += 10;
 
       selectedServices.forEach((id) => {
-        const p = proposals.find((x) => x.id === id);
+        const baseProposal = proposals.find((x) => x.id === id);
+        const p = baseProposal ? localizeProposal(baseProposal, lang) : undefined;
         if (!p) return;
         const detail = p.id === "robotics"
           ? pdfText("Location robot de service dès 499 € / mois · achat selon modèle · événement dès 250 €.", "Service robot rental from 499 € / month · purchase depends on model · events from 250 €.", "Thuê robot dịch vụ từ 499 € / tháng · giá mua tùy mẫu · sự kiện từ 250 €.", "تأجير روبوت الخدمة ابتداءً من 499 € شهريًا · الشراء حسب الطراز · الفعاليات ابتداءً من 250 €.", "Аренда сервисного робота от 499 € в месяц · покупка зависит от модели · мероприятия от 250 €.")
