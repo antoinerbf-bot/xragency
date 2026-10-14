@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Activity, ArrowRight, Check, ExternalLink, FileText, Globe2, Mail, MessageCircle, Palette, Search, ShieldCheck, Smartphone, Zap } from "lucide-react";
 import { jsPDF } from "jspdf";
 import { CONTACT } from "@/lib/content";
-import { useLang } from "@/lib/i18n";
+import { useLang, type Lang } from "@/lib/i18n";
 import { Parallax, Reveal } from "./primitives";
 
 type AuditType="design"|"seo"|"security"|"conversion"|"technical";
@@ -23,12 +23,82 @@ const UI={
  ru:{eyebrow:"DIGITAL AUDIT · БЕСПЛАТНО",title:"Сначала понять, потом переделывать.",intro:"Введите URL. Мы анализируем доступные публичные сигналы и превращаем их в понятный план действий.",url:"URL сайта",sector:"Отрасль",budget:"Бюджет",run:"Запустить аудит",running:"Анализ…",score:"Ориентировочный балл",recommend:"План действий",email:"Получить отчёт",name:"Имя",mail:"Email",pdf:"Скачать PDF",wa:"WhatsApp",retry:"Новый аудит"},
 } as const;
 
+
+const AUDIT_TRANSLATIONS: Record<string, Partial<Record<Lang, string>>> = {
+  "Website / UX": { en:"Website / UX",vi:"Website / UX",ar:"الموقع وتجربة المستخدم",ru:"Сайт / UX" },
+  "SEO": { en:"SEO",vi:"SEO",ar:"تحسين محركات البحث",ru:"SEO" },
+  "WebCare": { en:"WebCare",vi:"WebCare",ar:"الصيانة التقنية",ru:"Техническая поддержка" },
+  "Website / Conversion": { en:"Website / Conversion",vi:"Website / Chuyển đổi",ar:"الموقع / التحويل",ru:"Сайт / конверсия" },
+  "Website + WebCare": { en:"Website + WebCare",vi:"Website + WebCare",ar:"الموقع + الصيانة",ru:"Сайт + поддержка" },
+  "Renforcer la hiérarchie visuelle, la cohérence et l'expérience mobile.": { en:"Strengthen visual hierarchy, consistency and mobile experience.",vi:"Cải thiện thứ bậc thị giác, tính nhất quán và trải nghiệm di động.",ar:"تعزيز التسلسل البصري والاتساق وتجربة الهاتف.",ru:"Улучшить визуальную иерархию, согласованность и мобильный опыт." },
+  "Améliorer la structure, les contenus et la visibilité sur les recherches stratégiques.": { en:"Improve structure, content and visibility for strategic searches.",vi:"Cải thiện cấu trúc, nội dung và khả năng hiển thị trên các truy vấn chiến lược.",ar:"تحسين البنية والمحتوى والظهور في عمليات البحث الاستراتيجية.",ru:"Улучшить структуру, контент и видимость по стратегическим запросам." },
+  "Renforcer le suivi technique et les bonnes pratiques de sécurité.": { en:"Strengthen technical monitoring and security best practices.",vi:"Tăng cường theo dõi kỹ thuật và thực hành bảo mật tốt.",ar:"تعزيز المتابعة التقنية وأفضل ممارسات الأمان.",ru:"Усилить технический мониторинг и лучшие практики безопасности." },
+  "Réduire les frictions et rendre les CTA et parcours commerciaux plus efficaces.": { en:"Reduce friction and improve CTAs and commercial journeys.",vi:"Giảm trở ngại và cải thiện CTA cùng hành trình thương mại.",ar:"تقليل نقاط الاحتكاك وتحسين الدعوات إلى الإجراء ومسارات البيع.",ru:"Снизить трение и улучшить CTA и коммерческие сценарии." },
+  "Améliorer performance, responsive, accessibilité et suivi technique.": { en:"Improve performance, responsiveness, accessibility and technical monitoring.",vi:"Cải thiện hiệu năng, responsive, khả năng tiếp cận và theo dõi kỹ thuật.",ar:"تحسين الأداء والاستجابة وإمكانية الوصول والمتابعة التقنية.",ru:"Улучшить производительность, адаптивность, доступность и технический мониторинг." },
+  "Structure SEO": { en:"SEO structure",vi:"Cấu trúc SEO",ar:"بنية SEO",ru:"SEO-структура" },
+  "H1 principal": { en:"Main H1",vi:"H1 chính",ar:"عنوان H1 الرئيسي",ru:"Главный H1" },
+  "Responsive": { en:"Responsive",vi:"Responsive",ar:"التوافق مع الأجهزة",ru:"Адаптивность" },
+  "Images accessibles": { en:"Accessible images",vi:"Hình ảnh dễ tiếp cận",ar:"صور مهيأة للوصول",ru:"Доступность изображений" },
+  "HTTPS": { en:"HTTPS",vi:"HTTPS",ar:"HTTPS",ru:"HTTPS" },
+  "Headers de sécurité": { en:"Security headers",vi:"Header bảo mật",ar:"ترويسات الأمان",ru:"Заголовки безопасности" },
+  "Point d'action": { en:"Call to action",vi:"Điểm hành động",ar:"دعوة إلى الإجراء",ru:"Призыв к действию" },
+  "Parcours mobile": { en:"Mobile journey",vi:"Hành trình trên di động",ar:"مسار الهاتف",ru:"Мобильный сценарий" },
+  "Performance de page": { en:"Page performance",vi:"Hiệu năng trang",ar:"أداء الصفحة",ru:"Производительность страницы" },
+  "Cache": { en:"Cache",vi:"Bộ nhớ đệm",ar:"التخزين المؤقت",ru:"Кэш" },
+  "Titre et meta description détectés.": { en:"Title and meta description detected.",vi:"Đã phát hiện title và meta description.",ar:"تم اكتشاف العنوان ووصف meta.",ru:"Заголовок и метаописание обнаружены." },
+  "Titre ou meta description à améliorer.": { en:"Title or meta description needs improvement.",vi:"Cần cải thiện title hoặc meta description.",ar:"يحتاج العنوان أو وصف meta إلى تحسين.",ru:"Заголовок или метаописание требуют улучшения." },
+  "Aucun H1 détecté.": { en:"No H1 detected.",vi:"Không phát hiện H1.",ar:"لم يتم اكتشاف H1.",ru:"H1 не обнаружен." },
+  "Viewport détecté.": { en:"Viewport detected.",vi:"Đã phát hiện viewport.",ar:"تم اكتشاف viewport.",ru:"Viewport обнаружен." },
+  "Viewport non détecté.": { en:"Viewport not detected.",vi:"Không phát hiện viewport.",ar:"لم يتم اكتشاف viewport.",ru:"Viewport не обнаружен." },
+  "Aucune image détectée.": { en:"No images detected.",vi:"Không phát hiện hình ảnh.",ar:"لم يتم اكتشاف صور.",ru:"Изображения не обнаружены." },
+  "Connexion HTTPS utilisée.": { en:"HTTPS connection in use.",vi:"Đang sử dụng kết nối HTTPS.",ar:"يتم استخدام اتصال HTTPS.",ru:"Используется соединение HTTPS." },
+  "Le site est appelé en HTTP.": { en:"The site is being accessed over HTTP.",vi:"Website đang được truy cập qua HTTP.",ar:"يتم الوصول إلى الموقع عبر HTTP.",ru:"Сайт открыт по протоколу HTTP." },
+  "Vérification des principaux headers disponibles.": { en:"Checking the main available headers.",vi:"Đang kiểm tra các header chính hiện có.",ar:"التحقق من ترويسات الأمان الرئيسية المتاحة.",ru:"Проверка основных доступных заголовков." },
+  "Liens ou boutons détectés.": { en:"Links or buttons detected.",vi:"Đã phát hiện liên kết hoặc nút.",ar:"تم اكتشاف روابط أو أزرار.",ru:"Обнаружены ссылки или кнопки." },
+  "Aucun CTA évident détecté.": { en:"No obvious CTA detected.",vi:"Không phát hiện CTA rõ ràng.",ar:"لم يتم اكتشاف دعوة واضحة إلى الإجراء.",ru:"Очевидный CTA не обнаружен." },
+  "Cache-Control non détecté.": { en:"Cache-Control not detected.",vi:"Không phát hiện Cache-Control.",ar:"لم يتم اكتشاف Cache-Control.",ru:"Cache-Control не обнаружен." },
+  "URL requise.": { en:"A URL is required.",vi:"Vui lòng nhập URL.",ar:"رابط URL مطلوب.",ru:"Необходимо указать URL." },
+  "URL invalide.": { en:"Invalid URL.",vi:"URL không hợp lệ.",ar:"رابط URL غير صالح.",ru:"Недопустимый URL." },
+  "URL non autorisée.": { en:"URL not allowed.",vi:"URL không được phép.",ar:"رابط URL غير مسموح.",ru:"URL не разрешён." },
+  "Redirection vers une URL non autorisée.": { en:"Redirect to a disallowed URL.",vi:"Chuyển hướng đến URL không được phép.",ar:"إعادة توجيه إلى رابط غير مسموح.",ru:"Перенаправление на запрещённый URL." },
+  "Redirection vers un protocole non autorisé.": { en:"Redirect to a disallowed protocol.",vi:"Chuyển hướng đến giao thức không được phép.",ar:"إعادة توجيه إلى بروتوكول غير مسموح.",ru:"Перенаправление на запрещённый протокол." },
+  "Trop de redirections.": { en:"Too many redirects.",vi:"Quá nhiều lần chuyển hướng.",ar:"عدد كبير جدًا من عمليات إعادة التوجيه.",ru:"Слишком много перенаправлений." },
+  "Impossible de récupérer la page.": { en:"Unable to retrieve the page.",vi:"Không thể tải trang.",ar:"تعذر جلب الصفحة.",ru:"Не удалось получить страницу." },
+  "Sélectionnez au moins un axe d'audit.": { en:"Select at least one audit area.",vi:"Chọn ít nhất một hạng mục audit.",ar:"اختر محور تدقيق واحدًا على الأقل.",ru:"Выберите хотя бы одно направление аудита." },
+};
+const AUDIT_SECTORS: Record<string, Partial<Record<Lang,string>>> = {
+  other:{en:"other",vi:"khác",ar:"آخر",ru:"другое"},restaurant:{en:"restaurant",vi:"nhà hàng",ar:"مطعم",ru:"ресторан"},hospitality:{en:"hospitality",vi:"lưu trú",ar:"الضيافة",ru:"гостеприимство"},realestate:{en:"real estate",vi:"bất động sản",ar:"العقارات",ru:"недвижимость"},commerce:{en:"retail",vi:"thương mại",ar:"التجارة",ru:"торговля"},service:{en:"services",vi:"dịch vụ",ar:"الخدمات",ru:"услуги"}
+};
+const AUDIT_BUDGETS: Record<string, Partial<Record<Lang,string>>> = {
+  under500:{en:"under 500",vi:"dưới 500",ar:"أقل من 500",ru:"менее 500"}, "500_1000":{en:"500–1,000",vi:"500–1.000",ar:"500–1,000",ru:"500–1 000"}, "1000_2500":{en:"1,000–2,500",vi:"1.000–2.500",ar:"1,000–2,500",ru:"1 000–2 500"}, "2500_5000":{en:"2,500–5,000",vi:"2.500–5.000",ar:"2,500–5,000",ru:"2 500–5 000"}, "5000_plus":{en:"5,000+",vi:"trên 5.000",ar:"أكثر من 5,000",ru:"более 5 000"}
+};
+function localizeAuditText(value: string, lang: Lang): string {
+  const direct = AUDIT_TRANSLATIONS[value]?.[lang];
+  if (direct) return direct;
+  const split = value.split(" · ");
+  if (split.length > 1) return split.map(part => localizeAuditText(part, lang)).join(" · ");
+  const imageAlt = /^(\d+)\/(\d+) images avec attribut alt\.$/.exec(value);
+  if (imageAlt) {
+    const [_, alt, total] = imageAlt;
+    return lang === "en" ? `${alt}/${total} images have alt attributes.` : lang === "vi" ? `${alt}/${total} hình ảnh có thuộc tính alt.` : lang === "ar" ? `${alt}/${total} صورة لها سمة alt.` : lang === "ru" ? `${alt}/${total} изображений имеют атрибут alt.` : value;
+  }
+  const htmlSize = /^(\d+) Ko de HTML reçu\.$/.exec(value);
+  if (htmlSize) {
+    const kb = htmlSize[1];
+    return lang === "en" ? `${kb} KB of HTML received.` : lang === "vi" ? `Đã nhận ${kb} KB HTML.` : lang === "ar" ? `تم استلام ${kb} كيلوبايت من HTML.` : lang === "ru" ? `Получено ${kb} КБ HTML.` : value;
+  }
+  const priority = /^Priorisation (.+)$/.exec(value);
+  if (priority) return lang === "fr" ? value : `${lang === "en" ? "Prioritisation" : lang === "vi" ? "Ưu tiên" : lang === "ar" ? "تحديد الأولويات" : "Приоритизация"} ${AUDIT_SECTORS[priority[1]]?.[lang] ?? priority[1]}`;
+  const calibrated = /^Recommandations calibrées pour le contexte déclaré et le budget (.+)\.$/.exec(value);
+  if (calibrated) return lang === "fr" ? value : lang === "en" ? `Recommendations tailored to the stated context and budget ${AUDIT_BUDGETS[calibrated[1]]?.[lang] ?? calibrated[1]}.` : lang === "vi" ? `Đề xuất được điều chỉnh theo bối cảnh đã khai báo và ngân sách ${AUDIT_BUDGETS[calibrated[1]]?.[lang] ?? calibrated[1]}.` : lang === "ar" ? `توصيات مخصصة للسياق المعلن والميزانية ${AUDIT_BUDGETS[calibrated[1]]?.[lang] ?? calibrated[1]}.` : `Рекомендации с учётом указанного контекста и бюджета ${AUDIT_BUDGETS[calibrated[1]]?.[lang] ?? calibrated[1]}.`;
+  return value;
+}
 export function DigitalAudit(){
  const {lang, price, t:translate}=useLang();const t=UI[lang]??UI.fr;
  const sectorLabels:Record<string,string>={other:translate({fr:"Secteur · autre",en:"Industry · other",vi:"Lĩnh vực · khác",ar:"القطاع · آخر",ru:"Отрасль · другое"}),restaurant:translate({fr:"Restaurant",en:"Restaurant",vi:"Nhà hàng",ar:"مطعم",ru:"Ресторан"}),hospitality:translate({fr:"Hôtellerie",en:"Hospitality",vi:"Lưu trú",ar:"الضيافة",ru:"Гостеприимство"}),realestate:translate({fr:"Immobilier",en:"Real estate",vi:"Bất động sản",ar:"العقارات",ru:"Недвижимость"}),commerce:translate({fr:"Commerce",en:"Retail",vi:"Thương mại",ar:"التجارة",ru:"Торговля"}),service:translate({fr:"Service",en:"Services",vi:"Dịch vụ",ar:"الخدمات",ru:"Услуги"})};
  const [url,setUrl]=useState("");const [sector,setSector]=useState("other");const [budget,setBudget]=useState("1000_2500");const [types,setTypes]=useState<AuditType[]>(["design","seo"]);const [email,setEmail]=useState("");const [name,setName]=useState("");const [loading,setLoading]=useState(false);const [error,setError]=useState("");const [result,setResult]=useState<{score:number;url:string;title:string;description:string;status:number;types:AuditType[];findings:Finding[];recommendations:Recommendation[]}|null>(null);
  const toggle=(id:AuditType)=>setTypes(v=>v.includes(id)?v.filter(x=>x!==id):[...v,id]);
- const run=async()=>{if(!url.trim()||!types.length)return;setLoading(true);setError("");setResult(null);try{const res=await fetch("/api/audit",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({url,types,sector,budget,lang})});const data=await res.json();if(!res.ok)throw new Error(data.error||"Audit unavailable");setResult(data);}catch(e){setError(e instanceof Error?e.message:"Audit unavailable")}finally{setLoading(false)}};
+ const run=async()=>{if(!url.trim()||!types.length)return;setLoading(true);setError("");setResult(null);try{const res=await fetch("/api/audit",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({url,types,sector,budget,lang})});const data=await res.json();if(!res.ok)throw new Error(localizeAuditText(data.error||"Audit unavailable",lang));data.findings=(data.findings??[]).map((finding:Finding)=>({...finding,label:localizeAuditText(finding.label,lang),detail:localizeAuditText(finding.detail,lang)}));data.recommendations=(data.recommendations??[]).map((recommendation:Recommendation)=>({...recommendation,service:localizeAuditText(recommendation.service,lang),reason:localizeAuditText(recommendation.reason,lang)}));setResult(data);}catch(e){setError(e instanceof Error?e.message:"Audit unavailable")}finally{setLoading(false)}};
  const makePdf=()=>{if(!result)return;const doc=new jsPDF({unit:"mm",format:"a4"});const W=210,M=14,R=196;const ink=[18,22,29] as const;const blue=[43,92,255] as const;const muted=[92,100,112] as const;const soft=[242,244,247] as const;const line=[220,224,230] as const;const date=new Date().toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric"});const number="XR-AUDIT-"+new Date().toISOString().slice(0,10).replace(/-/g,"")+"-"+Math.floor(1000+Math.random()*9000);doc.setFillColor(...ink);doc.rect(0,0,W,30,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(18);doc.text("XRAGENCY",M,13);doc.setFont("helvetica","normal");doc.setFontSize(7);doc.text("DIGITAL AUDIT · EXPERT REVIEW",M,20);doc.setFont("helvetica","bold");doc.setFontSize(12);doc.text("RAPPORT",R,12,{align:"right"});doc.setFontSize(6.5);doc.setFont("helvetica","normal");doc.text(number,R,18,{align:"right"});doc.text(date,R,23,{align:"right"});let y=40;const section=(s:string)=>{doc.setFillColor(...soft);doc.roundedRect(M,y-4,W-2*M,8,1.5,1.5,"F");doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(7);doc.text(s.toUpperCase(),M+3,y+1);y+=12};section("Site audité");doc.setFont("helvetica","bold");doc.setFontSize(8);doc.text(result.url,M,y);y+=6;doc.setFont("helvetica","normal");doc.setTextColor(...muted);doc.setFontSize(6.5);doc.text("HTTP "+result.status+" · "+result.types.join(" · "),M,y);y+=8;section("Score");doc.setTextColor(...blue);doc.setFont("helvetica","bold");doc.setFontSize(28);doc.text(result.score+"/100",M,y);y+=12;section("Éléments détectés");doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(7);doc.text("Titre",M,y);doc.setFont("helvetica","normal");doc.setTextColor(...muted);doc.text(doc.splitTextToSize(result.title||"Non détecté",140),M+25,y);y+=7;doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.text("Meta description",M,y);doc.setFont("helvetica","normal");doc.setTextColor(...muted);doc.text(doc.splitTextToSize(result.description||"Non détectée",140),M+25,y);y+=12;section("Constats");result.findings.forEach((f,i)=>{if(y>268){doc.addPage();y=22}doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(7);doc.text(String(i+1).padStart(2,"0")+" · "+f.label,M,y);doc.setFont("helvetica","normal");doc.setTextColor(...muted);doc.text(doc.splitTextToSize((f.status===false?"À améliorer · ":"Signal positif · ")+f.detail,160),M+12,y+4);y+=12});if(result.recommendations.length){y+=2;section("Recommandations");result.recommendations.forEach((x,i)=>{if(y>268){doc.addPage();y=22}doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.text(String(i+1).padStart(2,"0")+" · "+x.service,M,y);doc.setFont("helvetica","normal");doc.setTextColor(...muted);doc.text(doc.splitTextToSize(x.reason,160),M+12,y+4);y+=12})}doc.setDrawColor(...line);doc.line(M,282,R,282);doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(6.2);doc.text("KARMA SASU · XRAGENCY",M,288);doc.setFont("helvetica","normal");doc.setTextColor(...muted);doc.text("SIREN 889 178 141 · SIRET 889 178 141 00012 · 78 Avenue des Champs-Élysées · 75008 Paris",M,293);doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83 · xragencyai.com",M,298);doc.save("XRAGENCY-Digital-Audit-"+number+".pdf")};
  const wa=CONTACT.whatsapp+"?text="+encodeURIComponent(translate({fr:"Bonjour XRAGENCY, j'ai terminé mon audit digital. Site : ",en:"Hello XRAGENCY, I completed my digital audit. Website: ",vi:"Xin chào XRAGENCY, tôi đã hoàn tất audit. Website: ",ar:"مرحبًا XRAGENCY، أكملت التدقيق الرقمي. الموقع: ",ru:"Здравствуйте, XRAGENCY! Я завершил(а) цифровой аудит. Сайт: "})+url);
  return <section id="audit" className="xr-section relative overflow-hidden border-y xr-line py-20 sm:py-28 lg:py-36">
