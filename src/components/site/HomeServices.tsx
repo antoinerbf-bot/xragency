@@ -28,20 +28,20 @@ const PRICES: Record<string, number> = {
 };
 
 const ACCENTS: Record<(typeof IDS)[number], string> = {
-  websites: "#94a3b8",
-  branding: "#c7b5df",
-  seo: "#38bdf8",
-  maps: "#f87171",
-  social: "#34d399",
-  maintenance: "#818cf8",
-  robotics: "#cbd5e1",
+  websites: "#e5e5e5",
+  branding: "#e5e5e5",
+  seo: "#e5e5e5",
+  maps: "#e5e5e5",
+  social: "#e5e5e5",
+  maintenance: "#e5e5e5",
+  robotics: "#e5e5e5",
 };
 
 const COPY = {
   fr: {
     eyebrow: "07 SERVICES · 07 ENTRÉES",
-    title: "Choisissez le besoin. Nous montrons le dispositif.",
-    lead: "Chaque expertise dispose de sa propre image, de son prix de départ et d'un parcours clair.",
+    title: "Une expertise à la fois. Un seul cap : vous faire avancer.",
+    lead: "Du premier regard à la prise de contact, chaque levier travaille pour la même chose : faire grandir votre activité.",
     from: "À partir de",
     open: "Voir le service",
     quote: "Ajouter au projet",
@@ -49,8 +49,8 @@ const COPY = {
   },
   en: {
     eyebrow: "07 SERVICES · 07 ENTRY POINTS",
-    title: "Choose the need. See the system.",
-    lead: "Each expertise has its own visual, starting price and clear path.",
+    title: "One discipline at a time. One goal: move you forward.",
+    lead: "From first impression to conversion, every discipline works toward the same goal: growing your business.",
     from: "From",
     open: "View service",
     quote: "Add to project",
@@ -58,8 +58,8 @@ const COPY = {
   },
   vi: {
     eyebrow: "07 DỊCH VỤ · 07 ĐIỂM BẮT ĐẦU",
-    title: "Chọn nhu cầu. Xem toàn bộ giải pháp.",
-    lead: "Mỗi chuyên môn có hình ảnh, giá khởi điểm và lộ trình rõ ràng.",
+    title: "Từng chuyên môn một. Cùng hướng đến sự phát triển.",
+    lead: "Từ ấn tượng đầu tiên đến chuyển đổi, mọi giải pháp đều hướng đến sự phát triển của doanh nghiệp.",
     from: "Từ",
     open: "Xem dịch vụ",
     quote: "Thêm vào dự án",
@@ -67,8 +67,8 @@ const COPY = {
   },
   ar: {
     eyebrow: "07 خدمات · 07 نقاط انطلاق",
-    title: "اختر الحاجة. شاهد المنظومة.",
-    lead: "لكل خبرة صورتها وسعرها الابتدائي ومسار واضح.",
+    title: "تخصص واحد في كل مرة. هدف واحد: نمو أعمالك.",
+    lead: "من الانطباع الأول إلى التحويل، تعمل كل الخبرات لتحقيق هدف واحد: تنمية أعمالك.",
     from: "ابتداءً من",
     open: "شاهد الخدمة",
     quote: "أضف للمشروع",
@@ -76,8 +76,8 @@ const COPY = {
   },
   ru: {
     eyebrow: "07 УСЛУГ · 07 ТОЧЕК ВХОДА",
-    title: "Выберите задачу. Увидьте систему.",
-    lead: "У каждой экспертизы есть свой визуальный образ, стартовая цена и понятный путь.",
+    title: "Каждая экспертиза работает на одну цель — рост вашего бизнеса.",
+    lead: "От первого впечатления до заявки — каждый инструмент помогает развивать ваш бизнес.",
     from: "От",
     open: "Открыть услугу",
     quote: "Добавить в проект",
@@ -101,8 +101,8 @@ export function HomeServices() {
   const next = IDS[(index + 1) % IDS.length];
 
   return (
-    <section id="homepage-services" className="xr-section relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-16 sm:py-20 lg:py-28">
-      <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,var(--xr-accent-soft),transparent_28%)]" />
+    <section id="homepage-services" className="xr-section relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-14 sm:py-20 lg:py-28">
+      <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_at_15%_10%,rgba(128,128,128,.08),transparent_32%)]" />
 
       <div className="relative mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
         <Reveal>
@@ -136,7 +136,7 @@ export function HomeServices() {
                       : "xr-line bg-[var(--xr-surface)] text-[var(--xr-ink)] hover:-translate-y-0.5 hover:bg-[var(--xr-surface-strong)]")
                   }
                 >
-                  <span className={"grid h-8 w-8 shrink-0 place-items-center rounded-full border " + (selected ? "border-transparent" : "xr-line")} style={selected ? { background: ACCENTS[id] } : undefined}>
+                  <span className={"grid h-8 w-8 shrink-0 place-items-center rounded-full border " + (selected ? "border-transparent" : "xr-line")} style={selected ? { background: ACCENTS[id], color: "#111111" } : undefined}>
                     <I className="h-3.5 w-3.5" />
                   </span>
                   <span className="min-w-0">
@@ -155,14 +155,14 @@ export function HomeServices() {
         <div className="mt-5 grid gap-5 lg:grid-cols-[1.32fr_.68fr]">
           <Reveal>
             <Parallax speed={-0.022}>
-              <div className="overflow-hidden rounded-[2.35rem] border xr-line bg-[var(--xr-bg-elev)] shadow-[var(--xr-shadow)]">
+              <div className="overflow-hidden rounded-[1.15rem] border xr-line bg-[var(--xr-bg-elev)] shadow-[var(--xr-shadow)]">
                 <ServiceIllustration service={active} title={t(service.title)} />
               </div>
             </Parallax>
           </Reveal>
 
           <Reveal delay={90}>
-            <div className="flex h-full min-h-[430px] flex-col justify-between rounded-[2.35rem] border xr-line bg-[var(--xr-bg-elev)] text-[var(--xr-ink)] p-7 shadow-[var(--xr-shadow)] backdrop-blur-xl sm:p-9 lg:p-10">
+            <div className="flex h-full min-h-[430px] flex-col justify-between rounded-[1.15rem] border xr-line bg-[var(--xr-bg-elev)] text-[var(--xr-ink)] p-7 shadow-[var(--xr-shadow)] backdrop-blur-xl sm:p-9 lg:p-10">
               <div>
                 <div className="flex items-center justify-between gap-4">
                   <span className="label-mono text-[7px] tracking-[.22em] xr-muted-2">

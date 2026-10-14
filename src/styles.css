@@ -735,3 +735,19 @@ video {
     scroll-snap-align: start;
   }
 }
+
+
+/* Cinematic homepage: a single fixed photograph with restrained light movement. */
+@keyframes xr-hero-breathe {
+  from { filter: brightness(.88) saturate(.88); }
+  to { filter: brightness(1) saturate(1); }
+}
+
+.xr-hero-photo-motion {
+  animation: xr-hero-breathe 18s ease-in-out infinite alternate;
+  will-change: filter, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xr-hero-photo-motion { animation: none !important; }
+}
