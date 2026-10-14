@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { ArrowRight, ArrowUpRight, BarChart3, Bot, Globe2, MapPinned, Palette, ShieldCheck, Users } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -95,13 +95,33 @@ export function HomeServices() {
   const { t, price, lang } = useLang();
   const copy = COPY[lang as keyof typeof COPY] ?? COPY.fr;
   const [active, setActive] = useState<(typeof IDS)[number]>("websites");
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    let frame = 0;
+    const updateFromScroll = () => {
+      frame = 0;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const rect = section.getBoundingClientRect();
+      if (rect.bottom <= 0 || rect.top >= window.innerHeight) return;
+      const progress = Math.max(0, Math.min(0.999, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
+      const nextIndex = Math.min(IDS.length - 1, Math.floor(progress * IDS.length));
+      setActive((current) => current === IDS[nextIndex] ? current : IDS[nextIndex]);
+    };
+    const onScroll = () => { if (!frame) frame = window.requestAnimationFrame(updateFromScroll); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); if (frame) window.cancelAnimationFrame(frame); };
+  }, []);
   const index = IDS.indexOf(active);
   const service = SERVICES.find((s) => s.id === active) ?? SERVICES[0];
   const Icon = ICONS[active];
   const next = IDS[(index + 1) % IDS.length];
 
   return (
-    <section id="homepage-services" className="xr-section relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-14 sm:py-20 lg:py-28">
+    <section ref={sectionRef} id="homepage-services" className="xr-section relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-14 sm:py-20 lg:py-28">
       <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_at_15%_10%,rgba(128,128,128,.08),transparent_32%)]" />
 
       <div className="relative mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
@@ -192,10 +212,10 @@ export function HomeServices() {
                 <div className="flex items-end justify-between gap-5 border-y xr-line py-5">
                   <div>
                     <span className="label-mono text-[6px] xr-muted-2">{copy.from}</span>
-                    <p className="display-serif mt-1 text-4xl">{active === "maps" ? "990 €" : price(PRICES[active])}</p>
+                    <p className="display-serif mt-1 text-4xl">{price(PRICES[active])}</p>
                   </div>
                   <span className="label-mono pb-1 text-[6px] xr-muted-2">
-                    {service.fromPeriod === "month" ? "/ MOIS" : service.fromPeriod === "year" ? "/ AN" : ""}
+                    {service.fromPeriod === "month" ? t({ fr: "/ MOIS", en: "/ MONTH", vi: "/ THÁNG", ar: "/ شهر", ru: "/ МЕСЯЦ" }) : service.fromPeriod === "year" ? t({ fr: "/ AN", en: "/ YEAR", vi: "/ NĂM", ar: "/ سنة", ru: "/ ГОД" }) : ""}
                   </span>
                 </div>
 
