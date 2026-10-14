@@ -316,107 +316,123 @@ function SeoVisual() {
 
 function MapsVisual() {
   return (
-    <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[var(--xr-surface)] via-[var(--xr-bg)] to-[var(--xr-surface)] p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
-      {/* Halos locaux subtils */}
-      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" />
-      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
-
-      <div className="flex items-center justify-between border-b xr-line pb-4">
-        <div className="flex items-center gap-2">
-          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-red-500/15 text-red-500">
-            <MapPin className="h-3.5 w-3.5" />
-          </span>
+    <div className="relative isolate overflow-hidden rounded-[1.5rem] border xr-line bg-[var(--xr-bg-elev)] p-5 shadow-[var(--xr-shadow)] sm:p-7">
+      <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full border border-current/10" />
+      <div className="flex items-center justify-between gap-4 border-b xr-line pb-4">
+        <div className="flex items-center gap-3">
+          <span className="grid h-9 w-9 place-items-center rounded-xl border xr-line bg-[var(--xr-surface)]"><MapPin className="h-4 w-4" /></span>
           <span className="label-mono text-[7px] tracking-[.18em] xr-muted">GOOGLE SEARCH & MAPS · PACK LOCAL 3-PACK</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
-            POSITION #1 GARANTIE
-          </span>
+          <span className="rounded-full border xr-line bg-[var(--xr-surface)] px-2.5 py-1 label-mono text-[6.5px] font-semibold xr-muted">POSITION #1 GARANTIE</span>
           <Label>04 / GOOGLE MAPS</Label>
         </div>
       </div>
 
-      {/* Console interactive Google Maps Top 1 */}
-      <div className="py-6 space-y-3">
-        {/* Top 1 result - Client */}
-        <div className="relative overflow-hidden rounded-[1.6rem] border border-emerald-500/50 bg-[var(--xr-surface-strong)] p-4 shadow-xl backdrop-blur-xl ring-1 ring-emerald-500/30">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex items-start gap-3">
-              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-xl bg-emerald-500 text-xs font-black text-white shadow-md">
-                1
-              </span>
-              <div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <h4 className="text-sm font-bold text-[var(--xr-ink)]">Votre Établissement (Leader Local)</h4>
-                  <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[7px] font-bold text-emerald-500">
-                    TOP 1 VÉRIFIÉ
-                  </span>
-                </div>
-                <div className="mt-1 flex items-center gap-2 text-[9px]">
-                  <span className="font-bold text-amber-400">5.0 ★★★★★</span>
-                  <span className="xr-muted">(480+ avis Google vérifiés)</span>
-                  <span className="xr-muted-2">· Restaurant / Entreprise d'exception</span>
-                </div>
-                <p className="mt-1 text-[8.5px] xr-muted">
-                  📍 Paris & Île-de-France · Ouvert · <span className="text-emerald-500 font-semibold">+340% d'appels et d'itinéraires générés</span>
-                </p>
-              </div>
+      <div className="grid gap-4 py-5 lg:grid-cols-[.92fr_1.08fr]">
+        <div className="xr-maps-illustration relative min-h-[300px] overflow-hidden rounded-[1.15rem] border xr-line bg-[#efeee8]">
+          <svg aria-hidden="true" viewBox="0 0 620 720" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
+            <g fill="none" stroke="#d8d5cc" strokeWidth="42" strokeLinecap="round">
+              <path d="M-80 110 C130 70 185 210 345 165 S505 85 720 120"/>
+              <path d="M-50 370 C120 300 235 405 350 350 S520 280 700 365"/>
+              <path d="M90 -50 C170 130 120 300 190 780"/>
+              <path d="M420 -50 C350 130 470 320 410 780"/>
+              <path d="M-60 610 C160 540 280 660 700 565"/>
+            </g>
+            <g fill="none" stroke="#fff" strokeWidth="29" strokeLinecap="round">
+              <path d="M-80 110 C130 70 185 210 345 165 S505 85 720 120"/>
+              <path d="M-50 370 C120 300 235 405 350 350 S520 280 700 365"/>
+              <path d="M90 -50 C170 130 120 300 190 780"/>
+              <path d="M420 -50 C350 130 470 320 410 780"/>
+              <path d="M-60 610 C160 540 280 660 700 565"/>
+            </g>
+            <g fill="#dce1d8" stroke="#fff" strokeWidth="4">
+              <rect x="35" y="180" width="90" height="65" rx="10"/>
+              <rect x="245" y="28" width="115" height="75" rx="10"/>
+              <rect x="470" y="185" width="100" height="75" rx="10"/>
+              <rect x="235" y="430" width="125" height="70" rx="10"/>
+              <rect x="40" y="500" width="115" height="62" rx="10"/>
+              <rect x="465" y="465" width="95" height="72" rx="10"/>
+            </g>
+            <path d="M-20 485 C140 410 250 515 365 450 S540 400 650 430" fill="none" stroke="#b7c0b2" strokeWidth="5" strokeLinecap="round"/>
+          </svg>
+          <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full border border-white/80 bg-white/90 px-3 py-2 shadow-lg backdrop-blur-xl">
+            <Search className="h-3 w-3 text-[#30302d]" />
+            <span className="label-mono text-[6px] tracking-[.12em] text-[#30302d]">GOOGLE MAPS</span>
+          </div>
+          <div className="absolute left-[35%] top-[32%]">
+            <span className="absolute -inset-3 rounded-full bg-black/10 animate-ping" />
+            <span className="relative grid h-11 w-11 place-items-center rounded-full border-[4px] border-white bg-[#1d1d1b] text-white shadow-[0_12px_30px_-8px_rgba(0,0,0,.55)]"><MapPin className="h-4 w-4" /></span>
+          </div>
+          <div className="absolute left-[65%] top-[56%] grid h-8 w-8 place-items-center rounded-full border-[3px] border-white bg-[#77766f] text-white shadow-lg"><MapPin className="h-3.5 w-3.5" /></div>
+          <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-white/70 bg-white/90 p-3 shadow-xl backdrop-blur-xl">
+            <div className="flex items-center justify-between">
+              <span className="label-mono text-[6px] tracking-[.14em] text-[#17181a]/55">LOCAL PACK</span>
+              <span className="h-1.5 w-1.5 rounded-full bg-[#292929]" />
             </div>
-            <div className="flex shrink-0 flex-col gap-1.5">
-              <span className="rounded-lg border border-emerald-500/40 bg-emerald-500/15 px-3 py-1.5 text-center label-mono text-[7px] font-bold text-emerald-500 shadow-sm">
-                ITINÉRAIRE
-              </span>
-              <span className="rounded-lg border xr-line bg-[var(--xr-bg)] px-3 py-1.5 text-center label-mono text-[7px] text-[var(--xr-ink)] font-semibold">
-                APPELER
-              </span>
+            <div className="mt-2 flex items-center gap-1.5">
+              {[0,1,2,3,4].map((n)=><span key={n} className="h-1.5 flex-1 rounded-full bg-[#bdbab1]" />)}
             </div>
           </div>
         </div>
 
-        {/* Top 2 result - Competitor */}
-        <div className="rounded-xl border xr-line bg-[var(--xr-surface)]/60 p-3.5 opacity-70 backdrop-blur-sm">
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-start gap-2.5">
-              <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md bg-neutral-500/20 text-[9px] font-bold text-neutral-400">
-                2
-              </span>
-              <div>
-                <h5 className="text-xs font-medium text-[var(--xr-ink)]">Concurrent Direct B</h5>
-                <div className="mt-0.5 flex items-center gap-2 text-[8px] xr-muted">
-                  <span className="text-amber-400">4.3 ★★★★☆</span>
-                  <span>(112 avis)</span>
-                  <span>· 0.4 km</span>
+        <div className="space-y-3">
+          <div className="relative overflow-hidden rounded-[1.15rem] border border-black/20 bg-[var(--xr-surface)] p-4 shadow-[0_22px_55px_-35px_rgba(0,0,0,.35)] ring-1 ring-black/5">
+            <div className="absolute inset-x-0 top-0 h-1 bg-[#242424]" />
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start gap-3">
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-[#202020] text-xs font-black text-white shadow-md">1</span>
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h4 className="text-sm font-bold text-[var(--xr-ink)]">Votre Établissement (Leader Local)</h4>
+                    <span className="rounded-full border xr-line bg-[var(--xr-bg)] px-2.5 py-0.5 label-mono text-[6px] font-semibold xr-muted">TOP 1 VÉRIFIÉ</span>
+                  </div>
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-[9px]">
+                    <span className="font-bold text-[var(--xr-ink)]">5.0 ★★★★★</span>
+                    <span className="xr-muted">(480+ avis Google vérifiés)</span>
+                    <span className="xr-muted-2">· Restaurant / Entreprise d'exception</span>
+                  </div>
+                  <p className="mt-2 text-[8.5px] leading-4 xr-muted">📍 Paris & Île-de-France · Ouvert · <span className="font-semibold text-[var(--xr-ink)]">+340% d'appels et d'itinéraires générés</span></p>
                 </div>
               </div>
+              <div className="hidden shrink-0 flex-col gap-1.5 sm:flex">
+                <span className="rounded-lg bg-[#202020] px-3 py-1.5 text-center label-mono text-[7px] font-semibold text-white">ITINÉRAIRE</span>
+                <span className="rounded-lg border xr-line bg-[var(--xr-bg)] px-3 py-1.5 text-center label-mono text-[7px] text-[var(--xr-ink)] font-semibold">APPELER</span>
+              </div>
             </div>
-            <span className="label-mono text-[6.5px] xr-muted-2">POSITION #2</span>
           </div>
-        </div>
 
-        {/* Top 3 result - Competitor */}
-        <div className="rounded-xl border xr-line bg-[var(--xr-surface)]/40 p-3.5 opacity-50 backdrop-blur-sm">
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-start gap-2.5">
-              <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md bg-neutral-500/20 text-[9px] font-bold text-neutral-400">
-                3
-              </span>
-              <div>
-                <h5 className="text-xs font-medium text-[var(--xr-ink)]">Concurrent Local C</h5>
-                <div className="mt-0.5 flex items-center gap-2 text-[8px] xr-muted">
-                  <span className="text-amber-400">4.0 ★★★★☆</span>
-                  <span>(64 avis)</span>
-                  <span>· 0.8 km</span>
+          <div className="rounded-xl border xr-line bg-[var(--xr-surface)]/75 p-3.5 opacity-75">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start gap-2.5">
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-lg border xr-line text-[9px] font-bold">2</span>
+                <div>
+                  <h5 className="text-xs font-medium text-[var(--xr-ink)]">Concurrent Direct B</h5>
+                  <div className="mt-0.5 flex flex-wrap items-center gap-2 text-[8px] xr-muted"><span>4.3 ★★★★☆</span><span>(112 avis)</span><span>· 0.4 km</span></div>
                 </div>
               </div>
+              <span className="label-mono text-[6.5px] xr-muted-2">POSITION #2</span>
             </div>
-            <span className="label-mono text-[6.5px] xr-muted-2">POSITION #3</span>
+          </div>
+
+          <div className="rounded-xl border xr-line bg-[var(--xr-surface)]/55 p-3.5 opacity-55">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start gap-2.5">
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-lg border xr-line text-[9px] font-bold">3</span>
+                <div>
+                  <h5 className="text-xs font-medium text-[var(--xr-ink)]">Concurrent Local C</h5>
+                  <div className="mt-0.5 flex flex-wrap items-center gap-2 text-[8px] xr-muted"><span>4.0 ★★★★☆</span><span>(64 avis)</span><span>· 0.8 km</span></div>
+                </div>
+              </div>
+              <span className="label-mono text-[6.5px] xr-muted-2">POSITION #3</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-t xr-line pt-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t xr-line pt-4">
         <span className="label-mono text-[7px] xr-muted">GÉOLOCALISATION · GESTION DES AVIS · CITATIONS LOCALES</span>
-        <span className="label-mono text-[7px] font-bold text-emerald-500">ENGAGEMENT « TOP 3 OU REMBOURSÉ »</span>
+        <span className="label-mono text-[7px] font-semibold text-[var(--xr-ink)]">ENGAGEMENT « TOP 3 OU REMBOURSÉ »</span>
       </div>
     </div>
   );
