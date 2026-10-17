@@ -18,13 +18,13 @@ const CATALOG_IDS = [
 ] as const;
 
 const SERVICE_KICKER: Record<string, { fr: string; en: string; vi: string; ar?: string; ru?: string }> = {
-  websites: { fr: "FLAGSHIP", en: "FLAGSHIP", vi: "FLAGSHIP" },
-  branding: { fr: "IDENTITÉ", en: "IDENTITY", vi: "NHẬN DIỆN" },
-  seo: { fr: "VISIBILITÉ", en: "VISIBILITY", vi: "HIỂN THỊ" },
-  maps: { fr: "LOCAL", en: "LOCAL", vi: "ĐỊA PHƯƠNG" },
-  social: { fr: "RÉSEAUX", en: "SOCIAL", vi: "MẠNG XÃ HỘI" },
-  maintenance: { fr: "CARE", en: "CARE", vi: "BẢO TRÌ" },
-  robotics: { fr: "ROBOTICS", en: "ROBOTICS", vi: "ROBOT" },
+  websites: { fr: "FLAGSHIP", en: "FLAGSHIP", vi: "FLAGSHIP", ar: "الخدمة الرئيسية", ru: "КЛЮЧЕВОЕ" },
+  branding: { fr: "IDENTITÉ", en: "IDENTITY", vi: "NHẬN DIỆN", ar: "الهوية", ru: "АЙДЕНТИКА" },
+  seo: { fr: "VISIBILITÉ", en: "VISIBILITY", vi: "HIỂN THỊ", ar: "الظهور", ru: "ВИДИМОСТЬ" },
+  maps: { fr: "LOCAL", en: "LOCAL", vi: "ĐỊA PHƯƠNG", ar: "محلي", ru: "ЛОКАЛЬНО" },
+  social: { fr: "RÉSEAUX", en: "SOCIAL", vi: "MẠNG XÃ HỘI", ar: "التواصل", ru: "СОЦСЕТИ" },
+  maintenance: { fr: "CARE", en: "CARE", vi: "BẢO TRÌ", ar: "الصيانة", ru: "ПОДДЕРЖКА" },
+  robotics: { fr: "ROBOTICS", en: "ROBOTICS", vi: "ROBOT", ar: "الروبوتات", ru: "РОБОТОТЕХНИКА" },
 };
 const HREF: Record<string, string> = {
   websites: "/services/websites",
@@ -84,9 +84,35 @@ export function ServicesCatalog() {
       quote: "Tạo báo giá",
       compose: "Chọn gói này",
     },
-  }[lang as "fr" | "en" | "vi"] ?? ({
-    eyebrow: "SERVICES", title1: "Multiple disciplines.", title2: "One system.", lead: "Explore our digital services.", learn: "Learn more", from: "From", ctaTitle: "Not sure where to start?", ctaLead: "Tell us about your situation.", cta: "Start my analysis", enter: "Enter the experience", quote: "Build my quote", compose: "Build this offer",
-  });
+    ar: {
+      eyebrow: "الخدمات",
+      title1: "خبرات متعددة.",
+      title2: "منظومة واحدة.",
+      lead: "مواقع تعريفية وتجارية ومتاجر إلكترونية، وهوية بصرية، وتحسين محركات البحث، وخرائط Google، وشبكات اجتماعية وصيانة. تعالج كل خدمة حاجة محددة، وتتكامل الخدمات لبناء حضور رقمي يحقق النتائج.",
+      learn: "اكتشف المزيد",
+      from: "ابتداءً من",
+      ctaTitle: "لست متأكدًا من أين تبدأ؟",
+      ctaLead: "اشرح لنا وضعك، وسنقترح ترتيبًا واضحًا ونطاقًا تقديريًا للميزانية.",
+      cta: "ابدأ التحليل",
+      enter: "اكتشف التجربة",
+      quote: "أنشئ عرض السعر",
+      compose: "اختر هذه الباقة",
+    },
+    ru: {
+      eyebrow: "УСЛУГИ",
+      title1: "Разные компетенции.",
+      title2: "Единая система.",
+      lead: "Сайты-визитки и бизнес-сайты, интернет-магазины, айдентика, SEO, Google Maps, социальные сети и обслуживание. Каждая услуга решает конкретную задачу, а вместе они создают цифровое присутствие, которое помогает конвертировать посетителей в клиентов.",
+      learn: "Подробнее",
+      from: "От",
+      ctaTitle: "Не знаете, с чего начать?",
+      ctaLead: "Расскажите о своей ситуации. Мы предложим понятную последовательность действий и ориентир по бюджету.",
+      cta: "Начать анализ",
+      enter: "Открыть возможности",
+      quote: "Составить смету",
+      compose: "Выбрать этот пакет",
+    },
+  }[lang];
 
   return (
     <section className="relative">
