@@ -44,8 +44,8 @@ function Index() {
       <Nav />
       <main className="relative z-10">
         <Hero />
-        <ImmersiveJourney />
         <ImmersiveServices />
+        <ImmersiveJourney />
         <QuoteConfiguratorCompact />
         <DigitalAudit />
         <MapsSimulator />
