@@ -1,12 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { X, Trash2, MessageCircle, ShoppingBag, Check } from "lucide-react";
-import { useCart, type CartItem } from "@/hooks/useCart";
-import { CONTACT } from "@/lib/content";
-import { useLang } from "@/lib/i18n";
-import { cn } from "@/lib/utils";
-
 const CART_COPY = {
-  fr:{emptyCount:"Aucune prestation choisie",empty:"{copy.empty}",choose:"{copy.choose}",total:"Estimation totale",request:"Demander un devis WhatsApp",send:"Envoyer ma sélection WhatsApp",terms:"Sans engagement · Réponse en moins de 2 h",selected:"Ma sélection",add:"{copy.add}",added:"{copy.added}",close:"Fermer",open:"Ouvrir ma sélection",remove:"Retirer",quote:copy.quote,intro:"Bonjour XR Agency, je suis intéressé par les services suivants :",finish:"Pouvons-nous planifier un échange ?"},
+  fr:{emptyCount:"Aucune prestation choisie",empty:"{copy.empty}",choose:"{copy.choose}",total:"Estimation totale",request:"Demander un devis WhatsApp",send:"Envoyer ma sélection WhatsApp",terms:"Sans engagement · Réponse en moins de 2 h",selected:"Ma sélection",add:"Ajouter à ma sélection",added:"Ajouté à ma sélection",close:"Fermer",open:"Ouvrir ma sélection",remove:"Retirer",quote:"Bonjour XR Agency, je souhaite obtenir un devis personnalisé.",intro:"Bonjour XR Agency, je suis intéressé par les services suivants :",finish:"Pouvons-nous planifier un échange ?"},
   en:{emptyCount:"No services selected",empty:"Your selection is empty",choose:"Choose a plan from the pricing table",total:"Estimated total",request:"Request a quote on WhatsApp",send:"Send my selection on WhatsApp",terms:"No obligation · Reply within 2 hours",selected:"My selection",add:"Add to my selection",added:"Added to my selection",close:"Close",open:"Open my selection",remove:"Remove",quote:"Hello XR Agency, I'd like a personalised quote.",intro:"Hello XR Agency, I'm interested in the following services:",finish:"Can we schedule a call?"},
   vi:{emptyCount:"Chưa chọn dịch vụ nào",empty:"Danh sách lựa chọn đang trống",choose:"Chọn gói dịch vụ trong bảng giá",total:"Tổng chi phí dự kiến",request:"Yêu cầu báo giá qua WhatsApp",send:"Gửi lựa chọn qua WhatsApp",terms:"Không ràng buộc · Phản hồi trong 2 giờ",selected:"Lựa chọn của tôi",add:"Thêm vào lựa chọn",added:"Đã thêm vào lựa chọn",close:"Đóng",open:"Mở danh sách lựa chọn",remove:"Xóa",quote:"Xin chào XR Agency, tôi muốn nhận báo giá tùy chỉnh.",intro:"Xin chào XR Agency, tôi quan tâm đến các dịch vụ sau:",finish:"Chúng ta có thể lên lịch trao đổi không?"},
   ar:{emptyCount:"لم يتم اختيار أي خدمة",empty:"قائمة اختياراتك فارغة",choose:"اختر باقة من جدول الأسعار",total:"الإجمالي التقديري",request:"طلب عرض سعر عبر واتساب",send:"إرسال اختياراتي عبر واتساب",terms:"دون التزام · الرد خلال ساعتين",selected:"اختياراتي",add:"أضف إلى اختياراتي",added:"تمت الإضافة إلى اختياراتي",close:"إغلاق",open:"فتح اختياراتي",remove:"إزالة",quote:"مرحباً XR Agency، أود الحصول على عرض سعر مخصص.",intro:"مرحباً XR Agency، أنا مهتم بالخدمات التالية:",finish:"هل يمكننا تحديد موعد للتواصل؟"},
@@ -52,8 +45,8 @@ export function Cart() {
   // Build WhatsApp message from cart
   const waMessage = encodeURIComponent(
     items.length === 0
-      ? "Bonjour XR Agency, je souhaite obtenir un devis personnalisé."
-      : `Bonjour XR Agency, je suis intéressé par les services suivants :\n\n${items
+      ? copy.quote
+      : `${copy.intro}\n\n${items
           .map(
             (i) =>
               `• ${i.serviceName} — ${i.planName} : ${price(i.priceEur)}${periodShort[i.period]}`,
@@ -107,8 +100,8 @@ export function Cart() {
             <h2 className="display-serif text-xl text-foreground">{copy.selected}</h2>
             <p className="label-mono mt-0.5 text-xs text-muted-foreground">
               {count === 0
-                ? "Aucune prestation choisie"
-                : `${count} prestation${count > 1 ? "s" : ""} sélectionnée${count > 1 ? "s" : ""}`}
+                ? copy.emptyCount
+                : `${count} ${lang === "en" ? "service(s) selected" : lang === "vi" ? "dịch vụ đã chọn" : lang === "ar" ? "خدمة محددة" : lang === "ru" ? "услуг выбрано" : `prestation${count > 1 ? "s" : ""} sélectionnée${count > 1 ? "s" : ""}`}`}
             </p>
           </div>
           <button
@@ -205,6 +198,8 @@ export function Cart() {
 /* ── Floating Cart Button (shown in Nav) ── */
 export function CartFloatingButton() {
   const { count, toggle, isOpen } = useCart();
+  const { lang } = useLang();
+  const copy = CART_COPY[lang] ?? CART_COPY.fr;
   const [justAdded, setJustAdded] = useState(false);
   const prevCount = useRef(count);
 
@@ -279,12 +274,12 @@ export function AddToCartBtn({ item, popular, className }: AddToCartBtnProps) {
       {added || isInCart ? (
         <>
           <Check className="h-3.5 w-3.5" />
-          Ajouté à ma sélection
+          {CART_COPY.fr.added}
         </>
       ) : (
         <>
           <ShoppingBag className="h-3.5 w-3.5" />
-          Ajouter à ma sélection
+          {CART_COPY.fr.add}
         </>
       )}
     </button>
