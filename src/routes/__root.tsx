@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { LanguageProvider } from "../lib/i18n";
 import { CartProvider } from "../hooks/useCart";
@@ -17,15 +17,35 @@ import { CursorGlow } from "../components/site/CursorGlow";
 import { ThemeProvider } from "../components/theme/ThemeProvider";
 import appCss from "../styles.css?url";
 
+const ERROR_COPY = {
+  fr: { notFound:"Page introuvable", notFoundText:"Cette page n’existe pas ou a été déplacée.", back:"Retour à l’accueil", load:"Cette page n’a pas pu se charger", loadText:"Une erreur est survenue. Vous pouvez réessayer ou revenir à l’accueil.", retry:"Réessayer", home:"Accueil" },
+  en: { notFound:"Page not found", notFoundText:"This page does not exist or has been moved.", back:"Back to home", load:"This page could not load", loadText:"Something went wrong. You can try again or return to the home page.", retry:"Try again", home:"Home" },
+  vi: { notFound:"Không tìm thấy trang", notFoundText:"Trang này không tồn tại hoặc đã được chuyển đi.", back:"Về trang chủ", load:"Không thể tải trang này", loadText:"Đã xảy ra lỗi. Bạn có thể thử lại hoặc quay về trang chủ.", retry:"Thử lại", home:"Trang chủ" },
+  ar: { notFound:"الصفحة غير موجودة", notFoundText:"هذه الصفحة غير موجودة أو تم نقلها.", back:"العودة إلى الرئيسية", load:"تعذّر تحميل الصفحة", loadText:"حدث خطأ. يمكنك المحاولة مجدداً أو العودة إلى الصفحة الرئيسية.", retry:"إعادة المحاولة", home:"الرئيسية" },
+  ru: { notFound:"Страница не найдена", notFoundText:"Эта страница не существует или была перемещена.", back:"На главную", load:"Не удалось загрузить страницу", loadText:"Произошла ошибка. Попробуйте ещё раз или вернитесь на главную страницу.", retry:"Повторить", home:"Главная" },
+} as const;
+
+function useErrorCopy() {
+  const [lang, setLang] = useState<keyof typeof ERROR_COPY>("fr");
+  useEffect(() => {
+    const stored = window.localStorage.getItem("xr-lang");
+    const browser = window.navigator.language.slice(0, 2).toLowerCase();
+    const selected = stored && stored in ERROR_COPY ? stored : browser in ERROR_COPY ? browser : "fr";
+    setLang(selected as keyof typeof ERROR_COPY);
+  }, []);
+  return ERROR_COPY[lang];
+}
+
 function NotFoundComponent() {
+  const c = useErrorCopy();
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page introuvable</h2>
-        <p className="mt-2 text-sm text-muted-foreground">Cette page n’existe pas ou a été déplacée.</p>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">{c.notFound}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{c.notFoundText}</p>
         <div className="mt-6">
-          <Link to="/" className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">Retour à l’accueil</Link>
+          <Link to="/" className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">{c.back}</Link>
         </div>
       </div>
     </div>
@@ -35,14 +55,15 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: unknown; reset: () => void }) {
   console.error(error);
   const router = useRouter();
+  const c = useErrorCopy();
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">This page didn't load</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Something went wrong on our end. You can try refreshing or head back home.</p>
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">{c.load}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{c.loadText}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button onClick={() => { router.invalidate(); reset(); }} className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">Try again</button>
-          <a href="/" className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent">Go home</a>
+          <button onClick={() => { router.invalidate(); reset(); }} className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">{c.retry}</button>
+          <a href="/" className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-accent">{c.home}</a>
         </div>
       </div>
     </div>
