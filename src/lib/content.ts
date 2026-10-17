@@ -115,6 +115,8 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
       fr: "Travaillez-vous à distance et à l'international ?",
       en: "Do you work remotely and internationally?",
       vi: "Bạn có làm việc từ xa và quốc tế không?",
+      ar: "هل تعملون عن بُعد وعلى المستوى الدولي؟",
+      ru: "Вы работаете удалённо и с международными клиентами?",
     },
     a: {
       fr: "Oui. XR Agency accompagne des clients en France, en Asie et à l'international, entièrement à distance, avec des points de suivi réguliers.",
@@ -130,6 +132,8 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
       fr: "Les droits d'utilisation de mon identité sont-ils inclus ?",
       en: "Are the usage rights to my identity included?",
       vi: "Quyền sử dụng bộ nhận diện có được bao gồm không?",
+      ar: "هل تشمل الخدمة حقوق استخدام الهوية البصرية؟",
+      ru: "Включены ли права на использование фирменного стиля?",
     },
     a: {
       fr: "Oui. Vous êtes propriétaire de votre identité visuelle : tous les droits d'utilisation commerciale sont cédés à la livraison.",
@@ -142,7 +146,7 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
 ];
 
 export const SHOWCASE = [
-  { id: "xr-pok-n-ball", name: "Pok-N Ball", url: "https://pokebowlfresh.vercel.app/", sectorKey: "sectorGastronomie", services: ["websites"], type: { fr: "site restaurant / commande", en: "restaurant / ordering site", vi: "website nhà hàng / đặt món" }, desc: { fr: "Projet XR Agency : expérience digitale orientée commande et conversion.", en: "XR Agency project focused on ordering and conversion.", vi: "Dự án XR Agency tập trung vào đặt món và chuyển đổi." }, metric: "XR AGENCY · WEBSITE + COMMANDE", image: "https://image.thum.io/get/width/1800/crop/1050/noanimate/https://pokebowlfresh.vercel.app/" },
+  { id: "xr-pok-n-ball", name: "Pok-N Ball", url: "https://pokebowlfresh.vercel.app/", sectorKey: "sectorGastronomie", services: ["websites"], type: { fr: "site restaurant / commande", en: "restaurant / ordering site", vi: "website nhà hàng / đặt món", ar: "موقع مطعم وطلبات", ru: "Сайт ресторана и заказов" }, desc: { fr: "Projet XR Agency : expérience digitale orientée commande et conversion.", en: "XR Agency project focused on ordering and conversion.", vi: "Dự án XR Agency tập trung vào đặt món và chuyển đổi.", ar: "مشروع XR Agency يركز على الطلبات والتحويل الرقمي.", ru: "Проект XR Agency с акцентом на заказы и конверсию." }, metric: "XR AGENCY · WEBSITE + COMMANDE", image: "https://image.thum.io/get/width/1800/crop/1050/noanimate/https://pokebowlfresh.vercel.app/" },
 ];
 
 export const PORTFOLIO = SHOWCASE.map((s, i) => ({
