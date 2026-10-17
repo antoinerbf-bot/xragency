@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { ArrowRight, Check, Gauge, Search, Smartphone, ShieldCheck, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, Check, Search, Smartphone, Sparkles, Zap } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
