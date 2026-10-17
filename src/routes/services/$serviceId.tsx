@@ -77,7 +77,7 @@ export const Route = createFileRoute("/services/$serviceId")({
 
 function ServiceDetailPage() {
   const { service } = Route.useLoaderData();
-  const { t, price } = useLang();
+  const { t, price, lang } = useLang();
   const [selectedPlanIndex, setSelectedPlanIndex] = useState(
     Math.max(0, service.plans.findIndex((p) => p.popular)),
   );
@@ -102,9 +102,14 @@ function ServiceDetailPage() {
     installmentSelections[selectedPlanIndex] === true &&
     planForWa?.period === "once";
 
-  const waPrefilled = encodeURIComponent(
-    `Bonjour XR Agency, je suis intéressé par votre service "${t(service.title)}" (Forfait: "${planForWa ? t(planForWa.name) : ""}"${planIsInstallmentWa ? " en mensualités sur 12 mois" : ""}). Pouvons-nous échanger ?`,
-  );
+  const waText = ({
+    fr: (title: string, plan: string, installment: boolean) => `Bonjour XR Agency, je suis intéressé par votre service "${title}" (forfait : "${plan}"${installment ? " en mensualités sur 12 mois" : ""}). Pouvons-nous échanger ?`,
+    en: (title: string, plan: string, installment: boolean) => `Hello XR Agency, I'm interested in your "${title}" service (plan: "${plan}"${installment ? ", payable monthly over 12 months" : ""}). Could we discuss it?`,
+    vi: (title: string, plan: string, installment: boolean) => `Xin chào XR Agency, tôi quan tâm đến dịch vụ "${title}" (gói: "${plan}"${installment ? ", thanh toán hàng tháng trong 12 tháng" : ""}). Chúng ta có thể trao đổi thêm không?`,
+    ar: (title: string, plan: string, installment: boolean) => `مرحبًا XR Agency، أنا مهتم بخدمة "${title}" (الباقة: "${plan}"${installment ? "، مع الدفع الشهري على مدى 12 شهرًا" : ""}). هل يمكننا مناقشة التفاصيل؟`,
+    ru: (title: string, plan: string, installment: boolean) => `Здравствуйте, XR Agency! Меня интересует услуга "${title}" (пакет: "${plan}"${installment ? ", с ежемесячной оплатой в течение 12 месяцев" : ""}). Можем обсудить детали?`,
+  } as const)[lang](t(service.title), planForWa ? t(planForWa.name) : "", planIsInstallmentWa);
+  const waPrefilled = encodeURIComponent(waText);
   const waUrl = `${CONTACT.whatsapp}?text=${waPrefilled}`;
   const faqItems = service.serviceFaqs?.length ? service.serviceFaqs : FAQ.slice(0, 4);
   const steps = service.steps ?? [];
@@ -213,7 +218,7 @@ function ServiceDetailPage() {
                 <Reveal delay={320}>
                   <div className="mt-9 flex items-end gap-6 border-t xr-line pt-5">
                     <div>
-                      <span className="label-mono text-[6px] xr-muted-2">À PARTIR DE</span>
+                      <span className="label-mono text-[6px] xr-muted-2">{t({ fr: "À PARTIR DE", en: "FROM", vi: "TỪ", ar: "ابتداءً من", ru: "ОТ" })}</span>
                       <p className="display-serif mt-1 text-4xl sm:text-5xl">{isCustomMaps ? "990 €" : price(service.fromEur)}</p>
                     </div>
                     <span className="label-mono pb-1 text-[7px] xr-muted-2">
