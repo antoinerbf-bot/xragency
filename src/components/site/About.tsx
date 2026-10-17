@@ -57,7 +57,7 @@ const ADVANTAGES = [
       en: "Delivery timelines defined by scope, with a structured production process.",
       vi: "Thời gian triển khai được xác định theo phạm vi, với quy trình sản xuất rõ ràng.",
     },
-    tag: "Selon périmètre",
+    tag: { fr: "Selon périmètre", en: "Scope-dependent", vi: "Theo phạm vi", ar: "حسب نطاق العمل", ru: "Зависит от объёма" },
   },
   {
     icon: Layers,
@@ -71,7 +71,7 @@ const ADVANTAGES = [
       en: "A multidisciplinary setup combining creative direction, development, SEO and AI according to project needs.",
       vi: "Chỉ đạo nghệ thuật, Lập trình viên Cloud, Chuyên gia SEO và Kỹ sư AI đồng hành cùng bạn.",
     },
-    tag: "DA · DEV · SEO · IA",
+    tag: { fr: "DA · DEV · SEO · IA", en: "ART · DEV · SEO · AI", vi: "Thiết kế · Dev · SEO · AI", ar: "تصميم · تطوير · SEO · ذكاء اصطناعي", ru: "Дизайн · разработка · SEO · ИИ" },
   },
   {
     icon: ShieldCheck,
@@ -85,7 +85,7 @@ const ADVANTAGES = [
       en: "Defined objectives, transparent monitoring and progressive optimisation.",
       vi: "Mục tiêu rõ ràng, theo dõi minh bạch và tối ưu từng bước.",
     },
-    tag: "Objectifs définis",
+    tag: { fr: "Objectifs définis", en: "Defined objectives", vi: "Mục tiêu rõ ràng", ar: "أهداف محددة", ru: "Чёткие цели" },
   },
   {
     icon: BarChart3,
@@ -99,12 +99,19 @@ const ADVANTAGES = [
       en: "A flexible model: investment follows the agreed scope and priorities.",
       vi: "Mô hình linh hoạt: ngân sách được xác định theo phạm vi và ưu tiên đã thống nhất.",
     },
-    tag: "ROI à mesurer",
+    tag: { fr: "ROI à mesurer", en: "ROI tracking", vi: "Theo dõi ROI", ar: "قياس العائد على الاستثمار", ru: "Отслеживание ROI" },
   },
 ];
 
 export function About() {
-  const { t } = useLang();
+  const { t, lang, price } = useLang();
+  const extra = {
+    fr: { variableCost: "Coût variable", inertia: "{extra.inertia}" },
+    en: { variableCost: "Variable cost", inertia: "Management overhead & high fixed costs" },
+    vi: { variableCost: "Chi phí biến đổi", inertia: "Chi phí quản lý và chi phí cố định cao" },
+    ar: { variableCost: "تكلفة متغيرة", inertia: "أعباء إدارية وتكاليف ثابتة مرتفعة" },
+    ru: { variableCost: "Переменные затраты", inertia: "Управленческие расходы и высокие постоянные затраты" },
+  }[lang];
 
   return (
     <section id="about" className="relative overflow-hidden py-16 sm:py-24 lg:py-32">
@@ -196,7 +203,7 @@ export function About() {
                       {t(UI.aboutRecruitTitle)}
                     </h4>
                     <p className="display-serif mt-3 text-3xl text-muted-foreground/80">
-                      Coût variable <span className="label-mono text-xs">{t(UI.aboutRecruitCost)}</span>
+                      {extra.variableCost} <span className="label-mono text-xs">{t(UI.aboutRecruitCost)}</span>
                     </p>
                     <ul className="mt-6 space-y-3.5 text-xs text-muted-foreground">
                       <li className="flex items-start gap-2.5">
@@ -236,7 +243,7 @@ export function About() {
                       {t(UI.aboutDigitalTitle)}
                     </h4>
                     <p className="display-serif mt-3 text-3xl text-primary">
-                      Dès 499 €{" "}
+                      {lang === "en" ? `From ${price(499)}` : lang === "vi" ? `Từ ${price(499)}` : lang === "ar" ? `ابتداءً من ${price(499)}` : lang === "ru" ? `От ${price(499)}` : `Dès ${price(499)}`}{" "}
                       <span className="label-mono text-xs text-muted-foreground font-normal">
                         {t(UI.aboutFromLabel)}
                       </span>
