@@ -5,6 +5,14 @@ import { CONTACT } from "@/lib/content";
 import { useLang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
+const CART_COPY = {
+  fr:{emptyCount:"Aucune prestation choisie",empty:"{copy.empty}",choose:"{copy.choose}",total:"Estimation totale",request:"Demander un devis WhatsApp",send:"Envoyer ma sélection WhatsApp",terms:"Sans engagement · Réponse en moins de 2 h",selected:"Ma sélection",add:"{copy.add}",added:"{copy.added}",close:"Fermer",open:"Ouvrir ma sélection",remove:"Retirer",quote:copy.quote,intro:"Bonjour XR Agency, je suis intéressé par les services suivants :",finish:"Pouvons-nous planifier un échange ?"},
+  en:{emptyCount:"No services selected",empty:"Your selection is empty",choose:"Choose a plan from the pricing table",total:"Estimated total",request:"Request a quote on WhatsApp",send:"Send my selection on WhatsApp",terms:"No obligation · Reply within 2 hours",selected:"My selection",add:"Add to my selection",added:"Added to my selection",close:"Close",open:"Open my selection",remove:"Remove",quote:"Hello XR Agency, I'd like a personalised quote.",intro:"Hello XR Agency, I'm interested in the following services:",finish:"Can we schedule a call?"},
+  vi:{emptyCount:"Chưa chọn dịch vụ nào",empty:"Danh sách lựa chọn đang trống",choose:"Chọn gói dịch vụ trong bảng giá",total:"Tổng chi phí dự kiến",request:"Yêu cầu báo giá qua WhatsApp",send:"Gửi lựa chọn qua WhatsApp",terms:"Không ràng buộc · Phản hồi trong 2 giờ",selected:"Lựa chọn của tôi",add:"Thêm vào lựa chọn",added:"Đã thêm vào lựa chọn",close:"Đóng",open:"Mở danh sách lựa chọn",remove:"Xóa",quote:"Xin chào XR Agency, tôi muốn nhận báo giá tùy chỉnh.",intro:"Xin chào XR Agency, tôi quan tâm đến các dịch vụ sau:",finish:"Chúng ta có thể lên lịch trao đổi không?"},
+  ar:{emptyCount:"لم يتم اختيار أي خدمة",empty:"قائمة اختياراتك فارغة",choose:"اختر باقة من جدول الأسعار",total:"الإجمالي التقديري",request:"طلب عرض سعر عبر واتساب",send:"إرسال اختياراتي عبر واتساب",terms:"دون التزام · الرد خلال ساعتين",selected:"اختياراتي",add:"أضف إلى اختياراتي",added:"تمت الإضافة إلى اختياراتي",close:"إغلاق",open:"فتح اختياراتي",remove:"إزالة",quote:"مرحباً XR Agency، أود الحصول على عرض سعر مخصص.",intro:"مرحباً XR Agency، أنا مهتم بالخدمات التالية:",finish:"هل يمكننا تحديد موعد للتواصل؟"},
+  ru:{emptyCount:"Услуги не выбраны",empty:"Список выбранных услуг пуст",choose:"Выберите пакет в таблице цен",total:"Предварительная сумма",request:"Запросить смету в WhatsApp",send:"Отправить выбранные услуги в WhatsApp",terms:"Без обязательств · Ответ в течение 2 часов",selected:"Мой выбор",add:"Добавить в мой выбор",added:"Добавлено в мой выбор",close:"Закрыть",open:"Открыть мой выбор",remove:"Удалить",quote:"Здравствуйте, XR Agency! Хочу получить индивидуальную смету.",intro:"Здравствуйте, XR Agency! Меня интересуют следующие услуги:",finish:"Можем ли мы договориться о звонке?"},
+} as const;
+
 /* ── Animated counter for total ── */
 function useCountUpTo(target: number, duration = 400) {
   const [val, setVal] = useState(target);
@@ -32,12 +40,13 @@ function useCountUpTo(target: number, duration = 400) {
 export function Cart() {
   const { items, isOpen, close, removeItem, total, count } = useCart();
   const { lang, price } = useLang();
+  const copy = CART_COPY[lang] ?? CART_COPY.fr;
   const animatedTotal = useCountUpTo(total, 400);
 
   const periodShort: Record<string, string> = {
     once: "",
-    month: lang === "en" ? "/mo" : lang === "vi" ? "/tháng" : "/mois",
-    year: lang === "en" ? "/yr" : lang === "vi" ? "/năm" : "/an",
+    month: lang === "en" ? "/mo" : lang === "vi" ? "/tháng" : lang === "ar" ? "/شهر" : lang === "ru" ? "/мес." : "/mois",
+    year: lang === "en" ? "/yr" : lang === "vi" ? "/năm" : lang === "ar" ? "/سنة" : lang === "ru" ? "/год" : "/an",
   };
 
   // Build WhatsApp message from cart
@@ -58,7 +67,7 @@ export function Cart() {
       <button
         id="cart-toggle-btn"
         onClick={close}
-        aria-label="Ouvrir ma sélection"
+        aria-label={copy.open}
         className={cn(
           "fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-300",
           "bg-primary text-primary-foreground hover:scale-105 hover:shadow-xl",
@@ -83,7 +92,7 @@ export function Cart() {
       <div
         id="cart-panel"
         role="dialog"
-        aria-label="Ma sélection"
+        aria-label={copy.selected}
         aria-modal="true"
         className={cn(
           "fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-card shadow-2xl transition-transform duration-350 ease-out",
@@ -95,7 +104,7 @@ export function Cart() {
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border/60 px-6 py-5">
           <div>
-            <h2 className="display-serif text-xl text-foreground">Ma sélection</h2>
+            <h2 className="display-serif text-xl text-foreground">{copy.selected}</h2>
             <p className="label-mono mt-0.5 text-xs text-muted-foreground">
               {count === 0
                 ? "Aucune prestation choisie"
@@ -104,7 +113,7 @@ export function Cart() {
           </div>
           <button
             onClick={close}
-            aria-label="Fermer"
+            aria-label={copy.close}
             className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
           >
             <X className="h-4 w-4" />
@@ -146,7 +155,7 @@ export function Cart() {
                   </div>
                   <button
                     onClick={() => removeItem(item.id)}
-                    aria-label={`Retirer ${item.planName}`}
+                    aria-label={`${copy.remove} ${item.planName}`}
                     className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/30 opacity-0 transition-all duration-200 hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -161,7 +170,7 @@ export function Cart() {
         <div className="border-t border-border/60 px-6 py-5">
           {items.length > 0 && (
             <div className="mb-4 flex items-baseline justify-between">
-              <span className="label-mono text-xs text-muted-foreground">Estimation totale</span>
+              <span className="label-mono text-xs text-muted-foreground">{copy.total}</span>
               <span
                 key={animatedTotal}
                 className="display-serif text-2xl text-primary animate-price-reveal"
@@ -181,11 +190,11 @@ export function Cart() {
             )}
           >
             <MessageCircle className="h-4 w-4 text-emerald-400" />
-            {items.length === 0 ? "Demander un devis WhatsApp" : "Envoyer ma sélection WhatsApp"}
+            {items.length === 0 ? copy.request : copy.send}
           </a>
 
           <p className="label-mono mt-3 text-center text-[10px] text-muted-foreground/50">
-            Sans engagement · Réponse en moins de 2h
+            {copy.terms}
           </p>
         </div>
       </div>
@@ -211,7 +220,7 @@ export function CartFloatingButton() {
   return (
     <button
       onClick={toggle}
-      aria-label={`Ma sélection (${count} prestation${count !== 1 ? "s" : ""})`}
+      aria-label={`${copy.selected} (${count})`}
       className={cn(
         "relative flex h-9 w-9 items-center justify-center rounded-full border transition-all duration-200",
         isOpen
