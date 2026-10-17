@@ -475,7 +475,7 @@ export const UI: Record<string, L> = {
     ar: "مجاني · 30 دقيقة · دون التزام",
     ru: "Бесплатно · 30 минут · Без обязательств",
   },
-  contactTitle1: { fr: "Réservez votre", en: "Book your free", vi: "Đặt lịch", ar: "احجز استشارتك", ru: "Запишитесь на", ar: "احجز استشارتك", ru: "Запишитесь на" },
+  contactTitle1: { fr: "Réservez votre", en: "Book your free", vi: "Đặt lịch", ar: "احجز استشارتك", ru: "Запишитесь на" },
   contactTitle2: {
     fr: "consultation digitale.",
     en: "digital consultation.",
@@ -518,7 +518,7 @@ export const UI: Record<string, L> = {
     ar: "راسلنا عبر WhatsApp",
     ru: "Написать в WhatsApp",
   },
-  contactEmail: { fr: "Nous écrire", en: "Email us", vi: "Gửi e-mail", ar: "راسلنا بالبريد الإلكتروني", ru: "Написать нам", ar: "راسلنا بالبريد الإلكتروني", ru: "Написать нам" },
+  contactEmail: { fr: "Nous écrire", en: "Email us", vi: "Gửi e-mail", ar: "راسلنا بالبريد الإلكتروني", ru: "Написать нам" },
   contactHeading: {
     fr: "Construisons votre avantage digital.",
     en: "Let's build your digital advantage.",
