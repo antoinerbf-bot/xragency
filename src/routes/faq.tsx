@@ -22,7 +22,13 @@ function FaqPage() {
   const { t, lang } = useLang();
   const [query, setQuery] = useState("");
 
-  const placeholder = lang === "en" ? "Search a question..." : lang === "vi" ? "Tìm kiếm câu hỏi..." : "Rechercher une question...";
+  const placeholder = ({
+    fr: "Rechercher une question...",
+    en: "Search a question...",
+    vi: "Tìm kiếm câu hỏi...",
+    ar: "ابحث عن سؤال...",
+    ru: "Поиск по вопросам...",
+  } as const)[lang];
 
   const items = useMemo(() => FAQ.filter(x => {
     const q = query.toLowerCase();
@@ -53,10 +59,22 @@ function FaqPage() {
             </figure>
             <p className="label-mono text-[10px] uppercase tracking-[.25em] text-primary">XR AGENCY · FAQ</p>
             <h1 className="display-serif mt-5 text-[clamp(3.5rem,8vw,7rem)] leading-[.86]">
-              {lang === "en" ? "Common questions" : lang === "vi" ? "Câu hỏi thường gặp" : "Les questions"}
+              {({
+                fr: "Les questions",
+                en: "Common questions",
+                vi: "Câu hỏi thường gặp",
+                ar: "الأسئلة الشائعة",
+                ru: "Частые вопросы",
+              } as const)[lang]}
               <br />
               <em className="not-italic italic text-primary">
-                {lang === "en" ? "we are asked." : lang === "vi" ? "khách hàng quan tâm." : "que l'on nous pose."}
+                {({
+                  fr: "que l'on nous pose.",
+                  en: "we are asked.",
+                  vi: "khách hàng quan tâm.",
+                  ar: "التي يطرحها عملاؤنا.",
+                  ru: "которые нам задают.",
+                } as const)[lang]}
               </em>
             </h1>
             <div className="relative mt-10 max-w-2xl">
