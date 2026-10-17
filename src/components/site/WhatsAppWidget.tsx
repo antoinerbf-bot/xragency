@@ -80,7 +80,7 @@ export function WhatsAppWidget() {
             </div>
             <button
               onClick={() => setOpen(false)}
-              aria-label="Fermer"
+              aria-label={lang === "fr" ? "Fermer" : lang === "en" ? "Close" : lang === "vi" ? "Đóng" : lang === "ar" ? "إغلاق" : "Закрыть"}
               className="rounded-full p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
             >
               <X className="h-4 w-4" />
@@ -104,7 +104,7 @@ export function WhatsAppWidget() {
 
             <div className="flex items-center justify-center gap-2 pt-1 text-[10px] text-muted-foreground">
               <ShieldCheck className="h-3 w-3 text-primary" />
-              <span>Confidentialité & devis gratuit</span>
+              <span>{({fr:"Confidentialité & devis gratuit",en:"Privacy & free quote",vi:"Bảo mật & báo giá miễn phí",ar:"الخصوصية وعرض سعر مجاني",ru:"Конфиденциальность и бесплатная смета"})[lang]}</span>
             </div>
           </div>
         </div>
@@ -114,7 +114,7 @@ export function WhatsAppWidget() {
       <button
         onClick={() => setOpen(!open)}
         className="group relative flex items-center gap-3 rounded-full border border-border/80 bg-card/90 px-4 py-3 shadow-xl backdrop-blur-xl transition-all duration-300 hover:border-primary/50 hover:shadow-2xl hover:scale-105"
-        aria-label="Contacter sur WhatsApp"
+        aria-label={({fr:"Contacter sur WhatsApp",en:"Contact on WhatsApp",vi:"Liên hệ qua WhatsApp",ar:"تواصل عبر واتساب",ru:"Связаться через WhatsApp"})[lang]}
       >
         <span className="relative flex h-3 w-3">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
