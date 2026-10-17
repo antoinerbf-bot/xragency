@@ -51,7 +51,7 @@ export function Cart() {
             (i) =>
               `• ${i.serviceName} — ${i.planName} : ${price(i.priceEur)}${periodShort[i.period]}`,
           )
-          .join("\n")}\n\nTotal estimé : ${price(total)}\n\nPouvons-nous planifier un échange ?`,
+          .join("\n")}\n\n ${copy.total} : ${price(total)}\n\n ${copy.finish}`,
   );
 
   return (
