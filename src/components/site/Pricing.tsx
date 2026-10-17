@@ -56,6 +56,13 @@ export function Pricing() {
     ar: { detailed: "الباقات والأسعار التفصيلية", cash: "دفع كامل", monthly: "شهريًا", perMonth: "/شهر" },
     ru: { detailed: "Пакеты и подробные цены", cash: "Полная оплата", monthly: "Ежемесячно", perMonth: "/мес." },
   } as const)[lang];
+  const buildQuoteMessage = ({
+    fr: (service: string, plan: string, amount: string, installment: boolean) => `Bonjour XR Agency, je suis intéressé par votre prestation "${service}" — Formule "${plan}" (${amount}${installment ? " / mois sur 12 mois" : ""}). Pouvons-nous échanger à ce sujet ?`,
+    en: (service: string, plan: string, amount: string, installment: boolean) => `Hello XR Agency, I'm interested in your "${service}" service — "${plan}" plan (${amount}${installment ? " / month for 12 months" : ""}). Could we discuss it?`,
+    vi: (service: string, plan: string, amount: string, installment: boolean) => `Xin chào XR Agency, tôi quan tâm đến dịch vụ "${service}" — gói "${plan}" (${amount}${installment ? " / tháng trong 12 tháng" : ""}). Chúng ta có thể trao đổi thêm không?`,
+    ar: (service: string, plan: string, amount: string, installment: boolean) => `مرحبًا XR Agency، أنا مهتم بخدمة "${service}" — باقة "${plan}" (${amount}${installment ? " / شهريًا لمدة 12 شهرًا" : ""}). هل يمكننا مناقشة التفاصيل؟`,
+    ru: (service: string, plan: string, amount: string, installment: boolean) => `Здравствуйте, XR Agency! Меня интересует услуга "${service}" — пакет "${plan}" (${amount}${installment ? " / мес. в течение 12 месяцев" : ""}). Можем обсудить детали?`,
+  } as const)[lang];
   const [activeCategory, setActiveCategory] = useState("all");
   const [activeServiceId, setActiveServiceId] = useState(SERVICES[0].id);
   const [installmentSelections, setInstallmentSelections] = useState<Record<number, boolean>>({});
@@ -164,7 +171,7 @@ export function Pricing() {
             const displayPeriod = planIsInstallment ? "month" : p.period;
 
             const waMessage = encodeURIComponent(
-              `Bonjour XR Agency, je suis intéressé par votre prestation "${t(currentService.title)}" — Formule "${t(p.name)}" (${price(displayPrice)}${planIsInstallment ? " / mois sur 12 mois" : ""}). Pouvons-nous échanger à ce sujet ?`,
+              buildQuoteMessage(t(currentService.title), t(p.name), price(displayPrice), planIsInstallment),
             );
 
             return (
