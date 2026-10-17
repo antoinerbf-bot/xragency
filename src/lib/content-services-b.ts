@@ -4,7 +4,7 @@ export const SERVICES_PART2 = [
     num: "04",
     title: { fr: "Google Maps Top 3", en: "Google Maps Top 3", vi: "Google Maps Top 3", ar: "Google Maps Top 3", ru: "Google Maps Top 3" },
     short: { fr: "Visibilité locale et positionnement carte.", en: "Local visibility and map ranking.", vi: "Hiển thị địa phương và xếp hạng bản đồ.", ar: "ظهور محلي وتحسين الحضور على الخرائط.", ru: "Локальная видимость и присутствие на карте." },
-    description: { fr: "Optimisation de votre fiche Google Business Profile et stratégie locale avec un engagement clair : viser le Top 3 sur les requêtes et zones définies au diagnostic, avec une garantie « Top 3 ou remboursé » lorsque les critères, délais et conditions de la garantie sont réunis.", en: "Google Business Profile optimisation and local strategy with a clear commitment: target Top 3 visibility for the searches and areas defined at diagnosis, with a « Top 3 or money back » guarantee when the agreed criteria, timeframe and guarantee conditions are met.", vi: "Tối ưu Google Business Profile và chiến lược địa phương với cam kết rõ ràng: hướng tới Top 3 theo truy vấn và khu vực được xác định khi chẩn đoán, kèm bảo đảm « Top 3 hoặc hoàn tiền » khi đáp ứng các tiêu chí, thời hạn và điều kiện đã thỏa thuận." },
+    description: { fr: "Optimisation de votre fiche Google Business Profile et stratégie locale avec un engagement clair : viser le Top 3 sur les requêtes et zones définies au diagnostic, avec une garantie « Top 3 ou remboursé » lorsque les critères, délais et conditions de la garantie sont réunis.", en: "Google Business Profile optimisation and local strategy with a clear commitment: target Top 3 visibility for the searches and areas defined at diagnosis, with a « Top 3 or money back » guarantee when the agreed criteria, timeframe and guarantee conditions are met.", vi: "Tối ưu Google Business Profile và chiến lược địa phương với cam kết rõ ràng: hướng tới Top 3 theo truy vấn và khu vực được xác định khi chẩn đoán, kèm bảo đảm « Top 3 hoặc hoàn tiền » khi đáp ứng các tiêu chí, thời hạn và điều kiện đã thỏa thuận.", ar: "تحسين ملف Google Business Profile والاستراتيجية المحلية بهدف الوصول إلى أفضل 3 نتائج للكلمات والمناطق المحددة، مع ضمان «ضمن أفضل 3 أو استرداد المبلغ» عند استيفاء الشروط والمواعيد المتفق عليها.", ru: "Оптимизация профиля Google Business Profile и локальная стратегия с целью попасть в топ-3 по согласованным запросам и регионам; гарантия «топ-3 или возврат средств» действует при соблюдении согласованных критериев и сроков." },
     fromEur: 990,
     fromPeriod: "year",
     highlights: [
@@ -49,7 +49,7 @@ export const SERVICES_PART2 = [
     num: "05",
     title: { fr: "Social Media", en: "Social Media", vi: "Mạng xã hội", ar: "وسائل التواصل الاجتماعي", ru: "Социальные сети" },
     short: { fr: "Stratégie, création et animation des réseaux.", en: "Strategy, creation and community management.", vi: "Chiến lược, sáng tạo và quản lý mạng xã hội.", ar: "استراتيجية وإنشاء وإدارة الشبكات الاجتماعية.", ru: "Стратегия, создание и ведение социальных сетей." },
-    description: { fr: "Calendrier éditorial, direction artistique, création de contenus percutants et animation Instagram, TikTok, LinkedIn & Facebook.", en: "Editorial calendar, content creation and management of Instagram, Facebook, LinkedIn and TikTok.", vi: "Lịch biên tập, sáng tạo nội dung và quản lý Instagram, Facebook, LinkedIn, TikTok." },
+    description: { fr: "Calendrier éditorial, direction artistique, création de contenus percutants et animation Instagram, TikTok, LinkedIn & Facebook.", en: "Editorial calendar, content creation and management of Instagram, Facebook, LinkedIn and TikTok.", vi: "Lịch biên tập, sáng tạo nội dung và quản lý Instagram, Facebook, LinkedIn, TikTok.", ar: "تقويم تحريري وتوجيه فني وإنشاء محتوى مؤثر وإدارة Instagram وTikTok وLinkedIn وFacebook.", ru: "Редакционный календарь, арт-дирекшн, создание выразительного контента и ведение Instagram, TikTok, LinkedIn и Facebook." },
     fromEur: 299,
     fromPeriod: "month",
     highlights: [
@@ -115,9 +115,9 @@ export const SERVICES_PART2 = [
   {
     id: "maintenance",
     num: "06",
-    title: { fr: "WebCare & Maintenance", en: "WebCare & Maintenance", vi: "WebCare & Bảo trì" },
-    short: { fr: "Corrections, évolutions et suivi du site.", en: "Fixes, updates and site monitoring.", vi: "Sửa lỗi, cập nhật và giám sát site." },
-    description: { fr: "Maintenance technique, mises à jour de sécurité et petites évolutions pour garder votre site fiable.", en: "Technical maintenance, security updates and small evolutions to keep your site reliable.", vi: "Bảo trì kỹ thuật, cập nhật bảo mật và điều chỉnh nhỏ." },
+    title: { fr: "WebCare & Maintenance", en: "WebCare & Maintenance", vi: "WebCare & Bảo trì", ar: "WebCare والصيانة", ru: "WebCare и обслуживание" },
+    short: { fr: "Corrections, évolutions et suivi du site.", en: "Fixes, updates and site monitoring.", vi: "Sửa lỗi, cập nhật và giám sát site.", ar: "إصلاحات وتحديثات ومتابعة الموقع.", ru: "Исправления, обновления и мониторинг сайта." },
+    description: { fr: "Maintenance technique, mises à jour de sécurité et petites évolutions pour garder votre site fiable.", en: "Technical maintenance, security updates and small evolutions to keep your site reliable.", vi: "Bảo trì kỹ thuật, cập nhật bảo mật và điều chỉnh nhỏ.", ar: "صيانة تقنية وتحديثات أمنية وتحسينات بسيطة للحفاظ على موثوقية موقعك.", ru: "Техническое обслуживание, обновления безопасности и небольшие доработки для надёжной работы сайта." },
     fromEur: 29,
     fromPeriod: "month",
     highlights: [
