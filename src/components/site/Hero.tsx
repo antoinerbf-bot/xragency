@@ -50,17 +50,17 @@ export function Hero() {
         <div className="absolute right-[10%] bottom-[23%] h-px w-[23%] bg-gradient-to-r from-transparent via-white/65 to-transparent" />
       </div>
 
-      <div className="relative mx-auto grid min-h-0 max-w-[1800px] md:min-h-[100svh] md:grid-cols-[minmax(0,1.05fr)_minmax(220px,.95fr)]">
-        <div className="relative h-[34svh] min-h-[220px] max-h-[340px] overflow-hidden md:hidden">
+      <div className="relative mx-auto grid min-h-[100svh] max-w-[1800px] md:min-h-[100svh] md:grid-cols-[minmax(0,1.05fr)_minmax(220px,.95fr)]">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden md:hidden">
           <img src={XR_HERO_PHOTO} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[center_42%]" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.12)_0%,rgba(0,0,0,.04)_35%,rgba(8,8,8,.45)_68%,#080808_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.30)_0%,rgba(0,0,0,.20)_24%,rgba(8,8,8,.58)_50%,#080808_88%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,.18),transparent_65%)]" />
           <div aria-hidden className="xr-hero-orbit absolute right-[-24px] top-[8%] h-48 w-48 rounded-full border border-white/25" />
           <div aria-hidden className="xr-hero-orbit xr-hero-orbit-delayed absolute right-[14px] top-[17%] h-32 w-32 rounded-full border border-white/15" />
           <div aria-hidden className="xr-hero-grain absolute inset-0 opacity-[.14]" />
         </div>
 
-        <div className="relative z-10 flex items-center px-5 pb-9 pt-3 sm:px-8 sm:pb-12 md:px-10 md:pb-32 md:pt-36 lg:px-16 xl:px-24">
+        <div className="relative z-10 flex items-end px-5 pb-16 pt-32 sm:px-8 sm:pb-20 md:items-center md:px-10 md:pb-32 md:pt-36 lg:px-16 xl:px-24">
           <div className="max-w-[850px]">
             <div className="mb-5 flex items-center gap-3 sm:mb-8">
               <span className="h-px w-10 bg-white/75" />
