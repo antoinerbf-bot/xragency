@@ -43,6 +43,8 @@ export function Faq() {
               fr: "Une question ? Elle est sûrement là. Sinon, posez-la nous directement — on répond en moins de 2h.",
               en: "A question? It's probably here. Otherwise, ask us directly — we reply in under 2h.",
               vi: "Có câu hỏi? Chắc chắn có ở đây. Nếu không, hãy hỏi chúng tôi trực tiếp.",
+              ar: "هل لديك سؤال؟ ربما تجد الإجابة هنا. وإلا، اسألنا مباشرة وسنرد خلال ساعتين.",
+              ru: "Есть вопрос? Возможно, ответ уже здесь. Если нет, спросите нас напрямую — мы ответим в течение двух часов.",
             })}
           </p>
         </Reveal>
