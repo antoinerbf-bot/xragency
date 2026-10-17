@@ -1,5 +1,5 @@
 const CART_COPY = {
-  fr:{emptyCount:"Aucune prestation choisie",empty:"{copy.empty}",choose:"{copy.choose}",total:"Estimation totale",request:"Demander un devis WhatsApp",send:"Envoyer ma sélection WhatsApp",terms:"Sans engagement · Réponse en moins de 2 h",selected:"Ma sélection",add:"Ajouter à ma sélection",added:"Ajouté à ma sélection",close:"Fermer",open:"Ouvrir ma sélection",remove:"Retirer",quote:"Bonjour XR Agency, je souhaite obtenir un devis personnalisé.",intro:"Bonjour XR Agency, je suis intéressé par les services suivants :",finish:"Pouvons-nous planifier un échange ?"},
+  fr:{emptyCount:"Aucune prestation choisie",empty:"Votre sélection est vide",choose:"Choisissez une formule dans la grille tarifaire",total:"Estimation totale",request:"Demander un devis WhatsApp",send:"Envoyer ma sélection WhatsApp",terms:"Sans engagement · Réponse en moins de 2 h",selected:"Ma sélection",add:"Ajouter à ma sélection",added:"Ajouté à ma sélection",close:"Fermer",open:"Ouvrir ma sélection",remove:"Retirer",quote:"Bonjour XR Agency, je souhaite obtenir un devis personnalisé.",intro:"Bonjour XR Agency, je suis intéressé par les services suivants :",finish:"Pouvons-nous planifier un échange ?"},
   en:{emptyCount:"No services selected",empty:"Your selection is empty",choose:"Choose a plan from the pricing table",total:"Estimated total",request:"Request a quote on WhatsApp",send:"Send my selection on WhatsApp",terms:"No obligation · Reply within 2 hours",selected:"My selection",add:"Add to my selection",added:"Added to my selection",close:"Close",open:"Open my selection",remove:"Remove",quote:"Hello XR Agency, I'd like a personalised quote.",intro:"Hello XR Agency, I'm interested in the following services:",finish:"Can we schedule a call?"},
   vi:{emptyCount:"Chưa chọn dịch vụ nào",empty:"Danh sách lựa chọn đang trống",choose:"Chọn gói dịch vụ trong bảng giá",total:"Tổng chi phí dự kiến",request:"Yêu cầu báo giá qua WhatsApp",send:"Gửi lựa chọn qua WhatsApp",terms:"Không ràng buộc · Phản hồi trong 2 giờ",selected:"Lựa chọn của tôi",add:"Thêm vào lựa chọn",added:"Đã thêm vào lựa chọn",close:"Đóng",open:"Mở danh sách lựa chọn",remove:"Xóa",quote:"Xin chào XR Agency, tôi muốn nhận báo giá tùy chỉnh.",intro:"Xin chào XR Agency, tôi quan tâm đến các dịch vụ sau:",finish:"Chúng ta có thể lên lịch trao đổi không?"},
   ar:{emptyCount:"لم يتم اختيار أي خدمة",empty:"قائمة اختياراتك فارغة",choose:"اختر باقة من جدول الأسعار",total:"الإجمالي التقديري",request:"طلب عرض سعر عبر واتساب",send:"إرسال اختياراتي عبر واتساب",terms:"دون التزام · الرد خلال ساعتين",selected:"اختياراتي",add:"أضف إلى اختياراتي",added:"تمت الإضافة إلى اختياراتي",close:"إغلاق",open:"فتح اختياراتي",remove:"إزالة",quote:"مرحباً XR Agency، أود الحصول على عرض سعر مخصص.",intro:"مرحباً XR Agency، أنا مهتم بالخدمات التالية:",finish:"هل يمكننا تحديد موعد للتواصل؟"},
@@ -122,10 +122,10 @@ export function Cart() {
               </div>
               <div>
                 <p className="display-serif text-lg text-muted-foreground/60">
-                  Votre sélection est vide
+                  {copy.empty}
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground/40">
-                  Choisissez une formule dans la grille tarifaire
+                  {copy.choose}
                 </p>
               </div>
             </div>
@@ -247,6 +247,8 @@ interface AddToCartBtnProps {
 
 export function AddToCartBtn({ item, popular, className }: AddToCartBtnProps) {
   const { addItem, items } = useCart();
+  const { lang } = useLang();
+  const copy = CART_COPY[lang] ?? CART_COPY.fr;
   const [added, setAdded] = useState(false);
   const id = item.id ?? `${item.serviceId}-${item.planName}`;
   const isInCart = items.some((i) => i.id === id);
@@ -274,12 +276,12 @@ export function AddToCartBtn({ item, popular, className }: AddToCartBtnProps) {
       {added || isInCart ? (
         <>
           <Check className="h-3.5 w-3.5" />
-          {CART_COPY.fr.added}
+          {copy.added}
         </>
       ) : (
         <>
           <ShoppingBag className="h-3.5 w-3.5" />
-          {CART_COPY.fr.add}
+          {copy.add}
         </>
       )}
     </button>
