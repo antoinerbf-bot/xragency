@@ -38,7 +38,7 @@ export function Hero() {
   return (
     <section ref={sectionRef} id="top" className="xr-hero xr-hero-refined relative isolate overflow-hidden bg-[#080808] text-white">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden md:block">
-        <img ref={imageRef} src={XR_HERO_PHOTO} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[center_42%]" style={{ transform: "scale(1)" }} />
+        <img ref={imageRef} src={XR_HERO_PHOTO} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[center_38%] sm:object-[center_42%]" style={{ transform: "scale(1)" }} />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.78)_0%,rgba(5,5,5,.56)_32%,rgba(5,5,5,.18)_62%,rgba(5,5,5,.04)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,5,5,.58)_0%,transparent_24%,rgba(5,5,5,.08)_100%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_73%_38%,transparent_0%,rgba(0,0,0,.08)_54%,rgba(0,0,0,.28)_100%)]" />
@@ -51,28 +51,28 @@ export function Hero() {
       </div>
 
       <div className="relative mx-auto grid min-h-0 max-w-[1800px] md:min-h-[100svh] md:grid-cols-[minmax(0,1.05fr)_minmax(220px,.95fr)]">
-        <div className="relative h-[42svh] min-h-[290px] max-h-[470px] overflow-hidden md:hidden">
+        <div className="relative h-[34svh] min-h-[220px] max-h-[340px] overflow-hidden md:hidden">
           <img src={XR_HERO_PHOTO} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[center_42%]" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.06)_0%,rgba(0,0,0,.02)_48%,#080808_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.12)_0%,rgba(0,0,0,.04)_35%,rgba(8,8,8,.45)_68%,#080808_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,.18),transparent_65%)]" />
           <div aria-hidden className="xr-hero-orbit absolute right-[-24px] top-[8%] h-48 w-48 rounded-full border border-white/25" />
           <div aria-hidden className="xr-hero-orbit xr-hero-orbit-delayed absolute right-[14px] top-[17%] h-32 w-32 rounded-full border border-white/15" />
           <div aria-hidden className="xr-hero-grain absolute inset-0 opacity-[.14]" />
         </div>
 
-        <div className="relative z-10 flex items-center px-5 pb-12 pt-5 sm:px-8 md:px-10 md:pb-32 md:pt-36 lg:px-16 xl:px-24">
+        <div className="relative z-10 flex items-center px-5 pb-9 pt-3 sm:px-8 sm:pb-12 md:px-10 md:pb-32 md:pt-36 lg:px-16 xl:px-24">
           <div className="max-w-[850px]">
-            <div className="mb-6 flex items-center gap-3 sm:mb-8">
+            <div className="mb-5 flex items-center gap-3 sm:mb-8">
               <span className="h-px w-10 bg-white/75" />
               <span className="label-mono text-[8px] tracking-[.24em] text-white/75 sm:text-[9px]">{t(UI.heroKicker)}</span>
             </div>
-            <h1 className="xr-hero-heading max-w-[920px] text-[clamp(3.45rem,7.2vw,7.9rem)] font-medium leading-[.86] tracking-[-.075em] text-white [text-wrap:balance]">
+            <h1 className="xr-hero-heading max-w-[920px] text-[clamp(3.1rem,7.2vw,7.9rem)] font-medium leading-[.86] tracking-[-.075em] text-white [text-wrap:balance]">
               <span className="block">{t(UI.heroTitle1)}</span>
               <span className="mt-1 block font-serif font-normal italic tracking-[-.065em] text-white/80">{t(UI.heroTitleAccent)}</span>
               <span className="mt-1 block">{t(UI.heroTitle2)}</span>
             </h1>
-            <p className="mt-6 max-w-[590px] text-[14px] leading-6 text-white/80 sm:mt-8 sm:text-base sm:leading-7 lg:text-[17px]">{t(UI.heroLead)}</p>
-            <div className="mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center">
+            <p className="mt-5 max-w-[590px] text-[14px] leading-6 text-white/80 sm:mt-8 sm:text-base sm:leading-7 lg:text-[17px]">{t(UI.heroLead)}</p>
+            <div className="mt-6 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center">
               <a href="#quote" className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-white px-6 py-4 text-[10px] font-bold uppercase tracking-[.1em] text-[#090909] transition duration-300 hover:-translate-y-1 hover:bg-neutral-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:min-w-[245px]">
                 {t(UI.heroCtaMockup)}
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
