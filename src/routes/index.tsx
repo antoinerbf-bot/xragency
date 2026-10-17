@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
-import { HomeServices } from "@/components/site/HomeServices";
+import { ImmersiveJourney } from "@/components/site/ImmersiveJourney";
+import { ImmersiveServices } from "@/components/site/ImmersiveServices";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
 import { DigitalAudit } from "@/components/site/DigitalAudit";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
@@ -32,8 +33,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-
-
 function Index() {
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
@@ -45,7 +44,8 @@ function Index() {
       <Nav />
       <main className="relative z-10">
         <Hero />
-        <HomeServices />
+        <ImmersiveJourney />
+        <ImmersiveServices />
         <QuoteConfiguratorCompact />
         <DigitalAudit />
         <MapsSimulator />
