@@ -36,6 +36,13 @@ function FlagIcon({ code }: { code: string }) {
 
 export function Nav() {
   const { t, lang, setLang, price } = useLang();
+  const accessibility = ({
+    fr: { language: "Choisir la langue", languagePrefix: "Langue : ", light: "Passer en mode clair", dark: "Passer en mode sombre", lightTitle: "Mode clair", darkTitle: "Mode sombre", menu: "Menu" },
+    en: { language: "Choose language", languagePrefix: "Language: ", light: "Switch to light mode", dark: "Switch to dark mode", lightTitle: "Light mode", darkTitle: "Dark mode", menu: "Menu" },
+    vi: { language: "Chọn ngôn ngữ", languagePrefix: "Ngôn ngữ: ", light: "Chuyển sang chế độ sáng", dark: "Chuyển sang chế độ tối", lightTitle: "Chế độ sáng", darkTitle: "Chế độ tối", menu: "Menu" },
+    ar: { language: "اختيار اللغة", languagePrefix: "اللغة: ", light: "التبديل إلى الوضع الفاتح", dark: "التبديل إلى الوضع الداكن", lightTitle: "الوضع الفاتح", darkTitle: "الوضع الداكن", menu: "القائمة" },
+    ru: { language: "Выбрать язык", languagePrefix: "Язык: ", light: "Переключить на светлую тему", dark: "Переключить на тёмную тему", lightTitle: "Светлая тема", darkTitle: "Тёмная тема", menu: "Меню" },
+  } as const)[lang];
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const isHome = location.pathname === "/";
@@ -186,7 +193,7 @@ export function Nav() {
                   <button
                     key={l.code}
                     type="button"
-                    aria-label={"Langue : " + l.label}
+                    aria-label={accessibility.languagePrefix + l.label}
                     aria-pressed={lang === l.code}
                     title={l.label}
                     onClick={() => setLang(l.code)}
@@ -201,9 +208,9 @@ export function Nav() {
               </div>
               <button
                 type="button"
-                aria-label="Choisir la langue"
+                aria-label={accessibility.language}
                 aria-expanded={languageOpen}
-                title="Choisir la langue"
+                title={accessibility.language}
                 onClick={() => setLanguageOpen((value) => !value)}
                 className="grid h-10 w-10 shrink-0 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] text-xl shadow-sm transition hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)] sm:hidden"
               >
@@ -215,7 +222,7 @@ export function Nav() {
                     <button
                       key={l.code}
                       type="button"
-                      aria-label={"Langue : " + l.label}
+                      aria-label={accessibility.languagePrefix + l.label}
                       aria-pressed={lang === l.code}
                       title={l.label}
                       onClick={() => {
@@ -236,14 +243,14 @@ export function Nav() {
 
             <button
               type="button"
-              aria-label={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
-              title={theme === "dark" ? "Mode clair" : "Mode sombre"}
+              aria-label={theme === "dark" ? accessibility.light : accessibility.dark}
+              title={theme === "dark" ? accessibility.lightTitle : accessibility.darkTitle}
               onClick={toggleTheme}
               className="group grid h-10 w-10 shrink-0 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] text-[var(--xr-ink)] shadow-[0_8px_28px_-18px_rgba(0,0,0,.35)] transition duration-300 hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)]"
             >
               <span className="relative grid place-items-center">
                 {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                <span className="sr-only">{theme === "dark" ? "Mode clair" : "Mode sombre"}</span>
+                <span className="sr-only">{theme === "dark" ? accessibility.lightTitle : accessibility.darkTitle}</span>
               </span>
             </button>
 
@@ -258,7 +265,7 @@ export function Nav() {
 
             <button
               type="button"
-              aria-label="Menu"
+              aria-label={accessibility.menu}
               onClick={() => setOpen((v) => !v)}
               className="grid h-10 w-10 shrink-0 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] text-[var(--xr-ink)] lg:hidden"
             >
@@ -356,7 +363,7 @@ export function Nav() {
                 <span className="label-mono mb-1.5 block text-[6px] xr-muted-2">THÈME</span>
                 <button
                   type="button"
-                  aria-label={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
+                  aria-label={theme === "dark" ? accessibility.light : accessibility.dark}
                   onClick={toggleTheme}
                   className="grid h-9 w-9 place-items-center rounded-full border xr-line bg-[var(--xr-surface-strong)] text-[var(--xr-ink)]"
                 >
