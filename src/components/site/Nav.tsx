@@ -64,11 +64,11 @@ export function Nav() {
   const heroTop = isHome && !scrolled;
 
   return (
-    <header className={cn("fixed inset-x-0 top-0 z-50 transition-all duration-500", scrolled ? "py-2 sm:py-3" : "py-3 sm:py-5")}>
+    <header className={cn("fixed inset-x-0 top-0 z-50 transition-all duration-500", scrolled ? "py-1.5 sm:py-2.5" : "py-2 sm:py-4")}>
       <div className="mx-auto max-w-[1640px] px-4 sm:px-6 lg:px-10">
         <nav
           className={cn(
-            "relative flex items-center gap-2 rounded-full border px-2.5 py-2.5 transition-all duration-500 sm:px-3",
+            "relative flex items-center gap-1.5 rounded-full border px-2 py-1.5 transition-all duration-500 sm:gap-2 sm:px-3 sm:py-2",
             scrolled
               ? "xr-panel-strong shadow-[var(--xr-shadow)] text-[var(--xr-ink)]"
               : heroTop
@@ -191,7 +191,7 @@ export function Nav() {
                     title={l.label}
                     onClick={() => setLang(l.code)}
                     className={cn(
-                      "grid h-8 w-8 place-items-center rounded-full text-xl transition hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)]",
+                      "grid h-7 w-7 place-items-center rounded-full text-lg transition hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)] sm:h-8 sm:w-8 sm:text-xl",
                       lang === l.code && "bg-[var(--xr-accent-soft)] ring-1 ring-[var(--xr-ink)]/35"
                     )}
                   >
