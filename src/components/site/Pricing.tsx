@@ -11,16 +11,16 @@ import { AddToCartBtn } from "./Cart";
 const CATEGORIES = [
   {
     id: "all",
-    label: { fr: "Tous les services (10)", en: "All Services (10)", vi: "Tất cả dịch vụ (10)" },
+    label: { fr: "Tous les services (10)", en: "All Services (10)", vi: "Tất cả dịch vụ (10)", ar: "جميع الخدمات (10)", ru: "Все услуги (10)" },
   },
   {
     id: "web",
-    label: { fr: "Sites Web & E-commerce", en: "Websites & E-commerce", vi: "Website & TMĐT" },
+    label: { fr: "Sites Web & E-commerce", en: "Websites & E-commerce", vi: "Website & TMĐT", ar: "المواقع والمتاجر الإلكترونية", ru: "Сайты и интернет-магазины" },
     ids: ["websites", "ecommerce", "refonte"],
   },
   {
     id: "growth",
-    label: { fr: "Google Maps & SEO", en: "Google Maps & SEO", vi: "Google Maps & SEO" },
+    label: { fr: "Google Maps & SEO", en: "Google Maps & SEO", vi: "Google Maps & SEO", ar: "خرائط Google وتحسين محركات البحث", ru: "Google Maps и SEO" },
     ids: ["maps", "seo", "ads"],
   },
   {
@@ -29,6 +29,8 @@ const CATEGORIES = [
       fr: "Stratégie Digitale",
       en: "Digital Strategy",
       vi: "Chiến lược Số",
+      ar: "الاستراتيجية الرقمية",
+      ru: "Цифровая стратегия",
     },
     ids: ["strategy"],
   },
@@ -38,13 +40,22 @@ const CATEGORIES = [
       fr: "Branding & Maintenance",
       en: "Branding & Maintenance",
       vi: "Thương hiệu & Bảo trì",
+      ar: "الهوية والصيانة",
+      ru: "Брендинг и обслуживание",
     },
     ids: ["branding", "social", "maintenance"],
   },
 ];
 
 export function Pricing() {
-  const { t, price } = useLang();
+  const { t, price, lang } = useLang();
+  const pricingCopy = ({
+    fr: { detailed: "Formules & Tarifs détaillés", cash: "Comptant", monthly: "Mensuel", perMonth: "/mois" },
+    en: { detailed: "Plans & Detailed Pricing", cash: "Pay in full", monthly: "Monthly", perMonth: "/month" },
+    vi: { detailed: "Gói dịch vụ & Bảng giá chi tiết", cash: "Thanh toán một lần", monthly: "Hàng tháng", perMonth: "/tháng" },
+    ar: { detailed: "الباقات والأسعار التفصيلية", cash: "دفع كامل", monthly: "شهريًا", perMonth: "/شهر" },
+    ru: { detailed: "Пакеты и подробные цены", cash: "Полная оплата", monthly: "Ежемесячно", perMonth: "/мес." },
+  } as const)[lang];
   const [activeCategory, setActiveCategory] = useState("all");
   const [activeServiceId, setActiveServiceId] = useState(SERVICES[0].id);
   const [installmentSelections, setInstallmentSelections] = useState<Record<number, boolean>>({});
@@ -128,7 +139,7 @@ export function Pricing() {
         <Reveal delay={140}>
           <div className="mt-8 rounded-2xl border border-border/80 bg-accent/20 px-5 py-4 sm:px-6 text-center max-w-3xl mx-auto">
             <span className="label-mono text-xs uppercase tracking-widest text-primary">
-              Formules & Tarifs détaillés · {currentService.num}
+              {pricingCopy.detailed} · {currentService.num}
             </span>
             <h3 className="display-serif mt-1.5 text-xl sm:text-2xl text-foreground">
               {t(currentService.title)}
@@ -193,7 +204,7 @@ export function Pricing() {
                               : "text-muted-foreground hover:text-foreground"
                           )}
                         >
-                          Comptant
+                          {pricingCopy.cash}
                         </button>
                         <button
                           onClick={() => setInstallmentSelections(prev => ({ ...prev, [i]: true }))}
@@ -204,7 +215,7 @@ export function Pricing() {
                               : "text-muted-foreground hover:text-foreground"
                           )}
                         >
-                          Mensuel
+                          {pricingCopy.monthly}
                         </button>
                       </div>
                     )}
@@ -219,12 +230,12 @@ export function Pricing() {
                           <span>{t(PERIOD_LABEL[displayPeriod])}</span>
                           {planIsInstallment && (
                             <span className="text-[9px] sm:text-[10px] text-primary/80 leading-tight max-w-[140px]">
-                              {t({ fr: "sur 12 mois (inclus domaine & hébergement 79€/m)", en: "over 12 mo (incl. domain & hosting 79€/m)", vi: "trong 12 tháng (gồm domain & hébergement 79€/m)" })}
+                              {t({ fr: "sur 12 mois (domaine et hébergement inclus : 79 €/mois)", en: "over 12 months (domain and hosting included: €79/month)", vi: "trong 12 tháng (đã gồm tên miền và hosting: 79 €/tháng)", ar: "على مدى 12 شهرًا (يشمل النطاق والاستضافة: 79 يورو/شهريًا)", ru: "на 12 месяцев (домен и хостинг включены: 79 €/мес.)" })}
                             </span>
                           )}
                           {displayPeriod === "month" && (
                             <span className="text-[9px] sm:text-[10px] text-primary/80">
-                              ≈ {price(Math.round((p.eur * 1.4) / 12))} /mois
+                              ≈ {price(Math.round((p.eur * 1.4) / 12))} {pricingCopy.perMonth}
                             </span>
                           )}
                         </span>
