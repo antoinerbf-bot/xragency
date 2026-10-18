@@ -2,10 +2,19 @@ import { useState } from "react";
 import type { CSSProperties } from "react";
 import { ArrowRight, ArrowUpRight, BarChart3, Bot, Globe2, MapPinned, Palette, ShieldCheck, Users } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { useLang } from "@/lib/i18n";
+import { useLang, type Lang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
 import { ServiceIllustration } from "./ServiceIllustration";
 import { Parallax, Reveal } from "./primitives";
+import { useFunnel } from "@/lib/funnel";
+
+const FUNNEL_SERVICE_BTN: Record<Lang, { added: string; add: string }> = {
+  fr: { added: "✓ Dans votre devis", add: "+ Ajouter au devis" },
+  en: { added: "✓ In your quote", add: "+ Add to quote" },
+  vi: { added: "✓ Đã thêm vào báo giá", add: "+ Thêm vào báo giá" },
+  ar: { added: "✓ مضاف إلى عرض السعر", add: "+ أضف إلى العرض" },
+  ru: { added: "✓ В вашей смете", add: "+ Добавить в смету" },
+};
 
 const IDS = ["websites", "branding", "seo", "maps", "social", "maintenance", "robotics"] as const;
 const ICONS = {
@@ -132,12 +141,21 @@ function serviceHref(id: string) {
 export function HomeServices() {
   const { t, price, lang } = useLang();
   const copy = COPY[lang as keyof typeof COPY] ?? COPY.fr;
+  let funnel: ReturnType<typeof useFunnel> | null = null;
+  try {
+    funnel = useFunnel();
+  } catch {
+    funnel = null;
+  }
+  const currentLang = (lang in FUNNEL_SERVICE_BTN ? lang : "fr") as Lang;
   const [active, setActive] = useState<(typeof IDS)[number]>("websites");
   const index = IDS.indexOf(active);
   const service = SERVICES.find((s) => s.id === active) ?? SERVICES[0];
   const Icon = ICONS[active];
   const next = IDS[(index + 1) % IDS.length];
   const currentAccent = ACCENTS[active];
+  const funnelServiceId = active === "websites" ? "website" : active;
+  const isSelectedInFunnel = funnel?.selectedServices.includes(funnelServiceId) ?? false;
 
   return (
     <section id="homepage-services" className="xr-section relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-14 sm:py-20 lg:py-28 transition-colors duration-700">
@@ -260,13 +278,33 @@ export function HomeServices() {
                     {copy.open}
                     <ArrowUpRight className="h-4 w-4" />
                   </Link>
-                  <a
-                    href="#quote"
+
+                  <button
+                    type="button"
+                    onClick={() => funnel?.toggleService(funnelServiceId)}
+                    className={
+                      "inline-flex items-center gap-2 rounded-full border px-4 py-3.5 label-mono text-[8px] transition hover:-translate-y-0.5 " +
+                      (isSelectedInFunnel
+                        ? "border-[var(--service-accent)] bg-[var(--xr-accent-soft)] font-bold text-[var(--xr-ink)]"
+                        : "xr-line bg-[var(--xr-surface-strong)] text-[var(--xr-muted)] hover:text-[var(--xr-ink)]")
+                    }
+                  >
+                    {isSelectedInFunnel
+                      ? FUNNEL_SERVICE_BTN[currentLang]?.added || "✓ Dans votre devis"
+                      : FUNNEL_SERVICE_BTN[currentLang]?.add || "+ Ajouter au devis"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!isSelectedInFunnel) funnel?.toggleService(funnelServiceId);
+                      funnel?.scrollToSection("#quote");
+                    }}
                     className="inline-flex items-center gap-2 rounded-full border xr-line px-5 py-3.5 label-mono text-[8px] xr-muted transition hover:bg-[var(--xr-bg)]"
                   >
                     {copy.quote}
                     <ArrowRight className="h-3.5 w-3.5" />
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

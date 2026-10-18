@@ -1,14 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
+import { CostOfInaction } from "@/components/site/CostOfInaction";
 import { HomeServices } from "@/components/site/HomeServices";
-import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
-import { DigitalAudit } from "@/components/site/DigitalAudit";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
+import { DigitalAudit } from "@/components/site/DigitalAudit";
+import { ProofAndGuarantees } from "@/components/site/ProofAndGuarantees";
+import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
 import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
-
 import { CinematicIntro } from "@/components/site/CinematicIntro";
+import { FunnelProvider } from "@/lib/funnel";
+import { FunnelRail } from "@/components/site/FunnelRail";
+import { StickyFunnelCTA } from "@/components/site/StickyFunnelCTA";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,27 +38,31 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-
-
 function Index() {
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
-      <CinematicIntro />
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 z-0 opacity-25"
-        style={{ background: "var(--gradient-halo)" }}
-      />
-      <Nav />
-      <main className="relative z-10">
-        <Hero />
-        <HomeServices />
-        <QuoteConfiguratorCompact />
-        <DigitalAudit />
-        <MapsSimulator />
-        <Faq />
-        <Contact />
-      </main>
-    </div>
+    <FunnelProvider>
+      <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
+        <CinematicIntro />
+        <div
+          aria-hidden
+          className="pointer-events-none fixed inset-0 z-0 opacity-25"
+          style={{ background: "var(--gradient-halo)" }}
+        />
+        <Nav />
+        <FunnelRail />
+        <main className="relative z-10">
+          <Hero />
+          <CostOfInaction />
+          <HomeServices />
+          <MapsSimulator />
+          <DigitalAudit />
+          <ProofAndGuarantees />
+          <QuoteConfiguratorCompact />
+          <Faq />
+          <Contact />
+        </main>
+        <StickyFunnelCTA />
+      </div>
+    </FunnelProvider>
   );
 }

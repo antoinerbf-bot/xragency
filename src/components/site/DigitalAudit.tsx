@@ -34,6 +34,7 @@ const UI = {
     waPrefill: "Bonjour XR Agency, j'ai terminé mon audit digital. Site : ",
     pdfReport: "RAPPORT", pdfSiteAudited: "Site audité", pdfScore: "Score", pdfDetected: "Éléments détectés", pdfTitle: "Titre", pdfMeta: "Meta description", pdfNotDetected: "Non détecté", pdfFindings: "Constats", pdfToImprove: "À améliorer · ", pdfPositive: "Signal positif · ", pdfRecommendations: "Recommandations",
     hudStatus: "SCANNER HUD DIGITAL", hudLive: "ANALYSE EN TEMPS RÉEL", hudSsl: "SÉCURITÉ SSL/TLS", hudDom: "STRUCTURE DOM", hudSpeed: "CORE WEB VITALS", hudUx: "EXPÉRIENCE MOBILE", hudLaser: "BALAYAGE RADAR XR ACTIF",
+    hudAwaiting: "EN ATTENTE", hudAwaitingBadge: "DÉMONSTRATION · EN ATTENTE", hudPending: "En attente de scan", hudBenchmarkSample: "Aperçu de diagnostic",
   },
   en: {
     eyebrow: "DIGITAL AUDIT · FREE", title: "Before rebuilding, understand.",
@@ -53,6 +54,7 @@ const UI = {
     waPrefill: "Hello XR Agency, I have completed my digital audit. Website: ",
     pdfReport: "REPORT", pdfSiteAudited: "Audited Website", pdfScore: "Score", pdfDetected: "Detected Elements", pdfTitle: "Title", pdfMeta: "Meta description", pdfNotDetected: "Not detected", pdfFindings: "Key Findings", pdfToImprove: "To improve · ", pdfPositive: "Positive signal · ", pdfRecommendations: "Recommendations",
     hudStatus: "DIGITAL HUD SCANNER", hudLive: "REAL-TIME TELEMETRY", hudSsl: "SSL/TLS SECURITY", hudDom: "DOM STRUCTURE", hudSpeed: "CORE WEB VITALS", hudUx: "MOBILE UX", hudLaser: "XR RADAR SCAN ACTIVE",
+    hudAwaiting: "STANDBY", hudAwaitingBadge: "DEMO PREVIEW · STANDBY", hudPending: "Awaiting scan", hudBenchmarkSample: "Diagnostic preview",
   },
   vi: {
     eyebrow: "AUDIT KỸ THUẬT SỐ · MIỄN PHÍ", title: "Hiểu trước khi làm lại.",
@@ -72,6 +74,7 @@ const UI = {
     waPrefill: "Xin chào XR Agency, tôi vừa hoàn thành audit kỹ thuật số. Website: ",
     pdfReport: "BÁO CÁO", pdfSiteAudited: "Website được kiểm toán", pdfScore: "Điểm", pdfDetected: "Thành phần phát hiện", pdfTitle: "Tiêu đề", pdfMeta: "Mô tả meta", pdfNotDetected: "Không phát hiện", pdfFindings: "Các phát hiện", pdfToImprove: "Cần cải thiện · ", pdfPositive: "Tín hiệu tốt · ", pdfRecommendations: "Khuyến nghị",
     hudStatus: "MÁY QUÉT HUD KỸ THUẬT SỐ", hudLive: "PHÂN TÍCH THỜI GIAN THỰC", hudSsl: "BẢO MẬT SSL/TLS", hudDom: "CẤU TRÚC DOM", hudSpeed: "CORE WEB VITALS", hudUx: "TRẢI NGHIỆM DI ĐỘNG", hudLaser: "TIA QUÉT RADAR XR HOẠT ĐỘNG",
+    hudAwaiting: "CHỜ QUÉT", hudAwaitingBadge: "XEM TRƯỚC DEMO · CHỜ QUÉT", hudPending: "Chờ bắt đầu quét", hudBenchmarkSample: "Mẫu chẩn đoán",
   },
   ar: {
     eyebrow: "تدقيق رقمي · مجاني", title: "افهم أولاً، ثم أعد البناء.",
@@ -91,6 +94,7 @@ const UI = {
     waPrefill: "مرحبًا XR Agency، أنهيت التدقيق الرقمي لموقعي: ",
     pdfReport: "تقرير", pdfSiteAudited: "الموقع المفحوص", pdfScore: "الدرجة", pdfDetected: "العناصر المرصودة", pdfTitle: "العنوان", pdfMeta: "الوصف التعريفي", pdfNotDetected: "غير مكتشف", pdfFindings: "النتائج والملاحظات", pdfToImprove: "بحاجة لتحسين · ", pdfPositive: "إشارة إيجابية · ", pdfRecommendations: "التوصيات",
     hudStatus: "ماسح HUD الرقمي", hudLive: "تحليل فوري ومباشر", hudSsl: "أمان SSL/TLS", hudDom: "بنية DOM", hudSpeed: "مؤشرات الويب الأساسية", hudUx: "تجربة الجوال", hudLaser: "مسح رادار XR نشط",
+    hudAwaiting: "جاهز", hudAwaitingBadge: "معاينة توضيحية · بانتظار الفحص", hudPending: "بانتظار الفحص", hudBenchmarkSample: "نموذج تشخيص",
   },
   ru: {
     eyebrow: "DIGITAL AUDIT · БЕСПЛАТНО", title: "Сначала понять, потом переделывать.",
@@ -110,6 +114,7 @@ const UI = {
     waPrefill: "Здравствуйте, XR Agency! Я завершил цифровой аудит сайта: ",
     pdfReport: "ОТЧЁТ", pdfSiteAudited: "Проверенный сайт", pdfScore: "Оценка", pdfDetected: "Обнаруженные элементы", pdfTitle: "Заголовок", pdfMeta: "Мета-описание", pdfNotDetected: "Не обнаружено", pdfFindings: "Выводы", pdfToImprove: "Требует улучшения · ", pdfPositive: "Положительный сигнал · ", pdfRecommendations: "Рекомендации",
     hudStatus: "ЦИФРОВОЙ HUD-СКАНЕР", hudLive: "АНАЛИЗ В РЕАЛЬНОМ ВРЕМЕНИ", hudSsl: "БЕЗОПАСНОСТЬ SSL/TLS", hudDom: "СТРУКТУРА DOM", hudSpeed: "CORE WEB VITALS", hudUx: "МОБИЛЬНЫЙ UX", hudLaser: "АКТИВЕН XR-РАДАРНЫЙ СКАНЕР",
+    hudAwaiting: "ОЖИДАНИЕ", hudAwaitingBadge: "ДЕМО-ПРЕДПРОСМОТР · ОЖИДАНИЕ", hudPending: "Ожидание сканирования", hudBenchmarkSample: "Пример диагностики",
   },
 } as const;
 
@@ -135,17 +140,17 @@ export function DigitalAudit(){
           <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]"/>
           <span className="h-2.5 w-2.5 rounded-full bg-[#27c93f]"/>
           <div className="ml-2 min-w-0 flex-1 rounded-lg border border-white/10 bg-[#0a0c10] px-3 py-1.5 font-mono text-[8px] text-white/60 truncate flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0"/>
-            <span className="truncate">{url || "https://votre-site.fr"}</span>
+            <span className={"h-1.5 w-1.5 rounded-full shrink-0 " + (loading ? "bg-emerald-400 animate-pulse" : "bg-white/30")}/>
+            <span className="truncate">{url.trim() ? url : "https://votre-site.com"}</span>
           </div>
           <span className="hidden rounded-full bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-1 label-mono text-[6px] text-emerald-400 sm:inline-flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping"/>
-            {t.hudLive}
+            <span className={"h-1.5 w-1.5 rounded-full " + (loading ? "bg-emerald-400 animate-ping" : "bg-emerald-400/60")}/>
+            {loading ? t.hudLive : t.hudAwaitingBadge}
           </span>
         </div>
         <div className="relative h-[230px] overflow-hidden bg-[#090b0e] p-4 sm:h-[250px]">
           <div aria-hidden className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(16,185,129,.15)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,.15)_1px,transparent_1px)] [background-size:24px_24px]"/>
-          <div className="pointer-events-none absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_15px_#10b981] animate-xr-scan z-10"/>
+          <div className={"pointer-events-none absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_15px_#10b981] z-10 " + (loading ? "animate-xr-scan" : "opacity-30")}/>
           <div className="relative h-full rounded-xl border border-white/10 bg-[#12161f]/80 p-4 backdrop-blur-md flex flex-col justify-between">
             <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
               <div className="flex items-center gap-2">
@@ -156,37 +161,49 @@ export function DigitalAudit(){
                 </div>
               </div>
               <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 label-mono text-[7px] font-bold text-emerald-400">
-                {loading ? "SCANNING..." : "MONITORING"}
+                {loading ? (t.scanRunning || "SCANNING...") : t.hudAwaiting}
               </span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 my-auto py-2">
               <div className="rounded-lg border border-white/5 bg-white/[0.03] p-2">
                 <span className="block label-mono text-[6px] text-white/40">{t.hudSsl}</span>
-                <span className="mt-1 block text-[10px] font-mono font-bold text-emerald-400">TLS 1.3 · A+</span>
+                <span className="mt-1 block text-[10px] font-mono font-bold text-emerald-400">
+                  {loading ? "SCANNING..." : "TLS 1.3 · A+"}
+                </span>
+                <span className="text-[6px] text-white/30 block mt-0.5">{loading ? "..." : (t.hudPending || "Exemple")}</span>
               </div>
               <div className="rounded-lg border border-white/5 bg-white/[0.03] p-2">
                 <span className="block label-mono text-[6px] text-white/40">{t.hudSpeed}</span>
-                <span className="mt-1 block text-[10px] font-mono font-bold text-cyan-400">1.1s LCP</span>
+                <span className="mt-1 block text-[10px] font-mono font-bold text-cyan-400">
+                  {loading ? "TESTING..." : "< 1.5s LCP"}
+                </span>
+                <span className="text-[6px] text-white/30 block mt-0.5">{loading ? "..." : (t.hudPending || "Exemple")}</span>
               </div>
               <div className="rounded-lg border border-white/5 bg-white/[0.03] p-2">
                 <span className="block label-mono text-[6px] text-white/40">{t.hudDom}</span>
-                <span className="mt-1 block text-[10px] font-mono font-bold text-amber-400">Clean DOM</span>
+                <span className="mt-1 block text-[10px] font-mono font-bold text-amber-400">
+                  {loading ? "PARSING..." : "Clean DOM"}
+                </span>
+                <span className="text-[6px] text-white/30 block mt-0.5">{loading ? "..." : (t.hudPending || "Exemple")}</span>
               </div>
               <div className="rounded-lg border border-white/5 bg-white/[0.03] p-2">
                 <span className="block label-mono text-[6px] text-white/40">{t.hudUx}</span>
-                <span className="mt-1 block text-[10px] font-mono font-bold text-rose-400">98/100 Mobile</span>
+                <span className="mt-1 block text-[10px] font-mono font-bold text-rose-400">
+                  {loading ? "AUDITING..." : "Mobile-First"}
+                </span>
+                <span className="text-[6px] text-white/30 block mt-0.5">{loading ? "..." : (t.hudPending || "Exemple")}</span>
               </div>
             </div>
             <div className="flex items-end gap-1.5 h-7 border-t border-white/10 pt-2">
               {[38, 62, 45, 85, 70, 92, 54, 78, 65, 88, 42, 95, 73, 84, 60, 90].map((h, i) => (
-                <span key={i} className="flex-1 rounded-t-sm bg-gradient-to-t from-emerald-500/20 to-emerald-400 transition-all duration-300" style={{ height: (loading ? (h * 0.9 + (i % 3) * 5) : h) + "%" }}/>
+                <span key={i} className="flex-1 rounded-t-sm bg-gradient-to-t from-emerald-500/20 to-emerald-400 transition-all duration-300" style={{ height: (loading ? (h * 0.9 + (i % 3) * 5) : (h * 0.4)) + "%" }}/>
               ))}
             </div>
           </div>
           <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-lg border border-white/10 bg-[#0c0e14]/90 px-3 py-2 shadow-lg backdrop-blur-xl">
             <span className="label-mono text-[5px] tracking-[.18em] text-white/50">{t.structureBanner}</span>
             <span className="text-[7px] font-semibold text-emerald-400 flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"/>
+              <span className={"h-1.5 w-1.5 rounded-full " + (loading ? "bg-emerald-400 animate-pulse" : "bg-emerald-400/40")}/>
               {loading ? t.scanRunning : t.scanReady}
             </span>
           </div>
@@ -194,24 +211,24 @@ export function DigitalAudit(){
       </div>
       <div aria-hidden="true" className="xr-audit-floating absolute right-5 top-[30%] z-20 hidden w-[165px] rounded-2xl border border-white/20 bg-[#11151e]/90 p-3.5 shadow-[0_28px_70px_-25px_rgba(0,0,0,.85)] backdrop-blur-2xl sm:block text-white">
         <div className="flex items-center justify-between border-b border-white/10 pb-2">
-          <span className="label-mono text-[6px] text-white/60">INDEX_SCORE</span>
-          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"/>
+          <span className="label-mono text-[6px] text-white/60">{loading ? "SCAN_CYCLE" : "BENCHMARK_PREVIEW"}</span>
+          <span className={"h-2 w-2 rounded-full " + (loading ? "bg-emerald-400 animate-pulse" : "bg-emerald-400/50")}/>
         </div>
         <div className="mt-2.5 flex items-center gap-3">
-          <div className="relative h-11 w-11 shrink-0 rounded-full" style={{ background: "conic-gradient(#10b981 0 88%, rgba(255,255,255,.1) 88% 100%)" }}>
+          <div className="relative h-11 w-11 shrink-0 rounded-full" style={{ background: loading ? "conic-gradient(#10b981 0 88%, rgba(255,255,255,.1) 88% 100%)" : "conic-gradient(rgba(16,185,129,.5) 0 85%, rgba(255,255,255,.1) 85% 100%)" }}>
             <div className="absolute inset-[4px] rounded-full bg-[#11151e] grid place-items-center">
-              <span className="font-mono text-[9px] font-bold text-white">88%</span>
+              <span className="font-mono text-[9px] font-bold text-white">{loading ? "..." : "88%"}</span>
             </div>
           </div>
           <div className="flex-1 space-y-1">
+            <span className="block text-[6px] font-mono text-white/60">{t.hudBenchmarkSample}</span>
             <span className="block h-1.5 w-full rounded-full bg-white/20"/>
             <span className="block h-1.5 w-3/4 rounded-full bg-emerald-400/80"/>
-            <span className="block h-1.5 w-1/2 rounded-full bg-white/10"/>
           </div>
         </div>
         <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[7px] font-mono text-white/70">
-          <span>LATENCY</span>
-          <span className="text-emerald-400">18ms</span>
+          <span>{loading ? "LATENCY" : "RADAR"}</span>
+          <span className="text-emerald-400">{loading ? "MEASURING..." : "STANDBY"}</span>
         </div>
       </div>
       <div className="relative flex flex-col justify-between">

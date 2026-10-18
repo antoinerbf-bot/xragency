@@ -17,6 +17,7 @@ import { useLang } from "@/lib/i18n";
 import { CONTACT } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { Reveal, SectionHeading } from "./primitives";
+import { useFunnel } from "@/lib/funnel";
 
 
 const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
@@ -361,10 +362,34 @@ export function MapsSimulator() {
   const { price: formatPrice, lang } = useLang();
   const tx = (value: string) => translateMaps(value, lang);
 
+  let funnel: ReturnType<typeof useFunnel> | null = null;
+  try {
+    funnel = useFunnel();
+  } catch {
+    funnel = null;
+  }
+
   const [sector, setSector] = useState(SECTORS[0].id);
   const [citySize, setCitySize] = useState(CITY_SIZES[0].id);
   const [keywords, setKeywords] = useState(KEYWORD_RANGES[0].id);
   const [rank, setRank] = useState(CURRENT_RANKS[0].id);
+
+  useEffect(() => {
+    if (!funnel?.sector) return;
+    const map: Record<string, string> = {
+      restaurant: "resto",
+      hospitality: "hotel",
+      health: "sante",
+      realestate: "immo",
+      beauty: "beaute",
+      services: "juridique",
+      commerce: "autre",
+    };
+    const target = map[funnel.sector];
+    if (target && target !== sector) {
+      setSector(target);
+    }
+  }, [funnel?.sector, sector]);
 
   /* ── Dynamic price calculation ── */
   const { priceMin, priceMax } = useMemo(() => {

@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowRight, Search } from "lucide-react";
-import { useLang } from "@/lib/i18n";
+import { useLang, type Lang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { XR_HERO_PHOTO } from "@/lib/photography";
+import { useFunnel } from "@/lib/funnel";
+import { HERO_FUNNEL_PILLS } from "@/lib/funnel-i18n";
 
 export function Hero() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const currentLang = (lang || "fr") as Lang;
+  const { applyGoalPreset } = useFunnel();
   const sectionRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const [motionAllowed, setMotionAllowed] = useState(false);
@@ -100,6 +104,31 @@ export function Hero() {
               <a href="#audit" className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/45 px-5 py-3 text-[10px] font-semibold uppercase tracking-[.1em] text-white transition duration-300 hover:-translate-y-0.5 hover:border-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:min-w-[190px]">
                 {t(UI.heroCtaAudit)}<Search className="h-3.5 w-3.5 transition-transform group-hover:scale-110" />
               </a>
+            </div>
+
+            {/* 1-Click Interactive Funnel Qualification Pills */}
+            <div className="mt-8 pt-6 border-t border-white/10">
+              <span className="block label-mono text-[7px] tracking-[.24em] text-white/50 mb-3 uppercase">
+                {currentLang === "fr" ? "Accès direct par objectif stratégique :" : currentLang === "vi" ? "Truy cập nhanh theo mục tiêu chiến lược :" : currentLang === "ar" ? "انطلاق سريع حسب الهدف الاستراتيجي :" : currentLang === "ru" ? "Быстрый выбор стратегической цели :" : "Direct access by strategic goal:"}
+              </span>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {HERO_FUNNEL_PILLS.map((pill) => (
+                  <button
+                    key={pill.id}
+                    type="button"
+                    onClick={() => applyGoalPreset(pill.id)}
+                    className="group relative flex flex-col items-start rounded-2xl border border-white/15 bg-white/[0.04] p-3 text-left backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-white/40 hover:bg-white/[0.08] active:scale-[0.98]"
+                  >
+                    <span className="text-base mb-1">{pill.icon}</span>
+                    <span className="text-[10px] font-bold text-white leading-tight group-hover:text-[var(--xr-accent)] transition">
+                      {pill.label[currentLang] ?? pill.label.fr}
+                    </span>
+                    <span className="mt-0.5 text-[8px] text-white/50 line-clamp-1">
+                      {pill.sub[currentLang] ?? pill.sub.fr}
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

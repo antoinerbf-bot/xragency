@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { ArrowRight, Check, ChevronRight, MessageCircle, RotateCcw, Sparkles } from "lucide-react";
 import { Parallax, Reveal } from "./primitives";
 import { useLang, type Lang } from "@/lib/i18n";
+import { useFunnel } from "@/lib/funnel";
 import {
   SECTORS_DATA,
   SERVICES_DATA,
@@ -38,6 +39,14 @@ const SERVICE_ORDER: Record<string, string[]> = {
   other: ["website","branding","seo","maps","social","maintenance","robotics"]
 };
 
+const ROBOTICS_DETAILS: Record<Lang, string> = {
+  fr: "Location robot de service dès 499 € / mois · achat selon modèle · événement dès 250 €.",
+  en: "Service robot rental from €499/mo · purchase options · event from €250.",
+  vi: "Thuê robot dịch vụ từ 499 € / tháng · tùy chọn mua · sự kiện từ 250 €.",
+  ar: "إيجار روبوتات الخدمة من 499 € شهرياً · خيارات الشراء · فعاليات من 250 €.",
+  ru: "Аренда сервисных роботов от 499 €/мес · покупка · мероприятия от 250 €.",
+};
+
 const BASE_PRICES: Record<string, number> = { website: 499, branding: 179, seo: 299, maps: 990, ads: 299, social: 299, content: 399, conversion: 299, maintenance: 29, robotics: 499 };
 
 const PROFILE_SERVICE_RULES: Record<string, string[]> = Object.fromEntries(
@@ -47,6 +56,12 @@ const PROFILE_SERVICE_RULES: Record<string, string[]> = Object.fromEntries(
 export function QuoteConfiguratorCompact() {
   const { lang } = useLang();
   const currentLang = (lang in QUOTE_UI.kicker ? lang : "fr") as Lang;
+  let funnel: ReturnType<typeof useFunnel> | null = null;
+  try {
+    funnel = useFunnel();
+  } catch {
+    funnel = null;
+  }
 
   const SECTORS = useMemo(() => SECTORS_DATA.map((s) => ({
     id: s.id,
@@ -113,19 +128,31 @@ export function QuoteConfiguratorCompact() {
   const journeyRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
-  const [sectorId, setSectorId] = useState("");
+  const [sectorId, setSectorId] = useState(() => funnel?.sector || "");
   const [showAllSectors, setShowAllSectors] = useState(false);
-  const [goal, setGoal] = useState("");
+  const [goal, setGoal] = useState(() => funnel?.goal || "");
   const [situation, setSituation] = useState("");
   const [budget, setBudget] = useState("");
   const [discovery, setDiscovery] = useState("");
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [selectedServices, setSelectedServices] = useState<string[]>(() => funnel?.selectedServices || []);
   const [client, setClient] = useState({ company: "", name: "", email: "", whatsapp: "", website: "" });
   const [generated, setGenerated] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendMessage, setSendMessage] = useState("");
   const [paying, setPaying] = useState(false);
   const [checkoutUrl, setCheckoutUrl] = useState("");
+
+  useEffect(() => {
+    if (funnel?.sector && !sectorId) {
+      setSectorId(funnel.sector);
+    }
+  }, [funnel?.sector, sectorId]);
+
+  useEffect(() => {
+    if (funnel?.selectedServices?.length && selectedServices.length === 0) {
+      setSelectedServices(funnel.selectedServices);
+    }
+  }, [funnel?.selectedServices, selectedServices.length]);
 
   useEffect(() => {
     setIsTyping(true);
@@ -237,15 +264,26 @@ export function QuoteConfiguratorCompact() {
       validity.setDate(validity.getDate() + 15);
       const stamp = issueDate.toISOString().slice(0, 10).replace(/-/g, "");
       const quoteNumber = "XR-" + stamp + "-" + String(Math.floor(1000 + Math.random() * 9000));
-      const date = (d: Date) => d.toLocaleDateString(currentLang === "fr" ? "fr-FR" : currentLang === "vi" ? "vi-VN" : currentLang === "ru" ? "ru-RU" : currentLang === "ar" ? "ar-SA" : "en-US", { day: "2-digit", month: "2-digit", year: "numeric" });
+      const pdfLang = (currentLang === "ar" || currentLang === "ru") ? "en" : currentLang;
+      const cleanForPdf = (str: string) => {
+        if (!str) return "";
+        return str
+          .replace(/đ/g, "d").replace(/Đ/g, "D")
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/[^\x20-\x7E\xA0-\xFF]/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+      };
+      const date = (d: Date) => d.toLocaleDateString(pdfLang === "fr" ? "fr-FR" : "en-US", { day: "2-digit", month: "2-digit", year: "numeric" });
 
-      const pdfLabels = {
+      const allPdfLabels = {
         fr: { devis: "DEVIS", subtitle: "STUDIO DIGITAL · STRATÉGIE · DESIGN · CROISSANCE", client: "Client", company: "Entreprise", contact: "Contact", email: "E-mail", whatsapp: "WhatsApp", website: "Site", project: "Projet", activity: "Activité", priority: "Priorité", situation: "Situation", budget: "Budget", acquisition: "Acquisition", services: "Prestations sélectionnées", colService: "PRESTATION", colMode: "MODE", colAmount: "MONTANT", frame: "Cadre du devis", validity: "Validité", validText: "15 jours · jusqu’au ", start: "Démarrage", startText: "Après validation du devis et réception des éléments nécessaires au projet.", nature: "Nature", natureText: "Pré-devis généré automatiquement à partir de votre configuration XR Quote Studio.", validation: "Validation client", valText1: "Ce document récapitule les prestations sélectionnées et leur modèle de facturation.", valText2: "Le périmètre définitif est confirmé avec XRAGENCY avant engagement.", dateSig: "Date / signature", nameQuality: "Nom / qualité", totalOnce: "TOTAL PONCTUEL", totalMonth: "TOTAL MENSUEL", recurring: "RÉCURRENT", custom: "SUR MESURE", once: "PONCTUEL", onQuote: "Sur devis" },
         en: { devis: "QUOTATION", subtitle: "DIGITAL STUDIO · STRATEGY · DESIGN · GROWTH", client: "Client", company: "Company", contact: "Contact", email: "Email", whatsapp: "WhatsApp", website: "Website", project: "Project", activity: "Industry", priority: "Priority", situation: "Situation", budget: "Budget", acquisition: "Acquisition", services: "Selected Services", colService: "SERVICE", colMode: "MODE", colAmount: "AMOUNT", frame: "Quote Terms", validity: "Validity", validText: "15 days · until ", start: "Kickoff", startText: "Upon quote sign-off and reception of necessary project assets.", nature: "Nature", natureText: "Automated estimate generated from your XR Quote Studio configuration.", validation: "Client Approval", valText1: "This document outlines selected services and their billing model.", valText2: "Definitive scope is verified with XRAGENCY prior to kickoff.", dateSig: "Date / signature", nameQuality: "Name / title", totalOnce: "ONE-TIME TOTAL", totalMonth: "MONTHLY TOTAL", recurring: "RECURRING", custom: "CUSTOM", once: "ONE-TIME", onQuote: "Custom quote" },
-        vi: { devis: "BÁO GIÁ", subtitle: "STUDIO KỸ THUẬT SỐ · CHIẾN LƯỢC · THIẾT KẾ · TĂNG TRƯỞNG", client: "Khách hàng", company: "Công ty", contact: "Người liên hệ", email: "Email", whatsapp: "WhatsApp", website: "Website", project: "Dự án", activity: "Lĩnh vực", priority: "Ưu tiên", situation: "Tình trạng", budget: "Ngân sách", acquisition: "Kênh tiếp cận", services: "Dịch vụ đã chọn", colService: "DỊCH VỤ", colMode: "HÌNH THỨC", colAmount: "SỐ TIỀN", frame: "Điều khoản báo giá", validity: "Hiệu lực", validText: "15 ngày · đến ngày ", start: "Khởi động", startText: "Sau khi xác nhận báo giá và nhận đủ tư liệu dự án.", nature: "Phân loại", natureText: "Báo giá ước tính tự động từ XR Quote Studio.", validation: "Xác nhận của khách hàng", valText1: "Tài liệu này tổng hợp các dịch vụ đã chọn và mô hình thanh toán.", valText2: "Phạm vi chính thức sẽ được XRAGENCY thống nhất trước khi triển khai.", dateSig: "Ngày / Chữ ký", nameQuality: "Họ tên / Chức vụ", totalOnce: "TỔNG MỘT LẦN", totalMonth: "TỔNG HÀNG THÁNG", recurring: "ĐỊNH KỲ", custom: "THEO YÊU CẦU", once: "MỘT LẦN", onQuote: "Theo báo giá" },
-        ar: { devis: "عرض سعر", subtitle: "استوديو رقمي · استراتيجية · تصميم · نمو", client: "العميل", company: "الشركة", contact: "جهة الاتصال", email: "البريد الإلكتروني", whatsapp: "واتساب", website: "الموقع الإلكتروني", project: "المشروع", activity: "النشاط", priority: "الأولوية", situation: "الوضع الحالي", budget: "الميزانية", acquisition: "الاستقطاب", services: "الخدمات المختارة", colService: "الخدمة", colMode: "النوع", colAmount: "المبلغ", frame: "شروط العرض", validity: "الصلاحية", validText: "15 يومًا · حتى ", start: "البدء", startText: "بعد اعتماد العرض واستلام متطلبات المشروع.", nature: "طبيعة الوثيقة", natureText: "عرض تقديري تم توليده تلقائيًا عبر XR Quote Studio.", validation: "اعتماد العميل", valText1: "توضح هذه الوثيقة الخدمات المختارة ونموذج الفوترة.", valText2: "يتم تأكيد النطاق النهائي رسميًا مع XRAGENCY قبل البدء.", dateSig: "التاريخ / التوقيع", nameQuality: "الاسم / الصفة", totalOnce: "إجمالي الدفعة الواحدة", totalMonth: "الإجمالي الشهري", recurring: "متكرر", custom: "مخصص", once: "دفعة واحدة", onQuote: "حسب العرض" },
-        ru: { devis: "СМЕТА", subtitle: "ЦИФРОВАЯ СТУДИЯ · СТРАТЕГИЯ · ДИЗАЙН · РОСТ", client: "Клиент", company: "Компания", contact: "Контактное лицо", email: "Email", whatsapp: "WhatsApp", website: "Веб-сайт", project: "Проект", activity: "Сфера", priority: "Приоритет", situation: "Ситуация", budget: "Бюджет", acquisition: "Канал клиентов", services: "Выбранные услуги", colService: "УСЛУГА", colMode: "ФОРМАТ", colAmount: "СТОИМОСТЬ", frame: "Условия сметы", validity: "Срок действия", validText: "15 дней · до ", start: "Старт", startText: "После согласования сметы и получения исходных материалов.", nature: "Статус", natureText: "Предварительная смета, сформированная в XR Quote Studio.", validation: "Согласование клиентом", valText1: "Документ содержит выбранные услуги и модель оплаты.", valText2: "Окончательный состав работ подтверждается XRAGENCY до старта.", dateSig: "Дата / подпись", nameQuality: "Имя / должность", totalOnce: "ИТОГО ЕДИНОВРЕМЕННО", totalMonth: "ИТОГО ЕЖЕМЕСЯЧНО", recurring: "ЕЖЕМЕСЯЧНО", custom: "ПО ЗАПРОСУ", once: "ЕДИНОВРЕМЕННО", onQuote: "По запросу" },
-      }[currentLang] ?? { devis: "DEVIS", subtitle: "STUDIO DIGITAL · STRATÉGIE · DESIGN · CROISSANCE", client: "Client", company: "Entreprise", contact: "Contact", email: "E-mail", whatsapp: "WhatsApp", website: "Site", project: "Projet", activity: "Activité", priority: "Priorité", situation: "Situation", budget: "Budget", acquisition: "Acquisition", services: "Prestations sélectionnées", colService: "PRESTATION", colMode: "MODE", colAmount: "MONTANT", frame: "Cadre du devis", validity: "Validité", validText: "15 jours · jusqu’au ", start: "Démarrage", startText: "Après validation du devis et réception des éléments nécessaires au projet.", nature: "Nature", natureText: "Pré-devis généré automatiquement à partir de votre configuration XR Quote Studio.", validation: "Validation client", valText1: "Ce document récapitule les prestations sélectionnées et leur modèle de facturation.", valText2: "Le périmètre définitif est confirmé avec XRAGENCY avant engagement.", dateSig: "Date / signature", nameQuality: "Nom / qualité", totalOnce: "TOTAL PONCTUEL", totalMonth: "TOTAL MENSUEL", recurring: "RÉCURRENT", custom: "SUR MESURE", once: "PONCTUEL", onQuote: "Sur devis" };
+        vi: { devis: "BAO GIA", subtitle: "STUDIO KY THUAT SO · CHIEN LUOC · THIET KE · TANG TRUONG", client: "Khach hang", company: "Cong ty", contact: "Nguoi lien he", email: "Email", whatsapp: "WhatsApp", website: "Website", project: "Du an", activity: "Linh vuc", priority: "Uu tien", situation: "Tinh trang", budget: "Ngan sach", acquisition: "Kenh tiep can", services: "Dich vu da chon", colService: "DICH VU", colMode: "HINH THUC", colAmount: "SO TIEN", frame: "Dieu khoan bao gia", validity: "Hieu luc", validText: "15 ngay · den ngay ", start: "Khoi dong", startText: "Sau khi xac nhan bao gia va nhan du tu lieu du an.", nature: "Phan loai", natureText: "Bao gia uoc tinh tu dong tu XR Quote Studio.", validation: "Xac nhan cua khach hang", valText1: "Tai lieu nay tong hop cac dich vu da chon va mo hinh thanh toan.", valText2: "Pham vi chinh thuc se duoc XRAGENCY thong nhat truoc khi trien khai.", dateSig: "Ngay / Chu ky", nameQuality: "Ho ten / Chuc vu", totalOnce: "TONG MOT LAN", totalMonth: "TONG HANG THANG", recurring: "DINH KY", custom: "THEO YEU CAU", once: "MOT LAN", onQuote: "Theo bao gia" },
+      } as const;
+
+      const pdfLabels = allPdfLabels[pdfLang as "fr" | "vi"] ?? allPdfLabels.en;
 
       const section = (label: string, y: number) => {
         doc.setFillColor(...soft);
@@ -253,7 +291,7 @@ export function QuoteConfiguratorCompact() {
         doc.setTextColor(...ink);
         doc.setFont("helvetica", "bold");
         doc.setFontSize(7.5);
-        doc.text(label.toUpperCase(), M + 3, y + 1);
+        doc.text(cleanForPdf(label).toUpperCase(), M + 3, y + 1);
         return y + 12;
       };
 
@@ -261,10 +299,10 @@ export function QuoteConfiguratorCompact() {
         doc.setFont("helvetica", "normal");
         doc.setFontSize(6.7);
         doc.setTextColor(...muted);
-        doc.text(label, x, y);
+        doc.text(cleanForPdf(label), x, y);
         doc.setFont("helvetica", "bold");
         doc.setTextColor(...ink);
-        const lines = doc.splitTextToSize(value || "—", maxWidth);
+        const lines = doc.splitTextToSize(cleanForPdf(value || "—"), maxWidth);
         doc.text(lines, x + 30, y);
         return y + Math.max(5, lines.length * 4.5);
       };
@@ -278,11 +316,11 @@ export function QuoteConfiguratorCompact() {
       doc.setFont("helvetica", "normal");
       doc.setFontSize(7);
       doc.setTextColor(198, 203, 211);
-      doc.text(pdfLabels.subtitle, M, 21);
+      doc.text(cleanForPdf(pdfLabels.subtitle), M, 21);
       doc.setTextColor(...white);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(13);
-      doc.text(pdfLabels.devis, R - M, 13, { align: "right" });
+      doc.text(cleanForPdf(pdfLabels.devis), R - M, 13, { align: "right" });
       doc.setFont("helvetica", "normal");
       doc.setFontSize(6.5);
       doc.setTextColor(198, 203, 211);
@@ -312,17 +350,18 @@ export function QuoteConfiguratorCompact() {
       doc.setTextColor(...white);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(6.5);
-      doc.text(pdfLabels.colService, M + 3, y + 1);
-      doc.text(pdfLabels.colMode, 124, y + 1);
-      doc.text(pdfLabels.colAmount, R - 3, y + 1, { align: "right" });
+      doc.text(cleanForPdf(pdfLabels.colService), M + 3, y + 1);
+      doc.text(cleanForPdf(pdfLabels.colMode), 124, y + 1);
+      doc.text(cleanForPdf(pdfLabels.colAmount), R - 3, y + 1, { align: "right" });
       y += 10;
 
       selectedServices.forEach((id) => {
         const p = proposals.find((x) => x.id === id);
         if (!p) return;
-        const detail = p.id === "robotics"
-          ? (currentLang === "en" ? "Service robot rental from €499/mo · purchase options · event from €250." : "Location robot de service dès 499 € / mois · achat selon modèle · événement dès 250 €.")
+        const rawDetail = p.id === "robotics"
+          ? (ROBOTICS_DETAILS[pdfLang] ?? ROBOTICS_DETAILS.en)
           : p.detail;
+        const detail = cleanForPdf(rawDetail);
         if (y > 255) {
           doc.addPage();
           y = 22;
@@ -330,18 +369,18 @@ export function QuoteConfiguratorCompact() {
         doc.setFont("helvetica", "bold");
         doc.setFontSize(7.4);
         doc.setTextColor(...ink);
-        doc.text(p.label, M + 3, y);
+        doc.text(cleanForPdf(p.label), M + 3, y);
         doc.setFont("helvetica", "normal");
         doc.setFontSize(5.9);
         doc.setTextColor(...muted);
         doc.text(doc.splitTextToSize(detail, 86).slice(0, 2), M + 3, y + 3.5);
         doc.setFontSize(6.4);
-        doc.text(p.period === "month" ? pdfLabels.recurring : p.custom ? pdfLabels.custom : pdfLabels.once, 124, y);
+        doc.text(cleanForPdf(p.period === "month" ? pdfLabels.recurring : p.custom ? pdfLabels.custom : pdfLabels.once), 124, y);
         doc.setFont("helvetica", "bold");
         doc.setFontSize(7.2);
         doc.setTextColor(...ink);
         doc.text(
-          p.custom ? pdfLabels.onQuote : p.price.toLocaleString("fr-FR") + " €" + (p.period === "month" ? " / mois" : ""),
+          p.custom ? cleanForPdf(pdfLabels.onQuote) : p.price.toLocaleString("fr-FR") + " €" + (p.period === "month" ? " / mois" : ""),
           R - 3,
           y,
           { align: "right" }
@@ -361,8 +400,8 @@ export function QuoteConfiguratorCompact() {
       doc.setFont("helvetica", "normal");
       doc.setFontSize(6.7);
       doc.setTextColor(186, 192, 202);
-      doc.text(pdfLabels.totalOnce, 114, y + 3);
-      doc.text(pdfLabels.totalMonth, 114, y + 12);
+      doc.text(cleanForPdf(pdfLabels.totalOnce), 114, y + 3);
+      doc.text(cleanForPdf(pdfLabels.totalMonth), 114, y + 12);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(9.4);
       doc.setTextColor(...white);
@@ -381,18 +420,18 @@ export function QuoteConfiguratorCompact() {
       doc.setTextColor(...ink);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(7.5);
-      doc.text(pdfLabels.validation, M + 4, y + 5);
+      doc.text(cleanForPdf(pdfLabels.validation), M + 4, y + 5);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(6.4);
       doc.setTextColor(...muted);
-      doc.text(pdfLabels.valText1, M + 4, y + 11);
-      doc.text(pdfLabels.valText2, M + 4, y + 16);
+      doc.text(cleanForPdf(pdfLabels.valText1), M + 4, y + 11);
+      doc.text(cleanForPdf(pdfLabels.valText2), M + 4, y + 16);
       doc.setDrawColor(...lineColor);
       doc.line(111, y + 8, 188, y + 8);
       doc.line(111, y + 21, 188, y + 21);
       doc.setFontSize(5.9);
-      doc.text(pdfLabels.dateSig, 111, y + 6);
-      doc.text(pdfLabels.nameQuality, 111, y + 19);
+      doc.text(cleanForPdf(pdfLabels.dateSig), 111, y + 6);
+      doc.text(cleanForPdf(pdfLabels.nameQuality), 111, y + 19);
 
       doc.setDrawColor(...lineColor);
       doc.line(M, 281, R, 281);
@@ -404,7 +443,7 @@ export function QuoteConfiguratorCompact() {
       doc.setFontSize(5.7);
       doc.setTextColor(...muted);
       doc.text("SIREN 889 178 141 · SIRET 889 178 141 00012 · RCS Paris", M, 292);
-      doc.text("78 Avenue des Champs-Élysées · Bureau 562 · 75008 Paris · France", M, 296);
+      doc.text("78 Avenue des Champs-Elysees · Bureau 562 · 75008 Paris · France", M, 296);
       doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83 · xragencyai.com", M, 300);
       doc.setTextColor(...blue);
       doc.setFont("helvetica", "bold");
