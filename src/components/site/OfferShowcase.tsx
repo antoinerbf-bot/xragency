@@ -131,7 +131,7 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
 
             <h2 className="display-serif mt-5 text-[clamp(2.6rem,5.5vw,5.5rem)] leading-[0.88] tracking-[-0.05em]">
               {tx("400 € de valeur offerte.")}<br />
-              <em className="not-italic xr-muted">{tx("{tx("Voyez le résultat avant d'investir.")}")}</em>
+              <em className="not-italic xr-muted">{tx("Voyez le résultat avant d'investir.")}</em>
             </h2>
 
             <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 xr-muted sm:text-base">
@@ -268,8 +268,8 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
 
               <h3 className="display-serif mt-3 text-3xl text-[var(--xr-ink)] sm:text-4xl">
                 {activeTab === "mockup"
-                  ? "{tx("Une maquette sur mesure taillée pour convertir.")}"
-                  : "{tx("Un audit impitoyable de vos performances actuelles.")}"}
+                  ? tx("Une maquette sur mesure taillée pour convertir.")
+                  : tx("Un audit impitoyable de vos performances actuelles.")}
               </h3>
 
               <p className="mt-4 text-sm leading-6 xr-muted">
