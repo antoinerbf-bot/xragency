@@ -34,6 +34,30 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "45 POINTS DE CONTRÔLE SCRUTÉS": "45 POINTS DE CONTRÔLE SCRUTÉS",
     "Prototypes Figma + Vue Interactive Mobile & Desktop": "Prototypes Figma + Vue Interactive Mobile & Desktop",
   },
+
+    "XR PROPOSITION VISUELLE HAUT DE GAMME": "XR PROPOSITION VISUELLE HAUT DE GAMME",
+    "SUR MESURE": "SUR MESURE",
+    "LIVRABLE OFFERT": "LIVRABLE OFFERT",
+    "0 € au lieu de 200 €": "0 € au lieu de 200 €",
+    "Rapport de Diagnostic XR": "Rapport de Diagnostic XR",
+    "Temps de chargement < 1s": "Temps de chargement < 1s",
+    "Balisage & métadonnées": "Balisage & métadonnées",
+    "Expérience sans friction": "Expérience sans friction",
+    "Architecture des CTA": "Architecture des CTA",
+    "Inclus dans votre rapport PDF :": "Inclus dans votre rapport PDF :",
+    "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE": "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE",
+    "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE": "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE",
+    "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.": "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.",
+    "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.": "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.",
+    "Direction artistique premium & typographies de caractère": "Direction artistique premium & typographies de caractère",
+    "Adaptation smartphone & ordinateur haute résolution": "Adaptation smartphone & ordinateur haute résolution",
+    "Structure de persuasion éprouvée pour déclencher l'achat": "Structure de persuasion éprouvée pour déclencher l'achat",
+    "Livraison en 48h sans aucun frais": "Livraison en 48h sans aucun frais",
+    "Analyse de votre positionnement sur Google Maps & Moteur de recherche": "Analyse de votre positionnement sur Google Maps & Moteur de recherche",
+    "Audit des pertes de clients sur votre parcours actuel": "Audit des pertes de clients sur votre parcours actuel",
+    "Benchmarking précis de vos 3 principaux concurrents": "Benchmarking précis de vos 3 principaux concurrents",
+    "Rapport PDF complet téléchargeable & échange direct": "Rapport PDF complet téléchargeable & échange direct",
+
   en: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "INSTANT ACCESS OFFER · NO COMMITMENT",
     "400 € de valeur offerte.": "€400 worth of value, free.",
@@ -51,6 +75,30 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "45 POINTS DE CONTRÔLE SCRUTÉS": "45 CHECKPOINTS REVIEWED",
     "Prototypes Figma + Vue Interactive Mobile & Desktop": "Figma prototypes + interactive mobile and desktop preview",
   },
+
+    "XR PROPOSITION VISUELLE HAUT DE GAMME": "PREMIUM VISUAL CONCEPT",
+    "SUR MESURE": "TAILORED",
+    "LIVRABLE OFFERT": "FREE DELIVERABLE",
+    "0 € au lieu de 200 €": "€0 instead of €200",
+    "Rapport de Diagnostic XR": "XR Diagnostic Report",
+    "Temps de chargement < 1s": "Load time < 1s",
+    "Balisage & métadonnées": "Markup & metadata",
+    "Expérience sans friction": "Frictionless experience",
+    "Architecture des CTA": "CTA structure",
+    "Inclus dans votre rapport PDF :": "Included in your PDF report:",
+    "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE": "STEP 1 · PREVIEW YOUR FUTURE WEBSITE",
+    "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE": "STEP 2 · IDENTIFY GROWTH OPPORTUNITIES",
+    "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.": "Our art directors design your future homepage around your competitors and positioning, so you can see the intended result before making any commitment.",
+    "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.": "We assess your existing website or project across SEO, speed, visual appeal, credibility and conversion, then provide a clear, actionable report.",
+    "Direction artistique premium & typographies de caractère": "Premium art direction and distinctive typography",
+    "Adaptation smartphone & ordinateur haute résolution": "High-resolution mobile and desktop layouts",
+    "Structure de persuasion éprouvée pour déclencher l'achat": "Proven persuasive structure to drive purchases",
+    "Livraison en 48h sans aucun frais": "Delivery within 48 hours at no cost",
+    "Analyse de votre positionnement sur Google Maps & Moteur de recherche": "Analysis of your Google Maps and search engine positioning",
+    "Audit des pertes de clients sur votre parcours actuel": "Audit of customer drop-off in your current journey",
+    "Benchmarking précis de vos 3 principaux concurrents": "Detailed benchmarking of your top 3 competitors",
+    "Rapport PDF complet téléchargeable & échange direct": "Downloadable full PDF report and direct consultation",
+
   vi: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "ƯU ĐÃI TRUY CẬP NGAY · KHÔNG CAM KẾT",
     "400 € de valeur offerte.": "Tặng giá trị tương đương 400 €.",
@@ -68,6 +116,30 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "45 POINTS DE CONTRÔLE SCRUTÉS": "45 ĐIỂM ĐƯỢC KIỂM TRA",
     "Prototypes Figma + Vue Interactive Mobile & Desktop": "Bản mẫu Figma + xem trước tương tác trên điện thoại và máy tính",
   },
+
+    "XR PROPOSITION VISUELLE HAUT DE GAMME": "BẢN THIẾT KẾ CAO CẤP",
+    "SUR MESURE": "THIẾT KẾ RIÊNG",
+    "LIVRABLE OFFERT": "SẢN PHẨM TẶNG",
+    "0 € au lieu de 200 €": "0 € thay vì 200 €",
+    "Rapport de Diagnostic XR": "Báo cáo chẩn đoán XR",
+    "Temps de chargement < 1s": "Thời gian tải dưới 1 giây",
+    "Balisage & métadonnées": "Cấu trúc đánh dấu và metadata",
+    "Expérience sans friction": "Trải nghiệm liền mạch",
+    "Architecture des CTA": "Cấu trúc CTA",
+    "Inclus dans votre rapport PDF :": "Có trong báo cáo PDF:",
+    "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE": "BƯỚC 1 · XEM TRƯỚC WEBSITE TƯƠNG LAI",
+    "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE": "BƯỚC 2 · XÁC ĐỊNH CƠ HỘI TĂNG TRƯỞNG",
+    "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.": "Đội ngũ giám đốc nghệ thuật thiết kế trang chủ tương lai dựa trên đối thủ và định vị của bạn, để bạn xem trước kết quả trước khi cam kết.",
+    "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.": "Chúng tôi đánh giá website hoặc dự án của bạn về SEO, tốc độ, hình ảnh, độ tin cậy và chuyển đổi, sau đó gửi báo cáo có thể hành động.",
+    "Direction artistique premium & typographies de caractère": "Định hướng nghệ thuật cao cấp và kiểu chữ đặc trưng",
+    "Adaptation smartphone & ordinateur haute résolution": "Tối ưu độ phân giải cao cho điện thoại và máy tính",
+    "Structure de persuasion éprouvée pour déclencher l'achat": "Cấu trúc thuyết phục đã được kiểm chứng để thúc đẩy mua hàng",
+    "Livraison en 48h sans aucun frais": "Bàn giao trong 48 giờ, hoàn toàn miễn phí",
+    "Analyse de votre positionnement sur Google Maps & Moteur de recherche": "Phân tích vị trí trên Google Maps và công cụ tìm kiếm",
+    "Audit des pertes de clients sur votre parcours actuel": "Kiểm tra điểm rơi khách hàng trong hành trình hiện tại",
+    "Benchmarking précis de vos 3 principaux concurrents": "So sánh chi tiết 3 đối thủ chính",
+    "Rapport PDF complet téléchargeable & échange direct": "Báo cáo PDF đầy đủ có thể tải xuống và trao đổi trực tiếp",
+
   ar: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "عرض وصول فوري · دون التزام",
     "400 € de valeur offerte.": "قيمة مجانية بقيمة 400 يورو.",
@@ -85,6 +157,30 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "45 POINTS DE CONTRÔLE SCRUTÉS": "فحص 45 نقطة",
     "Prototypes Figma + Vue Interactive Mobile & Desktop": "نماذج Figma + معاينة تفاعلية للهاتف والكمبيوتر",
   },
+
+    "XR PROPOSITION VISUELLE HAUT DE GAMME": "تصور بصري فاخر",
+    "SUR MESURE": "مخصص",
+    "LIVRABLE OFFERT": "مخرج مجاني",
+    "0 € au lieu de 200 €": "0 يورو بدلًا من 200 يورو",
+    "Rapport de Diagnostic XR": "تقرير تشخيص XR",
+    "Temps de chargement < 1s": "وقت التحميل أقل من ثانية",
+    "Balisage & métadonnées": "الترميز والبيانات الوصفية",
+    "Expérience sans friction": "تجربة سلسة",
+    "Architecture des CTA": "هيكلة أزرار الدعوة للإجراء",
+    "Inclus dans votre rapport PDF :": "يتضمن تقرير PDF الخاص بك:",
+    "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE": "الخطوة 1 · معاينة موقعك المستقبلي",
+    "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE": "الخطوة 2 · تحديد فرص النمو",
+    "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.": "يصمم مديرونا الفنيون الصفحة الرئيسية المستقبلية وفقًا لمنافسيك وتموضعك، لتشاهد النتيجة قبل أي التزام.",
+    "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.": "نفحص موقعك الحالي أو مشروعك من حيث SEO والسرعة والجاذبية البصرية والمصداقية والتحويل، ثم نقدم تقريرًا عمليًا واضحًا.",
+    "Direction artistique premium & typographies de caractère": "توجيه فني فاخر وخطوط مميزة",
+    "Adaptation smartphone & ordinateur haute résolution": "تصميم متوافق عالي الدقة للهاتف والكمبيوتر",
+    "Structure de persuasion éprouvée pour déclencher l'achat": "هيكل إقناعي مجرّب لتحفيز الشراء",
+    "Livraison en 48h sans aucun frais": "التسليم خلال 48 ساعة مجانًا",
+    "Analyse de votre positionnement sur Google Maps & Moteur de recherche": "تحليل ترتيبك على خرائط Google ومحركات البحث",
+    "Audit des pertes de clients sur votre parcours actuel": "تدقيق فقدان العملاء خلال مسارهم الحالي",
+    "Benchmarking précis de vos 3 principaux concurrents": "مقارنة دقيقة لأهم 3 منافسين",
+    "Rapport PDF complet téléchargeable & échange direct": "تقرير PDF كامل قابل للتنزيل مع استشارة مباشرة",
+
   ru: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "ПРЕДЛОЖЕНИЕ СРАЗУ · БЕЗ ОБЯЗАТЕЛЬСТВ",
     "400 € de valeur offerte.": "Бесплатные услуги стоимостью 400 €.",
@@ -101,7 +197,30 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE": "ОТВЕТ МЕНЕЕ ЧЕМ ЗА 2 ЧАСА · БЕЗ ОБЯЗАТЕЛЬСТВ · РЕАЛЬНАЯ ЦЕННОСТЬ",
     "45 POINTS DE CONTRÔLE SCRUTÉS": "ПРОВЕРЕНО 45 ПАРАМЕТРОВ",
     "Prototypes Figma + Vue Interactive Mobile & Desktop": "Прототипы Figma + интерактивный просмотр на мобильных устройствах и компьютерах",
-  },
+
+    "XR PROPOSITION VISUELLE HAUT DE GAMME": "ПРЕМИАЛЬНАЯ ВИЗУАЛЬНАЯ КОНЦЕПЦИЯ",
+    "SUR MESURE": "ИНДИВИДУАЛЬНО",
+    "LIVRABLE OFFERT": "БЕСПЛАТНЫЙ РЕЗУЛЬТАТ",
+    "0 € au lieu de 200 €": "0 € вместо 200 €",
+    "Rapport de Diagnostic XR": "Диагностический отчёт XR",
+    "Temps de chargement < 1s": "Загрузка менее чем за 1 с",
+    "Balisage & métadonnées": "Разметка и метаданные",
+    "Expérience sans friction": "Удобный пользовательский опыт",
+    "Architecture des CTA": "Структура CTA",
+    "Inclus dans votre rapport PDF :": "В ваш PDF-отчёт входят:",
+    "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE": "ШАГ 1 · ПРЕДВАРИТЕЛЬНЫЙ ПРОСМОТР САЙТА",
+    "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE": "ШАГ 2 · ПОИСК ВОЗМОЖНОСТЕЙ РОСТА",
+    "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.": "Наши арт-директора проектируют будущую главную страницу с учётом конкурентов и позиционирования, чтобы вы увидели результат до каких-либо обязательств.",
+    "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.": "Мы анализируем сайт или проект по SEO, скорости, визуальной привлекательности, доверию и конверсии и предоставляем понятный план действий.",
+    "Direction artistique premium & typographies de caractère": "Премиальная арт-дирекция и выразительная типографика",
+    "Adaptation smartphone & ordinateur haute résolution": "Адаптация для смартфонов и компьютеров высокого разрешения",
+    "Structure de persuasion éprouvée pour déclencher l'achat": "Проверенная структура убеждения для стимулирования покупок",
+    "Livraison en 48h sans aucun frais": "Готовность за 48 часов бесплатно",
+    "Analyse de votre positionnement sur Google Maps & Moteur de recherche": "Анализ позиций в Google Maps и поисковых системах",
+    "Audit des pertes de clients sur votre parcours actuel": "Анализ потери клиентов на текущем пути",
+    "Benchmarking précis de vos 3 principaux concurrents": "Подробное сравнение трёх главных конкурентов",
+    "Rapport PDF complet téléchargeable & échange direct": "Полный PDF-отчёт для скачивания и прямое обсуждение",
+
 };
 function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[lang][value] ?? value; }
 
@@ -184,10 +303,10 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
                       <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/80" />
                     </div>
                     <span className="label-mono text-[7px] text-white/50">
-                      XR PROPOSITION VISUELLE HAUT DE GAMME
+                      {tx("XR PROPOSITION VISUELLE HAUT DE GAMME")}
                     </span>
                     <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 label-mono text-[6px] text-emerald-400">
-                      SUR MESURE
+                      {tx("SUR MESURE")}
                     </span>
                   </div>
 
@@ -204,11 +323,11 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
                     <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-white/15 bg-black/75 p-3.5 backdrop-blur-xl sm:bottom-6 sm:left-6 sm:right-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="label-mono text-[6px] text-white/60">LIVRABLE OFFERT</p>
+                          <p className="label-mono text-[6px] text-white/60">{tx("LIVRABLE OFFERT")}</p>
                           <p className="text-xs font-semibold text-white">{tx("Prototypes Figma + Vue Interactive Mobile & Desktop")}</p>
                         </div>
                         <span className="label-mono rounded-lg border border-white/20 bg-white/10 px-2.5 py-1 text-[8px] font-bold text-emerald-400">
-                          0 € au lieu de 200 €
+                          {tx("0 € au lieu de 200 €")}
                         </span>
                       </div>
                     </div>
@@ -223,7 +342,7 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
                         <ShieldCheck className="h-4 w-4" />
                       </div>
                       <div>
-                        <p className="text-xs font-bold text-[var(--xr-ink)]">Rapport de Diagnostic XR</p>
+                        <p className="text-xs font-bold text-[var(--xr-ink)]">{tx("Rapport de Diagnostic XR")}</p>
                         <p className="label-mono text-[6px] xr-muted">{tx("45 POINTS DE CONTRÔLE SCRUTÉS")}</p>
                       </div>
                     </div>
@@ -234,10 +353,10 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
 
                   <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
                     {[
-                      { label: "Vitesse & WebPerf", score: "A+", desc: "Temps de chargement < 1s" },
-                      { label: "SEO Google", score: "96%", desc: "Balisage & métadonnées" },
-                      { label: "UX & Mobile", score: "Optimal", desc: "Expérience sans friction" },
-                      { label: "Conversion", score: "Élevée", desc: "Architecture des CTA" },
+                      { label: "Vitesse & WebPerf", score: "A+", desc: "{tx("Temps de chargement < 1s")}" },
+                      { label: "SEO Google", score: "96%", desc: "{tx("Balisage & métadonnées")}" },
+                      { label: "UX & Mobile", score: "Optimal", desc: "{tx("Expérience sans friction")}" },
+                      { label: "Conversion", score: "Élevée", desc: "{tx("Architecture des CTA")}" },
                     ].map((item, i) => (
                       <div key={i} className="rounded-xl border xr-line bg-[var(--xr-surface-strong)] p-3 text-center">
                         <span className="block text-lg font-black text-[var(--xr-ink)]">{item.score}</span>
@@ -248,7 +367,7 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
                   </div>
 
                   <div className="mt-5 rounded-xl border border-dashed xr-line bg-[var(--xr-surface)] p-4 text-xs leading-relaxed xr-muted">
-                    <span className="font-semibold text-[var(--xr-ink)]">Inclus dans votre rapport PDF :</span> liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.
+                    <span className="font-semibold text-[var(--xr-ink)]">{tx("Inclus dans votre rapport PDF :")}</span> liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.
                   </div>
                 </div>
               )}
@@ -259,7 +378,7 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
           <Reveal delay={180}>
             <div className="rounded-[2.5rem] border xr-line bg-[var(--xr-surface)] p-7 sm:p-9">
               <span className="label-mono text-[7px] tracking-[.24em] xr-muted">
-                {activeTab === "mockup" ? "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE" : "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE"}
+                {activeTab === "mockup" ? "{tx("ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE")}" : "{tx("ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE")}"}
               </span>
 
               <h3 className="display-serif mt-3 text-3xl text-[var(--xr-ink)] sm:text-4xl">
@@ -270,23 +389,23 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
 
               <p className="mt-4 text-sm leading-6 xr-muted">
                 {activeTab === "mockup"
-                  ? "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement."
-                  : "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair."}
+                  ? "{tx("Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.")}"
+                  : "{tx("Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.")}"}
               </p>
 
               <ul className="mt-6 space-y-2.5">
                 {(activeTab === "mockup"
                   ? [
-                      "Direction artistique premium & typographies de caractère",
-                      "Adaptation smartphone & ordinateur haute résolution",
-                      "Structure de persuasion éprouvée pour déclencher l'achat",
-                      "Livraison en 48h sans aucun frais",
+                      "{tx("Direction artistique premium & typographies de caractère")}",
+                      "{tx("Adaptation smartphone & ordinateur haute résolution")}",
+                      "{tx("Structure de persuasion éprouvée pour déclencher l'achat")}",
+                      "{tx("Livraison en 48h sans aucun frais")}",
                     ]
                   : [
-                      "Analyse de votre positionnement sur Google Maps & Moteur de recherche",
-                      "Audit des pertes de clients sur votre parcours actuel",
-                      "Benchmarking précis de vos 3 principaux concurrents",
-                      "Rapport PDF complet téléchargeable & échange direct",
+                      "{tx("Analyse de votre positionnement sur Google Maps & Moteur de recherche")}",
+                      "{tx("Audit des pertes de clients sur votre parcours actuel")}",
+                      "{tx("Benchmarking précis de vos 3 principaux concurrents")}",
+                      "{tx("Rapport PDF complet téléchargeable & échange direct")}",
                     ]
                 ).map((text, i) => (
                   <li key={i} className="flex items-center gap-3 text-xs text-[var(--xr-ink)]">
