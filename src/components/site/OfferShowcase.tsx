@@ -121,17 +121,17 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
             <div className="inline-flex items-center gap-2 rounded-full border xr-line bg-[var(--xr-surface-strong)] px-4 py-1.5 shadow-sm">
               <Sparkles className="h-3.5 w-3.5 text-emerald-500 animate-pulse" />
               <span className="label-mono text-[8px] font-semibold tracking-[0.25em] xr-accent">
-                OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT
+                {tx("OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT")}
               </span>
             </div>
 
             <h2 className="display-serif mt-5 text-[clamp(2.6rem,5.5vw,5.5rem)] leading-[0.88] tracking-[-0.05em]">
-              400 € de valeur offerte.<br />
-              <em className="not-italic xr-muted">{tx("Voyez le résultat avant d'investir.")}</em>
+              {tx("400 € de valeur offerte.")}<br />
+              <em className="not-italic xr-muted">{tx("{tx("Voyez le résultat avant d'investir.")}")}</em>
             </h2>
 
             <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 xr-muted sm:text-base">
-              Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.
+              {tx("Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.")}
             </p>
           </div>
         </Reveal>
@@ -150,7 +150,7 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
                 }`}
               >
                 <Laptop className="h-3.5 w-3.5" />
-                1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)
+                {tx("1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)")}
               </button>
               <button
                 type="button"
@@ -162,7 +162,7 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
                 }`}
               >
                 <FileSearch className="h-3.5 w-3.5" />
-                2. AUDIT DIGITAL & SEO (VALEUR 200 €)
+                {tx("2. AUDIT DIGITAL & SEO (VALEUR 200 €)")}
               </button>
             </div>
           </div>
@@ -264,8 +264,8 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
 
               <h3 className="display-serif mt-3 text-3xl text-[var(--xr-ink)] sm:text-4xl">
                 {activeTab === "mockup"
-                  ? "Une maquette sur mesure taillée pour convertir."
-                  : "Un audit impitoyable de vos performances actuelles."}
+                  ? "{tx("Une maquette sur mesure taillée pour convertir.")}"
+                  : "{tx("Un audit impitoyable de vos performances actuelles.")}"}
               </h3>
 
               <p className="mt-4 text-sm leading-6 xr-muted">
@@ -324,7 +324,7 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
                     rel="noreferrer"
                     className="group inline-flex flex-1 items-center justify-center gap-2.5 rounded-full bg-[var(--xr-ink)] px-6 py-4 label-mono text-[8px] font-bold uppercase tracking-wider text-[var(--xr-bg)] shadow-xl transition-all duration-300 hover:opacity-90 hover:-translate-y-0.5"
                   >
-                    Réserver mes 400 € offerts
+                    {tx("Réserver mes 400 € offerts")}
                     <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                   </a>
 
@@ -332,12 +332,12 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
                     href="#audit"
                     className="inline-flex items-center justify-center gap-2 rounded-full border xr-line px-5 py-4 label-mono text-[8px] xr-muted transition hover:bg-[var(--xr-surface-strong)]"
                   >
-                    Lancer l'audit en direct
+                    {tx("Lancer l'audit en direct")}
                   </a>
                 </div>
 
                 <p className="mt-3 text-center label-mono text-[6px] xr-muted-2">
-                  RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE
+                  {tx("RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE")}
                 </p>
               </div>
             </div>
