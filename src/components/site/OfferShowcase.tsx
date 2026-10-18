@@ -60,6 +60,7 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Audit des pertes de clients sur votre parcours actuel": "Audit des pertes de clients sur votre parcours actuel",
     "Benchmarking précis de vos 3 principaux concurrents": "Benchmarking précis de vos 3 principaux concurrents",
     "Rapport PDF complet téléchargeable & échange direct": "Rapport PDF complet téléchargeable & échange direct",
+    "OFFERT (VALEUR 200 €)": "OFFERT (VALEUR 200 €)",
   },
   en: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "INSTANT ACCESS OFFER · NO COMMITMENT",
@@ -100,6 +101,7 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Audit des pertes de clients sur votre parcours actuel": "Audit of customer drop-off in your current journey",
     "Benchmarking précis de vos 3 principaux concurrents": "Detailed benchmarking of your top 3 competitors",
     "Rapport PDF complet téléchargeable & échange direct": "Downloadable full PDF report and direct consultation",
+    "OFFERT (VALEUR 200 €)": "FREE (VALUE €200)",
   },
   vi: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "ƯU ĐÃI TRUY CẬP NGAY · KHÔNG CAM KẾT",
@@ -140,6 +142,7 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Audit des pertes de clients sur votre parcours actuel": "Kiểm tra điểm rơi khách hàng trong hành trình hiện tại",
     "Benchmarking précis de vos 3 principaux concurrents": "So sánh chi tiết 3 đối thủ chính",
     "Rapport PDF complet téléchargeable & échange direct": "Báo cáo PDF đầy đủ có thể tải xuống và trao đổi trực tiếp",
+    "OFFERT (VALEUR 200 €)": "MIỄN PHÍ (TRỊ GIÁ 200 €)",
   },
   ar: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "عرض وصول فوري · دون التزام",
@@ -180,6 +183,7 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Audit des pertes de clients sur votre parcours actuel": "تدقيق فقدان العملاء خلال مسارهم الحالي",
     "Benchmarking précis de vos 3 principaux concurrents": "مقارنة دقيقة لأهم 3 منافسين",
     "Rapport PDF complet téléchargeable & échange direct": "تقرير PDF كامل قابل للتنزيل مع استشارة مباشرة",
+    "OFFERT (VALEUR 200 €)": "مجاني (بقيمة 200 يورو)",
   },
   ru: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "ПРЕДЛОЖЕНИЕ СРАЗУ · БЕЗ ОБЯЗАТЕЛЬСТВ",
@@ -220,6 +224,7 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Audit des pertes de clients sur votre parcours actuel": "Анализ потери клиентов на текущем пути",
     "Benchmarking précis de vos 3 principaux concurrents": "Подробное сравнение трёх главных конкурентов",
     "Rapport PDF complet téléchargeable & échange direct": "Полный PDF-отчёт для скачивания и прямое обсуждение",
+    "OFFERT (VALEUR 200 €)": "БЕСПЛАТНО (СТОИМОСТЬ 200 €)",
   },
 };
 function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[lang][value] ?? value; }
@@ -343,7 +348,7 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
                       </div>
                       <div>
                         <p className="text-xs font-bold text-[var(--xr-ink)]">{tx("Rapport de Diagnostic XR")}</p>
-                        <p className="label-mono text-[6px] xr-muted">{tx("{tx("45 POINTS DE CONTRÔLE SCRUTÉS")}")}</p>
+                        <p className="label-mono text-[6px] xr-muted">{tx("45 POINTS DE CONTRÔLE SCRUTÉS")}</p>
                       </div>
                     </div>
                     <span className="label-mono rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[7px] font-bold text-emerald-600 dark:text-emerald-400">
@@ -378,7 +383,7 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
           <Reveal delay={180}>
             <div className="rounded-[2.5rem] border xr-line bg-[var(--xr-surface)] p-7 sm:p-9">
               <span className="label-mono text-[7px] tracking-[.24em] xr-muted">
-                {activeTab === "mockup" ? "{tx("ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE")}" : "{tx("ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE")}"}
+                {activeTab === "mockup" ? tx("ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE") : tx("ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE")}
               </span>
 
               <h3 className="display-serif mt-3 text-3xl text-[var(--xr-ink)] sm:text-4xl">
