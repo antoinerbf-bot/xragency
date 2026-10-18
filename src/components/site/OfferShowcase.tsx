@@ -61,6 +61,12 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Benchmarking précis de vos 3 principaux concurrents": "Benchmarking précis de vos 3 principaux concurrents",
     "Rapport PDF complet téléchargeable & échange direct": "Rapport PDF complet téléchargeable & échange direct",
     "OFFERT (VALEUR 200 €)": "OFFERT (VALEUR 200 €)",
+    "Vitesse & WebPerf": "Vitesse & WebPerf",
+    "SEO Google": "SEO Google",
+    "UX & Mobile": "UX & Mobile",
+    "Conversion": "Conversion",
+    "Optimal": "Optimal",
+    "Élevée": "Élevée",
   },
   en: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "INSTANT ACCESS OFFER · NO COMMITMENT",
@@ -102,6 +108,12 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Benchmarking précis de vos 3 principaux concurrents": "Detailed benchmarking of your top 3 competitors",
     "Rapport PDF complet téléchargeable & échange direct": "Downloadable full PDF report and direct consultation",
     "OFFERT (VALEUR 200 €)": "FREE (VALUE €200)",
+    "Vitesse & WebPerf": "Speed & WebPerf",
+    "SEO Google": "Google SEO",
+    "UX & Mobile": "UX & Mobile",
+    "Conversion": "Conversion",
+    "Optimal": "Optimal",
+    "Élevée": "High",
   },
   vi: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "ƯU ĐÃI TRUY CẬP NGAY · KHÔNG CAM KẾT",
@@ -143,6 +155,12 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Benchmarking précis de vos 3 principaux concurrents": "So sánh chi tiết 3 đối thủ chính",
     "Rapport PDF complet téléchargeable & échange direct": "Báo cáo PDF đầy đủ có thể tải xuống và trao đổi trực tiếp",
     "OFFERT (VALEUR 200 €)": "MIỄN PHÍ (TRỊ GIÁ 200 €)",
+    "Vitesse & WebPerf": "Tốc độ & WebPerf",
+    "SEO Google": "SEO Google",
+    "UX & Mobile": "UX & Di động",
+    "Conversion": "Chuyển đổi",
+    "Optimal": "Tối ưu",
+    "Élevée": "Cao",
   },
   ar: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "عرض وصول فوري · دون التزام",
@@ -184,6 +202,12 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Benchmarking précis de vos 3 principaux concurrents": "مقارنة دقيقة لأهم 3 منافسين",
     "Rapport PDF complet téléchargeable & échange direct": "تقرير PDF كامل قابل للتنزيل مع استشارة مباشرة",
     "OFFERT (VALEUR 200 €)": "مجاني (بقيمة 200 يورو)",
+    "Vitesse & WebPerf": "السرعة وأداء الويب",
+    "SEO Google": "سيو Google",
+    "UX & Mobile": "تجربة المستخدم والجوال",
+    "Conversion": "التحويل",
+    "Optimal": "مثالي",
+    "Élevée": "مرتفعة",
   },
   ru: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "ПРЕДЛОЖЕНИЕ СРАЗУ · БЕЗ ОБЯЗАТЕЛЬСТВ",
@@ -225,6 +249,12 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Benchmarking précis de vos 3 principaux concurrents": "Подробное сравнение трёх главных конкурентов",
     "Rapport PDF complet téléchargeable & échange direct": "Полный PDF-отчёт для скачивания и прямое обсуждение",
     "OFFERT (VALEUR 200 €)": "БЕСПЛАТНО (СТОИМОСТЬ 200 €)",
+    "Vitesse & WebPerf": "Скорость и WebPerf",
+    "SEO Google": "Google SEO",
+    "UX & Mobile": "UX и мобильные",
+    "Conversion": "Конверсия",
+    "Optimal": "Оптимально",
+    "Élevée": "Высокая",
   },
 };
 function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[lang][value] ?? value; }
@@ -358,10 +388,10 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
 
                   <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
                     {[
-                      { label: "Vitesse & WebPerf", score: "A+", desc: tx("Temps de chargement < 1s") },
-                      { label: "SEO Google", score: "96%", desc: tx("Balisage & métadonnées") },
-                      { label: "UX & Mobile", score: "Optimal", desc: tx("Expérience sans friction") },
-                      { label: "Conversion", score: "Élevée", desc: tx("Architecture des CTA") },
+                      { label: tx("Vitesse & WebPerf"), score: "A+", desc: tx("Temps de chargement < 1s") },
+                      { label: tx("SEO Google"), score: "96%", desc: tx("Balisage & métadonnées") },
+                      { label: tx("UX & Mobile"), score: tx("Optimal"), desc: tx("Expérience sans friction") },
+                      { label: tx("Conversion"), score: tx("Élevée"), desc: tx("Architecture des CTA") },
                     ].map((item, i) => (
                       <div key={i} className="rounded-xl border xr-line bg-[var(--xr-surface-strong)] p-3 text-center">
                         <span className="block text-lg font-black text-[var(--xr-ink)]">{item.score}</span>
@@ -372,7 +402,8 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
                   </div>
 
                   <div className="mt-5 rounded-xl border border-dashed xr-line bg-[var(--xr-surface)] p-4 text-xs leading-relaxed xr-muted">
-                    <span className="font-semibold text-[var(--xr-ink)]">{tx("Inclus dans votre rapport PDF :")}</span> liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.
+                    <span className="font-semibold text-[var(--xr-ink)]">{tx("Inclus dans votre rapport PDF :")}</span>{" "}
+                    {tx("liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.")}
                   </div>
                 </div>
               )}

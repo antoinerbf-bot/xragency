@@ -2,60 +2,114 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { ArrowRight, Check, ChevronRight, MessageCircle, RotateCcw, Sparkles } from "lucide-react";
 import { Parallax, Reveal } from "./primitives";
+import { useLang, type Lang } from "@/lib/i18n";
+import {
+  SECTORS_DATA,
+  SERVICES_DATA,
+  SITUATIONS_DATA,
+  BUDGETS_DATA,
+  DISCOVERY_DATA,
+  ALEXANDRE_MESSAGES,
+  STEP_TITLES,
+  STEP_SUBTITLES,
+  QUOTE_UI,
+} from "@/lib/quote-i18n";
 
 type Choice = { id: string; label: string; detail: string };
 type Sector = Choice & { goals: string[] };
 type Proposal = { id: string; label: string; detail: string; price: number; period: "once" | "month"; custom?: boolean };
-const SECTORS: Sector[] = [
-  { id: "restaurant", label: "Restaurant · café · bar", detail: "Restaurants, cafés, rooftops, bars et concepts food", goals: ["Augmenter les réservations", "Être trouvé localement", "Monter en gamme"] },
-  { id: "hospitality", label: "Hôtel · villa · resort", detail: "Hôtels, resorts, villas, maisons d'hôtes et hospitality", goals: ["Augmenter les réservations", "Attirer une clientèle internationale", "Améliorer la visibilité"] },
-  { id: "realestate", label: "Immobilier · location", detail: "Agences, promoteurs, biens premium et location", goals: ["Générer plus de demandes", "Valoriser les biens", "Attirer une clientèle premium"] },
-  { id: "automotive", label: "Automobile · mobilité", detail: "Concessions, garages premium, location et mobilité", goals: ["Générer des demandes qualifiées", "Valoriser les véhicules", "Développer la visibilité locale"] },
-  { id: "fashion", label: "Mode · accessoires", detail: "Mode, prêt-à-porter, maroquinerie et accessoires", goals: ["Renforcer l'image de marque", "Vendre davantage", "Développer une audience internationale"] },
-  { id: "jewelry", label: "Joaillerie · horlogerie", detail: "Bijoux, montres, maisons et pièces d'exception", goals: ["Renforcer le positionnement premium", "Générer des demandes", "Créer une présence internationale"] },
-  { id: "beauty", label: "Beauté · esthétique · spa", detail: "Instituts, spas, cliniques esthétiques et bien-être", goals: ["Générer des rendez-vous", "Être trouvé localement", "Professionnaliser l'image"] },
-  { id: "health", label: "Santé · médical", detail: "Cliniques, cabinets, spécialistes et santé privée", goals: ["Générer des prises de rendez-vous", "Gagner en confiance", "Être visible sur Google"] },
-  { id: "architecture", label: "Architecture · intérieur", detail: "Architectes, architecture intérieure et design d'espace", goals: ["Montrer les réalisations", "Attirer des projets premium", "Développer la visibilité"] },
-  { id: "construction", label: "Construction · rénovation", detail: "Bâtiment, rénovation, artisans et entreprises techniques", goals: ["Générer des demandes", "Présenter le savoir-faire", "Être trouvé localement"] },
-  { id: "legal", label: "Avocat · droit · expertise", detail: "Cabinets juridiques, droit des affaires et professions réglementées", goals: ["Gagner en crédibilité", "Obtenir des prospects qualifiés", "Être visible sur Google"] },
-  { id: "finance", label: "Finance · patrimoine · assurance", detail: "Finance, gestion de patrimoine, assurance et conseil", goals: ["Gagner en confiance", "Générer des leads", "Structurer l'image de marque"] },
-  { id: "commerce", label: "Commerce · e-commerce", detail: "Boutiques, marques, retail, catalogues et vente en ligne", goals: ["Vendre davantage", "Améliorer la conversion", "Développer la marque"] },
-  { id: "tourism", label: "Voyage · tourisme · expériences", detail: "Agences, excursions, activités, loisirs et expériences", goals: ["Augmenter les réservations", "Être trouvé par les touristes", "Convertir davantage"] },
-  { id: "agency", label: "Agence · studio · freelance", detail: "Créatifs, marketing, tech, conseil et production", goals: ["Présenter l'expertise", "Générer des leads", "Monter en gamme"] },
-  { id: "other", label: "Autre activité", detail: "Votre activité ne figure pas ici ? XR Quote Studio s'adapte.", goals: ["Développer mon activité", "Professionnaliser mon image", "Construire une présence forte"] },
-];
-const SERVICES: Choice[] = [
-  { id: "website", label: "Site web", detail: "Vitrine, Business, e-commerce ou réservation" }, { id: "branding", label: "Branding", detail: "Logo, identité, direction artistique et univers" }, { id: "seo", label: "SEO", detail: "Positionnement organique et acquisition Google" }, { id: "maps", label: "Google Maps", detail: "Fiche locale, visibilité et optimisation locale" }, { id: "ads", label: "Google Ads", detail: "Campagnes sponsorisées et acquisition payante" }, { id: "social", label: "Social Media", detail: "Stratégie, contenus et animation des réseaux" }, { id: "content", label: "Contenu · photo · vidéo", detail: "Direction de contenu, visuels et formats de campagne" }, { id: "conversion", label: "Conversion & parcours", detail: "UX, landing pages, CTA et optimisation commerciale" }, { id: "maintenance", label: "WebCare", detail: "Corrections, évolutions et suivi du site" }, { id: "robotics", label: "Robotique & IA", detail: "Robots de service, location, achat et intégration" },
-];
-const SITUATIONS: Choice[] = [
-  { id: "none", label: "Pas encore de site", detail: "Créer un socle digital propre dès le départ" }, { id: "existing", label: "J'ai déjà un site", detail: "Le conserver et l'améliorer" }, { id: "redesign", label: "Mon site doit être refait", detail: "Design, structure, mobile ou conversion à revoir" }, { id: "outdated", label: "Il fonctionne mais il est daté", detail: "Moderniser sans repartir de zéro" }, { id: "invisible", label: "J'ai peu de visibilité", detail: "Le problème est surtout l'acquisition" }, { id: "selling", label: "Je vends / prends des réservations", detail: "Catalogue, paiement, réservation ou rendez-vous" }, { id: "international", label: "Je vise l'international", detail: "Langues, image premium et acquisition internationale" }, { id: "launch", label: "Je lance une nouvelle activité", detail: "Construire l'offre et la présence dès le départ" },
-];
-const BUDGETS: Choice[] = [
-  { id: "under500", label: "Moins de 500 €", detail: "Un levier prioritaire" }, { id: "500_1000", label: "500 – 1 000 €", detail: "Une présence solide" }, { id: "1000_2500", label: "1 000 – 2 500 €", detail: "Un dispositif complet" }, { id: "2500_5000", label: "2 500 – 5 000 €", detail: "Une stratégie structurée" }, { id: "5000_plus", label: "5 000 € +", detail: "Un projet premium sur mesure" },
-];
-const DISCOVERY: Choice[] = [
-  { id: "google", label: "Google / Maps", detail: "Recherche, SEO ou visibilité locale" }, { id: "social", label: "Instagram / Facebook / TikTok", detail: "Réseaux sociaux et recommandations" }, { id: "referral", label: "Bouche-à-oreille", detail: "Recommandations et réseau" }, { id: "mixed", label: "Un peu de tout", detail: "Acquisition déjà diversifiée" },
-];
-const SERVICE_ORDER: Record<string, string[]> = { restaurant: ["website","maps","social","seo","branding","maintenance","robotics"], hospitality: ["website","maps","seo","social","branding","maintenance","robotics"], realestate: ["website","maps","branding","seo","social","maintenance","robotics"], automotive: ["website","maps","conversion","seo","content","maintenance","robotics"], fashion: ["website","branding","social","content","seo","maintenance","robotics"], jewelry: ["website","branding","content","seo","social","maintenance","robotics"], beauty: ["website","maps","social","seo","branding","maintenance","robotics"], health: ["website","maps","seo","branding","content","maintenance","robotics"], architecture: ["website","branding","content","seo","maps","maintenance","robotics"], construction: ["website","maps","seo","branding","content","maintenance","robotics"], legal: ["website","seo","branding","maps","content","maintenance","robotics"], finance: ["website","seo","branding","content","maps","maintenance","robotics"], commerce: ["website","social","seo","branding","conversion","maintenance","robotics"], tourism: ["website","maps","seo","social","content","maintenance","robotics"], agency: ["website","branding","conversion","seo","content","maintenance","robotics"], other: ["website","branding","seo","maps","social","maintenance","robotics"] };
+
+const SERVICE_ORDER: Record<string, string[]> = {
+  restaurant: ["website","maps","social","seo","branding","maintenance","robotics"],
+  hospitality: ["website","maps","seo","social","branding","maintenance","robotics"],
+  realestate: ["website","maps","branding","seo","social","maintenance","robotics"],
+  automotive: ["website","maps","conversion","seo","content","maintenance","robotics"],
+  fashion: ["website","branding","social","content","seo","maintenance","robotics"],
+  jewelry: ["website","branding","content","seo","social","maintenance","robotics"],
+  beauty: ["website","maps","social","seo","branding","maintenance","robotics"],
+  health: ["website","maps","seo","branding","content","maintenance","robotics"],
+  architecture: ["website","branding","content","seo","maps","maintenance","robotics"],
+  construction: ["website","maps","seo","branding","content","maintenance","robotics"],
+  legal: ["website","seo","branding","maps","content","maintenance","robotics"],
+  finance: ["website","seo","branding","content","maps","maintenance","robotics"],
+  commerce: ["website","social","seo","branding","conversion","maintenance","robotics"],
+  tourism: ["website","maps","seo","social","content","maintenance","robotics"],
+  agency: ["website","branding","conversion","seo","content","maintenance","robotics"],
+  other: ["website","branding","seo","maps","social","maintenance","robotics"]
+};
 
 const BASE_PRICES: Record<string, number> = { website: 499, branding: 179, seo: 299, maps: 990, ads: 299, social: 299, content: 399, conversion: 299, maintenance: 29, robotics: 499 };
-// Keep recommendation rules defined before the configurator render so SSR bundles always include them.
+
 const PROFILE_SERVICE_RULES: Record<string, string[]> = Object.fromEntries(
   Object.entries(SERVICE_ORDER).map(([sectorId, services]) => [sectorId, services.slice(0, 4)])
 );
 
-const WEBSITE_TIERS = {
-  showcase: { price: 499, label: "Site Vitrine Pro", detail: "Site premium jusqu'à 3 pages, responsive, contact et SEO de base" },
-  business: { price: 799, label: "Site Business", detail: "Site jusqu'à 5 pages, blog, galerie, chat et analytics avancés" },
-  ecommerce: { price: 1499, label: "E-commerce & Réservation", detail: "Catalogue, paiement sécurisé, gestion des stocks et parcours de réservation" },
-} as const;
-
-const BRANDING_TIERS = {
-  starter: { price: 179, label: "Logo Signature", detail: "Logo, déclinaisons essentielles et fichiers maîtres" },
-  premium: { price: 349, label: "Full Brand Suite", detail: "Système de marque étendu, direction artistique et Brand Book" },
-} as const;
-
 export function QuoteConfiguratorCompact() {
+  const { lang } = useLang();
+  const currentLang = (lang in QUOTE_UI.kicker ? lang : "fr") as Lang;
+
+  const SECTORS = useMemo(() => SECTORS_DATA.map((s) => ({
+    id: s.id,
+    label: s.label[currentLang],
+    detail: s.detail[currentLang],
+    goals: s.goals.map((g) => g[currentLang])
+  })), [currentLang]);
+
+  const SERVICES = useMemo(() => SERVICES_DATA.map((s) => ({
+    id: s.id,
+    label: s.label[currentLang],
+    detail: s.detail[currentLang]
+  })), [currentLang]);
+
+  const SITUATIONS = useMemo(() => SITUATIONS_DATA.map((s) => ({
+    id: s.id,
+    label: s.label[currentLang],
+    detail: s.detail[currentLang]
+  })), [currentLang]);
+
+  const BUDGETS = useMemo(() => BUDGETS_DATA.map((b) => ({
+    id: b.id,
+    label: b.label[currentLang],
+    detail: b.detail[currentLang]
+  })), [currentLang]);
+
+  const DISCOVERY = useMemo(() => DISCOVERY_DATA.map((d) => ({
+    id: d.id,
+    label: d.label[currentLang],
+    detail: d.detail[currentLang]
+  })), [currentLang]);
+
+  const websiteTiers = useMemo(() => ({
+    showcase: {
+      price: 499,
+      label: { fr: "Site Vitrine Pro", en: "Pro Showcase Site", vi: "Website Giới thiệu Pro", ar: "موقع تعريفي احترافي", ru: "Сайт-витрина Pro" }[currentLang],
+      detail: { fr: "Site premium jusqu'à 3 pages, responsive, contact et SEO de base", en: "Premium site up to 3 pages, responsive, contact and basic SEO", vi: "Website cao cấp tối đa 3 trang, responsive, liên hệ và chuẩn SEO cơ bản", ar: "موقع متميز حتى 3 صفحات، متجاوب، تواصل وSEO أساسي", ru: "Премиум сайт до 3 страниц, адаптивный, контакты и базовое SEO" }[currentLang],
+    },
+    business: {
+      price: 799,
+      label: { fr: "Site Business", en: "Business Site", vi: "Website Doanh nghiệp", ar: "موقع أعمال متقدم", ru: "Бизнес-сайт" }[currentLang],
+      detail: { fr: "Site jusqu'à 5 pages, blog, galerie, chat et analytics avancés", en: "Site up to 5 pages, blog, gallery, chat and advanced analytics", vi: "Website tối đa 5 trang, blog, thư viện ảnh, chat và analytics nâng cao", ar: "موقع حتى 5 صفحات، مدونة، معرض، دردشة وتحليلات متقدمة", ru: "Сайт до 5 страниц, блог, галерея, чат и расширенная аналитика" }[currentLang],
+    },
+    ecommerce: {
+      price: 1499,
+      label: { fr: "E-commerce & Réservation", en: "E-commerce & Booking", vi: "Thương mại điện tử & Đặt chỗ", ar: "تجارة إلكترونية وحجز", ru: "E-commerce и бронирование" }[currentLang],
+      detail: { fr: "Catalogue, paiement sécurisé, gestion des stocks et parcours de réservation", en: "Catalog, secure payment, inventory management and booking flow", vi: "Danh mục sản phẩm, thanh toán bảo mật, quản lý kho và luồng đặt chỗ", ar: "كتالوج ودفع آمن وإدارة مخزون ومسار حجز", ru: "Каталог, безопасная оплата, складской учёт и модуль бронирования" }[currentLang],
+    },
+  }), [currentLang]);
+
+  const brandingTiers = useMemo(() => ({
+    starter: {
+      price: 179,
+      label: { fr: "Logo Signature", en: "Signature Logo", vi: "Logo Đặc trưng", ar: "شعار توقيع مميز", ru: "Фирменный логотип" }[currentLang],
+      detail: { fr: "Logo, déclinaisons essentielles et fichiers maîtres", en: "Logo, essential variations and master files", vi: "Logo, các phiên bản cơ bản và tệp gốc", ar: "الشعار والنسخ الأساسية والملفات المصدرية", ru: "Логотип, базовые версии и исходные файлы" }[currentLang],
+    },
+    premium: {
+      price: 349,
+      label: { fr: "Full Brand Suite", en: "Full Brand Suite", vi: "Bộ nhận diện toàn diện", ar: "هوية بصرية شاملة", ru: "Полный брендинг" }[currentLang],
+      detail: { fr: "Système de marque étendu, direction artistique et Brand Book", en: "Extended brand system, art direction and Brand Book", vi: "Hệ thống thương hiệu mở rộng, định hướng nghệ thuật và Brand Book", ar: "نظام علامة تجارية موسع وتوجيه فني ودليل الهوية", ru: "Расширенная бренд-система, арт-дирекшн и брендбук" }[currentLang],
+    },
+  }), [currentLang]);
+
   const journeyRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState(0); const [sectorId, setSectorId] = useState(""); const [showAllSectors, setShowAllSectors] = useState(false); const [goal, setGoal] = useState(""); const [situation, setSituation] = useState(""); const [budget, setBudget] = useState(""); const [discovery, setDiscovery] = useState(""); const [selectedServices, setSelectedServices] = useState<string[]>([]); const [client, setClient] = useState({ company: "", name: "", email: "", whatsapp: "", website: "" }); const [generated, setGenerated] = useState(false); const [sending, setSending] = useState(false); const [sendMessage, setSendMessage] = useState("");
   const [paying, setPaying] = useState(false); const [checkoutUrl, setCheckoutUrl] = useState("");
@@ -108,22 +162,32 @@ export function QuoteConfiguratorCompact() {
       let price = BASE_PRICES[service.id];
       let label = service.label;
       let detail = service.detail;
-      if (service.id === "maps") { price = 990; label = "Google Maps Top 3"; detail = "SUR MESURE · à partir de 990 € / an · selon positionnement, zone, concurrence et mots-clés"; }
+      if (service.id === "maps") {
+        price = 990;
+        label = "Google Maps Top 3";
+        detail = {
+          fr: "SUR MESURE · à partir de 990 € / an · selon positionnement, zone, concurrence et mots-clés",
+          en: "BESPOKE · from €990 / year · based on ranking, area, competition and keywords",
+          vi: "THEO YÊU CẦU · từ 990 € / năm · tùy vị trí, khu vực, đối thủ và từ khóa",
+          ar: "مخصص · ابتداءً من 990 € سنويًا · وفق الترتيب والمنطقة والمنافسة والكلمات المفتاحية",
+          ru: "ПОД ЗАКАЗ · от 990 € в год · в зависимости от позиций, района, конкуренции и запросов",
+        }[currentLang];
+      }
       if (service.id === "website") {
         if (situation === "selling") {
-          price = WEBSITE_TIERS.ecommerce.price; label = WEBSITE_TIERS.ecommerce.label; detail = WEBSITE_TIERS.ecommerce.detail;
+          price = websiteTiers.ecommerce.price; label = websiteTiers.ecommerce.label; detail = websiteTiers.ecommerce.detail;
         } else if (budget === "1000_2500" || budget === "2500_5000" || budget === "5000_plus" || situation === "redesign") {
-          price = WEBSITE_TIERS.business.price; label = WEBSITE_TIERS.business.label; detail = WEBSITE_TIERS.business.detail;
+          price = websiteTiers.business.price; label = websiteTiers.business.label; detail = websiteTiers.business.detail;
         } else {
-          price = WEBSITE_TIERS.showcase.price; label = WEBSITE_TIERS.showcase.label; detail = WEBSITE_TIERS.showcase.detail;
+          price = websiteTiers.showcase.price; label = websiteTiers.showcase.label; detail = websiteTiers.showcase.detail;
         }
       }
       if (service.id === "branding" && (budget === "2500_5000" || budget === "5000_plus" || sectorId === "realestate")) {
-        price = BRANDING_TIERS.premium.price; label = BRANDING_TIERS.premium.label; detail = BRANDING_TIERS.premium.detail;
+        price = brandingTiers.premium.price; label = brandingTiers.premium.label; detail = brandingTiers.premium.detail;
       }
       return { id: service.id, label, detail, price, period: service.id === "seo" || service.id === "social" || service.id === "maintenance" ? "month" : "once", custom: service.id === "maps" };
     });
-  }, [orderedServices, situation, budget, sectorId]);
+  }, [orderedServices, situation, budget, sectorId, currentLang, websiteTiers, brandingTiers]);
 
   const recommendedIds = profileRecommendation;
   const activeRecommended = recommendedIds.filter((id) => proposals.some((p) => p.id === id));
@@ -375,12 +439,41 @@ export function QuoteConfiguratorCompact() {
 
   const recommendation = useMemo(() => {
     if (!sector || !discoveryChoice) return "";
-    const channel = discovery === "google" ? "Google et la visibilité locale" : discovery === "social" ? "les réseaux sociaux" : discovery === "referral" ? "la conversion du bouche-à-oreille" : "la complémentarité de vos canaux";
-    const budgetText = budget === "under500" ? "un premier levier ciblé" : budget === "500_1000" ? "une présence solide sans disperser le budget" : budget === "1000_2500" ? "un dispositif cohérent qui couvre votre socle digital et votre acquisition" : "un dispositif plus complet, sans ajouter des prestations qui ne servent pas votre objectif";
-    return `Pour ${sector.label.toLowerCase()}, XR Quote Studio recommande ${budgetText}, en donnant la priorité à ${activeRecommended.map((id) => SERVICES.find((x) => x.id === id)?.label).filter(Boolean).join(", ")}. Votre choix de ${channel} renforce cette recommandation.`;
-  }, [sector, discoveryChoice, discovery, budget, activeRecommended]);
+    const channels: Record<string, string> = {
+      google: { fr: "Google et la visibilité locale", en: "Google and local search visibility", vi: "Google và khả năng hiển thị địa phương", ar: "Google والظهور المحلي", ru: "Google и локальную видимость" }[currentLang],
+      social: { fr: "les réseaux sociaux", en: "social media channels", vi: "mạng xã hội", ar: "شبكات التواصل الاجتماعي", ru: "социальные сети" }[currentLang],
+      referral: { fr: "la conversion du bouche-à-oreille", en: "word-of-mouth conversion", vi: "chuyển đổi từ truyền miệng", ar: "تحويل توصيات العملاء", ru: "конверсию рекомендаций" }[currentLang],
+      mixed: { fr: "la complémentarité de vos canaux", en: "cross-channel synergy", vi: "sự kết hợp đa kênh", ar: "تكامل قنواتك", ru: "синергию всех каналов" }[currentLang],
+    };
+    const channel = channels[discovery] ?? channels.mixed;
+    const budgetTexts: Record<string, string> = {
+      under500: { fr: "un premier levier ciblé", en: "a focused initial lever", vi: "một đòn bẩy trọng tâm ban đầu", ar: "أداة تركيز أولية", ru: "точечный стартовый инструмент" }[currentLang],
+      "500_1000": { fr: "une présence solide sans disperser le budget", en: "a solid presence without scattering the budget", vi: "sự hiện diện vững chắc không lãng phí ngân sách", ar: "حضوراً قوياً دون تشتيت الميزانية", ru: "уверенное присутствие без распыления бюджета" }[currentLang],
+      "1000_2500": { fr: "un dispositif cohérent qui couvre votre socle digital et votre acquisition", en: "a coherent setup covering your digital foundation and acquisition", vi: "hệ thống hoàn chỉnh bao quát nền tảng số và thu hút khách hàng", ar: "منظومة متكاملة تغطي قاعدتك الرقمية والاستقطاب", ru: "комплекс, закрывающий цифровую базу и привлечение клиентов" }[currentLang],
+      default: { fr: "un dispositif plus complet, sans ajouter des prestations qui ne servent pas votre objectif", en: "a comprehensive setup without adding unnecessary services", vi: "hệ thống toàn diện mà không thêm dịch vụ thừa", ar: "منظومة شاملة دون إضافة خدمات لا تخدم أهدافك", ru: "полноценную систему без лишних нецелевых услуг" }[currentLang],
+    };
+    const budgetText = budgetTexts[budget] ?? budgetTexts.default;
+    const recServices = activeRecommended.map((id) => SERVICES.find((x) => x.id === id)?.label).filter(Boolean).join(", ");
 
-  const titles = ["Votre activité", "Votre priorité", "Votre situation aujourd'hui", "L'investissement envisagé", "Les prestations à activer", "Comment vos clients vous trouvent", "Votre recommandation", "Vos informations"];
+    if (currentLang === "en") {
+      return `For ${sector.label.toLowerCase()}, XR Quote Studio recommends ${budgetText}, prioritizing ${recServices}. Your focus on ${channel} reinforces this strategic direction.`;
+    }
+    if (currentLang === "vi") {
+      return `Đối với ${sector.label.toLowerCase()}, XR Quote Studio khuyến nghị ${budgetText}, ưu tiên ${recServices}. Việc bạn chú trọng ${channel} càng củng cố định hướng này.`;
+    }
+    if (currentLang === "ar") {
+      return `بالنسبة لـ ${sector.label}، يوصي XR Quote Studio بـ ${budgetText}، مع إعطاء الأولوية لـ ${recServices}. كما أن تركيزك على ${channel} يعزز هذه التوصية.`;
+    }
+    if (currentLang === "ru") {
+      return `Для сферы «${sector.label.toLowerCase()}» XR Quote Studio рекомендует ${budgetText}, с приоритетом на ${recServices}. Выбор направления «${channel}» подтверждает этот подход.`;
+    }
+    return `Pour ${sector.label.toLowerCase()}, XR Quote Studio recommande ${budgetText}, en donnant la priorité à ${recServices}. Votre choix de ${channel} renforce cette recommandation.`;
+  }, [sector, discoveryChoice, discovery, budget, activeRecommended, currentLang, SERVICES]);
+
+  const titles = useMemo(() => [0, 1, 2, 3, 4, 5, 6, 7].map((i) => STEP_TITLES[i][currentLang]), [currentLang]);
+  const subtitles = useMemo(() => [0, 1, 2, 3, 4, 5, 6, 7].map((i) => STEP_SUBTITLES[i][currentLang]), [currentLang]);
+  const alexMessages = useMemo(() => [0, 1, 2, 3, 4, 5, 6, 7].map((i) => ALEXANDRE_MESSAGES[i][currentLang]), [currentLang]);
+
   const progress = ((step + 1) / 8) * 100;
   const card = (item: Choice, onClick: () => void, selected = false) => {
     const icons: Record<string, string> = {
@@ -408,36 +501,36 @@ export function QuoteConfiguratorCompact() {
             <span className="block text-sm font-semibold leading-5 text-[var(--xr-ink)] sm:text-[15px]">{item.label}</span>
             <span className="mt-1.5 block text-[11px] leading-[1.55] xr-muted sm:text-xs">{item.detail}</span>
           </div>
-          {selected && <span className="label-mono text-[7px] tracking-[.15em] text-[var(--xr-ink)]">✓ AJOUTÉ À VOTRE PROJET</span>}
+          {selected && <span className="label-mono text-[7px] tracking-[.15em] text-[var(--xr-ink)]">{QUOTE_UI.addedToProject[currentLang]}</span>}
         </div>
       </button>
     );
   };
 
   const totalLabel = once > 0 && monthly > 0
-    ? once.toLocaleString("fr-FR") + " € + " + monthly.toLocaleString("fr-FR") + " €/mois"
+    ? once.toLocaleString("fr-FR") + " € + " + monthly.toLocaleString("fr-FR") + " €" + QUOTE_UI.perMonth[currentLang]
     : once > 0
       ? once.toLocaleString("fr-FR") + " €"
       : monthly > 0
-        ? monthly.toLocaleString("fr-FR") + " €/mois"
-        : "Sélection en cours";
+        ? monthly.toLocaleString("fr-FR") + " €" + QUOTE_UI.perMonth[currentLang]
+        : QUOTE_UI.calculating[currentLang];
 
   const SystemStack = () => (
     <div className="relative overflow-hidden rounded-[1.15rem] border xr-line bg-[var(--xr-surface)] p-4 shadow-[var(--xr-shadow)] sm:p-5">
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-70 [background-image:linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] [background-size:28px_28px]" />
       <div className="relative flex items-center justify-between gap-4">
         <div>
-          <span className="label-mono text-[7px] tracking-[.18em] xr-muted-2">ARCHITECTURE XR</span>
-          <p className="mt-1 text-xs font-semibold text-[var(--xr-ink)]">Votre dispositif digital</p>
+          <span className="label-mono text-[7px] tracking-[.18em] xr-muted-2">{QUOTE_UI.archTitle[currentLang]}</span>
+          <p className="mt-1 text-xs font-semibold text-[var(--xr-ink)]">{QUOTE_UI.archSub[currentLang]}</p>
         </div>
-        <span className="rounded-full border xr-line bg-[var(--xr-bg)] px-2.5 py-1 label-mono text-[6px] tracking-[.16em] xr-muted-2">{selectedServices.length} BRIQUE{selectedServices.length > 1 ? "S" : ""}</span>
+        <span className="rounded-full border xr-line bg-[var(--xr-bg)] px-2.5 py-1 label-mono text-[6px] tracking-[.16em] xr-muted-2">{selectedServices.length} {QUOTE_UI.activeBricks[currentLang]}</span>
       </div>
       <div className="relative mt-5 grid grid-cols-1 gap-2 sm:grid-cols-3">
         <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)] p-4 sm:col-span-1">
           <span className="label-mono text-[6px] xr-muted-2">CORE</span>
           <div className="mt-3 flex items-center gap-3">
             <div className="grid h-11 w-11 place-items-center rounded-full border xr-line bg-[var(--xr-ink)] text-[var(--xr-bg)] font-black tracking-[-.08em]">XR</div>
-            <div><p className="text-[10px] font-semibold text-[var(--xr-ink)]">XRAGENCY</p><p className="mt-1 text-[7px] xr-muted-2">Stratégie · Design · Croissance</p></div>
+            <div><p className="text-[10px] font-semibold text-[var(--xr-ink)]">XRAGENCY</p><p className="mt-1 text-[7px] xr-muted-2">{QUOTE_UI.archTagline[currentLang]}</p></div>
           </div>
         </div>
         <div className="relative sm:col-span-2">
@@ -460,7 +553,7 @@ export function QuoteConfiguratorCompact() {
         </div>
       </div>
       <div className="relative mt-4 flex items-center justify-between border-t border-[var(--xr-line)] pt-3">
-        <span className="label-mono text-[6px] tracking-[.14em] xr-muted-2">INVESTISSEMENT ESTIMÉ</span>
+        <span className="label-mono text-[6px] tracking-[.14em] xr-muted-2">{QUOTE_UI.estimatedInvestment[currentLang]}</span>
         <span className="text-[9px] font-semibold text-[var(--xr-ink)]">{totalLabel}</span>
       </div>
     </div>
@@ -472,9 +565,9 @@ export function QuoteConfiguratorCompact() {
       <div className="relative mx-auto max-w-[1560px] px-5 sm:px-8 lg:px-12">
         <Parallax speed={-0.025}><Reveal><div className="grid gap-7 border-b xr-line pb-10 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
           <div className="min-w-0">
-            <span className="label-mono xr-accent text-[8px] tracking-[.22em] sm:tracking-[.28em]">XR QUOTE STUDIO · DEVIS SUR MESURE</span>
-            <h2 className="display-serif mt-4 max-w-5xl break-words text-balance text-[clamp(2.35rem,5.2vw,5.6rem)] leading-[.98] tracking-[-.045em] sm:mt-5">Construisons votre <em className="not-italic opacity-55">projet</em>, étape par étape.</h2>
-            <p className="mt-5 max-w-2xl text-sm leading-7 xr-muted sm:text-base">Répondez à quelques questions : votre conseiller vous aide à définir les bonnes priorités, à composer votre dispositif digital et à préparer une proposition cohérente avec votre budget.</p>
+            <span className="label-mono xr-accent text-[8px] tracking-[.22em] sm:tracking-[.28em]">{QUOTE_UI.kicker[currentLang]}</span>
+            <h2 className="display-serif mt-4 max-w-5xl break-words text-balance text-[clamp(2.35rem,5.2vw,5.6rem)] leading-[.98] tracking-[-.045em] sm:mt-5">{QUOTE_UI.title1[currentLang]} <em className="not-italic opacity-55">{QUOTE_UI.titleAccent[currentLang]}</em>{QUOTE_UI.title2[currentLang]}</h2>
+            <p className="mt-5 max-w-2xl text-sm leading-7 xr-muted sm:text-base">{QUOTE_UI.lead[currentLang]}</p>
           </div>
           <div className="relative overflow-hidden rounded-[1.15rem] border xr-line bg-[var(--xr-surface)] p-4 shadow-[var(--xr-shadow)] sm:p-5">
             <div aria-hidden="true" className="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full bg-[var(--xr-accent-soft)] blur-3xl" />
@@ -485,27 +578,18 @@ export function QuoteConfiguratorCompact() {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-[var(--xr-ink)]">Alexandre</p>
-                <p className="mt-0.5 label-mono text-[7px] tracking-[.15em] xr-muted-2">VOTRE CONSEILLER DIGITAL</p>
+                <p className="mt-0.5 label-mono text-[7px] tracking-[.15em] xr-muted-2">{QUOTE_UI.advisorTitle[currentLang]}</p>
               </div>
-              <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-2.5 py-1 label-mono text-[6px] text-[var(--xr-ink)]"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--xr-ink)]" /> EN LIGNE</span>
+              <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-2.5 py-1 label-mono text-[6px] text-[var(--xr-ink)]"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--xr-ink)]" /> {QUOTE_UI.online[currentLang]}</span>
             </div>
             <div aria-live="polite" className="relative mt-4 rounded-2xl rounded-tl-sm border xr-line bg-[var(--xr-surface-strong)] p-4">
-              <div className="mb-2 flex items-center gap-2 label-mono text-[6px] tracking-[.16em] xr-muted-2"><MessageCircle className="h-3 w-3" /> MESSAGE D’ALEXANDRE</div>
-              <p className="text-[11px] leading-5 text-[var(--xr-ink)] sm:text-xs">{[
-                "Bonjour ! Je suis Alexandre. Je vais vous guider pour construire un projet adapté à votre activité.",
-                "Quel résultat compte le plus pour vous ? Je m’en servirai pour prioriser les bonnes actions.",
-                "Je prends en compte votre situation actuelle pour éviter de vous proposer des solutions inutiles.",
-                "Parlons budget : je vais ajuster le périmètre à votre investissement envisagé.",
-                "Je prépare une combinaison de services cohérente. Vous gardez le contrôle de chaque choix.",
-                "Dernière question sur votre acquisition : elle m’aide à identifier les leviers les plus pertinents.",
-                "Je croise vos réponses pour vous présenter une recommandation personnalisée et transparente.",
-                "Votre brief est prêt. Ajoutez vos coordonnées pour recevoir la proposition détaillée."
-              ][step]}</p>
-              <div className="mt-3 flex items-center gap-1" aria-hidden="true"><span className="h-1 w-1 rounded-full bg-[var(--xr-ink)] animate-pulse" /><span className="h-1 w-1 rounded-full bg-[var(--xr-ink)]/70 animate-pulse [animation-delay:150ms]" /><span className="h-1 w-1 rounded-full bg-[var(--xr-ink)]/40 animate-pulse [animation-delay:300ms]" /><span className="ml-1 label-mono text-[6px] xr-muted-2">ACCOMPAGNEMENT PERSONNALISÉ</span></div>
+              <div className="mb-2 flex items-center gap-2 label-mono text-[6px] tracking-[.16em] xr-muted-2"><MessageCircle className="h-3 w-3" /> {QUOTE_UI.alexMsg[currentLang]}</div>
+              <p className="text-[11px] leading-5 text-[var(--xr-ink)] sm:text-xs">{alexMessages[step]}</p>
+              <div className="mt-3 flex items-center gap-1" aria-hidden="true"><span className="h-1 w-1 rounded-full bg-[var(--xr-ink)] animate-pulse" /><span className="h-1 w-1 rounded-full bg-[var(--xr-ink)]/70 animate-pulse [animation-delay:150ms]" /><span className="h-1 w-1 rounded-full bg-[var(--xr-ink)]/40 animate-pulse [animation-delay:300ms]" /><span className="ml-1 label-mono text-[6px] xr-muted-2">{QUOTE_UI.personalizedSupport[currentLang]}</span></div>
             </div>
             <div className="relative mt-4 flex items-end justify-between gap-3 border-t xr-line pt-3">
-              <div><span className="label-mono text-[6px] tracking-[.18em] xr-muted-2">ESTIMATION EN DIRECT</span><p className="mt-1 display-serif text-2xl text-[var(--xr-ink)] sm:text-3xl">{totalLabel}</p></div>
-              <span className="shrink-0 rounded-full border xr-line px-3 py-1.5 label-mono text-[6px] xr-muted-2">{String(step+1).padStart(2,"0")} / 08 ÉTAPES</span>
+              <div><span className="label-mono text-[6px] tracking-[.18em] xr-muted-2">{QUOTE_UI.liveEstimate[currentLang]}</span><p className="mt-1 display-serif text-2xl text-[var(--xr-ink)] sm:text-3xl">{totalLabel}</p></div>
+              <span className="shrink-0 rounded-full border xr-line px-3 py-1.5 label-mono text-[6px] xr-muted-2">{String(step+1).padStart(2,"0")} / 08 {QUOTE_UI.stepCount[currentLang]}</span>
             </div>
           </div>
         </div></Reveal></Parallax>
@@ -513,7 +597,7 @@ export function QuoteConfiguratorCompact() {
           <div className="flex min-w-max gap-2 rounded-xl border xr-line bg-[var(--xr-surface)] p-2 shadow-[var(--xr-shadow)]">
             {titles.map((title, index) => (
               <button
-                key={title}
+                key={title + index}
                 type="button"
                 onClick={() => index <= step && setStep(index)}
                 className={"group flex min-w-[145px] items-center gap-3 rounded-xl px-3 py-3 text-left transition " + (index === step ? "bg-[var(--xr-ink)] text-[var(--xr-bg)] shadow-lg" : index < step ? "bg-[var(--xr-accent-soft)]" : "opacity-45")}
@@ -522,7 +606,7 @@ export function QuoteConfiguratorCompact() {
                   {index < step ? <Check className="h-3 w-3" /> : String(index + 1).padStart(2, "0")}
                 </span>
                 <span className="min-w-0">
-                  <span className={"label-mono block text-[5px] tracking-[.16em] " + (index === step ? "text-white/55" : "xr-muted-2")}>ÉTAPE {String(index + 1).padStart(2, "0")}</span>
+                  <span className={"label-mono block text-[5px] tracking-[.16em] " + (index === step ? "text-white/55" : "xr-muted-2")}>{QUOTE_UI.stepWord[currentLang]} {String(index + 1).padStart(2, "0")}</span>
                   <span className={"mt-1 block truncate text-[9px] font-semibold " + (index === step ? "text-white" : "text-[var(--xr-ink)]")}>{title}</span>
                 </span>
               </button>
@@ -531,21 +615,21 @@ export function QuoteConfiguratorCompact() {
         </div>
         <div ref={journeyRef} className="mt-8 grid gap-5 lg:grid-cols-[.25fr_1.75fr]">
           <Reveal><aside className="xr-panel rounded-[2rem] p-3 lg:sticky lg:top-28 lg:h-fit">
-            <div className="px-3 pb-3 pt-2"><div className="flex items-center justify-between"><span className="label-mono text-[6px] xr-muted-2">VOTRE PARCOURS</span><span className="label-mono text-[6px] xr-muted-2">{String(step+1).padStart(2,"0")} / 08</span></div><div className="mt-3 h-1 rounded-full bg-current opacity-10"><div className="h-full rounded-full bg-[var(--xr-accent)] transition-all duration-500" style={{width:progress+"%"}}/></div></div>
-            <div className="hidden gap-1 lg:grid">{titles.map((title,index)=><div key={title} className={"rounded-xl px-3 py-3 "+(index===step?"bg-[var(--xr-accent-soft)]":"opacity-45")}><div className="flex items-center gap-2"><span className="label-mono text-[6px] xr-muted-2">{String(index+1).padStart(2,"0")}</span><span className="truncate text-[8px] font-semibold">{title}</span></div></div>)}</div>
-            <div className="mt-2 rounded-xl border xr-line bg-[var(--xr-surface)] p-3"><span className="label-mono text-[6px] xr-muted-2">SYSTÈME</span><p className="mt-1 text-[9px] font-semibold">{selectedServices.length} brique(s) active(s)</p><p className="mt-1 text-[7px] xr-muted">{totalLabel}</p></div>
+            <div className="px-3 pb-3 pt-2"><div className="flex items-center justify-between"><span className="label-mono text-[6px] xr-muted-2">{QUOTE_UI.yourJourney[currentLang]}</span><span className="label-mono text-[6px] xr-muted-2">{String(step+1).padStart(2,"0")} / 08</span></div><div className="mt-3 h-1 rounded-full bg-current opacity-10"><div className="h-full rounded-full bg-[var(--xr-accent)] transition-all duration-500" style={{width:progress+"%"}}/></div></div>
+            <div className="hidden gap-1 lg:grid">{titles.map((title,index)=><div key={title + index} className={"rounded-xl px-3 py-3 "+(index===step?"bg-[var(--xr-accent-soft)]":"opacity-45")}><div className="flex items-center gap-2"><span className="label-mono text-[6px] xr-muted-2">{String(index+1).padStart(2,"0")}</span><span className="truncate text-[8px] font-semibold">{title}</span></div></div>)}</div>
+            <div className="mt-2 rounded-xl border xr-line bg-[var(--xr-surface)] p-3"><span className="label-mono text-[6px] xr-muted-2">{QUOTE_UI.system[currentLang]}</span><p className="mt-1 text-[9px] font-semibold">{selectedServices.length} {QUOTE_UI.activeBricks[currentLang]}</p><p className="mt-1 text-[7px] xr-muted">{totalLabel}</p></div>
           </aside></Reveal>
           <Reveal delay={70}><div className="xr-depth-card rounded-[1.15rem] border xr-line bg-[var(--xr-surface)] p-4 sm:p-6 lg:p-8">
-            <div className="flex items-center justify-between gap-3 border-b xr-line pb-5"><div className="min-w-0"><span className="inline-flex items-center gap-2 rounded-full border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-[var(--xr-ink)]"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--xr-ink)]"/>{step===7?"DERNIÈRE LIGNE DROITE":"ÉTAPE "+String(step+1).padStart(2,"0")+" / 08"}</span><h3 className="mt-3 max-w-3xl break-words text-balance text-2xl font-semibold leading-[1.12] tracking-[-.03em] sm:text-3xl">{titles[step]}</h3><p className="mt-2 text-xs leading-5 xr-muted sm:text-sm">{["On commence simplement : quel est votre univers ?","Qu’aimeriez-vous améliorer en premier ?","Où en êtes-vous aujourd’hui ?","On adapte la proposition à votre investissement.","Composez votre équipe digitale à la carte.","Comment les clients vous découvrent-ils ?","Voici une piste claire, avec les coûts détaillés.","Encore quelques coordonnées pour finaliser votre brief."][step]}</p></div>{step>0&&<button type="button" onClick={()=>goToStep(step-1)} className="shrink-0 rounded-full border xr-line px-4 py-2 text-xs font-semibold transition hover:bg-[var(--xr-accent-soft)]">← Retour</button>}</div>
+            <div className="flex items-center justify-between gap-3 border-b xr-line pb-5"><div className="min-w-0"><span className="inline-flex items-center gap-2 rounded-full border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-[var(--xr-ink)]"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--xr-ink)]"/>{step===7 ? QUOTE_UI.lastStretch[currentLang] : QUOTE_UI.stepWord[currentLang] + " " + String(step+1).padStart(2,"0") + " / 08"}</span><h3 className="mt-3 max-w-3xl break-words text-balance text-2xl font-semibold leading-[1.12] tracking-[-.03em] sm:text-3xl">{titles[step]}</h3><p className="mt-2 text-xs leading-5 xr-muted sm:text-sm">{subtitles[step]}</p></div>{step>0&&<button type="button" onClick={()=>goToStep(step-1)} className="shrink-0 rounded-full border xr-line px-4 py-2 text-xs font-semibold transition hover:bg-[var(--xr-accent-soft)]">{QUOTE_UI.back[currentLang]}</button>}</div>
             <div className="mt-7">
-              {step===0&&<div className="space-y-4"><div className="rounded-[1.15rem] border xr-line bg-[var(--xr-surface-strong)] p-5"><span className="label-mono text-[6px] xr-accent">01 · VOTRE ACTIVITÉ</span><p className="mt-2 text-sm xr-muted">Choisissez votre univers. Les recommandations s'adaptent ensuite à votre objectif, situation et budget.</p></div><div className="grid grid-cols-2 gap-3 sm:grid-cols-3">{(showAllSectors?SECTORS:SECTORS.slice(0,6)).map((x,i)=><button key={x.id} type="button" aria-label={"Choisir "+x.label} onClick={()=>{setSectorId(x.id);goToStep(1)}} className="choice-card xr-depth-card group min-h-[140px] rounded-2xl border xr-line bg-[var(--xr-surface-strong)] p-4 text-left transition hover:border-[var(--xr-ink)]/50 hover:bg-[var(--xr-accent-soft)] sm:min-h-[155px] sm:p-5"><span className="flex items-center justify-between"><span className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--xr-accent-soft)] text-xl transition group-hover:scale-110">{({"restaurant":"🍽️","hospitality":"🏨","realestate":"🏡","automotive":"🚘","fashion":"👜","jewelry":"💎","beauty":"✨","health":"🩺","architecture":"🏛️","construction":"🛠️","legal":"⚖️","finance":"📈","commerce":"🛍️","tourism":"✈️","agency":"🎨","other":"💡"} as Record<string,string>)[x.id]||"✦"}</span><span className="label-mono text-[7px] xr-muted-2">{String(i+1).padStart(2,"0")}</span></span><span className="mt-4 block text-xs font-semibold leading-5 sm:text-sm">{x.label}</span><span className="mt-1.5 block text-[10px] leading-4 xr-muted">{x.detail}</span></button>)}</div><button type="button" onClick={()=>setShowAllSectors(v=>!v)} className="w-full rounded-full border xr-line py-3 label-mono text-[7px] xr-muted">{showAllSectors?"Réduire les activités":"Voir toutes les activités"}</button></div>}
-              {step===1&&sector&&<div className="space-y-4"><div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-5"><span className="label-mono text-[6px] xr-muted-2">ACTIVITÉ</span><p className="mt-2 text-xl font-semibold">{sector.label}</p><p className="mt-1 text-[9px] leading-4 xr-muted">{sector.detail}</p></div><div className="grid gap-2 sm:grid-cols-3">{sector.goals.map(x=>card({id:x,label:x,detail:"Priorité adaptée à votre secteur"},()=>choose(setGoal,x,2)))}</div></div>}
+              {step===0&&<div className="space-y-4"><div className="rounded-[1.15rem] border xr-line bg-[var(--xr-surface-strong)] p-5"><span className="label-mono text-[6px] xr-accent">{QUOTE_UI.activityBadge[currentLang]}</span><p className="mt-2 text-sm xr-muted">{QUOTE_UI.activityIntro[currentLang]}</p></div><div className="grid grid-cols-2 gap-3 sm:grid-cols-3">{(showAllSectors?SECTORS:SECTORS.slice(0,6)).map((x,i)=><button key={x.id} type="button" aria-label={QUOTE_UI.stepWord[currentLang] + " " + x.label} onClick={()=>{setSectorId(x.id);goToStep(1)}} className="choice-card xr-depth-card group min-h-[140px] rounded-2xl border xr-line bg-[var(--xr-surface-strong)] p-4 text-left transition hover:border-[var(--xr-ink)]/50 hover:bg-[var(--xr-accent-soft)] sm:min-h-[155px] sm:p-5"><span className="flex items-center justify-between"><span className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--xr-accent-soft)] text-xl transition group-hover:scale-110">{({"restaurant":"🍽️","hospitality":"🏨","realestate":"🏡","automotive":"🚘","fashion":"👜","jewelry":"💎","beauty":"✨","health":"🩺","architecture":"🏛️","construction":"🛠️","legal":"⚖️","finance":"📈","commerce":"🛍️","tourism":"✈️","agency":"🎨","other":"💡"} as Record<string,string>)[x.id]||"✦"}</span><span className="label-mono text-[7px] xr-muted-2">{String(i+1).padStart(2,"0")}</span></span><span className="mt-4 block text-xs font-semibold leading-5 sm:text-sm">{x.label}</span><span className="mt-1.5 block text-[10px] leading-4 xr-muted">{x.detail}</span></button>)}</div><button type="button" onClick={()=>setShowAllSectors(v=>!v)} className="w-full rounded-full border xr-line py-3 label-mono text-[7px] xr-muted">{showAllSectors ? QUOTE_UI.collapseSectors[currentLang] : QUOTE_UI.seeAllSectors[currentLang]}</button></div>}
+              {step===1&&sector&&<div className="space-y-4"><div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-5"><span className="label-mono text-[6px] xr-muted-2">{QUOTE_UI.activityBadge[currentLang]}</span><p className="mt-2 text-xl font-semibold">{sector.label}</p><p className="mt-1 text-[9px] leading-4 xr-muted">{sector.detail}</p></div><div className="grid gap-2 sm:grid-cols-3">{sector.goals.map(x=>card({id:x,label:x,detail:currentLang === "en" ? "Tailored priority for your sector" : currentLang === "vi" ? "Ưu tiên phù hợp với ngành của bạn" : currentLang === "ar" ? "أولوية مناسبة لمجالك" : currentLang === "ru" ? "Приоритетная задача для вашей сферы" : "Priorité adaptée à votre secteur"},()=>choose(setGoal,x,2)))}</div></div>}
               {step===2&&<div className="grid gap-2 sm:grid-cols-2">{SITUATIONS.map(x=>card(x,()=>choose(setSituation,x.id,3),x.id===situation))}</div>}
               {step===3&&<div className="grid gap-2 sm:grid-cols-3">{BUDGETS.map(x=>card(x,()=>{setBudget(x.id);setSelectedServices([]);window.setTimeout(()=>setStep(4),180)},x.id===budget))}</div>}
-              {step===4&&<div className="space-y-4"><div className="rounded-2xl border xr-line bg-[var(--xr-accent-soft)] p-5"><span className="label-mono text-[6px] xr-accent">SÉLECTION PRÉPARÉE</span><p className="mt-2 text-sm font-semibold">Les leviers les plus cohérents apparaissent ici en premier.</p><p className="mt-2 text-[9px] leading-4 xr-muted">Gardez-les, retirez-les ou ajoutez d'autres expertises. Rien n'est imposé.</p></div><div className="grid grid-cols-2 gap-2 sm:grid-cols-3">{orderedServices.map(x=>card(x,()=>toggleService(x.id),selectedServices.includes(x.id)))}</div><button type="button" disabled={!selectedServices.length} onClick={()=>goToStep(5)} className="w-full rounded-full bg-[var(--xr-ink)] px-5 py-4 label-mono text-[8px] font-semibold text-[var(--xr-bg)] disabled:opacity-30">Continuer →</button></div>}
-              {step===5&&<div className="space-y-4"><div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-5"><span className="label-mono text-[6px] xr-muted-2">ACQUISITION</span><p className="mt-2 text-lg font-semibold">Comment vos clients vous trouvent-ils aujourd'hui ?</p></div><div className="grid gap-2 sm:grid-cols-2">{DISCOVERY.map(x=>card(x,()=>choose(setDiscovery,x.id,6),x.id===discovery))}</div></div>}
-              {step===6&&sector&&<div className="space-y-5"><div className="rounded-[1.15rem] border xr-line bg-[var(--xr-accent-soft)] p-6"><span className="label-mono text-[6px] xr-accent">VOTRE RECOMMANDATION</span><p className="mt-3 max-w-3xl text-lg leading-7 sm:text-2xl">{recommendation}</p></div><div className="grid gap-2 sm:grid-cols-2">{selectedServices.map(id=>{const p=proposals.find(x=>x.id===id);return p?<div key={id} className="flex items-start justify-between gap-4 rounded-2xl border xr-line bg-[var(--xr-surface)] p-4"><div><p className="text-[10px] font-semibold">{p.label}</p><p className="mt-1 text-[8px] leading-4 xr-muted">{p.detail}</p></div><span className="shrink-0 text-[9px] font-semibold">{p.custom?"Sur devis":p.price.toLocaleString("fr-FR")+" €"+(p.period==="month"?" / mois":"")}</span></div>:null})}</div><div className="grid gap-2 sm:grid-cols-2"><div className="rounded-2xl border xr-line p-5"><span className="label-mono text-[6px] xr-muted-2">PONCTUEL</span><p className="mt-1 text-3xl font-semibold">{once.toLocaleString("fr-FR")} €</p></div><div className="rounded-2xl border xr-line p-5"><span className="label-mono text-[6px] xr-muted-2">MENSUEL</span><p className="mt-1 text-3xl font-semibold">{monthly.toLocaleString("fr-FR")} €<span className="text-sm xr-muted"> / mois</span></p></div></div><div className="grid gap-2 sm:grid-cols-2"><button type="button" onClick={()=>goToStep(7)} className="rounded-full bg-[var(--xr-ink)] px-5 py-4 label-mono text-[8px] font-semibold text-[var(--xr-bg)]">Recevoir mon devis PDF →</button><a href={"https://wa.me/33767566783?text="+encodeURIComponent("Bonjour XR Agency, j'ai terminé mon diagnostic XR Quote Studio. Secteur : "+sector.label+". Budget : "+budgetChoice?.label+". Prestations : "+selectedServices.map(id=>proposals.find(p=>p.id===id)?.label).filter(Boolean).join(", ")+". Total : "+once.toLocaleString("fr-FR")+" € + "+monthly.toLocaleString("fr-FR")+" €/mois.")} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border xr-line px-5 py-4 label-mono text-[8px] xr-muted">Continuer sur WhatsApp <ArrowRight className="h-3.5 w-3.5"/></a></div></div>}
-              {step===7&&<div className="space-y-4"><div className="rounded-2xl border xr-line bg-[var(--xr-accent-soft)] p-5"><span className="label-mono text-[6px] xr-accent">FINALISATION</span><p className="mt-2 text-lg font-semibold">Votre devis professionnel est prêt.</p><p className="mt-1 text-[9px] leading-4 xr-muted">Renseignez vos coordonnées pour télécharger votre devis PDF complet ou valider votre commande en ligne.</p></div><form onSubmit={handleQuoteSubmit} className="space-y-3"><div className="grid gap-3 sm:grid-cols-2"><input value={client.company} onChange={e=>setClient({...client,company:e.target.value})} placeholder="Entreprise / société *" autoComplete="organization" className="w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3.5 text-sm outline-none" required/><input value={client.name} onChange={e=>setClient({...client,name:e.target.value})} placeholder="Nom du représentant *" autoComplete="name" className="w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3.5 text-sm outline-none" required/><input value={client.email} onChange={e=>setClient({...client,email:e.target.value})} type="email" placeholder="E-mail professionnel *" autoComplete="email" className="w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3.5 text-sm outline-none" required/><input value={client.whatsapp} onChange={e=>setClient({...client,whatsapp:e.target.value})} type="tel" placeholder="Téléphone / WhatsApp *" autoComplete="tel" className="w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3.5 text-sm outline-none" required/></div><input value={client.website} onChange={e=>setClient({...client,website:e.target.value})} type="url" placeholder="Site web de l'entreprise (facultatif)" autoComplete="url" className="w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3.5 text-sm outline-none"/><div className="grid gap-3 sm:grid-cols-2 pt-2"><button type="submit" disabled={!client.company||!client.name||!client.email||!client.whatsapp||sending} className="w-full rounded-full bg-[var(--xr-ink)] px-5 py-4 label-mono text-[8px] font-semibold text-[var(--xr-bg)] disabled:opacity-30">{quoteDownloadLabel}</button><button type="button" onClick={createCheckout} disabled={!client.company||!client.name||!client.email||!client.whatsapp||paying} className="w-full rounded-full border border-[var(--xr-ink)]/50 bg-[var(--xr-accent-soft)] px-5 py-4 label-mono text-[8px] font-bold text-[var(--xr-ink)] hover:bg-[var(--xr-ink)] hover:text-[var(--xr-bg)] transition disabled:opacity-30">{paying?"Préparation du règlement...":"Régler mon acompte en ligne (CB) →"}</button></div></form>{generated&&<div className="rounded-2xl border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] p-4 text-sm text-center">Devis PDF généré avec succès ✓</div>}{sendMessage&&<div aria-live="polite" className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 text-center text-[9px] xr-muted">{sendMessage}</div>}<button type="button" onClick={reset} className="mx-auto flex items-center gap-2 label-mono text-[7px] xr-muted-2"><span>↺</span> Recommencer</button></div>}
+              {step===4&&<div className="space-y-4"><div className="rounded-2xl border xr-line bg-[var(--xr-accent-soft)] p-5"><span className="label-mono text-[6px] xr-accent">{QUOTE_UI.preparedSelection[currentLang]}</span><p className="mt-2 text-sm font-semibold">{QUOTE_UI.preparedTitle[currentLang]}</p><p className="mt-2 text-[9px] leading-4 xr-muted">{QUOTE_UI.preparedDetail[currentLang]}</p></div><div className="grid grid-cols-2 gap-2 sm:grid-cols-3">{orderedServices.map(x=>card(x,()=>toggleService(x.id),selectedServices.includes(x.id)))}</div><button type="button" disabled={!selectedServices.length} onClick={()=>goToStep(5)} className="w-full rounded-full bg-[var(--xr-ink)] px-5 py-4 label-mono text-[8px] font-semibold text-[var(--xr-bg)] disabled:opacity-30">{QUOTE_UI.continue[currentLang]}</button></div>}
+              {step===5&&<div className="space-y-4"><div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-5"><span className="label-mono text-[6px] xr-muted-2">{QUOTE_UI.acquisitionBadge[currentLang]}</span><p className="mt-2 text-lg font-semibold">{QUOTE_UI.acquisitionTitle[currentLang]}</p></div><div className="grid gap-2 sm:grid-cols-2">{DISCOVERY.map(x=>card(x,()=>choose(setDiscovery,x.id,6),x.id===discovery))}</div></div>}
+              {step===6&&sector&&<div className="space-y-5"><div className="rounded-[1.15rem] border xr-line bg-[var(--xr-accent-soft)] p-6"><span className="label-mono text-[6px] xr-accent">{QUOTE_UI.recommendationBadge[currentLang]}</span><p className="mt-3 max-w-3xl text-lg leading-7 sm:text-2xl">{recommendation}</p></div><div className="grid gap-2 sm:grid-cols-2">{selectedServices.map(id=>{const p=proposals.find(x=>x.id===id);return p?<div key={id} className="flex items-start justify-between gap-4 rounded-2xl border xr-line bg-[var(--xr-surface)] p-4"><div><p className="text-[10px] font-semibold">{p.label}</p><p className="mt-1 text-[8px] leading-4 xr-muted">{p.detail}</p></div><span className="shrink-0 text-[9px] font-semibold">{p.custom ? QUOTE_UI.onQuote[currentLang] : p.price.toLocaleString("fr-FR")+" €"+(p.period==="month" ? QUOTE_UI.perMonth[currentLang] : "")}</span></div>:null})}</div><div className="grid gap-2 sm:grid-cols-2"><div className="rounded-2xl border xr-line p-5"><span className="label-mono text-[6px] xr-muted-2">{QUOTE_UI.oneOff[currentLang]}</span><p className="mt-1 text-3xl font-semibold">{once.toLocaleString("fr-FR")} €</p></div><div className="rounded-2xl border xr-line p-5"><span className="label-mono text-[6px] xr-muted-2">{QUOTE_UI.monthly[currentLang]}</span><p className="mt-1 text-3xl font-semibold">{monthly.toLocaleString("fr-FR")} €<span className="text-sm xr-muted">{QUOTE_UI.perMonth[currentLang]}</span></p></div></div><div className="grid gap-2 sm:grid-cols-2"><button type="button" onClick={()=>goToStep(7)} className="rounded-full bg-[var(--xr-ink)] px-5 py-4 label-mono text-[8px] font-semibold text-[var(--xr-bg)]">{QUOTE_UI.getQuotePdf[currentLang]}</button><a href={"https://wa.me/33767566783?text="+encodeURIComponent(currentLang === "en" ? `Hello XR Agency, I have completed my XR Quote Studio setup.\n• Industry: ${sector?.label}\n• Budget: ${budgetChoice?.label}\n• Services: ${selectedServices.map(id => proposals.find(p=>p.id===id)?.label).filter(Boolean).join(", ")}\n• Total: ${totalLabel}` : currentLang === "vi" ? `Xin chào XR Agency, tôi đã hoàn thành cấu hình XR Quote Studio.\n• Ngành nghề: ${sector?.label}\n• Ngân sách: ${budgetChoice?.label}\n• Dịch vụ: ${selectedServices.map(id => proposals.find(p=>p.id===id)?.label).filter(Boolean).join(", ")}\n• Tổng cộng: ${totalLabel}` : currentLang === "ar" ? `مرحبًا XR Agency، لقد أكملت تكوين XR Quote Studio.\n• القطاع: ${sector?.label}\n• الميزانية: ${budgetChoice?.label}\n• الخدمات: ${selectedServices.map(id => proposals.find(p=>p.id===id)?.label).filter(Boolean).join(", ")}\n• الإجمالي: ${totalLabel}` : currentLang === "ru" ? `Здравствуйте, XR Agency! Я завершил расчёт в XR Quote Studio.\n• Сфера: ${sector?.label}\n• Бюджет: ${budgetChoice?.label}\n• Услуги: ${selectedServices.map(id => proposals.find(p=>p.id===id)?.label).filter(Boolean).join(", ")}\n• Итого: ${totalLabel}` : `Bonjour XR Agency, j'ai terminé mon diagnostic XR Quote Studio. Secteur : ${sector?.label}. Budget : ${budgetChoice?.label}. Prestations : ${selectedServices.map(id=>proposals.find(p=>p.id===id)?.label).filter(Boolean).join(", ")}. Total : ${totalLabel}.`)} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border xr-line px-5 py-4 label-mono text-[8px] xr-muted">{QUOTE_UI.continueWhatsApp[currentLang]} <ArrowRight className="h-3.5 w-3.5"/></a></div></div>}
+              {step===7&&<div className="space-y-4"><div className="rounded-2xl border xr-line bg-[var(--xr-accent-soft)] p-5"><span className="label-mono text-[6px] xr-accent">{QUOTE_UI.finalizationBadge[currentLang]}</span><p className="mt-2 text-lg font-semibold">{QUOTE_UI.finalizationTitle[currentLang]}</p><p className="mt-1 text-[9px] leading-4 xr-muted">{QUOTE_UI.finalizationDetail[currentLang]}</p></div><form onSubmit={handleQuoteSubmit} className="space-y-3"><div className="grid gap-3 sm:grid-cols-2"><input value={client.company} onChange={e=>setClient({...client,company:e.target.value})} placeholder={QUOTE_UI.formCompany[currentLang]} autoComplete="organization" className="w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3.5 text-sm outline-none" required/><input value={client.name} onChange={e=>setClient({...client,name:e.target.value})} placeholder={QUOTE_UI.formName[currentLang]} autoComplete="name" className="w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3.5 text-sm outline-none" required/><input value={client.email} onChange={e=>setClient({...client,email:e.target.value})} type="email" placeholder={QUOTE_UI.formEmail[currentLang]} autoComplete="email" className="w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3.5 text-sm outline-none" required/><input value={client.whatsapp} onChange={e=>setClient({...client,whatsapp:e.target.value})} type="tel" placeholder={QUOTE_UI.formPhone[currentLang]} autoComplete="tel" className="w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3.5 text-sm outline-none" required/></div><input value={client.website} onChange={e=>setClient({...client,website:e.target.value})} type="url" placeholder={QUOTE_UI.formWebsite[currentLang]} autoComplete="url" className="w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3.5 text-sm outline-none"/><div className="grid gap-3 sm:grid-cols-2 pt-2"><button type="submit" disabled={!client.company||!client.name||!client.email||!client.whatsapp||sending} className="w-full rounded-full bg-[var(--xr-ink)] px-5 py-4 label-mono text-[8px] font-semibold text-[var(--xr-bg)] disabled:opacity-30">{quoteDownloadLabel}</button><button type="button" onClick={createCheckout} disabled={!client.company||!client.name||!client.email||!client.whatsapp||paying} className="w-full rounded-full border border-[var(--xr-ink)]/50 bg-[var(--xr-accent-soft)] px-5 py-4 label-mono text-[8px] font-bold text-[var(--xr-ink)] hover:bg-[var(--xr-ink)] hover:text-[var(--xr-bg)] transition disabled:opacity-30">{paying ? QUOTE_UI.preparingPayment[currentLang] : QUOTE_UI.payDeposit[currentLang]}</button></div></form>{generated&&<div className="rounded-2xl border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] p-4 text-sm text-center">{QUOTE_UI.pdfSuccess[currentLang]}</div>}{sendMessage&&<div aria-live="polite" className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 text-center text-[9px] xr-muted">{sendMessage}</div>}<button type="button" onClick={reset} className="mx-auto flex items-center gap-2 label-mono text-[7px] xr-muted-2"><span>↺</span> {QUOTE_UI.restart[currentLang]}</button></div>}
             </div>
           </div></Reveal>
         </div>

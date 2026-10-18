@@ -21,32 +21,156 @@ import { Reveal, SectionHeading } from "./primitives";
 
 const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
   en: {
-    "Restaurant / Bar":"Restaurant / Bar","Hôtel / Spa":"Hotel / Spa","Santé / Médecin":"Healthcare / Doctor","Avocat / Notaire":"Lawyer / Notary","Immobilier":"Real estate","Artisan / BTP":"Trades / Construction","Beauté / Bien-être":"Beauty / Wellness","Autre commerce":"Other business",
-    "Petite ville":"Small town","Ville moyenne":"Medium-sized city","Grande ville":"Large city","Métropole":"Metropolitan area","mots-clés principaux":"main keywords","Absent de Maps":"Not on Maps","Fiche non créée ou invisible":"Listing not created or not visible","Hors Top 20":"Outside Top 20","Très peu visible":"Very low visibility","Position 4 – 10":"Position 4–10","Visible mais pas dans le Pack":"Visible but outside the Local Pack",
-    "SIMULATION EN DIRECT":"LIVE SIMULATION","RECHERCHE CIBLE":"TARGET SEARCH","POSITION ACTUELLE":"CURRENT POSITION","VISIBILITÉ À CONSTRUIRE":"VISIBILITY TO BUILD","SIGNAL À RENFORCER":"SIGNAL TO STRENGTHEN","POSITIONNEMENT À DÉVELOPPER":"POSITIONING TO IMPROVE",
-    "Configurateur de projet":"Project configurator","Estimez votre investissement Google Maps":"Estimate your Google Maps investment","Votre secteur d'activité":"Your industry","Taille de votre ville":"City size","Nombre de mots-clés principaux":"Number of main keywords","Votre positionnement actuel sur Google Maps":"Your current Google Maps ranking",
-    "Budget indicatif · à partir de 990 € / an":"Indicative budget · from €990/year","Estimation indicative · tarif exact après audit personnalisé":"Indicative estimate · exact price after a personalised audit","Objectif Top 3 · étude locale sur mesure":"Top 3 target · tailored local study","Lancer mon audit gratuit":"Start my free audit","Audit initial offert":"Initial audit included","Périmètre contractuel clair":"Clear contractual scope","Rapport mensuel inclus":"Monthly report included","Sans engagement minimum":"No minimum commitment","Méthodologie exclusive":"Exclusive methodology","Le processus en 7 phases":"The 7-phase process"
+    "Restaurant / Bar": "Restaurant / Bar", "Hôtel / Spa": "Hotel / Spa", "Santé / Médecin": "Healthcare / Doctor", "Avocat / Notaire": "Lawyer / Notary", "Immobilier": "Real Estate", "Artisan / BTP": "Trades / Construction", "Beauté / Bien-être": "Beauty / Wellness", "Autre commerce": "Other Business",
+    "Petite ville": "Small Town", "Ville moyenne": "Mid-sized City", "Grande ville": "Major City", "Métropole": "Metropolis",
+    "< 50 000 hab.": "< 50,000 inhab.", "50 000 – 150 000": "50,000 – 150,000", "150 000 – 500 000": "150,000 – 500,000", "500 000+": "500,000+",
+    "1 à 3": "1 to 3", "4 à 6": "4 to 6", "7 à 10": "7 to 10",
+    "mots-clés principaux": "main keywords",
+    "Absent de Maps": "Not on Maps", "Fiche non créée ou invisible": "Listing not created or invisible",
+    "Hors Top 20": "Outside Top 20", "Très peu visible": "Very low visibility",
+    "Position 4 – 10": "Position 4 – 10", "Visible mais pas dans le Pack": "Visible but outside the Local Pack",
+    "SIMULATION EN DIRECT": "LIVE SIMULATION", "RECHERCHE CIBLE": "TARGET SEARCH", "POSITION ACTUELLE": "CURRENT POSITION",
+    "VISIBILITÉ À CONSTRUIRE": "VISIBILITY TO BUILD", "SIGNAL À RENFORCER": "SIGNAL TO STRENGTHEN", "POSITIONNEMENT À DÉVELOPPER": "POSITIONING TO IMPROVE",
+    "Configurateur de projet": "Project Configurator",
+    "Estimez votre investissement Google Maps": "Estimate your Google Maps investment",
+    "Votre secteur d'activité": "Your industry",
+    "Taille de votre ville": "City size",
+    "Nombre de mots-clés principaux": "Number of main keywords",
+    "Votre positionnement actuel sur Google Maps": "Your current Google Maps ranking",
+    "Budget indicatif · à partir de 990 € / an": "Indicative budget · from €990 / year",
+    "/ an": "/ year",
+    "Estimation indicative · tarif exact après audit personnalisé": "Indicative estimate · exact price after personalized audit",
+    "Objectif Top 3 · étude locale sur mesure": "Top 3 Target · tailored local study",
+    "Lancer mon audit gratuit": "Start my free audit",
+    "Audit initial offert": "Initial audit included",
+    "Périmètre contractuel clair": "Clear contractual scope",
+    "Rapport mensuel inclus": "Monthly report included",
+    "Sans engagement minimum": "No minimum commitment",
+    "Méthodologie exclusive": "Exclusive methodology",
+    "Le processus en 7 phases": "The 7-Phase Process",
+    "Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.": "A structured, transparent and measurable approach to enhance your local visibility.",
+    "à partir de 990 € / an · objectif Top 3 sans garantie de position": "From €990 / year · Top 3 objective without position guarantee",
+    "Analyse Initiale": "Initial Analysis", "Diagnostic de présence": "Presence Diagnostic", "Audit technique complet de votre fiche actuelle, historique des avis, cohérence des données et pénalités éventuelles.": "Complete technical audit of your current listing, review history, NAP data consistency and potential penalties.",
+    "Audit Concurrentiel": "Competitor Audit", "Décryptage du TOP 3": "Top 3 Breakdown", "Analyse chirurgicale des 3 concurrents occupant actuellement le Local Pack : volume d'avis, mots-clés et autorité.": "In-depth analysis of the 3 competitors currently occupying the Local Pack: review volume, keywords and authority.",
+    "Stratégie Ciblée": "Targeted Strategy", "Mots-clés & Zones": "Keywords & Areas", "Sélection rigoureuse des requêtes à fort volume de conversion et cartographie des rayons géographiques prioritaires.": "Rigorous selection of high-converting search queries and mapping of priority geographical radiuses.",
+    "Optimisation GBP": "GBP Optimization", "Restructuration Pro": "Pro Restructuring", "Optimisation des catégories primaires/secondaires, géolocalisation des visuels HD, attributs clés et catalogue de services.": "Optimization of primary/secondary categories, geotagged HD visuals, key attributes and service catalog.",
+    "Autorité Locale": "Local Authority", "Signaux & Citations NAP": "NAP Signals & Citations", "Déploiement de citations locales cohérentes (Nom, Adresse, Téléphone) et renforcement de votre crédibilité territoriale.": "Deployment of consistent local citations (Name, Address, Phone) and reinforcement of territorial authority.",
+    "Pilotage Actif": "Active Management", "Veille & Ajustements": "Monitoring & Tuning", "Mises à jour stratégiques régulières, animation de posts géolocalisés et réponses optimisées aux avis clients.": "Regular strategic updates, geotagged posts publication and conversion-optimized review responses.",
+    "Résultats & ROI": "Results & ROI", "Mesure transparente": "Transparent Tracking", "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire.": "Weekly ranking dashboard, phone call tracking and direction request metrics."
   },
   vi: {
-    "Restaurant / Bar":"Nhà hàng / Bar","Hôtel / Spa":"Khách sạn / Spa","Santé / Médecin":"Y tế / Bác sĩ","Avocat / Notaire":"Luật sư / Công chứng viên","Immobilier":"Bất động sản","Artisan / BTP":"Thợ thủ công / Xây dựng","Beauté / Bien-être":"Làm đẹp / Sức khỏe","Autre commerce":"Doanh nghiệp khác",
-    "Petite ville":"Thành phố nhỏ","Ville moyenne":"Thành phố vừa","Grande ville":"Thành phố lớn","Métropole":"Đô thị lớn","mots-clés principaux":"từ khóa chính","Absent de Maps":"Chưa có trên Maps","Fiche non créée ou invisible":"Chưa tạo hồ sơ hoặc không hiển thị","Hors Top 20":"Ngoài Top 20","Très peu visible":"Khả năng hiển thị rất thấp","Position 4 – 10":"Vị trí 4–10","Visible mais pas dans le Pack":"Có hiển thị nhưng ngoài Local Pack",
-    "SIMULATION EN DIRECT":"MÔ PHỎNG TRỰC TIẾP","RECHERCHE CIBLE":"TÌM KIẾM MỤC TIÊU","POSITION ACTUELLE":"VỊ TRÍ HIỆN TẠI","VISIBILITÉ À CONSTRUIRE":"CẦN XÂY DỰNG HIỂN THỊ","SIGNAL À RENFORCER":"CẦN TĂNG CƯỜNG TÍN HIỆU","POSITIONNEMENT À DÉVELOPPER":"CẦN CẢI THIỆN THỨ HẠNG",
-    "Configurateur de projet":"Cấu hình dự án","Estimez votre investissement Google Maps":"Ước tính ngân sách Google Maps","Votre secteur d'activité":"Lĩnh vực hoạt động","Taille de votre ville":"Quy mô thành phố","Nombre de mots-clés principaux":"Số từ khóa chính","Votre positionnement actuel sur Google Maps":"Thứ hạng Google Maps hiện tại",
-    "Budget indicatif · à partir de 990 € / an":"Ngân sách tham khảo · từ 990 € / năm","Estimation indicative · tarif exact après audit personnalisé":"Ước tính tham khảo · giá chính xác sau kiểm toán cá nhân hóa","Objectif Top 3 · étude locale sur mesure":"Mục tiêu Top 3 · nghiên cứu địa phương theo yêu cầu","Lancer mon audit gratuit":"Bắt đầu kiểm toán miễn phí","Audit initial offert":"Miễn phí kiểm toán ban đầu","Périmètre contractuel clair":"Phạm vi hợp đồng rõ ràng","Rapport mensuel inclus":"Bao gồm báo cáo hằng tháng","Sans engagement minimum":"Không cam kết thời hạn tối thiểu","Méthodologie exclusive":"Phương pháp độc quyền","Le processus en 7 phases":"Quy trình 7 giai đoạn"
+    "Restaurant / Bar": "Nhà hàng / Bar", "Hôtel / Spa": "Khách sạn / Spa", "Santé / Médecin": "Y tế / Bác sĩ", "Avocat / Notaire": "Luật sư / Công chứng viên", "Immobilier": "Bất động sản", "Artisan / BTP": "Thợ thủ công / Xây dựng", "Beauté / Bien-être": "Làm đẹp / Sức khỏe", "Autre commerce": "Doanh nghiệp khác",
+    "Petite ville": "Thành phố nhỏ", "Ville moyenne": "Thành phố vừa", "Grande ville": "Thành phố lớn", "Métropole": "Đô thị lớn",
+    "< 50 000 hab.": "< 50.000 dân", "50 000 – 150 000": "50.000 – 150.000", "150 000 – 500 000": "150.000 – 500.000", "500 000+": "500.000+",
+    "1 à 3": "1 đến 3", "4 à 6": "4 đến 6", "7 à 10": "7 đến 10",
+    "mots-clés principaux": "từ khóa chính",
+    "Absent de Maps": "Chưa có trên Maps", "Fiche non créée ou invisible": "Chưa tạo hồ sơ hoặc không hiển thị",
+    "Hors Top 20": "Ngoài Top 20", "Très peu visible": "Khả năng hiển thị rất thấp",
+    "Position 4 – 10": "Vị trí 4 – 10", "Visible mais pas dans le Pack": "Có hiển thị nhưng ngoài Local Pack",
+    "SIMULATION EN DIRECT": "MÔ PHỎNG TRỰC TIẾP", "RECHERCHE CIBLE": "TÌM KIẾM MỤC TIÊU", "POSITION ACTUELLE": "VỊ TRÍ HIỆN TẠI",
+    "VISIBILITÉ À CONSTRUIRE": "CẦN XÂY DỰNG HIỂN THỊ", "SIGNAL À RENFORCER": "CẦN TĂNG CƯỜNG TÍN HIỆU", "POSITIONNEMENT À DÉVELOPPER": "CẦN CẢI THIỆN THỨ HẠNG",
+    "Configurateur de projet": "Cấu hình dự án",
+    "Estimez votre investissement Google Maps": "Ước tính ngân sách Google Maps",
+    "Votre secteur d'activité": "Lĩnh vực hoạt động",
+    "Taille de votre ville": "Quy mô thành phố",
+    "Nombre de mots-clés principaux": "Số lượng từ khóa chính",
+    "Votre positionnement actuel sur Google Maps": "Thứ hạng Google Maps hiện tại",
+    "Budget indicatif · à partir de 990 € / an": "Ngân sách tham khảo · từ 990 € / năm",
+    "/ an": "/ năm",
+    "Estimation indicative · tarif exact après audit personnalisé": "Ước tính tham khảo · giá chính xác sau kiểm toán cá nhân hóa",
+    "Objectif Top 3 · étude locale sur mesure": "Mục tiêu Top 3 · nghiên cứu địa phương theo yêu cầu",
+    "Lancer mon audit gratuit": "Bắt đầu kiểm toán miễn phí",
+    "Audit initial offert": "Miễn phí kiểm toán ban đầu",
+    "Périmètre contractuel clair": "Phạm vi hợp đồng rõ ràng",
+    "Rapport mensuel inclus": "Bao gồm báo cáo hằng tháng",
+    "Sans engagement minimum": "Không cam kết thời hạn tối thiểu",
+    "Méthodologie exclusive": "Phương pháp độc quyền",
+    "Le processus en 7 phases": "Quy trình 7 giai đoạn",
+    "Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.": "Phương pháp tiếp cận có cấu trúc, minh bạch và đo lường được để nâng cao khả năng hiển thị địa phương của bạn.",
+    "à partir de 990 € / an · objectif Top 3 sans garantie de position": "Từ 990 € / năm · Mục tiêu Top 3 không cam kết vị trí cố định",
+    "Analyse Initiale": "Phân tích ban đầu", "Diagnostic de présence": "Chẩn đoán hiện diện", "Audit technique complet de votre fiche actuelle, historique des avis, cohérence des données et pénalités éventuelles.": "Kiểm toán kỹ thuật toàn diện hồ sơ hiện tại, lịch sử đánh giá, tính nhất quán dữ liệu và các hình phạt tiềm ẩn.",
+    "Audit Concurrentiel": "Kiểm toán đối thủ", "Décryptage du TOP 3": "Phân tích TOP 3", "Analyse chirurgicale des 3 concurrents occupant actuellement le Local Pack : volume d'avis, mots-clés et autorité.": "Phân tích chuyên sâu 3 đối thủ đang chiếm giữ Local Pack: lượng đánh giá, từ khóa và độ uy tín.",
+    "Stratégie Ciblée": "Chiến lược mục tiêu", "Mots-clés & Zones": "Từ khóa & Khu vực", "Sélection rigoureuse des requêtes à fort volume de conversion et cartographie des rayons géographiques prioritaires.": "Lựa chọn kỹ lưỡng các truy vấn có tỷ lệ chuyển đổi cao và lập bản đồ bán kính địa lý ưu tiên.",
+    "Optimisation GBP": "Tối ưu hóa GBP", "Restructuration Pro": "Tái cấu trúc chuyên nghiệp", "Optimisation des catégories primaires/secondaires, géolocalisation des visuels HD, attributs clés et catalogue de services.": "Tối ưu danh mục chính/phụ, gắn tọa độ hình ảnh HD, thuộc tính cốt lõi và danh mục dịch vụ.",
+    "Autorité Locale": "Uy tín địa phương", "Signaux & Citations NAP": "Tín hiệu & Trích dẫn NAP", "Déploiement de citations locales cohérentes (Nom, Adresse, Téléphone) et renforcement de votre crédibilité territoriale.": "Triển khai trích dẫn địa phương đồng bộ (Tên, Địa chỉ, Số điện thoại) và tăng cường vị thế khu vực.",
+    "Pilotage Actif": "Quản trị chủ động", "Veille & Ajustements": "Theo dõi & Điều chỉnh", "Mises à jour stratégiques régulières, animation de posts géolocalisés et réponses optimisées aux avis clients.": "Cập nhật chiến lược định kỳ, xuất bản bài đăng cục bộ và phản hồi đánh giá khách hàng tối ưu.",
+    "Résultats & ROI": "Kết quả & ROI", "Mesure transparente": "Đo lường minh bạch", "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire.": "Bảng điều khiển theo dõi thứ hạng hằng tuần, số cuộc gọi đến và yêu cầu chỉ đường."
   },
   ru: {
-    "Restaurant / Bar":"Ресторан / бар","Hôtel / Spa":"Отель / спа","Santé / Médecin":"Медицина / врач","Avocat / Notaire":"Юрист / нотариус","Immobilier":"Недвижимость","Artisan / BTP":"Мастер / строительство","Beauté / Bien-être":"Красота / wellness","Autre commerce":"Другой бизнес",
-    "Petite ville":"Небольшой город","Ville moyenne":"Средний город","Grande ville":"Крупный город","Métropole":"Мегаполис","mots-clés principaux":"основных ключевых слов","Absent de Maps":"Нет на Maps","Fiche non créée ou invisible":"Профиль не создан или не виден","Hors Top 20":"За пределами топ-20","Très peu visible":"Очень низкая видимость","Position 4 – 10":"Позиция 4–10","Visible mais pas dans le Pack":"Видимость есть, но не в Local Pack",
-    "SIMULATION EN DIRECT":"ИНТЕРАКТИВНАЯ СИМУЛЯЦИЯ","RECHERCHE CIBLE":"ЦЕЛЕВОЙ ПОИСК","POSITION ACTUELLE":"ТЕКУЩАЯ ПОЗИЦИЯ","VISIBILITÉ À CONSTRUIRE":"ВИДИМОСТЬ НУЖНО СОЗДАТЬ","SIGNAL À RENFORCER":"СИГНАЛ НУЖНО УСИЛИТЬ","POSITIONNEMENT À DÉVELOPPER":"ПОЗИЦИЮ НУЖНО УЛУЧШИТЬ",
-    "Configurateur de projet":"Конфигуратор проекта","Estimez votre investissement Google Maps":"Оцените инвестиции в Google Maps","Votre secteur d'activité":"Ваша сфера деятельности","Taille de votre ville":"Размер города","Nombre de mots-clés principaux":"Количество основных ключевых слов","Votre positionnement actuel sur Google Maps":"Ваше текущее положение в Google Maps",
-    "Budget indicatif · à partir de 990 € / an":"Ориентировочный бюджет · от 990 € в год","Estimation indicative · tarif exact après audit personnalisé":"Предварительная оценка · точная цена после персонального аудита","Objectif Top 3 · étude locale sur mesure":"Цель — топ-3 · индивидуальное локальное исследование","Lancer mon audit gratuit":"Начать бесплатный аудит","Audit initial offert":"Первичный аудит включён","Périmètre contractuel clair":"Чёткий объём договора","Rapport mensuel inclus":"Ежемесячный отчёт включён","Sans engagement minimum":"Без минимального срока обязательств","Méthodologie exclusive":"Эксклюзивная методология","Le processus en 7 phases":"Процесс из 7 этапов"
+    "Restaurant / Bar": "Ресторан / бар", "Hôtel / Spa": "Отель / спа", "Santé / Médecin": "Медицина / врач", "Avocat / Notaire": "Юрист / нотариус", "Immobilier": "Недвижимость", "Artisan / BTP": "Мастер / строительство", "Beauté / Bien-être": "Красота / wellness", "Autre commerce": "Другой бизнес",
+    "Petite ville": "Небольшой город", "Ville moyenne": "Средний город", "Grande ville": "Крупный город", "Métropole": "Мегаполис",
+    "< 50 000 hab.": "< 50 000 жит.", "50 000 – 150 000": "50 000 – 150 000", "150 000 – 500 000": "150 000 – 500 000", "500 000+": "500 000+",
+    "1 à 3": "1–3", "4 à 6": "4–6", "7 à 10": "7–10",
+    "mots-clés principaux": "основных ключевых слов",
+    "Absent de Maps": "Нет на Maps", "Fiche non créée ou invisible": "Профиль не создан или не виден",
+    "Hors Top 20": "За пределами топ-20", "Très peu visible": "Очень низкая видимость",
+    "Position 4 – 10": "Позиция 4–10", "Visible mais pas dans le Pack": "Видимость есть, но не в Local Pack",
+    "SIMULATION EN DIRECT": "ИНТЕРАКТИВНАЯ СИМУЛЯЦИЯ", "RECHERCHE CIBLE": "ЦЕЛЕВОЙ ПОИСК", "POSITION ACTUELLE": "ТЕКУЩАЯ ПОЗИЦИЯ",
+    "VISIBILITÉ À CONSTRUIRE": "ВИДИМОСТЬ НУЖНО СОЗДАТЬ", "SIGNAL À RENFORCER": "СИГНАЛ НУЖНО УСИЛИТЬ", "POSITIONNEMENT À DÉVELOPPER": "ПОЗИЦИЮ НУЖНО УЛУЧШИТЬ",
+    "Configurateur de projet": "Конфигуратор проекта",
+    "Estimez votre investissement Google Maps": "Оцените инвестиции в Google Maps",
+    "Votre secteur d'activité": "Ваша сфера деятельности",
+    "Taille de votre ville": "Размер города",
+    "Nombre de mots-clés principaux": "Количество основных ключевых слов",
+    "Votre positionnement actuel sur Google Maps": "Ваше текущее положение в Google Maps",
+    "Budget indicatif · à partir de 990 € / an": "Ориентировочный бюджет · от 990 € в год",
+    "/ an": "/ год",
+    "Estimation indicative · tarif exact après audit personnalisé": "Предварительная оценка · точная цена после персонального аудита",
+    "Objectif Top 3 · étude locale sur mesure": "Цель — топ-3 · индивидуальное локальное исследование",
+    "Lancer mon audit gratuit": "Начать бесплатный аудит",
+    "Audit initial offert": "Первичный аудит включён",
+    "Périmètre contractuel clair": "Чёткий объём договора",
+    "Rapport mensuel inclus": "Ежемесячный отчёт включён",
+    "Sans engagement minimum": "Без минимального срока обязательств",
+    "Méthodologie exclusive": "Эксклюзивная методология",
+    "Le processus en 7 phases": "Процесс из 7 этапов",
+    "Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.": "Структурированный, прозрачный и измеримый подход для усиления вашей локальной видимости.",
+    "à partir de 990 € / an · objectif Top 3 sans garantie de position": "От 990 € в год · Цель — топ-3 без гарантии точной позиции",
+    "Analyse Initiale": "Начальный анализ", "Diagnostic de présence": "Диагностика присутствия", "Audit technique complet de votre fiche actuelle, historique des avis, cohérence des données et pénalités éventuelles.": "Полный технический аудит текущего профиля, истории отзывов, согласованности данных и возможных санкций.",
+    "Audit Concurrentiel": "Анализ конкурентов", "Décryptage du TOP 3": "Разбор топ-3", "Analyse chirurgicale des 3 concurrents occupant actuellement le Local Pack : volume d'avis, mots-clés et autorité.": "Детальный анализ 3 лидеров в Local Pack: объём отзывов, ключевые слова и авторитет профиля.",
+    "Stratégie Ciblée": "Целевая стратегия", "Mots-clés & Zones": "Ключи и зоны", "Sélection rigoureuse des requêtes à fort volume de conversion et cartographie des rayons géographiques prioritaires.": "Тщательный отбор конверсионных запросов и картирование приоритетных географических зон.",
+    "Optimisation GBP": "Оптимизация GBP", "Restructuration Pro": "Про-реструктуризация", "Optimisation des catégories primaires/secondaires, géolocalisation des visuels HD, attributs clés et catalogue de services.": "Оптимизация основных и вторичных категорий, геотегирование HD-фото, ключевые атрибуты и каталог услуг.",
+    "Autorité Locale": "Локальный авторитет", "Signaux & Citations NAP": "Сигналы и NAP-цитирования", "Déploiement de citations locales cohérentes (Nom, Adresse, Téléphone) et renforcement de votre crédibilité territoriale.": "Размещение единых локальных упоминаний (Имя, Адрес, Телефон) и усиление территориального доверия.",
+    "Pilotage Actif": "Активное управление", "Veille & Ajustements": "Мониторинг и правки", "Mises à jour stratégiques régulières, animation de posts géolocalisés et réponses optimisées aux avis clients.": "Регулярные стратегические обновления, публикации с геолокацией и оптимизированные ответы на отзывы.",
+    "Résultats & ROI": "Результаты и ROI", "Mesure transparente": "Прозрачная отчётность", "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire.": "Еженедельный дашборд отслеживания позиций, звонков и запросов маршрута."
   },
   ar: {
-    "Restaurant / Bar":"مطعم / بار","Hôtel / Spa":"فندق / سبا","Santé / Médecin":"الصحة / طبيب","Avocat / Notaire":"محامٍ / موثق","Immobilier":"العقارات","Artisan / BTP":"حرفي / إنشاءات","Beauté / Bien-être":"الجمال / العافية","Autre commerce":"نشاط تجاري آخر",
-    "Petite ville":"مدينة صغيرة","Ville moyenne":"مدينة متوسطة","Grande ville":"مدينة كبيرة","Métropole":"منطقة حضرية كبرى","mots-clés principaux":"كلمات مفتاحية رئيسية","Absent de Maps":"غير موجود على Maps","Fiche non créée ou invisible":"الملف غير منشأ أو غير ظاهر","Hors Top 20":"خارج أفضل 20","Très peu visible":"ظهور محدود جدًا","Position 4 – 10":"الترتيب 4–10","Visible mais pas dans le Pack":"ظاهر ولكن خارج الحزمة المحلية",
-    "SIMULATION EN DIRECT":"محاكاة مباشرة","RECHERCHE CIBLE":"البحث المستهدف","POSITION ACTUELLE":"الترتيب الحالي","VISIBILITÉ À CONSTRUIRE":"يلزم بناء الظهور","SIGNAL À RENFORCER":"يلزم تعزيز الإشارات","POSITIONNEMENT À DÉVELOPPER":"يلزم تحسين الترتيب",
-    "Configurateur de projet":"مُهيّئ المشروع","Estimez votre investissement Google Maps":"قدّر استثمارك في Google Maps","Votre secteur d'activité":"مجال نشاطك","Taille de votre ville":"حجم مدينتك","Nombre de mots-clés principaux":"عدد الكلمات المفتاحية الرئيسية","Votre positionnement actuel sur Google Maps":"ترتيبك الحالي على Google Maps",
-    "Budget indicatif · à partir de 990 € / an":"ميزانية تقديرية · ابتداءً من 990 € سنويًا","Estimation indicative · tarif exact après audit personnalisé":"تقدير أولي · السعر الدقيق بعد التدقيق المخصص","Objectif Top 3 · étude locale sur mesure":"هدف أفضل 3 · دراسة محلية مخصصة","Lancer mon audit gratuit":"ابدأ التدقيق المجاني","Audit initial offert":"التدقيق الأولي مشمول","Périmètre contractuel clair":"نطاق تعاقدي واضح","Rapport mensuel inclus":"تقرير شهري مشمول","Sans engagement minimum":"دون حد أدنى للالتزام","Méthodologie exclusive":"منهجية حصرية","Le processus en 7 phases":"العملية في 7 مراحل"
+    "Restaurant / Bar": "مطعم / بار", "Hôtel / Spa": "فندق / سبا", "Santé / Médecin": "الصحة / طبيب", "Avocat / Notaire": "محامٍ / موثق", "Immobilier": "العقارات", "Artisan / BTP": "حرفي / إنشاءات", "Beauté / Bien-être": "الجمال / العافية", "Autre commerce": "نشاط تجاري آخر",
+    "Petite ville": "مدينة صغيرة", "Ville moyenne": "مدينة متوسطة", "Grande ville": "مدينة كبيرة", "Métropole": "منطقة حضرية كبرى",
+    "< 50 000 hab.": "< 50,000 نسمة", "50 000 – 150 000": "50,000 – 150,000", "150 000 – 500 000": "150,000 – 500,000", "500 000+": "+500,000",
+    "1 à 3": "1 إلى 3", "4 à 6": "4 إلى 6", "7 à 10": "7 إلى 10",
+    "mots-clés principaux": "كلمات مفتاحية رئيسية",
+    "Absent de Maps": "غير موجود على Maps", "Fiche non créée ou invisible": "الملف غير منشأ أو غير ظاهر",
+    "Hors Top 20": "خارج أفضل 20", "Très peu visible": "ظهور محدود جدًا",
+    "Position 4 – 10": "الترتيب 4–10", "Visible mais pas dans le Pack": "ظاهر ولكن خارج الحزمة المحلية",
+    "SIMULATION EN DIRECT": "محاكاة مباشرة", "RECHERCHE CIBLE": "البحث المستهدف", "POSITION ACTUELLE": "الترتيب الحالي",
+    "VISIBILITÉ À CONSTRUIRE": "يلزم بناء الظهور", "SIGNAL À RENFORCER": "يلزم تعزيز الإشارات", "POSITIONNEMENT À DÉVELOPPER": "يلزم تحسين الترتيب",
+    "Configurateur de projet": "مُهيّئ المشروع",
+    "Estimez votre investissement Google Maps": "قدّر استثمارك في Google Maps",
+    "Votre secteur d'activité": "مجال نشاطك",
+    "Taille de votre ville": "حجم مدينتك",
+    "Nombre de mots-clés principaux": "عدد الكلمات المفتاحية الرئيسية",
+    "Votre positionnement actuel sur Google Maps": "ترتيبك الحالي على Google Maps",
+    "Budget indicatif · à partir de 990 € / an": "ميزانية تقديرية · ابتداءً من 990 € سنويًا",
+    "/ an": "/ سنويًا",
+    "Estimation indicative · tarif exact après audit personnalisé": "تقدير أولي · السعر الدقيق بعد التدقيق المخصص",
+    "Objectif Top 3 · étude locale sur mesure": "هدف أفضل 3 · دراسة محلية مخصصة",
+    "Lancer mon audit gratuit": "ابدأ التدقيق المجاني",
+    "Audit initial offert": "التدقيق الأولي مشمول",
+    "Périmètre contractuel clair": "نطاق تعاقدي واضح",
+    "Rapport mensuel inclus": "تقرير شهري مشمول",
+    "Sans engagement minimum": "دون حد أدنى للالتزام",
+    "Méthodologie exclusive": "منهجية حصرية",
+    "Le processus en 7 phases": "العملية في 7 مراحل",
+    "Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.": "نهج منظم وشفاف وقابل للقياس لتعزيز ظهورك المحلي.",
+    "à partir de 990 € / an · objectif Top 3 sans garantie de position": "ابتداءً من 990 € سنويًا · هدف الوصول لأفضل 3 دون ضمان ترتيب محدد",
+    "Analyse Initiale": "التحليل الأولي", "Diagnostic de présence": "تشخيص الحضور", "Audit technique complet de votre fiche actuelle, historique des avis, cohérence des données et pénalités éventuelles.": "تدقيق تقني شامل لملفك الحالي، وسجل التقييمات، وتناسق البيانات، وأي عقوبات محتملة.",
+    "Audit Concurrentiel": "تدقيق المنافسين", "Décryptage du TOP 3": "تحليل أفضل 3", "Analyse chirurgicale des 3 concurrents occupant actuellement le Local Pack : volume d'avis, mots-clés et autorité.": "تحليل دقيق لأبرز 3 منافسين يتصدرون الحزمة المحلية: حجم التقييمات، والكلمات المفتاحية، والسمعة.",
+    "Stratégie Ciblée": "استراتيجية مستهدفة", "Mots-clés & Zones": "الكلمات والمناطق", "Sélection rigoureuse des requêtes à fort volume de conversion et cartographie des rayons géographiques prioritaires.": "اختيار مدروس للعبارات ذات معدل التحويل العالي وتحديد النطاقات الجغرافية ذات الأولوية.",
+    "Optimisation GBP": "تحسين ملف GBP", "Restructuration Pro": "إعادة هيكلة احترافية", "Optimisation des catégories primaires/secondaires, géolocalisation des visuels HD, attributs clés et catalogue de services.": "تحسين الفئات الأساسية والفرعية، ووضع الإحداثيات لصور HD، والسمات الرئيسية وكتالوج الخدمات.",
+    "Autorité Locale": "السلطة المحلية", "Signaux & Citations NAP": "إشارات واقتباسات NAP", "Déploiement de citations locales cohérentes (Nom, Adresse, Téléphone) et renforcement de votre crédibilité territoriale.": "نشر اقتباسات محلية متطابقة (الاسم، العنوان، الهاتف) وتعزيز الموثوقية في نطاقك الجغرافي.",
+    "Pilotage Actif": "إدارة ومتابعة نشطة", "Veille & Ajustements": "رصد وتحديثات مستمرة", "Mises à jour stratégiques régulières, animation de posts géolocalisés et réponses optimisées aux avis clients.": "تحديثات استراتيجية دورية، نشر منشورات جغرافية، وردود مُحسَّنة على تقييمات العملاء.",
+    "Résultats & ROI": "النتائج وعائد الاستثمار", "Mesure transparente": "قياس شفاف", "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire.": "لوحة تحكم أسبوعية لتتبع الترتيب، وعدد المكالمات الهاتفية، وطلبات الاتجاهات."
   }
 };
 function translateMaps(value: string, lang: string) { return MAPS_TRANSLATIONS[lang]?.[value] ?? value; }
@@ -183,16 +307,48 @@ export function MapsSimulator() {
   const animMax = useAnimatedPrice(priceMax);
 
   const selectedSector = SECTORS.find((s) => s.id === sector);
+  const sectorLabel = tx(selectedSector?.label ?? "");
+  const cityLabel = tx(CITY_SIZES.find((c) => c.id === citySize)?.label ?? "");
+  const kwLabel = `${KEYWORD_RANGES.find((k) => k.id === keywords)?.label ?? ""} ${tx("mots-clés principaux")}`;
+  const rankLabel = tx(CURRENT_RANKS.find((r) => r.id === rank)?.label ?? "");
 
-  const waPrefill = encodeURIComponent(
-    `Bonjour XR Agency, je souhaite une étude Google Maps Top 3 sur mesure.\n\n` +
-    `• Secteur : ${selectedSector?.label}\n` +
-    `• Taille de ville : ${CITY_SIZES.find((c) => c.id === citySize)?.label}\n` +
-    `• Mots-clés : ${KEYWORD_RANGES.find((k) => k.id === keywords)?.label}\n` +
-    `• Position actuelle : ${CURRENT_RANKS.find((r) => r.id === rank)?.label}\n\n` +
-    `Référence de départ : à partir de 990 € / an · devis sur mesure\n\n` +
-    `Pouvons-nous lancer l'audit personnalisé ?`
-  );
+  const waPrefill = encodeURIComponent(({
+    fr: `Bonjour XR Agency, je souhaite une étude Google Maps Top 3 sur mesure.\n\n` +
+      `• Secteur : ${sectorLabel}\n` +
+      `• Taille de ville : ${cityLabel}\n` +
+      `• Mots-clés : ${kwLabel}\n` +
+      `• Position actuelle : ${rankLabel}\n\n` +
+      `Référence de départ : à partir de 990 € / an · devis sur mesure\n\n` +
+      `Pouvons-nous lancer l'audit personnalisé ?`,
+    en: `Hello XR Agency, I would like a tailored Google Maps Top 3 study.\n\n` +
+      `• Industry: ${sectorLabel}\n` +
+      `• City size: ${cityLabel}\n` +
+      `• Keywords: ${kwLabel}\n` +
+      `• Current ranking: ${rankLabel}\n\n` +
+      `Starting benchmark: from €990 / year · tailored quote\n\n` +
+      `Can we start the personalised audit?`,
+    vi: `Xin chào XR Agency, tôi muốn được tư vấn gói Google Maps Top 3 theo yêu cầu.\n\n` +
+      `• Lĩnh vực: ${sectorLabel}\n` +
+      `• Quy mô thành phố: ${cityLabel}\n` +
+      `• Từ khóa: ${kwLabel}\n` +
+      `• Thứ hạng hiện tại: ${rankLabel}\n\n` +
+      `Mức tham khảo: từ 990 € / năm · báo giá theo yêu cầu\n\n` +
+      `Chúng ta có thể bắt đầu kiểm toán cá nhân hóa không?`,
+    ar: `مرحبًا XR Agency، أود الحصول على دراسة مخصصة لبلوغ أفضل 3 مراتب على Google Maps.\n\n` +
+      `• مجال النشاط: ${sectorLabel}\n` +
+      `• حجم المدينة: ${cityLabel}\n` +
+      `• الكلمات المفتاحية: ${kwLabel}\n` +
+      `• الترتيب الحالي: ${rankLabel}\n\n` +
+      `المرجع المبدئي: ابتداءً من 990 € سنويًا · عرض مخصص\n\n` +
+      `هل يمكننا بدء التدقيق المخصص؟`,
+    ru: `Здравствуйте, XR Agency! Хочу заказать индивидуальный расчёт по выводу в топ-3 Google Maps.\n\n` +
+      `• Сфера: ${sectorLabel}\n` +
+      `• Размер города: ${cityLabel}\n` +
+      `• Ключевые слова: ${kwLabel}\n` +
+      `• Текущая позиция: ${rankLabel}\n\n` +
+      `Базовый ориентир: от 990 € в год · индивидуальный расчёт\n\n` +
+      `Можем ли мы запустить персональный аудит?`,
+  } as const)[(lang as "fr" | "en" | "vi" | "ar" | "ru")] ?? `Bonjour XR Agency, je souhaite une étude Google Maps Top 3 sur mesure.`);
 
   return (
     <section id="maps" className="xr-section-elevated relative border-y xr-line py-20 sm:py-28 lg:py-32">
@@ -325,7 +481,7 @@ export function MapsSimulator() {
               <div>
                 <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--xr-ink)] text-[10px] font-bold text-[var(--xr-bg)]">1</span>
-                  Votre secteur d'activité
+                  {tx("Votre secteur d'activité")}
                 </p>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                   {SECTORS.map((s) => (
@@ -345,7 +501,7 @@ export function MapsSimulator() {
               <div>
                 <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--xr-ink)] text-[10px] font-bold text-[var(--xr-bg)]">2</span>
-                  Taille de votre ville
+                  {tx("Taille de votre ville")}
                 </p>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                   {CITY_SIZES.map((c) => (
@@ -356,7 +512,7 @@ export function MapsSimulator() {
                     >
                       <Building2 className="h-4 w-4" />
                       <span className="font-semibold text-[12px]">{tx(c.label)}</span>
-                      <span className="text-[10px] opacity-60">{c.sub}</span>
+                      <span className="text-[10px] opacity-60">{tx(c.sub)}</span>
                     </SelectorBtn>
                   ))}
                 </div>
@@ -366,7 +522,7 @@ export function MapsSimulator() {
               <div>
                 <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--xr-ink)] text-[10px] font-bold text-[var(--xr-bg)]">3</span>
-                  Nombre de mots-clés principaux
+                  {tx("Nombre de mots-clés principaux")}
                 </p>
                 <div className="grid grid-cols-3 gap-2">
                   {KEYWORD_RANGES.map((k) => (
@@ -376,7 +532,7 @@ export function MapsSimulator() {
                       onClick={() => setKeywords(k.id)}
                     >
                       <BarChart3 className="h-4 w-4" />
-                      <span className="font-bold text-base">{k.label}</span>
+                      <span className="font-bold text-base">{tx(k.label)}</span>
                       <span className="text-[10px] opacity-60">{tx(k.sub)}</span>
                     </SelectorBtn>
                   ))}
@@ -387,7 +543,7 @@ export function MapsSimulator() {
               <div>
                 <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--xr-ink)] text-[10px] font-bold text-[var(--xr-bg)]">4</span>
-                  Votre positionnement actuel sur Google Maps
+                  {tx("Votre positionnement actuel sur Google Maps")}
                 </p>
                 <div className="grid grid-cols-3 gap-2">
                   {CURRENT_RANKS.map((r) => (
@@ -423,7 +579,7 @@ export function MapsSimulator() {
                       >
                         {formatEur(animMax)}
                       </span>
-                      <span className="label-mono text-xs text-muted-foreground">/ an</span>
+                      <span className="label-mono text-xs text-muted-foreground">{tx("/ an")}</span>
                     </div>
                     <p className="mt-1.5 text-xs text-muted-foreground/70">
                       {tx("Estimation indicative · tarif exact après audit personnalisé")}
@@ -445,7 +601,7 @@ export function MapsSimulator() {
                       className="label-mono inline-flex items-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-2.5 text-xs font-semibold text-[var(--xr-bg)] transition-all duration-200 hover:bg-[var(--xr-ink)]/90 hover:-translate-y-0.5 hover:shadow-lg"
                     >
                       <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
-                      Lancer mon audit gratuit
+                      {tx("Lancer mon audit gratuit")}
                     </a>
                   </div>
                 </div>
@@ -475,10 +631,10 @@ export function MapsSimulator() {
             <div className="mb-8 text-center">
               <p className="label-mono text-xs text-[var(--xr-ink)]">{tx("Méthodologie exclusive")}</p>
               <h3 className="display-serif mt-2 text-2xl sm:text-3xl text-foreground">
-                Le processus en 7 phases
+                {tx("Le processus en 7 phases")}
               </h3>
               <p className="mt-2 text-sm text-muted-foreground max-w-xl mx-auto">
-                Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.
+                {tx("Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.")}
               </p>
             </div>
 
@@ -490,7 +646,7 @@ export function MapsSimulator() {
                 >
                   <p className="label-mono text-xs text-[var(--xr-ink)]">{ph.num} · {tx(ph.name)}</p>
                   <p className="display-serif mt-1.5 text-base text-foreground">{tx(ph.title)}</p>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{ph.desc}</p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{tx(ph.desc)}</p>
                 </div>
               ))}
             </div>
@@ -502,7 +658,7 @@ export function MapsSimulator() {
                 >
                   <p className="label-mono text-xs text-[var(--xr-ink)]">{ph.num} · {tx(ph.name)}</p>
                   <p className="display-serif mt-1.5 text-base text-foreground">{tx(ph.title)}</p>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{ph.desc}</p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{tx(ph.desc)}</p>
                 </div>
               ))}
             </div>

@@ -37,30 +37,28 @@ export function Hero() {
 
   return (
     <section ref={sectionRef} id="top" className="xr-hero xr-hero-refined relative isolate overflow-hidden bg-[#080808] text-white">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden md:block">
-        <img ref={imageRef} src={XR_HERO_PHOTO} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[center_42%]" style={{ transform: "scale(1)" }} />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.78)_0%,rgba(5,5,5,.56)_32%,rgba(5,5,5,.18)_62%,rgba(5,5,5,.04)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,5,5,.58)_0%,transparent_24%,rgba(5,5,5,.08)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_73%_38%,transparent_0%,rgba(0,0,0,.08)_54%,rgba(0,0,0,.28)_100%)]" />
-        <div className="xr-hero-grain absolute inset-0 opacity-[.14]" />
-        <div className="xr-hero-orbit absolute right-[8%] top-[14%] h-[min(62vw,680px)] w-[min(62vw,680px)] rounded-full border border-white/20" />
-        <div className="xr-hero-orbit xr-hero-orbit-delayed absolute right-[14%] top-[21%] h-[min(48vw,530px)] w-[min(48vw,530px)] rounded-full border border-white/15" />
-        <div className="absolute right-[18%] top-[29%] h-[min(34vw,370px)] w-[min(34vw,370px)] rounded-full border border-white/10 bg-white/[.025] backdrop-blur-[1px]" />
-        <div className="absolute right-[17%] top-[28%] h-2 w-2 rounded-full bg-white shadow-[0_0_26px_8px_rgba(255,255,255,.28)]" />
-        <div className="absolute right-[10%] bottom-[23%] h-px w-[23%] bg-gradient-to-r from-transparent via-white/65 to-transparent" />
+      {/* High-res cinematic photo backdrop - pristine sharpness without blur filters */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <img
+          ref={imageRef}
+          src={XR_HERO_PHOTO}
+          alt=""
+          fetchPriority="high"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover object-[center_32%] md:object-[center_36%]"
+          style={{ transform: "scale(1)" }}
+        />
+        {/* Desktop vignette: deep readable dark on left for text, crystalline view on right for penthouse & Eiffel tower */}
+        <div className="hidden md:block absolute inset-0 bg-[linear-gradient(90deg,#080808_0%,rgba(8,8,8,0.86)_28%,rgba(8,8,8,0.38)_55%,rgba(8,8,8,0.06)_80%,transparent_100%)]" />
+        <div className="hidden md:block absolute inset-0 bg-[linear-gradient(0deg,#080808_0%,transparent_20%)]" />
+        {/* Mobile vignette: atmospheric view at top, smooth fade for high readability over text */}
+        <div className="block md:hidden absolute inset-0 bg-[linear-gradient(180deg,rgba(8,8,8,0.22)_0%,rgba(8,8,8,0.68)_35%,rgba(8,8,8,0.95)_70%,#080808_100%)]" />
+        <div className="hidden md:block absolute right-[8%] top-[14%] h-[min(55vw,600px)] w-[min(55vw,600px)] rounded-full border border-white/10" />
+        <div className="hidden md:block absolute right-[17%] top-[28%] h-2 w-2 rounded-full bg-white shadow-[0_0_24px_6px_rgba(255,255,255,.3)]" />
       </div>
 
-      <div className="relative mx-auto grid min-h-0 max-w-[1800px] md:min-h-[100svh] md:grid-cols-[minmax(0,1.05fr)_minmax(220px,.95fr)]">
-        <div className="relative h-[42svh] min-h-[290px] max-h-[470px] overflow-hidden md:hidden">
-          <img src={XR_HERO_PHOTO} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[center_42%]" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.06)_0%,rgba(0,0,0,.02)_48%,#080808_100%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,.18),transparent_65%)]" />
-          <div aria-hidden className="xr-hero-orbit absolute right-[-24px] top-[8%] h-48 w-48 rounded-full border border-white/25" />
-          <div aria-hidden className="xr-hero-orbit xr-hero-orbit-delayed absolute right-[14px] top-[17%] h-32 w-32 rounded-full border border-white/15" />
-          <div aria-hidden className="xr-hero-grain absolute inset-0 opacity-[.14]" />
-        </div>
-
-        <div className="relative z-10 flex items-center px-5 pb-12 pt-5 sm:px-8 md:px-10 md:pb-32 md:pt-36 lg:px-16 xl:px-24">
+      <div className="relative mx-auto grid min-h-[100svh] max-w-[1800px] md:grid-cols-[minmax(0,1.15fr)_minmax(220px,.85fr)]">
+        <div className="relative z-10 flex items-center px-5 pb-16 pt-24 sm:px-8 md:px-10 md:pb-32 md:pt-36 lg:px-16 xl:px-24">
           <div className="max-w-[850px]">
             <div className="mb-6 flex items-center gap-3 sm:mb-8">
               <span className="h-px w-10 bg-white/75" />
@@ -85,15 +83,11 @@ export function Hero() {
         </div>
 
         <div aria-hidden="true" className="pointer-events-none relative hidden min-h-[500px] md:block">
-          <div className="xr-hero-glass absolute right-[9%] top-[22%] h-[min(31vw,340px)] w-[min(31vw,340px)] rounded-full border border-white/20" />
-          <div className="xr-hero-glass xr-hero-glass-delayed absolute right-[18%] top-[32%] h-[min(17vw,190px)] w-[min(17vw,190px)] rounded-full border border-white/25" />
-          <div className="absolute right-[22%] top-[36%] h-[min(9vw,100px)] w-[min(9vw,100px)] rounded-full border border-white/35 bg-white/[.035] shadow-[0_0_100px_rgba(255,255,255,.07)] backdrop-blur-sm" />
           <div className="absolute bottom-[16%] right-[8%] flex items-center gap-3 text-white/75">
             <span className="label-mono text-[7px] tracking-[.2em]">{t(UI.heroScrollNotice)}</span>
             <span className="grid h-11 w-11 place-items-center rounded-full border border-white/45 transition-transform duration-500"><ArrowDown className={motionAllowed ? "h-4 w-4 animate-bounce" : "h-4 w-4"} /></span>
           </div>
           <div className="absolute bottom-[18%] left-[7%] h-32 w-px bg-gradient-to-b from-transparent via-white/50 to-transparent" />
-          <div className="absolute right-[6%] top-[13%] h-2 w-2 rounded-full bg-white/70 shadow-[0_0_22px_6px_rgba(255,255,255,.18)]" />
         </div>
       </div>
 

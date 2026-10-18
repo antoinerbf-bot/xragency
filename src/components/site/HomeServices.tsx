@@ -46,6 +46,8 @@ const COPY = {
     open: "Voir le service",
     quote: "Ajouter au projet",
     next: "Service suivant",
+    perMonth: "/ MOIS",
+    perYear: "/ AN",
   },
   en: {
     eyebrow: "07 SERVICES · 07 ENTRY POINTS",
@@ -55,6 +57,8 @@ const COPY = {
     open: "View service",
     quote: "Add to project",
     next: "Next service",
+    perMonth: "/ MONTH",
+    perYear: "/ YEAR",
   },
   vi: {
     eyebrow: "07 DỊCH VỤ · 07 ĐIỂM BẮT ĐẦU",
@@ -64,6 +68,8 @@ const COPY = {
     open: "Xem dịch vụ",
     quote: "Thêm vào dự án",
     next: "Dịch vụ tiếp theo",
+    perMonth: "/ THÁNG",
+    perYear: "/ NĂM",
   },
   ar: {
     eyebrow: "07 خدمات · 07 نقاط انطلاق",
@@ -73,6 +79,8 @@ const COPY = {
     open: "شاهد الخدمة",
     quote: "أضف للمشروع",
     next: "الخدمة التالية",
+    perMonth: "/ شهريًا",
+    perYear: "/ سنويًا",
   },
   ru: {
     eyebrow: "07 УСЛУГ · 07 ТОЧЕК ВХОДА",
@@ -82,6 +90,8 @@ const COPY = {
     open: "Открыть услугу",
     quote: "Добавить в проект",
     next: "Следующая услуга",
+    perMonth: "/ МЕСЯЦ",
+    perYear: "/ ГОД",
   },
 } as const;
 
@@ -195,7 +205,7 @@ export function HomeServices() {
                     <p className="display-serif mt-1 text-4xl">{active === "maps" ? "990 €" : price(PRICES[active])}</p>
                   </div>
                   <span className="label-mono pb-1 text-[6px] xr-muted-2">
-                    {service.fromPeriod === "month" ? "/ MOIS" : service.fromPeriod === "year" ? "/ AN" : ""}
+                    {service.fromPeriod === "month" ? copy.perMonth : service.fromPeriod === "year" ? copy.perYear : ""}
                   </span>
                 </div>
 

@@ -51,11 +51,15 @@ const ADVANTAGES = [
       fr: "Vitesse d'Exécution Record",
       en: "Record Speed of Execution",
       vi: "Tốc độ triển khai kỷ lục",
+      ar: "سرعة تنفيذ قياسية",
+      ru: "Рекордная скорость выполнения",
     },
     desc: {
       fr: "Délais définis selon le périmètre, avec un processus de réalisation structuré.",
       en: "Delivery timelines defined by scope, with a structured production process.",
       vi: "Thời gian triển khai được xác định theo phạm vi, với quy trình sản xuất rõ ràng.",
+      ar: "مواعيد تسليم محددة حسب نطاق العمل، مع عملية إنتاج منظمة.",
+      ru: "Сроки определены объёмом работ и структурированным процессом производства.",
     },
     tag: { fr: "Selon périmètre", en: "Scope-dependent", vi: "Theo phạm vi", ar: "حسب نطاق العمل", ru: "Зависит от объёма" },
   },
@@ -65,11 +69,15 @@ const ADVANTAGES = [
       fr: "Collectif pluridisciplinaire",
       en: "Multidisciplinary collective",
       vi: "Đội ngũ đa chuyên môn",
+      ar: "فريق متعدد التخصصات",
+      ru: "Мультидисциплинарная команда",
     },
     desc: {
       fr: "Une organisation pluridisciplinaire réunissant création, développement, SEO et IA selon les besoins du projet.",
       en: "A multidisciplinary setup combining creative direction, development, SEO and AI according to project needs.",
       vi: "Chỉ đạo nghệ thuật, Lập trình viên Cloud, Chuyên gia SEO và Kỹ sư AI đồng hành cùng bạn.",
+      ar: "تنظيم متعدد التخصصات يجمع بين الإبداع والتطوير والـ SEO والذكاء الاصطناعي.",
+      ru: "Мультидисциплинарная структура, объединяющая дизайн, разработку, SEO и ИИ.",
     },
     tag: { fr: "DA · DEV · SEO · IA", en: "ART · DEV · SEO · AI", vi: "Thiết kế · Dev · SEO · AI", ar: "تصميم · تطوير · SEO · ذكاء اصطناعي", ru: "Дизайн · разработка · SEO · ИИ" },
   },
@@ -79,11 +87,15 @@ const ADVANTAGES = [
       fr: "Méthode & Rigueur",
       en: "Method & Rigor",
       vi: "Phương pháp & Chuẩn mực",
+      ar: "منهجية ودقة",
+      ru: "Метод и дисциплина",
     },
     desc: {
       fr: "Objectifs définis avec méthode, suivi transparent et optimisation progressive.",
       en: "Defined objectives, transparent monitoring and progressive optimisation.",
       vi: "Mục tiêu rõ ràng, theo dõi minh bạch và tối ưu từng bước.",
+      ar: "أهداف واضحة ومحددة بمنهجية، مع متابعة شفافة وتحسين مستمر.",
+      ru: "Чёткие цели, прозрачный мониторинг и поступательная оптимизация.",
     },
     tag: { fr: "Objectifs définis", en: "Defined objectives", vi: "Mục tiêu rõ ràng", ar: "أهداف محددة", ru: "Чёткие цели" },
   },
@@ -93,11 +105,15 @@ const ADVANTAGES = [
       fr: "Budget & agilité",
       en: "Budget & agility",
       vi: "Ngân sách & linh hoạt",
+      ar: "الميزانية والمرونة",
+      ru: "Бюджет и гибкость",
     },
     desc: {
       fr: "Une organisation flexible : vous investissez selon le périmètre et les priorités définis ensemble.",
       en: "A flexible model: investment follows the agreed scope and priorities.",
       vi: "Mô hình linh hoạt: ngân sách được xác định theo phạm vi và ưu tiên đã thống nhất.",
+      ar: "هيكل مرن: تستثمر وفقاً لنطاق العمل والأولويات المتفق عليها.",
+      ru: "Гибкая структура: инвестиции соответствуют согласованному объёму и приоритетам.",
     },
     tag: { fr: "ROI à mesurer", en: "ROI tracking", vi: "Theo dõi ROI", ar: "قياس العائد على الاستثمار", ru: "Отслеживание ROI" },
   },
@@ -106,7 +122,7 @@ const ADVANTAGES = [
 export function About() {
   const { t, lang, price } = useLang();
   const extra = {
-    fr: { variableCost: "Coût variable", inertia: "{extra.inertia}" },
+    fr: { variableCost: "Coût variable", inertia: "Inertie managériale & coûts fixes élevés" },
     en: { variableCost: "Variable cost", inertia: "Management overhead & high fixed costs" },
     vi: { variableCost: "Chi phí biến đổi", inertia: "Chi phí quản lý và chi phí cố định cao" },
     ar: { variableCost: "تكلفة متغيرة", inertia: "أعباء إدارية وتكاليف ثابتة مرتفعة" },
@@ -222,7 +238,7 @@ export function About() {
                   </div>
                   <div className="mt-8 pt-4 border-t border-border/40">
                     <span className="label-mono text-[11px] text-muted-foreground/60">
-                      Inertie managériale & coûts fixes élevés
+                      {extra.inertia}
                     </span>
                   </div>
                 </div>
@@ -270,6 +286,8 @@ export function About() {
                         fr: "Explorer nos solutions & tarifs",
                         en: "Explore our solutions & pricing",
                         vi: "Khám phá giải pháp & bảng giá",
+                        ar: "استكشف حلولنا وأسعارنا",
+                        ru: "Изучить наши решения и тарифы",
                       })}
                     </EmberButton>
                   </div>

@@ -19,11 +19,31 @@ export const Route = createFileRoute("/work")({
 });
 
 const copy = {
-  fr: { kicker:"XRAGENCY · WORK", title:"Des univers digitaux", accent:"pensés pour être vécus.", intro:"Sites, identités et expériences : une seule collection, avec les homepages visibles avant même d’ouvrir chaque référence.", search:"Rechercher…", all:"Toutes les prestations", industries:"Tous les secteurs", open:"Ouvrir le site", close:"Fermer", reset:"Réinitialiser", catalogue:"Catalogue créatif", index:"projets sélectionnés", reel:"REEL HOMEPAGES", showcase:"Voir les univers en situation", reference:"Référence", agency:"XR Agency", homepage:"HOMEPAGE", visit:"VISITER" },
-  en: { kicker:"XRAGENCY · WORK", title:"Digital worlds", accent:"designed to be experienced.", intro:"Websites, identities and experiences: one collection, with homepage previews visible before opening each reference.", search:"Search…", all:"All services", industries:"All industries", open:"Open website", close:"Close", reset:"Reset", catalogue:"Creative catalogue", index:"selected projects", reel:"HOMEPAGE REEL", showcase:"See the work in context", reference:"Reference", agency:"XR Agency", homepage:"HOMEPAGE", visit:"VISIT" },
-  vi: { kicker:"XRAGENCY · WORK", title:"Những thế giới số", accent:"được thiết kế để trải nghiệm.", intro:"Website, nhận diện và trải nghiệm: một bộ sưu tập thống nhất, với bản xem trước homepage.", search:"Tìm kiếm…", all:"Tất cả dịch vụ", industries:"Tất cả lĩnh vực", open:"Mở website", close:"Đóng", reset:"Đặt lại", catalogue:"Bộ sưu tập sáng tạo", index:"dự án được chọn", reel:"REEL HOMEPAGE", showcase:"Xem các universes thực tế", reference:"Tham khảo", agency:"XR Agency", homepage:"HOMEPAGE", visit:"MỞ" },
-  ar: { kicker:"XRAGENCY · WORK", title:"عوالم رقمية", accent:"مصممة لتُعاش.", intro:"مواقع وهويات وتجارب رقمية ضمن مجموعة واحدة، مع معاينات للصفحات الرئيسية.", search:"بحث…", all:"جميع الخدمات", industries:"جميع القطاعات", open:"فتح الموقع", close:"إغلاق", reset:"إعادة ضبط", catalogue:"المجموعة الإبداعية", index:"مشاريع مختارة", reel:"REEL HOMEPAGES", showcase:"شاهد العمل في سياقه", reference:"مرجع", agency:"XR Agency", homepage:"HOMEPAGE", visit:"زيارة" },
-  ru: { kicker:"XRAGENCY · WORK", title:"Цифровые миры", accent:"созданные для опыта.", intro:"Сайты, айдентика и цифровые впечатления в одной коллекции с видимыми превью главных страниц.", search:"Поиск…", all:"Все услуги", industries:"Все отрасли", open:"Открыть сайт", close:"Закрыть", reset:"Сбросить", catalogue:"Креативная коллекция", index:"выбранных проектов", reel:"REEL HOMEPAGES", showcase:"Смотреть проекты в контексте", reference:"Референс", agency:"XR Agency", homepage:"HOMEPAGE", visit:"ОТКРЫТЬ" },
+  fr: {
+    kicker:"XRAGENCY · WORK", title:"Des univers digitaux", accent:"pensés pour être vécus.", intro:"Sites, identités et expériences : une seule collection, avec les homepages visibles avant même d’ouvrir chaque référence.", search:"Rechercher…", all:"Toutes les prestations", industries:"Tous les secteurs", open:"Ouvrir le site", close:"Fermer", reset:"Réinitialiser", catalogue:"Catalogue créatif", index:"projets sélectionnés", reel:"REEL HOMEPAGES", showcase:"Voir les univers en situation", reference:"Référence", agency:"XR Agency", homepage:"HOMEPAGE", visit:"VISITER",
+    catHeading:"Chaque référence,", catAccent:"en image.", catDesc:"Les références sont présentées avec leur homepage comme première matière visuelle : structure, rythme, direction artistique et expérience.",
+    moreBtn:"AFFICHER 18 RÉFÉRENCES DE PLUS", remaining:"RESTANTES", empty:"Aucune référence ne correspond à ces filtres.", modalNote:"Capture visuelle de la homepage publique. Le bouton ouvre le site réel dans un nouvel onglet."
+  },
+  en: {
+    kicker:"XRAGENCY · WORK", title:"Digital worlds", accent:"designed to be experienced.", intro:"Websites, identities and experiences: one collection, with homepage previews visible before opening each reference.", search:"Search…", all:"All services", industries:"All industries", open:"Open website", close:"Close", reset:"Reset", catalogue:"Creative catalogue", index:"selected projects", reel:"HOMEPAGE REEL", showcase:"See the work in context", reference:"Reference", agency:"XR Agency", homepage:"HOMEPAGE", visit:"VISIT",
+    catHeading:"Every reference,", catAccent:"in images.", catDesc:"References are showcased with their homepage as first visual material: structure, rhythm, art direction, and experience.",
+    moreBtn:"SHOW 18 MORE REFERENCES", remaining:"REMAINING", empty:"No references match these filters.", modalNote:"Visual capture of the public homepage. The button opens the live website in a new tab."
+  },
+  vi: {
+    kicker:"XRAGENCY · WORK", title:"Những thế giới số", accent:"được thiết kế để trải nghiệm.", intro:"Website, nhận diện và trải nghiệm: một bộ sưu tập thống nhất, với bản xem trước homepage.", search:"Tìm kiếm…", all:"Tất cả dịch vụ", industries:"Tất cả lĩnh vực", open:"Mở website", close:"Đóng", reset:"Đặt lại", catalogue:"Bộ sưu tập sáng tạo", index:"dự án được chọn", reel:"REEL HOMEPAGE", showcase:"Xem các universes thực tế", reference:"Tham khảo", agency:"XR Agency", homepage:"HOMEPAGE", visit:"MỞ",
+    catHeading:"Từng dự án,", catAccent:"qua hình ảnh.", catDesc:"Các dự án được hiển thị với homepage làm điểm nhấn thị giác đầu tiên: cấu trúc, nhịp điệu, định hướng nghệ thuật và trải nghiệm.",
+    moreBtn:"HIỂN THỊ THÊM 18 DỰ ÁN", remaining:"CÒN LẠI", empty:"Không có dự án nào phù hợp với bộ lọc này.", modalNote:"Bản chụp giao diện homepage thực tế. Nút bấm sẽ mở website trực tiếp trong tab mới."
+  },
+  ar: {
+    kicker:"XRAGENCY · WORK", title:"عوالم رقمية", accent:"مصممة لتُعاش.", intro:"مواقع وهويات وتجارب رقمية ضمن مجموعة واحدة، مع معاينات للصفحات الرئيسية.", search:"بحث…", all:"جميع الخدمات", industries:"جميع القطاعات", open:"فتح الموقع", close:"إغلاق", reset:"إعادة ضبط", catalogue:"المجموعة الإبداعية", index:"مشاريع مختارة", reel:"REEL HOMEPAGES", showcase:"شاهد العمل في سياقه", reference:"مرجع", agency:"XR Agency", homepage:"HOMEPAGE", visit:"زيارة",
+    catHeading:"كل مرجع،", catAccent:"في صور.", catDesc:"يتم عرض المراجع مع صفحتها الرئيسية كأول مادة بصرية: الهيكل، الإيقاع، التوجيه الفني والتجربة.",
+    moreBtn:"عرض 18 مرجعاً إضافياً", remaining:"متبقية", empty:"لا توجد مراجع تطابق هذه الفلاتر.", modalNote:"لقطة بصرية للصفحة الرئيسية العامة. الزر يفتح الموقع الفعلي في نافذة جديدة."
+  },
+  ru: {
+    kicker:"XRAGENCY · WORK", title:"Цифровые миры", accent:"созданные для опыта.", intro:"Сайты, айдентика и цифровые впечатления в одной коллекции с видимыми превью главных страниц.", search:"Поиск…", all:"Все услуги", industries:"Все отрасли", open:"Открыть сайт", close:"Закрыть", reset:"Сбросить", catalogue:"Креативная коллекция", index:"выбранных проектов", reel:"REEL HOMEPAGES", showcase:"Смотреть проекты в контексте", reference:"Референс", agency:"XR Agency", homepage:"HOMEPAGE", visit:"ОТКРЫТЬ",
+    catHeading:"Каждый проект,", catAccent:"в изображениях.", catDesc:"Проекты представлены своими главными страницами как основой визуального восприятия: структура, ритм, арт-дирекшн и впечатления.",
+    moreBtn:"ПОКАЗАТЬ ЕЩЁ 18 ПРОЕКТОВ", remaining:"ОСТАЛОСЬ", empty:"Нет проектов, соответствующих этим фильтрам.", modalNote:"Визуальный снимок публичной главной страницы. Кнопка открывает реальный сайт в новой вкладке."
+  },
 } as const;
 
 const sectorLabels: Record<string, Record<string,string>> = {
@@ -293,8 +313,8 @@ export function WorkPage() {
           <div className="mb-10 flex flex-col gap-6 border-b border-border pb-8 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="label-mono text-[9px] tracking-[.28em] text-primary">01 / {tx.catalogue}</p>
-              <h2 className="display-serif mt-3 max-w-5xl text-4xl leading-[.86] sm:text-6xl">Chaque référence, <em className="not-italic text-muted-foreground">en image.</em></h2>
-              <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground">Les références sont présentées avec leur homepage comme première matière visuelle : structure, rythme, direction artistique et expérience.</p>
+              <h2 className="display-serif mt-3 max-w-5xl text-4xl leading-[.86] sm:text-6xl">{tx.catHeading} <em className="not-italic text-muted-foreground">{tx.catAccent}</em></h2>
+              <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground">{tx.catDesc}</p>
             </div>
             <div className="flex shrink-0 items-center gap-2">
               <span className="rounded-full border border-border px-3 py-2 label-mono text-[8px] text-muted-foreground">{filtered.length} {tx.index}</span>
@@ -351,14 +371,14 @@ export function WorkPage() {
                 onClick={()=>setVisibleCount(count=>Math.min(count+18,filtered.length))}
                 className="rounded-full border border-border bg-card px-6 py-3 label-mono text-[8px] tracking-[.16em] text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
               >
-                AFFICHER 18 RÉFÉRENCES DE PLUS · {filtered.length-visibleCount} RESTANTES
+                {tx.moreBtn} · {filtered.length-visibleCount} {tx.remaining}
               </button>
             </div>
           )}
 
           {!filtered.length && (
             <div className="rounded-[1.8rem] border border-dashed border-border px-6 py-16 text-center">
-              <p className="display-serif text-3xl">Aucune référence ne correspond à ces filtres.</p>
+              <p className="display-serif text-3xl">{tx.empty}</p>
               <button type="button" onClick={()=>{setQuery("");setSector("all");setService("all")}} className="mt-5 rounded-full border border-border px-4 py-2 label-mono text-[8px] text-muted-foreground hover:border-primary/40">{tx.reset}</button>
             </div>
           )}
@@ -368,7 +388,7 @@ export function WorkPage() {
     {active && <div className="fixed inset-0 z-[100] grid place-items-center bg-black/80 p-4 backdrop-blur-md" role="dialog" aria-modal="true">
       <div className="relative max-h-[92vh] w-full max-w-6xl overflow-auto rounded-[2rem] border border-white/15 bg-background shadow-2xl">
         <button type="button" onClick={()=>setActive(null)} aria-label={tx.close} className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-black/65 text-white"><X className="h-4 w-4"/></button>
-        <div className="grid lg:grid-cols-[1.4fr_.6fr]"><div className="min-h-[420px] bg-[#080b0f]"><div className="relative h-full min-h-[420px] overflow-hidden"><ReferencePreview item={active} alt={active.name+" homepage"} loading="eager" className="min-h-[420px] object-top"/><div className="absolute left-5 top-5 rounded-full border border-white/15 bg-black/50 px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-white/55 backdrop-blur-xl">{tx.homepage}</div></div></div><div className="p-7 sm:p-10"><span className="label-mono text-[8px] tracking-[.24em] text-primary">{sectorLabels[active.sector]?.[lang] ?? active.sector} · {active.type}</span><h2 className="display-serif mt-4 text-5xl leading-[.86]">{active.name}</h2><p className="mt-4 text-sm leading-6 text-muted-foreground">Capture visuelle de la homepage publique. Le bouton ouvre le site réel dans un nouvel onglet.</p><div className="mt-6 flex flex-wrap gap-2">{active.services.map(s=><span key={s} className="rounded-full border border-border px-3 py-1.5 text-[9px] text-muted-foreground">{s==="ecommerce"?"E-commerce":s}</span>)}</div><a href={active.url} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-xs font-semibold text-background">{tx.open}<ExternalLink className="h-3.5 w-3.5"/></a></div></div>
+        <div className="grid lg:grid-cols-[1.4fr_.6fr]"><div className="min-h-[420px] bg-[#080b0f]"><div className="relative h-full min-h-[420px] overflow-hidden"><ReferencePreview item={active} alt={active.name+" homepage"} loading="eager" className="min-h-[420px] object-top"/><div className="absolute left-5 top-5 rounded-full border border-white/15 bg-black/50 px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-white/55 backdrop-blur-xl">{tx.homepage}</div></div></div><div className="p-7 sm:p-10"><span className="label-mono text-[8px] tracking-[.24em] text-primary">{sectorLabels[active.sector]?.[lang] ?? active.sector} · {active.type}</span><h2 className="display-serif mt-4 text-5xl leading-[.86]">{active.name}</h2><p className="mt-4 text-sm leading-6 text-muted-foreground">{tx.modalNote}</p><div className="mt-6 flex flex-wrap gap-2">{active.services.map(s=><span key={s} className="rounded-full border border-border px-3 py-1.5 text-[9px] text-muted-foreground">{s==="ecommerce"?"E-commerce":s}</span>)}</div><a href={active.url} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-xs font-semibold text-background">{tx.open}<ExternalLink className="h-3.5 w-3.5"/></a></div></div>
       </div>
     </div>}
     <Contact/>

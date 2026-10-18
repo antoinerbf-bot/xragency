@@ -171,7 +171,7 @@ function ServiceDetailPage() {
               {t({ fr: "Tous les services", en: "All services", vi: "Tất cả dịch vụ", ar: "كل الخدمات", ru: "Все услуги" })}
             </Link>
             <div className="label-mono flex items-center gap-2 text-[7px] xr-muted-2">
-              <Link to="/" className="hover:xr-accent">Accueil</Link>
+              <Link to="/" className="hover:xr-accent">{t({ fr: "Accueil", en: "Home", vi: "Trang chủ", ar: "الرئيسية", ru: "Главная" })}</Link>
               <span>/</span>
               <span>{t(service.title)}</span>
             </div>
@@ -222,7 +222,7 @@ function ServiceDetailPage() {
                       <p className="display-serif mt-1 text-4xl sm:text-5xl">{isCustomMaps ? "990 €" : price(service.fromEur)}</p>
                     </div>
                     <span className="label-mono pb-1 text-[7px] xr-muted-2">
-                      {isCustomMaps ? "/ AN" : t(PERIOD_LABEL[service.fromPeriod])}
+                      {isCustomMaps ? t({ fr: "/ AN", en: "/ YEAR", vi: "/ NĂM", ar: "/ سنة", ru: "/ ГОД" }) : t(PERIOD_LABEL[service.fromPeriod])}
                     </span>
                   </div>
                 </Reveal>
@@ -324,10 +324,15 @@ function ServiceDetailPage() {
                 const isInst = installmentSelections[i] ?? false;
                 const planIsInstallment = service.id === "websites" && isInst && p.period === "once";
                 const displayPrice = planIsInstallment ? Math.round((p.eur * 1.4) / 12) : p.eur;
-                const displayPeriod = planIsInstallment ? "month" : p.period;
-                const planWaMessage = encodeURIComponent(
-                  `Bonjour XR Agency, je souhaite commander la formule "${t(p.name)}" du service "${t(service.title)}" (${isCustomMaps ? "Sur mesure" : price(displayPrice)}${planIsInstallment ? " / mois sur 12 mois" : ""}). Comment démarrer ?`,
-                );
+                const displayPeriod = (planIsInstallment ? "month" : p.period) as "once" | "month" | "year";
+                const planWaText: Record<string, string> = {
+                  fr: `Bonjour XR Agency, je souhaite commander la formule "${t(p.name)}" du service "${t(service.title)}" (${isCustomMaps ? "Sur mesure" : price(displayPrice)}${planIsInstallment ? " / mois sur 12 mois" : ""}). Comment démarrer ?`,
+                  en: `Hello XR Agency, I would like to order the "${t(p.name)}" plan for "${t(service.title)}" (${isCustomMaps ? "Custom" : price(displayPrice)}${planIsInstallment ? " / month over 12 months" : ""}). How do we start?`,
+                  vi: `Xin chào XR Agency, tôi muốn đặt gói "${t(p.name)}" của dịch vụ "${t(service.title)}" (${isCustomMaps ? "Theo yêu cầu" : price(displayPrice)}${planIsInstallment ? " / tháng trong 12 tháng" : ""}). Bắt đầu như thế nào?`,
+                  ar: `مرحبا XR Agency، أود طلب باقة "${t(p.name)}" لخدمة "${t(service.title)}" (${isCustomMaps ? "مخصصة" : price(displayPrice)}${planIsInstallment ? " / شهرياً على 12 شهراً" : ""}). كيف نبدأ؟`,
+                  ru: `Здравствуйте XR Agency, я хочу заказать тариф "${t(p.name)}" для услуги "${t(service.title)}" (${isCustomMaps ? "Индивидуально" : price(displayPrice)}${planIsInstallment ? " / мес на 12 месяцев" : ""}). С чего начать?`,
+                };
+                const planWaMessage = encodeURIComponent(planWaText[lang] ?? planWaText.fr);
                 const planWaUrl = CONTACT.whatsapp + "?text=" + planWaMessage;
 
                 return (
@@ -368,7 +373,7 @@ function ServiceDetailPage() {
                               }}
                               className={cn("flex-1 rounded-lg py-2 text-[8px] font-semibold uppercase tracking-[.12em]", !isInst ? "bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] shadow-sm" : "xr-muted")}
                             >
-                              Comptant
+                              {t({ fr: "Comptant", en: "One-off", vi: "Một lần", ar: "دفعة واحدة", ru: "Разово" })}
                             </button>
                             <button
                               type="button"
@@ -378,7 +383,7 @@ function ServiceDetailPage() {
                               }}
                               className={cn("flex-1 rounded-lg py-2 text-[8px] font-semibold uppercase tracking-[.12em]", isInst ? "bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] shadow-sm" : "xr-muted")}
                             >
-                              Mensualités
+                              {t({ fr: "Mensualités", en: "Monthly", vi: "Hàng tháng", ar: "أقساط شهرية", ru: "В рассрочку" })}
                             </button>
                           </div>
                         ) : null}
@@ -416,7 +421,7 @@ function ServiceDetailPage() {
                             className="flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-3.5 text-[9px] font-bold uppercase tracking-[.14em] text-white shadow-lg transition hover:bg-emerald-500"
                           >
                             <MessageCircle className="h-4 w-4" />
-                            Cadrer mon projet sur devis
+                            {t({ fr: "Cadrer mon projet sur devis", en: "Scope my project on quote", vi: "Tư vấn báo giá dự án", ar: "تحديد نطاق المشروع بعرض سعر", ru: "Обсудить проект по смете" })}
                           </a>
                         ) : !isCustomMaps ? (
                           <AddToCartBtn
@@ -464,7 +469,7 @@ function ServiceDetailPage() {
                   <p className="label-mono text-[7px] tracking-[.24em] xr-accent">04 / FAQ</p>
                   <h2 className="display-serif mt-3 text-4xl sm:text-6xl">{t(copy.faq)}</h2>
                 </div>
-                <span className="hidden label-mono text-[7px] xr-muted-2 sm:block">{String(faqItems.length).padStart(2, "0")} QUESTIONS</span>
+                <span className="hidden label-mono text-[7px] xr-muted-2 sm:block">{String(faqItems.length).padStart(2, "0")} {t({ fr: "QUESTIONS", en: "QUESTIONS", vi: "CÂU HỎI", ar: "أسئلة", ru: "ВОПРОСОВ" })}</span>
               </div>
             </Reveal>
 

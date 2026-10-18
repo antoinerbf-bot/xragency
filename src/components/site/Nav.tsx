@@ -113,7 +113,7 @@ export function Nav() {
                       <div className="flex items-center gap-2">
                         <span className="h-px w-8 bg-current opacity-60" />
                         <span className="label-mono text-[7px] tracking-[.22em] xr-muted-2">
-                          XRAGENCY · 07 EXPERTISES DIGITALES
+                          {t({ fr: "XRAGENCY · 07 EXPERTISES DIGITALES", en: "XRAGENCY · 07 DIGITAL EXPERTISES", vi: "XRAGENCY · 07 CHUYÊN MÔN KỸ THUẬT SỐ", ar: "XRAGENCY · 07 خبرات رقمية", ru: "XRAGENCY · 07 DIGITAL-КОМПЕТЕНЦИЙ" })}
                         </span>
                       </div>
                       <Link
@@ -292,13 +292,15 @@ export function Nav() {
         {open && (
           <div className="mt-2 overflow-hidden rounded-[1.75rem] border xr-line bg-[var(--xr-bg-elev)] p-4 shadow-2xl text-[var(--xr-ink)] lg:hidden animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between border-b xr-line pb-3">
-              <span className="label-mono text-[7px] tracking-[.2em] xr-muted-2">NOS SERVICES & TARIFS</span>
+              <span className="label-mono text-[7px] tracking-[.2em] xr-muted-2">
+                {t({ fr: "NOS SERVICES & TARIFS", en: "OUR SERVICES & PRICING", vi: "DỊCH VỤ & BẢNG GIÁ", ar: "خدماتنا وأسعارنا", ru: "УСЛУГИ И ЦЕНЫ" })}
+              </span>
               <Link
                 to="/services"
                 onClick={() => setOpen(false)}
                 className="label-mono text-[7px] font-semibold xr-accent underline"
               >
-                Tout voir
+                {t({ fr: "Tout voir", en: "View all", vi: "Xem tất cả", ar: "عرض الكل", ru: "Смотреть все" })}
               </Link>
             </div>
 
@@ -333,34 +335,34 @@ export function Nav() {
                 onClick={() => setOpen(false)}
                 className="rounded-xl border xr-line bg-[var(--xr-surface)] p-2.5 text-center text-[9px] font-semibold text-[var(--xr-ink)]"
               >
-                Réalisations
+                {t(UI.navWork)}
               </a>
               <a
                 href="/recrutement"
                 onClick={() => setOpen(false)}
                 className="rounded-xl border xr-line bg-[var(--xr-surface)] p-2.5 text-center text-[9px] font-semibold text-[var(--xr-ink)]"
               >
-                Affiliation 10-20%
+                {t(UI.navAffiliation)}
               </a>
               <a
                 href="/#audit"
                 onClick={() => setOpen(false)}
                 className="rounded-xl border xr-line bg-[var(--xr-surface)] p-2.5 text-center text-[9px] font-semibold text-[var(--xr-ink)]"
               >
-                Audit gratuit
+                {t({ fr: "Audit gratuit", en: "Free audit", vi: "Audit miễn phí", ar: "تدقيق مجاني", ru: "Бесплатный аудит" })}
               </a>
               <a
                 href="/#faq"
                 onClick={() => setOpen(false)}
                 className="rounded-xl border xr-line bg-[var(--xr-surface)] p-2.5 text-center text-[9px] font-semibold text-[var(--xr-ink)]"
               >
-                FAQ
+                {t(UI.navFaq)}
               </a>
             </div>
 
             <div className="mt-3 flex items-center justify-end border-t xr-line pt-3">
               <div className="flex flex-col items-center">
-                <span className="label-mono mb-1.5 block text-[6px] xr-muted-2">THÈME</span>
+                <span className="label-mono mb-1.5 block text-[6px] xr-muted-2">{t({ fr: "THÈME", en: "THEME", vi: "GIAO DIỆN", ar: "المظهر", ru: "ТЕМА" })}</span>
                 <button
                   type="button"
                   aria-label={theme === "dark" ? accessibility.light : accessibility.dark}

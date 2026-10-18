@@ -55,6 +55,9 @@ export function ServicesCatalog() {
       enter: "Entrer dans l’expérience",
       quote: "Faire mon devis",
       compose: "Composer cette offre",
+      quoteFree: "Faire mon devis gratuit",
+      perMonth: " / mois",
+      perYear: " / an",
     },
     en: {
       eyebrow: "SERVICES",
@@ -69,6 +72,9 @@ export function ServicesCatalog() {
       enter: "Enter the experience",
       quote: "Build my quote",
       compose: "Build this offer",
+      quoteFree: "Get my free quote",
+      perMonth: " / mo",
+      perYear: " / yr",
     },
     vi: {
       eyebrow: "DỊCH VỤ",
@@ -83,6 +89,9 @@ export function ServicesCatalog() {
       enter: "Bước vào trải nghiệm",
       quote: "Tạo báo giá",
       compose: "Chọn gói này",
+      quoteFree: "Nhận báo giá miễn phí",
+      perMonth: " / tháng",
+      perYear: " / năm",
     },
     ar: {
       eyebrow: "الخدمات",
@@ -97,6 +106,9 @@ export function ServicesCatalog() {
       enter: "اكتشف التجربة",
       quote: "أنشئ عرض السعر",
       compose: "اختر هذه الباقة",
+      quoteFree: "احصل على عرض سعر مجاني",
+      perMonth: " / شهر",
+      perYear: " / سنة",
     },
     ru: {
       eyebrow: "УСЛУГИ",
@@ -111,6 +123,9 @@ export function ServicesCatalog() {
       enter: "Открыть возможности",
       quote: "Составить смету",
       compose: "Выбрать этот пакет",
+      quoteFree: "Получить бесплатную смету",
+      perMonth: " / мес",
+      perYear: " / год",
     },
   }[lang];
 
@@ -177,7 +192,7 @@ export function ServicesCatalog() {
                         <a href={`/?service=${service.id}#quote`} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold uppercase tracking-[.12em] text-black transition hover:-translate-y-0.5 hover:bg-white/90">
                           {copy.compose} <ArrowUpRight className="h-4 w-4" />
                         </a>
-                        <span className="rounded-full border border-white/15 bg-black/30 px-4 py-3 label-mono text-[9px] text-white/70 backdrop-blur">{copy.from} {price(service.fromEur)}{service.fromPeriod === "month" ? " / mois" : service.fromPeriod === "year" ? " / an" : ""}</span>
+                        <span className="rounded-full border border-white/15 bg-black/30 px-4 py-3 label-mono text-[9px] text-white/70 backdrop-blur">{copy.from} {price(service.fromEur)}{service.fromPeriod === "month" ? copy.perMonth : service.fromPeriod === "year" ? copy.perYear : ""}</span>
                       </div>
                     </div>
                   </div>
@@ -197,7 +212,7 @@ export function ServicesCatalog() {
               href="/#quote"
               className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-6 py-3.5 label-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-foreground transition-all hover:gap-3"
             >
-              Faire mon devis gratuit
+              {copy.quoteFree}
               <ArrowUpRight className="h-4 w-4" />
             </a>
           </div>
