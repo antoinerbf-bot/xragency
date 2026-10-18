@@ -63,7 +63,6 @@ const WEBCARE_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Essentiel": "Essentiel",
     "Business": "Business",
     "Unlimited": "Unlimited",
-    "Un site propre, sans abonnement incompréhensible.": "Un site propre, sans abonnement incompréhensible.",
   },
   en: {
     "Votre site évolue.": "Your website evolves.",
@@ -108,7 +107,6 @@ const WEBCARE_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Essentiel": "Essential",
     "Business": "Business",
     "Unlimited": "Unlimited",
-    "Un site propre, sans abonnement incompréhensible.": "A well-maintained website, without a confusing subscription.",
   },
   vi: {
     "Votre site évolue.": "Website của bạn luôn phát triển.",
@@ -153,7 +151,6 @@ const WEBCARE_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Essentiel": "Cơ bản",
     "Business": "Doanh nghiệp",
     "Unlimited": "Không giới hạn",
-    "Un site propre, sans abonnement incompréhensible.": "Website được chăm sóc, không có gói đăng ký khó hiểu.",
   },
   ar: {
     "Votre site évolue.": "موقعك يتطور.",
@@ -198,7 +195,6 @@ const WEBCARE_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Essentiel": "أساسي",
     "Business": "الأعمال",
     "Unlimited": "غير محدود",
-    "Un site propre, sans abonnement incompréhensible.": "موقع مُعتنى به دون اشتراك غير واضح.",
   },
   ru: {
     "Votre site évolue.": "Ваш сайт развивается.",
@@ -243,7 +239,6 @@ const WEBCARE_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Essentiel": "Базовый",
     "Business": "Бизнес",
     "Unlimited": "Безлимит",
-    "Un site propre, sans abonnement incompréhensible.": "Ухоженный сайт без непонятной подписки.",
   },
 };
 function translateWebCare(value: string, lang: Lang) { return WEBCARE_TRANSLATIONS[lang][value] ?? value; }
@@ -257,7 +252,7 @@ const plans = [
 function WebCarePage() {
   const { lang } = useLang();
   const tx = (value: string) => translateWebCare(value, lang);
-  return <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
+  return <div dir={lang === "ar" ? "rtl" : "ltr"} className="min-h-screen overflow-x-hidden bg-background text-foreground">
     <Nav />
     <main className="pt-28">
       <section className="relative overflow-hidden border-b border-border/60 py-16 sm:py-24 lg:py-32"><Parallax speed={0.04} className="pointer-events-none absolute -inset-[8%] opacity-30"><img src={XR_PHOTOS.maintenance} alt="" aria-hidden="true" className="h-[116%] w-full object-cover object-center blur-[1px]" /></Parallax>
@@ -267,7 +262,7 @@ function WebCarePage() {
           <div className="max-w-4xl lg:col-span-7">
             <span className="label-mono text-[10px] uppercase tracking-[0.25em] text-primary">XR AGENCY · 06 · WEBCARE</span>
             <h1 className="display-serif mt-6 text-[clamp(3.2rem,8vw,7rem)] leading-[.86]">{tx("Votre site évolue.")}<br/><em className="not-italic italic text-primary">{tx("Nous aussi.")}</em></h1>
-            <p className="mt-7 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">Maintenance courante, corrections et évolutions légères : une formule claire pour garder votre site propre, à jour et exploitable sans transformer chaque petite demande en nouveau devis.</p>
+            <p className="mt-7 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">{tx("Maintenance courante, corrections et évolutions légères : une formule claire pour garder votre site propre, à jour et exploitable sans transformer chaque petite demande en nouveau devis.")}</p>
           </div>
           <Parallax speed={-0.035} className="lg:col-span-5">
             <div className="relative">
@@ -279,13 +274,13 @@ function WebCarePage() {
             <div className="rounded-[2rem] border border-primary/30 bg-primary/[.06] p-7 shadow-xl">
               <div className="flex items-center gap-3"><ServerCog className="h-6 w-6 text-primary"/><span className="label-mono text-[10px] uppercase tracking-[.18em] text-primary">{tx("Infrastructure annuelle")}</span></div>
               <div className="mt-5 flex items-end gap-2"><span className="display-serif text-6xl text-primary">79 €</span><span className="mb-2 label-mono text-[9px] text-muted-foreground">/ an</span></div>
-              <p className="mt-4 text-sm leading-6 text-muted-foreground">XR Agency gère l'hébergement, le nom de domaine et la sécurité de l'infrastructure.</p>
+              <p className="mt-4 text-sm leading-6 text-muted-foreground">{tx("XR Agency gère l'hébergement, le nom de domaine et la sécurité de l'infrastructure.")}</p>
               <div className="mt-5 grid gap-2 sm:grid-cols-3">{["Hébergement","Nom de domaine","Sécurité"].map(x=><div key={x} className="rounded-xl border border-border bg-background/70 p-3 text-center text-[10px] font-medium">{tx(x)}</div>)}</div>
             </div>
             <div className="rounded-[2rem] border border-border bg-card/60 p-7">
               <div className="flex items-center gap-3"><ShieldCheck className="h-6 w-6 text-primary"/><span className="label-mono text-[10px] uppercase tracking-[.18em] text-primary">{tx("À retenir")}</span></div>
-              <p className="mt-5 text-sm leading-7 text-muted-foreground">Les 79 € / an couvrent l'infrastructure. Les interventions de maintenance et d'évolution sont choisies séparément selon votre besoin.</p>
-              <p className="mt-4 text-xs text-muted-foreground">Les développements majeurs, refontes et nouvelles fonctionnalités font toujours l'objet d'un devis spécifique.</p>
+              <p className="mt-5 text-sm leading-7 text-muted-foreground">{tx("Les 79 € / an couvrent l'infrastructure. Les interventions de maintenance et d'évolution sont choisies séparément selon votre besoin.")}</p>
+              <p className="mt-4 text-xs text-muted-foreground">{tx("Les développements majeurs, refontes et nouvelles fonctionnalités font toujours l'objet d'un devis spécifique.")}</p>
             </div>
           </div>
         </div>
@@ -299,7 +294,7 @@ function WebCarePage() {
       </section></Parallax>
       <section id="plans" className="relative overflow-hidden py-20 lg:py-28"><div className="pointer-events-none absolute -left-28 top-12 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
         <div className="mx-auto max-w-7xl px-5 lg:px-10">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"><div><span className="label-mono text-[10px] uppercase tracking-[0.25em] text-primary">{tx("Maintenance mensuelle")}</span><h2 className="display-serif mt-4 text-4xl sm:text-6xl">{tx("Choisissez votre niveau")}<br/>{tx("d'accompagnement.")}</h2></div><p className="max-w-md text-sm leading-6 text-muted-foreground">Les volumes concernent les demandes courantes. Les travaux hors périmètre restent séparés pour préserver une charge de travail réaliste.</p></div>
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"><div><span className="label-mono text-[10px] uppercase tracking-[0.25em] text-primary">{tx("Maintenance mensuelle")}</span><h2 className="display-serif mt-4 text-4xl sm:text-6xl">{tx("Choisissez votre niveau")}<br/>{tx("d'accompagnement.")}</h2></div><p className="max-w-md text-sm leading-6 text-muted-foreground">{tx("Les volumes concernent les demandes courantes. Les travaux hors périmètre restent séparés pour préserver une charge de travail réaliste.")}</p></div>
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
             {plans.map((plan,index)=><article key={plan.name} className={`rounded-[1.75rem] border p-7 transition-all hover:-translate-y-1 hover:shadow-2xl sm:p-8 ${index===1?"border-primary/50 bg-primary/[0.05]":"border-border bg-card/60"}`}><div className="flex items-center justify-between"><span className="label-mono text-[9px] text-primary">0{index+1}</span>{index===1&&<span className="label-mono rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[8px] text-primary">{tx("ÉQUILIBRE")}</span>}</div><h3 className="display-serif mt-7 text-3xl">{tx(plan.name)}</h3><p className="mt-2 text-xs text-muted-foreground">{tx(plan.badge)}</p><div className="mt-6 flex items-end gap-2 border-y border-border py-5"><span className="display-serif text-5xl text-primary">{plan.price} €</span><span className="label-mono mb-1 text-[9px] text-muted-foreground">/ mois</span></div><ul className="mt-6 space-y-3">{plan.features.map(feature=><li key={tx(feature)} className="flex gap-3 text-sm leading-5 text-muted-foreground"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary"/>{tx(feature)}</li>)}</ul><a href={`https://wa.me/33767566783?text=${encodeURIComponent(`Bonjour XR Agency, je souhaite parler du forfait WebCare « ${plan.name} » à ${plan.price} €/mois.`)}`} target="_blank" rel="noreferrer" className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-5 py-3.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">{tx("Parler à XR Agency")} <ArrowRight className="h-4 w-4"/></a></article>)}
           </div>
@@ -310,7 +305,7 @@ function WebCarePage() {
           <div className="mb-8">
             <span className="label-mono text-[10px] uppercase tracking-[.25em] text-primary">{tx("Lecture rapide")}</span>
             <h2 className="display-serif mt-4 text-4xl sm:text-5xl">{tx("Ce que chaque niveau couvre.")}</h2>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-muted-foreground">Les points ci-dessous reprennent les éléments de chaque formule, afin de rendre le périmètre lisible avant de choisir.</p>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-muted-foreground">{tx("Les points ci-dessous reprennent les éléments de chaque formule, afin de rendre le périmètre lisible avant de choisir.")}</p>
           </div>
           <div className="grid gap-4 lg:grid-cols-3">
             {plans.map((plan,index) => (
@@ -332,7 +327,7 @@ function WebCarePage() {
           </div>
         </div>
       </section>
-      <section className="border-t border-border/60 py-16"><div className="mx-auto max-w-3xl px-5 text-center"><Sparkles className="mx-auto h-5 w-5 text-primary"/><h2 className="display-serif mt-4 text-4xl sm:text-5xl">{tx("Un site propre, sans abonnement incompréhensible.")}</h2><p className="mt-5 text-sm leading-7 text-muted-foreground">79 € / an pour l'infrastructure, puis le niveau de maintenance dont vous avez réellement besoin. Les évolutions importantes sont toujours cadrées séparément.</p></div></section>
+      <section className="border-t border-border/60 py-16"><div className="mx-auto max-w-3xl px-5 text-center"><Sparkles className="mx-auto h-5 w-5 text-primary"/><h2 className="display-serif mt-4 text-4xl sm:text-5xl">{tx("Un site propre, sans abonnement incompréhensible.")}</h2><p className="mt-5 text-sm leading-7 text-muted-foreground">{tx("79 € / an pour l'infrastructure, puis le niveau de maintenance dont vous avez réellement besoin. Les évolutions importantes sont toujours cadrées séparément.")}</p></div></section>
     </main><Contact />
   </div>;
 }
