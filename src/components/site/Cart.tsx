@@ -1,3 +1,10 @@
+import { useEffect, useRef, useState } from "react";
+import { X, Trash2, MessageCircle, ShoppingBag, Check } from "lucide-react";
+import { useCart, type CartItem } from "@/hooks/useCart";
+import { CONTACT } from "@/lib/content";
+import { useLang } from "@/lib/i18n";
+import { cn } from "@/lib/utils";
+
 const CART_COPY = {
   fr:{emptyCount:"Aucune prestation choisie",empty:"Votre sélection est vide",choose:"Choisissez une formule dans la grille tarifaire",total:"Estimation totale",request:"Demander un devis WhatsApp",send:"Envoyer ma sélection WhatsApp",terms:"Sans engagement · Réponse en moins de 2 h",selected:"Ma sélection",add:"Ajouter à ma sélection",added:"Ajouté à ma sélection",close:"Fermer",open:"Ouvrir ma sélection",remove:"Retirer",quote:"Bonjour XR Agency, je souhaite obtenir un devis personnalisé.",intro:"Bonjour XR Agency, je suis intéressé par les services suivants :",finish:"Pouvons-nous planifier un échange ?"},
   en:{emptyCount:"No services selected",empty:"Your selection is empty",choose:"Choose a plan from the pricing table",total:"Estimated total",request:"Request a quote on WhatsApp",send:"Send my selection on WhatsApp",terms:"No obligation · Reply within 2 hours",selected:"My selection",add:"Add to my selection",added:"Added to my selection",close:"Close",open:"Open my selection",remove:"Remove",quote:"Hello XR Agency, I'd like a personalised quote.",intro:"Hello XR Agency, I'm interested in the following services:",finish:"Can we schedule a call?"},

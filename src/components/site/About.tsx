@@ -292,7 +292,7 @@ export function About() {
                         <IconComp className="h-5 w-5" />
                       </div>
                       <span className="label-mono text-[10px] rounded-full border border-border px-2.5 py-1 text-muted-foreground">
-                        {adv.tag}
+                        {t(adv.tag)}
                       </span>
                     </div>
                     <h4 className="display-serif mt-5 text-lg text-foreground">{t(adv.title)}</h4>
