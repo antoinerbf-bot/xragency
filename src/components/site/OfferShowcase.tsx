@@ -3,8 +3,11 @@ import { ArrowRight, Check, Eye, FileSearch, Sparkles, Wand2, ShieldCheck, Lapto
 import { Reveal, Parallax } from "./primitives";
 import { XR_PHOTOS } from "@/lib/photography";
 import { CONTACT } from "@/lib/content";
+import { useLang, type Lang } from "@/lib/i18n";
 
 export function OfferShowcase() {
+  const { lang } = useLang();
+  const tx = (value: string) => translateOffer(value, lang);
   const [activeTab, setActiveTab] = useState<"mockup" | "audit">("mockup");
   const [siteUrl, setSiteUrl] = useState("");
   const [activity, setActivity] = useState("");
@@ -12,6 +15,85 @@ export function OfferShowcase() {
   const waMessage = encodeURIComponent(
     `Bonjour XR Agency, je souhaite réserver mes 400 € d'avantages offerts :\n- Maquette personnalisée (200 €)\n- Audit digital complet (200 €)\nActivité: ${activity || "Non spécifiée"}\nSite: ${siteUrl || "En création / non spécifié"}`
   );
+
+const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
+  fr: {
+    "{tx("OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT")}": "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT",
+    "{tx("400 € de valeur offerte.")}": "400 € de valeur offerte.",
+    "{tx("Voyez le résultat avant d'investir.")}": "Voyez le résultat avant d'investir.",
+    "{tx("Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.")}": "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.",
+    "{tx("1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)")}": "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)",
+    "{tx("2. AUDIT DIGITAL & SEO (VALEUR 200 €)")}": "2. AUDIT DIGITAL & SEO (VALEUR 200 €)",
+    "{tx("Une maquette sur mesure taillée pour convertir.")}": "Une maquette sur mesure taillée pour convertir.",
+    "{tx("Un audit impitoyable de vos performances actuelles.")}": "Un audit impitoyable de vos performances actuelles.",
+    "{tx("Réserver mes 400 € offerts")}": "Réserver mes 400 € offerts",
+    "{tx("Lancer l'audit en direct")}": "Lancer l'audit en direct",
+    "Votre activité (ex: Restaurant, Hôtel...)": "Votre activité (ex: Restaurant, Hôtel...)",
+    "Votre site actuel (optionnel)": "Votre site actuel (optionnel)",
+    "{tx("RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE")}": "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE",
+  },
+  en: {
+    "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "INSTANT ACCESS OFFER · NO COMMITMENT",
+    "400 € de valeur offerte.": "€400 worth of value, free.",
+    "Voyez le résultat avant d'investir.": "See the result before you invest.",
+    "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.": "We don't ask you to take our word for it. We create a tailored mockup and audit your digital presence upfront, free of charge and with no commitment.",
+    "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)": "1. CUSTOM MOCKUP (VALUE €200)",
+    "2. AUDIT DIGITAL & SEO (VALEUR 200 €)": "2. DIGITAL & SEO AUDIT (VALUE €200)",
+    "Une maquette sur mesure taillée pour convertir.": "A tailored mockup designed to convert.",
+    "Un audit impitoyable de vos performances actuelles.": "A rigorous audit of your current performance.",
+    "Réserver mes 400 € offerts": "Claim my €400 in free value",
+    "Lancer l'audit en direct": "Start the live audit",
+    "Votre activité (ex: Restaurant, Hôtel...)": "Your industry (e.g. restaurant, hotel...)",
+    "Votre site actuel (optionnel)": "Your current website (optional)",
+    "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE": "REPLY IN UNDER 2 HOURS · NO COMMITMENT · REAL VALUE GUARANTEED",
+  },
+  vi: {
+    "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "ƯU ĐÃI TRUY CẬP NGAY · KHÔNG CAM KẾT",
+    "400 € de valeur offerte.": "Tặng giá trị tương đương 400 €.",
+    "Voyez le résultat avant d'investir.": "Xem kết quả trước khi đầu tư.",
+    "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.": "Chúng tôi không yêu cầu bạn chỉ tin vào lời nói. Chúng tôi thiết kế bản mẫu riêng và kiểm tra hiện diện số trước, hoàn toàn miễn phí và không ràng buộc.",
+    "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)": "1. BẢN MẪU RIÊNG (TRỊ GIÁ 200 €)",
+    "2. AUDIT DIGITAL & SEO (VALEUR 200 €)": "2. KIỂM TOÁN SỐ & SEO (TRỊ GIÁ 200 €)",
+    "Une maquette sur mesure taillée pour convertir.": "Bản mẫu riêng được thiết kế để tăng chuyển đổi.",
+    "Un audit impitoyable de vos performances actuelles.": "Kiểm toán chuyên sâu hiệu quả hiện tại.",
+    "Réserver mes 400 € offerts": "Nhận ưu đãi miễn phí trị giá 400 €",
+    "Lancer l'audit en direct": "Bắt đầu kiểm toán trực tiếp",
+    "Votre activité (ex: Restaurant, Hôtel...)": "Ngành nghề của bạn (ví dụ: nhà hàng, khách sạn...)",
+    "Votre site actuel (optionnel)": "Website hiện tại (không bắt buộc)",
+    "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE": "PHẢN HỒI TRONG 2 GIỜ · KHÔNG RÀNG BUỘC · GIÁ TRỊ THỰC",
+  },
+  ar: {
+    "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "عرض وصول فوري · دون التزام",
+    "400 € de valeur offerte.": "قيمة مجانية بقيمة 400 يورو.",
+    "Voyez le résultat avant d'investir.": "شاهد النتيجة قبل الاستثمار.",
+    "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.": "لا نطلب منك الاكتفاء بكلامنا. نصمم نموذجًا مخصصًا ونراجع حضورك الرقمي مسبقًا مجانًا ودون أي التزام.",
+    "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)": "1. نموذج تصميم مخصص (بقيمة 200 يورو)",
+    "2. AUDIT DIGITAL & SEO (VALEUR 200 €)": "2. تدقيق رقمي وSEO (بقيمة 200 يورو)",
+    "Une maquette sur mesure taillée pour convertir.": "نموذج مخصص مصمم لزيادة التحويل.",
+    "Un audit impitoyable de vos performances actuelles.": "تدقيق دقيق لأدائك الحالي.",
+    "Réserver mes 400 € offerts": "احصل على مزايا مجانية بقيمة 400 يورو",
+    "Lancer l'audit en direct": "ابدأ التدقيق المباشر",
+    "Votre activité (ex: Restaurant, Hôtel...)": "مجالك (مثل مطعم أو فندق...)",
+    "Votre site actuel (optionnel)": "موقعك الحالي (اختياري)",
+    "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE": "الرد خلال أقل من ساعتين · دون التزام · قيمة حقيقية مضمونة",
+  },
+  ru: {
+    "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "ПРЕДЛОЖЕНИЕ СРАЗУ · БЕЗ ОБЯЗАТЕЛЬСТВ",
+    "400 € de valeur offerte.": "Бесплатные услуги стоимостью 400 €.",
+    "Voyez le résultat avant d'investir.": "Оцените результат до инвестиций.",
+    "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.": "Мы предлагаем не верить на слово: заранее создаём индивидуальный макет и проводим аудит вашего цифрового присутствия бесплатно и без обязательств.",
+    "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)": "1. ИНДИВИДУАЛЬНЫЙ МАКЕТ (СТОИМОСТЬ 200 €)",
+    "2. AUDIT DIGITAL & SEO (VALEUR 200 €)": "2. ЦИФРОВОЙ SEO-АУДИТ (СТОИМОСТЬ 200 €)",
+    "Une maquette sur mesure taillée pour convertir.": "Индивидуальный макет, созданный для конверсии.",
+    "Un audit impitoyable de vos performances actuelles.": "Тщательный аудит текущих показателей.",
+    "Réserver mes 400 € offerts": "Получить бесплатные услуги на 400 €",
+    "Lancer l'audit en direct": "Запустить аудит",
+    "Votre activité (ex: Restaurant, Hôtel...)": "Ваша сфера (например, ресторан, отель...)",
+    "Votre site actuel (optionnel)": "Ваш текущий сайт (необязательно)",
+    "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE": "ОТВЕТ МЕНЕЕ ЧЕМ ЗА 2 ЧАСА · БЕЗ ОБЯЗАТЕЛЬСТВ · РЕАЛЬНАЯ ЦЕННОСТЬ",
+  },
+};
+function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[lang][value] ?? value; }
 
   return (
     <section id="offre-exclusive" className="relative overflow-hidden border-b xr-line bg-gradient-to-b from-[var(--xr-bg)] via-[var(--xr-bg-elev)] to-[var(--xr-bg)] py-20 sm:py-28 lg:py-32">
@@ -211,14 +293,14 @@ export function OfferShowcase() {
                 <div className="grid gap-3 sm:grid-cols-2">
                   <input
                     type="text"
-                    placeholder="Votre activité (ex: Restaurant, Hôtel...)"
+                    placeholder={tx("Votre activité (ex: Restaurant, Hôtel...)")}
                     value={activity}
                     onChange={(e) => setActivity(e.target.value)}
                     className="w-full rounded-xl border xr-line bg-[var(--xr-bg)] px-4 py-3 text-xs outline-none focus:border-[var(--xr-ink)]"
                   />
                   <input
                     type="text"
-                    placeholder="Votre site actuel (optionnel)"
+                    placeholder={tx("Votre site actuel (optionnel)")}
                     value={siteUrl}
                     onChange={(e) => setSiteUrl(e.target.value)}
                     className="w-full rounded-xl border xr-line bg-[var(--xr-bg)] px-4 py-3 text-xs outline-none focus:border-[var(--xr-ink)]"
