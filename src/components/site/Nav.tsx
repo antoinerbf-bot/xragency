@@ -71,22 +71,23 @@ export function Nav() {
   const heroTop = isHome && !scrolled;
 
   return (
-    <header className={cn("fixed inset-x-0 top-0 z-50 transition-all duration-500", scrolled ? "py-2 sm:py-3" : "py-3 sm:py-5")}>
-      <div className="mx-auto max-w-[1640px] px-4 sm:px-6 lg:px-10">
+    <header className={cn("fixed inset-x-0 top-0 z-50 transition-all duration-300", scrolled ? "py-2 sm:py-2.5" : "py-3 sm:py-4")}>
+      <div className="mx-auto max-w-[1640px] px-3 sm:px-6 lg:px-8">
         <nav
           className={cn(
-            "relative flex items-center gap-2 rounded-full border px-2.5 py-2.5 transition-all duration-500 sm:px-3",
+            "relative flex items-center justify-between gap-2 rounded-full border transition-all duration-300 px-3 py-1.5 sm:px-4 sm:py-2",
             scrolled
-              ? "xr-panel-strong shadow-[var(--xr-shadow)] text-[var(--xr-ink)]"
+              ? "border-white/15 bg-black/60 text-white shadow-[0_16px_40px_-15px_rgba(0,0,0,0.6)] backdrop-blur-2xl dark:border-white/15 dark:bg-black/60 dark:text-white"
               : heroTop
-                ? "border-neutral-300/80 bg-white/80 text-neutral-900 shadow-sm backdrop-blur-xl dark:border-white/15 dark:bg-black/35 dark:text-white"
-                : "bg-[var(--xr-surface)] border-[var(--xr-line)] text-[var(--xr-ink)] backdrop-blur-xl"
+                ? "border-white/15 bg-black/40 text-white shadow-[0_8px_30px_rgba(0,0,0,0.3)] backdrop-blur-xl dark:border-white/15 dark:bg-black/40 dark:text-white"
+                : "border-neutral-200/80 bg-white/80 text-neutral-900 shadow-sm backdrop-blur-xl dark:border-white/15 dark:bg-black/50 dark:text-white"
           )}
         >
-          <Logo className="min-w-0 px-2 sm:px-1 text-current hover:opacity-85" />
+          <Logo className="min-w-0 px-1 text-current hover:opacity-85" />
 
+          {/* Desktop Center Navigation Links */}
           <div className="hidden min-w-0 flex-1 justify-center lg:flex">
-            <div className="flex items-center rounded-full border xr-line bg-[var(--xr-surface)] p-1 text-[var(--xr-ink)]">
+            <div className="flex items-center gap-1 rounded-full px-2 py-1 text-current">
               <div
                 className="relative"
                 onMouseEnter={() => {
@@ -101,25 +102,25 @@ export function Nav() {
                   type="button"
                   aria-expanded={servicesOpen}
                   onClick={() => setServicesOpen((v) => !v)}
-                  className="inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 text-[8px] font-semibold uppercase tracking-[.16em] transition hover:bg-[var(--xr-accent-soft)]"
+                  className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10"
                 >
                   {t(UI.navServices)}
-                  <ChevronDown className={cn("h-3 w-3 transition-transform", servicesOpen && "rotate-180")} />
+                  <ChevronDown className={cn("h-3 w-3 transition-transform duration-200", servicesOpen && "rotate-180")} />
                 </button>
 
                 {servicesOpen && (
-                  <div className="absolute left-1/2 top-full mt-2 w-[min(960px,calc(100vw-3rem))] -translate-x-1/2 rounded-[1.35rem] border xr-line bg-[var(--xr-bg-elev)]/95 p-4 shadow-[0_36px_100px_-30px_rgba(0,0,0,.65)] text-[var(--xr-ink)] backdrop-blur-2xl animate-in fade-in slide-in-from-top-2 duration-200">
-                    <div className="mb-3 flex items-center justify-between border-b xr-line px-2 pb-2.5">
+                  <div className="absolute left-1/2 top-full mt-2 w-[min(960px,calc(100vw-3rem))] -translate-x-1/2 rounded-[1.35rem] border border-white/15 bg-[#0e0f12]/95 p-4 shadow-[0_36px_100px_-30px_rgba(0,0,0,.75)] text-white backdrop-blur-2xl animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="mb-3 flex items-center justify-between border-b border-white/10 px-2 pb-2.5">
                       <div className="flex items-center gap-2">
                         <span className="h-px w-8 bg-current opacity-60" />
-                        <span className="label-mono text-[7px] tracking-[.22em] xr-muted-2">
+                        <span className="label-mono text-[7px] tracking-[.22em] text-white/60">
                           {t({ fr: "XRAGENCY · 07 EXPERTISES DIGITALES", en: "XRAGENCY · 07 DIGITAL EXPERTISES", vi: "XRAGENCY · 07 CHUYÊN MÔN KỸ THUẬT SỐ", ar: "XRAGENCY · 07 خبرات رقمية", ru: "XRAGENCY · 07 DIGITAL-КОМПЕТЕНЦИЙ" })}
                         </span>
                       </div>
                       <Link
                         to="/services"
                         onClick={() => setServicesOpen(false)}
-                        className="inline-flex items-center gap-1.5 label-mono text-[7px] xr-accent hover:underline"
+                        className="inline-flex items-center gap-1.5 label-mono text-[7px] text-emerald-400 hover:underline"
                       >
                         {t(UI.navFullCatalog)} <ArrowRight className="h-3 w-3" />
                       </Link>
@@ -135,7 +136,7 @@ export function Nav() {
                             key={id}
                             href={href(id)}
                             onClick={() => setServicesOpen(false)}
-                            className="group relative isolate flex min-h-[176px] flex-col justify-end overflow-hidden rounded-xl border xr-line bg-[#101010] text-white transition duration-500 hover:-translate-y-1 hover:shadow-[0_24px_50px_-28px_rgba(0,0,0,.8)]"
+                            className="group relative isolate flex min-h-[176px] flex-col justify-end overflow-hidden rounded-xl border border-white/10 bg-[#121316] text-white transition duration-500 hover:-translate-y-1 hover:border-white/25 hover:shadow-[0_24px_50px_-28px_rgba(0,0,0,.8)]"
                           >
                             <img src={XR_PHOTOS[id]} alt="" loading="lazy" decoding="async" className="absolute inset-0 -z-20 h-full w-full object-cover opacity-65 transition duration-700 group-hover:scale-[1.06] group-hover:opacity-85" />
                             <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-black via-black/55 to-black/5 transition-opacity duration-500 group-hover:from-black/95" />
@@ -162,13 +163,13 @@ export function Nav() {
 
               <Link
                 to="/realisations"
-                className="rounded-full px-4 py-2.5 text-[8px] font-semibold uppercase tracking-[.16em] xr-muted hover:bg-[var(--xr-accent-soft)] hover:text-[var(--xr-ink)] transition"
+                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
               >
                 {t(UI.navWork)}
               </Link>
               <Link
                 to="/recrutement"
-                className="rounded-full px-4 py-2.5 text-[8px] font-semibold uppercase tracking-[.16em] xr-muted hover:bg-[var(--xr-accent-soft)] hover:text-[var(--xr-ink)] transition"
+                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
               >
                 {t(UI.navAffiliation)}
               </Link>
@@ -179,45 +180,32 @@ export function Nav() {
                     ? document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" })
                     : window.location.assign("/#faq")
                 }
-                className="rounded-full px-4 py-2.5 text-[8px] font-semibold uppercase tracking-[.16em] xr-muted hover:bg-[var(--xr-accent-soft)] hover:text-[var(--xr-ink)] transition"
+                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
               >
                 {t(UI.navFaq)}
               </button>
             </div>
           </div>
 
-          <div className="ml-auto flex items-center gap-1.5">
+          {/* Right Action Tools: Compact Flag, Theme, Cart, CTA, Menu */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Compact Luxury Language Dropdown */}
             <div className="relative">
-              <div className="hidden items-center gap-0.5 rounded-full border xr-line bg-[var(--xr-surface)] p-1 sm:flex">
-                {LANGS.map((l) => (
-                  <button
-                    key={l.code}
-                    type="button"
-                    aria-label={accessibility.languagePrefix + l.label}
-                    aria-pressed={lang === l.code}
-                    title={l.label}
-                    onClick={() => setLang(l.code)}
-                    className={cn(
-                      "grid h-8 w-8 place-items-center rounded-full text-xl transition hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)]",
-                      lang === l.code && "bg-[var(--xr-accent-soft)] ring-1 ring-[var(--xr-ink)]/35"
-                    )}
-                  >
-                    <FlagIcon code={l.code} />
-                  </button>
-                ))}
-              </div>
               <button
                 type="button"
                 aria-label={accessibility.language}
                 aria-expanded={languageOpen}
                 title={accessibility.language}
-                onClick={() => setLanguageOpen((value) => !value)}
-                className="grid h-10 w-10 shrink-0 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] text-xl shadow-sm transition hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)] sm:hidden"
+                onClick={() => setLanguageOpen((v) => !v)}
+                className="flex h-9 items-center gap-1.5 rounded-full border border-current/20 bg-current/5 px-2.5 text-[10px] font-mono font-semibold tracking-wider transition hover:bg-current/10"
               >
                 <FlagIcon code={lang} />
+                <span className="uppercase">{lang}</span>
+                <ChevronDown className={cn("h-3 w-3 transition-transform opacity-70", languageOpen && "rotate-180")} />
               </button>
+
               {languageOpen && (
-                <div className="absolute right-0 top-full z-[70] mt-2 flex gap-1.5 rounded-2xl border xr-line bg-[var(--xr-bg-elev)] p-2 shadow-xl backdrop-blur-2xl sm:hidden">
+                <div className="absolute right-0 top-full mt-2 w-48 rounded-2xl border border-white/15 bg-[#121316]/95 p-1.5 shadow-2xl backdrop-blur-2xl animate-in fade-in slide-in-from-top-2 z-[80] text-white">
                   {LANGS.map((l) => (
                     <button
                       key={l.code}
@@ -230,11 +218,13 @@ export function Nav() {
                         setLanguageOpen(false);
                       }}
                       className={cn(
-                        "grid h-9 w-9 place-items-center rounded-xl text-xl transition hover:bg-[var(--xr-accent-soft)]",
-                        lang === l.code && "bg-[var(--xr-accent-soft)] ring-1 ring-emerald-500/50"
+                        "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-xs transition",
+                        lang === l.code ? "bg-white/15 font-semibold text-white" : "text-white/70 hover:bg-white/10 hover:text-white"
                       )}
                     >
                       <FlagIcon code={l.code} />
+                      <span className="flex-1 text-[11px]">{l.label}</span>
+                      {lang === l.code && <span className="text-emerald-400 text-xs">●</span>}
                     </button>
                   ))}
                 </div>
@@ -246,19 +236,16 @@ export function Nav() {
               aria-label={theme === "dark" ? accessibility.light : accessibility.dark}
               title={theme === "dark" ? accessibility.lightTitle : accessibility.darkTitle}
               onClick={toggleTheme}
-              className="group grid h-10 w-10 shrink-0 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] text-[var(--xr-ink)] shadow-[0_8px_28px_-18px_rgba(0,0,0,.35)] transition duration-300 hover:-translate-y-0.5 hover:bg-[var(--xr-accent-soft)]"
+              className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-current/20 bg-current/5 transition duration-200 hover:bg-current/10"
             >
-              <span className="relative grid place-items-center">
-                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                <span className="sr-only">{theme === "dark" ? accessibility.lightTitle : accessibility.darkTitle}</span>
-              </span>
+              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
 
             <CartFloatingButton />
 
             <EmberButton
               href="/#quote"
-              className="hidden min-h-9 px-4 py-2 text-[8px] md:inline-flex"
+              className="hidden min-h-9 px-4 py-1.5 text-[8px] tracking-[.14em] font-semibold md:inline-flex"
             >
               {t(UI.navLaunchAnalyze)}
             </EmberButton>
@@ -267,7 +254,7 @@ export function Nav() {
               type="button"
               aria-label={accessibility.menu}
               onClick={() => setOpen((v) => !v)}
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-full border xr-line bg-[var(--xr-surface)] text-[var(--xr-ink)] lg:hidden"
+              className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-current/20 bg-current/5 lg:hidden"
             >
               {open ? (
                 <X className="h-4 w-4" />
@@ -281,9 +268,9 @@ export function Nav() {
             </button>
           </div>
 
-          <div aria-hidden className="absolute bottom-0 left-3 right-3 h-px bg-[var(--xr-line)]">
+          <div aria-hidden className="absolute bottom-0 left-4 right-4 h-0.5 rounded-full overflow-hidden opacity-80">
             <div
-              className="h-full origin-left bg-[var(--xr-accent)] transition-transform duration-200"
+              className="h-full origin-left bg-gradient-to-r from-emerald-500 via-cyan-400 to-emerald-400 transition-transform duration-200"
               style={{ transform: "scaleX(" + progress + ")" }}
             />
           </div>

@@ -8,6 +8,8 @@ import { MapsSimulator } from "@/components/site/MapsSimulator";
 import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
 
+import { CinematicIntro } from "@/components/site/CinematicIntro";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -37,6 +39,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
+      <CinematicIntro />
       <div
         aria-hidden
         className="pointer-events-none fixed inset-0 z-0 opacity-25"

@@ -776,3 +776,46 @@ video {
 .xr-maps-illustration { box-shadow: inset 0 0 0 1px rgba(255,255,255,.45), 0 20px 55px -42px rgba(0,0,0,.4); }
 @keyframes xr-audit-card-float { from { transform: translate3d(0,0,0) rotate(1deg); } to { transform: translate3d(0,-8px,0) rotate(-1deg); } }
 @media (prefers-reduced-motion: reduce) { .xr-audit-floating { animation: none !important; } }
+
+/* ── Cinematic "X" Intro & High-End Interactions ── */
+@keyframes xrBeamSweep {
+  0% { transform: translate3d(-100%, -100%, 0) rotate(45deg); opacity: 0; }
+  25% { opacity: 0.9; }
+  60% { opacity: 0.8; }
+  100% { transform: translate3d(200%, 200%, 0) rotate(45deg); opacity: 0; }
+}
+
+@keyframes xrAuraPulse {
+  0%, 100% { transform: scale(0.96); opacity: 0.35; }
+  50% { transform: scale(1.08); opacity: 0.65; }
+}
+
+@keyframes xrScanLine {
+  0% { transform: translateY(-100%); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translateY(1000%); opacity: 0; }
+}
+
+@keyframes xrPinPulse {
+  0% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.7); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+.animate-xr-beam {
+  animation: xrBeamSweep 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+.animate-xr-aura {
+  animation: xrAuraPulse 4s ease-in-out infinite;
+}
+
+.animate-xr-scan {
+  animation: xrScanLine 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-xr-pin-pulse {
+  animation: xrPinPulse 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+

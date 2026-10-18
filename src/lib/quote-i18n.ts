@@ -542,6 +542,27 @@ export const QUOTE_UI = {
     ar: "مستشارك الرقمي",
     ru: "ВАШ ЦИФРОВОЙ КОНСУЛЬТАНТ"
   },
+  advisorRole: {
+    fr: "Directeur Conseil & Associé XR · Paris",
+    en: "Advisory Director & XR Partner · Paris",
+    vi: "Giám đốc Tư vấn & Đối tác XR · Paris",
+    ar: "المدير الاستشاري وشريك XR · باريس",
+    ru: "Управляющий партнёр и директор XR · Париж"
+  },
+  advisorLiveBadge: {
+    fr: "PARIS · EN DIRECT",
+    en: "PARIS · LIVE",
+    vi: "PARIS · TRỰC TUYẾN",
+    ar: "باريس · بث مباشر",
+    ru: "ПАРИЖ · В ЭФИРЕ"
+  },
+  typingState: {
+    fr: "Alexandre analyse vos choix…",
+    en: "Alexandre is analyzing your choices…",
+    vi: "Alexandre đang phân tích lựa chọn của bạn…",
+    ar: "ألكسندر يحلل اختياراتك…",
+    ru: "Александр анализирует ваши ответы…"
+  },
   online: {
     fr: "EN LIGNE",
     en: "ONLINE",
@@ -730,6 +751,41 @@ export const QUOTE_UI = {
     vi: "Đã tạo báo giá PDF thành công ✓",
     ar: "تم إنشاء عرض السعر PDF بنجاح ✓",
     ru: "Смета в PDF успешно сформирована ✓"
+  },
+  pdfGeneratedSuccess: {
+    fr: "Votre devis professionnel a été généré avec succès.",
+    en: "Your bespoke PDF quote has been successfully generated.",
+    vi: "Báo giá chuyên nghiệp của bạn đã được tạo thành công.",
+    ar: "تم إنشاء عرض السعر الاحترافي الخاص بك بنجاح.",
+    ru: "Ваша профессиональная смета успешно сформирована."
+  },
+  pdfError: {
+    fr: "Impossible de générer le devis PDF pour l'instant.",
+    en: "Unable to generate the PDF quote at this time.",
+    vi: "Hiện chưa thể tạo báo giá PDF.",
+    ar: "تعذر إنشاء عرض السعر بصيغة PDF في الوقت الحالي.",
+    ru: "Не удалось сформировать смету в PDF в данный момент."
+  },
+  paymentError: {
+    fr: "Impossible de préparer le règlement.",
+    en: "Unable to prepare the payment checkout.",
+    vi: "Không thể chuẩn bị thanh toán trực tuyến.",
+    ar: "تعذر تجهيز بوابة الدفع.",
+    ru: "Не удалось подготовить оплату."
+  },
+  priceFrom: {
+    fr: "Dès",
+    en: "From",
+    vi: "Từ",
+    ar: "من",
+    ru: "От"
+  },
+  perYear: {
+    fr: " / an",
+    en: " / year",
+    vi: " / năm",
+    ar: " / سنة",
+    ru: " / год"
   },
   seeAllSectors: {
     fr: "Voir toutes les activités",

@@ -27,21 +27,49 @@ const PRICES: Record<string, number> = {
   robotics: 499,
 };
 
-const ACCENTS: Record<(typeof IDS)[number], string> = {
-  websites: "#e5e5e5",
-  branding: "#e5e5e5",
-  seo: "#e5e5e5",
-  maps: "#e5e5e5",
-  social: "#e5e5e5",
-  maintenance: "#e5e5e5",
-  robotics: "#e5e5e5",
+const ACCENTS: Record<(typeof IDS)[number], { color: string; halo: string; tag: Record<string, string> }> = {
+  websites: {
+    color: "#10b981",
+    halo: "rgba(16, 185, 129, 0.14)",
+    tag: { fr: "UNIVERS WEB · HAUTE COUTURE", en: "WEB UNIVERSE · HAUTE COUTURE", vi: "VŨ TRỤ WEB · ĐỈNH CAO", ar: "عالم الويب · راقٍ ومميز", ru: "WEB-ВСЕЛЕННАЯ · ПРЕМИУМ" },
+  },
+  branding: {
+    color: "#f59e0b",
+    halo: "rgba(245, 158, 11, 0.14)",
+    tag: { fr: "UNIVERS BRANDING · SIGNATURE & OR", en: "BRANDING UNIVERSE · SIGNATURE GOLD", vi: "VŨ TRỤ THƯƠNG HIỆU · DẤU ẤN VÀNG", ar: "عالم الهوية · توقيع ذهبي", ru: "БРЕНДИНГ · ЗОЛОТОЙ СТАНДАРТ" },
+  },
+  seo: {
+    color: "#8b5cf6",
+    halo: "rgba(139, 92, 246, 0.14)",
+    tag: { fr: "UNIVERS SEO · AUTORITÉ & IMPACT", en: "SEO UNIVERSE · AUTHORITY & IMPACT", vi: "VŨ TRỤ SEO · UY TÍN & TÁC ĐỘNG", ar: "عالم SEO · سلطة وتأثير", ru: "SEO-ВСЕЛЕННАЯ · АВТОРИТЕТ И РОСТ" },
+  },
+  maps: {
+    color: "#ea4335",
+    halo: "rgba(234, 67, 53, 0.14)",
+    tag: { fr: "UNIVERS MAPS · LOCAL 3-PACK #1", en: "MAPS UNIVERSE · LOCAL 3-PACK #1", vi: "VŨ TRỤ MAPS · TOP 1 ĐỊA PHƯƠNG", ar: "عالم MAPS · المركز الأول محلياً", ru: "MAPS-ВСЕЛЕННАЯ · ТОП-1 НА КАРТАХ" },
+  },
+  social: {
+    color: "#f43f5e",
+    halo: "rgba(244, 63, 94, 0.14)",
+    tag: { fr: "UNIVERS SOCIAL · INFLUENCE & LUXE", en: "SOCIAL UNIVERSE · INFLUENCE & LUXURY", vi: "VŨ TRỤ SOCIAL · SANG TRỌNG & TƯƠNG TÁC", ar: "عالم التواصل · تأثير وفخامة", ru: "SOCIAL-ВСЕЛЕННАЯ · СТИЛЬ И ОХВАТ" },
+  },
+  maintenance: {
+    color: "#0ea5e9",
+    halo: "rgba(14, 165, 233, 0.14)",
+    tag: { fr: "UNIVERS WEBCARE · CYBER SÉCURITÉ", en: "WEBCARE UNIVERSE · CYBER SECURITY", vi: "VŨ TRỤ WEBCARE · BẢO MẬT TỐI ĐA", ar: "عالم الرعاية · أمان سيبراني", ru: "WEBCARE · ЗАЩИТА И БЫСТРОДЕЙСТВИЕ" },
+  },
+  robotics: {
+    color: "#22c55e",
+    halo: "rgba(34, 197, 94, 0.14)",
+    tag: { fr: "UNIVERS IA · ROBOTIQUE & AGENTS", en: "AI UNIVERSE · ROBOTICS & AGENTS", vi: "VŨ TRỤ AI · ROBOT & ĐẠI LÝ TỰ ĐỘNG", ar: "عالم الذكاء · روبوتات وأتمتة", ru: "ИИ-ВСЕЛЕННАЯ · АВТОМАТИЗАЦИЯ И РОБОТЫ" },
+  },
 };
 
 const COPY = {
   fr: {
     eyebrow: "07 SERVICES · 07 ENTRÉES",
     title: "Choisissez le besoin. Nous montrons le dispositif.",
-    lead: "Chaque expertise dispose de sa propre image, de son prix de départ et d'un parcours clair.",
+    lead: "Chaque expertise dispose de son propre univers visuel, de sa palette et d'un parcours mesurable.",
     from: "À partir de",
     open: "Voir le service",
     quote: "Ajouter au projet",
@@ -52,7 +80,7 @@ const COPY = {
   en: {
     eyebrow: "07 SERVICES · 07 ENTRY POINTS",
     title: "Choose the need. See the system.",
-    lead: "Each expertise has its own visual, starting price and clear path.",
+    lead: "Each expertise has its own visual universe, palette and measurable path.",
     from: "From",
     open: "View service",
     quote: "Add to project",
@@ -63,7 +91,7 @@ const COPY = {
   vi: {
     eyebrow: "07 DỊCH VỤ · 07 ĐIỂM BẮT ĐẦU",
     title: "Chọn nhu cầu. Xem toàn bộ giải pháp.",
-    lead: "Mỗi chuyên môn có hình ảnh, giá khởi điểm và lộ trình rõ ràng.",
+    lead: "Mỗi chuyên môn có một vũ trụ hình ảnh, bảng màu và lộ trình đo lường riêng biệt.",
     from: "Từ",
     open: "Xem dịch vụ",
     quote: "Thêm vào dự án",
@@ -74,7 +102,7 @@ const COPY = {
   ar: {
     eyebrow: "07 خدمات · 07 نقاط انطلاق",
     title: "اختر الحاجة. شاهد المنظومة.",
-    lead: "لكل خبرة صورتها وسعرها الابتدائي ومسار واضح.",
+    lead: "لكل خبرة عالمها البصري الخاص ولوحتها ومسارها القابل للقياس.",
     from: "ابتداءً من",
     open: "شاهد الخدمة",
     quote: "أضف للمشروع",
@@ -85,7 +113,7 @@ const COPY = {
   ru: {
     eyebrow: "07 УСЛУГ · 07 ТОЧЕК ВХОДА",
     title: "Выберите задачу. Увидьте систему.",
-    lead: "У каждой экспертизы есть свой визуальный образ, стартовая цена и понятный путь.",
+    lead: "У каждой экспертизы есть своя визуальная вселенная, цветовая палитра и понятный путь.",
     from: "От",
     open: "Открыть услугу",
     quote: "Добавить в проект",
@@ -109,16 +137,27 @@ export function HomeServices() {
   const service = SERVICES.find((s) => s.id === active) ?? SERVICES[0];
   const Icon = ICONS[active];
   const next = IDS[(index + 1) % IDS.length];
+  const currentAccent = ACCENTS[active];
 
   return (
-    <section id="homepage-services" className="xr-section relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-14 sm:py-20 lg:py-28">
-      <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_at_15%_10%,rgba(128,128,128,.08),transparent_32%)]" />
+    <section id="homepage-services" className="xr-section relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-14 sm:py-20 lg:py-28 transition-colors duration-700">
+      {/* Morphing dynamic ambient halo per universe */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 transition-all duration-700 opacity-70"
+        style={{
+          background: `radial-gradient(ellipse at 18% 12%, ${currentAccent.halo}, transparent 42%), radial-gradient(ellipse at 82% 82%, ${currentAccent.halo}, transparent 48%)`,
+        }}
+      />
 
       <div className="relative mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
         <Reveal>
           <div className="flex flex-col gap-6 border-b xr-line pb-8 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <span className="label-mono text-[8px] tracking-[.28em] xr-accent">{copy.eyebrow}</span>
+              <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 label-mono text-[7.5px] tracking-[.25em] transition-all duration-500" style={{ borderColor: currentAccent.color + "55", color: currentAccent.color, backgroundColor: currentAccent.color + "12" }}>
+                <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: currentAccent.color }} />
+                {t(currentAccent.tag)}
+              </div>
               <h2 className="display-serif mt-4 max-w-6xl text-[clamp(2.9rem,5.8vw,6.6rem)] leading-[.82] tracking-[-.065em]">
                 {copy.title}
               </h2>
@@ -133,26 +172,30 @@ export function HomeServices() {
               const S = SERVICES.find((s) => s.id === id);
               const I = ICONS[id];
               const selected = active === id;
+              const accent = ACCENTS[id];
               return (
                 <button
                   key={id}
                   type="button"
                   onClick={() => setActive(id)}
-                  style={{ "--service-accent": ACCENTS[id] } as CSSProperties}
+                  style={{ "--service-accent": accent.color } as CSSProperties}
                   className={
                     "group flex min-w-[150px] items-center gap-3 rounded-full border px-4 py-3 text-left transition duration-300 sm:min-w-0 sm:flex-1 " +
                     (selected
-                      ? "border-[var(--service-accent)] bg-[var(--xr-bg-elev)] text-[var(--xr-ink)] shadow-[var(--xr-shadow)]"
+                      ? "border-[var(--service-accent)] bg-[var(--xr-bg-elev)] text-[var(--xr-ink)] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)] ring-1"
                       : "xr-line bg-[var(--xr-surface)] text-[var(--xr-ink)] hover:-translate-y-0.5 hover:bg-[var(--xr-surface-strong)]")
                   }
                 >
-                  <span className={"grid h-8 w-8 shrink-0 place-items-center rounded-full border " + (selected ? "border-transparent" : "xr-line")} style={selected ? { background: ACCENTS[id], color: "#111111" } : undefined}>
+                  <span
+                    className={"grid h-8 w-8 shrink-0 place-items-center rounded-full border transition-all duration-300 " + (selected ? "border-transparent text-white" : "xr-line")}
+                    style={selected ? { background: accent.color, boxShadow: `0 0 16px ${accent.color}66` } : undefined}
+                  >
                     <I className="h-3.5 w-3.5" />
                   </span>
                   <span className="min-w-0">
                     <span className="block truncate text-[9px] font-semibold">{t(S?.title ?? { fr: id, en: id, vi: id, ar: id, ru: id })}</span>
-                    {selected ? <span className="mt-1 block h-0.5 w-8 rounded-full" style={{ background: ACCENTS[id] }} /> : null}
-                    <span className={"mt-0.5 block label-mono text-[6px] " + (selected ? "xr-muted-2" : "xr-muted-2")}>
+                    {selected ? <span className="mt-1 block h-0.5 w-8 rounded-full" style={{ background: accent.color }} /> : null}
+                    <span className={"mt-0.5 block label-mono text-[6px] xr-muted-2"}>
                       0{i + 1}
                     </span>
                   </span>
@@ -178,7 +221,7 @@ export function HomeServices() {
                   <span className="label-mono text-[7px] tracking-[.22em] xr-muted-2">
                     CHAPTER {String(index + 1).padStart(2, "0")} / 07
                   </span>
-                  <span className="grid h-10 w-10 place-items-center rounded-full text-[var(--xr-ink)]" style={{ background: ACCENTS[active] }}>
+                  <span className="grid h-10 w-10 place-items-center rounded-full text-white shadow-lg transition-colors duration-300" style={{ background: currentAccent.color, boxShadow: `0 0 20px ${currentAccent.color}55` }}>
                     <Icon className="h-4 w-4" />
                   </span>
                 </div>

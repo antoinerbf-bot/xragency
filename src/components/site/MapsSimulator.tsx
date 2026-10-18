@@ -56,7 +56,26 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Optimisation GBP": "GBP Optimization", "Restructuration Pro": "Pro Restructuring", "Optimisation des catégories primaires/secondaires, géolocalisation des visuels HD, attributs clés et catalogue de services.": "Optimization of primary/secondary categories, geotagged HD visuals, key attributes and service catalog.",
     "Autorité Locale": "Local Authority", "Signaux & Citations NAP": "NAP Signals & Citations", "Déploiement de citations locales cohérentes (Nom, Adresse, Téléphone) et renforcement de votre crédibilité territoriale.": "Deployment of consistent local citations (Name, Address, Phone) and reinforcement of territorial authority.",
     "Pilotage Actif": "Active Management", "Veille & Ajustements": "Monitoring & Tuning", "Mises à jour stratégiques régulières, animation de posts géolocalisés et réponses optimisées aux avis clients.": "Regular strategic updates, geotagged posts publication and conversion-optimized review responses.",
-    "Résultats & ROI": "Results & ROI", "Mesure transparente": "Transparent Tracking", "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire.": "Weekly ranking dashboard, phone call tracking and direction request metrics."
+    "Résultats & ROI": "Results & ROI", "Mesure transparente": "Transparent Tracking", "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire.": "Weekly ranking dashboard, phone call tracking and direction request metrics.",
+    "TOP 1 PACK LOCAL · PROJECTION XR AGENCY": "TOP 1 LOCAL PACK · XR AGENCY PROJECTION",
+    "Votre Établissement": "Your Business",
+    "4.9 ★★★★★ (284 avis Google vérifiés)": "4.9 ★★★★★ (284 verified Google reviews)",
+    "Ouvert · Ferme à 23h30": "Open · Closes 11:30 PM",
+    "Excellence locale · Cadre d'exception, service irréprochable et réputation certifiée": "Local excellence · Exceptional setting, flawless service and certified reputation",
+    "Site web": "Website", "Itinéraire": "Directions", "Appeler": "Call",
+    "Concurrent B (Fiche standard)": "Competitor B (Standard listing)",
+    "4.1 ★★★★☆ (34 avis) · Fiche non optimisée": "4.1 ★★★★☆ (34 reviews) · Unoptimized listing",
+    "Concurrent C (Peu visible)": "Competitor C (Low visibility)",
+    "3.8 ★★★☆☆ (12 avis) · Pas de catalogue ni attributs": "3.8 ★★★☆☆ (12 reviews) · Missing catalog and attributes",
+    "Ouvert actuellement": "Open now", "Note 4,5★ et +": "Rated 4.5★+", "Visite virtuelle": "Virtual tour",
+    "Trafic fluide": "Clear traffic", "Calculateur de Rentabilité & ROI Local": "Local Profitability & ROI Calculator",
+    "Impact direct du Top 3 Google Maps sur votre chiffre d'affaires :": "Direct Top 3 Google Maps impact on your revenue:",
+    "Recherches locales / mois": "Local searches / mo",
+    "Trafic capté par le Top 3": "Traffic captured by Top 3",
+    "Nouveaux clients estimés": "Estimated new clients",
+    "CA additionnel estimé": "Estimated added revenue",
+    "Réserver mon secteur avant mes concurrents": "Claim my sector before competitors",
+    "Amorti dès le 1er mois grâce aux contacts entrants.": "Paid off from month 1 through incoming leads."
   },
   vi: {
     "Restaurant / Bar": "Nhà hàng / Bar", "Hôtel / Spa": "Khách sạn / Spa", "Santé / Médecin": "Y tế / Bác sĩ", "Avocat / Notaire": "Luật sư / Công chứng viên", "Immobilier": "Bất động sản", "Artisan / BTP": "Thợ thủ công / Xây dựng", "Beauté / Bien-être": "Làm đẹp / Sức khỏe", "Autre commerce": "Doanh nghiệp khác",
@@ -94,7 +113,26 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Optimisation GBP": "Tối ưu hóa GBP", "Restructuration Pro": "Tái cấu trúc chuyên nghiệp", "Optimisation des catégories primaires/secondaires, géolocalisation des visuels HD, attributs clés et catalogue de services.": "Tối ưu danh mục chính/phụ, gắn tọa độ hình ảnh HD, thuộc tính cốt lõi và danh mục dịch vụ.",
     "Autorité Locale": "Uy tín địa phương", "Signaux & Citations NAP": "Tín hiệu & Trích dẫn NAP", "Déploiement de citations locales cohérentes (Nom, Adresse, Téléphone) et renforcement de votre crédibilité territoriale.": "Triển khai trích dẫn địa phương đồng bộ (Tên, Địa chỉ, Số điện thoại) và tăng cường vị thế khu vực.",
     "Pilotage Actif": "Quản trị chủ động", "Veille & Ajustements": "Theo dõi & Điều chỉnh", "Mises à jour stratégiques régulières, animation de posts géolocalisés et réponses optimisées aux avis clients.": "Cập nhật chiến lược định kỳ, xuất bản bài đăng cục bộ và phản hồi đánh giá khách hàng tối ưu.",
-    "Résultats & ROI": "Kết quả & ROI", "Mesure transparente": "Đo lường minh bạch", "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire.": "Bảng điều khiển theo dõi thứ hạng hằng tuần, số cuộc gọi đến và yêu cầu chỉ đường."
+    "Résultats & ROI": "Kết quả & ROI", "Mesure transparente": "Đo lường minh bạch", "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire.": "Bảng điều khiển theo dõi thứ hạng hằng tuần, số cuộc gọi đến và yêu cầu chỉ đường.",
+    "TOP 1 PACK LOCAL · PROJECTION XR AGENCY": "TOP 1 LOCAL PACK · DỰ BÁO XR AGENCY",
+    "Votre Établissement": "Doanh nghiệp của bạn",
+    "4.9 ★★★★★ (284 avis Google vérifiés)": "4.9 ★★★★★ (284 đánh giá Google đã xác minh)",
+    "Ouvert · Ferme à 23h30": "Đang mở cửa · Đóng cửa lúc 23:30",
+    "Excellence locale · Cadre d'exception, service irréprochable et réputation certifiée": "Uy tín hàng đầu · Không gian đẳng cấp, dịch vụ hoàn hảo và danh tiếng chứng thực",
+    "Site web": "Website", "Itinéraire": "Chỉ đường", "Appeler": "Gọi điện",
+    "Concurrent B (Fiche standard)": "Đối thủ B (Hồ sơ tiêu chuẩn)",
+    "4.1 ★★★★☆ (34 avis) · Fiche non optimisée": "4.1 ★★★★☆ (34 đánh giá) · Chưa tối ưu",
+    "Concurrent C (Peu visible)": "Đối thủ C (Hiển thị kém)",
+    "3.8 ★★★☆☆ (12 avis) · Pas de catalogue ni attributs": "3.8 ★★★☆☆ (12 đánh giá) · Thiếu danh mục và thuộc tính",
+    "Ouvert actuellement": "Đang mở cửa", "Note 4,5★ et +": "Đánh giá 4.5★+", "Visite virtuelle": "Tham quan ảo",
+    "Trafic fluide": "Giao thông thông suốt", "Calculateur de Rentabilité & ROI Local": "Công cụ tính Lợi nhuận & ROI địa phương",
+    "Impact direct du Top 3 Google Maps sur votre chiffre d'affaires :": "Tác động trực tiếp của Top 3 Google Maps lên doanh thu của bạn:",
+    "Recherches locales / mois": "Lượt tìm kiếm địa phương / tháng",
+    "Trafic capté par le Top 3": "Lưu lượng Top 3 nắm giữ",
+    "Nouveaux clients estimés": "Khách hàng mới ước tính",
+    "CA additionnel estimé": "Doanh thu bổ sung ước tính",
+    "Réserver mon secteur avant mes concurrents": "Đặt chỗ khu vực của tôi trước đối thủ",
+    "Amorti dès le 1er mois grâce aux contacts entrants.": "Hoàn vốn ngay từ tháng đầu tiên nhờ khách hàng chủ động liên hệ."
   },
   ru: {
     "Restaurant / Bar": "Ресторан / бар", "Hôtel / Spa": "Отель / спа", "Santé / Médecin": "Медицина / врач", "Avocat / Notaire": "Юрист / нотариус", "Immobilier": "Недвижимость", "Artisan / BTP": "Мастер / строительство", "Beauté / Bien-être": "Красота / wellness", "Autre commerce": "Другой бизнес",
@@ -129,10 +167,29 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Analyse Initiale": "Начальный анализ", "Diagnostic de présence": "Диагностика присутствия", "Audit technique complet de votre fiche actuelle, historique des avis, cohérence des données et pénalités éventuelles.": "Полный технический аудит текущего профиля, истории отзывов, согласованности данных и возможных санкций.",
     "Audit Concurrentiel": "Анализ конкурентов", "Décryptage du TOP 3": "Разбор топ-3", "Analyse chirurgicale des 3 concurrents occupant actuellement le Local Pack : volume d'avis, mots-clés et autorité.": "Детальный анализ 3 лидеров в Local Pack: объём отзывов, ключевые слова и авторитет профиля.",
     "Stratégie Ciblée": "Целевая стратегия", "Mots-clés & Zones": "Ключи и зоны", "Sélection rigoureuse des requêtes à fort volume de conversion et cartographie des rayons géographiques prioritaires.": "Тщательный отбор конверсионных запросов и картирование приоритетных географических зон.",
-    "Optimisation GBP": "Оптимизация GBP", "Restructuration Pro": "Про-реструктуризация", "Optimisation des catégories primaires/secondaires, géolocalisation des visuels HD, attributs clés et catalogue de services.": "Оптимизация основных и вторичных категорий, геотегирование HD-фото, ключевые атрибуты и каталог услуг.",
+    "Optimisation GBP": "Оптимизация GBP", "Restructuration Pro": "Про-реструктуризация", "Optimisation des catégories primaires/secondaires, géolocalisation des visuels HD, attributs clés et catalogue de services.": "Оптимизация категорий, геотегирование HD-фото, ключевые атрибуты и каталог услуг.",
     "Autorité Locale": "Локальный авторитет", "Signaux & Citations NAP": "Сигналы и NAP-цитирования", "Déploiement de citations locales cohérentes (Nom, Adresse, Téléphone) et renforcement de votre crédibilité territoriale.": "Размещение единых локальных упоминаний (Имя, Адрес, Телефон) и усиление территориального доверия.",
     "Pilotage Actif": "Активное управление", "Veille & Ajustements": "Мониторинг и правки", "Mises à jour stratégiques régulières, animation de posts géolocalisés et réponses optimisées aux avis clients.": "Регулярные стратегические обновления, публикации с геолокацией и оптимизированные ответы на отзывы.",
-    "Résultats & ROI": "Результаты и ROI", "Mesure transparente": "Прозрачная отчётность", "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire.": "Еженедельный дашборд отслеживания позиций, звонков и запросов маршрута."
+    "Résultats & ROI": "Результаты и ROI", "Mesure transparente": "Прозрачная отчётность", "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire.": "Еженедельный дашборд отслеживания позиций, звонков и запросов маршрута.",
+    "TOP 1 PACK LOCAL · PROJECTION XR AGENCY": "ТОП-1 LOCAL PACK · ПРОГНОЗ XR AGENCY",
+    "Votre Établissement": "Ваша компания",
+    "4.9 ★★★★★ (284 avis Google vérifiés)": "4.9 ★★★★★ (284 проверенных отзыва в Google)",
+    "Ouvert · Ferme à 23h30": "Открыто · Закрывается в 23:30",
+    "Excellence locale · Cadre d'exception, service irréprochable et réputation certifiée": "Локальный лидер · Премиальный сервис, безупречное качество и подтверждённая репутация",
+    "Site web": "Сайт", "Itinéraire": "Маршрут", "Appeler": "Позвонить",
+    "Concurrent B (Fiche standard)": "Конкурент B (Обычный профиль)",
+    "4.1 ★★★★☆ (34 avis) · Fiche non optimisée": "4.1 ★★★★☆ (34 отзыва) · Профиль не оптимизирован",
+    "Concurrent C (Peu visible)": "Конкурент C (Низкая видимость)",
+    "3.8 ★★★☆☆ (12 avis) · Pas de catalogue ni attributs": "3.8 ★★★☆☆ (12 отзывов) · Нет каталога и атрибутов",
+    "Ouvert actuellement": "Открыто сейчас", "Note 4,5★ et +": "Оценка 4.5★+", "Visite virtuelle": "3D-тур",
+    "Trafic fluide": "Дорога свободна", "Calculateur de Rentabilité & ROI Local": "Калькулятор окупаемости и локального ROI",
+    "Impact direct du Top 3 Google Maps sur votre chiffre d'affaires :": "Прямое влияние топ-3 Google Maps на вашу прибыль:",
+    "Recherches locales / mois": "Локальных поисков / мес",
+    "Trafic capté par le Top 3": "Трафик, забираемый топ-3",
+    "Nouveaux clients estimés": "Оценка новых клиентов",
+    "CA additionnel estimé": "Ориентировочная доп. выручка",
+    "Réserver mon secteur avant mes concurrents": "Занять нишу раньше конкурентов",
+    "Amorti dès le 1er mois grâce aux contacts entrants.": "Окупается с первого месяца за счёт входящих обращений."
   },
   ar: {
     "Restaurant / Bar": "مطعم / بار", "Hôtel / Spa": "فندق / سبا", "Santé / Médecin": "الصحة / طبيب", "Avocat / Notaire": "محامٍ / موثق", "Immobilier": "العقارات", "Artisan / BTP": "حرفي / إنشاءات", "Beauté / Bien-être": "الجمال / العافية", "Autre commerce": "نشاط تجاري آخر",
@@ -170,7 +227,26 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Optimisation GBP": "تحسين ملف GBP", "Restructuration Pro": "إعادة هيكلة احترافية", "Optimisation des catégories primaires/secondaires, géolocalisation des visuels HD, attributs clés et catalogue de services.": "تحسين الفئات الأساسية والفرعية، ووضع الإحداثيات لصور HD، والسمات الرئيسية وكتالوج الخدمات.",
     "Autorité Locale": "السلطة المحلية", "Signaux & Citations NAP": "إشارات واقتباسات NAP", "Déploiement de citations locales cohérentes (Nom, Adresse, Téléphone) et renforcement de votre crédibilité territoriale.": "نشر اقتباسات محلية متطابقة (الاسم، العنوان، الهاتف) وتعزيز الموثوقية في نطاقك الجغرافي.",
     "Pilotage Actif": "إدارة ومتابعة نشطة", "Veille & Ajustements": "رصد وتحديثات مستمرة", "Mises à jour stratégiques régulières, animation de posts géolocalisés et réponses optimisées aux avis clients.": "تحديثات استراتيجية دورية، نشر منشورات جغرافية، وردود مُحسَّنة على تقييمات العملاء.",
-    "Résultats & ROI": "النتائج وعائد الاستثمار", "Mesure transparente": "قياس شفاف", "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire.": "لوحة تحكم أسبوعية لتتبع الترتيب، وعدد المكالمات الهاتفية، وطلبات الاتجاهات."
+    "Résultats & ROI": "النتائج وعائد الاستثمار", "Mesure transparente": "قياس شفاف", "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire.": "لوحة تحكم أسبوعية لتتبع الترتيب، وعدد المكالمات الهاتفية، وطلبات الاتجاهات.",
+    "TOP 1 PACK LOCAL · PROJECTION XR AGENCY": "أفضل 1 بالحزمة المحلية · توقعات XR AGENCY",
+    "Votre Établissement": "منشأتك",
+    "4.9 ★★★★★ (284 avis Google vérifiés)": "4.9 ★★★★★ (284 تقييم موثق على Google)",
+    "Ouvert · Ferme à 23h30": "مفتوح · يغلق عند الساعة 23:30",
+    "Excellence locale · Cadre d'exception, service irréprochable et réputation certifiée": "ريادة محلية · موقع استثنائي، خدمة رفيعة المستوى وسمعة معتمدة",
+    "Site web": "الموقع الإلكتروني", "Itinéraire": "الاتجاهات", "Appeler": "اتصال",
+    "Concurrent B (Fiche standard)": "المنافس ب (ملف قياسي)",
+    "4.1 ★★★★☆ (34 avis) · Fiche non optimisée": "4.1 ★★★★☆ (34 تقييم) · ملف غير محسّن",
+    "Concurrent C (Peu visible)": "المنافس ج (ظهور ضعيف)",
+    "3.8 ★★★☆☆ (12 avis) · Pas de catalogue ni attributs": "3.8 ★★★☆☆ (12 تقييم) · يفتقر للكتالوج والميزات",
+    "Ouvert actuellement": "مفتوح حالياً", "Note 4,5★ et +": "تقييم 4.5★ فما فوق", "Visite virtuelle": "جولة افتراضية",
+    "Trafic fluide": "حركة مرور سلسة", "Calculateur de Rentabilité & ROI Local": "حاسبة العائد والربحية المحلية",
+    "Impact direct du Top 3 Google Maps sur votre chiffre d'affaires :": "الأثر المباشر لبلوغ أفضل 3 على إيراداتك:",
+    "Recherches locales / mois": "عمليات البحث المحلية / شهر",
+    "Trafic capté par le Top 3": "حركة المرور المكتسبة من أفضل 3",
+    "Nouveaux clients estimés": "العملاء الجدد المتوقعون",
+    "CA additionnel estimé": "الإيراد الإضافي المتوقع",
+    "Réserver mon secteur avant mes concurrents": "احجز قطاعك قبل منافسيك",
+    "Amorti dès le 1er mois grâce aux contacts entrants.": "تسترد استثمارك من الشهر الأول عبر العملاء الجدد."
   }
 };
 function translateMaps(value: string, lang: string) { return MAPS_TRANSLATIONS[lang]?.[value] ?? value; }
@@ -312,6 +388,31 @@ export function MapsSimulator() {
   const kwLabel = `${KEYWORD_RANGES.find((k) => k.id === keywords)?.label ?? ""} ${tx("mots-clés principaux")}`;
   const rankLabel = tx(CURRENT_RANKS.find((r) => r.id === rank)?.label ?? "");
 
+  const roiMetrics = useMemo(() => {
+    const cityData: Record<string, { searches: number; example: Record<string, string> }> = {
+      small: { searches: 2400, example: { fr: "Cannes", en: "Oxford", vi: "Đà Lạt", ar: "عجمان", ru: "Сочи" } },
+      medium: { searches: 5200, example: { fr: "Bordeaux", en: "Bristol", vi: "Đà Nẵng", ar: "الشارقة", ru: "Казань" } },
+      large: { searches: 11400, example: { fr: "Lyon", en: "Manchester", vi: "Hà Nội", ar: "أبوظبي", ru: "Санкт-Петербург" } },
+      metro: { searches: 24800, example: { fr: "Paris 8e", en: "London Mayfair", vi: "TP. Hồ Chí Minh", ar: "دبي", ru: "Москва" } },
+    };
+
+    const kwFactor = keywords === "k1" ? 1 : keywords === "k2" ? 1.75 : 2.5;
+    const baseSearches = Math.round((cityData[citySize]?.searches ?? 5000) * kwFactor);
+    const top3Captured = Math.round(baseSearches * 0.38); // 38% CTR Local Pack
+    const newClients = Math.max(16, Math.round(top3Captured * 0.045));
+    const avgBasket = sector === "juridique" ? 450 : sector === "hotel" ? 280 : sector === "immo" ? 850 : sector === "resto" ? 75 : sector === "sante" ? 120 : 95;
+    const addedRevenueMonth = Math.round(newClients * avgBasket);
+    const cityName = cityData[citySize]?.example[lang as keyof typeof cityData.small.example] ?? cityData[citySize]?.example.fr;
+
+    return {
+      baseSearches,
+      top3Captured,
+      newClients,
+      addedRevenueMonth,
+      cityName,
+    };
+  }, [citySize, keywords, sector, lang]);
+
   const waPrefill = encodeURIComponent(({
     fr: `Bonjour XR Agency, je souhaite une étude Google Maps Top 3 sur mesure.\n\n` +
       `• Secteur : ${sectorLabel}\n` +
@@ -397,62 +498,195 @@ export function MapsSimulator() {
 
         <Reveal delay={40}>
           <div className="overflow-hidden rounded-[2.2rem] border xr-line bg-[var(--xr-bg-elev)] text-[var(--xr-ink)] shadow-[var(--xr-shadow)]">
-            <div className="flex items-center justify-between border-b xr-line bg-[var(--xr-surface)] px-5 py-4 sm:px-7">
+            {/* Google Search Mockup Bar */}
+            <div className="flex flex-col gap-3 border-b xr-line bg-[var(--xr-surface)] px-4 py-3.5 sm:px-6">
               <div className="flex items-center gap-3">
-                <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--xr-accent-soft)]"><MapPinned className="h-4 w-4 text-[var(--xr-ink)]"/></span>
-                <div>
-                  <span className="label-mono text-[6px] tracking-[.18em] xr-muted-2">{tx("SIMULATION EN DIRECT")}</span>
-                  <p className="mt-0.5 text-sm font-semibold text-[var(--xr-ink)]">{tx(selectedSector?.label ?? "")} · {tx(CITY_SIZES.find(c=>c.id===citySize)?.label ?? "")}</p>
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-black/5">
+                  <svg viewBox="0 0 24 24" className="h-4.5 w-4.5" aria-label="Google" role="img">
+                    <path fill="#4285F4" d="M21.35 12.27c0-.71-.06-1.4-.18-2.06H12v3.9h5.23a4.47 4.47 0 0 1-1.94 2.94v2.44h3.14c1.84-1.69 2.92-4.18 2.92-7.22Z" />
+                    <path fill="#34A853" d="M12 21.55c2.63 0 4.84-.87 6.45-2.36l-3.14-2.44c-.87.58-1.98.92-3.31.92-2.54 0-4.7-1.72-5.47-4.03H3.28v2.52A9.74 9.74 0 0 0 12 21.55Z" />
+                    <path fill="#FBBC05" d="M6.53 13.64A5.84 5.84 0 0 1 6.23 12c0-.57.1-1.12.3-1.64V7.84H3.28A9.72 9.72 0 0 0 2.25 12c0 1.57.38 3.06 1.03 4.16l3.25-2.52Z" />
+                    <path fill="#EA4335" d="M12 6.33c1.43 0 2.7.49 3.71 1.45l2.78-2.78C16.84 3.42 14.63 2.45 12 2.45a9.74 9.74 0 0 0-8.72 5.39l3.25 2.52c.77-2.31 2.93-4.03 5.47-4.03Z" />
+                  </svg>
+                </span>
+                <div className="flex flex-1 items-center justify-between rounded-full border border-black/10 bg-white/95 px-4 py-2 text-xs text-neutral-800 shadow-inner dark:border-white/10 dark:bg-black/40 dark:text-neutral-200">
+                  <span className="font-medium truncate">
+                    {tx(selectedSector?.label ?? "")} <span className="opacity-60">à</span> {roiMetrics.cityName}
+                  </span>
+                  <span className="label-mono text-[8px] text-emerald-500 font-bold shrink-0">LOCAL PACK #1</span>
                 </div>
               </div>
-              <span className="rounded-full border xr-line bg-[var(--xr-surface)] px-3 py-1.5 label-mono text-[6px] xr-muted">LOCAL PACK</span>
+
+              {/* Filter chips */}
+              <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-medium text-emerald-500">
+                  ✓ {tx("Ouvert actuellement")}
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-black/5 dark:bg-white/5 px-2.5 py-0.5 text-[10px] font-medium opacity-80">
+                  ★ {tx("Note 4,5★ et +")}
+                </span>
+                <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-white/10 bg-black/5 dark:bg-white/5 px-2.5 py-0.5 text-[10px] font-medium opacity-80">
+                  {tx("Visite virtuelle")}
+                </span>
+                <span className="ml-auto label-mono text-[7px] text-muted-foreground">
+                  {roiMetrics.baseSearches.toLocaleString()} {tx("Recherches locales / mois")}
+                </span>
+              </div>
             </div>
-            <div className="xr-maps-stage relative h-[330px] overflow-hidden bg-[#efeee9] sm:h-[390px]">
-              <div aria-hidden className="absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(76,78,72,.10)_1px,transparent_1px),linear-gradient(90deg,rgba(76,78,72,.10)_1px,transparent_1px)] [background-size:30px_30px]"/>
-              <svg aria-hidden="true" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
-                <g fill="none" stroke="#d9d6ce" strokeWidth="34" strokeLinecap="round">
-                  <path d="M-80 110 C180 65 250 205 470 175 S780 45 1280 130"/>
-                  <path d="M-40 410 C170 330 270 420 430 360 S790 300 1260 440"/>
-                  <path d="M250 -60 C300 100 250 230 330 590"/>
-                  <path d="M650 -40 C590 120 710 210 660 570"/>
-                  <path d="M990 -40 C900 90 1020 230 930 570"/>
-                  <path d="M-40 255 C220 220 350 275 530 250 S880 205 1260 260"/>
-                </g>
-                <g fill="none" stroke="#fff" strokeWidth="23" strokeLinecap="round">
-                  <path d="M-80 110 C180 65 250 205 470 175 S780 45 1280 130"/>
-                  <path d="M-40 410 C170 330 270 420 430 360 S790 300 1260 440"/>
-                  <path d="M250 -60 C300 100 250 230 330 590"/>
-                  <path d="M650 -40 C590 120 710 210 660 570"/>
-                  <path d="M990 -40 C900 90 1020 230 930 570"/>
-                  <path d="M-40 255 C220 220 350 275 530 250 S880 205 1260 260"/>
-                </g>
-                <g fill="#d8e0d6" stroke="#fff" strokeWidth="3">
-                  <rect x="65" y="155" width="115" height="58" rx="9"/>
-                  <rect x="410" y="35" width="125" height="65" rx="9"/>
-                  <rect x="765" y="175" width="125" height="62" rx="9"/>
-                  <rect x="400" y="410" width="150" height="55" rx="9"/>
-                  <rect x="1035" y="300" width="110" height="65" rx="9"/>
-                </g>
-              </svg>
-              {[["34%","34%","#252525","01"],["51%","48%","#686761","02"],["67%","30%","#a3a198","03"]].map(([left,top,bg,num])=>
-                <div key={num} className="absolute" style={{left,top}}>
-                  <div className="grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-4 border-white bg-[var(--pin)] shadow-[0_14px_32px_-10px_rgba(18,19,22,.55)] ring-1 ring-black/10" style={{ left: 0, top: 0, background: bg }}>
-                    <span className="text-[8px] font-black text-white">{num}</span>
+
+            {/* Main Stage: Left SERP Local 3-Pack + Right Vector Map */}
+            <div className="grid grid-cols-1 lg:grid-cols-[1.22fr_.78fr]">
+              {/* Left Column: Local Pack Listings */}
+              <div className="flex flex-col divide-y xr-line p-3 sm:p-5">
+                {/* #1 Winner Card - XR Agency Client Profile */}
+                <div className="relative rounded-2xl border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-500/10 via-[var(--xr-surface)] to-[var(--xr-surface)] p-4 shadow-lg transition duration-300 hover:border-emerald-500/60">
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500 px-2 py-0.5 text-[8px] font-black uppercase tracking-wider text-black shadow-sm">
+                      ⚡ {tx("TOP 1 PACK LOCAL · PROJECTION XR AGENCY")}
+                    </span>
+                    <span className="label-mono text-[8px] font-bold text-emerald-500">#1 GOOGLE</span>
+                  </div>
+
+                  <h4 className="mt-2 text-base font-bold text-foreground">
+                    {tx("Votre Établissement")} — <span className="opacity-90">{tx(selectedSector?.label ?? "")}</span>
+                  </h4>
+
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
+                    <span className="font-bold text-amber-500">4.9</span>
+                    <div className="flex text-amber-500 text-xs tracking-tighter" aria-label="5 stars">★★★★★</div>
+                    <span className="text-xs text-muted-foreground font-semibold">({tx("4.9 ★★★★★ (284 avis Google vérifiés)")})</span>
+                  </div>
+
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {tx(selectedSector?.label ?? "")} · {roiMetrics.cityName} · <span className="text-emerald-500 font-semibold">{tx("Ouvert · Ferme à 23h30")}</span>
+                  </p>
+
+                  <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground italic border-l-2 border-emerald-500/40 pl-2">
+                    "{tx("Excellence locale · Cadre d'exception, service irréprochable et réputation certifiée")}"
+                  </p>
+
+                  {/* Google Action Buttons */}
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <a href="#quote" className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500 px-3 py-1.5 text-[10px] font-bold text-black transition hover:bg-emerald-400">
+                      🌐 {tx("Site web")}
+                    </a>
+                    <a href="#quote" className="inline-flex items-center gap-1.5 rounded-full border border-border bg-[var(--xr-surface-strong)] px-3 py-1.5 text-[10px] font-semibold text-foreground transition hover:bg-[var(--xr-accent-soft)]">
+                      🧭 {tx("Itinéraire")}
+                    </a>
+                    <a href="#quote" className="inline-flex items-center gap-1.5 rounded-full border border-border bg-[var(--xr-surface-strong)] px-3 py-1.5 text-[10px] font-semibold text-foreground transition hover:bg-[var(--xr-accent-soft)]">
+                      📞 {tx("Appeler")}
+                    </a>
+                  </div>
+
+                  <div className="mt-3 flex items-center justify-between rounded-xl bg-emerald-500/10 border border-emerald-500/20 px-3 py-2">
+                    <span className="text-[10px] font-semibold text-emerald-500">
+                      ⚡ +340% d'appels entrants par rapport à votre position actuelle
+                    </span>
+                    <span className="label-mono text-[7px] font-bold text-emerald-500 shrink-0">
+                      38% DU TRAFIC
+                    </span>
                   </div>
                 </div>
-              )}
-              <div className="absolute left-4 right-4 top-4 flex items-center justify-between gap-3 sm:left-6 sm:right-6">
-                <div className="rounded-xl border border-white/60 bg-white/90 px-3 py-2 shadow-lg backdrop-blur-xl">
-                  <span className="label-mono text-[5px] tracking-[.16em] text-[#17181a]/40">{tx("RECHERCHE CIBLE")}</span>
-                  <p className="mt-1 text-[10px] font-semibold text-[#17181a]">{tx(selectedSector?.label ?? "")} · {KEYWORD_RANGES.find(k=>k.id===keywords)?.label} {tx("mots-clés principaux")}</p>
+
+                {/* #2 Competitor Card */}
+                <div className="p-3.5 opacity-65 transition hover:opacity-90">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="grid h-5 w-5 place-items-center rounded-full bg-muted font-bold text-[9px] text-muted-foreground">2</span>
+                      <h5 className="text-xs font-semibold text-foreground">{tx("Concurrent B (Fiche standard)")}</h5>
+                    </div>
+                    <span className="text-[10px] text-amber-500">4.1 ★★★★☆ (34)</span>
+                  </div>
+                  <p className="mt-1 text-[10px] text-muted-foreground">
+                    {tx("4.1 ★★★★☆ (34 avis) · Fiche non optimisée")} · Horaires incomplets
+                  </p>
                 </div>
-                <div className="hidden rounded-xl border border-white/60 bg-white/90 px-3 py-2 text-right shadow-lg backdrop-blur-xl sm:block">
-                  <span className="label-mono text-[5px] tracking-[.16em] text-[#17181a]/40">{tx("POSITION ACTUELLE")}</span>
-                  <p className="mt-1 text-[10px] font-semibold text-[#17181a]">{tx(CURRENT_RANKS.find(r=>r.id===rank)?.label ?? "")}</p>
+
+                {/* #3 Competitor Card */}
+                <div className="p-3.5 opacity-45 transition hover:opacity-80">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="grid h-5 w-5 place-items-center rounded-full bg-muted font-bold text-[9px] text-muted-foreground">3</span>
+                      <h5 className="text-xs font-semibold text-foreground">{tx("Concurrent C (Peu visible)")}</h5>
+                    </div>
+                    <span className="text-[10px] text-amber-500">3.8 ★★★☆☆ (12)</span>
+                  </div>
+                  <p className="mt-1 text-[10px] text-muted-foreground">
+                    {tx("3.8 ★★★☆☆ (12 avis) · Pas de catalogue ni attributs")}
+                  </p>
                 </div>
               </div>
-              <div className="absolute bottom-4 left-4 rounded-full border border-white/60 bg-white/90 px-3 py-2 label-mono text-[5px] tracking-[.14em] text-[#17181a]/48 shadow-lg backdrop-blur-xl sm:left-6">
-                {rank === "absent" ? tx("VISIBILITÉ À CONSTRUIRE") : rank === "below20" ? tx("SIGNAL À RENFORCER") : tx("POSITIONNEMENT À DÉVELOPPER")}
+
+              {/* Right Column: Realistic Modern Dark/Light Map */}
+              <div className="relative min-h-[320px] overflow-hidden border-t lg:border-t-0 lg:border-l xr-line bg-[#0d1117] text-white">
+                {/* Vector map roads & parks */}
+                <svg viewBox="0 0 600 480" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full opacity-65">
+                  <rect width="600" height="480" fill="#0d1117" />
+                  {/* Water river */}
+                  <path d="M-20 220 C140 180 260 270 420 240 S560 190 620 210" fill="none" stroke="#152636" strokeWidth="48" strokeLinecap="round" />
+                  {/* Parks / Green areas */}
+                  <rect x="40" y="40" width="120" height="90" rx="16" fill="#13231b" />
+                  <rect x="420" y="60" width="140" height="110" rx="20" fill="#13231b" />
+                  <rect x="280" y="320" width="160" height="100" rx="20" fill="#13231b" />
+                  {/* Secondary roads */}
+                  <path d="M0 80 H600 M0 160 H600 M0 300 H600 M0 380 H600" stroke="#1f2937" strokeWidth="6" />
+                  <path d="M100 0 V480 M220 0 V480 M360 0 V480 M480 0 V480" stroke="#1f2937" strokeWidth="6" />
+                  {/* Main highways */}
+                  <path d="M-20 120 Q300 110 620 140" stroke="#374151" strokeWidth="12" />
+                  <path d="M260 -20 Q280 240 310 500" stroke="#374151" strokeWidth="12" />
+                  {/* Active navigation route line to Pin #1 */}
+                  <path d="M80 400 L220 400 L220 260 L360 260 L360 180" fill="none" stroke="#10b981" strokeWidth="4" strokeDasharray="6 4" />
+                </svg>
+
+                {/* Animated #1 Google Maps Pin with Radar Ring */}
+                <div className="absolute left-[60%] top-[38%] -translate-x-1/2 -translate-y-1/2">
+                  <div className="relative flex items-center justify-center">
+                    {/* Pulsing Radar Ring */}
+                    <span className="absolute h-16 w-16 rounded-full bg-emerald-500/30 animate-xr-pin-pulse" />
+                    <span className="absolute h-10 w-10 rounded-full bg-emerald-500/50" />
+                    {/* The Google Pin */}
+                    <div className="relative z-10 flex flex-col items-center drop-shadow-[0_8px_20px_rgba(16,185,129,0.7)]">
+                      <div className="grid h-10 w-10 place-items-center rounded-full border-2 border-white bg-emerald-500 text-xs font-black text-black shadow-lg">
+                        #1
+                      </div>
+                      <div className="h-2 w-2 -mt-1 rotate-45 bg-emerald-500" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Competitor Pin #2 */}
+                <div className="absolute left-[37%] top-[55%] -translate-x-1/2 -translate-y-1/2 opacity-70">
+                  <div className="grid h-7 w-7 place-items-center rounded-full border-2 border-neutral-400 bg-neutral-700 text-[9px] font-bold text-white shadow-md">
+                    #2
+                  </div>
+                </div>
+
+                {/* Competitor Pin #3 */}
+                <div className="absolute left-[78%] top-[68%] -translate-x-1/2 -translate-y-1/2 opacity-50">
+                  <div className="grid h-6 w-6 place-items-center rounded-full border border-neutral-500 bg-neutral-800 text-[8px] font-bold text-neutral-300">
+                    #3
+                  </div>
+                </div>
+
+                {/* Floating GPS Navigation chip */}
+                <div className="absolute left-3 top-3 rounded-xl border border-white/15 bg-black/75 px-3 py-1.5 shadow-xl backdrop-blur-md">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="font-mono text-[9px] font-semibold text-white">
+                      📍 2,4 km · 6 min ({tx("Trafic fluide")})
+                    </span>
+                  </div>
+                </div>
+
+                {/* Status Indicator at bottom of map */}
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-xl border border-white/10 bg-black/80 px-3 py-2 text-xs backdrop-blur-md">
+                  <span className="font-mono text-[8px] tracking-wider text-white/70">
+                    {rank === "absent" ? tx("VISIBILITÉ À CONSTRUIRE") : rank === "below20" ? tx("SIGNAL À RENFORCER") : tx("POSITIONNEMENT À DÉVELOPPER")}
+                  </span>
+                  <span className="font-mono text-[8px] font-bold text-emerald-400">
+                    TOP 3 PACK VISÉ
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -557,6 +791,46 @@ export function MapsSimulator() {
                       <span className="text-[10px] opacity-60 leading-tight">{tx(r.sub)}</span>
                     </SelectorBtn>
                   ))}
+                </div>
+              </div>
+
+              {/* ── High-Converting Local ROI Calculator ── */}
+              <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 via-[var(--xr-surface-strong)] to-[var(--xr-surface)] p-5 sm:p-6 shadow-md">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b xr-line pb-4">
+                  <div>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-2.5 py-0.5 label-mono text-[7.5px] font-bold text-emerald-500">
+                      ⚡ {tx("Calculateur de Rentabilité & ROI Local")}
+                    </span>
+                    <h4 className="mt-1.5 text-base font-bold text-foreground">
+                      {tx("Impact direct du Top 3 Google Maps sur votre chiffre d'affaires :")}
+                    </h4>
+                  </div>
+                  <span className="label-mono text-[8px] text-emerald-500 font-semibold bg-emerald-500/10 border border-emerald-500/30 rounded-full px-3 py-1">
+                    {roiMetrics.cityName} · 38% CAPTURÉ
+                  </span>
+                </div>
+
+                <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3">
+                    <span className="label-mono text-[6.5px] text-muted-foreground">{tx("Recherches locales / mois")}</span>
+                    <p className="mt-1 text-base font-bold text-foreground">{roiMetrics.baseSearches.toLocaleString()}</p>
+                    <span className="text-[8px] text-muted-foreground">Volume ciblé</span>
+                  </div>
+                  <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3">
+                    <span className="label-mono text-[6.5px] text-muted-foreground">{tx("Trafic capté par le Top 3")}</span>
+                    <p className="mt-1 text-base font-bold text-emerald-500 font-mono">+{roiMetrics.top3Captured.toLocaleString()}</p>
+                    <span className="text-[8px] text-muted-foreground">Vues directes (38%)</span>
+                  </div>
+                  <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3">
+                    <span className="label-mono text-[6.5px] text-muted-foreground">{tx("Nouveaux clients estimés")}</span>
+                    <p className="mt-1 text-base font-bold text-foreground">+{roiMetrics.newClients} / mois</p>
+                    <span className="text-[8px] text-muted-foreground">Appels & réservations</span>
+                  </div>
+                  <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/15 p-3">
+                    <span className="label-mono text-[6.5px] text-emerald-400 font-bold">{tx("CA additionnel estimé")}</span>
+                    <p className="mt-1 text-base font-black text-emerald-400 font-mono">+{formatEur(roiMetrics.addedRevenueMonth)} / m</p>
+                    <span className="text-[8px] text-emerald-300 font-medium">{tx("Amorti dès le 1er mois grâce aux contacts entrants.")}</span>
+                  </div>
                 </div>
               </div>
 
