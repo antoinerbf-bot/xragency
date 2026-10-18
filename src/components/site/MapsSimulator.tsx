@@ -18,6 +18,39 @@ import { CONTACT } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { Reveal, SectionHeading } from "./primitives";
 
+
+const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
+  en: {
+    "Restaurant / Bar":"Restaurant / Bar","Hôtel / Spa":"Hotel / Spa","Santé / Médecin":"Healthcare / Doctor","Avocat / Notaire":"Lawyer / Notary","Immobilier":"Real estate","Artisan / BTP":"Trades / Construction","Beauté / Bien-être":"Beauty / Wellness","Autre commerce":"Other business",
+    "Petite ville":"Small town","Ville moyenne":"Medium-sized city","Grande ville":"Large city","Métropole":"Metropolitan area","mots-clés principaux":"main keywords","Absent de Maps":"Not on Maps","Fiche non créée ou invisible":"Listing not created or not visible","Hors Top 20":"Outside Top 20","Très peu visible":"Very low visibility","Position 4 – 10":"Position 4–10","Visible mais pas dans le Pack":"Visible but outside the Local Pack",
+    "SIMULATION EN DIRECT":"LIVE SIMULATION","RECHERCHE CIBLE":"TARGET SEARCH","POSITION ACTUELLE":"CURRENT POSITION","VISIBILITÉ À CONSTRUIRE":"VISIBILITY TO BUILD","SIGNAL À RENFORCER":"SIGNAL TO STRENGTHEN","POSITIONNEMENT À DÉVELOPPER":"POSITIONING TO IMPROVE",
+    "Configurateur de projet":"Project configurator","{tx("Estimez votre investissement Google Maps")}":"Estimate your Google Maps investment","Votre secteur d'activité":"Your industry","Taille de votre ville":"City size","Nombre de mots-clés principaux":"Number of main keywords","Votre positionnement actuel sur Google Maps":"Your current Google Maps ranking",
+    "Budget indicatif · à partir de 990 € / an":"Indicative budget · from €990/year","{tx("Estimation indicative · tarif exact après audit personnalisé")}":"Indicative estimate · exact price after a personalised audit","{tx("Objectif Top 3 · étude locale sur mesure")}":"Top 3 target · tailored local study","Lancer mon audit gratuit":"Start my free audit","Audit initial offert":"Initial audit included","Périmètre contractuel clair":"Clear contractual scope","Rapport mensuel inclus":"Monthly report included","Sans engagement minimum":"No minimum commitment","Méthodologie exclusive":"Exclusive methodology","Le processus en 7 phases":"The 7-phase process"
+  },
+  vi: {
+    "Restaurant / Bar":"Nhà hàng / Bar","Hôtel / Spa":"Khách sạn / Spa","Santé / Médecin":"Y tế / Bác sĩ","Avocat / Notaire":"Luật sư / Công chứng viên","Immobilier":"Bất động sản","Artisan / BTP":"Thợ thủ công / Xây dựng","Beauté / Bien-être":"Làm đẹp / Sức khỏe","Autre commerce":"Doanh nghiệp khác",
+    "Petite ville":"Thành phố nhỏ","Ville moyenne":"Thành phố vừa","Grande ville":"Thành phố lớn","Métropole":"Đô thị lớn","mots-clés principaux":"từ khóa chính","Absent de Maps":"Chưa có trên Maps","Fiche non créée ou invisible":"Chưa tạo hồ sơ hoặc không hiển thị","Hors Top 20":"Ngoài Top 20","Très peu visible":"Khả năng hiển thị rất thấp","Position 4 – 10":"Vị trí 4–10","Visible mais pas dans le Pack":"Có hiển thị nhưng ngoài Local Pack",
+    "SIMULATION EN DIRECT":"MÔ PHỎNG TRỰC TIẾP","RECHERCHE CIBLE":"TÌM KIẾM MỤC TIÊU","POSITION ACTUELLE":"VỊ TRÍ HIỆN TẠI","VISIBILITÉ À CONSTRUIRE":"CẦN XÂY DỰNG HIỂN THỊ","SIGNAL À RENFORCER":"CẦN TĂNG CƯỜNG TÍN HIỆU","POSITIONNEMENT À DÉVELOPPER":"CẦN CẢI THIỆN THỨ HẠNG",
+    "Configurateur de projet":"Cấu hình dự án","{tx("Estimez votre investissement Google Maps")}":"Ước tính ngân sách Google Maps","Votre secteur d'activité":"Lĩnh vực hoạt động","Taille de votre ville":"Quy mô thành phố","Nombre de mots-clés principaux":"Số từ khóa chính","Votre positionnement actuel sur Google Maps":"Thứ hạng Google Maps hiện tại",
+    "Budget indicatif · à partir de 990 € / an":"Ngân sách tham khảo · từ 990 € / năm","{tx("Estimation indicative · tarif exact après audit personnalisé")}":"Ước tính tham khảo · giá chính xác sau kiểm toán cá nhân hóa","{tx("Objectif Top 3 · étude locale sur mesure")}":"Mục tiêu Top 3 · nghiên cứu địa phương theo yêu cầu","Lancer mon audit gratuit":"Bắt đầu kiểm toán miễn phí","Audit initial offert":"Miễn phí kiểm toán ban đầu","Périmètre contractuel clair":"Phạm vi hợp đồng rõ ràng","Rapport mensuel inclus":"Bao gồm báo cáo hằng tháng","Sans engagement minimum":"Không cam kết thời hạn tối thiểu","Méthodologie exclusive":"Phương pháp độc quyền","Le processus en 7 phases":"Quy trình 7 giai đoạn"
+  },
+  ru: {
+    "Restaurant / Bar":"Ресторан / бар","Hôtel / Spa":"Отель / спа","Santé / Médecin":"Медицина / врач","Avocat / Notaire":"Юрист / нотариус","Immobilier":"Недвижимость","Artisan / BTP":"Мастер / строительство","Beauté / Bien-être":"Красота / wellness","Autre commerce":"Другой бизнес",
+    "Petite ville":"Небольшой город","Ville moyenne":"Средний город","Grande ville":"Крупный город","Métropole":"Мегаполис","mots-clés principaux":"основных ключевых слов","Absent de Maps":"Нет на Maps","Fiche non créée ou invisible":"Профиль не создан или не виден","Hors Top 20":"За пределами топ-20","Très peu visible":"Очень низкая видимость","Position 4 – 10":"Позиция 4–10","Visible mais pas dans le Pack":"Видимость есть, но не в Local Pack",
+    "SIMULATION EN DIRECT":"ИНТЕРАКТИВНАЯ СИМУЛЯЦИЯ","RECHERCHE CIBLE":"ЦЕЛЕВОЙ ПОИСК","POSITION ACTUELLE":"ТЕКУЩАЯ ПОЗИЦИЯ","VISIBILITÉ À CONSTRUIRE":"ВИДИМОСТЬ НУЖНО СОЗДАТЬ","SIGNAL À RENFORCER":"СИГНАЛ НУЖНО УСИЛИТЬ","POSITIONNEMENT À DÉVELOPPER":"ПОЗИЦИЮ НУЖНО УЛУЧШИТЬ",
+    "Configurateur de projet":"Конфигуратор проекта","{tx("Estimez votre investissement Google Maps")}":"Оцените инвестиции в Google Maps","Votre secteur d'activité":"Ваша сфера деятельности","Taille de votre ville":"Размер города","Nombre de mots-clés principaux":"Количество основных ключевых слов","Votre positionnement actuel sur Google Maps":"Ваше текущее положение в Google Maps",
+    "Budget indicatif · à partir de 990 € / an":"Ориентировочный бюджет · от 990 € в год","{tx("Estimation indicative · tarif exact après audit personnalisé")}":"Предварительная оценка · точная цена после персонального аудита","{tx("Objectif Top 3 · étude locale sur mesure")}":"Цель — топ-3 · индивидуальное локальное исследование","Lancer mon audit gratuit":"Начать бесплатный аудит","Audit initial offert":"Первичный аудит включён","Périmètre contractuel clair":"Чёткий объём договора","Rapport mensuel inclus":"Ежемесячный отчёт включён","Sans engagement minimum":"Без минимального срока обязательств","Méthodologie exclusive":"Эксклюзивная методология","Le processus en 7 phases":"Процесс из 7 этапов"
+  },
+  ar: {
+    "Restaurant / Bar":"مطعم / بار","Hôtel / Spa":"فندق / سبا","Santé / Médecin":"الصحة / طبيب","Avocat / Notaire":"محامٍ / موثق","Immobilier":"العقارات","Artisan / BTP":"حرفي / إنشاءات","Beauté / Bien-être":"الجمال / العافية","Autre commerce":"نشاط تجاري آخر",
+    "Petite ville":"مدينة صغيرة","Ville moyenne":"مدينة متوسطة","Grande ville":"مدينة كبيرة","Métropole":"منطقة حضرية كبرى","mots-clés principaux":"كلمات مفتاحية رئيسية","Absent de Maps":"غير موجود على Maps","Fiche non créée ou invisible":"الملف غير منشأ أو غير ظاهر","Hors Top 20":"خارج أفضل 20","Très peu visible":"ظهور محدود جدًا","Position 4 – 10":"الترتيب 4–10","Visible mais pas dans le Pack":"ظاهر ولكن خارج الحزمة المحلية",
+    "SIMULATION EN DIRECT":"محاكاة مباشرة","RECHERCHE CIBLE":"البحث المستهدف","POSITION ACTUELLE":"الترتيب الحالي","VISIBILITÉ À CONSTRUIRE":"يلزم بناء الظهور","SIGNAL À RENFORCER":"يلزم تعزيز الإشارات","POSITIONNEMENT À DÉVELOPPER":"يلزم تحسين الترتيب",
+    "Configurateur de projet":"مُهيّئ المشروع","{tx("Estimez votre investissement Google Maps")}":"قدّر استثمارك في Google Maps","Votre secteur d'activité":"مجال نشاطك","Taille de votre ville":"حجم مدينتك","Nombre de mots-clés principaux":"عدد الكلمات المفتاحية الرئيسية","Votre positionnement actuel sur Google Maps":"ترتيبك الحالي على Google Maps",
+    "Budget indicatif · à partir de 990 € / an":"ميزانية تقديرية · ابتداءً من 990 € سنويًا","{tx("Estimation indicative · tarif exact après audit personnalisé")}":"تقدير أولي · السعر الدقيق بعد التدقيق المخصص","{tx("Objectif Top 3 · étude locale sur mesure")}":"هدف أفضل 3 · دراسة محلية مخصصة","Lancer mon audit gratuit":"ابدأ التدقيق المجاني","Audit initial offert":"التدقيق الأولي مشمول","Périmètre contractuel clair":"نطاق تعاقدي واضح","Rapport mensuel inclus":"تقرير شهري مشمول","Sans engagement minimum":"دون حد أدنى للالتزام","Méthodologie exclusive":"منهجية حصرية","Le processus en 7 phases":"العملية في 7 مراحل"
+  }
+};
+function translateMaps(value: string, lang: string) { return MAPS_TRANSLATIONS[lang]?.[value] ?? value; }
+
 /* ── Sector options ── */
 const SECTORS = [
   { id: "resto", icon: "🍽️", label: "Restaurant / Bar" },
@@ -125,7 +158,8 @@ function SelectorBtn({
 }
 
 export function MapsSimulator() {
-  const { price: formatPrice } = useLang();
+  const { price: formatPrice, lang } = useLang();
+  const tx = (value: string) => translateMaps(value, lang);
 
   const [sector, setSector] = useState(SECTORS[0].id);
   const [citySize, setCitySize] = useState(CITY_SIZES[0].id);
@@ -175,16 +209,20 @@ export function MapsSimulator() {
         <div>
           <SectionHeading
             label={{ fr: "GOOGLE BUSINESS PROFILE · LOCAL SEO", en: "GOOGLE BUSINESS PROFILE · LOCAL SEO", vi: "GOOGLE BUSINESS PROFILE · LOCAL SEO" }}
-            line1={{ fr: "Construisons votre visibilité", en: "Build your local visibility", vi: "Xây dựng khả năng hiển thị địa phương" }}
+            line1={{ fr: "Construisons votre visibilité", en: "Build your local visibility", vi: "Xây dựng khả năng hiển thị địa phương", ru: "Повысим вашу видимость", ar: "لنبنِ ظهورك" }}
             line2={{
               fr: "sur Google Maps, sur mesure.",
               en: "on Google Maps, built around you.",
               vi: "trên Google Maps, theo nhu cầu của bạn.",
+              ru: "в Google Maps с учётом ваших задач.",
+              ar: "على Google Maps بما يناسبك.",
             }}
             lead={{
               fr: "À partir de 990 € / an. Audit, optimisation Google Business Profile, stratégie locale et suivi adaptés à votre zone, votre concurrence et vos requêtes.",
               en: "From €990 / year. Audit, Google Business Profile optimisation, local strategy and monitoring adapted to your area, competition and target searches.",
               vi: "Từ 990 € / năm. Kiểm toán, tối ưu Google Business Profile, chiến lược địa phương và theo dõi theo khu vực, đối thủ và truy vấn mục tiêu.",
+              ru: "От 990 € в год. Аудит, оптимизация Google Business Profile, локальная стратегия и мониторинг с учётом района, конкурентов и запросов.",
+              ar: "ابتداءً من 990 € سنويًا. تدقيق وتحسين Google Business Profile واستراتيجية محلية ومتابعة وفق منطقتك ومنافسيك وطلبات البحث.",
             }}
           />
 
@@ -194,7 +232,7 @@ export function MapsSimulator() {
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white font-black shadow-sm"><svg viewBox="0 0 24 24" className="h-5 w-5" aria-label="Google" role="img"><path fill="#4285F4" d="M21.35 12.27c0-.71-.06-1.4-.18-2.06H12v3.9h5.23a4.47 4.47 0 0 1-1.94 2.94v2.44h3.14c1.84-1.69 2.92-4.18 2.92-7.22Z"/><path fill="#34A853" d="M12 21.55c2.63 0 4.84-.87 6.45-2.36l-3.14-2.44c-.87.58-1.98.92-3.31.92-2.54 0-4.7-1.72-5.47-4.03H3.28v2.52A9.74 9.74 0 0 0 12 21.55Z"/><path fill="#FBBC05" d="M6.53 13.64A5.84 5.84 0 0 1 6.23 12c0-.57.1-1.12.3-1.64V7.84H3.28A9.72 9.72 0 0 0 2.25 12c0 1.57.38 3.06 1.03 4.16l3.25-2.52Z"/><path fill="#EA4335" d="M12 6.33c1.43 0 2.7.49 3.71 1.45l2.78-2.78C16.84 3.42 14.63 2.45 12 2.45a9.74 9.74 0 0 0-8.72 5.39l3.25 2.52c.77-2.31 2.93-4.03 5.47-4.03Z"/></svg></span>
               <Zap className="h-5 w-5 shrink-0 text-[var(--xr-bg)]" />
               <p className="text-sm font-semibold text-foreground leading-snug">
-                Google Maps · à partir de 990 € / an · objectif Top 3 sans garantie de position
+                {tx("à partir de 990 € / an · objectif Top 3 sans garantie de position")}
               </p>
               <Award className="h-5 w-5 shrink-0 text-[var(--xr-ink)]" />
             </div>
@@ -207,8 +245,8 @@ export function MapsSimulator() {
               <div className="flex items-center gap-3">
                 <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--xr-accent-soft)]"><MapPinned className="h-4 w-4 text-[var(--xr-ink)]"/></span>
                 <div>
-                  <span className="label-mono text-[6px] tracking-[.18em] xr-muted-2">SIMULATION EN DIRECT</span>
-                  <p className="mt-0.5 text-sm font-semibold text-[var(--xr-ink)]">{selectedSector?.label} · {CITY_SIZES.find(c=>c.id===citySize)?.label}</p>
+                  <span className="label-mono text-[6px] tracking-[.18em] xr-muted-2">{tx("SIMULATION EN DIRECT")}</span>
+                  <p className="mt-0.5 text-sm font-semibold text-[var(--xr-ink)]">{tx(selectedSector?.label ?? "")} · {tx(CITY_SIZES.find(c=>c.id===citySize)?.label ?? "")}</p>
                 </div>
               </div>
               <span className="rounded-full border xr-line bg-[var(--xr-surface)] px-3 py-1.5 label-mono text-[6px] xr-muted">LOCAL PACK</span>
@@ -249,16 +287,16 @@ export function MapsSimulator() {
               )}
               <div className="absolute left-4 right-4 top-4 flex items-center justify-between gap-3 sm:left-6 sm:right-6">
                 <div className="rounded-xl border border-white/60 bg-white/90 px-3 py-2 shadow-lg backdrop-blur-xl">
-                  <span className="label-mono text-[5px] tracking-[.16em] text-[#17181a]/40">RECHERCHE CIBLE</span>
-                  <p className="mt-1 text-[10px] font-semibold text-[#17181a]">{selectedSector?.label} · {KEYWORD_RANGES.find(k=>k.id===keywords)?.label} mots-clés</p>
+                  <span className="label-mono text-[5px] tracking-[.16em] text-[#17181a]/40">{tx("RECHERCHE CIBLE")}</span>
+                  <p className="mt-1 text-[10px] font-semibold text-[#17181a]">{tx(selectedSector?.label ?? "")} · {KEYWORD_RANGES.find(k=>k.id===keywords)?.label} {tx("mots-clés principaux")}</p>
                 </div>
                 <div className="hidden rounded-xl border border-white/60 bg-white/90 px-3 py-2 text-right shadow-lg backdrop-blur-xl sm:block">
-                  <span className="label-mono text-[5px] tracking-[.16em] text-[#17181a]/40">POSITION ACTUELLE</span>
-                  <p className="mt-1 text-[10px] font-semibold text-[#17181a]">{CURRENT_RANKS.find(r=>r.id===rank)?.label}</p>
+                  <span className="label-mono text-[5px] tracking-[.16em] text-[#17181a]/40">{tx("POSITION ACTUELLE")}</span>
+                  <p className="mt-1 text-[10px] font-semibold text-[#17181a]">{tx(CURRENT_RANKS.find(r=>r.id===rank)?.label ?? "")}</p>
                 </div>
               </div>
               <div className="absolute bottom-4 left-4 rounded-full border border-white/60 bg-white/90 px-3 py-2 label-mono text-[5px] tracking-[.14em] text-[#17181a]/48 shadow-lg backdrop-blur-xl sm:left-6">
-                {rank === "absent" ? "VISIBILITÉ À CONSTRUIRE" : rank === "below20" ? "SIGNAL À RENFORCER" : "POSITIONNEMENT À DÉVELOPPER"}
+                {rank === "absent" ? tx("VISIBILITÉ À CONSTRUIRE") : rank === "below20" ? tx("SIGNAL À RENFORCER") : tx("POSITIONNEMENT À DÉVELOPPER")}
               </div>
             </div>
           </div>
@@ -274,9 +312,9 @@ export function MapsSimulator() {
                   <Gauge className="h-4.5 w-4.5" />
                 </div>
                 <div>
-                  <p className="label-mono text-xs text-[var(--xr-ink)]">Configurateur de projet</p>
+                  <p className="label-mono text-xs text-[var(--xr-ink)]">{tx("Configurateur de projet")}</p>
                   <p className="display-serif text-lg text-foreground mt-0.5">
-                    Estimez votre investissement Google Maps
+                    {tx("Estimez votre investissement Google Maps")}
                   </p>
                 </div>
               </div>
@@ -297,7 +335,7 @@ export function MapsSimulator() {
                       onClick={() => setSector(s.id)}
                     >
                       <span className="text-2xl">{s.icon}</span>
-                      <span className="text-[11px] leading-tight">{s.label}</span>
+                      <span className="text-[11px] leading-tight">{tx(s.label)}</span>
                     </SelectorBtn>
                   ))}
                 </div>
@@ -317,7 +355,7 @@ export function MapsSimulator() {
                       onClick={() => setCitySize(c.id)}
                     >
                       <Building2 className="h-4 w-4" />
-                      <span className="font-semibold text-[12px]">{c.label}</span>
+                      <span className="font-semibold text-[12px]">{tx(c.label)}</span>
                       <span className="text-[10px] opacity-60">{c.sub}</span>
                     </SelectorBtn>
                   ))}
@@ -339,7 +377,7 @@ export function MapsSimulator() {
                     >
                       <BarChart3 className="h-4 w-4" />
                       <span className="font-bold text-base">{k.label}</span>
-                      <span className="text-[10px] opacity-60">{k.sub}</span>
+                      <span className="text-[10px] opacity-60">{tx(k.sub)}</span>
                     </SelectorBtn>
                   ))}
                 </div>
@@ -359,8 +397,8 @@ export function MapsSimulator() {
                       onClick={() => setRank(r.id)}
                     >
                       <MapPinned className="h-4 w-4" />
-                      <span className="font-semibold text-[12px] leading-tight">{r.label}</span>
-                      <span className="text-[10px] opacity-60 leading-tight">{r.sub}</span>
+                      <span className="font-semibold text-[12px] leading-tight">{tx(r.label)}</span>
+                      <span className="text-[10px] opacity-60 leading-tight">{tx(r.sub)}</span>
                     </SelectorBtn>
                   ))}
                 </div>
@@ -370,7 +408,7 @@ export function MapsSimulator() {
               <div className="rounded-2xl border-2 border-primary/30 bg-[var(--xr-ink)]/5 p-5 sm:p-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="label-mono text-xs text-muted-foreground">Budget indicatif · à partir de 990 € / an</p>
+                    <p className="label-mono text-xs text-muted-foreground">{tx("Budget indicatif · à partir de 990 € / an")}</p>
                     <div className="mt-1 flex items-baseline gap-2">
                       <span
                         key={animMin}
@@ -388,7 +426,7 @@ export function MapsSimulator() {
                       <span className="label-mono text-xs text-muted-foreground">/ an</span>
                     </div>
                     <p className="mt-1.5 text-xs text-muted-foreground/70">
-                      Estimation indicative · tarif exact après audit personnalisé
+                      {tx("Estimation indicative · tarif exact après audit personnalisé")}
                     </p>
                   </div>
 
@@ -397,7 +435,7 @@ export function MapsSimulator() {
                     <div className="flex items-center gap-2 rounded-xl border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-3 py-2">
                       <ShieldCheck className="h-4 w-4 shrink-0 text-[var(--xr-ink)]" />
                       <span className="label-mono text-[10px] font-bold text-[var(--xr-ink)]">
-                        Objectif Top 3 · étude locale sur mesure
+                        {tx("Objectif Top 3 · étude locale sur mesure")}
                       </span>
                     </div>
                     <a
@@ -415,10 +453,10 @@ export function MapsSimulator() {
                 {/* Trust signals */}
                 <div className="mt-4 flex flex-wrap gap-3 border-t border-[var(--xr-ink)]/20 pt-4">
                   {[
-                    { icon: CheckCircle2, text: "Audit initial offert" },
-                    { icon: CheckCircle2, text: "Périmètre contractuel clair" },
-                    { icon: CheckCircle2, text: "Rapport mensuel inclus" },
-                    { icon: CheckCircle2, text: "Sans engagement minimum" },
+                    { icon: CheckCircle2, text: tx("Audit initial offert") },
+                    { icon: CheckCircle2, text: tx("Périmètre contractuel clair") },
+                    { icon: CheckCircle2, text: tx("Rapport mensuel inclus") },
+                    { icon: CheckCircle2, text: tx("Sans engagement minimum") },
                   ].map(({ icon: Icon, text }) => (
                     <div key={text} className="flex items-center gap-1.5">
                       <Icon className="h-3.5 w-3.5 shrink-0 text-[var(--xr-ink)]" />
@@ -435,7 +473,7 @@ export function MapsSimulator() {
         <Reveal delay={80}>
           <div>
             <div className="mb-8 text-center">
-              <p className="label-mono text-xs text-[var(--xr-ink)]">Méthodologie exclusive</p>
+              <p className="label-mono text-xs text-[var(--xr-ink)]">{tx("Méthodologie exclusive")}</p>
               <h3 className="display-serif mt-2 text-2xl sm:text-3xl text-foreground">
                 Le processus en 7 phases
               </h3>
@@ -450,8 +488,8 @@ export function MapsSimulator() {
                   key={ph.num}
                   className="rounded-2xl border border-border/80 bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--xr-ink)]/30"
                 >
-                  <p className="label-mono text-xs text-[var(--xr-ink)]">{ph.num} · {ph.name}</p>
-                  <p className="display-serif mt-1.5 text-base text-foreground">{ph.title}</p>
+                  <p className="label-mono text-xs text-[var(--xr-ink)]">{ph.num} · {tx(ph.name)}</p>
+                  <p className="display-serif mt-1.5 text-base text-foreground">{tx(ph.title)}</p>
                   <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{ph.desc}</p>
                 </div>
               ))}
@@ -462,8 +500,8 @@ export function MapsSimulator() {
                   key={ph.num}
                   className="rounded-2xl border border-border/80 bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--xr-ink)]/30"
                 >
-                  <p className="label-mono text-xs text-[var(--xr-ink)]">{ph.num} · {ph.name}</p>
-                  <p className="display-serif mt-1.5 text-base text-foreground">{ph.title}</p>
+                  <p className="label-mono text-xs text-[var(--xr-ink)]">{ph.num} · {tx(ph.name)}</p>
+                  <p className="display-serif mt-1.5 text-base text-foreground">{tx(ph.title)}</p>
                   <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{ph.desc}</p>
                 </div>
               ))}
