@@ -443,15 +443,15 @@ function SocialVisual() {
     <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[var(--xr-surface)] via-[var(--xr-bg)] to-[var(--xr-surface)] p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
       {/* Halos sociaux dynamiques */}
       <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-pink-500/10 blur-3xl" />
-      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl" />
 
       <div className="flex items-center justify-between border-b xr-line pb-4">
         <div className="flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">STUDIO COMMUNITY MANAGEMENT · TOURNAGES & REELS 4K</span>
+          <span className="h-2.5 w-2.5 rounded-full bg-amber-400 animate-pulse" />
+          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">STUDIO SOCIAL MEDIA · TOURNAGES 4K & STRATÉGIE MULTI-PLATEFORMES</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
+          <span className="rounded-full bg-amber-400/15 border border-amber-400/30 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-amber-300">
             GESTION 100% DÉLÉGUÉE
           </span>
           <Label>05 / SOCIAL MEDIA</Label>
@@ -459,65 +459,68 @@ function SocialVisual() {
       </div>
 
       <div className="py-6 space-y-4">
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {/* Instagram Card */}
-          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
+          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-pink-500/40">
             <div className="flex items-center justify-between">
               <span className="label-mono text-[7px] font-bold text-pink-500">INSTAGRAM</span>
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              <span className="rounded-full bg-pink-500/15 px-2 py-0.5 label-mono text-[6px] text-pink-400 font-bold">REELS 4K</span>
             </div>
-            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]">Feed & Reels 4K</p>
-            <div className="mt-2.5 flex items-baseline justify-between text-[8px] xr-muted">
-              <span>Engagement</span>
-              <span className="label-mono font-bold text-emerald-500">+18.4%</span>
+            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]">Feed & DA Prestige</p>
+            <p className="mt-1 text-[8px] xr-muted leading-relaxed">Shooting mensuel, étalonnage cinématique et curation esthétique sur-mesure.</p>
+            <div className="mt-3 flex items-baseline justify-between text-[8px] xr-muted">
+              <span>Engagement moyen</span>
+              <span className="label-mono font-bold text-amber-400">+18.4%</span>
             </div>
             <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
-              <div className="h-full w-[82%] rounded-full bg-gradient-to-r from-pink-500 to-purple-500" />
+              <div className="h-full w-[82%] rounded-full bg-gradient-to-r from-pink-500 via-rose-400 to-amber-300" />
             </div>
           </div>
 
           {/* TikTok Card */}
-          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
+          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-cyan-400/40">
             <div className="flex items-center justify-between">
-              <span className="label-mono text-[7px] font-bold text-cyan-500">TIKTOK</span>
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              <span className="label-mono text-[7px] font-bold text-cyan-400">TIKTOK</span>
+              <span className="rounded-full bg-cyan-400/15 px-2 py-0.5 label-mono text-[6px] text-cyan-300 font-bold">HOOK 3S</span>
             </div>
-            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]">Formats Verticaux</p>
-            <div className="mt-2.5 flex items-baseline justify-between text-[8px] xr-muted">
-              <span>Vues vidéo</span>
-              <span className="label-mono font-bold text-emerald-500">240K+</span>
+            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]">Viralité & Formats Verticaux</p>
+            <p className="mt-1 text-[8px] xr-muted leading-relaxed">Rétention maximale dès 3 secondes, sons trendy et narration rythmée.</p>
+            <div className="mt-3 flex items-baseline justify-between text-[8px] xr-muted">
+              <span>Vues vidéo cumulées</span>
+              <span className="label-mono font-bold text-cyan-300">240K+</span>
             </div>
             <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
               <div className="h-full w-[94%] rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" />
             </div>
           </div>
 
-          {/* LinkedIn / Facebook Card */}
-          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
+          {/* Facebook & Meta Ads Card */}
+          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-blue-500/40">
             <div className="flex items-center justify-between">
-              <span className="label-mono text-[7px] font-bold text-blue-500">LINKEDIN / FB</span>
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              <span className="label-mono text-[7px] font-bold text-blue-400">FACEBOOK & META</span>
+              <span className="rounded-full bg-blue-500/15 px-2 py-0.5 label-mono text-[6px] text-blue-300 font-bold">LOCAL 5KM</span>
             </div>
-            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]">B2B & Local</p>
-            <div className="mt-2.5 flex items-baseline justify-between text-[8px] xr-muted">
+            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]">Acquisition Géolocalisée</p>
+            <p className="mt-1 text-[8px] xr-muted leading-relaxed">Ciblage de proximité dans un rayon de 5 km, retargeting et formulaires directs.</p>
+            <div className="mt-3 flex items-baseline justify-between text-[8px] xr-muted">
               <span>Portée qualifiée</span>
-              <span className="label-mono font-bold text-emerald-500">×3.2</span>
+              <span className="label-mono font-bold text-emerald-400">×3.4</span>
             </div>
             <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
-              <div className="h-full w-[70%] rounded-full bg-blue-500" />
+              <div className="h-full w-[76%] rounded-full bg-gradient-to-r from-blue-500 to-indigo-400" />
             </div>
           </div>
         </div>
 
         {/* Workflow & Engagement badge */}
-        <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 backdrop-blur-md">
+        <div className="rounded-2xl border border-amber-400/25 bg-amber-400/5 p-3.5 backdrop-blur-md">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <div className="flex items-center gap-2 text-[10px]">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="font-bold text-[var(--xr-ink)]">Accompagnement avec engagement garanti</span>
-              <span className="xr-muted">· Planning éditorial, tournages, montage et modération active</span>
+              <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
+              <span className="font-bold text-[var(--xr-ink)]">Production éditoriale complète</span>
+              <span className="xr-muted">· Écriture, tournages sur site, montage cinématique et modération réactive</span>
             </div>
-            <span className="rounded-full bg-emerald-500/20 px-3 py-1 label-mono text-[7px] font-bold text-emerald-400 shrink-0 self-start sm:self-center">
+            <span className="rounded-full border border-amber-400/35 bg-amber-400/15 px-3 py-1 label-mono text-[7px] font-bold text-amber-300 shrink-0 self-start sm:self-center">
               DÈS 299 € / MOIS
             </span>
           </div>
@@ -525,8 +528,8 @@ function SocialVisual() {
       </div>
 
       <div className="flex items-center justify-between border-t xr-line pt-4">
-        <span className="label-mono text-[7px] xr-muted">INSTAGRAM · TIKTOK · LINKEDIN · FACEBOOK</span>
-        <span className="label-mono text-[7px] font-bold text-emerald-500">ENGAGEMENT MINIMUM SUR-MESURE</span>
+        <span className="label-mono text-[7px] xr-muted">INSTAGRAM REELS · TIKTOK SHORTS · FACEBOOK META ADS</span>
+        <span className="label-mono text-[7px] font-bold text-amber-300">STRATÉGIE SUR-MESURE & REPORTING HEBDOMADAIRE</span>
       </div>
     </div>
   );

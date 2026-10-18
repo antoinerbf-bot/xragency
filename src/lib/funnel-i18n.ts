@@ -28,7 +28,7 @@ export const HERO_FUNNEL_PILLS: HeroFunnelPill[] = [
       ru: "Топ-3 района + оформление карточки",
     },
     services: ["maps", "seo", "website"],
-    targetAnchor: "#simulator",
+    targetAnchor: "#maps",
   },
   {
     id: "ecommerce_sales",
@@ -48,7 +48,7 @@ export const HERO_FUNNEL_PILLS: HeroFunnelPill[] = [
       ru: "Быстрый модуль онлайн-заказа",
     },
     services: ["website", "conversion", "social"],
-    targetAnchor: "#cost-of-inaction",
+    targetAnchor: "#quote",
   },
   {
     id: "luxury_rebrand",

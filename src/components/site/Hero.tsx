@@ -27,7 +27,7 @@ export function Hero() {
       frame = 0;
       const rect = section.getBoundingClientRect();
       const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
-      image.style.transform = `scale(1.04) translate3d(0, ${((progress - 0.5) * -28).toFixed(2)}px, 0)`;
+      image.style.transform = `translate3d(0, ${((progress - 0.5) * -22).toFixed(2)}px, 0)`;
     };
     const requestUpdate = () => { if (!frame) frame = window.requestAnimationFrame(updateDepth); };
     updateDepth();
@@ -54,7 +54,7 @@ export function Hero() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="top" className="xr-hero xr-hero-refined relative isolate overflow-hidden bg-[#080808] text-white">
+    <section ref={sectionRef} id="hero" className="xr-hero xr-hero-refined relative isolate overflow-hidden bg-[#080808] text-white">
       {/* High-res cinematic photo backdrop - crisp, luminous, Parisian penthouse & Eiffel tower */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         <img
@@ -63,8 +63,7 @@ export function Hero() {
           alt=""
           fetchPriority="high"
           decoding="async"
-          className="absolute inset-0 h-full w-full object-cover object-[center_32%] md:object-[center_36%] contrast-[1.05] brightness-[1.03] saturate-[1.06] transition-transform duration-300 ease-out will-change-transform"
-          style={{ transform: "scale(1.04)" }}
+          className="absolute inset-0 h-full w-full object-cover object-[center_32%] md:object-[center_36%] contrast-[1.04] brightness-[1.03] saturate-[1.05] transition-transform duration-300 ease-out will-change-transform"
         />
         {/* Dynamic interactive mouse follow spotlight */}
         <div
@@ -74,13 +73,11 @@ export function Hero() {
             background: "radial-gradient(800px circle at 65% 45%, rgba(255,255,255,0.08), transparent 80%)",
           }}
         />
-        {/* Desktop vignette: deep readable dark on left for text, crystalline view on right for penthouse & Eiffel tower */}
-        <div className="hidden md:block absolute inset-0 bg-[linear-gradient(90deg,#080808_0%,rgba(8,8,8,0.80)_26%,rgba(8,8,8,0.28)_55%,rgba(8,8,8,0.02)_82%,transparent_100%)]" />
-        <div className="hidden md:block absolute inset-0 bg-[linear-gradient(0deg,#080808_0%,transparent_18%)]" />
+        {/* Desktop vignette: deep readable dark on left for text, crystalline luminous view on right for penthouse & Eiffel tower */}
+        <div className="hidden md:block absolute inset-0 bg-[linear-gradient(90deg,#080808_0%,rgba(8,8,8,0.76)_22%,rgba(8,8,8,0.22)_52%,rgba(8,8,8,0.02)_80%,transparent_100%)]" />
+        <div className="hidden md:block absolute inset-0 bg-[linear-gradient(0deg,#080808_0%,transparent_16%)]" />
         {/* Mobile vignette: atmospheric view at top, smooth fade for high readability over text */}
         <div className="block md:hidden absolute inset-0 bg-[linear-gradient(180deg,rgba(8,8,8,0.18)_0%,rgba(8,8,8,0.60)_35%,rgba(8,8,8,0.92)_70%,#080808_100%)]" />
-        <div className="hidden md:block absolute right-[8%] top-[14%] h-[min(55vw,600px)] w-[min(55vw,600px)] rounded-full border border-white/10" />
-        <div className="hidden md:block absolute right-[17%] top-[28%] h-2 w-2 rounded-full bg-white shadow-[0_0_24px_6px_rgba(255,255,255,.35)]" />
       </div>
 
       <div className="relative mx-auto grid min-h-[100svh] max-w-[1800px] md:grid-cols-[minmax(0,1.15fr)_minmax(220px,.85fr)]">
@@ -92,7 +89,7 @@ export function Hero() {
             </div>
             <h1 className="xr-hero-heading max-w-[920px] text-[clamp(3.45rem,7.2vw,7.9rem)] font-medium leading-[.86] tracking-[-.075em] text-white [text-wrap:balance]">
               <span className="block">{t(UI.heroTitle1)}</span>
-              <span className="mt-1 block font-serif font-normal italic tracking-[-.065em] text-white/80">{t(UI.heroTitleAccent)}</span>
+              <span className="mt-1.5 block font-serif font-normal italic tracking-[-.045em] text-[#f4e2b8] [font-feature-settings:'liga'_1,'dlig'_1]">{t(UI.heroTitleAccent)}</span>
               <span className="mt-1 block">{t(UI.heroTitle2)}</span>
             </h1>
             <p className="mt-6 max-w-[590px] text-[14px] leading-6 text-white/80 sm:mt-8 sm:text-base sm:leading-7 lg:text-[17px]">{t(UI.heroLead)}</p>

@@ -10,11 +10,10 @@ interface Step {
 
 const STEPS: Step[] = [
   { id: "hero", key: "hero" },
-  { id: "cost-of-inaction", key: "inaction" },
   { id: "services", key: "solutions" },
-  { id: "simulator", key: "maps" },
-  { id: "audit", key: "audit" },
   { id: "quote", key: "quote" },
+  { id: "audit", key: "audit" },
+  { id: "maps", key: "maps" },
 ];
 
 export function FunnelRail() {

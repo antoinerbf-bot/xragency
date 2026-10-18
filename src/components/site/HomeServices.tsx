@@ -38,8 +38,8 @@ const PRICES: Record<string, number> = {
 
 const ACCENTS: Record<(typeof IDS)[number], { color: string; halo: string; tag: Record<string, string> }> = {
   websites: {
-    color: "#10b981",
-    halo: "rgba(16, 185, 129, 0.14)",
+    color: "#c5a880",
+    halo: "rgba(197, 168, 128, 0.14)",
     tag: { fr: "UNIVERS WEB · HAUTE COUTURE", en: "WEB UNIVERSE · HAUTE COUTURE", vi: "VŨ TRỤ WEB · ĐỈNH CAO", ar: "عالم الويب · راقٍ ومميز", ru: "WEB-ВСЕЛЕННАЯ · ПРЕМИУМ" },
   },
   branding: {
@@ -68,8 +68,8 @@ const ACCENTS: Record<(typeof IDS)[number], { color: string; halo: string; tag: 
     tag: { fr: "UNIVERS WEBCARE · CYBER SÉCURITÉ", en: "WEBCARE UNIVERSE · CYBER SECURITY", vi: "VŨ TRỤ WEBCARE · BẢO MẬT TỐI ĐA", ar: "عالم الرعاية · أمان سيبراني", ru: "WEBCARE · ЗАЩИТА И БЫСТРОДЕЙСТВИЕ" },
   },
   robotics: {
-    color: "#22c55e",
-    halo: "rgba(34, 197, 94, 0.14)",
+    color: "#d4af37",
+    halo: "rgba(212, 175, 55, 0.14)",
     tag: { fr: "UNIVERS IA · ROBOTIQUE & AGENTS", en: "AI UNIVERSE · ROBOTICS & AGENTS", vi: "VŨ TRỤ AI · ROBOT & ĐẠI LÝ TỰ ĐỘNG", ar: "عالم الذكاء · روبوتات وأتمتة", ru: "ИИ-ВСЕЛЕННАЯ · АВТОМАТИЗАЦИЯ И РОБОТЫ" },
   },
 };
@@ -77,8 +77,8 @@ const ACCENTS: Record<(typeof IDS)[number], { color: string; halo: string; tag: 
 const COPY = {
   fr: {
     eyebrow: "07 SERVICES · 07 ENTRÉES",
-    title: "Choisissez le besoin. Nous montrons le dispositif.",
-    lead: "Chaque expertise dispose de son propre univers visuel, de sa palette et d'un parcours mesurable.",
+    title: "Nos Services d'Élite : Choisissez votre levier, découvrez le dispositif complet.",
+    lead: "Des livrables transparents, des garanties contractuelles et une exécution de prestige pour chaque pilier de votre croissance.",
     from: "À partir de",
     open: "Voir le service",
     quote: "Ajouter au projet",
@@ -88,8 +88,8 @@ const COPY = {
   },
   en: {
     eyebrow: "07 SERVICES · 07 ENTRY POINTS",
-    title: "Choose the need. See the system.",
-    lead: "Each expertise has its own visual universe, palette and measurable path.",
+    title: "Elite Services: Select your growth lever, explore the complete system.",
+    lead: "Transparent deliverables, contractual guarantees and prestige execution for every pillar of your digital growth.",
     from: "From",
     open: "View service",
     quote: "Add to project",
@@ -99,8 +99,8 @@ const COPY = {
   },
   vi: {
     eyebrow: "07 DỊCH VỤ · 07 ĐIỂM BẮT ĐẦU",
-    title: "Chọn nhu cầu. Xem toàn bộ giải pháp.",
-    lead: "Mỗi chuyên môn có một vũ trụ hình ảnh, bảng màu và lộ trình đo lường riêng biệt.",
+    title: "Dịch vụ Cao cấp: Chọn đòn bẩy phát triển, khám phá giải pháp toàn diện.",
+    lead: "Hạng mục bàn giao minh bạch, cam kết chuẩn mực và chất lượng thi công đỉnh cao cho doanh nghiệp.",
     from: "Từ",
     open: "Xem dịch vụ",
     quote: "Thêm vào dự án",
@@ -110,8 +110,8 @@ const COPY = {
   },
   ar: {
     eyebrow: "07 خدمات · 07 نقاط انطلاق",
-    title: "اختر الحاجة. شاهد المنظومة.",
-    lead: "لكل خبرة عالمها البصري الخاص ولوحتها ومسارها القابل للقياس.",
+    title: "خدماتنا المتميزة: اختر محور نموك واكتشف المنظومة المتكاملة.",
+    lead: "مخرجات واضحة وشفافة، ضمانات موثقة وتنفيذ رفيع المستوى لكل ركيزة من ركائز نموك الرقمي.",
     from: "ابتداءً من",
     open: "شاهد الخدمة",
     quote: "أضف للمشروع",
@@ -121,8 +121,8 @@ const COPY = {
   },
   ru: {
     eyebrow: "07 УСЛУГ · 07 ТОЧЕК ВХОДА",
-    title: "Выберите задачу. Увидьте систему.",
-    lead: "У каждой экспертизы есть своя визуальная вселенная, цветовая палитра и понятный путь.",
+    title: "Премиальные услуги: выберите точку роста и откройте готовую систему.",
+    lead: "Прозрачные результаты, договорные гарантии и безупречное исполнение для каждого направления вашего бизнеса.",
     from: "От",
     open: "Открыть услугу",
     quote: "Добавить в проект",
@@ -158,7 +158,7 @@ export function HomeServices() {
   const isSelectedInFunnel = funnel?.selectedServices.includes(funnelServiceId) ?? false;
 
   return (
-    <section id="homepage-services" className="xr-section relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-14 sm:py-20 lg:py-28 transition-colors duration-700">
+    <section id="services" data-section="homepage-services" className="xr-section relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-14 sm:py-20 lg:py-28 transition-colors duration-700">
       {/* Morphing dynamic ambient halo per universe */}
       <div
         aria-hidden
