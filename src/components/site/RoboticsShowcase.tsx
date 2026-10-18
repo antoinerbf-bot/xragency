@@ -237,10 +237,10 @@ export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
                 </div>
                 <div className="border-t border-white/10 px-5 py-3 flex items-center justify-between bg-black/40">
                   <button type="button" onClick={()=>setActive(p)} className="label-mono text-[7px] text-white/60 hover:text-white">
-                    Voir les détails
+                    {tx("Voir les détails")}
                   </button>
                   <a href={p.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 label-mono text-[7.5px] font-semibold text-emerald-400 hover:text-emerald-300">
-                    Fiche officielle site <ExternalLink className="h-3 w-3"/>
+                    {tx("Fiche officielle site")} <ExternalLink className="h-3 w-3"/>
                   </a>
                 </div>
               </div>
