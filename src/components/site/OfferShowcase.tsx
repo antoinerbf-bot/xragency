@@ -12,9 +12,13 @@ export function OfferShowcase() {
   const [siteUrl, setSiteUrl] = useState("");
   const [activity, setActivity] = useState("");
 
-  const waMessage = encodeURIComponent(
-    `Bonjour XR Agency, je souhaite réserver mes 400 € d'avantages offerts :\n- Maquette personnalisée (200 €)\n- Audit digital complet (200 €)\nActivité: ${activity || "Non spécifiée"}\nSite: ${siteUrl || "En création / non spécifié"}`
-  );
+  const waMessage = encodeURIComponent(({
+    fr: "Bonjour XR Agency, je souhaite réserver mes 400 € d'avantages offerts :\n- Maquette personnalisée (200 €)\n- Audit digital complet (200 €)\nActivité : " + (activity || "Non spécifiée") + "\nSite : " + (siteUrl || "En création / non spécifié"),
+    en: "Hello XR Agency, I would like to claim my €400 in free benefits:\n- Custom mockup (€200)\n- Full digital audit (€200)\nIndustry: " + (activity || "Not specified") + "\nWebsite: " + (siteUrl || "To be created / not specified"),
+    vi: "Xin chào XR Agency, tôi muốn nhận ưu đãi miễn phí trị giá 400 €:\n- Bản mẫu riêng (200 €)\n- Kiểm toán số toàn diện (200 €)\nNgành nghề: " + (activity || "Chưa xác định") + "\nWebsite: " + (siteUrl || "Đang tạo / chưa xác định"),
+    ar: "مرحبًا XR Agency، أود الحصول على مزايا مجانية بقيمة 400 يورو:\n- نموذج تصميم مخصص (200 يورو)\n- تدقيق رقمي شامل (200 يورو)\nالمجال: " + (activity || "غير محدد") + "\nالموقع: " + (siteUrl || "قيد الإنشاء / غير محدد"),
+    ru: "Здравствуйте, XR Agency! Хочу получить бесплатные услуги на 400 €:\n- Индивидуальный макет (200 €)\n- Полный цифровой аудит (200 €)\nСфера: " + (activity || "Не указана") + "\nСайт: " + (siteUrl || "В разработке / не указан"),
+  } as const)[lang]);
 
 const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
   fr: {
