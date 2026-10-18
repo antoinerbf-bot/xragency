@@ -32,6 +32,9 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Votre site actuel (optionnel)": "Votre site actuel (optionnel)",
     "{tx("RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE")}": "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE",
   },
+    "45 POINTS DE CONTRÔLE SCRUTÉS": "45 POINTS DE CONTRÔLE SCRUTÉS",
+    "Voyez le résultat avant d'investir.": "Voyez le résultat avant d'investir.",
+    "Prototypes Figma + Vue Interactive Mobile & Desktop": "Prototypes Figma + Vue Interactive Mobile & Desktop",
   en: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "INSTANT ACCESS OFFER · NO COMMITMENT",
     "400 € de valeur offerte.": "€400 worth of value, free.",
@@ -47,6 +50,8 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Votre site actuel (optionnel)": "Your current website (optional)",
     "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE": "REPLY IN UNDER 2 HOURS · NO COMMITMENT · REAL VALUE GUARANTEED",
   },
+    "45 POINTS DE CONTRÔLE SCRUTÉS": "45 CHECKPOINTS REVIEWED",
+    "Prototypes Figma + Vue Interactive Mobile & Desktop": "Figma prototypes + interactive mobile and desktop preview",
   vi: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "ƯU ĐÃI TRUY CẬP NGAY · KHÔNG CAM KẾT",
     "400 € de valeur offerte.": "Tặng giá trị tương đương 400 €.",
@@ -62,6 +67,8 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Votre site actuel (optionnel)": "Website hiện tại (không bắt buộc)",
     "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE": "PHẢN HỒI TRONG 2 GIỜ · KHÔNG RÀNG BUỘC · GIÁ TRỊ THỰC",
   },
+    "45 POINTS DE CONTRÔLE SCRUTÉS": "45 ĐIỂM ĐƯỢC KIỂM TRA",
+    "Prototypes Figma + Vue Interactive Mobile & Desktop": "Bản mẫu Figma + xem trước tương tác trên điện thoại và máy tính",
   ar: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "عرض وصول فوري · دون التزام",
     "400 € de valeur offerte.": "قيمة مجانية بقيمة 400 يورو.",
@@ -77,6 +84,8 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Votre site actuel (optionnel)": "موقعك الحالي (اختياري)",
     "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE": "الرد خلال أقل من ساعتين · دون التزام · قيمة حقيقية مضمونة",
   },
+    "45 POINTS DE CONTRÔLE SCRUTÉS": "فحص 45 نقطة",
+    "Prototypes Figma + Vue Interactive Mobile & Desktop": "نماذج Figma + معاينة تفاعلية للهاتف والكمبيوتر",
   ru: {
     "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "ПРЕДЛОЖЕНИЕ СРАЗУ · БЕЗ ОБЯЗАТЕЛЬСТВ",
     "400 € de valeur offerte.": "Бесплатные услуги стоимостью 400 €.",
@@ -91,6 +100,8 @@ const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     "Votre activité (ex: Restaurant, Hôtel...)": "Ваша сфера (например, ресторан, отель...)",
     "Votre site actuel (optionnel)": "Ваш текущий сайт (необязательно)",
     "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE": "ОТВЕТ МЕНЕЕ ЧЕМ ЗА 2 ЧАСА · БЕЗ ОБЯЗАТЕЛЬСТВ · РЕАЛЬНАЯ ЦЕННОСТЬ",
+    "45 POINTS DE CONTRÔLE SCRUTÉS": "ПРОВЕРЕНО 45 ПАРАМЕТРОВ",
+    "Prototypes Figma + Vue Interactive Mobile & Desktop": "Прототипы Figma + интерактивный просмотр на мобильных устройствах и компьютерах",
   },
 };
 function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[lang][value] ?? value; }
@@ -117,7 +128,7 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
 
             <h2 className="display-serif mt-5 text-[clamp(2.6rem,5.5vw,5.5rem)] leading-[0.88] tracking-[-0.05em]">
               400 € de valeur offerte.<br />
-              <em className="not-italic xr-muted">Voyez le résultat avant d'investir.</em>
+              <em className="not-italic xr-muted">{tx("Voyez le résultat avant d'investir.")}</em>
             </h2>
 
             <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 xr-muted sm:text-base">
@@ -195,7 +206,7 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="label-mono text-[6px] text-white/60">LIVRABLE OFFERT</p>
-                          <p className="text-xs font-semibold text-white">Prototypes Figma + Vue Interactive Mobile & Desktop</p>
+                          <p className="text-xs font-semibold text-white">{tx("Prototypes Figma + Vue Interactive Mobile & Desktop")}</p>
                         </div>
                         <span className="label-mono rounded-lg border border-white/20 bg-white/10 px-2.5 py-1 text-[8px] font-bold text-emerald-400">
                           0 € au lieu de 200 €
@@ -214,7 +225,7 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
                       </div>
                       <div>
                         <p className="text-xs font-bold text-[var(--xr-ink)]">Rapport de Diagnostic XR</p>
-                        <p className="label-mono text-[6px] xr-muted">45 POINTS DE CONTRÔLE SCRUTÉS</p>
+                        <p className="label-mono text-[6px] xr-muted">{tx("45 POINTS DE CONTRÔLE SCRUTÉS")}</p>
                       </div>
                     </div>
                     <span className="label-mono rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[7px] font-bold text-emerald-600 dark:text-emerald-400">
