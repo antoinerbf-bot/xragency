@@ -125,133 +125,252 @@ export function DigitalAudit(){
  const run=async()=>{if(!url.trim()||!types.length)return;setLoading(true);setError("");setResult(null);try{const res=await fetch("/api/audit",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({url,types,sector,budget})});const data=await res.json();if(!res.ok)throw new Error(data.error||"Audit unavailable");setResult(data);}catch(e){setError(e instanceof Error?e.message:"Audit unavailable")}finally{setLoading(false)}};
  const makePdf=()=>{if(!result)return;const doc=new jsPDF({unit:"mm",format:"a4"});const W=210,M=14,R=196;const ink=[18,22,29] as const;const blue=[43,92,255] as const;const muted=[92,100,112] as const;const soft=[242,244,247] as const;const line=[220,224,230] as const;const date=new Date().toLocaleDateString(lang==="fr"?"fr-FR":lang==="vi"?"vi-VN":lang==="ru"?"ru-RU":"en-US",{day:"2-digit",month:"2-digit",year:"numeric"});const number="XR-AUDIT-"+new Date().toISOString().slice(0,10).replace(/-/g,"")+"-"+Math.floor(1000+Math.random()*9000);doc.setFillColor(...ink);doc.rect(0,0,W,30,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(18);doc.text("XRAGENCY",M,13);doc.setFont("helvetica","normal");doc.setFontSize(7);doc.text("DIGITAL AUDIT · EXPERT REVIEW",M,20);doc.setFont("helvetica","bold");doc.setFontSize(12);doc.text(t.pdfReport,R,12,{align:"right"});doc.setFontSize(6.5);doc.setFont("helvetica","normal");doc.text(number,R,18,{align:"right"});doc.text(date,R,23,{align:"right"});let y=40;const section=(s:string)=>{doc.setFillColor(...soft);doc.roundedRect(M,y-4,W-2*M,8,1.5,1.5,"F");doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(7);doc.text(s.toUpperCase(),M+3,y+1);y+=12};section(t.pdfSiteAudited);doc.setFont("helvetica","bold");doc.setFontSize(8);doc.text(result.url,M,y);y+=6;doc.setFont("helvetica","normal");doc.setTextColor(...muted);doc.setFontSize(6.5);doc.text("HTTP "+result.status+" · "+result.types.join(" · "),M,y);y+=8;section(t.pdfScore);doc.setTextColor(...blue);doc.setFont("helvetica","bold");doc.setFontSize(28);doc.text(result.score+"/100",M,y);y+=12;section(t.pdfDetected);doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(7);doc.text(t.pdfTitle,M,y);doc.setFont("helvetica","normal");doc.setTextColor(...muted);doc.text(doc.splitTextToSize(result.title||t.pdfNotDetected,140),M+25,y);y+=7;doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.text(t.pdfMeta,M,y);doc.setFont("helvetica","normal");doc.setTextColor(...muted);doc.text(doc.splitTextToSize(result.description||t.pdfNotDetected,140),M+25,y);y+=12;section(t.pdfFindings);result.findings.forEach((f,i)=>{if(y>268){doc.addPage();y=22}doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(7);doc.text(String(i+1).padStart(2,"0")+" · "+f.label,M,y);doc.setFont("helvetica","normal");doc.setTextColor(...muted);doc.text(doc.splitTextToSize((f.status===false?t.pdfToImprove:t.pdfPositive)+f.detail,160),M+12,y+4);y+=12});if(result.recommendations.length){y+=2;section(t.pdfRecommendations);result.recommendations.forEach((x,i)=>{if(y>268){doc.addPage();y=22}doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.text(String(i+1).padStart(2,"0")+" · "+x.service,M,y);doc.setFont("helvetica","normal");doc.setTextColor(...muted);doc.text(doc.splitTextToSize(x.reason,160),M+12,y+4);y+=12})}doc.setDrawColor(...line);doc.line(M,282,R,282);doc.setTextColor(...ink);doc.setFont("helvetica","bold");doc.setFontSize(6.2);doc.text("KARMA SASU · XRAGENCY",M,288);doc.setFont("helvetica","normal");doc.setTextColor(...muted);doc.text("SIREN 889 178 141 · SIRET 889 178 141 00012 · 78 Avenue des Champs-Élysées · 75008 Paris",M,293);doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83 · xragencyai.com",M,298);doc.save("XRAGENCY-Digital-Audit-"+number+".pdf")};
  const wa=CONTACT.whatsapp+"?text="+encodeURIComponent(t.waPrefill+url);
- return <section id="audit" className="xr-section relative overflow-hidden border-y xr-line py-20 sm:py-28 lg:py-36">
-  <div className="relative mx-auto max-w-[1560px] px-5 sm:px-8 lg:px-12">
-   <Parallax speed={-0.025}><Reveal><div className="grid gap-8 border-b xr-line pb-10 lg:grid-cols-[1.15fr_.85fr] lg:items-end"><div><span className="label-mono xr-accent text-[8px] tracking-[.28em]">{t.eyebrow}</span><h2 className="display-serif mt-5 max-w-5xl text-[clamp(3rem,5.6vw,6.2rem)] leading-[.84] tracking-[-.065em]">{t.title}</h2><p className="mt-5 max-w-2xl text-sm leading-7 xr-muted sm:text-base">{t.intro}</p></div><div className="rounded-[1.7rem] border xr-line bg-[var(--xr-surface)] p-5"><div className="grid grid-cols-5 gap-2">{(Object.keys(TYPES) as AuditType[]).map(id=><div key={id} className="text-center"><span className="label-mono text-[5px] xr-muted-2">{id.slice(0,4).toUpperCase()}</span><div className={"mt-2 h-1 rounded-full "+(types.includes(id)?"bg-[var(--xr-accent)]":"bg-current opacity-10")}/></div>)}</div><p className="mt-3 text-[8px] xr-muted">{t.chooseAxes}</p></div></div></Reveal></Parallax>
-
-   {!result&&<div className="mt-8 grid gap-5 lg:grid-cols-[1fr_1fr]">
-    <Reveal><div className="xr-depth-card rounded-[2.2rem] border xr-line bg-[var(--xr-surface)] p-5 sm:p-7"><div className="flex items-center gap-3"><span className="grid h-11 w-11 place-items-center rounded-2xl border xr-line xr-accent-bg"><Globe2 className="h-5 w-5 xr-accent"/></span><div><span className="label-mono text-[6px] xr-muted-2">01 · SOURCE</span><p className="mt-1 text-sm font-semibold">{t.url}</p></div><Activity className="ml-auto h-4 w-4 opacity-35"/></div><input value={url} onChange={e=>setUrl(e.target.value)} placeholder="https://votresite.com" className="mt-5 w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-4 text-sm outline-none"/><div className="mt-3 grid gap-2 sm:grid-cols-2"><select value={sector} onChange={e=>setSector(e.target.value)} className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-3 py-3 text-[9px] outline-none"><option value="other">{t.sectorOther}</option><option value="restaurant">{t.sectorResto}</option><option value="hospitality">{t.sectorHosp}</option><option value="realestate">{t.sectorRealestate}</option><option value="commerce">{t.sectorCommerce}</option><option value="service">{t.sectorService}</option></select><select value={budget} onChange={e=>setBudget(e.target.value)} className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-3 py-3 text-[9px] outline-none"><option value="under500">&lt; 500 €</option><option value="500_1000">500 – 1 000 €</option><option value="1000_2500">1 000 – 2 500 €</option><option value="2500_5000">2 500 – 5 000 €</option><option value="5000_plus">5 000 € +</option></select></div><div className="mt-5 grid gap-2 sm:grid-cols-2">{(Object.entries(TYPES) as [AuditType,typeof TYPES[AuditType]][]).map(([id,x])=>{const I=x.icon;return <button key={id} type="button" onClick={()=>toggle(id)} className={"rounded-[1.35rem] border p-4 text-left transition "+(types.includes(id)?"border-[var(--xr-accent)] bg-[var(--xr-accent-soft)]":"xr-line bg-[var(--xr-surface-strong)] hover:-translate-y-0.5")}><div className="flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-xl border xr-line"><I className="h-3.5 w-3.5 opacity-55"/></span><span className="text-[10px] font-semibold">{x.label[lang]??x.label.fr}</span>{types.includes(id)&&<Check className="ml-auto h-3.5 w-3.5 xr-accent"/>}</div><p className="mt-2 text-[8px] leading-4 xr-muted">{x.detail[lang]??x.detail.fr}</p></button>})}</div><button type="button" onClick={run} disabled={!url.trim()||loading} className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-4 label-mono text-[8px] font-semibold text-[var(--xr-bg)] disabled:opacity-30">{loading?t.running:t.run}<ArrowRight className="h-4 w-4"/></button><p className="mt-3 text-center label-mono text-[5px] xr-muted-2">{t.signalsPublic}</p></div></Reveal>
-    <Reveal delay={90}><div className="xr-panel-strong xr-audit-stage relative min-h-[580px] overflow-hidden rounded-[2rem] p-5 sm:p-7 flex flex-col justify-between">
-      <div aria-hidden className="absolute -right-24 -top-24 h-72 w-72 rounded-full border border-emerald-500/10 xr-float-slower"/>
-      <div aria-hidden className="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-emerald-500/5 blur-3xl pointer-events-none"/>
-      <div className="xr-audit-browser relative mb-6 overflow-hidden rounded-2xl border border-white/10 bg-[#0d1015] text-white shadow-[0_36px_90px_-40px_rgba(0,0,0,.8)] transition-transform duration-700 hover:-translate-y-1">
-        <div className="flex items-center gap-2 border-b border-white/10 bg-[#141820] px-4 py-3">
-          <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f56]"/>
-          <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]"/>
-          <span className="h-2.5 w-2.5 rounded-full bg-[#27c93f]"/>
-          <div className="ml-2 min-w-0 flex-1 rounded-lg border border-white/10 bg-[#0a0c10] px-3 py-1.5 font-mono text-[8px] text-white/60 truncate flex items-center gap-2">
-            <span className={"h-1.5 w-1.5 rounded-full shrink-0 " + (loading ? "bg-emerald-400 animate-pulse" : "bg-white/30")}/>
-            <span className="truncate">{url.trim() ? url : "https://votre-site.com"}</span>
-          </div>
-          <span className="hidden rounded-full bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-1 label-mono text-[6px] text-emerald-400 sm:inline-flex items-center gap-1.5">
-            <span className={"h-1.5 w-1.5 rounded-full " + (loading ? "bg-emerald-400 animate-ping" : "bg-emerald-400/60")}/>
-            {loading ? t.hudLive : t.hudAwaitingBadge}
-          </span>
-        </div>
-        <div className="relative h-[230px] overflow-hidden bg-[#090b0e] p-4 sm:h-[250px]">
-          <div aria-hidden className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(16,185,129,.15)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,.15)_1px,transparent_1px)] [background-size:24px_24px]"/>
-          <div className={"pointer-events-none absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_15px_#10b981] z-10 " + (loading ? "animate-xr-scan" : "opacity-30")}/>
-          <div className="relative h-full rounded-xl border border-white/10 bg-[#12161f]/80 p-4 backdrop-blur-md flex flex-col justify-between">
-            <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
-              <div className="flex items-center gap-2">
-                <span className="grid h-6 w-6 place-items-center rounded-lg bg-emerald-500/20 text-emerald-400 font-mono text-[9px] font-bold">XR</span>
-                <div>
-                  <span className="block label-mono text-[6px] text-white/50">{t.hudStatus}</span>
-                  <span className="block text-[10px] font-semibold text-white/90">TELEMETRY_ENGINE_v2.4</span>
-                </div>
-              </div>
-              <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 label-mono text-[7px] font-bold text-emerald-400">
-                {loading ? (t.scanRunning || "SCANNING...") : t.hudAwaiting}
+ return (
+    <section id="audit" className="xr-section relative overflow-hidden border-y xr-line py-10 sm:py-14 lg:py-16">
+      <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+        {/* Compact, Luxury Header */}
+        <Reveal>
+          <div className="flex flex-col gap-4 border-b xr-line pb-6 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <span className="label-mono xr-accent text-[8px] tracking-[.24em] uppercase">{t.eyebrow}</span>
+              <h2 className="display-serif mt-2 max-w-4xl text-[clamp(1.85rem,3.2vw,3.2rem)] leading-[1.05] tracking-[-.04em] text-[var(--xr-ink)]">
+                {t.title}
+              </h2>
+              <p className="mt-2 max-w-xl text-xs sm:text-sm leading-relaxed xr-muted">{t.intro}</p>
+            </div>
+            <div className="flex items-center gap-2 rounded-2xl border xr-line bg-[var(--xr-surface)] px-4 py-2.5 shadow-sm shrink-0">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="label-mono text-[7px] text-[var(--xr-ink)] font-bold tracking-wider">
+                {loading ? t.scanRunning : t.scanReady}
               </span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 my-auto py-2">
-              <div className="rounded-lg border border-white/5 bg-white/[0.03] p-2">
-                <span className="block label-mono text-[6px] text-white/40">{t.hudSsl}</span>
-                <span className="mt-1 block text-[10px] font-mono font-bold text-emerald-400">
-                  {loading ? "SCANNING..." : "TLS 1.3 · A+"}
-                </span>
-                <span className="text-[6px] text-white/30 block mt-0.5">{loading ? "..." : (t.hudPending || "Exemple")}</span>
-              </div>
-              <div className="rounded-lg border border-white/5 bg-white/[0.03] p-2">
-                <span className="block label-mono text-[6px] text-white/40">{t.hudSpeed}</span>
-                <span className="mt-1 block text-[10px] font-mono font-bold text-cyan-400">
-                  {loading ? "TESTING..." : "< 1.5s LCP"}
-                </span>
-                <span className="text-[6px] text-white/30 block mt-0.5">{loading ? "..." : (t.hudPending || "Exemple")}</span>
-              </div>
-              <div className="rounded-lg border border-white/5 bg-white/[0.03] p-2">
-                <span className="block label-mono text-[6px] text-white/40">{t.hudDom}</span>
-                <span className="mt-1 block text-[10px] font-mono font-bold text-amber-400">
-                  {loading ? "PARSING..." : "Clean DOM"}
-                </span>
-                <span className="text-[6px] text-white/30 block mt-0.5">{loading ? "..." : (t.hudPending || "Exemple")}</span>
-              </div>
-              <div className="rounded-lg border border-white/5 bg-white/[0.03] p-2">
-                <span className="block label-mono text-[6px] text-white/40">{t.hudUx}</span>
-                <span className="mt-1 block text-[10px] font-mono font-bold text-rose-400">
-                  {loading ? "AUDITING..." : "Mobile-First"}
-                </span>
-                <span className="text-[6px] text-white/30 block mt-0.5">{loading ? "..." : (t.hudPending || "Exemple")}</span>
-              </div>
-            </div>
-            <div className="flex items-end gap-1.5 h-7 border-t border-white/10 pt-2">
-              {[38, 62, 45, 85, 70, 92, 54, 78, 65, 88, 42, 95, 73, 84, 60, 90].map((h, i) => (
-                <span key={i} className="flex-1 rounded-t-sm bg-gradient-to-t from-emerald-500/20 to-emerald-400 transition-all duration-300" style={{ height: (loading ? (h * 0.9 + (i % 3) * 5) : (h * 0.4)) + "%" }}/>
-              ))}
-            </div>
           </div>
-          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-lg border border-white/10 bg-[#0c0e14]/90 px-3 py-2 shadow-lg backdrop-blur-xl">
-            <span className="label-mono text-[5px] tracking-[.18em] text-white/50">{t.structureBanner}</span>
-            <span className="text-[7px] font-semibold text-emerald-400 flex items-center gap-1.5">
-              <span className={"h-1.5 w-1.5 rounded-full " + (loading ? "bg-emerald-400 animate-pulse" : "bg-emerald-400/40")}/>
-              {loading ? t.scanRunning : t.scanReady}
-            </span>
-          </div>
-        </div>
-      </div>
-      <div aria-hidden="true" className="xr-audit-floating absolute right-5 top-[30%] z-20 hidden w-[165px] rounded-2xl border border-white/20 bg-[#11151e]/90 p-3.5 shadow-[0_28px_70px_-25px_rgba(0,0,0,.85)] backdrop-blur-2xl sm:block text-white">
-        <div className="flex items-center justify-between border-b border-white/10 pb-2">
-          <span className="label-mono text-[6px] text-white/60">{loading ? "SCAN_CYCLE" : "BENCHMARK_PREVIEW"}</span>
-          <span className={"h-2 w-2 rounded-full " + (loading ? "bg-emerald-400 animate-pulse" : "bg-emerald-400/50")}/>
-        </div>
-        <div className="mt-2.5 flex items-center gap-3">
-          <div className="relative h-11 w-11 shrink-0 rounded-full" style={{ background: loading ? "conic-gradient(#10b981 0 88%, rgba(255,255,255,.1) 88% 100%)" : "conic-gradient(rgba(16,185,129,.5) 0 85%, rgba(255,255,255,.1) 85% 100%)" }}>
-            <div className="absolute inset-[4px] rounded-full bg-[#11151e] grid place-items-center">
-              <span className="font-mono text-[9px] font-bold text-white">{loading ? "..." : "88%"}</span>
-            </div>
-          </div>
-          <div className="flex-1 space-y-1">
-            <span className="block text-[6px] font-mono text-white/60">{t.hudBenchmarkSample}</span>
-            <span className="block h-1.5 w-full rounded-full bg-white/20"/>
-            <span className="block h-1.5 w-3/4 rounded-full bg-emerald-400/80"/>
-          </div>
-        </div>
-        <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[7px] font-mono text-white/70">
-          <span>{loading ? "LATENCY" : "RADAR"}</span>
-          <span className="text-emerald-400">{loading ? "MEASURING..." : "STANDBY"}</span>
-        </div>
-      </div>
-      <div className="relative flex flex-col justify-between">
-        <div>
-          <span className="label-mono text-[6px] xr-muted-2">{t.reportChapter}</span>
-          <p className="mt-3 display-serif text-4xl tracking-[-.04em]">{t.reportTitle}</p>
-          <p className="mt-4 max-w-md text-sm leading-6 xr-muted">{t.reportDesc}</p>
-        </div>
-        <div className="mt-6 grid grid-cols-2 gap-2">
-          {t.reportPills.map((x, i) => (
-            <div key={x} className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3.5 transition hover:bg-[var(--xr-accent-soft)]">
-              <span className="label-mono text-[5px] xr-muted-2">0{i + 1}</span>
-              <p className="mt-2 text-[9px] font-semibold">{x}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div></Reveal>
-   </div>}
+        </Reveal>
 
-   {result&&<Reveal><div className="mt-8 space-y-5"><div className="grid gap-5 lg:grid-cols-[.5fr_1.5fr]"><div className="xr-panel rounded-[2.2rem] p-6 sm:p-8"><div className="flex items-center justify-between"><span className="label-mono text-[6px] xr-muted-2">{t.score}</span><span className="label-mono text-[6px] xr-muted-2">HTTP {result.status}</span></div><div className="mx-auto mt-8 grid h-48 w-48 place-items-center rounded-full border-[12px] border-[var(--xr-accent-soft)]" style={{background:"conic-gradient(var(--xr-accent) "+result.score+"%, transparent 0)"}}><div className="grid h-36 w-36 place-items-center rounded-full bg-[var(--xr-bg-elev)]"><div className="text-center"><span className="display-serif text-6xl">{result.score}</span><span className="block label-mono text-[6px] xr-muted-2">/ 100</span></div></div></div><p className="mt-6 break-words text-center text-[9px] font-semibold">{result.url}</p><p className="mt-2 text-center text-[8px] leading-4 xr-muted">{result.types.length} {t.axesAnalyzed}</p></div><div className="xr-panel rounded-[2.2rem] p-6 sm:p-8"><div className="flex items-start justify-between gap-4"><div><span className="label-mono text-[6px] xr-muted-2">{t.readingSite}</span><h3 className="mt-2 text-xl font-semibold tracking-[-.03em] sm:text-3xl">{result.title||t.noTitle}</h3><p className="mt-2 max-w-3xl text-[9px] leading-5 xr-muted">{result.description||t.noDesc}</p></div><a href={result.url} target="_blank" rel="noreferrer" className="inline-flex shrink-0 items-center gap-2 rounded-full border xr-line px-3 py-2 label-mono text-[6px] xr-muted">{t.openSite} <ExternalLink className="h-3 w-3"/></a></div><div className="mt-6 grid gap-2 sm:grid-cols-2">{result.findings.map((f,i)=><div key={f.label+i} className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-4"><div className="flex items-center gap-2"><span className="grid h-7 w-7 place-items-center rounded-lg border xr-line">{f.status===false?"!":<Check className="h-3.5 w-3.5 xr-accent"/>}</span><span className="text-[9px] font-semibold">{f.label}</span></div><p className="mt-2 text-[8px] leading-4 xr-muted">{f.detail}</p></div>)}</div></div></div><div className="grid gap-5 lg:grid-cols-[1.1fr_.9fr]"><div className="xr-panel rounded-[2.2rem] p-6 sm:p-8"><span className="label-mono text-[6px] xr-muted-2">{t.recommend}</span><div className="mt-5 grid gap-2">{(result.recommendations??[]).map((x,i)=><div key={x.service+i} className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-4"><div className="flex gap-3"><span className="label-mono text-[6px] xr-accent">0{i+1}</span><div><p className="text-[9px] font-semibold">{x.service}</p><p className="mt-1 text-[8px] leading-4 xr-muted">{x.reason}</p></div></div></div>)}</div></div><div className="xr-panel-strong rounded-[2.2rem] p-6 sm:p-8"><span className="label-mono text-[6px] xr-muted-2">{t.exportChapter}</span><p className="mt-3 display-serif text-3xl leading-[.9]">{t.exportTitle}</p><div className="mt-6 grid gap-2"><button type="button" onClick={makePdf} className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-3.5 label-mono text-[8px] font-semibold text-[var(--xr-bg)]"><FileText className="h-4 w-4"/>{t.pdf}</button><a href={wa} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border xr-line px-5 py-3.5 label-mono text-[8px] xr-muted"><MessageCircle className="h-4 w-4"/>{t.wa}</a></div><div className="mt-6 border-t xr-line pt-4"><p className="text-[8px] xr-muted">{t.email}</p><div className="mt-2 grid gap-2 sm:grid-cols-[.75fr_1fr_auto]"><input value={name} onChange={e=>setName(e.target.value)} placeholder={t.name} className="rounded-xl border xr-line bg-[var(--xr-surface)] px-3 py-2.5 text-[9px] outline-none"/><input value={email} onChange={e=>setEmail(e.target.value)} placeholder={t.mail} type="email" className="rounded-xl border xr-line bg-[var(--xr-surface)] px-3 py-2.5 text-[9px] outline-none"/><a href={email?"mailto:"+email:"mailto:contact.xragency@gmail.com"} className="inline-flex items-center justify-center gap-2 rounded-xl border xr-line px-3 py-2.5 label-mono text-[6px] xr-muted"><Mail className="h-3 w-3"/>Mail</a></div></div><button type="button" onClick={()=>{setResult(null);setError("")}} className="mt-5 inline-flex items-center gap-2 label-mono text-[6px] xr-muted-2">{t.retry}<ArrowRight className="h-3 w-3"/></button></div></div></div></Reveal>}
-   {error&&<div className="mt-5 rounded-2xl border xr-line bg-[var(--xr-surface)] p-4 text-sm xr-muted">{error}</div>}
-  </div>
- </section>;
+        {!result && (
+          <div className="mt-6 grid gap-6 lg:grid-cols-[1.1fr_0.9fr] items-stretch">
+            {/* Left: Refined Studio Search & Config Bar */}
+            <Reveal>
+              <div className="flex flex-col justify-between h-full rounded-2xl border xr-line bg-[var(--xr-surface)] p-5 sm:p-6 shadow-md backdrop-blur-xl">
+                <div>
+                  <div className="flex items-center justify-between border-b xr-line pb-3">
+                    <div className="flex items-center gap-2">
+                      <Globe2 className="h-4 w-4 text-emerald-400" />
+                      <span className="text-xs font-bold text-[var(--xr-ink)]">{t.url}</span>
+                    </div>
+                    <span className="label-mono text-[6.5px] xr-muted uppercase">ANALYSE EN TEMPS RÉEL</span>
+                  </div>
+
+                  {/* Main Input Bar */}
+                  <div className="mt-3.5 relative">
+                    <input
+                      value={url}
+                      onChange={(e) => setUrl(e.target.value)}
+                      placeholder="https://votresite.com"
+                      className="w-full rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3 text-xs outline-none focus:border-emerald-500/60 transition shadow-inner font-mono text-[var(--xr-ink)]"
+                    />
+                  </div>
+
+                  {/* Sector & Budget Selectors */}
+                  <div className="mt-2.5 grid grid-cols-2 gap-2">
+                    <select
+                      value={sector}
+                      onChange={(e) => setSector(e.target.value)}
+                      className="rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3 py-2 text-[10px] outline-none font-medium text-[var(--xr-ink)]"
+                    >
+                      <option value="other">{t.sectorOther}</option>
+                      <option value="restaurant">{t.sectorResto}</option>
+                      <option value="hospitality">{t.sectorHosp}</option>
+                      <option value="realestate">{t.sectorRealestate}</option>
+                      <option value="commerce">{t.sectorCommerce}</option>
+                      <option value="service">{t.sectorService}</option>
+                    </select>
+
+                    <select
+                      value={budget}
+                      onChange={(e) => setBudget(e.target.value)}
+                      className="rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3 py-2 text-[10px] outline-none font-medium text-[var(--xr-ink)]"
+                    >
+                      <option value="under500">&lt; 500 €</option>
+                      <option value="500_1000">500 – 1 000 €</option>
+                      <option value="1000_2500">1 000 – 2 500 €</option>
+                      <option value="2500_5000">2 500 – 5 000 €</option>
+                      <option value="5000_plus">5 000 € +</option>
+                    </select>
+                  </div>
+
+                  {/* Compact Audit Axes Selector Chips */}
+                  <div className="mt-4">
+                    <span className="label-mono text-[6.5px] xr-muted uppercase block mb-2">
+                      CHOISISSEZ VOS AXES PRIORITAIRES :
+                    </span>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      {(Object.entries(TYPES) as [AuditType, typeof TYPES[AuditType]][]).map(([id, x]) => {
+                        const I = x.icon;
+                        const active = types.includes(id);
+                        return (
+                          <button
+                            key={id}
+                            type="button"
+                            onClick={() => toggle(id)}
+                            className={
+                              "flex items-center gap-2 rounded-xl border p-2 text-left transition " +
+                              (active
+                                ? "border-emerald-500/60 bg-emerald-500/10 text-emerald-400 font-semibold"
+                                : "border-white/10 bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] hover:border-white/20")
+                            }
+                          >
+                            <I className="h-3 w-3 shrink-0" />
+                            <span className="text-[10px] truncate">{x.label[lang] ?? x.label.fr}</span>
+                            {active && <Check className="ml-auto h-3 w-3 text-emerald-400 shrink-0" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-5 pt-3 border-t xr-line">
+                  <button
+                    type="button"
+                    onClick={run}
+                    disabled={!url.trim() || loading}
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-3 label-mono text-[8px] font-semibold text-[var(--xr-bg)] disabled:opacity-30 hover:opacity-90 transition shadow-md"
+                  >
+                    {loading ? t.running : t.run}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                  <p className="mt-2 text-center label-mono text-[5.5px] xr-muted-2">{t.signalsPublic}</p>
+                </div>
+              </div>
+            </Reveal>
+
+            {/* Right: Sleek, Compact Live Telemetry HUD */}
+            <Reveal delay={80}>
+              <div className="flex flex-col justify-between h-full rounded-2xl border border-white/10 bg-[#0d1016] text-white p-5 shadow-lg relative overflow-hidden">
+                <div aria-hidden className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-emerald-500/10 blur-2xl pointer-events-none" />
+
+                {/* HUD Header Bar */}
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-red-500" />
+                    <span className="h-2 w-2 rounded-full bg-amber-400" />
+                    <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                    <span className="ml-2 font-mono text-[9px] text-white/60 truncate max-w-[180px]">
+                      {url.trim() ? url : "https://votre-site.com"}
+                    </span>
+                  </div>
+                  <span className="label-mono text-[6.5px] text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 rounded-full px-2 py-0.5 font-bold">
+                    {loading ? t.hudLive : "SCANNER ACTIF"}
+                  </span>
+                </div>
+
+                {/* HUD Live Grid Indicators */}
+                <div className="grid grid-cols-2 gap-2.5 my-4">
+                  <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                    <span className="block label-mono text-[6.5px] text-white/50">{t.hudSsl}</span>
+                    <span className="mt-1 block text-sm font-mono font-bold text-emerald-400">
+                      {loading ? "SCAN EN COURS…" : "TLS 1.3 · A+"}
+                    </span>
+                    <span className="text-[7.5px] text-white/40 block mt-0.5">Certificat & chiffrement</span>
+                  </div>
+
+                  <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                    <span className="block label-mono text-[6.5px] text-white/50">{t.hudSpeed}</span>
+                    <span className="mt-1 block text-sm font-mono font-bold text-cyan-400">
+                      {loading ? "TEST LATENCE…" : "< 1.2s LCP"}
+                    </span>
+                    <span className="text-[7.5px] text-white/40 block mt-0.5">Vitesse & Core Web Vitals</span>
+                  </div>
+
+                  <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                    <span className="block label-mono text-[6.5px] text-white/50">{t.hudDom}</span>
+                    <span className="mt-1 block text-sm font-mono font-bold text-amber-300">
+                      {loading ? "ANALYSE DOM…" : "Sémantique OK"}
+                    </span>
+                    <span className="text-[7.5px] text-white/40 block mt-0.5">Structure & Balisage Hn</span>
+                  </div>
+
+                  <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                    <span className="block label-mono text-[6.5px] text-white/50">{t.hudUx}</span>
+                    <span className="mt-1 block text-sm font-mono font-bold text-rose-400">
+                      {loading ? "TEST MOBILE…" : "Responsive 100%"}
+                    </span>
+                    <span className="text-[7.5px] text-white/40 block mt-0.5">Ergonomie & Lisibilité</span>
+                  </div>
+                </div>
+
+                {/* Bottom Spectrum Analyzer */}
+                <div className="pt-3 border-t border-white/10 flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping" />
+                    <span className="label-mono text-[6.5px] text-white/60">RADAR XR EN ATTENTE D'URL</span>
+                  </div>
+                  <span className="label-mono text-[6.5px] text-emerald-400 font-bold">100% GRATUIT & SANS ENGAGEMENT</span>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        )}
+
+        {/* Scan Results View */}
+        {result && (
+          <Reveal>
+            <div className="mt-6 space-y-4">
+              <div className="grid gap-4 sm:grid-cols-[200px_1fr]">
+                <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-5 text-center flex flex-col justify-between items-center shadow-md">
+                  <span className="label-mono text-[6.5px] xr-muted-2 uppercase">{t.score}</span>
+                  <div className="my-3 grid h-28 w-28 place-items-center rounded-full border-[8px] border-emerald-500/20 bg-emerald-500/10">
+                    <span className="display-serif text-3xl font-bold text-emerald-400">{result.score}/100</span>
+                  </div>
+                  <span className="text-[9px] font-semibold text-[var(--xr-ink)] truncate max-w-full">{result.url}</span>
+                </div>
+
+                <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-5 shadow-md">
+                  <div className="flex items-start justify-between gap-3 border-b xr-line pb-3">
+                    <div>
+                      <span className="label-mono text-[6px] xr-muted-2 uppercase">{t.readingSite}</span>
+                      <h3 className="text-base font-bold text-[var(--xr-ink)] mt-0.5">{result.title || t.noTitle}</h3>
+                      <p className="text-[10px] xr-muted line-clamp-2">{result.description || t.noDesc}</p>
+                    </div>
+                    <a href={result.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-full border xr-line px-3 py-1 label-mono text-[6.5px] xr-muted hover:text-[var(--xr-ink)] shrink-0">
+                      {t.openSite} <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </div>
+
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                    {result.findings.slice(0, 4).map((f, i) => (
+                      <div key={f.label + i} className="rounded-xl border xr-line bg-[var(--xr-surface-strong)] p-2.5">
+                        <div className="flex items-center gap-1.5">
+                          <Check className="h-3 w-3 text-emerald-400 shrink-0" />
+                          <span className="text-[10px] font-bold text-[var(--xr-ink)]">{f.label}</span>
+                        </div>
+                        <p className="mt-0.5 text-[8.5px] xr-muted leading-tight">{f.detail}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t xr-line flex flex-wrap items-center justify-between gap-2">
+                    <button type="button" onClick={makePdf} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--xr-ink)] text-[var(--xr-bg)] px-4 py-2 label-mono text-[7.5px] font-bold shadow-md">
+                      <FileText className="h-3.5 w-3.5" />
+                      {t.pdf}
+                    </button>
+                    <a href={wa} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 px-4 py-2 label-mono text-[7.5px] font-bold">
+                      <MessageCircle className="h-3.5 w-3.5" />
+                      {t.wa}
+                    </a>
+                    <button type="button" onClick={() => { setResult(null); setError(""); }} className="label-mono text-[7px] xr-muted-2 hover:text-[var(--xr-ink)] ml-auto">
+                      ↺ {t.retry}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        )}
+
+        {error && <div className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-400">{error}</div>}
+      </div>
+    </section>
+  );
 }
-

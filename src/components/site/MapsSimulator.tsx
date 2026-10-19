@@ -346,7 +346,7 @@ function SelectorBtn({
     <button
       onClick={onClick}
       className={cn(
-        "flex w-full flex-col items-center gap-1.5 rounded-xl border px-3 py-3 text-center text-xs transition-all duration-200",
+        "flex w-full flex-col items-center gap-1 rounded-xl border px-2.5 py-2 text-center text-xs transition-all duration-200",
         selected
           ? "border-[var(--xr-ink)] bg-[var(--xr-accent-soft)] text-[var(--xr-ink)] shadow-sm ring-1 ring-[var(--xr-ink)]/15"
           : "border-border bg-card/60 text-muted-foreground hover:border-[var(--xr-ink)]/40 hover:text-foreground",
@@ -477,7 +477,7 @@ export function MapsSimulator() {
   } as const)[(lang as "fr" | "en" | "vi" | "ar" | "ru")] ?? `Bonjour XR Agency, je souhaite une étude Google Maps Top 3 sur mesure.`);
 
   return (
-    <section id="maps" className="xr-section-elevated relative border-y xr-line py-20 sm:py-28 lg:py-32">
+    <section id="maps" className="xr-section-elevated relative border-y xr-line py-10 sm:py-14 lg:py-16">
       {/* Background Glow */}
       <div
         aria-hidden
@@ -485,7 +485,7 @@ export function MapsSimulator() {
         style={{ background: "var(--gradient-halo)" }}
       />
 
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-10 space-y-16 sm:space-y-20">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10">
 
         {/* ── Section Header ── */}
         <div>
@@ -510,7 +510,7 @@ export function MapsSimulator() {
 
           {/* ── Exclusivity Badge — very visible ── */}
           <Reveal delay={80}>
-            <div className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-5 py-3.5 shadow-lg">
+            <div className="mt-4 inline-flex items-center gap-2.5 rounded-xl border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-3.5 py-2 shadow-md">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white font-black shadow-sm"><svg viewBox="0 0 24 24" className="h-5 w-5" aria-label="Google" role="img"><path fill="#4285F4" d="M21.35 12.27c0-.71-.06-1.4-.18-2.06H12v3.9h5.23a4.47 4.47 0 0 1-1.94 2.94v2.44h3.14c1.84-1.69 2.92-4.18 2.92-7.22Z"/><path fill="#34A853" d="M12 21.55c2.63 0 4.84-.87 6.45-2.36l-3.14-2.44c-.87.58-1.98.92-3.31.92-2.54 0-4.7-1.72-5.47-4.03H3.28v2.52A9.74 9.74 0 0 0 12 21.55Z"/><path fill="#FBBC05" d="M6.53 13.64A5.84 5.84 0 0 1 6.23 12c0-.57.1-1.12.3-1.64V7.84H3.28A9.72 9.72 0 0 0 2.25 12c0 1.57.38 3.06 1.03 4.16l3.25-2.52Z"/><path fill="#EA4335" d="M12 6.33c1.43 0 2.7.49 3.71 1.45l2.78-2.78C16.84 3.42 14.63 2.45 12 2.45a9.74 9.74 0 0 0-8.72 5.39l3.25 2.52c.77-2.31 2.93-4.03 5.47-4.03Z"/></svg></span>
               <Zap className="h-5 w-5 shrink-0 text-[var(--xr-bg)]" />
               <p className="text-sm font-semibold text-foreground leading-snug">
@@ -721,7 +721,7 @@ export function MapsSimulator() {
         <Reveal delay={60}>
           <div className="rounded-3xl border border-border bg-card shadow-xl overflow-hidden">
             {/* Configurator header */}
-            <div className="border-b border-border/60 bg-accent/20 px-6 py-5 sm:px-8">
+            <div className="border-b border-border/60 bg-accent/20 px-4 py-3 sm:px-6">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--xr-ink)] text-[var(--xr-bg)]">
                   <Gauge className="h-4.5 w-4.5" />
@@ -735,7 +735,7 @@ export function MapsSimulator() {
               </div>
             </div>
 
-            <div className="p-6 sm:p-8 space-y-8">
+            <div className="p-4 sm:p-6 space-y-4">
               {/* Step 1 — Sector */}
               <div>
                 <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
@@ -927,7 +927,7 @@ export function MapsSimulator() {
         {/* ── 7-Phase Methodology ── */}
         <Reveal delay={80}>
           <div>
-            <div className="mb-8 text-center">
+            <div className="mb-6 text-center">
               <p className="label-mono text-xs text-[var(--xr-ink)]">{tx("Méthodologie exclusive")}</p>
               <h3 className="display-serif mt-2 text-2xl sm:text-3xl text-foreground">
                 {tx("Le processus en 7 phases")}
@@ -937,27 +937,15 @@ export function MapsSimulator() {
               </p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {PHASES.slice(0, 4).map((ph) => (
+            <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
+              {PHASES.map((ph) => (
                 <div
                   key={ph.num}
-                  className="rounded-2xl border border-border/80 bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--xr-ink)]/30"
+                  className="rounded-xl border border-border/70 bg-card p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-[var(--xr-ink)]/30"
                 >
-                  <p className="label-mono text-xs text-[var(--xr-ink)]">{ph.num} · {tx(ph.name)}</p>
-                  <p className="display-serif mt-1.5 text-base text-foreground">{tx(ph.title)}</p>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{tx(ph.desc)}</p>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 grid gap-4 sm:grid-cols-3">
-              {PHASES.slice(4).map((ph) => (
-                <div
-                  key={ph.num}
-                  className="rounded-2xl border border-border/80 bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-[var(--xr-ink)]/30"
-                >
-                  <p className="label-mono text-xs text-[var(--xr-ink)]">{ph.num} · {tx(ph.name)}</p>
-                  <p className="display-serif mt-1.5 text-base text-foreground">{tx(ph.title)}</p>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{tx(ph.desc)}</p>
+                  <span className="label-mono text-[6.5px] text-emerald-600 dark:text-emerald-400 font-bold block">{ph.num} · {tx(ph.name)}</span>
+                  <p className="mt-1 text-xs font-bold text-foreground">{tx(ph.title)}</p>
+                  <p className="mt-1 text-[10.5px] leading-snug text-muted-foreground line-clamp-2">{tx(ph.desc)}</p>
                 </div>
               ))}
             </div>

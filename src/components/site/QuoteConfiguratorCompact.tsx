@@ -555,31 +555,25 @@ export function QuoteConfiguratorCompact() {
         type="button"
         aria-pressed={selected}
         onClick={onClick}
-        className={"choice-card group relative min-h-[140px] w-full overflow-hidden rounded-2xl border p-4 text-left transition-all duration-300 sm:min-h-[150px] sm:p-5 flex flex-col justify-between " + (selected ? "is-active border-emerald-500/50 bg-[var(--xr-accent-soft)] text-[var(--xr-ink)] shadow-[0_12px_32px_-12px_rgba(16,185,129,0.25)] ring-1 ring-emerald-500/30" : "border-[var(--xr-line)] bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] hover:border-[var(--xr-ink)]/40 hover:-translate-y-0.5")}
+        className={"choice-card group relative min-h-[58px] sm:min-h-[64px] w-full rounded-xl border p-3 sm:p-3.5 text-left transition-all duration-200 flex items-center justify-between gap-3 " + (selected ? "is-active border-emerald-500/60 bg-[var(--xr-accent-soft)] text-[var(--xr-ink)] shadow-md ring-1 ring-emerald-500/30" : "border-[var(--xr-line)] bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] hover:border-[var(--xr-ink)]/40 hover:-translate-y-0.5")}
       >
-        <span className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[var(--xr-accent-soft)] blur-2xl transition-transform duration-500 group-hover:scale-150" />
-        <div className="relative flex items-start justify-between gap-3 w-full">
-          <span aria-hidden="true" className={"grid h-11 w-11 shrink-0 place-items-center rounded-2xl text-xl transition-transform duration-300 group-hover:rotate-[-4deg] group-hover:scale-110 " + (selected ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30" : "bg-[var(--xr-accent-soft)]")}>{icons[item.id] ?? "✦"}</span>
-          <div className="flex items-center gap-1.5">
-            {priceDelta && (
-              <span className={"rounded-full px-2.5 py-1 label-mono text-[7px] font-bold tracking-wider transition-all " + (selected ? "bg-emerald-500 text-white shadow-sm" : "border xr-line bg-[var(--xr-bg)] text-[var(--xr-ink)]")}>
-                {priceDelta}
-              </span>
-            )}
-            <span className={"grid h-7 w-7 shrink-0 place-items-center rounded-full border transition-all " + (selected ? "border-emerald-500 bg-emerald-500 text-white" : "xr-line bg-[var(--xr-bg)] xr-muted-2 group-hover:border-[var(--xr-ink)]/50 group-hover:text-[var(--xr-ink)]")}>
-              {selected ? <Check className="h-3.5 w-3.5 stroke-[2.5]" /> : <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />}
+        <div className="flex items-center gap-2.5 min-w-0">
+          <span aria-hidden="true" className={"grid h-8 w-8 shrink-0 place-items-center rounded-lg text-base transition-transform group-hover:scale-105 " + (selected ? "bg-emerald-500 text-white shadow-sm" : "bg-[var(--xr-accent-soft)]")}>{icons[item.id] ?? "✦"}</span>
+          <div className="min-w-0">
+            <span className="block text-xs font-semibold leading-tight text-[var(--xr-ink)] sm:text-[13px] truncate">{item.label}</span>
+            <span className="mt-0.5 block text-[10px] leading-snug xr-muted line-clamp-1">{item.detail}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0">
+          {priceDelta && (
+            <span className={"rounded-full px-2 py-0.5 label-mono text-[6.5px] font-bold tracking-wider " + (selected ? "bg-emerald-500 text-white" : "border xr-line bg-[var(--xr-bg)] text-[var(--xr-ink)]")}>
+              {priceDelta}
             </span>
-          </div>
+          )}
+          <span className={"grid h-6 w-6 place-items-center rounded-full border transition-all " + (selected ? "border-emerald-500 bg-emerald-500 text-white" : "xr-line bg-[var(--xr-bg)] xr-muted-2 group-hover:border-[var(--xr-ink)]/50 group-hover:text-[var(--xr-ink)]")}>
+            {selected ? <Check className="h-3 w-3 stroke-[2.5]" /> : <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />}
+          </span>
         </div>
-        <div className="relative mt-3">
-          <span className="block text-sm font-semibold leading-5 text-[var(--xr-ink)] sm:text-[15px]">{item.label}</span>
-          <span className="mt-1.5 block text-[11px] leading-[1.55] xr-muted sm:text-xs">{item.detail}</span>
-        </div>
-        {selected && (
-          <div className="relative mt-3 pt-2 border-t border-emerald-500/20 flex items-center justify-between">
-            <span className="label-mono text-[7px] font-bold tracking-[.15em] text-emerald-600 dark:text-emerald-400">{QUOTE_UI.addedToProject[currentLang]}</span>
-          </div>
-        )}
       </button>
     );
   };
@@ -637,109 +631,255 @@ export function QuoteConfiguratorCompact() {
   );
 
   return (
-    <section id="quote" className="xr-section-elevated relative overflow-hidden border-y xr-line bg-[#f3efe7] py-14 sm:py-20 lg:py-28 dark:bg-[#0d0f12]">
+    <section id="quote" className="xr-section-elevated relative overflow-hidden border-y xr-line bg-[#f3efe7] py-10 sm:py-14 lg:py-16 dark:bg-[#0d0f12]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,var(--xr-accent-soft),transparent_26%),radial-gradient(circle_at_82%_78%,rgba(120,120,140,.08),transparent_24%)]"/>
-      <div className="relative mx-auto max-w-[1560px] px-5 sm:px-8 lg:px-12">
-        <Parallax speed={-0.025}><Reveal><div className="grid gap-7 border-b xr-line pb-10 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
-          <div className="min-w-0">
-            <span className="label-mono xr-accent text-[8px] tracking-[.22em] sm:tracking-[.28em]">{QUOTE_UI.kicker[currentLang]}</span>
-            <h2 className="display-serif mt-4 max-w-5xl break-words text-balance text-[clamp(2.35rem,5.2vw,5.6rem)] leading-[.98] tracking-[-.045em] sm:mt-5">{QUOTE_UI.title1[currentLang]} <em className="not-italic opacity-55">{QUOTE_UI.titleAccent[currentLang]}</em>{QUOTE_UI.title2[currentLang]}</h2>
-            <p className="mt-5 max-w-2xl text-sm leading-7 xr-muted sm:text-base">{QUOTE_UI.lead[currentLang]}</p>
-          </div>
-          <div className="relative overflow-hidden rounded-[1.15rem] border xr-line bg-[var(--xr-surface)] p-4 shadow-[var(--xr-shadow)] sm:p-5">
-            <div aria-hidden="true" className="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full bg-[var(--xr-accent-soft)] blur-3xl" />
-            <div className="relative flex items-center gap-3.5">
-              <div className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[#1c2430] to-[#0c0e12] border border-white/10 text-white shadow-xl">
-                <span className="font-serif text-lg font-bold tracking-tight text-white/95">AX</span>
-                <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-[var(--xr-surface)] bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]">
-                  <span className="h-1.5 w-1.5 rounded-full bg-white animate-ping" />
-                </span>
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <p className="text-sm font-bold tracking-tight text-[var(--xr-ink)]">Alexandre</p>
-                  <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 label-mono text-[6px] font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">{QUOTE_UI.online[currentLang]}</span>
-                </div>
-                <p className="mt-0.5 label-mono text-[7px] tracking-[.12em] xr-muted-2 truncate">{QUOTE_UI.advisorRole[currentLang]}</p>
-              </div>
-              <span className="hidden sm:inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-2.5 py-1 label-mono text-[6px] font-semibold text-[var(--xr-ink)]">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                {QUOTE_UI.advisorLiveBadge[currentLang]}
-              </span>
+      <div className="relative mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+        <Parallax speed={-0.02}><Reveal>
+          <div className="grid gap-6 border-b xr-line pb-6 lg:grid-cols-[1.15fr_.85fr] lg:items-center">
+            <div className="min-w-0">
+              <span className="label-mono xr-accent text-[7.5px] tracking-[.22em] sm:tracking-[.26em]">{QUOTE_UI.kicker[currentLang]}</span>
+              <h2 className="display-serif mt-2.5 max-w-3xl break-words text-balance text-[clamp(1.75rem,3.2vw,2.9rem)] leading-[1.04] tracking-[-.04em]">{QUOTE_UI.title1[currentLang]} <em className="not-italic opacity-55">{QUOTE_UI.titleAccent[currentLang]}</em>{QUOTE_UI.title2[currentLang]}</h2>
+              <p className="mt-2.5 max-w-xl text-xs leading-5 xr-muted sm:text-[13px]">{QUOTE_UI.lead[currentLang]}</p>
             </div>
-            <div aria-live="polite" className="relative mt-4 rounded-2xl rounded-tl-sm border xr-line bg-[var(--xr-surface-strong)] p-4 shadow-sm min-h-[96px] flex flex-col justify-between">
-              <div className="mb-2 flex items-center justify-between gap-2">
-                <span className="flex items-center gap-1.5 label-mono text-[6px] tracking-[.16em] xr-muted-2">
-                  <MessageCircle className="h-3 w-3 text-[var(--xr-accent)]" /> {QUOTE_UI.alexMsg[currentLang]}
-                </span>
-                {isTyping && (
-                  <span className="inline-flex items-center gap-1 label-mono text-[6px] text-emerald-600 dark:text-emerald-400">
-                    <span className="h-1 w-1 rounded-full bg-emerald-500 animate-bounce [animation-delay:0ms]" />
-                    <span className="h-1 w-1 rounded-full bg-emerald-500 animate-bounce [animation-delay:150ms]" />
-                    <span className="h-1 w-1 rounded-full bg-emerald-500 animate-bounce [animation-delay:300ms]" />
-                  </span>
-                )}
-              </div>
-              <div className={"transition-opacity duration-300 " + (isTyping ? "opacity-35" : "opacity-100")}>
-                <p className="text-[11px] leading-relaxed text-[var(--xr-ink)] sm:text-xs font-medium">
-                  {alexMessages[step]}
-                </p>
-              </div>
-              <div className="mt-3 flex items-center justify-between border-t border-[var(--xr-line)]/50 pt-2" aria-hidden="true">
-                <div className="flex items-center gap-1">
-                  <span className="h-1 w-1 rounded-full bg-[var(--xr-ink)]/60 animate-pulse" />
-                  <span className="h-1 w-1 rounded-full bg-[var(--xr-ink)]/40 animate-pulse [animation-delay:150ms]" />
-                  <span className="h-1 w-1 rounded-full bg-[var(--xr-ink)]/20 animate-pulse [animation-delay:300ms]" />
-                  <span className="ml-1.5 label-mono text-[6px] xr-muted-2">{QUOTE_UI.personalizedSupport[currentLang]}</span>
+
+            {/* Alexandre Sleek Live Advisor & Realtime Estimate */}
+            <div className="relative overflow-hidden rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5 shadow-sm sm:p-4">
+              <div aria-hidden="true" className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-[var(--xr-accent-soft)] blur-2xl" />
+              <div className="relative flex items-center justify-between gap-3 border-b xr-line pb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="relative grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#1c2430] to-[#0c0e12] border border-white/10 text-white shadow-md">
+                    <span className="font-serif text-sm font-bold tracking-tight text-white/95">AX</span>
+                    <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3 items-center justify-center rounded-full border-2 border-[var(--xr-surface)] bg-emerald-500">
+                      <span className="h-1 w-1 rounded-full bg-white animate-ping" />
+                    </span>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <p className="text-xs font-bold text-[var(--xr-ink)]">Alexandre</p>
+                      <span className="rounded-full bg-emerald-500/10 px-1.5 py-0.5 label-mono text-[5.5px] font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">{QUOTE_UI.online[currentLang]}</span>
+                    </div>
+                    <p className="label-mono text-[6.5px] tracking-wider xr-muted-2 truncate">{QUOTE_UI.advisorRole[currentLang]}</p>
+                  </div>
                 </div>
-                <span className="label-mono text-[6px] xr-muted-2 tracking-wider">PARIS 8E</span>
+
+                <div className="text-right">
+                  <span className="label-mono text-[5.5px] tracking-wider xr-muted-2 block">{QUOTE_UI.liveEstimate[currentLang]}</span>
+                  <span className="text-base font-bold text-[var(--xr-ink)]">{totalLabel}</span>
+                </div>
               </div>
-            </div>
-            <div className="relative mt-4 flex items-end justify-between gap-3 border-t xr-line pt-3">
-              <div><span className="label-mono text-[6px] tracking-[.18em] xr-muted-2">{QUOTE_UI.liveEstimate[currentLang]}</span><p className="mt-1 display-serif text-2xl text-[var(--xr-ink)] sm:text-3xl">{totalLabel}</p></div>
-              <span className="shrink-0 rounded-full border xr-line px-3 py-1.5 label-mono text-[6px] xr-muted-2">{String(step+1).padStart(2,"0")} / 08 {QUOTE_UI.stepCount[currentLang]}</span>
+
+              {/* Dynamic message quote */}
+              <div aria-live="polite" className="relative mt-2.5 flex items-start gap-2 rounded-xl bg-[var(--xr-surface-strong)] px-3 py-2 text-[11px] leading-snug text-[var(--xr-ink)]">
+                <MessageCircle className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                <p className="text-[11px] font-medium leading-relaxed">{alexMessages[step]}</p>
+              </div>
             </div>
           </div>
-        </div></Reveal></Parallax>
-        <div className="mt-6 overflow-x-auto pb-1">
-          <div className="flex min-w-max gap-2 rounded-xl border xr-line bg-[var(--xr-surface)] p-2 shadow-[var(--xr-shadow)]">
+        </Reveal></Parallax>
+
+        {/* Unified Horizontal Step Progress Bar */}
+        <div className="mt-5 overflow-x-auto pb-1">
+          <div className="flex min-w-max gap-1.5 rounded-xl border xr-line bg-[var(--xr-surface)] p-1.5 shadow-sm">
             {titles.map((title, index) => (
               <button
                 key={title + index}
                 type="button"
                 onClick={() => index <= step && setStep(index)}
-                className={"group flex min-w-[145px] items-center gap-3 rounded-xl px-3 py-3 text-left transition " + (index === step ? "bg-[var(--xr-ink)] text-[var(--xr-bg)] shadow-lg" : index < step ? "bg-[var(--xr-accent-soft)]" : "opacity-45")}
+                className={"group flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-left transition " + (index === step ? "bg-[var(--xr-ink)] text-[var(--xr-bg)] shadow-sm" : index < step ? "bg-[var(--xr-accent-soft)] text-[var(--xr-ink)]" : "opacity-45 text-[var(--xr-ink)]")}
               >
-                <span className={"grid h-8 w-8 shrink-0 place-items-center rounded-full border text-[8px] font-semibold " + (index === step ? "border-white/15 bg-white/10" : "xr-line")}>
-                  {index < step ? <Check className="h-3 w-3" /> : String(index + 1).padStart(2, "0")}
+                <span className={"grid h-5 w-5 shrink-0 place-items-center rounded-full text-[7.5px] font-bold " + (index === step ? "bg-white/20 text-white" : "border xr-line")}>
+                  {index < step ? <Check className="h-2.5 w-2.5" /> : index + 1}
                 </span>
-                <span className="min-w-0">
-                  <span className={"label-mono block text-[5px] tracking-[.16em] " + (index === step ? "text-white/55" : "xr-muted-2")}>{QUOTE_UI.stepWord[currentLang]} {String(index + 1).padStart(2, "0")}</span>
-                  <span className={"mt-1 block truncate text-[9px] font-semibold " + (index === step ? "text-white" : "text-[var(--xr-ink)]")}>{title}</span>
-                </span>
+                <span className="truncate text-[9.5px] font-semibold">{title}</span>
               </button>
             ))}
           </div>
         </div>
-        <div ref={journeyRef} className="mt-8 grid gap-5 lg:grid-cols-[.25fr_1.75fr]">
-          <Reveal><aside className="xr-panel rounded-[2rem] p-3 lg:sticky lg:top-28 lg:h-fit">
-            <div className="px-3 pb-3 pt-2"><div className="flex items-center justify-between"><span className="label-mono text-[6px] xr-muted-2">{QUOTE_UI.yourJourney[currentLang]}</span><span className="label-mono text-[6px] xr-muted-2">{String(step+1).padStart(2,"0")} / 08</span></div><div className="mt-3 h-1 rounded-full bg-current opacity-10"><div className="h-full rounded-full bg-[var(--xr-accent)] transition-all duration-500" style={{width:progress+"%"}}/></div></div>
-            <div className="hidden gap-1 lg:grid">{titles.map((title,index)=><div key={title + index} className={"rounded-xl px-3 py-3 "+(index===step?"bg-[var(--xr-accent-soft)]":"opacity-45")}><div className="flex items-center gap-2"><span className="label-mono text-[6px] xr-muted-2">{String(index+1).padStart(2,"0")}</span><span className="truncate text-[8px] font-semibold">{title}</span></div></div>)}</div>
-            <div className="mt-2 rounded-xl border xr-line bg-[var(--xr-surface)] p-3"><span className="label-mono text-[6px] xr-muted-2">{QUOTE_UI.system[currentLang]}</span><p className="mt-1 text-[9px] font-semibold">{selectedServices.length} {QUOTE_UI.activeBricks[currentLang]}</p><p className="mt-1 text-[7px] xr-muted">{totalLabel}</p></div>
-          </aside></Reveal>
-          <Reveal delay={70}><div className="xr-depth-card rounded-[1.15rem] border xr-line bg-[var(--xr-surface)] p-4 sm:p-6 lg:p-8">
-            <div className="flex items-center justify-between gap-3 border-b xr-line pb-5"><div className="min-w-0"><span className="inline-flex items-center gap-2 rounded-full border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-[var(--xr-ink)]"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--xr-ink)]"/>{step===7 ? QUOTE_UI.lastStretch[currentLang] : QUOTE_UI.stepWord[currentLang] + " " + String(step+1).padStart(2,"0") + " / 08"}</span><h3 className="mt-3 max-w-3xl break-words text-balance text-2xl font-semibold leading-[1.12] tracking-[-.03em] sm:text-3xl">{titles[step]}</h3><p className="mt-2 text-xs leading-5 xr-muted sm:text-sm">{subtitles[step]}</p></div>{step>0&&<button type="button" onClick={()=>goToStep(step-1)} className="shrink-0 rounded-full border xr-line px-4 py-2 text-xs font-semibold transition hover:bg-[var(--xr-accent-soft)]">{QUOTE_UI.back[currentLang]}</button>}</div>
-            <div className="mt-7">
-              {step===0&&<div className="space-y-4"><div className="rounded-[1.15rem] border xr-line bg-[var(--xr-surface-strong)] p-5"><span className="label-mono text-[6px] xr-accent">{QUOTE_UI.activityBadge[currentLang]}</span><p className="mt-2 text-sm xr-muted">{QUOTE_UI.activityIntro[currentLang]}</p></div><div className="grid grid-cols-2 gap-3 sm:grid-cols-3">{(showAllSectors?SECTORS:SECTORS.slice(0,6)).map((x,i)=><button key={x.id} type="button" aria-label={QUOTE_UI.stepWord[currentLang] + " " + x.label} onClick={()=>{setSectorId(x.id);goToStep(1)}} className="choice-card xr-depth-card group min-h-[140px] rounded-2xl border xr-line bg-[var(--xr-surface-strong)] p-4 text-left transition hover:border-[var(--xr-ink)]/50 hover:bg-[var(--xr-accent-soft)] sm:min-h-[155px] sm:p-5"><span className="flex items-center justify-between"><span className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--xr-accent-soft)] text-xl transition group-hover:scale-110">{({"restaurant":"🍽️","hospitality":"🏨","realestate":"🏡","automotive":"🚘","fashion":"👜","jewelry":"💎","beauty":"✨","health":"🩺","architecture":"🏛️","construction":"🛠️","legal":"⚖️","finance":"📈","commerce":"🛍️","tourism":"✈️","agency":"🎨","other":"💡"} as Record<string,string>)[x.id]||"✦"}</span><span className="label-mono text-[7px] xr-muted-2">{String(i+1).padStart(2,"0")}</span></span><span className="mt-4 block text-xs font-semibold leading-5 sm:text-sm">{x.label}</span><span className="mt-1.5 block text-[10px] leading-4 xr-muted">{x.detail}</span></button>)}</div><button type="button" onClick={()=>setShowAllSectors(v=>!v)} className="w-full rounded-full border xr-line py-3 label-mono text-[7px] xr-muted">{showAllSectors ? QUOTE_UI.collapseSectors[currentLang] : QUOTE_UI.seeAllSectors[currentLang]}</button></div>}
-              {step===1&&sector&&<div className="space-y-4"><div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-5"><span className="label-mono text-[6px] xr-muted-2">{QUOTE_UI.activityBadge[currentLang]}</span><p className="mt-2 text-xl font-semibold">{sector.label}</p><p className="mt-1 text-[9px] leading-4 xr-muted">{sector.detail}</p></div><div className="grid gap-2 sm:grid-cols-3">{sector.goals.map(x=>card({id:x,label:x,detail:currentLang === "en" ? "Tailored priority for your sector" : currentLang === "vi" ? "Ưu tiên phù hợp với ngành của bạn" : currentLang === "ar" ? "أولوية مناسبة لمجالك" : currentLang === "ru" ? "Приоритетная задача для вашей сферы" : "Priorité adaptée à votre secteur"},()=>choose(setGoal,x,2)))}</div></div>}
-              {step===2&&<div className="grid gap-2 sm:grid-cols-2">{SITUATIONS.map(x=>card(x,()=>choose(setSituation,x.id,3),x.id===situation))}</div>}
-              {step===3&&<div className="grid gap-2 sm:grid-cols-3">{BUDGETS.map(x=>card(x,()=>{setBudget(x.id);setSelectedServices([]);window.setTimeout(()=>setStep(4),180)},x.id===budget))}</div>}
-              {step===4&&<div className="space-y-4"><div className="rounded-2xl border xr-line bg-[var(--xr-accent-soft)] p-5"><span className="label-mono text-[6px] xr-accent">{QUOTE_UI.preparedSelection[currentLang]}</span><p className="mt-2 text-sm font-semibold">{QUOTE_UI.preparedTitle[currentLang]}</p><p className="mt-2 text-[9px] leading-4 xr-muted">{QUOTE_UI.preparedDetail[currentLang]}</p></div><div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">{orderedServices.map(x=>{const p = proposals.find(item => item.id === x.id); const deltaTag = p ? p.custom ? QUOTE_UI.onQuote[currentLang] : p.period === "month" ? `${p.price.toLocaleString("fr-FR")} €${QUOTE_UI.perMonth[currentLang]}` : p.id === "maps" ? `990 €${QUOTE_UI.perYear[currentLang]}` : `+${p.price.toLocaleString("fr-FR")} €` : undefined; return card(x,()=>toggleService(x.id),selectedServices.includes(x.id), deltaTag);})}</div><button type="button" disabled={!selectedServices.length} onClick={()=>goToStep(5)} className="w-full rounded-full bg-[var(--xr-ink)] px-5 py-4 label-mono text-[8px] font-semibold text-[var(--xr-bg)] hover:opacity-90 transition disabled:opacity-30">{QUOTE_UI.continue[currentLang]}</button></div>}
-              {step===5&&<div className="space-y-4"><div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-5"><span className="label-mono text-[6px] xr-muted-2">{QUOTE_UI.acquisitionBadge[currentLang]}</span><p className="mt-2 text-lg font-semibold">{QUOTE_UI.acquisitionTitle[currentLang]}</p></div><div className="grid gap-2 sm:grid-cols-2">{DISCOVERY.map(x=>card(x,()=>choose(setDiscovery,x.id,6),x.id===discovery))}</div></div>}
-              {step===6&&sector&&<div className="space-y-5"><div className="rounded-[1.15rem] border xr-line bg-[var(--xr-accent-soft)] p-6"><span className="label-mono text-[6px] xr-accent">{QUOTE_UI.recommendationBadge[currentLang]}</span><p className="mt-3 max-w-3xl text-lg leading-7 sm:text-2xl">{recommendation}</p></div><div className="grid gap-2 sm:grid-cols-2">{selectedServices.map(id=>{const p=proposals.find(x=>x.id===id);return p?<div key={id} className="flex items-start justify-between gap-4 rounded-2xl border xr-line bg-[var(--xr-surface)] p-4"><div><p className="text-[10px] font-semibold">{p.label}</p><p className="mt-1 text-[8px] leading-4 xr-muted">{p.detail}</p></div><span className="shrink-0 text-[9px] font-semibold">{p.custom ? QUOTE_UI.onQuote[currentLang] : p.price.toLocaleString("fr-FR")+" €"+(p.period==="month" ? QUOTE_UI.perMonth[currentLang] : "")}</span></div>:null})}</div><div className="grid gap-2 sm:grid-cols-2"><div className="rounded-2xl border xr-line p-5"><span className="label-mono text-[6px] xr-muted-2">{QUOTE_UI.oneOff[currentLang]}</span><p className="mt-1 text-3xl font-semibold">{once.toLocaleString("fr-FR")} €</p></div><div className="rounded-2xl border xr-line p-5"><span className="label-mono text-[6px] xr-muted-2">{QUOTE_UI.monthly[currentLang]}</span><p className="mt-1 text-3xl font-semibold">{monthly.toLocaleString("fr-FR")} €<span className="text-sm xr-muted">{QUOTE_UI.perMonth[currentLang]}</span></p></div></div><div className="grid gap-2 sm:grid-cols-2"><button type="button" onClick={()=>goToStep(7)} className="rounded-full bg-[var(--xr-ink)] px-5 py-4 label-mono text-[8px] font-semibold text-[var(--xr-bg)]">{QUOTE_UI.getQuotePdf[currentLang]}</button><a href={"https://wa.me/33767566783?text="+encodeURIComponent(currentLang === "en" ? `Hello XR Agency, I have completed my XR Quote Studio setup.\n• Industry: ${sector?.label}\n• Budget: ${budgetChoice?.label}\n• Services: ${selectedServices.map(id => proposals.find(p=>p.id===id)?.label).filter(Boolean).join(", ")}\n• Total: ${totalLabel}` : currentLang === "vi" ? `Xin chào XR Agency, tôi đã hoàn thành cấu hình XR Quote Studio.\n• Ngành nghề: ${sector?.label}\n• Ngân sách: ${budgetChoice?.label}\n• Dịch vụ: ${selectedServices.map(id => proposals.find(p=>p.id===id)?.label).filter(Boolean).join(", ")}\n• Tổng cộng: ${totalLabel}` : currentLang === "ar" ? `مرحبًا XR Agency، لقد أكملت تكوين XR Quote Studio.\n• القطاع: ${sector?.label}\n• الميزانية: ${budgetChoice?.label}\n• الخدمات: ${selectedServices.map(id => proposals.find(p=>p.id===id)?.label).filter(Boolean).join(", ")}\n• الإجمالي: ${totalLabel}` : currentLang === "ru" ? `Здравствуйте, XR Agency! Я завершил расчёт в XR Quote Studio.\n• Сфера: ${sector?.label}\n• Бюджет: ${budgetChoice?.label}\n• Услуги: ${selectedServices.map(id => proposals.find(p=>p.id===id)?.label).filter(Boolean).join(", ")}\n• Итого: ${totalLabel}` : `Bonjour XR Agency, j'ai terminé mon diagnostic XR Quote Studio. Secteur : ${sector?.label}. Budget : ${budgetChoice?.label}. Prestations : ${selectedServices.map(id=>proposals.find(p=>p.id===id)?.label).filter(Boolean).join(", ")}. Total : ${totalLabel}.`)} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border xr-line px-5 py-4 label-mono text-[8px] xr-muted">{QUOTE_UI.continueWhatsApp[currentLang]} <ArrowRight className="h-3.5 w-3.5"/></a></div></div>}
-              {step===7&&<div className="space-y-4"><div className="rounded-2xl border xr-line bg-[var(--xr-accent-soft)] p-5"><span className="label-mono text-[6px] xr-accent">{QUOTE_UI.finalizationBadge[currentLang]}</span><p className="mt-2 text-lg font-semibold">{QUOTE_UI.finalizationTitle[currentLang]}</p><p className="mt-1 text-[9px] leading-4 xr-muted">{QUOTE_UI.finalizationDetail[currentLang]}</p></div><form onSubmit={handleQuoteSubmit} className="space-y-3"><div className="grid gap-3 sm:grid-cols-2"><input value={client.company} onChange={e=>setClient({...client,company:e.target.value})} placeholder={QUOTE_UI.formCompany[currentLang]} autoComplete="organization" className="w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3.5 text-sm outline-none" required/><input value={client.name} onChange={e=>setClient({...client,name:e.target.value})} placeholder={QUOTE_UI.formName[currentLang]} autoComplete="name" className="w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3.5 text-sm outline-none" required/><input value={client.email} onChange={e=>setClient({...client,email:e.target.value})} type="email" placeholder={QUOTE_UI.formEmail[currentLang]} autoComplete="email" className="w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3.5 text-sm outline-none" required/><input value={client.whatsapp} onChange={e=>setClient({...client,whatsapp:e.target.value})} type="tel" placeholder={QUOTE_UI.formPhone[currentLang]} autoComplete="tel" className="w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3.5 text-sm outline-none" required/></div><input value={client.website} onChange={e=>setClient({...client,website:e.target.value})} type="url" placeholder={QUOTE_UI.formWebsite[currentLang]} autoComplete="url" className="w-full rounded-2xl border xr-line bg-[var(--xr-surface-strong)] px-4 py-3.5 text-sm outline-none"/><div className="grid gap-3 sm:grid-cols-2 pt-2"><button type="submit" disabled={!client.company||!client.name||!client.email||!client.whatsapp||sending} className="w-full rounded-full bg-[var(--xr-ink)] px-5 py-4 label-mono text-[8px] font-semibold text-[var(--xr-bg)] disabled:opacity-30">{quoteDownloadLabel}</button><button type="button" onClick={createCheckout} disabled={!client.company||!client.name||!client.email||!client.whatsapp||paying} className="w-full rounded-full border border-[var(--xr-ink)]/50 bg-[var(--xr-accent-soft)] px-5 py-4 label-mono text-[8px] font-bold text-[var(--xr-ink)] hover:bg-[var(--xr-ink)] hover:text-[var(--xr-bg)] transition disabled:opacity-30">{paying ? QUOTE_UI.preparingPayment[currentLang] : QUOTE_UI.payDeposit[currentLang]}</button></div></form>{generated&&<div className="rounded-2xl border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] p-4 text-sm text-center">{QUOTE_UI.pdfSuccess[currentLang]}</div>}{sendMessage&&<div aria-live="polite" className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 text-center text-[9px] xr-muted">{sendMessage}</div>}<button type="button" onClick={reset} className="mx-auto flex items-center gap-2 label-mono text-[7px] xr-muted-2"><span>↺</span> {QUOTE_UI.restart[currentLang]}</button></div>}
+
+        {/* Main Sleek Stage Container */}
+        <div ref={journeyRef} className="mt-5">
+          <Reveal delay={60}>
+            <div className="xr-depth-card rounded-2xl border xr-line bg-[var(--xr-surface)] p-4 sm:p-6 lg:p-7 shadow-sm">
+              <div className="flex items-center justify-between gap-3 border-b xr-line pb-4">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-2.5 py-0.5 label-mono text-[6.5px] font-semibold tracking-wider text-[var(--xr-ink)]">
+                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"/>
+                      {step === 7 ? QUOTE_UI.lastStretch[currentLang] : QUOTE_UI.stepWord[currentLang] + " " + String(step + 1).padStart(2, "0") + " / 08"}
+                    </span>
+                    <span className="label-mono text-[7px] text-muted-foreground">{titles[step]}</span>
+                  </div>
+                  <h3 className="mt-2 text-xl font-bold tracking-tight text-[var(--xr-ink)] sm:text-2xl">{subtitles[step]}</h3>
+                </div>
+                {step > 0 && (
+                  <button type="button" onClick={() => goToStep(step - 1)} className="shrink-0 rounded-full border xr-line px-3.5 py-1.5 text-xs font-semibold transition hover:bg-[var(--xr-accent-soft)]">
+                    {QUOTE_UI.back[currentLang]}
+                  </button>
+                )}
+              </div>
+
+              <div className="mt-5">
+                {step === 0 && (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                      {(showAllSectors ? SECTORS : SECTORS.slice(0, 8)).map((x) =>
+                        card(x, () => { setSectorId(x.id); goToStep(1); }, x.id === sectorId)
+                      )}
+                    </div>
+                    <button type="button" onClick={() => setShowAllSectors(v => !v)} className="mx-auto block rounded-full border xr-line px-5 py-2 label-mono text-[7px] font-semibold xr-muted hover:text-[var(--xr-ink)] transition">
+                      {showAllSectors ? QUOTE_UI.collapseSectors[currentLang] : QUOTE_UI.seeAllSectors[currentLang]}
+                    </button>
+                  </div>
+                )}
+
+                {step === 1 && sector && (
+                  <div className="space-y-4">
+                    <div className="rounded-xl border xr-line bg-[var(--xr-accent-soft)] p-3 text-xs">
+                      <span className="label-mono text-[6px] text-muted-foreground block">{QUOTE_UI.activityBadge[currentLang]}</span>
+                      <span className="font-bold text-[var(--xr-ink)]">{sector.label}</span> · <span className="xr-muted">{sector.detail}</span>
+                    </div>
+                    <div className="grid gap-2 sm:grid-cols-3">
+                      {sector.goals.map(x => card({ id: x, label: x, detail: currentLang === "en" ? "Tailored priority for your sector" : currentLang === "vi" ? "Ưu tiên phù hợp với ngành của bạn" : currentLang === "ar" ? "أولوية مناسبة لمجالك" : currentLang === "ru" ? "Приоритетная задача для вашей сферы" : "Priorité adaptée à votre secteur" }, () => choose(setGoal, x, 2)))}
+                    </div>
+                  </div>
+                )}
+
+                {step === 2 && (
+                  <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                    {SITUATIONS.map(x => card(x, () => choose(setSituation, x.id, 3), x.id === situation))}
+                  </div>
+                )}
+
+                {step === 3 && (
+                  <div className="grid gap-2 sm:grid-cols-3">
+                    {BUDGETS.map(x => card(x, () => { setBudget(x.id); setSelectedServices([]); window.setTimeout(() => setStep(4), 180); }, x.id === budget))}
+                  </div>
+                )}
+
+                {step === 4 && (
+                  <div className="space-y-4">
+                    <div className="rounded-xl border xr-line bg-[var(--xr-accent-soft)] p-3 flex items-center justify-between">
+                      <div>
+                        <span className="label-mono text-[6px] text-emerald-600 dark:text-emerald-400 font-bold block">{QUOTE_UI.preparedSelection[currentLang]}</span>
+                        <p className="text-xs font-semibold text-[var(--xr-ink)]">{QUOTE_UI.preparedTitle[currentLang]}</p>
+                      </div>
+                      <span className="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 label-mono text-[7px] font-bold text-emerald-600 dark:text-emerald-400">
+                        {selectedServices.length} {QUOTE_UI.activeBricks[currentLang]}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                      {orderedServices.map(x => {
+                        const p = proposals.find(item => item.id === x.id);
+                        const deltaTag = p ? p.custom ? QUOTE_UI.onQuote[currentLang] : p.period === "month" ? `${p.price.toLocaleString("fr-FR")} €${QUOTE_UI.perMonth[currentLang]}` : p.id === "maps" ? `990 €${QUOTE_UI.perYear[currentLang]}` : `+${p.price.toLocaleString("fr-FR")} €` : undefined;
+                        return card(x, () => toggleService(x.id), selectedServices.includes(x.id), deltaTag);
+                      })}
+                    </div>
+                    <button type="button" disabled={!selectedServices.length} onClick={() => goToStep(5)} className="w-full rounded-full bg-[var(--xr-ink)] px-5 py-3 label-mono text-[8px] font-semibold text-[var(--xr-bg)] hover:opacity-90 transition disabled:opacity-30">
+                      {QUOTE_UI.continue[currentLang]}
+                    </button>
+                  </div>
+                )}
+
+                {step === 5 && (
+                  <div className="space-y-4">
+                    <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                      {DISCOVERY.map(x => card(x, () => choose(setDiscovery, x.id, 6), x.id === discovery))}
+                    </div>
+                  </div>
+                )}
+
+                {step === 6 && sector && (
+                  <div className="space-y-4">
+                    <div className="rounded-xl border xr-line bg-[var(--xr-accent-soft)] p-4">
+                      <span className="label-mono text-[6px] text-emerald-600 dark:text-emerald-400 font-bold block">{QUOTE_UI.recommendationBadge[currentLang]}</span>
+                      <p className="mt-1 text-sm leading-relaxed text-[var(--xr-ink)] font-medium">{recommendation}</p>
+                    </div>
+
+                    <div className="grid gap-2 sm:grid-cols-2">
+                      {selectedServices.map(id => {
+                        const p = proposals.find(x => x.id === id);
+                        return p ? (
+                          <div key={id} className="flex items-center justify-between gap-3 rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3.5 py-2.5">
+                            <span className="text-xs font-semibold text-[var(--xr-ink)] truncate">{p.label}</span>
+                            <span className="shrink-0 label-mono text-[7.5px] font-bold text-emerald-600 dark:text-emerald-400">
+                              {p.custom ? QUOTE_UI.onQuote[currentLang] : p.price.toLocaleString("fr-FR") + " €" + (p.period === "month" ? QUOTE_UI.perMonth[currentLang] : "")}
+                            </span>
+                          </div>
+                        ) : null;
+                      })}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 text-center">
+                        <span className="label-mono text-[6px] xr-muted-2 block">{QUOTE_UI.oneOff[currentLang]}</span>
+                        <span className="text-xl font-bold text-[var(--xr-ink)] sm:text-2xl">{once.toLocaleString("fr-FR")} €</span>
+                      </div>
+                      <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 text-center">
+                        <span className="label-mono text-[6px] xr-muted-2 block">{QUOTE_UI.monthly[currentLang]}</span>
+                        <span className="text-xl font-bold text-[var(--xr-ink)] sm:text-2xl">{monthly.toLocaleString("fr-FR")} €<span className="text-xs font-normal xr-muted">{QUOTE_UI.perMonth[currentLang]}</span></span>
+                      </div>
+                    </div>
+
+                    <div className="grid gap-2 sm:grid-cols-2 pt-2">
+                      <button type="button" onClick={() => goToStep(7)} className="rounded-full bg-[var(--xr-ink)] px-5 py-3 label-mono text-[8px] font-semibold text-[var(--xr-bg)] hover:opacity-90 transition">
+                        {QUOTE_UI.getQuotePdf[currentLang]}
+                      </button>
+                      <a
+                        href={"https://wa.me/33767566783?text=" + encodeURIComponent(currentLang === "en" ? `Hello XR Agency, I have completed my XR Quote Studio setup.\n• Industry: ${sector?.label}\n• Budget: ${budgetChoice?.label}\n• Services: ${selectedServices.map(id => proposals.find(p => p.id === id)?.label).filter(Boolean).join(", ")}\n• Total: ${totalLabel}` : currentLang === "vi" ? `Xin chào XR Agency, tôi đã hoàn thành cấu hình XR Quote Studio.\n• Ngành nghề: ${sector?.label}\n• Ngân sách: ${budgetChoice?.label}\n• Dịch vụ: ${selectedServices.map(id => proposals.find(p => p.id === id)?.label).filter(Boolean).join(", ")}\n• Tổng cộng: ${totalLabel}` : currentLang === "ar" ? `مرحبًا XR Agency، لقد أكملت تكوين XR Quote Studio.\n• القطاع: ${sector?.label}\n• الميزانية: ${budgetChoice?.label}\n• الخدمات: ${selectedServices.map(id => proposals.find(p => p.id === id)?.label).filter(Boolean).join(", ")}\n• الإجمالي: ${totalLabel}` : currentLang === "ru" ? `Здравствуйте, XR Agency! Я завершил расчёт в XR Quote Studio.\n• Сфера: ${sector?.label}\n• Бюджет: ${budgetChoice?.label}\n• Услуги: ${selectedServices.map(id => proposals.find(p => p.id === id)?.label).filter(Boolean).join(", ")}\n• Итого: ${totalLabel}` : `Bonjour XR Agency, j'ai terminé mon diagnostic XR Quote Studio. Secteur : ${sector?.label}. Budget : ${budgetChoice?.label}. Prestations : ${selectedServices.map(id => proposals.find(p => p.id === id)?.label).filter(Boolean).join(", ")}. Total : ${totalLabel}.`)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center justify-center gap-2 rounded-full border xr-line px-5 py-3 label-mono text-[8px] xr-muted hover:border-[var(--xr-ink)] hover:text-[var(--xr-ink)] transition"
+                      >
+                        {QUOTE_UI.continueWhatsApp[currentLang]} <ArrowRight className="h-3 w-3"/>
+                      </a>
+                    </div>
+                  </div>
+                )}
+
+                {step === 7 && (
+                  <div className="space-y-4">
+                    <div className="rounded-xl border xr-line bg-[var(--xr-accent-soft)] p-3">
+                      <span className="label-mono text-[6px] text-emerald-600 dark:text-emerald-400 font-bold block">{QUOTE_UI.finalizationBadge[currentLang]}</span>
+                      <p className="text-xs font-semibold text-[var(--xr-ink)]">{QUOTE_UI.finalizationTitle[currentLang]}</p>
+                    </div>
+
+                    <form onSubmit={handleQuoteSubmit} className="space-y-2.5">
+                      <div className="grid gap-2.5 sm:grid-cols-2">
+                        <input value={client.company} onChange={e => setClient({ ...client, company: e.target.value })} placeholder={QUOTE_UI.formCompany[currentLang]} autoComplete="organization" className="w-full rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3.5 py-2.5 text-xs outline-none focus:border-emerald-500" required />
+                        <input value={client.name} onChange={e => setClient({ ...client, name: e.target.value })} placeholder={QUOTE_UI.formName[currentLang]} autoComplete="name" className="w-full rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3.5 py-2.5 text-xs outline-none focus:border-emerald-500" required />
+                        <input value={client.email} onChange={e => setClient({ ...client, email: e.target.value })} type="email" placeholder={QUOTE_UI.formEmail[currentLang]} autoComplete="email" className="w-full rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3.5 py-2.5 text-xs outline-none focus:border-emerald-500" required />
+                        <input value={client.whatsapp} onChange={e => setClient({ ...client, whatsapp: e.target.value })} type="tel" placeholder={QUOTE_UI.formPhone[currentLang]} autoComplete="tel" className="w-full rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3.5 py-2.5 text-xs outline-none focus:border-emerald-500" required />
+                      </div>
+                      <input value={client.website} onChange={e => setClient({ ...client, website: e.target.value })} type="url" placeholder={QUOTE_UI.formWebsite[currentLang]} autoComplete="url" className="w-full rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3.5 py-2.5 text-xs outline-none focus:border-emerald-500" />
+                      
+                      <div className="grid gap-2 sm:grid-cols-2 pt-2">
+                        <button type="submit" disabled={!client.company || !client.name || !client.email || !client.whatsapp || sending} className="w-full rounded-full bg-[var(--xr-ink)] px-5 py-3 label-mono text-[8px] font-semibold text-[var(--xr-bg)] disabled:opacity-30 hover:opacity-90 transition">
+                          {quoteDownloadLabel}
+                        </button>
+                        <button type="button" onClick={createCheckout} disabled={!client.company || !client.name || !client.email || !client.whatsapp || paying} className="w-full rounded-full border border-[var(--xr-ink)]/50 bg-[var(--xr-accent-soft)] px-5 py-3 label-mono text-[8px] font-bold text-[var(--xr-ink)] hover:bg-[var(--xr-ink)] hover:text-[var(--xr-bg)] transition disabled:opacity-30">
+                          {paying ? QUOTE_UI.preparingPayment[currentLang] : QUOTE_UI.payDeposit[currentLang]}
+                        </button>
+                      </div>
+                    </form>
+
+                    {generated && (
+                      <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs text-center text-emerald-500 font-medium">
+                        {QUOTE_UI.pdfSuccess[currentLang]}
+                      </div>
+                    )}
+                    {sendMessage && (
+                      <div aria-live="polite" className="rounded-xl border xr-line bg-[var(--xr-surface)] p-2.5 text-center text-[10px] xr-muted">
+                        {sendMessage}
+                      </div>
+                    )}
+                    <button type="button" onClick={reset} className="mx-auto flex items-center gap-1.5 label-mono text-[6.5px] xr-muted-2 hover:text-[var(--xr-ink)] transition">
+                      <span>↺</span> {QUOTE_UI.restart[currentLang]}
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
-          </div></Reveal>
+          </Reveal>
         </div>
       </div>
     </section>

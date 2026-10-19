@@ -245,7 +245,7 @@ export function HomeServices() {
   const currentLang = (lang in FUNNEL_SERVICE_BTN ? lang : "fr") as Lang;
 
   return (
-    <section id="services" data-section="homepage-services" className="xr-section relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-14 sm:py-20 lg:py-28">
+    <section id="services" data-section="homepage-services" className="xr-section relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-10 sm:py-14 lg:py-16">
       {/* Dynamic ambient halo */}
       <div
         aria-hidden
@@ -258,16 +258,16 @@ export function HomeServices() {
       <div className="relative mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
         {/* Section Global Header */}
         <Reveal>
-          <div className="flex flex-col gap-5 border-b xr-line pb-10 lg:flex-row lg:items-end lg:justify-between">
+          <div className="flex flex-col gap-4 border-b xr-line pb-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <span className="label-mono text-[8px] tracking-[.26em] text-[var(--xr-ink)]/60 uppercase">
                 {copy.eyebrow}
               </span>
-              <h2 className="display-serif mt-3 max-w-5xl text-[clamp(2.4rem,5vw,5.4rem)] leading-[.88] tracking-[-.055em] text-[var(--xr-ink)]">
+              <h2 className="display-serif mt-2 max-w-4xl text-[clamp(1.85rem,3.4vw,3.2rem)] leading-tight tracking-[-.04em] text-[var(--xr-ink)]">
                 {copy.title}
               </h2>
             </div>
-            <p className="max-w-md text-xs sm:text-sm leading-6 xr-muted">{copy.lead}</p>
+            <p className="max-w-md text-xs sm:text-sm leading-relaxed xr-muted">{copy.lead}</p>
           </div>
         </Reveal>
 
@@ -282,7 +282,7 @@ export function HomeServices() {
               <article
                 key={item.id}
                 id={item.id === "websites" ? "services-websites" : `services-${item.id}`}
-                className="relative py-16 sm:py-24 lg:py-28"
+                className="relative py-8 sm:py-10 lg:py-12"
               >
                 {/* Subtle localized ambient glow per universe */}
                 <div
@@ -293,10 +293,10 @@ export function HomeServices() {
                   }}
                 />
 
-                <div className={`relative grid grid-cols-1 gap-10 lg:gap-14 items-center ${isEven ? "lg:grid-cols-[1fr_1.15fr]" : "lg:grid-cols-[1.15fr_1fr]"}`}>
+                <div className={`relative grid grid-cols-1 gap-8 lg:gap-12 items-center ${isEven ? "lg:grid-cols-[1fr_1.15fr]" : "lg:grid-cols-[1.15fr_1fr]"}`}>
                   
                   {/* Column 1: Editorial Value Proposition */}
-                  <div className={`flex flex-col justify-between space-y-6 ${isEven ? "lg:order-1" : "lg:order-2"}`}>
+                  <div className={`flex flex-col justify-between space-y-4 ${isEven ? "lg:order-1" : "lg:order-2"}`}>
                     <div>
                       {/* Category Eyebrow Pill */}
                       <div
@@ -312,7 +312,7 @@ export function HomeServices() {
                       </div>
 
                       {/* Service Title */}
-                      <h3 className="display-serif mt-5 text-[clamp(2rem,3.8vw,3.8rem)] leading-[.92] tracking-[-.045em] text-[var(--xr-ink)]">
+                      <h3 className="display-serif mt-3 text-2xl sm:text-3xl lg:text-[2rem] leading-snug tracking-[-.035em] text-[var(--xr-ink)]">
                         {t(service.title)}
                       </h3>
 
