@@ -8,6 +8,7 @@ import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
 import { EmberButton, Parallax, Reveal } from "@/components/site/primitives";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
+import { SocialSimulator } from "@/components/site/SocialSimulator";
 import { AddToCartBtn } from "@/components/site/Cart";
 import { ServiceIllustration } from "@/components/site/ServiceIllustration";
 import { cn } from "@/lib/utils";
@@ -279,6 +280,10 @@ function ServiceDetailPage() {
               <MapsSimulator />
             </div>
           </section>
+        ) : null}
+
+        {service.id === "social" ? (
+          <SocialSimulator />
         ) : null}
 
         {steps.length > 0 ? (

@@ -365,11 +365,11 @@ export const FUNNEL_UI = {
       {
         icon: "Sparkles",
         title: {
-          fr: "Ligne directe Alexandre & Concierge WhatsApp",
-          en: "Direct Line to Alexandre & Dedicated WhatsApp",
-          vi: "Đường dây trực tiếp với Alexandre & WhatsApp VIP",
-          ar: "خط مباشر مع ألكسندر وخدمة كونسيرج واتساب",
-          ru: "Прямой чат с Александром и VIP-поддержка",
+          fr: "Ligne directe Alexandre · Assistant à votre service",
+          en: "Direct Line to Alexandre · Assistant at your service",
+          vi: "Đường dây trực tiếp Alexandre · Trợ lý phục vụ bạn",
+          ar: "خط مباشر مع ألكسندر · مساعد في خدمتكم",
+          ru: "Прямой контакт с Александром · Ассистент к вашим услугам",
         },
         desc: {
           fr: "Pas de standard impersonnel : vous échangez directement avec les artisans qui conçoivent votre projet.",

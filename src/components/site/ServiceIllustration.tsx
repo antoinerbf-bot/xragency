@@ -1,7 +1,62 @@
 import { useState, useRef, type ReactNode } from "react";
-import { Activity, ArrowUpRight, Bot, Check, CheckCircle2, Clock, Cpu, Gauge, Globe2, Lock, MapPin, Megaphone, Palette, Search, Server, ShieldCheck, Sparkles, Zap } from "lucide-react";
+import { Activity, ArrowUpRight, Bookmark, Bot, Check, CheckCircle2, Clock, Cpu, Eye, Film, Gauge, Globe2, Heart, Lock, MapPin, Megaphone, MessageCircle, Music, Palette, Play, Radio, Search, Server, Share2, ShieldCheck, Sparkles, TrendingUp, Video, Volume2, Zap } from "lucide-react";
 import { XR_PHOTOS } from "@/lib/photography";
 import { Parallax } from "./primitives";
+
+export function InstagramLogo({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-label="Instagram">
+      <defs>
+        <radialGradient id="xrInstaGrad" cx="30%" cy="105%" r="115%">
+          <stop offset="0%" stopColor="#ffd600" />
+          <stop offset="35%" stopColor="#ff0100" />
+          <stop offset="65%" stopColor="#d800b9" />
+          <stop offset="100%" stopColor="#7024c4" />
+        </radialGradient>
+      </defs>
+      <rect x="2" y="2" width="20" height="20" rx="5.5" fill="url(#xrInstaGrad)" />
+      <rect x="5.5" y="5.5" width="13" height="13" rx="3.5" fill="none" stroke="#ffffff" strokeWidth="1.8" />
+      <circle cx="12" cy="12" r="3.2" fill="none" stroke="#ffffff" strokeWidth="1.8" />
+      <circle cx="16.5" cy="7.5" r="0.9" fill="#ffffff" />
+    </svg>
+  );
+}
+
+export function TikTokLogo({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-label="TikTok">
+      <rect width="24" height="24" rx="5.5" fill="#010101" />
+      <path
+        d="M16.6 5.82s.51.5 1.4 0c.93-.53 2-.82 3.1-.82V8.4a6.38 6.38 0 0 1-3.7-1.18v6.52c0 3.2-2.6 5.8-5.8 5.8s-5.8-2.6-5.8-5.8 2.6-5.8 5.8-5.8c.37 0 .73.04 1.08.1v3.45a2.53 2.53 0 0 0-1.08-.24c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5V3.8h2.5c0 .7.3 1.45.8 2.02z"
+        fill="#00f2fe"
+        opacity="0.9"
+        transform="translate(-0.5, -0.5)"
+      />
+      <path
+        d="M16.6 5.82s.51.5 1.4 0c.93-.53 2-.82 3.1-.82V8.4a6.38 6.38 0 0 1-3.7-1.18v6.52c0 3.2-2.6 5.8-5.8 5.8s-5.8-2.6-5.8-5.8 2.6-5.8 5.8-5.8c.37 0 .73.04 1.08.1v3.45a2.53 2.53 0 0 0-1.08-.24c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5V3.8h2.5c0 .7.3 1.45.8 2.02z"
+        fill="#fe2c55"
+        opacity="0.9"
+        transform="translate(0.5, 0.5)"
+      />
+      <path
+        d="M16.6 5.82s.51.5 1.4 0c.93-.53 2-.82 3.1-.82V8.4a6.38 6.38 0 0 1-3.7-1.18v6.52c0 3.2-2.6 5.8-5.8 5.8s-5.8-2.6-5.8-5.8 2.6-5.8 5.8-5.8c.37 0 .73.04 1.08.1v3.45a2.53 2.53 0 0 0-1.08-.24c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5V3.8h2.5c0 .7.3 1.45.8 2.02z"
+        fill="#ffffff"
+      />
+    </svg>
+  );
+}
+
+export function FacebookLogo({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-label="Facebook">
+      <circle cx="12" cy="12" r="10.5" fill="#1877F2" />
+      <path
+        d="M15.2 12.3h-2.1v7.2h-3v-7.2h-1.5v-2.5h1.5V8.1c0-2.1 1.2-3.3 3.2-3.3.9 0 1.8.1 1.8.1v2.3h-1c-1 0-1.4.6-1.4 1.3v1.3h2.4l-.4 2.5z"
+        fill="#ffffff"
+      />
+    </svg>
+  );
+}
 
 type Props = { service: string; title?: string };
 type Meta = { number: string; label: string; photo?: keyof typeof XR_PHOTOS; position?: string };
@@ -439,97 +494,356 @@ function MapsVisual() {
 }
 
 function SocialVisual() {
-  return (
-    <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[var(--xr-surface)] via-[var(--xr-bg)] to-[var(--xr-surface)] p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
-      {/* Halos sociaux dynamiques */}
-      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-pink-500/10 blur-3xl" />
-      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl" />
+  const [platform, setPlatform] = useState<"instagram" | "tiktok" | "facebook">("instagram");
+  const [likes, setLikes] = useState(28400);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
-      <div className="flex items-center justify-between border-b xr-line pb-4">
-        <div className="flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-full bg-amber-400 animate-pulse" />
-          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">STUDIO SOCIAL MEDIA · TOURNAGES 4K & STRATÉGIE MULTI-PLATEFORMES</span>
+  const toggleLike = () => {
+    setIsLiked((prev) => !prev);
+    setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
+  };
+
+  const platforms = [
+    {
+      id: "instagram" as const,
+      name: "Instagram",
+      badge: "REELS 4K & FEED",
+      tagline: "Direction Artistique Haute Couture",
+      accent: "from-pink-500 via-rose-500 to-amber-400",
+      border: "hover:border-pink-500/50",
+      activeBg: "bg-pink-500/10 border-pink-500/40 text-pink-300",
+      logo: InstagramLogo,
+      stat: "+18.4% ENGAGEMENT",
+      desc: "Tournages mensuels sur site, étalonnage cinématique et feed harmonisé.",
+    },
+    {
+      id: "tiktok" as const,
+      name: "TikTok",
+      badge: "HOOK 3S & VIRALITÉ",
+      tagline: "Storytelling & Rétention Algorithmique",
+      accent: "from-cyan-400 to-blue-500",
+      border: "hover:border-cyan-400/50",
+      activeBg: "bg-cyan-500/10 border-cyan-400/40 text-cyan-300",
+      logo: TikTokLogo,
+      stat: "240K+ VUES / MOIS",
+      desc: "Captation de l'attention dès 3 secondes, sons tendance et formats verticaux.",
+    },
+    {
+      id: "facebook" as const,
+      name: "Facebook & Meta Ads",
+      badge: "LOCAL 5KM & ROAS ×4.2",
+      tagline: "Acquisition Géolocalisée Rentable",
+      accent: "from-blue-500 to-indigo-500",
+      border: "hover:border-blue-500/50",
+      activeBg: "bg-blue-500/10 border-blue-500/40 text-blue-300",
+      logo: FacebookLogo,
+      stat: "ROAS ×4.2 MESURÉ",
+      desc: "Campagnes sponsorisées ciblées à 5 km autour de votre établissement.",
+    },
+  ];
+
+  const current = platforms.find((p) => p.id === platform) ?? platforms[0];
+  const CurrentLogo = current.logo;
+
+  return (
+    <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[var(--xr-surface)] via-[var(--xr-bg)] to-[var(--xr-surface)] p-5 shadow-2xl backdrop-blur-2xl sm:p-7">
+      {/* Dynamic ambient halo based on active platform */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-20 -top-20 h-96 w-96 rounded-full blur-3xl opacity-20 transition-all duration-700"
+        style={{
+          background:
+            platform === "instagram"
+              ? "radial-gradient(circle, #e1306c, #f77737)"
+              : platform === "tiktok"
+              ? "radial-gradient(circle, #00f2fe, #fe2c55)"
+              : "radial-gradient(circle, #1877F2, #0d5bb5)",
+        }}
+      />
+
+      {/* Top Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b xr-line pb-4">
+        <div className="flex items-center gap-2.5">
+          <CurrentLogo className="h-5 w-5 shrink-0 shadow-sm" />
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="label-mono text-[8px] font-bold tracking-[.18em] text-[var(--xr-ink)]">
+                STUDIO SOCIAL MEDIA · XR AGENCY
+              </span>
+              <span className="flex h-2 w-2 items-center justify-center">
+                <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-ping" />
+              </span>
+            </div>
+            <p className="text-[10px] xr-muted">Tournages 4K, montage cinématique & community management</p>
+          </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-amber-400/15 border border-amber-400/30 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-amber-300">
-            GESTION 100% DÉLÉGUÉE
+          <span className="rounded-full border border-emerald-500/30 bg-emerald-500/15 px-3 py-1 label-mono text-[7px] font-bold text-emerald-400">
+            100% CLÉ-EN-MAIN
           </span>
-          <Label>05 / SOCIAL MEDIA</Label>
+          <Label>03 / SOCIAL</Label>
         </div>
       </div>
 
-      <div className="py-6 space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {/* Instagram Card */}
-          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-pink-500/40">
-            <div className="flex items-center justify-between">
-              <span className="label-mono text-[7px] font-bold text-pink-500">INSTAGRAM</span>
-              <span className="rounded-full bg-pink-500/15 px-2 py-0.5 label-mono text-[6px] text-pink-400 font-bold">REELS 4K</span>
+      {/* Main Grid: Interactive Smartphone Mockup + Telemetry Tunnel */}
+      <div className="py-6 grid gap-6 lg:grid-cols-[280px_1fr] items-center">
+        {/* Smartphone Reel / Post Simulator */}
+        <div className="mx-auto w-full max-w-[275px]">
+          <div className="relative overflow-hidden rounded-[2.3rem] border-[3px] border-[#252b3b] bg-black shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] ring-1 ring-white/10 aspect-[9/16]">
+            {/* Camera Dynamic Notch */}
+            <div className="absolute top-2.5 left-1/2 -translate-x-1/2 z-30 flex items-center justify-between px-3 h-4 w-28 rounded-full bg-black/90 border border-white/10 backdrop-blur-md">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#1b202e]" />
+              <div className="flex items-center gap-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
+                <span className="label-mono text-[5.5px] font-bold text-white tracking-wider">REC 4K</span>
+              </div>
             </div>
-            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]">Feed & DA Prestige</p>
-            <p className="mt-1 text-[8px] xr-muted leading-relaxed">Shooting mensuel, étalonnage cinématique et curation esthétique sur-mesure.</p>
-            <div className="mt-3 flex items-baseline justify-between text-[8px] xr-muted">
-              <span>Engagement moyen</span>
-              <span className="label-mono font-bold text-amber-400">+18.4%</span>
-            </div>
-            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
-              <div className="h-full w-[82%] rounded-full bg-gradient-to-r from-pink-500 via-rose-400 to-amber-300" />
-            </div>
-          </div>
 
-          {/* TikTok Card */}
-          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-cyan-400/40">
-            <div className="flex items-center justify-between">
-              <span className="label-mono text-[7px] font-bold text-cyan-400">TIKTOK</span>
-              <span className="rounded-full bg-cyan-400/15 px-2 py-0.5 label-mono text-[6px] text-cyan-300 font-bold">HOOK 3S</span>
-            </div>
-            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]">Viralité & Formats Verticaux</p>
-            <p className="mt-1 text-[8px] xr-muted leading-relaxed">Rétention maximale dès 3 secondes, sons trendy et narration rythmée.</p>
-            <div className="mt-3 flex items-baseline justify-between text-[8px] xr-muted">
-              <span>Vues vidéo cumulées</span>
-              <span className="label-mono font-bold text-cyan-300">240K+</span>
-            </div>
-            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
-              <div className="h-full w-[94%] rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" />
-            </div>
-          </div>
+            {/* Video / Photo Background */}
+            <img
+              src={XR_PHOTOS.social}
+              alt="Shooting vidéo 4K et production social media"
+              className="absolute inset-0 h-full w-full object-cover brightness-[0.92] contrast-[1.05]"
+            />
+            {/* Cinematic Gradient Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-black/60 z-10 pointer-events-none" />
 
-          {/* Facebook & Meta Ads Card */}
-          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-blue-500/40">
-            <div className="flex items-center justify-between">
-              <span className="label-mono text-[7px] font-bold text-blue-400">FACEBOOK & META</span>
-              <span className="rounded-full bg-blue-500/15 px-2 py-0.5 label-mono text-[6px] text-blue-300 font-bold">LOCAL 5KM</span>
+            {/* In-Phone Header */}
+            <div className="absolute top-8 left-3.5 right-3.5 z-20 flex items-center justify-between text-white">
+              <div className="flex items-center gap-2">
+                <div className="h-7 w-7 rounded-full border border-white/30 bg-black/60 p-0.5 backdrop-blur-md">
+                  <CurrentLogo className="h-full w-full" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-[10px] font-bold tracking-tight">xragency.paris</span>
+                    <span className="inline-flex h-3 w-3 items-center justify-center rounded-full bg-blue-500 text-[6.5px] font-bold text-white">
+                      ✓
+                    </span>
+                  </div>
+                  <span className="label-mono text-[6px] text-white/70 block -mt-0.5">
+                    {platform === "facebook" ? "Sponsorisé · Rayon 5 km" : "Production 4K officielle"}
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={toggleLike}
+                className="rounded-full bg-white/20 hover:bg-white/30 px-2.5 py-1 label-mono text-[6.5px] font-bold backdrop-blur-md transition"
+              >
+                Suivre
+              </button>
             </div>
-            <p className="mt-2 text-xs font-bold text-[var(--xr-ink)]">Acquisition Géolocalisée</p>
-            <p className="mt-1 text-[8px] xr-muted leading-relaxed">Ciblage de proximité dans un rayon de 5 km, retargeting et formulaires directs.</p>
-            <div className="mt-3 flex items-baseline justify-between text-[8px] xr-muted">
-              <span>Portée qualifiée</span>
-              <span className="label-mono font-bold text-emerald-400">×3.4</span>
+
+            {/* In-Phone Right Interaction Sidebar */}
+            <div className="absolute right-2.5 bottom-16 z-20 flex flex-col items-center gap-3 text-white">
+              <button
+                type="button"
+                onClick={toggleLike}
+                className="group flex flex-col items-center gap-1 transition active:scale-125"
+                aria-label="Aimer"
+              >
+                <div
+                  className={`h-9 w-9 rounded-full flex items-center justify-center backdrop-blur-md transition border ${
+                    isLiked
+                      ? "bg-rose-600/90 border-rose-500 text-white shadow-[0_0_15px_rgba(244,63,94,0.7)]"
+                      : "bg-black/50 border-white/20 text-white hover:bg-black/70"
+                  }`}
+                >
+                  <Heart className={`h-4 w-4 ${isLiked ? "fill-white" : ""}`} />
+                </div>
+                <span className="label-mono text-[6.5px] font-bold drop-shadow-md">
+                  {(likes / 1000).toFixed(1)}k
+                </span>
+              </button>
+
+              <button
+                type="button"
+                className="flex flex-col items-center gap-1 text-white hover:text-white/80 transition"
+                aria-label="Commentaires"
+              >
+                <div className="h-9 w-9 rounded-full bg-black/50 border border-white/20 flex items-center justify-center backdrop-blur-md">
+                  <MessageCircle className="h-4 w-4" />
+                </div>
+                <span className="label-mono text-[6.5px] font-bold drop-shadow-md">1.4k</span>
+              </button>
+
+              <button
+                type="button"
+                className="flex flex-col items-center gap-1 text-white hover:text-white/80 transition"
+                aria-label="Partager"
+              >
+                <div className="h-9 w-9 rounded-full bg-black/50 border border-white/20 flex items-center justify-center backdrop-blur-md">
+                  <Share2 className="h-4 w-4" />
+                </div>
+                <span className="label-mono text-[6.5px] font-bold drop-shadow-md">4.8k</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsSaved(!isSaved)}
+                className="flex flex-col items-center gap-1 text-white hover:text-white/80 transition"
+                aria-label="Enregistrer"
+              >
+                <div
+                  className={`h-9 w-9 rounded-full flex items-center justify-center backdrop-blur-md transition border ${
+                    isSaved ? "bg-amber-400 text-black border-amber-300" : "bg-black/50 border-white/20 text-white"
+                  }`}
+                >
+                  <Bookmark className={`h-4 w-4 ${isSaved ? "fill-current" : ""}`} />
+                </div>
+              </button>
+
+              {/* Spinning vinyl audio record */}
+              <div className="mt-1 relative flex h-7 w-7 items-center justify-center rounded-full bg-neutral-900 border border-white/30 animate-spin [animation-duration:5s]">
+                <div className="h-2 w-2 rounded-full bg-amber-400" />
+              </div>
             </div>
-            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
-              <div className="h-full w-[76%] rounded-full bg-gradient-to-r from-blue-500 to-indigo-400" />
+
+            {/* In-Phone Bottom Content */}
+            <div className="absolute bottom-3 left-3 right-14 z-20 text-white">
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-black/60 px-2 py-0.5 border border-white/15 backdrop-blur-md mb-1.5">
+                <Music className="h-2.5 w-2.5 text-amber-300 animate-pulse" />
+                <span className="label-mono text-[6px] tracking-wider text-white/90 truncate max-w-[120px]">
+                  XR Soundscape · Audio 4K
+                </span>
+              </div>
+              <p className="text-[10px] font-bold leading-tight drop-shadow-md text-white">
+                {current.tagline}
+              </p>
+              <p className="mt-0.5 text-[7.5px] leading-tight text-white/85 line-clamp-2 drop-shadow-sm">
+                {current.desc}
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Workflow & Engagement badge */}
-        <div className="rounded-2xl border border-amber-400/25 bg-amber-400/5 p-3.5 backdrop-blur-md">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <div className="flex items-center gap-2 text-[10px]">
-              <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-              <span className="font-bold text-[var(--xr-ink)]">Production éditoriale complète</span>
-              <span className="xr-muted">· Écriture, tournages sur site, montage cinématique et modération réactive</span>
-            </div>
-            <span className="rounded-full border border-amber-400/35 bg-amber-400/15 px-3 py-1 label-mono text-[7px] font-bold text-amber-300 shrink-0 self-start sm:self-center">
-              DÈS 299 € / MOIS
+        {/* Sales Tunnel Control & Telemetry Panel */}
+        <div className="space-y-4">
+          {/* Interactive Platform Tabs with Official Logos */}
+          <div className="space-y-2">
+            <span className="label-mono text-[7px] tracking-[.2em] xr-muted uppercase">
+              1. CHOISISSEZ LA PLATEFORME POUR TESTER L'EXPÉRIENCE
             </span>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              {platforms.map((p) => {
+                const PLogo = p.logo;
+                const isSelected = p.id === platform;
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => setPlatform(p.id)}
+                    className={
+                      "relative flex flex-col items-start p-3 rounded-2xl border text-left transition-all duration-300 " +
+                      (isSelected
+                        ? "border-amber-400/60 bg-[var(--xr-surface-strong)] shadow-lg scale-[1.02] ring-1 ring-amber-400/40"
+                        : "border-white/10 bg-[var(--xr-surface)]/70 hover:border-white/30 hover:bg-[var(--xr-surface-strong)]")
+                    }
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center gap-2">
+                        <PLogo className="h-5 w-5" />
+                        <span className="text-xs font-bold text-[var(--xr-ink)]">{p.name}</span>
+                      </div>
+                      {isSelected && (
+                        <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)]" />
+                      )}
+                    </div>
+                    <span className="mt-2 label-mono text-[6.5px] font-bold text-amber-300">
+                      {p.badge}
+                    </span>
+                    <span className="mt-0.5 text-[8px] xr-muted leading-tight">{p.stat}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Business Impact & Telemetry Metrics */}
+          <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
+            <div className="flex items-center justify-between border-b xr-line pb-2.5">
+              <span className="label-mono text-[7px] tracking-[.18em] xr-muted uppercase">
+                2. RÉSULTATS MOYENS CONSTATÉS · PACK XR SOCIAL
+              </span>
+              <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 label-mono text-[6.5px] font-bold text-emerald-400">
+                AUDIT CONTINU INCLUS
+              </span>
+            </div>
+
+            <div className="mt-3 grid grid-cols-3 gap-3 text-center">
+              <div className="rounded-xl border xr-line bg-[var(--xr-bg)]/80 p-2.5">
+                <span className="display-serif block text-lg font-bold text-amber-300 sm:text-xl">
+                  +18.4%
+                </span>
+                <span className="label-mono text-[6px] tracking-wider xr-muted uppercase">
+                  Taux d'Engagement
+                </span>
+              </div>
+              <div className="rounded-xl border xr-line bg-[var(--xr-bg)]/80 p-2.5">
+                <span className="display-serif block text-lg font-bold text-cyan-400 sm:text-xl">
+                  240K+
+                </span>
+                <span className="label-mono text-[6px] tracking-wider xr-muted uppercase">
+                  Vues Cumulées / Mois
+                </span>
+              </div>
+              <div className="rounded-xl border xr-line bg-[var(--xr-bg)]/80 p-2.5">
+                <span className="display-serif block text-lg font-bold text-emerald-400 sm:text-xl">
+                  ×4.2
+                </span>
+                <span className="label-mono text-[6px] tracking-wider xr-muted uppercase">
+                  ROAS Campagnes Ads
+                </span>
+              </div>
+            </div>
+
+            {/* Deliverables Checklist */}
+            <div className="mt-3.5 space-y-1.5 pt-3 border-t xr-line text-[9px] text-[var(--xr-ink)]">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                <span>Tournages sur site avec caméras cinéma 4K & stabilisateurs Ronin</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                <span>Montage dynamique, étalonnage couleur haute couture & sous-titrage viral</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                <span>100% des droits audiovisuels cédés · Aucune charge mentale</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Sales conversion trigger */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-2xl border border-amber-400/35 bg-gradient-to-r from-amber-400/15 via-amber-400/5 to-transparent p-3.5">
+            <div>
+              <span className="label-mono text-[6.5px] font-bold text-amber-300 tracking-wider uppercase">
+                OFFRE OFFICIELLE CLÉ-EN-MAIN
+              </span>
+              <p className="text-[11px] font-bold text-[var(--xr-ink)]">
+                Dès 299 € / mois · Prise en charge intégrale sous 7 jours
+              </p>
+            </div>
+            <a
+              href="#quote"
+              className="inline-flex items-center justify-center gap-1.5 rounded-full bg-[var(--xr-ink)] text-[var(--xr-bg)] px-4 py-2 label-mono text-[7.5px] font-bold hover:scale-105 transition shadow-md shrink-0"
+            >
+              Ajouter au devis
+              <ArrowUpRight className="h-3 w-3" />
+            </a>
           </div>
         </div>
       </div>
 
       <div className="flex items-center justify-between border-t xr-line pt-4">
-        <span className="label-mono text-[7px] xr-muted">INSTAGRAM REELS · TIKTOK SHORTS · FACEBOOK META ADS</span>
-        <span className="label-mono text-[7px] font-bold text-amber-300">STRATÉGIE SUR-MESURE & REPORTING HEBDOMADAIRE</span>
+        <span className="label-mono text-[7px] xr-muted">
+          INSTAGRAM REELS · TIKTOK SHORTS · FACEBOOK META ADS · 100% CESSION DROITS
+        </span>
+        <span className="label-mono text-[7px] font-bold text-amber-300">
+          STUDIO DE PRODUCTION AUDIOVISUELLE D'ÉLITE
+        </span>
       </div>
     </div>
   );
@@ -650,7 +964,7 @@ const KORBEN_ROBOTS = [
   {
     id: "welcome-plus",
     name: "Welcome Plus",
-    type: "Accueil VIP & Conciergerie",
+    type: "Accueil VIP & Assistant interactif",
     image: "https://www.korbenforpeople.com/wp-content/uploads/2025/08/ROBOT-ACCUEIL-02-scaled.png",
     specs: ["Écran tactile 27\"", "30+ Langues", "Guidage LiDAR", "Interaction Vocale"],
     tag: "SIÈGES · SALONS · CLINIQUE",
