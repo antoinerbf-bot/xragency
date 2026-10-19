@@ -24,19 +24,17 @@ export function Logo({ className }: { className?: string }) {
       aria-label="XRAGENCY — Accueil"
       onClick={handleHomeClick}
       className={cn(
-        "group inline-flex min-h-11 items-center font-black text-[18px] leading-none tracking-[0.14em] text-foreground transition-opacity duration-200 hover:opacity-80 sm:text-[20px]",
+        "group inline-flex min-h-11 items-center tracking-[0.16em] transition-opacity duration-200 hover:opacity-80",
         className,
       )}
     >
       <span className="flex items-center gap-2.5">
-        <span className="xr-logo-lockup flex items-center">
-          <span className="xr-logo-mark mr-1.5 inline-grid h-7 w-7 place-items-center rounded-lg border border-amber-400/40 bg-gradient-to-br from-amber-400/25 via-neutral-900/85 to-black font-black text-amber-300 shadow-[0_2px_12px_rgba(212,175,55,0.3)] text-[15px] transition-transform duration-300 group-hover:scale-105">
-            X
-          </span>
-          <span className="font-extrabold tracking-[0.15em] text-current">RAGENCY</span>
+        <span className="xr-logo-lockup flex items-center font-sans text-[18px] sm:text-[20px] font-black leading-none text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.55)]">
+          <span className="font-black text-white transition-transform duration-200 group-hover:scale-105">X</span>
+          <span className="font-extrabold tracking-[0.15em] text-white">RAGENCY</span>
         </span>
-        <span className="hidden h-5 w-px bg-current opacity-20 sm:block" />
-        <span className="hidden text-[7px] font-semibold uppercase tracking-[0.18em] opacity-70 sm:block">
+        <span className="hidden h-4 w-px bg-white/30 sm:block" />
+        <span className="hidden text-[7px] font-medium uppercase tracking-[0.2em] text-white/80 drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)] sm:block">
           Digital Agency · Paris
         </span>
       </span>

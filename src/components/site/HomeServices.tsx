@@ -1,5 +1,3 @@
-import { useState } from "react";
-import type { CSSProperties } from "react";
 import { ArrowRight, ArrowUpRight, BarChart3, Bot, Globe2, MapPinned, Palette, ShieldCheck, Users } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useLang, type Lang } from "@/lib/i18n";
@@ -16,126 +14,223 @@ const FUNNEL_SERVICE_BTN: Record<Lang, { added: string; add: string }> = {
   ru: { added: "✓ В вашей смете", add: "+ Добавить в смету" },
 };
 
-const IDS = ["websites", "branding", "seo", "maps", "social", "maintenance", "robotics"] as const;
-const ICONS = {
-  websites: Globe2,
-  branding: Palette,
-  seo: BarChart3,
-  maps: MapPinned,
-  social: Users,
-  maintenance: ShieldCheck,
-  robotics: Bot,
-};
-const PRICES: Record<string, number> = {
-  websites: 499,
-  branding: 199,
-  seo: 299,
-  maps: 990,
-  social: 299,
-  maintenance: 29,
-  robotics: 499,
-};
-
-const ACCENTS: Record<(typeof IDS)[number], { color: string; halo: string; tag: Record<string, string> }> = {
-  websites: {
-    color: "#c5a880",
-    halo: "rgba(197, 168, 128, 0.14)",
-    tag: { fr: "UNIVERS WEB · HAUTE COUTURE", en: "WEB UNIVERSE · HAUTE COUTURE", vi: "VŨ TRỤ WEB · ĐỈNH CAO", ar: "عالم الويب · راقٍ ومميز", ru: "WEB-ВСЕЛЕННАЯ · ПРЕМИУМ" },
+export const ORDERED_SERVICES = [
+  {
+    id: "websites",
+    funnelId: "website",
+    num: "01",
+    tag: {
+      fr: "01 · UNIVERS WEB · HAUTE COUTURE",
+      en: "01 · WEB UNIVERSE · HAUTE COUTURE",
+      vi: "01 · VŨ TRỤ WEB · ĐỈNH CAO",
+      ar: "01 · عالم الويب · راقٍ ومميز",
+      ru: "01 · WEB-ВСЕЛЕННАЯ · ПРЕМИУМ",
+    },
+    accent: "#c5a880",
+    halo: "rgba(197, 168, 128, 0.12)",
+    icon: Globe2,
+    href: "/services/websites",
+    price: 499,
+    period: "once",
   },
-  branding: {
-    color: "#f59e0b",
-    halo: "rgba(245, 158, 11, 0.14)",
-    tag: { fr: "UNIVERS BRANDING · SIGNATURE & OR", en: "BRANDING UNIVERSE · SIGNATURE GOLD", vi: "VŨ TRỤ THƯƠNG HIỆU · DẤU ẤN VÀNG", ar: "عالم الهوية · توقيع ذهبي", ru: "БРЕНДИНГ · ЗОЛОТОЙ СТАНДАРТ" },
+  {
+    id: "maps",
+    funnelId: "maps",
+    num: "02",
+    tag: {
+      fr: "02 · UNIVERS GOOGLE MAPS · PACK LOCAL #1",
+      en: "02 · GOOGLE MAPS · LOCAL 3-PACK #1",
+      vi: "02 · VŨ TRỤ MAPS · TOP 1 ĐỊA PHƯƠNG",
+      ar: "02 · عالم MAPS · المركز الأول محلياً",
+      ru: "02 · MAPS-ВСЕЛЕННАЯ · ТОП-1 НА КАРТАХ",
+    },
+    accent: "#ea4335",
+    halo: "rgba(234, 67, 53, 0.12)",
+    icon: MapPinned,
+    href: "/services/maps",
+    price: 990,
+    period: "year",
   },
-  seo: {
-    color: "#8b5cf6",
-    halo: "rgba(139, 92, 246, 0.14)",
-    tag: { fr: "UNIVERS SEO · AUTORITÉ & IMPACT", en: "SEO UNIVERSE · AUTHORITY & IMPACT", vi: "VŨ TRỤ SEO · UY TÍN & TÁC ĐỘNG", ar: "عالم SEO · سلطة وتأثير", ru: "SEO-ВСЕЛЕННАЯ · АВТОРИТЕТ И РОСТ" },
+  {
+    id: "social",
+    funnelId: "social",
+    num: "03",
+    tag: {
+      fr: "03 · UNIVERS SOCIAL · TOURNAGES & REELS 4K",
+      en: "03 · SOCIAL UNIVERSE · 4K VIDEO PRODUCTION",
+      vi: "03 · VŨ TRỤ SOCIAL · SẢN XUẤT REELS 4K",
+      ar: "03 · عالم التواصل · إنتاج ريلز 4K",
+      ru: "03 · SOCIAL-ВСЕЛЕННАЯ · 4K-ПРОДАКШН",
+    },
+    accent: "#f43f5e",
+    halo: "rgba(244, 63, 94, 0.12)",
+    icon: Users,
+    href: "/services/social",
+    price: 299,
+    period: "month",
   },
-  maps: {
-    color: "#ea4335",
-    halo: "rgba(234, 67, 53, 0.14)",
-    tag: { fr: "UNIVERS MAPS · LOCAL 3-PACK #1", en: "MAPS UNIVERSE · LOCAL 3-PACK #1", vi: "VŨ TRỤ MAPS · TOP 1 ĐỊA PHƯƠNG", ar: "عالم MAPS · المركز الأول محلياً", ru: "MAPS-ВСЕЛЕННАЯ · ТОП-1 НА КАРТАХ" },
+  {
+    id: "branding",
+    funnelId: "branding",
+    num: "04",
+    tag: {
+      fr: "04 · UNIVERS BRANDING · IDENTITÉ DE PRESTIGE",
+      en: "04 · BRANDING UNIVERSE · PRESTIGE IDENTITY",
+      vi: "04 · VŨ TRỤ THƯƠNG HIỆU · DẤU ẤN VÀNG",
+      ar: "04 · عالم الهوية · توقيع مميز وراقي",
+      ru: "04 · БРЕНДИНГ · ПРЕМИАЛЬНЫЙ СТИЛЬ",
+    },
+    accent: "#f59e0b",
+    halo: "rgba(245, 158, 11, 0.12)",
+    icon: Palette,
+    href: "/services/branding",
+    price: 199,
+    period: "once",
   },
-  social: {
-    color: "#f43f5e",
-    halo: "rgba(244, 63, 94, 0.14)",
-    tag: { fr: "UNIVERS SOCIAL · INFLUENCE & LUXE", en: "SOCIAL UNIVERSE · INFLUENCE & LUXURY", vi: "VŨ TRỤ SOCIAL · SANG TRỌNG & TƯƠNG TÁC", ar: "عالم التواصل · تأثير وفخامة", ru: "SOCIAL-ВСЕЛЕННАЯ · СТИЛЬ И ОХВАТ" },
+  {
+    id: "seo",
+    funnelId: "seo",
+    num: "05",
+    tag: {
+      fr: "05 · UNIVERS SEO · AUTORITÉ & TOP POSITIONS",
+      en: "05 · SEO UNIVERSE · AUTHORITY & TOP RANKINGS",
+      vi: "05 · VŨ TRỤ SEO · UY TÍN & TOP 1",
+      ar: "05 · عالم SEO · سلطة ومراكز أولى",
+      ru: "05 · SEO-ВСЕЛЕННАЯ · ТОП-ПОЗИЦИИ",
+    },
+    accent: "#8b5cf6",
+    halo: "rgba(139, 92, 246, 0.12)",
+    icon: BarChart3,
+    href: "/services/seo",
+    price: 299,
+    period: "month",
   },
-  maintenance: {
-    color: "#0ea5e9",
-    halo: "rgba(14, 165, 233, 0.14)",
-    tag: { fr: "UNIVERS WEBCARE · CYBER SÉCURITÉ", en: "WEBCARE UNIVERSE · CYBER SECURITY", vi: "VŨ TRỤ WEBCARE · BẢO MẬT TỐI ĐA", ar: "عالم الرعاية · أمان سيبراني", ru: "WEBCARE · ЗАЩИТА И БЫСТРОДЕЙСТВИЕ" },
+  {
+    id: "maintenance",
+    funnelId: "maintenance",
+    num: "06",
+    tag: {
+      fr: "06 · UNIVERS WEBCARE · CYBER SÉCURITÉ 24/7",
+      en: "06 · WEBCARE UNIVERSE · 24/7 CYBER SECURITY",
+      vi: "06 · VŨ TRỤ WEBCARE · BẢO MẬT 24/7",
+      ar: "06 · عالم الرعاية · أمان سيبراني 24/7",
+      ru: "06 · WEBCARE · БЕЗОПАСНОСТЬ 24/7",
+    },
+    accent: "#0ea5e9",
+    halo: "rgba(14, 165, 233, 0.12)",
+    icon: ShieldCheck,
+    href: "/services/webcare",
+    price: 29,
+    period: "month",
   },
-  robotics: {
-    color: "#d4af37",
-    halo: "rgba(212, 175, 55, 0.14)",
-    tag: { fr: "UNIVERS IA · ROBOTIQUE & AGENTS", en: "AI UNIVERSE · ROBOTICS & AGENTS", vi: "VŨ TRỤ AI · ROBOT & ĐẠI LÝ TỰ ĐỘNG", ar: "عالم الذكاء · روبوتات وأتمتة", ru: "ИИ-ВСЕЛЕННАЯ · АВТОМАТИЗАЦИЯ И РОБОТЫ" },
+  {
+    id: "robotics",
+    funnelId: "robotics",
+    num: "07",
+    tag: {
+      fr: "07 · UNIVERS IA · ROBOTIQUE DE SERVICE KORBEN",
+      en: "07 · AI UNIVERSE · KORBEN SERVICE ROBOTS",
+      vi: "07 · VŨ TRỤ AI · ROBOT DỊCH VỤ KORBEN",
+      ar: "07 · عالم الذكاء · روبوتات الخدمة KORBEN",
+      ru: "07 · ИИ-ВСЕЛЕННАЯ · РОБОТЫ KORBEN",
+    },
+    accent: "#d4af37",
+    halo: "rgba(212, 175, 55, 0.12)",
+    icon: Bot,
+    href: "/services/robotique",
+    price: 499,
+    period: "month",
   },
-};
+] as const;
 
 const COPY = {
   fr: {
-    eyebrow: "07 SERVICES · 07 ENTRÉES",
+    eyebrow: "07 SERVICES D'ÉLITE · LE PARCOURS STRATÉGIQUE",
     title: "Nos Services d'Élite : Choisissez votre levier, découvrez le dispositif complet.",
     lead: "Des livrables transparents, des garanties contractuelles et une exécution de prestige pour chaque pilier de votre croissance.",
     from: "À partir de",
-    open: "Voir le service",
-    quote: "Ajouter au projet",
-    next: "Service suivant",
+    open: "Découvrir la prestation",
+    quote: "Configurer avec Alexandre",
     perMonth: "/ MOIS",
     perYear: "/ AN",
   },
   en: {
-    eyebrow: "07 SERVICES · 07 ENTRY POINTS",
+    eyebrow: "07 ELITE SERVICES · STRATEGIC JOURNEY",
     title: "Elite Services: Select your growth lever, explore the complete system.",
     lead: "Transparent deliverables, contractual guarantees and prestige execution for every pillar of your digital growth.",
     from: "From",
-    open: "View service",
-    quote: "Add to project",
-    next: "Next service",
+    open: "Explore service",
+    quote: "Configure with Alexandre",
     perMonth: "/ MONTH",
     perYear: "/ YEAR",
   },
   vi: {
-    eyebrow: "07 DỊCH VỤ · 07 ĐIỂM BẮT ĐẦU",
+    eyebrow: "07 DỊCH VỤ CAO CẤP · LỘ TRÌNH CHIẾN LƯỢC",
     title: "Dịch vụ Cao cấp: Chọn đòn bẩy phát triển, khám phá giải pháp toàn diện.",
     lead: "Hạng mục bàn giao minh bạch, cam kết chuẩn mực và chất lượng thi công đỉnh cao cho doanh nghiệp.",
     from: "Từ",
-    open: "Xem dịch vụ",
-    quote: "Thêm vào dự án",
-    next: "Dịch vụ tiếp theo",
+    open: "Khám phá dịch vụ",
+    quote: "Cấu hình cùng Alexandre",
     perMonth: "/ THÁNG",
     perYear: "/ NĂM",
   },
   ar: {
-    eyebrow: "07 خدمات · 07 نقاط انطلاق",
+    eyebrow: "07 خدمات متميزة · المسار الاستراتيجي المتكامل",
     title: "خدماتنا المتميزة: اختر محور نموك واكتشف المنظومة المتكاملة.",
     lead: "مخرجات واضحة وشفافة، ضمانات موثقة وتنفيذ رفيع المستوى لكل ركيزة من ركائز نموك الرقمي.",
     from: "ابتداءً من",
-    open: "شاهد الخدمة",
-    quote: "أضف للمشروع",
-    next: "الخدمة التالية",
+    open: "استكشف الخدمة",
+    quote: "تكوين العرض مع ألكسندر",
     perMonth: "/ شهريًا",
     perYear: "/ سنويًا",
   },
   ru: {
-    eyebrow: "07 УСЛУГ · 07 ТОЧЕК ВХОДА",
+    eyebrow: "07 ПРЕМИАЛЬНЫХ УСЛУГ · СТРАТЕГИЧЕСКИЙ МАРШРУТ",
     title: "Премиальные услуги: выберите точку роста и откройте готовую систему.",
     lead: "Прозрачные результаты, договорные гарантии и безупречное исполнение для каждого направления вашего бизнеса.",
     from: "От",
-    open: "Открыть услугу",
-    quote: "Добавить в проект",
-    next: "Следующая услуга",
+    open: "Подробнее об услуге",
+    quote: "Настроить с Александром",
     perMonth: "/ МЕСЯЦ",
     perYear: "/ ГОД",
   },
 } as const;
 
-function serviceHref(id: string) {
-  if (id === "maintenance") return "/services/webcare";
-  if (id === "robotics") return "/services/robotique";
-  return "/services/" + id;
+function ServiceLink({
+  id,
+  children,
+  className,
+}: {
+  id: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  if (id === "robotics") {
+    return (
+      <Link to="/services/robotique" className={className}>
+        {children}
+      </Link>
+    );
+  }
+  if (id === "maintenance") {
+    return (
+      <Link to="/services/webcare" className={className}>
+        {children}
+      </Link>
+    );
+  }
+  if (id === "seo") {
+    return (
+      <Link to="/services/seo" className={className}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <Link to="/services/$serviceId" params={{ serviceId: id }} className={className}>
+      {children}
+    </Link>
+  );
 }
 
 export function HomeServices() {
@@ -148,182 +243,167 @@ export function HomeServices() {
     funnel = null;
   }
   const currentLang = (lang in FUNNEL_SERVICE_BTN ? lang : "fr") as Lang;
-  const [active, setActive] = useState<(typeof IDS)[number]>("websites");
-  const index = IDS.indexOf(active);
-  const service = SERVICES.find((s) => s.id === active) ?? SERVICES[0];
-  const Icon = ICONS[active];
-  const next = IDS[(index + 1) % IDS.length];
-  const currentAccent = ACCENTS[active];
-  const funnelServiceId = active === "websites" ? "website" : active;
-  const isSelectedInFunnel = funnel?.selectedServices.includes(funnelServiceId) ?? false;
 
   return (
-    <section id="services" data-section="homepage-services" className="xr-section relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-14 sm:py-20 lg:py-28 transition-colors duration-700">
-      {/* Morphing dynamic ambient halo per universe */}
+    <section id="services" data-section="homepage-services" className="xr-section relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-14 sm:py-20 lg:py-28">
+      {/* Dynamic ambient halo */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 transition-all duration-700 opacity-70"
+        className="pointer-events-none absolute inset-0 opacity-40"
         style={{
-          background: `radial-gradient(ellipse at 18% 12%, ${currentAccent.halo}, transparent 42%), radial-gradient(ellipse at 82% 82%, ${currentAccent.halo}, transparent 48%)`,
+          background: "radial-gradient(ellipse at 25% 15%, rgba(197, 168, 128, 0.08), transparent 50%), radial-gradient(ellipse at 75% 75%, rgba(6, 182, 212, 0.06), transparent 50%)",
         }}
       />
 
       <div className="relative mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
+        {/* Section Global Header */}
         <Reveal>
-          <div className="flex flex-col gap-6 border-b xr-line pb-8 lg:flex-row lg:items-end lg:justify-between">
+          <div className="flex flex-col gap-5 border-b xr-line pb-10 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 label-mono text-[7.5px] tracking-[.25em] transition-all duration-500" style={{ borderColor: currentAccent.color + "55", color: currentAccent.color, backgroundColor: currentAccent.color + "12" }}>
-                <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: currentAccent.color }} />
-                {t(currentAccent.tag)}
-              </div>
-              <h2 className="display-serif mt-4 max-w-6xl text-[clamp(2.9rem,5.8vw,6.6rem)] leading-[.82] tracking-[-.065em]">
+              <span className="label-mono text-[8px] tracking-[.26em] text-[var(--xr-ink)]/60 uppercase">
+                {copy.eyebrow}
+              </span>
+              <h2 className="display-serif mt-3 max-w-5xl text-[clamp(2.4rem,5vw,5.4rem)] leading-[.88] tracking-[-.055em] text-[var(--xr-ink)]">
                 {copy.title}
               </h2>
             </div>
-            <p className="max-w-md text-sm leading-6 xr-muted">{copy.lead}</p>
+            <p className="max-w-md text-xs sm:text-sm leading-6 xr-muted">{copy.lead}</p>
           </div>
         </Reveal>
 
-        <Reveal delay={70}>
-          <div className="xr-rail mt-6 flex gap-2 overflow-x-auto pb-2">
-            {IDS.map((id, i) => {
-              const S = SERVICES.find((s) => s.id === id);
-              const I = ICONS[id];
-              const selected = active === id;
-              const accent = ACCENTS[id];
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => setActive(id)}
-                  style={{ "--service-accent": accent.color } as CSSProperties}
-                  className={
-                    "group flex min-w-[150px] items-center gap-3 rounded-full border px-4 py-3 text-left transition duration-300 sm:min-w-0 sm:flex-1 " +
-                    (selected
-                      ? "border-[var(--service-accent)] bg-[var(--xr-bg-elev)] text-[var(--xr-ink)] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)] ring-1"
-                      : "xr-line bg-[var(--xr-surface)] text-[var(--xr-ink)] hover:-translate-y-0.5 hover:bg-[var(--xr-surface-strong)]")
-                  }
-                >
-                  <span
-                    className={"grid h-8 w-8 shrink-0 place-items-center rounded-full border transition-all duration-300 " + (selected ? "border-transparent text-white" : "xr-line")}
-                    style={selected ? { background: accent.color, boxShadow: `0 0 16px ${accent.color}66` } : undefined}
-                  >
-                    <I className="h-3.5 w-3.5" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block truncate text-[9px] font-semibold">{t(S?.title ?? { fr: id, en: id, vi: id, ar: id, ru: id })}</span>
-                    {selected ? <span className="mt-1 block h-0.5 w-8 rounded-full" style={{ background: accent.color }} /> : null}
-                    <span className={"mt-0.5 block label-mono text-[6px] xr-muted-2"}>
-                      0{i + 1}
-                    </span>
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </Reveal>
+        {/* 7 Services Unfolding Sequentially with Parallax Effect */}
+        <div className="divide-y xr-line">
+          {ORDERED_SERVICES.map((item, idx) => {
+            const service = SERVICES.find((s) => s.id === item.id) ?? SERVICES[0];
+            const isSelected = funnel?.selectedServices.includes(item.funnelId) ?? false;
+            const isEven = idx % 2 === 0;
 
-        <div className="mt-5 grid gap-5 lg:grid-cols-[1.32fr_.68fr]">
-          <Reveal>
-            <Parallax speed={-0.022}>
-              <div className="overflow-hidden rounded-[1.15rem] border xr-line bg-[var(--xr-bg-elev)] shadow-[var(--xr-shadow)]">
-                <ServiceIllustration service={active} title={t(service.title)} />
-              </div>
-            </Parallax>
-          </Reveal>
+            return (
+              <article
+                key={item.id}
+                id={item.id === "websites" ? "services-websites" : `services-${item.id}`}
+                className="relative py-16 sm:py-24 lg:py-28"
+              >
+                {/* Subtle localized ambient glow per universe */}
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 opacity-40"
+                  style={{
+                    background: `radial-gradient(circle at ${isEven ? "85% 50%" : "15% 50%"}, ${item.halo}, transparent 45%)`,
+                  }}
+                />
 
-          <Reveal delay={90}>
-            <div className="flex h-full min-h-[430px] flex-col justify-between rounded-[1.15rem] border xr-line bg-[var(--xr-bg-elev)] text-[var(--xr-ink)] p-7 shadow-[var(--xr-shadow)] backdrop-blur-xl sm:p-9 lg:p-10">
-              <div>
-                <div className="flex items-center justify-between gap-4">
-                  <span className="label-mono text-[7px] tracking-[.22em] xr-muted-2">
-                    CHAPTER {String(index + 1).padStart(2, "0")} / 07
-                  </span>
-                  <span className="grid h-10 w-10 place-items-center rounded-full text-white shadow-lg transition-colors duration-300" style={{ background: currentAccent.color, boxShadow: `0 0 20px ${currentAccent.color}55` }}>
-                    <Icon className="h-4 w-4" />
-                  </span>
-                </div>
+                <div className={`relative grid grid-cols-1 gap-10 lg:gap-14 items-center ${isEven ? "lg:grid-cols-[1fr_1.15fr]" : "lg:grid-cols-[1.15fr_1fr]"}`}>
+                  
+                  {/* Column 1: Editorial Value Proposition */}
+                  <div className={`flex flex-col justify-between space-y-6 ${isEven ? "lg:order-1" : "lg:order-2"}`}>
+                    <div>
+                      {/* Category Eyebrow Pill */}
+                      <div
+                        className="inline-flex items-center gap-2 rounded-full border px-3 py-1 label-mono text-[7px] tracking-[.2em] transition-all"
+                        style={{
+                          borderColor: `${item.accent}55`,
+                          color: item.accent,
+                          backgroundColor: `${item.accent}12`,
+                        }}
+                      >
+                        <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: item.accent }} />
+                        {item.tag[currentLang] ?? item.tag.fr}
+                      </div>
 
-                <h3 className="display-serif mt-10 text-5xl leading-[.82] tracking-[-.05em] sm:text-6xl">
-                  {t(service.title)}
-                </h3>
-                <p className="mt-6 max-w-xl text-sm leading-6 xr-muted">{t(service.description)}</p>
+                      {/* Service Title */}
+                      <h3 className="display-serif mt-5 text-[clamp(2rem,3.8vw,3.8rem)] leading-[.92] tracking-[-.045em] text-[var(--xr-ink)]">
+                        {t(service.title)}
+                      </h3>
 
-                <div className="mt-7 space-y-2">
-                  {(service.highlights ?? []).slice(0, 3).map((item, i) => (
-                    <div key={i} className="flex items-start gap-3 border-t xr-line py-3.5">
-                      <span className="label-mono mt-0.5 text-[6px] xr-muted-2">0{i + 1}</span>
-                      <span className="text-[10px] leading-4">{t(item)}</span>
+                      {/* Description */}
+                      <p className="mt-4 max-w-xl text-xs sm:text-[13.5px] leading-relaxed xr-muted">
+                        {t(service.description)}
+                      </p>
+
+                      {/* Highlights Deliverables */}
+                      <div className="mt-6 space-y-2 border-t xr-line pt-4">
+                        {(service.highlights ?? []).slice(0, 3).map((hl, i) => (
+                          <div key={i} className="flex items-start gap-3 py-1 text-xs">
+                            <span className="label-mono mt-0.5 text-[6.5px] font-bold text-[var(--xr-ink)]/50">
+                              0{i + 1}
+                            </span>
+                            <span className="text-[11.5px] font-medium leading-relaxed text-[var(--xr-ink)]">
+                              {t(hl)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </div>
 
-              <div className="mt-8">
-                <div className="flex items-end justify-between gap-5 border-y xr-line py-5">
-                  <div>
-                    <span className="label-mono text-[6px] xr-muted-2">{copy.from}</span>
-                    <p className="display-serif mt-1 text-4xl">{active === "maps" ? "990 €" : price(PRICES[active])}</p>
+                    {/* Price & Direct Actions */}
+                    <div className="pt-2">
+                      <div className="flex items-baseline justify-between border-y xr-line py-4 mb-5">
+                        <div>
+                          <span className="label-mono text-[6.5px] xr-muted-2 uppercase tracking-wider">{copy.from}</span>
+                          <p className="display-serif mt-0.5 text-3xl font-bold text-[var(--xr-ink)]">
+                            {item.id === "maps" ? "990 €" : price(item.price)}
+                          </p>
+                        </div>
+                        <span className="label-mono text-[7px] font-semibold xr-muted-2">
+                          {item.period === "month" ? copy.perMonth : item.period === "year" ? copy.perYear : ""}
+                        </span>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2.5">
+                        {/* Direct toggle into custom quote */}
+                        <button
+                          type="button"
+                          onClick={() => funnel?.toggleService(item.funnelId)}
+                          className={
+                            "inline-flex items-center gap-2 rounded-full border px-4 py-3 label-mono text-[8px] font-semibold transition-all duration-300 " +
+                            (isSelected
+                              ? "border-emerald-500/50 bg-emerald-500/15 text-emerald-400 font-bold shadow-sm"
+                              : "border-white/20 bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] hover:border-white/40 hover:-translate-y-0.5")
+                          }
+                        >
+                          {isSelected
+                            ? FUNNEL_SERVICE_BTN[currentLang]?.added || "✓ Dans votre devis"
+                            : FUNNEL_SERVICE_BTN[currentLang]?.add || "+ Ajouter au devis"}
+                        </button>
+
+                        {/* Link to dedicated service page */}
+                        <ServiceLink
+                          id={item.id}
+                          className="inline-flex items-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-3 label-mono text-[8px] font-semibold text-[var(--xr-bg)] transition hover:-translate-y-0.5 shadow-md"
+                        >
+                          {copy.open}
+                          <ArrowUpRight className="h-3.5 w-3.5" />
+                        </ServiceLink>
+
+                        {/* Configure directly with Alexandre */}
+                        <a
+                          href="#quote"
+                          onClick={(e) => {
+                            if (!isSelected) funnel?.toggleService(item.funnelId);
+                          }}
+                          className="inline-flex items-center gap-1.5 rounded-full border xr-line px-4 py-3 label-mono text-[8px] xr-muted transition hover:bg-[var(--xr-bg)] hover:text-[var(--xr-ink)]"
+                        >
+                          {copy.quote}
+                          <ArrowRight className="h-3 w-3" />
+                        </a>
+                      </div>
+                    </div>
                   </div>
-                  <span className="label-mono pb-1 text-[6px] xr-muted-2">
-                    {service.fromPeriod === "month" ? copy.perMonth : service.fromPeriod === "year" ? copy.perYear : ""}
-                  </span>
+
+                  {/* Column 2: Rich Interactive Illustration with Parallax */}
+                  <div className={`relative ${isEven ? "lg:order-2" : "lg:order-1"}`}>
+                    <Parallax speed={isEven ? 0.04 : -0.04}>
+                      <div className="overflow-hidden rounded-[2.2rem] border xr-line bg-[var(--xr-bg-elev)] shadow-[var(--xr-shadow)]">
+                        <ServiceIllustration service={item.id} title={t(service.title)} />
+                      </div>
+                    </Parallax>
+                  </div>
                 </div>
-
-                <div className="mt-5 flex flex-wrap gap-2">
-                  <Link
-                    to={serviceHref(active)}
-                    className="inline-flex items-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-3.5 label-mono text-[8px] font-semibold text-[var(--xr-bg)] transition hover:-translate-y-0.5"
-                  >
-                    {copy.open}
-                    <ArrowUpRight className="h-4 w-4" />
-                  </Link>
-
-                  <button
-                    type="button"
-                    onClick={() => funnel?.toggleService(funnelServiceId)}
-                    className={
-                      "inline-flex items-center gap-2 rounded-full border px-4 py-3.5 label-mono text-[8px] transition hover:-translate-y-0.5 " +
-                      (isSelectedInFunnel
-                        ? "border-[var(--service-accent)] bg-[var(--xr-accent-soft)] font-bold text-[var(--xr-ink)]"
-                        : "xr-line bg-[var(--xr-surface-strong)] text-[var(--xr-muted)] hover:text-[var(--xr-ink)]")
-                    }
-                  >
-                    {isSelectedInFunnel
-                      ? FUNNEL_SERVICE_BTN[currentLang]?.added || "✓ Dans votre devis"
-                      : FUNNEL_SERVICE_BTN[currentLang]?.add || "+ Ajouter au devis"}
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!isSelectedInFunnel) funnel?.toggleService(funnelServiceId);
-                      funnel?.scrollToSection("#quote");
-                    }}
-                    className="inline-flex items-center gap-2 rounded-full border xr-line px-5 py-3.5 label-mono text-[8px] xr-muted transition hover:bg-[var(--xr-bg)]"
-                  >
-                    {copy.quote}
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </Reveal>
+              </article>
+            );
+          })}
         </div>
-
-        <Reveal delay={140}>
-          <button
-            type="button"
-            onClick={() => setActive(next)}
-            className="mt-4 flex w-full items-center justify-between rounded-[1.5rem] border xr-line bg-[var(--xr-bg)] px-5 py-4 text-left transition hover:-translate-y-0.5 sm:px-6"
-          >
-            <span>
-              <span className="label-mono block text-[6px] tracking-[.2em] xr-muted-2">{copy.next}</span>
-              <span className="mt-1 block text-sm font-semibold">{t(SERVICES.find((s) => s.id === next)?.title ?? { fr: next, en: next, vi: next, ar: next, ru: next })}</span>
-            </span>
-            <ArrowRight className="h-4 w-4 xr-muted-2" />
-          </button>
-        </Reveal>
       </div>
     </section>
   );

@@ -63,7 +63,7 @@ export function Hero() {
           alt=""
           fetchPriority="high"
           decoding="async"
-          className="absolute inset-0 h-full w-full object-cover object-[center_32%] md:object-[center_36%] contrast-[1.04] brightness-[1.03] saturate-[1.05] transition-transform duration-300 ease-out will-change-transform"
+          className="absolute inset-0 h-full w-full object-cover object-[center_18%] md:object-[center_20%] contrast-[1.04] brightness-[1.03] saturate-[1.05] transition-transform duration-300 ease-out will-change-transform"
         />
         {/* Dynamic interactive mouse follow spotlight */}
         <div
@@ -80,32 +80,32 @@ export function Hero() {
         <div className="block md:hidden absolute inset-0 bg-[linear-gradient(180deg,rgba(8,8,8,0.18)_0%,rgba(8,8,8,0.60)_35%,rgba(8,8,8,0.92)_70%,#080808_100%)]" />
       </div>
 
-      <div className="relative mx-auto grid min-h-[100svh] max-w-[1800px] md:grid-cols-[minmax(0,1.15fr)_minmax(220px,.85fr)]">
-        <div className="relative z-10 flex items-center px-5 pb-16 pt-24 sm:px-8 md:px-10 md:pb-32 md:pt-36 lg:px-16 xl:px-24">
-          <div className="max-w-[850px]">
-            <div className="mb-6 flex items-center gap-3 sm:mb-8">
-              <span className="h-px w-10 bg-white/75" />
-              <span className="label-mono text-[8px] tracking-[.24em] text-white/75 sm:text-[9px]">{t(UI.heroKicker)}</span>
+      <div className="relative mx-auto grid min-h-[100svh] max-w-[1700px] md:grid-cols-[minmax(0,1.18fr)_minmax(200px,.82fr)] items-center">
+        <div className="relative z-10 flex items-center px-5 pb-8 pt-20 sm:px-8 md:px-10 md:pb-10 md:pt-28 lg:px-14 xl:px-20">
+          <div className="max-w-[760px]">
+            <div className="mb-4 flex items-center gap-3 sm:mb-5">
+              <span className="h-px w-8 bg-white/75" />
+              <span className="label-mono text-[7.5px] tracking-[.24em] text-white/75 sm:text-[8.5px]">{t(UI.heroKicker)}</span>
             </div>
-            <h1 className="xr-hero-heading max-w-[920px] text-[clamp(3.45rem,7.2vw,7.9rem)] font-medium leading-[.86] tracking-[-.075em] text-white [text-wrap:balance]">
+            <h1 className="xr-hero-heading max-w-[760px] text-[clamp(2.15rem,4.2vw,4.1rem)] font-medium leading-[0.94] tracking-[-0.05em] text-white [text-wrap:balance]">
               <span className="block">{t(UI.heroTitle1)}</span>
-              <span className="mt-1.5 block font-serif font-normal italic tracking-[-.045em] text-[#f4e2b8] [font-feature-settings:'liga'_1,'dlig'_1]">{t(UI.heroTitleAccent)}</span>
+              <span className="mt-1 block font-serif font-light italic tracking-tight text-white">{t(UI.heroTitleAccent)}</span>
               <span className="mt-1 block">{t(UI.heroTitle2)}</span>
             </h1>
-            <p className="mt-6 max-w-[590px] text-[14px] leading-6 text-white/80 sm:mt-8 sm:text-base sm:leading-7 lg:text-[17px]">{t(UI.heroLead)}</p>
-            <div className="mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center">
-              <a href="#quote" className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-white px-6 py-4 text-[10px] font-bold uppercase tracking-[.1em] text-[#090909] transition duration-300 hover:-translate-y-1 hover:bg-neutral-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:min-w-[245px]">
+            <p className="mt-4 max-w-[540px] text-[13px] leading-relaxed text-white/80 sm:mt-5 sm:text-[14px] sm:leading-6">{t(UI.heroLead)}</p>
+            <div className="mt-5 flex flex-col gap-2.5 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center">
+              <a href="#quote" className="group inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full bg-white px-5 py-3 text-[9.5px] font-bold uppercase tracking-[.1em] text-[#090909] transition duration-300 hover:-translate-y-0.5 hover:bg-neutral-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:min-w-[210px]">
                 {t(UI.heroCtaMockup)}
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
               </a>
-              <a href="#audit" className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/45 px-5 py-3 text-[10px] font-semibold uppercase tracking-[.1em] text-white transition duration-300 hover:-translate-y-0.5 hover:border-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:min-w-[190px]">
-                {t(UI.heroCtaAudit)}<Search className="h-3.5 w-3.5 transition-transform group-hover:scale-110" />
+              <a href="#audit" className="group inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-white/45 px-4 py-2.5 text-[9.5px] font-semibold uppercase tracking-[.1em] text-white transition duration-300 hover:-translate-y-0.5 hover:border-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:min-w-[175px]">
+                {t(UI.heroCtaAudit)}<Search className="h-3 w-3 transition-transform group-hover:scale-110" />
               </a>
             </div>
 
             {/* 1-Click Interactive Funnel Qualification Pills */}
-            <div className="mt-8 pt-6 border-t border-white/10">
-              <span className="block label-mono text-[7px] tracking-[.24em] text-white/50 mb-3 uppercase">
+            <div className="mt-6 pt-4 border-t border-white/10">
+              <span className="block label-mono text-[6.5px] tracking-[.22em] text-white/50 mb-2.5 uppercase">
                 {currentLang === "fr" ? "Accès direct par objectif stratégique :" : currentLang === "vi" ? "Truy cập nhanh theo mục tiêu chiến lược :" : currentLang === "ar" ? "انطلاق سريع حسب الهدف الاستراتيجي :" : currentLang === "ru" ? "Быстрый выбор стратегической цели :" : "Direct access by strategic goal:"}
               </span>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -114,13 +114,13 @@ export function Hero() {
                     key={pill.id}
                     type="button"
                     onClick={() => applyGoalPreset(pill.id)}
-                    className="group relative flex flex-col items-start rounded-2xl border border-white/15 bg-white/[0.04] p-3 text-left backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-white/40 hover:bg-white/[0.08] active:scale-[0.98]"
+                    className="group relative flex flex-col items-start rounded-xl border border-white/15 bg-white/[0.04] p-2.5 text-left backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/[0.08] active:scale-[0.98]"
                   >
-                    <span className="text-base mb-1">{pill.icon}</span>
-                    <span className="text-[10px] font-bold text-white leading-tight group-hover:text-[var(--xr-accent)] transition">
+                    <span className="text-sm mb-1">{pill.icon}</span>
+                    <span className="text-[9.5px] font-bold text-white leading-tight group-hover:text-[var(--xr-accent)] transition">
                       {pill.label[currentLang] ?? pill.label.fr}
                     </span>
-                    <span className="mt-0.5 text-[8px] text-white/50 line-clamp-1">
+                    <span className="mt-0.5 text-[7.5px] text-white/50 line-clamp-1">
                       {pill.sub[currentLang] ?? pill.sub.fr}
                     </span>
                   </button>

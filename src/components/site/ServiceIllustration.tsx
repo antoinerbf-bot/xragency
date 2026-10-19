@@ -1,5 +1,5 @@
-import { ArrowUpRight, Bot, Gauge, Globe2, MapPin, Megaphone, Palette, Search, ShieldCheck, Sparkles } from "lucide-react";
-import type { ReactNode } from "react";
+import { useState, useRef, type ReactNode } from "react";
+import { Activity, ArrowUpRight, Bot, Check, CheckCircle2, Clock, Cpu, Gauge, Globe2, Lock, MapPin, Megaphone, Palette, Search, Server, ShieldCheck, Sparkles, Zap } from "lucide-react";
 import { XR_PHOTOS } from "@/lib/photography";
 import { Parallax } from "./primitives";
 
@@ -539,136 +539,287 @@ function WebcareVisual() {
   return (
     <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[var(--xr-surface)] via-[var(--xr-bg)] to-[var(--xr-surface)] p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
       {/* Halos cloud subtils */}
-      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-indigo-500/10 blur-3xl" />
-      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl" />
 
       <div className="flex items-center justify-between border-b xr-line pb-4">
         <div className="flex items-center gap-2">
-          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-500/15 text-emerald-500">
+          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-cyan-500/15 text-cyan-400">
             <ShieldCheck className="h-3.5 w-3.5" />
           </span>
-          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">SUPERVISION CLOUD DÉDIÉE · SÉCURITÉ & MAINTENANCE</span>
+          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">SUPERVISION CLOUD DÉDIÉE · SÉCURITÉ & MAINTENANCE HAUTE DISPONIBILITÉ</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
-            99.99% UPTIME
+          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="rounded-full bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-400">
+            99.99% UPTIME ACTIF
           </span>
           <Label>06 / WEBCARE</Label>
         </div>
       </div>
 
-      <div className="py-6 space-y-4">
-        <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
-            <span className="label-mono text-[6.5px] xr-muted-2">TEMPS DE RÉPONSE</span>
-            <p className="mt-1 text-xl font-bold text-emerald-500">&lt; 150 ms</p>
-            <span className="label-mono text-[6px] text-emerald-400 font-medium">Performance A+</span>
+      <div className="py-5 space-y-4">
+        {/* Real-time server telemetry cards */}
+        <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-3.5 sm:p-4 shadow-sm backdrop-blur-xl">
+            <div className="flex items-center justify-between">
+              <span className="label-mono text-[6.5px] xr-muted-2">LATENCE SERVEUR</span>
+              <Activity className="h-3 w-3 text-cyan-400 animate-pulse" />
+            </div>
+            <p className="mt-1 text-lg sm:text-xl font-bold text-cyan-400">&lt; 92 ms</p>
+            <div className="mt-1.5 flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              <span className="label-mono text-[6px] text-emerald-400 font-medium">Paris CDG · Edge A+</span>
+            </div>
           </div>
-          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
-            <span className="label-mono text-[6.5px] xr-muted-2">DISPONIBILITÉ</span>
-            <p className="mt-1 text-xl font-bold text-[var(--xr-ink)]">99.99%</p>
-            <span className="label-mono text-[6px] text-emerald-400 font-medium">SLA Contractuel</span>
+
+          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-3.5 sm:p-4 shadow-sm backdrop-blur-xl">
+            <div className="flex items-center justify-between">
+              <span className="label-mono text-[6.5px] xr-muted-2">DISPONIBILITÉ SLA</span>
+              <Server className="h-3 w-3 text-amber-300" />
+            </div>
+            <p className="mt-1 text-lg sm:text-xl font-bold text-[var(--xr-ink)]">99.99%</p>
+            <span className="mt-1.5 block label-mono text-[6px] text-amber-300/90 font-medium">Garantie contractuelle</span>
           </div>
-          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
-            <span className="label-mono text-[6.5px] xr-muted-2">SÉCURITÉ SSL</span>
-            <p className="mt-1 text-xl font-bold text-emerald-500">TLS 1.3</p>
-            <span className="label-mono text-[6px] text-emerald-400 font-medium">Protection WAF</span>
+
+          <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-3.5 sm:p-4 shadow-sm backdrop-blur-xl">
+            <div className="flex items-center justify-between">
+              <span className="label-mono text-[6.5px] xr-muted-2">CHIPHER & WAF</span>
+              <Lock className="h-3 w-3 text-emerald-400" />
+            </div>
+            <p className="mt-1 text-lg sm:text-xl font-bold text-emerald-400">TLS 1.3</p>
+            <span className="mt-1.5 block label-mono text-[6px] text-emerald-300/80 font-medium">Pare-feu anti-DDoS</span>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-emerald-500/25 bg-[var(--xr-surface-strong)] p-4 shadow-sm backdrop-blur-xl ring-1 ring-emerald-500/15">
-          <div className="flex items-center justify-between">
+        {/* Live automated log journal */}
+        <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)]/95 p-4 shadow-sm backdrop-blur-xl">
+          <div className="flex items-center justify-between border-b xr-line pb-2.5">
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              <span className="text-xs font-bold text-[var(--xr-ink)]">Intervention Proactive & Mises à Jour Mensuelles</span>
+              <span className="h-2 w-2 rounded-full bg-cyan-400" />
+              <span className="text-[11px] font-bold text-[var(--xr-ink)]">Journal de Surveillance en Temps Réel</span>
             </div>
-            <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-400">
-              SUPPORT 24/7
+            <span className="label-mono text-[6.5px] text-cyan-300/90 font-bold uppercase tracking-wider">
+              SURVEILLANCE 24/7/365
             </span>
           </div>
-          <p className="mt-1.5 text-[8.5px] leading-relaxed xr-muted">
-            Sauvegardes quotidiennes redondantes, restauration immédiate, modifications régulières de contenus et surveillance continue contre les cybermenaces.
-          </p>
+          <div className="mt-3 space-y-2 text-[8px] sm:text-[8.5px]">
+            <div className="flex items-center justify-between py-1 border-b xr-line/40">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-3 w-3 text-emerald-400 shrink-0" />
+                <span className="text-[var(--xr-ink)]">Sauvegarde quotidienne cloud chiffrée AES-256 (France & Francfort)</span>
+              </div>
+              <span className="label-mono text-[7px] text-emerald-400 font-bold">SUCCÈS 04:00</span>
+            </div>
+            <div className="flex items-center justify-between py-1 border-b xr-line/40">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-3 w-3 text-emerald-400 shrink-0" />
+                <span className="text-[var(--xr-ink)]">Filtrage WAF applicatif & scans de vulnérabilités continues</span>
+              </div>
+              <span className="label-mono text-[7px] text-cyan-400 font-bold">0 INTRUSION</span>
+            </div>
+            <div className="flex items-center justify-between py-1">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-3 w-3 text-emerald-400 shrink-0" />
+                <span className="text-[var(--xr-ink)]">Mises à jour de sécurité du noyau et monitoring continu des temps de réponse</span>
+              </div>
+              <span className="label-mono text-[7px] text-amber-300 font-bold">À JOUR</span>
+            </div>
+          </div>
         </div>
       </div>
 
       <div className="flex items-center justify-between border-t xr-line pt-4">
-        <span className="label-mono text-[7px] xr-muted">SAUVEGARDES · MISES À JOUR DU CŒUR · MODIFICATIONS INCLUSES</span>
-        <span className="label-mono text-[7px] font-bold text-emerald-500">SÉRÉNITÉ TOTALE DÈS 29 €/MOIS</span>
+        <span className="label-mono text-[7px] xr-muted">SAUVEGARDES QUOTIDIENNES · INFOGÉRANCE SENIOR · MODIFICATIONS INCLUSES</span>
+        <span className="label-mono text-[7px] font-bold text-amber-300">SÉRÉNITÉ DIGITALE DÈS 29 € / MOIS</span>
       </div>
     </div>
   );
 }
 
+const KORBEN_ROBOTS = [
+  {
+    id: "tribot",
+    name: "TriBot",
+    type: "Collecte & Tri Intelligent",
+    image: "https://www.korbenforpeople.com/wp-content/uploads/2026/01/S3J0900-scaled.png",
+    specs: ["120 L Bacs (2×60L)", "Écran 18,5\" FHD", "Batterie échangeable", "24 h/24 Continu"],
+    tag: "HÔTELS · RETAIL · GARES",
+    url: "https://www.korbenforpeople.com/robot/tribot/",
+  },
+  {
+    id: "welcome-plus",
+    name: "Welcome Plus",
+    type: "Accueil VIP & Conciergerie",
+    image: "https://www.korbenforpeople.com/wp-content/uploads/2025/08/ROBOT-ACCUEIL-02-scaled.png",
+    specs: ["Écran tactile 27\"", "30+ Langues", "Guidage LiDAR", "Interaction Vocale"],
+    tag: "SIÈGES · SALONS · CLINIQUE",
+    url: "https://www.korbenforpeople.com/robot/welcome-plus/",
+  },
+  {
+    id: "delivery-pro",
+    name: "Delivery Pro",
+    type: "Service & Livraison Autonome",
+    image: "https://www.korbenforpeople.com/wp-content/uploads/2025/08/DELIVERY-BOTS-2-VUE-01-scaled.png",
+    specs: ["Charge utile 60 kg", "3 à 4 Plateaux", "Suspension active", "Évitement 360°"],
+    tag: "RESTAURANTS · HÔTELS",
+    url: "https://www.korbenforpeople.com/robot/delivery-pro/",
+  },
+  {
+    id: "phantas",
+    name: "Cleaning Phantas",
+    type: "Nettoyage Haute Précision",
+    image: "https://www.korbenforpeople.com/wp-content/uploads/2025/08/PHANTAS-VUE-02.png",
+    specs: ["500 m²/h", "Lavage & Aspiration", "Bordures zéro marge", "Auto-vidange"],
+    tag: "BOUTIQUES · BUREAUX",
+    url: "https://www.korbenforpeople.com/robot/cleaning-phantas/",
+  },
+];
+
 function RoboticsVisual() {
+  const [selectedRobot, setSelectedRobot] = useState(KORBEN_ROBOTS[0]);
+  const [rotate, setRotate] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = containerRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    const rotX = ((0.5 - y) * 22).toFixed(1);
+    const rotY = ((x - 0.5) * 32).toFixed(1);
+    setRotate({ x: parseFloat(rotX), y: parseFloat(rotY) });
+  };
+
+  const handleMouseLeave = () => {
+    setRotate({ x: 0, y: 0 });
+  };
+
   return (
-    <Stage accent="rgba(148,163,184,.15)">
-      <div className="relative h-full min-h-[380px] p-5 sm:min-h-[430px] sm:p-7 flex flex-col justify-between">
-        <div className="flex items-center justify-between border-b xr-line pb-3">
-          <div className="flex items-center gap-2">
-            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-neutral-500/10 text-neutral-400">
-              <Bot className="h-3 w-3" />
-            </span>
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">ROBOTS DE SERVICE · ÉLÉGANCE OPÉRATIONNELLE</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="label-mono text-[7px] text-emerald-500 font-bold">DISPONIBLE DÉMO</span>
-            <Label>07 / ROBOTIQUE</Label>
-          </div>
+    <div
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[var(--xr-surface)] via-[#080b10] to-[var(--xr-surface)] p-5 sm:p-7 shadow-2xl backdrop-blur-2xl"
+    >
+      {/* Dynamic ambient sci-fi halos */}
+      <div aria-hidden className="pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full bg-cyan-500/15 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -left-20 -bottom-20 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl" />
+
+      {/* Header with live 3D status badge */}
+      <div className="flex items-center justify-between border-b xr-line pb-3.5">
+        <div className="flex items-center gap-2">
+          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-cyan-500/15 text-cyan-400">
+            <Bot className="h-3.5 w-3.5" />
+          </span>
+          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">XR × KORBEN · ROBOTS PROFESSIONNELS EN SITUATION RÉELLE</span>
         </div>
-
-        <div className="my-auto py-3 grid gap-4 lg:grid-cols-[1.2fr_.8fr] items-center">
-          <div className="relative overflow-hidden rounded-2xl border xr-line shadow-xl group">
-            <img
-              src={XR_PHOTOS.robotics}
-              alt="Robot de service autonome de luxe en hôtel 5 étoiles"
-              className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-              <div>
-                <span className="label-mono text-[7px] text-white/90">NAVIGATION LIDAR 3D DYNAMIQUE</span>
-                <p className="text-[10px] font-semibold text-white">Évitement d'obstacles en temps réel</p>
-              </div>
-              <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[7px] font-bold text-emerald-300 backdrop-blur-md">Prêt à l'emploi</span>
-            </div>
-          </div>
-
-          <div className="space-y-2.5">
-            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5 backdrop-blur-md">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-[var(--xr-ink)]">Capacités de Terrain</span>
-                <span className="label-mono text-[6px] text-emerald-500 font-bold">12H AUTONOMIE</span>
-              </div>
-              <p className="mt-1 text-[8.5px] leading-relaxed xr-muted">
-                Service en salle, port de plateaux lourds (jusqu'à 40 kg), accueil VIP et guidage interactif des clients.
-              </p>
-              <div className="mt-2.5 grid grid-cols-2 gap-1.5 text-center text-[7.5px]">
-                <div className="rounded-lg border xr-line bg-[var(--xr-bg)] p-1.5">
-                  <span className="block font-bold text-[var(--xr-ink)]">0 Bruit</span>
-                  <span className="xr-muted-2">Moteurs silencieux</span>
-                </div>
-                <div className="rounded-lg border xr-line bg-[var(--xr-bg)] p-1.5">
-                  <span className="block font-bold text-[var(--xr-ink)]">100% Sûr</span>
-                  <span className="xr-muted-2">Capteurs 360°</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-[9px]">
-              <span className="xr-muted">Location événementielle ou vente</span>
-              <span className="label-mono text-[7px] font-bold text-emerald-400">Dès 499 €</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">HÔTELLERIE · RESTAURATION · ÉVÉNEMENTS VIP · SALONS</span>
-          <span className="label-mono text-[7px] text-emerald-500 font-semibold">ESSAI GRATUIT SUR SITE POSSIBLE</span>
+        <div className="flex items-center gap-2">
+          <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-cyan-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-ping" />
+            VUE 3D 360° INTERACTIVE
+          </span>
+          <Label>07 / ROBOTIQUE</Label>
         </div>
       </div>
-    </Stage>
+
+      {/* Model Selector Tabs */}
+      <div className="mt-3.5 flex flex-wrap items-center gap-1.5">
+        {KORBEN_ROBOTS.map((robot) => (
+          <button
+            key={robot.id}
+            type="button"
+            onClick={() => setSelectedRobot(robot)}
+            className={`rounded-xl px-3 py-1.5 label-mono text-[7.5px] font-bold tracking-wider transition-all duration-300 ${
+              selectedRobot.id === robot.id
+                ? "border border-cyan-400/50 bg-cyan-500/20 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.25)]"
+                : "border xr-line bg-[var(--xr-surface-strong)] text-[var(--xr-ink)]/70 hover:border-white/30 hover:text-white"
+            }`}
+          >
+            {robot.name}
+          </button>
+        ))}
+        <span className="ml-auto label-mono text-[7px] text-white/40 hidden md:inline-block">
+          Survolez pour incliner sous tous les angles
+        </span>
+      </div>
+
+      {/* Interactive 3D Stage */}
+      <div className="relative mt-4 flex flex-col md:flex-row items-center justify-between gap-5 rounded-2xl border xr-line bg-gradient-to-b from-[#0e121a]/90 to-[#07090d]/90 p-5 backdrop-blur-xl overflow-hidden min-h-[300px]">
+        {/* Holographic floor grid & laser scan */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(6,182,212,.15)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,.15)_1px,transparent_1px)] [background-size:24px_24px]" />
+        
+        {/* Concentric pedestal glow */}
+        <div aria-hidden className="pointer-events-none absolute left-1/2 md:left-[35%] bottom-6 -translate-x-1/2 h-20 w-56 rounded-full bg-cyan-500/20 blur-xl" />
+        <div aria-hidden className="pointer-events-none absolute left-1/2 md:left-[35%] bottom-8 -translate-x-1/2 h-10 w-44 rounded-full border border-cyan-400/40 shadow-[0_0_20px_rgba(6,182,212,0.4)]" />
+
+        {/* 3D Moving Robot Container */}
+        <div
+          className="relative z-10 mx-auto md:mx-0 flex h-60 w-60 sm:h-64 sm:w-64 items-center justify-center transition-transform duration-200 ease-out will-change-transform"
+          style={{
+            transform: `perspective(1000px) rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale3d(1.05, 1.05, 1.05)`,
+          }}
+        >
+          <img
+            src={selectedRobot.image}
+            alt={selectedRobot.name}
+            className="h-full w-full object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.85)] filter contrast-[1.04] brightness-[1.02]"
+          />
+        </div>
+
+        {/* Robot Specifications & Action Panel */}
+        <div className="relative z-10 flex-1 w-full space-y-3">
+          <div className="rounded-xl border xr-line bg-[var(--xr-surface)]/90 p-3.5 backdrop-blur-md">
+            <div className="flex items-center justify-between">
+              <span className="label-mono text-[7px] text-cyan-400 font-bold">{selectedRobot.tag}</span>
+              <span className="label-mono text-[6.5px] text-emerald-400 font-semibold">DISPONIBLE DÉMO</span>
+            </div>
+            <h4 className="mt-1 text-base font-bold text-white tracking-tight">{selectedRobot.name}</h4>
+            <p className="text-[10px] text-white/70 font-medium">{selectedRobot.type}</p>
+            
+            {/* Tech Specs Pills */}
+            <div className="mt-3 grid grid-cols-2 gap-1.5">
+              {selectedRobot.specs.map((spec, i) => (
+                <div key={i} className="flex items-center gap-1.5 rounded-lg border xr-line bg-[var(--xr-bg)]/80 px-2 py-1.5 text-[7.5px] text-white/85">
+                  <Cpu className="h-2.5 w-2.5 text-cyan-400 shrink-0" />
+                  <span className="truncate">{spec}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-amber-400/25 bg-amber-400/5 px-3 py-2 text-[9px]">
+            <span className="text-white/80">Location mensuelle ou achat accompagné</span>
+            <span className="label-mono text-[7.5px] font-bold text-amber-300">DÈS 499 € / MOIS</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <a
+              href={selectedRobot.url}
+              target="_blank"
+              rel="noreferrer"
+              className="flex-1 flex items-center justify-center gap-1.5 rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-[8px] font-bold uppercase tracking-wider text-white hover:bg-white/20 transition"
+            >
+              Fiche officielle Korben <ArrowUpRight className="h-3 w-3" />
+            </a>
+            <a
+              href="#quote"
+              className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-white px-3 py-2 text-[8px] font-bold uppercase tracking-wider text-black hover:bg-neutral-200 transition shadow-md"
+            >
+              Ajouter au devis
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between border-t xr-line pt-3.5 mt-3.5">
+        <span className="label-mono text-[7px] xr-muted">
+          ORIENTATION 3D : [ X: {rotate.x > 0 ? `+${rotate.x}` : rotate.x}° · Y: {rotate.y > 0 ? `+${rotate.y}` : rotate.y}° ]
+        </span>
+        <span className="label-mono text-[7px] font-bold text-cyan-400">ÉCOSYSTÈME IA & ROBOTIQUE LIVRÉ SUR SITE</span>
+      </div>
+    </div>
   );
 }
 
