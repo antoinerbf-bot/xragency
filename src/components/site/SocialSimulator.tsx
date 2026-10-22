@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { ArrowRight, ArrowUpRight, Check, CheckCircle2, Flame, Heart, MessageCircle, Play, Share2, Sparkles, TrendingUp, Users, Video, XCircle, Zap } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { InstagramLogo, TikTokLogo, FacebookLogo } from "./ServiceIllustration";
-import { XR_PHOTOS } from "@/lib/photography";
 import { useLang, type Lang } from "@/lib/i18n";
 import { Reveal } from "./primitives";
 
@@ -118,8 +117,6 @@ export function SocialSimulator() {
   const [activeChannel, setActiveChannel] = useState<"instagram" | "tiktok" | "facebook">("instagram");
 
   const sector = SECTORS.find((s) => s.id === selectedSector) ?? SECTORS[0];
-  const isFr = currentLang === "fr";
-  const isVi = currentLang === "vi";
   const copy = {
     kicker: { fr: "COMMUNITY MANAGEMENT · STUDIO DE CONTENU", en: "COMMUNITY MANAGEMENT · CONTENT STUDIO", vi: "QUẢN LÝ CỘNG ĐỒNG · STUDIO NỘI DUNG", ar: "إدارة المجتمع · استوديو المحتوى", ru: "КОМЬЮНИТИ-МЕНЕДЖМЕНТ · КОНТЕНТ-СТУДИЯ" },
     title: { fr: "Du contenu qui donne envie d’entrer en conversation.", en: "Content that gives people a reason to engage.", vi: "Nội dung khơi gợi tương tác thực sự.", ar: "محتوى يشجع الجمهور على التفاعل.", ru: "Контент, который вовлекает в диалог." },
@@ -209,7 +206,6 @@ export function SocialSimulator() {
             <div className="border-b xr-line p-6 sm:p-8">
               <p className="label-mono text-[8px] tracking-[.2em] text-pink-400">{text("preview")}</p>
               <h3 className="display-serif mt-4 text-3xl leading-tight text-[var(--xr-ink)]">{sector.label[currentLang] ?? sector.label.fr}</h3>
-              <p className="mt-4 text-sm leading-6 xr-muted">{sectorPlan.goal}</p>
               <div className="mt-6 rounded-2xl border border-primary/25 bg-primary/[.06] p-4"><p className="label-mono text-[7px] tracking-[.18em] text-primary">{text("goal")}</p><p className="mt-2 text-xs leading-5 text-foreground">{sectorPlan.goal}</p></div>
             </div>
             <div className="p-6 sm:p-8"><p className="label-mono text-[8px] tracking-[.18em] xr-muted-2">{text("angles")}</p><ul className="mt-4 space-y-3">{sectorPlan.angles.map((angle, i) => <li key={angle} className="flex gap-3 text-xs leading-5 text-foreground"><span className="label-mono text-primary">0{i + 1}</span><span>{angle}</span></li>)}</ul></div>
@@ -217,7 +213,7 @@ export function SocialSimulator() {
           <article className="relative overflow-hidden rounded-[2rem] border xr-line bg-[var(--xr-surface-strong)] shadow-xl">
             <div aria-hidden className="absolute inset-0 opacity-25" style={{ background: "radial-gradient(circle at 75% 10%, rgba(225,48,108,.25), transparent 45%)" }} />
             <div className="relative p-6 sm:p-8">
-              <div className="flex flex-col gap-4 border-b xr-line pb-5 sm:flex-row sm:items-end sm:justify-between"><div><p className="label-mono text-[8px] tracking-[.2em] text-primary">{text("channels")}</p><h3 className="display-serif mt-2 text-2xl text-[var(--xr-ink)]">{channels.name}</h3></div><div className="flex gap-2">{(["instagram", "tiktok", "facebook"] as const).map((channel) => <button key={channel} type="button" aria-pressed={activeChannel === channel} onClick={() => setActiveChannel(channel)} className={"flex items-center gap-2 rounded-full border px-3 py-2 text-xs transition " + (activeChannel === channel ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:text-foreground")}>{channel === "instagram" ? <InstagramLogo className="h-4 w-4" /> : channel === "tiktok" ? <TikTokLogo className="h-4 w-4" /> : <FacebookLogo className="h-4 w-4" />}<span>{channel === "facebook" ? "Facebook" : channel === "instagram" ? "Instagram" : "TikTok"}</span></button>)}</div></div>
+              <div className="flex flex-col gap-4 border-b xr-line pb-5 sm:flex-row sm:items-end sm:justify-between"><div><p className="label-mono text-[8px] tracking-[.2em] text-primary">{text("channels")}</p><h3 className="display-serif mt-2 text-2xl text-[var(--xr-ink)]">{channels.name}</h3></div><div className="flex gap-2">{(["instagram", "tiktok", "facebook"] as const).map((channel) => <button key={channel} type="button" aria-pressed={activeChannel === channel} onClick={() => setActiveChannel(channel)} className={"flex items-center gap-2 rounded-full border px-3 py-2 text-xs transition " + (activeChannel === channel ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:text-foreground")}>{channel === "instagram" ? <InstagramLogo className="h-4 w-4" /> : channel === "tiktok" ? <TikTokLogo className="h-4 w-4" /> : <FacebookLogo className="h-4 w-4" />}<span>{channels.name === "Facebook" ? "Facebook" : channel === "instagram" ? "Instagram" : "TikTok"}</span></button>)}</div></div>
               <div className="mt-6 rounded-2xl border xr-line bg-[var(--xr-bg)] p-5 sm:p-6">
                 <div className="flex items-center justify-between gap-3"><span className="label-mono text-[7px] tracking-[.18em] text-primary">{text("example")}</span><Sparkles className="h-4 w-4 text-primary" /></div>
                 <div className="mt-5 flex items-start gap-4"><div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border xr-line bg-card">{channels.icon}</div><div><h4 className="text-sm font-semibold text-foreground">{channels.label}</h4><p className="mt-2 text-xs leading-5 xr-muted">{channels.formats[currentLang] ?? channels.formats.fr}</p></div></div>
