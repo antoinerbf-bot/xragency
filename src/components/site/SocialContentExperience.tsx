@@ -76,7 +76,7 @@ const PLANS = [
     features: { fr: ["Tout Présence Essentielle", "20 publications / mois", "Reels / TikTok", "3 Stories / semaine", "Interaction proactive", "Reporting renforcé"], en: ["Everything in Essential Presence", "20 publications / month", "Reels / TikTok", "3 Stories / week", "Proactive engagement", "Enhanced reporting"], vi: ["Toàn bộ gói Cơ bản", "20 bài đăng / tháng", "Reels / TikTok", "3 Story / tuần", "Tương tác chủ động", "Báo cáo nâng cao"] }, popular: true,
   },
   {
-    name: { fr: "Social Authority", en: "Social Authority", vi: "Social Authority" }, price: 699,
+    name: { fr: "Social Authority", en: "Social Authority", vi: "Social Authority" }, price: 799,
     desc: { fr: "Pour une présence éditoriale forte avec animation de communauté.", en: "For a stronger editorial presence with community management.", vi: "Cho hiện diện nội dung mạnh cùng quản trị cộng đồng." },
     features: { fr: ["Production de contenu en continu", "Stories quotidiennes", "Modération des commentaires", "Gestion des messages privés", "Sondages & FAQ", "Reporting stratégique"], en: ["Continuous content production", "Daily Stories", "Comment moderation", "Direct message management", "Polls & Q&A", "Strategic reporting"], vi: ["Sản xuất nội dung liên tục", "Story hàng ngày", "Kiểm duyệt bình luận", "Quản lý tin nhắn riêng", "Khảo sát & Q&A", "Báo cáo chiến lược"] },
   },
