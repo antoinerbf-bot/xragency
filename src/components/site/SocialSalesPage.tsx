@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowDown, ArrowRight, Check, ChevronDown, Clapperboard, Compass, MessageCircle, PenTool, Play, ShieldCheck, Sparkles, Video, CalendarDays, BarChart3, Clock3, Instagram, Facebook, Linkedin, Menu, X } from "lucide-react";
-import { SERVICES, CONTACT } from "@/lib/content";
+import { SERVICES } from "@/lib/content";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
 import { AddToCartBtn } from "@/components/site/Cart";
@@ -95,7 +95,7 @@ export function SocialSalesPage() {
           <div className="mx-auto flex max-w-[1240px] flex-col gap-5 px-5 sm:px-8 lg:px-12">
             <p className="label-mono text-xs tracking-[.18em] xr-muted">LES CANAUX QUE NOUS POUVONS ANIMER</p>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {[["Instagram", Instagram], ["TikTok", Play], ["LinkedIn", Linkedin], ["Facebook", Facebook]].map(([name, Icon]) => <div key={name as string} className="flex min-h-12 items-center gap-3 rounded-xl border xr-line px-4 py-3"><Icon className="h-5 w-5" /><span className="text-base font-medium">{name as string}</span></div>)}
+              {[{ name: "Instagram", Icon: Instagram }, { name: "TikTok", Icon: Play }, { name: "LinkedIn", Icon: Linkedin }, { name: "Facebook", Icon: Facebook }].map(({ name, Icon }) => <div key={name} className="flex min-h-12 items-center gap-3 rounded-xl border xr-line px-4 py-3"><Icon className="h-5 w-5" /><span className="text-base font-medium">{name}</span></div>)}
             </div>
             <p className="text-sm xr-muted">Références clients et chiffres vérifiés : à intégrer ici après validation. Aucun résultat n’est présenté comme garanti.</p>
           </div>
