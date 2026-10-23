@@ -77,7 +77,7 @@ export function Hero() {
         <div className="hidden md:block absolute inset-0 bg-[linear-gradient(90deg,#080808_0%,rgba(8,8,8,0.76)_22%,rgba(8,8,8,0.22)_52%,rgba(8,8,8,0.02)_80%,transparent_100%)]" />
         <div className="hidden md:block absolute inset-0 bg-[linear-gradient(0deg,#080808_0%,transparent_16%)]" />
         {/* Mobile vignette: atmospheric view at top, smooth fade for high readability over text */}
-        <div className="block md:hidden absolute inset-0 bg-[linear-gradient(180deg,rgba(8,8,8,0.18)_0%,rgba(8,8,8,0.60)_35%,rgba(8,8,8,0.92)_70%,#080808_100%)]" />
+        <div className="block md:hidden absolute inset-0 bg-[linear-gradient(180deg,rgba(8,8,8,0.08)_0%,rgba(8,8,8,0.28)_28%,rgba(8,8,8,0.58)_58%,rgba(8,8,8,0.82)_82%,rgba(8,8,8,0.9)_100%)]" />
       </div>
 
       <div className="relative mx-auto grid min-h-[100svh] max-w-[1700px] md:grid-cols-[minmax(0,1.18fr)_minmax(200px,.82fr)] items-center">
