@@ -56,14 +56,16 @@ export function SocialSalesPage() {
                 <video
                   className="aspect-[4/4.2] w-full object-cover"
                   src="https://videos.pexels.com/video-files/7308291/7308291-hd_1080_1920_30fps.mp4"
-                  poster={XR_PHOTOS.social}
                   autoPlay
                   muted
                   loop
                   playsInline
-                  preload="metadata"
+                  controls
+                  preload="auto"
                   aria-label="Vidéo verticale illustrant la création de contenu et l’usage des réseaux sociaux"
-                />
+                >
+                  Votre navigateur ne peut pas lire cette vidéo.
+                </video>
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-black/10" />
                 <div className="absolute inset-x-5 bottom-5 text-white sm:inset-x-7 sm:bottom-7"><span className="rounded-full border border-white/30 bg-black/20 px-3 py-1.5 text-xs">STRATÉGIE · CONTENU · DIFFUSION</span><p className="display-serif mt-4 max-w-sm text-3xl leading-tight sm:text-4xl">Votre univers. Une même signature.</p></div>
                 <span className="absolute right-4 top-4 rounded-full border border-white/30 bg-black/35 px-3 py-1.5 text-[10px] tracking-[.14em] text-white">FILM EN BOUCLE</span>
