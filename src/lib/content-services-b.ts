@@ -50,7 +50,7 @@ export const SERVICES_PART2 = [
     title: { fr: "Social Media", en: "Social Media", vi: "Mạng xã hội", ar: "وسائل التواصل الاجتماعي", ru: "Социальные сети" },
     short: { fr: "Stratégie, création et animation des réseaux.", en: "Strategy, creation and community management.", vi: "Chiến lược, sáng tạo và quản lý mạng xã hội.", ar: "استراتيجية وإنشاء وإدارة الشبكات الاجتماعية.", ru: "Стратегия, создание и ведение социальных сетей." },
     description: { fr: "Calendrier éditorial, direction artistique, création de contenus percutants et animation Instagram, TikTok, LinkedIn & Facebook.", en: "Editorial calendar, content creation and management of Instagram, Facebook, LinkedIn and TikTok.", vi: "Lịch biên tập, sáng tạo nội dung và quản lý Instagram, Facebook, LinkedIn, TikTok.", ar: "تقويم تحريري وتوجيه فني وإنشاء محتوى مؤثر وإدارة Instagram وTikTok وLinkedIn وFacebook.", ru: "Редакционный календарь, арт-дирекшн, создание выразительного контента и ведение Instagram, TikTok, LinkedIn и Facebook." },
-    fromEur: 299,
+    fromEur: 349,
     fromPeriod: "month",
     highlights: [
       { fr: "Instagram, TikTok, LinkedIn & Facebook", en: "Instagram, TikTok, LinkedIn & Facebook", vi: "Instagram, TikTok, LinkedIn & Facebook", ar: "Instagram و TikTok و LinkedIn و Facebook", ru: "Instagram, TikTok, LinkedIn и Facebook" },
@@ -60,7 +60,7 @@ export const SERVICES_PART2 = [
     plans: [
       {
         name: { fr: "Présence Essentielle", en: "Essential Presence", vi: "Hiện diện Cơ bản" },
-        eur: 299,
+        eur: 349,
         period: "month",
         features: [
           { fr: "Engagement minimum 3 mois (mise en place de la stratégie)", en: "3 months minimum commitment (strategy ramp-up)", vi: "Cam kết tối thiểu 3 tháng" },
