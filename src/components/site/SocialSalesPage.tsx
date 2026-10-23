@@ -53,9 +53,20 @@ export function SocialSalesPage() {
             <div className="absolute -inset-4 rounded-[2rem] bg-[#b18153]/10 blur-2xl" />
             <div className="relative rounded-[1.6rem] border xr-line bg-[var(--xr-surface)] p-3 shadow-[0_24px_70px_-35px_rgba(0,0,0,.35)] sm:p-4">
               <div className="relative overflow-hidden rounded-[1.2rem] bg-black">
-                <img src={XR_PHOTOS.social} alt="Direction artistique pour une campagne de réseaux sociaux" className="aspect-[4/4.2] w-full object-cover" fetchPriority="high" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/10" />
-                <div className="absolute inset-x-5 bottom-5 text-white sm:inset-x-7 sm:bottom-7"><span className="rounded-full border border-white/30 bg-black/20 px-3 py-1.5 text-xs">EXEMPLE CRÉATIF</span><p className="display-serif mt-4 max-w-sm text-3xl leading-tight sm:text-4xl">Votre univers. Une même signature.</p></div>
+                <video
+                  className="aspect-[4/4.2] w-full object-cover"
+                  src="https://videos.pexels.com/video-files/7308291/7308291-hd_1080_1920_30fps.mp4"
+                  poster={XR_PHOTOS.social}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  aria-label="Vidéo verticale illustrant la création de contenu et l’usage des réseaux sociaux"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-black/10" />
+                <div className="absolute inset-x-5 bottom-5 text-white sm:inset-x-7 sm:bottom-7"><span className="rounded-full border border-white/30 bg-black/20 px-3 py-1.5 text-xs">STRATÉGIE · CONTENU · DIFFUSION</span><p className="display-serif mt-4 max-w-sm text-3xl leading-tight sm:text-4xl">Votre univers. Une même signature.</p></div>
+                <span className="absolute right-4 top-4 rounded-full border border-white/30 bg-black/35 px-3 py-1.5 text-[10px] tracking-[.14em] text-white">FILM EN BOUCLE</span>
               </div>
               <div className="grid grid-cols-3 gap-2 p-1 pt-3">{[{Icon:Instagram,label:"Instagram"},{Icon:Play,label:"TikTok"},{Icon:Linkedin,label:"LinkedIn"}].map(({Icon,label})=><div key={label} className="flex items-center justify-center gap-2 rounded-xl border xr-line px-2 py-3 text-xs sm:text-sm"><Icon className="h-4 w-4"/>{label}</div>)}</div>
             </div>
