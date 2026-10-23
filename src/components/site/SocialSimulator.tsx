@@ -3,6 +3,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { InstagramLogo, TikTokLogo, FacebookLogo } from "./ServiceIllustration";
 import { useLang, type Lang } from "@/lib/i18n";
 import { Reveal } from "./primitives";
+import { XR_PHOTOS } from "@/lib/photography";
 
 interface SectorData {
   id: string;
@@ -120,7 +121,7 @@ export function SocialSimulator() {
   const copy = {
     kicker: { fr: "COMMUNITY MANAGEMENT · STUDIO DE CONTENU", en: "COMMUNITY MANAGEMENT · CONTENT STUDIO", vi: "QUẢN LÝ CỘNG ĐỒNG · STUDIO NỘI DUNG", ar: "إدارة المجتمع · استوديو المحتوى", ru: "КОМЬЮНИТИ-МЕНЕДЖМЕНТ · КОНТЕНТ-СТУДИЯ" },
     title: { fr: "Du contenu qui donne envie d’entrer en conversation.", en: "Content that gives people a reason to engage.", vi: "Nội dung khơi gợi tương tác thực sự.", ar: "محتوى يشجع الجمهور على التفاعل.", ru: "Контент, который вовлекает в диалог." },
-    intro: { fr: "Une ligne éditoriale claire, des visuels cohérents et une animation adaptée à votre marque. Explorez un exemple de direction créative selon votre secteur.", en: "A clear editorial direction, cohesive visuals and community management tailored to your brand. Explore a creative direction for your sector.", vi: "Định hướng nội dung rõ ràng, hình ảnh nhất quán và quản lý cộng đồng phù hợp với thương hiệu.", ar: "توجه تحريري واضح وصور متناسقة وإدارة مجتمع تناسب علامتك التجارية.", ru: "Чёткая редакционная стратегия, единый визуальный стиль и управление сообществом под ваш бренд." },
+    intro: { fr: "Une présence sociale qui donne envie de s’arrêter, de découvrir votre univers et de vous contacter. Choisissez votre secteur pour voir une piste créative concrète — puis découvrez la formule adaptée.", en: "A social presence designed to stop the scroll, express your brand and invite people to connect. Choose your sector to explore a creative direction, then find the right plan.", vi: "Định hướng nội dung rõ ràng, hình ảnh nhất quán và quản lý cộng đồng phù hợp với thương hiệu.", ar: "توجه تحريري واضح وصور متناسقة وإدارة مجتمع تناسب علامتك التجارية.", ru: "Чёткая редакционная стратегия, единый визуальный стиль и управление сообществом под ваш бренд." },
     choose: { fr: "01 · Choisissez votre secteur", en: "01 · Choose your sector", vi: "01 · Chọn lĩnh vực", ar: "01 · اختر مجال نشاطك", ru: "01 · Выберите отрасль" },
     preview: { fr: "02 · Aperçu de direction éditoriale", en: "02 · Editorial direction preview", vi: "02 · Xem trước định hướng nội dung", ar: "02 · معاينة التوجه التحريري", ru: "02 · Пример редакционной стратегии" },
     example: { fr: "EXEMPLE CRÉATIF · PAS UNE PRÉVISION DE PERFORMANCE", en: "CREATIVE EXAMPLE · NOT A PERFORMANCE FORECAST", vi: "VÍ DỤ SÁNG TẠO · KHÔNG PHẢI DỰ BÁO HIỆU QUẢ", ar: "مثال إبداعي · ليس توقعًا للأداء", ru: "КРЕАТИВНЫЙ ПРИМЕР · НЕ ПРОГНОЗ РЕЗУЛЬТАТОВ" },
@@ -214,13 +215,21 @@ export function SocialSimulator() {
             <div aria-hidden className="absolute inset-0 opacity-25" style={{ background: "radial-gradient(circle at 75% 10%, rgba(225,48,108,.25), transparent 45%)" }} />
             <div className="relative p-6 sm:p-8">
               <div className="flex flex-col gap-4 border-b xr-line pb-5 sm:flex-row sm:items-end sm:justify-between"><div><p className="label-mono text-[8px] tracking-[.2em] text-primary">{text("channels")}</p><h3 className="display-serif mt-2 text-2xl text-[var(--xr-ink)]">{channels.name}</h3></div><div className="flex gap-2">{(["instagram", "tiktok", "facebook"] as const).map((channel) => <button key={channel} type="button" aria-pressed={activeChannel === channel} onClick={() => setActiveChannel(channel)} className={"flex items-center gap-2 rounded-full border px-3 py-2 text-xs transition " + (activeChannel === channel ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:text-foreground")}>{channel === "instagram" ? <InstagramLogo className="h-4 w-4" /> : channel === "tiktok" ? <TikTokLogo className="h-4 w-4" /> : <FacebookLogo className="h-4 w-4" />}<span>{channels.name === "Facebook" ? "Facebook" : channel === "instagram" ? "Instagram" : "TikTok"}</span></button>)}</div></div>
-              <div className="mt-6 rounded-2xl border xr-line bg-[var(--xr-bg)] p-5 sm:p-6">
+              <div className="relative mt-6 h-44 overflow-hidden rounded-2xl border xr-line sm:h-52">
+                <img src={XR_PHOTOS.social} alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
+                <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-3 text-white">
+                  <div><p className="label-mono text-[7px] tracking-[.2em] text-white/70">XR SOCIAL STUDIO</p><p className="mt-1 text-lg font-semibold leading-tight">Une marque. Une histoire. Un feed cohérent.</p></div>
+                  <span className="rounded-full border border-white/25 bg-black/30 px-3 py-1.5 label-mono text-[7px] backdrop-blur">APERÇU CRÉATIF</span>
+                </div>
+              </div>
+              <div className="mt-4 rounded-2xl border xr-line bg-[var(--xr-bg)] p-5 sm:p-6">
                 <div className="flex items-center justify-between gap-3"><span className="label-mono text-[7px] tracking-[.18em] text-primary">{text("example")}</span><Sparkles className="h-4 w-4 text-primary" /></div>
                 <div className="mt-5 flex items-start gap-4"><div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border xr-line bg-card">{channels.icon}</div><div><h4 className="text-sm font-semibold text-foreground">{channels.label}</h4><p className="mt-2 text-xs leading-5 xr-muted">{channels.formats[currentLang] ?? channels.formats.fr}</p></div></div>
                 <div className="mt-5 grid gap-2 sm:grid-cols-3">{sectorPlan.angles.map((angle, i) => <div key={angle} className="rounded-xl border xr-line bg-card/50 p-3"><span className="label-mono text-[7px] text-primary">IDÉE 0{i + 1}</span><p className="mt-2 text-xs leading-5 text-foreground">{angle}</p></div>)}</div>
               </div>
               <p className="mt-5 text-xs leading-6 xr-muted">{text("scope")}</p>
-              <a href="#plans" className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-3 text-xs font-semibold text-[var(--xr-bg)] transition hover:-translate-y-0.5">{text("plans")}<ArrowRight className="h-4 w-4" /></a>
+              <a href="#plans" className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-3.5 text-xs font-semibold text-[var(--xr-bg)] shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl">{text("plans")}<ArrowRight className="h-4 w-4" /></a>
             </div>
           </article>
         </div>
