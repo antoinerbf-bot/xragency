@@ -823,7 +823,7 @@ function SocialVisual() {
                 OFFRE OFFICIELLE CLÉ-EN-MAIN
               </span>
               <p className="text-[11px] font-bold text-[var(--xr-ink)]">
-                Dès 299 € / mois · Prise en charge intégrale sous 7 jours
+                Dès 349 € / mois · Prise en charge intégrale sous 7 jours
               </p>
             </div>
             <a
