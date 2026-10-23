@@ -11,6 +11,7 @@ import { MapsSimulator } from "@/components/site/MapsSimulator";
 import { SocialSimulator } from "@/components/site/SocialSimulator";
 import { AddToCartBtn } from "@/components/site/Cart";
 import { ServiceIllustration } from "@/components/site/ServiceIllustration";
+import { SocialSalesPage } from "@/components/site/SocialSalesPage";
 import { cn } from "@/lib/utils";
 
 const SERVICE_ALIASES: Record<string, string> = {
@@ -77,6 +78,12 @@ export const Route = createFileRoute("/services/$serviceId")({
 });
 
 function ServiceDetailPage() {
+  const { service } = Route.useLoaderData();
+  if (service.id === "social") return <SocialSalesPage />;
+  return <GenericServiceDetailPage />;
+}
+
+function GenericServiceDetailPage() {
   const { service } = Route.useLoaderData();
   const { t, price, lang } = useLang();
   const [selectedPlanIndex, setSelectedPlanIndex] = useState(
