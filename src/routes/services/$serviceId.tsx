@@ -63,12 +63,17 @@ export const Route = createFileRoute("/services/$serviceId")({
   head: ({ loaderData }) => {
     const s = loaderData?.service;
     if (!s) return { meta: [{ title: "Service — XR Agency" }] };
+    const isSocial = s.id === "social";
+    const title = isSocial ? "Gestion des réseaux sociaux — XR Agency" : `${s.title.fr} — XR Agency`;
+    const description = isSocial
+      ? "Stratégie, création de contenus et animation des réseaux sociaux. Trois formules claires dès 349 €/mois."
+      : `${s.short.fr} — Tarifs, livrables et méthode XR Agency.`;
     return {
       meta: [
-        { title: `${s.title.fr} — XR Agency` },
-        { name: "description", content: `${s.short.fr} — Tarifs, livrables et méthode XR Agency.` },
-        { property: "og:title", content: `${s.title.fr} — XR Agency` },
-        { property: "og:description", content: `${s.short.fr} — Studio digital & IA.` },
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
         { property: "og:type", content: "website" },
       ],
       links: [{ rel: "canonical", href: "https://xragencyai.com/services/" + loaderData.canonicalId }],
