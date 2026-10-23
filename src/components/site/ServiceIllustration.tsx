@@ -514,8 +514,8 @@ function SocialVisual() {
       border: "hover:border-pink-500/50",
       activeBg: "bg-pink-500/10 border-pink-500/40 text-pink-300",
       logo: InstagramLogo,
-      stat: "+18.4% ENGAGEMENT",
-      desc: "Tournages mensuels sur site, étalonnage cinématique et feed harmonisé.",
+      stat: "IMAGE DE MARQUE",
+      desc: "Direction artistique cohérente, tournage sur site et feed harmonisé.",
     },
     {
       id: "tiktok" as const,
@@ -526,8 +526,8 @@ function SocialVisual() {
       border: "hover:border-cyan-400/50",
       activeBg: "bg-cyan-500/10 border-cyan-400/40 text-cyan-300",
       logo: TikTokLogo,
-      stat: "240K+ VUES / MOIS",
-      desc: "Captation de l'attention dès 3 secondes, sons tendance et formats verticaux.",
+      stat: "VIDÉOS VERTICALES",
+      desc: "Accroches créatives, montage rythmé et formats adaptés à la plateforme.",
     },
     {
       id: "facebook" as const,
@@ -538,8 +538,8 @@ function SocialVisual() {
       border: "hover:border-blue-500/50",
       activeBg: "bg-blue-500/10 border-blue-500/40 text-blue-300",
       logo: FacebookLogo,
-      stat: "ROAS ×4.2 MESURÉ",
-      desc: "Campagnes sponsorisées ciblées à 5 km autour de votre établissement.",
+      stat: "DIFFUSION CIBLÉE",
+      desc: "Contenus sponsorisés et ciblage définis selon vos objectifs et votre audience.",
     },
   ];
 
@@ -765,53 +765,40 @@ function SocialVisual() {
           <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)]/90 p-4 shadow-sm backdrop-blur-xl">
             <div className="flex items-center justify-between border-b xr-line pb-2.5">
               <span className="label-mono text-[7px] tracking-[.18em] xr-muted uppercase">
-                2. RÉSULTATS MOYENS CONSTATÉS · PACK XR SOCIAL
+                2. VOTRE CONTENU, DE L’IDÉE À LA PUBLICATION
               </span>
               <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 label-mono text-[6.5px] font-bold text-emerald-400">
-                AUDIT CONTINU INCLUS
+                MÉTHODE SUR MESURE
               </span>
             </div>
 
-            <div className="mt-3 grid grid-cols-3 gap-3 text-center">
-              <div className="rounded-xl border xr-line bg-[var(--xr-bg)]/80 p-2.5">
-                <span className="display-serif block text-lg font-bold text-amber-300 sm:text-xl">
-                  +18.4%
-                </span>
-                <span className="label-mono text-[6px] tracking-wider xr-muted uppercase">
-                  Taux d'Engagement
-                </span>
-              </div>
-              <div className="rounded-xl border xr-line bg-[var(--xr-bg)]/80 p-2.5">
-                <span className="display-serif block text-lg font-bold text-cyan-400 sm:text-xl">
-                  240K+
-                </span>
-                <span className="label-mono text-[6px] tracking-wider xr-muted uppercase">
-                  Vues Cumulées / Mois
-                </span>
-              </div>
-              <div className="rounded-xl border xr-line bg-[var(--xr-bg)]/80 p-2.5">
-                <span className="display-serif block text-lg font-bold text-emerald-400 sm:text-xl">
-                  ×4.2
-                </span>
-                <span className="label-mono text-[6px] tracking-wider xr-muted uppercase">
-                  ROAS Campagnes Ads
-                </span>
-              </div>
+            <div className="mt-3 grid gap-2 sm:grid-cols-3">
+              {[
+                { step: "01", title: "Cadrer", desc: "Votre marque, vos clients et vos objectifs." },
+                { step: "02", title: "Créer", desc: "Un univers visuel et des formats adaptés." },
+                { step: "03", title: "Publier", desc: "Un calendrier éditorial clair et régulier." },
+              ].map((item) => (
+                <div key={item.step} className="rounded-xl border xr-line bg-[var(--xr-bg)]/80 p-3">
+                  <span className="label-mono text-[7px] font-bold text-amber-300">{item.step} / ÉTAPE</span>
+                  <p className="mt-1 text-sm font-semibold text-[var(--xr-ink)]">{item.title}</p>
+                  <p className="mt-1 text-[9px] leading-4 xr-muted">{item.desc}</p>
+                </div>
+              ))}
             </div>
 
             {/* Deliverables Checklist */}
             <div className="mt-3.5 space-y-1.5 pt-3 border-t xr-line text-[9px] text-[var(--xr-ink)]">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
-                <span>Tournages sur site avec caméras cinéma 4K & stabilisateurs Ronin</span>
+                <span>Production visuelle adaptée à votre marque et à vos canaux</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
-                <span>Montage dynamique, étalonnage couleur haute couture & sous-titrage viral</span>
+                <span>Montage soigné, rythme maîtrisé et sous-titres lisibles</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
-                <span>100% des droits audiovisuels cédés · Aucune charge mentale</span>
+                <span>Calendrier éditorial coordonné et accompagnement de publication</span>
               </div>
             </div>
           </div>
@@ -820,7 +807,7 @@ function SocialVisual() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-2xl border border-amber-400/35 bg-gradient-to-r from-amber-400/15 via-amber-400/5 to-transparent p-3.5">
             <div>
               <span className="label-mono text-[6.5px] font-bold text-amber-300 tracking-wider uppercase">
-                OFFRE OFFICIELLE CLÉ-EN-MAIN
+                VOTRE PRÉSENCE SOCIALE, PRÊTE À DÉCOLLER
               </span>
               <p className="text-[11px] font-bold text-[var(--xr-ink)]">
                 Dès 349 € / mois · Prise en charge intégrale sous 7 jours
@@ -830,7 +817,7 @@ function SocialVisual() {
               href="#quote"
               className="inline-flex items-center justify-center gap-1.5 rounded-full bg-[var(--xr-ink)] text-[var(--xr-bg)] px-4 py-2 label-mono text-[7.5px] font-bold hover:scale-105 transition shadow-md shrink-0"
             >
-              Ajouter au devis
+              Découvrir les formules
               <ArrowUpRight className="h-3 w-3" />
             </a>
           </div>
