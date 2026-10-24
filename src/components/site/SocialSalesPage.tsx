@@ -51,7 +51,7 @@ export function SocialSalesPage() {
           <div className="relative mx-auto mt-8 grid max-w-[980px] grid-cols-3 items-end gap-2 sm:mt-10 sm:gap-5">
             <div className="relative -rotate-[4deg] overflow-hidden rounded-[1.25rem] border-[3px] border-[#a9b3b8] bg-[#080b0d] p-1 shadow-[0_18px_50px_rgba(0,0,0,.55)] sm:rounded-[2rem] sm:border-4 sm:p-2">
               <div className="relative aspect-[9/16] overflow-hidden rounded-[.9rem] bg-[#272727] sm:rounded-[1.5rem]">
-                <img src={XR_PHOTOS.ads} alt="Exemple de création visuelle pour Instagram" className="absolute inset-0 h-full w-full object-cover" />
+                <img src={XR_PHOTOS.strategy} alt="Visuel éditorial culinaire pour une publication Instagram" className="absolute inset-0 h-full w-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-black/15" />
                 <div className="absolute inset-x-2 top-2 flex items-center gap-1 rounded-full bg-black/40 px-2 py-1 text-[8px] text-white backdrop-blur-sm sm:inset-x-3 sm:top-3 sm:text-xs"><Instagram className="h-3 w-3 sm:h-4 sm:w-4"/> Instagram</div>
                 <div className="absolute inset-x-2 bottom-3 text-white sm:inset-x-4 sm:bottom-5"><p className="display-serif text-sm leading-tight sm:text-2xl">Votre univers.<br/>En images.</p><p className="mt-1 text-[8px] text-white/70 sm:text-xs">Reels · Stories · Carrousels</p></div>
@@ -59,7 +59,7 @@ export function SocialSalesPage() {
             </div>
             <div className="relative z-10 -translate-y-3 overflow-hidden rounded-[1.35rem] border-[3px] border-[#c6d1d6] bg-[#080b0d] p-1 shadow-[0_22px_65px_rgba(0,0,0,.65)] sm:-translate-y-7 sm:rounded-[2.1rem] sm:border-4 sm:p-2">
               <div className="relative aspect-[9/16] overflow-hidden rounded-[1rem] bg-[#272727] sm:rounded-[1.6rem]">
-                <img src={XR_PHOTOS.branding} alt="Exemple de contenu vidéo de marque pour TikTok" className="absolute inset-0 h-full w-full object-cover" />
+                <img src={XR_PHOTOS.social} alt="Création visuelle de campagne social media pour TikTok" className="absolute inset-0 h-full w-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/5 to-black/15" />
                 <div className="absolute inset-x-2 top-2 flex items-center gap-1 rounded-full bg-black/40 px-2 py-1 text-[8px] text-white backdrop-blur-sm sm:inset-x-3 sm:top-3 sm:text-xs"><Music2 className="h-3 w-3 sm:h-4 sm:w-4"/> TikTok</div>
                 <div className="absolute inset-x-2 bottom-3 text-white sm:inset-x-4 sm:bottom-5"><p className="display-serif text-base leading-tight sm:text-3xl">Des vidéos qui <em className="text-[#22d5d0]">captivent.</em></p><p className="mt-1 text-[8px] text-white/70 sm:text-xs">Formats courts · Tendances</p></div>
@@ -67,7 +67,7 @@ export function SocialSalesPage() {
             </div>
             <div className="relative rotate-[4deg] overflow-hidden rounded-[1.25rem] border-[3px] border-[#a9b3b8] bg-[#080b0d] p-1 shadow-[0_18px_50px_rgba(0,0,0,.55)] sm:rounded-[2rem] sm:border-4 sm:p-2">
               <div className="relative aspect-[9/16] overflow-hidden rounded-[.9rem] bg-[#272727] sm:rounded-[1.5rem]">
-                <img src={XR_PHOTOS.websites} alt="Exemple de campagne de marque pour Facebook" className="absolute inset-0 h-full w-full object-cover" />
+                <img src={XR_PHOTOS.refonte} alt="Visuel de marque et campagne pour Facebook" className="absolute inset-0 h-full w-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-black/15" />
                 <div className="absolute inset-x-2 top-2 flex items-center gap-1 rounded-full bg-black/40 px-2 py-1 text-[8px] text-white backdrop-blur-sm sm:inset-x-3 sm:top-3 sm:text-xs"><Facebook className="h-3 w-3 sm:h-4 sm:w-4"/> Facebook</div>
                 <div className="absolute inset-x-2 bottom-3 text-white sm:inset-x-4 sm:bottom-5"><p className="display-serif text-sm leading-tight sm:text-2xl">Des campagnes qui convertissent.</p><p className="mt-1 text-[8px] text-white/70 sm:text-xs">Publicités · Communauté</p></div>
