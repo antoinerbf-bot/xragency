@@ -55,7 +55,7 @@ export function SocialSalesPage() {
               <div className="relative overflow-hidden rounded-[1.2rem] bg-black">
                 <video
                   className="aspect-[4/4.2] w-full object-cover"
-                  src="https://videos.pexels.com/video-files/7308291/7308291-hd_1080_1920_30fps.mp4"
+                  src="https://videos.pexels.com/video-files/7308291/7308291-hd_1080_1920_24fps.mp4"
                   autoPlay
                   muted
                   loop
