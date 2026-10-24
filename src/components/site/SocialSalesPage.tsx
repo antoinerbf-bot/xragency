@@ -74,11 +74,11 @@ export function SocialSalesPage() {
               </div>
             </div>
           </div>
-          <div className="mx-auto mt-7 grid max-w-[1080px] grid-cols-2 gap-2 rounded-2xl border border-white/15 bg-black/55 p-3 backdrop-blur-md sm:mt-9 sm:grid-cols-4 sm:gap-4 sm:p-5">
-            {[{title:"Stratégie sur-mesure",text:"Positionnement, audience, plan de contenu.",icon:"◎"},{title:"Création de contenus",text:"Photos, vidéos, Reels et carrousels.",icon:"▣"},{title:"Diffusion & publicités",text:"Campagnes selon les besoins.",icon:"↗"},{title:"Suivi & optimisation",text:"Analyse et recommandations.",icon:"◉"}].map((item)=><div key={item.title} className="px-1 py-2 text-center sm:px-3"><span className="text-2xl text-[#22d5d0] sm:text-3xl">{item.icon}</span><h2 className="mt-2 text-xs font-semibold sm:text-sm">{item.title}</h2><p className="mt-1 text-[10px] leading-4 text-white/65 sm:text-xs sm:leading-5">{item.text}</p></div>)}
+          <div className="mx-auto mt-5 grid max-w-[1080px] grid-cols-2 gap-x-3 gap-y-1 rounded-2xl border border-white/15 bg-black/55 p-2.5 backdrop-blur-md sm:mt-9 sm:grid-cols-4 sm:gap-4 sm:p-5">
+            {[{title:"Stratégie sur-mesure",text:"Positionnement, audience, plan de contenu.",icon:"◎"},{title:"Création de contenus",text:"Photos, vidéos, Reels et carrousels.",icon:"▣"},{title:"Diffusion & publicités",text:"Campagnes selon les besoins.",icon:"↗"},{title:"Suivi & optimisation",text:"Analyse et recommandations.",icon:"◉"}].map((item)=><div key={item.title} className="px-1 py-1.5 text-center sm:px-3 sm:py-2"><span className="text-2xl text-[#22d5d0] sm:text-3xl">{item.icon}</span><h2 className="mt-2 text-xs font-semibold sm:text-sm">{item.title}</h2><p className="mt-1 text-[10px] leading-4 text-white/65 sm:text-xs sm:leading-5">{item.text}</p></div>)}
           </div>
-          <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:mt-6 sm:flex-row">
-            <a href="#formules" className="inline-flex min-h-12 w-full max-w-[340px] items-center justify-center gap-3 rounded-full bg-[#f8f5ee] px-7 py-3 text-sm font-bold tracking-[.12em] text-[#101315] transition-transform hover:-translate-y-0.5 sm:w-auto">DÉCOUVRIR NOS OFFRES <ArrowRight className="h-4 w-4"/></a>
+          <div className="mt-5 flex flex-col items-center justify-center gap-2 pb-2 sm:mt-6 sm:flex-row">
+            <a href="#formules" className="inline-flex min-h-12 w-full max-w-[340px] items-center justify-center gap-3 rounded-full bg-[#f8f5ee] px-7 py-3 text-sm font-bold tracking-[.12em] text-[#101315] shadow-[0_8px_30px_rgba(0,0,0,.25)] transition-transform hover:-translate-y-0.5 sm:w-auto">DÉCOUVRIR NOS OFFRES <ArrowRight className="h-4 w-4"/></a>
             <span className="text-xs text-white/65">Formules à partir de 349 € / mois</span>
           </div>
         </div>
