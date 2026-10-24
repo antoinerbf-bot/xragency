@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, Check, ChevronDown, MessageCircle, Instagram, Linkedin, Play } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, MessageCircle, Instagram, Facebook, Music2, Sparkles } from "lucide-react";
 import { SERVICES } from "@/lib/content";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
@@ -50,27 +50,34 @@ export function SocialSalesPage() {
             <p className="mt-5 text-sm xr-muted">Stratégie · Création · Publication · Selon la formule choisie</p>
           </div>
           <div className="relative mx-auto w-full max-w-[520px]">
-            <div className="absolute -inset-4 rounded-[2rem] bg-[#b18153]/10 blur-2xl" />
-            <div className="relative rounded-[1.6rem] border xr-line bg-[var(--xr-surface)] p-3 shadow-[0_24px_70px_-35px_rgba(0,0,0,.35)] sm:p-4">
-              <div className="relative overflow-hidden rounded-[1.2rem] bg-black">
-                <video
-                  className="aspect-[4/4.2] w-full object-cover"
-                  src="https://videos.pexels.com/video-files/7308291/7308291-hd_1080_1920_24fps.mp4"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  controls
-                  preload="auto"
-                  aria-label="Vidéo verticale illustrant la création de contenu et l’usage des réseaux sociaux"
-                >
-                  Votre navigateur ne peut pas lire cette vidéo.
-                </video>
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-black/10" />
-                <div className="absolute inset-x-5 bottom-5 text-white sm:inset-x-7 sm:bottom-7"><span className="rounded-full border border-white/30 bg-black/20 px-3 py-1.5 text-xs">STRATÉGIE · CONTENU · DIFFUSION</span><p className="display-serif mt-4 max-w-sm text-3xl leading-tight sm:text-4xl">Votre univers. Une même signature.</p></div>
-                <span className="absolute right-4 top-4 rounded-full border border-white/30 bg-black/35 px-3 py-1.5 text-[10px] tracking-[.14em] text-white">FILM EN BOUCLE</span>
+            <div className="absolute -inset-6 rounded-[2.5rem] bg-[#b18153]/15 blur-3xl" />
+            <div className="relative overflow-hidden rounded-[1.8rem] border xr-line bg-[#171715] p-4 text-[#f6f2eb] shadow-[0_28px_80px_-32px_rgba(0,0,0,.5)] sm:p-6">
+              <div className="flex items-center justify-between gap-3">
+                <span className="label-mono text-[10px] tracking-[.2em] text-white/55">XR SOCIAL STUDIO</span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[10px]"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" /> CONTENU EN MOUVEMENT</span>
               </div>
-              <div className="grid grid-cols-3 gap-2 p-1 pt-3">{[{Icon:Instagram,label:"Instagram"},{Icon:Play,label:"TikTok"},{Icon:Linkedin,label:"LinkedIn"}].map(({Icon,label})=><div key={label} className="flex items-center justify-center gap-2 rounded-xl border xr-line px-2 py-3 text-xs sm:text-sm"><Icon className="h-4 w-4"/>{label}</div>)}</div>
+              <div className="relative mt-5 min-h-[300px] overflow-hidden rounded-[1.3rem] bg-gradient-to-br from-[#3c2834] via-[#191919] to-[#2d382d] p-5 sm:min-h-[350px] sm:p-7">
+                <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-[#c87967]/30 blur-3xl" />
+                <div className="absolute -bottom-14 -left-10 h-48 w-48 rounded-full bg-[#b18153]/25 blur-3xl" />
+                <div className="relative z-10 flex items-center gap-2 text-xs text-white/65"><Sparkles className="h-4 w-4" /> STRATÉGIE · CRÉATION · DIFFUSION</div>
+                <p className="display-serif relative z-10 mt-5 max-w-sm text-4xl leading-[1.02] sm:text-5xl">Des contenus qui <em className="font-normal text-[#e8b99a]">captent l’attention.</em></p>
+                <p className="relative z-10 mt-3 max-w-xs text-sm leading-6 text-white/65">Une identité reconnaissable, adaptée aux codes de chaque plateforme.</p>
+                <div className="relative z-10 mt-6 grid grid-cols-2 gap-3">
+                  <div className="animate-[float_5s_ease-in-out_infinite] rounded-2xl border border-white/15 bg-white/10 p-3 backdrop-blur-md">
+                    <div className="flex items-center justify-between"><Instagram className="h-5 w-5"/><span className="text-[10px] text-white/55">01 / SOCIAL</span></div>
+                    <div className="mt-5 h-2 w-4/5 rounded-full bg-[#e7a28d]/80"/><div className="mt-2 h-2 w-2/3 rounded-full bg-white/25"/><p className="mt-4 text-xs font-medium">Identité & contenus</p>
+                  </div>
+                  <div className="animate-[float_5s_ease-in-out_infinite] rounded-2xl border border-white/15 bg-white/10 p-3 backdrop-blur-md [animation-delay:700ms]">
+                    <div className="flex items-center justify-between"><Music2 className="h-5 w-5"/><span className="text-[10px] text-white/55">02 / VIDEO</span></div>
+                    <div className="mt-5 flex h-7 items-end gap-1">{[35,65,45,90,55,75,40,85,50].map((h,i)=><span key={i} className="w-full rounded-t-sm bg-[#e7a28d]/80" style={{height:h+"%"}} />)}</div><p className="mt-2 text-xs font-medium">Formats dynamiques</p>
+                  </div>
+                </div>
+                <div className="absolute right-5 top-[42%] hidden -rotate-6 rounded-xl border border-white/20 bg-[#f6f2eb] px-3 py-2 text-xs font-semibold text-[#171715] shadow-xl sm:block">Votre marque, partout.</div>
+              </div>
+              <div className="mt-4 grid grid-cols-3 gap-2">
+                {[{Icon:Instagram,label:"Instagram"},{Icon:Music2,label:"TikTok"},{Icon:Facebook,label:"Facebook"}].map(({Icon,label})=><div key={label} className="flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-2 py-3 text-xs sm:text-sm"><Icon className="h-4 w-4"/>{label}</div>)}
+              </div>
+              <div className="mt-4 flex items-center justify-between gap-3 rounded-xl bg-white/5 px-4 py-3"><span className="text-xs text-white/65">Gestion des réseaux sociaux</span><a href="#formules" className="inline-flex items-center gap-1.5 text-xs font-semibold">Voir les formules <ArrowRight className="h-3.5 w-3.5"/></a></div>
             </div>
           </div>
         </div>
