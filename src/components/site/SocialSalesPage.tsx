@@ -36,50 +36,50 @@ export function SocialSalesPage() {
   return <div className="min-h-screen bg-[var(--xr-bg)] text-[var(--xr-ink)]">
     <Nav />
     <main>
-      <section className="overflow-hidden border-b xr-line">
-        <div className="mx-auto grid max-w-[1180px] items-center gap-10 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[1fr_.9fr] lg:px-12 lg:py-20">
-          <div>
-            <p className="label-mono text-xs tracking-[.18em] xr-muted">SOCIAL MEDIA · XR AGENCY</p>
-            <h1 className="display-serif mt-5 max-w-2xl text-[clamp(2.7rem,6vw,5.4rem)] leading-[.98] tracking-[-.04em]">Une présence sociale <em className="font-normal">qui vous ressemble.</em></h1>
-            <p className="mt-5 max-w-xl text-base leading-7 xr-muted sm:text-lg">Nous créons et animons vos réseaux pour donner à votre marque une image claire, régulière et professionnelle.</p>
-            <div className="mt-6 flex items-baseline gap-3"><span className="display-serif text-5xl sm:text-6xl">349 €</span><span className="xr-muted">/ mois · dès</span></div>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <a href="#formules" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--xr-ink)] px-7 py-3 text-base font-semibold text-[var(--xr-bg)]">Voir les formules <ArrowRight className="h-4 w-4" /></a>
-              <a href={waFor("Social Media")} target="_blank" rel="noreferrer" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border xr-line px-6 py-3 text-base font-semibold"><MessageCircle className="h-4 w-4" /> Poser une question</a>
-            </div>
-            <p className="mt-5 text-sm xr-muted">Stratégie · Création · Publication · Selon la formule choisie</p>
+      <section className="relative isolate overflow-hidden border-b border-white/10 bg-[#080b0d] text-white">
+        <div className="absolute inset-0">
+          <img src={XR_PHOTOS.social} alt="" aria-hidden="true" className="h-full w-full object-cover opacity-45" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#07090b]/75 via-[#07090b]/35 to-[#07090b]/95" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_20%,rgba(36,220,213,.13),transparent_45%)]" />
+        </div>
+        <div className="relative mx-auto max-w-[1240px] px-4 pb-8 pt-8 sm:px-8 sm:pb-12 sm:pt-10 lg:px-12">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="label-mono text-[10px] tracking-[.28em] text-white/70 sm:text-xs">XR AGENCY · SOCIAL MEDIA STUDIO</p>
+            <h1 className="display-serif mx-auto mt-4 max-w-3xl text-[clamp(2.3rem,6.5vw,5.3rem)] leading-[.93] tracking-[-.045em]">Des contenus qui font <em className="font-normal text-[#22d5d0]">grandir</em> votre marque.</h1>
+            <p className="mt-4 text-xs tracking-wide text-white/75 sm:text-base">Stratégie · Création · Diffusion · Performance</p>
           </div>
-          <div className="relative mx-auto w-full max-w-[520px]">
-            <div className="absolute -inset-6 rounded-[2.5rem] bg-[#b18153]/15 blur-3xl" />
-            <div className="relative overflow-hidden rounded-[1.8rem] border xr-line bg-[#171715] p-4 text-[#f6f2eb] shadow-[0_28px_80px_-32px_rgba(0,0,0,.5)] sm:p-6">
-              <div className="flex items-center justify-between gap-3">
-                <span className="label-mono text-[10px] tracking-[.2em] text-white/55">XR SOCIAL STUDIO</span>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[10px]"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" /> CONTENU EN MOUVEMENT</span>
+          <div className="relative mx-auto mt-8 grid max-w-[980px] grid-cols-3 items-end gap-2 sm:mt-10 sm:gap-5">
+            <div className="relative -rotate-[4deg] overflow-hidden rounded-[1.25rem] border-[3px] border-[#a9b3b8] bg-[#080b0d] p-1 shadow-[0_18px_50px_rgba(0,0,0,.55)] sm:rounded-[2rem] sm:border-4 sm:p-2">
+              <div className="relative aspect-[9/16] overflow-hidden rounded-[.9rem] bg-[#272727] sm:rounded-[1.5rem]">
+                <img src={XR_PHOTOS.ads} alt="Exemple de création visuelle pour Instagram" className="absolute inset-0 h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-black/15" />
+                <div className="absolute inset-x-2 top-2 flex items-center gap-1 rounded-full bg-black/40 px-2 py-1 text-[8px] text-white backdrop-blur-sm sm:inset-x-3 sm:top-3 sm:text-xs"><Instagram className="h-3 w-3 sm:h-4 sm:w-4"/> Instagram</div>
+                <div className="absolute inset-x-2 bottom-3 text-white sm:inset-x-4 sm:bottom-5"><p className="display-serif text-sm leading-tight sm:text-2xl">Votre univers.<br/>En images.</p><p className="mt-1 text-[8px] text-white/70 sm:text-xs">Reels · Stories · Carrousels</p></div>
               </div>
-              <div className="group relative mt-5 min-h-[390px] overflow-hidden rounded-[1.3rem] bg-[#171715] sm:min-h-[440px]">
-                <img src={XR_PHOTOS.social} alt="Création de contenu pour les réseaux sociaux" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#171715] via-[#171715]/35 to-black/10" />
-                <div className="absolute inset-x-5 top-5 z-10 flex flex-wrap gap-2 sm:inset-x-7 sm:top-7">
-                  <span className="rounded-full border border-white/25 bg-black/35 px-3 py-1.5 text-[10px] tracking-[.12em] text-white backdrop-blur-md">STRATÉGIE</span>
-                  <span className="rounded-full border border-white/25 bg-black/35 px-3 py-1.5 text-[10px] tracking-[.12em] text-white backdrop-blur-md">CRÉATION</span>
-                  <span className="rounded-full border border-white/25 bg-black/35 px-3 py-1.5 text-[10px] tracking-[.12em] text-white backdrop-blur-md">PUBLICATION</span>
-                </div>
-                <div className="absolute inset-x-5 bottom-5 z-10 sm:inset-x-7 sm:bottom-7">
-                  <p className="label-mono text-[10px] tracking-[.18em] text-white/70">VOTRE MARQUE, SUR LES BONS RÉSEAUX</p>
-                  <p className="display-serif mt-3 max-w-sm text-4xl leading-[1.02] text-white sm:text-5xl">Des contenus qui <em className="font-normal text-[#e8b99a]">donnent envie.</em></p>
-                  <p className="mt-3 max-w-sm text-sm leading-6 text-white/80">Une direction visuelle cohérente, déclinée selon les codes de chaque plateforme.</p>
-                  <a href="#formules" className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-[#f6f2eb] px-5 py-3 text-sm font-semibold text-[#171715]">Découvrir les offres <ArrowRight className="h-4 w-4"/></a>
-                </div>
-                <div className="absolute right-4 top-[42%] z-10 hidden -rotate-6 rounded-2xl border border-white/25 bg-white/90 p-3 text-[#171715] shadow-2xl backdrop-blur-md sm:block">
-                  <div className="flex items-center gap-2"><Instagram className="h-4 w-4"/><span className="text-xs font-semibold">Création sociale</span></div>
-                  <div className="mt-3 flex gap-1"><span className="h-1.5 w-8 rounded-full bg-[#d58e7b]"/><span className="h-1.5 w-5 rounded-full bg-[#171715]/20"/><span className="h-1.5 w-4 rounded-full bg-[#171715]/20"/></div>
-                </div>
-              </div>
-              <div className="mt-4 grid grid-cols-3 gap-2">
-                {[{Icon:Instagram,label:"Instagram"},{Icon:Music2,label:"TikTok"},{Icon:Facebook,label:"Facebook"}].map(({Icon,label})=><div key={label} className="flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-2 py-3 text-xs sm:text-sm"><Icon className="h-4 w-4"/>{label}</div>)}
-              </div>
-              <div className="mt-4 flex items-center justify-between gap-3 rounded-xl bg-white/5 px-4 py-3"><span className="text-xs text-white/65">Gestion des réseaux sociaux</span><a href="#formules" className="inline-flex items-center gap-1.5 text-xs font-semibold">Voir les formules <ArrowRight className="h-3.5 w-3.5"/></a></div>
             </div>
+            <div className="relative z-10 -translate-y-3 overflow-hidden rounded-[1.35rem] border-[3px] border-[#c6d1d6] bg-[#080b0d] p-1 shadow-[0_22px_65px_rgba(0,0,0,.65)] sm:-translate-y-7 sm:rounded-[2.1rem] sm:border-4 sm:p-2">
+              <div className="relative aspect-[9/16] overflow-hidden rounded-[1rem] bg-[#272727] sm:rounded-[1.6rem]">
+                <img src={XR_PHOTOS.branding} alt="Exemple de contenu vidéo de marque pour TikTok" className="absolute inset-0 h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/5 to-black/15" />
+                <div className="absolute inset-x-2 top-2 flex items-center gap-1 rounded-full bg-black/40 px-2 py-1 text-[8px] text-white backdrop-blur-sm sm:inset-x-3 sm:top-3 sm:text-xs"><Music2 className="h-3 w-3 sm:h-4 sm:w-4"/> TikTok</div>
+                <div className="absolute inset-x-2 bottom-3 text-white sm:inset-x-4 sm:bottom-5"><p className="display-serif text-base leading-tight sm:text-3xl">Des vidéos qui <em className="text-[#22d5d0]">captivent.</em></p><p className="mt-1 text-[8px] text-white/70 sm:text-xs">Formats courts · Tendances</p></div>
+              </div>
+            </div>
+            <div className="relative rotate-[4deg] overflow-hidden rounded-[1.25rem] border-[3px] border-[#a9b3b8] bg-[#080b0d] p-1 shadow-[0_18px_50px_rgba(0,0,0,.55)] sm:rounded-[2rem] sm:border-4 sm:p-2">
+              <div className="relative aspect-[9/16] overflow-hidden rounded-[.9rem] bg-[#272727] sm:rounded-[1.5rem]">
+                <img src={XR_PHOTOS.websites} alt="Exemple de campagne de marque pour Facebook" className="absolute inset-0 h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-black/15" />
+                <div className="absolute inset-x-2 top-2 flex items-center gap-1 rounded-full bg-black/40 px-2 py-1 text-[8px] text-white backdrop-blur-sm sm:inset-x-3 sm:top-3 sm:text-xs"><Facebook className="h-3 w-3 sm:h-4 sm:w-4"/> Facebook</div>
+                <div className="absolute inset-x-2 bottom-3 text-white sm:inset-x-4 sm:bottom-5"><p className="display-serif text-sm leading-tight sm:text-2xl">Des campagnes qui convertissent.</p><p className="mt-1 text-[8px] text-white/70 sm:text-xs">Publicités · Communauté</p></div>
+              </div>
+            </div>
+          </div>
+          <div className="mx-auto mt-7 grid max-w-[1080px] grid-cols-2 gap-2 rounded-2xl border border-white/15 bg-black/55 p-3 backdrop-blur-md sm:mt-9 sm:grid-cols-4 sm:gap-4 sm:p-5">
+            {[{title:"Stratégie sur-mesure",text:"Positionnement, audience, plan de contenu.",icon:"◎"},{title:"Création de contenus",text:"Photos, vidéos, Reels et carrousels.",icon:"▣"},{title:"Diffusion & publicités",text:"Campagnes selon les besoins.",icon:"↗"},{title:"Suivi & optimisation",text:"Analyse et recommandations.",icon:"◉"}].map((item)=><div key={item.title} className="px-1 py-2 text-center sm:px-3"><span className="text-2xl text-[#22d5d0] sm:text-3xl">{item.icon}</span><h2 className="mt-2 text-xs font-semibold sm:text-sm">{item.title}</h2><p className="mt-1 text-[10px] leading-4 text-white/65 sm:text-xs sm:leading-5">{item.text}</p></div>)}
+          </div>
+          <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:mt-6 sm:flex-row">
+            <a href="#formules" className="inline-flex min-h-12 w-full max-w-[340px] items-center justify-center gap-3 rounded-full bg-[#f8f5ee] px-7 py-3 text-sm font-bold tracking-[.12em] text-[#101315] transition-transform hover:-translate-y-0.5 sm:w-auto">DÉCOUVRIR NOS OFFRES <ArrowRight className="h-4 w-4"/></a>
+            <span className="text-xs text-white/65">Formules à partir de 349 € / mois</span>
           </div>
         </div>
       </section>
