@@ -48,9 +48,9 @@ export function SocialSalesPage() {
             <h1 className="display-serif mx-auto mt-4 max-w-3xl text-[clamp(2.3rem,6.5vw,5.3rem)] leading-[.93] tracking-[-.045em]">Des contenus qui font <em className="font-normal text-[#22d5d0]">grandir</em> votre marque.</h1>
             <p className="mt-4 text-xs tracking-wide text-white/75 sm:text-base">Stratégie · Création · Diffusion · Performance</p>
           </div>
-          <div className="relative mx-auto mt-8 grid max-w-[980px] grid-cols-3 items-end gap-2 sm:mt-10 sm:gap-5">
+          <div className="relative mx-auto mt-6 grid max-w-[980px] grid-cols-3 items-end gap-2 sm:mt-10 sm:gap-5">
             <div className="relative -rotate-[4deg] overflow-hidden rounded-[1.25rem] border-[3px] border-[#a9b3b8] bg-[#080b0d] p-1 shadow-[0_18px_50px_rgba(0,0,0,.55)] sm:rounded-[2rem] sm:border-4 sm:p-2">
-              <div className="relative aspect-[9/16] overflow-hidden rounded-[.9rem] bg-[#272727] sm:rounded-[1.5rem]">
+              <div className="relative aspect-[9/13] overflow-hidden rounded-[.9rem] bg-[#272727] sm:aspect-[9/16] sm:rounded-[1.5rem]">
                 <img src={XR_PHOTOS.strategy} alt="Visuel éditorial culinaire pour une publication Instagram" className="absolute inset-0 h-full w-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-black/15" />
                 <div className="absolute inset-x-2 top-2 flex items-center gap-1 rounded-full bg-black/40 px-2 py-1 text-[8px] text-white backdrop-blur-sm sm:inset-x-3 sm:top-3 sm:text-xs"><Instagram className="h-3 w-3 sm:h-4 sm:w-4"/> Instagram</div>
@@ -58,7 +58,7 @@ export function SocialSalesPage() {
               </div>
             </div>
             <div className="relative z-10 -translate-y-3 overflow-hidden rounded-[1.35rem] border-[3px] border-[#c6d1d6] bg-[#080b0d] p-1 shadow-[0_22px_65px_rgba(0,0,0,.65)] sm:-translate-y-7 sm:rounded-[2.1rem] sm:border-4 sm:p-2">
-              <div className="relative aspect-[9/16] overflow-hidden rounded-[1rem] bg-[#272727] sm:rounded-[1.6rem]">
+              <div className="relative aspect-[9/13] overflow-hidden rounded-[1rem] bg-[#272727] sm:aspect-[9/16] sm:rounded-[1.6rem]">
                 <img src={XR_PHOTOS.social} alt="Création visuelle de campagne social media pour TikTok" className="absolute inset-0 h-full w-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/5 to-black/15" />
                 <div className="absolute inset-x-2 top-2 flex items-center gap-1 rounded-full bg-black/40 px-2 py-1 text-[8px] text-white backdrop-blur-sm sm:inset-x-3 sm:top-3 sm:text-xs"><Music2 className="h-3 w-3 sm:h-4 sm:w-4"/> TikTok</div>
@@ -74,12 +74,12 @@ export function SocialSalesPage() {
               </div>
             </div>
           </div>
-          <div className="mx-auto mt-5 grid max-w-[1080px] grid-cols-2 gap-x-3 gap-y-1 rounded-2xl border border-white/15 bg-black/55 p-2.5 backdrop-blur-md sm:mt-9 sm:grid-cols-4 sm:gap-4 sm:p-5">
-            {[{title:"Stratégie sur-mesure",text:"Positionnement, audience, plan de contenu.",icon:"◎"},{title:"Création de contenus",text:"Photos, vidéos, Reels et carrousels.",icon:"▣"},{title:"Diffusion & publicités",text:"Campagnes selon les besoins.",icon:"↗"},{title:"Suivi & optimisation",text:"Analyse et recommandations.",icon:"◉"}].map((item)=><div key={item.title} className="px-1 py-1.5 text-center sm:px-3 sm:py-2"><span className="text-2xl text-[#22d5d0] sm:text-3xl">{item.icon}</span><h2 className="mt-2 text-xs font-semibold sm:text-sm">{item.title}</h2><p className="mt-1 text-[10px] leading-4 text-white/65 sm:text-xs sm:leading-5">{item.text}</p></div>)}
+          <div className="mx-auto mt-4 grid max-w-[1080px] grid-cols-2 gap-x-3 gap-y-0 rounded-2xl border border-white/15 bg-black/60 p-2 backdrop-blur-md sm:mt-9 sm:grid-cols-4 sm:gap-4 sm:p-5">
+            {[{title:"Stratégie sur-mesure",text:"Positionnement, audience, plan de contenu.",icon:"◎"},{title:"Création de contenus",text:"Photos, vidéos, Reels et carrousels.",icon:"▣"},{title:"Diffusion & publicités",text:"Campagnes selon les besoins.",icon:"↗"},{title:"Suivi & optimisation",text:"Analyse et recommandations.",icon:"◉"}].map((item)=><div key={item.title} className="px-1 py-1 text-center sm:px-3 sm:py-2"><span className="text-xl text-[#22d5d0] sm:text-3xl">{item.icon}</span><h2 className="mt-1 text-[11px] font-semibold leading-tight sm:mt-2 sm:text-sm">{item.title}</h2><p className="mt-1 text-[9px] leading-3 text-white/65 sm:text-xs sm:leading-5">{item.text}</p></div>)}
           </div>
-          <div className="mt-5 flex flex-col items-center justify-center gap-2 pb-2 sm:mt-6 sm:flex-row">
+          <div className="mt-4 flex flex-col items-center justify-center gap-1 pb-3 sm:mt-6 sm:flex-row">
             <a href="#formules" className="inline-flex min-h-12 w-full max-w-[340px] items-center justify-center gap-3 rounded-full bg-[#f8f5ee] px-7 py-3 text-sm font-bold tracking-[.12em] text-[#101315] shadow-[0_8px_30px_rgba(0,0,0,.25)] transition-transform hover:-translate-y-0.5 sm:w-auto">DÉCOUVRIR NOS OFFRES <ArrowRight className="h-4 w-4"/></a>
-            <span className="text-xs text-white/65">Formules à partir de 349 € / mois</span>
+            <span className="text-xs text-white/65">Formules à partir de {Math.min(...plans.map((plan) => plan.eur))} € / mois</span>
           </div>
         </div>
       </section>
