@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, Check, ChevronDown, MessageCircle, Instagram, Facebook, Music2, Camera, UsersRound, ChartNoAxesCombined, Target, Heart, Bookmark, Send, Play, Sparkles } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, MessageCircle, Instagram, Facebook, Music2, Camera, UsersRound, ChartNoAxesCombined, Target, Heart, Bookmark } from "lucide-react";
 import { SERVICES } from "@/lib/content";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
@@ -31,18 +31,18 @@ const faq = [
 function PhoneMockup({ platform, image, center = false }: { platform: "Instagram" | "TikTok" | "Facebook"; image: string; center?: boolean }) {
   const Icon = platform === "Instagram" ? Instagram : platform === "TikTok" ? Music2 : Facebook;
   const title = platform === "Instagram" ? <>Votre univers.<br />En images.</> : platform === "TikTok" ? <>Des vidéos qui <em>captivent.</em></> : <>Des campagnes<br />qui vous ressemblent.</>;
-  return <div className={`relative mx-auto w-full max-w-[250px] ${center ? "z-20 -translate-y-0 sm:-translate-y-7" : "z-10"}`}>
-    <div className={`relative rounded-[2rem] border border-[#a9a49b] bg-[#121312] p-[5px] shadow-[0_24px_55px_rgba(0,0,0,.55)] sm:rounded-[2.4rem] sm:p-[7px] ${center ? "rotate-0" : platform === "Instagram" ? "-rotate-[5deg]" : "rotate-[5deg]"}`}>
-      <div className="relative aspect-[9/16] overflow-hidden rounded-[1.65rem] bg-[#242321] sm:rounded-[1.95rem]">
+  return <div className={`relative mx-auto w-full min-w-0 max-w-[250px] ${center ? "z-20 -translate-y-0 sm:-translate-y-7" : "z-10"}`}>
+    <div className={`relative rounded-[1.25rem] border border-[#a9a49b] bg-[#121312] p-[3px] shadow-[0_18px_35px_rgba(0,0,0,.48)] sm:rounded-[2.4rem] sm:p-[7px] ${center ? "rotate-0" : platform === "Instagram" ? "sm:-rotate-[5deg]" : "sm:rotate-[5deg]"}`}>
+      <div className="relative aspect-[9/15] overflow-hidden rounded-[1rem] bg-[#242321] sm:aspect-[9/16] sm:rounded-[1.95rem]">
         <img src={image} alt={`Exemple de direction artistique ${platform}`} className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/90" />
-        <div className="absolute inset-x-3 top-3 flex items-center gap-2 text-[10px] font-medium text-white"><span className="grid h-7 w-7 place-items-center rounded-full border border-white/50 bg-black/30"><Icon className="h-4 w-4" /></span><span>{platform === "Instagram" ? "xr.agency" : platform === "TikTok" ? "XR Agency" : "XR Agency"}</span><span className="ml-auto text-white/80">•••</span></div>
-        {platform === "TikTok" && <div className="absolute right-2 top-[42%] flex flex-col gap-4 text-white"><Heart className="h-5 w-5 fill-white/70"/><MessageCircle className="h-5 w-5"/><Bookmark className="h-5 w-5"/></div>}
-        <div className="absolute inset-x-3 bottom-8 text-white"><p className="font-serif text-xl leading-[1.05] tracking-tight sm:text-2xl">{title}</p><p className="mt-2 text-[9px] leading-4 text-white/75">{platform === "Instagram" ? "Une identité visuelle pensée pour votre marque." : platform === "TikTok" ? "Formats courts · Idées créatives" : "Contenus utiles. Relations durables."}</p></div>
-        <div className="absolute inset-x-3 bottom-2 flex items-center justify-between border-t border-white/25 pt-2 text-white/90"><span className="text-[8px]">⌂ Accueil</span><span className="text-[8px]">⌕ Découvrir</span><span className="text-[8px]">♡ Activité</span><span className="text-[8px]">◉ Profil</span></div>
+        <div className="absolute inset-x-1.5 top-2 flex items-center gap-1 text-[7px] font-medium text-white sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px]"><span className="grid h-5 w-5 shrink-0 place-items-center rounded-full border border-white/50 bg-black/30 sm:h-7 sm:w-7"><Icon className="h-3 w-3 sm:h-4 sm:w-4" /></span><span>{platform === "Instagram" ? "xr.agency" : platform === "TikTok" ? "XR Agency" : "XR Agency"}</span><span className="ml-auto text-white/80">•••</span></div>
+        {platform === "TikTok" && <div className="absolute right-1 top-[42%] flex flex-col gap-2 text-white sm:right-2 sm:gap-4"><Heart className="h-3.5 w-3.5 fill-white/70 sm:h-5 sm:w-5"/><MessageCircle className="h-3.5 w-3.5 sm:h-5 sm:w-5"/><Bookmark className="h-3.5 w-3.5 sm:h-5 sm:w-5"/></div>}
+        <div className="absolute inset-x-1.5 bottom-6 text-white sm:inset-x-3 sm:bottom-8"><p className="font-serif text-[11px] leading-[1.05] tracking-tight sm:text-2xl">{title}</p><p className="mt-1 text-[7px] leading-[1.25] text-white/75 sm:mt-2 sm:text-[9px] sm:leading-4">{platform === "Instagram" ? "Une identité visuelle pensée pour votre marque." : platform === "TikTok" ? "Formats courts · Idées créatives" : "Contenus utiles. Relations durables."}</p></div>
+        <div className="absolute inset-x-1.5 bottom-1 flex items-center justify-between border-t border-white/25 pt-1 text-white/90 sm:inset-x-3 sm:bottom-2 sm:pt-2"><span className="text-[6px] sm:text-[8px]">⌂</span><span className="text-[6px] sm:text-[8px]">⌕</span><span className="text-[6px] sm:text-[8px]">♡</span><span className="text-[6px] sm:text-[8px]">◉</span></div>
       </div>
     </div>
-    <div className="absolute -left-2 top-[18%] grid h-10 w-10 place-items-center rounded-xl border border-white/20 bg-[#181a18] text-white shadow-xl sm:-left-4 sm:h-12 sm:w-12"><Icon className="h-5 w-5 sm:h-6 sm:w-6" /></div>
+    <div className="absolute -left-1.5 top-[18%] grid h-7 w-7 place-items-center rounded-lg border border-white/20 bg-[#181a18] text-white shadow-xl sm:-left-4 sm:h-12 sm:w-12"><Icon className="h-4 w-4 sm:h-6 sm:w-6" /></div>
   </div>;
 }
 
@@ -73,21 +73,21 @@ export function SocialSalesPage() {
     <main>
       <section className="relative isolate overflow-hidden bg-[#101311] text-[#f5f1e9]">
         <div className="absolute inset-0"><img src={XR_PHOTOS.social} alt="" aria-hidden="true" className="h-full w-full object-cover opacity-35" /><div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,12,10,.58),rgba(9,12,10,.78)_48%,rgba(9,12,10,.62))]" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_8%,rgba(141,169,154,.20),transparent_50%)]" /></div>
-        <div className="relative mx-auto max-w-[1440px] px-4 pb-8 pt-8 sm:px-7 sm:pb-12 sm:pt-10 lg:px-10">
+        <div className="relative mx-auto max-w-[1440px] px-4 pb-7 pt-24 sm:px-7 sm:pb-12 sm:pt-12 lg:px-10">
           <div className="mx-auto max-w-4xl text-center">
             <p className="social-kicker text-white/70">Social Media Studio · XR Agency</p>
             <h1 className="social-serif mx-auto mt-4 max-w-4xl text-[clamp(2.5rem,6.4vw,5.8rem)] leading-[.91]">Des contenus qui font <em className="social-jade not-italic">grandir</em><br className="hidden sm:block"/> votre marque.</h1>
             <p className="mt-4 text-xs tracking-wide text-white/75 sm:text-sm">Stratégie · Création · Diffusion · Performance</p>
           </div>
-          <div className="mx-auto mt-8 grid max-w-[980px] grid-cols-3 items-end gap-2 sm:mt-12 sm:gap-7">
+          <div className="mx-auto mt-7 grid max-w-[980px] grid-cols-3 items-end gap-2 sm:mt-12 sm:gap-7">
             <PhoneMockup platform="Instagram" image={XR_PHOTOS.strategy} />
             <PhoneMockup platform="TikTok" image={XR_PHOTOS.social} center />
             <PhoneMockup platform="Facebook" image={XR_PHOTOS.refonte} />
           </div>
-          <div className="mx-auto mt-8 grid max-w-[1120px] grid-cols-2 overflow-hidden rounded-2xl border border-white/15 bg-black/45 backdrop-blur-xl sm:mt-10 sm:grid-cols-4">
-            {serviceTiles.map(({title,text,Icon},i)=><div key={title} className={`px-3 py-4 text-center sm:px-5 sm:py-5 ${i%2===0?"border-r border-white/10":""} ${i<2?"border-b border-white/10 sm:border-b-0":""} ${i===1?"sm:border-r":i===2?"sm:border-r":""}`}><Icon className="mx-auto h-6 w-6 text-[#a9c1b2] sm:h-7 sm:w-7" strokeWidth={1.5}/><h2 className="mt-2 text-[11px] font-semibold sm:text-sm">{title}</h2><p className="mx-auto mt-1 max-w-[210px] text-[10px] leading-4 text-white/60 sm:text-xs sm:leading-5">{text}</p></div>)}
+          <div className="mx-auto mt-6 grid max-w-[1120px] grid-cols-2 overflow-hidden rounded-2xl border border-white/15 bg-black/45 backdrop-blur-xl sm:mt-10 sm:grid-cols-4">
+            {serviceTiles.map(({title,text,Icon},i)=><div key={title} className={`px-2 py-3 text-center sm:px-5 sm:py-5 ${i%2===0?"border-r border-white/10":""} ${i<2?"border-b border-white/10 sm:border-b-0":""} ${i===1?"sm:border-r":i===2?"sm:border-r":""}`}><Icon className="mx-auto h-5 w-5 text-[#a9c1b2] sm:h-7 sm:w-7" strokeWidth={1.5}/><h2 className="mt-1.5 text-[10px] font-semibold leading-tight sm:mt-2 sm:text-sm">{title}</h2><p className="mx-auto mt-1 max-w-[210px] text-[9px] leading-3 text-white/60 sm:text-xs sm:leading-5">{text}</p></div>)}
           </div>
-          <div className="mt-5 flex flex-col items-center gap-2 pb-2 sm:mt-6">
+          <div className="mt-4 flex flex-col items-center gap-2 pb-4 sm:mt-6">
             <a href="#formules" className="social-cta inline-flex min-h-12 w-full max-w-[330px] items-center justify-center gap-3 rounded-full bg-[#f5f1e9] px-7 py-3 text-xs font-semibold tracking-[.12em] text-[#171916] shadow-xl sm:w-auto sm:text-sm">DÉCOUVRIR NOS FORMULES <ArrowRight className="h-4 w-4"/></a>
             <span className="text-xs text-white/60">Un accompagnement adapté à votre activité</span>
           </div>
