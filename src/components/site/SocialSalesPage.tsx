@@ -7,9 +7,9 @@ import { AddToCartBtn } from "@/components/site/Cart";
 import { XR_PHOTOS } from "@/lib/photography";
 
 const SOCIAL_VISUALS = {
-  instagram: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=85",
-  tiktok: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=85",
-  facebook: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=900&q=85",
+  instagram: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1000&q=90",
+  tiktok: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1000&q=90",
+  facebook: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1000&q=90",
 } as const;
 
 const service = SERVICES.find((item) => item.id === "social")!;
@@ -78,7 +78,7 @@ export function SocialSalesPage() {
     <Nav />
     <main>
       <section className="relative isolate overflow-hidden bg-[#101311] text-[#f5f1e9]">
-        <div className="absolute inset-0"><img src={XR_PHOTOS.social} alt="" aria-hidden="true" className="h-full w-full object-cover opacity-35" /><div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,12,10,.58),rgba(9,12,10,.78)_48%,rgba(9,12,10,.62))]" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_8%,rgba(141,169,154,.20),transparent_50%)]" /></div>
+        <div className="absolute inset-0"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=2200&q=90" alt="" aria-hidden="true" className="h-full w-full object-cover opacity-35" /><div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,12,10,.66),rgba(9,12,10,.70)_48%,rgba(9,12,10,.66))]" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_8%,rgba(141,169,154,.20),transparent_50%)]" /></div>
         <div className="relative mx-auto max-w-[1440px] px-4 pb-7 pt-24 sm:px-7 sm:pb-12 sm:pt-12 lg:px-10">
           <div className="mx-auto max-w-4xl text-center">
             <p className="social-kicker text-white/70">Social Media Studio · XR Agency</p>
