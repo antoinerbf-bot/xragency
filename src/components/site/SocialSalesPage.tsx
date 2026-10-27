@@ -6,13 +6,19 @@ import { Contact } from "@/components/site/Contact";
 import { AddToCartBtn } from "@/components/site/Cart";
 import { XR_PHOTOS } from "@/lib/photography";
 
+const SOCIAL_VISUALS = {
+  instagram: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=85",
+  tiktok: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=85",
+  facebook: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=900&q=85",
+} as const;
+
 const service = SERVICES.find((item) => item.id === "social")!;
 const plans = service.plans;
 const waFor = (name: string) => `https://wa.me/33767566783?text=${encodeURIComponent(`Bonjour XR Agency, je souhaite parler de la formule ${name} pour la gestion de mes réseaux sociaux.`)}`;
 const platformCards = [
-  { name: "Instagram", icon: Instagram, tags: ["Reels", "Carrousels", "Stories"], copy: "Un contenu visuel cohérent pour faire vivre votre univers et fédérer votre communauté.", image: XR_PHOTOS.strategy, accent: "#b78a69" },
-  { name: "TikTok", icon: Music2, tags: ["Vidéos courtes", "Tendances", "Créativité"], copy: "Des formats rythmés et authentiques, pensés pour capter l’attention sans perdre votre identité.", image: XR_PHOTOS.social, accent: "#9aab9b" },
-  { name: "Facebook", icon: Facebook, tags: ["Publications", "Publicités", "Communauté"], copy: "Des contenus et campagnes adaptés à votre activité pour nourrir la relation avec vos clients.", image: XR_PHOTOS.refonte, accent: "#b8a17f" },
+  { name: "Instagram", icon: Instagram, tags: ["Reels", "Carrousels", "Stories"], copy: "Un contenu visuel cohérent pour faire vivre votre univers et fédérer votre communauté.", image: SOCIAL_VISUALS.instagram, accent: "#b78a69" },
+  { name: "TikTok", icon: Music2, tags: ["Vidéos courtes", "Tendances", "Créativité"], copy: "Des formats rythmés et authentiques, pensés pour capter l’attention sans perdre votre identité.", image: SOCIAL_VISUALS.tiktok, accent: "#9aab9b" },
+  { name: "Facebook", icon: Facebook, tags: ["Publications", "Publicités", "Communauté"], copy: "Des contenus et campagnes adaptés à votre activité pour nourrir la relation avec vos clients.", image: SOCIAL_VISUALS.facebook, accent: "#b8a17f" },
 ];
 const serviceTiles = [
   { title: "Stratégie sur-mesure", text: "Positionnement, audience et ligne éditoriale.", Icon: UsersRound },
@@ -80,9 +86,9 @@ export function SocialSalesPage() {
             <p className="mt-4 text-xs tracking-wide text-white/75 sm:text-sm">Stratégie · Création · Diffusion · Performance</p>
           </div>
           <div className="mx-auto mt-7 grid max-w-[980px] grid-cols-3 items-end gap-2 sm:mt-12 sm:gap-7">
-            <PhoneMockup platform="Instagram" image={XR_PHOTOS.strategy} />
-            <PhoneMockup platform="TikTok" image={XR_PHOTOS.social} center />
-            <PhoneMockup platform="Facebook" image={XR_PHOTOS.refonte} />
+            <PhoneMockup platform="Instagram" image={SOCIAL_VISUALS.instagram} />
+            <PhoneMockup platform="TikTok" image={SOCIAL_VISUALS.tiktok} center />
+            <PhoneMockup platform="Facebook" image={SOCIAL_VISUALS.facebook} />
           </div>
           <div className="mx-auto mt-6 grid max-w-[1120px] grid-cols-2 overflow-hidden rounded-2xl border border-white/15 bg-black/45 backdrop-blur-xl sm:mt-10 sm:grid-cols-4">
             {serviceTiles.map(({title,text,Icon},i)=><div key={title} className={`px-2 py-3 text-center sm:px-5 sm:py-5 ${i%2===0?"border-r border-white/10":""} ${i<2?"border-b border-white/10 sm:border-b-0":""} ${i===1?"sm:border-r":i===2?"sm:border-r":""}`}><Icon className="mx-auto h-5 w-5 text-[#a9c1b2] sm:h-7 sm:w-7" strokeWidth={1.5}/><h2 className="mt-1.5 text-[10px] font-semibold leading-tight sm:mt-2 sm:text-sm">{title}</h2><p className="mx-auto mt-1 max-w-[210px] text-[9px] leading-3 text-white/60 sm:text-xs sm:leading-5">{text}</p></div>)}
