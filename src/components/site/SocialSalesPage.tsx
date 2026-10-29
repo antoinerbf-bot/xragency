@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, Check, ChevronDown, MessageCircle, Instagram, Facebook, Music2, Camera, UsersRound, ChartNoAxesCombined, Target, Heart, Bookmark } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, MessageCircle, Instagram, Facebook, Linkedin, Music2, Camera, UsersRound, ChartNoAxesCombined, Target, Heart, Bookmark, Sparkles } from "lucide-react";
 import { SERVICES } from "@/lib/content";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
@@ -18,7 +18,8 @@ const waFor = (name: string) => `https://wa.me/33767566783?text=${encodeURICompo
 const platformCards = [
   { name: "Instagram", icon: Instagram, tags: ["Reels", "Carrousels", "Stories"], copy: "Un contenu visuel cohérent pour faire vivre votre univers et fédérer votre communauté.", image: SOCIAL_VISUALS.instagram, accent: "#b78a69" },
   { name: "TikTok", icon: Music2, tags: ["Vidéos courtes", "Tendances", "Créativité"], copy: "Des formats rythmés et authentiques, pensés pour capter l’attention sans perdre votre identité.", image: SOCIAL_VISUALS.tiktok, accent: "#9aab9b" },
-  { name: "Facebook", icon: Facebook, tags: ["Publications", "Publicités", "Communauté"], copy: "Des contenus et campagnes adaptés à votre activité pour nourrir la relation avec vos clients.", image: SOCIAL_VISUALS.facebook, accent: "#b8a17f" },
+  { name: "Facebook", icon: Facebook, tags: ["Publications", "Communauté", "Actualités"], copy: "Des contenus adaptés à votre activité pour entretenir le lien avec vos clients et votre communauté.", image: SOCIAL_VISUALS.facebook, accent: "#b8a17f" },
+  { name: "LinkedIn", icon: Linkedin, tags: ["Expertise", "Marque employeur", "B2B"], copy: "Une présence professionnelle pour valoriser votre expertise, votre équipe et vos actualités.", image: SOCIAL_VISUALS.tiktok, accent: "#718f9d" },
 ];
 const serviceTiles = [
   { title: "Stratégie sur-mesure", text: "Positionnement, audience et ligne éditoriale.", Icon: UsersRound },
@@ -56,6 +57,15 @@ export function SocialSalesPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [expandedPlans, setExpandedPlans] = useState<number[]>([]);
   const [showSticky, setShowSticky] = useState(false);
+  const [industry, setIndustry] = useState("commerce");
+  const [goal, setGoal] = useState("croissance");
+  const [delegation, setDelegation] = useState("reguliere");
+  const recommendedPlan = delegation === "complete" ? 2 : goal === "croissance" || delegation === "multi" ? 1 : 0;
+  const recommendationReason = recommendedPlan === 2
+    ? "Vous recherchez une prise en charge étendue sur plusieurs réseaux."
+    : recommendedPlan === 1
+      ? "Vous voulez publier régulièrement et développer votre présence sur plusieurs réseaux."
+      : "Vous souhaitez structurer votre présence avec un premier réseau et un rythme maîtrisé.";
   useEffect(() => {
     const onScroll = () => setShowSticky(window.scrollY > 520);
     onScroll();
@@ -115,7 +125,7 @@ export function SocialSalesPage() {
             <div><p className="social-kicker text-[#777a70]">Des contenus adaptés à chaque plateforme</p><h2 className="social-serif mt-3 text-4xl leading-[.98] sm:text-5xl">Une stratégie complète<br/>pour des <em className="not-italic text-[#718f80]">résultats concrets.</em></h2></div>
             <p className="max-w-xl text-sm leading-6 text-[#62655e] md:justify-self-end">Nous créons des contenus engageants et des campagnes adaptées à votre marque pour développer votre visibilité, entretenir le lien avec votre communauté et soutenir vos objectifs.</p>
           </div>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {platformCards.map(({name,icon:Icon,tags,copy,image,accent})=><article key={name} className="social-card group relative min-h-[300px] overflow-hidden rounded-2xl border border-black/5 bg-white/75 p-5 sm:min-h-[320px] sm:p-6">
               <div className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-xl text-white" style={{background:accent}}><Icon className="h-5 w-5"/></span><h3 className="text-lg font-semibold">{name}</h3></div>
               <div className="mt-4 flex flex-wrap gap-1.5">{tags.map(tag=><span key={tag} className="rounded-md bg-[#eae7e0] px-2.5 py-1 text-[10px] text-[#55584f]">{tag}</span>)}</div>
@@ -127,12 +137,24 @@ export function SocialSalesPage() {
         </div>
       </section>
 
+      <section id="choisir" className="bg-[#eae6dd] px-4 py-12 sm:px-7 sm:py-16 lg:px-10">
+        <div className="mx-auto grid max-w-[1120px] gap-8 lg:grid-cols-[.85fr_1.15fr] lg:items-center">
+          <div><p className="social-kicker text-[#718f80]">Votre point de départ</p><h2 className="social-serif mt-3 text-4xl leading-tight sm:text-5xl">Quelle formule correspond à votre ambition ?</h2><p className="mt-4 max-w-lg text-sm leading-6 text-[#62655e]">Répondez à trois questions pour obtenir une orientation. Vous gardez le choix final et pouvez consulter tous les détails avant de vous engager.</p></div>
+          <div className="rounded-3xl border border-black/10 bg-[#f8f5ef] p-5 shadow-[0_18px_45px_rgba(28,31,25,.06)] sm:p-7">
+            <label className="block text-xs font-semibold text-[#62655e]" htmlFor="social-industry">1. Votre activité</label><select id="social-industry" value={industry} onChange={e=>setIndustry(e.target.value)} className="mt-2 min-h-12 w-full rounded-xl border border-black/10 bg-white px-3 text-sm text-[#171916] focus:outline-none focus:ring-2 focus:ring-[#718f80]"><option value="commerce">Commerce / boutique</option><option value="restaurant">Restaurant / hôtellerie</option><option value="services">Services / conseil</option><option value="beaute">Beauté / bien-être</option><option value="autre">Autre activité</option></select>
+            <label className="mt-5 block text-xs font-semibold text-[#62655e]" htmlFor="social-goal">2. Votre priorité</label><select id="social-goal" value={goal} onChange={e=>setGoal(e.target.value)} className="mt-2 min-h-12 w-full rounded-xl border border-black/10 bg-white px-3 text-sm text-[#171916] focus:outline-none focus:ring-2 focus:ring-[#718f80]"><option value="visibilite">Soigner ma présence en ligne</option><option value="croissance">Développer ma visibilité et ma communauté</option><option value="leads">Soutenir mes demandes commerciales</option></select>
+            <label className="mt-5 block text-xs font-semibold text-[#62655e]" htmlFor="social-delegation">3. Le niveau d’accompagnement souhaité</label><select id="social-delegation" value={delegation} onChange={e=>setDelegation(e.target.value)} className="mt-2 min-h-12 w-full rounded-xl border border-black/10 bg-white px-3 text-sm text-[#171916] focus:outline-none focus:ring-2 focus:ring-[#718f80]"><option value="simple">Commencer avec un réseau</option><option value="reguliere">Un rythme régulier sur plusieurs réseaux</option><option value="multi">Développer plusieurs réseaux</option><option value="complete">Une prise en charge étendue</option></select>
+            <div aria-live="polite" className="mt-6 rounded-2xl bg-[#18201b] p-5 text-[#f5f1e9]"><div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[.16em] text-[#a9c1b2]"><Sparkles className="h-4 w-4"/> Notre orientation</div><div className="mt-3 flex flex-wrap items-baseline justify-between gap-2"><h3 className="social-serif text-2xl">{plans[recommendedPlan].name.fr}</h3><p className="text-xl font-semibold">{plans[recommendedPlan].eur} €<span className="text-xs font-normal text-white/60"> / mois</span></p></div><p className="mt-2 text-sm leading-6 text-white/70">{recommendationReason}</p><p className="mt-2 text-xs text-white/45">Orientation indicative selon vos réponses — le périmètre final est confirmé avec vous.</p><a href={`#plan-${recommendedPlan}`} className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[#f5f1e9] px-5 py-3 text-sm font-semibold text-[#171916]">Découvrir cette formule <ArrowRight className="h-4 w-4"/></a></div>
+          </div>
+        </div>
+      </section>
+
       <section id="formules" className="scroll-mt-20 bg-[#101311] px-4 py-12 text-[#f5f1e9] sm:px-7 sm:py-16 lg:px-10">
         <div className="mx-auto max-w-[1180px]">
           <p className="social-kicker text-center text-white/55">Nos formules</p><h2 className="social-serif mt-3 text-center text-4xl leading-tight sm:text-5xl">Des offres adaptées à <em className="not-italic text-[#a9c1b2]">vos besoins.</em></h2>
           <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-6 text-white/60">Choisissez le niveau d’accompagnement adapté à votre rythme et à vos objectifs.</p>
           <div className="mt-8 grid items-stretch gap-4 lg:grid-cols-3">
-            {plans.map((plan,i)=>{const popular=Boolean(plan.popular);const isOpen=expandedPlans.includes(i);return <article key={plan.name.fr} className={`relative flex h-full flex-col rounded-2xl border p-5 sm:p-6 ${popular?"border-[#a9c1b2] bg-[#1a211d] shadow-[0_0_0_1px_rgba(169,193,178,.12)]":"border-white/10 bg-[#151916]"}`}>
+            {plans.map((plan,i)=>{const popular=Boolean(plan.popular);const isOpen=expandedPlans.includes(i);return <article id={`plan-${i}`} key={plan.name.fr} className={`relative flex h-full flex-col rounded-2xl border p-5 sm:p-6 ${popular?"border-[#a9c1b2] bg-[#1a211d] shadow-[0_0_0_1px_rgba(169,193,178,.12)]":"border-white/10 bg-[#151916]"}`}>
               {popular&&<span className="absolute -top-3 left-5 rounded-full bg-[#a9c1b2] px-3 py-1.5 text-xs font-semibold text-[#111412]">Le plus populaire</span>}
               <p className="social-kicker mt-2 text-white/45">Formule 0{i+1}</p><h3 className="social-serif mt-3 text-3xl">{plan.name.fr}</h3><p className="mt-1 text-sm text-white/60">{plan.audience?.fr ?? "Un accompagnement adapté à votre activité"}</p>
               <div className="mt-5 border-y border-white/10 py-4"><div className="flex items-baseline gap-2"><span className="social-serif text-5xl">{plan.eur} €</span><span className="text-sm text-white/55">/ mois</span></div><p className="mt-2 text-xs text-white/55">Engagement minimum : {i===0?"3":"6"} mois</p></div>
