@@ -114,7 +114,7 @@ export function SocialSalesPage() {
           </div>
           <div className="mt-4 flex flex-col items-center gap-2 pb-4 sm:mt-6">
             <a href="#formules" className="social-cta inline-flex min-h-12 w-full max-w-[330px] items-center justify-center gap-3 rounded-full bg-[#f5f1e9] px-7 py-3 text-xs font-semibold tracking-[.12em] text-[#171916] shadow-xl sm:w-auto sm:text-sm">DÉCOUVRIR NOS FORMULES <ArrowRight className="h-4 w-4"/></a>
-            <span className="text-xs text-white/60">Un accompagnement adapté à votre activité</span>
+            <span className="text-xs text-white/60">Formules à partir de 349 €/mois · engagement dès 3 mois</span>
           </div>
         </div>
       </section>
