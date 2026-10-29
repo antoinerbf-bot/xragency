@@ -7,9 +7,9 @@ import { AddToCartBtn } from "@/components/site/Cart";
 import { XR_PHOTOS } from "@/lib/photography";
 
 const SOCIAL_VISUALS = {
-  instagram: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1000&q=90",
-  tiktok: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1000&q=90",
-  facebook: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1000&q=90",
+  instagram: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=90",
+  tiktok: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=90",
+  facebook: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=90",
 } as const;
 
 const service = SERVICES.find((item) => item.id === "social")!;
@@ -41,7 +41,7 @@ function PhoneMockup({ platform, image, center = false }: { platform: "Instagram
     <div className={`relative rounded-[1.25rem] border border-[#a9a49b] bg-[#121312] p-[3px] shadow-[0_18px_35px_rgba(0,0,0,.48)] sm:rounded-[2.4rem] sm:p-[7px] ${center ? "rotate-0" : platform === "Instagram" ? "sm:-rotate-[5deg]" : "sm:rotate-[5deg]"}`}>
       <div className="relative aspect-[9/15] overflow-hidden rounded-[1rem] bg-[#242321] sm:aspect-[9/16] sm:rounded-[1.95rem]">
         <img src={image} alt={`Exemple de direction artistique ${platform}`} className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent via-45% to-black/85" />
         <div className="absolute inset-x-1.5 top-2 flex items-center gap-1 text-[7px] font-medium text-white sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px]"><span className="grid h-5 w-5 shrink-0 place-items-center rounded-full border border-white/50 bg-black/30 sm:h-7 sm:w-7"><Icon className="h-3 w-3 sm:h-4 sm:w-4" /></span><span>{platform === "Instagram" ? "xr.agency" : platform === "TikTok" ? "XR Agency" : "XR Agency"}</span><span className="ml-auto text-white/80">•••</span></div>
         {platform === "TikTok" && <div className="absolute right-1 top-[42%] flex flex-col gap-2 text-white sm:right-2 sm:gap-4"><Heart className="h-3.5 w-3.5 fill-white/70 sm:h-5 sm:w-5"/><MessageCircle className="h-3.5 w-3.5 sm:h-5 sm:w-5"/><Bookmark className="h-3.5 w-3.5 sm:h-5 sm:w-5"/></div>}
         <div className="absolute inset-x-1.5 bottom-6 text-white sm:inset-x-3 sm:bottom-8"><p className="font-serif text-[11px] leading-[1.05] tracking-tight sm:text-2xl">{title}</p><p className="mt-1 text-[7px] leading-[1.25] text-white/75 sm:mt-2 sm:text-[9px] sm:leading-4">{platform === "Instagram" ? "Une identité visuelle pensée pour votre marque." : platform === "TikTok" ? "Formats courts · Idées créatives" : "Contenus utiles. Relations durables."}</p></div>
@@ -85,12 +85,21 @@ export function SocialSalesPage() {
             <h1 className="social-serif mx-auto mt-4 max-w-4xl text-[clamp(2.5rem,6.4vw,5.8rem)] leading-[.91]">Des contenus qui font <em className="social-jade not-italic">grandir</em><br className="hidden sm:block"/> votre marque.</h1>
             <p className="mt-4 text-xs tracking-wide text-white/75 sm:text-sm">Stratégie · Création · Diffusion · Performance</p>
           </div>
-          <div className="mx-auto mt-7 grid max-w-[980px] grid-cols-3 items-end gap-2 sm:mt-12 sm:gap-7">
-            <PhoneMockup platform="Instagram" image={SOCIAL_VISUALS.instagram} />
-            <PhoneMockup platform="TikTok" image={SOCIAL_VISUALS.tiktok} center />
-            <PhoneMockup platform="Facebook" image={SOCIAL_VISUALS.facebook} />
+          <div className="relative mx-auto mt-7 max-w-[1120px] sm:mt-12">
+            <div className="pointer-events-none absolute -right-1 top-0 z-30 hidden w-[190px] rotate-[2deg] rounded-2xl border border-white/20 bg-[#111613]/80 p-4 text-white shadow-2xl backdrop-blur-lg xl:block">
+              <p className="text-[10px] uppercase tracking-[.22em] text-white/55">Aperçu des indicateurs</p>
+              <div className="mt-3 flex items-end justify-between"><div><p className="font-serif text-3xl text-[#b8c9b9]">Visibilité</p><p className="mt-1 text-xs text-white/55">Portée & découverte</p></div><ChartNoAxesCombined className="h-6 w-6 text-[#b8c9b9]"/></div>
+              <div className="mt-3 flex h-12 items-end gap-1.5">{[28,42,35,58,50,72,66,92].map((h,i)=><span key={i} className="flex-1 rounded-t-sm bg-[#9eb3a2]/80" style={{height:`${h}%`}} />)}</div>
+              <div className="mt-4 border-t border-white/10 pt-3"><p className="text-xs text-white/55">Engagement</p><div className="mt-2 flex h-7 items-center gap-1">{[8,13,10,17,14,23,19,27,24].map((h,i)=><span key={i} className="flex-1 rounded-full bg-[#c5a27e]/80" style={{height:`${h}px`}} />)}</div></div>
+            </div>
+            <div className="pointer-events-none absolute -left-1 top-0 z-20 hidden -rotate-6 text-right font-serif text-3xl italic leading-[1.05] text-white/85 lg:block xl:-left-5">Instagram<br/>TikTok<br/>Facebook<div className="ml-auto mt-2 h-1 w-24 rotate-[-8deg] rounded-full bg-[#a8bca9]" /></div>
+            <div className="mx-auto grid max-w-[780px] grid-cols-3 items-end gap-2 sm:max-w-[880px] sm:gap-7 xl:max-w-[850px]">
+              <PhoneMockup platform="Instagram" image={SOCIAL_VISUALS.instagram} />
+              <PhoneMockup platform="TikTok" image={SOCIAL_VISUALS.tiktok} center />
+              <PhoneMockup platform="Facebook" image={SOCIAL_VISUALS.facebook} />
+            </div>
           </div>
-          <div className="mx-auto mt-6 grid max-w-[1120px] grid-cols-2 overflow-hidden rounded-2xl border border-white/15 bg-black/45 backdrop-blur-xl sm:mt-10 sm:grid-cols-4">
+          <div className="mx-auto mt-6 grid max-w-[1120px] grid-cols-2 overflow-hidden rounded-2xl border border-white/15 bg-[#111411]/80 shadow-[0_18px_60px_rgba(0,0,0,.24)] backdrop-blur-xl sm:mt-10 sm:grid-cols-4">
             {serviceTiles.map(({title,text,Icon},i)=><div key={title} className={`px-2 py-3 text-center sm:px-5 sm:py-5 ${i%2===0?"border-r border-white/10":""} ${i<2?"border-b border-white/10 sm:border-b-0":""} ${i===1?"sm:border-r":i===2?"sm:border-r":""}`}><Icon className="mx-auto h-5 w-5 text-[#a9c1b2] sm:h-7 sm:w-7" strokeWidth={1.5}/><h2 className="mt-1.5 text-[10px] font-semibold leading-tight sm:mt-2 sm:text-sm">{title}</h2><p className="mx-auto mt-1 max-w-[210px] text-[9px] leading-3 text-white/60 sm:text-xs sm:leading-5">{text}</p></div>)}
           </div>
           <div className="mt-4 flex flex-col items-center gap-2 pb-4 sm:mt-6">
