@@ -66,7 +66,7 @@ export const ORDERED_SERVICES = [
     halo: "rgba(244, 63, 94, 0.12)",
     icon: Users,
     href: "/services/social",
-    price: 299,
+    price: 349,
     period: "month",
   },
   {
