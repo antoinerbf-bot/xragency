@@ -342,7 +342,7 @@ export function HomeServices() {
                         <div>
                           <span className="label-mono text-[6.5px] xr-muted-2 uppercase tracking-wider">{copy.from}</span>
                           <p className="display-serif mt-0.5 text-3xl font-bold text-[var(--xr-ink)]">
-                            {item.id === "maps" ? "990 €" : price(item.price)}
+                            {item.id === "maps" ? "990 €" : price(service.fromEur)}
                           </p>
                         </div>
                         <span className="label-mono text-[7px] font-semibold xr-muted-2">
