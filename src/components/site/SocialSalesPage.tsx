@@ -124,9 +124,10 @@ export function SocialSalesPage() {
           <div className="mx-auto mt-6 grid max-w-[1120px] grid-cols-2 overflow-hidden rounded-2xl border border-white/15 bg-[#111411]/80 shadow-[0_18px_60px_rgba(0,0,0,.24)] backdrop-blur-xl sm:mt-10 sm:grid-cols-4">
             {serviceTiles.map(({title,text,Icon},i)=><div key={title} className={`px-2 py-3 text-center sm:px-5 sm:py-5 ${i%2===0?"border-r border-white/10":""} ${i<2?"border-b border-white/10 sm:border-b-0":""} ${i===1?"sm:border-r":i===2?"sm:border-r":""}`}><Icon className="mx-auto h-5 w-5 text-[#a9c1b2] sm:h-7 sm:w-7" strokeWidth={1.5}/><h2 className="mt-1.5 text-[10px] font-semibold leading-tight sm:mt-2 sm:text-sm">{title}</h2><p className="mx-auto mt-1 max-w-[210px] text-[9px] leading-3 text-white/60 sm:text-xs sm:leading-5">{text}</p></div>)}
           </div>
-          <div className="mt-4 flex flex-col items-center gap-2 pb-4 sm:mt-6">
-            <a href="#formules" className="social-cta inline-flex min-h-12 w-full max-w-[330px] items-center justify-center gap-3 rounded-full bg-[#f5f1e9] px-7 py-3 text-xs font-semibold tracking-[.12em] text-[#171916] shadow-xl sm:w-auto sm:text-sm">DÉCOUVRIR NOS FORMULES <ArrowRight className="h-4 w-4"/></a>
-            <span className="text-xs text-white/60">Formules à partir de 349 €/mois · engagement dès 3 mois</span>
+          <div className="mt-4 flex flex-col items-center gap-3 pb-4 sm:mt-6">
+            <a href="#choisir" className="social-cta inline-flex min-h-12 w-full max-w-[330px] items-center justify-center gap-3 rounded-full bg-[#a9c1b2] px-7 py-3 text-xs font-bold tracking-[.10em] text-[#111412] shadow-xl sm:w-auto sm:text-sm">TROUVER MA FORMULE EN 30 SECONDES <Sparkles className="h-4 w-4"/></a>
+            <a href="#formules" className="inline-flex min-h-11 w-full max-w-[330px] items-center justify-center gap-2 rounded-full border border-white/25 px-6 py-2.5 text-xs font-semibold tracking-[.08em] text-white transition hover:bg-white/10 sm:w-auto">COMPARER LES 3 OFFRES <ArrowRight className="h-4 w-4"/></a>
+            <span className="text-xs text-white/60">3 formules fixes · dès 349 €/mois · engagement dès 3 mois</span>
           </div>
         </div>
       </section>
