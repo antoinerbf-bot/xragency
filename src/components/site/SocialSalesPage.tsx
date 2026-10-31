@@ -10,6 +10,7 @@ const SOCIAL_VISUALS = {
   instagram: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=90",
   tiktok: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=90",
   facebook: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=90",
+  linkedin: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=90",
 } as const;
 
 const service = SERVICES.find((item) => item.id === "social")!;
@@ -19,7 +20,7 @@ const platformCards = [
   { name: "Instagram", icon: Instagram, tags: ["Reels", "Carrousels", "Stories"], copy: "Un contenu visuel cohérent pour faire vivre votre univers et fédérer votre communauté.", image: SOCIAL_VISUALS.instagram, accent: "#b78a69" },
   { name: "TikTok", icon: Music2, tags: ["Vidéos courtes", "Tendances", "Créativité"], copy: "Des formats rythmés et authentiques, pensés pour capter l’attention sans perdre votre identité.", image: SOCIAL_VISUALS.tiktok, accent: "#9aab9b" },
   { name: "Facebook", icon: Facebook, tags: ["Publications", "Communauté", "Actualités"], copy: "Des contenus adaptés à votre activité pour entretenir le lien avec vos clients et votre communauté.", image: SOCIAL_VISUALS.facebook, accent: "#b8a17f" },
-  { name: "LinkedIn", icon: Linkedin, tags: ["Expertise", "Marque employeur", "B2B"], copy: "Une présence professionnelle pour valoriser votre expertise, votre équipe et vos actualités.", image: SOCIAL_VISUALS.tiktok, accent: "#718f9d" },
+  { name: "LinkedIn", icon: Linkedin, tags: ["Expertise", "Marque employeur", "B2B"], copy: "Une présence professionnelle pour valoriser votre expertise, votre équipe et vos actualités.", image: SOCIAL_VISUALS.linkedin, accent: "#718f9d" },
 ];
 const serviceTiles = [
   { title: "Stratégie sur-mesure", text: "Positionnement, audience et ligne éditoriale.", Icon: UsersRound },
@@ -60,12 +61,23 @@ export function SocialSalesPage() {
   const [industry, setIndustry] = useState("commerce");
   const [goal, setGoal] = useState("croissance");
   const [delegation, setDelegation] = useState("reguliere");
-  const recommendedPlan = delegation === "complete" ? 2 : goal === "croissance" || delegation === "multi" ? 1 : 0;
+  const recommendedPlan = (() => {
+    if (delegation === "complete") return 2;
+    if (delegation === "multi" || goal === "croissance" || goal === "leads") return 1;
+    if (delegation === "simple") return 0;
+    if (industry === "restaurant" || industry === "beaute") return goal === "visibilite" ? 0 : 1;
+    if (industry === "services" && goal === "leads") return 1;
+    return 0;
+  })();
   const recommendationReason = recommendedPlan === 2
-    ? "Vous recherchez une prise en charge étendue sur plusieurs réseaux."
+    ? "Votre choix privilégie une délégation plus étendue pour coordonner votre présence sur plusieurs réseaux."
     : recommendedPlan === 1
-      ? "Vous voulez publier régulièrement et développer votre présence sur plusieurs réseaux."
-      : "Vous souhaitez structurer votre présence avec un premier réseau et un rythme maîtrisé.";
+      ? goal === "leads"
+        ? "Pour soutenir vos demandes commerciales, une présence régulière et des contenus adaptés à votre audience constituent un point de départ pertinent."
+        : industry === "restaurant" || industry === "beaute"
+          ? "Votre activité se prête à des contenus visuels réguliers pour mettre en valeur vos offres, votre savoir-faire et votre univers."
+          : "Pour développer votre visibilité, une présence régulière sur plusieurs réseaux offre un cadre plus adapté."
+      : "Vous pouvez commencer avec un périmètre plus ciblé, puis faire évoluer l’accompagnement selon vos besoins.";
   useEffect(() => {
     const onScroll = () => setShowSticky(window.scrollY > 520);
     onScroll();
