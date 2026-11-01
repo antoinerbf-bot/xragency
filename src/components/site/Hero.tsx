@@ -9,6 +9,7 @@ import { HERO_FUNNEL_PILLS } from "@/lib/funnel-i18n";
 export function Hero() {
   const { t, lang } = useLang();
   const currentLang = (lang || "fr") as Lang;
+  const heroVideoUrl = import.meta.env.VITE_XR_HERO_VIDEO_URL as string | undefined;
   const { applyGoalPreset } = useFunnel();
   const sectionRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
@@ -38,7 +39,7 @@ export function Hero() {
       const x = ((e.clientX - rect.left) / rect.width) * 100;
       const y = ((e.clientY - rect.top) / rect.height) * 100;
       if (heroSpotlightRef.current) {
-        heroSpotlightRef.current.style.background = `radial-gradient(800px circle at ${x}% ${y}%, rgba(255,255,255,0.11), rgba(56,189,248,0.04) 40%, transparent 80%)`;
+        heroSpotlightRef.current.style.background = `radial-gradient(800px circle at ${x}% ${y}%, rgba(255,255,255,0.10), rgba(197,168,128,0.035) 40%, transparent 80%)`;
       }
     };
 
@@ -65,12 +66,26 @@ export function Hero() {
           decoding="async"
           className="absolute inset-0 h-full w-full object-cover object-[center_18%] md:object-[center_20%] contrast-[1.04] brightness-[1.03] saturate-[1.05] transition-transform duration-300 ease-out will-change-transform"
         />
+        {heroVideoUrl && motionAllowed && (
+          <video
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover object-[center_18%] md:object-[center_20%] contrast-[1.04] brightness-[1.03] saturate-[1.05]"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster={XR_HERO_PHOTO}
+          >
+            <source src={heroVideoUrl} type="video/mp4" />
+          </video>
+        )}
         {/* Dynamic interactive mouse follow spotlight */}
         <div
           ref={heroSpotlightRef}
           className="absolute inset-0 transition-opacity duration-300 pointer-events-none mix-blend-screen"
           style={{
-            background: "radial-gradient(800px circle at 65% 45%, rgba(255,255,255,0.08), transparent 80%)",
+            background: "radial-gradient(800px circle at 65% 45%, rgba(255,255,255,0.06), transparent 80%)",
           }}
         />
         {/* Desktop vignette: deep readable dark on left for text, crystalline luminous view on right for penthouse & Eiffel tower */}
