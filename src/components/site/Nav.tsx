@@ -18,7 +18,7 @@ const BASE_PRICES: Record<string, { eur: number; period?: string }> = {
   branding: { eur: 199 },
   seo: { eur: 299, period: "/m" },
   maps: { eur: 990, period: "/an" },
-  social: { eur: 299, period: "/m" },
+  social: { eur: 349, period: "/m" },
   maintenance: { eur: 29, period: "/m" },
   robotics: { eur: 499 },
 };
