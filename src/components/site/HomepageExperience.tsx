@@ -176,6 +176,7 @@ export function HomepageExperience() {
   return (
     <>
       <section id="homepage-services" data-section="homepage-services" className="relative overflow-hidden border-y border-[#b9a98f]/25 bg-[#f6f0e6] py-14 text-[#191713] sm:py-20">
+        <span id="services" aria-hidden="true" className="absolute -top-24" />
         <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
           <Reveal>
             <div className="mx-auto mb-9 max-w-3xl text-center sm:mb-12">
