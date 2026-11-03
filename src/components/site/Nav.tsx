@@ -79,7 +79,7 @@ export function Nav() {
             scrolled
               ? "border-white/15 bg-black/60 text-white shadow-[0_16px_40px_-15px_rgba(0,0,0,0.6)] backdrop-blur-2xl dark:border-white/15 dark:bg-black/60 dark:text-white"
               : heroTop
-                ? "border-[#101114]/10 bg-[#f8f6f0]/88 text-[#101114] shadow-[0_8px_30px_rgba(16,17,20,0.08)] backdrop-blur-xl dark:border-white/15 dark:bg-black/50 dark:text-white"
+                ? "border-white/15 bg-black/45 text-white shadow-[0_12px_36px_rgba(0,0,0,0.28)] backdrop-blur-2xl dark:border-white/15 dark:bg-black/50 dark:text-white"
                 : "border-neutral-200/80 bg-white/80 text-neutral-900 shadow-sm backdrop-blur-xl dark:border-white/15 dark:bg-black/50 dark:text-white"
           )}
         >
