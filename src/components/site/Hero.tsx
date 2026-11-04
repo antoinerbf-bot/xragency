@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { ArrowDown, ArrowRight, Play, Search } from "lucide-react";
 import { useLang, type Lang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
@@ -9,16 +9,8 @@ import { HERO_FUNNEL_PILLS } from "@/lib/funnel-i18n";
 export function Hero() {
   const { t, lang } = useLang();
   const currentLang = (lang || "fr") as Lang;
-  const heroVideoUrl = import.meta.env.VITE_XR_HERO_VIDEO_URL as string | undefined;
   const { applyGoalPreset } = useFunnel();
   const sectionRef = useRef<HTMLElement>(null);
-  const [motionAllowed, setMotionAllowed] = useState(false);
-
-  useEffect(() => {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
-    setMotionAllowed(!reducedMotion && !saveData);
-  }, []);
 
   return (
     <section
@@ -32,22 +24,8 @@ export function Hero() {
           alt=""
           fetchPriority="high"
           decoding="async"
-          className="absolute inset-0 h-full w-full object-cover object-[58%_center] md:object-center"
+          className="xr-hero-image absolute inset-0 h-full w-full object-cover object-[72%_center] md:object-center"
         />
-        {heroVideoUrl && motionAllowed ? (
-          <video
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover object-[58%_center] md:object-center"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster={XR_HERO_PHOTO}
-          >
-            <source src={heroVideoUrl} type="video/mp4" />
-          </video>
-        ) : null}
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(12,12,12,.88)_0%,rgba(12,12,12,.70)_35%,rgba(12,12,12,.20)_72%,rgba(12,12,12,.10)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(10,10,10,.88)_0%,rgba(10,10,10,.28)_35%,transparent_72%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_72%_38%,transparent_0%,rgba(0,0,0,.12)_68%,rgba(0,0,0,.28)_100%)]" />
