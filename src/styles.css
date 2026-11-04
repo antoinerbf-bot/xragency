@@ -819,3 +819,9 @@ video {
   animation: xrPinPulse 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
+
+
+/* XR Agency: restrained, stable cinematic movement for the homepage hero. */
+.xr-hero-image { transform: scale(1.035); transform-origin: 68% 50%; animation: xr-hero-drift 34s ease-in-out infinite alternate; will-change: transform; }
+@keyframes xr-hero-drift { from { transform: scale(1.035) translate3d(0, 0, 0); } to { transform: scale(1.085) translate3d(-0.7%, -0.35%, 0); } }
+@media (prefers-reduced-motion: reduce) { .xr-hero-image { animation: none; transform: none; } }
