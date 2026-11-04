@@ -7,7 +7,7 @@ import { ServiceIllustration } from "./ServiceIllustration";
 import { Reveal } from "./primitives";
 import { useFunnel } from "@/lib/funnel";
 import { PORTFOLIO_REFERENCES } from "@/lib/portfolioReferences";
-import { XR_HERO_PHOTO } from "@/lib/photography";
+import { XR_HERO_PHOTO, XR_PHOTOS } from "@/lib/photography";
 
 const COPY = {
   fr: {
@@ -21,10 +21,10 @@ const COPY = {
     discover: "Découvrir",
     add: "Ajouter au devis",
     added: "Ajouté au devis",
-    reelEyebrow: "XR AGENCY · SHOWREEL",
-    reelTitle: "La stratégie prend forme. La création prend vie.",
-    reelLead: "Un aperçu de notre approche créative et de nos réalisations.",
-    reelMissing: "Le fichier vidéo du showreel sera affiché dès qu’il sera configuré.",
+    reelEyebrow: "XR AGENCY · PROJET À LA UNE",
+    reelTitle: "Des expériences digitales pensées pour convaincre.",
+    reelLead: "Découvrez un projet réalisé par XR Agency, puis explorez nos autres réalisations.",
+    reelMissing: "Un projet réel, une expérience digitale conçue pour une activité concrète.",
     watch: "Voir les réalisations",
     portfolioEyebrow: "PROJET XR AGENCY",
     portfolioTitle: "Du concret, pas des projets fictifs.",
@@ -50,10 +50,10 @@ const COPY = {
     discover: "Explore",
     add: "Add to quote",
     added: "Added to quote",
-    reelEyebrow: "XR AGENCY · SHOWREEL",
-    reelTitle: "Strategy takes shape. Creativity comes to life.",
-    reelLead: "A glimpse into our creative approach and selected work.",
-    reelMissing: "The showreel video will appear here once its media file is configured.",
+    reelEyebrow: "XR AGENCY · PROJET À LA UNE",
+    reelTitle: "Digital experiences designed to make an impact.",
+    reelLead: "Explore a project delivered by XR Agency, then discover more of our work.",
+    reelMissing: "A real project and a digital experience built for a real business.",
     watch: "Explore projects",
     portfolioEyebrow: "XR AGENCY PROJECT",
     portfolioTitle: "Real work, not invented case studies.",
@@ -79,10 +79,10 @@ const COPY = {
     discover: "Khám phá",
     add: "Thêm vào báo giá",
     added: "Đã thêm vào báo giá",
-    reelEyebrow: "XR AGENCY · SHOWREEL",
-    reelTitle: "Chiến lược thành hình. Sáng tạo trở nên sống động.",
-    reelLead: "Khám phá cách tiếp cận sáng tạo và các dự án của chúng tôi.",
-    reelMissing: "Video showreel sẽ xuất hiện tại đây sau khi được cấu hình.",
+    reelEyebrow: "XR AGENCY · DỰ ÁN NỔI BẬT",
+    reelTitle: "Trải nghiệm số được thiết kế để tạo khác biệt.",
+    reelLead: "Khám phá một dự án do XR Agency thực hiện và các dự án khác.",
+    reelMissing: "Một dự án thực tế và trải nghiệm số dành cho một doanh nghiệp thực tế.",
     watch: "Xem dự án",
     portfolioEyebrow: "DỰ ÁN XR AGENCY",
     portfolioTitle: "Dự án thực tế, không phải ví dụ hư cấu.",
@@ -108,10 +108,10 @@ const COPY = {
     discover: "اكتشف",
     add: "أضف إلى العرض",
     added: "أُضيف إلى العرض",
-    reelEyebrow: "XR AGENCY · SHOWREEL",
-    reelTitle: "تتجسد الاستراتيجية وتنبض الأفكار بالحياة.",
-    reelLead: "لمحة عن منهجنا الإبداعي وأعمالنا المختارة.",
-    reelMissing: "سيظهر فيديو العرض هنا بعد إعداد ملف الوسائط.",
+    reelEyebrow: "XR AGENCY · مشروع مميز",
+    reelTitle: "تجارب رقمية مصممة لإحداث فرق.",
+    reelLead: "اكتشف مشروعًا نفذته XR Agency ثم استكشف أعمالنا الأخرى.",
+    reelMissing: "مشروع حقيقي وتجربة رقمية مصممة لنشاط حقيقي.",
     watch: "استكشف المشاريع",
     portfolioEyebrow: "مشروع XR AGENCY",
     portfolioTitle: "أعمال حقيقية، لا دراسات حالة وهمية.",
@@ -137,10 +137,10 @@ const COPY = {
     discover: "Подробнее",
     add: "Добавить в смету",
     added: "Добавлено в смету",
-    reelEyebrow: "XR AGENCY · SHOWREEL",
-    reelTitle: "Стратегия обретает форму. Идеи оживают.",
-    reelLead: "Знакомство с нашим творческим подходом и проектами.",
-    reelMissing: "Видео showreel появится здесь после настройки медиафайла.",
+    reelEyebrow: "XR AGENCY · ИЗБРАННЫЙ ПРОЕКТ",
+    reelTitle: "Цифровые решения, которые работают на ваш бренд.",
+    reelLead: "Посмотрите проект XR Agency и другие наши работы.",
+    reelMissing: "Реальный проект и цифровой опыт для реального бизнеса.",
     watch: "Посмотреть проекты",
     portfolioEyebrow: "ПРОЕКТ XR AGENCY",
     portfolioTitle: "Реальная работа, а не вымышленные кейсы.",
@@ -186,7 +186,7 @@ export function HomepageExperience() {
             </div>
           </Reveal>
 
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
+          <div className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 md:grid-cols-3 xl:grid-cols-4">
             {ORDERED_SERVICES.map((item, index) => {
               const service = SERVICES.find((entry) => entry.id === item.id);
               if (!service) return null;
@@ -194,10 +194,11 @@ export function HomepageExperience() {
               const Icon = item.icon;
               const period = item.period === "month" ? copy.month : item.period === "year" ? copy.year : copy.once;
               return (
-                <Reveal key={item.id} delay={index * 45}>
+                <div key={item.id} className="w-[78vw] shrink-0 snap-start sm:w-auto">
+                <Reveal delay={index * 45}>
                   <article className="group flex h-full flex-col overflow-hidden rounded-[1.25rem] border border-[#b7a58c]/35 bg-[#fffdf8] shadow-[0_12px_32px_rgba(53,40,24,.07)] transition duration-500 hover:-translate-y-1.5 hover:shadow-[0_22px_44px_rgba(53,40,24,.13)]">
-                    <div className="relative h-[112px] overflow-hidden bg-[#e9dfd0] sm:h-[150px]">
-                      <ServiceIllustration service={item.id} title={t(service.title)} />
+                    <div className="relative h-[190px] overflow-hidden bg-[#e9dfd0] sm:h-[150px]">
+                      <img src={(item.id === "social" ? XR_PHOTOS.ai : XR_PHOTOS[item.id as keyof typeof XR_PHOTOS]) ?? XR_HERO_PHOTO} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" />
                       <div className="absolute left-3 top-3 grid h-8 w-8 place-items-center rounded-full border border-white/60 bg-black/35 text-white backdrop-blur-md">
                         <Icon className="h-4 w-4" />
                       </div>
@@ -232,6 +233,7 @@ export function HomepageExperience() {
                     </div>
                   </article>
                 </Reveal>
+                </div>
               );
             })}
           </div>
