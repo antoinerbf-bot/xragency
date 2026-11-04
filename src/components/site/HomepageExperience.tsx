@@ -3,7 +3,6 @@ import { Link } from "@tanstack/react-router";
 import { useLang, type Lang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
 import { ORDERED_SERVICES } from "./HomeServices";
-import { ServiceIllustration } from "./ServiceIllustration";
 import { Reveal } from "./primitives";
 import { useFunnel } from "@/lib/funnel";
 import { PORTFOLIO_REFERENCES } from "@/lib/portfolioReferences";
