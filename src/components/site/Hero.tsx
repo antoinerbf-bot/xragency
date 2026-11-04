@@ -24,7 +24,7 @@ export function Hero() {
     <section
       ref={sectionRef}
       id="hero"
-      className="xr-hero relative isolate flex min-h-[100svh] items-end overflow-hidden bg-[#171512] text-white"
+      className="xr-hero relative isolate flex min-h-[92svh] items-end overflow-hidden bg-[#171512] text-white md:min-h-[100svh]"
     >
       <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
         <img
@@ -53,7 +53,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_72%_38%,transparent_0%,rgba(0,0,0,.12)_68%,rgba(0,0,0,.28)_100%)]" />
       </div>
 
-      <div className="relative z-10 mx-auto grid w-full max-w-[1700px] grid-cols-1 items-end gap-10 px-5 pb-10 pt-32 sm:px-8 sm:pb-14 md:min-h-[100svh] md:grid-cols-[minmax(0,1fr)_minmax(180px,.55fr)] md:gap-8 md:px-12 md:pb-24 lg:px-20 xl:px-24">
+      <div className="relative z-10 mx-auto grid w-full max-w-[1700px] grid-cols-1 items-end gap-7 px-5 pb-8 pt-28 sm:gap-10 sm:px-8 sm:pb-14 md:min-h-[100svh] md:grid-cols-[minmax(0,1fr)_minmax(180px,.55fr)] md:gap-8 md:px-12 md:pb-24 lg:px-20 xl:px-24">
         <div className="max-w-[780px]">
           <div className="mb-5 flex items-center gap-3 sm:mb-6">
             <span className="h-px w-9 bg-[#c59a62]" />
@@ -91,27 +91,36 @@ export function Hero() {
             </a>
           </div>
 
-          <div className="mt-8 border-t border-white/20 pt-5">
-            <span className="mb-3 block label-mono text-[7px] uppercase tracking-[.2em] text-white/60 sm:text-[8px]">
-              {currentLang === "fr" ? "Accès direct par objectif stratégique" : currentLang === "vi" ? "Truy cập nhanh theo mục tiêu chiến lược" : currentLang === "ar" ? "الوصول حسب الهدف الاستراتيجي" : currentLang === "ru" ? "Быстрый доступ по стратегической цели" : "Quick access by strategic goal"}
-            </span>
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-              {HERO_FUNNEL_PILLS.map((pill) => (
-                <button
-                  key={pill.id}
-                  type="button"
-                  onClick={() => applyGoalPreset(pill.id)}
-                  className="group flex min-h-[76px] flex-col items-start rounded-xl border border-white/15 bg-black/30 p-3 text-left shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-[#c59a62]/70 hover:bg-black/50 active:scale-[.98]"
-                >
-                  <span className="mb-1 text-sm">{pill.icon}</span>
-                  <span className="text-[10px] font-bold leading-tight text-white transition group-hover:text-[#e4c18e]">
-                    {pill.label[currentLang] ?? pill.label.fr}
-                  </span>
-                  <span className="mt-1 line-clamp-1 text-[8px] text-white/60">
-                    {pill.sub[currentLang] ?? pill.sub.fr}
-                  </span>
-                </button>
-              ))}
+          <div className="mt-7 border-t border-white/20 pt-4 sm:mt-8 sm:pt-5">
+            <a
+              href="#homepage-services"
+              className="inline-flex min-h-11 items-center gap-2 text-[10px] font-semibold uppercase tracking-[.12em] text-white/85 transition hover:text-[#e4c18e] sm:hidden"
+            >
+              {currentLang === "fr" ? "Explorer nos expertises" : currentLang === "vi" ? "Khám phá chuyên môn" : currentLang === "ar" ? "اكتشف خبراتنا" : currentLang === "ru" ? "Наши направления" : "Explore our expertise"}
+              <ArrowDown className="h-3.5 w-3.5" />
+            </a>
+            <div className="hidden sm:block">
+              <span className="mb-3 block label-mono text-[8px] uppercase tracking-[.2em] text-white/60">
+                {currentLang === "fr" ? "Accès direct par objectif stratégique" : currentLang === "vi" ? "Truy cập nhanh theo mục tiêu chiến lược" : currentLang === "ar" ? "الوصول حسب الهدف الاستراتيجي" : currentLang === "ru" ? "Быстрый доступ по стратегической цели" : "Quick access by strategic goal"}
+              </span>
+              <div className="grid grid-cols-4 gap-2">
+                {HERO_FUNNEL_PILLS.map((pill) => (
+                  <button
+                    key={pill.id}
+                    type="button"
+                    onClick={() => applyGoalPreset(pill.id)}
+                    className="group flex min-h-[76px] flex-col items-start rounded-xl border border-white/15 bg-black/30 p-3 text-left shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-[#c59a62]/70 hover:bg-black/50 active:scale-[.98]"
+                  >
+                    <span className="mb-1 text-sm">{pill.icon}</span>
+                    <span className="text-[10px] font-bold leading-tight text-white transition group-hover:text-[#e4c18e]">
+                      {pill.label[currentLang] ?? pill.label.fr}
+                    </span>
+                    <span className="mt-1 line-clamp-1 text-[8px] text-white/60">
+                      {pill.sub[currentLang] ?? pill.sub.fr}
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
