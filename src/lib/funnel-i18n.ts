@@ -81,7 +81,7 @@ export const HERO_FUNNEL_PILLS: HeroFunnelPill[] = [
       ru: "Полный перезапуск + ИИ",
     },
     sub: {
-      fr: "Site sur-mesure + WebCare + Automatisation",
+      fr: "Site + WebCare + Automatisation IA",
       en: "Bespoke site + WebCare + Robotics",
       vi: "Website may đo + WebCare + Robot",
       ar: "موقع مخصص + WebCare + روبوتات",

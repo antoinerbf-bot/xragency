@@ -77,10 +77,10 @@ export function Nav() {
           className={cn(
             "relative flex items-center justify-between gap-2 rounded-full border transition-all duration-300 px-3 py-1.5 sm:px-4 sm:py-2",
             scrolled
-              ? "border-white/15 bg-black/60 text-white shadow-[0_16px_40px_-15px_rgba(0,0,0,0.6)] backdrop-blur-2xl dark:border-white/15 dark:bg-black/60 dark:text-white"
+              ? "border-[#141312]/12 bg-[#f7f4ed]/95 text-[#141312] shadow-[0_14px_38px_-14px_rgba(20,19,18,0.2)] backdrop-blur-2xl dark:border-white/15 dark:bg-[#121110]/90 dark:text-[#f7f4ed]"
               : heroTop
-                ? "border-white/15 bg-black/45 text-white shadow-[0_12px_36px_rgba(0,0,0,0.28)] backdrop-blur-2xl dark:border-white/15 dark:bg-black/50 dark:text-white"
-                : "border-neutral-200/80 bg-white/80 text-neutral-900 shadow-sm backdrop-blur-xl dark:border-white/15 dark:bg-black/50 dark:text-white"
+                ? "border-[#141312]/10 bg-[#f7f4ed]/88 text-[#141312] shadow-[0_14px_34px_-16px_rgba(20,19,18,0.16)] backdrop-blur-2xl dark:border-white/15 dark:bg-[#121110]/85 dark:text-[#f7f4ed]"
+                : "border-[#141312]/10 bg-[#f7f4ed]/90 text-[#141312] shadow-sm backdrop-blur-xl dark:border-white/15 dark:bg-[#121110]/85 dark:text-[#f7f4ed]"
           )}
         >
           <Logo className="min-w-0 px-1 text-current hover:opacity-85" />
@@ -102,14 +102,14 @@ export function Nav() {
                   type="button"
                   aria-expanded={servicesOpen}
                   onClick={() => setServicesOpen((v) => !v)}
-                  className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10"
+                  className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-[#141312]/6 dark:hover:bg-white/10"
                 >
                   {t(UI.navServices)}
                   <ChevronDown className={cn("h-3 w-3 transition-transform duration-200", servicesOpen && "rotate-180")} />
                 </button>
 
                 {servicesOpen && (
-                  <div className="absolute left-1/2 top-full mt-2 w-[min(960px,calc(100vw-3rem))] -translate-x-1/2 rounded-[1.35rem] border border-white/15 bg-[#0e0f12]/95 p-4 shadow-[0_36px_100px_-30px_rgba(0,0,0,.75)] text-white backdrop-blur-2xl animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="absolute left-1/2 top-full mt-2 w-[min(960px,calc(100vw-3rem))] -translate-x-1/2 rounded-[1.35rem] border border-white/15 bg-[#121110]/96 p-4 shadow-[0_36px_100px_-30px_rgba(0,0,0,.75)] text-white backdrop-blur-2xl animate-in fade-in slide-in-from-top-2 duration-200">
                     <div className="mb-3 flex items-center justify-between border-b border-white/10 px-2 pb-2.5">
                       <div className="flex items-center gap-2">
                         <span className="h-px w-8 bg-current opacity-60" />
@@ -120,7 +120,7 @@ export function Nav() {
                       <Link
                         to="/services"
                         onClick={() => setServicesOpen(false)}
-                        className="inline-flex items-center gap-1.5 label-mono text-[7px] text-emerald-400 hover:underline"
+                        className="inline-flex items-center gap-1.5 label-mono text-[7px] text-[#e8cfa6] hover:underline"
                       >
                         {t(UI.navFullCatalog)} <ArrowRight className="h-3 w-3" />
                       </Link>
@@ -163,13 +163,13 @@ export function Nav() {
 
               <Link
                 to="/realisations"
-                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
+                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-[#141312]/6 dark:hover:bg-white/10 opacity-85 hover:opacity-100"
               >
                 {t(UI.navWork)}
               </Link>
               <Link
                 to="/recrutement"
-                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
+                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-[#141312]/6 dark:hover:bg-white/10 opacity-85 hover:opacity-100"
               >
                 {t(UI.navAffiliation)}
               </Link>
@@ -180,7 +180,7 @@ export function Nav() {
                     ? document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" })
                     : window.location.assign("/#faq")
                 }
-                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
+                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-[#141312]/6 dark:hover:bg-white/10 opacity-85 hover:opacity-100"
               >
                 {t(UI.navFaq)}
               </button>

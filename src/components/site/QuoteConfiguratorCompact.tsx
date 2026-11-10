@@ -975,9 +975,9 @@ export function QuoteConfiguratorCompact() {
                       <p className="mt-1 text-[9.5px] text-white/60 leading-none">{titles[step]}</p>
                     </div>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right shrink-0">
                     <span className="block label-mono text-[6px] text-[#c5a880] uppercase">{QUOTE_UI.liveEstimate[currentLang]}</span>
-                    <span className="text-sm font-bold text-white">{totalLabel}</span>
+                    <span className="text-[12.5px] sm:text-sm font-bold text-white whitespace-nowrap">{totalLabel}</span>
                   </div>
                 </div>
                 <div className="mt-2.5 flex items-start gap-2 text-[11px] text-white/80 leading-snug">

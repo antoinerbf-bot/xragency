@@ -2,46 +2,47 @@ import { useState, useEffect } from "react";
 import { MessageCircle, X } from "lucide-react";
 import { useLang, type Lang } from "@/lib/i18n";
 import { CONTACT } from "@/lib/content";
+import agentXrPortrait from "@/assets/agent-xr-portrait.jpg";
 
 const NOTIFICATIONS: Record<Lang, { title: string; role: string; prompt: string; subprompt: string }> = {
   fr: {
-    title: "Alexandre",
-    role: "Assistant à votre service",
+    title: "Agent XR",
+    role: "Conciergerie privée · WhatsApp",
     prompt: "Un projet en tête ?",
     subprompt: "Réponse directe WhatsApp",
   },
   en: {
-    title: "Alexandre",
-    role: "Assistant at your service",
+    title: "Agent XR",
+    role: "Private Concierge · WhatsApp",
     prompt: "Have a digital project?",
     subprompt: "Direct WhatsApp reply",
   },
   vi: {
-    title: "Alexandre",
-    role: "Trợ lý phục vụ bạn",
+    title: "Agent XR",
+    role: "Tư vấn riêng · WhatsApp",
     prompt: "Bạn có dự án mới?",
     subprompt: "Hỗ trợ trực tiếp WhatsApp",
   },
   ar: {
-    title: "ألكسندر",
-    role: "مساعد في خدمتكم",
+    title: "Agent XR",
+    role: "الخدمة الخاصة · واتساب",
     prompt: "هل لديك فكرة مشروع؟",
     subprompt: "رد فوري عبر واتساب",
   },
   ru: {
-    title: "Александр",
-    role: "Ассистент к вашим услугам",
+    title: "Agent XR",
+    role: "Консьерж · WhatsApp",
     prompt: "Есть идея проекта?",
     subprompt: "Прямой ответ в WhatsApp",
   },
 };
 
 const WA_MESSAGES: Record<Lang, string> = {
-  fr: "Bonjour Alexandre, je consulte le site XR Agency et je souhaite échanger sur mon projet digital.",
-  en: "Hello Alexandre, I am browsing XR Agency and would like to discuss my digital project.",
-  vi: "Xin chào Alexandre, tôi đang xem trang web XR Agency và muốn trao đổi về dự án.",
-  ar: "مرحبا ألكسندر، أود الاستفسار ومناقشة مشروع رقمي مع XR Agency.",
-  ru: "Здравствуйте, Александр! Я на сайте XR Agency и хочу обсудить digital-проект.",
+  fr: "Bonjour XR Agency, je consulte votre site et je souhaite échanger sur mon projet digital.",
+  en: "Hello XR Agency, I am browsing your site and would like to discuss my digital project.",
+  vi: "Xin chào XR Agency, tôi đang xem trang web và muốn trao đổi về dự án.",
+  ar: "مرحبا XR Agency، أود الاستفسار ومناقشة مشروعي الرقمي.",
+  ru: "Здравствуйте, XR Agency! Я на вашем сайте и хочу обсудить digital-проект.",
 };
 
 export function WhatsAppWidget() {
@@ -55,7 +56,7 @@ export function WhatsAppWidget() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 280 && !dismissed) {
+      if (window.scrollY > 360 && !dismissed) {
         setVisible(true);
       }
     };
@@ -79,42 +80,38 @@ export function WhatsAppWidget() {
 
   return (
     <aside
-      aria-label="Assistant à votre service - WhatsApp"
-      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 transition-all duration-500 ease-out rtl:right-auto rtl:left-6 animate-in fade-in slide-in-from-bottom-3"
+      aria-label="Conciergerie XR Agency - WhatsApp"
+      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex items-center gap-2 transition-all duration-500 ease-out rtl:right-auto rtl:left-4 sm:rtl:left-6 animate-in fade-in slide-in-from-bottom-3"
     >
-      {/* Dynamic Floating Charming Notification Pill */}
       <a
         href={waUrl}
         target="_blank"
         rel="noreferrer"
-        className="group relative flex items-center gap-2.5 rounded-full border border-white/20 bg-[#090b10]/95 py-1.5 pl-2 pr-3.5 shadow-[0_12px_32px_rgba(0,0,0,0.65)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/60 hover:bg-[#111622] hover:shadow-[0_16px_40px_rgba(16,185,129,0.25)]"
+        className="group relative flex items-center gap-2.5 rounded-full border border-[#c5a880]/40 bg-[#141312]/95 p-1.5 sm:py-1.5 sm:pl-1.5 sm:pr-3.5 shadow-[0_14px_34px_rgba(0,0,0,0.58)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-[#c5a880] hover:bg-[#1c1a17]"
         aria-label={`${copy.title} · ${copy.role}`}
         title={`${copy.title} · ${copy.role}`}
       >
-        {/* Subtle breathing glow */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute -inset-0.5 rounded-full bg-emerald-500/10 blur-sm opacity-50 group-hover:opacity-100 transition duration-500"
-        />
-
-        {/* Alexandre bespoke avatar badge */}
-        <div className="relative flex h-7 w-7 items-center justify-center rounded-full border border-white/25 bg-gradient-to-br from-[#1e2533] to-[#0c0f16] text-white shrink-0">
-          <span className="font-serif text-[10px] font-bold tracking-tight">AX</span>
-          <span className="absolute -bottom-0.5 -right-0.5 flex h-2.5 w-2.5 items-center justify-center rounded-full border border-black bg-emerald-500">
+        <div className="relative h-9 w-9 sm:h-8 sm:w-8 shrink-0">
+          <img
+            src={agentXrPortrait}
+            alt="Agent XR"
+            className="h-full w-full rounded-full object-cover object-top border border-[#c5a880]/70"
+          />
+          <span className="absolute -bottom-0.5 -right-0.5 flex h-2.5 w-2.5 items-center justify-center rounded-full border border-[#141312] bg-emerald-400">
             <span className="h-1 w-1 rounded-full bg-white animate-ping" />
           </span>
         </div>
 
-        {/* Dynamic Charming Text Transition */}
-        <div className="flex flex-col text-left overflow-hidden min-w-[130px]">
+        {/* Hidden on very narrow phones so content cards remain clear; visible on sm+ */}
+        <div className="hidden sm:flex flex-col text-left overflow-hidden min-w-[138px]">
           {!altMessage ? (
             <div className="animate-in fade-in slide-in-from-bottom-1 duration-300">
               <div className="flex items-center gap-1.5">
-                <span className="text-[11px] font-bold tracking-tight text-white group-hover:text-emerald-300 transition">
+                <span className="text-[11px] font-bold tracking-tight text-[#f7f4ed] group-hover:text-[#e8cfa6] transition">
                   {copy.title}
                 </span>
                 <span className="text-[9px] text-white/35">·</span>
-                <span className="text-[10px] text-emerald-400 font-medium">WhatsApp</span>
+                <span className="text-[10px] text-[#c5a880] font-semibold">En ligne</span>
               </div>
               <span className="label-mono text-[7px] text-white/65 -mt-0.5 tracking-wider block truncate">
                 {copy.role}
@@ -123,30 +120,28 @@ export function WhatsAppWidget() {
           ) : (
             <div className="animate-in fade-in slide-in-from-top-1 duration-300">
               <div className="flex items-center gap-1.5">
-                <span className="text-[11px] font-bold tracking-tight text-emerald-300">
+                <span className="text-[11px] font-bold tracking-tight text-[#e8cfa6]">
                   {copy.prompt}
                 </span>
               </div>
-              <span className="label-mono text-[7px] text-emerald-400/80 -mt-0.5 tracking-wider block truncate">
+              <span className="label-mono text-[7px] text-white/75 -mt-0.5 tracking-wider block truncate">
                 {copy.subprompt}
               </span>
             </div>
           )}
         </div>
 
-        {/* Official WhatsApp Icon Badge with micro-bounce on hover */}
-        <div className="ml-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 transition-transform group-hover:scale-115">
-          <MessageCircle className="h-3.5 w-3.5 fill-emerald-500/20" />
+        <div className="hidden sm:flex ml-0.5 h-6 w-6 items-center justify-center rounded-full bg-[#c5a880]/15 text-[#e8cfa6] border border-[#c5a880]/35 transition-transform group-hover:scale-110">
+          <MessageCircle className="h-3.5 w-3.5" />
         </div>
       </a>
 
-      {/* Discrete close button */}
       <button
         type="button"
         onClick={() => setDismissed(true)}
         title="Masquer"
         aria-label="Fermer la notification"
-        className="flex h-6 w-6 items-center justify-center rounded-full border border-white/10 bg-[#090b10]/85 text-white/40 hover:bg-white/20 hover:text-white transition shadow-sm backdrop-blur-md"
+        className="hidden sm:flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-[#141312]/90 text-white/45 hover:bg-[#1c1a17] hover:text-white transition shadow-sm backdrop-blur-md"
       >
         <X className="h-3 w-3" />
       </button>
