@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CrmRouteImport } from './routes/crm'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
@@ -17,11 +18,13 @@ import { Route as NotreHistoireRouteImport } from './routes/notre-histoire'
 import { Route as RealisationsRouteImport } from './routes/realisations'
 import { Route as RecrutementRouteImport } from './routes/recrutement'
 import { Route as RefonteSiteInternetRouteImport } from './routes/refonte-site-internet'
+import { Route as SchoolRouteImport } from './routes/school'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as WorkRouteImport } from './routes/work'
 import { Route as ApiAuditRouteImport } from './routes/api/audit'
 import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiCreateCheckoutRouteImport } from './routes/api/create-checkout'
+import { Route as ApiCrmRouteImport } from './routes/api/crm'
 import { Route as ApiSendQuoteRouteImport } from './routes/api/send-quote'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardAuditsRouteImport } from './routes/dashboard/audits'
@@ -39,6 +42,11 @@ import { Route as DashboardProspectsProspectIdRouteImport } from './routes/dashb
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrmRoute = CrmRouteImport.update({
+  id: '/crm',
+  path: '/crm',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -76,6 +84,11 @@ const RefonteSiteInternetRoute = RefonteSiteInternetRouteImport.update({
   path: '/refonte-site-internet',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SchoolRoute = SchoolRouteImport.update({
+  id: '/school',
+  path: '/school',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -99,6 +112,11 @@ const ApiContactRoute = ApiContactRouteImport.update({
 const ApiCreateCheckoutRoute = ApiCreateCheckoutRouteImport.update({
   id: '/api/create-checkout',
   path: '/api/create-checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCrmRoute = ApiCrmRouteImport.update({
+  id: '/api/crm',
+  path: '/api/crm',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSendQuoteRoute = ApiSendQuoteRouteImport.update({
@@ -170,6 +188,7 @@ const DashboardProspectsProspectIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/crm': typeof CrmRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/faq': typeof FaqRoute
   '/mentions-legales': typeof MentionsLegalesRoute
@@ -177,11 +196,13 @@ export interface FileRoutesByFullPath {
   '/realisations': typeof RealisationsRoute
   '/recrutement': typeof RecrutementRoute
   '/refonte-site-internet': typeof RefonteSiteInternetRoute
+  '/school': typeof SchoolRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/work': typeof WorkRoute
   '/api/audit': typeof ApiAuditRoute
   '/api/contact': typeof ApiContactRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
+  '/api/crm': typeof ApiCrmRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
@@ -198,17 +219,20 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/crm': typeof CrmRoute
   '/faq': typeof FaqRoute
   '/mentions-legales': typeof MentionsLegalesRoute
   '/notre-histoire': typeof NotreHistoireRoute
   '/realisations': typeof RealisationsRoute
   '/recrutement': typeof RecrutementRoute
   '/refonte-site-internet': typeof RefonteSiteInternetRoute
+  '/school': typeof SchoolRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/work': typeof WorkRoute
   '/api/audit': typeof ApiAuditRoute
   '/api/contact': typeof ApiContactRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
+  '/api/crm': typeof ApiCrmRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
@@ -226,6 +250,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/crm': typeof CrmRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/faq': typeof FaqRoute
   '/mentions-legales': typeof MentionsLegalesRoute
@@ -233,11 +258,13 @@ export interface FileRoutesById {
   '/realisations': typeof RealisationsRoute
   '/recrutement': typeof RecrutementRoute
   '/refonte-site-internet': typeof RefonteSiteInternetRoute
+  '/school': typeof SchoolRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/work': typeof WorkRoute
   '/api/audit': typeof ApiAuditRoute
   '/api/contact': typeof ApiContactRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
+  '/api/crm': typeof ApiCrmRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
@@ -256,6 +283,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/crm'
     | '/dashboard'
     | '/faq'
     | '/mentions-legales'
@@ -263,11 +291,13 @@ export interface FileRouteTypes {
     | '/realisations'
     | '/recrutement'
     | '/refonte-site-internet'
+    | '/school'
     | '/sitemap.xml'
     | '/work'
     | '/api/audit'
     | '/api/contact'
     | '/api/create-checkout'
+    | '/api/crm'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
@@ -284,17 +314,20 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/crm'
     | '/faq'
     | '/mentions-legales'
     | '/notre-histoire'
     | '/realisations'
     | '/recrutement'
     | '/refonte-site-internet'
+    | '/school'
     | '/sitemap.xml'
     | '/work'
     | '/api/audit'
     | '/api/contact'
     | '/api/create-checkout'
+    | '/api/crm'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
@@ -311,6 +344,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/crm'
     | '/dashboard'
     | '/faq'
     | '/mentions-legales'
@@ -318,11 +352,13 @@ export interface FileRouteTypes {
     | '/realisations'
     | '/recrutement'
     | '/refonte-site-internet'
+    | '/school'
     | '/sitemap.xml'
     | '/work'
     | '/api/audit'
     | '/api/contact'
     | '/api/create-checkout'
+    | '/api/crm'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
@@ -340,6 +376,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CrmRoute: typeof CrmRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   FaqRoute: typeof FaqRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
@@ -347,11 +384,13 @@ export interface RootRouteChildren {
   RealisationsRoute: typeof RealisationsRoute
   RecrutementRoute: typeof RecrutementRoute
   RefonteSiteInternetRoute: typeof RefonteSiteInternetRoute
+  SchoolRoute: typeof SchoolRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   WorkRoute: typeof WorkRoute
   ApiAuditRoute: typeof ApiAuditRoute
   ApiContactRoute: typeof ApiContactRoute
   ApiCreateCheckoutRoute: typeof ApiCreateCheckoutRoute
+  ApiCrmRoute: typeof ApiCrmRoute
   ApiSendQuoteRoute: typeof ApiSendQuoteRoute
   ServicesServiceIdRoute: typeof ServicesServiceIdRoute
   ServicesRobotiqueRoute: typeof ServicesRobotiqueRoute
@@ -367,6 +406,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crm': {
+      id: '/crm'
+      path: '/crm'
+      fullPath: '/crm'
+      preLoaderRoute: typeof CrmRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -418,6 +464,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RefonteSiteInternetRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/school': {
+      id: '/school'
+      path: '/school'
+      fullPath: '/school'
+      preLoaderRoute: typeof SchoolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -451,6 +504,13 @@ declare module '@tanstack/react-router' {
       path: '/api/create-checkout'
       fullPath: '/api/create-checkout'
       preLoaderRoute: typeof ApiCreateCheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/crm': {
+      id: '/api/crm'
+      path: '/api/crm'
+      fullPath: '/api/crm'
+      preLoaderRoute: typeof ApiCrmRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/send-quote': {
@@ -592,6 +652,7 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CrmRoute: CrmRoute,
   DashboardRoute: DashboardRouteWithChildren,
   FaqRoute: FaqRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
@@ -599,11 +660,13 @@ const rootRouteChildren: RootRouteChildren = {
   RealisationsRoute: RealisationsRoute,
   RecrutementRoute: RecrutementRoute,
   RefonteSiteInternetRoute: RefonteSiteInternetRoute,
+  SchoolRoute: SchoolRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   WorkRoute: WorkRoute,
   ApiAuditRoute: ApiAuditRoute,
   ApiContactRoute: ApiContactRoute,
   ApiCreateCheckoutRoute: ApiCreateCheckoutRoute,
+  ApiCrmRoute: ApiCrmRoute,
   ApiSendQuoteRoute: ApiSendQuoteRoute,
   ServicesServiceIdRoute: ServicesServiceIdRoute,
   ServicesRobotiqueRoute: ServicesRobotiqueRoute,

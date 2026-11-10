@@ -23,6 +23,8 @@ const BASE_PRICES: Record<string, number> = {
   content: 399,
   conversion: 299,
   maintenance: 29,
+  school_academy: 4000,
+  school_installment: 1350,
 };
 
 const WEBSITE_PRICES = {
@@ -74,6 +76,8 @@ function getLabel(serviceId: string, situation: string) {
     content: "Contenu · photo · vidéo",
     conversion: "Conversion & parcours",
     maintenance: "WebCare",
+    school_academy: "XR School · Programme Agence 90 Jours (Clés-en-main)",
+    school_installment: "XR School · Échéance 1/3 (Programme 90 Jours)",
   };
   return labels[serviceId] ?? serviceId;
 }

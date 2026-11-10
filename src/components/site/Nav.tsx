@@ -79,8 +79,8 @@ export function Nav() {
             scrolled
               ? "border-[#141312]/12 bg-[#f7f4ed]/95 text-[#141312] shadow-[0_14px_38px_-14px_rgba(20,19,18,0.2)] backdrop-blur-2xl dark:border-white/15 dark:bg-[#121110]/90 dark:text-[#f7f4ed]"
               : heroTop
-                ? "border-[#141312]/10 bg-[#f7f4ed]/88 text-[#141312] shadow-[0_14px_34px_-16px_rgba(20,19,18,0.16)] backdrop-blur-2xl dark:border-white/15 dark:bg-[#121110]/85 dark:text-[#f7f4ed]"
-                : "border-[#141312]/10 bg-[#f7f4ed]/90 text-[#141312] shadow-sm backdrop-blur-xl dark:border-white/15 dark:bg-[#121110]/85 dark:text-[#f7f4ed]"
+                ? "border-white/18 bg-[#121110]/68 text-[#f7f4ed] shadow-[0_16px_40px_rgba(0,0,0,0.38)] backdrop-blur-2xl"
+                : "border-[#141312]/10 bg-[#f7f4ed]/92 text-[#141312] shadow-sm backdrop-blur-xl dark:border-white/15 dark:bg-[#121110]/85 dark:text-[#f7f4ed]"
           )}
         >
           <Logo className="min-w-0 px-1 text-current hover:opacity-85" />
@@ -163,15 +163,28 @@ export function Nav() {
 
               <Link
                 to="/realisations"
-                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-[#141312]/6 dark:hover:bg-white/10 opacity-85 hover:opacity-100"
+                className="rounded-full px-3 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.16em] transition hover:bg-current/10 opacity-85 hover:opacity-100"
               >
                 {t(UI.navWork)}
               </Link>
               <Link
+                to="/school"
+                className="inline-flex items-center gap-1.5 rounded-full border border-[#c5a880]/40 bg-[#c5a880]/15 px-3 py-1 text-[8.5px] font-bold uppercase tracking-[.16em] transition hover:bg-[#c5a880]/30"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-[#c5a880]" />
+                XR School
+              </Link>
+              <Link
                 to="/recrutement"
-                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-[#141312]/6 dark:hover:bg-white/10 opacity-85 hover:opacity-100"
+                className="rounded-full px-3 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.16em] transition hover:bg-current/10 opacity-85 hover:opacity-100"
               >
                 {t(UI.navAffiliation)}
+              </Link>
+              <Link
+                to="/crm"
+                className="rounded-full px-3 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.16em] transition hover:bg-current/10 opacity-85 hover:opacity-100"
+              >
+                CRM Équipe
               </Link>
               <button
                 type="button"
@@ -180,7 +193,7 @@ export function Nav() {
                     ? document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" })
                     : window.location.assign("/#faq")
                 }
-                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-[#141312]/6 dark:hover:bg-white/10 opacity-85 hover:opacity-100"
+                className="rounded-full px-3 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.16em] transition hover:bg-current/10 opacity-85 hover:opacity-100"
               >
                 {t(UI.navFaq)}
               </button>
@@ -245,7 +258,10 @@ export function Nav() {
 
             <EmberButton
               href="/#quote"
-              className="hidden min-h-9 px-4 py-1.5 text-[8px] tracking-[.14em] font-semibold md:inline-flex"
+              className={cn(
+                "hidden min-h-9 px-4 py-1.5 text-[8px] tracking-[.14em] font-semibold md:inline-flex",
+                heroTop && "bg-[#f7f4ed] text-[#141312] hover:bg-[#e8cfa6]"
+              )}
             >
               {t(UI.navLaunchAnalyze)}
             </EmberButton>
@@ -316,7 +332,21 @@ export function Nav() {
               })}
             </div>
 
-            <div className="mt-3 grid grid-cols-2 gap-2 border-t xr-line pt-3 sm:grid-cols-4">
+            <div className="mt-3 grid grid-cols-2 gap-2 border-t xr-line pt-3 sm:grid-cols-3">
+              <Link
+                to="/school"
+                onClick={() => setOpen(false)}
+                className="rounded-xl border border-[#c5a880]/45 bg-[#c5a880]/15 p-2.5 text-center text-[9px] font-bold text-[#8c6c3c] dark:text-[#e8cfa6]"
+              >
+                XR School · 90j
+              </Link>
+              <Link
+                to="/crm"
+                onClick={() => setOpen(false)}
+                className="rounded-xl border border-[#141312]/20 bg-[#141312] p-2.5 text-center text-[9px] font-bold text-[#f7f4ed]"
+              >
+                CRM Équipe
+              </Link>
               <a
                 href="/realisations"
                 onClick={() => setOpen(false)}

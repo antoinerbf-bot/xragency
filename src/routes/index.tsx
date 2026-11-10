@@ -7,6 +7,7 @@ import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCom
 import { DigitalAudit } from "@/components/site/DigitalAudit";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
 import { ProofAndGuarantees } from "@/components/site/ProofAndGuarantees";
+import { SchoolAndCrmSection } from "@/components/site/SchoolAndCrmSection";
 import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
 import { FunnelProvider } from "@/lib/funnel";
@@ -54,6 +55,7 @@ function Index() {
           <QuoteConfiguratorCompact />
           <DigitalAudit />
           <MapsSimulator />
+          <SchoolAndCrmSection />
           <ProofAndGuarantees />
           <Faq />
           <Contact />
