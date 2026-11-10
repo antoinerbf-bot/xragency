@@ -18,7 +18,7 @@ import {
 
 type Choice = { id: string; label: string; detail: string };
 type Sector = Choice & { goals: string[] };
-type Proposal = { id: string; label: string; detail: string; price: number; period: "once" | "month"; custom?: boolean };
+type Proposal = { id: string; label: string; detail: string; price: number; period: "once" | "month"; custom?: boolean; commitment?: string };
 
 const SERVICE_ORDER: Record<string, string[]> = {
   restaurant: ["website","maps","social","seo","branding","maintenance","robotics"],
@@ -47,7 +47,7 @@ const ROBOTICS_DETAILS: Record<Lang, string> = {
   ru: "Аренда сервисных роботов от 499 €/мес · покупка · мероприятия от 250 €.",
 };
 
-const BASE_PRICES: Record<string, number> = { website: 499, branding: 179, seo: 299, maps: 990, ads: 299, social: 299, content: 399, conversion: 299, maintenance: 29, robotics: 499 };
+const BASE_PRICES: Record<string, number> = { website: 499, branding: 199, seo: 299, maps: 99, ads: 299, social: 349, content: 399, conversion: 299, maintenance: 29, robotics: 499 };
 
 const PROFILE_SERVICE_RULES: Record<string, string[]> = Object.fromEntries(
   Object.entries(SERVICE_ORDER).map(([sectorId, services]) => [sectorId, services.slice(0, 4)])
@@ -114,12 +114,12 @@ export function QuoteConfiguratorCompact() {
 
   const brandingTiers = useMemo(() => ({
     starter: {
-      price: 179,
+      price: 199,
       label: { fr: "Logo Signature", en: "Signature Logo", vi: "Logo Đặc trưng", ar: "شعار توقيع مميز", ru: "Фирменный логотип" }[currentLang],
       detail: { fr: "Logo, déclinaisons essentielles et fichiers maîtres", en: "Logo, essential variations and master files", vi: "Logo, các phiên bản cơ bản và tệp gốc", ar: "الشعار والنسخ الأساسية والملفات المصدرية", ru: "Логотип, базовые версии и исходные файлы" }[currentLang],
     },
     premium: {
-      price: 349,
+      price: 399,
       label: { fr: "Full Brand Suite", en: "Full Brand Suite", vi: "Bộ nhận diện toàn diện", ar: "هوية بصرية شاملة", ru: "Полный брендинг" }[currentLang],
       detail: { fr: "Système de marque étendu, direction artistique et Brand Book", en: "Extended brand system, art direction and Brand Book", vi: "Hệ thống thương hiệu mở rộng, định hướng nghệ thuật và Brand Book", ar: "نظام علامة تجارية موسع وتوجيه فني ودليل الهوية", ru: "Расширенная бренд-система, арт-дирекшн и брендбук" }[currentLang],
     },
@@ -209,14 +209,14 @@ export function QuoteConfiguratorCompact() {
       let label = service.label;
       let detail = service.detail;
       if (service.id === "maps") {
-        price = 990;
+        price = 99;
         label = "Google Maps Top 3";
         detail = {
-          fr: "SUR MESURE · à partir de 990 € / an · selon positionnement, zone, concurrence et mots-clés",
-          en: "BESPOKE · from €990 / year · based on ranking, area, competition and keywords",
-          vi: "THEO YÊU CẦU · từ 990 € / năm · tùy vị trí, khu vực, đối thủ và từ khóa",
-          ar: "مخصص · ابتداءً من 990 € سنويًا · وفق الترتيب والمنطقة والمنافسة والكلمات المفتاحية",
-          ru: "ПОД ЗАКАЗ · от 990 € в год · в зависимости от позиций, района, конкуренции и запросов",
+          fr: "Dès 99 € / mois (Gestion) · Domination Top 3 à 159 € / mois · Plaque NFC offerte",
+          en: "From €99 / mo (Management) · Top 3 Domination at €159 / mo · Free NFC plaque",
+          vi: "Từ 99 € / tháng (Quản lý) · Thống lĩnh Top 3 159 € / tháng · Tặng bảng NFC",
+          ar: "ابتداءً من 99 € / شهر (إدارة) · تصدر Top 3 بـ 159 € / شهر · لوحة NFC مجانية",
+          ru: "От 99 € / мес (Ведение) · Топ-3 Доминирование за 159 € / мес · Стойка NFC в подарок",
         }[currentLang];
       }
       if (service.id === "website") {
@@ -231,7 +231,12 @@ export function QuoteConfiguratorCompact() {
       if (service.id === "branding" && (budget === "2500_5000" || budget === "5000_plus" || sectorId === "realestate")) {
         price = brandingTiers.premium.price; label = brandingTiers.premium.label; detail = brandingTiers.premium.detail;
       }
-      return { id: service.id, label, detail, price, period: service.id === "seo" || service.id === "social" || service.id === "maintenance" ? "month" : "once", custom: service.id === "maps" };
+      const commitment = service.id === "social"
+        ? ({ fr: "Engagement : 3 mois", en: "3-month commitment", vi: "Cam kết 3 tháng", ar: "التزام 3 أشهر", ru: "Обязательство 3 мес" }[currentLang])
+        : service.id === "maps"
+          ? ({ fr: "Abonnement annuel", en: "Annual plan", vi: "Gói hàng năm", ar: "اشتراك سنوي", ru: "Годовой пакет" }[currentLang])
+          : undefined;
+      return { id: service.id, label, detail, price, period: service.id === "seo" || service.id === "social" || service.id === "maintenance" || service.id === "robotics" ? "month" : "once", custom: false, commitment };
     });
   }, [orderedServices, situation, budget, sectorId, currentLang, websiteTiers, brandingTiers]);
 
@@ -375,12 +380,12 @@ export function QuoteConfiguratorCompact() {
         doc.setTextColor(...muted);
         doc.text(doc.splitTextToSize(detail, 86).slice(0, 2), M + 3, y + 3.5);
         doc.setFontSize(6.4);
-        doc.text(cleanForPdf(p.period === "month" ? pdfLabels.recurring : p.custom ? pdfLabels.custom : pdfLabels.once), 124, y);
+        doc.text(cleanForPdf(p.id === "maps" ? "ANNUEL" : p.id === "social" ? pdfLabels.recurring + " (3 MOIS)" : p.period === "month" ? pdfLabels.recurring : p.custom ? pdfLabels.custom : pdfLabels.once), 124, y);
         doc.setFont("helvetica", "bold");
         doc.setFontSize(7.2);
         doc.setTextColor(...ink);
         doc.text(
-          p.custom ? cleanForPdf(pdfLabels.onQuote) : p.price.toLocaleString("fr-FR") + " €" + (p.period === "month" ? " / mois" : ""),
+          p.custom ? cleanForPdf(pdfLabels.onQuote) : p.price.toLocaleString("fr-FR") + " €" + (p.id === "maps" ? " / an" : p.period === "month" ? " / mois" : ""),
           R - 3,
           y,
           { align: "right" }
@@ -449,9 +454,50 @@ export function QuoteConfiguratorCompact() {
       doc.setFont("helvetica", "bold");
       doc.text(quoteNumber, R, 300, { align: "right" });
 
+      const pdfDataUri = doc.output("datauristring");
+      const pdfBase64 = pdfDataUri.includes(",") ? pdfDataUri.split(",")[1] : "";
       doc.save("XRAGENCY-Devis-" + quoteNumber + ".pdf");
       setGenerated(true);
-      setSendMessage(QUOTE_UI.pdfGeneratedSuccess[currentLang]);
+
+      let emailDelivered = false;
+      if (pdfBase64 && client.email) {
+        try {
+          const emailRes = await fetch("/api/send-quote", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              email: client.email,
+              name: client.name,
+              company: client.company,
+              whatsapp: client.whatsapp,
+              website: client.website,
+              quoteNumber,
+              pdfBase64,
+            }),
+          });
+          if (emailRes.ok) {
+            emailDelivered = true;
+          }
+        } catch {
+          emailDelivered = false;
+        }
+      }
+
+      if (emailDelivered) {
+        setSendMessage(
+          currentLang === "en"
+            ? `Your PDF quote (${quoteNumber}) has been downloaded and emailed to ${client.email}.`
+            : currentLang === "vi"
+              ? `Báo giá PDF (${quoteNumber}) đã được tải xuống và gửi tới ${client.email}.`
+              : currentLang === "ar"
+                ? `تم تنزيل عرض السعر PDF (${quoteNumber}) وإرساله إلى ${client.email}.`
+                : currentLang === "ru"
+                  ? `Ваш PDF-расчёт (${quoteNumber}) скачан и отправлен на ${client.email}.`
+                  : `Votre devis PDF (${quoteNumber}) a été téléchargé et envoyé par e-mail à ${client.email}.`
+        );
+      } else {
+        setSendMessage(QUOTE_UI.pdfGeneratedSuccess[currentLang]);
+      }
     } catch (error) {
       setSendMessage(error instanceof Error ? error.message : QUOTE_UI.pdfError[currentLang]);
     } finally {
@@ -476,7 +522,13 @@ export function QuoteConfiguratorCompact() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const requested = params.get("service");
-    const normalized = requested === "ecommerce" ? "website" : requested;
+    const aliasMap: Record<string, string> = {
+      ecommerce: "website",
+      websites: "website",
+      webcare: "maintenance",
+      robotique: "robotics",
+    };
+    const normalized = requested ? (aliasMap[requested] ?? requested) : null;
     if (normalized && SERVICES.some((x) => x.id === normalized)) {
       if (requested === "ecommerce") setSituation("selling");
       setSelectedServices((current) => current.includes(normalized) ? current : [normalized]);
@@ -752,7 +804,7 @@ export function QuoteConfiguratorCompact() {
 
                 {step === 3 && (
                   <div className="grid gap-2 sm:grid-cols-3">
-                    {BUDGETS.map(x => card(x, () => { setBudget(x.id); setSelectedServices([]); window.setTimeout(() => setStep(4), 180); }, x.id === budget))}
+                    {BUDGETS.map(x => card(x, () => { setBudget(x.id); window.setTimeout(() => setStep(4), 180); }, x.id === budget))}
                   </div>
                 )}
 
@@ -770,7 +822,7 @@ export function QuoteConfiguratorCompact() {
                     <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                       {orderedServices.map(x => {
                         const p = proposals.find(item => item.id === x.id);
-                        const deltaTag = p ? p.custom ? QUOTE_UI.onQuote[currentLang] : p.period === "month" ? `${p.price.toLocaleString("fr-FR")} €${QUOTE_UI.perMonth[currentLang]}` : p.id === "maps" ? `990 €${QUOTE_UI.perYear[currentLang]}` : `+${p.price.toLocaleString("fr-FR")} €` : undefined;
+                        const deltaTag = p ? p.custom ? QUOTE_UI.onQuote[currentLang] : p.period === "month" || p.id === "maps" ? `${p.price.toLocaleString("fr-FR")} €${QUOTE_UI.perMonth[currentLang]}` : `+${p.price.toLocaleString("fr-FR")} €` : undefined;
                         return card(x, () => toggleService(x.id), selectedServices.includes(x.id), deltaTag);
                       })}
                     </div>
@@ -800,9 +852,12 @@ export function QuoteConfiguratorCompact() {
                         const p = proposals.find(x => x.id === id);
                         return p ? (
                           <div key={id} className="flex items-center justify-between gap-3 rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3.5 py-2.5">
-                            <span className="text-xs font-semibold text-[var(--xr-ink)] truncate">{p.label}</span>
+                            <div className="min-w-0">
+                              <span className="block text-xs font-semibold text-[var(--xr-ink)] truncate">{p.label}</span>
+                              {p.commitment && <span className="block label-mono text-[6.5px] text-emerald-600 dark:text-emerald-400">{p.commitment}</span>}
+                            </div>
                             <span className="shrink-0 label-mono text-[7.5px] font-bold text-emerald-600 dark:text-emerald-400">
-                              {p.custom ? QUOTE_UI.onQuote[currentLang] : p.price.toLocaleString("fr-FR") + " €" + (p.period === "month" ? QUOTE_UI.perMonth[currentLang] : "")}
+                              {p.custom ? QUOTE_UI.onQuote[currentLang] : p.price.toLocaleString("fr-FR") + " €" + (p.id === "maps" ? QUOTE_UI.perYear[currentLang] : p.period === "month" ? QUOTE_UI.perMonth[currentLang] : "")}
                             </span>
                           </div>
                         ) : null;

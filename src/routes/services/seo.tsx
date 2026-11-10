@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, Check, ChevronDown, Search, ShieldCheck, Sparkles, TrendingUp } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, MessageCircle, Search, ShieldCheck, Sparkles, TrendingUp } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { useLang, type Lang, type L } from "@/lib/i18n";
 import { Nav } from "@/components/site/Nav";
+import { Contact } from "@/components/site/Contact";
+import { AddToCartBtn } from "@/components/site/Cart";
 import { ServiceIllustration } from "@/components/site/ServiceIllustration";
 
 export const Route = createFileRoute("/services/seo")({
@@ -71,14 +73,40 @@ function FeatureList({ features, t }: { features: Copy[]; t: (v: Copy) => string
 
 function PlanCard({ plan, t }: { plan: Plan; t: (v: Copy) => string; lang?: Lang }) {
   const { price } = useLang();
+  const planTitle = t(plan.name);
+  const waHref = `https://wa.me/33767566783?text=${encodeURIComponent(`Bonjour XR Agency, je souhaite parler de la formule SEO « ${planTitle} » (${plan.priceEur} € ${t(plan.period)}).`)}`;
   return <article className={`relative flex h-full flex-col rounded-3xl border p-6 sm:p-8 ${plan.popular ? "border-primary/60 bg-primary/[0.05] shadow-2xl shadow-primary/10" : "border-border bg-card/40"}`}>
     {plan.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-primary-foreground">{t(c("Le plus choisi", "Most popular", "Phổ biến nhất", "الأكثر طلباً", "Самый популярный"))}</div>}
     {plan.annual && <div className="mb-4 inline-flex w-fit rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.14em] text-primary">{t(c("Engagement annuel", "Annual programme", "Chương trình hàng năm", "برنامج سنوي", "Годовая программа"))}</div>}
-    <h3 className="text-2xl font-semibold tracking-tight">{t(plan.name)}</h3>
+    <h3 className="text-2xl font-semibold tracking-tight">{planTitle}</h3>
     <p className="mt-3 min-h-[48px] text-sm leading-6 text-muted-foreground">{t(plan.audience)}</p>
     <div className="mt-6 flex items-end gap-1 border-b border-border/70 pb-6"><span className="text-4xl font-semibold tracking-tight">{price(plan.priceEur)}</span><span className="pb-1 text-sm text-muted-foreground">{t(plan.period)}</span></div>
     <div className="mt-6 flex-1"><FeatureList features={plan.features} t={t} /></div>
-    <CTA href="/#quote">{t(c("Choisir cette formule", "Choose this plan", "Chọn gói này", "اختر هذه الباقة", "Выбрать этот тариф"))}</CTA>
+    <div className="mt-8 space-y-2.5">
+      <AddToCartBtn
+        item={{
+          serviceId: "seo",
+          serviceName: "SEO & Domination Google",
+          planName: planTitle,
+          priceEur: plan.priceEur,
+          period: plan.annual ? "year" : "month",
+          periodLabel: t(plan.period),
+          commitment: plan.annual
+            ? t(c("Engagement : 12 mois", "12-month programme", "Cam kết 12 tháng", "التزام 12 شهراً", "Программа 12 мес"))
+            : t(c("Sans engagement initial", "No initial lock-in", "Không cam kết ban đầu", "بدون التزام أولي", "Без обязательств")),
+        }}
+        popular={plan.popular}
+      />
+      <a
+        href={waHref}
+        target="_blank"
+        rel="noreferrer"
+        className="flex w-full items-center justify-center gap-2 rounded-full border border-border bg-card/50 py-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+      >
+        <MessageCircle className="h-3.5 w-3.5" />
+        {t(c("Parler de cette formule", "Discuss this plan", "Trao đổi về gói này", "ناقش هذه الباقة", "Обсудить тариф"))}
+      </a>
+    </div>
   </article>;
 }
 
@@ -107,6 +135,7 @@ function SEOPage() {
 
     <section className="border-t border-border/60 py-20 sm:py-24"><div className="mx-auto max-w-4xl px-5 sm:px-8"><div className="text-center"><p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-primary">FAQ</p><h2 className="mt-3 text-3xl font-semibold">{t(c("Questions fréquentes", "Frequently asked questions", "Câu hỏi thường gặp"))}</h2></div><div className="mt-10 divide-y divide-border rounded-2xl border border-border">{faq.map(([question, answer], i) => <div key={i}><button type="button" onClick={() => setOpenFaq(openFaq === i ? null : i)} className="flex w-full items-center justify-between gap-6 p-5 text-left text-sm font-medium"><span>{t(question)}</span><ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${openFaq === i ? "rotate-180 text-primary" : ""}`} /></button>{openFaq === i && <div className="px-5 pb-5 text-sm leading-7 text-muted-foreground">{t(answer)}</div>}</div>)}</div></div></section>
 
-    <section className="px-5 pb-24 pt-8 sm:px-8"><div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-primary/30 bg-primary p-8 text-center text-primary-foreground shadow-2xl shadow-primary/15 sm:p-12"><h2 className="text-3xl font-semibold tracking-tight sm:text-5xl">{t(c("Votre prochain client vous cherche déjà.", "Your next customer is already searching.", "Khách hàng tiếp theo của bạn đang tìm kiếm."))}</h2><p className="mx-auto mt-4 max-w-2xl text-sm leading-6 opacity-85">{t(c("La question n'est pas de savoir si vos clients cherchent. C'est de savoir s'ils vous trouvent, ou trouvent votre concurrent.", "The question is not whether customers search. It is whether they find you or your competitor.", "Vấn đề không phải khách hàng có tìm kiếm hay không. Mà là họ tìm thấy bạn hay đối thủ."))}</p><div className="mt-8"><a href="/#quote" className="group inline-flex items-center gap-2 rounded-full bg-background px-7 py-4 text-[10px] font-bold uppercase tracking-[0.15em] text-foreground transition-transform hover:-translate-y-0.5">{t(c("Construire ma stratégie SEO", "Build my SEO strategy", "Xây dựng chiến lược SEO"))}<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></a></div></div></section>
+    <section className="px-5 pb-16 pt-8 sm:px-8"><div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-primary/30 bg-primary p-8 text-center text-primary-foreground shadow-2xl shadow-primary/15 sm:p-12"><h2 className="text-3xl font-semibold tracking-tight sm:text-5xl">{t(c("Votre prochain client vous cherche déjà.", "Your next customer is already searching.", "Khách hàng tiếp theo của bạn đang tìm kiếm."))}</h2><p className="mx-auto mt-4 max-w-2xl text-sm leading-6 opacity-85">{t(c("La question n'est pas de savoir si vos clients cherchent. C'est de savoir s'ils vous trouvent, ou trouvent votre concurrent.", "The question is not whether customers search. It is whether they find you or your competitor.", "Vấn đề không phải khách hàng có tìm kiếm hay không. Mà là họ tìm thấy bạn hay đối thủ."))}</p><div className="mt-8"><a href="/#quote" className="group inline-flex items-center gap-2 rounded-full bg-background px-7 py-4 text-[10px] font-bold uppercase tracking-[0.15em] text-foreground transition-transform hover:-translate-y-0.5">{t(c("Construire ma stratégie SEO", "Build my SEO strategy", "Xây dựng chiến lược SEO"))}<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></a></div></div></section>
+    <Contact />
   </main></div>;
 }

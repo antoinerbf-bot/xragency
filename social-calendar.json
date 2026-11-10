@@ -1,0 +1,56 @@
+[
+  {
+    "id": "auto_1793966954261_0",
+    "created_at": "2026-11-06T12:09:14.261Z",
+    "theme": "Configurateur IA de Devis",
+    "status": "published",
+    "tiktok": {
+      "hook": "Pourquoi les devis d'agences prennent 3 jours alors qu'on peut en avoir un en 30 secondes ?",
+      "script": "Plan 1 (0-3s) : Gros plan sur l'écran avec le curseur qui bouge sur xragencyai.com.\nPlan 2 (3-8s) : Ajustement en temps réel des modules (Site 3D, Agent IA, Automations).\nPlan 3 (8-15s) : Le prix et le calendrier se calculent en direct. Voix off : 'Lien en bio pour tester le tien gratuitement.'"
+    },
+    "instagram": {
+      "caption": "Combien coûte un site web nouvelle génération ou une solution IA en 2026 ? 🚀\n\nChez XR Agency, on a automatisé tout le processus : notre configurateur intelligent calcule votre devis en direct.\n\n✨ 3D temps réel\n⚡ Stack ultra-rapide (React 19 / TanStack)\n🤖 Intégration d'agents IA autonomes\n\n👉 Testez-le en direct : xragencyai.com (lien en bio)\n\n#agenceia #webdesign #tanstack #react #automation #intelligenceartificielle #tech"
+    },
+    "facebook": {
+      "post": "Finies les attentes de 3 jours pour recevoir une proposition commerciale.\n\nSur notre nouvelle plateforme XR Agency, configurez votre projet digital en temps réel (Site Web 3D immersif, Agent IA autonome, Automatisation métier) et obtenez un chiffrage immédiat.\n\n👉 Découvrir la démo en direct : https://xragencyai.com"
+    },
+    "target_site": "https://xragencyai.com",
+    "published_at": "2026-11-06T12:09:28.089Z"
+  },
+  {
+    "id": "auto_1793966954264_1",
+    "created_at": "2026-11-06T12:09:14.264Z",
+    "theme": "Agents IA Autonomes en Entreprise",
+    "status": "published",
+    "tiktok": {
+      "hook": "Voici comment une IA qualifie des prospects et gère le CRM 24h/24 sans jamais dormir.",
+      "script": "Plan 1 (0-3s) : Alerte prospect reçue à 2h du matin.\nPlan 2 (3-9s) : L'agent IA analyse le besoin, vérifie le calendrier et booke un appel qualifié.\nPlan 3 (9-15s) : Tableau de bord des leads convertis. CTA : 'Toutes les infos sur xragencyai.com'"
+    },
+    "instagram": {
+      "caption": "Automatiser 80% des tâches répétitives de son entreprise, c'est possible dès aujourd'hui ⚡\n\nOn déploie des agents IA connectés directement à vos bases de données, CRM et réseaux pour qualifier et convertir vos prospects en continu.\n\nDécouvrez nos architectures sur xragencyai.com 🔥\n\n#ia #agentsia #automation #crm #businessonline #entrepreneuriat #productivite"
+    },
+    "facebook": {
+      "post": "Comment les entreprises modernes automatisent leurs opérations avec des agents IA sur-mesure.\n\nDe la qualification automatique de leads au support client autonome 24/7, découvrez nos études de cas et solutions sur https://xragencyai.com"
+    },
+    "target_site": "https://xragencyai.com",
+    "published_at": "2026-11-06T12:09:28.090Z"
+  },
+  {
+    "id": "auto_1793966954264_2",
+    "created_at": "2026-11-06T12:09:14.264Z",
+    "theme": "Sites Web Immersifs & 3D Temps Réel",
+    "status": "published",
+    "tiktok": {
+      "hook": "Les sites web en 2026 ressemblent à ça, et votre site actuel a pris 10 ans d'un coup.",
+      "script": "Plan 1 (0-3s) : Scroll ultra-fluide avec interaction 3D dynamique.\nPlan 2 (3-9s) : Transitions cinématiques et vitesse de chargement instantanée.\nPlan 3 (9-15s) : 'Ton site convertit ou il fait fuir tes visiteurs ? Rendez-vous sur xragencyai.com pour un audit gratuit.'"
+    },
+    "instagram": {
+      "caption": "Pourquoi se contenter d'un template classique quand votre marque peut offrir une expérience visuelle digne d'un film ? 🎬✨\n\nFluidité 120 FPS, 3D interactive, temps de chargement éclair.\n\nExplorez nos réalisations sur xragencyai.com\n\n#webgl #threejs #uxdesign #webdesigninspiration #creativecoding #luxurybrand"
+    },
+    "facebook": {
+      "post": "L'immersion visuelle au service de votre taux de conversion.\n\nDécouvrez comment nous concevons des plateformes web immersives alliant performance technique extrême et design cinématique.\n\nVisitez https://xragencyai.com"
+    },
+    "target_site": "https://xragencyai.com",
+    "published_at": "2026-11-06T12:09:28.090Z"
+  }
+]

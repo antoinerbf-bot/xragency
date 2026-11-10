@@ -373,6 +373,7 @@ export function MapsSimulator() {
   const [citySize, setCitySize] = useState(CITY_SIZES[0].id);
   const [keywords, setKeywords] = useState(KEYWORD_RANGES[0].id);
   const [rank, setRank] = useState(CURRENT_RANKS[0].id);
+  const [selectedPlanId, setSelectedPlanId] = useState<"growth" | "domination" | "annual">("domination");
 
   useEffect(() => {
     if (!funnel?.sector) return;
@@ -438,41 +439,62 @@ export function MapsSimulator() {
     };
   }, [citySize, keywords, sector, lang]);
 
+  const PLAN_OPTIONS = {
+    growth: {
+      name: "Pack Gestion & Croissance Locale",
+      priceDisplay: "99 € / mois",
+      detail: "Audit GBP, 4 Google Posts mensuels SEO, modération des avis et rapport mensuel.",
+      badge: "GESTION 99€/M",
+    },
+    domination: {
+      name: "Pack Domination Top 3 & Acquisition",
+      priceDisplay: "159 € / mois",
+      detail: "Engagement Top 3 Garanti, 8 posts SEO, Geotagging EXIF, +40 annuaires & Plaque NFC offerte.",
+      badge: "MACHINE À CASH · TOP 3",
+    },
+    annual: {
+      name: "Pack Annuel Sérénité",
+      priceDisplay: "990 € / an",
+      detail: "Paiement annuel en 1 fois : économisez 198 € (2 mois offerts par rapport à la mensualisation).",
+      badge: "2 MOIS OFFERTS",
+    },
+  };
+
   const waPrefill = encodeURIComponent(({
     fr: `Bonjour XR Agency, je souhaite une étude Google Maps Top 3 sur mesure.\n\n` +
       `• Secteur : ${sectorLabel}\n` +
       `• Taille de ville : ${cityLabel}\n` +
       `• Mots-clés : ${kwLabel}\n` +
-      `• Position actuelle : ${rankLabel}\n\n` +
-      `Référence de départ : à partir de 990 € / an · devis sur mesure\n\n` +
+      `• Position actuelle : ${rankLabel}\n` +
+      `• Formule sélectionnée : ${PLAN_OPTIONS[selectedPlanId].name} (${PLAN_OPTIONS[selectedPlanId].priceDisplay})\n\n` +
       `Pouvons-nous lancer l'audit personnalisé ?`,
     en: `Hello XR Agency, I would like a tailored Google Maps Top 3 study.\n\n` +
       `• Industry: ${sectorLabel}\n` +
       `• City size: ${cityLabel}\n` +
       `• Keywords: ${kwLabel}\n` +
-      `• Current ranking: ${rankLabel}\n\n` +
-      `Starting benchmark: from €990 / year · tailored quote\n\n` +
+      `• Current ranking: ${rankLabel}\n` +
+      `• Selected Plan: ${PLAN_OPTIONS[selectedPlanId].name} (${PLAN_OPTIONS[selectedPlanId].priceDisplay})\n\n` +
       `Can we start the personalised audit?`,
     vi: `Xin chào XR Agency, tôi muốn được tư vấn gói Google Maps Top 3 theo yêu cầu.\n\n` +
       `• Lĩnh vực: ${sectorLabel}\n` +
       `• Quy mô thành phố: ${cityLabel}\n` +
       `• Từ khóa: ${kwLabel}\n` +
-      `• Thứ hạng hiện tại: ${rankLabel}\n\n` +
-      `Mức tham khảo: từ 990 € / năm · báo giá theo yêu cầu\n\n` +
+      `• Thứ hạng hiện tại: ${rankLabel}\n` +
+      `• Gói đã chọn: ${PLAN_OPTIONS[selectedPlanId].name} (${PLAN_OPTIONS[selectedPlanId].priceDisplay})\n\n` +
       `Chúng ta có thể bắt đầu kiểm toán cá nhân hóa không?`,
     ar: `مرحبًا XR Agency، أود الحصول على دراسة مخصصة لبلوغ أفضل 3 مراتب على Google Maps.\n\n` +
       `• مجال النشاط: ${sectorLabel}\n` +
       `• حجم المدينة: ${cityLabel}\n` +
       `• الكلمات المفتاحية: ${kwLabel}\n` +
-      `• الترتيب الحالي: ${rankLabel}\n\n` +
-      `المرجع المبدئي: ابتداءً من 990 € سنويًا · عرض مخصص\n\n` +
+      `• الترتيب الحالي: ${rankLabel}\n` +
+      `• الباقة المختارة: ${PLAN_OPTIONS[selectedPlanId].name} (${PLAN_OPTIONS[selectedPlanId].priceDisplay})\n\n` +
       `هل يمكننا بدء التدقيق المخصص؟`,
     ru: `Здравствуйте, XR Agency! Хочу заказать индивидуальный расчёт по выводу в топ-3 Google Maps.\n\n` +
       `• Сфера: ${sectorLabel}\n` +
       `• Размер города: ${cityLabel}\n` +
       `• Ключевые слова: ${kwLabel}\n` +
-      `• Текущая позиция: ${rankLabel}\n\n` +
-      `Базовый ориентир: от 990 € в год · индивидуальный расчёт\n\n` +
+      `• Текущая позиция: ${rankLabel}\n` +
+      `• Выбранный тариф: ${PLAN_OPTIONS[selectedPlanId].name} (${PLAN_OPTIONS[selectedPlanId].priceDisplay})\n\n` +
       `Можем ли мы запустить персональный аудит?`,
   } as const)[(lang as "fr" | "en" | "vi" | "ar" | "ru")] ?? `Bonjour XR Agency, je souhaite une étude Google Maps Top 3 sur mesure.`);
 
@@ -859,51 +881,128 @@ export function MapsSimulator() {
                 </div>
               </div>
 
-              {/* ── Dynamic Price Result ── */}
-              <div className="rounded-2xl border-2 border-primary/30 bg-[var(--xr-ink)]/5 p-5 sm:p-6">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="label-mono text-xs text-muted-foreground">{tx("Budget indicatif · à partir de 990 € / an")}</p>
-                    <div className="mt-1 flex items-baseline gap-2">
-                      <span
-                        key={animMin}
-                        className="display-serif text-3xl font-bold text-[var(--xr-ink)] sm:text-4xl animate-price-reveal"
-                      >
-                        {formatEur(animMin)}
+              {/* ── 3 Selectable Conversion Plans (99€/m · 159€/m · 990€/an) ── */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="label-mono text-xs text-[var(--xr-ink)] font-bold uppercase tracking-wider">
+                    Sélectionnez votre formule d'acquisition locale :
+                  </span>
+                  <span className="label-mono text-[7px] text-emerald-500 font-bold">
+                    GARANTIE CONTRACTUELLE OU REMBOURSÉ
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                  {/* Plan 1: 99 € / m */}
+                  <div
+                    onClick={() => setSelectedPlanId("growth")}
+                    className={cn(
+                      "cursor-pointer rounded-2xl border p-4 transition-all duration-300 relative",
+                      selectedPlanId === "growth"
+                        ? "border-emerald-500 bg-emerald-500/10 shadow-lg ring-1 ring-emerald-500/30"
+                        : "border-border bg-card/60 hover:border-emerald-500/40"
+                    )}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="label-mono text-[6.5px] font-bold text-muted-foreground uppercase">
+                        {PLAN_OPTIONS.growth.badge}
                       </span>
-                      <span className="display-serif text-xl text-[var(--xr-ink)]/60">–</span>
-                      <span
-                        key={animMax}
-                        className="display-serif text-3xl font-bold text-[var(--xr-ink)] sm:text-4xl animate-price-reveal"
-                      >
-                        {formatEur(animMax)}
-                      </span>
-                      <span className="label-mono text-xs text-muted-foreground">{tx("/ an")}</span>
+                      {selectedPlanId === "growth" && (
+                        <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                      )}
                     </div>
-                    <p className="mt-1.5 text-xs text-muted-foreground/70">
-                      {tx("Estimation indicative · tarif exact après audit personnalisé")}
+                    <h5 className="mt-2 text-sm font-bold text-foreground">{PLAN_OPTIONS.growth.name}</h5>
+                    <div className="mt-1 flex items-baseline gap-1">
+                      <span className="display-serif text-2xl font-bold text-foreground">99 €</span>
+                      <span className="label-mono text-[8px] text-muted-foreground">/ mois</span>
+                    </div>
+                    <p className="mt-2 text-[9px] leading-relaxed text-muted-foreground">
+                      {PLAN_OPTIONS.growth.detail}
                     </p>
                   </div>
 
-                  <div className="flex flex-col gap-2 sm:items-end">
-                    {/* Guarantee badge */}
-                    <div className="flex items-center gap-2 rounded-xl border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-3 py-2">
-                      <ShieldCheck className="h-4 w-4 shrink-0 text-[var(--xr-ink)]" />
-                      <span className="label-mono text-[10px] font-bold text-[var(--xr-ink)]">
-                        {tx("Objectif Top 3 · étude locale sur mesure")}
-                      </span>
+                  {/* Plan 2: 159 € / m (Popular) */}
+                  <div
+                    onClick={() => setSelectedPlanId("domination")}
+                    className={cn(
+                      "cursor-pointer rounded-2xl border p-4 transition-all duration-300 relative",
+                      selectedPlanId === "domination"
+                        ? "border-emerald-500 bg-emerald-500/15 shadow-xl ring-2 ring-emerald-500/50"
+                        : "border-border bg-card/60 hover:border-emerald-500/50"
+                    )}
+                  >
+                    <div className="absolute -top-2.5 right-4 rounded-full bg-emerald-500 px-2.5 py-0.5 label-mono text-[6.5px] font-black text-black shadow-md">
+                      POPULAIRE · ROI MAX
                     </div>
-                    <a
-                      href={`${CONTACT.whatsapp}?text=${waPrefill}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="label-mono inline-flex items-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-2.5 text-xs font-semibold text-[var(--xr-bg)] transition-all duration-200 hover:bg-[var(--xr-ink)]/90 hover:-translate-y-0.5 hover:shadow-lg"
-                    >
-                      <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
-                      {tx("Lancer mon audit gratuit")}
-                    </a>
+                    <div className="flex items-center justify-between">
+                      <span className="label-mono text-[6.5px] font-bold text-emerald-400 uppercase">
+                        {PLAN_OPTIONS.domination.badge}
+                      </span>
+                      {selectedPlanId === "domination" && (
+                        <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                      )}
+                    </div>
+                    <h5 className="mt-2 text-sm font-black text-foreground">{PLAN_OPTIONS.domination.name}</h5>
+                    <div className="mt-1 flex items-baseline gap-1">
+                      <span className="display-serif text-2xl font-black text-emerald-400">159 €</span>
+                      <span className="label-mono text-[8px] text-muted-foreground">/ mois</span>
+                    </div>
+                    <p className="mt-2 text-[9px] leading-relaxed text-muted-foreground">
+                      {PLAN_OPTIONS.domination.detail}
+                    </p>
+                  </div>
+
+                  {/* Plan 3: 990 € / an */}
+                  <div
+                    onClick={() => setSelectedPlanId("annual")}
+                    className={cn(
+                      "cursor-pointer rounded-2xl border p-4 transition-all duration-300 relative",
+                      selectedPlanId === "annual"
+                        ? "border-emerald-500 bg-emerald-500/10 shadow-lg ring-1 ring-emerald-500/30"
+                        : "border-border bg-card/60 hover:border-emerald-500/40"
+                    )}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="label-mono text-[6.5px] font-bold text-amber-400 uppercase">
+                        {PLAN_OPTIONS.annual.badge}
+                      </span>
+                      {selectedPlanId === "annual" && (
+                        <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                      )}
+                    </div>
+                    <h5 className="mt-2 text-sm font-bold text-foreground">{PLAN_OPTIONS.annual.name}</h5>
+                    <div className="mt-1 flex items-baseline gap-1">
+                      <span className="display-serif text-2xl font-bold text-foreground">990 €</span>
+                      <span className="label-mono text-[8px] text-muted-foreground">/ an (comptant)</span>
+                    </div>
+                    <p className="mt-2 text-[9px] leading-relaxed text-muted-foreground">
+                      {PLAN_OPTIONS.annual.detail}
+                    </p>
                   </div>
                 </div>
+
+                {/* Selected CTA Bar */}
+                <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4">
+                  <div>
+                    <span className="label-mono text-[7px] text-emerald-400 font-bold block uppercase">
+                      Formule validée : {PLAN_OPTIONS[selectedPlanId].name}
+                    </span>
+                    <p className="text-xs text-foreground mt-0.5">
+                      Tarif contractuel : <span className="font-bold text-emerald-400">{PLAN_OPTIONS[selectedPlanId].priceDisplay}</span> · Audit personnalisé offert
+                    </p>
+                  </div>
+
+                  <a
+                    href={`${CONTACT.whatsapp}?text=${waPrefill}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="label-mono inline-flex items-center justify-center gap-2 rounded-full bg-emerald-500 px-6 py-3 text-xs font-black text-black transition-all duration-200 hover:bg-emerald-400 hover:-translate-y-0.5 hover:shadow-lg"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    Réserver ma place pour {PLAN_OPTIONS[selectedPlanId].priceDisplay}
+                  </a>
+                </div>
+              </div>
 
                 {/* Trust signals */}
                 <div className="mt-4 flex flex-wrap gap-3 border-t border-[var(--xr-ink)]/20 pt-4">
@@ -921,7 +1020,6 @@ export function MapsSimulator() {
                 </div>
               </div>
             </div>
-          </div>
         </Reveal>
 
         {/* ── 7-Phase Methodology ── */}

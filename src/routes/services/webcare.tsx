@@ -4,6 +4,7 @@ import { Nav } from "@/components/site/Nav";
 import { ServiceIllustration } from "@/components/site/ServiceIllustration";
 import { Parallax } from "@/components/site/primitives";
 import { Contact } from "@/components/site/Contact";
+import { AddToCartBtn } from "@/components/site/Cart";
 import { XR_PHOTOS } from "@/lib/photography";
 import { useLang, type Lang } from "@/lib/i18n";
 
@@ -311,6 +312,19 @@ function WebCarePage() {
               <div className="mt-5 flex items-end gap-2"><span className="display-serif text-6xl text-primary">79 €</span><span className="mb-2 label-mono text-[9px] text-muted-foreground">/ an</span></div>
               <p className="mt-4 text-sm leading-6 text-muted-foreground">{tx("XR Agency gère l'hébergement, le nom de domaine et la sécurité de l'infrastructure.")}</p>
               <div className="mt-5 grid gap-2 sm:grid-cols-3">{["Hébergement","Nom de domaine","Sécurité"].map(x=><div key={x} className="rounded-xl border border-border bg-background/70 p-3 text-center text-[10px] font-medium">{tx(x)}</div>)}</div>
+              <div className="mt-5">
+                <AddToCartBtn
+                  item={{
+                    serviceId: "webcare-infra",
+                    serviceName: "WebCare Infrastructure",
+                    planName: tx("Infrastructure annuelle"),
+                    priceEur: 79,
+                    period: "year",
+                    periodLabel: "/ an",
+                    commitment: "Abonnement annuel",
+                  }}
+                />
+              </div>
             </div>
             <div className="rounded-[2rem] border border-border bg-card/60 p-7">
               <div className="flex items-center gap-3"><ShieldCheck className="h-6 w-6 text-primary"/><span className="label-mono text-[10px] uppercase tracking-[.18em] text-primary">{tx("À retenir")}</span></div>
@@ -331,7 +345,7 @@ function WebCarePage() {
         <div className="mx-auto max-w-7xl px-5 lg:px-10">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"><div><span className="label-mono text-[10px] uppercase tracking-[0.25em] text-primary">{tx("Maintenance mensuelle")}</span><h2 className="display-serif mt-4 text-4xl sm:text-6xl">{tx("Choisissez votre niveau")}<br/>{tx("d'accompagnement.")}</h2></div><p className="max-w-md text-sm leading-6 text-muted-foreground">{tx("Les volumes concernent les demandes courantes. Les travaux hors périmètre restent séparés pour préserver une charge de travail réaliste.")}</p></div>
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
-            {plans.map((plan,index)=><article key={plan.name} className={`rounded-[1.75rem] border p-7 transition-all hover:-translate-y-1 hover:shadow-2xl sm:p-8 ${index===1?"border-primary/50 bg-primary/[0.05]":"border-border bg-card/60"}`}><div className="flex items-center justify-between"><span className="label-mono text-[9px] text-primary">0{index+1}</span>{index===1&&<span className="label-mono rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[8px] text-primary">{tx("ÉQUILIBRE")}</span>}</div><h3 className="display-serif mt-7 text-3xl">{tx(plan.name)}</h3><p className="mt-2 text-xs text-muted-foreground">{tx(plan.badge)}</p><div className="mt-6 flex items-end gap-2 border-y border-border py-5"><span className="display-serif text-5xl text-primary">{plan.price} €</span><span className="label-mono mb-1 text-[9px] text-muted-foreground">/ mois</span></div><ul className="mt-6 space-y-3">{plan.features.map(feature=><li key={tx(feature)} className="flex gap-3 text-sm leading-5 text-muted-foreground"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary"/>{tx(feature)}</li>)}</ul><a href={`https://wa.me/33767566783?text=${encodeURIComponent(`Bonjour XR Agency, je souhaite parler du forfait WebCare « ${plan.name} » à ${plan.price} €/mois.`)}`} target="_blank" rel="noreferrer" className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-5 py-3.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">{tx("Parler à XR Agency")} <ArrowRight className="h-4 w-4"/></a></article>)}
+            {plans.map((plan,index)=><article key={plan.name} className={`flex flex-col rounded-[1.75rem] border p-7 transition-all hover:-translate-y-1 hover:shadow-2xl sm:p-8 ${index===1?"border-primary/50 bg-primary/[0.05]":"border-border bg-card/60"}`}><div className="flex items-center justify-between"><span className="label-mono text-[9px] text-primary">0{index+1}</span>{index===1&&<span className="label-mono rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[8px] text-primary">{tx("ÉQUILIBRE")}</span>}</div><h3 className="display-serif mt-7 text-3xl">{tx(plan.name)}</h3><p className="mt-2 text-xs text-muted-foreground">{tx(plan.badge)}</p><div className="mt-6 flex items-end gap-2 border-y border-border py-5"><span className="display-serif text-5xl text-primary">{plan.price} €</span><span className="label-mono mb-1 text-[9px] text-muted-foreground">{tx("/ mois")}</span></div><ul className="mt-6 flex-1 space-y-3">{plan.features.map(feature=><li key={tx(feature)} className="flex gap-3 text-sm leading-5 text-muted-foreground"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary"/>{tx(feature)}</li>)}</ul><div className="mt-8 space-y-2.5"><AddToCartBtn item={{serviceId:"maintenance",serviceName:"WebCare Maintenance",planName:tx(plan.name),priceEur:plan.price,period:"month",periodLabel:tx("/ mois"),commitment:"Sans engagement"}} popular={index===1}/><a href={`https://wa.me/33767566783?text=${encodeURIComponent(`Bonjour XR Agency, je souhaite parler du forfait WebCare « ${plan.name} » à ${plan.price} €/mois.`)}`} target="_blank" rel="noreferrer" className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border bg-card/50 px-5 py-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground transition hover:border-primary/40 hover:text-foreground">{tx("Parler à XR Agency")} <ArrowRight className="h-4 w-4"/></a></div></article>)}
           </div>
         </div>
       </section>

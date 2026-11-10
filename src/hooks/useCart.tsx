@@ -8,6 +8,7 @@ export interface CartItem {
   priceEur: number;
   period: "once" | "month" | "year";
   periodLabel: string;
+  commitment?: string;
 }
 
 interface CartContextValue {
@@ -31,8 +32,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addItem = useCallback((item: CartItem) => {
     setItems((prev) => {
-      // Replace if same service+plan already in cart
-      const exists = prev.findIndex((i) => i.id === item.id);
+      // Replace if same id or same serviceId already in cart to avoid duplicate plans of the same service
+      const exists = prev.findIndex((i) => i.id === item.id || i.serviceId === item.serviceId);
       if (exists >= 0) {
         const updated = [...prev];
         updated[exists] = item;

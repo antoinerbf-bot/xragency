@@ -16,10 +16,10 @@ type CheckoutBody = {
 const BASE_PRICES: Record<string, number> = {
   website: 499,
   branding: 199,
-  seo: 199,
-  maps: 990,
+  seo: 299,
+  maps: 99,
   ads: 299,
-  social: 299,
+  social: 349,
   content: 399,
   conversion: 299,
   maintenance: 29,

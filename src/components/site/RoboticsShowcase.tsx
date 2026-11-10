@@ -3,6 +3,7 @@ import { ArrowRight, Bot, ExternalLink, Sparkles, ShieldCheck } from "lucide-rea
 import { Link } from "@tanstack/react-router";
 import { CONTACT } from "@/lib/content";
 import { useLang, type Lang } from "@/lib/i18n";
+import { AddToCartBtn } from "@/components/site/Cart";
 
 
 const ROBOTICS_UI: Record<Lang, Record<string, string>> = {
@@ -261,7 +262,23 @@ export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
             <ShieldCheck className="h-5 w-5 text-white/55"/>
             <h3 className="display-serif mt-5 text-4xl">{tx("Location ou achat.")}</h3>
             <p className="mt-4 text-sm leading-6 text-white/45">Korben annonce des locations sur mesure à partir de 499 €/mois, une fourchette d’achat de 8 000 à 21 000 € HT selon le modèle et des locations événementielles à partir de 250 €.</p>
-            <a href={wa("Bonjour XRAGENCY, je veux connaître les conditions de location d'un robot Korben pour mon entreprise.")} target="_blank" rel="noreferrer" className="mt-7 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3.5 label-mono text-[9px] font-semibold tracking-[.12em] text-black">{tx("Demander une offre")} <ArrowRight className="h-4 w-4"/></a>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="sm:w-64">
+                <AddToCartBtn
+                  item={{
+                    serviceId: "robotics",
+                    serviceName: "Robotique de service × Korben",
+                    planName: `Location (${active.name})`,
+                    priceEur: 499,
+                    period: "month",
+                    periodLabel: "/ mois",
+                    commitment: "Location mensuelle sur mesure",
+                  }}
+                  popular
+                />
+              </div>
+              <a href={wa(`Bonjour XRAGENCY, je veux connaître les conditions de location du robot Korben ${active.name} pour mon entreprise.`)} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-3.5 label-mono text-[9px] font-semibold tracking-[.12em] text-white hover:bg-white hover:text-black transition">{tx("Demander une offre")} <ArrowRight className="h-4 w-4"/></a>
+            </div>
           </div>
         </div>
 

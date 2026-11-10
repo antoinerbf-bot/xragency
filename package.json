@@ -10,7 +10,10 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "start": "node .output/server/index.mjs"
+    "start": "node .output/server/index.mjs",
+    "social:mcp": "node scripts/mcp-social-server.js",
+    "social:generate": "node scripts/generate-social-posts.js",
+    "social:publish": "node scripts/publish-social.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

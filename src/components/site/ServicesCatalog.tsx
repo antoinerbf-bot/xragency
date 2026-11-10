@@ -33,6 +33,7 @@ const HREF: Record<string, string> = {
   maps: "/services/maps",
   social: "/services/social",
   maintenance: "/services/webcare",
+  robotics: "/services/robotique",
 };
 
 export function ServicesCatalog() {

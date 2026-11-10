@@ -108,7 +108,7 @@ function GenericServiceDetailPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const isCustomMaps = service.id === "maps";
+  const isCustomMaps = false;
   const planForWa = service.plans[selectedPlanIndex];
   const planIsInstallmentWa =
     service.id === "websites" &&
@@ -440,7 +440,7 @@ function GenericServiceDetailPage() {
                             <MessageCircle className="h-4 w-4" />
                             {t({ fr: "Cadrer mon projet sur devis", en: "Scope my project on quote", vi: "Tư vấn báo giá dự án", ar: "تحديد نطاق المشروع بعرض سعر", ru: "Обсудить проект по смете" })}
                           </a>
-                        ) : !isCustomMaps ? (
+                        ) : (
                           <AddToCartBtn
                             item={{
                               serviceId: service.id,
@@ -449,10 +449,15 @@ function GenericServiceDetailPage() {
                               priceEur: displayPrice,
                               period: displayPeriod,
                               periodLabel: t(PERIOD_LABEL[displayPeriod]),
+                              commitment: planIsInstallment
+                                ? t({ fr: "Engagement : 12 mois", en: "12-month commitment", vi: "Cam kết 12 tháng", ar: "التزام 12 شهراً", ru: "Обязательство 12 мес" })
+                                : displayPeriod === "year"
+                                  ? t({ fr: "Abonnement annuel", en: "Annual plan", vi: "Gói hàng năm", ar: "اشتراك سنوي", ru: "Годовой пакет" })
+                                  : undefined,
                             }}
                             popular={p.popular}
                           />
-                        ) : null}
+                        )}
                         {!p.isQuoteOnly && (
                           <a
                             href={planWaUrl}
