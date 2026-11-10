@@ -576,7 +576,7 @@ export function MapsSimulator() {
                   {tx("Visite virtuelle")}
                 </span>
                 <span className="ml-auto label-mono text-[7px] text-muted-foreground">
-                  {roiMetrics.baseSearches.toLocaleString()} {tx("Recherches locales / mois")}
+                  {roiMetrics.baseSearches.toLocaleString("fr-FR")} {tx("Recherches locales / mois")}
                 </span>
               </div>
             </div>
@@ -860,12 +860,12 @@ export function MapsSimulator() {
                 <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
                   <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3">
                     <span className="label-mono text-[6.5px] text-muted-foreground">{tx("Recherches locales / mois")}</span>
-                    <p className="mt-1 text-base font-bold text-foreground">{roiMetrics.baseSearches.toLocaleString()}</p>
+                    <p className="mt-1 text-base font-bold text-foreground">{roiMetrics.baseSearches.toLocaleString("fr-FR")}</p>
                     <span className="text-[8px] text-muted-foreground">Volume ciblé</span>
                   </div>
                   <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3">
                     <span className="label-mono text-[6.5px] text-muted-foreground">{tx("Trafic capté par le Top 3")}</span>
-                    <p className="mt-1 text-base font-bold text-emerald-500 font-mono">+{roiMetrics.top3Captured.toLocaleString()}</p>
+                    <p className="mt-1 text-base font-bold text-emerald-500 font-mono">+{roiMetrics.top3Captured.toLocaleString("fr-FR")}</p>
                     <span className="text-[8px] text-muted-foreground">Vues directes (38%)</span>
                   </div>
                   <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3">

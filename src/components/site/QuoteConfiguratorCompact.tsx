@@ -234,9 +234,9 @@ export function QuoteConfiguratorCompact() {
       const commitment = service.id === "social"
         ? ({ fr: "Engagement : 3 mois", en: "3-month commitment", vi: "Cam kết 3 tháng", ar: "التزام 3 أشهر", ru: "Обязательство 3 мес" }[currentLang])
         : service.id === "maps"
-          ? ({ fr: "Abonnement annuel", en: "Annual plan", vi: "Gói hàng năm", ar: "اشتراك سنوي", ru: "Годовой пакет" }[currentLang])
+          ? ({ fr: "Abonnement mensuel", en: "Monthly plan", vi: "Gói hàng tháng", ar: "اشتراك شهري", ru: "Ежемесячный тариф" }[currentLang])
           : undefined;
-      return { id: service.id, label, detail, price, period: service.id === "seo" || service.id === "social" || service.id === "maintenance" || service.id === "robotics" ? "month" : "once", custom: false, commitment };
+      return { id: service.id, label, detail, price, period: service.id === "maps" || service.id === "seo" || service.id === "social" || service.id === "maintenance" || service.id === "robotics" ? "month" : "once", custom: false, commitment };
     });
   }, [orderedServices, situation, budget, sectorId, currentLang, websiteTiers, brandingTiers]);
 
@@ -380,12 +380,12 @@ export function QuoteConfiguratorCompact() {
         doc.setTextColor(...muted);
         doc.text(doc.splitTextToSize(detail, 86).slice(0, 2), M + 3, y + 3.5);
         doc.setFontSize(6.4);
-        doc.text(cleanForPdf(p.id === "maps" ? "ANNUEL" : p.id === "social" ? pdfLabels.recurring + " (3 MOIS)" : p.period === "month" ? pdfLabels.recurring : p.custom ? pdfLabels.custom : pdfLabels.once), 124, y);
+        doc.text(cleanForPdf(p.id === "social" ? pdfLabels.recurring + " (3 MOIS)" : p.period === "month" ? pdfLabels.recurring : p.custom ? pdfLabels.custom : pdfLabels.once), 124, y);
         doc.setFont("helvetica", "bold");
         doc.setFontSize(7.2);
         doc.setTextColor(...ink);
         doc.text(
-          p.custom ? cleanForPdf(pdfLabels.onQuote) : p.price.toLocaleString("fr-FR") + " €" + (p.id === "maps" ? " / an" : p.period === "month" ? " / mois" : ""),
+          p.custom ? cleanForPdf(pdfLabels.onQuote) : p.price.toLocaleString("fr-FR") + " €" + (p.period === "month" ? " / mois" : ""),
           R - 3,
           y,
           { align: "right" }
@@ -857,7 +857,7 @@ export function QuoteConfiguratorCompact() {
                               {p.commitment && <span className="block label-mono text-[6.5px] text-emerald-600 dark:text-emerald-400">{p.commitment}</span>}
                             </div>
                             <span className="shrink-0 label-mono text-[7.5px] font-bold text-emerald-600 dark:text-emerald-400">
-                              {p.custom ? QUOTE_UI.onQuote[currentLang] : p.price.toLocaleString("fr-FR") + " €" + (p.id === "maps" ? QUOTE_UI.perYear[currentLang] : p.period === "month" ? QUOTE_UI.perMonth[currentLang] : "")}
+                              {p.custom ? QUOTE_UI.onQuote[currentLang] : p.price.toLocaleString("fr-FR") + " €" + (p.period === "month" ? QUOTE_UI.perMonth[currentLang] : "")}
                             </span>
                           </div>
                         ) : null;
