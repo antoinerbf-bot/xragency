@@ -553,14 +553,14 @@ function SocialVisual() {
     {
       id: "instagram" as const,
       name: "Instagram",
-      badge: "REELS 4K & FEED",
+      badge: "FEED & REELS HD",
       tagline: "Direction Artistique Haute Couture",
       accent: "from-pink-500 via-rose-500 to-amber-400",
       border: "hover:border-pink-500/50",
       activeBg: "bg-pink-500/10 border-pink-500/40 text-pink-300",
       logo: InstagramLogo,
       stat: "IMAGE DE MARQUE",
-      desc: "Direction artistique cohérente, tournage sur site et feed harmonisé.",
+      desc: "Direction artistique cohérente, visuels HD et feed harmonisé.",
     },
     {
       id: "tiktok" as const,
@@ -620,7 +620,7 @@ function SocialVisual() {
                 <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-ping" />
               </span>
             </div>
-            <p className="text-[10px] xr-muted">Tournages 4K, montage cinématique & community management</p>
+            <p className="text-[10px] xr-muted">Direction artistique, montage dynamique & community management</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -636,19 +636,16 @@ function SocialVisual() {
         {/* Smartphone Reel / Post Simulator */}
         <div className="mx-auto w-full max-w-[275px]">
           <div className="relative overflow-hidden rounded-[2.3rem] border-[3px] border-[#252b3b] bg-black shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] ring-1 ring-white/10 aspect-[9/16]">
-            {/* Camera Dynamic Notch */}
-            <div className="absolute top-2.5 left-1/2 -translate-x-1/2 z-30 flex items-center justify-between px-3 h-4 w-28 rounded-full bg-black/90 border border-white/10 backdrop-blur-md">
+            {/* iPhone Dynamic Island */}
+            <div className="absolute top-2.5 left-1/2 -translate-x-1/2 z-30 flex items-center justify-between px-3 h-4 w-24 rounded-full bg-black/95 border border-white/10 backdrop-blur-md">
               <span className="h-1.5 w-1.5 rounded-full bg-[#1b202e]" />
-              <div className="flex items-center gap-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
-                <span className="label-mono text-[5.5px] font-bold text-white tracking-wider">REC 4K</span>
-              </div>
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400/80" />
             </div>
 
             {/* Video / Photo Background */}
             <img
               src={XR_PHOTOS.social}
-              alt="Shooting vidéo 4K et production social media"
+              alt="Aperçu direction artistique et contenu social media"
               className="absolute inset-0 h-full w-full object-cover brightness-[0.92] contrast-[1.05]"
             />
             {/* Cinematic Gradient Overlays */}
@@ -668,7 +665,7 @@ function SocialVisual() {
                     </span>
                   </div>
                   <span className="label-mono text-[6px] text-white/70 block -mt-0.5">
-                    {platform === "facebook" ? "Sponsorisé · Rayon 5 km" : "Production 4K officielle"}
+                    {platform === "facebook" ? "Sponsorisé · Rayon 5 km" : "Feed géré · Contenu éditorial"}
                   </span>
                 </div>
               </div>
@@ -751,7 +748,7 @@ function SocialVisual() {
               <div className="inline-flex items-center gap-1.5 rounded-full bg-black/60 px-2 py-0.5 border border-white/15 backdrop-blur-md mb-1.5">
                 <Music className="h-2.5 w-2.5 text-amber-300 animate-pulse" />
                 <span className="label-mono text-[6px] tracking-wider text-white/90 truncate max-w-[120px]">
-                  XR Soundscape · Audio 4K
+                  Format court · Hook &amp; Rétention
                 </span>
               </div>
               <p className="text-[10px] font-bold leading-tight drop-shadow-md text-white">
@@ -874,7 +871,7 @@ function SocialVisual() {
           INSTAGRAM REELS · TIKTOK SHORTS · FACEBOOK META ADS · 100% CESSION DROITS
         </span>
         <span className="label-mono text-[7px] font-bold text-amber-300">
-          STUDIO DE PRODUCTION AUDIOVISUELLE D'ÉLITE
+          DIRECTION ARTISTIQUE &amp; GESTION SOCIAL MEDIA
         </span>
       </div>
     </div>

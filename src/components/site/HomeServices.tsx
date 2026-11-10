@@ -135,51 +135,51 @@ export const ORDERED_SERVICES = [
     funnelId: "social",
     num: "03",
     tag: {
-      fr: "03 · SOCIAL MEDIA · TOURNAGES & REELS 4K",
-      en: "03 · SOCIAL MEDIA · 4K VIDEO PRODUCTION",
-      vi: "03 · MẠNG XÃ HỘI · SẢN XUẤT REELS 4K",
-      ar: "03 · التواصل الاجتماعي · إنتاج 4K",
-      ru: "03 · СОЦСЕТИ · 4K-ПРОДАКШН И REELS",
+      fr: "03 · SOCIAL MEDIA · GESTION & CROISSANCE",
+      en: "03 · SOCIAL MEDIA · CONTENT & GROWTH",
+      vi: "03 · MẠNG XÃ HỘI · CHIẾN LƯỢC & TĂNG TRƯỞNG",
+      ar: "03 · التواصل الاجتماعي · الإدارة والنمو",
+      ru: "03 · СОЦСЕТИ · КОНТЕНТ И ПРОДВИЖЕНИЕ",
     },
     title: {
-      fr: "Tournages Cinéma 4K & Reels Viraux",
-      en: "4K Cinema Shoots & Viral Reels",
-      vi: "Quay Phim Điện Ảnh 4K & Reels Triệu View",
-      ar: "تصوير سينمائي 4K وريلز عالية الانتشار",
-      ru: "Кинематографичные съемки 4K и вирусные Reels",
+      fr: "Direction Artistique & Gestion Réseaux Sociaux",
+      en: "Art Direction & Social Media Management",
+      vi: "Chỉ Đạo Nghệ Thuật & Quản Trị Mạng Xã Hội",
+      ar: "إخراج فني وإدارة شاملة لحسابات التواصل",
+      ru: "Арт-дирекшн и ведение социальных сетей",
     },
     desc: {
-      fr: "Tournages physiques sur site avec matériel cinéma et montage vertical optimisé pour la rétention et l'acquisition.",
-      en: "On-site physical shoots with cinema gear and vertical editing tailored for retention and customer acquisition.",
-      vi: "Quay thực tế tại doanh nghiệp với máy quay điện ảnh và dựng video ngắn tối ưu chuyển đổi.",
-      ar: "تصوير ميداني بمعدات سينمائية ومونتاج عمودي عالي الجودة لزيادة المتابعين والمبيعات.",
-      ru: "Выездные съемки на кинокамеры и вертикальный монтаж с высокой вовлекаемостью.",
+      fr: "Stratégie éditoriale, création de visuels HD, montage de formats courts et animation complète de vos réseaux pour attirer des clients.",
+      en: "Editorial strategy, HD visuals, short-form editing and full social channel management engineered to attract qualified clients.",
+      vi: "Chiến lược nội dung, thiết kế hình ảnh HD, dựng video ngắn và quản trị kênh bài bản để thu hút khách hàng.",
+      ar: "استراتيجية محتوى، تصميم مرئيات عالية الدقة، مونتاج ريلز وإدارة كاملة لحساباتك لجذب العملاء.",
+      ru: "Контент-стратегия, HD-визуал, динамичный монтаж коротких видео и полное ведение ваших соцсетей для привлечения заявок.",
     },
     deliverables: {
       fr: [
-        "Tournage sur site avec caméras cinéma & éclairage pro",
-        "Montage vertical dynamique 4K (TikTok, Reels, Shorts)",
-        "Calendrier éditorial & stratégie d'acquisition mensuelle",
+        "Stratégie éditoriale & direction artistique harmonisée",
+        "Création de carrousels HD & montage Reels / TikTok dynamiques",
+        "Programmation, modération & reporting mensuel (tournage en option)",
       ],
       en: [
-        "On-site filming with cinema cameras & professional lighting",
-        "Dynamic 4K vertical editing (TikTok, Reels, Shorts)",
-        "Monthly editorial calendar & acquisition strategy",
+        "Tailored editorial calendar & cohesive feed art direction",
+        "HD carousels & dynamic Reels / TikTok / Shorts editing",
+        "Publishing, moderation & monthly analytics (on-site shoot optional)",
       ],
       vi: [
-        "Quay tại địa điểm với máy quay & ánh sáng chuyên nghiệp",
-        "Dựng video dọc 4K sống động (TikTok, Reels, Shorts)",
-        "Kế hoạch nội dung & chiến lược tăng trưởng định kỳ",
+        "Kế hoạch nội dung & đồng bộ nhận diện hình ảnh feed",
+        "Thiết kế carousel HD & dựng video ngắn Reels / TikTok",
+        "Lên lịch đăng, tương tác cộng đồng & báo cáo hàng tháng",
       ],
       ar: [
-        "تصوير بموقعك بكاميرات سينمائية وإضاءة احترافية",
-        "مونتاج عمودي 4K ديناميكي (TikTok, Reels, Shorts)",
-        "جدول نشر استراتيجي شهري يستهدف زيادة المبيعات",
+        "جدول نشر استراتيجي وإخراج بصري متناسق للحساب",
+        "تصميم كاروسيل HD ومونتاج ريلز وتيك توك جذابة",
+        "جدولة النشر وإدارة التفاعل وتقارير الأداء الشهرية",
       ],
       ru: [
-        "Съемки на вашей локации с профессиональным светом",
-        "Динамичный 4K монтаж (TikTok, Reels, Shorts)",
-        "Контент-план и стратегия привлечения клиентов",
+        "Контент-план и единая визуальная концепция ленты",
+        "Создание HD-каруселей и монтаж Reels / TikTok",
+        "Публикация, модерация и ежемесячная отчётность",
       ],
     },
     accent: "#f43f5e",
@@ -525,6 +525,7 @@ export function HomeServices() {
       data-section="homepage-services"
       className="relative overflow-hidden border-t border-[#101114]/10 bg-[#f8f6f0] py-16 sm:py-24 text-[#101114]"
     >
+      <span id="homepage-services" aria-hidden="true" className="pointer-events-none absolute -top-20 left-0" />
       {/* Ambient background aura */}
       <div
         aria-hidden="true"

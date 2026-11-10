@@ -34,7 +34,7 @@ const SECTORS: SectorData[] = [
     clients: "+180 à +320 réservations / mois",
     hoursSaved: "18h / mois",
     roas: "×4.8",
-    bestFormat: "Reels 4K gourmands & coulisses du chef",
+    bestFormat: "Reels dynamiques & stories coulisses",
     quoteAnchor: "restaurant",
   },
   {
@@ -52,7 +52,7 @@ const SECTORS: SectorData[] = [
     clients: "+95 à +180 ventes qualifiées / mois",
     hoursSaved: "22h / mois",
     roas: "×5.4",
-    bestFormat: "Lookbooks cinématiques 4K & macro-détails",
+    bestFormat: "Carrousels éditoriaux & Reels produit",
     quoteAnchor: "luxury",
   },
   {

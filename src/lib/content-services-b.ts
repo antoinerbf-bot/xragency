@@ -167,7 +167,7 @@ export const SERVICES_PART2 = [
           { fr: "Engagement minimum 6 mois (production soutenue & rayonnement multi-réseaux)", en: "6 months minimum commitment (intensive multi-network production)", vi: "Cam kết tối thiểu 6 tháng" },
           { fr: "3 réseaux sociaux complets (Instagram + TikTok + LinkedIn/Facebook)", en: "3 full social networks (Instagram + TikTok + LinkedIn/Facebook)", vi: "3 mạng xã hội toàn diện" },
           { fr: "30 publications premium / mois (rythme soutenu)", en: "30 premium posts / month (intensive cadence)", vi: "30 bài đăng cao cấp / tháng (mỗi ngày 1 bài)" },
-          { fr: "Création, scriptwriting & montage Reels / TikTok haute définition", en: "Creation, scriptwriting & HD Reels / TikTok editing", vi: "Biên kịch, sáng tạo & dựng Reels chuẩn điện ảnh 4K" },
+          { fr: "Création, scriptwriting & montage Reels / TikTok haute définition", en: "Creation, scriptwriting & HD Reels / TikTok editing", vi: "Biên kịch, sáng tạo & dựng Reels / TikTok sắc nét HD" },
           { fr: "Stories quotidiennes & mise en avant de vos temps forts", en: "Daily stories & key business highlights coverage", vi: "Stories hàng ngày & đưa tin sự kiện nổi bật" },
           { fr: "Modération et animation proactives 6j/7", en: "Proactive moderation & community management 6 days a week", vi: "Kiểm duyệt & tương tác chủ động 6 ngày/tuần" },
           { fr: "Veille concurrentielle & reporting analytique approfondi", en: "Competitive benchmark & comprehensive analytical report", vi: "Theo dõi đối thủ & báo cáo phân tích chuyên sâu" },

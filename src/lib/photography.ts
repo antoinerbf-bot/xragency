@@ -5,7 +5,7 @@ import heroCinematic from "@/assets/hero-cinematic.jpg";
 import serviceBrandingCinematic from "@/assets/svc-branding-cinematic.jpg";
 import serviceMapsCinematic from "@/assets/svc-maps-cinematic.jpg";
 import serviceSeoCinematic from "@/assets/svc-seo-cinematic.jpg";
-import serviceSocialCinematic from "@/assets/svc-social-cinematic.jpg";
+import serviceSocial from "@/assets/svc-social.jpg";
 import serviceMaintenanceCinematic from "@/assets/svc-maintenance-cinematic.jpg";
 import serviceRoboticsCinematic from "@/assets/svc-robotics-cinematic.jpg";
 import serviceAi from "@/assets/svc-ai.jpg";
@@ -19,7 +19,7 @@ export const XR_PHOTOS = {
   branding: serviceBrandingCinematic,
   seo: serviceSeoCinematic,
   maps: serviceMapsCinematic,
-  social: serviceSocialCinematic,
+  social: serviceSocial,
   maintenance: serviceMaintenanceCinematic,
   robotics: serviceRoboticsCinematic,
   refonte: villaAzur,
