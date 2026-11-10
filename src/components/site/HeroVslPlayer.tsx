@@ -131,7 +131,7 @@ export function HeroVslPlayer() {
     const video = videoRef.current;
     if (!video) return;
     setIsPlaying(true);
-    video.play().catch(() => {});
+    video.play().catch(() => { });
   };
 
   const jumpToChapter = (idx: number, time: number) => {
@@ -140,7 +140,7 @@ export function HeroVslPlayer() {
     if (!video) return;
     setIsPlaying(true);
     video.currentTime = time;
-    video.play().catch(() => {});
+    video.play().catch(() => { });
   };
 
   const handleTimeUpdate = () => {
@@ -164,7 +164,7 @@ export function HeroVslPlayer() {
         {/* Clean Editorial Header matching Hero above */}
         <div className="mx-auto max-w-3xl text-center mb-8 sm:mb-11">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#8b704f]/30 bg-white/80 px-4 py-1.5 shadow-xs backdrop-blur-md mb-4">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#015aff] animate-pulse" />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#b48f5a] animate-pulse" />
             <span className="label-mono text-[7.5px] sm:text-[8.5px] font-semibold tracking-[.22em] text-[#554b3e] uppercase">
               {copy.kicker}
             </span>
@@ -182,8 +182,8 @@ export function HeroVslPlayer() {
 
         {/* Video Frame */}
         <div className="relative mx-auto w-full max-w-5xl">
-          <div className="group relative overflow-hidden rounded-2xl sm:rounded-3xl border border-[#101114]/15 bg-[#0a0d16] shadow-[0_28px_75px_-20px_rgba(1,90,255,0.42),0_0_0_1px_rgba(255,255,255,0.65)] transition-all">
-            <div className="relative aspect-video w-full overflow-hidden bg-[#0a0d16]">
+          <div className="group relative overflow-hidden rounded-2xl sm:rounded-3xl border border-[#141312]/15 bg-[#121110] shadow-[0_28px_75px_-22px_rgba(20,19,18,0.48),0_0_0_1px_rgba(255,255,255,0.65)] transition-all">
+            <div className="relative aspect-video w-full overflow-hidden bg-[#121110]">
               <video
                 ref={videoRef}
                 src="/videos/xr-agency-vsl.mp4"
@@ -207,13 +207,13 @@ export function HeroVslPlayer() {
                 <button
                   type="button"
                   onClick={startPlayback}
-                  className="absolute inset-0 z-20 flex items-end justify-center pb-6 sm:pb-9 bg-gradient-to-t from-black/55 via-transparent to-transparent cursor-pointer transition-opacity"
+                  className="absolute inset-0 z-20 flex items-end justify-center pb-6 sm:pb-9 bg-gradient-to-t from-black/60 via-transparent to-transparent cursor-pointer transition-opacity"
                   aria-label={copy.watch}
                 >
-                  <div className="flex items-center gap-3 sm:gap-3.5 rounded-full bg-[#015aff] hover:bg-[#004ed4] text-white px-5 sm:px-6 py-2.5 sm:py-3 font-semibold text-sm sm:text-base shadow-[0_12px_40px_rgba(1,90,255,0.7)] hover:scale-105 active:scale-95 transition-all">
-                    <span className="relative flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-white text-[#015aff] shrink-0">
-                      <span className="absolute inset-0 rounded-full border-2 border-white/80 animate-ping opacity-75" />
-                      <Play className="h-4 w-4 sm:h-4.5 sm:w-4.5 fill-[#015aff] ml-0.5" />
+                  <div className="flex items-center gap-3 sm:gap-3.5 rounded-full border border-[#c5a880]/45 bg-[#141312]/95 hover:bg-[#1e1b17] text-[#f7f4ed] px-5 sm:px-6 py-2.5 sm:py-3 font-semibold text-sm sm:text-base shadow-[0_14px_40px_rgba(20,19,18,0.75)] hover:scale-105 active:scale-95 transition-all backdrop-blur-md">
+                    <span className="relative flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#e7cfa8] to-[#b48f5a] text-[#141312] shrink-0">
+                      <span className="absolute inset-0 rounded-full border-2 border-[#e7cfa8]/75 animate-ping opacity-75" />
+                      <Play className="h-4 w-4 sm:h-4.5 sm:w-4.5 fill-[#141312] ml-0.5" />
                     </span>
                     <span className="tracking-tight">{copy.watch}</span>
                   </div>
@@ -222,9 +222,9 @@ export function HeroVslPlayer() {
             </div>
 
             {/* Chapters Scrub Bar */}
-            <div className="border-t border-white/10 bg-[#0b0f19] p-2.5 sm:p-3.5">
+            <div className="border-t border-white/10 bg-[#121110] p-2.5 sm:p-3.5">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5">
-                <span className="label-mono text-[7px] sm:text-[8px] font-semibold text-[#8bb4ff] tracking-[.18em] uppercase shrink-0">
+                <span className="label-mono text-[7px] sm:text-[8px] font-semibold text-[#e8cfa6] tracking-[.18em] uppercase shrink-0">
                   Chapitres :
                 </span>
 
@@ -236,11 +236,11 @@ export function HeroVslPlayer() {
                       onClick={() => jumpToChapter(idx, chap.time)}
                       className={`rounded-lg px-2 py-1.5 text-center transition border ${
                         activeChapter === idx
-                          ? "border-[#015aff] bg-[#015aff]/25 text-white font-bold"
-                          : "border-white/10 bg-white/5 text-white/70 hover:bg-white/15 hover:text-white"
+                          ? "border-[#c5a880] bg-[#c5a880]/20 text-[#f7f4ed] font-bold"
+                          : "border-white/10 bg-white/5 text-white/70 hover:bg-white/12 hover:text-white"
                       }`}
                     >
-                      <span className="label-mono text-[6.5px] text-[#8bb4ff] block">{chap.num}</span>
+                      <span className="label-mono text-[6.5px] text-[#e8cfa6] block">{chap.num}</span>
                       <span className="text-[8.5px] sm:text-[9.5px] font-medium line-clamp-1">{chap.label}</span>
                     </button>
                   ))}
