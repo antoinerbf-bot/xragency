@@ -26,6 +26,7 @@ export interface CrmMemberRecord {
   fullName: string;
   title: string;
   role: "admin" | "member";
+  portalType?: "director" | "closer" | "student";
   phoneLine: string;
   commissionPct: number;
   passwordHash: string;
@@ -79,8 +80,33 @@ export interface CrmLead {
   convertedClientId?: string;
   outsourceRequest?: OutsourceRequest;
   callLogs?: CrmCallLog[];
+  screenshotUrl?: string;
+  maquetteStatus?: "none" | "pending" | "validated";
+  maquetteUrl?: string;
+  maquetteBrief?: string;
+  maquetteRequestedAt?: string;
+  maquetteValidatedAt?: string;
   createdAt: string;
   updatedAt: string;
+}
+
+/**
+ * Calcule la commission exacte selon les règles officielles XR Agency :
+ * - 30 % sur les Sites Internet (Vitrine, Business, E-commerce)
+ * - 20 % sur la vente de CRM / Systèmes POS sur-mesure
+ * - 10 % sur Google Maps (Top 3 & GBP) et toutes les offres mensuelles (SEO, Community Management, WebCare)
+ */
+export function computeLeadCommissionRate(serviceTarget: string): { ratePct: number; ruleLabel: string } {
+  const s = (serviceTarget || "").toLowerCase();
+  if (s.includes("crm") || s.includes("pos") || s.includes("caisse")) {
+    return { ratePct: 20, ruleLabel: "20 % (Offre CRM / POS)" };
+  }
+  if (s.includes("site") || s.includes("vitrine") || s.includes("e-commerce") || s.includes("ecommerce") || s.includes("refonte") || s.includes("web")) {
+    if (!s.includes("webcare")) {
+      return { ratePct: 30, ruleLabel: "30 % (Site Internet)" };
+    }
+  }
+  return { ratePct: 10, ruleLabel: "10 % (Google Maps / Mensuel)" };
 }
 
 export interface CrmClientRecord {
@@ -845,12 +871,21 @@ export function saveStore(store: CrmStore) {
 }
 
 export function sanitizeMember(m: CrmMemberRecord) {
+  const isStudent =
+    m.portalType === "student" ||
+    m.id === "mem-karim" ||
+    m.title.toLowerCase().includes("school") ||
+    m.title.toLowerCase().includes("élève") ||
+    m.title.toLowerCase().includes("eleve");
+  const portalType: "director" | "closer" | "student" =
+    m.role === "admin" ? "director" : isStudent ? "student" : "closer";
   return {
     id: m.id,
     email: m.email,
     fullName: m.fullName,
     title: m.title,
     role: m.role,
+    portalType,
     phoneLine: m.phoneLine,
     commissionPct: m.commissionPct,
     active: m.active,
@@ -871,6 +906,9 @@ export function buildSnapshot(store: CrmStore, user: CrmMemberRecord) {
 
   const totalLeads = visibleLeads.length;
   const signedLeads = visibleLeads.filter((l) => l.status === "signed" || l.status === "outsourced");
+  const inProgressCount = visibleLeads.filter((l) =>
+    ["contacted", "in_progress", "callback", "proposal_prep", "proposal_sent", "negotiation"].includes(l.status)
+  ).length;
   const signedCount = signedLeads.length;
   const revenueEur = signedLeads.reduce((acc, l) => acc + (Number(l.budgetEur) || 0), 0);
   const pipelineEur = visibleLeads
@@ -904,6 +942,29 @@ export function buildSnapshot(store: CrmStore, user: CrmMemberRecord) {
     (n) => n.targetMemberId === "all" || n.targetMemberId === user.id
   );
 
+  const teamBreakdown = store.members
+    .filter((m) => m.active && m.role !== "admin")
+    .map((m) => {
+      const mLeads = store.leads.filter((l) => l.assignedTo === m.id);
+      const mSigned = mLeads.filter((l) => l.status === "signed" || l.status === "outsourced");
+      const mRev = mSigned.reduce((s, l) => s + (Number(l.budgetEur) || 0), 0);
+      const mCom = mSigned.reduce((s, l) => {
+        const { ratePct } = computeLeadCommissionRate(l.serviceTarget);
+        return s + Math.round(((Number(l.budgetEur) || 0) * ratePct) / 100);
+      }, 0);
+      const mCalls = mLeads.reduce((s, l) => s + (Number(l.callsCount) || 0), 0);
+      return {
+        ...sanitizeMember(m),
+        assignedCount: mLeads.length,
+        toCallCount: mLeads.filter((l) => l.status === "to_call" || l.status === "new").length,
+        signedCount: mSigned.length,
+        revenueEur: mRev,
+        estimatedCommissionEur: mCom,
+        callsCount: mCalls,
+        closingRate: mLeads.length > 0 ? Math.round((mSigned.length / mLeads.length) * 100) : 0,
+      };
+    });
+
   return {
     authenticated: true,
     user: sanitizeMember(user),
@@ -917,9 +978,11 @@ export function buildSnapshot(store: CrmStore, user: CrmMemberRecord) {
     providers: isAdmin ? store.providers : [],
     notifications: visibleNotifications,
     activities: visibleActivities,
+    teamBreakdown,
     stats: {
       totalLeads,
       toCallCount: visibleLeads.filter((l) => l.status === "to_call" || l.status === "new" || l.status === "to_qualify").length,
+      inProgressCount,
       signedCount,
       outsourcedCount,
       revenueEur,

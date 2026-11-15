@@ -17,10 +17,10 @@ const BASE_PRICES: Record<string, { eur: number; period?: string }> = {
   websites: { eur: 499 },
   branding: { eur: 199 },
   seo: { eur: 299, period: "/m" },
-  maps: { eur: 99 },
+  maps: { eur: 999, period: "/an" },
   social: { eur: 349, period: "/m" },
   maintenance: { eur: 29, period: "/m" },
-  robotics: { eur: 499, period: "/m" },
+  robotics: { eur: 499 },
 };
 
 
@@ -77,8 +77,10 @@ export function Nav() {
           className={cn(
             "relative flex items-center justify-between gap-2 rounded-full border transition-all duration-300 px-3 py-1.5 sm:px-4 sm:py-2",
             scrolled
-              ? "border-[#D4AF37]/30 bg-[#080B10]/90 text-[#F8FAFC] shadow-[0_16px_40px_-15px_rgba(0,0,0,0.8)] backdrop-blur-2xl"
-              : "border-white/15 bg-[#0F172A]/90 text-[#F8FAFC] shadow-[0_8px_30px_rgba(0,0,0,0.5)] backdrop-blur-xl"
+              ? "border-white/15 bg-black/60 text-white shadow-[0_16px_40px_-15px_rgba(0,0,0,0.6)] backdrop-blur-2xl dark:border-white/15 dark:bg-black/60 dark:text-white"
+              : heroTop
+                ? "border-[#101114]/10 bg-[#f8f6f0]/88 text-[#101114] shadow-[0_8px_30px_rgba(16,17,20,0.08)] backdrop-blur-xl dark:border-white/15 dark:bg-black/50 dark:text-white"
+                : "border-neutral-200/80 bg-white/80 text-neutral-900 shadow-sm backdrop-blur-xl dark:border-white/15 dark:bg-black/50 dark:text-white"
           )}
         >
           <Logo className="min-w-0 px-1 text-current hover:opacity-85" />
@@ -161,27 +163,15 @@ export function Nav() {
 
               <Link
                 to="/realisations"
-                className="rounded-full px-3 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 opacity-85 hover:opacity-100"
+                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
               >
                 {t(UI.navWork)}
               </Link>
               <Link
                 to="/recrutement"
-                className="rounded-full px-3 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] text-[#D4AF37] transition hover:bg-white/10"
+                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
               >
-                Recrutement
-              </Link>
-              <Link
-                to="/affiliation"
-                className="rounded-full px-3 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] text-[#10B981] transition hover:bg-white/10"
-              >
-                Affiliation
-              </Link>
-              <Link
-                to="/dashboard"
-                className="rounded-full border border-[#D4AF37]/40 bg-[#D4AF37]/10 px-3 py-1 text-[8.5px] font-bold uppercase tracking-[.18em] text-[#D4AF37] transition hover:bg-[#D4AF37] hover:text-[#080B10]"
-              >
-                CRM RPG
+                {t(UI.navAffiliation)}
               </Link>
               <button
                 type="button"
@@ -190,7 +180,7 @@ export function Nav() {
                     ? document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" })
                     : window.location.assign("/#faq")
                 }
-                className="rounded-full px-3 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 opacity-85 hover:opacity-100"
+                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
               >
                 {t(UI.navFaq)}
               </button>
@@ -326,48 +316,34 @@ export function Nav() {
               })}
             </div>
 
-            <div className="mt-3 grid grid-cols-2 gap-2 border-t xr-line pt-3 sm:grid-cols-3">
-              <Link
-                to="/realisations"
+            <div className="mt-3 grid grid-cols-2 gap-2 border-t xr-line pt-3 sm:grid-cols-4">
+              <a
+                href="/realisations"
                 onClick={() => setOpen(false)}
                 className="rounded-xl border xr-line bg-[var(--xr-surface)] p-2.5 text-center text-[9px] font-semibold text-[var(--xr-ink)]"
               >
                 {t(UI.navWork)}
-              </Link>
-              <Link
-                to="/recrutement"
-                onClick={() => setOpen(false)}
-                className="rounded-xl border border-[#D4AF37]/40 bg-[#0F172A] p-2.5 text-center text-[9px] font-bold text-[#D4AF37]"
-              >
-                Recrutement Closers
-              </Link>
-              <Link
-                to="/affiliation"
-                onClick={() => setOpen(false)}
-                className="rounded-xl border border-[#10B981]/40 bg-[#0F172A] p-2.5 text-center text-[9px] font-bold text-[#10B981]"
-              >
-                Affiliation
-              </Link>
-              <Link
-                to="/dashboard"
-                onClick={() => setOpen(false)}
-                className="rounded-xl border border-[#D4AF37] bg-[#D4AF37] p-2.5 text-center text-[9px] font-bold text-[#080B10]"
-              >
-                CRM RPG (/crm)
-              </Link>
-              <a
-                href="/#diagnostic-5-piliers"
-                onClick={() => setOpen(false)}
-                className="rounded-xl border xr-line bg-[var(--xr-surface)] p-2.5 text-center text-[9px] font-semibold text-[var(--xr-ink)]"
-              >
-                {t({ fr: "Audit 5 Piliers", en: "Free audit", vi: "Audit miễn phí", ar: "تدقيق مجاني", ru: "Бесплатный аудит" })}
               </a>
               <a
-                href="/#configurateur"
+                href="/recrutement"
                 onClick={() => setOpen(false)}
                 className="rounded-xl border xr-line bg-[var(--xr-surface)] p-2.5 text-center text-[9px] font-semibold text-[var(--xr-ink)]"
               >
-                Devis 3 Étapes
+                {t(UI.navAffiliation)}
+              </a>
+              <a
+                href="/#audit"
+                onClick={() => setOpen(false)}
+                className="rounded-xl border xr-line bg-[var(--xr-surface)] p-2.5 text-center text-[9px] font-semibold text-[var(--xr-ink)]"
+              >
+                {t({ fr: "Audit gratuit", en: "Free audit", vi: "Audit miễn phí", ar: "تدقيق مجاني", ru: "Бесплатный аудит" })}
+              </a>
+              <a
+                href="/#faq"
+                onClick={() => setOpen(false)}
+                className="rounded-xl border xr-line bg-[var(--xr-surface)] p-2.5 text-center text-[9px] font-semibold text-[var(--xr-ink)]"
+              >
+                {t(UI.navFaq)}
               </a>
             </div>
 

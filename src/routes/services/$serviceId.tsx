@@ -1,17 +1,17 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, Check, MessageCircle, Plus, ShieldCheck, Sparkles, Star, ChevronDown, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, MessageCircle, Plus, ShieldCheck, Sparkles } from "lucide-react";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { SERVICES, PERIOD_LABEL, CONTACT, FAQ } from "@/lib/content";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
+import { EmberButton, Parallax, Reveal } from "@/components/site/primitives";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
 import { SocialSimulator } from "@/components/site/SocialSimulator";
 import { AddToCartBtn } from "@/components/site/Cart";
 import { ServiceIllustration } from "@/components/site/ServiceIllustration";
 import { SocialSalesPage } from "@/components/site/SocialSalesPage";
-import { ServicePillarDeepBlocks } from "@/components/site/ServicePillarDeepBlocks";
 import { cn } from "@/lib/utils";
 
 const SERVICE_ALIASES: Record<string, string> = {
@@ -50,10 +50,6 @@ const SERVICE_ALIASES: Record<string, string> = {
   conseil: "strategy",
   ai: "ai",
   ia: "ai",
-  caisse: "robotics",
-  pos: "robotics",
-  "pos-crm": "robotics",
-  crm: "robotics",
 };
 
 export const Route = createFileRoute("/services/$serviceId")({
@@ -98,6 +94,7 @@ function GenericServiceDetailPage() {
   const [selectedPlanIndex, setSelectedPlanIndex] = useState(
     Math.max(0, service.plans.findIndex((p) => p.popular)),
   );
+  const [installmentSelections, setInstallmentSelections] = useState<Record<number, boolean>>({});
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [showSticky, setShowSticky] = useState(false);
 
@@ -111,436 +108,405 @@ function GenericServiceDetailPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const isCustomMaps = service.id === "maps";
   const planForWa = service.plans[selectedPlanIndex];
+  const planIsInstallmentWa =
+    service.id === "websites" &&
+    installmentSelections[selectedPlanIndex] === true &&
+    planForWa?.period === "once";
 
   const waText = ({
-    fr: (title: string, plan: string) => `Bonjour XR Agency, je suis intéressé par votre service "${title}" (forfait : "${plan}"). Pouvons-nous échanger ?`,
-    en: (title: string, plan: string) => `Hello XR Agency, I'm interested in your "${title}" service (plan: "${plan}"). Could we discuss it?`,
-    vi: (title: string, plan: string) => `Xin chào XR Agency, tôi quan tâm đến dịch vụ "${title}" (gói: "${plan}"). Chúng ta có thể trao đổi thêm không?`,
-    ar: (title: string, plan: string) => `مرحبًا XR Agency، أنا مهتم بخدمة "${title}" (الباقة: "${plan}"). هل يمكننا مناقشة التفاصيل؟`,
-    ru: (title: string, plan: string) => `Здравствуйте, XR Agency! Меня интересует услуга "${title}" (пакет: "${plan}"). Можем обсудить детали?`,
-  } as const)[lang](t(service.title), planForWa ? t(planForWa.name) : "");
+    fr: (title: string, plan: string, installment: boolean) => `Bonjour XR Agency, je suis intéressé par votre service "${title}" (forfait : "${plan}"${installment ? " en mensualités sur 12 mois" : ""}). Pouvons-nous échanger ?`,
+    en: (title: string, plan: string, installment: boolean) => `Hello XR Agency, I'm interested in your "${title}" service (plan: "${plan}"${installment ? ", payable monthly over 12 months" : ""}). Could we discuss it?`,
+    vi: (title: string, plan: string, installment: boolean) => `Xin chào XR Agency, tôi quan tâm đến dịch vụ "${title}" (gói: "${plan}"${installment ? ", thanh toán hàng tháng trong 12 tháng" : ""}). Chúng ta có thể trao đổi thêm không?`,
+    ar: (title: string, plan: string, installment: boolean) => `مرحبًا XR Agency، أنا مهتم بخدمة "${title}" (الباقة: "${plan}"${installment ? "، مع الدفع الشهري على مدى 12 شهرًا" : ""}). هل يمكننا مناقشة التفاصيل؟`,
+    ru: (title: string, plan: string, installment: boolean) => `Здравствуйте, XR Agency! Меня интересует услуга "${title}" (пакет: "${plan}"${installment ? ", с ежемесячной оплатой в течение 12 месяцев" : ""}). Можем обсудить детали?`,
+  } as const)[lang](t(service.title), planForWa ? t(planForWa.name) : "", planIsInstallmentWa);
   const waPrefilled = encodeURIComponent(waText);
   const waUrl = `${CONTACT.whatsapp}?text=${waPrefilled}`;
   const faqItems = service.serviceFaqs?.length ? service.serviceFaqs : FAQ.slice(0, 4);
   const steps = service.steps ?? [];
 
+  const copy = {
+    overview: {
+      fr: "Une page. Une expertise. Tout ce qu’il faut pour comprendre et agir.",
+      en: "One page. One expertise. Everything needed to understand and act.",
+      vi: "Một trang. Một chuyên môn. Mọi thứ cần để hiểu và hành động.",
+      ar: "صفحة واحدة. خبرة واحدة. كل ما يلزم للفهم واتخاذ الخطوة التالية.",
+      ru: "Одна страница. Одна экспертиза. Всё необходимое для решения.",
+    },
+    included: {
+      fr: "Ce que vous obtenez",
+      en: "What you get",
+      vi: "Bạn nhận được gì",
+      ar: "ما تحصل عليه",
+      ru: "Что вы получаете",
+    },
+    process: {
+      fr: "Comment on le fait",
+      en: "How we do it",
+      vi: "Cách chúng tôi thực hiện",
+      ar: "كيف ننفذ",
+      ru: "Как мы работаем",
+    },
+    pricing: {
+      fr: "Choisir la bonne formule",
+      en: "Choose the right plan",
+      vi: "Chọn gói phù hợp",
+      ar: "اختر الباقة المناسبة",
+      ru: "Выберите подходящий пакет",
+    },
+    pricingLead: {
+      fr: "Les prix et le périmètre restent exactement ceux de votre offre officielle. Choisissez une formule pour la commander ou nous écrire directement.",
+      en: "Pricing and scope stay exactly as in the official offer. Select a plan to order or contact us directly.",
+      vi: "Giá và phạm vi giữ nguyên theo gói chính thức. Chọn gói để đặt hoặc liên hệ trực tiếp.",
+      ar: "تبقى الأسعار والنطاق كما هو في العرض الرسمي. اختر باقة للطلب أو تواصل معنا مباشرة.",
+      ru: "Цены и состав полностью соответствуют официальному предложению. Выберите пакет для заказа или связи.",
+    },
+    faq: {
+      fr: "Questions essentielles",
+      en: "Essential questions",
+      vi: "Câu hỏi quan trọng",
+      ar: "الأسئلة الأساسية",
+      ru: "Главные вопросы",
+    },
+  };
+
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#030406] text-white selection:bg-[#d4af37] selection:text-black">
+    <div className="xr-section min-h-screen overflow-x-hidden">
       <Nav />
 
-      {/* Atmospheric Specular Halo */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[600px] w-[95%] max-w-[1400px] rounded-full bg-[#d4af37]/8 blur-[160px]"
-      />
-
-      <main className="pt-28 sm:pt-32">
-        {/* Breadcrumb Navigation */}
-        <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-14">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 py-4 font-mono text-[9.5px]">
-            <Link to="/services" className="inline-flex items-center gap-2 text-[#94a3b8] hover:text-white transition">
+      <main className="pt-28">
+        <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b xr-line py-4">
+            <Link to="/services" className="label-mono inline-flex items-center gap-2 xr-muted hover:xr-accent">
               <ArrowLeft className="h-3.5 w-3.5" />
-              <span>{t({ fr: "TOUTES LES DISCIPLINES", en: "ALL DISCIPLINES", vi: "TẤT CẢ DỊCH VỤ", ar: "كل الخدمات", ru: "ВСЕ УСЛУГИ" })}</span>
+              {t({ fr: "Tous les services", en: "All services", vi: "Tất cả dịch vụ", ar: "كل الخدمات", ru: "Все услуги" })}
             </Link>
-            <div className="flex items-center gap-2 text-[#64748b]">
-              <Link to="/" className="hover:text-white transition">{t({ fr: "ACCUEIL", en: "HOME", vi: "TRANG CHỦ", ar: "الرئيسية", ru: "ГЛАВНАЯ" })}</Link>
+            <div className="label-mono flex items-center gap-2 text-[7px] xr-muted-2">
+              <Link to="/" className="hover:xr-accent">{t({ fr: "Accueil", en: "Home", vi: "Trang chủ", ar: "الرئيسية", ru: "Главная" })}</Link>
               <span>/</span>
-              <span className="text-[#d4af37] font-bold uppercase">{t(service.title)}</span>
+              <span>{t(service.title)}</span>
             </div>
           </div>
         </div>
 
-        {/* ── HERO OF THE SERVICE ── */}
-        <section className="relative overflow-hidden border-b border-white/10 py-16 sm:py-20 lg:py-28">
-          <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-14">
-            <div className="grid items-center gap-12 lg:grid-cols-[0.52fr_0.48fr] lg:gap-16">
-
-              {/* Left Column: Typography & Authority */}
+        <section className="xr-section relative overflow-hidden border-b xr-line py-12 sm:py-16 lg:py-24">
+          <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
+            <div className="grid items-center gap-10 lg:grid-cols-[.83fr_1.17fr] lg:gap-16">
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-[#d4af37]/30 bg-[#d4af37]/10 px-4 py-1.5 font-mono text-[9px] font-bold uppercase tracking-[0.22em] text-[#d4af37] mb-6 backdrop-blur-md">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#d4af37]" />
-                  <span>0{service.num} · ATELIER HAUTE COUTURE XR</span>
-                </div>
-
-                <h1 className="text-[clamp(2.9rem,5.8vw,5.8rem)] font-black uppercase leading-[0.92] tracking-[-0.045em] text-white [text-wrap:balance]">
-                  {t(service.title)}
-                </h1>
-
-                <p className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-[#94a3b8] font-normal">
-                  {t(service.description)}
-                </p>
-
-                {/* Highlights Pills */}
-                <div className="mt-7 flex flex-wrap gap-2">
-                  {service.highlights.slice(0, 4).map((h, i) => (
-                    <span
-                      key={i}
-                      className="rounded-full border border-white/12 bg-white/5 px-3.5 py-1.5 font-mono text-[9px] font-semibold text-[#cbd5e1] backdrop-blur-md"
-                    >
-                      {t(h)}
+                <Reveal>
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-9 w-9 place-items-center rounded-full bg-[var(--xr-ink)] text-[var(--xr-bg)]">
+                      <span className="label-mono text-[7px]">{service.num}</span>
                     </span>
-                  ))}
-                </div>
-
-                {/* Call to Actions */}
-                <div className="mt-9 flex flex-wrap items-center gap-4">
-                  <a
-                    href="#plans"
-                    className="inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 font-mono text-xs font-bold uppercase tracking-[0.16em] text-black shadow-[0_0_30px_rgba(255,255,255,0.2)] transition hover:scale-105 hover:bg-[#d4af37]"
-                  >
-                    <span>{t(UI.explorePacks)}</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </a>
-                  <a
-                    href="/#quote"
-                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/60 px-6 py-4 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-white hover:border-[#d4af37] hover:text-[#d4af37] transition"
-                  >
-                    <span>{t({ fr: "Cadrage sur mesure", en: "Bespoke briefing", vi: "Tư vấn riêng", ar: "دراسة مخصصة", ru: "Индивидуальный расчет" })}</span>
-                  </a>
-                </div>
-
-                {/* Reassurance SLA Banner */}
-                <div className="mt-10 flex items-center gap-8 border-t border-white/10 pt-6">
-                  <div>
-                    <span className="font-mono text-[8px] uppercase tracking-wider text-[#94a3b8] block">
-                      {t({ fr: "À PARTIR DE", en: "STARTING FROM", vi: "TỪ", ar: "ابتداءً من", ru: "ОТ" })}
-                    </span>
-                    <p className="text-3xl sm:text-4xl font-extrabold text-white font-serif mt-0.5">
-                      {price(service.fromEur)}
-                    </p>
+                    <span className="label-mono text-[7px] tracking-[.24em] xr-muted-2">XR AGENCY / SERVICE</span>
                   </div>
-                  <div className="border-l border-white/10 pl-8">
-                    <span className="font-mono text-[8px] uppercase tracking-wider text-[#d4af37] block font-bold">
-                      ENGAGEMENT QUALITÉ XR AGENCY
-                    </span>
-                    <p className="text-sm font-semibold text-[#cbd5e1] mt-0.5">
-                      Devis détaillé · Livrables sur mesure · Propriété client
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column: Live Interactive Simulator in Titanium Frame */}
-              <div className="relative">
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute -inset-4 rounded-3xl bg-gradient-to-tr from-[#d4af37]/20 via-transparent to-white/5 blur-2xl"
-                />
-                <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-[#090b10] p-3 sm:p-5 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.98)] backdrop-blur-2xl">
-                  <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-4 px-2">
-                    <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-[#d4af37]" />
-                      <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-white">
-                        Simulateur Interactif en Direct
+                </Reveal>
+                <Reveal delay={80}>
+                  <h1 className="display-serif mt-7 max-w-4xl text-[clamp(3.2rem,7vw,7.4rem)] leading-[.78] tracking-[-.07em]">
+                    {t(service.title)}
+                  </h1>
+                </Reveal>
+                <Reveal delay={140}>
+                  <p className="mt-7 max-w-2xl text-base leading-7 xr-muted sm:text-lg">{t(service.description)}</p>
+                </Reveal>
+                <Reveal delay={200}>
+                  <div className="mt-7 flex flex-wrap gap-2">
+                    {service.highlights.slice(0, 4).map((h, i) => (
+                      <span key={i} className="rounded-full border xr-line bg-[var(--xr-surface)] px-3 py-2 label-mono text-[7px] xr-muted">
+                        {t(h)}
                       </span>
-                    </div>
-                    <span className="font-mono text-[8.5px] text-[#94a3b8]">
-                      60 FPS · LIVE DEMO
-                    </span>
+                    ))}
                   </div>
-
-                  <ServiceIllustration service={service.id} title={t(service.title)} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── EARLY PRICING OVERVIEW STRIP ── */}
-        {service.plans.length > 0 && (
-          <section className="border-b border-white/10 bg-[#06070a] py-8 text-white">
-            <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-14">
-              <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-                <span className="font-mono text-[9px] font-bold tracking-[.24em] text-[#d4af37] uppercase">
-                  {t({ fr: "APERÇU DES FORMULES OFFICIELLES & TARIFS", en: "OFFICIAL PLANS & PRICING OVERVIEW", vi: "BẢNG GIÁ DỊCH VỤ", ar: "نظرة سريعة على الأسعار", ru: "БЫСТРЫЙ ОБЗОР ТАРИФОВ" })}
-                </span>
-                <a href="#plans" className="font-mono text-[9px] font-bold text-white hover:text-[#d4af37] transition">
-                  {t({ fr: "Comparer les formules ↓", en: "Compare plans ↓", vi: "So sánh các gói ↓", ar: "مقارنة الباقات ↓", ru: "Сравнить тарифы ↓" })}
-                </a>
-              </div>
-
-              <div className={cn("grid gap-4", service.plans.length === 4 ? "md:grid-cols-2 lg:grid-cols-4" : service.plans.length === 2 ? "md:grid-cols-2" : "md:grid-cols-3")}>
-                {service.plans.map((p, idx) => (
-                  <a
-                    key={idx}
-                    href="#plans"
-                    onClick={() => setSelectedPlanIndex(idx)}
-                    className={cn(
-                      "flex items-center justify-between gap-4 rounded-2xl border p-5 shadow-lg transition hover:-translate-y-0.5",
-                      p.popular
-                        ? "border-[#d4af37] bg-[#0c0e18] shadow-[0_0_25px_rgba(212,175,55,0.15)]"
-                        : "border-white/10 bg-[#090b10] hover:border-white/30"
-                    )}
-                  >
+                </Reveal>
+                <Reveal delay={260}>
+                  <div className="mt-9 flex flex-wrap gap-3">
+                    <EmberButton href="#plans">{t(UI.explorePacks)}</EmberButton>
+                    <EmberButton href={`/?service=${service.id}#quote`} variant="outline">
+                      {t({ fr: "Composer mon projet", en: "Build my project", vi: "Tạo dự án", ar: "تكوين مشروعي", ru: "Собрать проект" })}
+                    </EmberButton>
+                  </div>
+                </Reveal>
+                <Reveal delay={320}>
+                  <div className="mt-9 flex items-end gap-6 border-t xr-line pt-5">
                     <div>
-                      <span className="font-mono text-[8.5px] font-bold text-[#d4af37] block">
-                        0{idx + 1} {p.popular ? "· POPULAIRE" : ""}
-                      </span>
-                      <p className="mt-1 text-base font-bold text-white leading-tight">{t(p.name)}</p>
+                      <span className="label-mono text-[6px] xr-muted-2">{t({ fr: "À PARTIR DE", en: "FROM", vi: "TỪ", ar: "ابتداءً من", ru: "ОТ" })}</span>
+                      <p className="display-serif mt-1 text-4xl sm:text-5xl">{isCustomMaps ? "990 €" : price(service.fromEur)}</p>
                     </div>
-                    <div className="text-right shrink-0">
-                      <p className="text-2xl font-bold font-serif text-white">
-                        {p.isQuoteOnly ? t({ fr: "Dès 550 €", en: "From €550", vi: "Từ 550 €", ar: "من 550 €", ru: "От 550 €" }) : price(p.eur)}
-                      </p>
-                      <span className="font-mono text-[8.5px] text-[#94a3b8]">
-                        {t(PERIOD_LABEL[p.period])}
-                      </span>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ── 01 / STRATEGIC IMPACT ── */}
-        <section className="border-b border-white/10 bg-[#040508] py-20 sm:py-28">
-          <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-14">
-            <div className="grid gap-12 lg:grid-cols-[0.4fr_0.6fr] lg:items-start">
-              <div>
-                <span className="font-mono text-[8.5px] font-bold uppercase tracking-[0.24em] text-[#d4af37] block mb-3">
-                  01 / IMPACT STRATÉGIQUE
-                </span>
-                <h2 className="text-3xl sm:text-5xl font-extrabold uppercase tracking-tight text-white leading-tight">
-                  {t({ fr: "Ce que cette architecture change pour votre marque.", en: "What this architecture changes for your brand.", vi: "Kiến trúc này thay đổi điều gì cho thương hiệu.", ar: "ما الذي يغيره هذا الحل لعلامتك التجارية.", ru: "Что эта архитектура меняет для бренда." })}
-                </h2>
-                <p className="mt-5 text-sm sm:text-base text-[#94a3b8] leading-relaxed font-normal">
-                  Chaque détail est pensé pour maximiser votre autorité perçue et convertir immédiatement l'attention en chiffre d'affaires qualifié.
-                </p>
-              </div>
-
-              <div className="divide-y divide-white/10 border-y border-white/10">
-                {service.highlights.slice(0, 3).map((item, i) => (
-                  <div key={i} className="py-7 flex items-start gap-6 group">
-                    <span className="font-mono text-xl sm:text-2xl font-extrabold text-[#d4af37]">
-                      0{i + 1}
+                    <span className="label-mono pb-1 text-[7px] xr-muted-2">
+                      {isCustomMaps ? t({ fr: "/ AN", en: "/ YEAR", vi: "/ NĂM", ar: "/ سنة", ru: "/ ГОД" }) : t(PERIOD_LABEL[service.fromPeriod])}
                     </span>
-                    <div className="flex-1">
-                      <h3 className="text-xl sm:text-2xl font-bold text-white transition group-hover:text-[#f8fafc]">
-                        {t(item)}
-                      </h3>
-                    </div>
-                    <ArrowRight className="h-5 w-5 text-[#d4af37] opacity-60 transition group-hover:translate-x-1 group-hover:opacity-100 shrink-0 mt-1" />
                   </div>
+                </Reveal>
+              </div>
+
+              <Reveal delay={100}>
+                <Parallax speed={-0.035}>
+                  <ServiceIllustration service={service.id} title={t(service.title)} />
+                </Parallax>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-b border-white/[0.06] py-14 sm:py-20">
+          <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
+            <div className="grid gap-10 lg:grid-cols-[.72fr_1.28fr] lg:items-start">
+              <Reveal>
+                <p className="label-mono text-[7px] tracking-[.24em] xr-accent">01 / ESSENTIAL</p>
+                <h2 className="display-serif mt-4 max-w-xl text-4xl leading-[.9] sm:text-6xl">
+                  {t({ fr: "Ce que ce service change concrètement.", en: "What this service changes.", vi: "Dịch vụ này thay đổi điều gì.", ar: "ما الذي يغيّره هذا الخِيار.", ru: "Что меняет эта услуга." })}
+                </h2>
+                <p className="mt-5 max-w-md text-sm leading-6 xr-muted">
+                  {t({ fr: "Pas de répétition : trois points essentiels pour comprendre la valeur de la prestation.", en: "No repetition: three essential points to understand the value of the service.", vi: "Không lặp lại: ba điểm chính để hiểu giá trị dịch vụ.", ar: "بدون تكرار: ثلاث نقاط أساسية لفهم قيمة الخدمة.", ru: "Без повторов: три ключевых пункта, чтобы понять ценность услуги." })}
+                </p>
+              </Reveal>
+
+              <div className="divide-y divide-white/[0.06] border-y border-white/[0.06]">
+                {service.highlights.slice(0, 3).map((item, i) => (
+                  <Reveal key={i} delay={i * 80}>
+                    <article className="group grid gap-5 py-7 sm:grid-cols-[72px_1fr] sm:items-start sm:py-8">
+                      <span className="label-mono text-[8px] xr-muted-2">0{i + 1}</span>
+                      <div className="flex items-start justify-between gap-6">
+                        <h3 className="display-serif max-w-2xl text-2xl leading-tight sm:text-3xl">{t(item)}</h3>
+                        <ArrowRight className="mt-1 h-4 w-4 shrink-0 opacity-35 transition-transform duration-300 group-hover:translate-x-1" />
+                      </div>
+                    </article>
+                  </Reveal>
                 ))}
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── 02 / PRODUCTION PROCESS ── */}
-        {steps.length > 0 && (
-          <section className="border-b border-white/10 bg-[#050608] py-20 sm:py-28">
-            <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-14">
-              <div className="max-w-2xl mb-14">
-                <span className="font-mono text-[8.5px] font-bold uppercase tracking-[0.24em] text-[#d4af37] block mb-3">
-                  02 / MÉTHODOLOGIE & CADRAGE
-                </span>
-                <h2 className="text-3xl sm:text-5xl font-extrabold uppercase tracking-tight text-white">
-                  {t({ fr: "Une exécution millimétrée.", en: "Flawless engineering.", vi: "Quy trình chuẩn mực.", ar: "تنفيذ دقيق.", ru: "Выверенный процесс работы." })}
-                </h2>
-              </div>
+        {service.id === "maps" ? (
+          <section className="border-b xr-line py-12 sm:py-16 lg:py-20">
+            <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
+              <Reveal>
+                <div className="mb-6 flex items-center gap-3">
+                  <ShieldCheck className="h-4 w-4" />
+                  <span className="label-mono text-[7px] tracking-[.2em]">GOOGLE MAPS / REAL SEARCH</span>
+                </div>
+              </Reveal>
+              <MapsSimulator />
+            </div>
+          </section>
+        ) : null}
 
-              <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        {service.id === "social" ? (
+          <SocialSimulator />
+        ) : null}
+
+        {steps.length > 0 ? (
+          <section className="border-b xr-line py-14 sm:py-18 lg:py-24">
+            <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
+              <Reveal>
+                <p className="label-mono text-[7px] tracking-[.24em] xr-accent">02 / PROCESS</p>
+                <h2 className="display-serif mt-3 text-4xl sm:text-6xl">{t(copy.process)}</h2>
+              </Reveal>
+              <div className="mt-10 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
                 {steps.slice(0, 4).map((step, i) => (
-                  <div
-                    key={step.num}
-                    className="relative rounded-3xl border border-white/10 bg-[#090b10] p-6 sm:p-7 shadow-xl hover:border-white/25 transition duration-300"
-                  >
-                    <div className="flex items-center justify-between mb-6">
-                      <span className="grid h-8 w-8 place-items-center rounded-full border border-[#d4af37]/30 bg-[#d4af37]/10 font-mono text-xs font-bold text-[#d4af37]">
-                        {step.num}
-                      </span>
-                      {i < steps.length - 1 ? (
-                        <ArrowRight className="hidden lg:block h-4 w-4 text-white/30" />
-                      ) : (
-                        <Sparkles className="h-4 w-4 text-[#d4af37]" />
-                      )}
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-2">{t(step.title)}</h3>
-                    <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed">{t(step.desc)}</p>
-                  </div>
+                  <Reveal key={step.num} delay={i * 70}>
+                    <article className="relative h-full rounded-[1.6rem] border xr-line bg-[var(--xr-surface)] p-5 sm:p-6">
+                      <div className="flex items-center justify-between">
+                        <span className="label-mono grid h-8 w-8 place-items-center rounded-full border xr-line">{step.num}</span>
+                        {i < steps.length - 1 ? <ArrowRight className="hidden h-4 w-4 xr-muted-2 lg:block" /> : <Sparkles className="h-4 w-4" />}
+                      </div>
+                      <h3 className="display-serif mt-8 text-2xl">{t(step.title)}</h3>
+                      <p className="mt-3 text-sm leading-6 xr-muted">{t(step.desc)}</p>
+                    </article>
+                  </Reveal>
                 ))}
               </div>
             </div>
           </section>
-        )}
+        ) : null}
 
-        {/* ── 03 / DETAILED PLANS & ORDER MATRIX ── */}
-        <section id="plans" className="border-b border-white/10 bg-[#030406] py-20 sm:py-32 scroll-mt-20">
-          <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-14">
-            <div className="grid gap-6 lg:grid-cols-[0.55fr_0.45fr] lg:items-end mb-16">
-              <div>
-                <span className="font-mono text-[8.5px] font-bold uppercase tracking-[0.24em] text-[#d4af37] block mb-3">
-                  03 / CHOISIR VOTRE FORMULE
-                </span>
-                <h2 className="text-3xl sm:text-5xl font-extrabold uppercase tracking-tight text-white">
-                  {t({ fr: "Formules officielles & composition.", en: "Official plans & scope.", vi: "Bảng giá và phạm vi.", ar: "الباقات الرسمية ونطاق العمل.", ru: "Официальные тарифы." })}
-                </h2>
+        <section id="plans" className="border-b xr-line py-14 sm:py-18 lg:py-24">
+          <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
+            <Reveal>
+              <div className="grid gap-5 lg:grid-cols-[.72fr_1.28fr] lg:items-end">
+                <div>
+                  <p className="label-mono text-[7px] tracking-[.24em] xr-accent">03 / PRICING</p>
+                  <h2 className="display-serif mt-3 text-4xl leading-[.85] sm:text-6xl">{t(copy.pricing)}</h2>
+                </div>
+                <p className="max-w-2xl text-sm leading-6 xr-muted lg:justify-self-end">{t(copy.pricingLead)}</p>
               </div>
-              <p className="text-sm sm:text-base text-[#94a3b8] leading-relaxed lg:justify-self-end max-w-lg">
-                Tarifs transparents, sans frais cachés. Choisissez une formule pour la commander directement ou échanger avec Antoine sur WhatsApp.
-              </p>
-            </div>
+            </Reveal>
 
-            <div className={cn("grid gap-6 items-stretch", service.plans.length === 4 ? "md:grid-cols-2 lg:grid-cols-4" : service.plans.length === 2 ? "lg:grid-cols-2" : "lg:grid-cols-3")}>
+            <div className="mt-10 grid gap-4 lg:grid-cols-3">
               {service.plans.map((p, i) => {
                 const isSelected = selectedPlanIndex === i;
-                const displayPrice = p.eur;
-                const displayPeriod = p.period;
-
+                const isInst = installmentSelections[i] ?? false;
+                const planIsInstallment = service.id === "websites" && isInst && p.period === "once";
+                const displayPrice = planIsInstallment ? Math.round((p.eur * 1.4) / 12) : p.eur;
+                const displayPeriod = (planIsInstallment ? "month" : p.period) as "once" | "month" | "year";
                 const planWaText: Record<string, string> = {
-                  fr: `Bonjour XR Agency, je souhaite commander la formule "${t(p.name)}" pour "${t(service.title)}" (${p.isQuoteOnly ? "Sur mesure dès 550 €" : price(displayPrice)}). Pouvons-nous finaliser ?`,
-                  en: `Hello XR Agency, I want to book "${t(p.name)}" for "${t(service.title)}" (${p.isQuoteOnly ? "Custom from €550" : price(displayPrice)}). How do we finalize?`,
-                  vi: `Xin chào XR Agency, tôi muốn đặt gói "${t(p.name)}" cho "${t(service.title)}".`,
-                  ar: `مرحبا XR Agency، أود طلب باقة "${t(p.name)}" لخدمة "${t(service.title)}".`,
-                  ru: `Здравствуйте XR Agency, я хочу заказать тариф "${t(p.name)}" для "${t(service.title)}".`,
+                  fr: `Bonjour XR Agency, je souhaite commander la formule "${t(p.name)}" du service "${t(service.title)}" (${isCustomMaps ? "Sur mesure" : price(displayPrice)}${planIsInstallment ? " / mois sur 12 mois" : ""}). Comment démarrer ?`,
+                  en: `Hello XR Agency, I would like to order the "${t(p.name)}" plan for "${t(service.title)}" (${isCustomMaps ? "Custom" : price(displayPrice)}${planIsInstallment ? " / month over 12 months" : ""}). How do we start?`,
+                  vi: `Xin chào XR Agency, tôi muốn đặt gói "${t(p.name)}" của dịch vụ "${t(service.title)}" (${isCustomMaps ? "Theo yêu cầu" : price(displayPrice)}${planIsInstallment ? " / tháng trong 12 tháng" : ""}). Bắt đầu như thế nào?`,
+                  ar: `مرحبا XR Agency، أود طلب باقة "${t(p.name)}" لخدمة "${t(service.title)}" (${isCustomMaps ? "مخصصة" : price(displayPrice)}${planIsInstallment ? " / شهرياً على 12 شهراً" : ""}). كيف نبدأ؟`,
+                  ru: `Здравствуйте XR Agency, я хочу заказать тариф "${t(p.name)}" для услуги "${t(service.title)}" (${isCustomMaps ? "Индивидуально" : price(displayPrice)}${planIsInstallment ? " / мес на 12 месяцев" : ""}). С чего начать?`,
                 };
                 const planWaMessage = encodeURIComponent(planWaText[lang] ?? planWaText.fr);
                 const planWaUrl = CONTACT.whatsapp + "?text=" + planWaMessage;
 
                 return (
-                  <article
-                    key={i}
-                    onClick={() => setSelectedPlanIndex(i)}
-                    className={cn(
-                      "flex flex-col justify-between rounded-3xl border p-7 sm:p-9 transition-all duration-300 relative cursor-pointer",
-                      isSelected
-                        ? "border-[#d4af37] bg-[#0c0e18] shadow-[0_0_50px_rgba(212,175,55,0.22)] ring-1 ring-[#d4af37]/60"
-                        : "border-white/10 bg-[#080a12] hover:border-white/30"
-                    )}
-                  >
-                    <div>
-                      {/* Top Plan Header */}
-                      <div className="flex items-center justify-between gap-3 mb-6">
-                        <span className={cn("font-mono text-[9px] font-bold uppercase tracking-wider", isSelected ? "text-[#d4af37]" : "text-white/60")}>
-                          0{i + 1} / 0{service.plans.length}
+                  <Reveal key={i} delay={i * 70}>
+                    <article
+                      onClick={() => setSelectedPlanIndex(i)}
+                      className={cn(
+                        "group flex h-full cursor-pointer flex-col rounded-[1.8rem] border p-6 transition-all duration-400 sm:p-7",
+                        isSelected
+                          ? "border-emerald-500/80 bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] shadow-[0_20px_50px_-20px_rgba(16,185,129,0.25)] ring-1 ring-emerald-500/30"
+                          : "xr-line bg-[var(--xr-surface)] hover:-translate-y-1 hover:border-white/20",
+                      )}
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <span className={cn("label-mono text-[7px]", isSelected ? "text-emerald-500 font-bold" : "xr-muted-2")}>
+                          {String(i + 1).padStart(2, "0")} / {String(service.plans.length).padStart(2, "0")}
                         </span>
-                        {p.popular && (
-                          <span className="rounded-full bg-[#d4af37] px-3 py-1 font-mono text-[8px] font-extrabold uppercase tracking-wider text-black shadow-md">
-                            RECOMMANDÉ
+                        {p.popular ? (
+                          <span className={cn("rounded-full border px-3 py-1 label-mono text-[6px]", isSelected ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400 font-bold" : "xr-line")}>
+                            {t(UI.popular)}
                           </span>
-                        )}
+                        ) : null}
                       </div>
 
-                      <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">{t(p.name)}</h3>
-                      <p className="text-xs text-[#94a3b8] leading-relaxed mb-6">
-                        {p.audience ? t(p.audience) : "Périmètre complet inclus dans la formule."}
+                      <h3 className="display-serif mt-8 text-3xl leading-none sm:text-4xl">{t(p.name)}</h3>
+                      <p className="mt-3 text-xs leading-5 xr-muted">
+                        {p.audience ? t(p.audience) : t({ fr: "Formule définie par les éléments inclus.", en: "Plan defined by the items included.", vi: "Gói được xác định bởi các hạng mục.", ar: "باقة محددة بالعناصر المشمولة.", ru: "Состав пакета определён включёнными элементами." })}
                       </p>
 
-                      {/* Price Display */}
-                      <div className="border-y border-white/10 py-6 mb-6">
-                        <div className="flex items-baseline gap-2">
-                          {p.isQuoteOnly && <span className="font-mono text-xs text-[#94a3b8]">Dès</span>}
-                          <span className="text-4xl sm:text-5xl font-black text-white font-serif">
-                            {price(displayPrice)}
-                          </span>
-                          <span className="font-mono text-xs text-[#94a3b8]">
-                            {p.isQuoteOnly ? "· sur mesure" : t(PERIOD_LABEL[displayPeriod])}
+                      <div className={cn("mt-7 border-y py-5", isSelected ? "border-emerald-500/20" : "xr-line")}>
+                        {service.id === "websites" && p.period === "once" ? (
+                          <div className={cn("mb-4 flex rounded-xl border p-1", isSelected ? "border-emerald-500/30 bg-[var(--xr-bg)]" : "xr-line bg-[var(--xr-bg)]")}>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setInstallmentSelections((prev) => ({ ...prev, [i]: false }));
+                              }}
+                              className={cn("flex-1 rounded-lg py-2 text-[8px] font-semibold uppercase tracking-[.12em]", !isInst ? "bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] shadow-sm" : "xr-muted")}
+                            >
+                              {t({ fr: "Comptant", en: "One-off", vi: "Một lần", ar: "دفعة واحدة", ru: "Разово" })}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setInstallmentSelections((prev) => ({ ...prev, [i]: true }));
+                              }}
+                              className={cn("flex-1 rounded-lg py-2 text-[8px] font-semibold uppercase tracking-[.12em]", isInst ? "bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] shadow-sm" : "xr-muted")}
+                            >
+                              {t({ fr: "Mensualités", en: "Monthly", vi: "Hàng tháng", ar: "أقساط شهرية", ru: "В рассрочку" })}
+                            </button>
+                          </div>
+                        ) : null}
+
+                        <div className="flex items-end gap-2">
+                          <span className="display-serif text-5xl">{price(displayPrice)}</span>
+                          <span className={cn("label-mono pb-1 text-[8px]", isSelected ? "xr-muted" : "xr-muted-2")}>
+                            {isCustomMaps
+                              ? t({ fr: "à partir de 990 € / an", en: "from €990 / year", vi: "từ 990 € / năm", ar: "ابتداءً من 990 € / سنة", ru: "от 990 € / год" })
+                              : t(PERIOD_LABEL[displayPeriod])}
                           </span>
                         </div>
+                        {planIsInstallment ? (
+                          <p className={cn("mt-2 text-[10px] leading-4", isSelected ? "text-emerald-400 font-medium" : "xr-muted")}>
+                            {t({ fr: "Mensualités calculées sur 12 mois.", en: "Monthly instalments calculated over 12 months.", vi: "Thanh toán hàng tháng tính trên 12 tháng.", ar: "أقساط شهرية على 12 شهراً.", ru: "Ежемесячный платёж рассчитан на 12 месяцев." })}
+                          </p>
+                        ) : null}
                       </div>
 
-                      {/* Deliverables Checklist */}
-                      <ul className="space-y-3 mb-8">
+                      <ul className="mt-5 space-y-3">
                         {(p.features ?? []).map((feature, k) => (
-                          <li key={k} className="flex items-start gap-3 text-xs sm:text-sm text-[#cbd5e1] leading-relaxed">
-                            <Check className="h-4 w-4 text-[#d4af37] shrink-0 mt-0.5" />
+                          <li key={k} className={cn("flex items-start gap-3 text-sm leading-5", isSelected ? "text-[var(--xr-ink)] font-normal" : "xr-muted")}>
+                            <Check className={cn("mt-0.5 h-4 w-4 shrink-0", isSelected ? "text-emerald-500" : "xr-muted-2")} />
                             <span>{t(feature)}</span>
                           </li>
                         ))}
                       </ul>
-                    </div>
 
-                    {/* Action Buttons */}
-                    <div className="space-y-3 pt-4 border-t border-white/10">
-                      {p.isQuoteOnly ? (
-                        <a
-                          href="/#quote"
-                          className="flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-4 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-black shadow-lg hover:bg-[#d4af37] transition"
-                        >
-                          <span>Estimer mon projet sur mesure</span>
-                          <ArrowRight className="h-3.5 w-3.5" />
-                        </a>
-                      ) : (
-                        <AddToCartBtn
-                          item={{
-                            serviceId: service.id === "maps"
-                              ? p.eur === 99
-                                ? "maps_essentiel"
-                                : p.eur === 169
-                                  ? "maps_croissance"
-                                  : "maps_intensif"
-                              : service.id,
-                            serviceName: t(service.title),
-                            planName: t(p.name),
-                            priceEur: displayPrice,
-                            period: displayPeriod,
-                            periodLabel: t(PERIOD_LABEL[displayPeriod]),
-                            commitment: p.commitmentMonths
-                              ? `Engagement minimum ${p.commitmentMonths} mois`
-                              : displayPeriod === "year"
-                                ? "Abonnement annuel"
-                                : undefined,
-                          }}
-                          popular={p.popular}
-                        />
-                      )}
-
-                      <a
-                        href={planWaUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex w-full items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 py-3 font-mono text-[9.5px] font-semibold uppercase tracking-wider text-[#cbd5e1] hover:border-[#d4af37] hover:text-white transition"
-                      >
-                        <MessageCircle className="h-3.5 w-3.5 text-[#25D366]" />
-                        <span>Échanger sur WhatsApp avec Antoine</span>
-                      </a>
-                    </div>
-                  </article>
+                      <div className="mt-8">
+                        {p.isQuoteOnly ? (
+                          <a
+                            href={planWaUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-3.5 text-[9px] font-bold uppercase tracking-[.14em] text-white shadow-lg transition hover:bg-emerald-500"
+                          >
+                            <MessageCircle className="h-4 w-4" />
+                            {t({ fr: "Cadrer mon projet sur devis", en: "Scope my project on quote", vi: "Tư vấn báo giá dự án", ar: "تحديد نطاق المشروع بعرض سعر", ru: "Обсудить проект по смете" })}
+                          </a>
+                        ) : !isCustomMaps ? (
+                          <AddToCartBtn
+                            item={{
+                              serviceId: service.id,
+                              serviceName: t(service.title),
+                              planName: t(p.name) + (planIsInstallment ? " (12 mois)" : ""),
+                              priceEur: displayPrice,
+                              period: displayPeriod,
+                              periodLabel: t(PERIOD_LABEL[displayPeriod]),
+                            }}
+                            popular={p.popular}
+                          />
+                        ) : null}
+                        {!p.isQuoteOnly && (
+                          <a
+                            href={planWaUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className={cn(
+                              "mt-3 flex w-full items-center justify-center gap-2 rounded-full border py-3 text-[9px] font-semibold uppercase tracking-[.12em] transition",
+                              isSelected
+                                ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
+                                : "xr-line bg-[var(--xr-bg)] xr-muted hover:bg-[var(--xr-surface-strong)]",
+                            )}
+                          >
+                            <MessageCircle className="h-3.5 w-3.5" />
+                            {t({ fr: "Parler de cette formule", en: "Discuss this plan", vi: "Trao đổi về gói này", ar: "ناقش هذه الباقة", ru: "Обсудить пакет" })}
+                          </a>
+                        )}
+                      </div>
+                    </article>
+                  </Reveal>
                 );
               })}
             </div>
           </div>
         </section>
 
-        {/* ── PILLAR 1: HUMAN ADVISOR ATTRIBUTION & SERVICE-SPECIFIC DEEP BLOCKS ── */}
-        <ServicePillarDeepBlocks serviceId={service.id} />
+        <section className="border-b xr-line py-14 sm:py-18 lg:py-24">
+          <div className="mx-auto max-w-[1120px] px-5 sm:px-8 lg:px-12">
+            <Reveal>
+              <div className="flex items-end justify-between gap-6">
+                <div>
+                  <p className="label-mono text-[7px] tracking-[.24em] xr-accent">04 / FAQ</p>
+                  <h2 className="display-serif mt-3 text-4xl sm:text-6xl">{t(copy.faq)}</h2>
+                </div>
+                <span className="hidden label-mono text-[7px] xr-muted-2 sm:block">{String(faqItems.length).padStart(2, "0")} {t({ fr: "QUESTIONS", en: "QUESTIONS", vi: "CÂU HỎI", ar: "أسئلة", ru: "ВОПРОСОВ" })}</span>
+              </div>
+            </Reveal>
 
-        {/* ── 04 / FAQ ACCORDION ── */}
-        <section className="border-b border-white/10 bg-[#040508] py-20 sm:py-28">
-          <div className="mx-auto max-w-4xl px-5 sm:px-8">
-            <div className="text-center mb-14">
-              <span className="font-mono text-[8.5px] font-bold uppercase tracking-[0.24em] text-[#d4af37] block mb-3">
-                04 / QUESTIONS FRÉQUENTES
-              </span>
-              <h2 className="text-3xl sm:text-5xl font-extrabold uppercase tracking-tight text-white">
-                Questions essentielles
-              </h2>
-            </div>
-
-            <div className="divide-y divide-white/10 border-y border-white/10">
+            <div className="mt-8 border-t xr-line">
               {faqItems.map((item, i) => {
                 const active = openFaq === i;
                 return (
-                  <div key={i} className="py-5">
-                    <button
-                      type="button"
-                      onClick={() => setOpenFaq(active ? null : i)}
-                      className="flex w-full items-center justify-between gap-4 text-left font-bold text-base sm:text-lg text-white hover:text-[#d4af37] transition"
-                    >
-                      <span className="flex items-center gap-4">
-                        <span className="font-mono text-xs text-[#d4af37]">0{i + 1}</span>
-                        <span>{t(item.q)}</span>
-                      </span>
-                      <Plus className={cn("h-4 w-4 transition-transform duration-300 text-[#d4af37]", active && "rotate-45")} />
-                    </button>
-                    {active && (
-                      <div className="mt-4 pl-8 text-xs sm:text-sm leading-relaxed text-[#94a3b8] animate-in fade-in duration-200">
-                        {t(item.a)}
+                  <div key={i} className="border-b xr-line">
+                    <button type="button" onClick={() => setOpenFaq(active ? null : i)} className="flex w-full items-start justify-between gap-5 py-6 text-left">
+                      <div className="flex items-start gap-4">
+                        <span className="label-mono mt-1 text-[7px] xr-muted-2">{String(i + 1).padStart(2, "0")}</span>
+                        <span className="display-serif text-xl sm:text-2xl">{t(item.q)}</span>
                       </div>
-                    )}
+                      <Plus className={cn("mt-1 h-5 w-5 shrink-0 transition-transform duration-300", active && "rotate-45")} />
+                    </button>
+                    <div className="grid transition-all duration-500" style={{ gridTemplateRows: active ? "1fr" : "0fr" }}>
+                      <div className="overflow-hidden">
+                        <p className="max-w-3xl pb-7 pl-9 text-sm leading-6 xr-muted">{t(item.a)}</p>
+                      </div>
+                    </div>
                   </div>
                 );
               })}
@@ -548,32 +514,21 @@ function GenericServiceDetailPage() {
           </div>
         </section>
 
-        {/* Global Studio Contact */}
         <Contact />
 
-        {/* ── STICKY FLOATING CAPSULE ON SCROLL ── */}
-        {showSticky && (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-3 rounded-full border border-white/15 bg-[#090b10]/95 px-5 py-3 shadow-[0_20px_60px_-10px_rgba(0,0,0,0.95)] backdrop-blur-2xl animate-in slide-in-from-bottom-3 duration-300">
-            <span className="font-mono text-[10px] font-bold text-white hidden sm:inline">
-              {t(service.title)} · dès {price(service.fromEur)}
+        {showSticky ? (
+          <div className="fixed bottom-5 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full border xr-line bg-[var(--xr-surface-strong)] px-3 py-2 shadow-[var(--xr-shadow)] backdrop-blur-xl sm:bottom-7 sm:gap-3 sm:px-4">
+            <span className="hidden label-mono text-[7px] xr-muted-2 sm:block">
+              {t(service.title)} · {price(service.fromEur)}
             </span>
-            <a
-              href="#plans"
-              className="rounded-full bg-white px-4 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-black hover:bg-[#d4af37] transition"
-            >
-              Commander
+            <a href="#plans" className="rounded-full bg-[var(--xr-ink)] px-4 py-2 label-mono text-[7px] font-semibold text-[var(--xr-bg)]">
+              {t({ fr: "Voir les formules", en: "View plans", vi: "Xem các gói", ar: "عرض الباقات", ru: "Смотреть пакеты" })}
             </a>
-            <a
-              href={waUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-full border border-white/20 bg-white/5 px-4 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-white hover:border-[#25D366] transition flex items-center gap-1.5"
-            >
-              <MessageCircle className="h-3 w-3 text-[#25D366]" />
-              <span>WhatsApp</span>
+            <a href={waUrl} target="_blank" rel="noreferrer" className="rounded-full border xr-line px-4 py-2 label-mono text-[7px] xr-muted">
+              WhatsApp
             </a>
           </div>
-        )}
+        ) : null}
       </main>
     </div>
   );

@@ -33,7 +33,6 @@ const HREF: Record<string, string> = {
   maps: "/services/maps",
   social: "/services/social",
   maintenance: "/services/webcare",
-  robotics: "/services/robotique",
 };
 
 export function ServicesCatalog() {
@@ -146,121 +145,74 @@ export function ServicesCatalog() {
           }}
         />
         <div className="relative z-10 mx-auto flex min-h-[70vh] max-w-[1400px] flex-col justify-end px-5 pb-16 pt-32 sm:px-8 lg:px-12 lg:pb-24">
-          <Parallax speed={-0.035}>
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#d4af37]/30 bg-[#d4af37]/10 px-4 py-1.5 font-mono text-[9px] font-bold uppercase tracking-[0.24em] text-[#d4af37] mb-6 backdrop-blur-md">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#d4af37]" />
-              <span>ATELIER DES DISCIPLINES · XR DIGITAL</span>
-            </div>
-            <h1 className="text-[clamp(3rem,6.8vw,6.8rem)] font-black uppercase leading-[0.9] tracking-[-0.045em] text-white">
-              {copy.title1}
-              <br />
-              <span className="text-[#d4af37]">{copy.title2}</span>
-            </h1>
-            <p className="mt-6 max-w-2xl text-base text-[#94a3b8] leading-relaxed">
-              {copy.lead}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href="/#quote"
-                className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 font-mono text-[10px] font-bold uppercase tracking-[.14em] text-black transition hover:scale-105 hover:bg-[#d4af37] shadow-[0_0_25px_rgba(255,255,255,0.2)]"
-              >
-                {copy.enter} <ArrowUpRight className="h-4 w-4" />
-              </a>
-              <a
-                href="/#quote"
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/60 px-6 py-3.5 font-mono text-[10px] font-semibold uppercase tracking-[.14em] text-white transition hover:border-[#d4af37] hover:text-[#d4af37]"
-              >
-                {copy.quote}
-              </a>
-            </div>
+          <Parallax speed={-0.035}><p className="label-mono text-[10px] uppercase tracking-[0.32em] text-primary">{copy.eyebrow}</p>
+          <h1 className="display-serif mt-5 max-w-5xl text-5xl leading-[0.9] sm:text-7xl lg:text-[6.5rem]">
+            {copy.title1}
+            <br />
+            <span className="text-foreground/90">{copy.title2}</span>
+          </h1>
+          <p className="mt-8 max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
+            {copy.lead}
+          </p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <a href="/#quote" className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 label-mono text-[10px] font-semibold uppercase tracking-[.14em] text-primary-foreground transition hover:-translate-y-0.5">{copy.enter} <ArrowUpRight className="h-4 w-4" /></a>
+            <a href="/#quote" className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-5 py-3 label-mono text-[10px] font-semibold uppercase tracking-[.14em] text-foreground transition hover:border-primary hover:text-primary">{copy.quote}</a>
+          </div>
           </Parallax>
-          <p className="mt-6 font-mono text-[9.5px] uppercase tracking-[0.2em] text-[#64748b]">
-            01 // {String(catalog.length).padStart(2, "0")} EXPERTISES SOUVERAINES
+          <p className="mt-6 label-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
+            01 // {String(catalog.length).padStart(2, "0")}
           </p>
         </div>
       </div>
 
       {/* Six service scenes — editorial bento */}
       <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-12">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-12 lg:gap-6">
           {catalog.map((service, index) => {
             const kicker = SERVICE_KICKER[service.id] ?? { fr: "SERVICE", en: "SERVICE", vi: "DỊCH VỤ" };
             const href = HREF[service.id] ?? `/services/${service.id}`;
             const featured = index === 0;
             return (
-              <article key={service.id} className={cn("group flex flex-col justify-between overflow-hidden rounded-[2rem] border border-white/12 bg-[#090b10] p-5 sm:p-7 shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:border-[#d4af37]/60 hover:shadow-[0_0_40px_rgba(212,175,55,0.18)]", featured ? "md:col-span-2 lg:col-span-7" : "lg:col-span-5")}>
-                <div>
-                  <div className="mb-5 overflow-hidden rounded-2xl border border-white/10 bg-[#06070a]">
-                    <ServiceIllustration service={service.id} title={t(service.title)} />
+              <article key={service.id} className={cn("group relative overflow-hidden rounded-[2rem] border border-border/70 bg-card/50 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-primary/45 hover:shadow-2xl", featured ? "md:col-span-2 lg:col-span-7" : "lg:col-span-5")}>
+                <div className={cn("relative overflow-hidden", featured ? "min-h-[560px]" : "min-h-[460px]")}>
+                  <div className="absolute inset-0 p-3 sm:p-5"><ServiceIllustration service={service.id} title={t(service.title)} /></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/55 to-transparent" />
+                  <div className="relative z-10 flex h-full min-h-[460px] flex-col justify-between p-6 sm:p-8">
+                    <div className="flex items-center justify-between">
+                      <span className="label-mono rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[8px] uppercase tracking-[.2em] text-white/70 backdrop-blur">{kicker[lang] ?? kicker.en}</span>
+                      <span className="label-mono text-[8px] text-white/40">{String(index + 1).padStart(2, "0")} / {String(catalog.length).padStart(2, "0")}</span>
+                    </div>
+                    <div className="max-w-2xl">
+                      <h2 className={cn("display-serif leading-[.9] text-white", featured ? "text-5xl sm:text-7xl" : "text-4xl sm:text-5xl")}>{t(service.title)}</h2>
+                      <p className="mt-4 max-w-xl text-sm leading-6 text-white/60">{t(service.description)}</p>
+                      <div className="mt-6 flex flex-wrap items-center gap-2.5">
+                        <a href={href} className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/35 px-5 py-3 label-mono text-[9px] font-semibold uppercase tracking-[.12em] text-white transition hover:-translate-y-0.5 hover:border-white/40">
+                          {copy.learn} <ArrowUpRight className="h-4 w-4" />
+                        </a>
+                        <a href={`/?service=${service.id}#quote`} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold uppercase tracking-[.12em] text-black transition hover:-translate-y-0.5 hover:bg-white/90">
+                          {copy.compose} <ArrowUpRight className="h-4 w-4" />
+                        </a>
+                        <span className="rounded-full border border-white/15 bg-black/30 px-4 py-3 label-mono text-[9px] text-white/70 backdrop-blur">{copy.from} {price(service.fromEur)}{service.fromPeriod === "month" ? copy.perMonth : service.fromPeriod === "year" ? copy.perYear : ""}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="font-mono rounded-full border border-[#d4af37]/40 bg-[#d4af37]/10 px-3 py-1 text-[8px] font-bold uppercase tracking-[.2em] text-[#d4af37]">
-                      {kicker[lang] ?? kicker.en}
-                    </span>
-                    <span className="rounded-full bg-black/80 px-3.5 py-1 font-mono text-[8.5px] font-bold text-[#d4af37] border border-white/10">
-                      {copy.from} {price(service.fromEur)}{service.fromPeriod === "month" ? copy.perMonth : service.fromPeriod === "year" ? copy.perYear : ""}
-                    </span>
-                  </div>
-                  <h2 className={cn("leading-[.95] text-white font-extrabold", featured ? "text-3xl sm:text-5xl" : "text-2xl sm:text-4xl")}>
-                    {t(service.title)}
-                  </h2>
-                  <p className="mt-3 max-w-xl text-sm leading-6 text-[#94a3b8]">{t(service.description)}</p>
-                </div>
-
-                <div className="mt-6 flex flex-wrap items-center gap-2.5 pt-4 border-t border-white/10">
-                  <a href={href} className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-3 font-mono text-[9px] font-bold uppercase tracking-[.12em] text-white transition hover:border-[#d4af37] hover:text-[#d4af37]">
-                    {copy.learn} <ArrowUpRight className="h-4 w-4" />
-                  </a>
-                  <a href={`/?service=${service.id}#quote`} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-mono text-[9px] font-bold uppercase tracking-[.12em] text-black transition hover:bg-[#d4af37] hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                    {copy.compose} <ArrowUpRight className="h-4 w-4" />
-                  </a>
                 </div>
               </article>
             );
           })}
-
-          {/* Dedicated Custom CRM Card */}
-          <article className="group flex flex-col justify-between overflow-hidden rounded-[2rem] border border-[#d4af37]/40 bg-gradient-to-br from-[#0e121d] via-[#090b10] to-[#040508] p-6 sm:p-8 shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_50px_rgba(212,175,55,0.25)] md:col-span-2 lg:col-span-12">
-            <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-              <div>
-                <div className="flex flex-wrap items-center gap-2 mb-3">
-                  <span className="font-mono rounded-full border border-[#d4af37]/40 bg-[#d4af37]/15 px-3 py-1 text-[8px] font-bold uppercase tracking-[.2em] text-[#d4af37]">
-                    NOUVELLE OFFRE MÉTIER
-                  </span>
-                  <span className="rounded-full bg-black px-3.5 py-1 font-mono text-[8.5px] font-bold text-[#d4af37] border border-white/15">
-                    À PARTIR DE 2 000 € · 0% COMMISSION
-                  </span>
-                </div>
-                <h2 className="text-3xl sm:text-5xl text-white font-extrabold leading-tight">
-                  Caisse POS &amp; CRM Omnicanal · <span className="text-[#d4af37] font-light italic">Stop aux 30% d&apos;Uber Eats.</span>
-                </h2>
-                <p className="mt-3 text-sm leading-6 text-[#94a3b8] max-w-2xl">
-                  Logiciel de caisse tactile avec tickets certifiés, gestion complète des stocks, synchronisation avec votre site web, écran cuisine KDS, app livreurs et option Jumeau Numérique 3D immersif style GTA.
-                </p>
-              </div>
-              <div className="flex flex-wrap lg:justify-end gap-3">
-                <a href="/services/robotique#crm-sur-mesure" className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 font-mono text-[9px] font-bold uppercase tracking-[.12em] text-black transition hover:scale-105 hover:bg-[#d4af37] shadow-[0_0_25px_rgba(255,255,255,0.25)]">
-                  Découvrir l&apos;offre Caisse &amp; CRM <ArrowUpRight className="h-4 w-4" />
-                </a>
-              </div>
-            </div>
-          </article>
         </div>
         {/* Bottom CTA */}
-        <div className="mt-20 rounded-3xl border border-white/15 bg-[#090b10] px-8 py-12 sm:px-12 lg:px-16 shadow-[0_30px_80px_rgba(0,0,0,0.9)]">
+        <div className="mt-20 rounded-3xl border border-primary/20 bg-primary/[0.04] px-8 py-12 sm:px-12 lg:px-16">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <span className="font-mono text-[9px] font-bold uppercase tracking-[0.22em] text-[#d4af37] block mb-2">
-                CADRAGE IMMÉDIAT
-              </span>
-              <h3 className="text-3xl sm:text-5xl font-extrabold uppercase text-white tracking-tight">{copy.ctaTitle}</h3>
-              <p className="mt-3 max-w-xl text-sm sm:text-base text-[#94a3b8] leading-relaxed font-normal">{copy.ctaLead}</p>
+              <h3 className="display-serif text-3xl sm:text-4xl">{copy.ctaTitle}</h3>
+              <p className="mt-3 max-w-xl text-sm leading-7 text-muted-foreground">{copy.ctaLead}</p>
             </div>
             <a
               href="/#quote"
-              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-8 py-4 font-mono text-xs font-bold uppercase tracking-[0.14em] text-black transition-all hover:bg-[#d4af37] hover:scale-105 shadow-[0_0_25px_rgba(255,255,255,0.2)]"
+              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-6 py-3.5 label-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-foreground transition-all hover:gap-3"
             >
-              <span>{copy.quoteFree}</span>
+              {copy.quoteFree}
               <ArrowUpRight className="h-4 w-4" />
             </a>
           </div>

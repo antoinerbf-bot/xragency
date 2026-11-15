@@ -47,7 +47,7 @@ const ROBOTICS_DETAILS: Record<Lang, string> = {
   ru: "Аренда сервисных роботов от 499 €/мес · покупка · мероприятия от 250 €.",
 };
 
-const BASE_PRICES: Record<string, number> = { website: 499, branding: 199, seo: 299, maps: 99, ads: 299, social: 349, content: 399, conversion: 299, maintenance: 29, robotics: 499 };
+const BASE_PRICES: Record<string, number> = { website: 499, branding: 179, seo: 299, maps: 990, ads: 299, social: 299, content: 399, conversion: 299, maintenance: 29, robotics: 499 };
 
 const PROFILE_SERVICE_RULES: Record<string, string[]> = Object.fromEntries(
   Object.entries(SERVICE_ORDER).map(([sectorId, services]) => [sectorId, services.slice(0, 4)])
@@ -114,19 +114,14 @@ export function QuoteConfiguratorCompact() {
 
   const brandingTiers = useMemo(() => ({
     starter: {
-      price: 199,
+      price: 179,
       label: { fr: "Logo Signature", en: "Signature Logo", vi: "Logo Đặc trưng", ar: "شعار توقيع مميز", ru: "Фирменный логотип" }[currentLang],
-      detail: { fr: "Logo sur mesure, déclinaisons essentielles et fichiers maîtres (199 €)", en: "Custom logo, essential variations and master files (€199)", vi: "Logo, các phiên bản cơ bản và tệp gốc (199 €)", ar: "الشعار والنسخ الأساسية والملفات المصدرية (199 €)", ru: "Логотип, базовые версии и исходные файлы (199 €)" }[currentLang],
-    },
-    identity: {
-      price: 299,
-      label: { fr: "Identité de Marque", en: "Brand Identity", vi: "Nhận diện Thương hiệu", ar: "هوية العلامة التجارية", ru: "Фирменный стиль" }[currentLang],
-      detail: { fr: "Logo, palette de couleurs, typographies et déclinaisons réseaux (299 €)", en: "Logo, color palette, typography and social variations (€299)", vi: "Logo, bảng màu, font chữ và ấn phẩm mạng xã hội (299 €)", ar: "الشعار ولوحة الألوان والخطوط وتطبيقات الشبكات (299 €)", ru: "Логотип, палитра, типографика и соцсети (299 €)" }[currentLang],
+      detail: { fr: "Logo, déclinaisons essentielles et fichiers maîtres", en: "Logo, essential variations and master files", vi: "Logo, các phiên bản cơ bản và tệp gốc", ar: "الشعار والنسخ الأساسية والملفات المصدرية", ru: "Логотип, базовые версии и исходные файлы" }[currentLang],
     },
     premium: {
-      price: 399,
-      label: { fr: "Charte Graphique Complète", en: "Complete Brand Guidelines", vi: "Bộ Quy chuẩn Thương hiệu", ar: "دليل الهوية البصرية الكامل", ru: "Полный брендбук" }[currentLang],
-      detail: { fr: "Système de marque complet, direction artistique et Brand Book (399 €)", en: "Complete brand system, art direction and Brand Book (€399)", vi: "Hệ thống thương hiệu mở rộng, định hướng nghệ thuật và Brand Book (399 €)", ar: "نظام علامة تجارية موسع وتوجيه فني ودليل الهوية (399 €)", ru: "Расширенная бренд-система, арт-дирекшн и брендбук (399 €)" }[currentLang],
+      price: 349,
+      label: { fr: "Full Brand Suite", en: "Full Brand Suite", vi: "Bộ nhận diện toàn diện", ar: "هوية بصرية شاملة", ru: "Полный брендинг" }[currentLang],
+      detail: { fr: "Système de marque étendu, direction artistique et Brand Book", en: "Extended brand system, art direction and Brand Book", vi: "Hệ thống thương hiệu mở rộng, định hướng nghệ thuật và Brand Book", ar: "نظام علامة تجارية موسع وتوجيه فني ودليل الهوية", ru: "Расширенная бренд-система, арт-дирекшн и брендбук" }[currentLang],
     },
   }), [currentLang]);
 
@@ -214,22 +209,14 @@ export function QuoteConfiguratorCompact() {
       let label = service.label;
       let detail = service.detail;
       if (service.id === "maps") {
-        if (budget === "2500_5000" || budget === "5000_plus") {
-          price = 299;
-          label = "Google Maps — Domination Locale";
-        } else if (budget === "1000_2500") {
-          price = 169;
-          label = "Google Maps — Pack Visibilité Maps";
-        } else {
-          price = 99;
-          label = "Google Maps — Fiche Pro Optimisée";
-        }
+        price = 990;
+        label = "Google Maps Top 3";
         detail = {
-          fr: "Fiche Pro 99 € · Pack Visibilité 169 € · Domination Locale 299 € (+ Option SEO Local Conquête 550 €)",
-          en: "Pro Listing €99 · Visibility Pack €169 · Local Domination €299 (+ Local SEO Option €550)",
-          vi: "Hồ sơ Pro 99 € · Gói Hiển thị 169 € · Thống lĩnh Địa phương 299 € (+ Tùy chọn SEO 550 €)",
-          ar: "ملف احترافي 99 € · باقة الظهور 169 € · السيطرة المحلية 299 € (+ خيار SEO المحلي 550 €)",
-          ru: "Профиль Pro 99 € · Пакет видимости 169 € · Локальное доминирование 299 € (+ Локальное SEO 550 €)",
+          fr: "SUR MESURE · à partir de 990 € / an · selon positionnement, zone, concurrence et mots-clés",
+          en: "BESPOKE · from €990 / year · based on ranking, area, competition and keywords",
+          vi: "THEO YÊU CẦU · từ 990 € / năm · tùy vị trí, khu vực, đối thủ và từ khóa",
+          ar: "مخصص · ابتداءً من 990 € سنويًا · وفق الترتيب والمنطقة والمنافسة والكلمات المفتاحية",
+          ru: "ПОД ЗАКАЗ · от 990 € в год · в зависимости от позиций, района, конкуренции и запросов",
         }[currentLang];
       }
       if (service.id === "website") {
@@ -241,16 +228,10 @@ export function QuoteConfiguratorCompact() {
           price = websiteTiers.showcase.price; label = websiteTiers.showcase.label; detail = websiteTiers.showcase.detail;
         }
       }
-      if (service.id === "branding") {
-        if (budget === "2500_5000" || budget === "5000_plus" || sectorId === "realestate") {
-          price = brandingTiers.premium.price; label = brandingTiers.premium.label; detail = brandingTiers.premium.detail;
-        } else if (budget === "1000_2500") {
-          price = brandingTiers.identity.price; label = brandingTiers.identity.label; detail = brandingTiers.identity.detail;
-        } else {
-          price = brandingTiers.starter.price; label = brandingTiers.starter.label; detail = brandingTiers.starter.detail;
-        }
+      if (service.id === "branding" && (budget === "2500_5000" || budget === "5000_plus" || sectorId === "realestate")) {
+        price = brandingTiers.premium.price; label = brandingTiers.premium.label; detail = brandingTiers.premium.detail;
       }
-      return { id: service.id, label, detail, price, period: service.id === "seo" || service.id === "social" || service.id === "maintenance" ? "month" : "once", custom: false };
+      return { id: service.id, label, detail, price, period: service.id === "seo" || service.id === "social" || service.id === "maintenance" ? "month" : "once", custom: service.id === "maps" };
     });
   }, [orderedServices, situation, budget, sectorId, currentLang, websiteTiers, brandingTiers]);
 
@@ -789,7 +770,7 @@ export function QuoteConfiguratorCompact() {
                     <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                       {orderedServices.map(x => {
                         const p = proposals.find(item => item.id === x.id);
-                        const deltaTag = p ? p.custom ? QUOTE_UI.onQuote[currentLang] : p.period === "month" ? `${p.price.toLocaleString("fr-FR")} €${QUOTE_UI.perMonth[currentLang]}` : `+${p.price.toLocaleString("fr-FR")} €` : undefined;
+                        const deltaTag = p ? p.custom ? QUOTE_UI.onQuote[currentLang] : p.period === "month" ? `${p.price.toLocaleString("fr-FR")} €${QUOTE_UI.perMonth[currentLang]}` : p.id === "maps" ? `990 €${QUOTE_UI.perYear[currentLang]}` : `+${p.price.toLocaleString("fr-FR")} €` : undefined;
                         return card(x, () => toggleService(x.id), selectedServices.includes(x.id), deltaTag);
                       })}
                     </div>

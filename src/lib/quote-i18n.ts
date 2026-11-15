@@ -254,38 +254,6 @@ export const SECTORS_DATA: LocalizedSector[] = [
     ]
   },
   {
-    id: "events",
-    label: { fr: "Événementiel · réceptions", en: "Events & Gala Reception", vi: "Sự kiện · Tiệc & Hội nghị", ar: "الفعاليات والمناسبات", ru: "События · мероприятия" },
-    detail: {
-      fr: "Organisateurs d'événements, mariages, traiteurs et galas d'entreprise",
-      en: "Event planners, weddings, corporate galas and reception venues",
-      vi: "Tổ chức sự kiện, tiệc cưới, hội nghị và địa điểm cao cấp",
-      ar: "منظمو الفعاليات والحفلات والمؤتمرات وقاعات الاستقبال",
-      ru: "Организация мероприятий, свадьбы, корпоративные гала-ужины"
-    },
-    goals: [
-      { fr: "Recevoir plus de demandes", en: "Capture event planning inquiries", vi: "Nhận thêm yêu cầu tổ chức sự kiện", ar: "استقطاب طلبات الفعاليات", ru: "Получать больше заявок на события" },
-      { fr: "Mettre en scène nos réalisations", en: "Showcase visual event portfolios", vi: "Trình diễn hình ảnh sự kiện ấn tượng", ar: "عرض الفعاليات السابقة بأسلوب راقٍ", ru: "Красиво показать портфолио" },
-      { fr: "Développer la notoriété locale", en: "Boost local & Google Maps visibility", vi: "Tăng độ nhận diện địa phương", ar: "تعزيز الظهور المحلي على Google", ru: "Повысить узнаваемость в регионе" },
-    ]
-  },
-  {
-    id: "education",
-    label: { fr: "Éducation · formation", en: "Education · Training Academies", vi: "Giáo dục · Đào tạo", ar: "التعليم والتدريب", ru: "Образование · обучение" },
-    detail: {
-      fr: "Écoles, centres de formation, coaching et académies privées",
-      en: "Private schools, training centers, coaching and academies",
-      vi: "Trường học, trung tâm đào tạo, coaching và học viện",
-      ar: "المدارس ومراكز التدريب والأكاديميات الخاصة",
-      ru: "Школы, учебные центры, коучинг и частные академии"
-    },
-    goals: [
-      { fr: "Générer des inscriptions", en: "Increase student & trainee enrollments", vi: "Tăng số lượng học viên đăng ký", ar: "زيادة تسجيل الطلاب والمتدربين", ru: "Привлекать больше учеников" },
-      { fr: "Clarifier nos programmes", en: "Clarify programmes & conversions", vi: "Trình bày lộ trình đào tạo rõ ràng", ar: "توضيح البرامج التدريبية بجاذبية", ru: "Понятно презентовать программы" },
-      { fr: "Automatiser le suivi candidats", en: "Automate admissions CRM & follow-up", vi: "Tự động hóa quản lý hồ sơ tuyển sinh", ar: "أتمتة متابعة المسجلين عبر CRM", ru: "Автоматизировать работу с заявками" },
-    ]
-  },
-  {
     id: "other",
     label: { fr: "Autre activité", en: "Other Business", vi: "Lĩnh vực khác", ar: "نشاط آخر", ru: "Другая сфера" },
     detail: {
@@ -320,14 +288,9 @@ export const SERVICES_DATA: LocalizedChoice[] = [
     detail: { fr: "Positionnement organique et acquisition Google", en: "Organic rankings and sustained Google acquisition", vi: "Thứ hạng tự nhiên và lượng truy cập từ Google", ar: "تصدر النتائج المجانية والاستقطاب عبر Google", ru: "Органический трафик и вывод в топ Google" }
   },
   {
-    id: "maps_top3",
-    label: { fr: "Google Maps Top 3 (Sur mesure)", en: "Google Maps Top 3 (Bespoke)", vi: "Google Maps Top 3 (Theo yêu cầu)", ar: "خرائط Google Top 3 (مخصص)", ru: "Google Карты Топ-3 (На заказ)" },
-    detail: { fr: "Référencement local dynamique selon ville, concurrence et rang", en: "Custom Local SEO calibrated to city, competition and starting rank", vi: "SEO địa phương tùy biến theo thành phố, cạnh tranh & thứ hạng", ar: "سيو محلي مخصص حسب المدينة والمنافسة والترتيب الحالي", ru: "Локальное SEO по оценке города, конкуренции и позиции" }
-  },
-  {
-    id: "maps_management",
-    label: { fr: "Gestion mensuelle fiche Maps", en: "Monthly GBP Management", vi: "Quản lý hồ sơ Maps hàng tháng", ar: "إدارة ملف Google الشهرية", ru: "Ежемесячное ведение карточки Maps" },
-    detail: { fr: "Abonnement à distance sur fiche existante (Posts, avis, photos)", en: "Remote monthly care for existing profile (Posts, reviews, visuals)", vi: "Vận hành từ xa hồ sơ có sẵn (Bài đăng, đánh giá, hình ảnh)", ar: "إدارة عن بُعد للملف القائم (منشورات، تقييمات، صور)", ru: "Удалённое ведение действующей карточки (посты, отзывы, фото)" }
+    id: "maps",
+    label: { fr: "Google Maps", en: "Google Maps", vi: "Google Maps", ar: "خرائط Google Maps", ru: "Google Карты" },
+    detail: { fr: "Fiche locale, visibilité et optimisation locale", en: "Local Pack top 3, local SEO and reputation setup", vi: "Tối ưu hồ sơ địa phương, vị trí top 3 và đánh giá", ar: "التواجد المحلي، الظهور في أفضل 3 وتحسين التقييمات", ru: "Топ-3 в Local Pack, карточка компании и отзывы" }
   },
   {
     id: "ads",
@@ -356,8 +319,8 @@ export const SERVICES_DATA: LocalizedChoice[] = [
   },
   {
     id: "robotics",
-    label: { fr: "IA, Automatisations & Robotique", en: "AI Automation & Robotics", vi: "AI Tự Động & Robot", ar: "الأتمتة الذكية والروبوتات", ru: "ИИ-автоматизация и Роботы" },
-    detail: { fr: "Agents conversationnels, CRM/ventes automatisées et robots Korben", en: "Conversational agents, CRM sales automation and Korben robots", vi: "Trợ lý AI, tự động hóa bán hàng CRM và robot Korben", ar: "وكلاء المحادثة وأتمتة المبيعات عبر CRM وروبوتات Korben", ru: "ИИ-агенты, интеграции CRM/продаж и роботы Korben" }
+    label: { fr: "Robotique & IA", en: "Robotics & AI", vi: "Robot & AI", ar: "الروبوتات والذكاء الاصطناعي", ru: "Робототехника и ИИ" },
+    detail: { fr: "Robots de service, location, achat et intégration", en: "Service robots, rental, acquisition and software setup", vi: "Robot dịch vụ, thuê, mua và tích hợp phần mềm thông minh", ar: "روبوتات الخدمة، إيجار وشراء وبرمجة متكاملة", ru: "Сервисные роботы, аренда, покупка и интеграция" }
   },
 ];
 
@@ -457,83 +420,83 @@ export const DISCOVERY_DATA: LocalizedChoice[] = [
 
 export const ALEXANDRE_MESSAGES: Record<number, MultiLang> = {
   0: {
-    fr: "Bonjour ! Sélectionnez votre secteur : j'adapte immédiatement le diagnostic et les recommandations.",
-    en: "Hello! Select your industry: I immediately tailor the diagnostic and recommendations.",
-    vi: "Xin chào! Hãy chọn lĩnh vực: tôi sẽ điều chỉnh ngay bộ câu hỏi phù hợp.",
-    ar: "مرحبًا! اختر مجال نشاطك وسأضبط الأسئلة والتوصيات فوراً.",
-    ru: "Здравствуйте! Выберите сферу бизнеса — я сразу адаптирую вопросы и смету."
+    fr: "Bonjour ! Je suis Alexandre. Je vais vous guider pour construire un projet adapté à votre activité.",
+    en: "Hello! I am Alexandre. I will guide you to build a project tailored to your business.",
+    vi: "Xin chào! Tôi là Alexandre. Tôi sẽ hướng dẫn bạn xây dựng giải pháp phù hợp nhất với ngành nghề của bạn.",
+    ar: "مرحبًا! أنا ألكسندر. سأرشدك لبناء مشروع يناسب نشاطك بدقة.",
+    ru: "Здравствуйте! Я Александр. Я помогу вам сформировать проект, точно адаптированный под ваш бизнес."
   },
   1: {
-    fr: "Identifions votre situation actuelle pour éviter toute prestation inutile et cibler l'essentiel.",
-    en: "Let's clarify your starting situation to avoid unnecessary services and target what matters.",
-    vi: "Xác định đúng hiện trạng giúp tập trung ngân sách vào hạng mục thực sự cần thiết.",
-    ar: "لنحدد وضعك الحالي بدقة لتجنب أي خدمات غير لازمة والتركيز على الأولويات.",
-    ru: "Определим вашу текущую ситуацию, чтобы исключить лишнее и сфокусироваться на результате."
+    fr: "Quel résultat compte le plus pour vous ? Je m’en servirai pour prioriser les bonnes actions.",
+    en: "Which result matters most to you? I will use this to prioritize the right actions.",
+    vi: "Mục tiêu nào quan trọng nhất với bạn? Tôi sẽ dựa vào đó để ưu tiên các giải pháp phù hợp.",
+    ar: "ما هي النتيجة الأهم بالنسبة لك؟ سأعتمد عليها لترتيب أولويات العمل.",
+    ru: "Какой результат для вас важнее всего? Я использую это для расстановки приоритетов."
   },
   2: {
-    fr: "Quel résultat prioritaire souhaitez-vous atteindre dans les 90 prochains jours ?",
-    en: "What primary outcome do you want to achieve first?",
-    vi: "Kết quả ưu tiên nào bạn muốn đạt được trước tiên?",
-    ar: "ما النتيجة الأهم التي ترغب في تحقيقها أولاً؟",
-    ru: "Какой главный результат для вас в приоритете?"
+    fr: "Je prends en compte votre situation actuelle pour éviter de vous proposer des solutions inutiles.",
+    en: "I take into account your current situation to avoid proposing unnecessary solutions.",
+    vi: "Tôi xem xét tình trạng hiện tại để tránh đề xuất những giải pháp không cần thiết.",
+    ar: "آخذ وضعك الحالي في الحسبان لتجنب اقتراح حلول لا تحتاج إليها.",
+    ru: "Я учитываю вашу текущую ситуацию, чтобы исключить лишние и ненужные решения."
   },
   3: {
-    fr: "Sélectionnez les prestations souhaitées. Notez que Google Maps sépare bien le SEO Top 3 sur mesure de la gestion mensuelle.",
-    en: "Select the services you need. Google Maps clearly separates custom Top 3 SEO from monthly care.",
-    vi: "Chọn dịch vụ mong muốn. Google Maps tách riêng SEO Top 3 theo yêu cầu và quản lý hàng tháng.",
-    ar: "اختر الخدمات المطلوبة. مسار السيو المحلي Top 3 منفصل عن الإدارة الشهرية للملف.",
-    ru: "Выберите нужные услуги. В Google Maps чётко разделены SEO Топ-3 на заказ и ведение профиля."
+    fr: "Parlons budget : je vais ajuster le périmètre à votre investissement envisagé.",
+    en: "Let's talk budget: I will tailor the project scope to your planned investment.",
+    vi: "Về ngân sách: tôi sẽ điều chỉnh phạm vi dự án tương ứng với mức đầu tư dự kiến.",
+    ar: "لنتحدث عن الميزانية: سأقوم بضبط نطاق العمل ليناسب استثمارك المرصود.",
+    ru: "Поговорим о бюджете: я адаптирую объём работ под запланированные инвестиции."
   },
   4: {
-    fr: "Répondez maintenant aux questions propres aux prestations sélectionnées pour un chiffrage précis et défendable.",
-    en: "Answer the service-specific questions below for an accurate, transparent estimate.",
-    vi: "Trả lời các thông số riêng của từng dịch vụ để nhận ước tính chính xác.",
-    ar: "أجب عن التفاصيل الخاصة بكل خدمة للحصول على تقدير دقيق ومنطقي.",
-    ru: "Ответьте на уточняющие вопросы по выбранным услугам для точного расчёта."
+    fr: "Je prépare une combinaison de services cohérente. Vous gardez le contrôle de chaque choix.",
+    en: "I prepare a coherent combination of services. You remain in full control of every choice.",
+    vi: "Tôi kết hợp các dịch vụ liền mạch với nhau. Bạn hoàn toàn làm chủ mọi lựa chọn.",
+    ar: "أقوم بإعداد مزيج متناسق من الخدمات مع إبقاء التحكم الكامل بيدك في كل اختيار.",
+    ru: "Я формирую сбалансированный комплекс услуг. Вы сохраняете полный контроль над каждым выбором."
   },
   5: {
-    fr: "Voici votre estimation argumentée, avec les facteurs qui expliquent le budget et les prestations incluses.",
-    en: "Here is your detailed estimate with clear pricing drivers and deliverables.",
-    vi: "Đây là báo giá ước tính chi tiết kèm các yếu tố cấu thành chi phí.",
-    ar: "إليك التقدير المالي المفصل مع توضيح العوامل المؤثرة والمهام.",
-    ru: "Готов аргументированный расчёт с факторами стоимости и составом работ."
+    fr: "Dernière question sur votre acquisition : elle m’aide à identifier les leviers les plus pertinents.",
+    en: "One last question about customer acquisition: this helps identify the most effective levers.",
+    vi: "Câu hỏi cuối về cách thu hút khách hàng: giúp xác định đòn bẩy hiệu quả nhất.",
+    ar: "سؤال أخير حول استقطاب العملاء: يساعدني في تحديد أقوى القنوات فاعلية.",
+    ru: "Последний вопрос об источниках клиентов: это поможет выявить самые действенные рычаги."
   },
   6: {
-    fr: "Vérifiez l'ensemble de vos réponses. Vous pouvez modifier n'importe quel paramètre avant validation.",
-    en: "Review your full configuration. You can edit any answer before generating your quote.",
-    vi: "Kiểm tra lại toàn bộ thông số. Bạn có thể quay lại chỉnh sửa bất kỳ bước nào.",
-    ar: "راجع جميع إجاباتك ويمكنك تعديل أي عنصر قبل تأكيد الطلب.",
-    ru: "Проверьте сводку конфигурации — любой параметр можно изменить до отправки."
+    fr: "Je croise vos réponses pour vous présenter une recommandation personnalisée et transparente.",
+    en: "I analyze your answers to provide a transparent, customized recommendation.",
+    vi: "Tôi tổng hợp các câu trả lời để đưa ra khuyến nghị minh bạch và phù hợp nhất.",
+    ar: "أقوم بمطابقة إجاباتك لأقدم لك توصية شفافة ومخصصة تمامًا.",
+    ru: "Я объединяю ваши ответы, чтобы представить прозрачную персональную рекомендацию."
   },
   7: {
-    fr: "Votre brief complet est prêt. Recevez votre devis PDF détaillé et transmettez-le en un clic à notre équipe.",
-    en: "Your full brief is ready. Download your detailed PDF quote and send it directly to our team.",
-    vi: "Bản brief đã hoàn tất. Tải báo giá PDF chi tiết và gửi ngay cho đội ngũ XR Agency.",
-    ar: "ملفك جاهز الآن. نزّل عرض السعر بصيغة PDF وأرسله مباشرة إلى فريقنا.",
-    ru: "Ваш бриф готов. Скачайте детальную смету в PDF и отправьте заявку команде."
+    fr: "Votre brief est prêt. Ajoutez vos coordonnées pour recevoir la proposition détaillée.",
+    en: "Your project brief is ready. Add your details to receive the comprehensive proposal.",
+    vi: "Bản tóm tắt dự án đã sẵn sàng. Hãy điền thông tin để nhận bản đề xuất chi tiết.",
+    ar: "ملف مشروعك جاهز. أضف بيانات الاتصال لاستلام المقترح المفصل.",
+    ru: "Ваш бриф готов. Укажите контакты, чтобы получить подробное коммерческое предложение."
   }
 };
 
 export const STEP_TITLES: Record<number, MultiLang> = {
-  0: { fr: "Secteur d'activité", en: "Industry sector", vi: "Lĩnh vực", ar: "مجال النشاط", ru: "Сфера деятельности" },
-  1: { fr: "Situation actuelle", en: "Current situation", vi: "Hiện trạng", ar: "الوضع الحالي", ru: "Текущая ситуация" },
-  2: { fr: "Objectif prioritaire", en: "Main objective", vi: "Mục tiêu", ar: "الهدف الرئيسي", ru: "Главная цель" },
-  3: { fr: "Prestations à activer", en: "Selected services", vi: "Dịch vụ lựa chọn", ar: "الخدمات المختارة", ru: "Выбор услуг" },
-  4: { fr: "Paramétrage conditionnel", en: "Service parameters", vi: "Thông số chi tiết", ar: "تخصيص المعايير", ru: "Параметры услуг" },
-  5: { fr: "Estimation & proposition", en: "Estimate & proposal", vi: "Ước tính & Đề xuất", ar: "التقدير والمقترح", ru: "Оценка и предложение" },
-  6: { fr: "Récapitulatif complet", en: "Full summary", vi: "Tổng hợp dự án", ar: "الملخص الكامل", ru: "Полная сводка" },
-  7: { fr: "Coordonnées & Devis PDF", en: "Contact & PDF Quote", vi: "Liên hệ & Xuất PDF", ar: "البيانات وملف PDF", ru: "Контакты и PDF-смета" },
+  0: { fr: "Votre activité", en: "Your industry", vi: "Lĩnh vực hoạt động", ar: "مجال نشاطك", ru: "Ваша сфера деятельности" },
+  1: { fr: "Votre priorité", en: "Your priority", vi: "Ưu tiên hàng đầu", ar: "أولويتك الرئيسية", ru: "Ваш приоритет" },
+  2: { fr: "Votre situation aujourd'hui", en: "Your current situation", vi: "Tình trạng hiện tại", ar: "وضعك الحالي", ru: "Текущая ситуация" },
+  3: { fr: "L'investissement envisagé", en: "Planned investment", vi: "Ngân sách dự kiến", ar: "الاستثمار المتوقع", ru: "Планируемые инвестиции" },
+  4: { fr: "Les prestations à activer", en: "Services to activate", vi: "Dịch vụ cần triển khai", ar: "الخدمات المراد تفعيلها", ru: "Услуги для подключения" },
+  5: { fr: "Comment vos clients vous trouvent", en: "How customers find you", vi: "Cách khách hàng biết đến bạn", ar: "كيف يجدك عملاؤك", ru: "Как вас находят клиенты" },
+  6: { fr: "Votre recommandation", en: "Your recommendation", vi: "Đề xuất dành riêng cho bạn", ar: "توصيتك المخصصة", ru: "Ваша рекомендация" },
+  7: { fr: "Vos informations", en: "Your information", vi: "Thông tin liên hệ", ar: "معلوماتك", ru: "Ваши контактные данные" },
 };
 
 export const STEP_SUBTITLES: Record<number, MultiLang> = {
-  0: { fr: "Quel est votre secteur d'activité ?", en: "What is your industry?", vi: "Ngành nghề của bạn là gì?", ar: "ما هو مجال نشاطك؟", ru: "В какой сфере вы работаете?" },
-  1: { fr: "Quelle est votre situation digitale aujourd'hui ?", en: "What is your current digital situation?", vi: "Hiện trạng kênh số của bạn ra sao?", ar: "ما هو وضعك الرقمي الحالي؟", ru: "Какова ваша текущая ситуация?" },
-  2: { fr: "Quel objectif souhaitez-vous privilégier ?", en: "Which goal would you like to prioritize?", vi: "Bạn muốn ưu tiên mục tiêu nào?", ar: "ما الهدف الذي تود إعطاءه الأولوية؟", ru: "Какую цель вы ставите в приоритет?" },
-  3: { fr: "Quelles prestations souhaitez-vous intégrer ?", en: "Which services would you like to include?", vi: "Bạn muốn triển khai những dịch vụ nào?", ar: "ما الخدمات التي ترغب في تفعيلها؟", ru: "Какие услуги вы хотите включить?" },
-  4: { fr: "Affinons les critères réels de votre projet.", en: "Let's refine the specific criteria of your project.", vi: "Cung cấp thông số riêng cho từng dịch vụ.", ar: "لنحدد المعايير الدقيقة لمشروعك.", ru: "Уточним реальные параметры проекта." },
-  5: { fr: "Voici votre proposition chiffrée et argumentée.", en: "Here is your detailed commercial estimate.", vi: "Đây là ước tính chi phí minh bạch và giải thích cụ thể.", ar: "إليك العرض التقديري المفصل والعوامل المؤثرة.", ru: "Детальный расчёт стоимости и обоснование." },
-  6: { fr: "Relisez et ajustez vos réponses si besoin.", en: "Review and adjust any answer before submitting.", vi: "Kiểm tra và chỉnh sửa lại nếu cần.", ar: "راجع إجاباتك وعدّل ما يلزم قبل الإرسال.", ru: "Проверьте и при необходимости измените ответы." },
-  7: { fr: "Recevez votre devis PDF et transmettez votre demande.", en: "Download your PDF quote and submit to our team.", vi: "Nhận báo giá PDF và gửi yêu cầu tới đội ngũ.", ar: "استلم عرض السعر PDF وأرسل طلبك للفريق.", ru: "Получите PDF-смету и отправьте заявку." },
+  0: { fr: "On commence simplement : quel est votre univers ?", en: "Let's start simply: what is your business field?", vi: "Bắt đầu đơn giản: lĩnh vực của bạn là gì?", ar: "نبدأ ببساطة: ما هو مجال عملك؟", ru: "Начнём с простого: в какой сфере вы работаете?" },
+  1: { fr: "Qu’aimeriez-vous améliorer en premier ?", en: "What would you like to improve first?", vi: "Bạn muốn cải thiện điều gì đầu tiên?", ar: "ما الذي ترغب في تحسينه أولاً؟", ru: "Что вы хотите улучшить в первую очередь?" },
+  2: { fr: "Où en êtes-vous aujourd’hui ?", en: "Where do you stand today?", vi: "Hiện trạng của bạn ra sao?", ar: "أين تقف اليوم؟", ru: "Какова ваша ситуация на сегодняшний день?" },
+  3: { fr: "On adapte la proposition à votre investissement.", en: "We adjust the proposal to your investment.", vi: "Chúng tôi điều chỉnh đề xuất theo mức đầu tư của bạn.", ar: "نوفّق المقترح مع استثمارك المستهدف.", ru: "Мы адаптируем предложение под ваши инвестиции." },
+  4: { fr: "Composez votre équipe digitale à la carte.", en: "Build your digital team à la carte.", vi: "Tùy chọn dịch vụ kỹ thuật số theo nhu cầu.", ar: "شكّل فريقك الرقمي حسب رغبتك.", ru: "Соберите индивидуальный цифровой стек." },
+  5: { fr: "Comment les clients vous découvrent-ils ?", en: "How do clients discover you today?", vi: "Khách hàng hiện tìm thấy bạn qua đâu?", ar: "كيف يكتشفك العملاء اليوم؟", ru: "Как клиенты узнают о вас сейчас?" },
+  6: { fr: "Voici une piste claire, avec les coûts détaillés.", en: "Here is a clear path with detailed costs.", vi: "Đây là lộ trình rõ ràng cùng chi phí chi tiết.", ar: "إليك مساراً واضحاً مع تفاصيل التكاليف.", ru: "Вот понятный план с детализацией стоимости." },
+  7: { fr: "Encore quelques coordonnées pour finaliser votre brief.", en: "A few contact details to finalize your brief.", vi: "Thêm vài thông tin để hoàn tất bản brief.", ar: "بعض التفاصيل الإضافية لإتمام ملفك.", ru: "Ещё пара контактов для завершения брифа." },
 };
 
 export const QUOTE_UI = {

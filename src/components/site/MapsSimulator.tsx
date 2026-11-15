@@ -266,24 +266,24 @@ const SECTORS = [
 
 /* ── City size options ── */
 const CITY_SIZES = [
-  { id: "small", label: "Petite ville", sub: "< 50 000 hab.", multiplier: 1.0 },
-  { id: "medium", label: "Ville moyenne", sub: "50 000 – 150 000", multiplier: 1.3 },
-  { id: "large", label: "Grande ville", sub: "150 000 – 500 000", multiplier: 1.6 },
-  { id: "metro", label: "Métropole", sub: "500 000+", multiplier: 2.1 },
+  { id: "small", label: "Petite ville", sub: "0 – 10 000 hab.", multiplier: 1.0 },
+  { id: "medium", label: "Ville moyenne", sub: "10 000 – 50 000 hab.", multiplier: 1.35 },
+  { id: "large", label: "Grande ville", sub: "50 000 – 250 000 hab.", multiplier: 1.85 },
+  { id: "metro", label: "Métropole", sub: "250 000+ hab. (ex: Paris)", multiplier: 2.65 },
 ];
 
 /* ── Keywords volume options ── */
 const KEYWORD_RANGES = [
-  { id: "k1", label: "1 à 3", sub: "mots-clés principaux", factor: 1.0 },
-  { id: "k2", label: "4 à 6", sub: "mots-clés principaux", factor: 1.25 },
-  { id: "k3", label: "7 à 10", sub: "mots-clés principaux", factor: 1.55 },
+  { id: "k1", label: "1 à 3", sub: "mots-clés stratégiques", factor: 1.0 },
+  { id: "k2", label: "4 à 6", sub: "mots-clés stratégiques", factor: 1.35 },
+  { id: "k3", label: "7 à 10", sub: "mots-clés haute concurrence", factor: 1.75 },
 ];
 
 /* ── Current ranking options ── */
 const CURRENT_RANKS = [
-  { id: "absent", label: "Absent de Maps", sub: "Fiche non créée ou invisible", penalty: 1.15 },
-  { id: "below20", label: "Hors Top 20", sub: "Très peu visible", penalty: 1.08 },
-  { id: "4to10", label: "Position 4 – 10", sub: "Visible mais pas dans le Pack", penalty: 1.0 },
+  { id: "4to10", label: "1re Page (Pos. 4–10)", sub: "Visible mais hors Top 3", penalty: 1.0 },
+  { id: "below20", label: "2e à 4e Page", sub: "Peu visible sur la zone", penalty: 1.25 },
+  { id: "absent", label: "Absent / Pas de fiche", sub: "Tout est à construire", penalty: 1.45 },
 ];
 
 /* ── 7-Phase methodology ── */
@@ -373,6 +373,8 @@ export function MapsSimulator() {
   const [citySize, setCitySize] = useState(CITY_SIZES[0].id);
   const [keywords, setKeywords] = useState(KEYWORD_RANGES[0].id);
   const [rank, setRank] = useState(CURRENT_RANKS[0].id);
+  const [customKeywords, setCustomKeywords] = useState("Serrurier Paris");
+  const [hasListing, setHasListing] = useState<"yes" | "no">("yes");
 
   useEffect(() => {
     if (!funnel?.sector) return;
@@ -391,18 +393,20 @@ export function MapsSimulator() {
     }
   }, [funnel?.sector, sector]);
 
-  /* ── Dynamic price calculation ── */
+  /* ── Dynamic price calculation (Base 999 € / an) ── */
   const { priceMin, priceMax } = useMemo(() => {
-    const base = 990;
+    const base = 999;
     const sizeMul = CITY_SIZES.find((c) => c.id === citySize)?.multiplier ?? 1;
     const kwFactor = KEYWORD_RANGES.find((k) => k.id === keywords)?.factor ?? 1;
     const rankPenalty = CURRENT_RANKS.find((r) => r.id === rank)?.penalty ?? 1;
-    const raw = base * sizeMul * kwFactor * rankPenalty;
+    const noListingBonus = hasListing === "no" ? 1.15 : 1.0;
+    const raw = base * sizeMul * kwFactor * rankPenalty * noListingBonus;
+    const minVal = raw <= 1050 ? 999 : Math.round(raw / 50) * 50;
     return {
-      priceMin: Math.round(raw / 100) * 100,
-      priceMax: Math.round((raw * 1.45) / 100) * 100,
+      priceMin: minVal,
+      priceMax: Math.round((raw * 1.45) / 50) * 50,
     };
-  }, [citySize, keywords, rank]);
+  }, [citySize, keywords, rank, hasListing]);
 
   const animMin = useAnimatedPrice(priceMin);
   const animMax = useAnimatedPrice(priceMax);
@@ -500,11 +504,11 @@ export function MapsSimulator() {
               ar: "على Google Maps بما يناسبك.",
             }}
             lead={{
-              fr: "À partir de 990 € / an. Audit, optimisation Google Business Profile, stratégie locale et suivi adaptés à votre zone, votre concurrence et vos requêtes.",
-              en: "From €990 / year. Audit, Google Business Profile optimisation, local strategy and monitoring adapted to your area, competition and target searches.",
-              vi: "Từ 990 € / năm. Kiểm toán, tối ưu Google Business Profile, chiến lược địa phương và theo dõi theo khu vực, đối thủ và truy vấn mục tiêu.",
-              ru: "От 990 € в год. Аудит, оптимизация Google Business Profile, локальная стратегия и мониторинг с учётом района, конкурентов и запросов.",
-              ar: "ابتداءً من 990 € سنويًا. تدقيق وتحسين Google Business Profile واستراتيجية محلية ومتابعة وفق منطقتك ومنافسيك وطلبات البحث.",
+              fr: "À partir de 999 € / an. Top 3 garanti 24h/24, 7j/7 pendant 1 an (ou remboursé) sur les mots-clés validés ensemble avec nos experts et analystes. Ou optez pour la Gestion Annuelle complète de votre fiche à 500 € / an.",
+              en: "From €999 / year. Guaranteed Top 3 24/7 for 1 year (or refunded) on keywords validated with our analysts. Or choose our Annual Profile Management at €500 / year.",
+              vi: "Từ 999 € / năm. Cam kết Top 3 24/7 trong 1 năm hoặc hoàn tiền trên bộ từ khóa được chuyên gia thẩm định.",
+              ru: "От 999 € в год. Топ-3 24/7 на 1 год с гарантией по согласованным ключевым словам, либо годовое ведение карточки за 500 € / год.",
+              ar: "ابتداءً من 999 € سنويًا. ضمان أفضل 3 على مدار الساعة لمدة عام أو استرداد المبلغ بعد اعتماد الكلمات المفتاحية.",
             }}
           />
 
@@ -514,7 +518,7 @@ export function MapsSimulator() {
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white font-black shadow-sm"><svg viewBox="0 0 24 24" className="h-5 w-5" aria-label="Google" role="img"><path fill="#4285F4" d="M21.35 12.27c0-.71-.06-1.4-.18-2.06H12v3.9h5.23a4.47 4.47 0 0 1-1.94 2.94v2.44h3.14c1.84-1.69 2.92-4.18 2.92-7.22Z"/><path fill="#34A853" d="M12 21.55c2.63 0 4.84-.87 6.45-2.36l-3.14-2.44c-.87.58-1.98.92-3.31.92-2.54 0-4.7-1.72-5.47-4.03H3.28v2.52A9.74 9.74 0 0 0 12 21.55Z"/><path fill="#FBBC05" d="M6.53 13.64A5.84 5.84 0 0 1 6.23 12c0-.57.1-1.12.3-1.64V7.84H3.28A9.72 9.72 0 0 0 2.25 12c0 1.57.38 3.06 1.03 4.16l3.25-2.52Z"/><path fill="#EA4335" d="M12 6.33c1.43 0 2.7.49 3.71 1.45l2.78-2.78C16.84 3.42 14.63 2.45 12 2.45a9.74 9.74 0 0 0-8.72 5.39l3.25 2.52c.77-2.31 2.93-4.03 5.47-4.03Z"/></svg></span>
               <Zap className="h-5 w-5 shrink-0 text-[var(--xr-bg)]" />
               <p className="text-sm font-semibold text-foreground leading-snug">
-                {tx("à partir de 990 € / an · objectif Top 3 sans garantie de position")}
+                À partir de 999 € / an · Top 3 garanti 24h/24, 7j/7 pendant 1 an ou remboursé (validation obligatoire par nos experts)
               </p>
               <Award className="h-5 w-5 shrink-0 text-[var(--xr-ink)]" />
             </div>
@@ -735,7 +739,37 @@ export function MapsSimulator() {
               </div>
             </div>
 
-            <div className="p-4 sm:p-6 space-y-4">
+            <div className="p-4 sm:p-6 space-y-5">
+              {/* Step 0 — Exact Keyword & Listing check */}
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-[1.3fr_0.7fr] rounded-2xl border border-border/80 bg-accent/10 p-4">
+                <div>
+                  <label className="label-mono mb-2 flex items-center gap-2 text-xs text-foreground font-bold">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-black text-black">★</span>
+                    Mots-clés & Ville visés pour le Top 3 (24h/24 · 7j/7)
+                  </label>
+                  <input
+                    type="text"
+                    value={customKeywords}
+                    onChange={(e) => setCustomKeywords(e.target.value)}
+                    placeholder="Ex : Serrurier Paris, Dentiste Lyon, Restaurant Bordeaux..."
+                    className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground placeholder:text-muted-foreground focus:border-emerald-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="label-mono mb-2 block text-xs text-foreground font-bold">
+                    Avez-vous déjà une fiche Google Maps ?
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <SelectorBtn selected={hasListing === "yes"} onClick={() => setHasListing("yes")}>
+                      <span className="font-bold text-xs">Oui, fiche existante</span>
+                    </SelectorBtn>
+                    <SelectorBtn selected={hasListing === "no"} onClick={() => { setHasListing("no"); setRank("absent"); }}>
+                      <span className="font-bold text-xs">Non, à créer</span>
+                    </SelectorBtn>
+                  </div>
+                </div>
+              </div>
+
               {/* Step 1 — Sector */}
               <div>
                 <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
@@ -859,65 +893,104 @@ export function MapsSimulator() {
                 </div>
               </div>
 
-              {/* ── Dynamic Price Result ── */}
-              <div className="rounded-2xl border-2 border-primary/30 bg-[var(--xr-ink)]/5 p-5 sm:p-6">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="label-mono text-xs text-muted-foreground">{tx("Budget indicatif · à partir de 990 € / an")}</p>
-                    <div className="mt-1 flex items-baseline gap-2">
-                      <span
-                        key={animMin}
-                        className="display-serif text-3xl font-bold text-[var(--xr-ink)] sm:text-4xl animate-price-reveal"
-                      >
-                        {formatEur(animMin)}
+              {/* ── Dynamic Price Result (Offre 1 : Top 3 Garanti 999€+ & Offre 2 : Gestion Annuelle 500€/an) ── */}
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.35fr_0.65fr]">
+                <div className="rounded-2xl border-2 border-primary/30 bg-[var(--xr-ink)]/5 p-5 sm:p-6 flex flex-col justify-between">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 label-mono text-[8px] font-bold text-emerald-500 mb-2">
+                        OFFRE 1 · TOP 3 GARANTI 24H/24 & 7J/7 PENDANT 1 AN (OU REMBOURSÉ)
                       </span>
-                      <span className="display-serif text-xl text-[var(--xr-ink)]/60">–</span>
-                      <span
-                        key={animMax}
-                        className="display-serif text-3xl font-bold text-[var(--xr-ink)] sm:text-4xl animate-price-reveal"
-                      >
-                        {formatEur(animMax)}
-                      </span>
-                      <span className="label-mono text-xs text-muted-foreground">{tx("/ an")}</span>
+                      <p className="label-mono text-xs text-muted-foreground">
+                        Estimation selon votre ville, concurrence & mots-clés ({customKeywords || "Vos mots-clés"}) · Dès 999 € / an
+                      </p>
+                      <div className="mt-1 flex items-baseline gap-2">
+                        <span
+                          key={animMin}
+                          className="display-serif text-3xl font-bold text-[var(--xr-ink)] sm:text-4xl animate-price-reveal"
+                        >
+                          {formatEur(animMin)}
+                        </span>
+                        <span className="display-serif text-xl text-[var(--xr-ink)]/60">–</span>
+                        <span
+                          key={animMax}
+                          className="display-serif text-3xl font-bold text-[var(--xr-ink)] sm:text-4xl animate-price-reveal"
+                        >
+                          {formatEur(animMax)}
+                        </span>
+                        <span className="label-mono text-xs text-muted-foreground">{tx("/ an")}</span>
+                      </div>
+                      <p className="mt-1.5 text-xs text-muted-foreground/85 font-medium">
+                        ⚠️ Aucun paiement direct en ligne : tarif définitif validé ensemble avec nos experts et analystes selon vos mots-clés.
+                      </p>
                     </div>
-                    <p className="mt-1.5 text-xs text-muted-foreground/70">
-                      {tx("Estimation indicative · tarif exact après audit personnalisé")}
-                    </p>
+
+                    <div className="flex flex-col gap-2 sm:items-end shrink-0">
+                      <div className="flex items-center gap-2 rounded-xl border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-3 py-2">
+                        <ShieldCheck className="h-4 w-4 shrink-0 text-[var(--xr-ink)]" />
+                        <span className="label-mono text-[10px] font-bold text-[var(--xr-ink)]">
+                          Garanti Top 3 sur 1 an ou remboursé
+                        </span>
+                      </div>
+                      <a
+                        href={`${CONTACT.whatsapp}?text=${encodeURIComponent(
+                          `Bonjour XR Agency, je souhaite valider mon éligibilité Top 3 Google Maps (dès 999 €/an).\n• Mots-clés visés : ${customKeywords}\n• Secteur : ${sectorLabel}\n• Ville : ${cityLabel}\n• Position actuelle : ${rankLabel}\n• Estimation affichée : ${animMin} € – ${animMax} € / an`
+                        )}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="label-mono inline-flex items-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-2.5 text-xs font-semibold text-[var(--xr-bg)] transition-all duration-200 hover:bg-[var(--xr-ink)]/90 hover:-translate-y-0.5 hover:shadow-lg"
+                      >
+                        <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
+                        Faire valider mes mots-clés par un expert
+                      </a>
+                    </div>
                   </div>
 
-                  <div className="flex flex-col gap-2 sm:items-end">
-                    {/* Guarantee badge */}
-                    <div className="flex items-center gap-2 rounded-xl border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-3 py-2">
-                      <ShieldCheck className="h-4 w-4 shrink-0 text-[var(--xr-ink)]" />
-                      <span className="label-mono text-[10px] font-bold text-[var(--xr-ink)]">
-                        {tx("Objectif Top 3 · étude locale sur mesure")}
-                      </span>
-                    </div>
-                    <a
-                      href={`${CONTACT.whatsapp}?text=${waPrefill}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="label-mono inline-flex items-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-2.5 text-xs font-semibold text-[var(--xr-bg)] transition-all duration-200 hover:bg-[var(--xr-ink)]/90 hover:-translate-y-0.5 hover:shadow-lg"
-                    >
-                      <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
-                      {tx("Lancer mon audit gratuit")}
-                    </a>
+                  {/* Trust signals */}
+                  <div className="mt-4 flex flex-wrap gap-3 border-t border-[var(--xr-ink)]/20 pt-4">
+                    {[
+                      { icon: CheckCircle2, text: "Validation obligatoire par nos analystes" },
+                      { icon: CheckCircle2, text: "Top 3 24h/24, 7j/7 pendant 1 an" },
+                      { icon: CheckCircle2, text: "Contrat garanti ou remboursé" },
+                      { icon: CheckCircle2, text: "Zéro abonnement mensuel imposé" },
+                    ].map(({ icon: Icon, text }) => (
+                      <div key={text} className="flex items-center gap-1.5">
+                        <Icon className="h-3.5 w-3.5 shrink-0 text-[var(--xr-ink)]" />
+                        <span className="label-mono text-[10px] text-muted-foreground">{text}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                {/* Trust signals */}
-                <div className="mt-4 flex flex-wrap gap-3 border-t border-[var(--xr-ink)]/20 pt-4">
-                  {[
-                    { icon: CheckCircle2, text: tx("Audit initial offert") },
-                    { icon: CheckCircle2, text: tx("Périmètre contractuel clair") },
-                    { icon: CheckCircle2, text: tx("Rapport mensuel inclus") },
-                    { icon: CheckCircle2, text: tx("Sans engagement minimum") },
-                  ].map(({ icon: Icon, text }) => (
-                    <div key={text} className="flex items-center gap-1.5">
-                      <Icon className="h-3.5 w-3.5 shrink-0 text-[var(--xr-ink)]" />
-                      <span className="label-mono text-[10px] text-muted-foreground">{text}</span>
+                {/* Offre 2 : Gestion Annuelle de Fiche Google Maps — 500 € / an */}
+                <div className="rounded-2xl border border-border bg-[var(--xr-surface)] p-5 sm:p-6 flex flex-col justify-between shadow-md">
+                  <div>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 border border-amber-500/30 px-2.5 py-0.5 label-mono text-[8px] font-bold text-amber-500">
+                      OFFRE 2 · GESTION DE FICHE CLÉS-EN-MAIN
+                    </span>
+                    <h4 className="display-serif mt-2 text-xl font-bold text-foreground">
+                      Gestion Annuelle Fiche Google Maps
+                    </h4>
+                    <div className="mt-2 flex items-baseline gap-1.5">
+                      <span className="display-serif text-3xl font-bold text-foreground">500 €</span>
+                      <span className="label-mono text-xs text-muted-foreground">/ an (forfait annuel unique)</span>
                     </div>
-                  ))}
+                    <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                      Aucun prélèvement mensuel : nous gérons l&apos;intégralité de votre fiche Google Maps pendant 12 mois (ajout et optimisation de vos photos, réponses professionnelles à vos avis clients, horaires et actualités).
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-border/60">
+                    <a
+                      href={`${CONTACT.whatsapp}?text=${encodeURIComponent(
+                        `Bonjour XR Agency, je souhaite souscrire au forfait Gestion Annuelle Fiche Google Maps à 500 € / an (avis, photos, mises à jour pendant 12 mois).`
+                      )}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="label-mono w-full inline-flex items-center justify-center gap-2 rounded-full border border-[var(--xr-ink)] bg-transparent px-4 py-2.5 text-xs font-bold text-foreground transition hover:bg-[var(--xr-ink)] hover:text-[var(--xr-bg)]"
+                    >
+                      Choisir la Gestion Annuelle (500 €/an)
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

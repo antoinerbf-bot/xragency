@@ -20,27 +20,25 @@ import { CONTACT } from "@/lib/content";
 import { Parallax, Reveal, EmberButton } from "./primitives";
 import { cn } from "@/lib/utils";
 
-import { XR_GALLERY_PHOTOS } from "@/lib/photography";
-
-// Editorial studio & team photography bundled locally for consistent art direction
+// Real, authentic, high-end photography of creative direction & workshops
 const GALLERY: { src: string; caption: typeof UI.galleryCaption1; speed: number }[] = [
   {
-    src: XR_GALLERY_PHOTOS.workshop1,
+    src: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=85",
     caption: UI.galleryCaption1,
     speed: 0.04,
   },
   {
-    src: XR_GALLERY_PHOTOS.workshop2,
+    src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=85",
     caption: UI.galleryCaption2,
     speed: -0.03,
   },
   {
-    src: XR_GALLERY_PHOTOS.workshop3,
+    src: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=85",
     caption: UI.galleryCaption3,
     speed: 0.04,
   },
   {
-    src: XR_GALLERY_PHOTOS.workshop4,
+    src: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=800&q=85",
     caption: UI.galleryCaption4,
     speed: -0.03,
   },

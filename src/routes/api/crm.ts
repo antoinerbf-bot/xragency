@@ -78,21 +78,32 @@ export const Route = createFileRoute("/api/crm")({
           const store = loadStore();
           const now = new Date().toISOString();
 
-          // ── 1. AUTHENTICATION (PUBLIC) ──
+          // ── 1. AUTHENTICATION (PUBLIC · CODES PIN 071266 / 07266, 7777, 1234 + EMAIL) ──
           if (action === "login") {
+            const rawPin = String(body.pin || body.password || "").trim();
             let email = String(body.email || "").trim().toLowerCase();
+
+            // Détection directe par code PIN
+            if (rawPin === "071266" || rawPin === "07266") {
+              email = "admin@xragency.fr";
+            } else if (rawPin === "7777" && !email) {
+              email = "lucas@xragency.fr";
+            } else if (rawPin === "1234") {
+              email = "karim@xragency.fr";
+            }
+
             if (email === "antoine@xragency.fr" || email === "direction@xragency.fr") {
               email = "admin@xragency.fr";
             }
-            const password = String(body.password || "");
+
             const user = store.members.find((m) => m.email.toLowerCase() === email && m.active);
             const isValidPassword =
               user &&
-              (verifyPassword(password, user.passwordHash) ||
-                (user.role === "admin" && (password === "AdminXR2026!" || password === "DirecteurXR2026!")) ||
-                (user.role === "member" && password === "EquipeXR2026!"));
+              (verifyPassword(rawPin, user.passwordHash) ||
+                (user.role === "admin" && (rawPin === "071266" || rawPin === "07266" || rawPin === "AdminXR2026!" || rawPin === "DirecteurXR2026!")) ||
+                (user.role === "member" && (rawPin === "7777" || rawPin === "1234" || rawPin === "EquipeXR2026!")));
             if (!user || !isValidPassword) {
-              return Response.json({ error: "Identifiants incorrects." }, { status: 401 });
+              return Response.json({ error: "Code d'accès incorrect. Vérifiez votre code PIN." }, { status: 401 });
             }
             const token = signSession({
               id: user.id,
@@ -129,51 +140,138 @@ export const Route = createFileRoute("/api/crm")({
             return Response.json({ error: "Compte introuvable ou désactivé." }, { status: 401 });
           }
 
-          // ── 2. PROSPECTS / LEADS ──
+          // ── 2. PROSPECTS / LEADS (SAISIE FLEXIBLE : SCREENSHOT, TÉLÉPHONE OU FICHE) ──
           if (action === "send_lead") {
-            if (user.role !== "admin") {
-              return Response.json({ error: "Action réservée à la Direction." }, { status: 403 });
-            }
-            const company = String(body.company || "").trim();
+            const rawCompany = String(body.company || "").trim();
+            const phone = String(body.phone || "").trim();
+            const screenshotUrl = typeof body.screenshotUrl === "string" ? body.screenshotUrl.trim() : undefined;
             const contactName = String(body.contactName || "").trim();
-            const assignedTo = String(body.assignedTo || "").trim();
-            if (!company || !assignedTo) {
-              return Response.json({ error: "Entreprise et destinataire requis." }, { status: 400 });
+            const assignedTo = String(body.assignedTo || user.id).trim();
+
+            if (!rawCompany && !phone && !screenshotUrl) {
+              return Response.json({ error: "Indiquez au moins un nom, un numéro ou un screenshot." }, { status: 400 });
             }
-            const targetMember = store.members.find((m) => m.id === assignedTo);
-            if (!targetMember) {
-              return Response.json({ error: "Membre assigné introuvable." }, { status: 404 });
-            }
+
+            const company =
+              rawCompany ||
+              (phone ? `Prospect Direct · ${phone}` : "Lead Screenshot / Photo Terrain");
+
+            const targetMember = store.members.find((m) => m.id === assignedTo) || user;
             const lead: CrmLead = {
               id: `lead-${Date.now().toString(36)}`,
               company,
-              contactName: contactName || "À qualifier",
-              phone: String(body.phone || "").trim(),
+              contactName: contactName || "Contact Direct",
+              phone: phone || "Voir capture / fiche",
               email: String(body.email || "").trim(),
               website: typeof body.website === "string" ? body.website.trim() : undefined,
               city: String(body.city || "France").trim(),
-              sector: String(body.sector || "Commerce / PME").trim(),
-              serviceTarget: String(body.serviceTarget || "Site Web + Google Maps").trim(),
-              budgetEur: Math.max(0, Number(body.budgetEur) || 1499),
-              status: (typeof body.status === "string" ? body.status : "new") as LeadStatus,
+              sector: String(body.sector || "Commerce / Restauration").trim(),
+              serviceTarget: String(body.serviceTarget || "Site Vitrine Pro (499 €) + Google Maps").trim(),
+              budgetEur: Math.max(0, Number(body.budgetEur) || 799),
+              status: (typeof body.status === "string" ? body.status : "to_call") as LeadStatus,
               priority: (body.priority === "urgent" || body.priority === "high" ? body.priority : "high") as LeadPriority,
-              assignedTo,
+              assignedTo: targetMember.id,
               sentBy: user.fullName,
-              source: String(body.source || "Envoi Direction").trim(),
+              source: String(body.source || (screenshotUrl ? "Capture Screenshot Direction" : "Envoi Direction")).trim(),
               notes: String(body.notes || "").trim(),
               nextFollowUp: String(body.nextFollowUp || "Aujourd'hui").trim(),
               callsCount: 0,
+              screenshotUrl,
+              maquetteStatus: "none",
               createdAt: now,
               updatedAt: now,
             };
             store.leads.unshift(lead);
+            if (targetMember.id !== user.id) {
+              store.notifications.unshift({
+                id: `notif-${Date.now().toString(36)}`,
+                targetMemberId: targetMember.id,
+                type: "new_lead",
+                title: "🎯 Nouveau Lead attribué par la Direction !",
+                message: `${lead.company} (${lead.serviceTarget})${screenshotUrl ? " avec capture jointe" : ""}.`,
+                read: false,
+                createdAt: now,
+              });
+            }
             store.activities.unshift({
               id: `act-${Date.now().toString(36)}`,
               leadId: lead.id,
               memberId: user.id,
               memberName: user.fullName,
               type: "assigned",
-              message: `Nouveau lead envoyé à ${targetMember.fullName} : ${lead.company} (${lead.budgetEur.toLocaleString("fr-FR")} €).`,
+              message:
+                targetMember.id === user.id
+                  ? `Lead personnel ajouté par ${user.fullName} : ${lead.company}.`
+                  : `Nouveau lead envoyé à ${targetMember.fullName} : ${lead.company} (${lead.budgetEur.toLocaleString("fr-FR")} €).`,
+              createdAt: now,
+            });
+            saveStore(store);
+            return Response.json(buildSnapshot(store, user));
+          }
+
+          // ── 2B. FLUX MAQUETTES : DEMANDE PAR VENDEUR -> VALIDATION PAR LIEN DIRECTION ──
+          if (action === "request_maquette") {
+            const leadId = String(body.leadId || "");
+            const lead = store.leads.find((l) => l.id === leadId);
+            if (!lead) return Response.json({ error: "Lead introuvable." }, { status: 404 });
+            lead.maquetteStatus = "pending";
+            lead.maquetteBrief = String(body.brief || `Maquette demandée pour ${lead.company} (${lead.serviceTarget})`).trim();
+            lead.maquetteRequestedAt = now;
+            lead.updatedAt = now;
+
+            store.notifications.unshift({
+              id: `notif-${Date.now().toString(36)}`,
+              targetMemberId: "mem-admin",
+              type: "project_update",
+              title: "🎨 Nouvelle demande de maquette",
+              message: `${user.fullName} demande une maquette pour ${lead.company} (${lead.serviceTarget}).`,
+              read: false,
+              createdAt: now,
+            });
+            store.activities.unshift({
+              id: `act-${Date.now().toString(36)}`,
+              leadId: lead.id,
+              memberId: user.id,
+              memberName: user.fullName,
+              type: "status",
+              message: `Maquette demandée au QG Direction pour ${lead.company}.`,
+              createdAt: now,
+            });
+            saveStore(store);
+            return Response.json(buildSnapshot(store, user));
+          }
+
+          if (action === "validate_maquette") {
+            if (user.role !== "admin") {
+              return Response.json({ error: "Validation réservée à la Direction." }, { status: 403 });
+            }
+            const leadId = String(body.leadId || "");
+            const maquetteUrl = String(body.maquetteUrl || "").trim();
+            const lead = store.leads.find((l) => l.id === leadId);
+            if (!lead || !maquetteUrl) {
+              return Response.json({ error: "Lead et lien de maquette requis." }, { status: 400 });
+            }
+            lead.maquetteStatus = "validated";
+            lead.maquetteUrl = maquetteUrl;
+            lead.maquetteValidatedAt = now;
+            lead.updatedAt = now;
+
+            store.notifications.unshift({
+              id: `notif-${Date.now().toString(36)}`,
+              targetMemberId: lead.assignedTo,
+              type: "project_update",
+              title: "✅ Maquette validée par la Direction !",
+              message: `La maquette de ${lead.company} est prête : ${maquetteUrl}`,
+              read: false,
+              createdAt: now,
+            });
+            store.activities.unshift({
+              id: `act-${Date.now().toString(36)}`,
+              leadId: lead.id,
+              memberId: user.id,
+              memberName: user.fullName,
+              type: "status",
+              message: `Maquette livrée & validée pour ${lead.company} (${maquetteUrl}).`,
               createdAt: now,
             });
             saveStore(store);
@@ -402,6 +500,59 @@ export const Route = createFileRoute("/api/crm")({
               updatedAt: now,
             };
             store.quotes.unshift(newQuote);
+
+            // Création automatique de la Facture / Proforma officielle avec RIB KARMA SASU intégré
+            const invoiceId = `VIR-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+            const paymentReference = `XR-${quoteId.slice(-4)}-${Date.now().toString(36).toUpperCase().slice(-4)}`;
+            const totalToPay = totalOnceEur + totalAnnualEur + totalMonthlyEur;
+
+            const autoInvoice: CrmInvoiceRecord = {
+              id: invoiceId,
+              quoteId,
+              clientName: newQuote.clientName,
+              clientCompany: newQuote.clientCompany,
+              clientEmail: newQuote.clientEmail,
+              items: items.map((i) => ({
+                label: i.label,
+                detail: i.detail || "Prestation officielle XR Agency",
+                amountEur: i.priceEur * (i.quantity || 1),
+              })),
+              totalEur: totalToPay,
+              taxRatePct: 0,
+              taxNotice: "TVA non applicable, art. 293 B du CGI.",
+              paymentMethod: "bank_transfer",
+              paymentReference,
+              bankDetails: {
+                beneficiary: "KARMA SASU (XR Agency)",
+                bankName: "Banque Professionnelle France",
+                ibanMasked: "FR76 1005 7000 **** **** **** 42",
+                bic: "BNPAFRPPXXX",
+                instructions: `Mentionner impérativement la référence ${paymentReference} dans le libellé du virement bancaire.`,
+              },
+              status: "pending_transfer",
+              dueDate: new Date(Date.now() + 7 * 86_400_000).toISOString(),
+              createdAt: now,
+              updatedAt: now,
+            };
+            store.invoices.unshift(autoInvoice);
+
+            if (typeof body.leadId === "string") {
+              const linkedLead = store.leads.find((l) => l.id === body.leadId);
+              if (linkedLead && linkedLead.status !== "signed") {
+                linkedLead.status = "proposal_sent";
+                linkedLead.updatedAt = now;
+              }
+            }
+
+            store.notifications.unshift({
+              id: `notif-${Date.now().toString(36)}`,
+              targetMemberId: "mem-admin",
+              type: "quote_accepted",
+              title: "📄 Nouveau Devis & RIB généré",
+              message: `${user.fullName} a généré le devis ${newQuote.id} (${totalToPay.toLocaleString("fr-FR")} €) pour ${newQuote.clientCompany}.`,
+              read: false,
+              createdAt: now,
+            });
 
             store.activities.unshift({
               id: `act-${Date.now().toString(36)}`,

@@ -7,10 +7,10 @@ import { AddToCartBtn } from "@/components/site/Cart";
 import { XR_PHOTOS } from "@/lib/photography";
 
 const SOCIAL_VISUALS = {
-  instagram: XR_PHOTOS.social,
-  tiktok: XR_PHOTOS.branding,
-  facebook: XR_PHOTOS.strategy,
-  linkedin: XR_PHOTOS.websites,
+  instagram: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=90",
+  tiktok: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=90",
+  facebook: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=90",
+  linkedin: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=90",
 } as const;
 
 const service = SERVICES.find((item) => item.id === "social")!;
@@ -100,7 +100,7 @@ export function SocialSalesPage() {
     <Nav />
     <main>
       <section className="relative isolate overflow-hidden bg-[#101311] text-[#f5f1e9]">
-        <div className="absolute inset-0"><img src={XR_PHOTOS.social} alt="" aria-hidden="true" className="h-full w-full object-cover opacity-35" /><div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,12,10,.66),rgba(9,12,10,.70)_48%,rgba(9,12,10,.66))]" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_8%,rgba(197,160,89,.20),transparent_50%)]" /></div>
+        <div className="absolute inset-0"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=2200&q=90" alt="" aria-hidden="true" className="h-full w-full object-cover opacity-35" /><div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,12,10,.66),rgba(9,12,10,.70)_48%,rgba(9,12,10,.66))]" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_8%,rgba(141,169,154,.20),transparent_50%)]" /></div>
         <div className="relative mx-auto max-w-[1440px] px-4 pb-7 pt-24 sm:px-7 sm:pb-12 sm:pt-12 lg:px-10">
           <div className="mx-auto max-w-4xl text-center">
             <p className="social-kicker text-white/70">Social Media Studio · XR Agency</p>
@@ -168,7 +168,7 @@ export function SocialSalesPage() {
           <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-6 text-white/60">Choisissez le niveau d’accompagnement adapté à votre rythme et à vos objectifs.</p>
           <div className="mt-8 grid items-stretch gap-4 lg:grid-cols-3">
             {plans.map((plan,i)=>{const popular=Boolean(plan.popular);const isOpen=expandedPlans.includes(i);return <article id={`plan-${i}`} key={plan.name.fr} className={`relative flex h-full flex-col rounded-2xl border p-5 sm:p-6 ${popular?"border-[#a9c1b2] bg-[#1a211d] shadow-[0_0_0_1px_rgba(169,193,178,.12)]":"border-white/10 bg-[#151916]"}`}>
-              {popular&&<span className="absolute -top-3 left-5 rounded-full bg-[#C5A059] px-3 py-1.5 text-xs font-semibold text-[#0B0B0C]">Le plus choisi</span>}
+              {popular&&<span className="absolute -top-3 left-5 rounded-full bg-[#a9c1b2] px-3 py-1.5 text-xs font-semibold text-[#111412]">Le plus populaire</span>}
               <p className="social-kicker mt-2 text-white/45">Formule 0{i+1}</p><h3 className="social-serif mt-3 text-3xl">{plan.name.fr}</h3><p className="mt-1 text-sm text-white/60">{plan.audience?.fr ?? "Un accompagnement adapté à votre activité"}</p>
               <div className="mt-5 border-y border-white/10 py-4"><div className="flex items-baseline gap-2"><span className="social-serif text-5xl">{plan.eur} €</span><span className="text-sm text-white/55">/ mois</span></div><p className="mt-2 text-xs text-white/55">Engagement minimum : {i===0?"3":"6"} mois</p></div>
               <ul className="mt-5 space-y-3">{plan.features.slice(0,4).map((feature,k)=><li key={k} className="flex gap-2.5 text-sm leading-5 text-white/85"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#a9c1b2]"/><span>{feature.fr}</span></li>)}</ul>

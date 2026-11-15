@@ -11,27 +11,39 @@ import { AddToCartBtn } from "./Cart";
 const CATEGORIES = [
   {
     id: "all",
-    label: { fr: "Tous les services (7)", en: "All Services (7)", vi: "Tất cả dịch vụ (7)", ar: "جميع الخدمات (7)", ru: "Все услуги (7)" },
+    label: { fr: "Tous les services (10)", en: "All Services (10)", vi: "Tất cả dịch vụ (10)", ar: "جميع الخدمات (10)", ru: "Все услуги (10)" },
   },
   {
     id: "web",
-    label: { fr: "Sites Web", en: "Websites", vi: "Website", ar: "المواقع", ru: "Сайты" },
-    ids: ["websites"],
+    label: { fr: "Sites Web & E-commerce", en: "Websites & E-commerce", vi: "Website & TMĐT", ar: "المواقع والمتاجر الإلكترونية", ru: "Сайты и интернет-магазины" },
+    ids: ["websites", "ecommerce", "refonte"],
   },
   {
-    id: "visibility",
-    label: { fr: "Visibilité Google", en: "Google Visibility", vi: "Hiển thị Google", ar: "الظهور على Google", ru: "Видимость в Google" },
-    ids: ["maps", "seo"],
+    id: "growth",
+    label: { fr: "Google Maps & SEO", en: "Google Maps & SEO", vi: "Google Maps & SEO", ar: "خرائط Google وتحسين محركات البحث", ru: "Google Maps и SEO" },
+    ids: ["maps", "seo", "ads"],
+  },
+  {
+    id: "strategy",
+    label: {
+      fr: "Stratégie Digitale",
+      en: "Digital Strategy",
+      vi: "Chiến lược Số",
+      ar: "الاستراتيجية الرقمية",
+      ru: "Цифровая стратегия",
+    },
+    ids: ["strategy"],
   },
   {
     id: "brand",
-    label: { fr: "Branding & Réseaux sociaux", en: "Branding & Social Media", vi: "Thương hiệu & Mạng xã hội", ar: "الهوية ووسائل التواصل", ru: "Брендинг и соцсети" },
-    ids: ["branding", "social"],
-  },
-  {
-    id: "operations",
-    label: { fr: "Maintenance & Solutions métier", en: "Maintenance & Business Solutions", vi: "Bảo trì & Giải pháp doanh nghiệp", ar: "الصيانة وحلول الأعمال", ru: "Поддержка и бизнес-решения" },
-    ids: ["maintenance", "robotics"],
+    label: {
+      fr: "Branding & Maintenance",
+      en: "Branding & Maintenance",
+      vi: "Thương hiệu & Bảo trì",
+      ar: "الهوية والصيانة",
+      ru: "Брендинг и обслуживание",
+    },
+    ids: ["branding", "social", "maintenance"],
   },
 ];
 
@@ -53,6 +65,7 @@ export function Pricing() {
   } as const)[lang];
   const [activeCategory, setActiveCategory] = useState("all");
   const [activeServiceId, setActiveServiceId] = useState(SERVICES[0].id);
+  const [installmentSelections, setInstallmentSelections] = useState<Record<number, boolean>>({});
 
   const filteredServices = SERVICES.filter((s) => {
     if (activeCategory === "all") return true;
@@ -152,11 +165,13 @@ export function Pricing() {
           className="mt-8 sm:mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3"
         >
           {currentService.plans.map((p, i) => {
-            const displayPrice = p.eur;
-            const displayPeriod = p.period;
+            const isInst = installmentSelections[i] ?? false;
+            const planIsInstallment = currentService.id === "websites" && isInst && p.period === "once";
+            const displayPrice = planIsInstallment ? Math.round((p.eur * 1.4) / 12) : p.eur;
+            const displayPeriod = planIsInstallment ? "month" : p.period;
 
             const waMessage = encodeURIComponent(
-              buildQuoteMessage(t(currentService.title), t(p.name), price(displayPrice), false),
+              buildQuoteMessage(t(currentService.title), t(p.name), price(displayPrice), planIsInstallment),
             );
 
             return (
@@ -184,19 +199,52 @@ export function Pricing() {
                       </p>
                     ) : null}
 
+                    {/* Inline Payment Selector for Websites */}
+                    {currentService.id === "websites" && p.period === "once" && (
+                      <div className="mt-4 flex rounded-lg bg-accent/30 p-1 border border-border/50">
+                        <button
+                          onClick={() => setInstallmentSelections(prev => ({ ...prev, [i]: false }))}
+                          className={cn(
+                            "flex-1 rounded-md text-[10px] sm:text-xs font-semibold transition-all py-1.5",
+                            !isInst
+                              ? "bg-primary text-primary-foreground shadow-sm"
+                              : "text-muted-foreground hover:text-foreground"
+                          )}
+                        >
+                          {pricingCopy.cash}
+                        </button>
+                        <button
+                          onClick={() => setInstallmentSelections(prev => ({ ...prev, [i]: true }))}
+                          className={cn(
+                            "flex-1 rounded-md text-[10px] sm:text-xs font-medium transition-all py-1.5",
+                            isInst
+                              ? "bg-primary/10 text-primary ring-1 ring-primary/30"
+                              : "text-muted-foreground hover:text-foreground"
+                          )}
+                        >
+                          {pricingCopy.monthly}
+                        </button>
+                      </div>
+                    )}
+
                     {/* Price display — compact */}
                     <div className="mt-5 border-y border-border/60 py-3.5">
                       <div className="flex items-baseline gap-2">
-                        {p.isQuoteOnly && (
-                          <span className="label-mono text-xs text-muted-foreground">
-                            {t({ fr: "À partir de", en: "From", vi: "Từ", ar: "ابتداءً من", ru: "От" })}
-                          </span>
-                        )}
                         <span className="display-serif text-3xl font-bold text-primary">
                           {price(displayPrice)}
                         </span>
                         <span className="label-mono flex flex-col items-start gap-1 text-xs text-muted-foreground">
-                          <span>{p.isQuoteOnly ? t({ fr: "· sur mesure", en: "· custom", vi: "· theo yêu cầu", ar: "· مخصص", ru: "· расчёт" }) : t(PERIOD_LABEL[displayPeriod])}</span>
+                          <span>{t(PERIOD_LABEL[displayPeriod])}</span>
+                          {planIsInstallment && (
+                            <span className="text-[9px] sm:text-[10px] text-primary/80 leading-tight max-w-[140px]">
+                              {t({ fr: "sur 12 mois (domaine et hébergement inclus : 79 €/mois)", en: "over 12 months (domain and hosting included: €79/month)", vi: "trong 12 tháng (đã gồm tên miền và hosting: 79 €/tháng)", ar: "على مدى 12 شهرًا (يشمل النطاق والاستضافة: 79 يورو/شهريًا)", ru: "на 12 месяцев (домен и хостинг включены: 79 €/мес.)" })}
+                            </span>
+                          )}
+                          {displayPeriod === "month" && (
+                            <span className="text-[9px] sm:text-[10px] text-primary/80">
+                              ≈ {price(Math.round((p.eur * 1.4) / 12))} {pricingCopy.perMonth}
+                            </span>
+                          )}
                         </span>
                       </div>
                     </div>
@@ -214,36 +262,18 @@ export function Pricing() {
 
                   {/* Actions */}
                   <div className="mt-6 space-y-2 pt-4 border-t border-border/50">
-                    {p.isQuoteOnly ? (
-                      <a
-                        href={`/?service=${currentService.id === "maps" ? "maps_top3" : currentService.id}#quote`}
-                        className="label-mono flex w-full items-center justify-center gap-2 rounded-full bg-primary py-3 text-[11px] font-semibold text-primary-foreground shadow-md transition hover:opacity-90"
-                      >
-                        {t({ fr: "Configurer mon estimation sur mesure", en: "Configure my custom estimate", vi: "Tính báo giá theo yêu cầu", ar: "احسب تقديرك المخصص", ru: "Рассчитать индивидуальную смету" })}
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </a>
-                    ) : (
-                      <AddToCartBtn
-                        item={{
-                          serviceId: currentService.id === "maps"
-                            ? p.eur === 99
-                              ? "maps_essentiel"
-                              : p.eur === 169
-                                ? "maps_croissance"
-                                : "maps_intensif"
-                            : currentService.id,
-                          serviceName: t(currentService.title),
-                          planName: t(p.name),
-                          priceEur: displayPrice,
-                          period: displayPeriod as "once" | "month" | "year",
-                          periodLabel: t(PERIOD_LABEL[displayPeriod]),
-                          commitment: p.commitmentMonths
-                            ? (lang === "en" ? "Minimum " + p.commitmentMonths + " months" : lang === "vi" ? "Cam kết tối thiểu " + p.commitmentMonths + " tháng" : lang === "ar" ? "الحد الأدنى " + p.commitmentMonths + " أشهر" : lang === "ru" ? "Минимум " + p.commitmentMonths + " мес." : "Engagement minimum " + p.commitmentMonths + " mois")
-                            : undefined,
-                        }}
-                        popular={p.popular}
-                      />
-                    )}
+                    {/* Add to cart */}
+                    <AddToCartBtn
+                      item={{
+                        serviceId: currentService.id,
+                        serviceName: t(currentService.title),
+                        planName: t(p.name) + (planIsInstallment ? " (12 mois)" : ""),
+                        priceEur: displayPrice,
+                        period: displayPeriod as "once" | "month" | "year",
+                        periodLabel: t(PERIOD_LABEL[displayPeriod]),
+                      }}
+                      popular={p.popular}
+                    />
 
                     {/* Quick WhatsApp fallback */}
                     <a
@@ -261,18 +291,6 @@ export function Pricing() {
             );
           })}
         </div>
-
-        <Reveal delay={200}>
-          <p className="mx-auto mt-7 max-w-3xl text-center text-[10px] leading-relaxed text-muted-foreground">
-            {t({
-              fr: "Prix de référence en EUR. Le traitement de la TVA est confirmé sur le devis ou la facture selon le régime fiscal du prestataire et la localisation du client. Les conversions internationales sont indicatives.",
-              en: "EUR reference prices. VAT treatment is confirmed on the quote or invoice according to the provider's tax status and the client's location. International currency conversions are indicative.",
-              vi: "Giá tham chiếu bằng EUR. Việc áp dụng VAT sẽ được xác nhận trên báo giá hoặc hóa đơn theo chế độ thuế của nhà cung cấp và địa điểm của khách hàng. Quy đổi ngoại tệ chỉ mang tính tham khảo.",
-              ar: "الأسعار المرجعية باليورو. تتم مراجعة ضريبة القيمة المضافة في عرض السعر أو الفاتورة وفق الوضع الضريبي للمزود وموقع العميل. تحويلات العملات الدولية إرشادية.",
-              ru: "Базовые цены указаны в EUR. Применение НДС подтверждается в смете или счёте с учётом налогового статуса исполнителя и местонахождения клиента. Международная конвертация носит справочный характер."
-            })}
-          </p>
-        </Reveal>
 
         {/* Link to dedicated service page */}
         <Reveal delay={220}>

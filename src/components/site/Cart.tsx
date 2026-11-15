@@ -49,10 +49,6 @@ export function Cart() {
     year: lang === "en" ? "/yr" : lang === "vi" ? "/năm" : lang === "ar" ? "/سنة" : lang === "ru" ? "/год" : "/an",
   };
 
-  const onceTotal = items.filter((i) => i.period === "once").reduce((sum, i) => sum + i.priceEur, 0);
-  const monthTotal = items.filter((i) => i.period === "month").reduce((sum, i) => sum + i.priceEur, 0);
-  const yearTotal = items.filter((i) => i.period === "year").reduce((sum, i) => sum + i.priceEur, 0);
-
   // Build WhatsApp message from cart
   const waMessage = encodeURIComponent(
     items.length === 0
@@ -60,9 +56,9 @@ export function Cart() {
       : `${copy.intro}\n\n${items
           .map(
             (i) =>
-              `• ${i.serviceName} — ${i.planName} : ${price(i.priceEur)}${periodShort[i.period]}${i.commitment ? ` (${i.commitment})` : ""}`,
+              `• ${i.serviceName} — ${i.planName} : ${price(i.priceEur)}${periodShort[i.period]}`,
           )
-          .join("\n")}\n\n${copy.total} : ${price(total)}\n\n${copy.finish}`,
+          .join("\n")}\n\n ${copy.total} : ${price(total)}\n\n ${copy.finish}`,
   );
 
   return (
@@ -156,16 +152,11 @@ export function Cart() {
                       {price(item.priceEur)}
                       {periodShort[item.period]}
                     </p>
-                    {item.commitment ? (
-                      <p className="mt-1 text-[11px] text-muted-foreground">
-                        {item.commitment}
-                      </p>
-                    ) : null}
                   </div>
                   <button
                     onClick={() => removeItem(item.id)}
                     aria-label={`${copy.remove} ${item.planName}`}
-                    className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/60 transition-all duration-200 hover:bg-destructive/10 hover:text-destructive"
+                    className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/30 opacity-0 transition-all duration-200 hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
@@ -178,39 +169,14 @@ export function Cart() {
         {/* Footer */}
         <div className="border-t border-border/60 px-6 py-5">
           {items.length > 0 && (
-            <div className="mb-4 space-y-2">
-              {(onceTotal > 0 && (monthTotal > 0 || yearTotal > 0)) || (monthTotal > 0 && yearTotal > 0) ? (
-                <div className="space-y-1 border-b border-border/50 pb-2 text-xs text-muted-foreground">
-                  {onceTotal > 0 && (
-                    <div className="flex justify-between">
-                      <span>Ponctuel</span>
-                      <span className="font-semibold text-foreground">{price(onceTotal)}</span>
-                    </div>
-                  )}
-                  {monthTotal > 0 && (
-                    <div className="flex justify-between">
-                      <span>Mensuel</span>
-                      <span className="font-semibold text-foreground">{price(monthTotal)}{periodShort.month}</span>
-                    </div>
-                  )}
-                  {yearTotal > 0 && (
-                    <div className="flex justify-between">
-                      <span>Annuel</span>
-                      <span className="font-semibold text-foreground">{price(yearTotal)}{periodShort.year}</span>
-                    </div>
-                  )}
-                </div>
-              ) : null}
-              <div className="flex items-baseline justify-between">
-                <span className="label-mono text-xs text-muted-foreground">{copy.total}</span>
-                <span
-                  key={animatedTotal}
-                  className="display-serif text-2xl text-primary animate-price-reveal"
-                >
-                  {price(animatedTotal)}
-                  {items.length === 1 ? periodShort[items[0].period] : ""}
-                </span>
-              </div>
+            <div className="mb-4 flex items-baseline justify-between">
+              <span className="label-mono text-xs text-muted-foreground">{copy.total}</span>
+              <span
+                key={animatedTotal}
+                className="display-serif text-2xl text-primary animate-price-reveal"
+              >
+                {price(animatedTotal)}
+              </span>
             </div>
           )}
 
