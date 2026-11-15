@@ -12,6 +12,12 @@ import { SocialSimulator } from "@/components/site/SocialSimulator";
 import { AddToCartBtn } from "@/components/site/Cart";
 import { ServiceIllustration } from "@/components/site/ServiceIllustration";
 import { SocialSalesPage } from "@/components/site/SocialSalesPage";
+import {
+  WebsitesStudioPage,
+  MapsDominationStudioPage,
+  BrandingStudioPage,
+  AiAndCustomSoftwareStudioPage,
+} from "@/components/site/ImmersiveServicePages";
 import { cn } from "@/lib/utils";
 
 const SERVICE_ALIASES: Record<string, string> = {
@@ -85,6 +91,10 @@ export const Route = createFileRoute("/services/$serviceId")({
 function ServiceDetailPage() {
   const { service } = Route.useLoaderData();
   if (service.id === "social") return <SocialSalesPage />;
+  if (service.id === "websites") return <WebsitesStudioPage />;
+  if (service.id === "maps") return <MapsDominationStudioPage />;
+  if (service.id === "branding") return <BrandingStudioPage />;
+  if (service.id === "ai" || service.id === "strategy") return <AiAndCustomSoftwareStudioPage />;
   return <GenericServiceDetailPage />;
 }
 
@@ -232,7 +242,7 @@ function GenericServiceDetailPage() {
                   <div className="mt-9 flex items-end gap-6 border-t xr-line pt-5">
                     <div>
                       <span className="label-mono text-[6px] xr-muted-2">{t({ fr: "À PARTIR DE", en: "FROM", vi: "TỪ", ar: "ابتداءً من", ru: "ОТ" })}</span>
-                      <p className="display-serif mt-1 text-4xl sm:text-5xl">{isCustomMaps ? "990 €" : price(service.fromEur)}</p>
+                      <p className="display-serif mt-1 text-4xl sm:text-5xl">{isCustomMaps ? "999 €" : price(service.fromEur)}</p>
                     </div>
                     <span className="label-mono pb-1 text-[7px] xr-muted-2">
                       {isCustomMaps ? t({ fr: "/ AN", en: "/ YEAR", vi: "/ NĂM", ar: "/ سنة", ru: "/ ГОД" }) : t(PERIOD_LABEL[service.fromPeriod])}
@@ -409,7 +419,7 @@ function GenericServiceDetailPage() {
                           <span className="display-serif text-5xl">{price(displayPrice)}</span>
                           <span className={cn("label-mono pb-1 text-[8px]", isSelected ? "xr-muted" : "xr-muted-2")}>
                             {isCustomMaps
-                              ? t({ fr: "à partir de 990 € / an", en: "from €990 / year", vi: "từ 990 € / năm", ar: "ابتداءً من 990 € / سنة", ru: "от 990 € / год" })
+                              ? t({ fr: "à partir de 999 € / an", en: "from €999 / year", vi: "từ 999 € / năm", ar: "ابتداءً من 999 € / سنة", ru: "от 999 € / год" })
                               : t(PERIOD_LABEL[displayPeriod])}
                           </span>
                         </div>
