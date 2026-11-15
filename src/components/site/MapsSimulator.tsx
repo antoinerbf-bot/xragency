@@ -1,30 +1,23 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import {
   MapPinned,
   Building2,
+  ShieldCheck,
   CheckCircle2,
-  Check,
-  AlertTriangle,
-  Minus,
-  ExternalLink,
+  Sparkles,
   ArrowRight,
   MessageCircle,
+  Award,
   Zap,
+  Users,
   BarChart3,
   Gauge,
 } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { CONTACT } from "@/lib/content";
 import { cn } from "@/lib/utils";
-import { Reveal } from "./primitives";
+import { Reveal, SectionHeading } from "./primitives";
 import { useFunnel } from "@/lib/funnel";
-import pfMaisonLumiere from "@/assets/pf-01-maison-lumiere.jpg";
-import pfVillaAzur from "@/assets/pf-02-villa-azur.jpg";
-import pfNoirOr from "@/assets/pf-03-noir-or.jpg";
-import pfCabinetMercier from "@/assets/pf-04-cabinet-mercier.jpg";
-import pfElanStudio from "@/assets/pf-05-elan-studio.jpg";
-import pfZenRetreat from "@/assets/pf-06-zen-retreat.jpg";
-import pfNeoGear from "@/assets/pf-08-neo-gear.jpg";
 
 
 const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
@@ -83,17 +76,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Nouveaux clients estimés": "Estimated new clients",
     "CA additionnel estimé": "Estimated added revenue",
     "Réserver mon secteur avant mes concurrents": "Claim my sector before competitors",
-    "Amorti dès le 1er mois grâce aux contacts entrants.": "Paid off from month 1 through incoming leads.",
-    "Visibilité locale": "Local visibility",
-    "Profil complet": "Complete profile",
-    "Photos (24)": "Photos (24)",
-    "Avis clients (4,8 ★)": "Reviews (4.8 ★)",
-    "Position locale": "Local ranking",
-    "Concurrence (3)": "Competitors (3)",
-    "Nos recommandations": "Our recommendations",
-    "3 actions prioritaires pour améliorer votre positionnement.": "3 priority actions to boost your local ranking.",
-    "Améliorer ma visibilité": "Boost my visibility",
-    "Analysez votre fiche, comparez votre position et découvrez vos opportunités de croissance.": "Analyze your profile, compare your ranking and unlock your local growth potential."
+    "Amorti dès le 1er mois grâce aux contacts entrants.": "Paid off from month 1 through incoming leads."
   },
   vi: {
     "Restaurant / Bar": "Nhà hàng / Bar", "Hôtel / Spa": "Khách sạn / Spa", "Santé / Médecin": "Y tế / Bác sĩ", "Avocat / Notaire": "Luật sư / Công chứng viên", "Immobilier": "Bất động sản", "Artisan / BTP": "Thợ thủ công / Xây dựng", "Beauté / Bien-être": "Làm đẹp / Sức khỏe", "Autre commerce": "Doanh nghiệp khác",
@@ -150,17 +133,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Nouveaux clients estimés": "Khách hàng mới ước tính",
     "CA additionnel estimé": "Doanh thu bổ sung ước tính",
     "Réserver mon secteur avant mes concurrents": "Đặt chỗ khu vực của tôi trước đối thủ",
-    "Amorti dès le 1er mois grâce aux contacts entrants.": "Hoàn vốn ngay từ tháng đầu tiên nhờ khách hàng chủ động liên hệ.",
-    "Visibilité locale": "Hiển thị địa phương",
-    "Profil complet": "Hồ sơ hoàn chỉnh",
-    "Photos (24)": "Hình ảnh (24)",
-    "Avis clients (4,8 ★)": "Đánh giá (4,8 ★)",
-    "Position locale": "Thứ hạng khu vực",
-    "Concurrence (3)": "Đối thủ (3)",
-    "Nos recommandations": "Đề xuất của chúng tôi",
-    "3 actions prioritaires pour améliorer votre positionnement.": "3 hành động ưu tiên để cải thiện thứ hạng của bạn.",
-    "Améliorer ma visibilité": "Nâng cao khả năng hiển thị",
-    "Analysez votre fiche, comparez votre position et découvrez vos opportunités de croissance.": "Phân tích hồ sơ, so sánh thứ hạng và khám phá cơ hội tăng trưởng địa phương."
+    "Amorti dès le 1er mois grâce aux contacts entrants.": "Hoàn vốn ngay từ tháng đầu tiên nhờ khách hàng chủ động liên hệ."
   },
   ru: {
     "Restaurant / Bar": "Ресторан / бар", "Hôtel / Spa": "Отель / спа", "Santé / Médecin": "Медицина / врач", "Avocat / Notaire": "Юрист / нотариус", "Immobilier": "Недвижимость", "Artisan / BTP": "Мастер / строительство", "Beauté / Bien-être": "Красота / wellness", "Autre commerce": "Другой бизнес",
@@ -217,17 +190,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Nouveaux clients estimés": "Оценка новых клиентов",
     "CA additionnel estimé": "Ориентировочная доп. выручка",
     "Réserver mon secteur avant mes concurrents": "Занять нишу раньше конкурентов",
-    "Amorti dès le 1er mois grâce aux contacts entrants.": "Окупается с первого месяца за счёт входящих обращений.",
-    "Visibilité locale": "Локальная видимость",
-    "Profil complet": "Профиль заполнен",
-    "Photos (24)": "Фото (24)",
-    "Avis clients (4,8 ★)": "Отзывы (4,8 ★)",
-    "Position locale": "Локальная позиция",
-    "Concurrence (3)": "Конкуренты (3)",
-    "Nos recommandations": "Наши рекомендации",
-    "3 actions prioritaires pour améliorer votre positionnement.": "3 приоритетных действия для роста позиций.",
-    "Améliorer ma visibilité": "Повысить видимость",
-    "Analysez votre fiche, comparez votre position et découvrez vos opportunités de croissance.": "Проанализируйте профиль, сравните позиции и откройте точки локального роста."
+    "Amorti dès le 1er mois grâce aux contacts entrants.": "Окупается с первого месяца за счёт входящих обращений."
   },
   ar: {
     "Restaurant / Bar": "مطعم / بار", "Hôtel / Spa": "فندق / سبا", "Santé / Médecin": "الصحة / طبيب", "Avocat / Notaire": "محامٍ / موثق", "Immobilier": "العقارات", "Artisan / BTP": "حرفي / إنشاءات", "Beauté / Bien-être": "الجمال / العافية", "Autre commerce": "نشاط تجاري آخر",
@@ -284,17 +247,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Nouveaux clients estimés": "العملاء الجدد المتوقعون",
     "CA additionnel estimé": "الإيراد الإضافي المتوقع",
     "Réserver mon secteur avant mes concurrents": "احجز قطاعك قبل منافسيك",
-    "Amorti dès le 1er mois grâce aux contacts entrants.": "تسترد استثمارك من الشهر الأول عبر العملاء الجدد.",
-    "Visibilité locale": "الظهور المحلي",
-    "Profil complet": "ملف مكتمل",
-    "Photos (24)": "الصور (24)",
-    "Avis clients (4,8 ★)": "تقييمات العملاء (4,8 ★)",
-    "Position locale": "الترتيب المحلي",
-    "Concurrence (3)": "المنافسة (3)",
-    "Nos recommandations": "توصياتنا",
-    "3 actions prioritaires pour améliorer votre positionnement.": "3 إجراءات ذات أولوية لتحسين ترتيبك.",
-    "Améliorer ma visibilité": "تعزيز ظهوري المحلي",
-    "Analysez votre fiche, comparez votre position et découvrez vos opportunités de croissance.": "حلّل ملفك، قارن ترتيبك واكتشف فرص النمو المحلي المتاحة لك."
+    "Amorti dès le 1er mois grâce aux contacts entrants.": "تسترد استثمارك من الشهر الأول عبر العملاء الجدد."
   }
 };
 function translateMaps(value: string, lang: string) { return MAPS_TRANSLATIONS[lang]?.[value] ?? value; }
@@ -344,6 +297,30 @@ const PHASES = [
   { num: "07", name: "Résultats & ROI", title: "Mesure transparente", desc: "Tableau de bord de suivi hebdomadaire des positions, suivi des appels téléphoniques et des demandes d’itinéraire." },
 ];
 
+/* ── Animated price counter ── */
+function useAnimatedPrice(target: number, duration = 500) {
+  const [val, setVal] = useState(target);
+  const prevRef = useRef(target);
+  const rafRef = useRef<number>(0);
+
+  useEffect(() => {
+    const from = prevRef.current;
+    if (from === target) return;
+    prevRef.current = target;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setVal(Math.round(from + (target - from) * eased));
+      if (t < 1) rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [target, duration]);
+
+  return val;
+}
+
 function formatEur(n: number) {
   return new Intl.NumberFormat("fr-FR", {
     style: "currency",
@@ -352,17 +329,6 @@ function formatEur(n: number) {
     maximumFractionDigits: 0,
   }).format(n);
 }
-
-const SAMPLE_PLACES: Record<string, { name: string; cat: string; img: string; rating: string; reviews: number }> = {
-  resto: { name: "Le Bistrot Parisien", cat: "Restaurant", img: pfMaisonLumiere, rating: "4,8", reviews: 324 },
-  hotel: { name: "Hôtel Villa d'Or", cat: "Hôtel & Spa", img: pfVillaAzur, rating: "4,9", reviews: 412 },
-  sante: { name: "Clinique Saint-Honoré", cat: "Santé", img: pfZenRetreat, rating: "4,9", reviews: 198 },
-  juridique: { name: "Cabinet Mercier & Associés", cat: "Cabinet", img: pfCabinetMercier, rating: "4,9", reviews: 164 },
-  immo: { name: "Propriétés Rive Gauche", cat: "Immobilier", img: pfNoirOr, rating: "4,8", reviews: 236 },
-  artisan: { name: "Atelier Haussmann", cat: "Architecture & BTP", img: pfElanStudio, rating: "4,9", reviews: 142 },
-  beaute: { name: "Maison Zen & Soin", cat: "Beauté & Spa", img: pfZenRetreat, rating: "4,8", reviews: 289 },
-  autre: { name: "Maison XR Sélection", cat: "Commerce", img: pfNeoGear, rating: "4,8", reviews: 215 },
-};
 
 /* ── Selector Button ── */
 function SelectorBtn({
@@ -378,13 +344,12 @@ function SelectorBtn({
 }) {
   return (
     <button
-      type="button"
       onClick={onClick}
       className={cn(
-        "flex w-full flex-col items-center gap-1 rounded-2xl border px-3 py-2.5 text-center text-xs transition-all duration-200",
+        "flex w-full flex-col items-center gap-1 rounded-xl border px-2.5 py-2 text-center text-xs transition-all duration-200",
         selected
-          ? "border-[#b48f5a] bg-[#f2ead9] text-[#141312] shadow-sm ring-1 ring-[#c5a880]"
-          : "border-[#141312]/10 bg-white text-[#5d564c] hover:border-[#b48f5a]/50 hover:text-[#141312]",
+          ? "border-[var(--xr-ink)] bg-[var(--xr-accent-soft)] text-[var(--xr-ink)] shadow-sm ring-1 ring-[var(--xr-ink)]/15"
+          : "border-border bg-card/60 text-muted-foreground hover:border-[var(--xr-ink)]/40 hover:text-foreground",
         className,
       )}
     >
@@ -394,7 +359,7 @@ function SelectorBtn({
 }
 
 export function MapsSimulator() {
-  const { lang } = useLang();
+  const { price: formatPrice, lang } = useLang();
   const tx = (value: string) => translateMaps(value, lang);
 
   let funnel: ReturnType<typeof useFunnel> | null = null;
@@ -408,7 +373,6 @@ export function MapsSimulator() {
   const [citySize, setCitySize] = useState(CITY_SIZES[0].id);
   const [keywords, setKeywords] = useState(KEYWORD_RANGES[0].id);
   const [rank, setRank] = useState(CURRENT_RANKS[0].id);
-  const [selectedPlanId, setSelectedPlanId] = useState<"growth" | "domination" | "annual">("domination");
 
   useEffect(() => {
     if (!funnel?.sector) return;
@@ -427,14 +391,27 @@ export function MapsSimulator() {
     }
   }, [funnel?.sector, sector]);
 
+  /* ── Dynamic price calculation ── */
+  const { priceMin, priceMax } = useMemo(() => {
+    const base = 990;
+    const sizeMul = CITY_SIZES.find((c) => c.id === citySize)?.multiplier ?? 1;
+    const kwFactor = KEYWORD_RANGES.find((k) => k.id === keywords)?.factor ?? 1;
+    const rankPenalty = CURRENT_RANKS.find((r) => r.id === rank)?.penalty ?? 1;
+    const raw = base * sizeMul * kwFactor * rankPenalty;
+    return {
+      priceMin: Math.round(raw / 100) * 100,
+      priceMax: Math.round((raw * 1.45) / 100) * 100,
+    };
+  }, [citySize, keywords, rank]);
+
+  const animMin = useAnimatedPrice(priceMin);
+  const animMax = useAnimatedPrice(priceMax);
+
   const selectedSector = SECTORS.find((s) => s.id === sector);
   const sectorLabel = tx(selectedSector?.label ?? "");
   const cityLabel = tx(CITY_SIZES.find((c) => c.id === citySize)?.label ?? "");
   const kwLabel = `${KEYWORD_RANGES.find((k) => k.id === keywords)?.label ?? ""} ${tx("mots-clés principaux")}`;
   const rankLabel = tx(CURRENT_RANKS.find((r) => r.id === rank)?.label ?? "");
-
-  const samplePlace = SAMPLE_PLACES[sector] ?? SAMPLE_PLACES.resto;
-  const visibilityScore = rank === "4to10" ? 89 : rank === "below20" ? 83 : 78;
 
   const roiMetrics = useMemo(() => {
     const cityData: Record<string, { searches: number; example: Record<string, string> }> = {
@@ -461,690 +438,484 @@ export function MapsSimulator() {
     };
   }, [citySize, keywords, sector, lang]);
 
-  const cardCityDisplay = citySize === "small" && lang === "fr" ? "Paris" : roiMetrics.cityName;
-
-  const PLAN_OPTIONS = {
-    growth: {
-      name: "Pack Gestion & Croissance Locale",
-      priceDisplay: "99 € / mois",
-      detail: "Audit GBP, 4 Google Posts mensuels SEO, modération des avis et rapport mensuel.",
-      badge: "GESTION 99€/M",
-    },
-    domination: {
-      name: "Pack Domination Top 3 & Acquisition",
-      priceDisplay: "159 € / mois",
-      detail: "Engagement Top 3 Garanti, 8 posts SEO, Geotagging EXIF, +40 annuaires & Plaque NFC offerte.",
-      badge: "MACHINE À CASH · TOP 3",
-    },
-    annual: {
-      name: "Pack Annuel Sérénité",
-      priceDisplay: "990 € / an",
-      detail: "Paiement annuel en 1 fois : économisez 198 € (2 mois offerts par rapport à la mensualisation).",
-      badge: "2 MOIS OFFERTS",
-    },
-  };
-
   const waPrefill = encodeURIComponent(({
     fr: `Bonjour XR Agency, je souhaite une étude Google Maps Top 3 sur mesure.\n\n` +
       `• Secteur : ${sectorLabel}\n` +
       `• Taille de ville : ${cityLabel}\n` +
       `• Mots-clés : ${kwLabel}\n` +
-      `• Position actuelle : ${rankLabel}\n` +
-      `• Formule sélectionnée : ${PLAN_OPTIONS[selectedPlanId].name} (${PLAN_OPTIONS[selectedPlanId].priceDisplay})\n\n` +
+      `• Position actuelle : ${rankLabel}\n\n` +
+      `Référence de départ : à partir de 990 € / an · devis sur mesure\n\n` +
       `Pouvons-nous lancer l'audit personnalisé ?`,
     en: `Hello XR Agency, I would like a tailored Google Maps Top 3 study.\n\n` +
       `• Industry: ${sectorLabel}\n` +
       `• City size: ${cityLabel}\n` +
       `• Keywords: ${kwLabel}\n` +
-      `• Current ranking: ${rankLabel}\n` +
-      `• Selected Plan: ${PLAN_OPTIONS[selectedPlanId].name} (${PLAN_OPTIONS[selectedPlanId].priceDisplay})\n\n` +
+      `• Current ranking: ${rankLabel}\n\n` +
+      `Starting benchmark: from €990 / year · tailored quote\n\n` +
       `Can we start the personalised audit?`,
     vi: `Xin chào XR Agency, tôi muốn được tư vấn gói Google Maps Top 3 theo yêu cầu.\n\n` +
       `• Lĩnh vực: ${sectorLabel}\n` +
       `• Quy mô thành phố: ${cityLabel}\n` +
       `• Từ khóa: ${kwLabel}\n` +
-      `• Thứ hạng hiện tại: ${rankLabel}\n` +
-      `• Gói đã chọn: ${PLAN_OPTIONS[selectedPlanId].name} (${PLAN_OPTIONS[selectedPlanId].priceDisplay})\n\n` +
+      `• Thứ hạng hiện tại: ${rankLabel}\n\n` +
+      `Mức tham khảo: từ 990 € / năm · báo giá theo yêu cầu\n\n` +
       `Chúng ta có thể bắt đầu kiểm toán cá nhân hóa không?`,
     ar: `مرحبًا XR Agency، أود الحصول على دراسة مخصصة لبلوغ أفضل 3 مراتب على Google Maps.\n\n` +
       `• مجال النشاط: ${sectorLabel}\n` +
       `• حجم المدينة: ${cityLabel}\n` +
       `• الكلمات المفتاحية: ${kwLabel}\n` +
-      `• الترتيب الحالي: ${rankLabel}\n` +
-      `• الباقة المختارة: ${PLAN_OPTIONS[selectedPlanId].name} (${PLAN_OPTIONS[selectedPlanId].priceDisplay})\n\n` +
+      `• الترتيب الحالي: ${rankLabel}\n\n` +
+      `المرجع المبدئي: ابتداءً من 990 € سنويًا · عرض مخصص\n\n` +
       `هل يمكننا بدء التدقيق المخصص؟`,
     ru: `Здравствуйте, XR Agency! Хочу заказать индивидуальный расчёт по выводу в топ-3 Google Maps.\n\n` +
       `• Сфера: ${sectorLabel}\n` +
       `• Размер города: ${cityLabel}\n` +
       `• Ключевые слова: ${kwLabel}\n` +
-      `• Текущая позиция: ${rankLabel}\n` +
-      `• Выбранный тариф: ${PLAN_OPTIONS[selectedPlanId].name} (${PLAN_OPTIONS[selectedPlanId].priceDisplay})\n\n` +
+      `• Текущая позиция: ${rankLabel}\n\n` +
+      `Базовый ориентир: от 990 € в год · индивидуальный расчёт\n\n` +
       `Можем ли мы запустить персональный аудит?`,
   } as const)[(lang as "fr" | "en" | "vi" | "ar" | "ru")] ?? `Bonjour XR Agency, je souhaite une étude Google Maps Top 3 sur mesure.`);
 
-  const ringRadius = 49;
-  const ringCircumference = 2 * Math.PI * ringRadius;
-  const ringDashOffset = ringCircumference * (1 - visibilityScore / 100);
-
   return (
-    <section id="maps" className="relative border-y xr-line py-12 sm:py-16 lg:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10">
-        <Reveal>
-          <div className="overflow-hidden rounded-[2rem] border border-[#141312]/12 bg-[#121110] shadow-[0_32px_90px_-36px_rgba(20,19,18,0.45)]">
-            {/* ── Screen 3 Obsidian Luxury Radar Header ── */}
-            <div className="relative overflow-hidden bg-[#121110] px-5 pt-6 pb-11 sm:px-8 sm:pt-8 sm:pb-12 text-[#f7f4ed]">
-              {/* Subtle Golden Radar Grid & Pin on right (matches Screen 3 mobile & desktop) */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 opacity-35"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(circle at 82% 52%, rgba(197,168,128,0.22), transparent 46%), linear-gradient(rgba(247,244,237,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(247,244,237,0.06) 1px, transparent 1px)",
-                  backgroundSize: "100% 100%, 42px 42px, 42px 42px",
-                }}
-              />
-              {/* Floating Champagne Pin & Concentric Rings */}
-              <div aria-hidden className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 hidden sm:flex items-center justify-center opacity-90">
-                <span className="absolute h-36 w-36 rounded-full border border-[#c5a880]/20" />
-                <span className="absolute h-24 w-24 rounded-full border border-[#c5a880]/35 animate-pulse" />
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#e7cfa8] to-[#b48f5a] text-[#141312] shadow-[0_12px_34px_rgba(197,168,128,0.5)]">
-                  <MapPinned className="h-5 w-5" />
+    <section id="maps" className="xr-section-elevated relative border-y xr-line py-10 sm:py-14 lg:py-16">
+      {/* Background Glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-20"
+        style={{ background: "var(--gradient-halo)" }}
+      />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10">
+
+        {/* ── Section Header ── */}
+        <div>
+          <SectionHeading
+            label={{ fr: "GOOGLE BUSINESS PROFILE · LOCAL SEO", en: "GOOGLE BUSINESS PROFILE · LOCAL SEO", vi: "GOOGLE BUSINESS PROFILE · LOCAL SEO" }}
+            line1={{ fr: "Construisons votre visibilité", en: "Build your local visibility", vi: "Xây dựng khả năng hiển thị địa phương", ru: "Повысим вашу видимость", ar: "لنبنِ ظهورك" }}
+            line2={{
+              fr: "sur Google Maps, sur mesure.",
+              en: "on Google Maps, built around you.",
+              vi: "trên Google Maps, theo nhu cầu của bạn.",
+              ru: "в Google Maps с учётом ваших задач.",
+              ar: "على Google Maps بما يناسبك.",
+            }}
+            lead={{
+              fr: "À partir de 990 € / an. Audit, optimisation Google Business Profile, stratégie locale et suivi adaptés à votre zone, votre concurrence et vos requêtes.",
+              en: "From €990 / year. Audit, Google Business Profile optimisation, local strategy and monitoring adapted to your area, competition and target searches.",
+              vi: "Từ 990 € / năm. Kiểm toán, tối ưu Google Business Profile, chiến lược địa phương và theo dõi theo khu vực, đối thủ và truy vấn mục tiêu.",
+              ru: "От 990 € в год. Аудит, оптимизация Google Business Profile, локальная стратегия и мониторинг с учётом района, конкурентов и запросов.",
+              ar: "ابتداءً من 990 € سنويًا. تدقيق وتحسين Google Business Profile واستراتيجية محلية ومتابعة وفق منطقتك ومنافسيك وطلبات البحث.",
+            }}
+          />
+
+          {/* ── Exclusivity Badge — very visible ── */}
+          <Reveal delay={80}>
+            <div className="mt-4 inline-flex items-center gap-2.5 rounded-xl border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-3.5 py-2 shadow-md">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white font-black shadow-sm"><svg viewBox="0 0 24 24" className="h-5 w-5" aria-label="Google" role="img"><path fill="#4285F4" d="M21.35 12.27c0-.71-.06-1.4-.18-2.06H12v3.9h5.23a4.47 4.47 0 0 1-1.94 2.94v2.44h3.14c1.84-1.69 2.92-4.18 2.92-7.22Z"/><path fill="#34A853" d="M12 21.55c2.63 0 4.84-.87 6.45-2.36l-3.14-2.44c-.87.58-1.98.92-3.31.92-2.54 0-4.7-1.72-5.47-4.03H3.28v2.52A9.74 9.74 0 0 0 12 21.55Z"/><path fill="#FBBC05" d="M6.53 13.64A5.84 5.84 0 0 1 6.23 12c0-.57.1-1.12.3-1.64V7.84H3.28A9.72 9.72 0 0 0 2.25 12c0 1.57.38 3.06 1.03 4.16l3.25-2.52Z"/><path fill="#EA4335" d="M12 6.33c1.43 0 2.7.49 3.71 1.45l2.78-2.78C16.84 3.42 14.63 2.45 12 2.45a9.74 9.74 0 0 0-8.72 5.39l3.25 2.52c.77-2.31 2.93-4.03 5.47-4.03Z"/></svg></span>
+              <Zap className="h-5 w-5 shrink-0 text-[var(--xr-bg)]" />
+              <p className="text-sm font-semibold text-foreground leading-snug">
+                {tx("à partir de 990 € / an · objectif Top 3 sans garantie de position")}
+              </p>
+              <Award className="h-5 w-5 shrink-0 text-[var(--xr-ink)]" />
+            </div>
+          </Reveal>
+        </div>
+
+        <Reveal delay={40}>
+          <div className="overflow-hidden rounded-[2.2rem] border xr-line bg-[var(--xr-bg-elev)] text-[var(--xr-ink)] shadow-[var(--xr-shadow)]">
+            {/* Google Search Mockup Bar */}
+            <div className="flex flex-col gap-3 border-b xr-line bg-[var(--xr-surface)] px-4 py-3.5 sm:px-6">
+              <div className="flex items-center gap-3">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-black/5">
+                  <svg viewBox="0 0 24 24" className="h-4.5 w-4.5" aria-label="Google" role="img">
+                    <path fill="#4285F4" d="M21.35 12.27c0-.71-.06-1.4-.18-2.06H12v3.9h5.23a4.47 4.47 0 0 1-1.94 2.94v2.44h3.14c1.84-1.69 2.92-4.18 2.92-7.22Z" />
+                    <path fill="#34A853" d="M12 21.55c2.63 0 4.84-.87 6.45-2.36l-3.14-2.44c-.87.58-1.98.92-3.31.92-2.54 0-4.7-1.72-5.47-4.03H3.28v2.52A9.74 9.74 0 0 0 12 21.55Z" />
+                    <path fill="#FBBC05" d="M6.53 13.64A5.84 5.84 0 0 1 6.23 12c0-.57.1-1.12.3-1.64V7.84H3.28A9.72 9.72 0 0 0 2.25 12c0 1.57.38 3.06 1.03 4.16l3.25-2.52Z" />
+                    <path fill="#EA4335" d="M12 6.33c1.43 0 2.7.49 3.71 1.45l2.78-2.78C16.84 3.42 14.63 2.45 12 2.45a9.74 9.74 0 0 0-8.72 5.39l3.25 2.52c.77-2.31 2.93-4.03 5.47-4.03Z" />
+                  </svg>
+                </span>
+                <div className="flex flex-1 items-center justify-between rounded-full border border-black/10 bg-white/95 px-4 py-2 text-xs text-neutral-800 shadow-inner dark:border-white/10 dark:bg-black/40 dark:text-neutral-200">
+                  <span className="font-medium truncate">
+                    {tx(selectedSector?.label ?? "")} <span className="opacity-60">à</span> {roiMetrics.cityName}
+                  </span>
+                  <span className="label-mono text-[8px] text-emerald-500 font-bold shrink-0">LOCAL PACK #1</span>
                 </div>
               </div>
 
-              <div className="relative z-10 max-w-2xl">
-                <div className="flex flex-wrap items-center justify-between gap-2.5">
-                  <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 backdrop-blur-sm">
-                    <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" aria-label="Google Maps" role="img">
-                      <path fill="#EA4335" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Z" />
-                      <circle cx="12" cy="9" r="2.7" fill="#FFFFFF" />
-                      <path fill="#4285F4" d="M12 2a7 7 0 0 1 6.71 5H14.2A2.7 2.7 0 0 0 12 6.3V2Z" />
-                      <path fill="#34A853" d="M12 11.7a2.7 2.7 0 0 0 2.2-4.7H18.7C19.6 10.6 15.2 17.5 12 22v-10.3Z" opacity="0.85" />
-                    </svg>
-                    <span className="text-xs font-semibold tracking-wide text-[#f7f4ed]">Google Maps</span>
-                  </div>
-                  <span className="label-mono rounded-full border border-[#c5a880]/35 bg-[#c5a880]/12 px-3 py-1 text-[9px] text-[#e8cfa6]">
-                    TOP 3 LOCAL PACK · AUDIT LIVE
-                  </span>
-                </div>
-
-                <h2 className="display-serif mt-5 text-3xl sm:text-4xl lg:text-[2.75rem] leading-[1.06] text-[#f7f4ed]">
-                  Développez <em className="italic font-normal text-[#c5a880]">votre</em>
-                  <br />
-                  visibilité locale.
-                </h2>
-                <p className="mt-2.5 text-sm leading-relaxed text-[#d7d1c6] max-w-lg">
-                  {tx("Analysez votre fiche, comparez votre position et découvrez vos opportunités de croissance.")}
-                </p>
+              {/* Filter chips */}
+              <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-medium text-emerald-500">
+                  ✓ {tx("Ouvert actuellement")}
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-black/5 dark:bg-white/5 px-2.5 py-0.5 text-[10px] font-medium opacity-80">
+                  ★ {tx("Note 4,5★ et +")}
+                </span>
+                <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-white/10 bg-black/5 dark:bg-white/5 px-2.5 py-0.5 text-[10px] font-medium opacity-80">
+                  {tx("Visite virtuelle")}
+                </span>
+                <span className="ml-auto label-mono text-[7px] text-muted-foreground">
+                  {roiMetrics.baseSearches.toLocaleString()} {tx("Recherches locales / mois")}
+                </span>
               </div>
             </div>
 
-            {/* ── Warm Ivory/Cream Luxury Workspace Sheet ── */}
-            <div className="relative z-10 -mt-5 rounded-t-[1.75rem] lg:rounded-t-[2.1rem] bg-[#f7f4ed] px-4 py-6 sm:px-7 sm:py-8 lg:px-9 lg:py-9 text-[#141312] space-y-7">
-              {/* Row 1: Split Stage (Left = Screen 3 Diagnostic Scorecard, Right = Live Google Pack + Radar Map) */}
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
-                {/* ── Left Column: Screen 3 Scorecard ── */}
-                <div className="space-y-4">
-                  {/* Establishment Preview Header Card */}
-                  <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#141312]/10 bg-white p-3.5 shadow-sm">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <img
-                        src={samplePlace.img}
-                        alt={samplePlace.name}
-                        className="h-14 w-14 shrink-0 rounded-xl object-cover border border-[#141312]/10"
-                      />
-                      <div className="min-w-0">
-                        <h3 className="text-sm sm:text-base font-bold text-[#141312] truncate">
-                          {samplePlace.name}
-                        </h3>
-                        <p className="text-xs text-[#6f675b] truncate">
-                          {samplePlace.cat} · {cardCityDisplay}
-                        </p>
-                        <div className="mt-1 flex items-center gap-1.5 text-xs">
-                          <span className="font-bold text-[#141312]">{samplePlace.rating}</span>
-                          <span className="text-[#c59b49] tracking-tighter text-[11px]" aria-label="5 stars">★★★★★</span>
-                          <span className="text-[#6f675b] text-[11px]">({samplePlace.reviews})</span>
-                        </div>
-                      </div>
-                    </div>
-                    <a
-                      href="#maps-serp"
-                      aria-label="Voir simulation Google"
-                      className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-[#141312]/10 bg-[#f7f4ed] text-[#141312]/70 transition hover:border-[#b48f5a] hover:text-[#141312]"
-                    >
-                      <ExternalLink className="h-4 w-4" />
+            {/* Main Stage: Left SERP Local 3-Pack + Right Vector Map */}
+            <div className="grid grid-cols-1 lg:grid-cols-[1.22fr_.78fr]">
+              {/* Left Column: Local Pack Listings */}
+              <div className="flex flex-col divide-y xr-line p-3 sm:p-5">
+                {/* #1 Winner Card - XR Agency Client Profile */}
+                <div className="relative rounded-2xl border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-500/10 via-[var(--xr-surface)] to-[var(--xr-surface)] p-4 shadow-lg transition duration-300 hover:border-emerald-500/60">
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500 px-2 py-0.5 text-[8px] font-black uppercase tracking-wider text-black shadow-sm">
+                      ⚡ {tx("TOP 1 PACK LOCAL · PROJECTION XR AGENCY")}
+                    </span>
+                    <span className="label-mono text-[8px] font-bold text-emerald-500">#1 GOOGLE</span>
+                  </div>
+
+                  <h4 className="mt-2 text-base font-bold text-foreground">
+                    {tx("Votre Établissement")} — <span className="opacity-90">{tx(selectedSector?.label ?? "")}</span>
+                  </h4>
+
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
+                    <span className="font-bold text-amber-500">4.9</span>
+                    <div className="flex text-amber-500 text-xs tracking-tighter" aria-label="5 stars">★★★★★</div>
+                    <span className="text-xs text-muted-foreground font-semibold">({tx("4.9 ★★★★★ (284 avis Google vérifiés)")})</span>
+                  </div>
+
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {tx(selectedSector?.label ?? "")} · {roiMetrics.cityName} · <span className="text-emerald-500 font-semibold">{tx("Ouvert · Ferme à 23h30")}</span>
+                  </p>
+
+                  <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground italic border-l-2 border-emerald-500/40 pl-2">
+                    "{tx("Excellence locale · Cadre d'exception, service irréprochable et réputation certifiée")}"
+                  </p>
+
+                  {/* Google Action Buttons */}
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <a href="#quote" className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500 px-3 py-1.5 text-[10px] font-bold text-black transition hover:bg-emerald-400">
+                      🌐 {tx("Site web")}
+                    </a>
+                    <a href="#quote" className="inline-flex items-center gap-1.5 rounded-full border border-border bg-[var(--xr-surface-strong)] px-3 py-1.5 text-[10px] font-semibold text-foreground transition hover:bg-[var(--xr-accent-soft)]">
+                      🧭 {tx("Itinéraire")}
+                    </a>
+                    <a href="#quote" className="inline-flex items-center gap-1.5 rounded-full border border-border bg-[var(--xr-surface-strong)] px-3 py-1.5 text-[10px] font-semibold text-foreground transition hover:bg-[var(--xr-accent-soft)]">
+                      📞 {tx("Appeler")}
                     </a>
                   </div>
 
-                  {/* Screen 3 Gauge + 5 Status Rows */}
-                  <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[142px_1fr] items-center gap-4 rounded-2xl border border-[#141312]/10 bg-white p-4 shadow-sm">
-                    <div className="relative flex flex-col items-center justify-center">
-                      <svg viewBox="0 0 120 120" className="h-28 w-28 sm:h-32 sm:w-32 -rotate-90">
-                        <defs>
-                          <linearGradient id="mapsRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="#d8b989" />
-                            <stop offset="100%" stopColor="#b08950" />
-                          </linearGradient>
-                        </defs>
-                        <circle
-                          cx="60"
-                          cy="60"
-                          r={ringRadius}
-                          fill="none"
-                          stroke="#eae3d5"
-                          strokeWidth="10"
-                        />
-                        <circle
-                          cx="60"
-                          cy="60"
-                          r={ringRadius}
-                          fill="none"
-                          stroke="url(#mapsRingGrad)"
-                          strokeWidth="10"
-                          strokeLinecap="round"
-                          strokeDasharray={ringCircumference}
-                          strokeDashoffset={ringDashOffset}
-                          className="transition-all duration-500 ease-out"
-                        />
-                      </svg>
-                      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <div className="flex items-baseline gap-0.5">
-                          <span className="display-serif text-3xl sm:text-[2rem] font-semibold leading-none text-[#141312]">
-                            {visibilityScore}
-                          </span>
-                          <span className="text-[11px] font-medium text-[#7b7367]">/100</span>
-                        </div>
-                        <span className="mt-0.5 text-[9.5px] font-medium text-[#6f675b]">
-                          {tx("Visibilité locale")}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* 5 Checklist Status Pills */}
-                    <div className="space-y-1.5">
-                      {[
-                        { kind: "ok" as const, label: tx("Profil complet") },
-                        { kind: "ok" as const, label: tx("Photos (24)") },
-                        { kind: "warn" as const, label: tx("Avis clients (4,8 ★)") },
-                        { kind: "warn" as const, label: tx("Position locale") },
-                        { kind: "neutral" as const, label: tx("Concurrence (3)") },
-                      ].map((row) => (
-                        <div
-                          key={row.label}
-                          className="flex items-center gap-2 rounded-xl border border-[#141312]/6 bg-[#f7f4ed]/70 px-2.5 py-1.5 text-xs"
-                        >
-                          <span
-                            className={cn(
-                              "grid h-4.5 w-4.5 shrink-0 place-items-center rounded-full text-white",
-                              row.kind === "ok"
-                                ? "bg-[#2e7d4f]"
-                                : row.kind === "warn"
-                                  ? "bg-[#d4963a]"
-                                  : "bg-[#b9b4aa]"
-                            )}
-                          >
-                            {row.kind === "ok" ? (
-                              <Check className="h-2.5 w-2.5 stroke-[3]" />
-                            ) : row.kind === "warn" ? (
-                              <AlertTriangle className="h-2.5 w-2.5 stroke-[2.5]" />
-                            ) : (
-                              <Minus className="h-2.5 w-2.5 stroke-[3]" />
-                            )}
-                          </span>
-                          <span className="font-medium text-[#2c2823] truncate">{row.label}</span>
-                        </div>
-                      ))}
-                    </div>
+                  <div className="mt-3 flex items-center justify-between rounded-xl bg-emerald-500/10 border border-emerald-500/20 px-3 py-2">
+                    <span className="text-[10px] font-semibold text-emerald-500">
+                      ⚡ +340% d'appels entrants par rapport à votre position actuelle
+                    </span>
+                    <span className="label-mono text-[7px] font-bold text-emerald-500 shrink-0">
+                      38% DU TRAFIC
+                    </span>
                   </div>
-
-                  {/* Recommendations Callout Row */}
-                  <a
-                    href="#maps-config"
-                    className="group flex items-center justify-between gap-3 rounded-2xl border border-[#141312]/10 bg-white p-3.5 shadow-sm transition hover:border-[#b48f5a]/60"
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#f3ead9] text-[#a8834d]">
-                        <BarChart3 className="h-5 w-5" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-sm font-bold text-[#141312]">{tx("Nos recommandations")}</p>
-                        <p className="text-[11px] text-[#6f675b] leading-snug">
-                          {tx("3 actions prioritaires pour améliorer votre positionnement.")}
-                        </p>
-                      </div>
-                    </div>
-                    <ArrowRight className="h-4 w-4 shrink-0 text-[#6f675b] transition-transform group-hover:translate-x-0.5 group-hover:text-[#141312]" />
-                  </a>
-
-                  {/* Primary Obsidian Pill CTA */}
-                  <button
-                    type="button"
-                    onClick={() => document.getElementById("maps-plans")?.scrollIntoView({ behavior: "smooth" })}
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#141312] px-6 py-3.5 text-sm font-semibold text-[#f7f4ed] shadow-[0_14px_30px_-14px_rgba(20,19,18,0.65)] transition hover:bg-[#26231f]"
-                  >
-                    {tx("Améliorer ma visibilité")}
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
                 </div>
 
-                {/* ── Right Column: Google Search Local 3-Pack & Radar Map ── */}
-                <div id="maps-serp" className="overflow-hidden rounded-2xl border border-[#141312]/12 bg-white shadow-sm">
-                  {/* Google Search Mockup Bar */}
-                  <div className="flex flex-col gap-2.5 border-b border-[#141312]/10 bg-[#faf7f1] px-4 py-3.5">
-                    <div className="flex items-center gap-2.5">
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white shadow-xs ring-1 ring-black/8">
-                        <svg viewBox="0 0 24 24" className="h-4 w-4" aria-label="Google" role="img">
-                          <path fill="#4285F4" d="M21.35 12.27c0-.71-.06-1.4-.18-2.06H12v3.9h5.23a4.47 4.47 0 0 1-1.94 2.94v2.44h3.14c1.84-1.69 2.92-4.18 2.92-7.22Z" />
-                          <path fill="#34A853" d="M12 21.55c2.63 0 4.84-.87 6.45-2.36l-3.14-2.44c-.87.58-1.98.92-3.31.92-2.54 0-4.7-1.72-5.47-4.03H3.28v2.52A9.74 9.74 0 0 0 12 21.55Z" />
-                          <path fill="#FBBC05" d="M6.53 13.64A5.84 5.84 0 0 1 6.23 12c0-.57.1-1.12.3-1.64V7.84H3.28A9.72 9.72 0 0 0 2.25 12c0 1.57.38 3.06 1.03 4.16l3.25-2.52Z" />
-                          <path fill="#EA4335" d="M12 6.33c1.43 0 2.7.49 3.71 1.45l2.78-2.78C16.84 3.42 14.63 2.45 12 2.45a9.74 9.74 0 0 0-8.72 5.39l3.25 2.52c.77-2.31 2.93-4.03 5.47-4.03Z" />
-                        </svg>
-                      </span>
-                      <div className="flex flex-1 items-center justify-between gap-2 rounded-full border border-[#141312]/12 bg-white px-3.5 py-1.5 text-xs text-[#141312]">
-                        <span className="font-medium truncate">
-                          {sectorLabel} <span className="text-[#6f675b]">à</span> {cardCityDisplay}
-                        </span>
-                        <span className="label-mono shrink-0 text-[8px] font-bold text-[#9b7b4b]">LOCAL PACK #1</span>
-                      </div>
+                {/* #2 Competitor Card */}
+                <div className="p-3.5 opacity-65 transition hover:opacity-90">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="grid h-5 w-5 place-items-center rounded-full bg-muted font-bold text-[9px] text-muted-foreground">2</span>
+                      <h5 className="text-xs font-semibold text-foreground">{tx("Concurrent B (Fiche standard)")}</h5>
                     </div>
+                    <span className="text-[10px] text-amber-500">4.1 ★★★★☆ (34)</span>
+                  </div>
+                  <p className="mt-1 text-[10px] text-muted-foreground">
+                    {tx("4.1 ★★★★☆ (34 avis) · Fiche non optimisée")} · Horaires incomplets
+                  </p>
+                </div>
 
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="inline-flex items-center gap-1 rounded-full border border-[#2e7d4f]/25 bg-[#2e7d4f]/10 px-2.5 py-0.5 text-[10px] font-medium text-[#24663f]">
-                        ✓ {tx("Ouvert actuellement")}
-                      </span>
-                      <span className="inline-flex items-center gap-1 rounded-full border border-[#141312]/10 bg-white px-2.5 py-0.5 text-[10px] font-medium text-[#4e483f]">
-                        ★ {tx("Note 4,5★ et +")}
-                      </span>
-                      <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-[#141312]/10 bg-white px-2.5 py-0.5 text-[10px] font-medium text-[#4e483f]">
-                        {tx("Visite virtuelle")}
-                      </span>
-                      <span className="ml-auto label-mono text-[8px] text-[#6f675b]">
-                        {roiMetrics.baseSearches.toLocaleString("fr-FR")} {tx("Recherches locales / mois")}
-                      </span>
+                {/* #3 Competitor Card */}
+                <div className="p-3.5 opacity-45 transition hover:opacity-80">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="grid h-5 w-5 place-items-center rounded-full bg-muted font-bold text-[9px] text-muted-foreground">3</span>
+                      <h5 className="text-xs font-semibold text-foreground">{tx("Concurrent C (Peu visible)")}</h5>
+                    </div>
+                    <span className="text-[10px] text-amber-500">3.8 ★★★☆☆ (12)</span>
+                  </div>
+                  <p className="mt-1 text-[10px] text-muted-foreground">
+                    {tx("3.8 ★★★☆☆ (12 avis) · Pas de catalogue ni attributs")}
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Column: Realistic Modern Dark/Light Map */}
+              <div className="relative min-h-[320px] overflow-hidden border-t lg:border-t-0 lg:border-l xr-line bg-[#0d1117] text-white">
+                {/* Vector map roads & parks */}
+                <svg viewBox="0 0 600 480" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full opacity-65">
+                  <rect width="600" height="480" fill="#0d1117" />
+                  {/* Water river */}
+                  <path d="M-20 220 C140 180 260 270 420 240 S560 190 620 210" fill="none" stroke="#152636" strokeWidth="48" strokeLinecap="round" />
+                  {/* Parks / Green areas */}
+                  <rect x="40" y="40" width="120" height="90" rx="16" fill="#13231b" />
+                  <rect x="420" y="60" width="140" height="110" rx="20" fill="#13231b" />
+                  <rect x="280" y="320" width="160" height="100" rx="20" fill="#13231b" />
+                  {/* Secondary roads */}
+                  <path d="M0 80 H600 M0 160 H600 M0 300 H600 M0 380 H600" stroke="#1f2937" strokeWidth="6" />
+                  <path d="M100 0 V480 M220 0 V480 M360 0 V480 M480 0 V480" stroke="#1f2937" strokeWidth="6" />
+                  {/* Main highways */}
+                  <path d="M-20 120 Q300 110 620 140" stroke="#374151" strokeWidth="12" />
+                  <path d="M260 -20 Q280 240 310 500" stroke="#374151" strokeWidth="12" />
+                  {/* Active navigation route line to Pin #1 */}
+                  <path d="M80 400 L220 400 L220 260 L360 260 L360 180" fill="none" stroke="#10b981" strokeWidth="4" strokeDasharray="6 4" />
+                </svg>
+
+                {/* Animated #1 Google Maps Pin with Radar Ring */}
+                <div className="absolute left-[60%] top-[38%] -translate-x-1/2 -translate-y-1/2">
+                  <div className="relative flex items-center justify-center">
+                    {/* Pulsing Radar Ring */}
+                    <span className="absolute h-16 w-16 rounded-full bg-emerald-500/30 animate-xr-pin-pulse" />
+                    <span className="absolute h-10 w-10 rounded-full bg-emerald-500/50" />
+                    {/* The Google Pin */}
+                    <div className="relative z-10 flex flex-col items-center drop-shadow-[0_8px_20px_rgba(16,185,129,0.7)]">
+                      <div className="grid h-10 w-10 place-items-center rounded-full border-2 border-white bg-emerald-500 text-xs font-black text-black shadow-lg">
+                        #1
+                      </div>
+                      <div className="h-2 w-2 -mt-1 rotate-45 bg-emerald-500" />
                     </div>
                   </div>
+                </div>
 
-                  {/* SERP + Vector Map */}
-                  <div className="grid grid-cols-1 divide-y divide-[#141312]/10">
-                    {/* #1 Winner Card */}
-                    <div className="p-4">
-                      <div className="rounded-xl border-2 border-[#b48f5a] bg-gradient-to-br from-[#fdfbf7] to-[#f4ead7] p-3.5">
-                        <div className="flex items-start justify-between gap-2">
-                          <span className="inline-flex items-center gap-1 rounded-md bg-[#141312] px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-[#e8cfa6]">
-                            ⚡ {tx("TOP 1 PACK LOCAL · PROJECTION XR AGENCY")}
-                          </span>
-                          <span className="label-mono text-[8px] font-bold text-[#9b7b4b]">#1 GOOGLE</span>
-                        </div>
+                {/* Competitor Pin #2 */}
+                <div className="absolute left-[37%] top-[55%] -translate-x-1/2 -translate-y-1/2 opacity-70">
+                  <div className="grid h-7 w-7 place-items-center rounded-full border-2 border-neutral-400 bg-neutral-700 text-[9px] font-bold text-white shadow-md">
+                    #2
+                  </div>
+                </div>
 
-                        <h4 className="mt-2 text-sm sm:text-base font-bold text-[#141312]">
-                          {tx("Votre Établissement")} — <span className="font-normal text-[#4e483f]">{sectorLabel}</span>
-                        </h4>
+                {/* Competitor Pin #3 */}
+                <div className="absolute left-[78%] top-[68%] -translate-x-1/2 -translate-y-1/2 opacity-50">
+                  <div className="grid h-6 w-6 place-items-center rounded-full border border-neutral-500 bg-neutral-800 text-[8px] font-bold text-neutral-300">
+                    #3
+                  </div>
+                </div>
 
-                        <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs">
-                          <span className="font-bold text-[#a8834d]">4.9</span>
-                          <span className="text-[#c59b49] text-xs tracking-tighter">★★★★★</span>
-                          <span className="text-[11px] text-[#6f675b]">({tx("4.9 ★★★★★ (284 avis Google vérifiés)")})</span>
-                        </div>
+                {/* Floating GPS Navigation chip */}
+                <div className="absolute left-3 top-3 rounded-xl border border-white/15 bg-black/75 px-3 py-1.5 shadow-xl backdrop-blur-md">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="font-mono text-[9px] font-semibold text-white">
+                      📍 2,4 km · 6 min ({tx("Trafic fluide")})
+                    </span>
+                  </div>
+                </div>
 
-                        <p className="mt-1 text-[11px] text-[#6f675b]">
-                          {sectorLabel} · {cardCityDisplay} · <span className="font-semibold text-[#24663f]">{tx("Ouvert · Ferme à 23h30")}</span>
-                        </p>
+                {/* Status Indicator at bottom of map */}
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-xl border border-white/10 bg-black/80 px-3 py-2 text-xs backdrop-blur-md">
+                  <span className="font-mono text-[8px] tracking-wider text-white/70">
+                    {rank === "absent" ? tx("VISIBILITÉ À CONSTRUIRE") : rank === "below20" ? tx("SIGNAL À RENFORCER") : tx("POSITIONNEMENT À DÉVELOPPER")}
+                  </span>
+                  <span className="font-mono text-[8px] font-bold text-emerald-400">
+                    TOP 3 PACK VISÉ
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Reveal>
 
-                        <div className="mt-2.5 flex flex-wrap items-center gap-2">
-                          <a href="#maps-plans" className="inline-flex items-center gap-1 rounded-full bg-[#141312] px-3 py-1 text-[10px] font-semibold text-[#f7f4ed] transition hover:bg-[#2a2621]">
-                            {tx("Site web")}
-                          </a>
-                          <a href="#maps-plans" className="inline-flex items-center gap-1 rounded-full border border-[#141312]/15 bg-white px-3 py-1 text-[10px] font-semibold text-[#141312] transition hover:border-[#b48f5a]">
-                            {tx("Itinéraire")}
-                          </a>
-                          <a href="#maps-plans" className="inline-flex items-center gap-1 rounded-full border border-[#141312]/15 bg-white px-3 py-1 text-[10px] font-semibold text-[#141312] transition hover:border-[#b48f5a]">
-                            {tx("Appeler")}
-                          </a>
-                        </div>
+        {/* ── Intelligent Configurator ── */}
+        <Reveal delay={60}>
+          <div className="rounded-3xl border border-border bg-card shadow-xl overflow-hidden">
+            {/* Configurator header */}
+            <div className="border-b border-border/60 bg-accent/20 px-4 py-3 sm:px-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--xr-ink)] text-[var(--xr-bg)]">
+                  <Gauge className="h-4.5 w-4.5" />
+                </div>
+                <div>
+                  <p className="label-mono text-xs text-[var(--xr-ink)]">{tx("Configurateur de projet")}</p>
+                  <p className="display-serif text-lg text-foreground mt-0.5">
+                    {tx("Estimez votre investissement Google Maps")}
+                  </p>
+                </div>
+              </div>
+            </div>
 
-                        <div className="mt-2.5 flex items-center justify-between gap-2 rounded-lg border border-[#b48f5a]/25 bg-white/80 px-3 py-1.5">
-                          <span className="text-[10px] font-semibold text-[#8c6c3c]">
-                            ⚡ +340% d&apos;appels entrants vs position hors Top 3
-                          </span>
-                          <span className="label-mono text-[7.5px] font-bold text-[#9b7b4b] shrink-0">38% CTR</span>
-                        </div>
-                      </div>
+            <div className="p-4 sm:p-6 space-y-4">
+              {/* Step 1 — Sector */}
+              <div>
+                <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--xr-ink)] text-[10px] font-bold text-[var(--xr-bg)]">1</span>
+                  {tx("Votre secteur d'activité")}
+                </p>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  {SECTORS.map((s) => (
+                    <SelectorBtn
+                      key={s.id}
+                      selected={sector === s.id}
+                      onClick={() => setSector(s.id)}
+                    >
+                      <span className="text-2xl">{s.icon}</span>
+                      <span className="text-[11px] leading-tight">{tx(s.label)}</span>
+                    </SelectorBtn>
+                  ))}
+                </div>
+              </div>
 
-                      {/* Competitors #2 & #3 */}
-                      <div className="mt-2.5 divide-y divide-[#141312]/8 rounded-xl border border-[#141312]/8 bg-[#faf7f1]/70">
-                        <div className="flex items-center justify-between px-3 py-2 opacity-75">
-                          <div className="flex items-center gap-2 min-w-0">
-                            <span className="grid h-4.5 w-4.5 shrink-0 place-items-center rounded-full bg-[#141312]/10 text-[9px] font-bold text-[#141312]">2</span>
-                            <span className="text-[11px] font-semibold text-[#141312] truncate">{tx("Concurrent B (Fiche standard)")}</span>
-                          </div>
-                          <span className="text-[10px] font-medium text-[#6f675b] shrink-0">4.1 ★ (34)</span>
-                        </div>
-                        <div className="flex items-center justify-between px-3 py-2 opacity-55">
-                          <div className="flex items-center gap-2 min-w-0">
-                            <span className="grid h-4.5 w-4.5 shrink-0 place-items-center rounded-full bg-[#141312]/10 text-[9px] font-bold text-[#141312]">3</span>
-                            <span className="text-[11px] font-semibold text-[#141312] truncate">{tx("Concurrent C (Peu visible)")}</span>
-                          </div>
-                          <span className="text-[10px] font-medium text-[#6f675b] shrink-0">3.8 ★ (12)</span>
-                        </div>
-                      </div>
-                    </div>
+              {/* Step 2 — City Size */}
+              <div>
+                <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--xr-ink)] text-[10px] font-bold text-[var(--xr-bg)]">2</span>
+                  {tx("Taille de votre ville")}
+                </p>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  {CITY_SIZES.map((c) => (
+                    <SelectorBtn
+                      key={c.id}
+                      selected={citySize === c.id}
+                      onClick={() => setCitySize(c.id)}
+                    >
+                      <Building2 className="h-4 w-4" />
+                      <span className="font-semibold text-[12px]">{tx(c.label)}</span>
+                      <span className="text-[10px] opacity-60">{tx(c.sub)}</span>
+                    </SelectorBtn>
+                  ))}
+                </div>
+              </div>
 
-                    {/* Dark Obsidian Vector Map */}
-                    <div className="relative h-56 sm:h-64 overflow-hidden bg-[#121110] text-white">
-                      <svg viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full opacity-80">
-                        <rect width="600" height="400" fill="#121110" />
-                        <path d="M-20 190 C140 155 260 230 420 205 S560 165 620 185" fill="none" stroke="#1d1b18" strokeWidth="42" strokeLinecap="round" />
-                        <path d="M0 70 H600 M0 140 H600 M0 265 H600 M0 340 H600" stroke="#24211c" strokeWidth="5" />
-                        <path d="M100 0 V400 M220 0 V400 M360 0 V400 M480 0 V400" stroke="#24211c" strokeWidth="5" />
-                        <path d="M-20 105 Q300 95 620 120" stroke="#312c24" strokeWidth="10" />
-                        <path d="M260 -20 Q280 200 310 420" stroke="#312c24" strokeWidth="10" />
-                        <path d="M80 340 L220 340 L220 220 L360 220 L360 145" fill="none" stroke="#c5a880" strokeWidth="4" strokeDasharray="6 4" />
-                      </svg>
+              {/* Step 3 — Keywords */}
+              <div>
+                <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--xr-ink)] text-[10px] font-bold text-[var(--xr-bg)]">3</span>
+                  {tx("Nombre de mots-clés principaux")}
+                </p>
+                <div className="grid grid-cols-3 gap-2">
+                  {KEYWORD_RANGES.map((k) => (
+                    <SelectorBtn
+                      key={k.id}
+                      selected={keywords === k.id}
+                      onClick={() => setKeywords(k.id)}
+                    >
+                      <BarChart3 className="h-4 w-4" />
+                      <span className="font-bold text-base">{tx(k.label)}</span>
+                      <span className="text-[10px] opacity-60">{tx(k.sub)}</span>
+                    </SelectorBtn>
+                  ))}
+                </div>
+              </div>
 
-                      {/* Animated #1 Champagne Pin */}
-                      <div className="absolute left-[60%] top-[36%] -translate-x-1/2 -translate-y-1/2">
-                        <div className="relative flex items-center justify-center">
-                          <span className="absolute h-16 w-16 rounded-full bg-[#c5a880]/25 animate-xr-pin-pulse" />
-                          <span className="absolute h-10 w-10 rounded-full bg-[#c5a880]/45" />
-                          <div className="relative z-10 flex flex-col items-center drop-shadow-[0_8px_20px_rgba(197,168,128,0.6)]">
-                            <div className="grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-[#c5a880] text-xs font-black text-[#141312] shadow-lg">
-                              #1
-                            </div>
-                            <div className="h-2 w-2 -mt-1 rotate-45 bg-[#c5a880]" />
-                          </div>
-                        </div>
-                      </div>
+              {/* Step 4 — Current Ranking */}
+              <div>
+                <p className="label-mono mb-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--xr-ink)] text-[10px] font-bold text-[var(--xr-bg)]">4</span>
+                  {tx("Votre positionnement actuel sur Google Maps")}
+                </p>
+                <div className="grid grid-cols-3 gap-2">
+                  {CURRENT_RANKS.map((r) => (
+                    <SelectorBtn
+                      key={r.id}
+                      selected={rank === r.id}
+                      onClick={() => setRank(r.id)}
+                    >
+                      <MapPinned className="h-4 w-4" />
+                      <span className="font-semibold text-[12px] leading-tight">{tx(r.label)}</span>
+                      <span className="text-[10px] opacity-60 leading-tight">{tx(r.sub)}</span>
+                    </SelectorBtn>
+                  ))}
+                </div>
+              </div>
 
-                      <div className="absolute left-[37%] top-[56%] -translate-x-1/2 -translate-y-1/2 opacity-75">
-                        <div className="grid h-6 w-6 place-items-center rounded-full border border-white/40 bg-[#2a2722] text-[9px] font-bold text-white shadow">
-                          #2
-                        </div>
-                      </div>
+              {/* ── High-Converting Local ROI Calculator ── */}
+              <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 via-[var(--xr-surface-strong)] to-[var(--xr-surface)] p-5 sm:p-6 shadow-md">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b xr-line pb-4">
+                  <div>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-2.5 py-0.5 label-mono text-[7.5px] font-bold text-emerald-500">
+                      ⚡ {tx("Calculateur de Rentabilité & ROI Local")}
+                    </span>
+                    <h4 className="mt-1.5 text-base font-bold text-foreground">
+                      {tx("Impact direct du Top 3 Google Maps sur votre chiffre d'affaires :")}
+                    </h4>
+                  </div>
+                  <span className="label-mono text-[8px] text-emerald-500 font-semibold bg-emerald-500/10 border border-emerald-500/30 rounded-full px-3 py-1">
+                    {roiMetrics.cityName} · 38% CAPTURÉ
+                  </span>
+                </div>
 
-                      <div className="absolute left-[78%] top-[70%] -translate-x-1/2 -translate-y-1/2 opacity-55">
-                        <div className="grid h-6 w-6 place-items-center rounded-full border border-white/25 bg-[#1e1c18] text-[8px] font-bold text-neutral-300">
-                          #3
-                        </div>
-                      </div>
-
-                      <div className="absolute left-3 top-3 rounded-xl border border-white/15 bg-black/75 px-3 py-1 backdrop-blur-md">
-                        <div className="flex items-center gap-2">
-                          <span className="h-2 w-2 rounded-full bg-[#c5a880] animate-pulse" />
-                          <span className="font-mono text-[9px] font-semibold text-[#f7f4ed]">
-                            2,4 km · 6 min ({tx("Trafic fluide")})
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-xl border border-white/10 bg-black/80 px-3 py-1.5 backdrop-blur-md">
-                        <span className="font-mono text-[8px] tracking-wider text-white/75">
-                          {rank === "absent" ? tx("VISIBILITÉ À CONSTRUIRE") : rank === "below20" ? tx("SIGNAL À RENFORCER") : tx("POSITIONNEMENT À DÉVELOPPER")}
-                        </span>
-                        <span className="font-mono text-[8px] font-bold text-[#e8cfa6]">
-                          TOP 3 PACK VISÉ
-                        </span>
-                      </div>
-                    </div>
+                <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3">
+                    <span className="label-mono text-[6.5px] text-muted-foreground">{tx("Recherches locales / mois")}</span>
+                    <p className="mt-1 text-base font-bold text-foreground">{roiMetrics.baseSearches.toLocaleString()}</p>
+                    <span className="text-[8px] text-muted-foreground">Volume ciblé</span>
+                  </div>
+                  <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3">
+                    <span className="label-mono text-[6.5px] text-muted-foreground">{tx("Trafic capté par le Top 3")}</span>
+                    <p className="mt-1 text-base font-bold text-emerald-500 font-mono">+{roiMetrics.top3Captured.toLocaleString()}</p>
+                    <span className="text-[8px] text-muted-foreground">Vues directes (38%)</span>
+                  </div>
+                  <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3">
+                    <span className="label-mono text-[6.5px] text-muted-foreground">{tx("Nouveaux clients estimés")}</span>
+                    <p className="mt-1 text-base font-bold text-foreground">+{roiMetrics.newClients} / mois</p>
+                    <span className="text-[8px] text-muted-foreground">Appels & réservations</span>
+                  </div>
+                  <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/15 p-3">
+                    <span className="label-mono text-[6.5px] text-emerald-400 font-bold">{tx("CA additionnel estimé")}</span>
+                    <p className="mt-1 text-base font-black text-emerald-400 font-mono">+{formatEur(roiMetrics.addedRevenueMonth)} / m</p>
+                    <span className="text-[8px] text-emerald-300 font-medium">{tx("Amorti dès le 1er mois grâce aux contacts entrants.")}</span>
                   </div>
                 </div>
               </div>
 
-              {/* ── Row 2: Intelligent Configurator ── */}
-              <div id="maps-config" className="rounded-3xl border border-[#141312]/10 bg-white p-4 sm:p-6 shadow-sm space-y-5">
-                <div className="flex items-center gap-3 border-b border-[#141312]/8 pb-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#141312] text-[#e8cfa6]">
-                    <Gauge className="h-5 w-5" />
-                  </div>
+              {/* ── Dynamic Price Result ── */}
+              <div className="rounded-2xl border-2 border-primary/30 bg-[var(--xr-ink)]/5 p-5 sm:p-6">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="label-mono text-[10px] font-semibold text-[#9b7b4b]">{tx("Configurateur de projet")}</p>
-                    <h3 className="display-serif text-lg sm:text-xl text-[#141312] mt-0.5">
-                      {tx("Estimez votre investissement Google Maps")}
-                    </h3>
-                  </div>
-                </div>
-
-                {/* Step 1 — Sector */}
-                <div>
-                  <p className="label-mono mb-2.5 flex items-center gap-2 text-[11px] font-semibold text-[#5d564c]">
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#141312] text-[10px] font-bold text-[#f7f4ed]">1</span>
-                    {tx("Votre secteur d'activité")}
-                  </p>
-                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                    {SECTORS.map((s) => (
-                      <SelectorBtn key={s.id} selected={sector === s.id} onClick={() => setSector(s.id)}>
-                        <span className="text-xl">{s.icon}</span>
-                        <span className="text-[11px] font-medium leading-tight">{tx(s.label)}</span>
-                      </SelectorBtn>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Step 2 — City Size */}
-                <div>
-                  <p className="label-mono mb-2.5 flex items-center gap-2 text-[11px] font-semibold text-[#5d564c]">
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#141312] text-[10px] font-bold text-[#f7f4ed]">2</span>
-                    {tx("Taille de votre ville")}
-                  </p>
-                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                    {CITY_SIZES.map((c) => (
-                      <SelectorBtn key={c.id} selected={citySize === c.id} onClick={() => setCitySize(c.id)}>
-                        <Building2 className="h-4 w-4 text-[#9b7b4b]" />
-                        <span className="font-semibold text-[12px]">{tx(c.label)}</span>
-                        <span className="text-[10px] opacity-70">{tx(c.sub)}</span>
-                      </SelectorBtn>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Step 3 & Step 4 side by side on Desktop */}
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                  <div>
-                    <p className="label-mono mb-2.5 flex items-center gap-2 text-[11px] font-semibold text-[#5d564c]">
-                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#141312] text-[10px] font-bold text-[#f7f4ed]">3</span>
-                      {tx("Nombre de mots-clés principaux")}
-                    </p>
-                    <div className="grid grid-cols-3 gap-2">
-                      {KEYWORD_RANGES.map((k) => (
-                        <SelectorBtn key={k.id} selected={keywords === k.id} onClick={() => setKeywords(k.id)}>
-                          <BarChart3 className="h-4 w-4 text-[#9b7b4b]" />
-                          <span className="font-bold text-sm">{tx(k.label)}</span>
-                          <span className="text-[9.5px] opacity-70">{tx(k.sub)}</span>
-                        </SelectorBtn>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="label-mono mb-2.5 flex items-center gap-2 text-[11px] font-semibold text-[#5d564c]">
-                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#141312] text-[10px] font-bold text-[#f7f4ed]">4</span>
-                      {tx("Votre positionnement actuel sur Google Maps")}
-                    </p>
-                    <div className="grid grid-cols-3 gap-2">
-                      {CURRENT_RANKS.map((r) => (
-                        <SelectorBtn key={r.id} selected={rank === r.id} onClick={() => setRank(r.id)}>
-                          <MapPinned className="h-4 w-4 text-[#9b7b4b]" />
-                          <span className="font-semibold text-[11.5px] leading-tight">{tx(r.label)}</span>
-                          <span className="text-[9.5px] opacity-70 leading-tight">{tx(r.sub)}</span>
-                        </SelectorBtn>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Obsidian Luxury ROI Calculator */}
-                <div className="rounded-2xl bg-[#121110] p-5 sm:p-6 text-[#f7f4ed] shadow-lg">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-white/10 pb-4">
-                    <div>
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c5a880]/30 bg-[#c5a880]/15 px-2.5 py-0.5 label-mono text-[8px] font-bold text-[#e8cfa6]">
-                        ⚡ {tx("Calculateur de Rentabilité & ROI Local")}
+                    <p className="label-mono text-xs text-muted-foreground">{tx("Budget indicatif · à partir de 990 € / an")}</p>
+                    <div className="mt-1 flex items-baseline gap-2">
+                      <span
+                        key={animMin}
+                        className="display-serif text-3xl font-bold text-[var(--xr-ink)] sm:text-4xl animate-price-reveal"
+                      >
+                        {formatEur(animMin)}
                       </span>
-                      <h4 className="mt-1.5 text-sm sm:text-base font-bold text-[#f7f4ed]">
-                        {tx("Impact direct du Top 3 Google Maps sur votre chiffre d'affaires :")}
-                      </h4>
-                    </div>
-                    <span className="label-mono text-[8.5px] font-semibold text-[#e8cfa6] bg-[#c5a880]/12 border border-[#c5a880]/30 rounded-full px-3 py-1 self-start sm:self-center">
-                      {cardCityDisplay} · 38% CAPTURÉ
-                    </span>
-                  </div>
-
-                  <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
-                      <span className="label-mono text-[7.5px] text-white/60">{tx("Recherches locales / mois")}</span>
-                      <p className="mt-1 text-base sm:text-lg font-bold text-[#f7f4ed]">{roiMetrics.baseSearches.toLocaleString("fr-FR")}</p>
-                      <span className="text-[9px] text-white/55">Volume ciblé</span>
-                    </div>
-                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
-                      <span className="label-mono text-[7.5px] text-white/60">{tx("Trafic capté par le Top 3")}</span>
-                      <p className="mt-1 text-base sm:text-lg font-bold text-[#e8cfa6] font-mono">+{roiMetrics.top3Captured.toLocaleString("fr-FR")}</p>
-                      <span className="text-[9px] text-white/55">Vues directes (38%)</span>
-                    </div>
-                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
-                      <span className="label-mono text-[7.5px] text-white/60">{tx("Nouveaux clients estimés")}</span>
-                      <p className="mt-1 text-base sm:text-lg font-bold text-[#f7f4ed]">+{roiMetrics.newClients} / mois</p>
-                      <span className="text-[9px] text-white/55">Appels & réservations</span>
-                    </div>
-                    <div className="rounded-xl border border-[#c5a880]/45 bg-[#c5a880]/15 p-3">
-                      <span className="label-mono text-[7.5px] font-bold text-[#e8cfa6]">{tx("CA additionnel estimé")}</span>
-                      <p className="mt-1 text-base sm:text-lg font-black text-[#e8cfa6] font-mono">+{formatEur(roiMetrics.addedRevenueMonth)} / m</p>
-                      <span className="text-[9px] text-[#e8cfa6]/85 font-medium leading-tight block mt-0.5">{tx("Amorti dès le 1er mois grâce aux contacts entrants.")}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* ── Row 3: 3 Selectable Conversion Plans (99€/m · 159€/m · 990€/an) ── */}
-              <div id="maps-plans" className="space-y-4">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="label-mono text-xs font-bold uppercase tracking-wider text-[#141312]">
-                    Sélectionnez votre formule d&apos;acquisition locale :
-                  </span>
-                  <span className="label-mono rounded-full border border-[#b48f5a]/35 bg-[#f2ead9] px-3 py-1 text-[8px] font-bold text-[#8c6c3c]">
-                    PILOTAGE MENSUEL OU ANNUEL
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                  {/* Plan 1: 99 € / m */}
-                  <div
-                    onClick={() => setSelectedPlanId("growth")}
-                    className={cn(
-                      "cursor-pointer rounded-2xl border p-5 transition-all duration-300 relative",
-                      selectedPlanId === "growth"
-                        ? "border-[#b48f5a] bg-white shadow-md ring-2 ring-[#c5a880]/45"
-                        : "border-[#141312]/10 bg-white/80 hover:border-[#b48f5a]/50"
-                    )}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="label-mono text-[7.5px] font-bold text-[#8c6c3c] uppercase">
-                        {PLAN_OPTIONS.growth.badge}
+                      <span className="display-serif text-xl text-[var(--xr-ink)]/60">–</span>
+                      <span
+                        key={animMax}
+                        className="display-serif text-3xl font-bold text-[var(--xr-ink)] sm:text-4xl animate-price-reveal"
+                      >
+                        {formatEur(animMax)}
                       </span>
-                      {selectedPlanId === "growth" && (
-                        <CheckCircle2 className="h-4.5 w-4.5 text-[#b48f5a]" />
-                      )}
+                      <span className="label-mono text-xs text-muted-foreground">{tx("/ an")}</span>
                     </div>
-                    <h5 className="mt-2 text-sm font-bold text-[#141312]">{PLAN_OPTIONS.growth.name}</h5>
-                    <div className="mt-1.5 flex items-baseline gap-1">
-                      <span className="display-serif text-3xl font-semibold text-[#141312]">99 €</span>
-                      <span className="label-mono text-[9px] text-[#6f675b]">/ mois</span>
-                    </div>
-                    <p className="mt-2 text-xs leading-relaxed text-[#5d564c]">
-                      {PLAN_OPTIONS.growth.detail}
+                    <p className="mt-1.5 text-xs text-muted-foreground/70">
+                      {tx("Estimation indicative · tarif exact après audit personnalisé")}
                     </p>
                   </div>
 
-                  {/* Plan 2: 159 € / m (Popular Featured Obsidian) */}
-                  <div
-                    onClick={() => setSelectedPlanId("domination")}
-                    className={cn(
-                      "cursor-pointer rounded-2xl border p-5 transition-all duration-300 relative text-[#f7f4ed] bg-[#141312]",
-                      selectedPlanId === "domination"
-                        ? "border-[#c5a880] shadow-[0_22px_50px_-20px_rgba(20,19,18,0.7)] ring-2 ring-[#c5a880]"
-                        : "border-[#141312]/40 hover:border-[#c5a880]/70"
-                    )}
-                  >
-                    <div className="absolute -top-2.5 right-4 rounded-full bg-gradient-to-r from-[#e4c79a] to-[#b48f5a] px-3 py-0.5 label-mono text-[7px] font-black text-[#141312] shadow-md">
-                      POPULAIRE · ROI MAX
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="label-mono text-[7.5px] font-bold text-[#e8cfa6] uppercase">
-                        {PLAN_OPTIONS.domination.badge}
+                  <div className="flex flex-col gap-2 sm:items-end">
+                    {/* Guarantee badge */}
+                    <div className="flex items-center gap-2 rounded-xl border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-3 py-2">
+                      <ShieldCheck className="h-4 w-4 shrink-0 text-[var(--xr-ink)]" />
+                      <span className="label-mono text-[10px] font-bold text-[var(--xr-ink)]">
+                        {tx("Objectif Top 3 · étude locale sur mesure")}
                       </span>
-                      {selectedPlanId === "domination" && (
-                        <CheckCircle2 className="h-4.5 w-4.5 text-[#e8cfa6]" />
-                      )}
                     </div>
-                    <h5 className="mt-2 text-sm font-bold text-[#f7f4ed]">{PLAN_OPTIONS.domination.name}</h5>
-                    <div className="mt-1.5 flex items-baseline gap-1">
-                      <span className="display-serif text-3xl font-semibold text-[#e8cfa6]">159 €</span>
-                      <span className="label-mono text-[9px] text-white/65">/ mois</span>
-                    </div>
-                    <p className="mt-2 text-xs leading-relaxed text-[#d7d1c6]">
-                      {PLAN_OPTIONS.domination.detail}
-                    </p>
-                  </div>
-
-                  {/* Plan 3: 990 € / an */}
-                  <div
-                    onClick={() => setSelectedPlanId("annual")}
-                    className={cn(
-                      "cursor-pointer rounded-2xl border p-5 transition-all duration-300 relative",
-                      selectedPlanId === "annual"
-                        ? "border-[#b48f5a] bg-white shadow-md ring-2 ring-[#c5a880]/45"
-                        : "border-[#141312]/10 bg-white/80 hover:border-[#b48f5a]/50"
-                    )}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="label-mono text-[7.5px] font-bold text-[#8c6c3c] uppercase">
-                        {PLAN_OPTIONS.annual.badge}
-                      </span>
-                      {selectedPlanId === "annual" && (
-                        <CheckCircle2 className="h-4.5 w-4.5 text-[#b48f5a]" />
-                      )}
-                    </div>
-                    <h5 className="mt-2 text-sm font-bold text-[#141312]">{PLAN_OPTIONS.annual.name}</h5>
-                    <div className="mt-1.5 flex items-baseline gap-1">
-                      <span className="display-serif text-3xl font-semibold text-[#141312]">990 €</span>
-                      <span className="label-mono text-[9px] text-[#6f675b]">/ an (comptant)</span>
-                    </div>
-                    <p className="mt-2 text-xs leading-relaxed text-[#5d564c]">
-                      {PLAN_OPTIONS.annual.detail}
-                    </p>
+                    <a
+                      href={`${CONTACT.whatsapp}?text=${waPrefill}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="label-mono inline-flex items-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-2.5 text-xs font-semibold text-[var(--xr-bg)] transition-all duration-200 hover:bg-[var(--xr-ink)]/90 hover:-translate-y-0.5 hover:shadow-lg"
+                    >
+                      <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
+                      {tx("Lancer mon audit gratuit")}
+                    </a>
                   </div>
                 </div>
 
-                {/* Selected Action Bar */}
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-[#b48f5a]/35 bg-white p-4 sm:p-5 shadow-sm">
-                  <div>
-                    <span className="label-mono text-[8px] font-bold text-[#9b7b4b] block uppercase">
-                      Formule validée : {PLAN_OPTIONS[selectedPlanId].name}
-                    </span>
-                    <p className="text-sm text-[#141312] mt-0.5">
-                      Tarif : <span className="font-bold">{PLAN_OPTIONS[selectedPlanId].priceDisplay}</span> · Audit personnalisé offert
-                    </p>
-                  </div>
-
-                  <a
-                    href={`${CONTACT.whatsapp}?text=${waPrefill}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#141312] px-6 py-3.5 text-xs font-semibold text-[#f7f4ed] transition-all duration-200 hover:bg-[#27231e] hover:-translate-y-0.5 hover:shadow-lg"
-                  >
-                    <MessageCircle className="h-4 w-4 text-[#e8cfa6]" />
-                    Réserver ma place · {PLAN_OPTIONS[selectedPlanId].priceDisplay}
-                  </a>
-                </div>
-
-                {/* Trust Signals */}
-                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 pt-2">
+                {/* Trust signals */}
+                <div className="mt-4 flex flex-wrap gap-3 border-t border-[var(--xr-ink)]/20 pt-4">
                   {[
-                    tx("Audit initial offert"),
-                    tx("Périmètre contractuel clair"),
-                    tx("Rapport mensuel inclus"),
-                    tx("Sans engagement minimum"),
-                  ].map((text) => (
+                    { icon: CheckCircle2, text: tx("Audit initial offert") },
+                    { icon: CheckCircle2, text: tx("Périmètre contractuel clair") },
+                    { icon: CheckCircle2, text: tx("Rapport mensuel inclus") },
+                    { icon: CheckCircle2, text: tx("Sans engagement minimum") },
+                  ].map(({ icon: Icon, text }) => (
                     <div key={text} className="flex items-center gap-1.5">
-                      <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[#b48f5a]" />
-                      <span className="label-mono text-[10px] text-[#5d564c]">{text}</span>
+                      <Icon className="h-3.5 w-3.5 shrink-0 text-[var(--xr-ink)]" />
+                      <span className="label-mono text-[10px] text-muted-foreground">{text}</span>
                     </div>
                   ))}
                 </div>
@@ -1157,7 +928,7 @@ export function MapsSimulator() {
         <Reveal delay={80}>
           <div>
             <div className="mb-6 text-center">
-              <p className="label-mono text-xs text-[#9b7b4b]">{tx("Méthodologie exclusive")}</p>
+              <p className="label-mono text-xs text-[var(--xr-ink)]">{tx("Méthodologie exclusive")}</p>
               <h3 className="display-serif mt-2 text-2xl sm:text-3xl text-foreground">
                 {tx("Le processus en 7 phases")}
               </h3>
@@ -1166,20 +937,21 @@ export function MapsSimulator() {
               </p>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
               {PHASES.map((ph) => (
                 <div
                   key={ph.num}
-                  className="rounded-2xl border border-[#141312]/10 bg-[#faf7f1] dark:bg-card p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#b48f5a]/50 hover:shadow-md"
+                  className="rounded-xl border border-border/70 bg-card p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-[var(--xr-ink)]/30"
                 >
-                  <span className="label-mono text-[8px] font-bold text-[#9b7b4b] block">{ph.num} · {tx(ph.name)}</span>
-                  <p className="mt-1 text-sm font-bold text-foreground">{tx(ph.title)}</p>
-                  <p className="mt-1 text-xs leading-snug text-muted-foreground">{tx(ph.desc)}</p>
+                  <span className="label-mono text-[6.5px] text-emerald-600 dark:text-emerald-400 font-bold block">{ph.num} · {tx(ph.name)}</span>
+                  <p className="mt-1 text-xs font-bold text-foreground">{tx(ph.title)}</p>
+                  <p className="mt-1 text-[10.5px] leading-snug text-muted-foreground line-clamp-2">{tx(ph.desc)}</p>
                 </div>
               ))}
             </div>
           </div>
         </Reveal>
+
       </div>
     </section>
   );

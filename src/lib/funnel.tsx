@@ -34,7 +34,7 @@ const BASE_SERVICE_PRICES: Record<string, { price: number; period: "once" | "mon
   website: { price: 499, period: "once" },
   branding: { price: 179, period: "once" },
   seo: { price: 299, period: "once" },
-  maps: { price: 99, period: "month" },
+  maps: { price: 990, period: "once" },
   ads: { price: 299, period: "once" },
   social: { price: 299, period: "once" },
   content: { price: 399, period: "once" },

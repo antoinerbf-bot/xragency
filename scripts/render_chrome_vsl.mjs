@@ -5,13 +5,13 @@ import { spawn } from "node:child_process";
 import os from "node:os";
 
 const FPS = 25;
-const DURATION = 101.04;
+const DURATION = 55.03;
 const TOTAL_FRAMES = Math.ceil(DURATION * FPS);
 const CHROME_BIN = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const FFMPEG_BIN = "./scripts/ffmpeg";
 const OUT_MP4 = "public/videos/xr-agency-vsl.mp4";
 const OUT_POSTER = "public/videos/vsl-poster.jpg";
-const VOICEOVER = "public/videos/xr-vsl-voiceover-v3.mp3";
+const VOICEOVER = "public/videos/xr-vsl-voiceover-v5.mp3";
 const SFX = "/tmp/xr_vsl_sfx.wav";
 const MUSIC = "public/videos/music-inspired.mp3";
 const DEBUG_PORT = 9229;
@@ -142,6 +142,7 @@ fs.writeFileSync(OUT_POSTER, Buffer.from(posterShot.data, "base64"));
 console.log(`Poster saved to ${OUT_POSTER}`);
 
 // 3. Pipe 25fps frames straight into FFmpeg + master audio mix
+const hasSfx = fs.existsSync(SFX);
 const ffmpegArgs = [
   "-y",
   "-f", "image2pipe",
@@ -149,14 +150,19 @@ const ffmpegArgs = [
   "-framerate", String(FPS),
   "-i", "-",
   "-i", VOICEOVER,
-  "-i", SFX,
+  ...(hasSfx ? ["-i", SFX] : []),
   "-i", MUSIC,
   "-filter_complex",
-  "[0:v]scale=1920:1080,format=yuv420p[vout];" +
-  "[1:a]aresample=48000,pan=stereo|c0=c0|c1=c0,volume=1.10[vo];" +
-  "[2:a]aresample=48000,pan=stereo|c0=c0|c1=c0,volume=0.85[sfx];" +
-  "[3:a]aresample=48000,volume=0.11,afade=t=in:st=0:d=1.5,afade=t=out:st=97.5:d=3.5[bgm];" +
-  "[vo][sfx][bgm]amix=inputs=3:duration=first:dropout_transition=2:normalize=0[aout]",
+  hasSfx
+    ? "[0:v]scale=1920:1080,format=yuv420p[vout];" +
+      "[1:a]aresample=48000,pan=stereo|c0=c0|c1=c0,volume=1.18[vo];" +
+      "[2:a]aresample=48000,pan=stereo|c0=c0|c1=c0,volume=0.35[sfx];" +
+      "[3:a]aresample=48000,volume=0.10,afade=t=in:st=0:d=1.2,afade=t=out:st=52.0:d=3.0[bgm];" +
+      "[vo][sfx][bgm]amix=inputs=3:duration=first:dropout_transition=2:normalize=0[aout]"
+    : "[0:v]scale=1920:1080,format=yuv420p[vout];" +
+      "[1:a]aresample=48000,pan=stereo|c0=c0|c1=c0,volume=1.18[vo];" +
+      "[2:a]aresample=48000,volume=0.11,afade=t=in:st=0:d=1.2,afade=t=out:st=52.0:d=3.0[bgm];" +
+      "[vo][bgm]amix=inputs=2:duration=first:dropout_transition=2:normalize=0[aout]",
   "-map", "[vout]",
   "-map", "[aout]",
   "-c:v", "libx264",

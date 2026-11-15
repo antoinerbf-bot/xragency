@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, Check, ChevronDown, MessageCircle, Instagram, Facebook, Linkedin, Music2, Camera, UsersRound, ChartNoAxesCombined, Target, Heart, Bookmark, Sparkles, Share2, Megaphone, Film } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, MessageCircle, Instagram, Facebook, Linkedin, Music2, Camera, UsersRound, ChartNoAxesCombined, Target, Heart, Bookmark, Sparkles } from "lucide-react";
 import { SERVICES } from "@/lib/content";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
 import { AddToCartBtn } from "@/components/site/Cart";
+import { XR_PHOTOS } from "@/lib/photography";
 
 const SOCIAL_VISUALS = {
-  instagram: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=90",
-  instagramGrid1: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400&q=80",
-  instagramGrid2: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=400&q=80",
-  instagramGrid3: "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=400&q=80",
-  tiktok: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=90",
-  facebook: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=90",
-  linkedin: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=90",
+  instagram: XR_PHOTOS.social,
+  tiktok: XR_PHOTOS.branding,
+  facebook: XR_PHOTOS.strategy,
+  linkedin: XR_PHOTOS.websites,
 } as const;
 
 const service = SERVICES.find((item) => item.id === "social")!;
@@ -25,40 +23,15 @@ const platformCards = [
   { name: "LinkedIn", icon: Linkedin, tags: ["Expertise", "Marque employeur", "B2B"], copy: "Une présence professionnelle pour valoriser votre expertise, votre équipe et vos actualités.", image: SOCIAL_VISUALS.linkedin, accent: "#718f9d" },
 ];
 const serviceTiles = [
-  {
-    title: "Stratégie sur-mesure",
-    text: "Positionnement, audience et ligne éditoriale.",
-    detail: "Audit de vos comptes, définition des piliers éditoriaux, ton de voix, calendrier de publication mensuel et choix des formats prioritaires par réseau.",
-    deliverable: "Calendrier éditorial & charte de feed",
-    Icon: UsersRound,
-  },
-  {
-    title: "Création de contenus",
-    text: "Photos, vidéos, Reels et carrousels.",
-    detail: "Direction artistique, habillage graphique sur-mesure, montage dynamique des vidéos verticales (Reels / TikTok), rédaction des légendes et stories.",
-    deliverable: "Visuels HD, carrousels & formats courts",
-    Icon: Camera,
-  },
-  {
-    title: "Diffusion & publicités",
-    text: "Publications et campagnes selon vos besoins.",
-    detail: "Programmation aux créneaux clés, modération et campagnes Social Media Ads ciblées (Meta Ads Instagram/Facebook, TikTok Ads, LinkedIn Ads).",
-    deliverable: "Publication régulière & Social Ads",
-    Icon: ChartNoAxesCombined,
-  },
-  {
-    title: "Suivi & optimisation",
-    text: "Analyse des résultats et recommandations.",
-    detail: "Suivi mensuel de la portée, de l'engagement, des clics et des demandes entrantes pour ajuster les formats et renforcer ce qui convertit.",
-    deliverable: "Reporting mensuel & plan d'action",
-    Icon: Target,
-  },
+  { title: "Stratégie sur-mesure", text: "Positionnement, audience et ligne éditoriale.", Icon: UsersRound },
+  { title: "Création de contenus", text: "Photos, vidéos, Reels et carrousels.", Icon: Camera },
+  { title: "Diffusion & publicités", text: "Publications et campagnes selon vos besoins.", Icon: ChartNoAxesCombined },
+  { title: "Suivi & optimisation", text: "Analyse des résultats et recommandations.", Icon: Target },
 ];
 const faq = [
   ["Que comprend chaque formule ?", "Le nombre de réseaux, de publications et les prestations incluses sont détaillés dans chaque formule. Ouvrez le détail pour consulter la liste complète."],
-  ["Les tournages sont-ils inclus ?", "Les tournages photo et vidéo sur site sont proposés en option, sur devis, afin d'adapter l'équipe et le matériel à votre projet."],
-  ["Quelle est la différence entre Social Media Ads et Google Ads ?", "Les Social Media Ads (Instagram, Facebook, TikTok, LinkedIn) diffusent vos visuels et vidéos auprès d'audiences ciblées sur les réseaux sociaux, tandis que Google Ads capte les recherches sur le moteur Google. Le budget média versé aux plateformes reste distinct du forfait de gestion."],
-  ["Puis-je changer de formule ?", "Nous vérifions ensemble le périmètre et les conditions avant toute évolution pour accompagner la croissance de votre activité."],
+  ["Les tournages sont-ils inclus ?", "Les tournages photo et vidéo sur site sont proposés en option, sur devis."],
+  ["Puis-je changer de formule ?", "Nous vérifions ensemble le périmètre et les conditions avant toute évolution."],
   ["À qui appartiennent les contenus ?", "Les droits sur les contenus livrés sont cédés selon les conditions prévues au contrat. Les éléments tiers restent soumis à leurs licences."],
   ["Quand commence l’accompagnement ?", "Le lancement est préparé sous 7 jours après réception des éléments nécessaires et validation du cadrage initial."],
 ] as const;
@@ -70,52 +43,10 @@ function PhoneMockup({ platform, image, center = false }: { platform: "Instagram
     <div className={`relative rounded-[1.25rem] border border-[#a9a49b] bg-[#121312] p-[3px] shadow-[0_18px_35px_rgba(0,0,0,.48)] sm:rounded-[2.4rem] sm:p-[7px] ${center ? "rotate-0" : platform === "Instagram" ? "sm:-rotate-[5deg]" : "sm:rotate-[5deg]"}`}>
       <div className="relative aspect-[9/15] overflow-hidden rounded-[1rem] bg-[#242321] sm:aspect-[9/16] sm:rounded-[1.95rem]">
         <img src={image} alt={`Exemple de direction artistique ${platform}`} className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent via-40% to-black/90" />
-        <div className="absolute inset-x-1.5 top-2 flex items-center gap-1 text-[7px] font-medium text-white sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px]">
-          <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full border border-white/50 bg-black/40 sm:h-7 sm:w-7"><Icon className="h-3 w-3 sm:h-4 sm:w-4" /></span>
-          <div className="min-w-0 leading-tight">
-            <span className="block truncate font-semibold">{platform === "Instagram" ? "xr.agency" : platform === "TikTok" ? "@xragency.studio" : "XR Agency"}</span>
-            <span className="hidden text-[7px] text-white/70 sm:block">{platform === "Instagram" ? "Feed & Carrousels" : platform === "TikTok" ? "Format vertical HD" : "Sponsorisé · Ciblé"}</span>
-          </div>
-          <span className="ml-auto text-white/80">•••</span>
-        </div>
-
-        {platform === "Instagram" && (
-          <div className="absolute inset-x-1.5 bottom-[34%] hidden grid-cols-3 gap-1 rounded-lg border border-white/20 bg-black/45 p-1 backdrop-blur-md sm:inset-x-3 sm:grid">
-            <img src={SOCIAL_VISUALS.instagramGrid1} alt="" aria-hidden="true" className="aspect-square w-full rounded object-cover" />
-            <img src={SOCIAL_VISUALS.instagramGrid2} alt="" aria-hidden="true" className="aspect-square w-full rounded object-cover" />
-            <img src={SOCIAL_VISUALS.instagramGrid3} alt="" aria-hidden="true" className="aspect-square w-full rounded object-cover" />
-          </div>
-        )}
-
-        {platform === "TikTok" && (
-          <div className="absolute right-1 top-[38%] flex flex-col items-center gap-2 text-white sm:right-2.5 sm:gap-3.5">
-            <div className="flex flex-col items-center"><Heart className="h-3.5 w-3.5 fill-white/85 sm:h-5 sm:w-5" /><span className="mt-0.5 hidden text-[7px] text-white/85 sm:block">24.8k</span></div>
-            <div className="flex flex-col items-center"><MessageCircle className="h-3.5 w-3.5 sm:h-5 sm:w-5" /><span className="mt-0.5 hidden text-[7px] text-white/85 sm:block">842</span></div>
-            <div className="flex flex-col items-center"><Bookmark className="h-3.5 w-3.5 sm:h-5 sm:w-5" /><span className="mt-0.5 hidden text-[7px] text-white/85 sm:block">3.1k</span></div>
-            <Share2 className=" hidden h-4 w-4 text-white/85 sm:block" />
-          </div>
-        )}
-
-        {platform === "Facebook" && (
-          <div className="absolute inset-x-1.5 top-[22%] hidden rounded-lg border border-white/20 bg-black/45 px-2.5 py-1.5 text-[8px] text-white/90 backdrop-blur-md sm:inset-x-3 sm:flex sm:items-center sm:justify-between">
-            <span>Campagne locale</span>
-            <span className="rounded-full bg-[#a9c1b2]/25 px-2 py-0.5 text-[7px] font-semibold text-[#d5e6db]">Audience ciblée</span>
-          </div>
-        )}
-
-        <div className="absolute inset-x-1.5 bottom-6 text-white sm:inset-x-3 sm:bottom-8">
-          <p className="font-serif text-[11px] leading-[1.05] tracking-tight sm:text-2xl">{title}</p>
-          <p className="mt-1 text-[7px] leading-[1.25] text-white/75 sm:mt-2 sm:text-[9px] sm:leading-4">
-            {platform === "Instagram" ? "Une identité visuelle pensée pour votre marque." : platform === "TikTok" ? "Formats courts · Idées créatives" : "Contenus utiles. Relations durables."}
-          </p>
-          {platform === "Facebook" && (
-            <div className="mt-2 hidden items-center justify-between rounded-md border border-white/20 bg-white/15 px-2.5 py-1 text-[8px] font-medium text-white backdrop-blur-sm sm:flex">
-              <span>Découvrir l’offre</span>
-              <ArrowRight className="h-3 w-3" />
-            </div>
-          )}
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent via-45% to-black/85" />
+        <div className="absolute inset-x-1.5 top-2 flex items-center gap-1 text-[7px] font-medium text-white sm:inset-x-3 sm:top-3 sm:gap-2 sm:text-[10px]"><span className="grid h-5 w-5 shrink-0 place-items-center rounded-full border border-white/50 bg-black/30 sm:h-7 sm:w-7"><Icon className="h-3 w-3 sm:h-4 sm:w-4" /></span><span>{platform === "Instagram" ? "xr.agency" : platform === "TikTok" ? "XR Agency" : "XR Agency"}</span><span className="ml-auto text-white/80">•••</span></div>
+        {platform === "TikTok" && <div className="absolute right-1 top-[42%] flex flex-col gap-2 text-white sm:right-2 sm:gap-4"><Heart className="h-3.5 w-3.5 fill-white/70 sm:h-5 sm:w-5"/><MessageCircle className="h-3.5 w-3.5 sm:h-5 sm:w-5"/><Bookmark className="h-3.5 w-3.5 sm:h-5 sm:w-5"/></div>}
+        <div className="absolute inset-x-1.5 bottom-6 text-white sm:inset-x-3 sm:bottom-8"><p className="font-serif text-[11px] leading-[1.05] tracking-tight sm:text-2xl">{title}</p><p className="mt-1 text-[7px] leading-[1.25] text-white/75 sm:mt-2 sm:text-[9px] sm:leading-4">{platform === "Instagram" ? "Une identité visuelle pensée pour votre marque." : platform === "TikTok" ? "Formats courts · Idées créatives" : "Contenus utiles. Relations durables."}</p></div>
         <div className="absolute inset-x-1.5 bottom-1 flex items-center justify-between border-t border-white/25 pt-1 text-white/90 sm:inset-x-3 sm:bottom-2 sm:pt-2"><span className="text-[6px] sm:text-[8px]">⌂</span><span className="text-[6px] sm:text-[8px]">⌕</span><span className="text-[6px] sm:text-[8px]">♡</span><span className="text-[6px] sm:text-[8px]">◉</span></div>
       </div>
     </div>
@@ -124,11 +55,8 @@ function PhoneMockup({ platform, image, center = false }: { platform: "Instagram
 }
 
 export function SocialSalesPage() {
-  const socialVideoUrl = import.meta.env.VITE_XR_SOCIAL_VIDEO_URL as string | undefined;
-  const [socialVideoFailed, setSocialVideoFailed] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [expandedPlans, setExpandedPlans] = useState<number[]>([]);
-  const [activeTile, setActiveTile] = useState<number>(0);
   const [showSticky, setShowSticky] = useState(false);
   const [industry, setIndustry] = useState("commerce");
   const [goal, setGoal] = useState("croissance");
@@ -172,7 +100,7 @@ export function SocialSalesPage() {
     <Nav />
     <main>
       <section className="relative isolate overflow-hidden bg-[#101311] text-[#f5f1e9]">
-        <div className="absolute inset-0"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=2200&q=90" alt="" aria-hidden="true" className="h-full w-full object-cover opacity-35" /><div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,12,10,.66),rgba(9,12,10,.70)_48%,rgba(9,12,10,.66))]" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_8%,rgba(141,169,154,.20),transparent_50%)]" /></div>
+        <div className="absolute inset-0"><img src={XR_PHOTOS.social} alt="" aria-hidden="true" className="h-full w-full object-cover opacity-35" /><div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,12,10,.66),rgba(9,12,10,.70)_48%,rgba(9,12,10,.66))]" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_8%,rgba(197,160,89,.20),transparent_50%)]" /></div>
         <div className="relative mx-auto max-w-[1440px] px-4 pb-7 pt-24 sm:px-7 sm:pb-12 sm:pt-12 lg:px-10">
           <div className="mx-auto max-w-4xl text-center">
             <p className="social-kicker text-white/70">Social Media Studio · XR Agency</p>
@@ -180,15 +108,11 @@ export function SocialSalesPage() {
             <p className="mt-4 text-xs tracking-wide text-white/75 sm:text-sm">Stratégie · Création · Diffusion · Performance</p>
           </div>
           <div className="relative mx-auto mt-7 max-w-[1120px] sm:mt-12">
-            <div className="pointer-events-none absolute -right-1 top-0 z-30 hidden w-[205px] rotate-[2deg] rounded-2xl border border-white/20 bg-[#111613]/85 p-4 text-white shadow-2xl backdrop-blur-lg xl:block">
-              <div className="flex items-center justify-between gap-2">
-                <p className="text-[9px] uppercase tracking-[.2em] text-white/60">Aperçu d’indicateurs</p>
-                <span className="rounded-full border border-white/15 bg-white/10 px-2 py-0.5 text-[7px] uppercase tracking-wider text-[#a9c1b2]">Démo</span>
-              </div>
+            <div className="pointer-events-none absolute -right-1 top-0 z-30 hidden w-[190px] rotate-[2deg] rounded-2xl border border-white/20 bg-[#111613]/80 p-4 text-white shadow-2xl backdrop-blur-lg xl:block">
+              <p className="text-[10px] uppercase tracking-[.22em] text-white/55">Aperçu des indicateurs</p>
               <div className="mt-3 flex items-end justify-between"><div><p className="font-serif text-3xl text-[#b8c9b9]">Visibilité</p><p className="mt-1 text-xs text-white/55">Portée & découverte</p></div><ChartNoAxesCombined className="h-6 w-6 text-[#b8c9b9]"/></div>
               <div className="mt-3 flex h-12 items-end gap-1.5">{[28,42,35,58,50,72,66,92].map((h,i)=><span key={i} className="flex-1 rounded-t-sm bg-[#9eb3a2]/80" style={{height:`${h}%`}} />)}</div>
               <div className="mt-4 border-t border-white/10 pt-3"><p className="text-xs text-white/55">Engagement</p><div className="mt-2 flex h-7 items-center gap-1">{[8,13,10,17,14,23,19,27,24].map((h,i)=><span key={i} className="flex-1 rounded-full bg-[#c5a27e]/80" style={{height:`${h}px`}} />)}</div></div>
-              <p className="mt-3 text-[9px] leading-3.5 text-white/45">Simulation illustrative du suivi mensuel.</p>
             </div>
             <div className="pointer-events-none absolute -left-1 top-0 z-20 hidden -rotate-6 text-right font-serif text-3xl italic leading-[1.05] text-white/85 lg:block xl:-left-5">Instagram<br/>TikTok<br/>Facebook<div className="ml-auto mt-2 h-1 w-24 rotate-[-8deg] rounded-full bg-[#a8bca9]" /></div>
             <div className="mx-auto grid max-w-[780px] grid-cols-3 items-end gap-2 sm:max-w-[880px] sm:gap-7 xl:max-w-[850px]">
@@ -196,53 +120,9 @@ export function SocialSalesPage() {
               <PhoneMockup platform="TikTok" image={SOCIAL_VISUALS.tiktok} center />
               <PhoneMockup platform="Facebook" image={SOCIAL_VISUALS.facebook} />
             </div>
-            <p className="mt-3 text-center text-[10px] tracking-wide text-white/50">
-              Concepts créatifs & démonstrations visuelles de direction artistique multi-plateformes
-            </p>
-            {/* Mobile & Tablet Reorganized Indicator Panel */}
-            <div className="mx-auto mt-4 grid max-w-[680px] grid-cols-2 gap-3 rounded-2xl border border-white/15 bg-[#111613]/85 p-3.5 text-white backdrop-blur-lg xl:hidden">
-              <div className="flex items-center justify-between gap-3 border-r border-white/10 pr-3">
-                <div>
-                  <span className="text-[9px] uppercase tracking-[.16em] text-white/55">Suivi · Portée</span>
-                  <p className="font-serif text-xl text-[#b8c9b9]">Visibilité</p>
-                </div>
-                <div className="flex h-8 w-16 items-end gap-1">{[35,55,48,72,66,92].map((h,i)=><span key={i} className="flex-1 rounded-t-sm bg-[#9eb3a2]/80" style={{height:`${h}%`}} />)}</div>
-              </div>
-              <div className="flex items-center justify-between gap-3 pl-1">
-                <div>
-                  <span className="text-[9px] uppercase tracking-[.16em] text-white/55">Interactions</span>
-                  <p className="font-serif text-xl text-[#d9bfa3]">Engagement</p>
-                </div>
-                <div className="flex h-8 w-16 items-center gap-1">{[8,14,11,19,16,24].map((h,i)=><span key={i} className="flex-1 rounded-full bg-[#c5a27e]/80" style={{height:`${h}px`}} />)}</div>
-              </div>
-            </div>
           </div>
-          <div className="mx-auto mt-6 grid max-w-[1120px] grid-cols-2 overflow-hidden rounded-2xl border border-white/15 bg-[#111411]/85 shadow-[0_18px_60px_rgba(0,0,0,.24)] backdrop-blur-xl sm:mt-10 sm:grid-cols-4">
-            {serviceTiles.map(({ title, text, Icon }, i) => {
-              const isSelected = activeTile === i;
-              return (
-                <button
-                  key={title}
-                  type="button"
-                  aria-pressed={isSelected}
-                  onClick={() => setActiveTile(i)}
-                  className={`px-2 py-3 text-center transition-colors sm:px-5 sm:py-5 ${i % 2 === 0 ? "border-r border-white/10" : ""} ${i < 2 ? "border-b border-white/10 sm:border-b-0" : ""} ${i === 1 ? "sm:border-r" : i === 2 ? "sm:border-r" : ""} ${isSelected ? "bg-[#1b231e] text-white" : "hover:bg-white/[0.04] text-white/90"}`}
-                >
-                  <Icon className="mx-auto h-5 w-5 text-[#a9c1b2] sm:h-7 sm:w-7" strokeWidth={1.5} />
-                  <h2 className="mt-1.5 text-[10px] font-semibold leading-tight sm:mt-2 sm:text-sm">{title}</h2>
-                  <p className="mx-auto mt-1 max-w-[210px] text-[9px] leading-3 text-white/60 sm:text-xs sm:leading-5">{text}</p>
-                </button>
-              );
-            })}
-          </div>
-          <div className="mx-auto mt-3 max-w-[1120px] rounded-2xl border border-white/12 bg-[#141916]/90 px-4 py-3 text-left text-xs text-white/80 backdrop-blur-md sm:flex sm:items-center sm:justify-between sm:gap-6 sm:px-6">
-            <div className="flex items-start gap-2.5">
-              <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#a9c1b2]/20 text-[10px] font-semibold text-[#a9c1b2]">0{activeTile + 1}</span>
-              <p className="leading-5"><strong className="font-semibold text-white">{serviceTiles[activeTile].title} :</strong> {serviceTiles[activeTile].detail}</p>
-            </div>
-            <span className="mt-2 inline-flex shrink-0 rounded-full border border-[#a9c1b2]/35 bg-[#a9c1b2]/10 px-3 py-1 text-[10px] font-medium text-[#c5d8cc] sm:mt-0">
-              {serviceTiles[activeTile].deliverable}
-            </span>
+          <div className="mx-auto mt-6 grid max-w-[1120px] grid-cols-2 overflow-hidden rounded-2xl border border-white/15 bg-[#111411]/80 shadow-[0_18px_60px_rgba(0,0,0,.24)] backdrop-blur-xl sm:mt-10 sm:grid-cols-4">
+            {serviceTiles.map(({title,text,Icon},i)=><div key={title} className={`px-2 py-3 text-center sm:px-5 sm:py-5 ${i%2===0?"border-r border-white/10":""} ${i<2?"border-b border-white/10 sm:border-b-0":""} ${i===1?"sm:border-r":i===2?"sm:border-r":""}`}><Icon className="mx-auto h-5 w-5 text-[#a9c1b2] sm:h-7 sm:w-7" strokeWidth={1.5}/><h2 className="mt-1.5 text-[10px] font-semibold leading-tight sm:mt-2 sm:text-sm">{title}</h2><p className="mx-auto mt-1 max-w-[210px] text-[9px] leading-3 text-white/60 sm:text-xs sm:leading-5">{text}</p></div>)}
           </div>
           <div className="mt-4 flex flex-col items-center gap-3 pb-4 sm:mt-6">
             <a href="#choisir" className="social-cta inline-flex min-h-12 w-full max-w-[330px] items-center justify-center gap-3 rounded-full bg-[#a9c1b2] px-7 py-3 text-xs font-bold tracking-[.10em] text-[#111412] shadow-xl sm:w-auto sm:text-sm">TROUVER MA FORMULE EN 30 SECONDES <Sparkles className="h-4 w-4"/></a>
@@ -264,82 +144,8 @@ export function SocialSalesPage() {
               <div className="mt-4 flex flex-wrap gap-1.5">{tags.map(tag=><span key={tag} className="rounded-md bg-[#eae7e0] px-2.5 py-1 text-[10px] text-[#55584f]">{tag}</span>)}</div>
               <p className="relative z-10 mt-3 max-w-[88%] text-xs leading-5 text-[#62655e]">{copy}</p>
               <div className="absolute -bottom-6 right-0 h-36 w-40 overflow-hidden rounded-tl-2xl border-l border-t border-white shadow-[-8px_-8px_25px_rgba(0,0,0,.08)] transition-transform duration-300 group-hover:-translate-y-2 sm:h-44 sm:w-48"><img src={image} alt={`Aperçu créatif ${name}`} className="h-full w-full object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent"/></div>
-              <a href="#formules" aria-label={`Voir les formules pour ${name}`} className="absolute bottom-5 left-5 z-10 grid h-8 w-8 place-items-center rounded-full bg-[#f5f1e9] text-[#718f80] shadow-md"><ArrowRight className="h-4 w-4"/></a>
+              <span className="absolute bottom-5 left-5 z-10 grid h-8 w-8 place-items-center rounded-full bg-[#f5f1e9] text-[#718f80] shadow-md"><ArrowRight className="h-4 w-4"/></span>
             </article>)}
-          </div>
-
-          <div id="studio-ads" className="mt-8 grid gap-5 lg:grid-cols-2">
-            <article className="flex flex-col justify-between rounded-3xl border border-black/10 bg-white/80 p-6 shadow-sm sm:p-7">
-              <div>
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#18201b] text-[#a9c1b2]"><Film className="h-5 w-5" /></span>
-                    <div>
-                      <p className="social-kicker text-[#718f80]">Social Media Studio</p>
-                      <h3 className="social-serif text-2xl sm:text-3xl">Direction artistique & production</h3>
-                    </div>
-                  </div>
-                  <span className="hidden rounded-full border border-black/10 bg-[#f5f1e9] px-3 py-1 text-[10px] font-medium text-[#55584f] sm:inline-flex">Organique & Image</span>
-                </div>
-                <p className="mt-3 text-sm leading-6 text-[#62655e]">
-                  Un studio créatif dédié à l’image de votre marque : nous structurons l’esthétique de votre feed, préparons vos visuels et vidéos courtes, et assurons un rythme de publication régulier.
-                </p>
-                <div className="mt-4 grid gap-4 sm:grid-cols-[1fr_140px] sm:items-center">
-                  <ul className="grid gap-2 text-xs text-[#373a34]">
-                    <li className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#718f80]" /><span>Direction artistique & harmonie du feed</span></li>
-                    <li className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#718f80]" /><span>Habillage des publications & carrousels</span></li>
-                    <li className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#718f80]" /><span>Montage de formats courts (Reels, TikTok)</span></li>
-                    <li className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#718f80]" /><span>Tournages sur site possibles en option sur devis</span></li>
-                  </ul>
-                  {/* 1:1 Square Studio Reel / Visual Composition */}
-                  <div className="relative mx-auto aspect-square w-32 overflow-hidden rounded-2xl border border-black/10 bg-[#101311] shadow-md sm:w-full">
-                    {socialVideoUrl && !socialVideoFailed ? (
-                      <video
-                        aria-label="Aperçu vidéo Social Media Studio"
-                        className="h-full w-full object-cover"
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                        poster={SOCIAL_VISUALS.instagram}
-                        onError={() => setSocialVideoFailed(true)}
-                      >
-                        <source src={socialVideoUrl} type="video/mp4" />
-                      </video>
-                    ) : (
-                      <div className="relative h-full w-full">
-                        <img src={SOCIAL_VISUALS.instagramGrid2} alt="Studio créatif XR Agency" className="h-full w-full object-cover opacity-85" loading="lazy" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                        <div className="absolute inset-x-2 bottom-2 text-white">
-                          <span className="block text-[8px] uppercase tracking-[.16em] text-[#a9c1b2]">Format 1:1 & 9:16</span>
-                          <span className="font-serif text-xs leading-tight">Studio Reel HD</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            <article className="rounded-3xl border border-black/10 bg-[#18201b] p-6 text-[#f5f1e9] shadow-sm sm:p-7">
-              <div className="flex items-center gap-3">
-                <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#a9c1b2]/20 text-[#a9c1b2]"><Megaphone className="h-5 w-5" /></span>
-                <div>
-                  <p className="social-kicker text-[#a9c1b2]">Social Media Ads</p>
-                  <h3 className="social-serif text-2xl sm:text-3xl">Publicité sur les réseaux sociaux</h3>
-                </div>
-              </div>
-              <p className="mt-3 text-sm leading-6 text-white/75">
-                Amplifiez votre portée au-delà de l’organique grâce à des campagnes sponsorisées ciblées sur Meta Ads (Instagram & Facebook), TikTok Ads et LinkedIn Ads.
-              </p>
-              <ul className="mt-4 grid gap-2 text-xs text-white/85 sm:grid-cols-2">
-                <li className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#a9c1b2]" /><span>Ciblage d’audience local, sectoriel ou B2B</span></li>
-                <li className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#a9c1b2]" /><span>Création des visuels et vidéos publicitaires</span></li>
-                <li className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#a9c1b2]" /><span>Génération de trafic, messages ou prospects</span></li>
-                <li className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#a9c1b2]" /><span>Distinct de Google Ads · budget média séparé</span></li>
-              </ul>
-            </article>
           </div>
         </div>
       </section>
@@ -361,14 +167,14 @@ export function SocialSalesPage() {
           <p className="social-kicker text-center text-white/55">Nos formules</p><h2 className="social-serif mt-3 text-center text-4xl leading-tight sm:text-5xl">Des offres adaptées à <em className="not-italic text-[#a9c1b2]">vos besoins.</em></h2>
           <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-6 text-white/60">Choisissez le niveau d’accompagnement adapté à votre rythme et à vos objectifs.</p>
           <div className="mt-8 grid items-stretch gap-4 lg:grid-cols-3">
-            {plans.map((plan,i)=>{const popular=Boolean(plan.popular);const isOpen=expandedPlans.includes(i);const commitmentLabel=i===0?"Engagement : 3 mois":"Engagement : 6 mois";return <article id={`plan-${i}`} key={plan.name.fr} className={`relative flex h-full flex-col rounded-2xl border p-5 sm:p-6 ${popular?"border-[#a9c1b2] bg-[#1a211d] shadow-[0_0_0_1px_rgba(169,193,178,.12)]":"border-white/10 bg-[#151916]"}`}>
-              {popular&&<span className="absolute -top-3 left-5 rounded-full bg-[#a9c1b2] px-3 py-1.5 text-xs font-semibold text-[#111412]">Le plus choisi</span>}
+            {plans.map((plan,i)=>{const popular=Boolean(plan.popular);const isOpen=expandedPlans.includes(i);return <article id={`plan-${i}`} key={plan.name.fr} className={`relative flex h-full flex-col rounded-2xl border p-5 sm:p-6 ${popular?"border-[#a9c1b2] bg-[#1a211d] shadow-[0_0_0_1px_rgba(169,193,178,.12)]":"border-white/10 bg-[#151916]"}`}>
+              {popular&&<span className="absolute -top-3 left-5 rounded-full bg-[#C5A059] px-3 py-1.5 text-xs font-semibold text-[#0B0B0C]">Le plus choisi</span>}
               <p className="social-kicker mt-2 text-white/45">Formule 0{i+1}</p><h3 className="social-serif mt-3 text-3xl">{plan.name.fr}</h3><p className="mt-1 text-sm text-white/60">{plan.audience?.fr ?? "Un accompagnement adapté à votre activité"}</p>
-              <div className="mt-5 border-y border-white/10 py-4"><div className="flex items-baseline gap-2"><span className="social-serif text-5xl">{plan.eur} €</span><span className="text-sm text-white/55">/ mois</span></div><p className="mt-2 text-xs text-white/65">{commitmentLabel}</p></div>
+              <div className="mt-5 border-y border-white/10 py-4"><div className="flex items-baseline gap-2"><span className="social-serif text-5xl">{plan.eur} €</span><span className="text-sm text-white/55">/ mois</span></div><p className="mt-2 text-xs text-white/55">Engagement minimum : {i===0?"3":"6"} mois</p></div>
               <ul className="mt-5 space-y-3">{plan.features.slice(0,4).map((feature,k)=><li key={k} className="flex gap-2.5 text-sm leading-5 text-white/85"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#a9c1b2]"/><span>{feature.fr}</span></li>)}</ul>
               <button type="button" aria-expanded={isOpen} onClick={()=>setExpandedPlans(prev=>isOpen?prev.filter(x=>x!==i):[...prev,i])} className="mt-4 inline-flex min-h-11 items-center justify-between gap-3 text-left text-sm text-white/80 underline underline-offset-4"><span>{isOpen?"Masquer le détail":"Voir le détail complet"}</span><ChevronDown className={`h-4 w-4 transition-transform ${isOpen?"rotate-180":""}`}/></button>
               {isOpen&&<ul className="mt-3 space-y-2 rounded-xl bg-black/20 p-4">{plan.features.map((feature,k)=><li key={k} className="flex gap-2.5 text-sm leading-5 text-white/65"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#a9c1b2]"/><span>{feature.fr}</span></li>)}</ul>}
-              <div className="mt-auto pt-6"><AddToCartBtn item={{serviceId:"social",serviceName:"Social Media",planName:plan.name.fr,priceEur:plan.eur,period:"month",periodLabel:"/ mois",commitment:commitmentLabel}} popular={popular} className={popular ? "!bg-[#a9c1b2] !text-[#111412] hover:!bg-white" : "!border-white/30 !bg-white/10 !text-white hover:!bg-[#a9c1b2] hover:!text-[#111412] hover:!border-[#a9c1b2]"}/><a href={waFor(plan.name.fr)} target="_blank" rel="noreferrer" className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-white/20 px-4 py-3 text-sm font-medium text-white/85 transition-colors hover:bg-white/10"><MessageCircle className="h-4 w-4"/> Parler de cette formule</a></div>
+              <div className="mt-auto pt-6"><AddToCartBtn item={{serviceId:"social",serviceName:"Social Media",planName:plan.name.fr,priceEur:plan.eur,period:"month",periodLabel:"/ mois"}} popular={popular}/><a href={waFor(plan.name.fr)} target="_blank" rel="noreferrer" className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-white/20 px-4 py-3 text-sm font-medium text-white/85 transition-colors hover:bg-white/10"><MessageCircle className="h-4 w-4"/> Parler de cette formule</a></div>
             </article>})}
           </div>
           <p className="mt-5 text-center text-xs text-white/50">Les tournages photo et vidéo sur site sont en option, sur devis.</p>

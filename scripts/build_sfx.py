@@ -4,7 +4,7 @@ import wave
 import random
 
 SAMPLE_RATE = 48000
-DURATION = 101.5  # seconds
+DURATION = 88.5  # seconds
 NUM_SAMPLES = int(SAMPLE_RATE * DURATION)
 
 buf = [0.0] * NUM_SAMPLES
@@ -43,31 +43,28 @@ def add_whoosh(t_sec, dur=0.28, amp=0.16):
         sub = math.sin(2.0 * math.pi * (80.0 + 70.0 * math.sin(math.pi * u)) * (i / SAMPLE_RATE)) * 0.25
         buf[idx] += (lp * 1.6 + sub) * env * amp
 
-# Scene transition swooshes aligned with voiceover pauses
-TRANSITIONS = [9.7, 15.7, 25.1, 32.0, 41.05, 50.55, 62.05, 75.6, 86.85, 95.2]
+# Scene transition swooshes aligned with voiceover pauses (V4 88.08s)
+TRANSITIONS = [10.36, 20.63, 29.31, 38.35, 58.36, 66.49, 77.79]
 for t in TRANSITIONS:
-    add_whoosh(max(0.0, t - 0.14), dur=0.28, amp=0.18)
+    add_whoosh(max(0.0, t - 0.14), dur=0.28, amp=0.16)
 
 # Crisp UI micro-pops for animations / cards / highlights
 POPS = [
-    1.1, 3.0, 5.4,              # Scene 1 pills
-    10.4, 12.4, 13.8,           # Scene 2 typing & suggestions
-    17.3, 21.0,                 # Scene 3 competitor alert & call badge
-    26.0, 29.0,                 # Scene 4 speedometer & warning
-    34.2, 35.8,                 # Scene 5 slash vitrine -> machine badge
-    42.2, 43.4, 44.6, 45.8,     # Scene 6 4 checklist cards
-    52.4, 54.0, 56.2, 59.0,     # Scene 7 Maps #1 rise + 99€ + 159€ + result
-    63.5, 69.8,                 # Scene 8 Social + Branding cards
-    75.9, 80.1, 83.6,           # Scene 9 SEO, WebCare, Robots
-    87.4, 88.2, 91.0, 93.0,     # Scene 10 +50, stars, timeline
-    96.2, 98.0                  # Scene 11 WhatsApp bubble + blue ticks
+    1.1, 2.2,
+    13.5,
+    22.4, 24.4,
+    30.2, 33.5,
+    39.0, 47.0,
+    59.2, 62.5,
+    67.0, 69.5, 72.0,
+    79.0
 ]
 for t in POPS:
-    add_pop(t, amp=0.11)
+    add_pop(t, amp=0.10)
 
-# Tiny soft keyboard clicks for Google search typing (~10.5s - 12.2s)
+# Tiny soft keyboard clicks for Google search typing (~10.8s - 12.6s)
 for k in range(14):
-    add_click(10.6 + k * 0.11, amp=0.045)
+    add_click(10.8 + k * 0.11, amp=0.04)
 
 # Soft clamp and export 16-bit 48kHz PCM WAV
 out_path = "/tmp/xr_vsl_sfx.wav"

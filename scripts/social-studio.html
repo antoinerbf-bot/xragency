@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XR Agency — Social Media Command Center (1-Click Publish)</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #09090d;
+      color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 32px;
+      line-height: 1.5;
+    }
+    .container { max-width: 1280px; margin: 0 auto; }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 32px;
+    }
+    .badge {
+      background: rgba(0, 242, 254, 0.1);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      color: #00f2fe;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pulse-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #00f2fe;
+      box-shadow: 0 0 12px #00f2fe;
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+    p.subtitle { color: #94a3b8; font-size: 14px; margin-top: 4px; }
+
+    /* Barre de configuration ultra-simple */
+    .autopilot-banner {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.7));
+      border: 1px solid rgba(0, 242, 254, 0.25);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .autopilot-text h3 { font-size: 16px; font-weight: 700; color: #fff; }
+    .autopilot-text p { font-size: 13px; color: #94a3b8; }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #00f2fe;
+      color: #050508;
+      font-weight: 700;
+      padding: 12px 24px;
+      border-radius: 99px;
+      box-shadow: 0 10px 30px rgba(0,242,254,0.3);
+      display: none;
+      z-index: 1000;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    /* Grille des posts */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 24px; }
+    
+    .card {
+      background: #111118;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 242, 254, 0.3);
+    }
+    .card-theme {
+      font-size: 12px;
+      font-weight: 800;
+      color: #00f2fe;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+
+    .platform-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 10px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+
+    .tab-content {
+      font-size: 13px;
+      color: #cbd5e1;
+      background: rgba(0,0,0,0.3);
+      padding: 14px;
+      border-radius: 12px;
+      max-height: 160px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      font-family: inherit;
+      border: 1px solid rgba(255,255,255,0.04);
+      margin-bottom: 16px;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+      text-align: center;
+    }
+    .btn-fb {
+      background: #1877f2;
+      color: #fff;
+    }
+    .btn-fb:hover { background: #166fe5; }
+    .btn-insta {
+      background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      color: #fff;
+    }
+    .btn-insta:hover { opacity: 0.9; }
+    .btn-tiktok {
+      background: #000;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #00f2fe;
+    }
+    .btn-tiktok:hover { background: #1a1a24; }
+
+    .btn-copy {
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.1);
+      width: 100%;
+    }
+    .btn-copy:hover { background: rgba(255,255,255,0.12); }
+
+    .visual-link {
+      font-size: 11px;
+      color: #00f2fe;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .visual-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div>
+      <div class="badge"><span class="pulse-dot"></span> Studio Réseaux Sociaux 1-Clic</div>
+      <h1 style="margin-top: 8px;">XR Agency — Gestionnaire Tout-en-Un</h1>
+      <p class="subtitle">Créez et publiez en 1 clic sur Facebook, Instagram et TikTok pour xragencyai.com</p>
+    </div>
+    <div>
+      <a href="https://xragencyai.com" target="_blank" class="badge" style="text-decoration: none; border-color: rgba(255,255,255,0.2); color: #fff;">
+        Visiter xragencyai.com ↗
+      </a>
+    </div>
+  </header>
+
+  <!-- Notice Confort Total -->
+  <div class="autopilot-banner">
+    <div class="autopilot-text">
+      <h3>🚀 Mode Zéro Prise de Tête : Vos comptes sont déjà ouverts sur ce Mac !</h3>
+      <p>Cliquez sur n'importe quel bouton : le texte se copie <strong>instantanément dans votre presse-papier</strong> et la page de publication officielle s'ouvre. Vous n'avez plus qu'à coller (Cmd+V) et valider !</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <button class="btn btn-copy" onclick="triggerRegenerate()" style="padding: 12px 20px;">⚡ Générer 10 Nouveaux Posts</button>
+    </div>
+  </div>
+
+  <div class="grid" id="posts-container">
+    <!-- Rendu dynamique via JavaScript -->
+  </div>
+</div>
+
+<div id="toast" class="toast">Texte copié ! Page ouverte 🚀</div>
+
+<script>
+  let postsData = [{"id":"auto_1793966954261_0","created_at":"2026-11-06T12:09:14.261Z","theme":"Configurateur IA de Devis","status":"published","tiktok":{"hook":"Pourquoi les devis d'agences prennent 3 jours alors qu'on peut en avoir un en 30 secondes ?","script":"Plan 1 (0-3s) : Gros plan sur l'écran avec le curseur qui bouge sur xragencyai.com.\nPlan 2 (3-8s) : Ajustement en temps réel des modules (Site 3D, Agent IA, Automations).\nPlan 3 (8-15s) : Le prix et le calendrier se calculent en direct. Voix off : 'Lien en bio pour tester le tien gratuitement.'"},"instagram":{"caption":"Combien coûte un site web nouvelle génération ou une solution IA en 2026 ? 🚀\n\nChez XR Agency, on a automatisé tout le processus : notre configurateur intelligent calcule votre devis en direct.\n\n✨ 3D temps réel\n⚡ Stack ultra-rapide (React 19 / TanStack)\n🤖 Intégration d'agents IA autonomes\n\n👉 Testez-le en direct : xragencyai.com (lien en bio)\n\n#agenceia #webdesign #tanstack #react #automation #intelligenceartificielle #tech"},"facebook":{"post":"Finies les attentes de 3 jours pour recevoir une proposition commerciale.\n\nSur notre nouvelle plateforme XR Agency, configurez votre projet digital en temps réel (Site Web 3D immersif, Agent IA autonome, Automatisation métier) et obtenez un chiffrage immédiat.\n\n👉 Découvrir la démo en direct : https://xragencyai.com"},"target_site":"https://xragencyai.com","published_at":"2026-11-06T12:09:28.089Z"},{"id":"auto_1793966954264_1","created_at":"2026-11-06T12:09:14.264Z","theme":"Agents IA Autonomes en Entreprise","status":"published","tiktok":{"hook":"Voici comment une IA qualifie des prospects et gère le CRM 24h/24 sans jamais dormir.","script":"Plan 1 (0-3s) : Alerte prospect reçue à 2h du matin.\nPlan 2 (3-9s) : L'agent IA analyse le besoin, vérifie le calendrier et booke un appel qualifié.\nPlan 3 (9-15s) : Tableau de bord des leads convertis. CTA : 'Toutes les infos sur xragencyai.com'"},"instagram":{"caption":"Automatiser 80% des tâches répétitives de son entreprise, c'est possible dès aujourd'hui ⚡\n\nOn déploie des agents IA connectés directement à vos bases de données, CRM et réseaux pour qualifier et convertir vos prospects en continu.\n\nDécouvrez nos architectures sur xragencyai.com 🔥\n\n#ia #agentsia #automation #crm #businessonline #entrepreneuriat #productivite"},"facebook":{"post":"Comment les entreprises modernes automatisent leurs opérations avec des agents IA sur-mesure.\n\nDe la qualification automatique de leads au support client autonome 24/7, découvrez nos études de cas et solutions sur https://xragencyai.com"},"target_site":"https://xragencyai.com","published_at":"2026-11-06T12:09:28.090Z"},{"id":"auto_1793966954264_2","created_at":"2026-11-06T12:09:14.264Z","theme":"Sites Web Immersifs & 3D Temps Réel","status":"published","tiktok":{"hook":"Les sites web en 2026 ressemblent à ça, et votre site actuel a pris 10 ans d'un coup.","script":"Plan 1 (0-3s) : Scroll ultra-fluide avec interaction 3D dynamique.\nPlan 2 (3-9s) : Transitions cinématiques et vitesse de chargement instantanée.\nPlan 3 (9-15s) : 'Ton site convertit ou il fait fuir tes visiteurs ? Rendez-vous sur xragencyai.com pour un audit gratuit.'"},"instagram":{"caption":"Pourquoi se contenter d'un template classique quand votre marque peut offrir une expérience visuelle digne d'un film ? 🎬✨\n\nFluidité 120 FPS, 3D interactive, temps de chargement éclair.\n\nExplorez nos réalisations sur xragencyai.com\n\n#webgl #threejs #uxdesign #webdesigninspiration #creativecoding #luxurybrand"},"facebook":{"post":"L'immersion visuelle au service de votre taux de conversion.\n\nDécouvrez comment nous concevons des plateformes web immersives alliant performance technique extrême et design cinématique.\n\nVisitez https://xragencyai.com"},"target_site":"https://xragencyai.com","published_at":"2026-11-06T12:09:28.090Z"},{"id":"campaign_1794583595572_1","theme":"Configurateur IA de Devis","scheduled_for":"2026-11-14T15:26:35.572Z","status":"published","target_site":"https://xragencyai.com","tiktok":{"hook":"Pourquoi les devis d'agences prennent 3 jours alors qu'on peut en avoir un en 30 secondes ?","script":"Plan 1 (0-3s) : Gros plan sur l'écran avec le curseur qui bouge sur xragencyai.com.\nPlan 2 (3-8s) : Ajustement en temps réel des modules (Site 3D, Agent IA, Automations).\nPlan 3 (8-15s) : Le prix et le calendrier se calculent en direct. Voix off : 'Lien en bio pour tester le tien gratuitement.'"},"instagram":{"caption":"Combien coûte un site web nouvelle génération ou une solution IA en 2026 ? 🚀\n\nChez XR Agency, on a automatisé tout le processus : notre configurateur intelligent calcule votre devis en direct.\n\n✨ 3D temps réel\n⚡ Stack ultra-rapide (React 19 / TanStack)\n🤖 Intégration d'agents IA autonomes\n\n👉 Testez-le en direct : xragencyai.com (lien en bio)\n\n#agenceia #webdesign #tanstack #react #automation #intelligenceartificielle #tech"},"facebook":{"post":"Finies les attentes de 3 jours pour recevoir une proposition commerciale.\n\nSur notre nouvelle plateforme XR Agency, configurez votre projet digital en temps réel (Site Web 3D immersif, Agent IA autonome, Automatisation métier) et obtenez un chiffrage immédiat.\n\n👉 Découvrir la démo en direct : https://xragencyai.com"},"assets":{"storySvg":"/social-assets/campaign_1794583595572_1-story.svg","squareSvg":"/social-assets/campaign_1794583595572_1-square.svg"},"published_at":"2026-11-13T15:26:51.839Z"},{"id":"campaign_1794583595576_2","theme":"Agents IA Autonomes en Entreprise","scheduled_for":"2026-11-15T15:26:35.572Z","status":"published","target_site":"https://xragencyai.com","tiktok":{"hook":"Voici comment une IA qualifie des prospects et gère le CRM 24h/24 sans jamais dormir.","script":"Plan 1 (0-3s) : Alerte prospect reçue à 2h du matin.\nPlan 2 (3-9s) : L'agent IA analyse le besoin, vérifie le calendrier et booke un appel qualifié.\nPlan 3 (9-15s) : Tableau de bord des leads convertis. CTA : 'Toutes les infos sur xragencyai.com'"},"instagram":{"caption":"Automatiser 80% des tâches répétitives de son entreprise, c'est possible dès aujourd'hui ⚡\n\nOn déploie des agents IA connectés directement à vos bases de données, CRM et réseaux pour qualifier et convertir vos prospects en continu.\n\nDécouvrez nos architectures sur xragencyai.com 🔥\n\n#ia #agentsia #automation #crm #businessonline #entrepreneuriat #productivite"},"facebook":{"post":"Comment les entreprises modernes automatisent leurs opérations avec des agents IA sur-mesure.\n\nDe la qualification automatique de leads au support client autonome 24/7, découvrez nos études de cas et solutions sur https://xragencyai.com"},"assets":{"storySvg":"/social-assets/campaign_1794583595576_2-story.svg","squareSvg":"/social-assets/campaign_1794583595576_2-square.svg"},"published_at":"2026-11-13T15:26:51.843Z"},{"id":"campaign_1794583595576_3","theme":"Sites Web Immersifs & 3D Temps Réel","scheduled_for":"2026-11-16T15:26:35.572Z","status":"published","target_site":"https://xragencyai.com","tiktok":{"hook":"Les sites web en 2026 ressemblent à ça, et votre site actuel a pris 10 ans d'un coup.","script":"Plan 1 (0-3s) : Scroll ultra-fluide avec interaction 3D dynamique.\nPlan 2 (3-9s) : Transitions cinématiques et vitesse de chargement instantanée.\nPlan 3 (9-15s) : 'Ton site convertit ou il fait fuir tes visiteurs ? Rendez-vous sur xragencyai.com pour un audit gratuit.'"},"instagram":{"caption":"Pourquoi se contenter d'un template classique quand votre marque peut offrir une expérience visuelle digne d'un film ? 🎬✨\n\nFluidité 120 FPS, 3D interactive, temps de chargement éclair.\n\nExplorez nos réalisations sur xragencyai.com\n\n#webgl #threejs #uxdesign #webdesigninspiration #creativecoding #luxurybrand"},"facebook":{"post":"L'immersion visuelle au service de votre taux de conversion.\n\nDécouvrez comment nous concevons des plateformes web immersives alliant performance technique extrême et design cinématique.\n\nVisitez https://xragencyai.com"},"assets":{"storySvg":"/social-assets/campaign_1794583595576_3-story.svg","squareSvg":"/social-assets/campaign_1794583595576_3-square.svg"},"published_at":"2026-11-13T15:26:51.843Z"},{"id":"campaign_1794583595576_4","theme":"Audit Performance : WordPress vs TanStack Start","scheduled_for":"2026-11-17T15:26:35.572Z","status":"published","target_site":"https://xragencyai.com","tiktok":{"hook":"Ton site met plus de 2 secondes à charger ? Tu perds littéralement 53% de tes ventes.","script":"Plan 1 (0-3s) : Chronomètre comparatif entre un vieux CMS lourd et une architecture React 19 / Vite.\nPlan 2 (3-8s) : Score 100/100 sur Google PageSpeed Insights.\nPlan 3 (8-15s) : 'Optimise ta conversion avec XR Agency : audit express sur xragencyai.com'"},"instagram":{"caption":"La vitesse est le premier facteur de conversion web en 2026 🏎️💨\n\nChaque seconde de chargement en trop détruit votre taux de rebond. Nous développons des applications ultra-légères avec TanStack Start et Tailwind v4.\n\nRésultat : Score 100/100 garanti et conversion maximale.\n\n👉 Audit offert de votre site actuel sur xragencyai.com\n\n#pagespeed #webperf #seo #react19 #tanstack #developpeurweb"},"facebook":{"post":"Saviez-vous que plus de la moitié des visiteurs quittent un site s'il met plus de 3 secondes à s'afficher ?\n\nNos architectures web modernes garantissent des performances extrêmes et un SEO technique sans compromis.\n\nFaites tester votre site gratuitement sur https://xragencyai.com"},"assets":{"storySvg":"/social-assets/campaign_1794583595576_4-story.svg","squareSvg":"/social-assets/campaign_1794583595576_4-square.svg"},"published_at":"2026-11-13T15:26:51.843Z"},{"id":"campaign_1794583595576_5","theme":"Automatisation Funnel & CRM en Temps Réel","scheduled_for":"2026-11-18T15:26:35.572Z","status":"published","target_site":"https://xragencyai.com","tiktok":{"hook":"Ce système transforme 1 visiteur froid en rendez-vous qualifié en moins de 2 minutes.","script":"Plan 1 (0-3s) : Notification d'un nouveau prospect entrant.\nPlan 2 (3-9s) : Workflow automatisé n8n / IA qui enrichit les données du lead et génère une proposition sur-mesure.\nPlan 3 (9-15s) : Le client confirme en un clic. 'Configure le tien sur xragencyai.com'"},"instagram":{"caption":"Ne laissez plus aucun lead refroidir 🔥\n\nAvec nos pipelines automatisés, chaque demande est traitée instantanément par nos agents intelligents : qualification, calcul de tarif, relance personnalisée.\n\nBoostez vos ventes avec l'IA sur xragencyai.com 📈\n\n#growth #funneldevente #salesautomation #entrepreneur #saas #ia"},"facebook":{"post":"L'automatisation intelligente au service de votre croissance commerciale.\n\nDécouvrez comment réduire vos coûts d'acquisition tout en multipliant vos prises de rendez-vous qualifiés.\n\nEn savoir plus sur https://xragencyai.com"},"assets":{"storySvg":"/social-assets/campaign_1794583595576_5-story.svg","squareSvg":"/social-assets/campaign_1794583595576_5-square.svg"},"published_at":"2026-11-13T15:26:51.843Z"},{"id":"campaign_1794583595577_6","theme":"Studio Digital & IA : L'Agence Nouvelle Génération","scheduled_for":"2026-11-19T15:26:35.572Z","status":"published","target_site":"https://xragencyai.com","tiktok":{"hook":"Les agences web traditionnelles sont mortes, voici ce qui les remplace.","script":"Plan 1 (0-3s) : Contraste 'Ancienne agence (2 mois de délais, devis opaque)' vs 'XR Agency (IA + 3D en temps réel)'.\nPlan 2 (3-9s) : Navigation interactive sur le studio xragencyai.com.\nPlan 3 (9-15s) : 'Passe au niveau supérieur dès aujourd'hui.'"},"instagram":{"caption":"Le monde digital a changé. Votre agence partenaire doit maîtriser les technologies d'aujourd'hui, pas celles d'il y a 10 ans 🌐\n\nChez XR Agency, nous fusionnons design cinématique, 3D interactive et automatisation IA pour créer des plateformes qui dominent leur marché.\n\nPrêt à transformer votre présence en ligne ? Visitez xragencyai.com 🚀\n\n#designagency #webdesign #luxury #branding #futur #innovation"},"facebook":{"post":"Redéfinir les standards de l'expérience digitale.\n\nXR Agency accompagne les marques exigeantes dans la conception d'expériences web immersives et de systèmes d'IA opérationnels.\n\nConfigurez votre projet en ligne sur https://xragencyai.com"},"assets":{"storySvg":"/social-assets/campaign_1794583595577_6-story.svg","squareSvg":"/social-assets/campaign_1794583595577_6-square.svg"},"published_at":"2026-11-13T15:26:51.843Z"},{"id":"campaign_1794583595577_7","theme":"Configurateur IA de Devis","scheduled_for":"2026-11-20T15:26:35.572Z","status":"published","target_site":"https://xragencyai.com","tiktok":{"hook":"Pourquoi les devis d'agences prennent 3 jours alors qu'on peut en avoir un en 30 secondes ?","script":"Plan 1 (0-3s) : Gros plan sur l'écran avec le curseur qui bouge sur xragencyai.com.\nPlan 2 (3-8s) : Ajustement en temps réel des modules (Site 3D, Agent IA, Automations).\nPlan 3 (8-15s) : Le prix et le calendrier se calculent en direct. Voix off : 'Lien en bio pour tester le tien gratuitement.'"},"instagram":{"caption":"Combien coûte un site web nouvelle génération ou une solution IA en 2026 ? 🚀\n\nChez XR Agency, on a automatisé tout le processus : notre configurateur intelligent calcule votre devis en direct.\n\n✨ 3D temps réel\n⚡ Stack ultra-rapide (React 19 / TanStack)\n🤖 Intégration d'agents IA autonomes\n\n👉 Testez-le en direct : xragencyai.com (lien en bio)\n\n#agenceia #webdesign #tanstack #react #automation #intelligenceartificielle #tech"},"facebook":{"post":"Finies les attentes de 3 jours pour recevoir une proposition commerciale.\n\nSur notre nouvelle plateforme XR Agency, configurez votre projet digital en temps réel (Site Web 3D immersif, Agent IA autonome, Automatisation métier) et obtenez un chiffrage immédiat.\n\n👉 Découvrir la démo en direct : https://xragencyai.com"},"assets":{"storySvg":"/social-assets/campaign_1794583595577_7-story.svg","squareSvg":"/social-assets/campaign_1794583595577_7-square.svg"},"published_at":"2026-11-13T15:26:51.843Z"},{"id":"campaign_1794583595577_8","theme":"Agents IA Autonomes en Entreprise","scheduled_for":"2026-11-21T15:26:35.572Z","status":"published","target_site":"https://xragencyai.com","tiktok":{"hook":"Voici comment une IA qualifie des prospects et gère le CRM 24h/24 sans jamais dormir.","script":"Plan 1 (0-3s) : Alerte prospect reçue à 2h du matin.\nPlan 2 (3-9s) : L'agent IA analyse le besoin, vérifie le calendrier et booke un appel qualifié.\nPlan 3 (9-15s) : Tableau de bord des leads convertis. CTA : 'Toutes les infos sur xragencyai.com'"},"instagram":{"caption":"Automatiser 80% des tâches répétitives de son entreprise, c'est possible dès aujourd'hui ⚡\n\nOn déploie des agents IA connectés directement à vos bases de données, CRM et réseaux pour qualifier et convertir vos prospects en continu.\n\nDécouvrez nos architectures sur xragencyai.com 🔥\n\n#ia #agentsia #automation #crm #businessonline #entrepreneuriat #productivite"},"facebook":{"post":"Comment les entreprises modernes automatisent leurs opérations avec des agents IA sur-mesure.\n\nDe la qualification automatique de leads au support client autonome 24/7, découvrez nos études de cas et solutions sur https://xragencyai.com"},"assets":{"storySvg":"/social-assets/campaign_1794583595577_8-story.svg","squareSvg":"/social-assets/campaign_1794583595577_8-square.svg"},"published_at":"2026-11-13T15:26:51.843Z"},{"id":"campaign_1794583595577_9","theme":"Sites Web Immersifs & 3D Temps Réel","scheduled_for":"2026-11-22T15:26:35.572Z","status":"published","target_site":"https://xragencyai.com","tiktok":{"hook":"Les sites web en 2026 ressemblent à ça, et votre site actuel a pris 10 ans d'un coup.","script":"Plan 1 (0-3s) : Scroll ultra-fluide avec interaction 3D dynamique.\nPlan 2 (3-9s) : Transitions cinématiques et vitesse de chargement instantanée.\nPlan 3 (9-15s) : 'Ton site convertit ou il fait fuir tes visiteurs ? Rendez-vous sur xragencyai.com pour un audit gratuit.'"},"instagram":{"caption":"Pourquoi se contenter d'un template classique quand votre marque peut offrir une expérience visuelle digne d'un film ? 🎬✨\n\nFluidité 120 FPS, 3D interactive, temps de chargement éclair.\n\nExplorez nos réalisations sur xragencyai.com\n\n#webgl #threejs #uxdesign #webdesigninspiration #creativecoding #luxurybrand"},"facebook":{"post":"L'immersion visuelle au service de votre taux de conversion.\n\nDécouvrez comment nous concevons des plateformes web immersives alliant performance technique extrême et design cinématique.\n\nVisitez https://xragencyai.com"},"assets":{"storySvg":"/social-assets/campaign_1794583595577_9-story.svg","squareSvg":"/social-assets/campaign_1794583595577_9-square.svg"},"published_at":"2026-11-13T15:26:51.843Z"},{"id":"campaign_1794583595578_10","theme":"Audit Performance : WordPress vs TanStack Start","scheduled_for":"2026-11-23T15:26:35.572Z","status":"published","target_site":"https://xragencyai.com","tiktok":{"hook":"Ton site met plus de 2 secondes à charger ? Tu perds littéralement 53% de tes ventes.","script":"Plan 1 (0-3s) : Chronomètre comparatif entre un vieux CMS lourd et une architecture React 19 / Vite.\nPlan 2 (3-8s) : Score 100/100 sur Google PageSpeed Insights.\nPlan 3 (8-15s) : 'Optimise ta conversion avec XR Agency : audit express sur xragencyai.com'"},"instagram":{"caption":"La vitesse est le premier facteur de conversion web en 2026 🏎️💨\n\nChaque seconde de chargement en trop détruit votre taux de rebond. Nous développons des applications ultra-légères avec TanStack Start et Tailwind v4.\n\nRésultat : Score 100/100 garanti et conversion maximale.\n\n👉 Audit offert de votre site actuel sur xragencyai.com\n\n#pagespeed #webperf #seo #react19 #tanstack #developpeurweb"},"facebook":{"post":"Saviez-vous que plus de la moitié des visiteurs quittent un site s'il met plus de 3 secondes à s'afficher ?\n\nNos architectures web modernes garantissent des performances extrêmes et un SEO technique sans compromis.\n\nFaites tester votre site gratuitement sur https://xragencyai.com"},"assets":{"storySvg":"/social-assets/campaign_1794583595578_10-story.svg","squareSvg":"/social-assets/campaign_1794583595578_10-square.svg"},"published_at":"2026-11-13T15:26:51.843Z"},{"id":"campaign_1794583648677_1","theme":"Configurateur IA de Devis","scheduled_for":"2026-11-14T15:27:28.677Z","status":"ready_to_publish","target_site":"https://xragencyai.com","tiktok":{"hook":"Pourquoi les devis d'agences prennent 3 jours alors qu'on peut en avoir un en 30 secondes ?","script":"Plan 1 (0-3s) : Gros plan sur l'écran avec le curseur qui bouge sur xragencyai.com.\nPlan 2 (3-8s) : Ajustement en temps réel des modules (Site 3D, Agent IA, Automations).\nPlan 3 (8-15s) : Le prix et le calendrier se calculent en direct. Voix off : 'Lien en bio pour tester le tien gratuitement.'"},"instagram":{"caption":"Combien coûte un site web nouvelle génération ou une solution IA en 2026 ? 🚀\n\nChez XR Agency, on a automatisé tout le processus : notre configurateur intelligent calcule votre devis en direct.\n\n✨ 3D temps réel\n⚡ Stack ultra-rapide (React 19 / TanStack)\n🤖 Intégration d'agents IA autonomes\n\n👉 Testez-le en direct : xragencyai.com (lien en bio)\n\n#agenceia #webdesign #tanstack #react #automation #intelligenceartificielle #tech"},"facebook":{"post":"Finies les attentes de 3 jours pour recevoir une proposition commerciale.\n\nSur notre nouvelle plateforme XR Agency, configurez votre projet digital en temps réel (Site Web 3D immersif, Agent IA autonome, Automatisation métier) et obtenez un chiffrage immédiat.\n\n👉 Découvrir la démo en direct : https://xragencyai.com"},"assets":{"storySvg":"/social-assets/campaign_1794583648677_1-story.svg","squareSvg":"/social-assets/campaign_1794583648677_1-square.svg"}},{"id":"campaign_1794583648678_2","theme":"Agents IA Autonomes en Entreprise","scheduled_for":"2026-11-15T15:27:28.677Z","status":"ready_to_publish","target_site":"https://xragencyai.com","tiktok":{"hook":"Voici comment une IA qualifie des prospects et gère le CRM 24h/24 sans jamais dormir.","script":"Plan 1 (0-3s) : Alerte prospect reçue à 2h du matin.\nPlan 2 (3-9s) : L'agent IA analyse le besoin, vérifie le calendrier et booke un appel qualifié.\nPlan 3 (9-15s) : Tableau de bord des leads convertis. CTA : 'Toutes les infos sur xragencyai.com'"},"instagram":{"caption":"Automatiser 80% des tâches répétitives de son entreprise, c'est possible dès aujourd'hui ⚡\n\nOn déploie des agents IA connectés directement à vos bases de données, CRM et réseaux pour qualifier et convertir vos prospects en continu.\n\nDécouvrez nos architectures sur xragencyai.com 🔥\n\n#ia #agentsia #automation #crm #businessonline #entrepreneuriat #productivite"},"facebook":{"post":"Comment les entreprises modernes automatisent leurs opérations avec des agents IA sur-mesure.\n\nDe la qualification automatique de leads au support client autonome 24/7, découvrez nos études de cas et solutions sur https://xragencyai.com"},"assets":{"storySvg":"/social-assets/campaign_1794583648678_2-story.svg","squareSvg":"/social-assets/campaign_1794583648678_2-square.svg"}},{"id":"campaign_1794583648678_3","theme":"Sites Web Immersifs & 3D Temps Réel","scheduled_for":"2026-11-16T15:27:28.677Z","status":"ready_to_publish","target_site":"https://xragencyai.com","tiktok":{"hook":"Les sites web en 2026 ressemblent à ça, et votre site actuel a pris 10 ans d'un coup.","script":"Plan 1 (0-3s) : Scroll ultra-fluide avec interaction 3D dynamique.\nPlan 2 (3-9s) : Transitions cinématiques et vitesse de chargement instantanée.\nPlan 3 (9-15s) : 'Ton site convertit ou il fait fuir tes visiteurs ? Rendez-vous sur xragencyai.com pour un audit gratuit.'"},"instagram":{"caption":"Pourquoi se contenter d'un template classique quand votre marque peut offrir une expérience visuelle digne d'un film ? 🎬✨\n\nFluidité 120 FPS, 3D interactive, temps de chargement éclair.\n\nExplorez nos réalisations sur xragencyai.com\n\n#webgl #threejs #uxdesign #webdesigninspiration #creativecoding #luxurybrand"},"facebook":{"post":"L'immersion visuelle au service de votre taux de conversion.\n\nDécouvrez comment nous concevons des plateformes web immersives alliant performance technique extrême et design cinématique.\n\nVisitez https://xragencyai.com"},"assets":{"storySvg":"/social-assets/campaign_1794583648678_3-story.svg","squareSvg":"/social-assets/campaign_1794583648678_3-square.svg"}}];
+
+  // Chargement du calendrier
+  async function loadCalendar() {
+    try {
+      const res = await fetch('/social-calendar.json');
+      if (res.ok) {
+        postsData = await res.json();
+      }
+    } catch (e) {
+      console.log("Erreur chargement:", e);
+    }
+
+    if (!postsData || postsData.length === 0) {
+      postsData = [
+        {
+          id: "1",
+          theme: "Configurateur IA de Devis",
+          tiktok: {
+            hook: "Pourquoi les devis d'agences prennent 3 jours alors qu'on peut en avoir un en 30 secondes ?",
+            script: "Plan 1 : Gros plan sur xragencyai.com\nPlan 2 : Slider de budget qui ajuste les options en direct\nPlan 3 : Prix et planning immédiat."
+          },
+          instagram: {
+            caption: "Combien coûte un site web nouvelle génération ou une solution IA en 2026 ? 🚀\n\nChez XR Agency, notre configurateur calcule votre estimation en temps réel.\n\n👉 Testez-le en direct : xragencyai.com (lien en bio) #ia #webdesign #tanstack"
+          },
+          facebook: {
+            post: "Finies les attentes de 3 jours pour recevoir un devis digital.\n\nConfigurez votre projet en ligne en 30 secondes chrono sur https://xragencyai.com"
+          },
+          assets: {
+            squareSvg: "/social-assets/demo-square.svg",
+            storySvg: "/social-assets/demo-story.svg"
+          }
+        }
+      ];
+    }
+
+    renderCards();
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 2500);
+  }
+
+  function copyText(text, msg = "Copié dans le presse-papier !") {
+    navigator.clipboard.writeText(text);
+    showToast(msg);
+  }
+
+  function publishPlatform(platform, text, postUrl) {
+    navigator.clipboard.writeText(text);
+    showToast(`Texte copié ! Ouverture de ${platform}...`);
+    setTimeout(() => {
+      window.open(postUrl, '_blank');
+    }, 300);
+  }
+
+  function renderCards() {
+    const container = document.getElementById('posts-container');
+    container.innerHTML = '';
+
+    postsData.slice(-12).reverse().forEach((post, idx) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      const fbText = post.facebook?.post || "";
+      const igText = post.instagram?.caption || "";
+      const ttText = (post.tiktok?.hook ? `[HOOK] ${post.tiktok.hook}\n\n` : "") + (post.tiktok?.script || "");
+
+      card.innerHTML = `
+        <div>
+          <div class="card-theme">${post.theme || 'Campagne IA'}</div>
+          <div class="card-title">${post.tiktok?.hook || post.theme}</div>
+
+          <div class="platform-tabs">
+            <button class="tab-btn active" onclick="switchTab(this, 'ig-${idx}')">📸 Instagram</button>
+            <button class="tab-btn" onclick="switchTab(this, 'fb-${idx}')">📘 Facebook</button>
+            <button class="tab-btn" onclick="switchTab(this, 'tt-${idx}')">🎵 TikTok</button>
+          </div>
+
+          <div id="ig-${idx}" class="tab-content">${escapeHtml(igText)}</div>
+          <div id="fb-${idx}" class="tab-content" style="display:none;">${escapeHtml(fbText)}</div>
+          <div id="tt-${idx}" class="tab-content" style="display:none;">${escapeHtml(ttText)}</div>
+
+          ${post.assets?.squareSvg ? `
+            <div style="margin-bottom: 16px;">
+              <a href="${post.assets.squareSvg}" target="_blank" class="visual-link">🎨 Voir le Visuel Feed (1080x1080) ↗</a>
+              <a href="${post.assets.storySvg}" target="_blank" class="visual-link">📱 Voir le Visuel Reel/TikTok (9:16) ↗</a>
+            </div>
+          ` : ''}
+        </div>
+
+        <div class="actions">
+          <div class="btn-row">
+            <button class="btn btn-insta" onclick='publishPlatform("Instagram", ${JSON.stringify(igText)}, "https://www.instagram.com/")'>Publier Insta</button>
+            <button class="btn btn-fb" onclick='publishPlatform("Facebook", ${JSON.stringify(fbText)}, "https://www.facebook.com/")'>Publier FB</button>
+            <button class="btn btn-tiktok" onclick='publishPlatform("TikTok", ${JSON.stringify(ttText)}, "https://www.tiktok.com/creator-center/upload")'>Publier TikTok</button>
+          </div>
+          <button class="btn btn-copy" onclick='copyText(${JSON.stringify(igText)}, "Légende Instagram copiée !")'>📋 Copier le texte seul</button>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+  }
+
+  function switchTab(btn, contentId) {
+    const parent = btn.closest('.card');
+    parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    parent.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+    btn.classList.add('active');
+    parent.querySelector('#' + contentId).style.display = 'block';
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function triggerRegenerate() {
+    showToast("Pour générer un nouveau lot : tapez 'npm run social:generate' dans le terminal !");
+  }
+
+  loadCalendar();
+</script>
+
+</body>
+</html>

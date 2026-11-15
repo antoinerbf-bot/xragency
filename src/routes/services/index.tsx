@@ -26,7 +26,7 @@ export const Route = createFileRoute("/services/")({
 
 function ServicesIndexPage() {
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#030406] text-white selection:bg-[#d4af37] selection:text-black">
       <Nav />
       <main className="relative z-10">
         <ServicesCatalog />

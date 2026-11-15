@@ -2,194 +2,156 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
-<title>XR School 90 Jours — VSL Studio</title>
+<title>XR School 90 Jours — Luminous Documentary Studio</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
     width: 1920px; height: 1080px; overflow: hidden;
-    background: #121110; color: #f7f4ed;
+    background: #faf8f4; color: #141312;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
   .serif { font-family: Georgia, "Times New Roman", serif; }
-  .stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #121110; }
-  .scene { position: absolute; inset: 0; width: 1920px; height: 1080px; opacity: 0; pointer-events: none; }
-  .grid-dark {
-    position: absolute; inset: -60px;
-    background-image: linear-gradient(to right, rgba(197,168,128,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(197,168,128,0.06) 1px, transparent 1px);
-    background-size: 68px 68px;
-  }
-  .grid-light {
-    position: absolute; inset: -60px;
-    background-image: linear-gradient(to right, rgba(20,19,18,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(20,19,18,0.05) 1px, transparent 1px);
-    background-size: 68px 68px;
-  }
-  .hud {
-    position: absolute; top: 44px; left: 72px; right: 72px; z-index: 90;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .hud-pill {
-    font-size: 15px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
-    padding: 11px 22px; border-radius: 999px; border: 1px solid rgba(197,168,128,0.3);
-    background: rgba(18,17,16,0.78); color: #e8cfa6; backdrop-filter: blur(12px);
-  }
-  .progress-wrap { width: 260px; height: 6px; border-radius: 99px; background: rgba(128,128,128,0.25); overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, #b48f5a, #e8cfa6); width: 0%; }
+  .stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #faf8f4; }
+  .scene { position: absolute; inset: 0; width: 1920px; height: 1080px; opacity: 0; pointer-events: none; will-change: opacity, transform; }
+  .photo { position: absolute; inset: -3%; width: 106%; height: 106%; object-fit: cover; will-change: transform; }
+  .hud { position: absolute; top: 38px; left: 68px; right: 68px; z-index: 90; display: flex; align-items: center; justify-content: space-between; pointer-events: none; }
+  .pill { font-size: 13px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; padding: 10px 20px; border-radius: 999px; border: 1px solid rgba(20,19,18,0.12); background: rgba(255,255,255,0.92); color: #141312; box-shadow: 0 12px 30px rgba(20,19,18,0.1); backdrop-filter: blur(12px); }
+  .progress-wrap { width: 240px; height: 6px; border-radius: 99px; background: rgba(20,19,18,0.14); overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #8b6b3e, #c5a880); width: 0%; }
+  .card { background: rgba(255,255,255,0.94); border: 1px solid rgba(20,19,18,0.1); border-radius: 28px; box-shadow: 0 24px 60px rgba(20,19,18,0.12); backdrop-filter: blur(14px); }
 </style>
 </head>
 <body>
 <div class="stage">
   <div class="hud">
-    <div id="hud-left" class="hud-pill">XR SCHOOL · PROGRAMME 90 JOURS</div>
-    <div style="display:flex;align-items:center;gap:18px;">
-      <div id="hud-chap" class="hud-pill">01 / VISION 90 JOURS</div>
+    <div class="pill">XR SCHOOL · PROGRAMME 90 JOURS</div>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div id="hud-chap" class="pill" style="color:#8b6b3e;">01 / VISION 90 JOURS</div>
       <div class="progress-wrap"><div class="progress-fill" id="progress-bar"></div></div>
     </div>
   </div>
 
-  <!-- SCENE 1: 0 - 8s HERO INTRO -->
+  <!-- SCENE 1: 0 - 6.92s -->
   <div class="scene" id="sc-1">
-    <img id="s1-bg" src="/assets/hero-cinematic.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.45) contrast(1.06);" />
-    <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 45%, rgba(197,168,128,0.22), rgba(14,13,12,0.86) 72%);"></div>
-    <div style="position:relative;z-index:10;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 120px;">
-      <div style="background:rgba(20,19,18,0.88);border:1.5px solid #c5a880;color:#e8cfa6;padding:12px 30px;border-radius:999px;font-size:20px;font-weight:800;letter-spacing:0.2em;">XR AGENCY PRÉSENTE</div>
-      <h1 id="s1-h1" class="serif" style="margin-top:34px;font-size:84px;font-weight:500;line-height:1.03;color:#f7f4ed;">
-        Créez votre <span style="font-style:italic;color:#e8cfa6;">agence digitale rentable</span><br/>en 90 jours clés-en-main.
-      </h1>
-      <div id="s1-badge" style="margin-top:38px;display:inline-flex;align-items:center;gap:20px;background:linear-gradient(135deg,#e7cfa8,#c5a880);color:#141312;padding:22px 46px;border-radius:999px;font-size:32px;font-weight:900;box-shadow:0 24px 70px rgba(0,0,0,0.5);">
-        <span>4 000 € · AUTONOMIE FINANCIÈRE GARANTIE</span>
+    <img id="s1-bg" src="/assets/story-entrepreneur-launch.jpg" class="photo" />
+    <div style="position:absolute;inset:0;background:linear-gradient(95deg,rgba(250,248,244,0.94) 0%,rgba(250,248,244,0.75) 52%,rgba(250,248,244,0.12) 100%);"></div>
+    <div style="position:relative;z-index:10;height:100%;display:flex;align-items:center;padding:0 100px;">
+      <div style="max-width:920px;">
+        <div style="display:inline-block;background:#f4ece0;border:1px solid #c5a880;color:#8b6b3e;padding:10px 24px;border-radius:999px;font-size:15px;font-weight:800;letter-spacing:0.18em;">XR SCHOOL PARIS · ACCOMPAGNEMENT FONDATEUR</div>
+        <h1 class="serif" style="margin-top:24px;font-size:74px;font-weight:500;line-height:1.03;color:#141312;">
+          Lancez votre <span style="font-style:italic;color:#8b6b3e;">agence digitale rentable</span> en 90 jours.
+        </h1>
+        <p style="margin-top:22px;font-size:24px;line-height:1.45;color:#4f483f;max-width:740px;">
+          Sans partir de zéro : infrastructure complète, leads réels et mentorat commercial jusqu'à votre autonomie financière.
+        </p>
+        <div style="margin-top:32px;display:inline-flex;align-items:center;gap:14px;background:#141312;color:#e8cfa6;padding:18px 36px;border-radius:999px;font-size:22px;font-weight:900;">
+          <span>4 000 € CLÉS-EN-MAIN · OBJECTIF AUTONOMIE 90J</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- SCENE 2: 8 - 17s DAYS 1-30 INFRASTRUCTURE -->
-  <div class="scene" id="sc-2" style="background:linear-gradient(155deg,#f7f4ed 0%,#efe7d6 100%);color:#141312;">
-    <div class="grid-light"></div>
-    <div style="position:relative;z-index:10;height:100%;display:grid;grid-template-columns:1.05fr 0.95fr;align-items:center;padding:0 110px;gap:64px;">
+  <!-- SCENE 2: 6.92 - 15.24s JOURS 1-30 INFRASTRUCTURE -->
+  <div class="scene" id="sc-2" style="background:#faf8f4;">
+    <div style="position:relative;z-index:10;height:100%;display:grid;grid-template-columns:1.05fr 0.95fr;align-items:center;padding:0 100px;gap:64px;">
       <div>
-        <div style="font-size:18px;font-weight:800;letter-spacing:0.2em;color:#9b7b4b;">PHASE 01 · JOURS 1 À 30</div>
-        <div class="serif" style="font-size:64px;font-weight:500;line-height:1.05;margin-top:12px;">
-          Votre infrastructure d&apos;agence <span style="font-style:italic;color:#9b7b4b;">livrée prête à encaisser</span>.
+        <div style="font-size:16px;font-weight:800;letter-spacing:0.2em;color:#8b6b3e;">PHASE 01 · JOURS 1 À 30</div>
+        <div class="serif" style="font-size:60px;font-weight:500;line-height:1.05;margin-top:12px;">
+          Votre agence <span style="font-style:italic;color:#8b6b3e;">livrée prête à encaisser</span>.
         </div>
-        <div style="margin-top:34px;display:flex;flex-direction:column;gap:18px;">
-          <div style="background:#fff;border:1px solid #e5dccb;border-radius:22px;padding:22px 26px;display:flex;align-items:center;gap:18px;box-shadow:0 14px 36px rgba(20,19,18,0.08);">
-            <div style="width:52px;height:52px;border-radius:16px;background:#141312;color:#e8cfa6;display:grid;place-items:center;font-size:24px;font-weight:900;flex-shrink:0;">1</div>
-            <div><div style="font-size:23px;font-weight:800;">Site internet sur-mesure + Image de marque</div><div style="font-size:16px;color:#5d564c;">Logo, Brand Book & tunnel de devis à votre nom</div></div>
+        <div style="margin-top:30px;display:flex;flex-direction:column;gap:16px;">
+          <div class="card" style="padding:22px 26px;display:flex;align-items:center;gap:18px;border-radius:22px;">
+            <div style="width:48px;height:48px;border-radius:14px;background:#141312;color:#e8cfa6;display:grid;place-items:center;font-size:22px;font-weight:900;flex-shrink:0;">1</div>
+            <div><div style="font-size:22px;font-weight:800;">Site internet sur-mesure + Brand Book</div><div style="font-size:16px;color:#5c554c;">Identité visuelle complète &amp; tunnels sous votre marque</div></div>
           </div>
-          <div style="background:#fff;border:1px solid #e5dccb;border-radius:22px;padding:22px 26px;display:flex;align-items:center;gap:18px;box-shadow:0 14px 36px rgba(20,19,18,0.08);">
-            <div style="width:52px;height:52px;border-radius:16px;background:#141312;color:#e8cfa6;display:grid;place-items:center;font-size:24px;font-weight:900;flex-shrink:0;">2</div>
-            <div><div style="font-size:23px;font-weight:800;">Ligne téléphonique professionnelle fournie</div><div style="font-size:16px;color:#5d564c;">Numéro dédié + standard + scripts d&apos;appels inclus</div></div>
+          <div class="card" style="padding:22px 26px;display:flex;align-items:center;gap:18px;border-radius:22px;">
+            <div style="width:48px;height:48px;border-radius:14px;background:#141312;color:#e8cfa6;display:grid;place-items:center;font-size:22px;font-weight:900;flex-shrink:0;">2</div>
+            <div><div style="font-size:22px;font-weight:800;">Ligne téléphonique professionnelle fournie</div><div style="font-size:16px;color:#5c554c;">Numéro dédié + scripts d'appels inclus</div></div>
           </div>
         </div>
       </div>
-      <div style="position:relative;">
-        <div style="border-radius:28px;overflow:hidden;border:2px solid #c5a880;box-shadow:0 36px 90px rgba(20,19,18,0.22);background:#fff;">
-          <img src="/assets/web-luxury-showcase.jpg" style="width:100%;height:420px;object-fit:cover;" />
-          <div style="padding:22px 28px;display:flex;align-items:center;justify-content:space-between;">
-            <div><div style="font-size:22px;font-weight:800;">Votre Agence Clés-en-Main</div><div style="font-size:15px;color:#6f675b;">Site web + Identité complète + Ligne pro</div></div>
-            <span style="background:#141312;color:#e8cfa6;padding:10px 20px;border-radius:999px;font-size:15px;font-weight:800;">LIVRÉ J+10</span>
+      <div class="card" style="overflow:hidden;border:2px solid #c5a880;">
+        <img src="/assets/svc-web-editorial.jpg" style="width:100%;height:420px;object-fit:cover;" />
+        <div style="padding:24px 28px;display:flex;align-items:center;justify-content:space-between;">
+          <div><div style="font-size:22px;font-weight:800;">Kit Fondateur Complet</div><div style="font-size:15px;color:#5c554c;">Site + Marque + Ligne Pro dès J+10</div></div>
+          <span style="background:#141312;color:#e8cfa6;padding:10px 20px;border-radius:999px;font-size:14px;font-weight:800;">INCLUS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENE 3: 15.24 - 23.72s JOURS 31-60 LEADS CRM & FORMATION VENTE -->
+  <div class="scene" id="sc-3">
+    <img id="s3-bg" src="/assets/story-school-mentor.jpg" class="photo" />
+    <div style="position:absolute;inset:0;background:linear-gradient(95deg,rgba(255,255,255,0.93) 0%,rgba(255,255,255,0.78) 54%,rgba(255,255,255,0.18) 100%);"></div>
+    <div style="position:relative;z-index:10;height:100%;display:flex;align-items:center;padding:0 100px;">
+      <div style="max-width:920px;">
+        <span style="font-size:16px;font-weight:800;letter-spacing:0.2em;color:#8b6b3e;">PHASE 02 · JOURS 31 À 60</span>
+        <div class="serif" style="margin-top:14px;font-size:58px;line-height:1.05;color:#141312;">
+          Leads fournis dans votre <span style="font-style:italic;color:#8b6b3e;">CRM interne</span> &amp; Vidéos Closing.
+        </div>
+        <div style="margin-top:30px;display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+          <div class="card" style="padding:26px;">
+            <div style="font-size:13px;font-weight:800;color:#8b6b3e;">ATTRIBUTION DIRECTE</div>
+            <div style="font-size:24px;font-weight:800;margin-top:6px;">Prospects qualifiés livrés</div>
+            <p style="margin-top:8px;font-size:16px;color:#5c554c;">Vous recevez vos contacts à rappeler dans l'espace équipe avec script et tarif conseillé.</p>
+          </div>
+          <div class="card" style="padding:26px;border:1.5px solid #8b6b3e;">
+            <div style="font-size:13px;font-weight:800;color:#8b6b3e;">FORMATION VIDÉO 90J</div>
+            <div style="font-size:24px;font-weight:800;margin-top:6px;">Méthode Closing Terrain</div>
+            <p style="margin-top:8px;font-size:16px;color:#5c554c;">Modules vidéo étape par étape + debriefing hebdo de vos vrais appels.</p>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- SCENE 3: 17 - 27s DAYS 31-60 LEADS + CRM + CLOSING -->
-  <div class="scene" id="sc-3" style="background:#121110;color:#f7f4ed;">
-    <div class="grid-dark"></div>
-    <div style="position:relative;z-index:10;height:100%;padding:110px 110px 70px;display:flex;flex-direction:column;justify-content:center;gap:34px;">
+  <!-- SCENE 4: 23.72 - 31.96s JOURS 61-90 RECRUTER OU SOUS-TRAITER -->
+  <div class="scene" id="sc-4" style="background:#faf8f4;">
+    <img src="/assets/story-business-meeting.jpg" class="photo" style="opacity:0.22;" />
+    <div style="position:relative;z-index:10;height:100%;padding:95px 100px 60px;display:flex;flex-direction:column;justify-content:center;gap:34px;">
       <div style="text-align:center;">
-        <span style="font-size:18px;font-weight:800;letter-spacing:0.22em;color:#e8cfa6;">PHASE 02 · JOURS 31 À 60</span>
-        <div class="serif" style="font-size:62px;font-weight:500;margin-top:8px;">
-          On vous envoie les <span style="font-style:italic;color:#c5a880;">leads qualifiés</span> + Formation Vente &amp; Closing
+        <span style="font-size:16px;font-weight:800;letter-spacing:0.2em;color:#8b6b3e;">PHASE 03 · JOURS 61 À 90</span>
+        <div class="serif" style="font-size:58px;margin-top:8px;color:#141312;">
+          Recrutez votre équipe... ou <span style="font-style:italic;color:#8b6b3e;">sous-traitez à XR Agency</span>.
         </div>
       </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:36px;">
-        <div style="background:rgba(24,22,19,0.95);border:2px solid #c5a880;border-radius:28px;padding:34px;">
-          <div style="font-size:15px;font-weight:800;letter-spacing:0.15em;color:#e8cfa6;">ACCÈS DIRECT CRM XR AGENCY</div>
-          <div style="font-size:32px;font-weight:900;margin-top:10px;">Leads chauds assignés dans votre espace</div>
-          <div style="margin-top:24px;display:flex;flex-direction:column;gap:14px;">
-            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;">
-              <div><strong style="font-size:20px;">Restaurant · Paris 8e</strong><div style="font-size:14px;color:#d7d1c6;">Maps Top 3 + Site Vitrine</div></div>
-              <span style="background:#c5a880;color:#141312;padding:6px 14px;border-radius:999px;font-weight:900;font-size:15px;">1 900 €</span>
-            </div>
-            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;">
-              <div><strong style="font-size:20px;">Cabinet Architecture · Lyon</strong><div style="font-size:14px;color:#d7d1c6;">Refonte + Branding + SEO</div></div>
-              <span style="background:#2e7d4f;color:#fff;padding:6px 14px;border-radius:999px;font-weight:900;font-size:15px;">SIGNÉ · 3 200 €</span>
-            </div>
-          </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+        <div class="card" style="padding:38px;">
+          <span style="display:inline-block;background:#f4ece0;color:#8b6b3e;font-size:13px;font-weight:900;padding:8px 18px;border-radius:999px;">OPTION A · SCALING ÉQUIPE</span>
+          <div class="serif" style="font-size:36px;margin-top:16px;">Recrutez vos commerciaux</div>
+          <p style="margin-top:14px;font-size:18px;color:#5c554c;line-height:1.55;">Méthode de recrutement, grille de rémunération et pilotage direct des objectifs dans le CRM.</p>
         </div>
-
-        <div style="background:#f7f4ed;color:#141312;border-radius:28px;padding:34px;display:flex;flex-direction:column;justify-content:space-between;">
-          <div>
-            <div style="font-size:15px;font-weight:800;letter-spacing:0.15em;color:#9b7b4b;">FORMATION VENTE HAUTE CONVERSION</div>
-            <div class="serif" style="font-size:38px;font-weight:500;margin-top:10px;line-height:1.1;">Maîtrisez chaque appel &amp; encaissez dès le premier mois</div>
-          </div>
-          <div style="font-size:19px;line-height:1.65;color:#2c2823;font-weight:600;">
-            ✓ Scripts de closing prouvés (Sites, Maps, Branding)<br/>
-            ✓ Gestion de toutes les objections tarifaires<br/>
-            ✓ Debriefing hebdo sur vos vrais appels téléphoniques
-          </div>
-          <div style="background:#141312;color:#e8cfa6;padding:16px 24px;border-radius:18px;font-size:20px;font-weight:800;text-align:center;">
-            2 à 3 clients signés = 4 000 € déjà rentabilisés
-          </div>
+        <div class="card" style="padding:38px;border:2px solid #8b6b3e;background:#fff;">
+          <span style="display:inline-block;background:#141312;color:#e8cfa6;font-size:13px;font-weight:900;padding:8px 18px;border-radius:999px;">OPTION B · SOUS-TRAITANCE XR</span>
+          <div class="serif" style="font-size:36px;margin-top:16px;">Déléguez la production technique</div>
+          <p style="margin-top:14px;font-size:18px;color:#5c554c;line-height:1.55;">Selon vos envies et votre capacité, notre équipe réalise vos sites, Google Maps ou SEO pendant que vous encaissez.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- SCENE 4: 27 - 36s DAYS 61-90 RECRUIT OR OUTSOURCE -->
-  <div class="scene" id="sc-4" style="background:linear-gradient(155deg,#f7f4ed 0%,#eee6d6 100%);color:#141312;">
-    <div class="grid-light"></div>
-    <div style="position:relative;z-index:10;height:100%;padding:110px 110px 70px;display:flex;flex-direction:column;justify-content:center;gap:40px;">
-      <div style="text-align:center;">
-        <span style="font-size:18px;font-weight:800;letter-spacing:0.22em;color:#9b7b4b;">PHASE 03 · JOURS 61 À 90</span>
-        <div class="serif" style="font-size:62px;font-weight:500;margin-top:8px;">
-          Recrutez votre équipe <span style="font-style:italic;color:#9b7b4b;">ou sous-traitez-nous tout</span> à la carte
-        </div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;">
-        <div style="background:#fff;border:1.5px solid #e5dccb;border-radius:28px;padding:38px;box-shadow:0 24px 60px rgba(20,19,18,0.08);">
-          <div style="display:inline-block;background:#f2ead9;color:#8c6c3c;font-size:14px;font-weight:900;padding:8px 18px;border-radius:999px;">OPTION A · CROISSANCE &amp; ÉQUIPE</div>
-          <div class="serif" style="font-size:38px;font-weight:500;margin-top:16px;">Recrutez &amp; managez vos commerciaux</div>
-          <p style="margin-top:16px;font-size:19px;color:#5d564c;line-height:1.55;">
-            Nous vous formons au recrutement, à l&apos;onboarding dans votre CRM et au management d&apos;équipe pour scaler sans dépendre uniquement de votre temps.
-          </p>
-        </div>
-
-        <div style="background:#141312;color:#f7f4ed;border:2px solid #c5a880;border-radius:28px;padding:38px;box-shadow:0 24px 60px rgba(20,19,18,0.35);">
-          <div style="display:inline-block;background:linear-gradient(135deg,#e7cfa8,#c5a880);color:#141312;font-size:14px;font-weight:900;padding:8px 18px;border-radius:999px;">OPTION B · SOUS-TRAITANCE XR AGENCY</div>
-          <div class="serif" style="font-size:38px;font-weight:500;margin-top:16px;">Déléguez-nous le travail en 1 clic</div>
-          <p style="margin-top:16px;font-size:19px;color:#d7d1c6;line-height:1.55;">
-            Selon vos envies, vos besoins et votre capacité, notre studio réalise vos sites, fiches Google Maps, SEO ou branding pendant que vous encaissez la marge.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SCENE 5: 36 - 42s CTA CLIMAX -->
-  <div class="scene" id="sc-5" style="background:radial-gradient(circle at 25% 35%, #2b2217 0%, #100f0e 85%);">
-    <div class="grid-dark"></div>
+  <!-- SCENE 5: 31.96 - 39.80s CTA -->
+  <div class="scene" id="sc-5">
+    <img src="/assets/hero-luminous.jpg" class="photo" />
+    <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(255,255,255,0.92) 0%,rgba(250,248,244,0.88) 65%,rgba(250,248,244,0.96) 100%);"></div>
     <div style="position:relative;z-index:10;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 120px;">
-      <div style="display:inline-flex;align-items:center;gap:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(197,168,128,0.45);padding:10px 22px 10px 10px;border-radius:999px;margin-bottom:28px;">
-        <img src="/assets/agent-xr-portrait.jpg" style="width:52px;height:52px;border-radius:50%;object-fit:cover;object-position:top center;border:2px solid #c5a880;" />
+      <div class="card" style="display:inline-flex;align-items:center;gap:14px;padding:10px 22px 10px 10px;border-radius:999px;margin-bottom:28px;">
+        <img src="/assets/agent-xr-portrait.jpg" style="width:52px;height:52px;border-radius:50%;object-fit:cover;object-position:top center;border:2px solid #8b6b3e;" />
         <div style="text-align:left;">
-          <div style="font-size:15px;font-weight:800;color:#e8cfa6;">XR SCHOOL · PROGRAMME 90 JOURS</div>
-          <div style="font-size:14px;color:#6ee7b7;font-weight:600;">● Places accompagnées limitées</div>
+          <div style="font-size:14px;font-weight:800;color:#141312;">XR SCHOOL · PROGRAMME 90 JOURS</div>
+          <div style="font-size:13px;color:#047857;font-weight:700;">● Places accompagnées ouvertes</div>
         </div>
       </div>
-
-      <h2 class="serif" style="font-size:74px;font-weight:500;line-height:1.04;color:#f7f4ed;">
-        4 000 € pour bâtir votre <span style="font-style:italic;color:#c5a880;">indépendance</span>.
+      <h2 class="serif" style="font-size:70px;font-weight:500;line-height:1.04;color:#141312;">
+        4 000 € pour bâtir votre <span style="font-style:italic;color:#8b6b3e;">indépendance</span>.
       </h2>
-      <p style="margin-top:20px;font-size:26px;color:#e5dac5;max-width:1100px;">
+      <p style="margin-top:18px;font-size:24px;color:#4f483f;max-width:1050px;">
         Site + Marque + Ligne Pro + Leads + CRM + Closing + Recrutement &amp; Sous-traitance XR
       </p>
-      <div style="margin-top:40px;background:linear-gradient(135deg,#e7cfa8,#c5a880);color:#141312;padding:24px 52px;border-radius:999px;font-size:26px;font-weight:900;box-shadow:0 28px 75px rgba(0,0,0,0.45);">
-        👇 RÉSERVER MA PLACE SUR /SCHOOL
+      <div style="margin-top:36px;background:#141312;color:#e8cfa6;padding:22px 48px;border-radius:999px;font-size:24px;font-weight:900;box-shadow:0 24px 65px rgba(20,19,18,0.22);">
+        RÉSERVER MA PLACE SUR /SCHOOL · PAIEMENT 1× OU 3× POSSIBLE
       </div>
     </div>
   </div>
@@ -198,13 +160,13 @@
 <script>
 const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 const easeOut = (x) => 1 - Math.pow(1 - clamp(x), 3);
-const DURATION = 42.0;
+const DURATION = 39.80;
 const SCENES = [
-  { id: "sc-1", start: 0, end: 8, chap: "01 / AUTONOMIE 90 JOURS" },
-  { id: "sc-2", start: 8, end: 17, chap: "02 / JOURS 1–30 · INFRASTRUCTURE" },
-  { id: "sc-3", start: 17, end: 27, chap: "03 / JOURS 31–60 · LEADS & CRM" },
-  { id: "sc-4", start: 27, end: 36, chap: "04 / JOURS 61–90 · ÉQUIPE & DÉLÉGATION" },
-  { id: "sc-5", start: 36, end: 42.1, chap: "05 / REJOINDRE XR SCHOOL (4 000 €)" },
+  { id: "sc-1", start: 0, end: 6.92, chap: "01 / VISION 90 JOURS" },
+  { id: "sc-2", start: 6.92, end: 15.24, chap: "02 / JOURS 1–30 · INFRASTRUCTURE" },
+  { id: "sc-3", start: 15.24, end: 23.72, chap: "03 / JOURS 31–60 · LEADS & CRM" },
+  { id: "sc-4", start: 23.72, end: 31.96, chap: "04 / JOURS 61–90 · ÉQUIPE & DÉLÉGATION" },
+  { id: "sc-5", start: 31.96, end: 40.0, chap: "05 / REJOINDRE XR SCHOOL (4 000 €)" },
 ];
 
 window.seek = function(t) {
@@ -220,10 +182,15 @@ window.seek = function(t) {
     }
     el.style.opacity = op.toFixed(3);
   }
-  const s1bg = document.getElementById("s1-bg");
-  if (s1bg && t <= 8.2) s1bg.style.transform = `scale(${1 + clamp(t / 8) * 0.08})`;
+  if (t <= 7.1) {
+    document.getElementById("s1-bg").style.transform = `scale(${1 + clamp(t / 6.92) * 0.06})`;
+  }
+  if (t >= 15.0 && t <= 24.0) {
+    const lt = t - 15.24;
+    document.getElementById("s3-bg").style.transform = `scale(${1 + clamp(lt / 8.5) * 0.05})`;
+  }
 };
+window.seek(0);
 </script>
 </body>
 </html>
-

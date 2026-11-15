@@ -1,29 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Resend } from "resend";
+import { recordLeadFromWebsite } from "@/lib/crm-store";
+
+const escapeHtml = (value: string) =>
+  value.replace(/[&<>"']/g, (character) => {
+    const entities: Record<string, string> = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    };
+    return entities[character] ?? character;
+  });
 
 export const Route = createFileRoute("/api/contact")({
   server: {
     handlers: {
       POST: async ({ request }) => {
         try {
-          const body = (await request.json()) as {
-            name?: string;
-            email?: string;
-            company?: string;
-            website?: string;
-            need?: string;
-            message?: string;
-            hp?: string;
-          };
+          const body = (await request.json()) as Record<string, unknown>;
 
-          // Protection honeypot silencieuse anti-robots
+          // Honeypot silencieux : ne jamais envoyer de message automatisé.
           if (body.hp) {
             return Response.json({ ok: true, message: "Message transmis." });
           }
 
-          const name = body.name?.trim();
-          const email = body.email?.trim();
-          const message = body.message?.trim();
+          const name = typeof body.name === "string" ? body.name.trim() : "";
+          const email = typeof body.email === "string" ? body.email.trim() : "";
+          const company = typeof body.company === "string" ? body.company.trim() : "";
+          const phone = typeof body.phone === "string" ? body.phone.trim() : "";
+          const website = typeof body.website === "string" ? body.website.trim() : "";
+          const need = typeof body.need === "string" ? body.need.trim() : "";
+          const message = typeof body.message === "string" ? body.message.trim() : "";
 
           if (!name || !email || !message) {
             return Response.json(
@@ -32,46 +41,78 @@ export const Route = createFileRoute("/api/contact")({
             );
           }
 
-          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
             return Response.json({ error: "Adresse email invalide." }, { status: 400 });
           }
 
-          if (process.env.RESEND_API_KEY) {
+          if (
+            name.length > 160 ||
+            company.length > 160 ||
+            phone.length > 80 ||
+            website.length > 2048 ||
+            need.length > 120 ||
+            message.length > 5000
+          ) {
+            return Response.json(
+              { error: "Certains champs dépassent la longueur autorisée." },
+              { status: 400 },
+            );
+          }
+
+          // Enregistrement systématique et résilient dans le CRM interne
+          const crmResult = recordLeadFromWebsite({
+            name,
+            email,
+            phone,
+            company,
+            website,
+            need,
+            message,
+            source: "Formulaire de contact web",
+          });
+
+          // Tentative d'envoi par e-mail via Resend si configuré
+          const apiKey = process.env.RESEND_API_KEY;
+          if (apiKey) {
             try {
-              const resend = new Resend(process.env.RESEND_API_KEY);
-              const from = process.env.RESEND_FROM_EMAIL || "XR Agency <onboarding@resend.dev>";
+              const resend = new Resend(apiKey);
+              const from =
+                process.env.RESEND_FROM_EMAIL || "XR Agency <onboarding@resend.dev>";
 
               await resend.emails.send({
                 from,
                 to: ["contact.xragency@gmail.com"],
                 replyTo: email,
-                subject: `[Nouveau Contact] ${name} ${body.company ? `(${body.company})` : ""}`,
+                subject: `[Nouveau Contact] ${name.replace(/[\r\n]+/g, " ")}${company ? ` (${company.replace(/[\r\n]+/g, " ")})` : ""}`,
                 html: `
                   <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111;">
                     <h2 style="border-bottom: 2px solid #111; padding-bottom: 8px;">Nouvelle demande de contact — XR Agency</h2>
-                    <p><strong>Nom :</strong> ${name}</p>
-                    <p><strong>Email :</strong> ${email}</p>
-                    <p><strong>Entreprise :</strong> ${body.company || "Non renseignée"}</p>
-                    <p><strong>Site web :</strong> ${body.website || "Non renseigné"}</p>
-                    <p><strong>Besoin :</strong> ${body.need || "Non précisé"}</p>
+                    <p><strong>Nom :</strong> ${escapeHtml(name)}</p>
+                    <p><strong>Email :</strong> ${escapeHtml(email)}</p>
+                    <p><strong>Téléphone :</strong> ${escapeHtml(phone || "Non renseigné")}</p>
+                    <p><strong>Entreprise :</strong> ${escapeHtml(company || "Non renseignée")}</p>
+                    <p><strong>Site web :</strong> ${escapeHtml(website || "Non renseigné")}</p>
+                    <p><strong>Besoin :</strong> ${escapeHtml(need || "Non précisé")}</p>
                     <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
                     <p><strong>Message :</strong></p>
-                    <p style="background: #f9f9f9; padding: 15px; border-radius: 8px; white-space: pre-wrap;">${message}</p>
+                    <p style="background: #f9f9f9; padding: 15px; border-radius: 8px; white-space: pre-wrap;">${escapeHtml(message)}</p>
                   </div>
                 `,
               });
-            } catch (err) {
-              console.error("Resend error:", err);
+            } catch (mailErr) {
+              console.warn("Notification email non envoyée (CRM à jour) :", mailErr);
             }
           }
 
           return Response.json({
             ok: true,
-            message: "Votre message a été transmis avec succès. Notre équipe vous répond sous 2h.",
+            leadId: crmResult.leadId,
+            message: "Votre message a été transmis avec succès. Notre équipe vous répond sous 2h ouvrées.",
           });
         } catch (error) {
+          console.error("Contact API error:", error);
           return Response.json(
-            { error: error instanceof Error ? error.message : "Erreur de traitement." },
+            { error: "Une erreur est survenue. Merci de réessayer ou de nous contacter via WhatsApp." },
             { status: 500 },
           );
         }

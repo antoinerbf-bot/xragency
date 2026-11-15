@@ -4,6 +4,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Nav } from "@/components/site/Nav";
 import { Reveal } from "@/components/site/primitives";
 import { Contact } from "@/components/site/Contact";
+import { AdvisorsShowcase } from "@/components/site/AdvisorsShowcase";
 import { PORTFOLIO_REFERENCES, PORTFOLIO_SECTORS } from "@/lib/portfolioReferences";
 import { SERVICES } from "@/lib/content";
 import { useLang } from "@/lib/i18n";
@@ -157,7 +158,7 @@ function ReferencePreview({
   const [hasImgError, setHasImgError] = useState(false);
 
   if (!item) {
-    return <div aria-hidden className={`relative h-full w-full overflow-hidden bg-[#0b0e12] ${className}`} />;
+    return <div aria-hidden className={`relative h-full w-full overflow-hidden bg-[#efe9dc] ${className}`} />;
   }
 
   const hostname = item.url.replace(/^https?:\/\//, "").replace(/\/$/, "");
@@ -167,24 +168,24 @@ function ReferencePreview({
   if (hasImgError) {
     return (
       <div
-        className={`relative h-full w-full overflow-hidden bg-[#0a0d12] text-white flex flex-col justify-between p-6 sm:p-7 select-none ${className}`}
+        className={`relative h-full w-full overflow-hidden bg-[#f3ede2] text-[#141312] flex flex-col justify-between p-6 sm:p-7 select-none ${className}`}
         aria-label={alt ?? item.name}
       >
         {/* Subtle background glow */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(16,185,129,.12),transparent_40%),linear-gradient(135deg,#0d1117,#07090c_65%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent_0%,rgba(255,255,255,.05)_50%,transparent_65%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(139,107,62,.18),transparent_45%),linear-gradient(135deg,#faf8f4,#ede4d2_70%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent_0%,rgba(255,255,255,.5)_50%,transparent_65%)]" />
 
         {/* Browser header mockup */}
         <div className="relative z-10 flex items-center justify-between border-b border-white/10 pb-3">
           <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-red-500/70" />
-            <span className="h-2 w-2 rounded-full bg-amber-500/70" />
-            <span className="h-2 w-2 rounded-full bg-emerald-500/70" />
-            <span className="ml-2 font-mono text-[7px] text-white/40 tracking-wider truncate max-w-[150px]">
+            <span className="h-2 w-2 rounded-full bg-[#d4af37]" />
+            <span className="h-2 w-2 rounded-full bg-white/20" />
+            <span className="h-2 w-2 rounded-full bg-white/10" />
+            <span className="ml-2 font-mono text-[7px] text-[#94a3b8] tracking-wider truncate max-w-[150px]">
               {hostname}
             </span>
           </div>
-          <span className="rounded-full bg-white/10 px-2 py-0.5 font-mono text-[6.5px] uppercase tracking-wider text-emerald-400">
+          <span className="rounded-full bg-white/10 border border-white/15 px-2 py-0.5 font-mono text-[6.5px] uppercase tracking-wider text-[#d4af37]">
             {item.type}
           </span>
         </div>
@@ -192,19 +193,19 @@ function ReferencePreview({
         {/* Body visual mockup */}
         <div className="relative z-10 my-auto py-4">
           <div className="flex items-center gap-3">
-            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-white/15 bg-white/5 text-xl font-bold font-serif text-white shadow-inner">
+            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-white/15 bg-black/60 text-xl font-bold font-serif text-white shadow-inner">
               {initial}
             </span>
             <div>
-              <p className="label-mono text-[7px] uppercase tracking-[.2em] text-white/45">{item.sector}</p>
-              <h3 className="display-serif text-2xl sm:text-3xl font-medium tracking-tight text-white">{item.name}</h3>
+              <p className="font-mono text-[7px] uppercase tracking-[.2em] text-[#94a3b8]">{item.sector}</p>
+              <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-white font-serif">{item.name}</h3>
             </div>
           </div>
           <div className="mt-3 flex items-center gap-2">
-            <span className="rounded-md border border-white/10 bg-white/5 px-2 py-1 label-mono text-[6.5px] text-white/60">
+            <span className="rounded-md border border-white/10 bg-white/5 px-2 py-1 font-mono text-[6.5px] text-[#94a3b8]">
               EXPÉRIENCE DIGITALE VÉRIFIÉE
             </span>
-            <span className="rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2 py-1 label-mono text-[6.5px] text-emerald-400">
+            <span className="rounded-md border border-[#d4af37]/40 bg-[#d4af37]/15 px-2 py-1 font-mono text-[6.5px] text-[#d4af37]">
               RÉFÉRENCE ACTIVE
             </span>
           </div>
@@ -212,8 +213,8 @@ function ReferencePreview({
 
         {/* Footer info */}
         <div className="relative z-10 flex items-center justify-between border-t border-white/10 pt-3">
-          <span className="label-mono text-[6.5px] text-white/40">EXPLORER L'UNIVERS DIGITAL</span>
-          <span className="inline-flex items-center gap-1 label-mono text-[7px] font-bold text-emerald-400">
+          <span className="font-mono text-[6.5px] text-[#94a3b8]">EXPLORER L'UNIVERS DIGITAL</span>
+          <span className="inline-flex items-center gap-1 font-mono text-[7px] font-bold text-[#d4af37]">
             SITE OFFICIEL ↗
           </span>
         </div>
@@ -263,45 +264,43 @@ export function WorkPage() {
   const [visibleCount,setVisibleCount]=useState(18);
   useEffect(() => { setVisibleCount(18); }, [query,sector,service]);
 
-  return <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
+  return <div className="min-h-screen overflow-x-hidden bg-[#030406] text-white">
     <Nav/>
     <main className="pt-20 sm:pt-24">
-      <section className="relative min-h-[72vh] overflow-hidden bg-[#050608] text-white">
-        <div className="absolute inset-0 bg-[#050608]"><ReferencePreview item={reelItem} alt="" loading="eager" className="absolute inset-0 opacity-52 contrast-[1.02] brightness-[.58] transition-opacity duration-1000" /><div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(5,6,8,.90),rgba(5,6,8,.42)_54%,rgba(5,6,8,.72))]" /></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_12%,rgba(220,185,113,.18),transparent_26%),linear-gradient(120deg,rgba(5,6,8,.86),rgba(11,17,23,.48)_55%,rgba(5,6,8,.78))]"/>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_78%,rgba(255,255,255,.07),transparent_28%)]"/>
-        <div aria-hidden className="absolute inset-0 opacity-30 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,.08)_50%,transparent_100%)]"/>
-        <div className="relative mx-auto flex min-h-[72vh] max-w-[1500px] flex-col justify-end px-5 pb-12 pt-28 sm:px-8 sm:pb-16 lg:px-12 lg:pb-20">
-          <p className="label-mono text-[9px] tracking-[.32em] text-white/42">{tx.kicker}</p>
-          <h1 className="display-serif mt-5 max-w-6xl text-[clamp(4rem,9vw,9rem)] leading-[.76] tracking-[-.075em]">{tx.title}<br/><em className="not-italic text-white/35">{tx.accent}</em></h1>
-          <p className="mt-7 max-w-2xl text-sm leading-6 text-white/55 sm:text-base">{tx.intro}</p>\n          {reelItem && <div className="mt-7 flex flex-wrap items-center gap-3"><div className="rounded-full border border-white/12 bg-white/[.045] px-4 py-2 backdrop-blur-xl"><span className="label-mono text-[8px] tracking-[.18em] text-white/55">{tx.reel} · {String(reelIndex + 1).padStart(2,"0")}/{String(featured.length).padStart(2,"0")}</span></div><div className="rounded-full border border-white/12 bg-black/45 px-4 py-2 backdrop-blur-xl"><span className="text-xs text-white/70">{reelItem.name}</span><span className="ml-2 text-[10px] text-white/35">{sectorLabels[reelItem.sector]?.[lang] ?? reelItem.sector}</span></div></div>}
-          <div className="mt-12 grid gap-2 rounded-[1.6rem] border border-white/10 bg-black/45 p-2 backdrop-blur-2xl lg:grid-cols-[1fr_.28fr_.28fr_auto]">
-            <div className="relative"><Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder={tx.search} className="w-full rounded-xl border border-white/10 bg-white/[.035] py-3.5 pl-11 pr-4 text-sm text-white placeholder:text-white/25 outline-none focus:border-white/30"/></div>
-            <label className="relative"><select value={sector} onChange={e=>setSector(e.target.value)} className="w-full appearance-none rounded-xl border border-white/10 bg-white/[.035] px-4 py-3.5 pr-9 text-xs text-white outline-none"><option value="all">{tx.industries}</option>{PORTFOLIO_SECTORS.map(([id,label])=><option key={id} value={id} className="text-black">{sectorLabels[id]?.[lang] ?? label}</option>)}</select><ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/35"/></label>
-            <label className="relative"><select value={service} onChange={e=>setService(e.target.value)} className="w-full appearance-none rounded-xl border border-white/10 bg-white/[.035] px-4 py-3.5 pr-9 text-xs text-white outline-none"><option value="all">{tx.all}</option>{serviceOptions.slice(1).map(x=><option key={x.id} value={x.id} className="text-black">{x.label}</option>)}</select><ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/35"/></label>
-            <div className="flex items-center justify-center rounded-xl border border-white/10 bg-white/[.035] px-4 py-3 label-mono text-[8px] text-white/45">{filtered.length} {tx.index}</div>
+      <section className="relative min-h-[62vh] overflow-hidden border-b border-white/10 bg-[#030406] text-white">
+        <div className="absolute inset-0"><ReferencePreview item={reelItem} alt="" loading="eager" className="absolute inset-0 opacity-20 transition-opacity duration-1000" /><div className="absolute inset-0 bg-gradient-to-r from-[#030406] via-[#030406]/90 to-[#030406]/55" /></div>
+        <div className="relative mx-auto flex min-h-[62vh] max-w-[1500px] flex-col justify-end px-5 pb-12 pt-24 sm:px-8 sm:pb-14 lg:px-12 lg:pb-16">
+          <p className="font-mono text-[9px] font-bold tracking-[.28em] text-[#d4af37] uppercase">{tx.kicker}</p>
+          <h1 className="mt-4 max-w-6xl text-[clamp(3.6rem,8vw,7.5rem)] font-extrabold uppercase leading-[.84] tracking-[-.06em] text-white">{tx.title}<br/><em className="not-italic text-[#d4af37]">{tx.accent}</em></h1>
+          <p className="mt-5 max-w-2xl text-sm leading-6 text-[#94a3b8] sm:text-base">{tx.intro}</p>
+          {reelItem && <div className="mt-5 flex flex-wrap items-center gap-3"><div className="rounded-full border border-[#d4af37]/30 bg-[#d4af37]/10 px-4 py-2"><span className="font-mono text-[8px] font-bold tracking-[.18em] text-[#d4af37]">{tx.reel} · {String(reelIndex + 1).padStart(2,"0")}/{String(featured.length).padStart(2,"0")}</span></div><div className="rounded-full border border-white/10 bg-[#090b10] px-4 py-2 shadow-sm"><span className="text-xs font-semibold text-white">{reelItem.name}</span><span className="ml-2 text-[10px] text-[#94a3b8]">{sectorLabels[reelItem.sector]?.[lang] ?? reelItem.sector}</span></div></div>}
+          <div className="mt-8 grid gap-2 rounded-[1.4rem] border border-white/10 bg-[#090b10] p-2 shadow-sm lg:grid-cols-[1fr_.28fr_.28fr_auto]">
+            <div className="relative"><Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#d4af37]"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder={tx.search} className="w-full rounded-xl border border-white/10 bg-black/60 py-3 pl-11 pr-4 text-sm text-white placeholder:text-[#94a3b8] outline-none focus:border-[#d4af37]"/></div>
+            <label className="relative"><select value={sector} onChange={e=>setSector(e.target.value)} className="w-full appearance-none rounded-xl border border-white/10 bg-black/60 px-4 py-3 pr-9 text-xs font-medium text-white outline-none"><option value="all">{tx.industries}</option>{PORTFOLIO_SECTORS.map(([id,label])=><option key={id} value={id}>{sectorLabels[id]?.[lang] ?? label}</option>)}</select><ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#94a3b8]"/></label>
+            <label className="relative"><select value={service} onChange={e=>setService(e.target.value)} className="w-full appearance-none rounded-xl border border-white/10 bg-black/60 px-4 py-3 pr-9 text-xs font-medium text-white outline-none"><option value="all">{tx.all}</option>{serviceOptions.slice(1).map(x=><option key={x.id} value={x.id}>{x.label}</option>)}</select><ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#94a3b8]"/></label>
+            <div className="flex items-center justify-center rounded-xl border border-[#d4af37]/30 bg-[#d4af37]/10 px-4 py-3 font-mono text-[8px] font-bold text-[#d4af37]">{filtered.length} {tx.index}</div>
           </div>
         </div>
       </section>
 
-      <section className="relative overflow-hidden border-y border-border bg-[#080b0f] py-16 text-white sm:py-24">
+      <section className="relative overflow-hidden border-b border-white/10 bg-[#050609] py-14 text-white sm:py-20">
         <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
           <div className="mb-8 flex items-end justify-between gap-5">
-            <div><p className="label-mono text-[9px] tracking-[.28em] text-white/45">{tx.reel}</p><h2 className="display-serif mt-3 max-w-4xl text-4xl leading-[.9] sm:text-6xl">{tx.showcase}</h2></div>
-            <div className="hidden items-center gap-1 sm:flex">{featured.slice(0,6).map((item,i)=><button key={item.url} type="button" onClick={()=>setReelIndex(i)} className={"h-1.5 rounded-full transition-all duration-500 "+(i===reelIndex?"w-10 bg-white":"w-3 bg-white/20 hover:bg-white/40")} aria-label={item.name}/>)}</div>
+            <div><p className="font-mono text-[9px] font-bold tracking-[.24em] text-[#d4af37] uppercase">{tx.reel}</p><h2 className="mt-2 max-w-4xl text-4xl font-extrabold uppercase leading-[.95] sm:text-5xl text-white">{tx.showcase}</h2></div>
+            <div className="hidden items-center gap-1 sm:flex">{featured.slice(0,6).map((item,i)=><button key={item.url} type="button" onClick={()=>setReelIndex(i)} className={"h-1.5 rounded-full transition-all duration-500 "+(i===reelIndex?"w-10 bg-[#d4af37]":"w-3 bg-white/20 hover:bg-white/40")} aria-label={item.name}/>)}</div>
           </div>
           <div className="grid gap-5 lg:grid-cols-[1.4fr_.6fr]">
-            <button type="button" onClick={()=>reelItem && setActive(reelItem)} className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-black text-left">
-              <div className="aspect-[16/9] overflow-hidden bg-[#0d1116]">
+            <button type="button" onClick={()=>reelItem && setActive(reelItem)} className="group relative overflow-hidden rounded-[2rem] border border-white/15 bg-[#090b10] text-left shadow-2xl">
+              <div className="aspect-[16/9] overflow-hidden">
                 <ReferencePreview item={reelItem} alt={reelItem?.name+" homepage"} loading="eager" className="transition duration-[1600ms] group-hover:scale-[1.025]"/>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-transparent to-black/3"/>
-                <div className="absolute left-5 right-5 top-5 flex items-center justify-between"><span className="rounded-full border border-white/15 bg-black/45 px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-white/55 backdrop-blur-xl">{tx.homepage} / {String(reelIndex+1).padStart(2,"0")}</span><span className="rounded-full border border-white/15 bg-black/45 px-3 py-1.5 label-mono text-[7px] text-white/55 backdrop-blur-xl">{reelItem?.origin === "XR Agency" ? tx.agency : tx.reference}</span></div>
-                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8"><p className="label-mono text-[8px] tracking-[.18em] text-white/38">{sectorLabels[reelItem?.sector ?? ""]?.[lang] ?? reelItem?.sector} · {reelItem?.type}</p><div className="mt-2 flex items-end justify-between gap-4"><h3 className="display-serif text-5xl leading-[.86] sm:text-7xl">{reelItem?.name}</h3><span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-white/20 bg-white/10 backdrop-blur-xl transition group-hover:bg-white group-hover:text-black"><ArrowUpRight className="h-4 w-4"/></span></div></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"/>
+                <div className="absolute left-5 right-5 top-5 flex items-center justify-between"><span className="rounded-full border border-white/15 bg-black/80 px-3 py-1.5 font-mono text-[7px] font-bold tracking-[.16em] text-white backdrop-blur-xl">{tx.homepage} / {String(reelIndex+1).padStart(2,"0")}</span><span className="rounded-full border border-[#d4af37]/30 bg-black/80 px-3 py-1.5 font-mono text-[7px] font-bold text-[#d4af37] backdrop-blur-xl">{reelItem?.origin === "XR Agency" ? tx.agency : tx.reference}</span></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 text-white"><p className="font-mono text-[8px] tracking-[.18em] text-white/75">{sectorLabels[reelItem?.sector ?? ""]?.[lang] ?? reelItem?.sector} · {reelItem?.type}</p><div className="mt-2 flex items-end justify-between gap-4"><h3 className="text-5xl font-extrabold leading-[.86] sm:text-7xl font-serif text-white">{reelItem?.name}</h3><span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-white/40 bg-white text-black transition group-hover:scale-105 group-hover:bg-[#d4af37]"><ArrowUpRight className="h-4 w-4"/></span></div></div>
               </div>
             </button>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-              {featured.slice(1,4).map((item,i)=><button key={item.url} type="button" onClick={()=>{setReelIndex(i+1);setActive(item)}} className="group relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[.025] text-left">
-                <div className="aspect-[16/9] overflow-hidden bg-[#0d1116] sm:aspect-[16/7] lg:aspect-[16/7]"><ReferencePreview item={item} alt={item.name+" homepage"} loading="lazy" className="opacity-75 transition duration-[1200ms] group-hover:scale-[1.04] group-hover:opacity-100"/><div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/25 to-transparent"/><div className="absolute inset-y-0 left-4 flex items-center"><div><p className="label-mono text-[7px] tracking-[.18em] text-white/35">{item.origin === "XR Agency" ? tx.agency : tx.reference} · {tx.homepage}</p><h3 className="display-serif mt-1 text-2xl">{item.name}</h3></div></div></div>
+              {featured.slice(1,4).map((item,i)=><button key={item.url} type="button" onClick={()=>{setReelIndex(i+1);setActive(item)}} className="group relative overflow-hidden rounded-[1.5rem] border border-white/15 bg-[#090b10] text-left">
+                <div className="aspect-[16/9] overflow-hidden sm:aspect-[16/7] lg:aspect-[16/7]"><ReferencePreview item={item} alt={item.name+" homepage"} loading="lazy" className="transition duration-[1200ms] group-hover:scale-[1.04]"/><div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent"/><div className="absolute inset-y-0 left-4 flex items-center text-white"><div><p className="font-mono text-[7px] tracking-[.18em] text-white/75">{item.origin === "XR Agency" ? tx.agency : tx.reference} · {tx.homepage}</p><h3 className="text-2xl font-bold font-serif mt-1 text-white">{item.name}</h3></div></div></div>
               </button>)}
             </div>
           </div>
@@ -339,7 +338,7 @@ export function WorkPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/5 to-transparent" />
                     <div className="absolute inset-x-4 top-4 flex items-center justify-between gap-2">
-                      <span className="rounded-full border border-white/15 bg-black/50 px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-white/60 backdrop-blur-xl">{tx.homepage} / {String(index+1).padStart(2,"0")}</span>
+                      <span className="rounded-full border border-white/15 bg-black/50 px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-[#141312]/65 backdrop-blur-xl">{tx.homepage} / {String(index+1).padStart(2,"0")}</span>
                       <span className="rounded-full border border-white/15 bg-black/50 px-3 py-1.5 label-mono text-[7px] tracking-[.12em] text-white/55 backdrop-blur-xl">{item.origin === "XR Agency" ? tx.agency : tx.reference}</span>
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
@@ -391,6 +390,7 @@ export function WorkPage() {
         <div className="grid lg:grid-cols-[1.4fr_.6fr]"><div className="min-h-[420px] bg-[#080b0f]"><div className="relative h-full min-h-[420px] overflow-hidden"><ReferencePreview item={active} alt={active.name+" homepage"} loading="eager" className="min-h-[420px] object-top"/><div className="absolute left-5 top-5 rounded-full border border-white/15 bg-black/50 px-3 py-1.5 label-mono text-[7px] tracking-[.16em] text-white/55 backdrop-blur-xl">{tx.homepage}</div></div></div><div className="p-7 sm:p-10"><span className="label-mono text-[8px] tracking-[.24em] text-primary">{sectorLabels[active.sector]?.[lang] ?? active.sector} · {active.type}</span><h2 className="display-serif mt-4 text-5xl leading-[.86]">{active.name}</h2><p className="mt-4 text-sm leading-6 text-muted-foreground">{tx.modalNote}</p><div className="mt-6 flex flex-wrap gap-2">{active.services.map(s=><span key={s} className="rounded-full border border-border px-3 py-1.5 text-[9px] text-muted-foreground">{s==="ecommerce"?"E-commerce":s}</span>)}</div><a href={active.url} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-xs font-semibold text-background">{tx.open}<ExternalLink className="h-3.5 w-3.5"/></a></div></div>
       </div>
     </div>}
+    <AdvisorsShowcase />
     <Contact/>
   </div>;
 }

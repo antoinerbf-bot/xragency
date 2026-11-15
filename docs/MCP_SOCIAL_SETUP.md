@@ -1,54 +1,64 @@
-# MCP Social Media Integration - XR Agency (xragencyai.com)
-## Configuration Facebook, Instagram & TikTok (100% GRATUIT via Postiz)
+# Système Autonome Réseaux Sociaux - XR Agency (xragencyai.com)
+## Architecture 100% Gratuite : Facebook, Instagram & TikTok
 
-Ce document récapitule la mise en place du serveur MCP officiel **Postiz** pour automatiser la publication sur :
-- **Facebook** (Page XR Agency)
-- **Instagram** (Compte Pro / Creator)
-- **TikTok** (Profil XR Agency)
+Ce système permet la création et la publication automatisée de contenus à fort taux de conversion pour **xragencyai.com**.
 
 ---
 
-### 1. Activer l'accès gratuit Postiz
+### 1. Composants du Système
 
-1. Crée un compte sur [postiz.com](https://postiz.com) (Tier gratuit à vie disponible) ou héberge le conteneur Docker open-source (`docker run -p 3000:3000 gitroomhq/postiz-app`).
-2. Dans le menu **Integrations**, connecte :
-   - Ta Page Facebook
-   - Ton compte Instagram Pro / Creator (lié à la Page Facebook)
-   - Ton compte TikTok
-3. Va dans **Settings > Public API** et copie ton **API Key**.
+| Fichier | Rôle |
+| :--- | :--- |
+| `scripts/mcp-social-server.js` | **Serveur MCP JSON-RPC 2.0** pilotable par IA (outils de création, calendrier et publication). |
+| `scripts/generate-social-posts.js` | Générateur de concepts viraux multicanaux (TikTok 3s hooks, scripts Reels, posts Facebook). |
+| `scripts/generate-visual-assets.js` | Générateur autonome de visuels graphiques 1080x1920 (Story/TikTok) et 1080x1080 (Feed). |
+| `scripts/publish-social.js` | Moteur d'envoi multi-canaux (Postiz API, Meta Graph API directe, ou Webhook Make/n8n). |
+| `scripts/social-daemon.js` | Démon autonome qui surveille la file et auto-régénère du contenu en continu. |
+| `social-calendar.json` | Base de données locale de la file d'attente et historique des publications. |
 
 ---
 
-### 2. Configuration MCP (Antigravity / Claude Code / Cursor)
+### 2. Commandes NPM rapides
 
-Ajoute cette configuration dans tes paramètres MCP (ex: `~/.gemini/antigravity/mcp_config.json` ou `claude_desktop_config.json`) :
+```bash
+# Générer un lot de 10 campagnes complètes avec visuels
+npm run social:generate
 
-```json
-{
-  "mcpServers": {
-    "postiz": {
-      "command": "npx",
-      "args": ["-y", "postiz-mcp"],
-      "env": {
-        "POSTIZ_API_KEY": "TON_API_KEY_POSTIZ",
-        "POSTIZ_URL": "https://api.postiz.com"
-      }
-    }
-  }
-}
-```
+# Lancer la boucle de publication de la file d'attente
+npm run social:publish
 
-*Note : Si tu utilises le transport direct HTTP/SSE fourni par Postiz :*
-```
-https://mcp.postiz.com/mcp-oauth-dynamic
+# Lancer le serveur MCP pour Antigravity / Claude Code / Cursor
+npm run social:mcp
+
+# Lancer le démon en arrière-plan (auto-refill & publication toutes les 30 min)
+npm run social:daemon
 ```
 
 ---
 
-### 3. Outils disponibles via le MCP Postiz
+### 3. Connecter la diffusion réelle (100% Gratuit)
 
-Une fois connecté, l'agent dispose des outils MCP natifs suivants :
-- `integrationList` : Liste les comptes connectés (FB, Insta, TikTok) et leurs IDs.
-- `integrationSchema` : Analyse les contraintes et règles requises par chaque réseau (durée vidéo, format, tags).
-- `schedulePost` : Publie ou programme un post, Reel ou TikTok avec médias (images/vidéos), légendes, hashtags et paramètres d'interaction (autoriser duos, collabs, commentaires).
+Vous avez 3 options gratuites selon votre préférence :
 
+#### Option A : Postiz (La plus simple, tout-en-un)
+1. Créez votre compte gratuit sur [postiz.com](https://postiz.com) et connectez vos 3 comptes (Page Facebook, Instagram Pro, TikTok).
+2. Récupérez votre clé API dans **Settings > Public API**.
+3. Dans votre environnement ou fichier `.env` :
+   ```env
+   POSTIZ_API_KEY=votre_cle_api_ici
+   ```
+
+#### Option B : Meta Graph API Directe (Facebook & Instagram)
+1. Créez une app gratuite sur [developers.facebook.com](https://developers.facebook.com).
+2. Récupérez le token d'accès de votre page et définissez :
+   ```env
+   META_ACCESS_TOKEN=votre_page_access_token
+   META_PAGE_ID=votre_page_id
+   ```
+
+#### Option C : Webhook Gratuit (Make / n8n / Zapier)
+Si vous utilisez déjà un scénario Make ou n8n qui publie sur vos réseaux :
+```env
+SOCIAL_WEBHOOK_URL=https://hook.eu1.make.com/xxxx
+```
+Le script enverra automatiquement le payload complet JSON (titre, hooks, textes, visuels SVG hébergés) à chaque déclenchement !

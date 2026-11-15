@@ -7,25 +7,23 @@ export function CinematicIntro() {
   const [fading, setFading] = useState(false);
 
   useEffect(() => {
-    // Check if motion is reduced
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
 
-    // Check if intro has already been displayed in this browser session
     const seen = window.sessionStorage.getItem("xr_intro_played");
     if (seen) return;
 
     setVisible(true);
 
-    // Sequence timing: start fade out at 1.9s, remove at 2.5s
+    // Courte séquence sobre : début du fondu à 1.35s, libération complète à 1.85s
     const fadeTimer = window.setTimeout(() => {
       setFading(true);
-    }, 1900);
+    }, 1350);
 
     const endTimer = window.setTimeout(() => {
       setVisible(false);
       window.sessionStorage.setItem("xr_intro_played", "1");
-    }, 2500);
+    }, 1850);
 
     return () => {
       window.clearTimeout(fadeTimer);
@@ -38,21 +36,21 @@ export function CinematicIntro() {
     window.setTimeout(() => {
       setVisible(false);
       window.sessionStorage.setItem("xr_intro_played", "1");
-    }, 300);
+    }, 220);
   };
 
   if (!visible) return null;
 
   const taglines = {
-    fr: "HAUTE CRÉATION DIGITALE & IA",
-    en: "HAUTE DIGITAL CREATION & AI",
-    vi: "SÁNG TẠO KỸ THUẬT SỐ ĐỈNH CAO & AI",
-    ar: "إبداع رقمي رفيع وذكاء اصطناعي",
-    ru: "ЦИФРОВОЕ ИСКУССТВО И ИИ",
+    fr: "STRATÉGIE · DESIGN · DÉVELOPPEMENT · CROISSANCE COMMERCIALE",
+    en: "STRATEGY · DESIGN · DEVELOPMENT · COMMERCIAL GROWTH",
+    vi: "CHIẾN LƯỢC · THIẾT KẾ · PHÁT TRIỂN · TĂNG TRƯỞNG THƯƠNG MẠI",
+    ar: "استراتيجية · تصميم · تطوير · نمو تجاري",
+    ru: "СТРАТЕГИЯ · ДИЗАЙН · РАЗРАБОТКА · КОММЕРЧЕСКИЙ РОСТ",
   };
 
   const skipCopy = {
-    fr: "Passer l'intro",
+    fr: "Passer l'introduction",
     en: "Skip intro",
     vi: "Bỏ qua",
     ar: "تخطي",
@@ -63,125 +61,90 @@ export function CinematicIntro() {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="XR Agency Cinematic Intro"
+      aria-label="Introduction XR Agency"
       onClick={skipIntro}
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#050507] text-white transition-all duration-700 select-none cursor-pointer ${
-        fading ? "opacity-0 pointer-events-none scale-105 filter blur-sm" : "opacity-100 scale-100"
+      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0B0B0C] text-[#F8F6F0] transition-all duration-500 select-none cursor-pointer ${
+        fading ? "opacity-0 pointer-events-none scale-[1.02]" : "opacity-100 scale-100"
       }`}
     >
-      {/* Background ambient radial lights */}
+      {/* Halo ambiant Champagne & Bronze très subtil */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute h-[500px] w-[500px] rounded-full opacity-40 blur-[120px] transition-transform duration-1000 animate-xr-aura"
+        className="pointer-events-none absolute h-[460px] w-[460px] rounded-full opacity-35 blur-[110px]"
         style={{
           background:
-            "radial-gradient(circle, rgba(16,185,129,0.35) 0%, rgba(56,189,248,0.2) 40%, rgba(212,175,55,0.15) 70%, transparent 90%)",
+            "radial-gradient(circle, rgba(232,220,196,0.28) 0%, rgba(197,160,89,0.18) 42%, rgba(139,112,79,0.10) 70%, transparent 100%)",
         }}
       />
 
-      {/* Grid overlay for tech precision feel */}
+      {/* Trame éditoriale fine */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
+        className="pointer-events-none absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
+            "linear-gradient(rgba(248,246,240,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(248,246,240,0.6) 1px, transparent 1px)",
+          backgroundSize: "64px 64px",
         }}
       />
 
-      {/* Center Cinematic "X" Structure */}
-      <div className="relative z-10 flex flex-col items-center">
-        {/* Sculpted Luxury "X" Vector */}
-        <div className="relative h-28 w-28 sm:h-36 sm:w-36 flex items-center justify-center">
+      {/* Monogramme XR & Révélation Typographique */}
+      <div className="relative z-10 flex flex-col items-center px-6">
+        <div className="relative h-24 w-24 sm:h-28 sm:w-28 flex items-center justify-center rounded-3xl border border-[#E8DCC4]/20 bg-[#101114]/90 shadow-[0_24px_60px_rgba(0,0,0,0.65)]">
           <svg
             viewBox="0 0 160 160"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="h-full w-full drop-shadow-[0_0_35px_rgba(255,255,255,0.35)]"
+            className="h-16 w-16 sm:h-20 sm:w-20"
           >
             <defs>
-              <linearGradient id="xr-silver-1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#ffffff" />
-                <stop offset="35%" stopColor="#e2e8f0" />
-                <stop offset="70%" stopColor="#94a3b8" />
-                <stop offset="100%" stopColor="#475569" />
+              <linearGradient id="xr-ivory-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#FDFBF7" />
+                <stop offset="55%" stopColor="#E8DCC4" />
+                <stop offset="100%" stopColor="#8B704F" />
               </linearGradient>
-              <linearGradient id="xr-gold-accent" x1="0%" y1="100%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#10b981" />
-                <stop offset="50%" stopColor="#38bdf8" />
-                <stop offset="100%" stopColor="#ffffff" />
+              <linearGradient id="xr-bronze-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#8B704F" />
+                <stop offset="50%" stopColor="#C5A059" />
+                <stop offset="100%" stopColor="#F8F6F0" />
               </linearGradient>
-              <filter id="xr-glow">
-                <feGaussianBlur stdDeviation="3" result="glow" />
-                <feComposite in="SourceGraphic" in2="glow" operator="over" />
-              </filter>
             </defs>
 
-            {/* Diagonal Blade 1: Top-Left to Bottom-Right */}
             <path
-              d="M24 24 L52 24 L136 136 L108 136 Z"
-              fill="url(#xr-silver-1)"
-              className="transition-all duration-700"
+              d="M26 26 L54 26 L134 134 L106 134 Z"
+              fill="url(#xr-ivory-grad)"
             />
-            {/* Diagonal Blade 2: Top-Right to Bottom-Left with bevel cutout */}
             <path
-              d="M136 24 L108 24 L24 136 L52 136 Z"
-              fill="url(#xr-gold-accent)"
+              d="M134 26 L106 26 L26 134 L54 134 Z"
+              fill="url(#xr-bronze-grad)"
               opacity="0.92"
             />
-            {/* Center overlap diamond highlight */}
-            <polygon
-              points="80,66 94,80 80,94 66,80"
-              fill="#ffffff"
-              filter="url(#xr-glow)"
-              className="animate-pulse"
-            />
-            {/* Fine outer precision hairline */}
-            <path
-              d="M22 22 L54 22 L138 138 L106 138 Z"
-              stroke="rgba(255,255,255,0.4)"
-              strokeWidth="0.8"
-            />
-            <path
-              d="M138 22 L106 22 L22 138 L54 138 Z"
-              stroke="rgba(255,255,255,0.4)"
-              strokeWidth="0.8"
-            />
+            <polygon points="80,67 93,80 80,93 67,80" fill="#FDFBF7" />
           </svg>
-
-          {/* Sweeping light beam reflection */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 overflow-hidden rounded-full"
-          >
-            <div className="absolute -inset-10 bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-0 animate-xr-beam" />
-          </div>
         </div>
 
-        {/* Agency Typography Reveal */}
-        <div className="mt-7 text-center">
-          <div className="flex items-center justify-center gap-3">
-            <span className="h-px w-6 bg-gradient-to-r from-transparent to-white/60" />
-            <h1 className="font-mono text-[10px] sm:text-[12px] font-bold tracking-[0.42em] text-white">
+        <div className="mt-6 text-center">
+          <div className="flex items-center justify-center gap-3.5">
+            <span className="h-px w-8 bg-gradient-to-r from-transparent to-[#C5A059]/70" />
+            <span className="font-mono text-[11px] sm:text-[13px] font-bold tracking-[0.42em] text-[#F8F6F0]">
               XR AGENCY
-            </h1>
-            <span className="h-px w-6 bg-gradient-to-l from-transparent to-white/60" />
+            </span>
+            <span className="h-px w-8 bg-gradient-to-l from-transparent to-[#C5A059]/70" />
           </div>
-          <p className="mt-2 font-mono text-[7px] sm:text-[8px] tracking-[0.3em] text-white/60">
-            PARIS · {taglines[lang as keyof typeof taglines] ?? taglines.fr}
+          <p className="mt-2.5 font-mono text-[7.5px] sm:text-[8.5px] tracking-[0.26em] text-[#E8DCC4]/75">
+            {taglines[lang as keyof typeof taglines] ?? taglines.fr}
           </p>
         </div>
       </div>
 
-      {/* Subtle skip indicator in bottom corner */}
+      {/* Bouton d'accessibilité pour passer immédiatement */}
       <button
         type="button"
         onClick={(e) => {
           e.stopPropagation();
           skipIntro();
         }}
-        className="absolute bottom-6 right-6 font-mono text-[8px] tracking-[0.2em] text-white/40 hover:text-white transition-colors"
+        className="absolute bottom-7 right-7 rounded-full border border-[#E8DCC4]/20 bg-[#101114]/80 px-4 py-2 font-mono text-[8.5px] uppercase tracking-[0.2em] text-[#E8DCC4]/80 hover:border-[#C5A059] hover:text-[#F8F6F0] transition-colors"
       >
         {skipCopy[lang as keyof typeof skipCopy] ?? skipCopy.fr} ✕
       </button>

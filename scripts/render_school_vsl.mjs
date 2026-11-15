@@ -9,12 +9,13 @@ const HTML_FILE = path.join(ROOT, "scripts", "school-studio.html");
 const ASSETS_DIR = path.join(ROOT, "src", "assets");
 const FFMPEG = path.join(ROOT, "scripts", "ffmpeg");
 const MUSIC = path.join(ROOT, "public", "videos", "music-inspired.mp3");
+const VOICEOVER = "/tmp/xr_school_vo.mp3";
 const OUT_MP4 = path.join(ROOT, "public", "videos", "xr-school-90j.mp4");
 const OUT_POSTER = path.join(ROOT, "public", "videos", "school-poster.jpg");
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 
 const FPS = 25;
-const DURATION = 42.0;
+const DURATION = 39.8;
 const TOTAL_FRAMES = Math.round(DURATION * FPS);
 
 const server = http.createServer((req, res) => {
@@ -101,11 +102,16 @@ try {
   fs.writeFileSync(OUT_POSTER, Buffer.from(posterShot.data, "base64"));
   console.log("School poster saved to public/videos/school-poster.jpg");
 
+  const hasVo = fs.existsSync(VOICEOVER);
   const ffArgs = [
     "-y",
     "-f", "image2pipe", "-vcodec", "mjpeg", "-framerate", String(FPS), "-i", "pipe:0",
+    ...(hasVo ? ["-i", VOICEOVER] : []),
     "-stream_loop", "-1", "-i", MUSIC,
-    "-filter_complex", "[0:v]scale=1920:1080,format=yuv420p[vout];[1:a]volume=0.22,afade=t=in:st=0:d=1.2,afade=t=out:st=40:d=2[aout]",
+    "-filter_complex",
+    hasVo
+      ? "[0:v]scale=1920:1080,format=yuv420p[vout];[1:a]aresample=48000,pan=stereo|c0=c0|c1=c0,volume=1.18[vo];[2:a]aresample=48000,volume=0.10,afade=t=in:st=0:d=1.0,afade=t=out:st=37.2:d=2.6[bgm];[vo][bgm]amix=inputs=2:duration=first:dropout_transition=2:normalize=0[aout]"
+      : "[0:v]scale=1920:1080,format=yuv420p[vout];[1:a]volume=0.22,afade=t=in:st=0:d=1.2,afade=t=out:st=37.2:d=2.6[aout]",
     "-map", "[vout]", "-map", "[aout]",
     "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p", "-r", String(FPS),
     "-c:a", "aac", "-b:a", "192k",

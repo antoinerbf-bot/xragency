@@ -10,6 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AffiliationRouteImport } from './routes/affiliation'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CreationSiteInternetVietnamRouteImport } from './routes/creation-site-internet-vietnam'
 import { Route as CrmRouteImport } from './routes/crm'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as FaqRouteImport } from './routes/faq'
@@ -20,7 +23,9 @@ import { Route as RecrutementRouteImport } from './routes/recrutement'
 import { Route as RefonteSiteInternetRouteImport } from './routes/refonte-site-internet'
 import { Route as SchoolRouteImport } from './routes/school'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as WebcareRouteImport } from './routes/webcare'
 import { Route as WorkRouteImport } from './routes/work'
+import { Route as AgenceWebCityRouteImport } from './routes/agence-web/$city'
 import { Route as ApiAuditRouteImport } from './routes/api/audit'
 import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiCreateCheckoutRouteImport } from './routes/api/create-checkout'
@@ -44,6 +49,22 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AffiliationRoute = AffiliationRouteImport.update({
+  id: '/affiliation',
+  path: '/affiliation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreationSiteInternetVietnamRoute =
+  CreationSiteInternetVietnamRouteImport.update({
+    id: '/creation-site-internet-vietnam',
+    path: '/creation-site-internet-vietnam',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const CrmRoute = CrmRouteImport.update({
   id: '/crm',
   path: '/crm',
@@ -94,9 +115,19 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WebcareRoute = WebcareRouteImport.update({
+  id: '/webcare',
+  path: '/webcare',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkRoute = WorkRouteImport.update({
   id: '/work',
   path: '/work',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgenceWebCityRoute = AgenceWebCityRouteImport.update({
+  id: '/agence-web/$city',
+  path: '/agence-web/$city',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuditRoute = ApiAuditRouteImport.update({
@@ -188,6 +219,9 @@ const DashboardProspectsProspectIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/affiliation': typeof AffiliationRoute
+  '/contact': typeof ContactRoute
+  '/creation-site-internet-vietnam': typeof CreationSiteInternetVietnamRoute
   '/crm': typeof CrmRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/faq': typeof FaqRoute
@@ -198,7 +232,9 @@ export interface FileRoutesByFullPath {
   '/refonte-site-internet': typeof RefonteSiteInternetRoute
   '/school': typeof SchoolRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/webcare': typeof WebcareRoute
   '/work': typeof WorkRoute
+  '/agence-web/$city': typeof AgenceWebCityRoute
   '/api/audit': typeof ApiAuditRoute
   '/api/contact': typeof ApiContactRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
@@ -219,6 +255,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/affiliation': typeof AffiliationRoute
+  '/contact': typeof ContactRoute
+  '/creation-site-internet-vietnam': typeof CreationSiteInternetVietnamRoute
   '/crm': typeof CrmRoute
   '/faq': typeof FaqRoute
   '/mentions-legales': typeof MentionsLegalesRoute
@@ -228,7 +267,9 @@ export interface FileRoutesByTo {
   '/refonte-site-internet': typeof RefonteSiteInternetRoute
   '/school': typeof SchoolRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/webcare': typeof WebcareRoute
   '/work': typeof WorkRoute
+  '/agence-web/$city': typeof AgenceWebCityRoute
   '/api/audit': typeof ApiAuditRoute
   '/api/contact': typeof ApiContactRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
@@ -250,6 +291,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/affiliation': typeof AffiliationRoute
+  '/contact': typeof ContactRoute
+  '/creation-site-internet-vietnam': typeof CreationSiteInternetVietnamRoute
   '/crm': typeof CrmRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/faq': typeof FaqRoute
@@ -260,7 +304,9 @@ export interface FileRoutesById {
   '/refonte-site-internet': typeof RefonteSiteInternetRoute
   '/school': typeof SchoolRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/webcare': typeof WebcareRoute
   '/work': typeof WorkRoute
+  '/agence-web/$city': typeof AgenceWebCityRoute
   '/api/audit': typeof ApiAuditRoute
   '/api/contact': typeof ApiContactRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
@@ -283,6 +329,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/affiliation'
+    | '/contact'
+    | '/creation-site-internet-vietnam'
     | '/crm'
     | '/dashboard'
     | '/faq'
@@ -293,7 +342,9 @@ export interface FileRouteTypes {
     | '/refonte-site-internet'
     | '/school'
     | '/sitemap.xml'
+    | '/webcare'
     | '/work'
+    | '/agence-web/$city'
     | '/api/audit'
     | '/api/contact'
     | '/api/create-checkout'
@@ -314,6 +365,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/affiliation'
+    | '/contact'
+    | '/creation-site-internet-vietnam'
     | '/crm'
     | '/faq'
     | '/mentions-legales'
@@ -323,7 +377,9 @@ export interface FileRouteTypes {
     | '/refonte-site-internet'
     | '/school'
     | '/sitemap.xml'
+    | '/webcare'
     | '/work'
+    | '/agence-web/$city'
     | '/api/audit'
     | '/api/contact'
     | '/api/create-checkout'
@@ -344,6 +400,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/affiliation'
+    | '/contact'
+    | '/creation-site-internet-vietnam'
     | '/crm'
     | '/dashboard'
     | '/faq'
@@ -354,7 +413,9 @@ export interface FileRouteTypes {
     | '/refonte-site-internet'
     | '/school'
     | '/sitemap.xml'
+    | '/webcare'
     | '/work'
+    | '/agence-web/$city'
     | '/api/audit'
     | '/api/contact'
     | '/api/create-checkout'
@@ -376,6 +437,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AffiliationRoute: typeof AffiliationRoute
+  ContactRoute: typeof ContactRoute
+  CreationSiteInternetVietnamRoute: typeof CreationSiteInternetVietnamRoute
   CrmRoute: typeof CrmRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   FaqRoute: typeof FaqRoute
@@ -386,7 +450,9 @@ export interface RootRouteChildren {
   RefonteSiteInternetRoute: typeof RefonteSiteInternetRoute
   SchoolRoute: typeof SchoolRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  WebcareRoute: typeof WebcareRoute
   WorkRoute: typeof WorkRoute
+  AgenceWebCityRoute: typeof AgenceWebCityRoute
   ApiAuditRoute: typeof ApiAuditRoute
   ApiContactRoute: typeof ApiContactRoute
   ApiCreateCheckoutRoute: typeof ApiCreateCheckoutRoute
@@ -406,6 +472,27 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/affiliation': {
+      id: '/affiliation'
+      path: '/affiliation'
+      fullPath: '/affiliation'
+      preLoaderRoute: typeof AffiliationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/creation-site-internet-vietnam': {
+      id: '/creation-site-internet-vietnam'
+      path: '/creation-site-internet-vietnam'
+      fullPath: '/creation-site-internet-vietnam'
+      preLoaderRoute: typeof CreationSiteInternetVietnamRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/crm': {
@@ -478,11 +565,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/webcare': {
+      id: '/webcare'
+      path: '/webcare'
+      fullPath: '/webcare'
+      preLoaderRoute: typeof WebcareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/work': {
       id: '/work'
       path: '/work'
       fullPath: '/work'
       preLoaderRoute: typeof WorkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agence-web/$city': {
+      id: '/agence-web/$city'
+      path: '/agence-web/$city'
+      fullPath: '/agence-web/$city'
+      preLoaderRoute: typeof AgenceWebCityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/audit': {
@@ -652,6 +753,9 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AffiliationRoute: AffiliationRoute,
+  ContactRoute: ContactRoute,
+  CreationSiteInternetVietnamRoute: CreationSiteInternetVietnamRoute,
   CrmRoute: CrmRoute,
   DashboardRoute: DashboardRouteWithChildren,
   FaqRoute: FaqRoute,
@@ -662,7 +766,9 @@ const rootRouteChildren: RootRouteChildren = {
   RefonteSiteInternetRoute: RefonteSiteInternetRoute,
   SchoolRoute: SchoolRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  WebcareRoute: WebcareRoute,
   WorkRoute: WorkRoute,
+  AgenceWebCityRoute: AgenceWebCityRoute,
   ApiAuditRoute: ApiAuditRoute,
   ApiContactRoute: ApiContactRoute,
   ApiCreateCheckoutRoute: ApiCreateCheckoutRoute,

@@ -6,15 +6,17 @@ import { SERVICES } from "@/lib/content";
 import { UI } from "@/lib/copy";
 import { cn } from "@/lib/utils";
 
+import { XR_PHOTOS } from "@/lib/photography";
+
 const ACTIVE_IDS = ["websites", "branding", "seo", "maps", "social", "maintenance"];
 const SERVICE_NUM: Record<string, string> = { websites: "01", branding: "02", seo: "03", maps: "04", social: "05", maintenance: "06" };
 const SERVICE_IMAGES: Record<string, string> = {
-  websites: "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=2200&q=88",
-  branding: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=2200&q=88",
-  seo: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2200&q=88",
-  maps: "https://images.unsplash.com/photo-1524666041070-9e3c7be7b8e0?auto=format&fit=crop&w=2200&q=88",
-  social: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=2200&q=88",
-  maintenance: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2200&q=88",
+  websites: XR_PHOTOS.websites,
+  branding: XR_PHOTOS.branding,
+  seo: XR_PHOTOS.seo,
+  maps: XR_PHOTOS.maps,
+  social: XR_PHOTOS.social,
+  maintenance: XR_PHOTOS.maintenance,
 };
 
 const COPY = {

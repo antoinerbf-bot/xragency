@@ -130,19 +130,19 @@ function wa(message:string){ return CONTACT.whatsapp + "?text=" + encodeURICompo
 
 function ProductVisual({ product, large=false }: { product: Product; large?: boolean }) {
   return (
-    <div className={`relative overflow-hidden bg-[#080a0d] ${large ? "h-full min-h-[540px]" : "h-72"}`}>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(255,255,255,.08),transparent_34%),linear-gradient(135deg,#101318,#050608)]" />
-      <div className="absolute left-0 top-1/2 h-px w-full bg-white/[.06]" />
-      <div className="absolute left-1/2 top-0 h-full w-px bg-white/[.06]" />
+    <div className={`relative overflow-hidden bg-gradient-to-br from-[#faf8f4] via-[#f3efe6] to-[#ebe4d6] ${large ? "h-full min-h-[540px]" : "h-72"}`}>
+      <div className="absolute left-0 top-1/2 h-px w-full bg-white text-black/[.06]" />
+      <div className="absolute left-1/2 top-0 h-full w-px bg-white text-black/[.06]" />
       <img src={product.image} alt={product.name} className={`absolute inset-0 h-full w-full object-contain transition duration-1000 ease-out group-hover:scale-[1.035] ${large ? "p-12 sm:p-16" : "p-7"}`} />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_18%,rgba(0,0,0,.62)_82%)]" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between">
-        <span className="label-mono text-[7px] tracking-[.28em] text-white/40">KORBEN / XR ROBOTICS</span>
-        <span className="label-mono text-[7px] text-white/25">{product.family.toUpperCase()}</span>
+        <span className="label-mono text-[7px] tracking-[.28em] text-[#d4af37] font-bold">KORBEN / XR ROBOTICS</span>
+        <span className="rounded-full bg-[#0c0e18]/90 border border-white/10 px-2.5 py-0.5 label-mono text-[7px] text-[#94a3b8]">{product.family.toUpperCase()}</span>
       </div>
     </div>
   );
 }
+
+import svcIaWorkflows from "@/assets/svc-ia-workflows.jpg";
 
 export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
   const { lang } = useLang();
@@ -152,27 +152,26 @@ export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
   const filtered=useMemo(()=>family==="Tous"?PRODUCTS:PRODUCTS.filter(p=>p.family===family),[family]);
 
   if(compact) return (
-    <section id="robotique" dir={lang === "ar" ? "rtl" : "ltr"} className="relative overflow-hidden border-y border-white/10 bg-[#050608] py-24 text-white sm:py-32">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_20%,rgba(255,255,255,.09),transparent_25%),radial-gradient(circle_at_12%_85%,rgba(255,255,255,.04),transparent_28%)]" />
+    <section id="robotique" dir={lang === "ar" ? "rtl" : "ltr"} className="relative overflow-hidden border-y border-white/10 bg-[#090b10] py-24 text-white sm:py-32">
       <div className="relative mx-auto grid max-w-[1500px] gap-10 px-5 sm:px-8 lg:grid-cols-[.78fr_1.22fr] lg:px-12 lg:items-center">
         <div>
-          <span className="label-mono text-[9px] tracking-[.3em] text-white/45">07 · XR ROBOTICS / KORBEN</span>
+          <span className="label-mono text-[9px] tracking-[.3em] text-[#d4af37] font-bold">07 · XR ROBOTICS / KORBEN</span>
           <h2 className="display-serif mt-5 max-w-2xl text-[clamp(3.1rem,7vw,6.8rem)] leading-[.82] tracking-[-.06em]">{tx("Le digital sort de l’écran.")}</h2>
-          <p className="mt-7 max-w-xl text-base leading-7 text-white/52">{tx("Accueil, livraison, nettoyage, logistique et IA physique : une sélection de robots professionnels avec location, achat et démonstration.")}</p>
+          <p className="mt-7 max-w-xl text-base leading-7 text-[#94a3b8]">{tx("Accueil, livraison, nettoyage, logistique et IA physique : une sélection de robots professionnels avec location, achat et démonstration.")}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/services/robotique" className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-4 label-mono text-[9px] font-semibold tracking-[.12em] text-black">{tx("Explorer la gamme")} <ArrowRight className="h-4 w-4"/></Link>
-            <a href={wa("Bonjour XRAGENCY, je souhaite une recommandation de robot Korben pour mon entreprise.")} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-4 label-mono text-[9px] tracking-[.12em] text-white/70">{tx("Parler à un expert")}</a>
+            <Link to="/services/robotique" className="inline-flex items-center gap-2 rounded-full bg-white text-black px-6 py-4 label-mono text-[9px] font-semibold tracking-[.12em] text-white hover:bg-[#8b704f] transition">{tx("Explorer la gamme")} <ArrowRight className="h-4 w-4"/></Link>
+            <a href={wa("Bonjour XRAGENCY, je souhaite une recommandation de robot Korben pour mon entreprise.")} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-[#0c0e18] px-6 py-4 label-mono text-[9px] tracking-[.12em] text-white hover:border-white/20 transition">{tx("Parler à un expert")}</a>
           </div>
           <div className="mt-9 grid max-w-xl grid-cols-3 gap-5 border-y border-white/10 py-5">
-            <div><strong className="display-serif text-3xl">499€</strong><span className="mt-1 block label-mono text-[8px] text-white/35">/ mois à partir de*</span></div>
-            <div><strong className="display-serif text-3xl">8–21K€</strong><span className="mt-1 block label-mono text-[8px] text-white/35">achat HT*</span></div>
-            <div><strong className="display-serif text-3xl">15+</strong><span className="mt-1 block label-mono text-[8px] text-white/35">modèles</span></div>
+            <div><strong className="display-serif text-3xl text-white">499€</strong><span className="mt-1 block label-mono text-[8px] text-[#94a3b8]">/ mois à partir de*</span></div>
+            <div><strong className="display-serif text-3xl text-white">8–21K€</strong><span className="mt-1 block label-mono text-[8px] text-[#94a3b8]">achat HT*</span></div>
+            <div><strong className="display-serif text-3xl text-white">15+</strong><span className="mt-1 block label-mono text-[8px] text-[#94a3b8]">modèles</span></div>
           </div>
         </div>
-        <div className="group relative overflow-hidden rounded-[2.4rem] border border-white/10">
+        <div className="group relative overflow-hidden rounded-[2.4rem] border border-white/10 bg-[#0c0e18] shadow-lg">
           <ProductVisual product={active} large />
-          <div className="absolute bottom-6 left-6 right-6 rounded-[1.5rem] border border-white/10 bg-black/70 p-5 backdrop-blur-xl">
-            <div className="flex items-end justify-between gap-4"><div><span className="label-mono text-[7px] text-white/35">SÉLECTION XR</span><h3 className="display-serif mt-1 text-3xl">{active.name}</h3></div><span className="grid h-10 w-10 place-items-center rounded-full border border-white/15"><Bot className="h-4 w-4"/></span></div>
+          <div className="absolute bottom-6 left-6 right-6 rounded-[1.5rem] border border-white/10 bg-[#090b10]/95 p-5 shadow-md backdrop-blur-xl">
+            <div className="flex items-end justify-between gap-4"><div><span className="label-mono text-[7px] text-[#d4af37] font-bold">SÉLECTION XR</span><h3 className="display-serif mt-1 text-3xl text-white">{active.name}</h3></div><span className="grid h-10 w-10 place-items-center rounded-full border border-white/15 text-white"><Bot className="h-4 w-4"/></span></div>
           </div>
         </div>
       </div>
@@ -180,67 +179,103 @@ export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
   );
 
   return (
-    <section dir={lang === "ar" ? "rtl" : "ltr"} className="relative overflow-hidden bg-[#050608] text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_7%,rgba(255,255,255,.08),transparent_24%),radial-gradient(circle_at_8%_50%,rgba(255,255,255,.035),transparent_28%)]" />
-      <div className="relative mx-auto max-w-[1600px] px-5 pb-28 pt-32 sm:px-8 lg:px-12">
-        <div className="grid min-h-[76vh] items-center gap-10 lg:grid-cols-[.78fr_1.22fr]">
+    <section dir={lang === "ar" ? "rtl" : "ltr"} className="relative overflow-hidden bg-[#030406] text-white border-t border-white/10">
+      <div className="relative mx-auto max-w-[1600px] px-5 pb-24 pt-16 sm:px-8 lg:px-12">
+        <div className="grid items-center gap-10 lg:grid-cols-[.82fr_1.18fr]">
           <div className="relative z-10">
-            <span className="label-mono text-[9px] tracking-[.32em] text-white/40">XRAGENCY · ROBOTIQUE DE SERVICE · KORBEN</span>
-            <h1 className="display-serif mt-7 text-[clamp(3.8rem,8vw,8.7rem)] leading-[.76] tracking-[-.075em]">{tx("Louez votre")}<br/><em className="not-italic text-white/38">{tx("prochain")}</em><br/>{tx("collaborateur.")}</h1>
-            <p className="mt-8 max-w-xl text-base leading-7 text-white/52 sm:text-lg">{tx("Des robots professionnels pour absorber les tâches répétitives, fluidifier l’accueil et créer de nouvelles expériences — avec un accompagnement XR de la sélection au déploiement.")}</p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <a href="#catalogue" className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-4 label-mono text-[9px] font-semibold tracking-[.12em] text-black">{tx("Voir les modèles")} <ArrowRight className="h-4 w-4"/></a>
-              <a href="#diagnostic" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-7 py-4 label-mono text-[9px] tracking-[.12em] text-white/70">{tx("Trouver le bon robot")}</a>
+            <span className="font-mono text-[9px] tracking-[.26em] text-[#d4af37] font-bold">AUTOMATISATIONS IA &amp; ROBOTIQUE DE SERVICE KORBEN</span>
+            <h2 className="mt-5 text-[clamp(2.6rem,5.5vw,5.2rem)] font-extrabold leading-[.9] tracking-[-.05em] text-white">
+              {lang === "en" ? "AI Workflows" : "Automatisations IA"}
+              <br />
+              <span className="text-[#d4af37] font-bold">&amp; {lang === "en" ? "Robotics" : "Robotique"}</span>
+            </h2>
+            <p className="mt-5 max-w-xl text-base leading-7 text-[#94a3b8]">
+              {lang === "en"
+                ? "24/7 conversational agents, bespoke tool integrations, and autonomous Korben hospitality robotics."
+                : "Agents IA, automatisations reliées à vos outils métier et déploiement de robots autonomes Korben pour fluidifier l'accueil et les opérations."}
+            </p>
+            <div className="mt-7 grid gap-3 sm:grid-cols-3 max-w-2xl">
+              <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-4 shadow-md">
+                <span className="font-mono text-[7px] font-bold text-[#d4af37]">WORKFLOWS MÉTIER</span>
+                <p className="mt-1.5 text-xs font-bold text-white">Agents & Qualification IA</p>
+                <p className="mt-1 text-[10px] text-[#94a3b8]">Tri instantané des demandes & relances automatisées.</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-4 shadow-md">
+                <span className="font-mono text-[7px] font-bold text-[#d4af37]">CONNEXIONS API</span>
+                <p className="mt-1.5 text-xs font-bold text-white">Outils & Facturation</p>
+                <p className="mt-1 text-[10px] text-[#94a3b8]">Stripe, Resend, Google Workspace & ERP synchronisés.</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-4 shadow-md">
+                <span className="font-mono text-[7px] font-bold text-[#d4af37]">ROBOTS KORBEN</span>
+                <p className="mt-1.5 text-xs font-bold text-white">Accueil & Livraison</p>
+                <p className="mt-1 text-[10px] text-[#94a3b8]">Gamme physique dès 499 €/m sur étude de site.</p>
+              </div>
             </div>
-            <div className="mt-10 grid max-w-xl grid-cols-3 gap-4 border-y border-white/10 py-5">
-              <div><strong className="display-serif text-3xl">499€</strong><span className="mt-1 block label-mono text-[8px] text-white/35">location / mois*</span></div>
-              <div><strong className="display-serif text-3xl">8–21K€</strong><span className="mt-1 block label-mono text-[8px] text-white/35">achat HT*</span></div>
-              <div><strong className="display-serif text-3xl">15+</strong><span className="mt-1 block label-mono text-[8px] text-white/35">modèles</span></div>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <a href="/?service=robotics#quote" className="inline-flex items-center gap-2 rounded-full bg-[#0c0e18] px-7 py-4 font-mono text-[9px] font-bold tracking-[.12em] text-black hover:bg-[#d4af37] hover:scale-105 transition shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                {tx("Demander une offre")} <ArrowRight className="h-4 w-4"/>
+              </a>
+              <a href="#catalogue" className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#0c0e18]/5 px-7 py-4 font-mono text-[9px] tracking-[.12em] text-white hover:border-[#d4af37] hover:text-[#d4af37] transition">{tx("Voir les modèles")}</a>
+            </div>
+            <div className="mt-8 grid max-w-xl grid-cols-3 gap-4 border-y border-white/10 py-5">
+              <div><strong className="text-3xl text-[#d4af37] font-serif">Dès 999€</strong><span className="mt-1 block font-mono text-[8px] text-[#94a3b8]">CRM & IA sur mesure</span></div>
+              <div><strong className="text-3xl text-white font-serif">499€</strong><span className="mt-1 block font-mono text-[8px] text-[#94a3b8]">robots Korben / mois*</span></div>
+              <div><strong className="text-3xl text-white font-serif">15+</strong><span className="mt-1 block font-mono text-[8px] text-[#94a3b8]">modèles physiques</span></div>
             </div>
           </div>
 
-          <div className="group relative overflow-hidden rounded-[2.8rem] border border-white/10 bg-[#080a0d] shadow-[0_70px_180px_-80px_rgba(0,0,0,.95)]">
-            <ProductVisual product={active} large />
-            <div className="absolute bottom-6 left-6 right-6 rounded-[1.6rem] border border-white/10 bg-black/72 p-5 backdrop-blur-2xl sm:p-6">
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div><span className="label-mono text-[7px] tracking-[.22em] text-white/35">{active.family.toUpperCase()}</span><h2 className="display-serif mt-1 text-3xl sm:text-4xl">{active.name}</h2><p className="mt-1 text-xs text-white/38">{active.use}</p></div>
-                <div className="flex flex-wrap gap-1.5">{active.stats.map(s=><span key={s} className="rounded-full border border-white/10 bg-white/[.05] px-2.5 py-1.5 label-mono text-[7px] text-white/60">{s}</span>)}</div>
+          <div className="space-y-4">
+            <div className="relative overflow-hidden rounded-[2.4rem] border border-white/15 bg-[#090b10] shadow-2xl">
+              <img src={svcIaWorkflows} alt="Conseil en automatisation et intégration IA XR Agency" className="aspect-[16/10] w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5 flex flex-wrap items-center justify-between gap-2">
+                <span className="label-mono rounded-full border border-white/30 bg-[#090b10]/95 px-3.5 py-1.5 text-[7.5px] font-bold text-white shadow-sm backdrop-blur-md">
+                  AGENTS CONVERSATIONNELS · CRM · AUTOMATISATIONS VENTES
+                </span>
               </div>
-              <p className="mt-4 max-w-2xl text-xs leading-5 text-white/43">{active.desc}</p>
-              <div className="mt-4 flex flex-wrap gap-2"><a href={active.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2.5 label-mono text-[8px] text-white/65 hover:border-white/30 hover:text-white">{tx("Fiche officielle")} <ExternalLink className="h-3 w-3"/></a>{active.tech && <a href={active.tech} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2.5 label-mono text-[8px] text-white/65 hover:border-white/30 hover:text-white">{tx("Fiche technique")} <ExternalLink className="h-3 w-3"/></a>}</div>
+            </div>
+            <div className="group relative overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#0c0e18] shadow-md">
+              <div className="grid sm:grid-cols-[200px_1fr] items-center">
+                <img src={active.image} alt={active.name} className="h-44 w-full object-contain p-4 bg-[#090b10]" />
+                <div className="p-5">
+                  <span className="label-mono text-[7px] font-bold tracking-[.22em] text-[#d4af37]">{active.family.toUpperCase()} · KORBEN</span>
+                  <h3 className="display-serif mt-1 text-2xl text-white">{active.name}</h3>
+                  <p className="mt-1 text-xs text-[#94a3b8]">{active.desc}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div id="catalogue" className="mt-16 border-t border-white/10 pt-20">
+        <div id="catalogue" className="mt-16 border-t border-white/10 pt-16">
           <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
-            <div><span className="label-mono text-[9px] tracking-[.3em] text-white/35">01 / CATALOGUE</span><h2 className="display-serif mt-3 text-5xl leading-[.85] sm:text-7xl">{tx("Choisissez par")}<br/><em className="not-italic text-white/35">{tx("usage.")}</em></h2></div>
-            <div className="flex max-w-3xl flex-wrap gap-2">{FAMILIES.map(f=><button key={f} onClick={()=>setFamily(f)} className={`rounded-full border px-3 py-2 label-mono text-[8px] tracking-[.1em] transition ${family===f ? "border-white bg-white text-black" : "border-white/10 bg-white/[.02] text-white/45 hover:border-white/25 hover:text-white"}`}>{tx(f)}</button>)}</div>
+            <div><span className="label-mono text-[9px] tracking-[.3em] text-[#d4af37] font-bold">01 / CATALOGUE KORBEN</span><h2 className="display-serif mt-3 text-4xl leading-[.9] sm:text-6xl text-white">{tx("Choisissez par")}<br/><em className="not-italic text-[#d4af37]">{tx("usage.")}</em></h2></div>
+            <div className="flex max-w-3xl flex-wrap gap-2">{FAMILIES.map(f=><button key={f} onClick={()=>setFamily(f)} className={`rounded-full border px-3.5 py-2 label-mono text-[8px] tracking-[.1em] transition ${family===f ? "border-white/20 bg-white text-black text-white" : "border-white/15 bg-[#0c0e18] text-[#94a3b8] hover:border-white/20 hover:text-white"}`}>{tx(f)}</button>)}</div>
           </div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map(p=>(
-              <div key={p.id} className={`group flex flex-col justify-between overflow-hidden rounded-[1.8rem] border text-left transition duration-500 ${active.id===p.id ? "border-white/30 bg-white/[.07]" : "border-white/10 bg-white/[.018] hover:-translate-y-1 hover:border-white/20"}`}>
+              <div key={p.id} className={`group flex flex-col justify-between overflow-hidden rounded-[1.8rem] border bg-[#0c0e18] text-left transition duration-500 ${active.id===p.id ? "border-[#d4af37] ring-2 ring-[#b48f5a]/25 shadow-lg" : "border-white/10 shadow-2xs hover:-translate-y-1 hover:border-[#d4af37] hover:shadow-md"}`}>
                 <div onClick={()=>setActive(p)} className="cursor-pointer">
                   <ProductVisual product={p}/>
                   <div className="p-5">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <span className="label-mono text-[7px] text-white/30">{p.family}</span>
-                        <h3 className="display-serif mt-1 text-2xl">{p.name}</h3>
-                        <p className="mt-1 text-xs text-white/38">{p.use}</p>
+                        <span className="label-mono text-[7px] text-[#d4af37] font-bold">{p.family}</span>
+                        <h3 className="display-serif mt-1 text-2xl text-white">{p.name}</h3>
+                        <p className="mt-1 text-xs text-[#94a3b8]">{p.use}</p>
                       </div>
-                      <ArrowRight className="mt-1 h-4 w-4 text-white/25 transition group-hover:translate-x-1 group-hover:text-white"/>
+                      <ArrowRight className="mt-1 h-4 w-4 text-[#d4af37] transition group-hover:translate-x-1"/>
                     </div>
                     <div className="mt-4 flex flex-wrap gap-1.5">
-                      {p.stats.map(s=><span key={s} className="rounded-full bg-white/[.05] px-2 py-1 label-mono text-[7px] text-white/50">{s}</span>)}
+                      {p.stats.map(s=><span key={s} className="rounded-full bg-[#090b10] border border-white/10 px-2.5 py-1 label-mono text-[7px] text-[#94a3b8]">{s}</span>)}
                     </div>
                   </div>
                 </div>
-                <div className="border-t border-white/10 px-5 py-3 flex items-center justify-between bg-black/40">
-                  <button type="button" onClick={()=>setActive(p)} className="label-mono text-[7px] text-white/60 hover:text-white">
+                <div className="border-t border-white/10 px-5 py-3 flex items-center justify-between bg-[#090b10]">
+                  <button type="button" onClick={()=>setActive(p)} className="label-mono text-[7px] font-bold text-white hover:text-[#d4af37]">
                     {tx("Voir les détails")}
                   </button>
-                  <a href={p.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 label-mono text-[7.5px] font-semibold text-emerald-400 hover:text-emerald-300">
+                  <a href={p.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 label-mono text-[7.5px] font-bold text-emerald-700 hover:text-emerald-600">
                     {tx("Fiche officielle site")} <ExternalLink className="h-3 w-3"/>
                   </a>
                 </div>
@@ -249,19 +284,18 @@ export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
           </div>
         </div>
 
-        <div id="diagnostic" className="mt-28 grid gap-4 lg:grid-cols-[1.1fr_.9fr]">
-          <div className="relative overflow-hidden rounded-[2.2rem] border border-white/10 bg-white/[.025] p-7 sm:p-10">
-            <div className="absolute right-0 top-0 h-64 w-64 rounded-full border border-white/[.06] translate-x-1/3 -translate-y-1/3" />
-            <span className="label-mono text-[8px] tracking-[.25em] text-white/35">02 / DIAGNOSTIC</span>
-            <h2 className="display-serif mt-4 max-w-2xl text-4xl sm:text-6xl">{tx("Pas besoin de choisir seul.")}</h2>
-            <div className="mt-9 grid gap-3 sm:grid-cols-3">
-              {[["01","Observer","Flux, surface, tâches, équipe."],["02","Matcher","Usage + robot + configuration + financement."],["03","Déployer","Démo, installation, contenus et suivi."]].map(x=><div key={x[0]} className="rounded-2xl border border-white/10 bg-black/20 p-5"><span className="label-mono text-[8px] text-white/30">{x[0]}</span><h3 className="mt-5 text-sm font-semibold">{tx(x[1])}</h3><p className="mt-2 text-xs leading-5 text-white/38">{tx(x[2])}</p></div>)}
+        <div id="diagnostic" className="mt-20 grid gap-5 lg:grid-cols-[1.1fr_.9fr]">
+          <div className="relative overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#0c0e18] p-7 sm:p-10 shadow-xs">
+            <span className="label-mono text-[8px] font-bold tracking-[.25em] text-[#d4af37]">02 / DIAGNOSTIC DÉPLOIEMENT</span>
+            <h2 className="display-serif mt-4 max-w-2xl text-4xl sm:text-5xl text-white">{tx("Pas besoin de choisir seul.")}</h2>
+            <div className="mt-8 grid gap-3 sm:grid-cols-3">
+              {[["01","Observer","Flux, surface, tâches, équipe."],["02","Matcher","Usage + robot + configuration + financement."],["03","Déployer","Démo, installation, contenus et suivi."]].map(x=><div key={x[0]} className="rounded-2xl border border-white/10 bg-[#090b10] p-5"><span className="label-mono text-[8px] font-bold text-[#d4af37]">{x[0]}</span><h3 className="mt-4 text-sm font-bold text-white">{tx(x[1])}</h3><p className="mt-2 text-xs leading-5 text-[#94a3b8]">{tx(x[2])}</p></div>)}
             </div>
           </div>
-          <div className="rounded-[2.2rem] border border-white/10 bg-white/[.04] p-7 sm:p-10">
-            <ShieldCheck className="h-5 w-5 text-white/55"/>
-            <h3 className="display-serif mt-5 text-4xl">{tx("Location ou achat.")}</h3>
-            <p className="mt-4 text-sm leading-6 text-white/45">Korben annonce des locations sur mesure à partir de 499 €/mois, une fourchette d’achat de 8 000 à 21 000 € HT selon le modèle et des locations événementielles à partir de 250 €.</p>
+          <div className="rounded-[2.2rem] border border-white/10 bg-[#0c0e18] p-7 sm:p-10 shadow-xs">
+            <ShieldCheck className="h-5 w-5 text-[#d4af37]"/>
+            <h3 className="display-serif mt-5 text-4xl text-white">{tx("Location ou achat.")}</h3>
+            <p className="mt-4 text-sm leading-6 text-[#94a3b8]">Korben annonce des locations sur mesure à partir de 499 €/mois, une fourchette d’achat de 8 000 à 21 000 € HT selon le modèle et des locations événementielles à partir de 250 €.</p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
               <div className="sm:w-64">
                 <AddToCartBtn
@@ -277,14 +311,14 @@ export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
                   popular
                 />
               </div>
-              <a href={wa(`Bonjour XRAGENCY, je veux connaître les conditions de location du robot Korben ${active.name} pour mon entreprise.`)} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-3.5 label-mono text-[9px] font-semibold tracking-[.12em] text-white hover:bg-white hover:text-black transition">{tx("Demander une offre")} <ArrowRight className="h-4 w-4"/></a>
+              <a href={wa(`Bonjour XRAGENCY, je veux connaître les conditions de location du robot Korben ${active.name} pour mon entreprise.`)} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-[#090b10] px-5 py-3.5 label-mono text-[9px] font-semibold tracking-[.12em] text-white hover:bg-white text-black hover:text-white transition">{tx("Demander une offre")} <ArrowRight className="h-4 w-4"/></a>
             </div>
           </div>
         </div>
 
-        <div className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-7">
-          <a href="https://www.korbenforpeople.com/" target="_blank" rel="noreferrer" className="label-mono text-[8px] tracking-[.18em] text-white/35 hover:text-white">{tx("Catalogue officiel Korben ↗")}</a>
-          <a href={wa("Bonjour XRAGENCY, je souhaite être accompagné pour choisir et louer un robot Korben.")} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold tracking-[.12em] text-black">{tx("Parler à XRAGENCY")} <ArrowRight className="h-4 w-4"/></a>
+        <div className="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-7">
+          <a href="https://www.korbenforpeople.com/" target="_blank" rel="noreferrer" className="label-mono text-[8px] tracking-[.18em] text-[#94a3b8] hover:text-white">{tx("Catalogue officiel Korben ↗")}</a>
+          <a href={wa("Bonjour XRAGENCY, je souhaite être accompagné pour choisir et louer un robot Korben.")} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-white text-black px-5 py-3 label-mono text-[9px] font-semibold tracking-[.12em] text-white hover:bg-[#8b704f] transition">{tx("Parler à XRAGENCY")} <ArrowRight className="h-4 w-4"/></a>
         </div>
       </div>
     </section>

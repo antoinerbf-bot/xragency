@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { ArrowRight, CheckCircle2, Play } from "lucide-react";
+import { ArrowRight, CheckCircle2, Play, Shield, Sparkles, Volume2, Zap } from "lucide-react";
 import { useLang, type Lang } from "@/lib/i18n";
 
 interface Chapter {
@@ -11,54 +11,44 @@ interface Chapter {
 
 const CHAPTERS: Record<Lang, Chapter[]> = {
   fr: [
-    { id: "intro", num: "00", label: "Introduction", time: 0 },
-    { id: "probleme", num: "01", label: "Le Problème", time: 9.7 },
-    { id: "solution", num: "02", label: "Acquisition XR", time: 32.0 },
-    { id: "web", num: "03", label: "Web < 0.4s", time: 41.05 },
-    { id: "maps", num: "04", label: "Google Maps Top 3", time: 50.55 },
-    { id: "social", num: "05", label: "Social & Branding", time: 62.05 },
-    { id: "ecosystem", num: "06", label: "SEO & Robots", time: 75.6 },
-    { id: "proof", num: "07", label: "Maquette & 5 Jours", time: 86.85 },
+    { id: "intro", num: "01", label: "Le Constat", time: 0 },
+    { id: "probleme", num: "02", label: "Prise de conscience", time: 8.08 },
+    { id: "solution", num: "03", label: "Vision Studio XR", time: 17.6 },
+    { id: "web", num: "04", label: "Web · Maps · Social", time: 25.84 },
+    { id: "ecosystem", num: "05", label: "CRM · SEO · IA", time: 36.96 },
+    { id: "proof", num: "06", label: "Démarrer ensemble", time: 46.12 },
   ],
   en: [
-    { id: "intro", num: "00", label: "Intro", time: 0 },
-    { id: "probleme", num: "01", label: "The Problem", time: 9.7 },
-    { id: "solution", num: "02", label: "XR Growth", time: 32.0 },
-    { id: "web", num: "03", label: "Web < 0.4s", time: 41.05 },
-    { id: "maps", num: "04", label: "Google Maps Top 3", time: 50.55 },
-    { id: "social", num: "05", label: "Social & Brand", time: 62.05 },
-    { id: "ecosystem", num: "06", label: "SEO & Robots", time: 75.6 },
-    { id: "proof", num: "07", label: "Mockup & 5 Days", time: 86.85 },
+    { id: "intro", num: "01", label: "The Context", time: 0 },
+    { id: "probleme", num: "02", label: "First Impression", time: 8.08 },
+    { id: "solution", num: "03", label: "XR Craft", time: 17.6 },
+    { id: "web", num: "04", label: "Web · Maps · Social", time: 25.84 },
+    { id: "ecosystem", num: "05", label: "CRM · SEO · AI", time: 36.96 },
+    { id: "proof", num: "06", label: "Begin Project", time: 46.12 },
   ],
   vi: [
-    { id: "intro", num: "00", label: "Giới thiệu", time: 0 },
-    { id: "probleme", num: "01", label: "Vấn đề", time: 9.7 },
-    { id: "solution", num: "02", label: "Hệ thống XR", time: 32.0 },
-    { id: "web", num: "03", label: "Web < 0.4s", time: 41.05 },
-    { id: "maps", num: "04", label: "Google Maps Top 3", time: 50.55 },
-    { id: "social", num: "05", label: "Social & Brand", time: 62.05 },
-    { id: "ecosystem", num: "06", label: "SEO & Robot", time: 75.6 },
-    { id: "proof", num: "07", label: "Bản mẫu 5 ngày", time: 86.85 },
+    { id: "intro", num: "01", label: "Thực trạng", time: 0 },
+    { id: "probleme", num: "02", label: "Tìm kiếm Google", time: 8.08 },
+    { id: "solution", num: "03", label: "Giải pháp XR", time: 17.6 },
+    { id: "web", num: "04", label: "Web · Maps · Social", time: 25.84 },
+    { id: "ecosystem", num: "05", label: "CRM · SEO · AI", time: 36.96 },
+    { id: "proof", num: "06", label: "Bắt đầu ngay", time: 46.12 },
   ],
   ar: [
-    { id: "intro", num: "00", label: "المقدمة", time: 0 },
-    { id: "probleme", num: "01", label: "المشكلة", time: 9.7 },
-    { id: "solution", num: "02", label: "منظومة النمو", time: 32.0 },
-    { id: "web", num: "03", label: "مواقع فائقة السرعة", time: 41.05 },
-    { id: "maps", num: "04", label: "خرائط جوجل #1", time: 50.55 },
-    { id: "social", num: "05", label: "التواصل والهوية", time: 62.05 },
-    { id: "ecosystem", num: "06", label: "سيو وروبوتات", time: 75.6 },
-    { id: "proof", num: "07", label: "معاينة مجانية", time: 86.85 },
+    { id: "intro", num: "01", label: "الواقع", time: 0 },
+    { id: "probleme", num: "02", label: "الانطباع الأول", time: 8.08 },
+    { id: "solution", num: "03", label: "منهجية XR", time: 17.6 },
+    { id: "web", num: "04", label: "المواقع والخرائط", time: 25.84 },
+    { id: "ecosystem", num: "05", label: "نظام CRM والسيو", time: 36.96 },
+    { id: "proof", num: "06", label: "ابدأ مشروعك", time: 46.12 },
   ],
   ru: [
-    { id: "intro", num: "00", label: "Введение", time: 0 },
-    { id: "probleme", num: "01", label: "Проблема", time: 9.7 },
-    { id: "solution", num: "02", label: "Система роста", time: 32.0 },
-    { id: "web", num: "03", label: "Web < 0.4с", time: 41.05 },
-    { id: "maps", num: "04", label: "Google Maps Top 3", time: 50.55 },
-    { id: "social", num: "05", label: "SMM и Брендинг", time: 62.05 },
-    { id: "ecosystem", num: "06", label: "SEO и Роботы", time: 75.6 },
-    { id: "proof", num: "07", label: "Макет за 5 дней", time: 86.85 },
+    { id: "intro", num: "01", label: "Контекст", time: 0 },
+    { id: "probleme", num: "02", label: "Первый контакт", time: 8.08 },
+    { id: "solution", num: "03", label: "Подход XR", time: 17.6 },
+    { id: "web", num: "04", label: "Сайты · Maps · SMM", time: 25.84 },
+    { id: "ecosystem", num: "05", label: "CRM · SEO · ИИ", time: 36.96 },
+    { id: "proof", num: "06", label: "Начать проект", time: 46.12 },
   ],
 };
 
@@ -67,60 +57,51 @@ const SECTION_COPY: Record<
   { kicker: string; title1: string; titleAccent: string; sub: string; watch: string; cta: string }
 > = {
   fr: {
-    kicker: "PRÉSENTATION VIDÉO · 1 MIN 40",
-    title1: "Comment transformer votre image en ",
-    titleAccent: "machine à clients.",
-    sub: "Web Haute Couture, Google Maps Top 3, Réseaux Sociaux, Branding, SEO & Robotique — découvrez tout notre écosystème en moins de deux minutes.",
-    watch: "Regarder la présentation · 1 min 40",
-    cta: "Obtenir ma maquette offerte",
+    kicker: "LE FILM INSTITUTIONNEL · 55 SEC",
+    title1: "L'art de séduire, ",
+    titleAccent: "la certitude de convertir.",
+    sub: "Plongez dans les coulisses du Studio XR. Découvrez comment nos directeurs artistiques et ingénieurs transforment chaque pixel en autorité commerciale pour votre marque.",
+    watch: "Lire le film cinéma",
+    cta: "Réserver votre cadrage",
   },
   en: {
-    kicker: "VIDEO PRESENTATION · 1 MIN 40",
-    title1: "How to turn your brand presence into a ",
-    titleAccent: "client engine.",
-    sub: "Haute Couture Web, Google Maps Top 3, Social Media, Branding, SEO & Robotics — our complete acquisition system in under two minutes.",
-    watch: "Watch the presentation · 1 min 40",
-    cta: "Claim my free mockup",
+    kicker: "THE STUDIO FILM · 55 SEC",
+    title1: "The art of prestige, ",
+    titleAccent: "the power of conversion.",
+    sub: "Step inside the XR Studio. See how our art directors and engineers engineer digital authority that converts high-value clients effortlessly.",
+    watch: "Play cinema film",
+    cta: "Book private briefing",
   },
   vi: {
-    kicker: "VIDEO GIỚI THIỆU · 1 PHÚT 40",
-    title1: "Cách biến hiện diện số thành ",
-    titleAccent: "cỗ máy thu hút khách hàng.",
-    sub: "Website Cao Cấp, Google Maps Top 3, Mạng Xã Hội, Thương Hiệu, SEO & Robot Korben — khám phá toàn bộ hệ sinh thái trong chưa đầy 2 phút.",
-    watch: "Xem video giới thiệu · 1 phút 40",
-    cta: "Nhận bản thiết kế mẫu miễn phí",
+    kicker: "PHIM GIỚI THIỆU STUDIO · 55 GIÂY",
+    title1: "Nghệ thuật đẳng cấp, ",
+    titleAccent: "chinh phục khách hàng.",
+    sub: "Khám phá cách XR Agency kết hợp chỉ đạo nghệ thuật, tìm kiếm địa phương và giải pháp số để tạo nên vị thế dẫn đầu.",
+    watch: "Xem phim điện ảnh",
+    cta: "Trao đổi dự án",
   },
   ar: {
-    kicker: "عرض مرئي · دقيقة و40 ثانية",
-    title1: "كيف تحوّل حضورك الرقمي إلى ",
-    titleAccent: "محرك لاستقطاب العملاء.",
-    sub: "مواقع راقية، تصدر خرائط جوجل، إدارة الشبكات، الهوية، السيو والروبوتات — اكتشف منظومتنا المتكاملة في أقل من دقيقتين.",
-    watch: "شاهد العرض التقديمي · 1:40",
-    cta: "احصل على معاينتك المجانية",
+    kicker: "فيلم الوكالة السينمائي · 55 ثانية",
+    title1: "فن الإبهار الرقمي، ",
+    titleAccent: "ويقين مضاعفة المبيعات.",
+    sub: "اكتشف كيف نجمع بين الإخراج الفني الراقي وأحدث التقنيات لترسيخ ريادتك في السوق.",
+    watch: "شاهد الفيلم السينمائي",
+    cta: "احجز جلسة استشارية",
   },
   ru: {
-    kicker: "ВИДЕО-ПРЕЗЕНТАЦИЯ · 1 МИН 40",
-    title1: "Как превратить цифровой образ в ",
-    titleAccent: "поток заявок и продаж.",
-    sub: "Премиум-сайты, Google Maps Топ-3, соцсети, брендинг, SEO и роботы Korben — вся экосистема XR Agency за две минуты.",
-    watch: "Смотреть презентацию · 1 мин 40",
-    cta: "Получить бесплатный макет",
+    kicker: "ФИЛЬМ О СТУДИИ · 55 СЕК",
+    title1: "Искусство премиум-образа, ",
+    titleAccent: "сила высоких конверсий.",
+    sub: "Погрузитесь в процесс XR Agency. Узнайте, как эстетика, безупречный код и локальное продвижение приносят состоятельных клиентов.",
+    watch: "Смотреть фильм",
+    cta: "Обсудить проект",
   },
-};
-
-const PROOFS: Record<Lang, string[]> = {
-  fr: ["Garantie contractuelle", "Direction artistique sur mesure", "Accompagnement humain dédié", "Maquette offerte sans engagement"],
-  en: ["Contractual guarantee", "Bespoke art direction", "Dedicated senior team", "Free custom mockup"],
-  vi: ["Cam kết hợp đồng", "Chỉ đạo nghệ thuật độc bản", "Đội ngũ chuyên gia đồng hành", "Tặng bản thiết kế mẫu"],
-  ar: ["ضمانات تعاقدية", "إخراج فني حصري", "فريق استشاري مخصص", "معاينة مجانية بدون التزام"],
-  ru: ["Гарантия по договору", "Индивидуальный стиль", "Персональная команда", "Бесплатный макет без обязательств"],
 };
 
 export function HeroVslPlayer() {
   const { lang } = useLang();
   const currentLang = (lang || "fr") as Lang;
   const chapters = CHAPTERS[currentLang] ?? CHAPTERS.fr;
-  const proofs = PROOFS[currentLang] ?? PROOFS.fr;
   const copy = SECTION_COPY[currentLang] ?? SECTION_COPY.fr;
 
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -131,7 +112,7 @@ export function HeroVslPlayer() {
     const video = videoRef.current;
     if (!video) return;
     setIsPlaying(true);
-    video.play().catch(() => { });
+    video.play().catch(() => {});
   };
 
   const jumpToChapter = (idx: number, time: number) => {
@@ -140,7 +121,7 @@ export function HeroVslPlayer() {
     if (!video) return;
     setIsPlaying(true);
     video.currentTime = time;
-    video.play().catch(() => { });
+    video.play().catch(() => {});
   };
 
   const handleTimeUpdate = () => {
@@ -158,116 +139,172 @@ export function HeroVslPlayer() {
   return (
     <section
       id="vsl-showcase"
-      className="relative overflow-hidden border-t border-[#101114]/10 bg-[#f8f6f0] py-14 sm:py-20 text-[#101114]"
+      className="relative overflow-hidden border-t border-white/10 bg-[#050608] py-24 sm:py-32 lg:py-36 text-white"
     >
-      <div className="mx-auto max-w-6xl px-5 sm:px-8 lg:px-12">
-        {/* Clean Editorial Header matching Hero above */}
-        <div className="mx-auto max-w-3xl text-center mb-8 sm:mb-11">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#8b704f]/30 bg-white/80 px-4 py-1.5 shadow-xs backdrop-blur-md mb-4">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#b48f5a] animate-pulse" />
-            <span className="label-mono text-[7.5px] sm:text-[8.5px] font-semibold tracking-[.22em] text-[#554b3e] uppercase">
-              {copy.kicker}
-            </span>
+      {/* Subtle Cinema Light Bleed */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[550px] w-[85%] rounded-full bg-[#d4af37]/8 blur-[180px]"
+      />
+
+      <div className="relative mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-14">
+        {/* Cinema Header */}
+        <div className="grid gap-8 lg:grid-cols-[0.58fr_0.42fr] lg:items-end mb-14 sm:mb-16">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#d4af37]/35 bg-[#d4af37]/10 px-4 py-1.5 text-[8.5px] font-mono font-bold tracking-[.26em] text-[#d4af37] uppercase mb-5 backdrop-blur-md">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#d4af37] animate-pulse" />
+              <span>{copy.kicker}</span>
+              <span className="opacity-30">|</span>
+              <span>FILM STUDIO · 55 SEC</span>
+            </div>
+            <h2 className="text-[clamp(2.4rem,4.4vw,4.4rem)] font-extrabold leading-[1.0] tracking-[-0.04em] text-white [text-wrap:balance]">
+              {copy.title1}
+              <span className="font-serif italic font-normal text-[#d4af37] tracking-tight block sm:inline">
+                {copy.titleAccent}
+              </span>
+            </h2>
           </div>
 
-          <h2 className="display-serif text-[clamp(1.85rem,3.6vw,3rem)] font-medium leading-[1.08] tracking-[-0.03em] text-[#101114] [text-wrap:balance]">
-            {copy.title1}
-            <span className="italic font-light text-[#8b704f]">{copy.titleAccent}</span>
-          </h2>
-
-          <p className="mx-auto mt-3.5 max-w-2xl text-[13.5px] sm:text-[15px] leading-relaxed text-[#5c5347]">
-            {copy.sub}
-          </p>
-        </div>
-
-        {/* Video Frame */}
-        <div className="relative mx-auto w-full max-w-5xl">
-          <div className="group relative overflow-hidden rounded-2xl sm:rounded-3xl border border-[#141312]/15 bg-[#121110] shadow-[0_28px_75px_-22px_rgba(20,19,18,0.48),0_0_0_1px_rgba(255,255,255,0.65)] transition-all">
-            <div className="relative aspect-video w-full overflow-hidden bg-[#121110]">
-              <video
-                ref={videoRef}
-                src="/videos/xr-agency-vsl.mp4"
-                poster="/videos/vsl-poster.jpg"
-                controls={isPlaying}
-                playsInline
-                preload="metadata"
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => {
-                  if (videoRef.current?.ended) setIsPlaying(false);
-                }}
-                onEnded={() => setIsPlaying(false)}
-                onTimeUpdate={handleTimeUpdate}
-                className="h-full w-full object-cover"
-              >
-                <source src="/videos/xr-agency-vsl.mp4" type="video/mp4" />
-                Votre navigateur ne supporte pas la lecture vidéo.
-              </video>
-
-              {!isPlaying && (
-                <button
-                  type="button"
-                  onClick={startPlayback}
-                  className="absolute inset-0 z-20 flex items-end justify-center pb-6 sm:pb-9 bg-gradient-to-t from-black/60 via-transparent to-transparent cursor-pointer transition-opacity"
-                  aria-label={copy.watch}
-                >
-                  <div className="flex items-center gap-3 sm:gap-3.5 rounded-full border border-[#c5a880]/45 bg-[#141312]/95 hover:bg-[#1e1b17] text-[#f7f4ed] px-5 sm:px-6 py-2.5 sm:py-3 font-semibold text-sm sm:text-base shadow-[0_14px_40px_rgba(20,19,18,0.75)] hover:scale-105 active:scale-95 transition-all backdrop-blur-md">
-                    <span className="relative flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#e7cfa8] to-[#b48f5a] text-[#141312] shrink-0">
-                      <span className="absolute inset-0 rounded-full border-2 border-[#e7cfa8]/75 animate-ping opacity-75" />
-                      <Play className="h-4 w-4 sm:h-4.5 sm:w-4.5 fill-[#141312] ml-0.5" />
-                    </span>
-                    <span className="tracking-tight">{copy.watch}</span>
-                  </div>
-                </button>
-              )}
-            </div>
-
-            {/* Chapters Scrub Bar */}
-            <div className="border-t border-white/10 bg-[#121110] p-2.5 sm:p-3.5">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5">
-                <span className="label-mono text-[7px] sm:text-[8px] font-semibold text-[#e8cfa6] tracking-[.18em] uppercase shrink-0">
-                  Chapitres :
-                </span>
-
-                <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5 w-full">
-                  {chapters.map((chap, idx) => (
-                    <button
-                      key={chap.id}
-                      type="button"
-                      onClick={() => jumpToChapter(idx, chap.time)}
-                      className={`rounded-lg px-2 py-1.5 text-center transition border ${
-                        activeChapter === idx
-                          ? "border-[#c5a880] bg-[#c5a880]/20 text-[#f7f4ed] font-bold"
-                          : "border-white/10 bg-white/5 text-white/70 hover:bg-white/12 hover:text-white"
-                      }`}
-                    >
-                      <span className="label-mono text-[6.5px] text-[#e8cfa6] block">{chap.num}</span>
-                      <span className="text-[8.5px] sm:text-[9.5px] font-medium line-clamp-1">{chap.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Direct CTA + Reassurance strip below video */}
-          <div className="mt-6 flex flex-col items-center gap-4">
+          <div className="flex flex-col sm:flex-row lg:flex-col lg:items-end justify-between gap-5">
+            <p className="max-w-md text-sm sm:text-base leading-relaxed text-neutral-300 lg:text-right">
+              {copy.sub}
+            </p>
             <a
               href="#quote"
-              className="group inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full bg-[#111215] px-7 py-3 text-[10px] font-bold uppercase tracking-[.12em] text-white shadow-lg transition duration-300 hover:-translate-y-0.5 hover:bg-[#302a23]"
+              className="group inline-flex items-center gap-2.5 font-mono text-xs font-bold uppercase tracking-[.18em] text-[#d4af37] hover:text-white transition shrink-0"
             >
               <span>{copy.cta}</span>
-              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 text-[#d4af37]" />
             </a>
-
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-[11px] text-[#5c5347]">
-              {proofs.map((proof, i) => (
-                <div key={i} className="flex items-center gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-[#8b704f]" />
-                  <span className="font-medium text-[#2d2822]">{proof}</span>
-                </div>
-              ))}
-            </div>
           </div>
+        </div>
+
+        {/* 21:9 CinemaScope Theater Canvas with Ambient Titanium Glass Frame */}
+        <div className="relative overflow-hidden rounded-[2.2rem] border border-[#d4af37]/25 bg-[#090b10] p-2.5 sm:p-4 shadow-[0_45px_120px_-30px_rgba(0,0,0,0.95)]">
+          {/* Subtle Outer Specular Sheen */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-white/[0.04] via-transparent to-[#d4af37]/[0.03]" />
+
+          <div className="relative aspect-[21/10] sm:aspect-[21/9] w-full overflow-hidden rounded-[1.6rem] bg-black">
+            <video
+              ref={videoRef}
+              src="/videos/xr-agency-vsl.mp4"
+              poster="/videos/vsl-poster.jpg"
+              controls={isPlaying}
+              playsInline
+              preload="metadata"
+              onPlay={() => setIsPlaying(true)}
+              onPause={() => {
+                if (videoRef.current?.ended) setIsPlaying(false);
+              }}
+              onEnded={() => setIsPlaying(false)}
+              onTimeUpdate={handleTimeUpdate}
+              className="h-full w-full object-cover"
+            >
+              <source src="/videos/xr-agency-vsl.mp4" type="video/mp4" />
+              Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
+
+            {!isPlaying && (
+              <button
+                type="button"
+                onClick={startPlayback}
+                className="group absolute inset-0 z-20 flex items-center justify-center bg-black/45 hover:bg-black/30 cursor-pointer transition-colors backdrop-blur-[2px]"
+                aria-label={copy.watch}
+              >
+                <div className="relative flex items-center gap-4.5 rounded-full border border-white/25 bg-black/80 px-8 py-4.5 text-sm font-bold text-white shadow-[0_0_60px_rgba(212,175,55,0.35)] backdrop-blur-2xl transition duration-300 group-hover:scale-105 group-hover:border-[#d4af37]">
+                  <span className="relative grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-[#f3e8c8] via-[#d4af37] to-[#8f7422] text-[#050608] shrink-0 shadow-[0_0_25px_rgba(212,175,55,0.5)]">
+                    <Play className="h-5 w-5 fill-current ml-0.5" />
+                  </span>
+                  <div className="text-left">
+                    <span className="block font-sans text-sm tracking-tight text-white font-semibold">{copy.watch}</span>
+                    <span className="block font-mono text-[9px] uppercase tracking-wider text-[#d4af37] font-bold">55 SEC · FILM STUDIO</span>
+                  </div>
+                </div>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* 4 Client Reassurance & Security Pillars */}
+        <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+          {[
+            {
+              icon: Shield,
+              title: "Délais cadrés",
+              sub: "Planning défini selon la formule",
+            },
+            {
+              icon: Zap,
+              title: "Propriété 100% Exclusive",
+              sub: "Zéro abonnement forcé, code cédé",
+            },
+            {
+              icon: Sparkles,
+              title: "Architecture Next-Gen",
+              sub: "Optimisation technique & suivi des performances",
+            },
+            {
+              icon: CheckCircle2,
+              title: "Accompagnement VIP",
+              sub: "Un interlocuteur dédié au projet",
+            },
+          ].map((pillar) => {
+            const Icon = pillar.icon;
+            return (
+              <div
+                key={pillar.title}
+                className="flex items-center gap-3.5 rounded-2xl border border-white/8 bg-[#090b10] px-4 py-3.5 backdrop-blur-md"
+              >
+                <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#d4af37]/10 text-[#d4af37] shrink-0 border border-[#d4af37]/20">
+                  <Icon className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-bold text-white tracking-tight leading-snug truncate">
+                    {pillar.title}
+                  </p>
+                  <p className="text-[10.5px] text-neutral-400 leading-snug truncate">
+                    {pillar.sub}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* High-Precision Chapter Scrub Matrix */}
+        <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 border-t border-white/10 pt-6">
+          {chapters.map((chap, idx) => (
+            <button
+              key={chap.id}
+              type="button"
+              onClick={() => jumpToChapter(idx, chap.time)}
+              className={`group text-left p-3 rounded-xl border transition-all ${
+                activeChapter === idx
+                  ? "border-[#d4af37] bg-[#d4af37]/15 text-white shadow-[0_0_20px_rgba(212,175,55,0.2)]"
+                  : "border-white/8 bg-white/[0.02] text-neutral-400 hover:border-white/20 hover:text-white"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span
+                  className={`font-mono text-[9.5px] tracking-widest ${
+                    activeChapter === idx ? "text-[#d4af37] font-bold" : "opacity-60"
+                  }`}
+                >
+                  {chap.num}
+                </span>
+                {activeChapter === idx && (
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#d4af37] animate-ping" />
+                )}
+              </div>
+              <span
+                className={`mt-1.5 block text-xs leading-snug ${
+                  activeChapter === idx ? "font-bold text-white" : "font-medium"
+                }`}
+              >
+                {chap.label}
+              </span>
+            </button>
+          ))}
         </div>
       </div>
     </section>

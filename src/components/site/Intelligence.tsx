@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, MapPinned, MousePointerClick, Search, Sparkles, TrendingUp, X, ArrowUpRight } from "lucide-react";
+import { Check, MapPinned, MousePointerClick, Search, Sparkles, TrendingUp, X } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { Reveal } from "./primitives";
@@ -20,7 +20,7 @@ const copy = {
     seoTitle: "SEO · être trouvé naturellement",
     seoText: "Le SEO travaille votre site, ses contenus et sa structure pour aider Google à comprendre vos pages et les faire apparaître sur les recherches pertinentes.",
     adsTitle: "Google Ads · acheter de la visibilité",
-    adsText: "Google Ads place des annonces sponsorisées devant des recherches pertinentes. Le ciblage, les enchères, la qualité de l’annonce et la page de destination influencent la diffusion et le coût.",
+    adsText: "Ads correspond à des annonces payantes. Le budget, le ciblage et les enchères jouent notamment sur la diffusion. XRAGENCY ne vend pas cette prestation.",
     why: "Ce qui influence cette surface",
     mapsSignals: ["Pertinence de la fiche", "Zone et distance", "Avis & réputation", "Qualité des informations"],
     seoSignals: ["Pertinence des pages", "Structure technique", "Contenu utile", "Autorité & concurrence"],
@@ -42,7 +42,7 @@ const copy = {
     seoTitle: "SEO · be found organically",
     seoText: "SEO works on your website, content and structure so Google can understand your pages and surface them for relevant searches.",
     adsTitle: "Google Ads · buy visibility",
-    adsText: "Google Ads uses sponsored placements for relevant searches. Targeting, bidding, ad quality and landing pages influence delivery and cost.",
+    adsText: "Ads uses paid placements. Budget, targeting and bidding affect delivery. XRAGENCY does not offer this service.",
     why: "What influences this surface",
     mapsSignals: ["Profile relevance", "Area and distance", "Reviews & reputation", "Information quality"],
     seoSignals: ["Page relevance", "Technical structure", "Useful content", "Authority & competition"],
@@ -64,7 +64,7 @@ const copy = {
     seoTitle: "SEO · được tìm thấy tự nhiên",
     seoText: "SEO tối ưu website, nội dung và cấu trúc để Google hiểu các trang và hiển thị chúng cho những tìm kiếm phù hợp.",
     adsTitle: "Google Ads · mua khả năng hiển thị",
-    adsText: "Google Ads sử dụng vị trí quảng cáo trả phí cho các tìm kiếm phù hợp. Nhắm mục tiêu, đấu giá, chất lượng quảng cáo và trang đích ảnh hưởng đến phân phối và chi phí.",
+    adsText: "Ads sử dụng vị trí quảng cáo trả phí. Ngân sách, nhắm mục tiêu và đấu giá ảnh hưởng đến việc phân phối. XRAGENCY không cung cấp dịch vụ này.",
     why: "Điều gì ảnh hưởng đến bề mặt này",
     mapsSignals: ["Mức độ liên quan hồ sơ", "Khu vực và khoảng cách", "Đánh giá & uy tín", "Chất lượng thông tin"],
     seoSignals: ["Mức độ liên quan trang", "Cấu trúc kỹ thuật", "Nội dung hữu ích", "Uy tín & cạnh tranh"],
@@ -73,8 +73,6 @@ const copy = {
     bridgeText: "Báo giá cho biết doanh nghiệp có thể cần chuyên môn nào. Mô phỏng này cho thấy các chuyên môn đó kết hợp ra sao.",
     next: "Khám phá chuyên môn XRAGENCY", unavailable: "XRAGENCY không cung cấp dịch vụ này.",
   },
-  ar: { eyebrow: "المرحلة 02 · محاكاة Google", title: "شاهد الآن كيف يجدك عملاؤك.", intro: "محاكاة واضحة لفهم Google Maps وSEO وGoogle Ads قبل اختيار الاستراتيجية.", searchLabel: "محاكاة البحث", search: "شركة تصميم داخلي فاخرة في دبي", maps: "Google Maps", seo: "SEO", ads: "Google Ads", mapsShort: "الظهور المحلي", organic: "النتائج الطبيعية", sponsored: "إعلانات مدفوعة", mapsTitle: "Google Maps · الظهور محلياً", mapsText: "تعتمد النتائج المحلية على ملاءمة الملف والمسافة والمراجعات وجودة المعلومات.", seoTitle: "SEO · الظهور الطبيعي", seoText: "يعمل SEO على الموقع والمحتوى والبنية لمساعدة Google على فهم الصفحات وإظهارها في عمليات البحث المناسبة.", adsTitle: "Google Ads · الظهور المدفوع", adsText: "تظهر إعلانات Google في مواضع مدفوعة. الاستهداف والمزايدة وجودة الإعلان والصفحة المقصودة تؤثر في الظهور والتكلفة.", why: "ما الذي يؤثر في هذه الواجهة", mapsSignals: ["ملاءمة الملف", "المنطقة والمسافة", "المراجعات والسمعة", "جودة المعلومات"], seoSignals: ["ملاءمة الصفحات", "البنية التقنية", "المحتوى المفيد", "المنافسة والسلطة"], adsSignals: ["الميزانية", "الاستهداف", "المزايدة", "ملاءمة الإعلان"], bridge: "أصبحت تعرف أين تُبنى رؤيتك الرقمية.", bridgeText: "يعرض لك العرض الخدمات التي قد تحتاجها شركتك، وهذه المحاكاة توضح كيف تعمل معاً.", next: "استكشف خبرات XRAGENCY", unavailable: "هذه الخدمة غير متاحة لدى XRAGENCY." },
-  ru: { eyebrow: "ЭТАП 02 · СИМУЛЯЦИЯ GOOGLE", title: "Посмотрите, как клиенты находят вас.", intro: "Понятная симуляция Google Maps, SEO и Google Ads перед выбором стратегии.", searchLabel: "Симуляция поиска", search: "премиальный дизайнер интерьеров в Дубае", maps: "Google Maps", seo: "SEO", ads: "Google Ads", mapsShort: "Локальная видимость", organic: "Органические результаты", sponsored: "Платная реклама", mapsTitle: "Google Maps · локальная видимость", mapsText: "Локальные результаты зависят от релевантности профиля, расстояния, отзывов и качества информации.", seoTitle: "SEO · органическая видимость", seoText: "SEO улучшает сайт, контент и структуру, чтобы Google понимал страницы и показывал их по релевантным запросам.", adsTitle: "Google Ads · платная видимость", adsText: "Google Ads использует платные размещения. Таргетинг, ставки, качество объявления и посадочная страница влияют на показы и стоимость.", why: "Что влияет на этот результат", mapsSignals: ["Релевантность профиля", "Зона и расстояние", "Отзывы и репутация", "Качество информации"], seoSignals: ["Релевантность страниц", "Техническая структура", "Полезный контент", "Авторитет и конкуренция"], adsSignals: ["Бюджет", "Таргетинг", "Ставки", "Релевантность объявления"], bridge: "Теперь вы понимаете, где строится видимость.", bridgeText: "Ваш расчёт показывает нужные компетенции, а эта симуляция показывает, как они работают вместе.", next: "Изучить экспертизу XRAGENCY", unavailable: "Эта услуга не предлагается XRAGENCY." },
 } as const;
 
 export function Intelligence() {
@@ -88,93 +86,43 @@ export function Intelligence() {
   }[surface];
   const Icon = data.icon;
 
-  const resultRows = {
-    maps: [
-      { name: "Exemple local A", meta: "4,9 ★ · 128 avis · Ouvert", tag: "Local 01" },
-      { name: "Exemple local B", meta: "4,8 ★ · 94 avis · Ouvert", tag: "Local 02" },
-      { name: "Exemple local C", meta: "4,7 ★ · 71 avis · Ouvert", tag: "Local 03" },
-    ],
-    seo: [
-      { name: "Exemple local B · Site officiel", meta: "www.exemple-agence.fr", tag: "Résultat 01" },
-      { name: "Architecture contemporaine à Paris", meta: "Guide · projets · expertise", tag: "Résultat 02" },
-      { name: "Architectes premium · Paris", meta: "Magazine · sélection", tag: "Résultat 03" },
-    ],
-    ads: [
-      { name: "Exemple local B — Architecture premium", meta: "Site officiel · Devis en ligne", tag: "ANNONCE" },
-      { name: "Architecture sur mesure — Paris", meta: "Consultation · Projet · Contact", tag: "ANNONCE" },
-      { name: "Exemple local C — Architecte", meta: "Prenez rendez-vous · Paris", tag: "ANNONCE" },
-    ],
-  }[surface];
-
   return (
-    <section id="google-simulation" className="relative border-b border-border/50 py-10 md:py-14">
-      <div className="mx-auto max-w-[1180px] px-4 md:px-8">
+    <section id="google-simulation" className="relative border-b border-border/50 py-20 md:py-28">
+      <div className="mx-auto max-w-7xl px-5 md:px-8">
         <Reveal>
-          <div className="mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-            <div>
-              <div className="mb-2 flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[.22em] text-muted-foreground"><Sparkles className="h-3 w-3" /> {t.eyebrow}</div>
-              <h2 className="text-2xl font-medium tracking-[-.05em] md:text-4xl">{t.title}</h2>
-              <p className="mt-2 max-w-2xl text-xs leading-5 text-muted-foreground md:text-sm">{t.intro}</p>
-            </div>
-            <div className="rounded-full border border-primary/15 bg-primary/[.04] px-3 py-1.5 text-[8px] uppercase tracking-[.16em] text-primary">3 surfaces · 1 recherche</div>
+          <div className="mb-10 max-w-4xl md:mb-14">
+            <div className="mb-4 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-muted-foreground"><Sparkles className="h-3.5 w-3.5" /> {t.eyebrow}</div>
+            <h2 className="text-4xl font-medium tracking-[-0.05em] md:text-6xl">{t.title}</h2>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground md:text-lg">{t.intro}</p>
           </div>
         </Reveal>
 
-        <Reveal delay={60}>
-          <div className="overflow-hidden rounded-[1.4rem] border border-border/80 bg-card/70 shadow-[0_30px_90px_-55px_rgba(0,0,0,.9)] backdrop-blur-xl">
-            <div className="border-b border-border/70 bg-background/70 p-3 md:p-4"><div className="mb-3 flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,.7)]"/><span className="text-[8px] font-medium uppercase tracking-[.14em] text-muted-foreground">Interface de recherche · simulation réaliste</span><span className="ml-auto rounded-full border border-border px-2 py-1 text-[7px] uppercase tracking-[.12em] text-muted-foreground">Pas un résultat réel</span></div>
-              <div className="mb-2 flex items-center justify-between text-[8px] uppercase tracking-[.16em] text-muted-foreground"><span>{t.searchLabel}</span><span>Google · simulation</span></div>
-              <div className="flex items-center gap-2 rounded-2xl border border-border bg-background px-3 py-2.5 text-xs shadow-sm md:text-sm">
-                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white text-[11px] font-bold text-[#4285F4]">G</span>
-                <Search className="h-3.5 w-3.5 text-muted-foreground" />
-                <span className="truncate">{t.search}</span>
-              </div>
+        <Reveal delay={70}>
+          <div className="overflow-hidden rounded-[2rem] border border-border bg-background shadow-2xl">
+            <div className="border-b border-border p-5 md:p-7">
+              <div className="mb-3 flex items-center justify-between gap-4"><span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{t.searchLabel}</span><span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Google / simulation</span></div>
+              <div className="flex items-center gap-3 rounded-2xl border border-border bg-muted/25 px-4 py-4 font-medium"><Search className="h-4 w-4 text-muted-foreground" /><span>{t.search}</span></div>
             </div>
-
-            <div className="grid grid-cols-3 border-b border-border/70">
-              {(["maps","seo","ads"] as Surface[]).map(id => {
+            <div className="grid border-b border-border md:grid-cols-3">
+              {(["maps", "seo", "ads"] as Surface[]).map((id) => {
                 const TabIcon = id === "maps" ? MapPinned : id === "seo" ? Search : MousePointerClick;
                 const label = id === "maps" ? t.maps : id === "seo" ? t.seo : t.ads;
                 const sub = id === "maps" ? t.mapsShort : id === "seo" ? t.organic : t.sponsored;
                 const active = surface === id;
-                return <button key={id} type="button" onClick={() => setSurface(id)} className={cn("relative flex min-h-[64px] items-center gap-2 border-r border-border/70 px-3 text-left last:border-r-0 md:px-5", active ? "bg-primary/[.07]" : "hover:bg-muted/30")}><span className={cn("grid h-8 w-8 shrink-0 place-items-center rounded-lg border", active ? "border-primary/35 bg-primary/10 text-primary" : "border-border text-muted-foreground")}><TabIcon className="h-4 w-4"/></span><span className="min-w-0"><span className="block truncate text-[10px] font-medium md:text-xs">{label}</span><span className="mt-0.5 hidden truncate text-[8px] text-muted-foreground sm:block">{sub}</span></span>{active&&<span className="absolute inset-x-0 bottom-0 h-0.5 bg-primary"/>}</button>;
+                return <button key={id} type="button" onClick={() => setSurface(id)} className={cn("flex min-h-20 items-center gap-4 border-b border-border px-5 text-left transition md:border-b-0 md:border-r last:md:border-r-0 md:px-7", active ? "bg-foreground/[0.055]" : "hover:bg-muted/25")}><span className={cn("rounded-xl border p-3", active ? "border-foreground/30" : "border-border")}><TabIcon className="h-5 w-5" /></span><span><span className="block font-medium">{label}</span><span className="mt-1 block text-xs text-muted-foreground">{sub}</span></span>{active && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-foreground" />}</button>;
               })}
             </div>
-
-            <div className="grid gap-3 p-3 md:grid-cols-[1.05fr_.95fr] md:p-4">
-              <div className="overflow-hidden rounded-xl border border-border bg-background">
-<div className="relative h-[300px] overflow-hidden bg-white">
-                  <img src={surface === "maps" ? "https://s3.amazonaws.com/images.seroundtable.com/t-google-local-pack-normal-map-1626952021.png" : surface === "seo" ? "https://img.labra.com.br/2026/serp-do-google-o-que-e-5.jpg" : "https://www.tribalism.com.au/img/services/images/google-ads-search-results.png"} alt={surface === "maps" ? "Exemple réel Google Maps Local Pack" : surface === "seo" ? "Exemple réel Google Search SEO" : "Exemple réel Google Ads"} className="h-full w-full object-cover object-top" loading="lazy" />
-                  <div className="absolute bottom-3 left-3 rounded-lg border border-black/10 bg-white/95 px-2.5 py-1.5 text-[7px] uppercase tracking-[.12em] text-black/65 shadow-lg">Exemple réel · interface Google</div>
-                </div>
-                <div className="divide-y divide-border/70">
-                  {resultRows.map((row,i) => <div key={row.name} className="flex items-center gap-2.5 px-3 py-3">
-                    <div className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-muted text-[8px] font-semibold">{i+1}</div>
-                    <div className="min-w-0 flex-1"><div className="truncate text-[10px] font-medium md:text-xs">{row.name}</div><div className="mt-0.5 truncate text-[8px] text-muted-foreground">{row.meta}</div></div>
-                    <span className={cn("shrink-0 rounded-full px-1.5 py-1 text-[7px] uppercase tracking-[.1em]", surface === "ads" ? "bg-amber-500/10 text-amber-700" : "bg-muted text-muted-foreground")}>{row.tag}</span>
-                  </div>)}
-                </div>
+            <div className="grid gap-4 p-4 md:grid-cols-[1.08fr_.92fr] md:p-6">
+              <div className={cn("rounded-2xl border p-6 md:p-7", data.accent)}>
+                <div className="flex items-start justify-between gap-6"><div><div className="mb-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{surface === "ads" ? t.sponsored : surface === "maps" ? t.mapsShort : t.organic}</div><h3 className="text-2xl font-medium tracking-tight md:text-3xl">{data.title}</h3></div><Icon className="h-6 w-6 shrink-0 text-muted-foreground" /></div>
+                <p className="mt-5 leading-7 text-muted-foreground">{data.text}</p>
+                <div className="mt-7 border-t border-border pt-6"><div className="mb-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{t.why}</div><div className="grid gap-2 sm:grid-cols-2">{data.signals.map((signal) => <div key={signal} className="flex items-center gap-2 rounded-xl bg-muted/35 px-3 py-3 text-sm"><Check className="h-4 w-4 shrink-0 text-muted-foreground" />{signal}</div>)}</div></div>
               </div>
-
-              <div className="rounded-xl border border-primary/15 bg-primary/[.035] p-4">
-                <div className="flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[.16em] text-primary"><TrendingUp className="h-3.5 w-3.5"/> {surface === "maps" ? "Google Maps" : surface === "seo" ? "SEO classique" : "Google Ads"}</div>
-                <h3 className="mt-2 text-lg font-medium tracking-tight md:text-xl">{data.title}</h3>
-                <p className="mt-2 text-[10px] leading-4.5 text-muted-foreground md:text-xs">{data.text}</p>
-                <div className="mt-3 rounded-lg border border-primary/15 bg-background/70 p-3 text-[9px] leading-4.5 text-muted-foreground">
-                  {surface === "maps" && <><strong className="text-foreground">Pourquoi c'est important :</strong> la recherche locale capte une grande partie de l'intention immédiate. La fiche, la distance, les avis et les informations comptent.</>}
-                  {surface === "seo" && <><strong className="text-foreground">À comprendre :</strong> ces résultats ne sont pas des annonces. Ils apparaissent grâce au travail de pertinence, contenu et structure du site.</>}
-                  {surface === "ads" && <><strong className="text-foreground">À comprendre :</strong> les trois lignes du haut sont des annonces payantes. Elles sont identifiées comme « ANNONCE ».</>}
-                </div>
-                <div className="mt-3 grid grid-cols-2 gap-1.5">{data.signals.map(signal => <div key={signal} className="rounded-lg bg-muted/35 px-2 py-2 text-[8px] leading-3.5"><Check className="mr-1 inline h-3 w-3 text-primary"/>{signal}</div>)}</div>
-              </div>
+              <div className="flex flex-col justify-center rounded-2xl border border-border bg-muted/15 p-6 md:p-7"><div className="flex items-center gap-3"><TrendingUp className="h-5 w-5" /><div className="font-medium">{t.bridge}</div></div><p className="mt-4 text-sm leading-6 text-muted-foreground">{t.bridgeText}</p>{surface === "ads" && <div className="mt-5 flex items-center gap-2 rounded-xl border border-amber-400/20 bg-amber-400/5 p-3 text-xs text-muted-foreground"><X className="h-4 w-4" />{t.unavailable}</div>}</div>
             </div>
           </div>
         </Reveal>
-
-        <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <span className="text-[8px] uppercase tracking-[.16em] text-muted-foreground">Simulez · comprenez · voyez où la visibilité se gagne</span>
-          <a href="#homepage-services" className="inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-4 py-2.5 text-[10px] font-medium text-background transition hover:-translate-y-0.5">{t.next} <ArrowUpRight className="h-3.5 w-3.5"/></a>
-        </div>
+        <div className="mt-7 flex justify-end"><a href="#homepage-services" className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-sm font-medium text-background transition hover:opacity-90">{t.next} <span aria-hidden>↓</span></a></div>
       </div>
     </section>
   );

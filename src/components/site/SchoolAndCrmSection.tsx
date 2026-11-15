@@ -54,34 +54,34 @@ export function SchoolAndCrmSection() {
               </div>
 
               {/* Right Column: Internal Team CRM Portal Card */}
-              <div className="p-6 sm:p-9 lg:p-10 bg-[#faf7f1] text-[#141312] flex flex-col justify-between gap-6">
+              <div className="p-6 sm:p-9 lg:p-10 bg-[#0c0e18] text-white border-t lg:border-t-0 lg:border-l border-white/10 flex flex-col justify-between gap-6">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between gap-3">
-                    <span className="label-mono text-[8.5px] font-bold text-[#9b7b4b] uppercase tracking-[.18em]">
+                    <span className="font-mono text-[8.5px] font-bold text-[#d4af37] uppercase tracking-[.18em]">
                       OUTIL INTERNE XR AGENCY
                     </span>
-                    <span className="rounded-full bg-[#141312] px-2.5 py-0.5 label-mono text-[7.5px] font-bold text-[#e8cfa6]">
+                    <span className="rounded-full bg-white px-2.5 py-0.5 font-mono text-[7.5px] font-bold text-black uppercase">
                       ACCÈS ÉQUIPE
                     </span>
                   </div>
 
-                  <h3 className="display-serif text-2xl sm:text-3xl text-[#141312] leading-tight">
+                  <h3 className="text-2xl sm:text-3xl text-white font-extrabold leading-tight">
                     CRM Équipe &amp; Distribution de Leads en direct.
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-[#5d564c] leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed">
                     Vos commerciaux, collaborateurs et élèves XR School se connectent à leur espace dédié pour recevoir les leads chauds, enregistrer leurs appels, suivre leurs statistiques de closing et déléguer les projets à la production.
                   </p>
 
-                  <div className="rounded-2xl border border-[#141312]/10 bg-white p-4 flex items-center gap-3.5 shadow-xs">
+                  <div className="rounded-2xl border border-white/10 bg-black/60 p-4 flex items-center gap-3.5 shadow-md">
                     <img
                       src={agentXrPortrait}
                       alt="Portail Équipe CRM XR Agency"
-                      className="h-12 w-12 rounded-xl object-cover object-top border border-[#b48f5a]/50 shrink-0"
+                      className="h-12 w-12 rounded-xl object-cover object-top border border-[#d4af37]/50 shrink-0"
                     />
                     <div className="min-w-0">
-                      <p className="text-xs font-bold text-[#141312]">Pilotage Direction &amp; Suivi Individuel</p>
-                      <p className="text-[11px] text-[#6f675b] mt-0.5">
+                      <p className="text-xs font-bold text-white">Pilotage Direction &amp; Suivi Individuel</p>
+                      <p className="text-[11px] text-[#94a3b8] mt-0.5">
                         Dispatch leads · Statistiques closing · Sous-traitance intégrée
                       </p>
                     </div>
@@ -90,9 +90,9 @@ export function SchoolAndCrmSection() {
 
                 <Link
                   to="/crm"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#141312] px-6 py-3.5 text-xs font-bold text-[#f7f4ed] shadow-md hover:bg-[#2a2621] transition"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 font-mono text-xs font-bold text-black uppercase shadow-lg hover:bg-[#d4af37] transition"
                 >
-                  Connexion Espace Équipe (/crm) <ArrowRight className="h-4 w-4 text-[#e8cfa6]" />
+                  Connexion Espace Équipe (/crm) <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
             </div>

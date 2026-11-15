@@ -92,7 +92,7 @@ export const SERVICES_PART1 = [
         ],
       },
       {
-        name: { fr: "Brand Identity Kit", en: "Brand Identity Kit", vi: "Brand Identity Kit" },
+        name: { fr: "Identité de Marque", en: "Brand Identity", vi: "Nhận diện Thương hiệu" },
         eur: 299,
         period: "once",
         popular: true,
@@ -105,11 +105,11 @@ export const SERVICES_PART1 = [
         ],
       },
       {
-        name: { fr: "Full Brand Suite", en: "Full Brand Suite", vi: "Full Brand Suite" },
+        name: { fr: "Charte Graphique Complète", en: "Complete Brand Guidelines", vi: "Charte Graphique Complète" },
         eur: 399,
         period: "once",
         features: [
-          { fr: "Tout le Brand Identity Kit inclus", en: "Everything in Brand Identity Kit included", vi: "Bao gồm trọn bộ Brand Identity Kit" },
+          { fr: "Toute l'Identité de Marque incluse", en: "Everything in Brand Identity included", vi: "Bao gồm trọn bộ Identité de Marque" },
           { fr: "Brand Book complet & guide des normes graphiques (PDF de 20+ pages)", en: "Complete Brand Book & visual identity guidelines (20+ pages PDF)", vi: "Brand Book chi tiết & quy chuẩn sử dụng (PDF hơn 20 trang)" },
           { fr: "Déclinaisons papeterie de prestige (cartes de visite, entêtes, devis)", en: "Luxury stationery kit (business cards, letterheads, invoice templates)", vi: "Bộ nhận diện văn phòng cao cấp (danh thiếp, tiêu đề thư, báo giá)" },
           { fr: "Pack signatures d'e-mail animées & corporate", en: "Corporate & animated email signatures pack", vi: "Gói chữ ký email đồng bộ chuyên nghiệp" },
@@ -140,23 +140,27 @@ export const SERVICES_PART1 = [
     ],
     plans: [
       {
-        name: { fr: "SEO Starter", en: "SEO Starter", vi: "SEO Starter" },
+        name: { fr: "SEO Essentiel", en: "SEO Essential", vi: "SEO Essentiel" },
         eur: 299,
         period: "month",
         features: [
-          { fr: "Audit & mots-clés", en: "Audit & keywords", vi: "Kiểm toán & từ khóa" },
-          { fr: "Optimisation on-page", en: "On-page optimisation", vi: "Tối ưu on-page" },
+          { fr: "Sans engagement", en: "No commitment", vi: "Không cam kết thời hạn" },
+          { fr: "Audit technique & ciblage mots-clés stratégiques", en: "Technical audit & strategic keyword targeting", vi: "Kiểm toán & từ khóa" },
+          { fr: "Optimisation on-page & balisage sémantique", en: "On-page optimisation & semantic tags", vi: "Tối ưu on-page" },
+          { fr: "Suivi mensuel des positions", en: "Monthly ranking report", vi: "Báo cáo thứ hạng hàng tháng" },
         ],
       },
       {
-        name: { fr: "SEO Growth", en: "SEO Growth", vi: "SEO Growth" },
+        name: { fr: "SEO Croissance", en: "SEO Growth", vi: "SEO Croissance" },
         eur: 499,
         period: "month",
+        commitmentMonths: 3,
         popular: true,
         features: [
-          { fr: "Tout le Starter", en: "Everything in Starter", vi: "Toàn bộ Starter" },
-          { fr: "Contenus mensuels", en: "Monthly content", vi: "Nội dung hàng tháng" },
-          { fr: "Reporting", en: "Reporting", vi: "Báo cáo" },
+          { fr: "Engagement 3 mois", en: "3-month commitment", vi: "Cam kết 3 tháng" },
+          { fr: "Tout le SEO Essentiel inclus", en: "Everything in SEO Essential included", vi: "Toàn bộ SEO Essentiel" },
+          { fr: "Création de contenus SEO ciblés chaque mois", en: "Monthly targeted SEO content creation", vi: "Nội dung SEO hàng tháng" },
+          { fr: "Maillage interne, autorité & reporting complet", en: "Internal linking, authority & full reporting", vi: "Báo cáo chuyên sâu" },
         ],
       },
     ],

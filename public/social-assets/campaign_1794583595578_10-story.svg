@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0a0f"/>
+      <stop offset="50%" stop-color="#12121e"/>
+      <stop offset="100%" stop-color="#050508"/>
+    </linearGradient>
+    <linearGradient id="cyan-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00f2fe"/>
+      <stop offset="100%" stop-color="#4facfe"/>
+    </linearGradient>
+    <linearGradient id="purple-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a18cd1"/>
+      <stop offset="100%" stop-color="#fbc2eb"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="30" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Arrière-plan dark cinematic -->
+  <rect width="1080" height="1920" fill="url(#bg-grad)"/>
+
+  <!-- Cercles d'ambiance lumineuse néon -->
+  <circle cx="850" cy="400" r="260" fill="#00f2fe" opacity="0.12" filter="url(#glow)"/>
+  <circle cx="200" cy="1400" r="320" fill="#a18cd1" opacity="0.1" filter="url(#glow)"/>
+
+  <!-- Grille cyberpunk discrète -->
+  <g opacity="0.04" stroke="#ffffff" stroke-width="1">
+    <line x1="0" y1="0" x2="0" y2="1920"/><line x1="108" y1="0" x2="108" y2="1920"/><line x1="216" y1="0" x2="216" y2="1920"/><line x1="324" y1="0" x2="324" y2="1920"/><line x1="432" y1="0" x2="432" y2="1920"/><line x1="540" y1="0" x2="540" y2="1920"/><line x1="648" y1="0" x2="648" y2="1920"/><line x1="756" y1="0" x2="756" y2="1920"/><line x1="864" y1="0" x2="864" y2="1920"/><line x1="972" y1="0" x2="972" y2="1920"/><line x1="1080" y1="0" x2="1080" y2="1920"/>
+    <line x1="0" y1="0" x2="1080" y2="0"/><line x1="0" y1="108" x2="1080" y2="108"/><line x1="0" y1="216" x2="1080" y2="216"/><line x1="0" y1="324" x2="1080" y2="324"/><line x1="0" y1="432" x2="1080" y2="432"/><line x1="0" y1="540" x2="1080" y2="540"/><line x1="0" y1="648" x2="1080" y2="648"/><line x1="0" y1="756" x2="1080" y2="756"/><line x1="0" y1="864" x2="1080" y2="864"/><line x1="0" y1="972" x2="1080" y2="972"/><line x1="0" y1="1080" x2="1080" y2="1080"/><line x1="0" y1="1188" x2="1080" y2="1188"/><line x1="0" y1="1296" x2="1080" y2="1296"/><line x1="0" y1="1404" x2="1080" y2="1404"/><line x1="0" y1="1512" x2="1080" y2="1512"/><line x1="0" y1="1620" x2="1080" y2="1620"/><line x1="0" y1="1728" x2="1080" y2="1728"/><line x1="0" y1="1836" x2="1080" y2="1836"/><line x1="0" y1="1944" x2="1080" y2="1944"/><line x1="0" y1="2052" x2="1080" y2="2052"/>
+  </g>
+
+  <!-- Header / Badge Marque -->
+  <g transform="translate(80, 140)">
+    <rect width="240" height="48" rx="24" fill="#ffffff" fill-opacity="0.07" stroke="#ffffff" stroke-opacity="0.15" stroke-width="1.5"/>
+    <circle cx="24" cy="24" r="6" fill="#00f2fe"/>
+    <text x="42" y="30" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="700" letter-spacing="3">XR AGENCY</text>
+  </g>
+
+  <!-- Tag Catégorie -->
+  <g transform="translate(80, 380)">
+    <text fill="#00f2fe" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="700" letter-spacing="4">STUDIO DIGITAL &amp; AGENTS IA</text>
+  </g>
+
+  <!-- Titre / Hook Viral Principal -->
+  <g transform="translate(80, 520)">
+    <foreignObject width="920" height="600">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 64px; font-weight: 800; line-height: 1.15; letter-spacing: -1.5px; text-shadow: 0 10px 30px rgba(0,0,0,0.8);">
+        AUDIT PERFORMANCE : WORDPRESS VS TANSTACK START
+      </div>
+    </foreignObject>
+  </g>
+
+  <!-- Sous-titre / Explication -->
+  <g transform="translate(80, 1050)">
+    <foreignObject width="920" height="300">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="color: #94a3b8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 34px; line-height: 1.4; font-weight: 400;">
+        Ton site met plus de 2 secondes à charger ? Tu perds littéralement 53% de tes ventes.
+      </div>
+    </foreignObject>
+  </g>
+
+  <!-- CTA Box & URL -->
+  <g transform="translate(80, 1560)">
+    <rect width="920" height="140" rx="28" fill="#0f172a" fill-opacity="0.8" stroke="url(#cyan-glow)" stroke-width="2"/>
+    <text x="60" y="85" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="36" font-weight="800" letter-spacing="1">DEVIS INSTANTANÉ EN LIGNE</text>
+    <text x="860" y="85" text-anchor="end" fill="#00f2fe" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="32" font-weight="700">xragencyai.com →</text>
+  </g>
+</svg>
