@@ -29,6 +29,11 @@ import { SERVICES, PERIOD_LABEL, CONTACT } from "@/lib/content";
 import { XR_PHOTOS } from "@/lib/photography";
 import { useLang } from "@/lib/i18n";
 
+import sectorConstruction from "@/assets/sector-construction.jpg";
+import sectorRestaurant from "@/assets/sector-restaurant.jpg";
+import sectorHealth from "@/assets/sector-health.jpg";
+import pfMaisonLumiere from "@/assets/pf-01-maison-lumiere.jpg";
+
 const WA_BASE = "https://wa.me/33767566783?text=";
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -47,28 +52,28 @@ export function WebsitesStudioPage() {
       subtitle: "Conçu pour déclencher des appels immédiats sur mobile et convertir le trafic local.",
       kpis: ["+210 % d'appels entrants", "Temps de chargement 0.6s", "Bouton d'appel & WhatsApp fixe"],
       recommendedPlan: "Site Vitrine Pro (499 €)",
-      image: XR_PHOTOS.websites,
+      image: sectorConstruction,
     },
     restaurant: {
       title: "Restaurants, Hôtellerie & Lieux de Vie",
       subtitle: "Direction artistique immersive, carte interactive et réservation de table en 2 clics.",
       kpis: ["Zéro commission sur réservations", "Menu QR & Photos HD", "Connexion Google Maps Top 3"],
       recommendedPlan: "Site Business Sur-Mesure (799 €)",
-      image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1600&q=85",
+      image: sectorRestaurant,
     },
     clinique: {
       title: "Cliniques, Cabinets Médicaux, Avocats & Prestige",
       subtitle: "Éditorial haute couture, prise de rendez-vous synchronisée et crédibilité institutionnelle.",
       kpis: ["Image de marque haut de gamme", "Prise de RDV Doctolib / Calendly", "Architecture SEO multi-villes"],
       recommendedPlan: "Site Business Sur-Mesure (799 €)",
-      image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=85",
+      image: sectorHealth,
     },
     ecommerce: {
       title: "Boutiques E-Commerce, Marques & Enseignes",
       subtitle: "Tunnel d'achat ultra-fluide, Apple Pay / Stripe, gestion des stocks et relance paniers.",
       kpis: ["Checkout 1-clic mobile", "Catalogue illimité", "SEO fiches produits automatisé"],
       recommendedPlan: "Site E-Commerce & Réservation (1 499 €)",
-      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=85",
+      image: pfMaisonLumiere,
     },
   };
 

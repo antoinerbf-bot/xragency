@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import createGlobe from "cobe";
 import { Globe2, MapPin, Sparkles, ArrowRight, ShieldCheck, CheckCircle2, Users } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 
@@ -218,351 +219,127 @@ const GLOBAL_HUBS: GlobalHub[] = [
   },
 ];
 
-// Simplified continent land dots (lat, lng) for realistic 3D Earth rendering
-const LAND_COORDS: Array<[number, number]> = [
-  // Europe
-  [48.8, 2.3], [51.5, -0.1], [40.4, -3.7], [41.9, 12.5], [52.5, 13.4], [46.2, 6.1], [59.3, 18.0], [60.1, 24.9], [50.0, 14.4], [47.5, 19.0], [38.7, -9.1], [53.3, -6.2], [55.7, 12.5], [37.9, 23.7], [44.4, 26.1], [52.2, 21.0],
-  // Middle East & Africa
-  [25.2, 55.3], [24.7, 46.7], [30.0, 31.2], [33.5, -7.6], [36.8, 10.1], [14.7, -17.4], [6.5, 3.3], [-1.2, 36.8], [-26.2, 28.0], [-33.9, 18.4], [32.0, 34.8], [41.0, 28.9],
-  // Asia
-  [10.8, 106.6], [21.0, 105.8], [1.3, 103.8], [13.7, 100.5], [3.1, 101.6], [14.6, 120.9], [22.3, 114.1], [31.2, 121.4], [39.9, 116.4], [35.6, 139.6], [37.5, 126.9], [28.6, 77.2], [19.0, 72.8], [12.9, 77.5], [-6.2, 106.8],
-  // Oceania
-  [-33.8, 151.2], [-37.8, 144.9], [-27.4, 153.0], [-36.8, 174.7],
-  // North America
-  [40.7, -74.0], [25.7, -80.2], [34.0, -118.2], [37.7, -122.4], [41.8, -87.6], [29.7, -95.3], [45.5, -73.5], [43.6, -79.3], [49.2, -123.1], [19.4, -99.1],
-  // South America
-  [-23.5, -46.6], [-22.9, -43.1], [-34.6, -58.3], [-33.4, -70.6], [4.7, -74.0], [-12.0, -77.0],
-];
+function locationToAngles(lat: number, lng: number): [number, number] {
+  return [
+    Math.PI - ((lng * Math.PI) / 180 - Math.PI / 2),
+    (lat * Math.PI) / 180,
+  ];
+}
 
 export function InteractiveGlobalTeamGlobe() {
   const { lang } = useLang();
   const l = (lang === "en" || lang === "vi" ? lang : "fr") as "fr" | "en" | "vi";
   const [selectedHubId, setSelectedHubId] = useState<string>("paris");
-  const [isDragging, setIsDragging] = useState(false);
+  const [autoRotate, setAutoRotate] = useState<boolean>(true);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Rotation state in refs for smooth 60fps loop
-  const rotRef = useRef<{ yaw: number; pitch: number; targetYaw: number; targetPitch: number; autoRotate: boolean }>({
-    yaw: -0.25,
-    pitch: 0.35,
-    targetYaw: -0.25,
-    targetPitch: 0.35,
-    autoRotate: true,
-  });
-  const dragStartRef = useRef<{ x: number; y: number; yaw: number; pitch: number } | null>(null);
-  const projectedHubsRef = useRef<Array<{ id: string; x: number; y: number; z: number; visible: boolean }>>([]);
+  const focusAnglesRef = useRef<[number, number]>(locationToAngles(48.8566, 2.3522));
+  const currentPhiRef = useRef<number>(focusAnglesRef.current[0]);
+  const currentThetaRef = useRef<number>(focusAnglesRef.current[1]);
+  const pointerInteracting = useRef<number | null>(null);
+  const pointerInteractionMovement = useRef<number>(0);
+  const autoRotateRef = useRef<boolean>(true);
 
   const activeHub = GLOBAL_HUBS.find((h) => h.id === selectedHubId) ?? GLOBAL_HUBS[0];
 
-  // Center globe on a selected hub when clicked
   const focusHub = (hub: GlobalHub) => {
     setSelectedHubId(hub.id);
-    const latRad = (hub.lat * Math.PI) / 180;
-    const lngRad = (hub.lng * Math.PI) / 180;
-    rotRef.current.targetYaw = -lngRad;
-    rotRef.current.targetPitch = Math.max(-0.7, Math.min(0.7, latRad * 0.65));
-    rotRef.current.autoRotate = false;
+    focusAnglesRef.current = locationToAngles(hub.lat, hub.lng);
+    setAutoRotate(false);
+    autoRotateRef.current = false;
   };
+
+  useEffect(() => {
+    autoRotateRef.current = autoRotate;
+  }, [autoRotate]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    let width = canvas.offsetWidth || 440;
 
-    let animId = 0;
-
-    const render = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const rect = canvas.getBoundingClientRect();
-      if (canvas.width !== Math.round(rect.width * dpr) || canvas.height !== Math.round(rect.height * dpr)) {
-        canvas.width = Math.round(rect.width * dpr);
-        canvas.height = Math.round(rect.height * dpr);
+    const onResize = () => {
+      if (canvasRef.current) {
+        width = canvasRef.current.offsetWidth;
       }
-      ctx.save();
-      ctx.scale(dpr, dpr);
+    };
+    window.addEventListener("resize", onResize);
 
-      const w = rect.width;
-      const h = rect.height;
-      const cx = w / 2;
-      const cy = h / 2;
-      const radius = Math.min(w, h) * 0.41;
-
-      ctx.clearRect(0, 0, w, h);
-
-      // Update rotation
-      if (rotRef.current.autoRotate && !dragStartRef.current) {
-        rotRef.current.targetYaw -= 0.0028;
-      }
-      rotRef.current.yaw += (rotRef.current.targetYaw - rotRef.current.yaw) * 0.08;
-      rotRef.current.pitch += (rotRef.current.targetPitch - rotRef.current.pitch) * 0.08;
-
-      const yaw = rotRef.current.yaw;
-      const pitch = rotRef.current.pitch;
-      const cosYaw = Math.cos(yaw);
-      const sinYaw = Math.sin(yaw);
-      const cosPitch = Math.cos(pitch);
-      const sinPitch = Math.sin(pitch);
-
-      const project = (lat: number, lng: number) => {
-        const phi = (lat * Math.PI) / 180;
-        const theta = (lng * Math.PI) / 180;
-        const x0 = Math.cos(phi) * Math.sin(theta);
-        const y0 = Math.sin(phi);
-        const z0 = Math.cos(phi) * Math.cos(theta);
-
-        // Rotate around Y (yaw)
-        const x1 = x0 * cosYaw + z0 * sinYaw;
-        const z1 = -x0 * sinYaw + z0 * cosYaw;
-        // Rotate around X (pitch)
-        const y2 = y0 * cosPitch - z1 * sinPitch;
-        const z2 = y0 * sinPitch + z1 * cosPitch;
-
-        return {
-          x: cx + x1 * radius,
-          y: cy - y2 * radius,
-          z: z2,
-        };
-      };
-
-      // Outer atmospheric halo
-      const haloGrad = ctx.createRadialGradient(cx, cy, radius * 0.78, cx, cy, radius * 1.24);
-      haloGrad.addColorStop(0, "rgba(197, 168, 128, 0.22)");
-      haloGrad.addColorStop(0.55, "rgba(139, 112, 79, 0.10)");
-      haloGrad.addColorStop(1, "rgba(16, 17, 20, 0)");
-      ctx.fillStyle = haloGrad;
-      ctx.beginPath();
-      ctx.arc(cx, cy, radius * 1.24, 0, Math.PI * 2);
-      ctx.fill();
-
-      // 3D Sphere body with realistic lighting
-      const sphereGrad = ctx.createRadialGradient(
-        cx - radius * 0.32,
-        cy - radius * 0.32,
-        radius * 0.08,
-        cx,
-        cy,
-        radius
-      );
-      sphereGrad.addColorStop(0, "#24221f");
-      sphereGrad.addColorStop(0.55, "#141416");
-      sphereGrad.addColorStop(1, "#090a0c");
-      ctx.fillStyle = sphereGrad;
-      ctx.beginPath();
-      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Subtle rim light
-      ctx.strokeStyle = "rgba(197, 168, 128, 0.38)";
-      ctx.lineWidth = 1.4;
-      ctx.beginPath();
-      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // Latitude / Longitude graticule lines
-      ctx.lineWidth = 0.65;
-      ctx.strokeStyle = "rgba(197, 168, 128, 0.11)";
-      for (let lat = -60; lat <= 60; lat += 30) {
-        ctx.beginPath();
-        let started = false;
-        for (let lng = -180; lng <= 180; lng += 6) {
-          const p = project(lat, lng);
-          if (p.z > 0) {
-            if (!started) {
-              ctx.moveTo(p.x, p.y);
-              started = true;
-            } else {
-              ctx.lineTo(p.x, p.y);
-            }
+    const globe = createGlobe(canvas, {
+      devicePixelRatio: 2,
+      width: width * 2,
+      height: width * 2,
+      phi: currentPhiRef.current,
+      theta: currentThetaRef.current,
+      dark: 1,
+      diffuse: 1.8,
+      mapSamples: 22000,
+      mapBrightness: 7.5,
+      baseColor: [0.16, 0.15, 0.14],
+      markerColor: [0.89, 0.76, 0.54],
+      glowColor: [0.45, 0.37, 0.25],
+      markers: GLOBAL_HUBS.map((h) => ({
+        location: [h.lat, h.lng],
+        size: h.id === selectedHubId ? 0.11 : 0.055,
+      })),
+      onRender: (state) => {
+        if (!pointerInteracting.current) {
+          if (autoRotateRef.current) {
+            currentPhiRef.current += 0.0035;
           } else {
-            started = false;
+            const [targetPhi, targetTheta] = focusAnglesRef.current;
+            const distPositive = (targetPhi - currentPhiRef.current + Math.PI * 2) % (Math.PI * 2);
+            const distNegative = (currentPhiRef.current - targetPhi + Math.PI * 2) % (Math.PI * 2);
+            if (distPositive < distNegative) {
+              currentPhiRef.current += distPositive * 0.08;
+            } else {
+              currentPhiRef.current -= distNegative * 0.08;
+            }
+            currentThetaRef.current =
+              currentThetaRef.current * 0.92 + targetTheta * 0.08;
           }
         }
-        ctx.stroke();
-      }
+        state.phi = currentPhiRef.current + pointerInteractionMovement.current;
+        state.theta = currentThetaRef.current;
+        state.width = width * 2;
+        state.height = width * 2;
+      },
+    });
 
-      for (let lng = -180; lng < 180; lng += 30) {
-        ctx.beginPath();
-        let started = false;
-        for (let lat = -80; lat <= 80; lat += 5) {
-          const p = project(lat, lng);
-          if (p.z > 0) {
-            if (!started) {
-              ctx.moveTo(p.x, p.y);
-              started = true;
-            } else {
-              ctx.lineTo(p.x, p.y);
-            }
-          } else {
-            started = false;
-          }
-        }
-        ctx.stroke();
-      }
-
-      // Draw continental land matrix dots
-      for (const [lat, lng] of LAND_COORDS) {
-        const p = project(lat, lng);
-        if (p.z > 0) {
-          const alpha = 0.2 + p.z * 0.45;
-          ctx.fillStyle = `rgba(197, 168, 128, ${alpha.toFixed(2)})`;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, 2.1, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-
-      // Draw arcs connecting Paris HQ to all global hubs
-      const parisHub = GLOBAL_HUBS[0];
-      const parisProj = project(parisHub.lat, parisHub.lng);
-      for (const hub of GLOBAL_HUBS.slice(1)) {
-        const hp = project(hub.lat, hub.lng);
-        if (parisProj.z > -0.2 && hp.z > -0.2) {
-          const midX = (parisProj.x + hp.x) / 2;
-          const midY = (parisProj.y + hp.y) / 2 - 26;
-          ctx.strokeStyle =
-            hub.id === selectedHubId
-              ? "rgba(212, 175, 122, 0.78)"
-              : "rgba(197, 168, 128, 0.24)";
-          ctx.lineWidth = hub.id === selectedHubId ? 1.8 : 0.9;
-          ctx.beginPath();
-          ctx.moveTo(parisProj.x, parisProj.y);
-          ctx.quadraticCurveTo(midX, midY, hp.x, hp.y);
-          ctx.stroke();
-        }
-      }
-
-      // Draw interactive city markers
-      const nextProjected: Array<{ id: string; x: number; y: number; z: number; visible: boolean }> = [];
-      const pulse = (Math.sin(Date.now() * 0.005) + 1) * 0.5;
-
-      for (const hub of GLOBAL_HUBS) {
-        const p = project(hub.lat, hub.lng);
-        const visible = p.z > -0.05;
-        nextProjected.push({ id: hub.id, x: p.x, y: p.y, z: p.z, visible });
-
-        if (!visible) continue;
-
-        const isSelected = hub.id === selectedHubId;
-        const ringRadius = isSelected ? 10 + pulse * 6 : 6 + pulse * 3;
-
-        // Outer pulse ring
-        ctx.strokeStyle = isSelected
-          ? "rgba(232, 195, 142, 0.85)"
-          : "rgba(197, 168, 128, 0.45)";
-        ctx.lineWidth = isSelected ? 2 : 1.2;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, ringRadius, 0, Math.PI * 2);
-        ctx.stroke();
-
-        // Core pin
-        ctx.fillStyle = isSelected ? "#f5d7a1" : "#c5a880";
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, isSelected ? 5.2 : 3.6, 0, Math.PI * 2);
-        ctx.fill();
-
-        // City label floating next to pin
-        ctx.font = isSelected ? "600 11px Inter, sans-serif" : "500 9.5px Inter, sans-serif";
-        const label = `${hub.flag} ${hub.city[l]}`;
-        const textWidth = ctx.measureText(label).width;
-        const labelX = p.x + 10;
-        const labelY = p.y + 3;
-
-        ctx.fillStyle = isSelected ? "rgba(16, 17, 20, 0.92)" : "rgba(16, 17, 20, 0.72)";
-        ctx.beginPath();
-        ctx.roundRect(labelX - 5, labelY - 10, textWidth + 10, 15, 5);
-        ctx.fill();
-
-        if (isSelected) {
-          ctx.strokeStyle = "rgba(212, 175, 122, 0.8)";
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        }
-
-        ctx.fillStyle = isSelected ? "#f8f6f0" : "rgba(248, 246, 240, 0.85)";
-        ctx.fillText(label, labelX, labelY);
-      }
-
-      projectedHubsRef.current = nextProjected;
-      ctx.restore();
-      animId = window.requestAnimationFrame(render);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      globe.destroy();
     };
-
-    animId = window.requestAnimationFrame(render);
-    return () => window.cancelAnimationFrame(animId);
-  }, [selectedHubId, l]);
-
-  // Handle pointer drag & click on city pins
-  const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    // Check if user clicked near a visible city pin
-    const clickedHub = projectedHubsRef.current
-      .filter((h) => h.visible)
-      .find((h) => Math.hypot(h.x - x, h.y - y) < 26);
-
-    if (clickedHub) {
-      const target = GLOBAL_HUBS.find((h) => h.id === clickedHub.id);
-      if (target) focusHub(target);
-      return;
-    }
-
-    setIsDragging(true);
-    rotRef.current.autoRotate = false;
-    dragStartRef.current = {
-      x: e.clientX,
-      y: e.clientY,
-      yaw: rotRef.current.targetYaw,
-      pitch: rotRef.current.targetPitch,
-    };
-  };
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    if (!dragStartRef.current) return;
-    const dx = e.clientX - dragStartRef.current.x;
-    const dy = e.clientY - dragStartRef.current.y;
-    rotRef.current.targetYaw = dragStartRef.current.yaw + dx * 0.007;
-    rotRef.current.targetPitch = Math.max(
-      -0.8,
-      Math.min(0.8, dragStartRef.current.pitch + dy * 0.007)
-    );
-  };
-
-  const handlePointerUp = () => {
-    setIsDragging(false);
-    dragStartRef.current = null;
-  };
+  }, [selectedHubId]);
 
   return (
     <section
       id="global-network"
-      className="relative overflow-hidden border-t border-[var(--xr-line)] bg-[#0d0e11] py-16 text-[#f8f6f0] sm:py-24"
+      className="relative overflow-hidden border-t border-white/10 bg-[#07080b] py-20 text-[#f8f6f0] sm:py-28"
     >
-      {/* Subtle luxury radial glow */}
+      {/* Halo atmosphérique bronze & obsidienne */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-40"
+        className="pointer-events-none absolute inset-0 opacity-45"
         style={{
           background:
-            "radial-gradient(900px circle at 25% 50%, rgba(197,168,128,0.14), transparent 70%), radial-gradient(700px circle at 80% 25%, rgba(139,112,79,0.12), transparent 70%)",
+            "radial-gradient(950px circle at 25% 50%, rgba(197,168,128,0.16), transparent 70%), radial-gradient(750px circle at 80% 25%, rgba(16,185,129,0.09), transparent 70%)",
         }}
       />
 
-      <div className="relative mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
-        {/* Section Header */}
+      <div className="relative mx-auto max-w-[1480px] px-4 sm:px-6 lg:px-10">
+        {/* En-tête de section */}
         <div className="mb-10 flex flex-col justify-between gap-4 border-b border-white/10 pb-8 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#c5a880]/35 bg-[#c5a880]/10 px-3.5 py-1 text-[9px] font-mono uppercase tracking-[0.22em] text-[#e5cba4]">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#c5a880]/40 bg-[#c5a880]/10 px-3.5 py-1 text-[9px] font-mono uppercase tracking-[0.22em] text-[#e5cba4]">
               <Globe2 className="h-3.5 w-3.5" />
               {l === "en"
-                ? "GLOBAL PRESENCE · INTERACTIVE 3D GLOBE"
+                ? "GLOBAL PRESENCE · WEBGL 3D EARTH"
                 : l === "vi"
-                  ? "HIỆN DIỆN TOÀN CẦU · ĐỊA CẦU 3D TƯƠNG TÁC"
-                  : "PRÉSENCE MONDIALE · GLOBE 3D INTERACTIF"}
+                  ? "HIỆN DIỆN TOÀN CẦU · ĐỊA CẦU WEBGL 3D"
+                  : "PRÉSENCE MONDIALE · GLOBE 3D HAUTE PRÉCISION"}
             </div>
-            <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-4xl">
+            <h2 className="display-serif text-3xl font-normal tracking-tight text-white sm:text-5xl">
               {l === "en"
                 ? "Click on a city to meet our local XR Agency teams & agents."
                 : l === "vi"
@@ -572,14 +349,14 @@ export function InteractiveGlobalTeamGlobe() {
           </div>
           <p className="max-w-md text-xs leading-relaxed text-white/65 sm:text-sm">
             {l === "en"
-              ? "Rotate the 3D globe or select any city below to inspect our regional experts in Communication, Google Maps Top 3, AI Automation, Custom Software & Robotics."
+              ? "Select any city below or rotate our 3D WebGL globe to inspect our regional experts in Communication, Google Maps Top 3, AI Automation, Custom Software & Robotics."
               : l === "vi"
                 ? "Xoay quả địa cầu 3D hoặc chọn thành phố bên dưới để xem đội ngũ chuyên gia Truyền thông, Google Maps Top 3, AI, Phần mềm & Robot."
-                : "Faites tourner le globe 3D ou cliquez directement sur une ville pour afficher l’équipe locale dédiée à votre communication, votre visibilité Google Maps, vos logiciels IA et vos robots."}
+                : "Sélectionnez une ville ou faites pivoter le globe 3D WebGL pour orienter la caméra directement sur l’agent local dédié à votre projet."}
           </p>
         </div>
 
-        {/* City Selector Pills */}
+        {/* Sélecteur rapide des 7 Hubs Mondiaux */}
         <div className="mb-8 flex flex-wrap items-center gap-2">
           {GLOBAL_HUBS.map((hub) => {
             const active = hub.id === selectedHubId;
@@ -588,9 +365,9 @@ export function InteractiveGlobalTeamGlobe() {
                 key={hub.id}
                 type="button"
                 onClick={() => focusHub(hub)}
-                className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-medium transition-all ${
+                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-medium transition-all ${
                   active
-                    ? "border-[#c5a880] bg-[#c5a880] text-[#101114] shadow-[0_0_25px_rgba(197,168,128,0.4)] font-semibold"
+                    ? "border-[#c5a880] bg-[#c5a880] text-[#090a0d] shadow-[0_0_30px_rgba(197,168,128,0.45)] font-bold scale-[1.03]"
                     : "border-white/15 bg-white/5 text-white/80 hover:border-[#c5a880]/50 hover:bg-white/10"
                 }`}
               >
@@ -601,37 +378,64 @@ export function InteractiveGlobalTeamGlobe() {
           })}
           <button
             type="button"
-            onClick={() => {
-              rotRef.current.autoRotate = !rotRef.current.autoRotate;
-            }}
-            className="ml-auto hidden rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-white/65 hover:border-white/30 hover:text-white sm:inline-flex"
+            onClick={() => setAutoRotate((v) => !v)}
+            className="ml-auto hidden rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-[10px] font-mono uppercase tracking-wider text-white/70 hover:border-[#c5a880] hover:text-white sm:inline-flex"
           >
-            {l === "en" ? "Auto-Rotation 3D" : "Rotation 3D Auto"}
+            {autoRotate ? "Rotation 3D [ACTIVE]" : "Rotation 3D [PAUSE]"}
           </button>
         </div>
 
-        {/* Main 2-Column Interactive Grid: 3D Globe + Selected Agent Card */}
+        {/* Grille Principale : Globe WebGL Cobe (22 000 points) + Dossier Agent */}
         <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
-          {/* Left: Interactive 3D Canvas Globe */}
-          <div className="relative flex flex-col items-center justify-center rounded-3xl border border-white/10 bg-[#121418]/90 p-4 shadow-2xl lg:col-span-7">
-            <div className="relative h-[340px] w-full sm:h-[440px]">
+          {/* Colonne Gauche : Globe 3D WebGL Ultra-Réaliste */}
+          <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-[2.2rem] border border-white/12 bg-gradient-to-b from-[#111319] to-[#08090c] p-6 shadow-2xl lg:col-span-7">
+            <div className="relative mx-auto aspect-square w-full max-w-[440px]">
               <canvas
                 ref={canvasRef}
-                onPointerDown={handlePointerDown}
-                onPointerMove={handlePointerMove}
-                onPointerUp={handlePointerUp}
-                onPointerLeave={handlePointerUp}
-                className={`h-full w-full touch-none ${
-                  isDragging ? "cursor-grabbing" : "cursor-grab"
-                }`}
+                onPointerDown={(e) => {
+                  pointerInteracting.current =
+                    e.clientX - pointerInteractionMovement.current;
+                  if (canvasRef.current) canvasRef.current.style.cursor = "grabbing";
+                }}
+                onPointerUp={() => {
+                  pointerInteracting.current = null;
+                  if (canvasRef.current) canvasRef.current.style.cursor = "grab";
+                }}
+                onPointerOut={() => {
+                  pointerInteracting.current = null;
+                  if (canvasRef.current) canvasRef.current.style.cursor = "grab";
+                }}
+                onMouseMove={(e) => {
+                  if (pointerInteracting.current !== null) {
+                    const delta = e.clientX - pointerInteracting.current;
+                    pointerInteractionMovement.current = delta / 180;
+                  }
+                }}
+                onTouchMove={(e) => {
+                  if (pointerInteracting.current !== null && e.touches[0]) {
+                    const delta = e.touches[0].clientX - pointerInteracting.current;
+                    pointerInteractionMovement.current = delta / 100;
+                  }
+                }}
+                className="h-full w-full cursor-grab transition-opacity duration-500"
+                style={{ contain: "layout paint size" }}
               />
+
+              {/* Badge HUD flottant de la ville ciblée */}
+              <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full border border-[#c5a880]/45 bg-black/80 px-4 py-1.5 backdrop-blur-xl shadow-xl">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
+                <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-white">
+                  {activeHub.flag} FOCUS CAMÉRA : {activeHub.city[l].toUpperCase()} ({activeHub.timezone})
+                </span>
+              </div>
             </div>
-            <div className="mt-2 flex flex-wrap items-center justify-between gap-2 w-full px-3 text-[11px] text-white/55">
+
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 w-full border-t border-white/10 pt-3 px-2 text-[11px] text-white/55">
               <span className="inline-flex items-center gap-1.5">
                 <MapPin className="h-3.5 w-3.5 text-[#c5a880]" />
                 {l === "en"
-                  ? "Interactive 3D Earth · Drag to rotate or click a city pin"
-                  : "Globe 3D interactif · Glissez pour tourner ou cliquez sur une ville"}
+                  ? "WebGL 3D Earth · Drag to rotate or click any city pill"
+                  : "Globe 3D WebGL 22 000 points · Glissez pour tourner ou cliquez sur une ville"}
               </span>
               <span className="font-mono text-[10px] text-[#c5a880]">
                 7 HUBS INTERNATIONAUX · OPÉRATIONS 24H/24
@@ -639,8 +443,8 @@ export function InteractiveGlobalTeamGlobe() {
             </div>
           </div>
 
-          {/* Right: Active City & Agent Dossier Card */}
-          <div className="rounded-3xl border border-[#c5a880]/35 bg-gradient-to-b from-[#191a1f] to-[#111216] p-6 sm:p-8 shadow-[0_24px_80px_-20px_rgba(0,0,0,0.85)] lg:col-span-5">
+          {/* Colonne Droite : Fiche de l'Agent Local Sélectionné */}
+          <div className="rounded-[2.2rem] border border-[#c5a880]/40 bg-gradient-to-b from-[#171920] to-[#0e1015] p-6 sm:p-8 shadow-[0_28px_90px_-20px_rgba(0,0,0,0.9)] lg:col-span-5">
             <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-4">
               <div className="flex items-center gap-3">
                 <span className="grid h-12 w-12 place-items-center rounded-2xl border border-[#c5a880]/40 bg-[#c5a880]/15 text-2xl">
@@ -657,8 +461,8 @@ export function InteractiveGlobalTeamGlobe() {
               </div>
             </div>
 
-            {/* Agent Profile Box */}
-            <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+            {/* Carte Agent */}
+            <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2">
@@ -667,10 +471,10 @@ export function InteractiveGlobalTeamGlobe() {
                       {l === "en" ? "LOCAL XR AGENT / LEAD" : "AGENT & RÉFÉRENT LOCAL XR"}
                     </span>
                   </div>
-                  <p className="mt-1 text-lg font-semibold text-white">{activeHub.agentName}</p>
+                  <p className="mt-1 text-lg font-bold text-white">{activeHub.agentName}</p>
                   <p className="text-xs text-[#d6be99]">{activeHub.agentRole[l]}</p>
                 </div>
-                <span className="rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-1 text-[10px] font-medium text-emerald-300">
+                <span className="rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-1 text-[10px] font-semibold text-emerald-300">
                   ● {l === "en" ? "Available" : "Disponible"}
                 </span>
               </div>
@@ -702,24 +506,24 @@ export function InteractiveGlobalTeamGlobe() {
               </div>
             </div>
 
-            {/* Direct CTA to launch project with this hub */}
+            {/* Boutons d'Action Directs */}
             <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
               <a
                 href="#quote"
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#c5a880] px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#101114] transition hover:bg-[#d8be98]"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#c5a880] px-5 py-3.5 text-xs font-black uppercase tracking-wider text-[#101114] transition hover:bg-[#d8be98]"
               >
                 <Sparkles className="h-3.5 w-3.5" />
                 {l === "en"
                   ? `Start a project with ${activeHub.city.en}`
-                  : `Lancer mon projet avec le pôle ${activeHub.city.fr}`}
+                  : `Lancer mon projet avec ${activeHub.city.fr}`}
                 <ArrowRight className="h-3.5 w-3.5" />
               </a>
               <a
                 href="#maps-simulator"
-                className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white/20 px-4 py-3 text-xs font-semibold text-white transition hover:border-[#c5a880] hover:bg-white/5"
+                className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white/20 px-4 py-3.5 text-xs font-semibold text-white transition hover:border-[#c5a880] hover:bg-white/5"
               >
                 <ShieldCheck className="h-3.5 w-3.5 text-[#c5a880]" />
-                {l === "en" ? "Maps Top 3" : "Simuler Maps Top 3"}
+                {l === "en" ? "Maps Top 3" : "Maps Top 3"}
               </a>
             </div>
           </div>

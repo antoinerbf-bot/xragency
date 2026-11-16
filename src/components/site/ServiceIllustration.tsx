@@ -137,170 +137,242 @@ function Glass({
 }
 
 function WebVisual() {
-  return (
-    <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[var(--xr-surface)] via-[var(--xr-bg)] to-[var(--xr-surface)] p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
-      {/* Halo immersif subtil */}
-      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
-      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-slate-500/10 blur-3xl" />
+  const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
 
-      {/* Barre supérieure fluide type navigateur de luxe */}
-      <div className="flex items-center justify-between border-b xr-line pb-4">
+  return (
+    <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[#0e1015] via-[#090b0e] to-[#0e1015] p-6 text-white shadow-2xl backdrop-blur-2xl sm:p-8">
+      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-[#c5a880]/15 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
+
+      {/* Barre supérieure type Studio Browser + Toggle Mobile/Desktop */}
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-4">
         <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-red-400/80" />
-          <span className="h-2 w-2 rounded-full bg-amber-400/80" />
-          <span className="h-2 w-2 rounded-full bg-emerald-400/80" />
-          <span className="ml-3 label-mono text-[7px] tracking-[.18em] xr-muted">HTTPS://XRAGENCYAI.COM</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
-            PERFORMANCE 100/100
+          <span className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
+          <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
+          <span className="ml-2 font-mono text-[8px] tracking-[.18em] text-white/65">
+            HTTPS://XRAGENCYAI.COM · SHOWREEL WEB
           </span>
-          <Label>01 / WEB DESIGN</Label>
+        </div>
+
+        <div className="flex items-center gap-1.5 rounded-full border border-white/15 bg-black/50 p-1">
+          <button
+            type="button"
+            onClick={() => setDevice("desktop")}
+            className={`rounded-full px-2.5 py-0.5 font-mono text-[8px] font-bold uppercase transition ${
+              device === "desktop" ? "bg-[#c5a880] text-[#090a0d]" : "text-white/70 hover:text-white"
+            }`}
+          >
+            Vue PC 16:10
+          </button>
+          <button
+            type="button"
+            onClick={() => setDevice("mobile")}
+            className={`rounded-full px-2.5 py-0.5 font-mono text-[8px] font-bold uppercase transition ${
+              device === "mobile" ? "bg-[#c5a880] text-[#090a0d]" : "text-white/70 hover:text-white"
+            }`}
+          >
+            Vue Mobile 9:16
+          </button>
         </div>
       </div>
 
-      {/* Contenu immersif sans coupure brutale */}
-      <div className="py-6 grid gap-6 lg:grid-cols-[1.25fr_.75fr] items-center">
-        <div className="group relative overflow-hidden rounded-[1.8rem] border xr-line shadow-xl">
-          <img
-            src={XR_PHOTOS.websites}
-            alt="Site web vitrine, business et e-commerce sur-mesure"
-            className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-            <div>
-              <span className="label-mono text-[7px] text-emerald-400 font-bold">ARCHITECTURE ULTRA-RAPIDE</span>
-              <p className="text-xs font-semibold text-white">Vitesse &lt; 0.4s · Mobile-First</p>
+      {/* Scène Vidéo Interactive */}
+      <div className="py-6 grid gap-6 lg:grid-cols-[1.28fr_.72fr] items-center">
+        <div className="flex justify-center">
+          <div
+            className={`group relative overflow-hidden rounded-[1.8rem] border border-white/20 bg-black shadow-2xl transition-all duration-500 ${
+              device === "mobile" ? "w-[235px] aspect-[9/16] rounded-[2.2rem]" : "w-full aspect-[16/10]"
+            }`}
+          >
+            <video
+              src="/videos/hero-ambient-loop.mp4"
+              poster={XR_PHOTOS.websites}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+            <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+              <span className="rounded-full border border-emerald-400/40 bg-emerald-500/20 px-2.5 py-0.5 font-mono text-[7.5px] font-bold text-emerald-300 backdrop-blur-md">
+                ● LIVE VIDEO RENDER
+              </span>
+              <span className="rounded-full bg-[#c5a880] px-2.5 py-0.5 font-mono text-[7.5px] font-black text-black">
+                MAQUETTE 24H
+              </span>
             </div>
-            <span className="rounded-full bg-white/15 px-3 py-1 label-mono text-[7px] font-bold text-white backdrop-blur-md">
-              DÈS 499 €
-            </span>
+            <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+              <div>
+                <span className="label-mono text-[7px] text-[#e5cba4] font-bold">
+                  ARCHITECTURE HAUTE CONVERSION
+                </span>
+                <p className="text-xs font-semibold text-white">
+                  {device === "mobile" ? "Expérience Mobile Immersive" : "Vitrine, Business & E-Commerce"}
+                </p>
+              </div>
+              <span className="rounded-full bg-white/15 px-3 py-1 label-mono text-[7px] font-bold text-white backdrop-blur-md">
+                499 € · 799 € · 1 499 €
+              </span>
+            </div>
           </div>
         </div>
 
         <div className="space-y-3">
-          <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)]/80 p-4 shadow-sm backdrop-blur-xl">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl">
             <div className="flex items-center justify-between">
-              <span className="label-mono text-[6.5px] xr-muted-2">LIVRABLES CLÉ EN MAIN</span>
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="label-mono text-[6.5px] text-[#e5cba4]">LIVRAISON CLÉ EN MAIN 7 JOURS</span>
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
             </div>
-            <h4 className="mt-1 text-xs font-bold text-[var(--xr-ink)]">Vitrine, Business & E-commerce</h4>
-            <p className="mt-1 text-[8.5px] leading-relaxed xr-muted">
-              Design unique 100% sur-mesure, CMS moderne, formulaires interactifs et paiements Stripe intégrés.
+            <h4 className="mt-1 text-xs font-bold text-white">Maquette Gratuite Validée Avant Lancement</h4>
+            <p className="mt-1 text-[9px] leading-relaxed text-white/70">
+              Design éditorial sur-mesure, parcours mobile ultra-fluide, formulaires connectés et propriété 100 % du code.
             </p>
           </div>
 
-          <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)]/80 p-4 shadow-sm backdrop-blur-xl">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl">
             <div className="flex items-center justify-between">
-              <span className="label-mono text-[6.5px] xr-muted-2">SCORE TECHNIQUE</span>
-              <span className="label-mono text-[7px] font-bold text-emerald-500">GRADE A+</span>
+              <span className="label-mono text-[6.5px] text-white/60">BENCHMARK TECHNIQUE</span>
+              <span className="label-mono text-[7px] font-bold text-emerald-400">GRADE A+</span>
             </div>
             <div className="mt-2.5 grid grid-cols-3 gap-1.5 text-center text-[7.5px]">
-              <div className="rounded-lg bg-[var(--xr-bg)] p-2 border xr-line">
-                <span className="block font-bold text-emerald-500">100/100</span>
-                <span className="label-mono text-[5.5px] xr-muted">SEO SCORE</span>
+              <div className="rounded-lg bg-black/50 p-2 border border-white/10">
+                <span className="block font-bold text-emerald-400">100/100</span>
+                <span className="label-mono text-[5.5px] text-white/60">SEO GOOGLE</span>
               </div>
-              <div className="rounded-lg bg-[var(--xr-bg)] p-2 border xr-line">
-                <span className="block font-bold text-[var(--xr-ink)]">&lt; 0.4s</span>
-                <span className="label-mono text-[5.5px] xr-muted">CHARGEMENT</span>
+              <div className="rounded-lg bg-black/50 p-2 border border-white/10">
+                <span className="block font-bold text-white">&lt; 0.4s</span>
+                <span className="label-mono text-[5.5px] text-white/60">VITESSE</span>
               </div>
-              <div className="rounded-lg bg-[var(--xr-bg)] p-2 border xr-line">
-                <span className="block font-bold text-[var(--xr-ink)]">100%</span>
-                <span className="label-mono text-[5.5px] xr-muted">RGPD OK</span>
+              <div className="rounded-lg bg-black/50 p-2 border border-white/10">
+                <span className="block font-bold text-[#e5cba4]">100%</span>
+                <span className="label-mono text-[5.5px] text-white/60">MOBILE OK</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-t xr-line pt-4">
-        <span className="label-mono text-[7px] xr-muted">REACT · TANSTACK · TAILWIND · HÉBERGEMENT 1 AN INCLUS</span>
-        <span className="label-mono text-[7px] font-bold text-emerald-500">PRÊT À CONVERTIR</span>
+      <div className="flex items-center justify-between border-t border-white/10 pt-4">
+        <span className="label-mono text-[7px] text-white/60">
+          VITRINE (499 €) · BUSINESS (799 €) · E-COMMERCE (1 499 €)
+        </span>
+        <span className="label-mono text-[7px] font-bold text-[#e5cba4]">PRÊT À CONVERTIR</span>
       </div>
     </div>
   );
 }
 
 function BrandingVisual() {
-  return (
-    <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[var(--xr-surface)] via-[var(--xr-bg)] to-[var(--xr-surface)] p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
-      {/* Halo d'ambiance subtil */}
-      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-purple-500/10 blur-3xl" />
-      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
+  const [paletteIdx, setPaletteIdx] = useState(0);
+  const palettes = [
+    {
+      name: "Obsidienne & Bronze Impérial",
+      colors: ["#090A0D", "#1E1B16", "#C5A880", "#F8F6F0"],
+    },
+    {
+      name: "Jade Émeraude & Craie",
+      colors: ["#0E1512", "#1F352C", "#10B981", "#F5F1E9"],
+    },
+    {
+      name: "Cobalt Tech & Argent",
+      colors: ["#090D16", "#162647", "#38BDF8", "#F8FAFC"],
+    },
+  ];
+  const currentPal = palettes[paletteIdx];
 
-      {/* Entête épurée */}
-      <div className="flex items-center justify-between border-b xr-line pb-4">
+  return (
+    <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[#0e1015] via-[#090b0e] to-[#0e1015] p-6 text-white shadow-2xl backdrop-blur-2xl sm:p-8">
+      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-[#c5a880]/15 blur-3xl" />
+
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-4">
         <div className="flex items-center gap-2">
-          <Palette className="h-4 w-4 text-emerald-500" />
-          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">STUDIO BRANDING & DIRECTION ARTISTIQUE</span>
+          <Palette className="h-4 w-4 text-[#c5a880]" />
+          <span className="font-mono text-[8px] tracking-[.18em] text-white/75">
+            STUDIO BRANDING & DIRECTION ARTISTIQUE
+          </span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
+          <span className="rounded-full bg-[#c5a880]/20 px-2.5 py-0.5 font-mono text-[7px] font-bold text-[#e5cba4]">
             CESSION 100% DROITS
           </span>
-          <Label>02 / BRANDING</Label>
+          <Label>04 / BRANDING</Label>
         </div>
       </div>
 
-      {/* Contenu visuel intégré et fluide */}
       <div className="py-6 grid gap-6 lg:grid-cols-[1.2fr_.8fr] items-center">
-        <div className="group relative overflow-hidden rounded-[1.8rem] border xr-line shadow-xl">
+        <div className="group relative overflow-hidden rounded-[1.8rem] border border-white/15 shadow-2xl">
           <img
             src={XR_PHOTOS.branding}
             alt="Direction artistique, Brand Book et papeterie de prestige"
             className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
           <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
             <div>
-              <span className="label-mono text-[7px] text-emerald-400 font-bold">ATELIER TYPOGRAPHIE & COULEURS</span>
-              <p className="text-xs font-semibold text-white">Papeterie, Packaging & Brand Book</p>
+              <span className="label-mono text-[7px] text-[#e5cba4] font-bold">
+                ATELIER TYPOGRAPHIE & COULEURS
+              </span>
+              <p className="text-xs font-semibold text-white">Logo Vectoriel, Papeterie & Brand Book</p>
             </div>
-            <span className="rounded-full bg-white/15 px-3 py-1 label-mono text-[7px] font-bold text-white backdrop-blur-md">
-              DÈS 179 €
+            <span className="rounded-full bg-[#c5a880] px-3 py-1 label-mono text-[7px] font-black text-black">
+              199 € · 399 € · 699 €
             </span>
           </div>
         </div>
 
         <div className="space-y-3">
-          <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)]/80 p-4 shadow-sm backdrop-blur-xl">
-            <span className="label-mono text-[6.5px] xr-muted-2">HARMONIE CHROMATIQUE EXCLUSIVE</span>
+          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl">
+            <div className="flex items-center justify-between">
+              <span className="label-mono text-[6.5px] text-[#e5cba4]">TESTER UNE HARMONIE CHROMATIQUE</span>
+            </div>
+            <div className="mt-2 flex gap-1.5">
+              {palettes.map((p, i) => (
+                <button
+                  key={p.name}
+                  type="button"
+                  onClick={() => setPaletteIdx(i)}
+                  className={`flex-1 rounded-lg py-1 font-mono text-[7px] font-bold transition ${
+                    paletteIdx === i ? "bg-[#c5a880] text-black" : "bg-white/10 text-white/70"
+                  }`}
+                >
+                  0{i + 1}
+                </button>
+              ))}
+            </div>
             <div className="mt-3 flex gap-2">
-              {[
-                { hex: "#090A0D", label: "Obsidian" },
-                { hex: "#F8F6F0", label: "Warm White" },
-                { hex: "#4B5563", label: "Titanium" },
-                { hex: "#10B981", label: "Emerald" },
-              ].map((c) => (
-                <div key={c.hex} className="flex-1 text-center">
+              {currentPal.colors.map((hex) => (
+                <div key={hex} className="flex-1 text-center">
                   <div
-                    className="h-10 w-full rounded-xl border border-black/10 dark:border-white/20 shadow-sm"
-                    style={{ background: c.hex }}
+                    className="h-10 w-full rounded-xl border border-white/20 shadow-sm transition-colors duration-300"
+                    style={{ background: hex }}
                   />
-                  <span className="mt-1 block text-[7px] font-mono font-medium xr-muted truncate">{c.hex}</span>
+                  <span className="mt-1 block font-mono text-[7px] text-white/70">{hex}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)]/80 p-4 shadow-sm backdrop-blur-xl">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-[var(--xr-ink)]">Livrables Vectoriels HD</span>
-              <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 label-mono text-[6.5px] font-bold text-emerald-500">
-                PRÊT À IMPRIMER
+              <span className="text-[11px] font-bold text-white">Livrables Vectoriels HD & Print</span>
+              <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 label-mono text-[6.5px] font-bold text-emerald-300">
+                300 DPI
               </span>
             </div>
-            <p className="mt-1.5 text-[8.5px] leading-relaxed xr-muted">
-              Logo vectoriel (AI, SVG, PNG), favicon, Brand Book 20+ pages et gabarits réseaux sociaux.
+            <p className="mt-1.5 text-[9px] leading-relaxed text-white/70">
+              Fichiers sources (AI, SVG, PDF, PNG), charte graphique complète et kit réseaux sociaux.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-t xr-line pt-4">
-        <span className="label-mono text-[7px] xr-muted">AI · SVG · PDF PRINT 300 DPI · GABARITS RÉSEAUX SOCIAUX</span>
-        <span className="label-mono text-[7px] font-bold text-emerald-500">IDENTITÉ DE PRESTIGE</span>
+      <div className="flex items-center justify-between border-t border-white/10 pt-4">
+        <span className="label-mono text-[7px] text-white/60">
+          AI · SVG · PDF PRINT 300 DPI · KIT RÉSEAUX SOCIAUX
+        </span>
+        <span className="label-mono text-[7px] font-bold text-[#e5cba4]">IDENTITÉ DE PRESTIGE</span>
       </div>
     </div>
   );
@@ -370,124 +442,145 @@ function SeoVisual() {
 }
 
 function MapsVisual() {
+  const [selectedOffer, setSelectedOffer] = useState<"top3" | "manage">("top3");
+
   return (
-    <div className="relative isolate overflow-hidden rounded-[1.5rem] border xr-line bg-[var(--xr-bg-elev)] p-5 shadow-[var(--xr-shadow)] sm:p-7">
-      <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full border border-current/10" />
-      <div className="flex items-center justify-between gap-4 border-b xr-line pb-4">
-        <div className="flex items-center gap-3">
-          <span className="grid h-9 w-9 place-items-center rounded-xl border xr-line bg-[var(--xr-surface)]"><MapPin className="h-4 w-4" /></span>
-          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">GOOGLE SEARCH & MAPS · PACK LOCAL 3-PACK</span>
+    <div className="relative isolate overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[#0e1015] via-[#090b0e] to-[#0e1015] p-6 text-white shadow-2xl sm:p-8">
+      <div aria-hidden className="pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full bg-emerald-500/15 blur-3xl" />
+
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+        <div className="flex items-center gap-2.5">
+          <span className="grid h-8 w-8 place-items-center rounded-xl border border-[#c5a880]/40 bg-[#c5a880]/15 text-[#e5cba4]">
+            <MapPin className="h-4 w-4" />
+          </span>
+          <span className="font-mono text-[8px] tracking-[.18em] text-white/75">
+            GOOGLE MAPS · PACK LOCAL TOP 3 GARANTI 24H/24 & 7J/7
+          </span>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="rounded-full border xr-line bg-[var(--xr-surface)] px-2.5 py-1 label-mono text-[6.5px] font-semibold xr-muted">POSITION #1 GARANTIE</span>
-          <Label>04 / GOOGLE MAPS</Label>
+
+        <div className="flex items-center gap-1.5 rounded-full border border-white/15 bg-black/50 p-1">
+          <button
+            type="button"
+            onClick={() => setSelectedOffer("top3")}
+            className={`rounded-full px-3 py-1 font-mono text-[7.5px] font-bold uppercase transition ${
+              selectedOffer === "top3" ? "bg-[#c5a880] text-black" : "text-white/70 hover:text-white"
+            }`}
+          >
+            Offre 1 : Top 3 (dès 999 €/an)
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedOffer("manage")}
+            className={`rounded-full px-3 py-1 font-mono text-[7.5px] font-bold uppercase transition ${
+              selectedOffer === "manage" ? "bg-emerald-400 text-black" : "text-white/70 hover:text-white"
+            }`}
+          >
+            Offre 2 : Gestion (500 €/an)
+          </button>
         </div>
       </div>
 
-      <div className="grid gap-4 py-5 lg:grid-cols-[.92fr_1.08fr]">
-        <div className="xr-maps-illustration relative min-h-[300px] overflow-hidden rounded-[1.15rem] border xr-line bg-[#efeee8]">
-          <svg aria-hidden="true" viewBox="0 0 620 720" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
-            <g fill="none" stroke="#d8d5cc" strokeWidth="42" strokeLinecap="round">
-              <path d="M-80 110 C130 70 185 210 345 165 S505 85 720 120"/>
-              <path d="M-50 370 C120 300 235 405 350 350 S520 280 700 365"/>
-              <path d="M90 -50 C170 130 120 300 190 780"/>
-              <path d="M420 -50 C350 130 470 320 410 780"/>
-              <path d="M-60 610 C160 540 280 660 700 565"/>
-            </g>
-            <g fill="none" stroke="#fff" strokeWidth="29" strokeLinecap="round">
-              <path d="M-80 110 C130 70 185 210 345 165 S505 85 720 120"/>
-              <path d="M-50 370 C120 300 235 405 350 350 S520 280 700 365"/>
-              <path d="M90 -50 C170 130 120 300 190 780"/>
-              <path d="M420 -50 C350 130 470 320 410 780"/>
-              <path d="M-60 610 C160 540 280 660 700 565"/>
-            </g>
-            <g fill="#dce1d8" stroke="#fff" strokeWidth="4">
-              <rect x="35" y="180" width="90" height="65" rx="10"/>
-              <rect x="245" y="28" width="115" height="75" rx="10"/>
-              <rect x="470" y="185" width="100" height="75" rx="10"/>
-              <rect x="235" y="430" width="125" height="70" rx="10"/>
-              <rect x="40" y="500" width="115" height="62" rx="10"/>
-              <rect x="465" y="465" width="95" height="72" rx="10"/>
-            </g>
-            <path d="M-20 485 C140 410 250 515 365 450 S540 400 650 430" fill="none" stroke="#b7c0b2" strokeWidth="5" strokeLinecap="round"/>
-          </svg>
-          <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full border border-white/80 bg-white/90 px-3 py-2 shadow-lg backdrop-blur-xl">
-            <Search className="h-3 w-3 text-[#30302d]" />
-            <span className="label-mono text-[6px] tracking-[.12em] text-[#30302d]">GOOGLE MAPS</span>
+      <div className="grid gap-6 py-6 lg:grid-cols-[.95fr_1.05fr] items-center">
+        {/* Carte Cinématique Radar Google Maps */}
+        <div className="relative min-h-[290px] overflow-hidden rounded-2xl border border-white/15 bg-[#12151c]">
+          <img
+            src={XR_PHOTOS.maps}
+            alt="Google Maps Top 3"
+            className="absolute inset-0 h-full w-full object-cover opacity-55"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/30" />
+
+          <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full border border-white/20 bg-black/75 px-3 py-1.5 backdrop-blur-xl">
+            <Search className="h-3.5 w-3.5 text-[#c5a880]" />
+            <span className="font-mono text-[8px] font-bold text-white">
+              EX : « SERRURIER PARIS » · TOP 3 GARANTI
+            </span>
           </div>
-          <div className="absolute left-[35%] top-[32%]">
-            <span className="absolute -inset-3 rounded-full bg-black/10 animate-ping" />
-            <span className="relative grid h-11 w-11 place-items-center rounded-full border-[4px] border-white bg-[#1d1d1b] text-white shadow-[0_12px_30px_-8px_rgba(0,0,0,.55)]"><MapPin className="h-4 w-4" /></span>
+
+          <div className="absolute left-[44%] top-[38%]">
+            <span className="absolute -inset-4 rounded-full bg-emerald-400/35 animate-ping" />
+            <span className="relative grid h-12 w-12 place-items-center rounded-full border-2 border-white bg-emerald-500 text-black shadow-[0_0_30px_rgba(16,185,129,0.8)]">
+              <MapPin className="h-5 w-5" />
+            </span>
           </div>
-          <div className="absolute left-[65%] top-[56%] grid h-8 w-8 place-items-center rounded-full border-[3px] border-white bg-[#77766f] text-white shadow-lg"><MapPin className="h-3.5 w-3.5" /></div>
-          <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-white/70 bg-white/90 p-3 shadow-xl backdrop-blur-xl">
+
+          <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-white/15 bg-black/80 p-3.5 backdrop-blur-xl">
             <div className="flex items-center justify-between">
-              <span className="label-mono text-[6px] tracking-[.14em] text-[#17181a]/55">LOCAL PACK</span>
-              <span className="h-1.5 w-1.5 rounded-full bg-[#292929]" />
+              <span className="font-mono text-[8px] font-bold text-[#e5cba4]">
+                GARANTIE CONTRACTUELLE 12 MOIS
+              </span>
+              <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 font-mono text-[7.5px] font-bold text-emerald-300">
+                OU REMBOURSÉ
+              </span>
             </div>
-            <div className="mt-2 flex items-center gap-1.5">
-              {[0,1,2,3,4].map((n)=><span key={n} className="h-1.5 flex-1 rounded-full bg-[#bdbab1]" />)}
-            </div>
+            <p className="mt-1 text-[10px] text-white/80">
+              Validation préalable obligatoire par nos experts et analystes selon la concurrence de votre ville.
+            </p>
           </div>
         </div>
 
+        {/* Colonne Droite : Classement Google Maps en Direct */}
         <div className="space-y-3">
-          <div className="relative overflow-hidden rounded-[1.15rem] border border-black/20 bg-[var(--xr-surface)] p-4 shadow-[0_22px_55px_-35px_rgba(0,0,0,.35)] ring-1 ring-black/5">
-            <div className="absolute inset-x-0 top-0 h-1 bg-[#242424]" />
+          <div className="relative overflow-hidden rounded-2xl border border-[#c5a880]/60 bg-gradient-to-r from-[#1d1912] to-[#12151c] p-4 shadow-xl">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-start gap-3">
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-[#202020] text-xs font-black text-white shadow-md">1</span>
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#c5a880] font-mono text-sm font-black text-black">
+                  #1
+                </span>
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <h4 className="text-sm font-bold text-[var(--xr-ink)]">Votre Établissement (Leader Local)</h4>
-                    <span className="rounded-full border xr-line bg-[var(--xr-bg)] px-2.5 py-0.5 label-mono text-[6px] font-semibold xr-muted">TOP 1 VÉRIFIÉ</span>
+                    <h4 className="text-sm font-bold text-white">Votre Établissement (Leader Local)</h4>
+                    <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 font-mono text-[7px] font-bold text-emerald-300">
+                      TOP 3 GARANTI 24/7
+                    </span>
                   </div>
-                  <div className="mt-1 flex flex-wrap items-center gap-2 text-[9px]">
-                    <span className="font-bold text-[var(--xr-ink)]">5.0 ★★★★★</span>
-                    <span className="xr-muted">(480+ avis Google vérifiés)</span>
-                    <span className="xr-muted-2">· Restaurant / Entreprise d'exception</span>
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-[10px]">
+                    <span className="font-bold text-[#e5cba4]">5.0 ★★★★★</span>
+                    <span className="text-white/65">(Avis vérifiés & optimisés)</span>
                   </div>
-                  <p className="mt-2 text-[8.5px] leading-4 xr-muted">📍 Paris & Île-de-France · Ouvert · <span className="font-semibold text-[var(--xr-ink)]">+340% d'appels et d'itinéraires générés</span></p>
+                  <p className="mt-2 text-[10px] text-white/80">
+                    {selectedOffer === "top3"
+                      ? "Propulsion & maintien dans les 3 premiers résultats pendant 1 an complet (dès 999 € / an)."
+                      : "Pilotage intégral de votre fiche pendant 12 mois : photos géolocalisées, avis & posts (500 € / an)."}
+                  </p>
                 </div>
-              </div>
-              <div className="hidden shrink-0 flex-col gap-1.5 sm:flex">
-                <span className="rounded-lg bg-[#202020] px-3 py-1.5 text-center label-mono text-[7px] font-semibold text-white">ITINÉRAIRE</span>
-                <span className="rounded-lg border xr-line bg-[var(--xr-bg)] px-3 py-1.5 text-center label-mono text-[7px] text-[var(--xr-ink)] font-semibold">APPELER</span>
               </div>
             </div>
           </div>
 
-          <div className="rounded-xl border xr-line bg-[var(--xr-surface)]/75 p-3.5 opacity-75">
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-start gap-2.5">
-                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-lg border xr-line text-[9px] font-bold">2</span>
-                <div>
-                  <h5 className="text-xs font-medium text-[var(--xr-ink)]">Concurrent Direct B</h5>
-                  <div className="mt-0.5 flex flex-wrap items-center gap-2 text-[8px] xr-muted"><span>4.3 ★★★★☆</span><span>(112 avis)</span><span>· 0.4 km</span></div>
-                </div>
+          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3 opacity-70">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <span className="grid h-6 w-6 place-items-center rounded-lg border border-white/15 font-mono text-[10px] font-bold text-white/70">
+                  #2
+                </span>
+                <span className="text-xs font-medium text-white/80">Concurrent Local B · 4.2 ★</span>
               </div>
-              <span className="label-mono text-[6.5px] xr-muted-2">POSITION #2</span>
+              <span className="font-mono text-[7.5px] text-white/50">DISTANCÉ</span>
             </div>
           </div>
 
-          <div className="rounded-xl border xr-line bg-[var(--xr-surface)]/55 p-3.5 opacity-55">
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-start gap-2.5">
-                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-lg border xr-line text-[9px] font-bold">3</span>
-                <div>
-                  <h5 className="text-xs font-medium text-[var(--xr-ink)]">Concurrent Local C</h5>
-                  <div className="mt-0.5 flex flex-wrap items-center gap-2 text-[8px] xr-muted"><span>4.0 ★★★★☆</span><span>(64 avis)</span><span>· 0.8 km</span></div>
-                </div>
+          <div className="rounded-xl border border-white/10 bg-white/[0.02] p-3 opacity-50">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <span className="grid h-6 w-6 place-items-center rounded-lg border border-white/15 font-mono text-[10px] font-bold text-white/70">
+                  #3
+                </span>
+                <span className="text-xs font-medium text-white/80">Concurrent Local C · 3.9 ★</span>
               </div>
-              <span className="label-mono text-[6.5px] xr-muted-2">POSITION #3</span>
+              <span className="font-mono text-[7.5px] text-white/50">DISTANCÉ</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t xr-line pt-4">
-        <span className="label-mono text-[7px] xr-muted">GÉOLOCALISATION · GESTION DES AVIS · CITATIONS LOCALES</span>
-        <span className="label-mono text-[7px] font-semibold text-[var(--xr-ink)]">ENGAGEMENT « TOP 3 OU REMBOURSÉ »</span>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-4">
+        <span className="label-mono text-[7px] text-white/60">
+          OFFRE 1 : TOP 3 GARANTI 1 AN (DÈS 999 €/AN) · OFFRE 2 : GESTION ANNUELLE (500 €/AN)
+        </span>
+        <span className="label-mono text-[7px] font-bold text-[#e5cba4]">
+          VALIDATION EXPERTS OBLIGATOIRE
+        </span>
       </div>
     </div>
   );
