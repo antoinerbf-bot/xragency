@@ -68,6 +68,7 @@ import { OfficialQuoteGenerator } from "@/components/crm/OfficialQuoteGenerator"
 import { CrmBossDashboard, type CrmTodo } from "@/components/crm/CrmBossDashboard";
 import { CrmGameWorld } from "@/components/crm/CrmGameWorld";
 import { CrmCloserDashboard } from "@/components/crm/CrmCloserDashboard";
+import { CrmUltraLudiqueArena } from "@/components/crm/CrmUltraLudiqueArena";
 import { CrmSchoolDashboard } from "@/components/crm/CrmSchoolDashboard";
 import { XR_ADVISORS } from "@/lib/xr-advisors";
 import { playXpChime, generateLovableArchitecturePrompt } from "@/lib/rpg-engine";
@@ -1361,7 +1362,7 @@ function CrmWorkspacePage() {
 
   // ══════════════════════════════════════════════════════════════════════════
   // PORTAIL 2 : ARÈNE COMMERCIALE (OU ÉLÈVE EN MODE PASSERELLE CRM)
-  // MODE A : HUB DE COMBAT CLOSER RPG COMPLET (CARTES, OBJECTIONS & SONS)
+  // MODE A : ARÈNE COMMERCIALE 200% LUDIQUE & INTUITIVE (BATTLE PASS & TARGET DECK)
   // ══════════════════════════════════════════════════════════════════════════
   if (
     (effectivePortal === "closer" || (effectivePortal === "student" && studentViewMode === "crm_bridge")) &&
@@ -1372,7 +1373,7 @@ function CrmWorkspacePage() {
         <div className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-3 border-b border-emerald-500/30 bg-black/90 px-4 py-2.5 backdrop-blur-xl">
           <div className="flex items-center gap-2">
             <span className="rounded-full bg-emerald-500/20 px-3 py-1 font-mono text-xs font-black text-emerald-300">
-              ⚔️ HUB CLOSER COMPLET RPG
+              ⚔️ ARÈNE COMMERCIALE LUDIQUE XR
             </span>
             {effectivePortal === "student" && (
               <button
@@ -1396,14 +1397,14 @@ function CrmWorkspacePage() {
             <button
               type="button"
               onClick={() => setCloserDisplayMode("missions")}
-              className="rounded-full bg-emerald-400 px-4 py-1.5 text-xs font-black uppercase text-[#0b0d11] hover:bg-emerald-300"
+              className="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold text-neutral-300 hover:text-white hover:bg-white/20"
             >
-              ← Vue Cartes de Missions & Appels
+              📋 Vue Tableau Classique
             </button>
           </div>
         </div>
 
-        <CrmCloserDashboard
+        <CrmUltraLudiqueArena
           user={{
             fullName: user.fullName,
             email: user.email,
@@ -1411,6 +1412,9 @@ function CrmWorkspacePage() {
           }}
           leads={leads}
           onLogout={handleLogout}
+          onOpenCallModal={openCallModal}
+          onOpenWhatsappModal={openWhatsappModal}
+          onSignDeal={(leadId) => updateLeadStatus(leadId, "signed")}
         />
       </div>
     );
