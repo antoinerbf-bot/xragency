@@ -398,7 +398,7 @@ function CrmWorkspacePage() {
 
   // ── DIRECTOR TABS & MODES D'AFFICHAGE (COCKPIT PRO vs BOSS ARCADE vs MONDE METAVERSE) ──
   const [directorDisplayMode, setDirectorDisplayMode] = useState<"cockpit" | "boss_arcade" | "game_world">("cockpit");
-  const [closerDisplayMode, setCloserDisplayMode] = useState<"missions" | "combat_hub">("missions");
+  const [closerDisplayMode, setCloserDisplayMode] = useState<"missions" | "combat_hub">("combat_hub");
   const [directorTab, setDirectorTab] = useState<
     | "overview"
     | "leads"
@@ -1453,9 +1453,9 @@ function CrmWorkspacePage() {
               <button
                 type="button"
                 onClick={() => setCloserDisplayMode("combat_hub")}
-                className="hidden rounded-xl border border-emerald-400/40 bg-emerald-500/15 px-3 py-1.5 text-xs font-bold text-emerald-300 hover:bg-emerald-500/25 sm:inline-flex"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/50 bg-emerald-500/20 px-3 py-1.5 text-xs font-bold text-emerald-300 hover:bg-emerald-500/30 shadow-[0_0_15px_rgba(52,211,153,0.3)]"
               >
-                ⚔️ Ouvrir Hub RPG Closer
+                ⚔️ Hub RPG Jeu Vidéo
               </button>
             </div>
 
