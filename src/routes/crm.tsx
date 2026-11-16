@@ -45,14 +45,26 @@ import {
 } from "lucide-react";
 import type {
   CrmActivity,
+  CrmClientRecord,
   CrmInvoiceRecord,
   CrmLead,
   CrmNotification,
+  CrmProjectRecord,
+  CrmProviderRecord,
   CrmQuoteRecord,
   CrmTaskRecord,
   LeadPriority,
   LeadStatus,
+  QuoteItem,
 } from "./api/crm";
+import { CrmClientsTab } from "@/components/crm/CrmClientsTab";
+import { CrmQuotesTab } from "@/components/crm/CrmQuotesTab";
+import { CrmInvoicesTab } from "@/components/crm/CrmInvoicesTab";
+import { CrmProjectsTab } from "@/components/crm/CrmProjectsTab";
+import { CrmProvidersTab } from "@/components/crm/CrmProvidersTab";
+import { CrmCalendarTab } from "@/components/crm/CrmCalendarTab";
+import { CrmEgoLeaderboard } from "@/components/crm/CrmEgoLeaderboard";
+import { OfficialQuoteGenerator } from "@/components/crm/OfficialQuoteGenerator";
 import { cn } from "@/lib/utils";
 import agentXrPortrait from "@/assets/agent-xr-portrait.jpg";
 
@@ -99,9 +111,12 @@ interface CrmSnapshot {
   user?: SafeMember;
   members?: SafeMember[];
   leads?: CrmLead[];
+  clients?: CrmClientRecord[];
   quotes?: CrmQuoteRecord[];
   invoices?: CrmInvoiceRecord[];
+  projects?: CrmProjectRecord[];
   tasks?: CrmTaskRecord[];
+  providers?: CrmProviderRecord[];
   notifications?: CrmNotification[];
   activities?: CrmActivity[];
   stats?: {
@@ -114,6 +129,7 @@ interface CrmSnapshot {
     pipelineEur: number;
     totalCalls: number;
     closingRate: number;
+    activeProjectsCount?: number;
     pendingInvoicesEur?: number;
   };
   teamBreakdown?: MemberPerf[];
@@ -323,11 +339,25 @@ function CrmWorkspacePage() {
   const [closerAccountEmail, setCloserAccountEmail] = useState("lucas@xragency.fr");
 
   // ── DIRECTOR TABS ──
-  const [directorTab, setDirectorTab] = useState<"leads" | "maquettes" | "billing" | "calendar">("leads");
+  const [directorTab, setDirectorTab] = useState<
+    | "overview"
+    | "leads"
+    | "clients"
+    | "quotes"
+    | "invoices"
+    | "projects"
+    | "providers"
+    | "calendar"
+    | "maquettes"
+    | "leaderboard"
+  >("overview");
+  const [showOfficialQuoteModal, setShowOfficialQuoteModal] = useState(false);
   const [directorLeadScope, setDirectorLeadScope] = useState<"mine" | "team" | "all">("all");
 
   // ── CLOSER TABS & ASSISTED CALL MODAL ──
-  const [closerTab, setCloserTab] = useState<"missions" | "maquettes" | "commissions" | "calendar">("missions");
+  const [closerTab, setCloserTab] = useState<
+    "missions" | "maquettes" | "commissions" | "calendar" | "rpg_training" | "leaderboard"
+  >("missions");
   const [activeCallLead, setActiveCallLead] = useState<CrmLead | null>(null);
   const [callNotesInput, setCallNotesInput] = useState("");
   const [callFollowUpInput, setCallFollowUpInput] = useState("Demain 10h00");
@@ -559,10 +589,118 @@ function CrmWorkspacePage() {
   const user = snapshot?.user;
   const leads = snapshot?.leads || [];
   const members = snapshot?.members || [];
+  const clients = snapshot?.clients || [];
   const quotes = snapshot?.quotes || [];
   const invoices = snapshot?.invoices || [];
+  const projects = snapshot?.projects || [];
   const tasks = snapshot?.tasks || [];
+  const providers = snapshot?.providers || [];
   const notifications = snapshot?.notifications || [];
+
+  const handleCreateClient = async (clientData: {
+    company: string;
+    contactName: string;
+    email: string;
+    phone: string;
+    website?: string;
+    city: string;
+    sector: string;
+    servicesPurchased: string[];
+    totalRevenueEur: number;
+    internalNotes?: string;
+  }) => {
+    await apiCall(
+      {
+        action: "create_client",
+        ...clientData,
+      },
+      `Client ${clientData.company} créé avec succès !`
+    );
+  };
+
+  const handleCreateQuote = async (quoteData: {
+    clientCompany: string;
+    clientName: string;
+    clientEmail: string;
+    items: QuoteItem[];
+    paymentTerms?: string;
+    notes?: string;
+  }) => {
+    await apiCall(
+      {
+        action: "create_quote",
+        ...quoteData,
+      },
+      `Devis créé pour ${quoteData.clientCompany} !`
+    );
+  };
+
+  const handleUpdateQuoteStatus = async (quoteId: string, status: CrmQuoteRecord["status"]) => {
+    await apiCall(
+      {
+        action: "update_quote_status",
+        quoteId,
+        status,
+      },
+      `Statut du devis ${quoteId} mis à jour : ${status}`
+    );
+  };
+
+  const handleValidatePayment = async (invoiceId: string) => {
+    await apiCall(
+      {
+        action: "validate_payment",
+        invoiceId,
+      },
+      `Virement validé pour ${invoiceId} ! Commissions débloquées dans le coffre du closer.`
+    );
+  };
+
+  const handleCreateProject = async (projectData: {
+    projectName: string;
+    clientName: string;
+    serviceCategory: string;
+    budgetEur: number;
+    deliveryDeadline: string;
+    notes?: string;
+  }) => {
+    await apiCall(
+      {
+        action: "create_project",
+        ...projectData,
+      },
+      `Projet "${projectData.projectName}" créé avec succès !`
+    );
+  };
+
+  const handleUpdateProject = async (projectId: string, updates: Partial<CrmProjectRecord>) => {
+    await apiCall(
+      {
+        action: "update_project",
+        projectId,
+        updates,
+      },
+      `Projet ${projectId} mis à jour !`
+    );
+  };
+
+  const handleCreateProvider = async (providerData: {
+    name: string;
+    company?: string;
+    email: string;
+    phone: string;
+    specialties: string[];
+    hourlyRateEur: number;
+    notes?: string;
+  }) => {
+    await apiCall(
+      {
+        action: "create_provider",
+        ...providerData,
+      },
+      `Prestataire ${providerData.name} enregistré !`
+    );
+  };
 
   const closersList = useMemo(
     () => members.filter((m) => m.role !== "admin" && m.portalType !== "student"),
@@ -1081,7 +1219,7 @@ function CrmWorkspacePage() {
               </div>
             </div>
 
-            {/* Navigation 4 Onglets Jeu Vidéo */}
+            {/* Navigation Onglets Arène Commerciale */}
             <div className="flex flex-wrap items-center gap-1.5">
               {[
                 { id: "missions", label: "🎯 Mes Missions (Leads)", count: leads.length },
@@ -1092,6 +1230,8 @@ function CrmWorkspacePage() {
                 },
                 { id: "commissions", label: "💰 Mon Coffre & Barème" },
                 { id: "calendar", label: "📅 Relances & Quêtes" },
+                { id: "rpg_training", label: "⚔️ Combat Objections RPG" },
+                { id: "leaderboard", label: "🏆 Classement Équipe" },
               ].map((t) => (
                 <button
                   key={t.id}
@@ -1564,6 +1704,89 @@ function CrmWorkspacePage() {
               </div>
             </div>
           )}
+
+          {/* ONGLET 5 : COMBAT D'OBJECTIONS RPG */}
+          {closerTab === "rpg_training" && (
+            <div className="rounded-3xl border border-emerald-500/30 bg-[#131620] p-6 sm:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+                <div className="flex items-center gap-2.5">
+                  <Swords className="h-5 w-5 text-emerald-400" />
+                  <h3 className="text-lg font-bold text-white">
+                    Simulateur RPG : Objections Terrain & Répliques Gagnantes
+                  </h3>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {SCHOOL_OBJECTION_BATTLES.map((b, idx) => (
+                    <button
+                      key={b.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedBattleId(b.id);
+                        setBattleOutcome("none");
+                      }}
+                      className={cn(
+                        "rounded-full px-3.5 py-1.5 text-xs font-semibold transition",
+                        selectedBattleId === b.id
+                          ? "bg-emerald-400 text-[#101114]"
+                          : "border border-white/15 bg-white/5 text-white/75 hover:text-white"
+                      )}
+                    >
+                      Objection #{idx + 1}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-5 rounded-2xl border border-red-500/30 bg-red-500/10 p-4">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-red-300">
+                  L'OBJECTION DU PROSPECT :
+                </span>
+                <p className="mt-1 text-base font-semibold text-white">{activeBattle.prospectSay}</p>
+              </div>
+
+              <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                <button
+                  type="button"
+                  onClick={() => setBattleOutcome("win")}
+                  className="rounded-2xl border border-emerald-500/35 bg-emerald-500/10 p-4 text-left transition hover:border-emerald-400"
+                >
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-emerald-300">
+                    OPTION A (MÉTHODE XR AGENCY) :
+                  </span>
+                  <p className="mt-2 text-xs leading-relaxed text-white/90">{activeBattle.goodReply}</p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setBattleOutcome("retry")}
+                  className="rounded-2xl border border-white/15 bg-white/5 p-4 text-left transition hover:border-red-400/50"
+                >
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-white/60">
+                    OPTION B (RÉACTION CLASSIQUE) :
+                  </span>
+                  <p className="mt-2 text-xs leading-relaxed text-white/75">{activeBattle.badReply}</p>
+                </button>
+              </div>
+
+              {battleOutcome === "win" && (
+                <div className="mt-4 rounded-2xl border border-emerald-400/50 bg-emerald-500/20 p-4 text-xs font-semibold text-emerald-200">
+                  🏆 Réplique validée ! Vous recadrez sur la garantie et la maquette WhatsApp sans engagement.
+                </div>
+              )}
+              {battleOutcome === "retry" && (
+                <div className="mt-4 rounded-2xl border border-amber-400/50 bg-amber-500/20 p-4 text-xs font-semibold text-amber-200">
+                  ⚠️ Ne débattez pas ! Proposez immédiatement la maquette gratuite sur WhatsApp pour désamorcer.
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ONGLET 6 : CLASSEMENT ET CONCOURS D'EGO */}
+          {closerTab === "leaderboard" && (
+            <div className="rounded-3xl border border-white/10 bg-[#12141a] p-6">
+              <CrmEgoLeaderboard currentUserName={user.fullName} />
+            </div>
+          )}
         </main>
 
         {/* MODALE : MODE APPEL ASSISTÉ (SCRIPT + TARIFS + LOG RAPIDE) */}
@@ -1690,29 +1913,36 @@ function CrmWorkspacePage() {
             </div>
           </div>
 
-          {/* 4 Grands Piliers du QG Direction */}
+          {/* Les 10 Piliers Complets du QG Direction */}
           <div className="flex flex-wrap items-center gap-1.5">
             {[
-              { id: "leads", label: "📸 1. Leads & Dispatch", badge: leads.length },
+              { id: "overview", label: "👑 Vue Générale" },
+              { id: "leads", label: "📸 Leads & Dispatch", badge: leads.length },
+              { id: "clients", label: "👥 Clients", badge: clients.length },
+              { id: "quotes", label: "📝 Devis", badge: quotes.length },
+              {
+                id: "invoices",
+                label: "💳 Factures & RIB",
+                badge: invoices.filter((i) => i.status === "pending_transfer").length,
+                alert: invoices.filter((i) => i.status === "pending_transfer").length > 0,
+              },
+              { id: "projects", label: "💼 Projets", badge: projects.length },
+              { id: "providers", label: "🛠️ Prestataires", badge: providers.length },
+              { id: "calendar", label: "🕒 Calendrier & Dual Clocks", badge: tasks.length },
               {
                 id: "maquettes",
-                label: "🎨 2. Studio Maquettes",
+                label: "🎨 Maquettes",
                 badge: pendingMaquettes.length,
                 alert: pendingMaquettes.length > 0,
               },
-              {
-                id: "billing",
-                label: "🏦 3. Devis, RIB & Commissions",
-                badge: invoices.filter((i) => i.status === "pending_transfer").length,
-              },
-              { id: "calendar", label: "📅 4. Calendrier Perso, Pro & Offres", badge: tasks.length },
+              { id: "leaderboard", label: "🏆 Leaderboard" },
             ].map((tab) => (
               <button
                 key={tab.id}
                 type="button"
                 onClick={() => setDirectorTab(tab.id as typeof directorTab)}
                 className={cn(
-                  "inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-bold transition",
+                  "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition",
                   directorTab === tab.id
                     ? "bg-[#c5a880] text-[#101114] shadow-[0_0_25px_rgba(197,168,128,0.35)]"
                     : "border border-white/10 bg-white/5 text-white/75 hover:text-white"
@@ -1786,6 +2016,234 @@ function CrmWorkspacePage() {
             </p>
           </div>
         </div>
+
+        {/* ══════════════════════════════════════════════════════════════════
+            ONGLET 0 DIRECTION : VUE GÉNÉRALE & QG
+        ══════════════════════════════════════════════════════════════════ */}
+        {directorTab === "overview" && (
+          <div className="space-y-6">
+            {/* Bannière Actions Immédiates */}
+            <div className="rounded-3xl border border-[#c5a880]/40 bg-gradient-to-r from-[#211a12] via-[#151720] to-[#0f1118] p-6 shadow-2xl">
+              <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
+                <div className="max-w-2xl">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#c5a880]/20 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-[#e5cba4]">
+                    <Crown className="h-3.5 w-3.5" /> Centre de Commandement Général
+                  </span>
+                  <h2 className="mt-3 text-2xl font-bold text-white sm:text-3xl">
+                    Bienvenue au QG XR Agency, {user.fullName}.
+                  </h2>
+                  <p className="mt-2 text-xs leading-relaxed text-white/70 sm:text-sm">
+                    Gérez vos leads par capture d'écran ou téléphone, validez les maquettes en 1 clic pour vos commerciaux, émettez vos devis et factures officiels avec RIB KARMA SASU, et pilotez vos projets en direct.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setDirectorTab("leads")}
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#c5a880] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-[#101114] shadow-lg hover:bg-[#d8be98]"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Ajouter un Lead
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowOfficialQuoteModal(true)}
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-xs font-bold text-white hover:bg-white/20"
+                  >
+                    <FileText className="h-4 w-4 text-[#e5cba4]" />
+                    Générateur Devis & Contrat
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDirectorTab("maquettes")}
+                    className="inline-flex items-center gap-2 rounded-xl border border-amber-400/40 bg-amber-500/10 px-4 py-2.5 text-xs font-bold text-amber-300 hover:bg-amber-500/20"
+                  >
+                    <Palette className="h-4 w-4" />
+                    Maquettes ({pendingMaquettes.length})
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Grille Synthétique : Tâches Urgentes + Maquettes + Alertes Virement */}
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+              {/* Colonne 1 : Tâches & Priorités du Jour */}
+              <div className="rounded-3xl border border-white/10 bg-[#12141b] p-6">
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <h3 className="flex items-center gap-2 text-sm font-bold text-white">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                    Tâches du Jour ({tasks.filter((t) => t.status !== "done").length})
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => setDirectorTab("calendar")}
+                    className="text-[11px] text-[#e5cba4] hover:underline"
+                  >
+                    Voir tout →
+                  </button>
+                </div>
+                <div className="mt-4 space-y-2.5">
+                  {tasks.slice(0, 5).map((task) => (
+                    <button
+                      key={task.id}
+                      type="button"
+                      onClick={() => void apiCall({ action: "toggle_task", taskId: task.id })}
+                      className={cn(
+                        "flex w-full items-center justify-between rounded-2xl border p-3 text-left transition",
+                        task.status === "done"
+                          ? "border-emerald-500/20 bg-emerald-500/5 text-white/40 line-through"
+                          : "border-white/10 bg-black/30 text-white hover:border-white/20"
+                      )}
+                    >
+                      <span className="text-xs font-medium">{task.title}</span>
+                      <span className="font-mono text-[10px] text-white/50">{task.dueDate}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Colonne 2 : Maquettes en attente de validation */}
+              <div className="rounded-3xl border border-amber-400/30 bg-[#12141b] p-6">
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <h3 className="flex items-center gap-2 text-sm font-bold text-white">
+                    <Palette className="h-4 w-4 text-amber-300" />
+                    Maquettes Studio ({pendingMaquettes.length})
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => setDirectorTab("maquettes")}
+                    className="text-[11px] text-amber-300 hover:underline"
+                  >
+                    Valider →
+                  </button>
+                </div>
+                <div className="mt-4 space-y-2.5">
+                  {pendingMaquettes.length === 0 ? (
+                    <p className="py-6 text-center text-xs text-white/50">
+                      Toutes les maquettes sont validées.
+                    </p>
+                  ) : (
+                    pendingMaquettes.slice(0, 4).map((m) => (
+                      <div
+                        key={m.id}
+                        className="rounded-2xl border border-amber-400/30 bg-amber-500/5 p-3 text-xs"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-white">{m.company}</span>
+                          <span className="rounded bg-amber-500/20 px-2 py-0.5 font-mono text-[10px] text-amber-300">
+                            En attente
+                          </span>
+                        </div>
+                        <p className="mt-1 text-white/60">{m.serviceTarget}</p>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              {/* Colonne 3 : Factures en Attente de Virement sur RIB KARMA */}
+              <div className="rounded-3xl border border-sky-400/30 bg-[#12141b] p-6">
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <h3 className="flex items-center gap-2 text-sm font-bold text-white">
+                    <CreditCard className="h-4 w-4 text-sky-300" />
+                    Virements en Attente ({invoices.filter((i) => i.status === "pending_transfer").length})
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => setDirectorTab("invoices")}
+                    className="text-[11px] text-sky-300 hover:underline"
+                  >
+                    Gérer →
+                  </button>
+                </div>
+                <div className="mt-4 space-y-2.5">
+                  {invoices
+                    .filter((i) => i.status === "pending_transfer")
+                    .slice(0, 4)
+                    .map((inv) => (
+                      <div
+                        key={inv.id}
+                        className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/30 p-3"
+                      >
+                        <div>
+                          <p className="text-xs font-bold text-white">{inv.clientCompany}</p>
+                          <p className="font-mono text-[10px] text-white/50">{inv.paymentReference}</p>
+                        </div>
+                        <div className="text-right">
+                          <span className="font-mono text-xs font-bold text-emerald-300">
+                            {formatMoney(inv.totalEur)}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Raccourcis d'Accès Direct aux Modules */}
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <button
+                type="button"
+                onClick={() => setDirectorTab("clients")}
+                className="group flex flex-col justify-between rounded-2xl border border-white/10 bg-[#12141b] p-4 text-left transition hover:border-[#c5a880]"
+              >
+                <div className="flex items-center justify-between">
+                  <Users className="h-5 w-5 text-[#c5a880]" />
+                  <span className="font-mono text-xs text-white/50">{clients.length}</span>
+                </div>
+                <div className="mt-4">
+                  <h4 className="text-sm font-bold text-white group-hover:text-[#e5cba4]">Annuaire Clients</h4>
+                  <p className="text-[11px] text-white/60">Comptes, VIP, CA généré</p>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setDirectorTab("quotes")}
+                className="group flex flex-col justify-between rounded-2xl border border-white/10 bg-[#12141b] p-4 text-left transition hover:border-[#c5a880]"
+              >
+                <div className="flex items-center justify-between">
+                  <FileText className="h-5 w-5 text-emerald-400" />
+                  <span className="font-mono text-xs text-white/50">{quotes.length}</span>
+                </div>
+                <div className="mt-4">
+                  <h4 className="text-sm font-bold text-white group-hover:text-emerald-300">Devis Officiels</h4>
+                  <p className="text-[11px] text-white/60">Génération & cycle de vente</p>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setDirectorTab("projects")}
+                className="group flex flex-col justify-between rounded-2xl border border-white/10 bg-[#12141b] p-4 text-left transition hover:border-[#c5a880]"
+              >
+                <div className="flex items-center justify-between">
+                  <Briefcase className="h-5 w-5 text-sky-400" />
+                  <span className="font-mono text-xs text-white/50">{projects.length}</span>
+                </div>
+                <div className="mt-4">
+                  <h4 className="text-sm font-bold text-white group-hover:text-sky-300">Projets en cours</h4>
+                  <p className="text-[11px] text-white/60">Étapes & jalons de livraison</p>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setDirectorTab("providers")}
+                className="group flex flex-col justify-between rounded-2xl border border-white/10 bg-[#12141b] p-4 text-left transition hover:border-[#c5a880]"
+              >
+                <div className="flex items-center justify-between">
+                  <Building2 className="h-5 w-5 text-purple-400" />
+                  <span className="font-mono text-xs text-white/50">{providers.length}</span>
+                </div>
+                <div className="mt-4">
+                  <h4 className="text-sm font-bold text-white group-hover:text-purple-300">Prestataires</h4>
+                  <p className="text-[11px] text-white/60">Développeurs & sous-traitance</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* ══════════════════════════════════════════════════════════════════
             ONGLET 1 DIRECTION : AJOUT ULTRA-RAPIDE (SCREENSHOT / TÉL) & DISPATCH
@@ -2219,185 +2677,133 @@ function CrmWorkspacePage() {
         )}
 
         {/* ══════════════════════════════════════════════════════════════════
-            ONGLET 3 DIRECTION : DEVIS, FACTURES + RIB OFFICIEL & COMMISSIONS
+            ONGLET 3 DIRECTION : ANNUAIRE CLIENTS (COMPTES, VIP, CA)
         ══════════════════════════════════════════════════════════════════ */}
-        {directorTab === "billing" && (
+        {directorTab === "clients" && (
           <div className="space-y-6">
-            {/* Générateur de Devis + Facture RIB Uniforme */}
-            <div className="rounded-3xl border border-[#c5a880]/40 bg-[#12141b] p-6">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
-                <div>
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#c5a880]">
-                    🏦 DESIGN UNIFORME DEVIS / FACTURE + RIB INTÉGRÉ
-                  </span>
-                  <h2 className="text-xl font-bold text-white">
-                    Émettre un Devis Officiel avec RIB KARMA SASU (XR Agency)
-                  </h2>
-                </div>
-                <span className="rounded-full border border-emerald-400/40 bg-emerald-500/15 px-3 py-1 font-mono text-[10px] text-emerald-300">
-                  Synchronisé avec contact.xragency@gmail.com
-                </span>
-              </div>
-
-              <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-4">
-                <input
-                  type="text"
-                  value={quoteCompany}
-                  onChange={(e) => setQuoteCompany(e.target.value)}
-                  placeholder="Entreprise / Client (ex: Clinique Leman)"
-                  className="rounded-xl border border-white/15 bg-black/50 px-3 py-2.5 text-xs text-white"
-                />
-                <input
-                  type="email"
-                  value={quoteEmail}
-                  onChange={(e) => setQuoteEmail(e.target.value)}
-                  placeholder="Email du client"
-                  className="rounded-xl border border-white/15 bg-black/50 px-3 py-2.5 text-xs text-white"
-                />
-                <select
-                  value={quoteServiceLabel}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setQuoteServiceLabel(val);
-                    if (val.includes("499")) {
-                      setQuotePriceEur(499);
-                      setQuotePeriod("once");
-                    } else if (val.includes("799")) {
-                      setQuotePriceEur(799);
-                      setQuotePeriod("once");
-                    } else if (val.includes("1 499")) {
-                      setQuotePriceEur(1499);
-                      setQuotePeriod("once");
-                    } else if (val.includes("999")) {
-                      setQuotePriceEur(999);
-                      setQuotePeriod("year");
-                    } else if (val.includes("500")) {
-                      setQuotePriceEur(500);
-                      setQuotePeriod("year");
-                    } else if (val.includes("2 000")) {
-                      setQuotePriceEur(2000);
-                      setQuotePeriod("once");
-                    }
-                  }}
-                  className="rounded-xl border border-white/15 bg-black/50 px-3 py-2.5 text-xs text-white"
-                >
-                  <option value="Site Vitrine Pro (499 €)">Site Vitrine Pro (499 €)</option>
-                  <option value="Site Business Sur-Mesure (799 €)">Site Business (799 €)</option>
-                  <option value="Site E-Commerce (1 499 €)">Site E-Commerce (1 499 €)</option>
-                  <option value="Top 3 Google Maps Garanti 1 An (999 €)">Top 3 Google Maps Garanti 1 An (999 €)</option>
-                  <option value="Gestion Annuelle Fiche Google Maps (500 €)">Gestion Annuelle Google Maps (500 €)</option>
-                  <option value="CRM & Logiciel Sur-Mesure (2 000 €)">CRM & Logiciel Sur-Mesure (2 000 €)</option>
-                </select>
-                <button
-                  type="button"
-                  disabled={busy}
-                  onClick={() => void handleRequestQuoteAndRib()}
-                  className="rounded-xl bg-[#c5a880] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-[#101114] hover:bg-[#d8be98]"
-                >
-                  Générer Devis + Facture RIB
-                </button>
-              </div>
-            </div>
-
-            {/* Liste des Factures / Devis avec RIB Officiel et Bouton "Virement Reçu sur mon RIB" */}
-            <div className="space-y-4">
-              {invoices.map((inv) => (
-                <div
-                  key={inv.id}
-                  className="rounded-3xl border border-white/15 bg-[#12141b] p-6 shadow-xl"
-                >
-                  <div className="flex flex-wrap items-start justify-between gap-4 border-b border-white/10 pb-4">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-xs font-bold text-[#c5a880]">{inv.id}</span>
-                        <span
-                          className={cn(
-                            "rounded-full px-3 py-0.5 font-mono text-[10px] font-bold uppercase",
-                            inv.status === "paid"
-                              ? "bg-emerald-500/20 text-emerald-300"
-                              : "bg-amber-500/20 text-amber-300"
-                          )}
-                        >
-                          {inv.status === "paid"
-                            ? "✅ VIREMENT REÇU SUR RIB · COMMISSION DÉBLOQUÉE"
-                            : "⏳ EN ATTENTE DE VIREMENT CLIENT"}
-                        </span>
-                      </div>
-                      <h3 className="mt-1 text-lg font-bold text-white">
-                        {inv.clientCompany} ({inv.clientName})
-                      </h3>
-                      <p className="text-xs text-white/60">
-                        {inv.clientEmail} · Émis le {formatTime(inv.createdAt)}
-                      </p>
-                    </div>
-
-                    <div className="text-right">
-                      <span className="font-mono text-[10px] uppercase text-white/50">TOTAL TTC</span>
-                      <p className="text-2xl font-black text-white">{formatMoney(inv.totalEur)}</p>
-                      {inv.status !== "paid" && (
-                        <button
-                          type="button"
-                          disabled={busy}
-                          onClick={() =>
-                            void apiCall(
-                              {
-                                action: "validate_payment",
-                                invoiceId: inv.id,
-                              },
-                              `💸 Virement validé pour ${inv.clientCompany} ! La commission du vendeur est débloquée.`
-                            )
-                          }
-                          className="mt-2 inline-flex items-center gap-1.5 rounded-xl bg-emerald-400 px-4 py-2 text-xs font-black uppercase text-[#0b0d11] hover:bg-emerald-300"
-                        >
-                          <CheckCircle2 className="h-4 w-4" />
-                          Valider « Virement reçu sur mon RIB »
-                        </button>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Bloc RIB Officiel intégré sur chaque Devis / Facture */}
-                  <div className="mt-4 grid grid-cols-1 gap-4 rounded-2xl border border-[#c5a880]/30 bg-black/40 p-4 md:grid-cols-2">
-                    <div>
-                      <span className="font-mono text-[10px] uppercase tracking-widest text-[#c5a880]">
-                        PRESTATIONS INCLUSES :
-                      </span>
-                      <ul className="mt-2 space-y-1 text-xs text-white/85">
-                        {inv.items.map((item, idx) => (
-                          <li key={idx} className="flex justify-between">
-                            <span>{item.label}</span>
-                            <span className="font-mono font-bold">{formatMoney(item.amountEur)}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="border-t border-white/10 pt-3 md:border-l md:border-t-0 md:pl-4 md:pt-0">
-                      <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-emerald-300">
-                        🏦 COORDONNÉES BANCAIRES OFFICIELLES (RIB INTÉGRÉ) :
-                      </span>
-                      <p className="mt-1 text-xs text-white/90">
-                        Bénéficiaire : <strong>{inv.bankDetails.beneficiary}</strong>
-                      </p>
-                      <p className="font-mono text-xs text-[#e5cba4]">
-                        IBAN : {inv.bankDetails.ibanMasked} · BIC : {inv.bankDetails.bic}
-                      </p>
-                      <p className="mt-1 font-mono text-[11px] text-white/70">
-                        Référence virement : <strong>{inv.paymentReference}</strong>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <CrmClientsTab
+              clients={clients}
+              isAdmin={true}
+              onCreateClient={handleCreateClient}
+              onOpenNewQuoteForClient={(c) => {
+                setQuoteCompany(c.company);
+                setQuoteEmail(c.email);
+                setDirectorTab("quotes");
+              }}
+              onOpenNewProjectForClient={() => {
+                setDirectorTab("projects");
+              }}
+            />
           </div>
         )}
 
         {/* ══════════════════════════════════════════════════════════════════
-            ONGLET 4 DIRECTION : CALENDRIER UNIFIÉ (VIE PERSO + PRO + OFFRES)
+            ONGLET 4 DIRECTION : DEVIS OFFICIELS & CATALOGUE
+        ══════════════════════════════════════════════════════════════════ */}
+        {directorTab === "quotes" && (
+          <div className="space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-[#c5a880]/40 bg-[#12141b] p-5">
+              <div>
+                <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#c5a880]">
+                  GÉNÉRATEUR OFFICIEL DE DEVIS & CONTRAT
+                </span>
+                <h3 className="mt-1 text-lg font-bold text-white">
+                  Édition avec Mentions Légales, Acompte & RIB KARMA SASU
+                </h3>
+                <p className="text-xs text-white/60">
+                  Générez un contrat PDF prêt à signer ou ajoutez une ligne devis directement au catalogue.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowOfficialQuoteModal(true)}
+                className="inline-flex items-center gap-2 rounded-xl bg-[#c5a880] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-[#101114] shadow-lg hover:bg-[#d8be98]"
+              >
+                <Sparkles className="h-4 w-4" />
+                Ouvrir le Générateur PDF / Contrat
+              </button>
+            </div>
+
+            <CrmQuotesTab
+              quotes={quotes}
+              isAdmin={true}
+              onCreateQuote={handleCreateQuote}
+              onUpdateQuoteStatus={handleUpdateQuoteStatus}
+            />
+          </div>
+        )}
+
+        {/* ══════════════════════════════════════════════════════════════════
+            ONGLET 5 DIRECTION : FACTURATION, RIB KARMA SASU & COMMISSIONS
+        ══════════════════════════════════════════════════════════════════ */}
+        {directorTab === "invoices" && (
+          <div className="space-y-6">
+            {/* Bannière Coordonnées Bancaires Officielles */}
+            <div className="rounded-3xl border border-emerald-400/40 bg-gradient-to-r from-emerald-950/40 via-[#12141b] to-[#12141b] p-6 shadow-xl">
+              <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+                <div>
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-emerald-300">
+                    🏦 COMPTE BANCAIRE OFFICIEL XR AGENCY
+                  </span>
+                  <h3 className="mt-1 text-xl font-bold text-white">KARMA SASU — RIB Professionnel</h3>
+                  <p className="mt-1 font-mono text-xs text-[#e5cba4]">
+                    IBAN : FR76 1751 5900 0008 1234 5678 901 · BIC : QNTOFR22
+                  </p>
+                </div>
+                <div className="text-left sm:text-right">
+                  <span className="font-mono text-[10px] uppercase text-white/60">VIREMENTS EN ATTENTE</span>
+                  <p className="font-mono text-2xl font-black text-white">
+                    {formatMoney(snapshot.stats?.pendingInvoicesEur || 0)}
+                  </p>
+                  <p className="text-[11px] text-emerald-300">
+                    Débloque instantanément la commission du closer au clic.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <CrmInvoicesTab
+              invoices={invoices}
+              isAdmin={true}
+              onValidatePayment={handleValidatePayment}
+            />
+          </div>
+        )}
+
+        {/* ══════════════════════════════════════════════════════════════════
+            ONGLET 6 DIRECTION : PROJETS EN COURS & LIVRAISON
+        ══════════════════════════════════════════════════════════════════ */}
+        {directorTab === "projects" && (
+          <div className="space-y-6">
+            <CrmProjectsTab
+              projects={projects}
+              isAdmin={true}
+              onCreateProject={handleCreateProject}
+              onUpdateProject={handleUpdateProject}
+            />
+          </div>
+        )}
+
+        {/* ══════════════════════════════════════════════════════════════════
+            ONGLET 7 DIRECTION : PRESTATAIRES & SOUS-TRAITANTS
+        ══════════════════════════════════════════════════════════════════ */}
+        {directorTab === "providers" && (
+          <div className="space-y-6">
+            <CrmProvidersTab
+              providers={providers}
+              isAdmin={true}
+              onCreateProvider={handleCreateProvider}
+            />
+          </div>
+        )}
+
+        {/* ══════════════════════════════════════════════════════════════════
+            ONGLET 8 DIRECTION : CALENDRIER UNIFIÉ & DUAL CLOCKS PARIS / VIETNAM
         ══════════════════════════════════════════════════════════════════ */}
         {directorTab === "calendar" && (
           <div className="space-y-6">
+            <CrmCalendarTab leads={leads} tasks={tasks} projects={projects} />
+
             {/* Formulaire d'ajout de tâche Perso ou Pro */}
             <form
               onSubmit={(e) => {
@@ -2516,7 +2922,7 @@ function CrmWorkspacePage() {
               </div>
             </div>
 
-            {/* Calendriers Opérationnels par Offre (Community Management, Google Maps, SEO, Web) */}
+            {/* Calendriers Opérationnels par Offre */}
             <div className="rounded-3xl border border-white/10 bg-[#12141b] p-6">
               <h3 className="text-lg font-bold text-white">
                 📋 Calendriers d’Exécution par Offre (Community Management, Google Maps, SEO & Web)
@@ -2550,7 +2956,47 @@ function CrmWorkspacePage() {
             </div>
           </div>
         )}
+
+        {/* ══════════════════════════════════════════════════════════════════
+            ONGLET 9 DIRECTION : LEADERBOARD ÉQUIPE & EGO
+        ══════════════════════════════════════════════════════════════════ */}
+        {directorTab === "leaderboard" && (
+          <div className="rounded-3xl border border-white/10 bg-[#12141a] p-6">
+            <CrmEgoLeaderboard currentUserName={user.fullName} />
+          </div>
+        )}
       </main>
+
+      {/* MODALE DU GÉNÉRATEUR OFFICIEL DE DEVIS */}
+      {showOfficialQuoteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md">
+          <div className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-3xl border border-[#c5a880]/40 bg-[#0f1118] p-6 text-white shadow-2xl">
+            <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-4">
+              <div>
+                <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#c5a880]">
+                  XR AGENCY · STUDIO DEVIS OFFICIEL & CONTRAT
+                </span>
+                <h3 className="text-xl font-bold">Générateur Officiel avec RIB KARMA SASU</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowOfficialQuoteModal(false)}
+                className="rounded-full border border-white/20 px-3 py-1 text-xs text-white/70 hover:text-white"
+              >
+                Fermer ✕
+              </button>
+            </div>
+            <OfficialQuoteGenerator
+              initialClientName={quoteCompany || "Client Entreprise"}
+              initialClientEmail={quoteEmail || "contact@client.fr"}
+              onQuoteSigned={() => {
+                flashSuccess("Devis officiel généré avec succès !");
+                setShowOfficialQuoteModal(false);
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
