@@ -69,7 +69,6 @@ import { CrmBossDashboard, type CrmTodo } from "@/components/crm/CrmBossDashboar
 import { CrmGameWorld } from "@/components/crm/CrmGameWorld";
 import { CrmCloserDashboard } from "@/components/crm/CrmCloserDashboard";
 import { CrmSchoolDashboard } from "@/components/crm/CrmSchoolDashboard";
-import { JarvisCommandHUD } from "@/components/jarvis/JarvisCommandHUD";
 import { XR_ADVISORS } from "@/lib/xr-advisors";
 import { playXpChime, generateLovableArchitecturePrompt } from "@/lib/rpg-engine";
 import { cn } from "@/lib/utils";
@@ -163,6 +162,58 @@ function getOfficialCommission(serviceTarget: string, budgetEur: number) {
   }
   const amountEur = Math.round(((Number(budgetEur) || 0) * ratePct) / 100);
   return { ratePct, ruleLabel, amountEur };
+}
+
+// ── EFFET SONORE & VICTOIRE CLOSING (WEB AUDIO SYNTHÉTISEUR SANS DÉPENDANCE) ──
+function playVictorySound() {
+  if (typeof window === "undefined") return;
+  try {
+    const AudioContextClass =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    const now = ctx.currentTime;
+    // Chime d'accord majeur ascendant brillant : Do5 -> Mi5 -> Sol5 -> Do6 -> Mi6
+    const notes = [523.25, 659.25, 783.99, 1046.5, 1318.51];
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+      gain.gain.setValueAtTime(0.001, now + idx * 0.07);
+      gain.gain.exponentialRampToValueAtTime(0.2, now + idx * 0.07 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.07 + 0.55);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + idx * 0.07);
+      osc.stop(now + idx * 0.07 + 0.6);
+    });
+  } catch {
+    // Audio fallback silencieux
+  }
+}
+
+// ── TEMPLATES DE MESSAGES WHATSAPP STRATÉGIQUES 1-CLIC ──
+function getWhatsappMessageText(
+  templateKey: "maquette" | "relance" | "devis" | "contact",
+  lead: CrmLead,
+  senderName: string
+) {
+  const contact = lead.contactName || "Bonjour";
+  const company = lead.company || "votre établissement";
+  const maquetteUrl = lead.maquetteUrl || "https://xragencyai.com";
+
+  if (templateKey === "maquette") {
+    return `Bonjour ${contact}, c'est ${senderName} de l'agence XR Agency. Suite à notre échange, notre studio créatif a finalisé la maquette sur-mesure pour ${company} : ${maquetteUrl} . Prenez 2 minutes pour la consulter sur votre smartphone et dites-moi ce que vous en pensez !`;
+  }
+  if (templateKey === "relance") {
+    return `Bonjour ${contact}, avez-vous pu jeter un œil à la proposition pour ${company} ? Vos concurrents renforcent actuellement leur visibilité sur Google Maps. Si vous souhaitez bloquer votre créneau de mise en ligne cette semaine, confirmez-moi et on valide !`;
+  }
+  if (templateKey === "devis") {
+    return `Bonjour ${contact}, voici les éléments pour valider votre commande pour ${company} (${lead.serviceTarget} à ${lead.budgetEur} €). Le virement est à adresser sur notre compte officiel KARMA SASU (IBAN transmis sur devis). Nous lançons la production dès réception !`;
+  }
+  return `Bonjour ${contact}, c'est ${senderName} de XR Agency à propos de la visibilité digitale de ${company}. Avez-vous 2 minutes pour échanger par message ?`;
 }
 
 const OFFICIAL_CATALOG = [
@@ -362,6 +413,7 @@ function CrmWorkspacePage() {
   >("overview");
   const [showOfficialQuoteModal, setShowOfficialQuoteModal] = useState(false);
   const [directorLeadScope, setDirectorLeadScope] = useState<string>("all");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // ── CLOSER TABS & ASSISTED CALL MODAL ──
   const [closerTab, setCloserTab] = useState<
@@ -402,6 +454,58 @@ function CrmWorkspacePage() {
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskCategory, setNewTaskCategory] = useState<"pro" | "perso">("pro");
   const [newTaskDueDate, setNewTaskDueDate] = useState("Aujourd'hui");
+
+  // ── GAMIFICATION & EFFETS LUDIQUES (KA-CHING, COFFRE, CONFETTIS) ──
+  const [showCelebration, setShowCelebration] = useState<{
+    active: boolean;
+    title: string;
+    subtitle: string;
+    amount?: number;
+  }>({
+    active: false,
+    title: "",
+    subtitle: "",
+  });
+
+  const triggerCelebration = (title: string, subtitle: string, amount?: number) => {
+    playVictorySound();
+    setShowCelebration({ active: true, title, subtitle, amount });
+    setTimeout(() => {
+      setShowCelebration((prev) => ({ ...prev, active: false }));
+    }, 4500);
+  };
+
+  // ── CHRONOMÈTRE APPEL ASSISTÉ CLOSER ──
+  const [callTimerSeconds, setCallTimerSeconds] = useState(0);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+    if (activeCallLead) {
+      setCallTimerSeconds(0);
+      timer = setInterval(() => {
+        setCallTimerSeconds((s) => s + 1);
+      }, 1000);
+    } else {
+      setCallTimerSeconds(0);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [activeCallLead]);
+
+  // ── MODE D'AJOUT DIRECTION (FLASH 5S vs DÉTAILLÉ) ──
+  const [directionAddMode, setDirectionAddMode] = useState<"flash" | "detailed">("flash");
+  const [flashLeadText, setFlashLeadText] = useState("");
+  const [flashCloserTarget, setFlashCloserTarget] = useState("mem-lucas");
+  const [flashServiceTarget, setFlashServiceTarget] = useState("Site Vitrine Pro (499 €)");
+
+  // ── MODALE MESSAGES WHATSAPP PRÉ-RÉDIGÉS 1-CLIC ──
+  const [whatsappModalLead, setWhatsappModalLead] = useState<CrmLead | null>(null);
+  const [whatsappTemplateKey, setWhatsappTemplateKey] = useState<"maquette" | "relance" | "devis" | "contact">("maquette");
+
+  // ── SIMULATEUR DE COMMISSION EN DIRECT (COFFRE CLOSER) ──
+  const [simulatedPriceEur, setSimulatedPriceEur] = useState(999);
+  const [simulatedServiceLabel, setSimulatedServiceLabel] = useState("Google Maps Top 3 Garanti 24/7 (999 €/an)");
 
   const flashSuccess = (msg: string) => {
     setSuccessMsg(msg);
@@ -566,6 +670,49 @@ function CrmWorkspacePage() {
     }
   };
 
+  const handleFlashAddLead = async (e: FormEvent) => {
+    e.preventDefault();
+    const raw = flashLeadText.trim();
+    if (!raw) {
+      setErrorMsg("Veuillez saisir un numéro ou un nom d'entreprise !");
+      return;
+    }
+
+    const phoneMatch = raw.match(/(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}/);
+    const extractedPhone = phoneMatch ? phoneMatch[0] : "";
+    let extractedCompany = raw.replace(extractedPhone, "").replace(/[-—,;:]/g, " ").trim();
+    if (!extractedCompany) {
+      extractedCompany = extractedPhone ? `Prospect ${extractedPhone}` : "Nouveau Prospect Direct";
+    }
+    const finalPhone = extractedPhone || raw;
+
+    let budget = 499;
+    if (flashServiceTarget.includes("999")) budget = 999;
+    else if (flashServiceTarget.includes("1499")) budget = 1499;
+    else if (flashServiceTarget.includes("2000")) budget = 2000;
+    else if (flashServiceTarget.includes("2490")) budget = 2490;
+
+    const res = await apiCall(
+      {
+        action: "send_lead",
+        company: extractedCompany,
+        contactName: "Gérant / Décideur",
+        phone: finalPhone,
+        city: "France / Métropole",
+        serviceTarget: flashServiceTarget,
+        budgetEur: budget,
+        assignedTo: flashCloserTarget,
+        notes: "Lead injecté en Mode Flash (5s) par la Direction",
+      },
+      "⚡ Lead flash créé et dispatché instantanément !"
+    );
+
+    if (res) {
+      setFlashLeadText("");
+      triggerCelebration("LEAD DISPATCHÉ ! ⚡", `Mission envoyée au closer pour ${extractedCompany}`);
+    }
+  };
+
   const handleRequestQuoteAndRib = async (lead?: CrmLead) => {
     const company = lead ? lead.company : quoteCompany.trim();
     const email = lead ? lead.email || "client@entreprise.fr" : quoteEmail.trim() || "client@entreprise.fr";
@@ -681,6 +828,10 @@ function CrmWorkspacePage() {
   };
 
   const handleValidatePayment = async (invoiceId: string) => {
+    triggerCelebration(
+      "VIREMENT REÇU & CONFIRMÉ ! 💸",
+      `Fonds reçus sur le RIB KARMA SASU. Les commissions ont été débloquées dans le coffre du closer !`
+    );
     await apiCall(
       {
         action: "validate_payment",
@@ -792,21 +943,111 @@ function CrmWorkspacePage() {
     playXpChime("audit");
   };
 
-  const mappedProspectsForJarvis = useMemo(() => {
-    return leads.map((l) => ({
-      id: l.id,
-      business_name: l.company,
-      contact_name: l.contactName,
-      phone: l.phone,
-      website_url: l.website || "",
-      status: (l.status === "signed" ? "Signé" : l.status === "to_call" ? "À Contacter" : "En Négociation") as any,
-      owner_id: l.assignedTo,
-      notes: l.notes,
-      created_at: l.createdAt,
-      last_contact_at: l.updatedAt || l.createdAt,
-      estimated_budget: l.budgetEur,
-    }));
-  }, [leads]);
+  // ── COMPOSANTS MODALES PARTAGÉES (WHATSAPP 1-CLIC & CÉLÉBRATION VICTOIRE) ──
+  const renderCelebrationBanner = () => {
+    if (!showCelebration.active) return null;
+    return (
+      <div className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center p-4">
+        <div className="animate-bounce rounded-3xl border-2 border-amber-400 bg-gradient-to-b from-[#1c1811] via-[#12141a] to-black p-8 text-center text-white shadow-[0_0_80px_rgba(251,191,36,0.5)]">
+          <span className="text-6xl animate-pulse inline-block">🏆🪙</span>
+          <h3 className="mt-4 text-2xl font-black uppercase tracking-wider text-amber-300">
+            {showCelebration.title}
+          </h3>
+          <p className="mt-2 text-sm text-white/90">{showCelebration.subtitle}</p>
+          {showCelebration.amount && (
+            <p className="mt-3 font-mono text-3xl font-black text-emerald-400">
+              +{formatMoney(showCelebration.amount)} DÉBLOQUÉS !
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const renderWhatsappModal = () => {
+    if (!whatsappModalLead) return null;
+    const messageText = getWhatsappMessageText(whatsappTemplateKey, whatsappModalLead, user.fullName);
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md">
+        <div className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-emerald-400/40 bg-[#0f1118] p-6 text-white shadow-2xl">
+          <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <div className="flex items-center gap-2">
+              <MessageCircle className="h-5 w-5 text-emerald-400" />
+              <h3 className="text-lg font-bold">WhatsApp 1-Clic · {whatsappModalLead.company}</h3>
+            </div>
+            <button
+              type="button"
+              onClick={() => setWhatsappModalLead(null)}
+              className="rounded-full border border-white/20 px-3 py-1 text-xs text-white/70 hover:text-white"
+            >
+              Fermer ✕
+            </button>
+          </div>
+
+          <p className="mt-3 text-xs text-white/60">
+            Sélectionnez un modèle calibré pour maximiser le taux de réponse :
+          </p>
+
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {[
+              { key: "maquette", label: "🎨 Maquette Offerte" },
+              { key: "relance", label: "🔥 Relance J+2" },
+              { key: "devis", label: "📝 Devis & RIB KARMA" },
+              { key: "contact", label: "🤝 Prise de Contact" },
+            ].map((t) => (
+              <button
+                key={t.key}
+                type="button"
+                onClick={() => setWhatsappTemplateKey(t.key as typeof whatsappTemplateKey)}
+                className={cn(
+                  "rounded-xl border p-2.5 text-xs font-bold transition",
+                  whatsappTemplateKey === t.key
+                    ? "border-emerald-400 bg-emerald-500/20 text-emerald-200"
+                    : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
+                )}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-4 rounded-2xl border border-white/15 bg-black/60 p-4 font-sans text-xs leading-relaxed text-white/90">
+            <span className="mb-2 block font-mono text-[9px] font-bold uppercase text-emerald-300">
+              Aperçu du message :
+            </span>
+            {messageText}
+          </div>
+
+          <div className="mt-5 flex gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                if (typeof navigator !== "undefined" && navigator.clipboard) {
+                  void navigator.clipboard.writeText(messageText);
+                  flashSuccess("Texte copié dans le presse-papier !");
+                }
+              }}
+              className="flex-1 rounded-xl border border-white/20 bg-white/5 py-3 text-xs font-bold text-white hover:bg-white/10"
+            >
+              Copier le texte
+            </button>
+            <a
+              href={`https://wa.me/${whatsappModalLead.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                messageText
+              )}`}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => setWhatsappModalLead(null)}
+              className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-400 py-3 text-xs font-black uppercase text-[#0b0d11] shadow-[0_0_20px_rgba(52,211,153,0.4)] hover:bg-emerald-300"
+            >
+              <MessageCircle className="h-4 w-4" />
+              Ouvrir WhatsApp 🚀
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   if (loading) {
     return (
@@ -866,7 +1107,7 @@ function CrmWorkspacePage() {
               type="button"
               onClick={() => {
                 setSelectedPortalRole("director");
-                setPinCode("07266");
+                setPinCode("");
                 setErrorMsg("");
               }}
               className={cn(
@@ -882,7 +1123,7 @@ function CrmWorkspacePage() {
                     <Crown className="h-6 w-6" />
                   </span>
                   <span className="rounded-full border border-[#c5a880]/40 bg-[#c5a880]/15 px-3 py-1 font-mono text-[10px] font-bold text-[#e5cba4]">
-                    CODE PIN : 07266
+                    ESPACE PRIVÉ
                   </span>
                 </div>
                 <h2 className="mt-4 text-xl font-bold text-white">1. QG Direction</h2>
@@ -891,7 +1132,7 @@ function CrmWorkspacePage() {
                 </p>
               </div>
               <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-3 text-xs font-semibold text-[#e5cba4]">
-                <span>Sélectionner Direction (07266)</span>
+                <span>Accéder au QG Direction</span>
                 <ArrowUpRight className="h-4 w-4" />
               </div>
             </button>
@@ -901,7 +1142,7 @@ function CrmWorkspacePage() {
               type="button"
               onClick={() => {
                 setSelectedPortalRole("closer");
-                setPinCode("7777");
+                setPinCode("");
                 setErrorMsg("");
               }}
               className={cn(
@@ -917,7 +1158,7 @@ function CrmWorkspacePage() {
                     <Target className="h-6 w-6" />
                   </span>
                   <span className="rounded-full border border-emerald-400/40 bg-emerald-500/15 px-3 py-1 font-mono text-[10px] font-bold text-emerald-300">
-                    CODE PIN : 7777
+                    ESPACE COMMERCIAL
                   </span>
                 </div>
                 <h2 className="mt-4 text-xl font-bold text-white">2. Arène Commerciale</h2>
@@ -926,7 +1167,7 @@ function CrmWorkspacePage() {
                 </p>
               </div>
               <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-3 text-xs font-semibold text-emerald-300">
-                <span>Sélectionner Commercial (7777)</span>
+                <span>Accéder à l'Arène Commerciale</span>
                 <ArrowUpRight className="h-4 w-4" />
               </div>
             </button>
@@ -936,7 +1177,7 @@ function CrmWorkspacePage() {
               type="button"
               onClick={() => {
                 setSelectedPortalRole("student");
-                setPinCode("1234");
+                setPinCode("");
                 setErrorMsg("");
               }}
               className={cn(
@@ -952,7 +1193,7 @@ function CrmWorkspacePage() {
                     <GraduationCap className="h-6 w-6" />
                   </span>
                   <span className="rounded-full border border-sky-400/40 bg-sky-500/15 px-3 py-1 font-mono text-[10px] font-bold text-sky-300">
-                    CODE PIN : 1234
+                    ESPACE FORMATION
                   </span>
                 </div>
                 <h2 className="mt-4 text-xl font-bold text-white">3. XR School (90j)</h2>
@@ -961,7 +1202,7 @@ function CrmWorkspacePage() {
                 </p>
               </div>
               <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-3 text-xs font-semibold text-sky-300">
-                <span>Sélectionner XR School (1234)</span>
+                <span>Accéder à XR School</span>
                 <ArrowUpRight className="h-4 w-4" />
               </div>
             </button>
@@ -1060,38 +1301,9 @@ function CrmWorkspacePage() {
               {busy ? "Connexion en cours..." : "Connexion · Déverrouiller mon Espace"}
             </button>
 
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-2 border-t border-white/5 pt-3 text-[10px] text-white/50">
-              <span>Rappel codes d’accès :</span>
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedPortalRole("director");
-                  setPinCode("07266");
-                }}
-                className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-white/80 transition hover:border-[#c5a880] hover:text-[#c5a880]"
-              >
-                Direction: 07266
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedPortalRole("closer");
-                  setPinCode("7777");
-                }}
-                className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-white/80 transition hover:border-emerald-400 hover:text-emerald-300"
-              >
-                Closer: 7777
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedPortalRole("student");
-                  setPinCode("1234");
-                }}
-                className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-white/80 transition hover:border-sky-400 hover:text-sky-300"
-              >
-                School: 1234
-              </button>
+            <div className="mt-4 flex items-center justify-center gap-1.5 border-t border-white/5 pt-3 text-[11px] text-white/40 font-mono">
+              <Lock className="h-3 w-3" />
+              <span>Accès strictement réservé · Code délivré en privé par la Direction</span>
             </div>
           </form>
         </div>
@@ -1292,7 +1504,7 @@ function CrmWorkspacePage() {
           </div>
         </header>
 
-        <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6">
+        <main className="mx-auto max-w-7xl space-y-6 px-4 pt-6 pb-24 sm:py-6 sm:px-6">
           {successMsg && (
             <div className="rounded-2xl border border-emerald-400/50 bg-emerald-500/20 px-4 py-3 text-xs font-bold text-emerald-200">
               {successMsg}
@@ -1440,17 +1652,17 @@ function CrmWorkspacePage() {
                             <Phone className="h-4 w-4 text-emerald-400" />
                             {lead.phone}
                           </a>
-                          <a
-                            href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                              `Bonjour ${lead.contactName}, c'est ${user.fullName} de l'agence XR Agency (${lead.company}).`
-                            )}`}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/20"
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setWhatsappTemplateKey("contact");
+                              setWhatsappModalLead(lead);
+                            }}
+                            className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/35 bg-emerald-500/15 px-3.5 py-2 text-xs font-bold text-emerald-300 hover:bg-emerald-500/25 active:scale-95"
                           >
                             <MessageCircle className="h-4 w-4" />
                             WhatsApp 1-Clic
-                          </a>
+                          </button>
                         </div>
 
                         {/* Si le directeur a envoyé un screenshot */}
@@ -1483,16 +1695,16 @@ function CrmWorkspacePage() {
                                 {lead.maquetteUrl}
                               </a>
                             </div>
-                            <a
-                              href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                                `Bonjour ${lead.contactName}, voici comme promis la maquette réalisée sur-mesure pour ${lead.company} par notre studio XR Agency : ${lead.maquetteUrl}`
-                              )}`}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="shrink-0 rounded-xl bg-emerald-400 px-3 py-1.5 text-[11px] font-bold text-[#0b0d11]"
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setWhatsappTemplateKey("maquette");
+                                setWhatsappModalLead(lead);
+                              }}
+                              className="shrink-0 rounded-xl bg-emerald-400 px-3 py-1.5 text-[11px] font-bold text-[#0b0d11] transition hover:bg-emerald-300 active:scale-95"
                             >
-                              Envoyer sur WhatsApp
-                            </a>
+                              Envoyer sur WhatsApp 🚀
+                            </button>
                           </div>
                         )}
 
@@ -1569,6 +1781,11 @@ function CrmWorkspacePage() {
                                 disabled={busy}
                                 onClick={() => {
                                   playXpChime("deal_closed");
+                                  triggerCelebration(
+                                    "DEAL SIGNÉ ! 🏆",
+                                    `${lead.company} est désormais client officiel XR Agency !`,
+                                    comm.amountEur
+                                  );
                                   void apiCall(
                                     {
                                       action: "convert_lead_to_client",
@@ -1577,7 +1794,7 @@ function CrmWorkspacePage() {
                                     `🏆 Bravo ! ${lead.company} est marqué Signé ! (+1000 XP)`
                                   );
                                 }}
-                                className="rounded-xl border border-emerald-400/50 bg-emerald-500/20 px-2 py-2 text-[10.5px] font-bold text-emerald-200 hover:bg-emerald-500/35"
+                                className="rounded-xl border border-emerald-400/50 bg-emerald-500/20 px-2 py-2 text-[10.5px] font-bold text-emerald-200 hover:bg-emerald-500/35 active:scale-95"
                               >
                                 🏆 Closer
                               </button>
@@ -1666,30 +1883,138 @@ function CrmWorkspacePage() {
           {/* ONGLET 3 : COFFRE-FORT DES COMMISSIONS & BARÈME OFFICIEL */}
           {closerTab === "commissions" && (
             <div className="space-y-6">
+              {/* BANDEAU GAMIFICATION DU COFFRE : RANG APEX + STREAK DE FEU */}
+              <div className="rounded-3xl border border-amber-400/50 bg-gradient-to-r from-amber-950/40 via-yellow-950/20 to-[#12141a] p-6 shadow-[0_0_40px_rgba(245,158,11,0.2)]">
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-12 w-12 place-items-center rounded-2xl border border-amber-400/60 bg-amber-400/20 text-2xl shadow-[0_0_20px_rgba(245,158,11,0.4)]">
+                      🪙
+                    </span>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="rounded-full bg-amber-400/25 px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-amber-300">
+                          RANG ACTUEL : NIVEAU 4 · APEX CLOSER
+                        </span>
+                        <span className="inline-flex items-center gap-1 rounded-full bg-red-500/25 px-2.5 py-0.5 font-mono text-[10px] font-bold text-red-300 animate-pulse">
+                          🔥 SÉRIE 5 JOURS ACTIFS
+                        </span>
+                      </div>
+                      <h3 className="mt-1 text-xl font-black text-white">Le Coffre-fort de {user.fullName}</h3>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-black/40 px-4 py-2 text-right">
+                    <span className="font-mono text-[10px] uppercase text-white/50">PROCHAIN BONUS DE PALIER</span>
+                    <p className="font-mono text-sm font-bold text-amber-300">+250 € cash dès 3 000 € de CA</p>
+                  </div>
+                </div>
+
+                {/* Barre de progression XP du Closer */}
+                <div className="mt-4">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-mono text-white/70">Progression vers Rang 5 (Légende XR) : 4 250 / 5 000 XP</span>
+                    <span className="font-mono font-bold text-amber-400">85 %</span>
+                  </div>
+                  <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-black/60 p-0.5 border border-white/10">
+                    <div className="h-full rounded-full bg-gradient-to-r from-amber-500 via-yellow-400 to-emerald-400 shadow-[0_0_15px_rgba(251,191,36,0.6)]" style={{ width: "85%" }} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Les 2 Compartiments du Coffre (Verrouillé vs Débloqué) */}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div className="rounded-3xl border border-sky-400/35 bg-[#141720] p-6">
-                  <span className="font-mono text-xs uppercase tracking-widest text-sky-300">
-                    🔒 EN COFFRE (ATTENTE VIREMENT CLIENT SUR RIB XR)
-                  </span>
-                  <p className="mt-2 text-4xl font-black text-white">
+                <div className="rounded-3xl border border-sky-400/35 bg-[#141720] p-6 shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs uppercase tracking-widest text-sky-300">
+                      🔒 EN COFFRE (ATTENTE DU VIREMENT CLIENT)
+                    </span>
+                    <span className="text-xl">⏳</span>
+                  </div>
+                  <p className="mt-3 text-4xl font-black text-white">
                     {formatMoney(commissionSummary.pendingVaultEur)}
                   </p>
                   <p className="mt-2 text-xs text-white/65">
-                    Ces commissions sont réservées dès la signature et se débloquent automatiquement dès que la Direction valide la réception du virement sur le RIB KARMA SASU.
+                    Commissions verrouillées dès la signature du devis. Elles sont débloquées immédiatement dès que la Direction valide la réception des fonds sur le RIB officiel KARMA SASU.
                   </p>
                 </div>
 
-                <div className="rounded-3xl border border-emerald-400/45 bg-emerald-950/25 p-6">
-                  <span className="font-mono text-xs uppercase tracking-widest text-emerald-300">
-                    💸 COMMISSIONS DÉBLOQUÉES (VIREMENT REÇU ✓)
-                  </span>
-                  <p className="mt-2 text-4xl font-black text-emerald-300">
+                <div className="rounded-3xl border border-emerald-400/45 bg-emerald-950/25 p-6 shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs uppercase tracking-widest text-emerald-300">
+                      💸 COMMISSIONS DÉBLOQUÉES (ENCAISSÉES ✓)
+                    </span>
+                    <span className="text-xl">✅</span>
+                  </div>
+                  <p className="mt-3 text-4xl font-black text-emerald-300">
                     {formatMoney(commissionSummary.unlockedEur)}
                   </p>
                   <p className="mt-2 text-xs text-white/75">
-                    Montant validé et prêt à être versé suite à l'encaissement effectif des factures clients.
+                    Montant net prêt pour votre virement suite au paiement effectif des clients closés.
                   </p>
                 </div>
+              </div>
+
+              {/* SIMULATEUR DE GAIN CASH DIRECT EN TEMPS RÉEL */}
+              <div className="rounded-3xl border border-[#c5a880]/40 bg-[#141720] p-6">
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <div>
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#c5a880]">
+                      🧮 SIMULATEUR DE GAIN EN DIRECT
+                    </span>
+                    <h3 className="text-lg font-bold text-white">Calculez votre commission sur votre prochain deal</h3>
+                  </div>
+                  <span className="text-2xl">💰</span>
+                </div>
+
+                <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  {[
+                    { label: "Site Vitrine Pro", price: 499, srv: "site" },
+                    { label: "Site Business Sur-Mesure", price: 799, srv: "site" },
+                    { label: "Google Maps Top 3 Garanti", price: 999, srv: "maps" },
+                    { label: "Caisse POS & CRM Métier", price: 2490, srv: "pos" },
+                  ].map((item) => (
+                    <button
+                      key={item.label}
+                      type="button"
+                      onClick={() => {
+                        setSimulatedPriceEur(item.price);
+                        setSimulatedServiceLabel(item.label);
+                      }}
+                      className={cn(
+                        "rounded-2xl border p-3 text-left transition",
+                        simulatedPriceEur === item.price
+                          ? "border-emerald-400 bg-emerald-500/20 text-emerald-200"
+                          : "border-white/10 bg-black/40 text-white/70 hover:bg-white/5"
+                      )}
+                    >
+                      <span className="block font-mono text-sm font-black text-white">{formatMoney(item.price)}</span>
+                      <span className="text-xs">{item.label}</span>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Résultat du calcul de commission */}
+                {(() => {
+                  const comm = getOfficialCommission(simulatedServiceLabel, simulatedPriceEur);
+                  return (
+                    <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-emerald-400/50 bg-gradient-to-r from-emerald-950/40 via-emerald-900/20 to-black p-4">
+                      <div>
+                        <span className="font-mono text-[10px] uppercase font-bold text-emerald-300">
+                          SUR CE DEAL ({simulatedServiceLabel} à {formatMoney(simulatedPriceEur)}) :
+                        </span>
+                        <p className="text-xs text-white/80">
+                          Taux officiel appliqué : <strong className="text-emerald-400">{comm.ruleLabel}</strong>
+                        </p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <span className="font-mono text-[10px] text-white/50 block">VOUS TOUCHEZ EN CASH DIRECT :</span>
+                        <span className="font-mono text-2xl font-black text-emerald-300">
+                          +{formatMoney(comm.amountEur)}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
 
               <div className="rounded-3xl border border-white/10 bg-[#141720] p-6">
@@ -1865,19 +2190,113 @@ function CrmWorkspacePage() {
         {activeCallLead && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md">
             <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-emerald-400/40 bg-[#12151e] p-6 text-white shadow-2xl">
-              <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                <div>
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-emerald-400">
-                    📞 MODE APPEL ASSISTÉ EN DIRECT
-                  </span>
-                  <h3 className="text-xl font-bold">{activeCallLead.company}</h3>
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+                <div className="flex items-center gap-3">
+                  <div>
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-emerald-400">
+                      📞 MODE APPEL ASSISTÉ EN DIRECT
+                    </span>
+                    <h3 className="text-xl font-bold">{activeCallLead.company}</h3>
+                  </div>
+
+                  {/* Chronomètre Appel Assisté */}
+                  <div
+                    className={cn(
+                      "flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-xs font-bold border",
+                      callTimerSeconds < 180
+                        ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-300"
+                        : callTimerSeconds < 300
+                          ? "border-amber-500/50 bg-amber-500/20 text-amber-200 animate-pulse"
+                          : "border-red-500/60 bg-red-500/25 text-red-200 animate-pulse"
+                    )}
+                  >
+                    <Clock className="h-3.5 w-3.5" />
+                    <span>
+                      {String(Math.floor(callTimerSeconds / 60)).padStart(2, "0")}:
+                      {String(callTimerSeconds % 60).padStart(2, "0")}
+                    </span>
+                    <span className="text-[10px] text-white/50">
+                      {callTimerSeconds < 180 ? "(Rythme idéal)" : callTimerSeconds < 300 ? "(Conclure)" : "(Trop long > 5m)"}
+                    </span>
+                  </div>
                 </div>
+
                 <button
                   type="button"
                   onClick={() => setActiveCallLead(null)}
                   className="rounded-full border border-white/15 px-3 py-1 text-xs text-white/70 hover:text-white"
                 >
                   Fermer ✕
+                </button>
+              </div>
+
+              {/* 4 Boutons de Qualification Flash en 1-Tap */}
+              <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCallNotesInput("Prospect très réceptif. Demande la maquette personnalisée.");
+                    void apiCall(
+                      {
+                        action: "request_maquette",
+                        leadId: activeCallLead.id,
+                        brief: `Maquette demandée suite à appel pour ${activeCallLead.company}`,
+                      },
+                      "🎨 Demande de maquette transmise !"
+                    );
+                    triggerCelebration("MAQUETTE DEMANDÉE ! 🎨", `En attente de validation Direction pour ${activeCallLead.company}`);
+                  }}
+                  className="flex flex-col items-center gap-1 rounded-2xl border border-amber-400/50 bg-amber-500/15 p-2.5 text-center transition hover:bg-amber-500/25 active:scale-95"
+                >
+                  <span className="text-lg">🎨</span>
+                  <span className="text-xs font-bold text-amber-300">Veut la maquette</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCallFollowUpInput("Demain 10h00");
+                    setCallNotesInput("Rappel calé pour décision avec le gérant.");
+                    flashSuccess("📅 Rappel pré-configuré pour demain 10h !");
+                  }}
+                  className="flex flex-col items-center gap-1 rounded-2xl border border-sky-400/50 bg-sky-500/15 p-2.5 text-center transition hover:bg-sky-500/25 active:scale-95"
+                >
+                  <span className="text-lg">📅</span>
+                  <span className="text-xs font-bold text-sky-300">Rappel Demain 10h</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setQuoteCompany(activeCallLead.company);
+                    setQuoteEmail(activeCallLead.email || "");
+                    setShowOfficialQuoteModal(true);
+                  }}
+                  className="flex flex-col items-center gap-1 rounded-2xl border border-emerald-400/50 bg-emerald-500/15 p-2.5 text-center transition hover:bg-emerald-500/25 active:scale-95"
+                >
+                  <span className="text-lg">📝</span>
+                  <span className="text-xs font-bold text-emerald-300">Générer Devis</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    void apiCall(
+                      {
+                        action: "log_call",
+                        leadId: activeCallLead.id,
+                        outcome: "Refus poli / Barrage secrétaire",
+                        summary: "Non intéressé pour le moment.",
+                        followUpDate: "Dans 1 mois",
+                      },
+                      "Noté comme non intéressé."
+                    );
+                    setActiveCallLead(null);
+                  }}
+                  className="flex flex-col items-center gap-1 rounded-2xl border border-red-500/40 bg-red-500/15 p-2.5 text-center transition hover:bg-red-500/25 active:scale-95"
+                >
+                  <span className="text-lg">❌</span>
+                  <span className="text-xs font-bold text-red-300">Pas intéressé</span>
                 </button>
               </div>
 
@@ -1943,6 +2362,68 @@ function CrmWorkspacePage() {
             </div>
           </div>
         )}
+
+        {/* BARRE DE NAVIGATION INFÉRIEURE MOBILE ULTRA-TACTILE (CLOSER) */}
+        <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-around border-t border-white/10 bg-[#0b0d11]/95 px-2 py-2 backdrop-blur-xl sm:hidden">
+          <button
+            type="button"
+            onClick={() => setCloserTab("missions")}
+            className={cn(
+              "flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition active:scale-95",
+              closerTab === "missions" ? "text-emerald-400 font-bold" : "text-white/60"
+            )}
+          >
+            <span className="text-lg">🎯</span>
+            <span className="text-[10px]">Missions</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setCloserTab("maquettes")}
+            className={cn(
+              "flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition active:scale-95",
+              closerTab === "maquettes" ? "text-emerald-400 font-bold" : "text-white/60"
+            )}
+          >
+            <span className="text-lg">🎨</span>
+            <span className="text-[10px]">Maquettes</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setCloserTab("commissions")}
+            className={cn(
+              "flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition active:scale-95",
+              closerTab === "commissions" ? "text-emerald-400 font-bold" : "text-white/60"
+            )}
+          >
+            <span className="text-lg">💰</span>
+            <span className="text-[10px]">Coffre</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setCloserTab("rpg_training")}
+            className={cn(
+              "flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition active:scale-95",
+              closerTab === "rpg_training" ? "text-emerald-400 font-bold" : "text-white/60"
+            )}
+          >
+            <span className="text-lg">⚔️</span>
+            <span className="text-[10px]">RPG</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setCloserTab("leaderboard")}
+            className={cn(
+              "flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition active:scale-95",
+              closerTab === "leaderboard" ? "text-emerald-400 font-bold" : "text-white/60"
+            )}
+          >
+            <span className="text-lg">🏆</span>
+            <span className="text-[10px]">Classement</span>
+          </button>
+        </div>
+
+        {renderWhatsappModal()}
+        {renderCelebrationBanner()}
       </div>
     );
   }
@@ -1982,44 +2463,12 @@ function CrmWorkspacePage() {
               <h1 className="text-base font-bold text-white">{user.fullName}</h1>
             </div>
 
-            {/* Switch de Mode Direction : Cockpit vs Boss Arcade vs Metaverse RPG */}
-            <div className="flex items-center gap-1 rounded-2xl border border-[#c5a880]/35 bg-black/60 p-1">
-              <button
-                type="button"
-                onClick={() => setDirectorDisplayMode("cockpit")}
-                className={cn(
-                  "rounded-xl px-2.5 py-1 text-[11px] font-bold transition",
-                  directorDisplayMode === "cockpit"
-                    ? "bg-[#c5a880] text-[#101114] shadow"
-                    : "text-white/70 hover:text-white"
-                )}
-              >
-                👑 Cockpit Pro (10 Onglets)
-              </button>
-              <button
-                type="button"
-                onClick={() => setDirectorDisplayMode("boss_arcade")}
-                className={cn(
-                  "rounded-xl px-2.5 py-1 text-[11px] font-bold transition",
-                  directorDisplayMode === "boss_arcade"
-                    ? "bg-yellow-500 text-black shadow"
-                    : "text-[#e5cba4] hover:bg-white/10"
-                )}
-              >
-                🕹️ Boss Arcade (Niv. 99)
-              </button>
-              <button
-                type="button"
-                onClick={() => setDirectorDisplayMode("game_world")}
-                className={cn(
-                  "rounded-xl px-2.5 py-1 text-[11px] font-bold transition",
-                  directorDisplayMode === "game_world"
-                    ? "bg-purple-600 text-white shadow"
-                    : "text-purple-300 hover:bg-white/10"
-                )}
-              >
-                🎮 Metaverse RPG (2D)
-              </button>
+            {/* Badge War Room Direction */}
+            <div className="hidden sm:flex items-center gap-2 rounded-2xl border border-[#c5a880]/35 bg-black/60 px-3 py-1.5">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-[#e5cba4]">
+                WAR ROOM DIRECTION · STATUT OPÉRATIONNEL
+              </span>
             </div>
           </div>
 
@@ -2088,7 +2537,7 @@ function CrmWorkspacePage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6">
+      <main className="mx-auto max-w-7xl space-y-6 px-4 pt-6 pb-24 sm:py-6 sm:px-6">
         {successMsg && (
           <div className="rounded-2xl border border-emerald-400/50 bg-emerald-500/20 px-4 py-3 text-xs font-bold text-emerald-200">
             {successMsg}
@@ -2130,83 +2579,9 @@ function CrmWorkspacePage() {
           </div>
         )}
 
-        {/* MODE BOSS ARCADE NIV. 99 */}
-        {directorDisplayMode === "boss_arcade" && (
-          <div className="rounded-3xl border border-yellow-500/30 bg-[#05040a] p-3 sm:p-5 shadow-2xl">
-            <CrmBossDashboard
-              user={{
-                fullName: user.fullName,
-                email: user.email,
-                role: user.role,
-              }}
-              leads={leads}
-              todos={crmTodos}
-              onToggleTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
-              onAddTodo={(todo) =>
-                void apiCall({
-                  action: "create_task",
-                  title: todo.title,
-                  category: todo.category,
-                  dueDate: todo.deadline,
-                  priority: todo.priority,
-                  tag: todo.tag,
-                })
-              }
-              onDeleteTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
-              onDispatchLead={(leadId, targetEmail) => {
-                const m = members.find((mem) => mem.email === targetEmail);
-                if (m) void apiCall({ action: "update_lead", leadId, assignedTo: m.id }, `Lead envoyé à ${m.fullName} !`);
-              }}
-              onLogout={handleLogout}
-              onSwitchToProMode={() => setDirectorDisplayMode("cockpit")}
-            />
-          </div>
-        )}
-
-        {/* MODE MONDE METAVERSE RPG 2D */}
-        {directorDisplayMode === "game_world" && (
-          <div className="rounded-3xl border border-purple-500/30 bg-[#05060c] p-3 sm:p-5 shadow-2xl">
-            <CrmGameWorld
-              currentUser={{
-                id: user.id,
-                email: user.email,
-                fullName: user.fullName,
-                role: user.role,
-                title: user.title,
-                commissionPct: user.commissionPct,
-              }}
-              leads={leads}
-              todos={crmTodos}
-              onToggleTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
-              onAddTodo={(todo) =>
-                void apiCall({
-                  action: "create_task",
-                  title: todo.title,
-                  category: todo.category,
-                  dueDate: todo.deadline,
-                  priority: todo.priority,
-                  tag: todo.tag,
-                })
-              }
-              onDeleteTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
-              switchUserRole={(email) => {
-                void apiCall({ action: "login", pin: "07266", email });
-              }}
-              membersList={members.map((m) => ({
-                email: m.email,
-                fullName: m.fullName,
-                role: m.role,
-                title: m.title,
-              }))}
-            />
-          </div>
-        )}
-
-        {/* MODE COCKPIT PRO (10 ONGLETS STRUCTURÉS) */}
-        {directorDisplayMode === "cockpit" && (
-          <>
-            {/* KPI Globaux Direction */}
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+        {/* QG DIRECTION UNIFIÉ · 10 PILIERS SANS DISPERSION */}
+        {/* KPI Globaux Direction */}
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
               <div className="rounded-2xl border border-white/10 bg-[#12141b] p-4">
                 <span className="font-mono text-[10px] uppercase text-white/55">CA SIGNÉ TOTAL</span>
                 <p className="mt-1 text-xl font-black text-emerald-400">
@@ -2506,11 +2881,135 @@ function CrmWorkspacePage() {
         ══════════════════════════════════════════════════════════════════ */}
         {directorTab === "leads" && (
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-            {/* Formulaire d'Ajout Express (Screenshot Ctrl+V, Photo ou Numéro) */}
-            <form
-              onSubmit={handleQuickAddLead}
-              className="rounded-3xl border border-[#c5a880]/40 bg-[#12141b] p-6 shadow-xl lg:col-span-5"
-            >
+            <div className="space-y-4 lg:col-span-5">
+              {/* SÉLECTEUR DE MODE : FLASH 5s vs FORMULAIRE DÉTAILLÉ */}
+              <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/40 p-1.5">
+                <button
+                  type="button"
+                  onClick={() => setDirectionAddMode("flash")}
+                  className={cn(
+                    "flex-1 flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-black uppercase tracking-wider transition",
+                    directionAddMode === "flash"
+                      ? "bg-amber-400 text-[#0b0d11] shadow-[0_0_20px_rgba(251,191,36,0.35)]"
+                      : "text-white/60 hover:text-white"
+                  )}
+                >
+                  <Zap className="h-3.5 w-3.5" />
+                  ⚡ Ajout Flash (5s)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDirectionAddMode("detailed")}
+                  className={cn(
+                    "flex-1 flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-black uppercase tracking-wider transition",
+                    directionAddMode === "detailed"
+                      ? "bg-[#c5a880] text-[#0b0d11] shadow-[0_0_20px_rgba(197,168,128,0.35)]"
+                      : "text-white/60 hover:text-white"
+                  )}
+                >
+                  <Camera className="h-3.5 w-3.5" />
+                  📋 Formulaire & Capture
+                </button>
+              </div>
+
+              {directionAddMode === "flash" ? (
+                /* FORMULAIRE FLASH 5 SECONDES */
+                <form
+                  onSubmit={handleFlashAddLead}
+                  className="rounded-3xl border border-amber-400/40 bg-gradient-to-br from-amber-950/20 via-[#12141b] to-black p-6 shadow-xl space-y-4"
+                >
+                  <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                    <div>
+                      <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-amber-300">
+                        ⚡ DISPATCH FLASH EN 5 SECONDES
+                      </span>
+                      <h3 className="text-base font-bold text-white">1 Champ · Extraction Automatique</h3>
+                    </div>
+                    <span className="text-2xl">⚡</span>
+                  </div>
+
+                  <div>
+                    <label className="mb-1 block text-[11px] font-semibold text-white/70">
+                      Téléphone ou Nom de l'entreprise :
+                    </label>
+                    <input
+                      type="text"
+                      value={flashLeadText}
+                      onChange={(e) => setFlashLeadText(e.target.value)}
+                      placeholder="Ex: 06 22 33 44 55 - Brasserie de la Mer"
+                      className="w-full rounded-2xl border border-amber-400/50 bg-black/60 p-3.5 text-sm font-bold text-white placeholder-white/40 focus:border-amber-400 focus:outline-none"
+                    />
+                    <p className="mt-1 text-[11px] text-white/50">
+                      Collez le numéro ou le nom, l'algorithme sépare les infos tout seul.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 block text-[11px] font-bold uppercase text-white/70">
+                      Assigner directement à :
+                    </label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {closersList.map((c) => (
+                        <button
+                          key={c.id}
+                          type="button"
+                          onClick={() => setFlashCloserTarget(c.id)}
+                          className={cn(
+                            "rounded-xl border py-2 text-xs font-bold transition",
+                            flashCloserTarget === c.id
+                              ? "border-amber-400 bg-amber-400/20 text-amber-200"
+                              : "border-white/10 bg-black/40 text-white/60 hover:text-white"
+                          )}
+                        >
+                          {c.fullName.split(" ")[0]}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 block text-[11px] font-bold uppercase text-white/70">
+                      Offre ciblée :
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        "Site Vitrine Pro (499 €)",
+                        "Google Maps Top 3 (999 €)",
+                        "Site E-Commerce (1499 €)",
+                        "Système POS & CRM (2490 €)",
+                      ].map((srv) => (
+                        <button
+                          key={srv}
+                          type="button"
+                          onClick={() => setFlashServiceTarget(srv)}
+                          className={cn(
+                            "rounded-xl border p-2 text-left text-[11px] font-semibold transition",
+                            flashServiceTarget === srv
+                              ? "border-emerald-400 bg-emerald-500/20 text-emerald-200"
+                              : "border-white/10 bg-black/40 text-white/60 hover:text-white"
+                          )}
+                        >
+                          {srv}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={busy || !flashLeadText.trim()}
+                    className="w-full flex items-center justify-center gap-2 rounded-2xl bg-amber-400 py-3.5 text-xs font-black uppercase tracking-wider text-[#0b0d11] shadow-[0_0_25px_rgba(251,191,36,0.35)] transition hover:bg-amber-300 disabled:opacity-50 active:scale-95"
+                  >
+                    <Zap className="h-4 w-4" />
+                    ⚡ Dispatcher au Vendeur en 1 Clic
+                  </button>
+                </form>
+              ) : (
+                /* Formulaire d'Ajout Express (Screenshot Ctrl+V, Photo ou Numéro) */
+                <form
+                  onSubmit={handleQuickAddLead}
+                  className="rounded-3xl border border-[#c5a880]/40 bg-[#12141b] p-6 shadow-xl"
+                >
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div>
                   <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#c5a880]">
@@ -2689,6 +3188,8 @@ function CrmWorkspacePage() {
                   : "Envoyer la Carte de Mission au Commercial"}
               </button>
             </form>
+          )}
+        </div>
 
             {/* Liste séparée : Mes Leads Perso vs Leads Équipe Commerciale */}
             <div className="space-y-4 lg:col-span-7">
@@ -2787,10 +3288,35 @@ function CrmWorkspacePage() {
 
                           <button
                             type="button"
-                            onClick={() => void handleRequestQuoteAndRib(lead)}
+                            onClick={() => handleCopyLovable(lead)}
+                            className="rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/15 px-3 py-1.5 text-xs font-bold text-[#E2D5BC] hover:bg-[#D4AF37]/25"
+                            title="Copier le prompt d'architecture Lovable en 1 clic"
+                          >
+                            ⚡ Lovable
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setQuoteCompany(lead.company);
+                              setQuoteEmail(lead.email || "");
+                              setShowOfficialQuoteModal(true);
+                            }}
                             className="rounded-xl border border-[#c5a880]/40 bg-[#c5a880]/15 px-3 py-1.5 text-xs font-bold text-[#e5cba4] hover:bg-[#c5a880]/25"
                           >
-                            📄 Devis + RIB
+                            📄 Devis Officiel
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setWhatsappTemplateKey("contact");
+                              setWhatsappModalLead(lead);
+                            }}
+                            className="rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-3 py-1.5 text-xs font-bold text-emerald-300 hover:bg-emerald-500/25 active:scale-95"
+                          >
+                            <MessageCircle className="h-3.5 w-3.5 inline mr-1" />
+                            WhatsApp 1-Clic
                           </button>
                         </div>
                       </div>
@@ -3223,9 +3749,126 @@ function CrmWorkspacePage() {
             <CrmEgoLeaderboard currentUserName={user.fullName} />
           </div>
         )}
-          </>
-        )}
       </main>
+
+      {/* BARRE DE NAVIGATION INFÉRIEURE MOBILE ULTRA-TACTILE (DIRECTION) */}
+      <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-around border-t border-white/10 bg-[#0f1118]/95 px-2 py-2 backdrop-blur-xl sm:hidden">
+        <button
+          type="button"
+          onClick={() => setDirectorTab("overview")}
+          className={cn(
+            "flex flex-col items-center gap-1 py-1 px-2 rounded-xl transition active:scale-95",
+            directorTab === "overview" ? "text-[#c5a880] font-bold" : "text-white/60"
+          )}
+        >
+          <span className="text-lg">👑</span>
+          <span className="text-[10px]">QG</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setDirectorTab("leads")}
+          className={cn(
+            "flex flex-col items-center gap-1 py-1 px-2 rounded-xl transition active:scale-95",
+            directorTab === "leads" ? "text-[#c5a880] font-bold" : "text-white/60"
+          )}
+        >
+          <span className="text-lg">📸</span>
+          <span className="text-[10px]">Leads</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setDirectorTab("maquettes")}
+          className={cn(
+            "flex flex-col items-center gap-1 py-1 px-2 rounded-xl transition active:scale-95",
+            directorTab === "maquettes" ? "text-[#c5a880] font-bold" : "text-white/60"
+          )}
+        >
+          <span className="text-lg">🎨</span>
+          <span className="text-[10px]">Maquettes</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setDirectorTab("quotes")}
+          className={cn(
+            "flex flex-col items-center gap-1 py-1 px-2 rounded-xl transition active:scale-95",
+            directorTab === "quotes" ? "text-[#c5a880] font-bold" : "text-white/60"
+          )}
+        >
+          <span className="text-lg">📝</span>
+          <span className="text-[10px]">Devis</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen(true)}
+          className={cn(
+            "flex flex-col items-center gap-1 py-1 px-2 rounded-xl transition active:scale-95",
+            ["clients", "invoices", "projects", "providers", "calendar", "leaderboard"].includes(directorTab)
+              ? "text-[#c5a880] font-bold"
+              : "text-white/60"
+          )}
+        >
+          <span className="text-lg">⋯</span>
+          <span className="text-[10px]">Plus</span>
+        </button>
+      </div>
+
+      {/* DRAWER / MODALE PLUS SUR MOBILE POUR DIRECTION */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex flex-col justify-end bg-black/80 backdrop-blur-sm sm:hidden">
+          <div className="w-full rounded-t-3xl border-t border-white/10 bg-[#12141c] p-5 shadow-2xl">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#c5a880]">
+                Autres Sections Direction
+              </span>
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-full bg-white/10 p-1.5 text-xs text-white/70 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-2.5 py-4">
+              {[
+                { id: "clients", label: "Clients", icon: "👥" },
+                { id: "invoices", label: "Factures", icon: "💳" },
+                { id: "projects", label: "Projets", icon: "💼" },
+                { id: "providers", label: "Prestataires", icon: "🛠️" },
+                { id: "calendar", label: "Calendrier", icon: "📅" },
+                { id: "leaderboard", label: "Classement Ego", icon: "🏆" },
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => {
+                    setDirectorTab(item.id as typeof directorTab);
+                    setMobileMenuOpen(false);
+                  }}
+                  className={cn(
+                    "flex items-center gap-2 rounded-xl border p-3 text-left text-xs font-bold transition",
+                    directorTab === item.id
+                      ? "border-[#c5a880] bg-[#c5a880]/15 text-[#e5cba4]"
+                      : "border-white/10 bg-white/5 text-white/80 hover:bg-white/10"
+                  )}
+                >
+                  <span className="text-base">{item.icon}</span>
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </div>
+            <div className="pt-2 border-t border-white/10">
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="w-full flex items-center justify-center gap-2 rounded-xl border border-red-500/40 bg-red-500/15 py-3 text-xs font-bold text-red-300"
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Se Déconnecter</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* MODALE DU GÉNÉRATEUR OFFICIEL DE DEVIS */}
       {showOfficialQuoteModal && (
@@ -3258,11 +3901,15 @@ function CrmWorkspacePage() {
         </div>
       )}
 
-      {/* Bouton Flottant Déconnexion Toujours Accessible en Bas à Droite */}
+      {/* Modales Globales Direction (WhatsApp 1-Clic & Célébration Victoire) */}
+      {renderWhatsappModal()}
+      {renderCelebrationBanner()}
+
+      {/* Bouton Flottant Déconnexion Toujours Accessible en Bas à Droite (Desktop) */}
       <button
         type="button"
         onClick={handleLogout}
-        className="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-full border border-red-500/50 bg-[#0f1118]/90 px-4 py-2.5 text-xs font-bold text-red-300 shadow-[0_10px_35px_rgba(239,68,68,0.25)] backdrop-blur-md transition hover:border-red-400 hover:bg-red-500/20 active:scale-95"
+        className="fixed bottom-5 right-5 z-30 hidden sm:flex items-center gap-2 rounded-full border border-red-500/50 bg-[#0f1118]/90 px-4 py-2.5 text-xs font-bold text-red-300 shadow-[0_10px_35px_rgba(239,68,68,0.25)] backdrop-blur-md transition hover:border-red-400 hover:bg-red-500/20 active:scale-95"
         title="Se déconnecter et retourner au choix du portail et code PIN"
       >
         <LogOut className="h-4 w-4 text-red-400" />

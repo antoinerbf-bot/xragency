@@ -192,11 +192,11 @@ function RecrutementClosersRpgPage() {
               </div>
 
               <Link
-                to="/dashboard"
+                to="/crm"
                 className="w-full py-3 px-4 rounded-xl bg-[#D4AF37] text-[#080B10] font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#e3be42] transition"
               >
                 <Sparkles className="w-4 h-4" />
-                Tester le CRM RPG en Direct (/dashboard)
+                Tester le CRM RPG en Direct (/crm)
               </Link>
             </div>
           </div>
