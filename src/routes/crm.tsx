@@ -447,6 +447,18 @@ function CrmWorkspacePage() {
     }
   };
 
+  const handleLogout = async () => {
+    setBusy(true);
+    try {
+      await apiCall({ action: "logout" }, "Déconnexion réussie !");
+    } catch {
+      // ignore
+    } finally {
+      setSnapshot({ authenticated: false });
+      setBusy(false);
+    }
+  };
+
   // Support Ctrl+V image paste for instant screenshot leads
   useEffect(() => {
     const handlePaste = (e: ClipboardEvent) => {
@@ -994,11 +1006,45 @@ function CrmWorkspacePage() {
             <button
               type="submit"
               disabled={busy}
-              className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#c5a880] px-5 py-3.5 text-xs font-bold uppercase tracking-widest text-[#101114] transition hover:bg-[#d8be98] disabled:opacity-50"
+              className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#c5a880] px-5 py-3.5 text-xs font-black uppercase tracking-widest text-[#101114] shadow-lg shadow-[#c5a880]/30 transition hover:bg-[#d8be98] disabled:opacity-50"
             >
-              <Rocket className="h-4 w-4" />
-              {busy ? "Ouverture en cours..." : "Déverrouiller mon espace"}
+              <KeyRound className="h-4 w-4" />
+              {busy ? "Connexion en cours..." : "Connexion · Déverrouiller mon Espace"}
             </button>
+
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2 border-t border-white/5 pt-3 text-[10px] text-white/50">
+              <span>Rappel codes d’accès :</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedPortalRole("director");
+                  setPinCode("071266");
+                }}
+                className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-white/80 transition hover:border-[#c5a880] hover:text-[#c5a880]"
+              >
+                Direction: 071266
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedPortalRole("closer");
+                  setPinCode("7777");
+                }}
+                className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-white/80 transition hover:border-emerald-400 hover:text-emerald-300"
+              >
+                Closer: 7777
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedPortalRole("student");
+                  setPinCode("1234");
+                }}
+                className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-white/80 transition hover:border-sky-400 hover:text-sky-300"
+              >
+                School: 1234
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -1022,20 +1068,30 @@ function CrmWorkspacePage() {
             <span className="text-xs font-bold text-white">{user.fullName}</span>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setStudentViewMode("crm_bridge")}
-            className="inline-flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-[#0b0d12] shadow-[0_0_25px_rgba(52,211,153,0.4)] transition hover:bg-emerald-300"
-          >
-            <Target className="h-4 w-4" />
-            Ouvrir Mon Arène Commerciale (Leads Réels)
-            <ArrowUpRight className="h-4 w-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="inline-flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-500/15 px-3.5 py-1.5 text-xs font-bold text-red-200 transition hover:bg-red-500/25"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              <span>Déconnexion</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setStudentViewMode("crm_bridge")}
+              className="inline-flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-[#0b0d12] shadow-[0_0_25px_rgba(52,211,153,0.4)] transition hover:bg-emerald-300"
+            >
+              <Target className="h-4 w-4" />
+              Ouvrir Mon Arène Commerciale (Leads Réels)
+              <ArrowUpRight className="h-4 w-4" />
+            </button>
+          </div>
         </div>
 
         <CrmSchoolDashboard
           user={{ fullName: user.fullName, email: user.email }}
-          onLogout={() => void apiCall({ action: "logout" })}
+          onLogout={handleLogout}
         />
       </div>
     );
@@ -1066,13 +1122,23 @@ function CrmWorkspacePage() {
               </button>
             )}
           </div>
-          <button
-            type="button"
-            onClick={() => setCloserDisplayMode("missions")}
-            className="rounded-full bg-emerald-400 px-4 py-1.5 text-xs font-black uppercase text-[#0b0d11] hover:bg-emerald-300"
-          >
-            ← Vue Cartes de Missions & Appels
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="inline-flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-500/15 px-3.5 py-1.5 text-xs font-bold text-red-300 hover:bg-red-500/25"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              <span>Déconnexion</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setCloserDisplayMode("missions")}
+              className="rounded-full bg-emerald-400 px-4 py-1.5 text-xs font-black uppercase text-[#0b0d11] hover:bg-emerald-300"
+            >
+              ← Vue Cartes de Missions & Appels
+            </button>
+          </div>
         </div>
 
         <CrmCloserDashboard
@@ -1082,7 +1148,7 @@ function CrmWorkspacePage() {
             commissionPct: user.commissionPct,
           }}
           leads={leads}
-          onLogout={() => void apiCall({ action: "logout" })}
+          onLogout={handleLogout}
         />
       </div>
     );
@@ -1167,10 +1233,12 @@ function CrmWorkspacePage() {
 
               <button
                 type="button"
-                onClick={() => void apiCall({ action: "logout" })}
-                className="ml-2 inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-xs text-white/70 hover:text-white"
+                onClick={handleLogout}
+                className="ml-2 inline-flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-500/15 px-3.5 py-2 text-xs font-bold text-red-300 transition hover:bg-red-500/25"
+                title="Se déconnecter et revenir à l'écran de code PIN"
               >
                 <LogOut className="h-3.5 w-3.5" />
+                <span>Déconnexion</span>
               </button>
             </div>
           </div>
@@ -1815,6 +1883,15 @@ function CrmWorkspacePage() {
             >
               🎮 Monde Metaverse RPG
             </button>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="inline-flex items-center gap-1.5 rounded-full border border-red-500/50 bg-red-500/20 px-3.5 py-1.5 text-xs font-bold text-red-300 transition hover:bg-red-500/30"
+              title="Se déconnecter"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              <span>Déconnexion</span>
+            </button>
           </div>
         </div>
 
@@ -1842,7 +1919,7 @@ function CrmWorkspacePage() {
             const m = members.find((mem) => mem.email === targetEmail);
             if (m) void apiCall({ action: "update_lead", leadId, assignedTo: m.id }, `Lead envoyé à ${m.fullName} !`);
           }}
-          onLogout={() => void apiCall({ action: "logout" })}
+          onLogout={handleLogout}
           onSwitchToProMode={() => setDirectorDisplayMode("cockpit")}
         />
       </div>
@@ -1875,6 +1952,15 @@ function CrmWorkspacePage() {
               className="rounded-full border border-yellow-500/40 bg-yellow-950/60 px-4 py-1.5 text-xs font-bold text-yellow-300 hover:bg-yellow-900"
             >
               🕹️ Boss Arcade
+            </button>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="inline-flex items-center gap-1.5 rounded-full border border-red-500/50 bg-red-500/20 px-3.5 py-1.5 text-xs font-bold text-red-300 transition hover:bg-red-500/30"
+              title="Se déconnecter"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              <span>Déconnexion</span>
             </button>
           </div>
         </div>
@@ -2031,10 +2117,12 @@ function CrmWorkspacePage() {
 
             <button
               type="button"
-              onClick={() => void apiCall({ action: "logout" })}
-              className="ml-1 inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-xs text-white/70 hover:text-white"
+              onClick={handleLogout}
+              className="ml-2 inline-flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-500/15 px-3.5 py-1.5 text-xs font-bold text-red-300 shadow-sm transition hover:bg-red-500/25 hover:border-red-400"
+              title="Se déconnecter et retourner à l'accueil du CRM"
             >
               <LogOut className="h-3.5 w-3.5" />
+              <span>Déconnexion</span>
             </button>
           </div>
         </div>
@@ -3064,6 +3152,17 @@ function CrmWorkspacePage() {
           </div>
         </div>
       )}
+
+      {/* Bouton Flottant Déconnexion Toujours Accessible en Bas à Droite */}
+      <button
+        type="button"
+        onClick={handleLogout}
+        className="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-full border border-red-500/50 bg-[#0f1118]/90 px-4 py-2.5 text-xs font-bold text-red-300 shadow-[0_10px_35px_rgba(239,68,68,0.25)] backdrop-blur-md transition hover:border-red-400 hover:bg-red-500/20 active:scale-95"
+        title="Se déconnecter et retourner au choix du portail et code PIN"
+      >
+        <LogOut className="h-4 w-4 text-red-400" />
+        <span>Déconnexion / Changer de portail</span>
+      </button>
     </div>
   );
 }
