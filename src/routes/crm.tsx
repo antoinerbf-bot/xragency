@@ -419,6 +419,8 @@ function CrmWorkspacePage() {
   const [closerTab, setCloserTab] = useState<
     "missions" | "maquettes" | "commissions" | "calendar" | "rpg_training" | "leaderboard"
   >("missions");
+  const [closerQuestMode, setCloserQuestMode] = useState<"quest_deck" | "grid">("quest_deck");
+  const [closerQuestIndex, setCloserQuestIndex] = useState(0);
   const [activeCallLead, setActiveCallLead] = useState<CrmLead | null>(null);
   const [callNotesInput, setCallNotesInput] = useState("");
   const [callFollowUpInput, setCallFollowUpInput] = useState("Demain 10h00");
@@ -1582,35 +1584,265 @@ function CrmWorkspacePage() {
             </div>
           </div>
 
-          {/* ONGLET 1 : MES CARTES DE MISSION (1 BOUTON LUMINEUX PAR CARTE) */}
+          {/* ONGLET 1 : MES CARTES DE MISSION (MODE QUÊTE RPG OU GRILLE) */}
           {closerTab === "missions" && (
-            <div className="space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <h2 className="text-xl font-bold text-white">
-                  Vos Cartes de Mission — Cliquez sur le bouton lumineux de chaque prospect
-                </h2>
-                <span className="text-xs text-white/60">
-                  Barème auto : 30 % Sites Web · 20 % CRM/POS · 10 % Google Maps & Abonnements
-                </span>
+            <div className="space-y-6">
+              
+              {/* Sélecteur de Mode : Quête Pas-à-Pas (Débutant) vs Grille Complète */}
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald-500/30 bg-[#0F172A]/80 p-3 backdrop-blur-xl">
+                <div className="flex items-center gap-2">
+                  <span className="grid h-8 w-8 place-items-center rounded-xl bg-emerald-500/20 text-emerald-400">
+                    <Sparkles className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+                      Arène Commerciale · Mode de Jeu
+                    </h3>
+                    <p className="text-[11px] text-neutral-400">
+                      Parcours pas-à-pas pour les nouveaux closers ou vision globale
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playXpChime();
+                      setCloserQuestMode("quest_deck");
+                    }}
+                    className={cn(
+                      "flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-bold transition",
+                      closerQuestMode === "quest_deck"
+                        ? "bg-emerald-400 text-black shadow-[0_0_15px_rgba(52,211,153,0.4)]"
+                        : "border border-white/10 bg-white/5 text-neutral-300 hover:text-white"
+                    )}
+                  >
+                    <Swords className="h-3.5 w-3.5" />
+                    <span>🎮 Quête Guidée (1 Cible)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setCloserQuestMode("grid")}
+                    className={cn(
+                      "flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-bold transition",
+                      closerQuestMode === "grid"
+                        ? "bg-emerald-400 text-black shadow-[0_0_15px_rgba(52,211,153,0.4)]"
+                        : "border border-white/10 bg-white/5 text-neutral-300 hover:text-white"
+                    )}
+                  >
+                    <LayoutGrid className="h-3.5 w-3.5" />
+                    <span>📋 Grille Complète ({leads.length})</span>
+                  </button>
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {leads.map((lead) => {
-                  const comm = getOfficialCommission(lead.serviceTarget, lead.budgetEur);
-                  const urgent48h = isLeadUrgent48h(lead);
+              {/* ── MODE 1 : QUÊTE GUIDÉE PAS À PAS (ULTRA LUDIQUE POUR NOUVEAUX COMMERCIAUX) ── */}
+              {closerQuestMode === "quest_deck" && leads.length > 0 && (() => {
+                const safeIndex = Math.abs(closerQuestIndex) % leads.length;
+                const lead = leads[safeIndex];
+                const comm = getOfficialCommission(lead.serviceTarget, lead.budgetEur);
+                const urgent48h = isLeadUrgent48h(lead);
 
-                  return (
-                    <div
-                      key={lead.id}
-                      className={cn(
-                        "flex flex-col justify-between rounded-3xl border p-5 transition-all",
-                        lead.status === "signed"
-                          ? "border-emerald-500/40 bg-emerald-950/20"
-                          : urgent48h
-                            ? "border-red-500/60 bg-gradient-to-b from-red-950/30 to-[#141720]"
-                            : "border-white/15 bg-[#141720]"
-                      )}
-                    >
+                return (
+                  <div className="space-y-6">
+                    {/* Battle Pass Journalier du Closer */}
+                    <div className="rounded-3xl border border-[#D4AF37]/35 bg-gradient-to-r from-[#0F172A] via-[#1E293B]/70 to-[#0F172A] p-5 shadow-xl">
+                      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
+                        <div className="flex items-center gap-2.5">
+                          <Trophy className="h-5 w-5 text-[#D4AF37] animate-bounce" />
+                          <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[#E2D5BC]">
+                            BATTLE PASS DU JOUR · OBJECTIFS DE PRIMES
+                          </h4>
+                        </div>
+                        <span className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-0.5 font-mono text-[10px] font-bold text-emerald-300">
+                          +400 XP & 150 € DÈS LE 1ER CLOSING
+                        </span>
+                      </div>
+
+                      <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="rounded-2xl border border-white/10 bg-black/40 p-3">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-neutral-300">📞 3 Appels passés</span>
+                            <span className="font-mono font-bold text-amber-400">1/3</span>
+                          </div>
+                          <div className="mt-2 h-1.5 w-full rounded-full bg-white/10">
+                            <div className="h-full rounded-full bg-amber-400" style={{ width: "33%" }} />
+                          </div>
+                          <span className="mt-1.5 block font-mono text-[9px] text-neutral-400">+50 XP</span>
+                        </div>
+
+                        <div className="rounded-2xl border border-white/10 bg-black/40 p-3">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-neutral-300">🎨 1 Maquette offerte</span>
+                            <span className="font-mono font-bold text-purple-400">
+                              {leads.some((l) => l.maquetteStatus === "validated") ? "1/1 ✓" : "0/1"}
+                            </span>
+                          </div>
+                          <div className="mt-2 h-1.5 w-full rounded-full bg-white/10">
+                            <div
+                              className="h-full rounded-full bg-purple-400"
+                              style={{ width: leads.some((l) => l.maquetteStatus === "validated") ? "100%" : "20%" }}
+                            />
+                          </div>
+                          <span className="mt-1.5 block font-mono text-[9px] text-neutral-400">+100 XP</span>
+                        </div>
+
+                        <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#D4AF37]/10 p-3">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="font-bold text-[#E2D5BC]">👑 1 Deal closé</span>
+                            <span className="font-mono font-bold text-[#D4AF37]">
+                              {leads.some((l) => l.status === "signed") ? "1/1 ✓" : "0/1"}
+                            </span>
+                          </div>
+                          <div className="mt-2 h-1.5 w-full rounded-full bg-white/10">
+                            <div
+                              className="h-full rounded-full bg-[#D4AF37]"
+                              style={{ width: leads.some((l) => l.status === "signed") ? "100%" : "10%" }}
+                            />
+                          </div>
+                          <span className="mt-1.5 block font-mono text-[9px] text-emerald-400">
+                            +250 XP & Prime Immédiate
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Carte de Cible Unique — Format Grand Écran / Deck de Cartes */}
+                    <div className="relative overflow-hidden rounded-3xl border-2 border-emerald-400/50 bg-[#10141E] p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
+                      
+                      {/* Contrôles Précédent / Suivant en haut */}
+                      <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                        <div className="flex items-center gap-2">
+                          <span className="rounded-full bg-emerald-500/20 px-3 py-1 font-mono text-xs font-bold text-emerald-300">
+                            CIBLE {safeIndex + 1} SUR {leads.length}
+                          </span>
+                          {urgent48h && (
+                            <span className="rounded-full bg-red-500/20 border border-red-500/40 px-2.5 py-0.5 font-mono text-[10px] font-bold text-red-300 animate-pulse">
+                              🔥 URGENT 48H
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              playXpChime();
+                              setCloserQuestIndex((prev) => (prev > 0 ? prev - 1 : leads.length - 1));
+                            }}
+                            className="rounded-xl border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/10"
+                          >
+                            ⬅️ Cible Précédente
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              playXpChime();
+                              setCloserQuestIndex((prev) => prev + 1);
+                            }}
+                            className="rounded-xl border border-emerald-400/40 bg-emerald-500/20 px-3 py-1.5 text-xs font-bold text-emerald-300 hover:bg-emerald-500/30"
+                          >
+                            Cible Suivante ➡️
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Contenu de la Cible */}
+                      <div className="mt-6 grid lg:grid-cols-12 gap-6 items-center">
+                        <div className="lg:col-span-7">
+                          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-3 py-1 font-mono text-xs font-black text-emerald-300">
+                            💰 PRIME CASH DIRECT : +{formatMoney(comm.amountEur)} ({comm.ratePct} %)
+                          </div>
+
+                          <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold text-white">
+                            {lead.company}
+                          </h2>
+                          <p className="mt-1 text-sm text-neutral-300">
+                            {lead.contactName || "Dirigeant"} · {lead.city || "France"} · Offre ciblée :{" "}
+                            <strong className="text-[#D4AF37]">{lead.serviceTarget}</strong> ({formatMoney(lead.budgetEur)})
+                          </p>
+
+                          {/* Le Pitch Téléphone sous les yeux (Script Mot-à-Mot) */}
+                          <div className="mt-5 rounded-2xl border border-cyan-500/30 bg-cyan-950/30 p-4">
+                            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-300">
+                              🗣️ TON PITCH D'OUVERTURE (À LIRE AU TÉLÉPHONE) :
+                            </span>
+                            <p className="mt-2 text-xs sm:text-sm italic text-neutral-200 leading-relaxed">
+                              « Bonjour {lead.contactName || "Monsieur"} ! Je suis {currentUser?.fullName?.split(" ")[0] || "Lucas"} de XR Agency. On a analysé la visibilité de {lead.company} et on a créé une maquette sur-mesure pour vous montrer comment doubler vos demandes locales. Est-ce que vous avez 2 minutes ou un numéro WhatsApp pour que je vous l'envoie ? »
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Les 3 Boutons d'Action Géants */}
+                        <div className="lg:col-span-5 flex flex-col gap-3">
+                          <button
+                            type="button"
+                            onClick={() => openCallModal(lead)}
+                            className="flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 py-4 px-6 text-sm font-black uppercase text-black shadow-[0_10px_30px_rgba(16,185,129,0.4)] transition hover:scale-[1.02] active:scale-95"
+                          >
+                            <PhoneCall className="h-5 w-5" />
+                            <span>1. Lancer l'Appel Gagnant</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => openWhatsappModal(lead)}
+                            className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-400/50 bg-[#0F172A] py-3.5 px-6 text-xs font-bold text-emerald-300 transition hover:bg-emerald-500/10 active:scale-95"
+                          >
+                            <MessageCircle className="h-4 w-4" />
+                            <span>2. Envoyer Maquette WhatsApp</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              playVictorySound();
+                              updateLeadStatus(lead.id, "signed");
+                            }}
+                            className="flex items-center justify-center gap-2 rounded-2xl border border-[#D4AF37]/60 bg-[#D4AF37]/15 py-3.5 px-6 text-xs font-bold text-[#E2D5BC] transition hover:bg-[#D4AF37] hover:text-black active:scale-95"
+                          >
+                            <Crown className="h-4 w-4" />
+                            <span>3. C'est Signé ! (Encaisser le Cash)</span>
+                          </button>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* ── MODE 2 : GRILLE DE LEADS CLASSIQUE ── */}
+              {closerQuestMode === "grid" && (
+                <div className="space-y-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <h2 className="text-xl font-bold text-white">
+                      Vos Cartes de Mission — Cliquez sur le bouton lumineux de chaque prospect
+                    </h2>
+                    <span className="text-xs text-white/60">
+                      Barème auto : 30 % Sites Web · 20 % CRM/POS · 10 % Google Maps & Abonnements
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    {leads.map((lead) => {
+                      const comm = getOfficialCommission(lead.serviceTarget, lead.budgetEur);
+                      const urgent48h = isLeadUrgent48h(lead);
+
+                      return (
+                        <div
+                          key={lead.id}
+                          className={cn(
+                            "flex flex-col justify-between rounded-3xl border p-5 transition-all",
+                            lead.status === "signed"
+                              ? "border-emerald-500/40 bg-emerald-950/20"
+                              : urgent48h
+                                ? "border-red-500/60 bg-gradient-to-b from-red-950/30 to-[#141720]"
+                                : "border-white/15 bg-[#141720]"
+                          )}
+                        >
                       <div>
                         {/* En-tête de la carte : Gain potentiel en vert + Statut Maquette */}
                         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -1808,6 +2040,8 @@ function CrmWorkspacePage() {
               </div>
             </div>
           )}
+        </div>
+      )}
 
           {/* ONGLET 2 : SUIVI DES MAQUETTES DU COMMERCIAL */}
           {closerTab === "maquettes" && (
