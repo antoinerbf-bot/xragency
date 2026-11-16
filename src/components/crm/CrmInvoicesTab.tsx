@@ -10,6 +10,7 @@ import {
   ArrowRight,
   Copy,
   Check,
+  Download,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CrmInvoiceRecord } from "@/lib/crm-store";
@@ -68,6 +69,52 @@ export function CrmInvoicesTab({
   const totalPaid = invoices.filter((i) => i.status === "paid").reduce((s, i) => s + i.totalEur, 0);
   const totalPending = invoices.filter((i) => i.status === "pending_transfer").reduce((s, i) => s + i.totalEur, 0);
 
+  const exportAccountingCsv = () => {
+    const headers = [
+      "Numéro Facture",
+      "Date d'émission",
+      "Entreprise",
+      "Contact",
+      "Email",
+      "Statut",
+      "Montant Total EUR",
+      "Référence Virement",
+      "Bénéficiaire",
+      "IBAN",
+      "BIC",
+      "Détail des Prestations",
+    ];
+
+    const rows = invoices.map((inv) => {
+      const itemsDetail = (inv.items || []).map((it) => `${it.label} (${it.amountEur}€)`).join(" + ");
+      return [
+        `"${inv.id}"`,
+        `"${new Date(inv.createdAt).toLocaleDateString("fr-FR")}"`,
+        `"${(inv.clientCompany || "").replace(/"/g, '""')}"`,
+        `"${(inv.clientName || "").replace(/"/g, '""')}"`,
+        `"${inv.clientEmail || ""}"`,
+        `"${inv.status === "paid" ? "Encaissé / Réglé" : inv.status === "pending_transfer" ? "En attente virement" : "Annulé"}"`,
+        inv.totalEur,
+        `"${inv.paymentReference}"`,
+        `"${inv.bankDetails?.beneficiary || "KARMA SASU"}"`,
+        `"${inv.bankDetails?.ibanMasked || ""}"`,
+        `"${inv.bankDetails?.bic || ""}"`,
+        `"${itemsDetail.replace(/"/g, '""')}"`,
+      ];
+    });
+
+    const csvContent = "\uFEFF" + [headers.join(";"), ...rows.map((r) => r.join(";"))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `export-comptable-xr-agency-${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       {/* Metric Cards */}
@@ -114,7 +161,7 @@ export function CrmInvoicesTab({
           />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {["all", "pending_transfer", "paid", "cancelled"].map((st) => (
             <button
               key={st}
@@ -130,6 +177,17 @@ export function CrmInvoicesTab({
               {st === "all" ? "Tous" : st === "pending_transfer" ? "En attente" : st === "paid" ? "Payé" : "Annulé"}
             </button>
           ))}
+
+          {isAdmin && (
+            <button
+              type="button"
+              onClick={exportAccountingCsv}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/40 bg-emerald-500/15 px-3 py-1.5 font-mono text-[10px] font-bold uppercase text-emerald-300 transition hover:bg-emerald-500/25"
+            >
+              <Download className="h-3.5 w-3.5" />
+              Export CSV Comptable
+            </button>
+          )}
         </div>
       </div>
 
