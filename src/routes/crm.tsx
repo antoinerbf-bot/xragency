@@ -65,6 +65,10 @@ import { CrmProvidersTab } from "@/components/crm/CrmProvidersTab";
 import { CrmCalendarTab } from "@/components/crm/CrmCalendarTab";
 import { CrmEgoLeaderboard } from "@/components/crm/CrmEgoLeaderboard";
 import { OfficialQuoteGenerator } from "@/components/crm/OfficialQuoteGenerator";
+import { CrmBossDashboard, type CrmTodo } from "@/components/crm/CrmBossDashboard";
+import { CrmGameWorld } from "@/components/crm/CrmGameWorld";
+import { CrmCloserDashboard } from "@/components/crm/CrmCloserDashboard";
+import { CrmSchoolDashboard } from "@/components/crm/CrmSchoolDashboard";
 import { cn } from "@/lib/utils";
 import agentXrPortrait from "@/assets/agent-xr-portrait.jpg";
 
@@ -338,7 +342,9 @@ function CrmWorkspacePage() {
   const [pinCode, setPinCode] = useState("");
   const [closerAccountEmail, setCloserAccountEmail] = useState("lucas@xragency.fr");
 
-  // ── DIRECTOR TABS ──
+  // ── DIRECTOR TABS & MODES D'AFFICHAGE (COCKPIT PRO vs BOSS ARCADE vs MONDE METAVERSE) ──
+  const [directorDisplayMode, setDirectorDisplayMode] = useState<"cockpit" | "boss_arcade" | "game_world">("cockpit");
+  const [closerDisplayMode, setCloserDisplayMode] = useState<"missions" | "combat_hub">("missions");
   const [directorTab, setDirectorTab] = useState<
     | "overview"
     | "leads"
@@ -596,6 +602,19 @@ function CrmWorkspacePage() {
   const tasks = snapshot?.tasks || [];
   const providers = snapshot?.providers || [];
   const notifications = snapshot?.notifications || [];
+
+  const crmTodos: CrmTodo[] = useMemo(() => {
+    return tasks.map((t) => ({
+      id: t.id,
+      category: (t.category === "perso" ? "perso" : "pro") as "pro" | "perso",
+      title: t.title,
+      priority: (t.priority || "high") as "urgent" | "high" | "normal",
+      deadline: t.dueDate || "Aujourd'hui",
+      tag: t.tag || (t.category === "perso" ? "Perso" : "Stratégie Pro"),
+      done: t.status === "done",
+      createdAt: t.createdAt,
+    }));
+  }, [tasks]);
 
   const handleCreateClient = async (clientData: {
     company: string;
@@ -992,201 +1011,85 @@ function CrmWorkspacePage() {
   // PORTAIL 3 : ACADÉMIE XR SCHOOL (AVEC PASSERELLE VERS LE CRM COMMERCIAL)
   // ══════════════════════════════════════════════════════════════════════════
   if (effectivePortal === "student" && studentViewMode === "school") {
-    const activeBattle =
-      SCHOOL_OBJECTION_BATTLES.find((b) => b.id === selectedBattleId) || SCHOOL_OBJECTION_BATTLES[0];
-
     return (
-      <div className="min-h-screen bg-[#0b0d12] text-[#f8f6f0]">
-        {/* Topbar XR School */}
-        <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0b0d12]/90 backdrop-blur-xl">
-          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
-            <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-sky-500/20 text-sky-300">
-                <GraduationCap className="h-5 w-5" />
-              </span>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-sky-400">
-                    ACADÉMIE XR SCHOOL · PROGRAMME 90 JOURS
-                  </span>
-                </div>
-                <h1 className="text-base font-bold text-white">{user.fullName} — Élève Closer</h1>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2.5">
-              {/* PASSERELLE AUTORISÉE VERS LE CRM COMMERCIAL */}
-              <button
-                type="button"
-                onClick={() => setStudentViewMode("crm_bridge")}
-                className="inline-flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#0b0d12] shadow-[0_0_25px_rgba(52,211,153,0.4)] transition hover:bg-emerald-300"
-              >
-                <Target className="h-4 w-4" />
-                Passer sur mon CRM Commercial (Leads & Appels)
-                <ArrowUpRight className="h-4 w-4" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => void apiCall({ action: "logout" })}
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3.5 py-2 text-xs text-white/75 hover:border-white/30 hover:text-white"
-              >
-                <LogOut className="h-3.5 w-3.5" />
-                Déconnexion
-              </button>
-            </div>
-          </div>
-        </header>
-
-        <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6">
-          {/* Bannière d'accueil + Barème officiel à mémoriser */}
-          <div className="rounded-3xl border border-sky-400/30 bg-gradient-to-r from-sky-950/60 via-[#121622] to-[#12141b] p-6 sm:p-8">
-            <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
-              <div className="max-w-2xl">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-sky-500/20 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-sky-300">
-                  <Sparkles className="h-3.5 w-3.5" /> Formation & Pratique Terrain
-                </span>
-                <h2 className="mt-3 text-2xl font-bold text-white sm:text-3xl">
-                  Apprenez la méthode XR Agency et closez vos premiers clients en direct.
-                </h2>
-                <p className="mt-2 text-xs leading-relaxed text-white/70 sm:text-sm">
-                  Votre espace école est connecté par une passerelle directe à votre CRM Commercial : dès que vous maîtrisez un script ci-dessous, cliquez sur le bouton vert en haut pour appeler vos leads attribués.
-                </p>
-              </div>
-              <div className="grid grid-cols-3 gap-2.5 text-center">
-                <div className="rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-3.5">
-                  <span className="block font-mono text-2xl font-black text-emerald-300">30 %</span>
-                  <span className="text-[10px] text-white/80">Sites Internet</span>
-                </div>
-                <div className="rounded-2xl border border-amber-400/30 bg-amber-500/10 p-3.5">
-                  <span className="block font-mono text-2xl font-black text-amber-300">20 %</span>
-                  <span className="text-[10px] text-white/80">CRM & POS</span>
-                </div>
-                <div className="rounded-2xl border border-sky-400/30 bg-sky-500/10 p-3.5">
-                  <span className="block font-mono text-2xl font-black text-sky-300">10 %</span>
-                  <span className="text-[10px] text-white/80">Maps & Mensuel</span>
-                </div>
-              </div>
-            </div>
+      <div className="relative min-h-screen bg-[#07090e]">
+        {/* Passerelle Supérieure vers le CRM Commercial */}
+        <div className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-3 border-b border-sky-400/30 bg-[#07090e]/95 px-4 py-2.5 backdrop-blur-xl">
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-sky-500/20 px-2.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-widest text-sky-300">
+              ACADÉMIE XR SCHOOL · 90 JOURS
+            </span>
+            <span className="text-xs font-bold text-white">{user.fullName}</span>
           </div>
 
-          {/* Cursus 90 Jours en 3 Piliers */}
-          <div>
-            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-white">
-              <BookOpen className="h-5 w-5 text-sky-400" />
-              Votre Parcours 90 Jours Étape par Étape
-            </h3>
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-              {SCHOOL_CURRICULUM_90D.map((block) => (
-                <div
-                  key={block.phase}
-                  className="flex flex-col justify-between rounded-3xl border border-white/10 bg-[#131620] p-6"
-                >
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-sky-400">
-                        {block.phase}
-                      </span>
-                      <span className="rounded-full bg-sky-500/15 px-2.5 py-0.5 font-mono text-[10px] font-bold text-sky-300">
-                        +{block.xp}
-                      </span>
-                    </div>
-                    <h4 className="mt-2 text-base font-bold text-white">{block.title}</h4>
-                    <ul className="mt-4 space-y-2.5">
-                      {block.modules.map((m, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-xs text-white/75">
-                          <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-400" />
-                          <span>{m}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={() => setStudentViewMode("crm_bridge")}
+            className="inline-flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-[#0b0d12] shadow-[0_0_25px_rgba(52,211,153,0.4)] transition hover:bg-emerald-300"
+          >
+            <Target className="h-4 w-4" />
+            Ouvrir Mon Arène Commerciale (Leads Réels)
+            <ArrowUpRight className="h-4 w-4" />
+          </button>
+        </div>
 
-          {/* Arène RPG : Entraînement aux Objections */}
-          <div className="rounded-3xl border border-white/10 bg-[#131620] p-6 sm:p-8">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
-              <div className="flex items-center gap-2.5">
-                <Swords className="h-5 w-5 text-amber-400" />
-                <h3 className="text-lg font-bold text-white">
-                  Simulateur RPG : Combat d’Objections au Téléphone
-                </h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {SCHOOL_OBJECTION_BATTLES.map((b, idx) => (
-                  <button
-                    key={b.id}
-                    type="button"
-                    onClick={() => {
-                      setSelectedBattleId(b.id);
-                      setBattleOutcome("none");
-                    }}
-                    className={cn(
-                      "rounded-full px-3.5 py-1.5 text-xs font-semibold transition",
-                      selectedBattleId === b.id
-                        ? "bg-amber-400 text-[#101114]"
-                        : "border border-white/15 bg-white/5 text-white/75 hover:text-white"
-                    )}
-                  >
-                    Objection #{idx + 1}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-5 rounded-2xl border border-red-500/30 bg-red-500/10 p-4">
-              <span className="font-mono text-[10px] uppercase tracking-widest text-red-300">
-                CE QUE DIT LE PROSPECT AU TÉLÉPHONE :
-              </span>
-              <p className="mt-1 text-base font-semibold text-white">{activeBattle.prospectSay}</p>
-            </div>
-
-            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-              <button
-                type="button"
-                onClick={() => setBattleOutcome("win")}
-                className="rounded-2xl border border-emerald-500/35 bg-emerald-500/10 p-4 text-left transition hover:border-emerald-400"
-              >
-                <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-emerald-300">
-                  RÉPONSE A (MÉTHODE XR AGENCY) :
-                </span>
-                <p className="mt-2 text-xs leading-relaxed text-white/90">{activeBattle.goodReply}</p>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setBattleOutcome("retry")}
-                className="rounded-2xl border border-white/15 bg-white/5 p-4 text-left transition hover:border-red-400/50"
-              >
-                <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-white/60">
-                  RÉPONSE B (RÉACTION CLASSIQUE) :
-                </span>
-                <p className="mt-2 text-xs leading-relaxed text-white/75">{activeBattle.badReply}</p>
-              </button>
-            </div>
-
-            {battleOutcome === "win" && (
-              <div className="mt-4 rounded-2xl border border-emerald-400/50 bg-emerald-500/20 p-4 text-xs font-semibold text-emerald-200">
-                🏆 Parfait ! Vous rebondissez sur la rentabilité, la garantie Top 3 ou remboursé et la maquette gratuite sans engagement.
-              </div>
-            )}
-            {battleOutcome === "retry" && (
-              <div className="mt-4 rounded-2xl border border-amber-400/50 bg-amber-500/20 p-4 text-xs font-semibold text-amber-200">
-                ⚠️ Attention : ne baissez jamais les bras dès la première objection ! Proposez toujours d'envoyer la maquette gratuite sur WhatsApp.
-              </div>
-            )}
-          </div>
-        </main>
+        <CrmSchoolDashboard
+          user={{ fullName: user.fullName, email: user.email }}
+          onLogout={() => void apiCall({ action: "logout" })}
+        />
       </div>
     );
   }
 
   // ══════════════════════════════════════════════════════════════════════════
   // PORTAIL 2 : ARÈNE COMMERCIALE (OU ÉLÈVE EN MODE PASSERELLE CRM)
-  // Ultra-simple façon Jeu Vidéo (« Utilisable par un enfant »)
+  // MODE A : HUB DE COMBAT CLOSER RPG COMPLET (CARTES, OBJECTIONS & SONS)
+  // ══════════════════════════════════════════════════════════════════════════
+  if (
+    (effectivePortal === "closer" || (effectivePortal === "student" && studentViewMode === "crm_bridge")) &&
+    closerDisplayMode === "combat_hub"
+  ) {
+    return (
+      <div className="relative min-h-screen bg-[#07090e]">
+        <div className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-3 border-b border-emerald-500/30 bg-black/90 px-4 py-2.5 backdrop-blur-xl">
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-emerald-500/20 px-3 py-1 font-mono text-xs font-black text-emerald-300">
+              ⚔️ HUB CLOSER COMPLET RPG
+            </span>
+            {effectivePortal === "student" && (
+              <button
+                type="button"
+                onClick={() => setStudentViewMode("school")}
+                className="rounded-full border border-sky-400/50 bg-sky-500/20 px-2.5 py-0.5 font-mono text-[9px] font-bold text-sky-300 hover:bg-sky-500/30"
+              >
+                ← Retour École XR
+              </button>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => setCloserDisplayMode("missions")}
+            className="rounded-full bg-emerald-400 px-4 py-1.5 text-xs font-black uppercase text-[#0b0d11] hover:bg-emerald-300"
+          >
+            ← Vue Cartes de Missions & Appels
+          </button>
+        </div>
+
+        <CrmCloserDashboard
+          user={{
+            fullName: user.fullName,
+            email: user.email,
+            commissionPct: user.commissionPct,
+          }}
+          leads={leads}
+          onLogout={() => void apiCall({ action: "logout" })}
+        />
+      </div>
+    );
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // MODE B : ARÈNE COMMERCIALE MISSIONS JEU VIDÉO
   // ══════════════════════════════════════════════════════════════════════════
   if (effectivePortal === "closer" || (effectivePortal === "student" && studentViewMode === "crm_bridge")) {
     return (
@@ -1217,6 +1120,15 @@ function CrmWorkspacePage() {
                 </div>
                 <h1 className="text-base font-bold text-white">{user.fullName}</h1>
               </div>
+
+              {/* Bouton pour basculer vers le Hub de Combat Closer RPG */}
+              <button
+                type="button"
+                onClick={() => setCloserDisplayMode("combat_hub")}
+                className="hidden rounded-xl border border-emerald-400/40 bg-emerald-500/15 px-3 py-1.5 text-xs font-bold text-emerald-300 hover:bg-emerald-500/25 sm:inline-flex"
+              >
+                ⚔️ Ouvrir Hub RPG Closer
+              </button>
             </div>
 
             {/* Navigation Onglets Arène Commerciale */}
@@ -1877,10 +1789,135 @@ function CrmWorkspacePage() {
 
   // ══════════════════════════════════════════════════════════════════════════
   // PORTAIL 1 : QG DIRECTION (CODE 071266 / 07266)
-  // 1. Mes Leads Perso vs Dispatch Vendeurs (Screenshot / Téléphone / Fiche)
-  // 2. Studio Maquettes (Coller le lien ➔ passe en Validée ✓)
-  // 3. Facturation, Devis + RIB KARMA SASU & Déblocage Commissions
-  // 4. Calendrier Unifié (Vie Perso + Pro + Community Management & Offres)
+  // MODE 1 : GRAND PALAIS DU FONDATEUR · BOSS MODE (NIVEAU 99 + SONS 8-BIT)
+  // ══════════════════════════════════════════════════════════════════════════
+  if (effectivePortal === "director" && directorDisplayMode === "boss_arcade") {
+    return (
+      <div className="relative min-h-screen bg-[#05040a]">
+        <div className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-3 border-b border-yellow-500/30 bg-black/90 px-4 py-2.5 backdrop-blur-xl">
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-yellow-500/20 px-3 py-1 font-mono text-xs font-black text-[#d4af37]">
+              👑 GRAND PALAIS BOSS · MODE ARCADE NIV. 99
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setDirectorDisplayMode("cockpit")}
+              className="rounded-full bg-[#c5a880] px-4 py-1.5 text-xs font-black uppercase tracking-wider text-[#101114] shadow-md hover:bg-[#d8be98]"
+            >
+              ← Basculer sur le Cockpit Pro (10 Onglets)
+            </button>
+            <button
+              type="button"
+              onClick={() => setDirectorDisplayMode("game_world")}
+              className="rounded-full border border-purple-500/40 bg-purple-950/60 px-4 py-1.5 text-xs font-bold text-purple-300 hover:bg-purple-900"
+            >
+              🎮 Monde Metaverse RPG
+            </button>
+          </div>
+        </div>
+
+        <CrmBossDashboard
+          user={{
+            fullName: user.fullName,
+            email: user.email,
+            role: user.role,
+          }}
+          leads={leads}
+          todos={crmTodos}
+          onToggleTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
+          onAddTodo={(todo) =>
+            void apiCall({
+              action: "create_task",
+              title: todo.title,
+              category: todo.category,
+              dueDate: todo.deadline,
+              priority: todo.priority,
+              tag: todo.tag,
+            })
+          }
+          onDeleteTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
+          onDispatchLead={(leadId, targetEmail) => {
+            const m = members.find((mem) => mem.email === targetEmail);
+            if (m) void apiCall({ action: "update_lead", leadId, assignedTo: m.id }, `Lead envoyé à ${m.fullName} !`);
+          }}
+          onLogout={() => void apiCall({ action: "logout" })}
+          onSwitchToProMode={() => setDirectorDisplayMode("cockpit")}
+        />
+      </div>
+    );
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // MODE 2 : MONDE VIRTUEL METAVERSE HQ ARCADE (D-PAD + 4 SALLES + PIÈCES)
+  // ══════════════════════════════════════════════════════════════════════════
+  if (effectivePortal === "director" && directorDisplayMode === "game_world") {
+    return (
+      <div className="relative min-h-screen bg-[#05060c] p-3 sm:p-6">
+        <div className="sticky top-0 z-50 mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-purple-500/30 bg-black/90 p-3 backdrop-blur-xl">
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-purple-500/20 px-3 py-1 font-mono text-xs font-black text-purple-300">
+              🎮 METAVERSE HQ · AVATAR 2D & SALLES DU QG
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setDirectorDisplayMode("cockpit")}
+              className="rounded-full bg-[#c5a880] px-4 py-1.5 text-xs font-black uppercase text-[#101114] hover:bg-[#d8be98]"
+            >
+              ← Cockpit Pro (10 Onglets)
+            </button>
+            <button
+              type="button"
+              onClick={() => setDirectorDisplayMode("boss_arcade")}
+              className="rounded-full border border-yellow-500/40 bg-yellow-950/60 px-4 py-1.5 text-xs font-bold text-yellow-300 hover:bg-yellow-900"
+            >
+              🕹️ Boss Arcade
+            </button>
+          </div>
+        </div>
+
+        <CrmGameWorld
+          currentUser={{
+            id: user.id,
+            email: user.email,
+            fullName: user.fullName,
+            role: user.role,
+            title: user.title,
+            commissionPct: user.commissionPct,
+          }}
+          leads={leads}
+          todos={crmTodos}
+          onToggleTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
+          onAddTodo={(todo) =>
+            void apiCall({
+              action: "create_task",
+              title: todo.title,
+              category: todo.category,
+              dueDate: todo.deadline,
+              priority: todo.priority,
+              tag: todo.tag,
+            })
+          }
+          onDeleteTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
+          switchUserRole={(email) => {
+            void apiCall({ action: "login", pin: "071266", email });
+          }}
+          membersList={members.map((m) => ({
+            email: m.email,
+            fullName: m.fullName,
+            role: m.role,
+            title: m.title,
+          }))}
+        />
+      </div>
+    );
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // MODE 3 : COCKPIT PRO DIRECTION (10 ONGLETS STRUCTURÉS)
   // ══════════════════════════════════════════════════════════════════════════
   const filteredDirectorLeads = leads.filter((l) => {
     if (directorLeadScope === "mine") return l.assignedTo === user.id;
@@ -1910,6 +1947,36 @@ function CrmWorkspacePage() {
                 </Link>
               </div>
               <h1 className="text-base font-bold text-white">{user.fullName}</h1>
+            </div>
+
+            {/* Switch de Mode Direction : Cockpit vs Boss Arcade vs Metaverse RPG */}
+            <div className="flex items-center gap-1 rounded-2xl border border-[#c5a880]/35 bg-black/60 p-1">
+              <button
+                type="button"
+                onClick={() => setDirectorDisplayMode("cockpit")}
+                className={cn(
+                  "rounded-xl px-2.5 py-1 text-[11px] font-bold transition",
+                  directorDisplayMode === "cockpit"
+                    ? "bg-[#c5a880] text-[#101114]"
+                    : "text-white/70 hover:text-white"
+                )}
+              >
+                👑 Cockpit Pro
+              </button>
+              <button
+                type="button"
+                onClick={() => setDirectorDisplayMode("boss_arcade")}
+                className="rounded-xl px-2.5 py-1 text-[11px] font-bold text-[#e5cba4] hover:bg-white/10"
+              >
+                🕹️ Boss Arcade (Niv. 99)
+              </button>
+              <button
+                type="button"
+                onClick={() => setDirectorDisplayMode("game_world")}
+                className="rounded-xl px-2.5 py-1 text-[11px] font-bold text-purple-300 hover:bg-white/10"
+              >
+                🎮 Metaverse RPG
+              </button>
             </div>
           </div>
 
