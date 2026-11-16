@@ -69,6 +69,7 @@ import { CrmBossDashboard, type CrmTodo } from "@/components/crm/CrmBossDashboar
 import { CrmGameWorld } from "@/components/crm/CrmGameWorld";
 import { CrmCloserDashboard } from "@/components/crm/CrmCloserDashboard";
 import { CrmUltraLudiqueArena } from "@/components/crm/CrmUltraLudiqueArena";
+import { CharacterSelectLogin } from "@/components/crm/CharacterSelectLogin";
 import { CrmSchoolDashboard } from "@/components/crm/CrmSchoolDashboard";
 import { XR_ADVISORS } from "@/lib/xr-advisors";
 import { playXpChime, generateLovableArchitecturePrompt } from "@/lib/rpg-engine";
@@ -1066,251 +1067,19 @@ function CrmWorkspacePage() {
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // ÉCRAN DE CONNEXION ULTRA-LUDIQUE : 3 PORTAILS ISOLÉS PAR CODE PIN
+  // ÉCRAN DE CONNEXION ULTRA-LUDIQUE : SÉLECTION DE HÉROS & CLAVIER TACTILE ARCADE
   // ══════════════════════════════════════════════════════════════════════════
   if (!snapshot?.authenticated || !user) {
     return (
-      <div className="relative min-h-screen overflow-hidden bg-[#0a0b0e] text-[#f8f6f0]">
-        <div
-          aria-hidden
-          className="pointer-events-none fixed inset-0 opacity-45"
-          style={{
-            background:
-              "radial-gradient(900px circle at 15% 20%, rgba(197,168,128,0.18), transparent 65%), radial-gradient(800px circle at 85% 80%, rgba(46,125,79,0.14), transparent 65%)",
-          }}
-        />
-
-        <div className="relative z-10 mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-16">
-          <div className="mb-8 flex items-center justify-between">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium text-white/80 transition hover:border-[#c5a880] hover:text-white"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              Retour au site xragencyai.com
-            </Link>
-            <span className="rounded-full border border-[#c5a880]/40 bg-[#c5a880]/10 px-3.5 py-1 font-mono text-[10px] uppercase tracking-widest text-[#e5cba4]">
-              XR AGENCY · ACCÈS SÉCURISÉ PAR RÔLE
-            </span>
-          </div>
-
-          <div className="text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
-              Choisissez votre espace & entrez votre Code PIN
-            </h1>
-            <p className="mx-auto mt-3 max-w-2xl text-sm text-white/65">
-              Chaque portail est strictement isolé selon votre mission : Direction Générale, Arène Commerciale ou Académie XR School 90 jours.
-            </p>
-          </div>
-
-          {/* 3 Cartes de Rôle */}
-          <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
-            {/* Carte 1 : Direction */}
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedPortalRole("director");
-                setPinCode("");
-                setErrorMsg("");
-              }}
-              className={cn(
-                "group relative flex flex-col justify-between rounded-3xl border p-6 text-left transition-all",
-                selectedPortalRole === "director"
-                  ? "border-[#c5a880] bg-gradient-to-b from-[#231e17] to-[#121317] shadow-[0_0_40px_rgba(197,168,128,0.28)]"
-                  : "border-white/10 bg-[#121318]/80 hover:border-white/25"
-              )}
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#c5a880]/20 text-[#e5cba4]">
-                    <Crown className="h-6 w-6" />
-                  </span>
-                  <span className="rounded-full border border-[#c5a880]/40 bg-[#c5a880]/15 px-3 py-1 font-mono text-[10px] font-bold text-[#e5cba4]">
-                    ESPACE PRIVÉ
-                  </span>
-                </div>
-                <h2 className="mt-4 text-xl font-bold text-white">1. QG Direction</h2>
-                <p className="mt-1.5 text-xs leading-relaxed text-white/65">
-                  Envoi de leads par screenshot ou numéro, validation des maquettes en 1 clic, facturation avec RIB KARMA SASU, déblocage des commissions et calendrier Vie Perso + Pro.
-                </p>
-              </div>
-              <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-3 text-xs font-semibold text-[#e5cba4]">
-                <span>Accéder au QG Direction</span>
-                <ArrowUpRight className="h-4 w-4" />
-              </div>
-            </button>
-
-            {/* Carte 2 : Commercial */}
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedPortalRole("closer");
-                setPinCode("");
-                setErrorMsg("");
-              }}
-              className={cn(
-                "group relative flex flex-col justify-between rounded-3xl border p-6 text-left transition-all",
-                selectedPortalRole === "closer"
-                  ? "border-emerald-400 bg-gradient-to-b from-emerald-950/50 to-[#121317] shadow-[0_0_40px_rgba(16,185,129,0.25)]"
-                  : "border-white/10 bg-[#121318]/80 hover:border-white/25"
-              )}
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-emerald-500/20 text-emerald-300">
-                    <Target className="h-6 w-6" />
-                  </span>
-                  <span className="rounded-full border border-emerald-400/40 bg-emerald-500/15 px-3 py-1 font-mono text-[10px] font-bold text-emerald-300">
-                    ESPACE COMMERCIAL
-                  </span>
-                </div>
-                <h2 className="mt-4 text-xl font-bold text-white">2. Arène Commerciale</h2>
-                <p className="mt-1.5 text-xs leading-relaxed text-white/65">
-                  Interface ludique façon jeu vidéo : vos cartes de mission à appeler, demande de maquette en 1 clic, mode appel assisté et coffre-fort de commissions (30% / 20% / 10%).
-                </p>
-              </div>
-              <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-3 text-xs font-semibold text-emerald-300">
-                <span>Accéder à l'Arène Commerciale</span>
-                <ArrowUpRight className="h-4 w-4" />
-              </div>
-            </button>
-
-            {/* Carte 3 : XR School */}
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedPortalRole("student");
-                setPinCode("");
-                setErrorMsg("");
-              }}
-              className={cn(
-                "group relative flex flex-col justify-between rounded-3xl border p-6 text-left transition-all",
-                selectedPortalRole === "student"
-                  ? "border-sky-400 bg-gradient-to-b from-sky-950/50 to-[#121317] shadow-[0_0_40px_rgba(56,189,248,0.25)]"
-                  : "border-white/10 bg-[#121318]/80 hover:border-white/25"
-              )}
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-sky-500/20 text-sky-300">
-                    <GraduationCap className="h-6 w-6" />
-                  </span>
-                  <span className="rounded-full border border-sky-400/40 bg-sky-500/15 px-3 py-1 font-mono text-[10px] font-bold text-sky-300">
-                    ESPACE FORMATION
-                  </span>
-                </div>
-                <h2 className="mt-4 text-xl font-bold text-white">3. XR School (90j)</h2>
-                <p className="mt-1.5 text-xs leading-relaxed text-white/65">
-                  Programme intensif 90 jours, scripts par secteur, entraînement aux objections RPG + passerelle directe vers votre CRM Commercial pour closer vos premiers clients.
-                </p>
-              </div>
-              <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-3 text-xs font-semibold text-sky-300">
-                <span>Accéder à XR School</span>
-                <ArrowUpRight className="h-4 w-4" />
-              </div>
-            </button>
-          </div>
-
-          {/* Pavé de Connexion par Code PIN */}
-          <form
-            onSubmit={handlePinLogin}
-            className="mx-auto mt-8 max-w-md rounded-3xl border border-white/15 bg-[#12141a]/95 p-6 sm:p-8 shadow-2xl"
-          >
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
-              <div className="flex items-center gap-2.5">
-                <KeyRound className="h-5 w-5 text-[#c5a880]" />
-                <div>
-                  <span className="block text-xs font-bold uppercase tracking-wider text-white">
-                    {selectedPortalRole === "director"
-                      ? "Connexion QG Direction"
-                      : selectedPortalRole === "closer"
-                        ? "Connexion Arène Commerciale"
-                        : "Connexion Académie XR School"}
-                  </span>
-                  <span className="text-[11px] text-white/55">
-                    Entrez votre code personnel à chiffres
-                  </span>
-                </div>
-              </div>
-              <Lock className="h-4 w-4 text-white/40" />
-            </div>
-
-            {selectedPortalRole === "closer" && (
-              <div className="mt-4">
-                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-white/70">
-                  Profil Commercial Dédié (7 Conseillers Officiels) :
-                </label>
-                <select
-                  value={closerAccountEmail}
-                  onChange={(e) => setCloserAccountEmail(e.target.value)}
-                  className="w-full rounded-xl border border-white/15 bg-black/50 px-3.5 py-2.5 text-sm text-white focus:border-emerald-400 focus:outline-none"
-                >
-                  {XR_ADVISORS.map((adv) => (
-                    <option key={adv.id} value={adv.email}>
-                      {adv.fullName} — {adv.role} ({adv.rankName})
-                    </option>
-                  ))}
-                  <option value="lucas@xragency.fr">Lucas Martin — Closer Senior (Sites & Maps)</option>
-                  <option value="sarah@xragency.fr">Sarah Benali — Closer & Académie XR</option>
-                </select>
-              </div>
-            )}
-
-            <div className="mt-4">
-              <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-white/70">
-                Code PIN d’accès :
-              </label>
-              <input
-                type="password"
-                inputMode="numeric"
-                value={pinCode}
-                onChange={(e) => setPinCode(e.target.value)}
-                placeholder="••••••"
-                className="w-full rounded-2xl border border-white/20 bg-black/60 px-4 py-3.5 text-center font-mono text-2xl font-bold tracking-[0.35em] text-white focus:border-[#c5a880] focus:outline-none"
-                autoFocus
-              />
-            </div>
-
-            {/* Clavier numérique tactile rapide */}
-            <div className="mt-4 grid grid-cols-3 gap-2">
-              {["1", "2", "3", "4", "5", "6", "7", "8", "9", "C", "0", "⌫"].map((digit) => (
-                <button
-                  key={digit}
-                  type="button"
-                  onClick={() => {
-                    if (digit === "C") setPinCode("");
-                    else if (digit === "⌫") setPinCode((p) => p.slice(0, -1));
-                    else setPinCode((p) => (p + digit).slice(0, 8));
-                  }}
-                  className="rounded-xl border border-white/10 bg-white/5 py-2.5 font-mono text-base font-bold text-white transition hover:border-[#c5a880]/60 hover:bg-white/10 active:scale-95"
-                >
-                  {digit}
-                </button>
-              ))}
-            </div>
-
-            {errorMsg && (
-              <p className="mt-4 rounded-xl border border-red-500/40 bg-red-500/15 px-3.5 py-2 text-center text-xs font-medium text-red-200">
-                {errorMsg}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={busy}
-              className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#c5a880] px-5 py-3.5 text-xs font-black uppercase tracking-widest text-[#101114] shadow-lg shadow-[#c5a880]/30 transition hover:bg-[#d8be98] disabled:opacity-50"
-            >
-              <KeyRound className="h-4 w-4" />
-              {busy ? "Connexion en cours..." : "Connexion · Déverrouiller mon Espace"}
-            </button>
-
-            <div className="mt-4 flex items-center justify-center gap-1.5 border-t border-white/5 pt-3 text-[11px] text-white/40 font-mono">
-              <Lock className="h-3 w-3" />
-              <span>Accès strictement réservé · Code délivré en privé par la Direction</span>
-            </div>
-          </form>
-        </div>
-      </div>
+      <CharacterSelectLogin
+        onLoginWithPin={async (portal, pin) => {
+          setSelectedPortalRole(portal);
+          setPinCode(pin);
+          await handlePinLogin(undefined, pin);
+        }}
+        isLoading={busy}
+        errorMessage={errorMsg}
+      />
     );
   }
 
