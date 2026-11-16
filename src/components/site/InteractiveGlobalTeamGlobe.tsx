@@ -1,6 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import createGlobe from "cobe";
-import { Globe2, MapPin, Sparkles, ArrowRight, ShieldCheck, CheckCircle2, Users } from "lucide-react";
+import * as THREE from "three";
+import {
+  Globe2,
+  MapPin,
+  Sparkles,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
+  Users,
+  RotateCw,
+} from "lucide-react";
+import earthTextureUrl from "@/assets/earth_texture.jpg";
 import { useLang } from "@/lib/i18n";
 
 interface GlobalHub {
@@ -211,7 +221,7 @@ const GLOBAL_HUBS: GlobalHub[] = [
     bio: {
       fr: "Accompagnement des groupes de restauration, cliniques, commerces et entrepreneurs francophones et internationaux implantés sur la côte Est américaine.",
       en: "Supporting restaurant groups, clinics, retail stores and international entrepreneurs across the US East Coast.",
-      vi: "Đồng hành cùng các chuỗi nhà hàng, phòng khám và doanh nghiệp quốc tế tại bờ Đông Hoa Kỳ.",
+      vi: "Đồng hành cùng các chuỗi nhà hàng, phòng khám et doanh nghiệp quốc tế tại bờ Đông Hoa Kỳ.",
     },
     languages: ["English", "Français", "Español"],
     projectsCount: "40+ clients US",
@@ -219,11 +229,22 @@ const GLOBAL_HUBS: GlobalHub[] = [
   },
 ];
 
-function locationToAngles(lat: number, lng: number): [number, number] {
-  return [
-    Math.PI - ((lng * Math.PI) / 180 - Math.PI / 2),
-    (lat * Math.PI) / 180,
-  ];
+// Convert geographic coordinates to 3D sphere position (Three.js SphereGeometry UV mapping)
+function latLngToVector3(lat: number, lng: number, radius: number): THREE.Vector3 {
+  const phi = (90 - lat) * (Math.PI / 180);
+  const theta = (lng + 180) * (Math.PI / 180);
+  const x = -radius * Math.sin(phi) * Math.cos(theta);
+  const y = radius * Math.cos(phi);
+  const z = radius * Math.sin(phi) * Math.sin(theta);
+  return new THREE.Vector3(x, y, z);
+}
+
+// Compute target Euler angles so the given (lat, lng) faces the camera at +Z
+function getTargetRotationForHub(lat: number, lng: number): { rotX: number; rotY: number } {
+  const theta = (lng + 180) * (Math.PI / 180);
+  const rotY = theta - Math.PI / 2;
+  const rotX = (lat * Math.PI) / 180 * 0.65;
+  return { rotX, rotY };
 }
 
 export function InteractiveGlobalTeamGlobe() {
@@ -231,91 +252,285 @@ export function InteractiveGlobalTeamGlobe() {
   const l = (lang === "en" || lang === "vi" ? lang : "fr") as "fr" | "en" | "vi";
   const [selectedHubId, setSelectedHubId] = useState<string>("paris");
   const [autoRotate, setAutoRotate] = useState<boolean>(true);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [pinPositions, setPinPositions] = useState<
+    Record<string, { x: number; y: number; visible: boolean }>
+  >({});
 
-  const focusAnglesRef = useRef<[number, number]>(locationToAngles(48.8566, 2.3522));
-  const currentPhiRef = useRef<number>(focusAnglesRef.current[0]);
-  const currentThetaRef = useRef<number>(focusAnglesRef.current[1]);
-  const pointerInteracting = useRef<number | null>(null);
-  const pointerInteractionMovement = useRef<number>(0);
-  const autoRotateRef = useRef<boolean>(true);
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const canvasHostRef = useRef<HTMLDivElement | null>(null);
+
+  const initialTarget = getTargetRotationForHub(GLOBAL_HUBS[0].lat, GLOBAL_HUBS[0].lng);
+  const rotationRef = useRef<{
+    rotX: number;
+    rotY: number;
+    targetX: number;
+    targetY: number;
+    autoRotate: boolean;
+    dragging: boolean;
+    dragStartX: number;
+    dragStartY: number;
+    startRotX: number;
+    startRotY: number;
+  }>({
+    rotX: initialTarget.rotX,
+    rotY: initialTarget.rotY,
+    targetX: initialTarget.rotX,
+    targetY: initialTarget.rotY,
+    autoRotate: true,
+    dragging: false,
+    dragStartX: 0,
+    dragStartY: 0,
+    startRotX: initialTarget.rotX,
+    startRotY: initialTarget.rotY,
+  });
 
   const activeHub = GLOBAL_HUBS.find((h) => h.id === selectedHubId) ?? GLOBAL_HUBS[0];
 
   const focusHub = (hub: GlobalHub) => {
     setSelectedHubId(hub.id);
-    focusAnglesRef.current = locationToAngles(hub.lat, hub.lng);
+    const { rotX, rotY } = getTargetRotationForHub(hub.lat, hub.lng);
+    // Shortest angular path around Y
+    const currentY = rotationRef.current.targetY;
+    let deltaY = ((rotY - currentY + Math.PI) % (Math.PI * 2)) - Math.PI;
+    if (deltaY < -Math.PI) deltaY += Math.PI * 2;
+    rotationRef.current.targetY = currentY + deltaY;
+    rotationRef.current.targetX = Math.max(-0.85, Math.min(0.85, rotX));
+    rotationRef.current.autoRotate = false;
     setAutoRotate(false);
-    autoRotateRef.current = false;
   };
 
   useEffect(() => {
-    autoRotateRef.current = autoRotate;
+    rotationRef.current.autoRotate = autoRotate;
   }, [autoRotate]);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    let width = canvas.offsetWidth || 440;
+    const stage = stageRef.current;
+    const host = canvasHostRef.current;
+    if (!stage || !host) return;
+
+    let renderer: THREE.WebGLRenderer | null = null;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+        powerPreference: "high-performance",
+      });
+    } catch {
+      return;
+    }
+
+    let width = Math.max(stage.clientWidth, 320);
+    let height = Math.max(stage.clientHeight, 320);
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(width, height);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.25;
+
+    host.innerHTML = "";
+    host.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
+    camera.position.set(0, 0, 3.45);
+
+    // Lighting setup
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.35);
+    scene.add(ambientLight);
+
+    const sunLight = new THREE.DirectionalLight(0xffe9c4, 2.2);
+    sunLight.position.set(4, 2.5, 5);
+    scene.add(sunLight);
+
+    const rimLight = new THREE.DirectionalLight(0x38bdf8, 0.9);
+    rimLight.position.set(-5, -2, -3);
+    scene.add(rimLight);
+
+    // Root globe group
+    const globeGroup = new THREE.Group();
+    scene.add(globeGroup);
+
+    // 1. Earth Sphere with high-res satellite texture
+    const RADIUS = 1.08;
+    const sphereGeo = new THREE.SphereGeometry(RADIUS, 64, 64);
+    const textureLoader = new THREE.TextureLoader();
+    const earthTexture = textureLoader.load(earthTextureUrl);
+    earthTexture.colorSpace = THREE.SRGBColorSpace;
+
+    const earthMat = new THREE.MeshStandardMaterial({
+      map: earthTexture,
+      roughness: 0.55,
+      metalness: 0.18,
+      bumpScale: 0.02,
+    });
+    const earthMesh = new THREE.Mesh(sphereGeo, earthMat);
+    globeGroup.add(earthMesh);
+
+    // 2. Subtle Golden Graticule Wireframe Overlay
+    const wireGeo = new THREE.SphereGeometry(RADIUS * 1.003, 32, 24);
+    const wireMat = new THREE.MeshBasicMaterial({
+      color: 0xc5a880,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.07,
+    });
+    globeGroup.add(new THREE.Mesh(wireGeo, wireMat));
+
+    // 3. Outer Atmospheric Fresnel Halo
+    const atmosGeo = new THREE.SphereGeometry(RADIUS * 1.12, 48, 48);
+    const atmosMat = new THREE.ShaderMaterial({
+      vertexShader: `
+        varying vec3 vNormal;
+        void main() {
+          vNormal = normalize(normalMatrix * normal);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        varying vec3 vNormal;
+        void main() {
+          float intensity = pow(0.62 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.4);
+          gl_FragColor = vec4(0.77, 0.66, 0.50, 1.0) * intensity * 0.85;
+        }
+      `,
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide,
+      transparent: true,
+      depthWrite: false,
+    });
+    scene.add(new THREE.Mesh(atmosGeo, atmosMat));
+
+    // 4. 3D City Beacons & Connection Arcs from Paris HQ
+    const hubVectors: Record<string, THREE.Vector3> = {};
+    for (const hub of GLOBAL_HUBS) {
+      const vec = latLngToVector3(hub.lat, hub.lng, RADIUS);
+      hubVectors[hub.id] = vec;
+
+      // Glowing beacon sphere on surface
+      const pinGeo = new THREE.SphereGeometry(0.026, 16, 16);
+      const pinMat = new THREE.MeshBasicMaterial({
+        color: hub.id === "paris" ? 0x10b981 : 0xe5cba4,
+      });
+      const pinMesh = new THREE.Mesh(pinGeo, pinMat);
+      pinMesh.position.copy(vec.clone().multiplyScalar(1.01));
+      globeGroup.add(pinMesh);
+    }
+
+    // Geodesic arcs from Paris to each hub
+    const parisVec = hubVectors["paris"];
+    for (const hub of GLOBAL_HUBS.slice(1)) {
+      const targetVec = hubVectors[hub.id];
+      const midPoint = parisVec.clone().add(targetVec).multiplyScalar(0.5);
+      const distance = parisVec.distanceTo(targetVec);
+      midPoint.normalize().multiplyScalar(RADIUS + distance * 0.28);
+
+      const curve = new THREE.QuadraticBezierCurve3(parisVec, midPoint, targetVec);
+      const points = curve.getPoints(44);
+      const arcGeo = new THREE.BufferGeometry().setFromPoints(points);
+      const arcMat = new THREE.LineBasicMaterial({
+        color: 0xc5a880,
+        transparent: true,
+        opacity: 0.45,
+      });
+      globeGroup.add(new THREE.Line(arcGeo, arcMat));
+    }
 
     const onResize = () => {
-      if (canvasRef.current) {
-        width = canvasRef.current.offsetWidth;
-      }
+      if (!stage || !renderer) return;
+      width = Math.max(stage.clientWidth, 320);
+      height = Math.max(stage.clientHeight, 320);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
     };
     window.addEventListener("resize", onResize);
 
-    const globe = createGlobe(canvas, {
-      devicePixelRatio: 2,
-      width: width * 2,
-      height: width * 2,
-      phi: currentPhiRef.current,
-      theta: currentThetaRef.current,
-      dark: 1,
-      diffuse: 1.8,
-      mapSamples: 22000,
-      mapBrightness: 7.5,
-      baseColor: [0.16, 0.15, 0.14],
-      markerColor: [0.89, 0.76, 0.54],
-      glowColor: [0.45, 0.37, 0.25],
-      markers: GLOBAL_HUBS.map((h) => ({
-        location: [h.lat, h.lng],
-        size: h.id === selectedHubId ? 0.11 : 0.055,
-      })),
-      onRender: (state) => {
-        if (!pointerInteracting.current) {
-          if (autoRotateRef.current) {
-            currentPhiRef.current += 0.0035;
-          } else {
-            const [targetPhi, targetTheta] = focusAnglesRef.current;
-            const distPositive = (targetPhi - currentPhiRef.current + Math.PI * 2) % (Math.PI * 2);
-            const distNegative = (currentPhiRef.current - targetPhi + Math.PI * 2) % (Math.PI * 2);
-            if (distPositive < distNegative) {
-              currentPhiRef.current += distPositive * 0.08;
-            } else {
-              currentPhiRef.current -= distNegative * 0.08;
-            }
-            currentThetaRef.current =
-              currentThetaRef.current * 0.92 + targetTheta * 0.08;
-          }
+    let animId = 0;
+    let frameCounter = 0;
+    const tempVec = new THREE.Vector3();
+    const worldNormal = new THREE.Vector3();
+    const camDir = new THREE.Vector3();
+
+    const animate = () => {
+      animId = window.requestAnimationFrame(animate);
+
+      const r = rotationRef.current;
+      if (r.autoRotate && !r.dragging) {
+        r.targetY += 0.0022;
+      }
+
+      r.rotX += (r.targetX - r.rotX) * 0.09;
+      r.rotY += (r.targetY - r.rotY) * 0.09;
+
+      globeGroup.rotation.x = r.rotX;
+      globeGroup.rotation.y = r.rotY;
+      globeGroup.updateMatrixWorld();
+
+      renderer?.render(scene, camera);
+
+      // Update projected HTML city pin overlays every 2 frames for smooth 60fps UI
+      frameCounter++;
+      if (frameCounter % 2 === 0) {
+        const nextPins: Record<string, { x: number; y: number; visible: boolean }> = {};
+        for (const hub of GLOBAL_HUBS) {
+          tempVec.copy(hubVectors[hub.id]).applyMatrix4(globeGroup.matrixWorld);
+          worldNormal.copy(tempVec).normalize();
+          camDir.copy(camera.position).sub(tempVec).normalize();
+          const facingDot = worldNormal.dot(camDir);
+
+          tempVec.project(camera);
+          const screenX = (tempVec.x * 0.5 + 0.5) * width;
+          const screenY = (-tempVec.y * 0.5 + 0.5) * height;
+
+          nextPins[hub.id] = {
+            x: screenX,
+            y: screenY,
+            visible: facingDot > 0.12,
+          };
         }
-        state.phi = currentPhiRef.current + pointerInteractionMovement.current;
-        state.theta = currentThetaRef.current;
-        state.width = width * 2;
-        state.height = width * 2;
-      },
-    });
+        setPinPositions(nextPins);
+      }
+    };
+
+    animId = window.requestAnimationFrame(animate);
 
     return () => {
+      window.cancelAnimationFrame(animId);
       window.removeEventListener("resize", onResize);
-      globe.destroy();
+      renderer?.dispose();
     };
-  }, [selectedHubId]);
+  }, []);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    rotationRef.current.dragging = true;
+    rotationRef.current.autoRotate = false;
+    setAutoRotate(false);
+    rotationRef.current.dragStartX = e.clientX;
+    rotationRef.current.dragStartY = e.clientY;
+    rotationRef.current.startRotX = rotationRef.current.targetX;
+    rotationRef.current.startRotY = rotationRef.current.targetY;
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!rotationRef.current.dragging) return;
+    const dx = e.clientX - rotationRef.current.dragStartX;
+    const dy = e.clientY - rotationRef.current.dragStartY;
+    rotationRef.current.targetY = rotationRef.current.startRotY + dx * 0.0065;
+    rotationRef.current.targetX = Math.max(
+      -0.85,
+      Math.min(0.85, rotationRef.current.startRotX + dy * 0.0065)
+    );
+  };
+
+  const handlePointerUp = () => {
+    rotationRef.current.dragging = false;
+  };
 
   return (
     <section
       id="global-network"
-      className="relative overflow-hidden border-t border-white/10 bg-[#07080b] py-20 text-[#f8f6f0] sm:py-28"
+      className="relative overflow-hidden border-t border-white/10 bg-[#06070a] py-20 text-[#f8f6f0] sm:py-28"
     >
       {/* Halo atmosphérique bronze & obsidienne */}
       <div
@@ -334,25 +549,25 @@ export function InteractiveGlobalTeamGlobe() {
             <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#c5a880]/40 bg-[#c5a880]/10 px-3.5 py-1 text-[9px] font-mono uppercase tracking-[0.22em] text-[#e5cba4]">
               <Globe2 className="h-3.5 w-3.5" />
               {l === "en"
-                ? "GLOBAL PRESENCE · WEBGL 3D EARTH"
+                ? "GLOBAL PRESENCE · INTERACTIVE 3D EARTH"
                 : l === "vi"
-                  ? "HIỆN DIỆN TOÀN CẦU · ĐỊA CẦU WEBGL 3D"
-                  : "PRÉSENCE MONDIALE · GLOBE 3D HAUTE PRÉCISION"}
+                  ? "HIỆN DIỆN TOÀN CẦU · ĐỊA CẦU 3D TƯƠNG TÁC"
+                  : "PRÉSENCE MONDIALE · GLOBE TERRESTRE 3D INTERACTIF"}
             </div>
             <h2 className="display-serif text-3xl font-normal tracking-tight text-white sm:text-5xl">
               {l === "en"
-                ? "Click on a city to meet our local XR Agency teams & agents."
+                ? "Click on a city on the 3D globe to meet our local XR Agency agents."
                 : l === "vi"
-                  ? "Nhấp vào từng thành phố để kết nối với chuyên gia XR Agency tại địa phương."
-                  : "Cliquez sur une ville pour découvrir nos agents & pôles d’intervention."}
+                  ? "Nhấp vào từng thành phố trên quả địa cầu 3D để kết nối với chuyên gia XR Agency."
+                  : "Cliquez sur une ville du globe 3D pour découvrir nos agents & pôles d’intervention."}
             </h2>
           </div>
           <p className="max-w-md text-xs leading-relaxed text-white/65 sm:text-sm">
             {l === "en"
-              ? "Select any city below or rotate our 3D WebGL globe to inspect our regional experts in Communication, Google Maps Top 3, AI Automation, Custom Software & Robotics."
+              ? "Click directly on a city pin on the 3D globe or select a hub below to orient the camera and view the dedicated local team."
               : l === "vi"
-                ? "Xoay quả địa cầu 3D hoặc chọn thành phố bên dưới để xem đội ngũ chuyên gia Truyền thông, Google Maps Top 3, AI, Phần mềm & Robot."
-                : "Sélectionnez une ville ou faites pivoter le globe 3D WebGL pour orienter la caméra directement sur l’agent local dédié à votre projet."}
+                ? "Nhấp trực tiếp vào thành phố trên quả địa cầu 3D hoặc chọn bên dưới để xem đội ngũ chuyên gia địa phương."
+                : "Cliquez directement sur les villes affichées sur le globe 3D (ou faites-le tourner au doigt / à la souris) pour orienter la caméra sur l’agent local dédié."}
           </p>
         </div>
 
@@ -379,71 +594,87 @@ export function InteractiveGlobalTeamGlobe() {
           <button
             type="button"
             onClick={() => setAutoRotate((v) => !v)}
-            className="ml-auto hidden rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-[10px] font-mono uppercase tracking-wider text-white/70 hover:border-[#c5a880] hover:text-white sm:inline-flex"
+            className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-[10px] font-mono uppercase tracking-wider text-white/75 hover:border-[#c5a880] hover:text-white"
           >
+            <RotateCw className={`h-3 w-3 ${autoRotate ? "animate-spin" : ""}`} />
             {autoRotate ? "Rotation 3D [ACTIVE]" : "Rotation 3D [PAUSE]"}
           </button>
         </div>
 
-        {/* Grille Principale : Globe WebGL Cobe (22 000 points) + Dossier Agent */}
+        {/* Grille Principale : Globe Three.js + Épingles Cliquables + Dossier Agent */}
         <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
-          {/* Colonne Gauche : Globe 3D WebGL Ultra-Réaliste */}
-          <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-[2.2rem] border border-white/12 bg-gradient-to-b from-[#111319] to-[#08090c] p-6 shadow-2xl lg:col-span-7">
-            <div className="relative mx-auto aspect-square w-full max-w-[440px]">
-              <canvas
-                ref={canvasRef}
-                onPointerDown={(e) => {
-                  pointerInteracting.current =
-                    e.clientX - pointerInteractionMovement.current;
-                  if (canvasRef.current) canvasRef.current.style.cursor = "grabbing";
-                }}
-                onPointerUp={() => {
-                  pointerInteracting.current = null;
-                  if (canvasRef.current) canvasRef.current.style.cursor = "grab";
-                }}
-                onPointerOut={() => {
-                  pointerInteracting.current = null;
-                  if (canvasRef.current) canvasRef.current.style.cursor = "grab";
-                }}
-                onMouseMove={(e) => {
-                  if (pointerInteracting.current !== null) {
-                    const delta = e.clientX - pointerInteracting.current;
-                    pointerInteractionMovement.current = delta / 180;
-                  }
-                }}
-                onTouchMove={(e) => {
-                  if (pointerInteracting.current !== null && e.touches[0]) {
-                    const delta = e.touches[0].clientX - pointerInteracting.current;
-                    pointerInteractionMovement.current = delta / 100;
-                  }
-                }}
-                className="h-full w-full cursor-grab transition-opacity duration-500"
-                style={{ contain: "layout paint size" }}
-              />
+          {/* Colonne Gauche : Scène Three.js + Marqueurs de Villes Cliquables en Direct */}
+          <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-[2.2rem] border border-white/15 bg-gradient-to-b from-[#0d1017] via-[#07090d] to-[#050608] p-4 sm:p-6 shadow-2xl lg:col-span-7">
+            <div
+              ref={stageRef}
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerLeave={handlePointerUp}
+              className="relative h-[380px] w-full sm:h-[470px] cursor-grab active:cursor-grabbing select-none touch-none overflow-hidden"
+            >
+              {/* Hôte du Canvas WebGL Three.js */}
+              <div ref={canvasHostRef} className="absolute inset-0 z-10" />
 
-              {/* Badge HUD flottant de la ville ciblée */}
-              <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full border border-[#c5a880]/45 bg-black/80 px-4 py-1.5 backdrop-blur-xl shadow-xl">
+              {/* Épingles HTML Interactives Projetées en Temps Réel sur les Villes du Globe */}
+              <div className="pointer-events-none absolute inset-0 z-20">
+                {GLOBAL_HUBS.map((hub) => {
+                  const pos = pinPositions[hub.id];
+                  if (!pos || !pos.visible) return null;
+                  const isSelected = hub.id === selectedHubId;
+
+                  return (
+                    <button
+                      key={hub.id}
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        focusHub(hub);
+                      }}
+                      style={{
+                        transform: `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%)`,
+                      }}
+                      className={`pointer-events-auto absolute left-0 top-0 group flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold transition-shadow duration-200 ${
+                        isSelected
+                          ? "z-30 border-[#c5a880] bg-[#c5a880] text-[#090a0d] shadow-[0_0_25px_rgba(197,168,128,0.9)] scale-110"
+                          : "z-20 border-white/25 bg-black/80 text-white/90 backdrop-blur-md hover:border-[#c5a880] hover:bg-black"
+                      }`}
+                    >
+                      <span
+                        className={`h-2 w-2 rounded-full ${
+                          isSelected ? "bg-[#090a0d] animate-ping" : "bg-emerald-400"
+                        }`}
+                      />
+                      <span>{hub.flag}</span>
+                      <span className="whitespace-nowrap">{hub.city[l]}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Badge HUD en bas du Globe */}
+              <div className="pointer-events-none absolute bottom-3 left-1/2 z-30 -translate-x-1/2 flex items-center gap-2 rounded-full border border-[#c5a880]/45 bg-black/80 px-4 py-1.5 backdrop-blur-xl shadow-xl">
                 <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
-                <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-white">
-                  {activeHub.flag} FOCUS CAMÉRA : {activeHub.city[l].toUpperCase()} ({activeHub.timezone})
+                <span className="font-mono text-[9.5px] font-bold uppercase tracking-wider text-white whitespace-nowrap">
+                  {activeHub.flag} {activeHub.city[l].toUpperCase()} · AGENT : {activeHub.agentName.toUpperCase()}
                 </span>
               </div>
             </div>
 
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 w-full border-t border-white/10 pt-3 px-2 text-[11px] text-white/55">
+            <div className="mt-2 flex flex-wrap items-center justify-between gap-2 w-full border-t border-white/10 pt-3 px-2 text-[11px] text-white/55">
               <span className="inline-flex items-center gap-1.5">
                 <MapPin className="h-3.5 w-3.5 text-[#c5a880]" />
                 {l === "en"
-                  ? "WebGL 3D Earth · Drag to rotate or click any city pill"
-                  : "Globe 3D WebGL 22 000 points · Glissez pour tourner ou cliquez sur une ville"}
+                  ? "3D Satellite Earth · Click any city pin on the globe or drag to rotate"
+                  : "Globe 3D Satellite · Cliquez directement sur une ville du globe ou glissez pour tourner"}
               </span>
               <span className="font-mono text-[10px] text-[#c5a880]">
-                7 HUBS INTERNATIONAUX · OPÉRATIONS 24H/24
+                7 HUBS MONDIAUX · 24H/24
               </span>
             </div>
           </div>
 
-          {/* Colonne Droite : Fiche de l'Agent Local Sélectionné */}
+          {/* Colonne Droite : Fiche Complète de l'Agent Local Sélectionné */}
           <div className="rounded-[2.2rem] border border-[#c5a880]/40 bg-gradient-to-b from-[#171920] to-[#0e1015] p-6 sm:p-8 shadow-[0_28px_90px_-20px_rgba(0,0,0,0.9)] lg:col-span-5">
             <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-4">
               <div className="flex items-center gap-3">
@@ -523,7 +754,7 @@ export function InteractiveGlobalTeamGlobe() {
                 className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white/20 px-4 py-3.5 text-xs font-semibold text-white transition hover:border-[#c5a880] hover:bg-white/5"
               >
                 <ShieldCheck className="h-3.5 w-3.5 text-[#c5a880]" />
-                {l === "en" ? "Maps Top 3" : "Maps Top 3"}
+                Maps Top 3
               </a>
             </div>
           </div>
