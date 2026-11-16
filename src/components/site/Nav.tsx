@@ -167,11 +167,22 @@ export function Nav() {
               >
                 {t(UI.navWork)}
               </Link>
-              <Link
-                to="/recrutement"
+              <button
+                type="button"
+                onClick={() =>
+                  isHome
+                    ? document.getElementById("processus")?.scrollIntoView({ behavior: "smooth" })
+                    : window.location.assign("/#processus")
+                }
                 className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
               >
-                {t(UI.navAffiliation)}
+                Méthode
+              </button>
+              <Link
+                to="/a-propos"
+                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
+              >
+                À propos
               </Link>
               <button
                 type="button"
@@ -243,12 +254,19 @@ export function Nav() {
 
             <CartFloatingButton />
 
-            <EmberButton
-              href="/#quote"
-              className="hidden min-h-9 px-4 py-1.5 text-[8px] tracking-[.14em] font-semibold md:inline-flex"
+            <a
+              href="/#tunnel-secteurs"
+              className="hidden lg:inline-flex min-h-9 items-center justify-center rounded-full border border-current/25 bg-current/5 px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.14em] transition hover:bg-current/15"
             >
-              {t(UI.navLaunchAnalyze)}
-            </EmberButton>
+              Simuler mon projet
+            </a>
+
+            <a
+              href="/#quote"
+              className="hidden sm:inline-flex min-h-9 items-center justify-center rounded-full bg-[#E2D5BC] px-4 py-1.5 text-[8.5px] font-bold uppercase tracking-[.14em] text-[#080B10] shadow-[0_4px_16px_rgba(226,213,188,0.3)] transition duration-300 hover:bg-white hover:-translate-y-0.5"
+            >
+              Devis gratuit
+            </a>
 
             <button
               type="button"

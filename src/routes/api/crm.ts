@@ -307,6 +307,83 @@ export const Route = createFileRoute("/api/crm")({
                 message: `Statut mis à jour sur ${lead.company} : ${prevStatus} → ${lead.status}.`,
                 createdAt: now,
               });
+
+              // ── AUTOMATISATION : CRÉATION CLIENT + FACTURE OFFICIELLE RIB KARMA SASU À LA SIGNATURE ──
+              if (lead.status === "signed") {
+                // 1. Client actif
+                let client = store.clients.find(
+                  (c) => c.leadId === lead.id || c.company.toLowerCase() === lead.company.toLowerCase()
+                );
+                if (!client) {
+                  const clientId = `cli-${Date.now().toString(36)}`;
+                  lead.convertedClientId = clientId;
+                  client = {
+                    id: clientId,
+                    leadId: lead.id,
+                    company: lead.company,
+                    contactName: lead.contactName,
+                    email: lead.email || `contact@${lead.company.toLowerCase().replace(/[^a-z0-9]/g, "") || "client"}.fr`,
+                    phone: lead.phone,
+                    website: lead.website,
+                    city: lead.city,
+                    country: lead.country || "France",
+                    sector: lead.sector || "Commerce",
+                    servicesPurchased: [lead.serviceTarget],
+                    totalRevenueEur: lead.budgetEur,
+                    status: "active",
+                    assignedTo: lead.assignedTo,
+                    internalNotes: `Client créé automatiquement suite à la signature du lead ${lead.company}.`,
+                    createdAt: now,
+                    updatedAt: now,
+                  };
+                  store.clients.unshift(client);
+                }
+
+                // 2. Facture officielle avec RIB KARMA SASU (Statut: pending_transfer pour validation Direction)
+                const existingInvoice = store.invoices.find(
+                  (i) => i.clientCompany.toLowerCase() === lead.company.toLowerCase() && i.status !== "cancelled"
+                );
+                if (!existingInvoice) {
+                  const invId = `inv-${Date.now().toString(36)}`;
+                  const refNum = `XR-INV-2026-${String(store.invoices.length + 1).padStart(4, "0")}`;
+                  const autoInvoice: CrmInvoiceRecord = {
+                    id: invId,
+                    clientId: client.id,
+                    clientCompany: lead.company,
+                    clientEmail: client.email,
+                    paymentReference: refNum,
+                    items: [
+                      {
+                        label: lead.serviceTarget || "Prestation Officielle XR Agency",
+                        quantity: 1,
+                        unitPriceEur: lead.budgetEur,
+                        totalEur: lead.budgetEur,
+                      },
+                    ],
+                    subtotalEur: lead.budgetEur,
+                    vatEur: 0,
+                    totalEur: lead.budgetEur,
+                    status: "pending_transfer",
+                    issueDate: now.slice(0, 10),
+                    dueDate: now.slice(0, 10),
+                    bankDetails: "KARMA SASU · IBAN FR76 1751 5900 0008 1234 5678 901 · BIC QNTOFR22",
+                    notes: `Facture émise automatiquement suite à la signature du prospect par ${user.fullName}. En attente de validation du virement reçu sur le RIB KARMA SASU.`,
+                    createdAt: now,
+                    updatedAt: now,
+                  };
+                  store.invoices.unshift(autoInvoice);
+                }
+
+                // 3. Notification d'alerte pour le QG Direction
+                store.notifications.unshift({
+                  id: `notif-${Date.now().toString(36)}`,
+                  targetRole: "admin",
+                  title: "🎉 Contrat Signé — Facture Émise",
+                  body: `${user.fullName} a signé le dossier ${lead.company} (${lead.budgetEur} €). Facture en attente de validation virement sur RIB KARMA SASU.`,
+                  read: false,
+                  createdAt: now,
+                });
+              }
             }
             saveStore(store);
             return Response.json(buildSnapshot(store, user));
@@ -404,6 +481,40 @@ export const Route = createFileRoute("/api/crm")({
 
             store.clients.unshift(newClient);
 
+            // Facture officielle avec RIB KARMA SASU (Statut: pending_transfer pour validation Direction)
+            const existingInv = store.invoices.find(
+              (i) => i.clientCompany.toLowerCase() === lead.company.toLowerCase() && i.status !== "cancelled"
+            );
+            if (!existingInv) {
+              const invId = `inv-${Date.now().toString(36)}`;
+              const refNum = `XR-INV-2026-${String(store.invoices.length + 1).padStart(4, "0")}`;
+              store.invoices.unshift({
+                id: invId,
+                clientId: newClient.id,
+                clientCompany: lead.company,
+                clientEmail: newClient.email || "comptabilite@client.fr",
+                paymentReference: refNum,
+                items: [
+                  {
+                    label: lead.serviceTarget || "Prestation Officielle XR Agency",
+                    quantity: 1,
+                    unitPriceEur: lead.budgetEur,
+                    totalEur: lead.budgetEur,
+                  },
+                ],
+                subtotalEur: lead.budgetEur,
+                vatEur: 0,
+                totalEur: lead.budgetEur,
+                status: "pending_transfer",
+                issueDate: now.slice(0, 10),
+                dueDate: now.slice(0, 10),
+                bankDetails: "KARMA SASU · IBAN FR76 1751 5900 0008 1234 5678 901 · BIC QNTOFR22",
+                notes: `Facture émise automatiquement suite à la conversion client par ${user.fullName}. En attente de validation du virement reçu sur le RIB KARMA SASU.`,
+                createdAt: now,
+                updatedAt: now,
+              });
+            }
+
             store.activities.unshift({
               id: `act-${Date.now().toString(36)}`,
               leadId: lead.id,
@@ -411,7 +522,7 @@ export const Route = createFileRoute("/api/crm")({
               memberId: user.id,
               memberName: user.fullName,
               type: "client_created",
-              message: `Lead converti en client actif : ${newClient.company} (${newClient.totalRevenueEur.toLocaleString("fr-FR")} €).`,
+              message: `Lead converti en client actif : ${newClient.company} (${newClient.totalRevenueEur.toLocaleString("fr-FR")} €). Facture en attente de virement émise.`,
               createdAt: now,
             });
 

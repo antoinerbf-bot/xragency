@@ -411,6 +411,39 @@ export function MapsSimulator() {
   const animMin = useAnimatedPrice(priceMin);
   const animMax = useAnimatedPrice(priceMax);
 
+  const [showAuditModal, setShowAuditModal] = useState(false);
+  const [leadCompany, setLeadCompany] = useState("");
+  const [leadContact, setLeadContact] = useState("");
+  const [leadPhone, setLeadPhone] = useState("");
+  const [leadEmail, setLeadEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  const handleAuditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!leadCompany.trim() || !leadPhone.trim()) return;
+    setIsSubmitting(true);
+    try {
+      await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name: leadContact.trim() || leadCompany.trim(),
+          company: leadCompany.trim(),
+          phone: leadPhone.trim(),
+          email: leadEmail.trim() || `contact@${leadCompany.toLowerCase().replace(/[^a-z0-9]/g, "") || "client"}.fr`,
+          need: `Google Maps Top 3 Garanti 1 An (${animMin} € - ${animMax} € / an)`,
+          message: `Simulation Google Maps :\n• Établissement : ${leadCompany}\n• Contact : ${leadContact || "Non précisé"}\n• Mots-clés : ${customKeywords || "Standards"}\n• Secteur : ${sectorLabel}\n• Ville : ${cityLabel}\n• Position actuelle : ${rankLabel}\n• Estimation affichée : ${animMin} € à ${animMax} € / an.\n• Téléphone : ${leadPhone}`,
+        }),
+      });
+      setSubmitSuccess(true);
+    } catch {
+      // ignore
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const selectedSector = SECTORS.find((s) => s.id === sector);
   const sectorLabel = tx(selectedSector?.label ?? "");
   const cityLabel = tx(CITY_SIZES.find((c) => c.id === citySize)?.label ?? "");
@@ -932,17 +965,30 @@ export function MapsSimulator() {
                           Garanti Top 3 sur 1 an ou remboursé
                         </span>
                       </div>
-                      <a
-                        href={`${CONTACT.whatsapp}?text=${encodeURIComponent(
-                          `Bonjour XR Agency, je souhaite valider mon éligibilité Top 3 Google Maps (dès 999 €/an).\n• Mots-clés visés : ${customKeywords}\n• Secteur : ${sectorLabel}\n• Ville : ${cityLabel}\n• Position actuelle : ${rankLabel}\n• Estimation affichée : ${animMin} € – ${animMax} € / an`
-                        )}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="label-mono inline-flex items-center gap-2 rounded-full bg-[var(--xr-ink)] px-5 py-2.5 text-xs font-semibold text-[var(--xr-bg)] transition-all duration-200 hover:bg-[var(--xr-ink)]/90 hover:-translate-y-0.5 hover:shadow-lg"
-                      >
-                        <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
-                        Faire valider mes mots-clés par un expert
-                      </a>
+                      <div className="flex flex-col gap-2 sm:flex-row">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowAuditModal(true);
+                            setSubmitSuccess(false);
+                          }}
+                          className="label-mono inline-flex items-center justify-center gap-2 rounded-full bg-[#c5a880] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-[#090a0d] shadow-lg transition-all duration-200 hover:bg-[#e3c9a4] hover:-translate-y-0.5"
+                        >
+                          <Sparkles className="h-3.5 w-3.5" />
+                          Réserver mon audit Top 3 (1-Clic)
+                        </button>
+                        <a
+                          href={`${CONTACT.whatsapp}?text=${encodeURIComponent(
+                            `Bonjour XR Agency, je souhaite valider mon éligibilité Top 3 Google Maps (dès 999 €/an).\n• Mots-clés visés : ${customKeywords}\n• Secteur : ${sectorLabel}\n• Ville : ${cityLabel}\n• Position actuelle : ${rankLabel}\n• Estimation affichée : ${animMin} € – ${animMax} € / an`
+                          )}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="label-mono inline-flex items-center justify-center gap-2 rounded-full border border-border bg-[var(--xr-ink)] px-5 py-2.5 text-xs font-semibold text-[var(--xr-bg)] transition-all duration-200 hover:bg-[var(--xr-ink)]/90 hover:-translate-y-0.5 hover:shadow-lg"
+                        >
+                          <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
+                          WhatsApp
+                        </a>
+                      </div>
                     </div>
                   </div>
 
@@ -1024,6 +1070,120 @@ export function MapsSimulator() {
             </div>
           </div>
         </Reveal>
+
+        {/* ── MODALE RÉSERVATION AUDIT TOP 3 (CAPTURE CRM IMMÉDIATE) ── */}
+        {showAuditModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md">
+            <div className="relative w-full max-w-lg rounded-3xl border border-[#c5a880]/40 bg-[#0f1118] p-6 text-white shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <div>
+                  <span className="label-mono text-[9px] uppercase tracking-widest text-[#c5a880]">
+                    XR AGENCY · GOOGLE MAPS AUDIT OFFICIEL
+                  </span>
+                  <h3 className="mt-1 text-lg font-bold">Réserver mon Audit Top 3 & Tarif Garanti</h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowAuditModal(false)}
+                  className="rounded-full border border-white/20 px-3 py-1 text-xs text-white/70 hover:text-white"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {submitSuccess ? (
+                <div className="py-8 text-center space-y-3">
+                  <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-emerald-500/20 text-emerald-400">
+                    <CheckCircle2 className="h-8 w-8" />
+                  </div>
+                  <h4 className="text-xl font-bold text-white">Demande d'audit transmise avec succès !</h4>
+                  <p className="text-xs text-white/70 max-w-sm mx-auto">
+                    Votre simulation ({customKeywords || "Mots-clés locaux"} à {cityLabel}) a été transmise à notre équipe d'analystes. Nous vous contactons sous 2h ouvrées avec votre rapport d'éligibilité.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setShowAuditModal(false)}
+                    className="mt-4 rounded-full bg-[#c5a880] px-6 py-2.5 text-xs font-black uppercase text-[#090a0d] hover:bg-[#e3c9a4]"
+                  >
+                    Fermer
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleAuditSubmit} className="mt-5 space-y-4">
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5 text-xs">
+                    <div className="flex justify-between text-white/60 text-[11px]">
+                      <span>Mots-clés visés : <strong className="text-white">{customKeywords || "Standards"}</strong></span>
+                      <span>Ville : <strong className="text-white">{cityLabel}</strong></span>
+                    </div>
+                    <div className="mt-1 flex justify-between text-white/60 text-[11px]">
+                      <span>Estimation : <strong className="text-emerald-400">{animMin} € à {animMax} € / an</strong></span>
+                      <span>Contrat : <strong className="text-[#c5a880]">Top 3 Garanti 1 An</strong></span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="mb-1 block text-xs font-medium text-white/80">Nom de votre établissement / Société *</label>
+                    <input
+                      type="text"
+                      required
+                      value={leadCompany}
+                      onChange={(e) => setLeadCompany(e.target.value)}
+                      placeholder="Ex: Restaurant Le Bistrot Parisien"
+                      className="w-full rounded-xl border border-white/15 bg-black/50 px-3.5 py-2.5 text-xs text-white focus:border-[#c5a880] focus:outline-none"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div>
+                      <label className="mb-1 block text-xs font-medium text-white/80">Votre Nom / Prénom</label>
+                      <input
+                        type="text"
+                        value={leadContact}
+                        onChange={(e) => setLeadContact(e.target.value)}
+                        placeholder="Ex: Alexandre Dupont"
+                        className="w-full rounded-xl border border-white/15 bg-black/50 px-3.5 py-2.5 text-xs text-white focus:border-[#c5a880] focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs font-medium text-white/80">Téléphone / WhatsApp *</label>
+                      <input
+                        type="tel"
+                        required
+                        value={leadPhone}
+                        onChange={(e) => setLeadPhone(e.target.value)}
+                        placeholder="Ex: 06 12 34 56 78"
+                        className="w-full rounded-xl border border-white/15 bg-black/50 px-3.5 py-2.5 text-xs text-white focus:border-[#c5a880] focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="mb-1 block text-xs font-medium text-white/80">Email (optionnel)</label>
+                    <input
+                      type="email"
+                      value={leadEmail}
+                      onChange={(e) => setLeadEmail(e.target.value)}
+                      placeholder="contact@votre-etablissement.fr"
+                      className="w-full rounded-xl border border-white/15 bg-black/50 px-3.5 py-2.5 text-xs text-white focus:border-[#c5a880] focus:outline-none"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="mt-2 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#c5a880] py-3 text-xs font-black uppercase tracking-wider text-[#090a0d] shadow-lg transition hover:bg-[#e3c9a4] disabled:opacity-50"
+                  >
+                    <Sparkles className="h-4 w-4" />
+                    {isSubmitting ? "Transmission en cours..." : "Valider mon éligibilité & être rappelé sous 2h"}
+                  </button>
+                  <p className="text-[10px] text-center text-white/50">
+                    Étude sans engagement · Validation par nos analystes XR Agency sous 2h.
+                  </p>
+                </form>
+              )}
+            </div>
+          </div>
+        )}
 
       </div>
     </section>

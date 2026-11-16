@@ -148,6 +148,89 @@ export function CrmInvoicesTab({
         </div>
       </div>
 
+      {/* ── SUIVI DES ABONNEMENTS MENSUELS RÉCURRENTS (MRR & COMMISSIONS 10%/MOIS) ── */}
+      <div className="rounded-3xl border border-sky-400/30 bg-[#0c101c] p-5 shadow-xl">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
+          <div className="flex items-center gap-2.5">
+            <span className="grid h-8 w-8 place-items-center rounded-xl bg-sky-500/20 text-sky-300">
+              <Clock className="h-4 w-4" />
+            </span>
+            <div>
+              <h3 className="text-sm font-bold text-white">🔄 Abonnements Mensuels Récurrents & MRR</h3>
+              <p className="text-[11px] text-white/60">
+                Suivi des échéances mensuelles (Webcare, Community Management, SEO) · Commission closer : 10 % par mois
+              </p>
+            </div>
+          </div>
+          <span className="rounded-full border border-sky-400/40 bg-sky-500/10 px-3 py-1 font-mono text-[10px] font-bold text-sky-300">
+            COMPTE BANCAIRE : KARMA SASU
+          </span>
+        </div>
+
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {[
+            {
+              client: "Villa Azur Palace",
+              service: "Webcare & Maintenance Pro",
+              amount: 199,
+              closerComm: 19.9,
+              nextDue: "5 Décembre 2026",
+              status: "active",
+            },
+            {
+              client: "Le Comptoir Gourmand",
+              service: "Community Management (Reels + Posts)",
+              amount: 499,
+              closerComm: 49.9,
+              nextDue: "1er Décembre 2026",
+              status: "active",
+            },
+            {
+              client: "Cabinet Haussmann Avocats",
+              service: "SEO & Référencement Mensuel",
+              amount: 349,
+              closerComm: 34.9,
+              nextDue: "10 Décembre 2026",
+              status: "active",
+            },
+          ].map((sub) => (
+            <div
+              key={sub.client}
+              className="flex flex-col justify-between rounded-2xl border border-white/10 bg-black/40 p-4 transition hover:border-sky-400/30"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-white text-xs">{sub.client}</span>
+                  <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 font-mono text-[9px] font-bold text-emerald-300">
+                    Actif ✓
+                  </span>
+                </div>
+                <p className="mt-1 text-[11px] text-white/70">{sub.service}</p>
+                <div className="mt-2 flex items-baseline justify-between border-t border-white/5 pt-2">
+                  <span className="font-mono text-sm font-black text-white">{sub.amount} € / mois</span>
+                  <span className="font-mono text-[10px] text-emerald-400 font-bold">
+                    +{sub.closerComm} € / m closer (10%)
+                  </span>
+                </div>
+                <p className="mt-1 font-mono text-[10px] text-white/50">Prochaine échéance : {sub.nextDue}</p>
+              </div>
+
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(
+                  `Bonjour ${sub.client}, voici le rappel pour le renouvellement mensuel de votre abonnement ${sub.service} (${sub.amount} € TTC).\nRIB Officiel KARMA SASU : FR76 1751 5900 0008 1234 5678 901 (BIC QNTOFR22).\nMerci pour votre confiance, l'équipe XR Agency.`
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 inline-flex items-center justify-center gap-1.5 rounded-xl border border-white/15 bg-white/5 py-1.5 text-[10px] font-bold text-white/80 transition hover:bg-white/15 hover:text-white"
+              >
+                <span>Relancer par WhatsApp</span>
+                <ArrowRight className="h-3 w-3" />
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Filter and Search Bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[#0a0d14]/90 p-3.5 backdrop-blur-xl">
         <div className="relative flex-1 min-w-[240px]">

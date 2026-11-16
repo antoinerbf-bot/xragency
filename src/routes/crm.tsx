@@ -358,7 +358,7 @@ function CrmWorkspacePage() {
     | "leaderboard"
   >("overview");
   const [showOfficialQuoteModal, setShowOfficialQuoteModal] = useState(false);
-  const [directorLeadScope, setDirectorLeadScope] = useState<"mine" | "team" | "all">("all");
+  const [directorLeadScope, setDirectorLeadScope] = useState<string>("all");
 
   // ── CLOSER TABS & ASSISTED CALL MODAL ──
   const [closerTab, setCloserTab] = useState<
@@ -1865,6 +1865,7 @@ function CrmWorkspacePage() {
   const filteredDirectorLeads = leads.filter((l) => {
     if (directorLeadScope === "mine") return l.assignedTo === user.id;
     if (directorLeadScope === "team") return l.assignedTo !== user.id;
+    if (directorLeadScope.startsWith("mem-")) return l.assignedTo === directorLeadScope;
     return true;
   });
 
@@ -2542,17 +2543,19 @@ function CrmWorkspacePage() {
                     { id: "all", label: `Tous les dossiers (${leads.length})` },
                     {
                       id: "mine",
-                      label: `👑 Mes Leads Perso Direction (${leads.filter((l) => l.assignedTo === user.id).length})`,
+                      label: `👑 Mes Leads Perso (${leads.filter((l) => l.assignedTo === user.id).length})`,
                     },
-                    {
-                      id: "team",
-                      label: `🎯 Leads Commerciaux (${leads.filter((l) => l.assignedTo !== user.id).length})`,
-                    },
+                    ...members
+                      .filter((m) => m.role !== "admin")
+                      .map((m) => ({
+                        id: m.id,
+                        label: `👤 ${m.fullName} (${leads.filter((l) => l.assignedTo === m.id).length})`,
+                      })),
                   ].map((f) => (
                     <button
                       key={f.id}
                       type="button"
-                      onClick={() => setDirectorLeadScope(f.id as typeof directorLeadScope)}
+                      onClick={() => setDirectorLeadScope(f.id)}
                       className={cn(
                         "rounded-xl px-3 py-1.5 text-xs font-bold transition",
                         directorLeadScope === f.id
