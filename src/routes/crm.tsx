@@ -69,6 +69,9 @@ import { CrmBossDashboard, type CrmTodo } from "@/components/crm/CrmBossDashboar
 import { CrmGameWorld } from "@/components/crm/CrmGameWorld";
 import { CrmCloserDashboard } from "@/components/crm/CrmCloserDashboard";
 import { CrmSchoolDashboard } from "@/components/crm/CrmSchoolDashboard";
+import { JarvisCommandHUD } from "@/components/jarvis/JarvisCommandHUD";
+import { XR_ADVISORS } from "@/lib/xr-advisors";
+import { playXpChime, generateLovableArchitecturePrompt } from "@/lib/rpg-engine";
 import { cn } from "@/lib/utils";
 import agentXrPortrait from "@/assets/agent-xr-portrait.jpg";
 
@@ -768,6 +771,43 @@ function CrmWorkspacePage() {
     [leads]
   );
 
+  const urgentLeads48h = useMemo(() => {
+    return leads.filter((l) => isLeadUrgent48h(l));
+  }, [leads]);
+
+  const handleCopyLovable = (lead: CrmLead) => {
+    const p = {
+      id: lead.id,
+      business_name: lead.company,
+      contact_name: lead.contactName,
+      phone: lead.phone,
+      website_url: lead.website || "",
+      status: lead.status,
+      notes: lead.notes,
+      created_at: lead.createdAt,
+    };
+    const prompt = generateLovableArchitecturePrompt(p as any);
+    navigator.clipboard.writeText(prompt);
+    flashSuccess(`⚡ Prompt Lovable 24h pour ${lead.company} copié dans le presse-papier !`);
+    playXpChime("audit");
+  };
+
+  const mappedProspectsForJarvis = useMemo(() => {
+    return leads.map((l) => ({
+      id: l.id,
+      business_name: l.company,
+      contact_name: l.contactName,
+      phone: l.phone,
+      website_url: l.website || "",
+      status: (l.status === "signed" ? "Signé" : l.status === "to_call" ? "À Contacter" : "En Négociation") as any,
+      owner_id: l.assignedTo,
+      notes: l.notes,
+      created_at: l.createdAt,
+      last_contact_at: l.updatedAt || l.createdAt,
+      estimated_budget: l.budgetEur,
+    }));
+  }, [leads]);
+
   if (loading) {
     return (
       <div className="grid min-h-screen place-items-center bg-[#0b0c0f] text-[#f8f6f0]">
@@ -954,15 +994,20 @@ function CrmWorkspacePage() {
             {selectedPortalRole === "closer" && (
               <div className="mt-4">
                 <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-white/70">
-                  Profil Commercial :
+                  Profil Commercial Dédié (7 Conseillers Officiels) :
                 </label>
                 <select
                   value={closerAccountEmail}
                   onChange={(e) => setCloserAccountEmail(e.target.value)}
                   className="w-full rounded-xl border border-white/15 bg-black/50 px-3.5 py-2.5 text-sm text-white focus:border-emerald-400 focus:outline-none"
                 >
-                  <option value="lucas@xragency.fr">Lucas Mercier (Closer Senior)</option>
-                  <option value="sarah@xragency.fr">Sarah Benali (Account Executive)</option>
+                  {XR_ADVISORS.map((adv) => (
+                    <option key={adv.id} value={adv.email}>
+                      {adv.fullName} — {adv.role} ({adv.rankName})
+                    </option>
+                  ))}
+                  <option value="lucas@xragency.fr">Lucas Martin — Closer Senior (Sites & Maps)</option>
+                  <option value="sarah@xragency.fr">Sarah Benali — Closer & Académie XR</option>
                 </select>
               </div>
             )}
@@ -1259,6 +1304,36 @@ function CrmWorkspacePage() {
             </div>
           )}
 
+          {/* Bandeau Alerte Rouge 48h de Closing */}
+          {urgentLeads48h.length > 0 && (
+            <div className="rounded-2xl border border-red-500/80 bg-gradient-to-r from-red-950/80 via-red-900/40 to-[#12141a] p-4 text-white shadow-[0_0_30px_rgba(239,68,68,0.35)] animate-pulse flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-red-500/30 text-red-400">
+                  <Flame className="h-5 w-5" />
+                </span>
+                <div>
+                  <h4 className="font-mono text-xs uppercase font-bold text-red-400 tracking-wider">
+                    ⚠️ ALERTE ROUGE CLOSING 48H · {urgentLeads48h.length} PROSPECT(S) EN DANGER
+                  </h4>
+                  <p className="text-xs text-white/80">
+                    {urgentLeads48h[0].company} ({urgentLeads48h[0].phone}) dépasse le délai SLA. Relancez immédiatement pour éviter la perte du dossier !
+                  </p>
+                </div>
+              </div>
+              <a
+                href={`https://wa.me/${urgentLeads48h[0].phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                  `Bonjour ${urgentLeads48h[0].contactName || ""}, je reviens vers vous concernant votre projet de visibilité avec XR Agency.`
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-red-500 px-4 py-2 text-xs font-black uppercase text-white shadow-lg shadow-red-500/40 hover:bg-red-400 shrink-0"
+              >
+                <MessageCircle className="h-4 w-4" />
+                Relance WhatsApp 1-Clic
+              </a>
+            </div>
+          )}
+
           {/* Compteurs Héroïques en haut */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <div className="rounded-2xl border border-amber-400/30 bg-amber-500/10 p-4">
@@ -1448,7 +1523,7 @@ function CrmWorkspacePage() {
                               1. Lancer l’Appel Assisté (Script + Tarifs)
                             </button>
 
-                            <div className="grid grid-cols-3 gap-2">
+                            <div className="grid grid-cols-4 gap-2">
                               <button
                                 type="button"
                                 disabled={busy || lead.maquetteStatus === "pending"}
@@ -1462,35 +1537,49 @@ function CrmWorkspacePage() {
                                     "🎨 Demande de maquette envoyée à la Direction !"
                                   )
                                 }
-                                className="rounded-xl border border-amber-400/40 bg-amber-500/15 px-2.5 py-2 text-[11px] font-bold text-amber-200 hover:bg-amber-500/25 disabled:opacity-50"
+                                className="rounded-xl border border-amber-400/40 bg-amber-500/15 px-2 py-2 text-[10.5px] font-bold text-amber-200 hover:bg-amber-500/25 disabled:opacity-50"
                               >
-                                🎨 2. Maquette
+                                🎨 Maquette
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() => handleCopyLovable(lead)}
+                                className="rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/15 px-2 py-2 text-[10.5px] font-bold text-[#E2D5BC] hover:bg-[#D4AF37]/25"
+                                title="Copier le prompt d'architecture Lovable en 1 clic"
+                              >
+                                ⚡ Lovable
                               </button>
 
                               <button
                                 type="button"
                                 disabled={busy}
-                                onClick={() => void handleRequestQuoteAndRib(lead)}
-                                className="rounded-xl border border-sky-400/40 bg-sky-500/15 px-2.5 py-2 text-[11px] font-bold text-sky-200 hover:bg-sky-500/25"
+                                onClick={() => {
+                                  setQuoteCompany(lead.company);
+                                  setQuoteEmail(lead.email || "");
+                                  setShowOfficialQuoteModal(true);
+                                }}
+                                className="rounded-xl border border-sky-400/40 bg-sky-500/15 px-2 py-2 text-[10.5px] font-bold text-sky-200 hover:bg-sky-500/25"
                               >
-                                📄 3. Devis + RIB
+                                📄 Devis
                               </button>
 
                               <button
                                 type="button"
                                 disabled={busy}
-                                onClick={() =>
+                                onClick={() => {
+                                  playXpChime("deal_closed");
                                   void apiCall(
                                     {
                                       action: "convert_lead_to_client",
                                       leadId: lead.id,
                                     },
-                                    `🏆 Bravo ! ${lead.company} est marqué Signé !`
-                                  )
-                                }
-                                className="rounded-xl border border-emerald-400/50 bg-emerald-500/20 px-2.5 py-2 text-[11px] font-bold text-emerald-200 hover:bg-emerald-500/35"
+                                    `🏆 Bravo ! ${lead.company} est marqué Signé ! (+1000 XP)`
+                                  );
+                                }}
+                                className="rounded-xl border border-emerald-400/50 bg-emerald-500/20 px-2 py-2 text-[10.5px] font-bold text-emerald-200 hover:bg-emerald-500/35"
                               >
-                                🏆 4. Closer !
+                                🏆 Closer
                               </button>
                             </div>
                           </>
@@ -2011,6 +2100,36 @@ function CrmWorkspacePage() {
           </div>
         )}
 
+        {/* Alerte Rouge 48h QG Direction */}
+        {urgentLeads48h.length > 0 && (
+          <div className="rounded-2xl border border-red-500/80 bg-gradient-to-r from-red-950/80 via-red-900/40 to-[#12141a] p-4 text-white shadow-[0_0_30px_rgba(239,68,68,0.35)] animate-pulse flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-red-500/30 text-red-400">
+                <Flame className="h-5 w-5" />
+              </span>
+              <div>
+                <h4 className="font-mono text-xs uppercase font-bold text-red-400 tracking-wider">
+                  ⚠️ ALERTE DIRECTION : {urgentLeads48h.length} PROSPECT(S) SANS SUIVI &gt; 48H
+                </h4>
+                <p className="text-xs text-white/80">
+                  {urgentLeads48h[0].company} ({urgentLeads48h[0].phone}) — Assignez ou relancez le prospect pour sécuriser le closing.
+                </p>
+              </div>
+            </div>
+            <a
+              href={`https://wa.me/${urgentLeads48h[0].phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                `Bonjour ${urgentLeads48h[0].contactName || ""}, c'est ${user.fullName} de la Direction XR Agency.`
+              )}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-red-500 px-4 py-2 text-xs font-black uppercase text-white shadow-lg shadow-red-500/40 hover:bg-red-400 shrink-0"
+            >
+              <MessageCircle className="h-4 w-4" />
+              WhatsApp Direction
+            </a>
+          </div>
+        )}
+
         {/* MODE BOSS ARCADE NIV. 99 */}
         {directorDisplayMode === "boss_arcade" && (
           <div className="rounded-3xl border border-yellow-500/30 bg-[#05040a] p-3 sm:p-5 shadow-2xl">
@@ -2278,6 +2397,42 @@ function CrmWorkspacePage() {
                       </div>
                     ))}
                 </div>
+              </div>
+            </div>
+
+            {/* Suivi des Élèves de l'Académie XR School en formation 90j */}
+            <div className="rounded-3xl border border-sky-400/30 bg-gradient-to-r from-sky-950/30 via-[#12141b] to-[#12141b] p-6 shadow-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="flex items-center gap-3.5">
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-sky-500/20 text-sky-300">
+                    <GraduationCap className="h-6 w-6" />
+                  </span>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-sky-300">
+                        🎓 ACADÉMIE XR SCHOOL · PROMOTION 90 JOURS
+                      </span>
+                      <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 font-mono text-[9px] font-bold text-emerald-300">
+                        1 Élève en cours
+                      </span>
+                    </div>
+                    <h3 className="mt-1 text-base font-bold text-white">
+                      Karim Zeroual — Jour 14 / 90 (Scripts Sectoriels & Objections RPG)
+                    </h3>
+                    <p className="text-xs text-white/60">
+                      Entraîné sur 12 simulations · Passerelle CRM active · Peut closer de vrais clients et percevoir ses commissions (Code d'accès : 1234)
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    void apiCall({ action: "login", pin: "1234" });
+                  }}
+                  className="rounded-xl border border-sky-400/40 bg-sky-500/15 px-4 py-2.5 text-xs font-bold text-sky-200 transition hover:bg-sky-500/25 shrink-0"
+                >
+                  Inspecter l'Académie XR School →
+                </button>
               </div>
             </div>
 

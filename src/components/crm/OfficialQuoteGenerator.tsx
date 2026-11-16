@@ -34,52 +34,62 @@ export interface CatalogItem {
 
 export const XR_OFFICIAL_CATALOG: CatalogItem[] = [
   {
-    id: "cat-maps-domination",
+    id: "cat-maps-top3-guaranteed",
     category: "MAPS_NFC",
-    title: "Pack Domination Locale Google Maps (Top 3 Local Pack)",
+    title: "Offre Google Maps Top 3 Garanti 1 An (Ou Remboursé)",
     description:
-      "Refonte fiche GBP, suroptimisation géolocalisée, citations NAP, structure de collecte d'avis 5★.",
-    unitPriceHt: 690,
+      "Garantie contractuelle d'apparition dans le Top 3 Google Maps 24h/24 et 7j/7 pendant 1 an. Optimisation GBP complète, géocodage et citations NAP.",
+    unitPriceHt: 999,
     billing: "ONE_SHOT",
     advisorId: "martin",
   },
   {
-    id: "cat-nfc-pack",
+    id: "cat-maps-management-annual",
     category: "MAPS_NFC",
-    title: "Pack Plaques comptoir & Cartes NFC Connectées (Gravure Or/Noir)",
+    title: "Gestion & Pilotage Annuel Fiche Google Maps",
     description:
-      "3 Plaques comptoir NFC + 5 Cartes métal/PVC programmées vers tunnel d'avis 5★ instantané.",
-    unitPriceHt: 290,
+      "Mise à jour hebdomadaire des photos géolocalisées, Google Posts réguliers, modération et réponses 5★, veille anti-modifications.",
+    unitPriceHt: 500,
     billing: "ONE_SHOT",
     advisorId: "martin",
   },
   {
     id: "cat-web-vitrine",
     category: "WEBSITES",
-    title: "Site Vitrine Haute Conversion (Livré en 7 jours)",
+    title: "Site Vitrine Pro Haute Conversion (Livré en 7 jours)",
     description:
       "Design Dark Luxury sur-mesure, score Lighthouse 99+, copywriting orienté prise de RDV, mobile-first.",
-    unitPriceHt: 1490,
+    unitPriceHt: 499,
     billing: "ONE_SHOT",
     advisorId: "romain",
   },
   {
     id: "cat-web-business",
     category: "WEBSITES",
-    title: "Refonte Site Business Pro & Tunnel de Devis Interactif",
+    title: "Site Business Sur-Mesure + Tunnel Devis & SEO",
     description:
       "Architecture multi-services, simulateur de devis intégré, SEO technique natif, tracking appels/leads.",
-    unitPriceHt: 2490,
+    unitPriceHt: 799,
     billing: "ONE_SHOT",
     advisorId: "romain",
   },
   {
     id: "cat-web-flagship",
     category: "WEBSITES",
-    title: "Écosystème Flagship Sur-Mesure + Automatisation CRM",
+    title: "Site E-Commerce / Flagship Sur-Mesure Luxury",
     description:
-      "Expérience signature complète, intégration CRM Supabase/WhatsApp, portail client et tunnels B2B.",
-    unitPriceHt: 4900,
+      "Expérience signature complète, boutique en ligne ou catalogue avancé, intégration CRM et portail client.",
+    unitPriceHt: 1499,
+    billing: "ONE_SHOT",
+    advisorId: "romain",
+  },
+  {
+    id: "cat-crm-pos",
+    category: "AUTOMATISATION_IA",
+    title: "Logiciel CRM & Système de Caisse POS Sur-Mesure",
+    description:
+      "Système de caisse complet, gestion des stocks, CRM client automatisé et relances WhatsApp Business.",
+    unitPriceHt: 2000,
     billing: "ONE_SHOT",
     advisorId: "romain",
   },

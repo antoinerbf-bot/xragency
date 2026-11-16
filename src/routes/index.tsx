@@ -11,6 +11,7 @@ import { InteractiveGlobalTeamGlobe } from "@/components/site/InteractiveGlobalT
 import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
 import { SectorSelectionTunnel } from "@/components/site/SectorSelectionTunnel";
+import { AdvisorsShowcase } from "@/components/site/AdvisorsShowcase";
 import { FunnelProvider } from "@/lib/funnel";
 import { FunnelRail } from "@/components/site/FunnelRail";
 
@@ -59,6 +60,7 @@ function Index() {
           <QuoteConfiguratorCompact />
           <DigitalAudit />
           <MapsSimulator />
+          <AdvisorsShowcase />
           <InteractiveGlobalTeamGlobe />
           <ProofAndGuarantees />
           <Faq />
