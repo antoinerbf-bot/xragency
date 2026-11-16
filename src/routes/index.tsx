@@ -10,6 +10,7 @@ import { ProofAndGuarantees } from "@/components/site/ProofAndGuarantees";
 import { InteractiveGlobalTeamGlobe } from "@/components/site/InteractiveGlobalTeamGlobe";
 import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
+import { SectorSelectionTunnel } from "@/components/site/SectorSelectionTunnel";
 import { FunnelProvider } from "@/lib/funnel";
 import { FunnelRail } from "@/components/site/FunnelRail";
 
@@ -50,6 +51,9 @@ function Index() {
         <FunnelRail />
         <main className="relative z-10">
           <Hero />
+          <div id="tunnel-secteurs">
+            <SectorSelectionTunnel />
+          </div>
           <HeroVslPlayer />
           <HomeServices />
           <QuoteConfiguratorCompact />

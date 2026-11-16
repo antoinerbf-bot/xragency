@@ -134,10 +134,10 @@ export function Hero() {
           {/* Boutons d'Action Principaux */}
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             <a
-              href="#quote"
+              href="#tunnel-secteurs"
               className="group inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full bg-[#c5a880] px-6 py-3.5 text-[10px] font-black uppercase tracking-[.13em] text-[#090a0d] shadow-[0_12px_40px_rgba(197,168,128,0.42)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#e3c9a4] sm:min-w-[225px]"
             >
-              {t(UI.heroCtaMockup)}
+              <span>Démarrer mon projet</span>
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </a>
 
@@ -149,11 +149,7 @@ export function Hero() {
               <span className="grid h-6 w-6 place-items-center rounded-full bg-[#c5a880] text-[#090a0d]">
                 <Play className="h-3 w-3 fill-current ml-0.5" />
               </span>
-              {currentLang === "en"
-                ? "Watch Studio Film (55s)"
-                : currentLang === "vi"
-                  ? "Xem Phim Studio (55s)"
-                  : "Découvrir le Film Studio (55s)"}
+              <span>Découvrir en 1 min</span>
             </button>
 
             <a
@@ -163,6 +159,22 @@ export function Hero() {
               {t(UI.heroCtaAudit)}
               <Search className="h-3.5 w-3.5 text-[#c5a880]" />
             </a>
+          </div>
+
+          {/* Chiffres d'autorité du Concept 01 de l'esquisse */}
+          <div className="mt-8 grid grid-cols-3 gap-4 border-t border-white/15 pt-5 max-w-[500px]">
+            <div>
+              <strong className="block font-mono text-2xl font-bold text-white">+300</strong>
+              <span className="text-[11px] text-white/65">Projets réalisés</span>
+            </div>
+            <div>
+              <strong className="block font-mono text-2xl font-bold text-[#c5a880]">10 ans</strong>
+              <span className="text-[11px] text-white/65">d'expertise</span>
+            </div>
+            <div>
+              <strong className="block font-mono text-2xl font-bold text-white">50 experts</strong>
+              <span className="text-[11px] text-white/65">à l'international</span>
+            </div>
           </div>
 
           {/* 4 Accès Directs par Objectif Stratégique */}

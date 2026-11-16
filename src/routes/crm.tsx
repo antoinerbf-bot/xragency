@@ -826,6 +826,7 @@ function CrmWorkspacePage() {
               type="button"
               onClick={() => {
                 setSelectedPortalRole("director");
+                setPinCode("07266");
                 setErrorMsg("");
               }}
               className={cn(
@@ -841,7 +842,7 @@ function CrmWorkspacePage() {
                     <Crown className="h-6 w-6" />
                   </span>
                   <span className="rounded-full border border-[#c5a880]/40 bg-[#c5a880]/15 px-3 py-1 font-mono text-[10px] font-bold text-[#e5cba4]">
-                    DIRECTION UNIQUEMENT
+                    CODE PIN : 07266
                   </span>
                 </div>
                 <h2 className="mt-4 text-xl font-bold text-white">1. QG Direction</h2>
@@ -850,7 +851,7 @@ function CrmWorkspacePage() {
                 </p>
               </div>
               <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-3 text-xs font-semibold text-[#e5cba4]">
-                <span>Sélectionner Direction</span>
+                <span>Sélectionner Direction (07266)</span>
                 <ArrowUpRight className="h-4 w-4" />
               </div>
             </button>
@@ -860,6 +861,7 @@ function CrmWorkspacePage() {
               type="button"
               onClick={() => {
                 setSelectedPortalRole("closer");
+                setPinCode("7777");
                 setErrorMsg("");
               }}
               className={cn(
@@ -875,7 +877,7 @@ function CrmWorkspacePage() {
                     <Target className="h-6 w-6" />
                   </span>
                   <span className="rounded-full border border-emerald-400/40 bg-emerald-500/15 px-3 py-1 font-mono text-[10px] font-bold text-emerald-300">
-                    ESPACE CLOSER ISOLÉ
+                    CODE PIN : 7777
                   </span>
                 </div>
                 <h2 className="mt-4 text-xl font-bold text-white">2. Arène Commerciale</h2>
@@ -884,7 +886,7 @@ function CrmWorkspacePage() {
                 </p>
               </div>
               <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-3 text-xs font-semibold text-emerald-300">
-                <span>Sélectionner Commercial</span>
+                <span>Sélectionner Commercial (7777)</span>
                 <ArrowUpRight className="h-4 w-4" />
               </div>
             </button>
@@ -894,6 +896,7 @@ function CrmWorkspacePage() {
               type="button"
               onClick={() => {
                 setSelectedPortalRole("student");
+                setPinCode("1234");
                 setErrorMsg("");
               }}
               className={cn(
@@ -909,7 +912,7 @@ function CrmWorkspacePage() {
                     <GraduationCap className="h-6 w-6" />
                   </span>
                   <span className="rounded-full border border-sky-400/40 bg-sky-500/15 px-3 py-1 font-mono text-[10px] font-bold text-sky-300">
-                    ÉCOLE + PASSERELLE CRM
+                    CODE PIN : 1234
                   </span>
                 </div>
                 <h2 className="mt-4 text-xl font-bold text-white">3. XR School (90j)</h2>
@@ -918,7 +921,7 @@ function CrmWorkspacePage() {
                 </p>
               </div>
               <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-3 text-xs font-semibold text-sky-300">
-                <span>Sélectionner XR School</span>
+                <span>Sélectionner XR School (1234)</span>
                 <ArrowUpRight className="h-4 w-4" />
               </div>
             </button>
@@ -1018,11 +1021,11 @@ function CrmWorkspacePage() {
                 type="button"
                 onClick={() => {
                   setSelectedPortalRole("director");
-                  setPinCode("071266");
+                  setPinCode("07266");
                 }}
                 className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-white/80 transition hover:border-[#c5a880] hover:text-[#c5a880]"
               >
-                Direction: 071266
+                Direction: 07266
               </button>
               <button
                 type="button"
@@ -1856,154 +1859,8 @@ function CrmWorkspacePage() {
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // PORTAIL 1 : QG DIRECTION (CODE 071266 / 07266)
-  // MODE 1 : GRAND PALAIS DU FONDATEUR · BOSS MODE (NIVEAU 99 + SONS 8-BIT)
-  // ══════════════════════════════════════════════════════════════════════════
-  if (effectivePortal === "director" && directorDisplayMode === "boss_arcade") {
-    return (
-      <div className="relative min-h-screen bg-[#05040a]">
-        <div className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-3 border-b border-yellow-500/30 bg-black/90 px-4 py-2.5 backdrop-blur-xl">
-          <div className="flex items-center gap-2">
-            <span className="rounded-full bg-yellow-500/20 px-3 py-1 font-mono text-xs font-black text-[#d4af37]">
-              👑 GRAND PALAIS BOSS · MODE ARCADE NIV. 99
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setDirectorDisplayMode("cockpit")}
-              className="rounded-full bg-[#c5a880] px-4 py-1.5 text-xs font-black uppercase tracking-wider text-[#101114] shadow-md hover:bg-[#d8be98]"
-            >
-              ← Basculer sur le Cockpit Pro (10 Onglets)
-            </button>
-            <button
-              type="button"
-              onClick={() => setDirectorDisplayMode("game_world")}
-              className="rounded-full border border-purple-500/40 bg-purple-950/60 px-4 py-1.5 text-xs font-bold text-purple-300 hover:bg-purple-900"
-            >
-              🎮 Monde Metaverse RPG
-            </button>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 rounded-full border border-red-500/50 bg-red-500/20 px-3.5 py-1.5 text-xs font-bold text-red-300 transition hover:bg-red-500/30"
-              title="Se déconnecter"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-              <span>Déconnexion</span>
-            </button>
-          </div>
-        </div>
-
-        <CrmBossDashboard
-          user={{
-            fullName: user.fullName,
-            email: user.email,
-            role: user.role,
-          }}
-          leads={leads}
-          todos={crmTodos}
-          onToggleTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
-          onAddTodo={(todo) =>
-            void apiCall({
-              action: "create_task",
-              title: todo.title,
-              category: todo.category,
-              dueDate: todo.deadline,
-              priority: todo.priority,
-              tag: todo.tag,
-            })
-          }
-          onDeleteTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
-          onDispatchLead={(leadId, targetEmail) => {
-            const m = members.find((mem) => mem.email === targetEmail);
-            if (m) void apiCall({ action: "update_lead", leadId, assignedTo: m.id }, `Lead envoyé à ${m.fullName} !`);
-          }}
-          onLogout={handleLogout}
-          onSwitchToProMode={() => setDirectorDisplayMode("cockpit")}
-        />
-      </div>
-    );
-  }
-
-  // ══════════════════════════════════════════════════════════════════════════
-  // MODE 2 : MONDE VIRTUEL METAVERSE HQ ARCADE (D-PAD + 4 SALLES + PIÈCES)
-  // ══════════════════════════════════════════════════════════════════════════
-  if (effectivePortal === "director" && directorDisplayMode === "game_world") {
-    return (
-      <div className="relative min-h-screen bg-[#05060c] p-3 sm:p-6">
-        <div className="sticky top-0 z-50 mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-purple-500/30 bg-black/90 p-3 backdrop-blur-xl">
-          <div className="flex items-center gap-2">
-            <span className="rounded-full bg-purple-500/20 px-3 py-1 font-mono text-xs font-black text-purple-300">
-              🎮 METAVERSE HQ · AVATAR 2D & SALLES DU QG
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setDirectorDisplayMode("cockpit")}
-              className="rounded-full bg-[#c5a880] px-4 py-1.5 text-xs font-black uppercase text-[#101114] hover:bg-[#d8be98]"
-            >
-              ← Cockpit Pro (10 Onglets)
-            </button>
-            <button
-              type="button"
-              onClick={() => setDirectorDisplayMode("boss_arcade")}
-              className="rounded-full border border-yellow-500/40 bg-yellow-950/60 px-4 py-1.5 text-xs font-bold text-yellow-300 hover:bg-yellow-900"
-            >
-              🕹️ Boss Arcade
-            </button>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 rounded-full border border-red-500/50 bg-red-500/20 px-3.5 py-1.5 text-xs font-bold text-red-300 transition hover:bg-red-500/30"
-              title="Se déconnecter"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-              <span>Déconnexion</span>
-            </button>
-          </div>
-        </div>
-
-        <CrmGameWorld
-          currentUser={{
-            id: user.id,
-            email: user.email,
-            fullName: user.fullName,
-            role: user.role,
-            title: user.title,
-            commissionPct: user.commissionPct,
-          }}
-          leads={leads}
-          todos={crmTodos}
-          onToggleTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
-          onAddTodo={(todo) =>
-            void apiCall({
-              action: "create_task",
-              title: todo.title,
-              category: todo.category,
-              dueDate: todo.deadline,
-              priority: todo.priority,
-              tag: todo.tag,
-            })
-          }
-          onDeleteTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
-          switchUserRole={(email) => {
-            void apiCall({ action: "login", pin: "071266", email });
-          }}
-          membersList={members.map((m) => ({
-            email: m.email,
-            fullName: m.fullName,
-            role: m.role,
-            title: m.title,
-          }))}
-        />
-      </div>
-    );
-  }
-
-  // ══════════════════════════════════════════════════════════════════════════
-  // MODE 3 : COCKPIT PRO DIRECTION (10 ONGLETS STRUCTURÉS)
+  // PORTAIL 1 : QG DIRECTION GÉNÉRALE (CODE 07266 / 071266)
+  // CADRE UNIFIÉ PERMANENT : 10 PILIERS + MODES LUDIQUES INTÉGRÉS
   // ══════════════════════════════════════════════════════════════════════════
   const filteredDirectorLeads = leads.filter((l) => {
     if (directorLeadScope === "mine") return l.assignedTo === user.id;
@@ -2043,25 +1900,35 @@ function CrmWorkspacePage() {
                 className={cn(
                   "rounded-xl px-2.5 py-1 text-[11px] font-bold transition",
                   directorDisplayMode === "cockpit"
-                    ? "bg-[#c5a880] text-[#101114]"
+                    ? "bg-[#c5a880] text-[#101114] shadow"
                     : "text-white/70 hover:text-white"
                 )}
               >
-                👑 Cockpit Pro
+                👑 Cockpit Pro (10 Onglets)
               </button>
               <button
                 type="button"
                 onClick={() => setDirectorDisplayMode("boss_arcade")}
-                className="rounded-xl px-2.5 py-1 text-[11px] font-bold text-[#e5cba4] hover:bg-white/10"
+                className={cn(
+                  "rounded-xl px-2.5 py-1 text-[11px] font-bold transition",
+                  directorDisplayMode === "boss_arcade"
+                    ? "bg-yellow-500 text-black shadow"
+                    : "text-[#e5cba4] hover:bg-white/10"
+                )}
               >
                 🕹️ Boss Arcade (Niv. 99)
               </button>
               <button
                 type="button"
                 onClick={() => setDirectorDisplayMode("game_world")}
-                className="rounded-xl px-2.5 py-1 text-[11px] font-bold text-purple-300 hover:bg-white/10"
+                className={cn(
+                  "rounded-xl px-2.5 py-1 text-[11px] font-bold transition",
+                  directorDisplayMode === "game_world"
+                    ? "bg-purple-600 text-white shadow"
+                    : "text-purple-300 hover:bg-white/10"
+                )}
               >
-                🎮 Metaverse RPG
+                🎮 Metaverse RPG (2D)
               </button>
             </div>
           </div>
@@ -2093,10 +1960,13 @@ function CrmWorkspacePage() {
               <button
                 key={tab.id}
                 type="button"
-                onClick={() => setDirectorTab(tab.id as typeof directorTab)}
+                onClick={() => {
+                  setDirectorTab(tab.id as typeof directorTab);
+                  setDirectorDisplayMode("cockpit");
+                }}
                 className={cn(
                   "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition",
-                  directorTab === tab.id
+                  directorDisplayMode === "cockpit" && directorTab === tab.id
                     ? "bg-[#c5a880] text-[#101114] shadow-[0_0_25px_rgba(197,168,128,0.35)]"
                     : "border border-white/10 bg-white/5 text-white/75 hover:text-white"
                 )}
@@ -2140,37 +2010,112 @@ function CrmWorkspacePage() {
           </div>
         )}
 
-        {/* KPI Globaux Direction */}
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-          <div className="rounded-2xl border border-white/10 bg-[#12141b] p-4">
-            <span className="font-mono text-[10px] uppercase text-white/55">CA SIGNÉ TOTAL</span>
-            <p className="mt-1 text-xl font-black text-emerald-400">
-              {formatMoney(snapshot.stats?.revenueEur || 0)}
-            </p>
+        {/* MODE BOSS ARCADE NIV. 99 */}
+        {directorDisplayMode === "boss_arcade" && (
+          <div className="rounded-3xl border border-yellow-500/30 bg-[#05040a] p-3 sm:p-5 shadow-2xl">
+            <CrmBossDashboard
+              user={{
+                fullName: user.fullName,
+                email: user.email,
+                role: user.role,
+              }}
+              leads={leads}
+              todos={crmTodos}
+              onToggleTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
+              onAddTodo={(todo) =>
+                void apiCall({
+                  action: "create_task",
+                  title: todo.title,
+                  category: todo.category,
+                  dueDate: todo.deadline,
+                  priority: todo.priority,
+                  tag: todo.tag,
+                })
+              }
+              onDeleteTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
+              onDispatchLead={(leadId, targetEmail) => {
+                const m = members.find((mem) => mem.email === targetEmail);
+                if (m) void apiCall({ action: "update_lead", leadId, assignedTo: m.id }, `Lead envoyé à ${m.fullName} !`);
+              }}
+              onLogout={handleLogout}
+              onSwitchToProMode={() => setDirectorDisplayMode("cockpit")}
+            />
           </div>
-          <div className="rounded-2xl border border-white/10 bg-[#12141b] p-4">
-            <span className="font-mono text-[10px] uppercase text-white/55">PIPELINE EN COURS</span>
-            <p className="mt-1 text-xl font-black text-[#e5cba4]">
-              {formatMoney(snapshot.stats?.pipelineEur || 0)}
-            </p>
+        )}
+
+        {/* MODE MONDE METAVERSE RPG 2D */}
+        {directorDisplayMode === "game_world" && (
+          <div className="rounded-3xl border border-purple-500/30 bg-[#05060c] p-3 sm:p-5 shadow-2xl">
+            <CrmGameWorld
+              currentUser={{
+                id: user.id,
+                email: user.email,
+                fullName: user.fullName,
+                role: user.role,
+                title: user.title,
+                commissionPct: user.commissionPct,
+              }}
+              leads={leads}
+              todos={crmTodos}
+              onToggleTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
+              onAddTodo={(todo) =>
+                void apiCall({
+                  action: "create_task",
+                  title: todo.title,
+                  category: todo.category,
+                  dueDate: todo.deadline,
+                  priority: todo.priority,
+                  tag: todo.tag,
+                })
+              }
+              onDeleteTodo={(id) => void apiCall({ action: "toggle_task", taskId: id })}
+              switchUserRole={(email) => {
+                void apiCall({ action: "login", pin: "07266", email });
+              }}
+              membersList={members.map((m) => ({
+                email: m.email,
+                fullName: m.fullName,
+                role: m.role,
+                title: m.title,
+              }))}
+            />
           </div>
-          <div className="rounded-2xl border border-amber-400/30 bg-amber-500/10 p-4">
-            <span className="font-mono text-[10px] uppercase text-amber-300">MAQUETTES À LIVRER</span>
-            <p className="mt-1 text-xl font-black text-white">{pendingMaquettes.length}</p>
-          </div>
-          <div className="rounded-2xl border border-sky-400/30 bg-sky-500/10 p-4">
-            <span className="font-mono text-[10px] uppercase text-sky-300">VIREMENTS EN ATTENTE</span>
-            <p className="mt-1 text-xl font-black text-white">
-              {formatMoney(snapshot.stats?.pendingInvoicesEur || 0)}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-4">
-            <span className="font-mono text-[10px] uppercase text-emerald-300">COMMISSIONS DÉBLOQUÉES</span>
-            <p className="mt-1 text-xl font-black text-emerald-300">
-              {formatMoney(commissionSummary.unlockedEur)}
-            </p>
-          </div>
-        </div>
+        )}
+
+        {/* MODE COCKPIT PRO (10 ONGLETS STRUCTURÉS) */}
+        {directorDisplayMode === "cockpit" && (
+          <>
+            {/* KPI Globaux Direction */}
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+              <div className="rounded-2xl border border-white/10 bg-[#12141b] p-4">
+                <span className="font-mono text-[10px] uppercase text-white/55">CA SIGNÉ TOTAL</span>
+                <p className="mt-1 text-xl font-black text-emerald-400">
+                  {formatMoney(snapshot.stats?.revenueEur || 0)}
+                </p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-[#12141b] p-4">
+                <span className="font-mono text-[10px] uppercase text-white/55">PIPELINE EN COURS</span>
+                <p className="mt-1 text-xl font-black text-[#e5cba4]">
+                  {formatMoney(snapshot.stats?.pipelineEur || 0)}
+                </p>
+              </div>
+              <div className="rounded-2xl border border-amber-400/30 bg-amber-500/10 p-4">
+                <span className="font-mono text-[10px] uppercase text-amber-300">MAQUETTES À LIVRER</span>
+                <p className="mt-1 text-xl font-black text-white">{pendingMaquettes.length}</p>
+              </div>
+              <div className="rounded-2xl border border-sky-400/30 bg-sky-500/10 p-4">
+                <span className="font-mono text-[10px] uppercase text-sky-300">VIREMENTS EN ATTENTE</span>
+                <p className="mt-1 text-xl font-black text-white">
+                  {formatMoney(snapshot.stats?.pendingInvoicesEur || 0)}
+                </p>
+              </div>
+              <div className="rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-4">
+                <span className="font-mono text-[10px] uppercase text-emerald-300">COMMISSIONS DÉBLOQUÉES</span>
+                <p className="mt-1 text-xl font-black text-emerald-300">
+                  {formatMoney(commissionSummary.unlockedEur)}
+                </p>
+              </div>
+            </div>
 
         {/* ══════════════════════════════════════════════════════════════════
             ONGLET 0 DIRECTION : VUE GÉNÉRALE & QG
@@ -3119,6 +3064,8 @@ function CrmWorkspacePage() {
           <div className="rounded-3xl border border-white/10 bg-[#12141a] p-6">
             <CrmEgoLeaderboard currentUserName={user.fullName} />
           </div>
+        )}
+          </>
         )}
       </main>
 
