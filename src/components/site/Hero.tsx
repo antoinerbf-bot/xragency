@@ -1,17 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ArrowRight, Play, Sparkles, Volume2, VolumeX, X, ShieldCheck, Gamepad2 } from "lucide-react";
+import { ArrowRight, Play, Sparkles, Volume2, VolumeX, X, ShieldCheck } from "lucide-react";
 import { useLang, type Lang } from "@/lib/i18n";
 import { useFunnel } from "@/lib/funnel";
 import heroEditorialImg from "@/assets/hero-editorial-concept01.jpg";
-import { DigitalPlaygroundHero } from "./DigitalPlaygroundHero";
 
 export function Hero() {
   const { lang } = useLang();
   const currentLang = (lang || "fr") as Lang;
   const { applyGoalPreset } = useFunnel();
-
-  // Mode par défaut : Concept 05 Digital Playground (le plus ludique et immersif)
-  const [heroMode, setHeroMode] = useState<"playground" | "editorial">("playground");
 
   const [cinemaModalOpen, setCinemaModalOpen] = useState(false);
   const modalVideoRef = useRef<HTMLVideoElement>(null);
@@ -22,10 +18,6 @@ export function Hero() {
       modalVideoRef.current?.play().catch(() => {});
     }, 100);
   };
-
-  if (heroMode === "playground") {
-    return <DigitalPlaygroundHero onSwitchToEditorial={() => setHeroMode("editorial")} />;
-  }
 
   return (
     <section
@@ -54,18 +46,6 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto max-w-[1680px] w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20">
         
-        {/* Switcher vers le Digital Playground en haut */}
-        <div className="mb-6 flex justify-end">
-          <button
-            type="button"
-            onClick={() => setHeroMode("playground")}
-            className="inline-flex items-center gap-2 rounded-full border border-cyan-500/40 bg-cyan-950/60 px-4 py-1.5 font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-300 backdrop-blur-xl transition hover:bg-cyan-500 hover:text-black shadow-[0_0_20px_rgba(6,182,212,0.2)]"
-          >
-            <Gamepad2 className="h-3.5 w-3.5" />
-            <span>🎮 Activer le Playground 3D (Ludique)</span>
-          </button>
-        </div>
-
         <div className="grid items-center gap-12 lg:grid-cols-12 xl:gap-16">
           
           {/* ── COLONNE GAUCHE (7 cols) : CONCEPT 01 ÉDITORIAL PREMIUM ── */}

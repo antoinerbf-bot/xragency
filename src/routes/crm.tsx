@@ -398,8 +398,8 @@ function CrmWorkspacePage() {
   const [pinCode, setPinCode] = useState("");
   const [closerAccountEmail, setCloserAccountEmail] = useState("lucas@xragency.fr");
 
-  // ── DIRECTOR TABS & MODES D'AFFICHAGE (COCKPIT PRO vs BOSS ARCADE vs MONDE METAVERSE) ──
-  const [directorDisplayMode, setDirectorDisplayMode] = useState<"cockpit" | "boss_arcade" | "game_world">("cockpit");
+  // ── DIRECTOR TABS & MODES D'AFFICHAGE (COCKPIT PRO vs BOSS ARCADE vs MONDE METAVERSE vs ARÈNE CLOSER) ──
+  const [directorDisplayMode, setDirectorDisplayMode] = useState<"cockpit" | "boss_arcade" | "game_world" | "closer_arena">("cockpit");
   const [closerDisplayMode, setCloserDisplayMode] = useState<"missions" | "combat_hub">("combat_hub");
   const [directorTab, setDirectorTab] = useState<
     | "overview"
@@ -2439,6 +2439,50 @@ function CrmWorkspacePage() {
   // PORTAIL 1 : QG DIRECTION GÉNÉRALE (CODE 07266 / 071266)
   // CADRE UNIFIÉ PERMANENT : 10 PILIERS + MODES LUDIQUES INTÉGRÉS
   // ══════════════════════════════════════════════════════════════════════════
+  if (directorDisplayMode === "closer_arena") {
+    return (
+      <div className="relative min-h-screen bg-[#07090e]">
+        <div className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-3 border-b border-amber-500/30 bg-black/90 px-4 py-2.5 backdrop-blur-xl">
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-amber-500/20 px-3 py-1 font-mono text-xs font-black text-amber-300">
+              👑 DIRECTION · APERÇU DE L'ARÈNE LUDIQUE COMMERCIALE
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setDirectorDisplayMode("cockpit")}
+              className="rounded-full border border-amber-400 bg-amber-400/20 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-amber-200 hover:bg-amber-400/30"
+            >
+              ← Revenir au QG Direction
+            </button>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="inline-flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-500/15 px-3.5 py-1.5 text-xs font-bold text-red-300 hover:bg-red-500/25"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              <span>Déconnexion</span>
+            </button>
+          </div>
+        </div>
+
+        <CrmUltraLudiqueArena
+          user={{
+            fullName: `${user.fullName} (Direction)`,
+            email: user.email,
+            commissionPct: 15,
+          }}
+          leads={leads}
+          onLogout={handleLogout}
+          onOpenCallModal={openCallModal}
+          onOpenWhatsappModal={openWhatsappModal}
+          onSignDeal={(leadId) => updateLeadStatus(leadId, "signed")}
+        />
+      </div>
+    );
+  }
+
   const filteredDirectorLeads = leads.filter((l) => {
     if (directorLeadScope === "mine") return l.assignedTo === user.id;
     if (directorLeadScope === "team") return l.assignedTo !== user.id;
@@ -2469,6 +2513,16 @@ function CrmWorkspacePage() {
               </div>
               <h1 className="text-base font-bold text-white">{user.fullName}</h1>
             </div>
+
+            {/* Bouton Arène Commerciale Ludique pour la Direction */}
+            <button
+              type="button"
+              onClick={() => setDirectorDisplayMode("closer_arena")}
+              className="inline-flex items-center gap-2 rounded-full border border-emerald-400/50 bg-emerald-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-emerald-300 shadow-[0_0_20px_rgba(52,211,153,0.3)] transition hover:bg-emerald-400 hover:text-black"
+            >
+              <Swords className="h-3.5 w-3.5" />
+              <span>Arène Commerciale Ludique ⚔️</span>
+            </button>
 
             {/* Badge War Room Direction */}
             <div className="hidden sm:flex items-center gap-2 rounded-2xl border border-[#c5a880]/35 bg-black/60 px-3 py-1.5">
@@ -2639,6 +2693,14 @@ function CrmWorkspacePage() {
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setDirectorDisplayMode("closer_arena")}
+                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-black shadow-lg shadow-emerald-500/25 transition hover:brightness-110"
+                  >
+                    <Swords className="h-4 w-4" />
+                    Arène Commerciale Ludique ⚔️
+                  </button>
                   <button
                     type="button"
                     onClick={() => setDirectorTab("leads")}
