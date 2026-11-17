@@ -128,10 +128,20 @@ export function SectorSelectionTunnel() {
         <div className="grid lg:grid-cols-12 gap-10 items-center">
           
           <div className="lg:col-span-5 max-w-xl">
-            <h2 className="font-serif text-[clamp(2.2rem,4vw,3.8rem)] font-normal leading-[1.08] tracking-[-0.02em] text-white">
-              Construisons ensemble votre croissance digitale.
+            <div className="sec-head-line mb-3">
+              <div className="sec-head-dash" />
+              <span className="mono-nex text-white/70">
+                <b className="text-[#c5a880] font-bold">06</b> / DIAGNOSTIC INTERACTIF PAR SECTEUR
+              </span>
+            </div>
+
+            <h2 className="h-nex text-3xl sm:text-5xl lg:text-[3.6rem] text-white">
+              Construisons ensemble votre{" "}
+              <span className="text-[#dfc39d] font-serif font-light italic">
+                croissance digitale.
+              </span>
             </h2>
-            <p className="mt-5 text-[15px] sm:text-[16px] font-light leading-relaxed text-neutral-300">
+            <p className="mt-4 text-[15px] sm:text-[16px] font-light leading-relaxed text-neutral-300">
               Répondez à quelques questions et recevez une recommandation sur-mesure en moins de 2 minutes.
             </p>
 
