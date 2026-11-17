@@ -29,13 +29,14 @@ export function Logo({ className }: { className?: string }) {
       )}
     >
       <span className="flex items-center gap-2.5">
-        <span className="xr-logo-lockup flex items-center font-sans text-[18px] sm:text-[20px] font-black leading-none text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.55)]">
-          <span className="font-black text-white transition-transform duration-200 group-hover:scale-105">X</span>
-          <span className="font-extrabold tracking-[0.15em] text-white">RAGENCY</span>
+        <span className="xr-logo-lockup flex items-center font-sans text-[18px] sm:text-[20px] font-black leading-none text-current">
+          <span className="font-black transition-transform duration-200 group-hover:scale-105">X</span>
+          <span className="font-extrabold tracking-[0.15em]">RAGENCY</span>
+          <sup className="text-[10px] ml-0.5 text-[#BFA27E] font-bold">®</sup>
         </span>
-        <span className="hidden h-4 w-px bg-white/30 sm:block" />
-        <span className="hidden text-[7px] font-medium uppercase tracking-[0.2em] text-white/80 drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)] sm:block">
-          Digital Agency · Paris
+        <span className="hidden h-4 w-px bg-current opacity-25 sm:block" />
+        <span className="hidden text-[8.5px] font-medium tracking-[0.15em] opacity-80 sm:block">
+          Agence digitale internationale
         </span>
       </span>
     </Link>
