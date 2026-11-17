@@ -4,7 +4,9 @@ import { Hero } from "@/components/site/Hero";
 import { HeroVslPlayer } from "@/components/site/HeroVslPlayer";
 import { HomeServices } from "@/components/site/HomeServices";
 import { NexProWorkShowcase } from "@/components/site/NexProWorkShowcase";
+import { NexProInteractiveTools } from "@/components/site/NexProInteractiveTools";
 import { NexProWhySection } from "@/components/site/NexProWhySection";
+import { NexProMobileShowcase } from "@/components/site/NexProMobileShowcase";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
 import { DigitalAudit } from "@/components/site/DigitalAudit";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
@@ -61,8 +63,14 @@ function Index() {
           {/* 02 / PÔLES D'EXPERTISE & SERVICES */}
           <HomeServices />
 
+          {/* 02.B / DÉMOS ET OUTILS INTERACTIFS EN DIRECT */}
+          <NexProInteractiveTools />
+
           {/* 03 / POURQUOI XR AGENCY (LIGNES NUMÉROTÉES 01, 02, 03) */}
           <NexProWhySection />
+
+          {/* 03.B / EXPÉRIENCE MOBILE-FIRST (DOUBLE SMARTPHONE 3D) */}
+          <NexProMobileShowcase />
 
           <div id="tunnel-secteurs">
             <SectorSelectionTunnel />
