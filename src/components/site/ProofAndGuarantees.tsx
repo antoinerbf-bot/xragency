@@ -15,15 +15,17 @@ export function ProofAndGuarantees() {
       <div className="relative mx-auto max-w-[1560px] px-5 sm:px-8 lg:px-12">
         <Parallax speed={-0.02}>
           <Reveal>
-            <div className="max-w-4xl">
-              <span className="label-mono xr-accent text-[8px] tracking-[.28em] inline-flex items-center gap-2">
-                <Award className="h-3.5 w-3.5" />
-                {t.eyebrow[currentLang] ?? t.eyebrow.fr}
-              </span>
-              <h2 className="display-serif mt-5 text-[clamp(2.4rem,5vw,5.2rem)] leading-[.9] tracking-[-.055em]">
+            <div className="sec-head max-w-4xl">
+              <div className="sec-head-line">
+                <div className="sec-head-dash" />
+                <span className="mono-nex text-white/70">
+                  <b className="text-[#c5a880] font-bold">06</b> / GARANTIES CONTRACTUELLES & STATUTS
+                </span>
+              </div>
+              <h2 className="h-nex text-3xl sm:text-5xl lg:text-[3.6rem] text-white">
                 {t.title[currentLang] ?? t.title.fr}
               </h2>
-              <p className="mt-5 max-w-2xl text-sm leading-7 xr-muted sm:text-base">
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-400 sm:text-base">
                 {t.subtitle[currentLang] ?? t.subtitle.fr}
               </p>
             </div>

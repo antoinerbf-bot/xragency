@@ -636,10 +636,19 @@ export function QuoteConfiguratorCompact() {
       <div className="relative mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
         <Parallax speed={-0.02}><Reveal>
           <div className="grid gap-6 border-b xr-line pb-6 lg:grid-cols-[1.15fr_.85fr] lg:items-center">
-            <div className="min-w-0">
-              <span className="label-mono xr-accent text-[7.5px] tracking-[.22em] sm:tracking-[.26em]">{QUOTE_UI.kicker[currentLang]}</span>
-              <h2 className="display-serif mt-2.5 max-w-3xl break-words text-balance text-[clamp(1.75rem,3.2vw,2.9rem)] leading-[1.04] tracking-[-.04em]">{QUOTE_UI.title1[currentLang]} <em className="not-italic opacity-55">{QUOTE_UI.titleAccent[currentLang]}</em>{QUOTE_UI.title2[currentLang]}</h2>
-              <p className="mt-2.5 max-w-xl text-xs leading-5 xr-muted sm:text-[13px]">{QUOTE_UI.lead[currentLang]}</p>
+            <div className="sec-head max-w-4xl">
+              <div className="sec-head-line">
+                <div className="sec-head-dash" />
+                <span className="mono-nex text-foreground/70">
+                  <b className="text-[#c5a880] font-bold">05</b> / CONFIGURATEUR TRANSPARENT & FORMULES
+                </span>
+              </div>
+              <h2 className="h-nex text-3xl sm:text-4xl lg:text-[2.8rem] text-foreground">
+                {QUOTE_UI.title1[currentLang]} <span className="text-[#c5a880] font-serif font-light italic">{QUOTE_UI.titleAccent[currentLang]}</span>{QUOTE_UI.title2[currentLang]}
+              </h2>
+              <p className="mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground max-w-xl">
+                {QUOTE_UI.lead[currentLang]}
+              </p>
             </div>
 
             {/* Alexandre Sleek Live Advisor & Realtime Estimate */}

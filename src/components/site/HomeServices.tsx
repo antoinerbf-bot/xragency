@@ -256,18 +256,21 @@ export function HomeServices() {
       />
 
       <div className="relative mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
-        {/* Section Global Header */}
+        {/* Section Global Header Style NexPro */}
         <Reveal>
-          <div className="flex flex-col gap-4 border-b xr-line pb-6 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <span className="label-mono text-[8px] tracking-[.26em] text-[var(--xr-ink)]/60 uppercase">
-                {copy.eyebrow}
+          <div className="sec-head max-w-5xl pb-6 border-b xr-line">
+            <div className="sec-head-line">
+              <div className="sec-head-dash" />
+              <span className="mono-nex text-white/70">
+                <b className="text-[#c5a880] font-bold">02</b> / NOS UNIVERS & PÔLES D'EXPERTISE
               </span>
-              <h2 className="display-serif mt-2 max-w-4xl text-[clamp(1.85rem,3.4vw,3.2rem)] leading-tight tracking-[-.04em] text-[var(--xr-ink)]">
+            </div>
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <h2 className="h-nex text-3xl sm:text-5xl lg:text-[3.6rem] text-white">
                 {copy.title}
               </h2>
+              <p className="max-w-md text-xs sm:text-sm leading-relaxed text-neutral-400">{copy.lead}</p>
             </div>
-            <p className="max-w-md text-xs sm:text-sm leading-relaxed xr-muted">{copy.lead}</p>
           </div>
         </Reveal>
 
@@ -312,23 +315,23 @@ export function HomeServices() {
                       </div>
 
                       {/* Service Title */}
-                      <h3 className="display-serif mt-3 text-2xl sm:text-3xl lg:text-[2rem] leading-snug tracking-[-.035em] text-[var(--xr-ink)]">
+                      <h3 className="h-nex mt-3 text-2xl sm:text-3xl lg:text-[2.2rem] text-white">
                         {t(service.title)}
                       </h3>
 
                       {/* Description */}
-                      <p className="mt-4 max-w-xl text-xs sm:text-[13.5px] leading-relaxed xr-muted">
+                      <p className="mt-4 max-w-xl text-xs sm:text-[13.5px] leading-relaxed text-neutral-300">
                         {t(service.description)}
                       </p>
 
-                      {/* Highlights Deliverables */}
-                      <div className="mt-6 space-y-2 border-t xr-line pt-4">
+                      {/* Highlights Deliverables Style NexPro */}
+                      <div className="mt-6 space-y-2.5 border-t xr-line pt-4">
                         {(service.highlights ?? []).slice(0, 3).map((hl, i) => (
                           <div key={i} className="flex items-start gap-3 py-1 text-xs">
-                            <span className="label-mono mt-0.5 text-[6.5px] font-bold text-[var(--xr-ink)]/50">
+                            <span className="font-mono text-[10px] font-bold text-[#c5a880]">
                               0{i + 1}
                             </span>
-                            <span className="text-[11.5px] font-medium leading-relaxed text-[var(--xr-ink)]">
+                            <span className="text-[12.5px] font-medium leading-relaxed text-neutral-200">
                               {t(hl)}
                             </span>
                           </div>

@@ -3,6 +3,8 @@ import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
 import { HeroVslPlayer } from "@/components/site/HeroVslPlayer";
 import { HomeServices } from "@/components/site/HomeServices";
+import { NexProWorkShowcase } from "@/components/site/NexProWorkShowcase";
+import { NexProWhySection } from "@/components/site/NexProWhySection";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
 import { DigitalAudit } from "@/components/site/DigitalAudit";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
@@ -52,14 +54,24 @@ function Index() {
         <FunnelRail />
         <main className="relative z-10">
           <Hero />
+
+          {/* 01 / ÉTUDES DE CAS & RÉALISATIONS STYLE NEXPRO */}
+          <NexProWorkShowcase />
+
+          {/* 02 / PÔLES D'EXPERTISE & SERVICES */}
+          <HomeServices />
+
+          {/* 03 / POURQUOI XR AGENCY (LIGNES NUMÉROTÉES 01, 02, 03) */}
+          <NexProWhySection />
+
           <div id="tunnel-secteurs">
             <SectorSelectionTunnel />
           </div>
+
           <HeroVslPlayer />
-          <HomeServices />
+          <MapsSimulator />
           <QuoteConfiguratorCompact />
           <DigitalAudit />
-          <MapsSimulator />
           <AdvisorsShowcase />
           <InteractiveGlobalTeamGlobe />
           <ProofAndGuarantees />

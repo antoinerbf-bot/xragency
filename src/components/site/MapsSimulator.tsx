@@ -524,26 +524,25 @@ export function MapsSimulator() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10">
 
-        {/* ── Section Header ── */}
-        <div>
-          <SectionHeading
-            label={{ fr: "GOOGLE BUSINESS PROFILE · LOCAL SEO", en: "GOOGLE BUSINESS PROFILE · LOCAL SEO", vi: "GOOGLE BUSINESS PROFILE · LOCAL SEO" }}
-            line1={{ fr: "Construisons votre visibilité", en: "Build your local visibility", vi: "Xây dựng khả năng hiển thị địa phương", ru: "Повысим вашу видимость", ar: "لنبنِ ظهورك" }}
-            line2={{
-              fr: "sur Google Maps, sur mesure.",
-              en: "on Google Maps, built around you.",
-              vi: "trên Google Maps, theo nhu cầu của bạn.",
-              ru: "в Google Maps с учётом ваших задач.",
-              ar: "على Google Maps بما يناسبك.",
-            }}
-            lead={{
-              fr: "À partir de 999 € / an. Top 3 garanti 24h/24, 7j/7 pendant 1 an (ou remboursé) sur les mots-clés validés ensemble avec nos experts et analystes. Ou optez pour la Gestion Annuelle complète de votre fiche à 500 € / an.",
-              en: "From €999 / year. Guaranteed Top 3 24/7 for 1 year (or refunded) on keywords validated with our analysts. Or choose our Annual Profile Management at €500 / year.",
-              vi: "Từ 999 € / năm. Cam kết Top 3 24/7 trong 1 năm hoặc hoàn tiền trên bộ từ khóa được chuyên gia thẩm định.",
-              ru: "От 999 € в год. Топ-3 24/7 на 1 год с гарантией по согласованным ключевым словам, либо годовое ведение карточки за 500 € / год.",
-              ar: "ابتداءً من 999 € سنويًا. ضمان أفضل 3 على مدار الساعة لمدة عام أو استرداد المبلغ بعد اعتماد الكلمات المفتاحية.",
-            }}
-          />
+        {/* ── Section Header Style NexPro ── */}
+        <div className="sec-head max-w-4xl">
+          <div className="sec-head-line">
+            <div className="sec-head-dash" />
+            <span className="mono-nex text-white/70">
+              <b className="text-[#c5a880] font-bold">04</b> / DOMINATION GOOGLE MAPS & LOCAL 3-PACK
+            </span>
+          </div>
+
+          <h2 className="h-nex text-3xl sm:text-5xl lg:text-[3.6rem] text-white">
+            Construisons votre visibilité sur Google Maps,{" "}
+            <span className="text-[#dfc39d] font-serif font-light italic">
+              sur mesure.
+            </span>
+          </h2>
+
+          <p className="mt-3 text-sm sm:text-base text-neutral-400 leading-relaxed max-w-3xl">
+            À partir de 999 € / an. Top 3 garanti 24h/24, 7j/7 pendant 1 an (ou remboursé) sur les mots-clés validés ensemble avec nos analystes. Ou optez pour la Gestion Annuelle complète de votre fiche à 500 € / an.
+          </p>
 
           {/* ── Exclusivity Badge — very visible ── */}
           <Reveal delay={80}>

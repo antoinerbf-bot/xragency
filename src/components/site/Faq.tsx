@@ -34,7 +34,22 @@ export function Faq() {
   return (
     <section id="faq" className="xr-section relative py-20 sm:py-28 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <SectionHeading label={UI.faqLabel} line1={UI.faqTitle1} line2={UI.faqTitle2} />
+        <Reveal>
+          <div className="sec-head max-w-4xl">
+            <div className="sec-head-line">
+              <div className="sec-head-dash" />
+              <span className="mono-nex text-white/70">
+                <b className="text-[#c5a880] font-bold">07</b> / QUESTIONS FRÉQUENTES
+              </span>
+            </div>
+            <h2 className="h-nex text-3xl sm:text-5xl lg:text-[3.6rem] text-white">
+              Toutes les réponses,{" "}
+              <span className="text-[#dfc39d] font-serif font-light italic">
+                sans détour.
+              </span>
+            </h2>
+          </div>
+        </Reveal>
 
         {/* Conversational intro */}
         <Reveal delay={60}>

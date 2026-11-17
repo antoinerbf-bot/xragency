@@ -114,12 +114,12 @@ export function Hero() {
         <div className="lg:col-span-7 max-w-[780px]">
           <div className="mb-4 inline-flex flex-wrap items-center gap-2.5 rounded-full border border-[#c5a880]/45 bg-black/60 px-4 py-1.5 backdrop-blur-xl shadow-lg">
             <span className="h-2 w-2 rounded-full bg-[#c5a880] animate-pulse" />
-            <span className="label-mono text-[8px] tracking-[.22em] text-[#e5cba4] sm:text-[9px]">
+            <span className="mono-nex text-[9px] text-[#e5cba4]">
               {t(UI.heroKicker)}
             </span>
           </div>
 
-          <h1 className="xr-hero-heading max-w-[760px] text-[clamp(2.4rem,4.7vw,4.7rem)] font-semibold leading-[0.94] tracking-[-0.04em] text-white drop-shadow-[0_14px_40px_rgba(0,0,0,0.9)] [text-wrap:balance]">
+          <h1 className="xr-hero-heading font-grotesk max-w-[760px] text-[clamp(2.4rem,4.7vw,4.7rem)] font-bold leading-[0.94] tracking-[-0.04em] text-white drop-shadow-[0_14px_40px_rgba(0,0,0,0.9)] [text-wrap:balance]">
             <span className="block">{t(UI.heroTitle1)}</span>
             <span className="mt-1 block font-serif font-light italic tracking-tight text-[#dfc39d]">
               {t(UI.heroTitleAccent)}
