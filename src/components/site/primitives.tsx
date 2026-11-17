@@ -29,14 +29,10 @@ export function Logo({ className }: { className?: string }) {
       )}
     >
       <span className="flex items-center gap-2.5">
-        <span className="xr-logo-lockup flex items-center font-sans text-[18px] sm:text-[20px] font-black leading-none text-current">
+        <span className="xr-logo-lockup flex items-center font-sans text-[17px] sm:text-[19px] font-black leading-none text-current">
           <span className="font-black transition-transform duration-200 group-hover:scale-105">X</span>
-          <span className="font-extrabold tracking-[0.15em]">RAGENCY</span>
-          <sup className="text-[10px] ml-0.5 text-[#BFA27E] font-bold">®</sup>
-        </span>
-        <span className="hidden h-4 w-px bg-current opacity-25 sm:block" />
-        <span className="hidden text-[8.5px] font-medium tracking-[0.15em] opacity-80 sm:block">
-          Agence digitale internationale
+          <span className="font-extrabold tracking-[0.16em]">RAGENCY</span>
+          <sup className="text-[9px] ml-0.5 text-[#BFA27E] font-bold">®</sup>
         </span>
       </span>
     </Link>

@@ -163,7 +163,7 @@ export function Nav() {
 
               <Link
                 to="/realisations"
-                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
+                className="rounded-full px-3 py-1 text-[9px] font-semibold uppercase tracking-[.14em] transition hover:bg-black/5 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
               >
                 {t(UI.navWork)}
               </Link>
@@ -171,29 +171,29 @@ export function Nav() {
                 type="button"
                 onClick={() =>
                   isHome
-                    ? document.getElementById("processus")?.scrollIntoView({ behavior: "smooth" })
-                    : window.location.assign("/#processus")
+                    ? document.getElementById("methode")?.scrollIntoView({ behavior: "smooth" })
+                    : window.location.assign("/#methode")
                 }
-                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
+                className="rounded-full px-3 py-1 text-[9px] font-semibold uppercase tracking-[.14em] transition hover:bg-black/5 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
               >
                 Méthode
               </button>
               <Link
                 to="/a-propos"
-                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
+                className="rounded-full px-3 py-1 text-[9px] font-semibold uppercase tracking-[.14em] transition hover:bg-black/5 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
               >
-                À propos
+                Agence
               </Link>
               <button
                 type="button"
                 onClick={() =>
                   isHome
-                    ? document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" })
-                    : window.location.assign("/#faq")
+                    ? document.getElementById("international")?.scrollIntoView({ behavior: "smooth" })
+                    : window.location.assign("/#international")
                 }
-                className="rounded-full px-3.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-[.18em] transition hover:bg-white/10 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
+                className="rounded-full px-3 py-1 text-[9px] font-semibold uppercase tracking-[.14em] transition hover:bg-black/5 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
               >
-                {t(UI.navFaq)}
+                International
               </button>
             </div>
           </div>

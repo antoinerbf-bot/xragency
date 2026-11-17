@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
+import { ExpertisesShowcase } from "@/components/site/ExpertisesShowcase";
 import { HeroVslPlayer } from "@/components/site/HeroVslPlayer";
-import { HomeServices } from "@/components/site/HomeServices";
 import { NexProWorkShowcase } from "@/components/site/NexProWorkShowcase";
 import { NexProInteractiveTools } from "@/components/site/NexProInteractiveTools";
 import { NexProWhySection } from "@/components/site/NexProWhySection";
@@ -60,11 +60,11 @@ function Index() {
         <main className="relative z-10">
           <Hero />
 
-          {/* 01 / ÉTUDES DE CAS & RÉALISATIONS STYLE NEXPRO */}
-          <NexProWorkShowcase />
+          {/* 02 / NOS EXPERTISES · 6 CARTES TACTILES DU TUNNEL */}
+          <ExpertisesShowcase />
 
-          {/* 02 / PÔLES D'EXPERTISE & SERVICES */}
-          <HomeServices />
+          {/* 03 / ÉTUDES DE CAS & RÉALISATIONS CONCRÈTES */}
+          <NexProWorkShowcase />
 
           {/* 02.B / DÉMOS ET OUTILS INTERACTIFS EN DIRECT */}
           <NexProInteractiveTools />

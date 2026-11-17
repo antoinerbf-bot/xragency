@@ -86,14 +86,14 @@ export function NexProWorkShowcase() {
           <div className="sec-head-line">
             <div className="sec-head-dash" />
             <span className="mono-nex text-white/70">
-              <b className="text-[#c5a880] font-bold">01</b> / ÉTUDES DE CAS & RÉALISATIONS
+              <b className="text-[#c5a880] font-bold">03</b> / NOS RÉALISATIONS & ÉTUDES DE CAS
             </span>
           </div>
 
           <h2 className="h-nex text-3xl sm:text-5xl lg:text-[3.8rem] text-white">
-            Des réalisations conçues pour{" "}
+            Des projets concrets,{" "}
             <span className="text-[#dfc39d] font-serif font-light italic">
-              imposer votre autorité.
+              des marques qui grandissent.
             </span>
           </h2>
 
