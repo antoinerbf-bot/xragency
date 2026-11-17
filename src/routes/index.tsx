@@ -7,6 +7,8 @@ import { NexProWorkShowcase } from "@/components/site/NexProWorkShowcase";
 import { NexProInteractiveTools } from "@/components/site/NexProInteractiveTools";
 import { NexProWhySection } from "@/components/site/NexProWhySection";
 import { NexProMobileShowcase } from "@/components/site/NexProMobileShowcase";
+import { NexProProcessSection } from "@/components/site/NexProProcessSection";
+import { NexProPricingGrid } from "@/components/site/NexProPricingGrid";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
 import { DigitalAudit } from "@/components/site/DigitalAudit";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
@@ -72,18 +74,37 @@ function Index() {
           {/* 03.B / EXPÉRIENCE MOBILE-FIRST (DOUBLE SMARTPHONE 3D) */}
           <NexProMobileShowcase />
 
+          {/* 04 / DÉROULEMENT DU PROJET · 14 JOURS CHRONO */}
+          <NexProProcessSection />
+
+          {/* 05 / FORMULES CLAIRES & INVESTISSEMENT */}
+          <NexProPricingGrid />
+
           <div id="tunnel-secteurs">
             <SectorSelectionTunnel />
           </div>
 
           <HeroVslPlayer />
+
+          {/* 06 / SIMULATEUR DE VISIBILITÉ GOOGLE MAPS */}
           <MapsSimulator />
+
+          {/* 07 / CONFIGURATEUR SUR MESURE */}
           <QuoteConfiguratorCompact />
+
           <DigitalAudit />
           <AdvisorsShowcase />
+
+          {/* 08 / RAYONNEMENT MONDIAL ET ÉQUIPE */}
           <InteractiveGlobalTeamGlobe />
+
+          {/* 09 / ENGAGEMENTS CONTRACTUELS & SASU KARMA */}
           <ProofAndGuarantees />
+
+          {/* 10 / QUESTIONS FRÉQUENTES */}
           <Faq />
+
+          {/* 11 / CONTACT & MAQUETTES */}
           <Contact />
         </main>
       </div>
