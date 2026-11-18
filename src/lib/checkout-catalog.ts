@@ -31,7 +31,7 @@ export const CHECKOUT_PRODUCTS = {
   maps_intensif: { label: "Gestion Google Business Profile — Intensif", amountEur: 299, interval: "month" },
 
   social_essential: { label: "Social Media — Présence Essentielle", amountEur: 349, interval: "month", commitmentMonths: 3 },
-  social_growth: { label: "Social Media — Croissance Active", amountEur: 499, interval: "month", commitmentMonths: 6 },
+  social_growth: { label: "Social Media — Croissance Active", amountEur: 599, interval: "month", commitmentMonths: 6 },
   social_domination: { label: "Social Media — Domination Sociale", amountEur: 799, interval: "month", commitmentMonths: 6 },
 
   webcare_essential: { label: "WebCare — Essentiel", amountEur: 29, interval: "month" },

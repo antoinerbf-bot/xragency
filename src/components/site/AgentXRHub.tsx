@@ -485,7 +485,7 @@ export function AgentXRHub() {
         });
       } else if (id === "social") {
         const commitmentMonths = socialTier === "essential" ? 3 : 6;
-        const p = socialTier === "signature" ? 799 : socialTier === "growth" ? 499 : 349;
+        const p = socialTier === "signature" ? 799 : socialTier === "growth" ? 599 : 349;
         items.push({
           id: "social",
           label: `Social Media · ${socialTier === "signature" ? "Domination Sociale" : socialTier === "growth" ? "Croissance Active" : "Présence Essentielle"}`,

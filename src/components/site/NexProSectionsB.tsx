@@ -973,7 +973,7 @@ export function FinalContactAndFooterSection() {
                 </li>
                 <li>
                   <Link to="/services/social" className="hover:text-white">
-                    Social Media (349 €/m · 499 €/m · 799 €/m)
+                    Social Media (349 €/m · 599 €/m · 799 €/m)
                   </Link>
                 </li>
                 <li>
