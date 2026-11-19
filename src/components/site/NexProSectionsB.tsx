@@ -812,10 +812,10 @@ export function FinalContactAndFooterSection() {
                   </div>
                   <div>
                     <span className="font-mono text-[8.5px] uppercase tracking-wider text-[#C5A059] block">
-                      SIÈGE SOCIAL
+                      ZONE D'INTERVENTION
                     </span>
-                    <p className="mt-1 text-white font-semibold">KARMA SASU · XR AGENCY</p>
-                    <p className="mt-0.5">78 Avenue des Champs-Élysées, Bureau 562, 75008 Paris</p>
+                    <p className="mt-1 text-white font-semibold">France & international</p>
+                    <p className="mt-0.5">Direction et production à distance · Contact sur rendez-vous</p>
                   </div>
                 </div>
               </div>
@@ -952,37 +952,37 @@ export function FinalContactAndFooterSection() {
               </span>
               <ul className="mt-4 space-y-2 text-xs text-[#E8DCC4]/80">
                 <li>
-                  <Link to="/services/websites" className="hover:text-white">
+                  <Link to="/services/$serviceId" params={{ serviceId: "websites" }} className="hover:text-white">
                     Sites Web (499 € · 799 € · 1 499 €)
                   </Link>
                 </li>
                 <li>
-                  <Link to="/services/branding" className="hover:text-white">
+                  <Link to="/services/$serviceId" params={{ serviceId: "branding" }} className="hover:text-white">
                     Branding &amp; Identité (199 € · 299 € · 399 €)
                   </Link>
                 </li>
                 <li>
-                  <Link to="/services/seo" className="hover:text-white">
+                  <Link to="/services/$serviceId" params={{ serviceId: "seo" }} className="hover:text-white">
                     SEO Naturel (299 €/m · 499 €/m)
                   </Link>
                 </li>
                 <li>
-                  <Link to="/services/maps" className="hover:text-white">
+                  <Link to="/services/$serviceId" params={{ serviceId: "maps" }} className="hover:text-white">
                     Google Maps (99 € · 169 € · 299 € · 550 €)
                   </Link>
                 </li>
                 <li>
-                  <Link to="/services/social" className="hover:text-white">
+                  <Link to="/services/$serviceId" params={{ serviceId: "social" }} className="hover:text-white">
                     Social Media (349 €/m · 499 €/m · 799 €/m)
                   </Link>
                 </li>
                 <li>
-                  <Link to="/services/webcare" className="hover:text-white">
+                  <Link to="/services/$serviceId" params={{ serviceId: "webcare" }} className="hover:text-white">
                     Maintenance WebCare (29 € · 49 € · 99 €/m)
                   </Link>
                 </li>
                 <li>
-                  <Link to="/services/robotique" className="hover:text-white">
+                  <Link to="/services/$serviceId" params={{ serviceId: "robotique" }} className="hover:text-white">
                     POS Restaurant (2 000 €) &amp; Robotique
                   </Link>
                 </li>
@@ -1032,16 +1032,15 @@ export function FinalContactAndFooterSection() {
                 INFORMATIONS LÉGALES
               </span>
               <div className="mt-4 space-y-2 text-xs text-[#E8DCC4]/75">
-                <p className="font-semibold text-white">KARMA SASU · XRAGENCY</p>
-                <p>SIREN 889 178 141 · SIRET 889 178 141 00012</p>
-                <p>78 Avenue des Champs-Élysées, Bureau 562, 75008 Paris</p>
-                <p>Hébergement : o2switch (France · RGPD)</p>
+                <p className="font-semibold text-white">XR AGENCY</p>
+                <p>Entité contractante et mentions légales à confirmer avant commande.</p>
+                <p>Hébergement web : Vercel · Données CRM : Supabase</p>
               </div>
             </div>
           </div>
 
           <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-[#E8DCC4]/60 sm:flex-row">
-            <p>© {new Date().getFullYear()} KARMA SASU · XR Agency. Tous droits réservés.</p>
+            <p>© {new Date().getFullYear()} XR Agency. Tous droits réservés.</p>
             <a
               href="#hero"
               className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3.5 py-1.5 font-mono text-[9px] text-[#E8DCC4] hover:border-[#C5A059]"
@@ -1055,3 +1054,5 @@ export function FinalContactAndFooterSection() {
     </section>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
