@@ -34,7 +34,7 @@ function LegalPage() {
             </Parallax>
             <div className="mt-10 grid gap-3 sm:grid-cols-3">
               {[
-                [Building2, "KARMA SASU"],
+                [Building2, "XR Agency"],
                 [ServerCog, "o2switch · France"],
                 [ShieldCheck, "RGPD · France"],
               ].map(([Icon, label]) => (
@@ -53,24 +53,19 @@ function LegalPage() {
               <Reveal>
                 <div className="rounded-3xl border border-border bg-card/60 p-7">
                   <p className="label-mono text-[9px] uppercase tracking-[.2em] text-primary">{t(UI.legalCompany)}</p>
-                  <h2 className="display-serif mt-4 text-3xl">KARMA SASU</h2>
+                  <h2 className="display-serif mt-4 text-3xl">XR Agency</h2>
                   <div className="mt-5 space-y-2 text-sm leading-6 text-muted-foreground">
-                    <p><strong className="text-foreground">{t(UI.legalForm)} :</strong> Société par actions simplifiée unipersonnelle</p>
-                    <p><strong className="text-foreground">{t(UI.legalSiren)} :</strong> 889 178 141</p>
-                    <p><strong className="text-foreground">{t(UI.legalSiret)} :</strong> 889 178 141 00012</p>
-                    <p><strong className="text-foreground">{t(UI.legalRcs)} :</strong> RCS Paris</p>
-                    <p><strong className="text-foreground">{t(UI.legalTva)} :</strong> FR00889178141</p>
-                    <p><strong className="text-foreground">{t(UI.legalAddress)} :</strong> 78 Avenue des Champs-Élysées · Bureau 562 · 75008 Paris, France</p>
-                    <p><strong className="text-foreground">{t(UI.legalDirector)} :</strong> Antoine REBUFFÉ</p>
+                    <p>{t({ fr: "Les coordonnées de l’entité juridique éditrice, son immatriculation et son adresse doivent être confirmées avant publication de cette page.", en: "The publishing legal entity, registration details and address must be confirmed before this page is published.", vi: "Pháp nhân xuất bản, thông tin đăng ký và địa chỉ cần được xác nhận trước khi công bố trang này.", ar: "يجب تأكيد الكيان القانوني الناشر وبيانات التسجيل والعنوان قبل نشر هذه الصفحة.", ru: "Юридическое лицо, регистрационные данные и адрес необходимо подтвердить до публикации этой страницы." })}</p>
+                    <p><strong className="text-foreground">{t(UI.legalPrivacy)} :</strong> contact.xragency@gmail.com</p>
                   </div>
                 </div>
               </Reveal>
               <Reveal delay={80}>
                 <div className="rounded-3xl border border-primary/25 bg-primary/[.045] p-7 shadow-[0_25px_70px_-45px_hsl(var(--primary)/.35)]">
                   <div className="flex items-center gap-3"><ServerCog className="h-5 w-5 text-primary" /><p className="label-mono text-[9px] uppercase tracking-[.2em] text-primary">{t(UI.legalHosting)}</p></div>
-                  <h2 className="display-serif mt-4 text-3xl">o2switch</h2>
-                  <p className="mt-4 text-sm leading-6 text-muted-foreground">{t(UI.legalHostingProvider)}</p>
-                  <div className="mt-6 flex items-start gap-3 rounded-2xl border border-border bg-background/60 p-4"><ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" /><p className="text-xs leading-5 text-muted-foreground">{t({ fr: "Infrastructure hébergée en France. Les données sont traitées selon les finalités indiquées dans le cadre de la relation commerciale.", en: "Infrastructure hosted in France. Data is processed according to the purposes stated within the business relationship.", vi: "Hạ tầng được lưu trữ tại Pháp. Dữ liệu được xử lý theo các mục đích đã nêu trong quan hệ thương mại.", ar: "البنية التحتية مستضافة في فرنسا. تتم معالجة البيانات وفق الأغراض المحددة ضمن العلاقة التجارية.", ru: "Инфраструктура размещена во Франции. Данные обрабатываются в соответствии с указанными целями в рамках деловых отношений." })}</p></div>
+                  <h2 className="display-serif mt-4 text-3xl">À confirmer</h2>
+                  <p className="mt-4 text-sm leading-6 text-muted-foreground">{t({ fr: "Le prestataire et la localisation de l’hébergement doivent être confirmés avant publication.", en: "The hosting provider and hosting location must be confirmed before publication.", vi: "Cần xác nhận nhà cung cấp và vị trí máy chủ trước khi công bố.", ar: "يجب تأكيد مزود الاستضافة وموقعها قبل النشر.", ru: "Поставщика и местоположение хостинга необходимо подтвердить до публикации." })}</p>
+                  <div className="mt-6 flex items-start gap-3 rounded-2xl border border-border bg-background/60 p-4"><ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" /><p className="text-xs leading-5 text-muted-foreground">{t({ fr: "Les modalités d’hébergement et de traitement des données doivent être documentées et validées avant publication.", en: "Infrastructure hosted in France. Data is processed according to the purposes stated within the business relationship.", vi: "Hạ tầng được lưu trữ tại Pháp. Dữ liệu được xử lý theo các mục đích đã nêu trong quan hệ thương mại.", ar: "البنية التحتية مستضافة في فرنسا. تتم معالجة البيانات وفق الأغراض المحددة ضمن العلاقة التجارية.", ru: "Инфраструктура размещена во Франции. Данные обрабатываются в соответствии с указанными целями в рамках деловых отношений." })}</p></div>
                 </div>
               </Reveal>
             </div>
