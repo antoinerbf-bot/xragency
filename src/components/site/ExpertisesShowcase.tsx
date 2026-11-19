@@ -13,12 +13,12 @@ const EXPERTISES = [
   { id: "robotics", title: { fr: "IA & robotique", en: "AI & robotics", vi: "AI & robot", ar: "الذكاء الاصطناعي والروبوتات", ru: "ИИ и робототехника" }, desc: { fr: "Automatisez des tâches et explorez des usages concrets de l’IA et de la robotique.", en: "Automate tasks and explore practical AI and robotics use cases.", vi: "Tự động hóa công việc và ứng dụng AI, robot vào thực tế.", ar: "أتمت المهام واستكشف تطبيقات عملية للذكاء الاصطناعي والروبوتات.", ru: "Автоматизируйте задачи и внедряйте практические решения на базе ИИ и робототехники." }, photo: XR_PHOTOS.robotics, icon: Bot, href: "/services/robotique" },
 ] as const;
 
-const SECTION: Record<Lang, { eyebrow: string; title: string; accent: string; intro: string; all: string }> = {
-  fr: { eyebrow: "NOS EXPERTISES", title: "Les bons leviers,", accent: "orchestrés ensemble.", intro: "Une vision globale, des expertises complémentaires et un accompagnement adapté à la réalité de votre entreprise.", all: "Voir toutes les expertises" },
-  en: { eyebrow: "OUR EXPERTISE", title: "The right levers,", accent: "working together.", intro: "A broader view, complementary expertise and support shaped around the reality of your business.", all: "Explore all expertise" },
-  vi: { eyebrow: "CHUYÊN MÔN", title: "Đúng giải pháp,", accent: "kết hợp đồng bộ.", intro: "Tầm nhìn tổng thể, chuyên môn bổ trợ và sự đồng hành phù hợp với thực tế doanh nghiệp.", all: "Xem tất cả chuyên môn" },
-  ar: { eyebrow: "خبراتنا", title: "الأدوات المناسبة،", accent: "ضمن رؤية متكاملة.", intro: "رؤية شاملة وخبرات متكاملة ومرافقة تناسب واقع أعمالك.", all: "اكتشف جميع الخبرات" },
-  ru: { eyebrow: "НАШИ КОМПЕТЕНЦИИ", title: "Нужные инструменты,", accent: "в единой системе.", intro: "Целостный взгляд, взаимодополняющая экспертиза и поддержка с учётом задач вашего бизнеса.", all: "Все компетенции" },
+const SECTION: Record<Lang, { eyebrow: string; title: string; accent: string; intro: string; all: string; discover: string }> = {
+  fr: { eyebrow: "NOS EXPERTISES", title: "Les bons leviers,", accent: "orchestrés ensemble.", intro: "Une vision globale, des expertises complémentaires et un accompagnement adapté à la réalité de votre entreprise.", all: "Voir toutes les expertises", discover: "Découvrir" },
+  en: { eyebrow: "OUR EXPERTISE", title: "The right levers,", accent: "working together.", intro: "A broader view, complementary expertise and support shaped around the reality of your business.", all: "Explore all expertise", discover: "Discover" },
+  vi: { eyebrow: "CHUYÊN MÔN", title: "Đúng giải pháp,", accent: "kết hợp đồng bộ.", intro: "Tầm nhìn tổng thể, chuyên môn bổ trợ và sự đồng hành phù hợp với thực tế doanh nghiệp.", all: "Xem tất cả chuyên môn", discover: "Khám phá" },
+  ar: { eyebrow: "خبراتنا", title: "الأدوات المناسبة،", accent: "ضمن رؤية متكاملة.", intro: "رؤية شاملة وخبرات متكاملة ومرافقة تناسب واقع أعمالك.", all: "اكتشف جميع الخبرات", discover: "اكتشف" },
+  ru: { eyebrow: "НАШИ КОМПЕТЕНЦИИ", title: "Нужные инструменты,", accent: "в единой системе.", intro: "Целостный взгляд, взаимодополняющая экспертиза и поддержка с учётом задач вашего бизнеса.", all: "Все компетенции", discover: "Подробнее" },
 };
 
 export function ExpertisesShowcase() {
@@ -64,7 +64,7 @@ export function ExpertisesShowcase() {
                   <div>
                     <h3 className="max-w-sm text-2xl font-medium tracking-[-0.035em] sm:text-[1.8rem]">{item.title[locale] ?? item.title.fr}</h3>
                     <p className="mt-3 max-w-sm text-sm leading-6 text-white/78">{item.desc[locale] ?? item.desc.fr}</p>
-                    <span className="mt-6 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#E5CBA4]">Découvrir <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" /></span>
+                    <span className="mt-6 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#E5CBA4]">{section.discover} <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" /></span>
                   </div>
                 </div>
               </Link>
