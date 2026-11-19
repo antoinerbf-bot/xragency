@@ -441,7 +441,7 @@ export function EditorialServicesShowcaseSection() {
 
                 <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-[#0B0B0C]/10 pt-5">
                   <Link
-                    to="/services/websites"
+                    to="/services/$serviceId" params={{ serviceId: "websites" }}
                     className="inline-flex items-center gap-2 rounded-full bg-[#0B0B0C] px-6 py-3 text-[10.5px] font-bold uppercase tracking-[0.15em] text-[#F8F6F0] hover:bg-[#8B704F] transition"
                   >
                     <span>Détails des offres Sites Web</span>
@@ -613,7 +613,7 @@ export function EditorialServicesShowcaseSection() {
 
               <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
                 <Link
-                  to="/services/branding"
+                  to="/services/$serviceId" params={{ serviceId: "branding" }}
                   className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-[#E8DCC4] hover:text-[#C5A059]"
                 >
                   <span>Explorer l&apos;offre Branding</span>
@@ -684,7 +684,7 @@ export function EditorialServicesShowcaseSection() {
 
               <div className="mt-6 flex items-center justify-between border-t border-[#0B0B0C]/10 pt-4">
                 <Link
-                  to="/services/seo"
+                  to="/services/$serviceId" params={{ serviceId: "seo" }}
                   className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-[#0B0B0C] hover:text-[#8B704F]"
                 >
                   <span>Détails du référencement SEO</span>
@@ -814,7 +814,7 @@ export function EditorialServicesShowcaseSection() {
 
                 <div className="mt-6 flex items-center justify-between">
                   <Link
-                    to="/services/maps"
+                    to="/services/$serviceId" params={{ serviceId: "maps" }}
                     className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-[#0B0B0C] hover:text-[#8B704F]"
                   >
                     <span>Voir la page Google Maps dédiée</span>
@@ -844,7 +844,7 @@ export function EditorialServicesShowcaseSection() {
                 </h3>
               </div>
               <Link
-                to="/services/social"
+                to="/services/$serviceId" params={{ serviceId: "social" }}
                 className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-[#8B704F] hover:text-[#0B0B0C]"
               >
                 <span>Découvrir la page Social Media</span>
@@ -976,7 +976,7 @@ export function EditorialServicesShowcaseSection() {
 
               <div className="mt-6 flex items-center justify-between border-t border-[#0B0B0C]/10 pt-4">
                 <Link
-                  to="/services/webcare"
+                  to="/services/$serviceId" params={{ serviceId: "webcare" }}
                   className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-[#0B0B0C] hover:text-[#8B704F]"
                 >
                   <span>Comparer les plans WebCare</span>
@@ -1036,7 +1036,7 @@ export function EditorialServicesShowcaseSection() {
 
               <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
                 <Link
-                  to="/services/robotique"
+                  to="/services/$serviceId" params={{ serviceId: "robotique" }}
                   className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-[#E8DCC4] hover:text-[#C5A059]"
                 >
                   <span>Découvrir nos solutions POS &amp; Robotique</span>
@@ -1050,3 +1050,5 @@ export function EditorialServicesShowcaseSection() {
     </section>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
