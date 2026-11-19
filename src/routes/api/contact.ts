@@ -60,7 +60,7 @@ export const Route = createFileRoute("/api/contact")({
           }
 
           // Enregistrement systématique et résilient dans le CRM interne
-          const crmResult = recordLeadFromWebsite({
+          const crmResult = await recordLeadFromWebsite({
             name,
             email,
             phone,
@@ -120,3 +120,5 @@ export const Route = createFileRoute("/api/contact")({
     },
   },
 });
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
