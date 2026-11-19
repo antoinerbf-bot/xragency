@@ -35,8 +35,8 @@ function LegalPage() {
             <div className="mt-10 grid gap-3 sm:grid-cols-3">
               {[
                 [Building2, "XR Agency"],
-                [ServerCog, "o2switch · France"],
-                [ShieldCheck, "RGPD · France"],
+                [ServerCog, "Hébergement à confirmer"],
+                [ShieldCheck, "Données & confidentialité"],
               ].map(([Icon, label]) => (
                 <div key={String(label)} className="flex items-center gap-3 rounded-2xl border border-border bg-card/60 p-4 backdrop-blur">
                   <Icon className="h-4 w-4 text-primary" />
