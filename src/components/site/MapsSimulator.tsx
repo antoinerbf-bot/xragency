@@ -76,7 +76,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Nouveaux clients estimés": "Estimated new clients",
     "CA additionnel estimé": "Estimated added revenue",
     "Réserver mon secteur avant mes concurrents": "Claim my sector before competitors",
-    "Amorti dès le 1er mois grâce aux contacts entrants.": "Paid off from month 1 through incoming leads."
+    "La rentabilité dépend de vos marges, de la demande et des résultats obtenus.": "Payback depends on your margins, demand and actual results."
   },
   vi: {
     "Restaurant / Bar": "Nhà hàng / Bar", "Hôtel / Spa": "Khách sạn / Spa", "Santé / Médecin": "Y tế / Bác sĩ", "Avocat / Notaire": "Luật sư / Công chứng viên", "Immobilier": "Bất động sản", "Artisan / BTP": "Thợ thủ công / Xây dựng", "Beauté / Bien-être": "Làm đẹp / Sức khỏe", "Autre commerce": "Doanh nghiệp khác",
@@ -133,7 +133,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Nouveaux clients estimés": "Khách hàng mới ước tính",
     "CA additionnel estimé": "Doanh thu bổ sung ước tính",
     "Réserver mon secteur avant mes concurrents": "Đặt chỗ khu vực của tôi trước đối thủ",
-    "Amorti dès le 1er mois grâce aux contacts entrants.": "Hoàn vốn ngay từ tháng đầu tiên nhờ khách hàng chủ động liên hệ."
+    "La rentabilité dépend de vos marges, de la demande et des résultats obtenus.": "Thời gian hoàn vốn phụ thuộc biên lợi nhuận, nhu cầu và kết quả thực tế."
   },
   ru: {
     "Restaurant / Bar": "Ресторан / бар", "Hôtel / Spa": "Отель / спа", "Santé / Médecin": "Медицина / врач", "Avocat / Notaire": "Юрист / нотариус", "Immobilier": "Недвижимость", "Artisan / BTP": "Мастер / строительство", "Beauté / Bien-être": "Красота / wellness", "Autre commerce": "Другой бизнес",
@@ -190,7 +190,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Nouveaux clients estimés": "Оценка новых клиентов",
     "CA additionnel estimé": "Ориентировочная доп. выручка",
     "Réserver mon secteur avant mes concurrents": "Занять нишу раньше конкурентов",
-    "Amorti dès le 1er mois grâce aux contacts entrants.": "Окупается с первого месяца за счёт входящих обращений."
+    "La rentabilité dépend de vos marges, de la demande et des résultats obtenus.": "Окупаемость зависит от маржи, спроса и фактических результатов."
   },
   ar: {
     "Restaurant / Bar": "مطعم / بار", "Hôtel / Spa": "فندق / سبا", "Santé / Médecin": "الصحة / طبيب", "Avocat / Notaire": "محامٍ / موثق", "Immobilier": "العقارات", "Artisan / BTP": "حرفي / إنشاءات", "Beauté / Bien-être": "الجمال / العافية", "Autre commerce": "نشاط تجاري آخر",
@@ -247,7 +247,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Nouveaux clients estimés": "العملاء الجدد المتوقعون",
     "CA additionnel estimé": "الإيراد الإضافي المتوقع",
     "Réserver mon secteur avant mes concurrents": "احجز قطاعك قبل منافسيك",
-    "Amorti dès le 1er mois grâce aux contacts entrants.": "تسترد استثمارك من الشهر الأول عبر العملاء الجدد."
+    "La rentabilité dépend de vos marges, de la demande et des résultats obtenus.": "تعتمد فترة استرداد الاستثمار على هامش الربح والطلب والنتائج الفعلية."
   }
 };
 function translateMaps(value: string, lang: string) { return MAPS_TRANSLATIONS[lang]?.[value] ?? value; }
@@ -920,7 +920,7 @@ export function MapsSimulator() {
                   <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/15 p-3">
                     <span className="label-mono text-[6.5px] text-emerald-400 font-bold">{tx("CA additionnel estimé")}</span>
                     <p className="mt-1 text-base font-black text-emerald-400 font-mono">+{formatEur(roiMetrics.addedRevenueMonth)} / m</p>
-                    <span className="text-[8px] text-emerald-300 font-medium">{tx("Amorti dès le 1er mois grâce aux contacts entrants.")}</span>
+                    <span className="text-[8px] text-emerald-300 font-medium">{tx("La rentabilité dépend de vos marges, de la demande et des résultats obtenus.")}</span>
                   </div>
                 </div>
               </div>
