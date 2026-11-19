@@ -130,30 +130,48 @@ export function CrmUltraLudiqueArena({
     }
   };
 
-  const safeLeads = leads && leads.length > 0 ? leads : [
+  const safeLeads: CrmLead[] = leads && leads.length > 0 ? leads : [
     {
       id: "lead-demo-1",
       company: "Brasserie de la Mer",
       contactName: "Marc Vasseur (Gérant)",
       phone: "06 22 33 44 55",
+      email: "",
       city: "Marseille",
+      sector: "Restauration",
       serviceTarget: "Site Vitrine & Google Maps Top 3 (999 €)",
       budgetEur: 999,
-      status: "to_call" as const,
-      priority: "urgent" as const,
+      status: "to_call",
+      priority: "urgent",
+      assignedTo: "",
+      sentBy: "Démo",
+      source: "Démonstration locale",
+      notes: "",
+      nextFollowUp: "À définir",
+      callsCount: 0,
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     },
     {
       id: "lead-demo-2",
       company: "Boutique Hôtel Les Palmiers",
       contactName: "Claire Dujardin",
       phone: "06 88 99 00 11",
+      email: "",
       city: "Cannes",
+      sector: "Hôtellerie",
       serviceTarget: "Site Web Immersif & Réservation (1 499 €)",
       budgetEur: 1499,
-      status: "to_call" as const,
-      priority: "high" as const,
+      status: "to_call",
+      priority: "high",
+      assignedTo: "",
+      sentBy: "Démo",
+      source: "Démonstration locale",
+      notes: "",
+      nextFollowUp: "À définir",
+      callsCount: 0,
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     },
   ];
 
@@ -530,7 +548,7 @@ export function CrmUltraLudiqueArena({
                 {vaultCommissionEur.toLocaleString()} €
               </h2>
               <p className="mt-2 text-sm text-neutral-300">
-                Commissions calculées en direct sur le compte de virement SASU KARMA.
+                Commissions calculées en direct sur le compte bancaire de l’entité contractante.
               </p>
 
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto">
@@ -707,3 +725,5 @@ export function CrmUltraLudiqueArena({
     </div>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
