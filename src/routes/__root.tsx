@@ -136,7 +136,7 @@ function RootComponent() {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     name: "XR Agency",
-    alternateName: "KARMA SASU",
+    
     description: "Agence digitale : création de sites web sur mesure, branding, SEO, visibilité locale, Google Maps et IA.",
     url: "https://xragencyai.com",
     telephone: "+33 7 67 56 67 83",
@@ -163,3 +163,5 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]

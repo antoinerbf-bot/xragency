@@ -438,12 +438,12 @@ export function QuoteConfiguratorCompact() {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(6.3);
       doc.setTextColor(...ink);
-      doc.text("KARMA SASU · XRAGENCY", M, 287);
+      doc.text("XR AGENCY · DEVIS INDICATIF", M, 287);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(5.7);
       doc.setTextColor(...muted);
-      doc.text("SIREN 889 178 141 · SIRET 889 178 141 00012 · RCS Paris", M, 292);
-      doc.text("78 Avenue des Champs-Elysees · Bureau 562 · 75008 Paris · France", M, 296);
+      doc.text("Entité contractante et mentions fiscales à confirmer avant signature.", M, 292);
+      doc.text("Devis non contractuel tant que les informations légales ne sont pas complétées.", M, 296);
       doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83 · xragencyai.com", M, 300);
       doc.setTextColor(...blue);
       doc.setFont("helvetica", "bold");
@@ -894,3 +894,5 @@ export function QuoteConfiguratorCompact() {
     </section>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]

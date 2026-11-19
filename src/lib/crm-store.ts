@@ -1,6 +1,5 @@
-import crypto from "node:crypto";
-import fs from "node:fs";
-import path from "node:path";
+import { getSupabaseServer } from "@/lib/saas/supabase";
+import { randomBytes, scryptSync, timingSafeEqual, createHmac } from "node:crypto";
 
 export type CrmRole = "admin" | "manager" | "closer" | "member" | "subcontractor";
 
@@ -286,28 +285,52 @@ export interface CrmStore {
 }
 
 export const COOKIE_NAME = "xr_crm_session";
-export const STORE_PATH = path.resolve(process.cwd(), ".data/xr-crm.json");
-
 export function getSigningSecret(): string {
-  return process.env.XR_CRM_SECRET || process.env.STRIPE_SECRET_KEY || "xr-internal-crm-session-key-v1";
+  const secret = process.env.XR_CRM_SECRET;
+  if (!secret || secret.length < 32) throw new Error("XR_CRM_SECRET absent ou trop court : le CRM reste fermé jusqu'à configuration d'un secret serveur fort.");
+  return secret;
+}
+
+export function normalizeIban(value: string): string {
+  return value.replace(/\s+/g, "").toUpperCase();
+}
+
+export function isValidIban(value: string): boolean {
+  const iban = normalizeIban(value);
+  if (!/^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/.test(iban)) return false;
+  const rearranged = iban.slice(4) + iban.slice(0, 4);
+  let remainder = 0;
+  for (const char of rearranged) {
+    const digits = char >= "A" && char <= "Z" ? String(char.charCodeAt(0) - 55) : char;
+    for (const digit of digits) remainder = (remainder * 10 + Number(digit)) % 97;
+  }
+  return remainder === 1;
+}
+
+export function isValidBic(value: string): boolean {
+  return /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}(?:[A-Z0-9]{3})?$/.test(value.trim().toUpperCase());
 }
 
 export function hashPassword(password: string): string {
-  return crypto.scryptSync(password, "xr-agency-salt-2026", 32).toString("hex");
+  if (password.length < 12) throw new Error("Le mot de passe doit contenir au moins 12 caractères.");
+  const salt = randomBytes(16);
+  const derived = scryptSync(password, salt, 64);
+  return `scrypt$${salt.toString("base64url")}$${derived.toString("base64url")}`;
 }
 
-export function verifyPassword(password: string, hash: string): boolean {
+export function verifyPassword(password: string, encoded: string): boolean {
   try {
-    const derived = crypto.scryptSync(password, "xr-agency-salt-2026", 32).toString("hex");
-    return crypto.timingSafeEqual(Buffer.from(derived, "hex"), Buffer.from(hash, "hex"));
-  } catch {
-    return false;
-  }
+    const [scheme, saltText, hashText] = encoded.split("$");
+    if (scheme !== "scrypt" || !saltText || !hashText) return false;
+    const expected = Buffer.from(hashText, "base64url");
+    const actual = scryptSync(password, Buffer.from(saltText, "base64url"), expected.length);
+    return expected.length === actual.length && timingSafeEqual(expected, actual);
+  } catch { return false; }
 }
 
 export function signSession(payload: { id: string; role: "admin" | "member"; exp: number }): string {
   const data = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
-  const sig = crypto.createHmac("sha256", getSigningSecret()).update(data).digest("base64url");
+  const sig = createHmac("sha256", getSigningSecret()).update(data).digest("base64url");
   return `${data}.${sig}`;
 }
 
@@ -315,10 +338,10 @@ export function verifySession(token: string | undefined): { id: string; role: "a
   if (!token || !token.includes(".")) return null;
   const [data, sig] = token.split(".");
   if (!data || !sig) return null;
-  const expected = crypto.createHmac("sha256", getSigningSecret()).update(data).digest("base64url");
+  const expected = createHmac("sha256", getSigningSecret()).update(data).digest("base64url");
   const sigBuf = Buffer.from(sig);
   const expBuf = Buffer.from(expected);
-  if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) return null;
+  if (sigBuf.length !== expBuf.length || !timingSafeEqual(sigBuf, expBuf)) return null;
   try {
     const parsed = JSON.parse(Buffer.from(data, "base64url").toString("utf8")) as {
       id: string;
@@ -346,8 +369,10 @@ declare global {
 }
 
 export function createInitialSeed(): CrmStore {
-  const adminPass = process.env.XR_CRM_ADMIN_PASS || "AdminXR2026!";
-  const staffPass = process.env.XR_CRM_STAFF_PASS || "EquipeXR2026!";
+  const adminPass = process.env.XR_CRM_ADMIN_PASS || "";
+  const staffPass = process.env.XR_CRM_STAFF_PASS || "";
+  if (!adminPass || adminPass.length < 12) throw new Error("XR_CRM_ADMIN_PASS doit être configuré (12 caractères minimum). Aucune connexion par défaut n'est autorisée.");
+  if (!staffPass || staffPass.length < 12) throw new Error("XR_CRM_STAFF_PASS doit être configuré (12 caractères minimum). Aucun accès équipe par défaut n'est autorisé.");
   const now = Date.now();
   const iso = (minsAgo: number) => new Date(now - minsAgo * 60_000).toISOString();
 
@@ -565,7 +590,7 @@ export function createInitialSeed(): CrmStore {
         totalAnnualEur: 0,
         status: "sent",
         validUntil: iso(-14_400), // Valide 15 jours
-        paymentTerms: "Acompte 50% par virement bancaire pro, solde à la livraison 7 jours ouvrés.",
+        paymentTerms: "Conditions de règlement à confirmer sur le devis final.",
         notes: "Option shooting studio réservable séparément sur devis.",
         createdAt: iso(300),
         updatedAt: iso(300),
@@ -604,14 +629,14 @@ export function createInitialSeed(): CrmStore {
         ],
         totalEur: 668,
         taxRatePct: 0,
-        taxNotice: "TVA non applicable, art. 293 B du CGI.",
+        taxNotice: "Régime de TVA à confirmer avant émission définitive.",
         paymentMethod: "bank_transfer",
         paymentReference: "XR-PAY-PKNB-01",
         bankDetails: {
-          beneficiary: "KARMA SASU (XR Agency)",
-          bankName: "Banque Professionnelle France",
-          ibanMasked: "FR76 1005 7000 **** **** **** 42",
-          bic: "BNPAFRPPXXX",
+          beneficiary: "Entité contractante à confirmer",
+          bankName: "À confirmer par la Direction",
+          ibanMasked: "Non configuré",
+          bic: "Non configuré",
           instructions: "Mentionner impérativement la référence XR-PAY-PKNB-01 dans le libellé de votre virement.",
         },
         status: "paid",
@@ -632,14 +657,14 @@ export function createInitialSeed(): CrmStore {
         ],
         totalEur: 1800,
         taxRatePct: 0,
-        taxNotice: "TVA non applicable, art. 293 B du CGI.",
+        taxNotice: "Régime de TVA à confirmer avant émission définitive.",
         paymentMethod: "bank_transfer",
         paymentReference: "XR-PAY-MRC-1800",
         bankDetails: {
-          beneficiary: "KARMA SASU (XR Agency)",
-          bankName: "Banque Professionnelle France",
-          ibanMasked: "FR76 1005 7000 **** **** **** 42",
-          bic: "BNPAFRPPXXX",
+          beneficiary: "Entité contractante à confirmer",
+          bankName: "À confirmer par la Direction",
+          ibanMasked: "Non configuré",
+          bic: "Non configuré",
           instructions: "Mentionner impérativement la référence XR-PAY-MRC-1800 dans le libellé de votre virement.",
         },
         status: "paid",
@@ -831,17 +856,40 @@ export function createInitialSeed(): CrmStore {
   };
 }
 
-export function loadStore(): CrmStore {
-  if (globalThis.__xrCrmMemoryStore) return globalThis.__xrCrmMemoryStore;
+type VersionedCrmStore = CrmStore & { __xrVersion?: number };
 
+function attachVersion(store: CrmStore, version: number): VersionedCrmStore {
+  Object.defineProperty(store, "__xrVersion", { value: version, writable: true, configurable: true, enumerable: false });
+  return store as VersionedCrmStore;
+}
+
+export async function loadStore(): Promise<CrmStore> {
+  const configured = Boolean(process.env.VITE_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+  if (configured) {
+    const client = getSupabaseServer();
+    const { data, error } = await client.from("xr_crm_state").select("state,version").eq("id", "main").maybeSingle();
+    if (error) throw new Error(`Lecture CRM Supabase impossible: ${error.message}`);
+    if (data?.state) return attachVersion(data.state as CrmStore, Number(data.version));
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("CRM non initialisé : import des données validées requis avant ouverture du service.");
+    }
+    const seeded = createInitialSeed();
+    const { error: insertError } = await client.from("xr_crm_state").insert({ id: "main", state: seeded, version: 1 });
+    if (insertError && insertError.code !== "23505") throw new Error(`Initialisation CRM impossible: ${insertError.message}`);
+    if (insertError?.code === "23505") return loadStore();
+    return attachVersion(seeded, 1);
+  }
+  if (process.env.NODE_ENV === "production") throw new Error("Stockage CRM non configuré : Supabase serveur est obligatoire en production.");
+  const { existsSync, readFileSync, mkdirSync, writeFileSync } = await import("node:fs");
+  const { resolve, dirname } = await import("node:path");
+  const storePath = resolve(process.cwd(), ".data/xr-crm.json");
   try {
-    if (fs.existsSync(STORE_PATH)) {
-      const parsed = JSON.parse(fs.readFileSync(STORE_PATH, "utf8")) as Partial<CrmStore>;
+    if (existsSync(storePath)) {
+      const parsed = JSON.parse(readFileSync(storePath, "utf8")) as Partial<CrmStore>;
       if (parsed && Array.isArray(parsed.members) && Array.isArray(parsed.leads)) {
         const initial = createInitialSeed();
-        const store: CrmStore = {
-          members: parsed.members,
-          leads: parsed.leads,
+        return attachVersion({
+          members: parsed.members, leads: parsed.leads,
           clients: Array.isArray(parsed.clients) ? parsed.clients : initial.clients,
           quotes: Array.isArray(parsed.quotes) ? parsed.quotes : initial.quotes,
           invoices: Array.isArray(parsed.invoices) ? parsed.invoices : initial.invoices,
@@ -850,24 +898,34 @@ export function loadStore(): CrmStore {
           providers: Array.isArray(parsed.providers) ? parsed.providers : initial.providers,
           notifications: Array.isArray(parsed.notifications) ? parsed.notifications : initial.notifications,
           activities: Array.isArray(parsed.activities) ? parsed.activities : initial.activities,
-        };
-        globalThis.__xrCrmMemoryStore = store;
-        return store;
+        }, 0);
       }
     }
-  } catch {}
-
+  } catch (error) { throw new Error(`Lecture du fichier CRM local impossible: ${error instanceof Error ? error.message : "erreur inconnue"}`); }
   const seeded = createInitialSeed();
-  saveStore(seeded);
-  return seeded;
+  mkdirSync(dirname(storePath), { recursive: true });
+  writeFileSync(storePath, JSON.stringify(seeded, null, 2), "utf8");
+  return attachVersion(seeded, 0);
 }
 
-export function saveStore(store: CrmStore) {
-  globalThis.__xrCrmMemoryStore = store;
-  try {
-    fs.mkdirSync(path.dirname(STORE_PATH), { recursive: true });
-    fs.writeFileSync(STORE_PATH, JSON.stringify(store, null, 2), "utf8");
-  } catch {}
+export async function saveStore(store: CrmStore): Promise<void> {
+  const version = Number((store as VersionedCrmStore).__xrVersion ?? 0);
+  const configured = Boolean(process.env.VITE_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+  if (configured) {
+    const { data, error } = await getSupabaseServer().rpc("xr_crm_save_state", { p_state: store, p_expected_version: version });
+    if (error) {
+      if (error.code === "40001") throw new Error("Conflit de modification CRM : recharge les données et réessaie. Aucune donnée n'a été écrasée.");
+      throw new Error(`Écriture CRM Supabase impossible: ${error.message}`);
+    }
+    attachVersion(store, Number(data));
+    return;
+  }
+  if (process.env.NODE_ENV === "production") throw new Error("Stockage CRM non configuré : écriture bloquée en production.");
+  const { mkdirSync, writeFileSync } = await import("node:fs");
+  const { resolve, dirname } = await import("node:path");
+  const storePath = resolve(process.cwd(), ".data/xr-crm.json");
+  mkdirSync(dirname(storePath), { recursive: true });
+  writeFileSync(storePath, JSON.stringify(store, null, 2), "utf8");
 }
 
 export function sanitizeMember(m: CrmMemberRecord) {
@@ -998,7 +1056,7 @@ export function buildSnapshot(store: CrmStore, user: CrmMemberRecord) {
 /**
  * Capture automatique d'un prospect depuis le formulaire de contact public
  */
-export function recordLeadFromWebsite(params: {
+export async function recordLeadFromWebsite(params: {
   name: string;
   email: string;
   phone?: string;
@@ -1009,8 +1067,8 @@ export function recordLeadFromWebsite(params: {
   source?: string;
   city?: string;
   budgetEur?: number;
-}): { ok: boolean; leadId: string } {
-  const store = loadStore();
+}): Promise<{ ok: boolean; leadId: string }> {
+  const store = await loadStore();
   const now = new Date().toISOString();
   const cleanEmail = params.email.trim().toLowerCase();
   const cleanPhone = (params.phone || "").trim();
@@ -1026,7 +1084,7 @@ export function recordLeadFromWebsite(params: {
     if (params.budgetEur && params.budgetEur > existing.budgetEur) {
       existing.budgetEur = params.budgetEur;
     }
-    saveStore(store);
+    await saveStore(store);
     return { ok: true, leadId: existing.id };
   }
 
@@ -1081,14 +1139,14 @@ export function recordLeadFromWebsite(params: {
     createdAt: now,
   });
 
-  saveStore(store);
+  await saveStore(store);
   return { ok: true, leadId: newLead.id };
 }
 
 /**
  * Capture automatique d'un devis ou demande de virement depuis le configurateur
  */
-export function recordQuoteFromWebsite(params: {
+export async function recordQuoteFromWebsite(params: {
   clientName: string;
   clientCompany: string;
   clientEmail: string;
@@ -1105,12 +1163,17 @@ export function recordQuoteFromWebsite(params: {
     annual?: number;
   };
   asBankTransfer?: boolean;
-}): { ok: boolean; quoteId: string; invoiceId?: string; paymentReference?: string } {
-  const store = loadStore();
+}): Promise<{ ok: boolean; quoteId: string; invoiceId?: string; paymentReference?: string }> {
+  const configuredIban = normalizeIban(process.env.XR_BANK_IBAN || "");
+  const configuredBic = process.env.XR_BANK_BIC?.trim().toUpperCase() || "";
+  if (params.asBankTransfer && (!isValidIban(configuredIban) || !isValidBic(configuredBic) || !process.env.XR_BANK_BENEFICIARY?.trim() || !process.env.XR_BANK_NAME?.trim())) {
+    throw new Error("Virement indisponible : les coordonnées bancaires officielles sont absentes ou invalides.");
+  }
+  let store = await loadStore();
   const now = new Date().toISOString();
 
   // 1. Enregistrement ou mise à jour du lead
-  const { leadId } = recordLeadFromWebsite({
+  const { leadId } = await recordLeadFromWebsite({
     name: params.clientName,
     email: params.clientEmail,
     phone: params.phone,
@@ -1120,6 +1183,9 @@ export function recordQuoteFromWebsite(params: {
     source: "Configurateur / Devis en ligne",
     budgetEur: (params.summary.once || 0) + (params.summary.monthly || 0) * 3,
   });
+  // recordLeadFromWebsite commits its own atomic update; reload the latest version
+  // before adding the quote/invoice to avoid a stale-version conflict.
+  store = await loadStore();
 
   // 2. Génération du devis formel
   const quoteId = `DEV-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -1145,7 +1211,7 @@ export function recordQuoteFromWebsite(params: {
     totalAnnualEur: params.summary.annual || 0,
     status: params.asBankTransfer ? "accepted" : "sent",
     validUntil: validUntilDate,
-    paymentTerms: "Règlement par virement bancaire professionnel à réception de commande. Livraison sous 7 jours ouvrés.",
+    paymentTerms: "Conditions de règlement précisées sur le devis final.",
     notes: `Secteur : ${params.summary.sector || "Non précisé"}. Priorité : ${params.summary.goal || "Non précisé"}.`,
     createdAt: now,
     updatedAt: now,
@@ -1158,6 +1224,13 @@ export function recordQuoteFromWebsite(params: {
 
   // 3. Si option virement bancaire sélectionnée, génération de la facture proforma
   if (params.asBankTransfer) {
+    const bankIban = configuredIban;
+    const bankBic = configuredBic;
+    const bankBeneficiary = process.env.XR_BANK_BENEFICIARY?.trim() || "";
+    const bankName = process.env.XR_BANK_NAME?.trim() || "";
+    if (!bankIban || !bankBic || !bankBeneficiary || !bankName) {
+      throw new Error("Virement indisponible : les coordonnées bancaires officielles ne sont pas configurées.");
+    }
     invoiceId = `VIR-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
     paymentReference = `XR-${newQuote.id.slice(-4)}-${Date.now().toString(36).toUpperCase().slice(-4)}`;
 
@@ -1178,14 +1251,14 @@ export function recordQuoteFromWebsite(params: {
       items: invoiceItems,
       totalEur: totalToPay,
       taxRatePct: 0,
-      taxNotice: "TVA non applicable, art. 293 B du CGI.",
+      taxNotice: "Régime de TVA à confirmer avant émission définitive.",
       paymentMethod: "bank_transfer",
       paymentReference,
       bankDetails: {
-        beneficiary: "KARMA SASU (XR Agency)",
-        bankName: "Banque Professionnelle France",
-        ibanMasked: "FR76 1005 7000 **** **** **** 42",
-        bic: "BNPAFRPPXXX",
+        beneficiary: "Entité contractante à confirmer",
+        bankName: "À confirmer par la Direction",
+        ibanMasked: "Non configuré",
+        bic: "Non configuré",
         instructions: `Mentionner impérativement la référence ${paymentReference} dans le libellé de votre virement bancaire pour validation automatique de votre commande.`,
       },
       status: "pending_transfer",
@@ -1208,6 +1281,8 @@ export function recordQuoteFromWebsite(params: {
     });
   }
 
-  saveStore(store);
+  await saveStore(store);
   return { ok: true, quoteId, invoiceId, paymentReference };
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]

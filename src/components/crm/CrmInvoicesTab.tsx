@@ -96,7 +96,7 @@ export function CrmInvoicesTab({
         `"${inv.status === "paid" ? "Encaissé / Réglé" : inv.status === "pending_transfer" ? "En attente virement" : "Annulé"}"`,
         inv.totalEur,
         `"${inv.paymentReference}"`,
-        `"${inv.bankDetails?.beneficiary || "KARMA SASU"}"`,
+        `"${inv.bankDetails?.beneficiary || "Entité contractante à confirmer"}"`,
         `"${inv.bankDetails?.ibanMasked || ""}"`,
         `"${inv.bankDetails?.bic || ""}"`,
         `"${itemsDetail.replace(/"/g, '""')}"`,
@@ -163,7 +163,7 @@ export function CrmInvoicesTab({
             </div>
           </div>
           <span className="rounded-full border border-sky-400/40 bg-sky-500/10 px-3 py-1 font-mono text-[10px] font-bold text-sky-300">
-            COMPTE BANCAIRE : KARMA SASU
+            COORDONNÉES BANCAIRES : À CONFIGURER
           </span>
         </div>
 
@@ -217,7 +217,7 @@ export function CrmInvoicesTab({
 
               <a
                 href={`https://wa.me/?text=${encodeURIComponent(
-                  `Bonjour ${sub.client}, voici le rappel pour le renouvellement mensuel de votre abonnement ${sub.service} (${sub.amount} € TTC).\nRIB Officiel KARMA SASU : FR76 1751 5900 0008 1234 5678 901 (BIC QNTOFR22).\nMerci pour votre confiance, l'équipe XR Agency.`
+                  `Bonjour ${sub.client}, voici le rappel pour le renouvellement mensuel de votre abonnement ${sub.service} (${sub.amount} € TTC).\nLes coordonnées bancaires officielles figurent sur votre facture validée par la Direction.\nMerci pour votre confiance, l'équipe XR Agency.`
                 )}`}
                 target="_blank"
                 rel="noreferrer"
@@ -468,3 +468,5 @@ export function CrmInvoicesTab({
     </div>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]

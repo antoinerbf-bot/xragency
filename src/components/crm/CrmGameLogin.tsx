@@ -51,33 +51,21 @@ export function CrmGameLogin({ onSelectCharacter, isLoading }: CrmGameLoginProps
     const mail = emailInput.trim().toLowerCase();
     if (!mail) return;
 
-    if (detectedProfile === "boss") {
-      onSelectCharacter("admin@xragency.fr", passwordInput || "AdminXR2026!", "Antoine (Directeur)");
-    } else if (detectedProfile === "closer") {
-      if (mail.includes("sarah")) {
-        onSelectCharacter("sarah@xragency.fr", passwordInput || "EquipeXR2026!", "Sarah (Closer)");
-      } else {
-        onSelectCharacter("lucas@xragency.fr", passwordInput || "EquipeXR2026!", "Lucas (Closer)");
-      }
-    } else if (detectedProfile === "student") {
-      onSelectCharacter("karim@xragency.fr", passwordInput || "EquipeXR2026!", "Karim (Élève 90j)");
-    } else {
-      // Default to boss or closer
-      onSelectCharacter(mail, passwordInput || "EquipeXR2026!", "Membre XR");
-    }
+    const displayName = detectedProfile === "boss" ? "Direction" : detectedProfile === "closer" ? "Commercial" : detectedProfile === "student" ? "Élève" : "Membre XR";
+    onSelectCharacter(mail, passwordInput, displayName);
   };
 
   const handlePortalClick = (profile: "boss" | "closer" | "student") => {
     if (profile === "boss") {
-      onSelectCharacter("admin@xragency.fr", "AdminXR2026!", "Antoine");
+      onSelectCharacter(emailInput.trim().toLowerCase(), passwordInput, "Direction");
     } else if (profile === "closer") {
       if (closerVariant === "sarah") {
-        onSelectCharacter("sarah@xragency.fr", "EquipeXR2026!", "Sarah");
+        onSelectCharacter(emailInput.trim().toLowerCase(), passwordInput, "Sarah");
       } else {
-        onSelectCharacter("lucas@xragency.fr", "EquipeXR2026!", "Lucas");
+        onSelectCharacter(emailInput.trim().toLowerCase(), passwordInput, "Lucas");
       }
     } else {
-      onSelectCharacter("karim@xragency.fr", "EquipeXR2026!", "Karim");
+      onSelectCharacter(emailInput.trim().toLowerCase(), passwordInput, "Karim");
     }
   };
 
@@ -400,3 +388,5 @@ export function CrmGameLogin({ onSelectCharacter, isLoading }: CrmGameLoginProps
     </div>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]

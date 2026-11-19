@@ -179,7 +179,7 @@ export function Nav() {
                 Méthode
               </button>
               <Link
-                to="/a-propos"
+                to="/notre-histoire"
                 className="rounded-full px-3 py-1 text-[9px] font-semibold uppercase tracking-[.14em] transition hover:bg-black/5 dark:hover:bg-white/10 opacity-80 hover:opacity-100"
               >
                 Agence
@@ -384,3 +384,5 @@ export function Nav() {
     </header>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]

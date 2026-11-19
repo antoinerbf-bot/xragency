@@ -20,7 +20,7 @@ const CONTACT_COPY = {
     error: "Une erreur est survenue lors de l'envoi. Veuillez réessayer ou nous écrire sur WhatsApp.",
     project: "Décrivez votre projet...", sending: "Envoi en cours...",
     footer: "Studio digital premium pour les marques, entreprises et projets qui veulent transformer leur présence digitale en actif commercial.",
-    legal: "Mentions légales & RGPD", rights: "Tous droits réservés.", hosting: "Hébergement : o2switch · France · cadre RGPD",
+    legal: "Mentions légales & RGPD", rights: "Tous droits réservés.", hosting: "Hébergement web : Vercel · Données CRM : Supabase",
     cities: "France · Dubaï · Asie · International",
   },
   en: {
@@ -32,7 +32,7 @@ const CONTACT_COPY = {
     error: "Something went wrong while sending your message. Please try again or contact us on WhatsApp.",
     project: "Tell us about your project...", sending: "Sending...",
     footer: "Premium digital studio for brands, businesses and projects looking to turn their digital presence into a commercial asset.",
-    legal: "Legal notice & GDPR", rights: "All rights reserved.", hosting: "Hosting: o2switch · France · GDPR framework",
+    legal: "Legal notice & GDPR", rights: "All rights reserved.", hosting: "Website hosting: Vercel · CRM data: Supabase",
     cities: "France · Dubai · Asia · Worldwide",
   },
   vi: {
@@ -44,7 +44,7 @@ const CONTACT_COPY = {
     error: "Đã xảy ra lỗi khi gửi tin nhắn. Vui lòng thử lại hoặc liên hệ với chúng tôi qua WhatsApp.",
     project: "Mô tả dự án của bạn...", sending: "Đang gửi...",
     footer: "Studio kỹ thuật số cao cấp dành cho thương hiệu và doanh nghiệp muốn biến sự hiện diện trực tuyến thành tài sản kinh doanh.",
-    legal: "Thông tin pháp lý & GDPR", rights: "Đã đăng ký bản quyền.", hosting: "Lưu trữ: o2switch · Pháp · Tuân thủ GDPR",
+    legal: "Thông tin pháp lý & GDPR", rights: "Đã đăng ký bản quyền.", hosting: "Lưu trữ website: Vercel · Dữ liệu CRM: Supabase",
     cities: "Pháp · Dubai · Châu Á · Quốc tế",
   },
   ar: {
@@ -56,7 +56,7 @@ const CONTACT_COPY = {
     error: "حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مجدداً أو مراسلتنا عبر واتساب.",
     project: "صف مشروعك...", sending: "جارٍ الإرسال...",
     footer: "استوديو رقمي متميز للعلامات التجارية والشركات والمشاريع التي تسعى لتحويل حضورها الرقمي إلى أصل تجاري.",
-    legal: "الإشعارات القانونية واللائحة العامة لحماية البيانات", rights: "جميع الحقوق محفوظة.", hosting: "الاستضافة: o2switch · فرنسا · إطار GDPR",
+    legal: "الإشعارات القانونية واللائحة العامة لحماية البيانات", rights: "جميع الحقوق محفوظة.", hosting: "استضافة الموقع: Vercel · بيانات CRM: Supabase",
     cities: "فرنسا · دبي · آسيا · دولياً",
   },
   ru: {
@@ -68,7 +68,7 @@ const CONTACT_COPY = {
     error: "При отправке сообщения произошла ошибка. Попробуйте ещё раз или напишите нам в WhatsApp.",
     project: "Расскажите о своём проекте...", sending: "Отправка...",
     footer: "Премиальная digital-студия для брендов и компаний, которые хотят превратить своё цифровое присутствие в коммерческий актив.",
-    legal: "Правовая информация и GDPR", rights: "Все права защищены.", hosting: "Хостинг: o2switch · Франция · требования GDPR",
+    legal: "Правовая информация и GDPR", rights: "Все права защищены.", hosting: "Хостинг сайта: Vercel · Данные CRM: Supabase",
     cities: "Франция · Дубай · Азия · Международные проекты",
   },
 } as const;
@@ -158,14 +158,14 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
         {showFooter ? <footer className="mt-14 border-t border-border/50 pt-8 sm:mt-16 sm:pt-10">
           <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr]">
             <div><Logo /><p className="mt-4 max-w-sm text-sm leading-6 text-muted-foreground">{c.footer}</p><div className="mt-5 flex flex-wrap gap-2">{["FR","EN","VI","AR","RU"].map((code)=><span key={code} className="rounded-full border border-border/60 px-2.5 py-1 font-mono text-[9px] tracking-wider text-muted-foreground">{code}</span>)}</div></div>
-            <div><p className="label-mono text-[9px] uppercase tracking-[.18em] text-muted-foreground/50">KARMA SASU</p><div className="mt-4 space-y-2 text-sm text-muted-foreground">
+            <div><p className="label-mono text-[9px] uppercase tracking-[.18em] text-muted-foreground/50">XR AGENCY</p><div className="mt-4 space-y-2 text-sm text-muted-foreground">
               <a href="mailto:contact.xragency@gmail.com" className="block text-foreground hover:text-primary">contact.xragency@gmail.com</a><a href={WA_DIRECT} target="_blank" rel="noreferrer" className="block hover:text-foreground">WhatsApp · +33 7 67 56 67 83</a>
-              <p>SIREN 889 178 141 · SIRET 889 178 141 00012</p><p>78 Avenue des Champs-Élysées · Bureau 562<br/>75008 Paris · France</p>
+              <p>Entité contractante et coordonnées juridiques précisées avant commande.</p>
               <Link to="/mentions-legales" className="inline-flex pt-1 text-xs font-semibold text-primary hover:underline">{c.legal} →</Link>
             </div></div>
           </div>
           <div className="mt-8 flex flex-col gap-4 border-t border-border/40 pt-5 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-            <div><p>KARMA SASU · XRAGENCY · © {new Date().getFullYear()} {c.rights}</p><p className="mt-1 text-[10px] text-muted-foreground/50">{c.hosting}</p></div>
+            <div><p>XR AGENCY · © {new Date().getFullYear()} {c.rights}</p><p className="mt-1 text-[10px] text-muted-foreground/50">{c.hosting}</p></div>
             <div className="flex items-center gap-2"><a href={CONTACT.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground hover:border-primary hover:text-primary"><Instagram className="h-4 w-4"/></a><a href="https://facebook.com/xragency" target="_blank" rel="noreferrer" aria-label="Facebook" className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground hover:border-primary hover:text-primary"><Facebook className="h-4 w-4"/></a><a href={CONTACT.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground hover:border-primary hover:text-primary"><Linkedin className="h-4 w-4"/></a><a href="mailto:contact.xragency@gmail.com" aria-label="Email" className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground hover:border-primary hover:text-primary"><Send className="h-4 w-4"/></a><a href="#top" className="flex h-8 items-center gap-1.5 rounded-full border border-border px-3 text-muted-foreground hover:border-primary hover:text-primary"><span className="label-mono text-[9px]">TOP</span><ArrowUpRight className="h-3 w-3"/></a></div>
           </div>
         </footer> : null}
@@ -173,3 +173,5 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
     </section>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]

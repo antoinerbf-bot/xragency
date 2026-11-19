@@ -54,7 +54,7 @@ function CityLandingPage() {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     name: `XR Agency ${city.name}`,
-    alternateName: "KARMA SASU",
+    
     url: `https://xragencyai.com/agence-web/${city.slug}`,
     logo: "https://xragencyai.com/logo-xr-agency.svg",
     image: "https://xragencyai.com/og-image.svg",
@@ -62,26 +62,6 @@ function CityLandingPage() {
     telephone: "+33 7 67 56 67 83",
     email: "contact.xragency@gmail.com",
     priceRange: "€€€",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: city.slug === "paris" ? "78 Avenue des Champs-Élysées" : `Service Clients XR Agency — ${city.name}`,
-      addressLocality: city.name,
-      postalCode: city.postalCode,
-      addressCountry: city.country === "France" ? "FR" : "VN",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: city.coordinates.lat,
-      longitude: city.coordinates.lng,
-    },
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        opens: "09:00",
-        closes: "19:00",
-      },
-    ],
     areaServed: {
       "@type": "AdministrativeArea",
       name: `${city.name}, ${city.region}`,
@@ -209,7 +189,7 @@ function CityLandingPage() {
                 </a>
 
                 <Link
-                  to="/services/websites"
+                  to="/services/$serviceId" params={{ serviceId: "websites" }}
                   className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-4 font-mono text-xs font-bold uppercase tracking-wider text-white transition hover:bg-white/10 hover:border-white/40"
                 >
                   <span>Nos Formules Dès 7j</span>
@@ -335,7 +315,7 @@ function CityLandingPage() {
                 </div>
               </div>
               <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
-                <Link to="/services/websites" className="font-mono text-xs font-bold text-[#d4af37] hover:underline">
+                <Link to="/services/$serviceId" params={{ serviceId: "websites" }} className="font-mono text-xs font-bold text-[#d4af37] hover:underline">
                   Découvrir les offres →
                 </Link>
                 <div className="w-48">
@@ -345,6 +325,8 @@ function CityLandingPage() {
                       serviceName: "Création de Site Web",
                       planName: `Vitrine Pro (${city.name})`,
                       priceEur: 1490,
+                      period: "once",
+                      periodLabel: "Paiement unique",
                     }}
                   />
                 </div>
@@ -369,7 +351,7 @@ function CityLandingPage() {
                 </div>
               </div>
               <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
-                <Link to="/services/seo" className="font-mono text-xs font-bold text-[#d4af37] hover:underline">
+                <Link to="/services/$serviceId" params={{ serviceId: "seo" }} className="font-mono text-xs font-bold text-[#d4af37] hover:underline">
                   Voir la stratégie SEO →
                 </Link>
                 <div className="w-48">
@@ -379,6 +361,8 @@ function CityLandingPage() {
                       serviceName: "SEO Domination Google",
                       planName: `Pack Croissance (${city.name})`,
                       priceEur: 490,
+                      period: "year",
+                      periodLabel: "Par an",
                     }}
                   />
                 </div>
@@ -400,7 +384,7 @@ function CityLandingPage() {
                 </div>
               </div>
               <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
-                <Link to="/services/branding" className="font-mono text-xs font-bold text-[#d4af37] hover:underline">
+                <Link to="/services/$serviceId" params={{ serviceId: "branding" }} className="font-mono text-xs font-bold text-[#d4af37] hover:underline">
                   Découvrir le branding →
                 </Link>
                 <div className="w-48">
@@ -410,6 +394,8 @@ function CityLandingPage() {
                       serviceName: "Identité de Marque",
                       planName: `Identité Complète (${city.name})`,
                       priceEur: 990,
+                      period: "once",
+                      periodLabel: "Paiement unique",
                     }}
                   />
                 </div>
@@ -527,3 +513,5 @@ function CityLandingPage() {
     </div>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]

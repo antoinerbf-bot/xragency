@@ -18,7 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 
 interface CharacterSelectLoginProps {
-  onLoginWithPin: (portal: "director" | "closer" | "student", pin: string, advisorEmail?: string) => Promise<void>;
+  onLoginWithPin: (portal: "director" | "closer" | "student", password: string, email: string) => Promise<void>;
   isLoading: boolean;
   errorMessage?: string | null;
 }
@@ -40,18 +40,18 @@ const HERO_CLASSES: HeroClass[] = [
   {
     id: "director",
     title: "Maître de Guilde",
-    subtitle: "Direction Générale & Stratégie SASU",
+    subtitle: "Direction Générale & Stratégie XR Agency",
     level: "NIV. 99",
     icon: <Crown className="h-8 w-8 text-[#D4AF37]" />,
     auraColor: "from-amber-500/20 via-yellow-500/10 to-transparent",
     borderColor: "border-[#D4AF37]",
     badge: "👑 QG STRATÉGIQUE",
     perks: [
-      "Trésorerie & Factures SASU KARMA",
+      "Trésorerie & Factures XR Agency",
       "Attribution des Quêtes (Dispatch 1-clic)",
       "Vision Pipeline Global & Rapports",
     ],
-    powerStat: "Vision 360° · Trésorerie SASU",
+    powerStat: "Vision 360° · Pilotage financier",
   },
   {
     id: "closer",
@@ -93,7 +93,8 @@ export function CharacterSelectLogin({
   errorMessage,
 }: CharacterSelectLoginProps) {
   const [selectedHero, setSelectedHero] = useState<"director" | "closer" | "student">("closer");
-  const [pin, setPin] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [soundEnabled, setSoundEnabled] = useState(true);
 
   const playChime = (type: "select" | "digit" | "enter") => {
@@ -133,27 +134,14 @@ export function CharacterSelectLogin({
   const handleSelectHero = (heroId: "director" | "closer" | "student") => {
     playChime("select");
     setSelectedHero(heroId);
-    setPin("");
-  };
-
-  const handleDigitPress = (digit: string) => {
-    playChime("digit");
-    if (digit === "C") {
-      setPin("");
-    } else if (digit === "⌫") {
-      setPin((p) => p.slice(0, -1));
-    } else {
-      if (pin.length < 8) {
-        setPin((p) => p + digit);
-      }
-    }
+    setPassword("");
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!pin || isLoading) return;
+    if (!password || !email.trim() || isLoading) return;
     playChime("enter");
-    onLoginWithPin(selectedHero, pin);
+    void onLoginWithPin(selectedHero, password, email.trim().toLowerCase());
   };
 
   const currentHero = HERO_CLASSES.find((h) => h.id === selectedHero) || HERO_CLASSES[1];
@@ -190,7 +178,7 @@ export function CharacterSelectLogin({
             </span>
           </h1>
           <p className="mt-2 text-xs sm:text-sm text-neutral-400 max-w-md mx-auto">
-            Sélectionnez votre rôle dans la guilde et entrez votre code d'accès privé pour débuter.
+            Sélectionnez votre rôle dans la guilde et entrez votre mot de passe personnel pour débuter.
           </p>
         </div>
 
@@ -278,40 +266,11 @@ export function CharacterSelectLogin({
               <Lock className="h-4 w-4 text-neutral-500" />
             </div>
 
-            {/* Affichage des points de saisie masqués */}
-            <div className="py-2">
-              <div className="flex justify-center gap-2.5">
-                {[0, 1, 2, 3, 4, 5].map((idx) => {
-                  const isFilled = pin.length > idx;
-                  return (
-                    <div
-                      key={idx}
-                      className={cn(
-                        "h-12 w-12 rounded-2xl border-2 flex items-center justify-center font-mono text-2xl font-black transition-all duration-200",
-                        isFilled
-                          ? "border-[#D4AF37] bg-[#D4AF37]/20 text-[#E2D5BC] shadow-[0_0_15px_rgba(212,175,55,0.4)] scale-105"
-                          : "border-white/15 bg-black/40 text-neutral-600"
-                      )}
-                    >
-                      {isFilled ? "•" : ""}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Clavier numérique rétro arcade */}
-            <div className="grid grid-cols-3 gap-2 pt-2">
-              {["1", "2", "3", "4", "5", "6", "7", "8", "9", "C", "0", "⌫"].map((digit) => (
-                <button
-                  key={digit}
-                  type="button"
-                  onClick={() => handleDigitPress(digit)}
-                  className="rounded-2xl border border-white/10 bg-white/5 py-3 font-mono text-lg font-bold text-white transition hover:border-[#D4AF37] hover:bg-[#D4AF37]/15 active:scale-95"
-                >
-                  {digit}
-                </button>
-              ))}
+            <div className="space-y-3">
+              <label className="block text-left text-xs font-semibold text-neutral-300" htmlFor="xr-crm-email">Adresse e-mail professionnelle</label>
+              <input id="xr-crm-email" type="email" autoComplete="username" required maxLength={254} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="prenom@xragency.fr" className="w-full rounded-xl border border-white/15 bg-black/40 px-4 py-3 text-sm text-white outline-none focus:border-[#D4AF37]" />
+              <label className="block text-left text-xs font-semibold text-neutral-300" htmlFor="xr-crm-password">Mot de passe personnel</label>
+              <input id="xr-crm-password" type="password" autoComplete="current-password" required minLength={12} maxLength={256} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="12 caractères minimum" className="w-full rounded-xl border border-white/15 bg-black/40 px-4 py-3 text-sm text-white outline-none focus:border-[#D4AF37]" />
             </div>
 
             {errorMessage && (
@@ -323,7 +282,7 @@ export function CharacterSelectLogin({
             {/* Bouton de soumission */}
             <button
               type="submit"
-              disabled={isLoading || pin.length < 3}
+              disabled={isLoading || password.length < 12 || !email.trim()}
               className="w-full flex items-center justify-center gap-2 rounded-2xl bg-[#E2D5BC] py-4 text-xs font-black uppercase tracking-widest text-[#080B10] shadow-[0_10px_30px_rgba(226,213,188,0.3)] transition hover:bg-white hover:-translate-y-0.5 active:scale-95 disabled:opacity-40"
             >
               <Zap className="h-4 w-4 fill-current" />
@@ -332,7 +291,7 @@ export function CharacterSelectLogin({
 
             <div className="text-center pt-2 text-[10px] font-mono text-neutral-500 flex items-center justify-center gap-1.5">
               <Lock className="h-3 w-3" />
-              <span>Accès strictement réservé · Code délivré en privé par la Direction</span>
+              <span>Accès strictement réservé · Identifiants personnels délivrés par la Direction</span>
             </div>
 
           </form>
@@ -342,3 +301,5 @@ export function CharacterSelectLogin({
     </div>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]

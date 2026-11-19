@@ -34,8 +34,8 @@ function LegalPage() {
             </Parallax>
             <div className="mt-10 grid gap-3 sm:grid-cols-3">
               {[
-                [Building2, "KARMA SASU"],
-                [ServerCog, "o2switch · France"],
+                [Building2, "XR Agency · entité contractante à confirmer"],
+                [ServerCog, "Vercel · Supabase"],
                 [ShieldCheck, "RGPD · France"],
               ].map(([Icon, label]) => (
                 <div key={String(label)} className="flex items-center gap-3 rounded-2xl border border-border bg-card/60 p-4 backdrop-blur">
@@ -53,24 +53,20 @@ function LegalPage() {
               <Reveal>
                 <div className="rounded-3xl border border-border bg-card/60 p-7">
                   <p className="label-mono text-[9px] uppercase tracking-[.2em] text-primary">{t(UI.legalCompany)}</p>
-                  <h2 className="display-serif mt-4 text-3xl">KARMA SASU</h2>
-                  <div className="mt-5 space-y-2 text-sm leading-6 text-muted-foreground">
-                    <p><strong className="text-foreground">{t(UI.legalForm)} :</strong> Société par actions simplifiée unipersonnelle</p>
-                    <p><strong className="text-foreground">{t(UI.legalSiren)} :</strong> 889 178 141</p>
-                    <p><strong className="text-foreground">{t(UI.legalSiret)} :</strong> 889 178 141 00012</p>
-                    <p><strong className="text-foreground">{t(UI.legalRcs)} :</strong> RCS Paris</p>
-                    <p><strong className="text-foreground">{t(UI.legalTva)} :</strong> FR00889178141</p>
-                    <p><strong className="text-foreground">{t(UI.legalAddress)} :</strong> 78 Avenue des Champs-Élysées · Bureau 562 · 75008 Paris, France</p>
-                    <p><strong className="text-foreground">{t(UI.legalDirector)} :</strong> Antoine REBUFFÉ</p>
+                  <h2 className="display-serif mt-4 text-3xl">XR Agency</h2>
+                  <div className="mt-5 space-y-3 text-sm leading-6 text-muted-foreground">
+                    <p>XR Agency est la marque commerciale présentée sur ce site. L'identité juridique de l'entité qui contracte, son adresse et ses numéros d'immatriculation doivent être confirmés avant toute commande.</p>
+                    <p>Le devis et la facture définitifs doivent désigner le prestataire contractant et indiquer son régime fiscal applicable.</p>
+                    <p><strong className="text-foreground">Contact :</strong> contact.xragency@gmail.com · +33 7 67 56 67 83</p>
                   </div>
                 </div>
               </Reveal>
               <Reveal delay={80}>
                 <div className="rounded-3xl border border-primary/25 bg-primary/[.045] p-7 shadow-[0_25px_70px_-45px_hsl(var(--primary)/.35)]">
                   <div className="flex items-center gap-3"><ServerCog className="h-5 w-5 text-primary" /><p className="label-mono text-[9px] uppercase tracking-[.2em] text-primary">{t(UI.legalHosting)}</p></div>
-                  <h2 className="display-serif mt-4 text-3xl">o2switch</h2>
+                  <h2 className="display-serif mt-4 text-3xl">Vercel & Supabase</h2>
                   <p className="mt-4 text-sm leading-6 text-muted-foreground">{t(UI.legalHostingProvider)}</p>
-                  <div className="mt-6 flex items-start gap-3 rounded-2xl border border-border bg-background/60 p-4"><ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" /><p className="text-xs leading-5 text-muted-foreground">{t({ fr: "Infrastructure hébergée en France. Les données sont traitées selon les finalités indiquées dans le cadre de la relation commerciale.", en: "Infrastructure hosted in France. Data is processed according to the purposes stated within the business relationship.", vi: "Hạ tầng được lưu trữ tại Pháp. Dữ liệu được xử lý theo các mục đích đã nêu trong quan hệ thương mại.", ar: "البنية التحتية مستضافة في فرنسا. تتم معالجة البيانات وفق الأغراض المحددة ضمن العلاقة التجارية.", ru: "Инфраструктура размещена во Франции. Данные обрабатываются в соответствии с указанными целями в рамках деловых отношений." })}</p></div>
+                  <div className="mt-6 flex items-start gap-3 rounded-2xl border border-border bg-background/60 p-4"><ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" /><p className="text-xs leading-5 text-muted-foreground">{t({ fr: "Le site public est servi par Vercel et les données CRM sont stockées dans Supabase. Les régions de traitement et les sous-traitants applicables dépendent de la configuration des comptes.", en: "The public website is served by Vercel and CRM data is stored in Supabase. Processing regions and applicable subprocessors depend on account configuration.", vi: "Website công khai được phục vụ bởi Vercel và dữ liệu CRM được lưu trữ trong Supabase. Khu vực xử lý và nhà cung cấp phụ thuộc vào cấu hình tài khoản.", ar: "يتم تقديم الموقع عبر Vercel وتخزين بيانات CRM في Supabase. تعتمد مناطق المعالجة والجهات الفرعية على إعدادات الحساب.", ru: "Публичный сайт обслуживается Vercel, данные CRM хранятся в Supabase. Регионы обработки и субподрядчики зависят от настроек аккаунтов." })}</p></div>
                 </div>
               </Reveal>
             </div>
@@ -89,3 +85,5 @@ function LegalPage() {
     </div>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
