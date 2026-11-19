@@ -738,11 +738,11 @@ export const UI: Record<string, L> = {
   legalAddress: { fr: "Siège social", en: "Registered office", vi: "Trụ sở chính" },
   legalHosting: { fr: "Hébergement", en: "Hosting", vi: "Lưu trữ" },
   legalHostingProvider: {
-    fr: "o2switch — Chemin des Pardiaux, 63000 Clermont-Ferrand, France",
-    en: "o2switch — Chemin des Pardiaux, 63000 Clermont-Ferrand, France",
-    vi: "o2switch — Chemin des Pardiaux, 63000 Clermont-Ferrand, France",
-    ar: "o2switch — Chemin des Pardiaux، 63000 Clermont-Ferrand، France",
-    ru: "o2switch — Chemin des Pardiaux, 63000 Clermont-Ferrand, France",
+    fr: "Vercel — plateforme d’hébergement web",
+    en: "Vercel — web hosting platform",
+    vi: "Vercel — nền tảng lưu trữ website",
+    ar: "Vercel — منصة استضافة المواقع",
+    ru: "Vercel — платформа веб-хостинга",
   },
   legalCopyright: {
     fr: "© 2026 XR Agency — Tous droits réservés",
@@ -1215,3 +1215,5 @@ export const UI: Record<string, L> = {
     ru: "Дизайн и сотрудничество",
   },
 };
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
