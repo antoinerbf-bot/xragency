@@ -405,7 +405,7 @@ export function MapsDominationStudioPage() {
                 <MapPin className="h-3.5 w-3.5" /> STRATÉGIE DE VISIBILITÉ LOCALE · GOOGLE MAPS
               </span>
               <h1 className="mt-5 font-serif text-[clamp(2.4rem,6vw,5.3rem)] leading-[0.94] text-white">
-                Soyez dans les <span className="text-[#c5a880]">3 premiers résultats</span> Google Maps de votre ville, ou nous vous remboursons.
+                Développez votre <span className="text-[#c5a880]">visibilité locale</span> sur Google Maps avec une stratégie adaptée à votre marché.
               </h1>
               <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-white/75 sm:text-base">
                 Une fiche claire, des informations cohérentes et une stratégie locale structurée facilitent la découverte de votre établissement. Le périmètre et les objectifs sont définis après analyse de votre marché.
