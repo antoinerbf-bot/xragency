@@ -213,7 +213,7 @@ function getWhatsappMessageText(
     return `Bonjour ${contact}, avez-vous pu jeter un œil à la proposition pour ${company} ? Vos concurrents renforcent actuellement leur visibilité sur Google Maps. Si vous souhaitez bloquer votre créneau de mise en ligne cette semaine, confirmez-moi et on valide !`;
   }
   if (templateKey === "devis") {
-    return `Bonjour ${contact}, voici les éléments pour valider votre commande pour ${company} (${lead.serviceTarget} à ${lead.budgetEur} €). Le virement est à adresser sur notre compte officiel KARMA SASU (IBAN transmis sur devis). Nous lançons la production dès réception !`;
+    return `Bonjour ${contact}, voici les éléments pour valider votre commande pour ${company} (${lead.serviceTarget} à ${lead.budgetEur} €). Les coordonnées bancaires officielles vous seront transmises sur le devis validé par la Direction. Nous lançons la production après validation du règlement !`;
   }
   return `Bonjour ${contact}, c'est ${senderName} de XR Agency à propos de la visibilité digitale de ${company}. Avez-vous 2 minutes pour échanger par message ?`;
 }
@@ -276,7 +276,7 @@ const SCHOOL_CURRICULUM_90D = [
       "Pitcher le Top 3 Google Maps garanti 24h/24, 7j/7 pendant 1 an ou remboursé + l'offre Gestion Annuelle à 500 €/an.",
       "Présenter la maquette validée par la Direction sur WhatsApp pour déclencher l'effet 'Waouh'.",
       "Désamorcer les 5 objections fatales ('C'est trop cher', 'J'ai déjà un site', 'Je dois réfléchir', 'Mon neveu s'en occupe').",
-      "Verrouiller l'engagement et envoyer le Devis + RIB KARMA SASU en direct pendant l'appel.",
+      "Verrouiller l'engagement et envoyer le Devis + coordonnées bancaires officielles en direct pendant l'appel.",
     ],
   },
   {
@@ -356,7 +356,7 @@ const OPERATIONAL_CALENDAR_PLAYBOOKS = [
     steps: [
       { day: "J+1", task: "Création de la maquette par la Direction ➔ Lien validé et envoyé au client." },
       { day: "J+2 à J+5", task: "Intégration responsive mobile/PC, copywriting persuasif et formulaires connectés." },
-      { day: "J+7", task: "Mise en ligne officielle, SSL, indexation Google & validation virement RIB." },
+      { day: "J+7", task: "Mise en ligne officielle, SSL, indexation Google & validation du règlement." },
       { day: "J+30", task: "Appel suivi satisfaction + proposition Upsell Google Maps Top 3 / WebCare / Parrainage." },
     ],
   },
@@ -505,6 +505,9 @@ function CrmWorkspacePage() {
 
   // ── MODALE MESSAGES WHATSAPP PRÉ-RÉDIGÉS 1-CLIC ──
   const [whatsappModalLead, setWhatsappModalLead] = useState<CrmLead | null>(null);
+  const [showAccessManager, setShowAccessManager] = useState(false);
+  const [resetMemberId, setResetMemberId] = useState("");
+  const [resetPassword, setResetPassword] = useState("");
   const [whatsappTemplateKey, setWhatsappTemplateKey] = useState<"maquette" | "relance" | "devis" | "contact">("maquette");
 
   // ── SIMULATEUR DE COMMISSION EN DIRECT (COFFRE CLOSER) ──
@@ -608,7 +611,7 @@ function CrmWorkspacePage() {
     reader.readAsDataURL(file);
   };
 
-  const handlePinLogin = async (e?: FormEvent, overridePin?: string, overrideRole?: "director" | "closer" | "student") => {
+  const handlePinLogin = async (e?: FormEvent, overridePin?: string, overrideRole?: "director" | "closer" | "student", overrideEmail?: string) => {
     if (e) e.preventDefault();
     const code = (overridePin ?? pinCode).trim();
     const role = overrideRole ?? selectedPortalRole;
@@ -616,12 +619,7 @@ function CrmWorkspacePage() {
       setErrorMsg("Saisissez votre code d'accès.");
       return;
     }
-    const emailForLogin =
-      role === "director"
-        ? "admin@xragency.fr"
-        : role === "student"
-          ? "karim@xragency.fr"
-          : closerAccountEmail;
+    const emailForLogin = overrideEmail || (role === "director" ? "admin@xragency.fr" : role === "student" ? "karim@xragency.fr" : closerAccountEmail);
 
     await apiCall(
       {
@@ -745,14 +743,14 @@ function CrmWorkspacePage() {
         items: [
           {
             label,
-            detail: "Prestation officielle XR Agency — Contrat & RIB KARMA SASU intégrés",
+            detail: "Prestation XR Agency — coordonnées bancaires transmises après validation",
             priceEur: price,
             period,
             quantity: 1,
           },
         ],
       },
-      `📄 Devis officiel & Facture RIB générés pour ${company} !`
+      `📄 Devis et proforma générés pour ${company} — coordonnées bancaires à confirmer.`
     );
     setQuoteCompany("");
     setQuoteEmail("");
@@ -834,7 +832,7 @@ function CrmWorkspacePage() {
   const handleValidatePayment = async (invoiceId: string) => {
     triggerCelebration(
       "VIREMENT REÇU & CONFIRMÉ ! 💸",
-      `Fonds reçus sur le RIB KARMA SASU. Les commissions ont été débloquées dans le coffre du closer !`
+      `Fonds reçus sur le compte bancaire de l’entité contractante. Les commissions ont été débloquées dans le coffre du closer !`
     );
     await apiCall(
       {
@@ -891,6 +889,16 @@ function CrmWorkspacePage() {
     );
   };
 
+  const handleResetMemberPassword = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!resetMemberId || resetPassword.length < 12) return;
+    const result = await apiCall({ action: "reset_member_password", memberId: resetMemberId, newPassword: resetPassword }, "Mot de passe réinitialisé. Transmettez-le au membre par un canal privé.");
+    if (result) {
+      setResetPassword("");
+      setShowAccessManager(false);
+    }
+  };
+
   const closersList = useMemo(
     () => members.filter((m) => m.role !== "admin" && m.portalType !== "student"),
     [members]
@@ -930,6 +938,28 @@ function CrmWorkspacePage() {
     return leads.filter((l) => isLeadUrgent48h(l));
   }, [leads]);
 
+  const activeBattle = SCHOOL_OBJECTION_BATTLES.find((battle) => battle.id === selectedBattleId) || SCHOOL_OBJECTION_BATTLES[0];
+
+  const openCallModal = (lead: CrmLead) => {
+    setCallNotesInput("");
+    setCallFollowUpInput("Demain 10h00");
+    setActiveCallLead(lead);
+  };
+
+  const openWhatsappModal = (lead: CrmLead) => {
+    setWhatsappTemplateKey("maquette");
+    setWhatsappModalLead(lead);
+  };
+
+  const updateLeadStatus = async (leadId: string, status: LeadStatus) => {
+    const result = await apiCall({ action: "update_lead", leadId, status }, "Statut du prospect mis à jour.");
+    if (result && status === "signed") {
+      const lead = leads.find((item) => item.id === leadId);
+      if (lead) triggerCelebration("DEAL SIGNÉ !", `${lead.company} a été marqué comme signé.`, getOfficialCommission(lead.serviceTarget, lead.budgetEur).amountEur);
+    }
+    return result;
+  };
+
   const handleCopyLovable = (lead: CrmLead) => {
     const p = {
       id: lead.id,
@@ -944,7 +974,7 @@ function CrmWorkspacePage() {
     const prompt = generateLovableArchitecturePrompt(p as any);
     navigator.clipboard.writeText(prompt);
     flashSuccess(`⚡ Prompt Lovable 24h pour ${lead.company} copié dans le presse-papier !`);
-    playXpChime("audit");
+    playXpChime();
   };
 
   // ── COMPOSANTS MODALES PARTAGÉES (WHATSAPP 1-CLIC & CÉLÉBRATION VICTOIRE) ──
@@ -968,9 +998,40 @@ function CrmWorkspacePage() {
     );
   };
 
+  const renderAccessManagerModal = () => {
+    if (!showAccessManager || user?.role !== "admin") return null;
+    const resettableMembers = members.filter((member) => member.active && member.id !== user.id);
+    return (
+      <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/85 p-4 backdrop-blur-md">
+        <form onSubmit={handleResetMemberPassword} className="w-full max-w-md space-y-4 rounded-3xl border border-[#D4AF37]/40 bg-[#10131b] p-6 text-white shadow-2xl">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-widest text-[#D4AF37]">Sécurité des comptes</p>
+              <h3 className="mt-1 text-xl font-bold">Réinitialiser un accès</h3>
+            </div>
+            <button type="button" onClick={() => { setShowAccessManager(false); setResetPassword(""); }} className="rounded-full border border-white/20 px-3 py-1 text-xs">Fermer</button>
+          </div>
+          <label className="block space-y-1 text-xs text-white/70">
+            <span>Membre</span>
+            <select required value={resetMemberId} onChange={(e) => setResetMemberId(e.target.value)} className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-3 text-sm text-white">
+              <option value="">Choisir un compte</option>
+              {resettableMembers.map((member) => <option key={member.id} value={member.id}>{member.fullName} · {member.email}</option>)}
+            </select>
+          </label>
+          <label className="block space-y-1 text-xs text-white/70">
+            <span>Nouveau mot de passe (12 caractères minimum)</span>
+            <input type="password" autoComplete="new-password" minLength={12} maxLength={256} required value={resetPassword} onChange={(e) => setResetPassword(e.target.value)} className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-3 text-sm text-white" />
+          </label>
+          <p className="text-[11px] leading-5 text-white/50">Le nouveau mot de passe remplace immédiatement l'ancien. Transmettez-le au membre par un canal privé, jamais dans un groupe public.</p>
+          <button type="submit" disabled={busy || !resetMemberId || resetPassword.length < 12} className="w-full rounded-xl bg-[#D4AF37] px-4 py-3 text-xs font-black uppercase tracking-wider text-black disabled:opacity-40">Enregistrer le nouvel accès</button>
+        </form>
+      </div>
+    );
+  };
+
   const renderWhatsappModal = () => {
     if (!whatsappModalLead) return null;
-    const messageText = getWhatsappMessageText(whatsappTemplateKey, whatsappModalLead, user.fullName);
+    const messageText = getWhatsappMessageText(whatsappTemplateKey, whatsappModalLead, user?.fullName || "Équipe XR");
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md">
         <div className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-emerald-400/40 bg-[#0f1118] p-6 text-white shadow-2xl">
@@ -996,7 +1057,7 @@ function CrmWorkspacePage() {
             {[
               { key: "maquette", label: "🎨 Maquette Offerte" },
               { key: "relance", label: "🔥 Relance J+2" },
-              { key: "devis", label: "📝 Devis & RIB KARMA" },
+              { key: "devis", label: "📝 Devis & coordonnées bancaires" },
               { key: "contact", label: "🤝 Prise de Contact" },
             ].map((t) => (
               <button
@@ -1072,10 +1133,10 @@ function CrmWorkspacePage() {
   if (!snapshot?.authenticated || !user) {
     return (
       <CharacterSelectLogin
-        onLoginWithPin={async (portal, pin) => {
+        onLoginWithPin={async (portal, password, email) => {
           setSelectedPortalRole(portal);
-          setPinCode(pin);
-          await handlePinLogin(undefined, pin);
+          setPinCode(password);
+          await handlePinLogin(undefined, password, portal, email);
         }}
         isLoading={busy}
         errorMessage={errorMsg}
@@ -1101,6 +1162,12 @@ function CrmWorkspacePage() {
           </div>
 
           <div className="flex items-center gap-2">
+            {user?.role === "admin" && (
+              <button type="button" onClick={() => { setResetMemberId(closersList[0]?.id || ""); setShowAccessManager(true); }} className="ml-2 inline-flex items-center gap-1.5 rounded-full border border-[#D4AF37]/40 bg-[#D4AF37]/10 px-3.5 py-1.5 text-xs font-bold text-[#E2D5BC] hover:bg-[#D4AF37]/20">
+                <KeyRound className="h-3.5 w-3.5" />
+                <span>Gérer les accès</span>
+              </button>
+            )}
             <button
               type="button"
               onClick={handleLogout}
@@ -1543,7 +1610,7 @@ function CrmWorkspacePage() {
                               🗣️ TON PITCH D'OUVERTURE (À LIRE AU TÉLÉPHONE) :
                             </span>
                             <p className="mt-2 text-xs sm:text-sm italic text-neutral-200 leading-relaxed">
-                              « Bonjour {lead.contactName || "Monsieur"} ! Je suis {currentUser?.fullName?.split(" ")[0] || "Lucas"} de XR Agency. On a analysé la visibilité de {lead.company} et on a créé une maquette sur-mesure pour vous montrer comment doubler vos demandes locales. Est-ce que vous avez 2 minutes ou un numéro WhatsApp pour que je vous l'envoie ? »
+                              « Bonjour {lead.contactName || "Monsieur"} ! Je suis {user?.fullName?.split(" ")[0] || "Lucas"} de XR Agency. On a analysé la visibilité de {lead.company} et on a créé une maquette sur-mesure pour vous montrer comment doubler vos demandes locales. Est-ce que vous avez 2 minutes ou un numéro WhatsApp pour que je vous l'envoie ? »
                             </p>
                           </div>
                         </div>
@@ -1785,7 +1852,7 @@ function CrmWorkspacePage() {
                                 type="button"
                                 disabled={busy}
                                 onClick={() => {
-                                  playXpChime("deal_closed");
+                                  playXpChime();
                                   triggerCelebration(
                                     "DEAL SIGNÉ ! 🏆",
                                     `${lead.company} est désormais client officiel XR Agency !`,
@@ -1941,7 +2008,7 @@ function CrmWorkspacePage() {
                     {formatMoney(commissionSummary.pendingVaultEur)}
                   </p>
                   <p className="mt-2 text-xs text-white/65">
-                    Commissions verrouillées dès la signature du devis. Elles sont débloquées immédiatement dès que la Direction valide la réception des fonds sur le RIB officiel KARMA SASU.
+                    Commissions verrouillées dès la signature du devis. Elles sont débloquées immédiatement dès que la Direction valide la réception des fonds sur le compte de l’entité contractante.
                   </p>
                 </div>
 
@@ -2436,7 +2503,7 @@ function CrmWorkspacePage() {
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // PORTAIL 1 : QG DIRECTION GÉNÉRALE (CODE 07266 / 071266)
+  // PORTAIL 1 : QG DIRECTION GÉNÉRALE
   // CADRE UNIFIÉ PERMANENT : 10 PILIERS + MODES LUDIQUES INTÉGRÉS
   // ══════════════════════════════════════════════════════════════════════════
   if (directorDisplayMode === "closer_arena") {
@@ -2542,7 +2609,7 @@ function CrmWorkspacePage() {
               { id: "quotes", label: "📝 Devis", badge: quotes.length },
               {
                 id: "invoices",
-                label: "💳 Factures & RIB",
+                label: "💳 Factures & paiements",
                 badge: invoices.filter((i) => i.status === "pending_transfer").length,
                 alert: invoices.filter((i) => i.status === "pending_transfer").length > 0,
               },
@@ -2689,7 +2756,7 @@ function CrmWorkspacePage() {
                     Bienvenue au QG XR Agency, {user.fullName}.
                   </h2>
                   <p className="mt-2 text-xs leading-relaxed text-white/70 sm:text-sm">
-                    Gérez vos leads par capture d'écran ou téléphone, validez les maquettes en 1 clic pour vos commerciaux, émettez vos devis et factures officiels avec RIB KARMA SASU, et pilotez vos projets en direct.
+                    Gérez vos leads par capture d'écran ou téléphone, validez les maquettes en 1 clic pour vos commerciaux, émettez vos devis et factures officiels avec coordonnées bancaires officielles, et pilotez vos projets en direct.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2.5">
@@ -2805,7 +2872,7 @@ function CrmWorkspacePage() {
                 </div>
               </div>
 
-              {/* Colonne 3 : Factures en Attente de Virement sur RIB KARMA */}
+              {/* Colonne 3 : Factures en Attente de Virement sur coordonnées bancaires */}
               <div className="rounded-3xl border border-sky-400/30 bg-[#12141b] p-6">
                 <div className="flex items-center justify-between border-b border-white/10 pb-3">
                   <h3 className="flex items-center gap-2 text-sm font-bold text-white">
@@ -2841,42 +2908,6 @@ function CrmWorkspacePage() {
                       </div>
                     ))}
                 </div>
-              </div>
-            </div>
-
-            {/* Suivi des Élèves de l'Académie XR School en formation 90j */}
-            <div className="rounded-3xl border border-sky-400/30 bg-gradient-to-r from-sky-950/30 via-[#12141b] to-[#12141b] p-6 shadow-xl">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div className="flex items-center gap-3.5">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-sky-500/20 text-sky-300">
-                    <GraduationCap className="h-6 w-6" />
-                  </span>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-sky-300">
-                        🎓 ACADÉMIE XR SCHOOL · PROMOTION 90 JOURS
-                      </span>
-                      <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 font-mono text-[9px] font-bold text-emerald-300">
-                        1 Élève en cours
-                      </span>
-                    </div>
-                    <h3 className="mt-1 text-base font-bold text-white">
-                      Karim Zeroual — Jour 14 / 90 (Scripts Sectoriels & Objections RPG)
-                    </h3>
-                    <p className="text-xs text-white/60">
-                      Entraîné sur 12 simulations · Passerelle CRM active · Peut closer de vrais clients et percevoir ses commissions (Code d'accès : 1234)
-                    </p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    void apiCall({ action: "login", pin: "1234" });
-                  }}
-                  className="rounded-xl border border-sky-400/40 bg-sky-500/15 px-4 py-2.5 text-xs font-bold text-sky-200 transition hover:bg-sky-500/25 shrink-0"
-                >
-                  Inspecter l'Académie XR School →
-                </button>
               </div>
             </div>
 
@@ -3561,7 +3592,7 @@ function CrmWorkspacePage() {
                   GÉNÉRATEUR OFFICIEL DE DEVIS & CONTRAT
                 </span>
                 <h3 className="mt-1 text-lg font-bold text-white">
-                  Édition avec Mentions Légales, Acompte & RIB KARMA SASU
+                  Édition avec Mentions Légales, Acompte & coordonnées bancaires officielles
                 </h3>
                 <p className="text-xs text-white/60">
                   Générez un contrat PDF prêt à signer ou ajoutez une ligne devis directement au catalogue.
@@ -3587,7 +3618,7 @@ function CrmWorkspacePage() {
         )}
 
         {/* ══════════════════════════════════════════════════════════════════
-            ONGLET 5 DIRECTION : FACTURATION, RIB KARMA SASU & COMMISSIONS
+            ONGLET 5 DIRECTION : FACTURATION, coordonnées bancaires officielles & COMMISSIONS
         ══════════════════════════════════════════════════════════════════ */}
         {directorTab === "invoices" && (
           <div className="space-y-6">
@@ -3598,9 +3629,9 @@ function CrmWorkspacePage() {
                   <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-emerald-300">
                     🏦 COMPTE BANCAIRE OFFICIEL XR AGENCY
                   </span>
-                  <h3 className="mt-1 text-xl font-bold text-white">KARMA SASU — RIB Professionnel</h3>
+                  <h3 className="mt-1 text-xl font-bold text-white">XR Agency — Coordonnées bancaires</h3>
                   <p className="mt-1 font-mono text-xs text-[#e5cba4]">
-                    IBAN : FR76 1751 5900 0008 1234 5678 901 · BIC : QNTOFR22
+                    Coordonnées bancaires : à configurer dans les paramètres sécurisés de production.
                   </p>
                 </div>
                 <div className="text-left sm:text-right">
@@ -3948,7 +3979,7 @@ function CrmWorkspacePage() {
                 <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#c5a880]">
                   XR AGENCY · STUDIO DEVIS OFFICIEL & CONTRAT
                 </span>
-                <h3 className="text-xl font-bold">Générateur Officiel avec RIB KARMA SASU</h3>
+                <h3 className="text-xl font-bold">Générateur Officiel avec coordonnées bancaires officielles</h3>
               </div>
               <button
                 type="button"
@@ -3972,6 +4003,7 @@ function CrmWorkspacePage() {
 
       {/* Modales Globales Direction (WhatsApp 1-Clic & Célébration Victoire) */}
       {renderWhatsappModal()}
+      {renderAccessManagerModal()}
       {renderCelebrationBanner()}
 
       {/* Bouton Flottant Déconnexion Toujours Accessible en Bas à Droite (Desktop) */}
@@ -3987,3 +4019,5 @@ function CrmWorkspacePage() {
     </div>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
