@@ -389,7 +389,7 @@ export function MapsDominationStudioPage() {
     <div className="min-h-screen bg-[#0c0e12] text-[#f8f6f0]">
       <Nav />
       <main>
-        {/* Hero Cinématique Google Maps Top 3 */}
+        {/* Hero cinématique Google Maps */}
         <section className="relative isolate overflow-hidden border-b border-white/10 pt-28 pb-16 sm:pt-36 sm:pb-20">
           <div
             aria-hidden
@@ -402,13 +402,13 @@ export function MapsDominationStudioPage() {
           <div className="relative mx-auto max-w-[1440px] px-4 sm:px-8">
             <div className="mx-auto max-w-4xl text-center">
               <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-4 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-emerald-300">
-                <MapPin className="h-3.5 w-3.5" /> GARANTIE CONTRACTUELLE TOP 3 · 24H/24 & 7J/7 PENDANT 1 AN
+                <MapPin className="h-3.5 w-3.5" /> STRATÉGIE DE VISIBILITÉ LOCALE · GOOGLE MAPS
               </span>
               <h1 className="mt-5 font-serif text-[clamp(2.4rem,6vw,5.3rem)] leading-[0.94] text-white">
                 Soyez dans les <span className="text-[#c5a880]">3 premiers résultats</span> Google Maps de votre ville, ou nous vous remboursons.
               </h1>
               <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-white/75 sm:text-base">
-                72 % des clients qui cherchent un commerce, un artisan, un restaurant ou une clinique sur leur téléphone appellent l’un des 3 premiers résultats Google Maps. Zéro abonnement mensuel : uniquement deux offres annuelles claires soumises à la validation de nos experts.
+                Une fiche claire, des informations cohérentes et une stratégie locale structurée facilitent la découverte de votre établissement. Le périmètre et les objectifs sont définis après analyse de votre marché.
               </p>
 
               {/* Comparatif visuel immédiat des 2 offres Maps */}
@@ -416,18 +416,18 @@ export function MapsDominationStudioPage() {
                 <div className="rounded-3xl border border-[#c5a880] bg-gradient-to-b from-[#1f1b15] to-[#12141a] p-6 shadow-xl">
                   <div className="flex items-center justify-between">
                     <span className="rounded-full bg-[#c5a880] px-3 py-1 font-mono text-[10px] font-bold uppercase text-[#101114]">
-                      OFFRE 1 · PROPULSION & GARANTIE
+                      OFFRE 1 · STRATÉGIE DE VISIBILITÉ
                     </span>
                     <span className="font-mono text-xs text-[#e5cba4]">Validation experts requise</span>
                   </div>
                   <h2 className="mt-4 font-serif text-2xl font-bold text-white">
-                    Top 3 Google Maps Garanti 1 An (24h/24, 7j/7)
+                    Stratégie de visibilité Google Maps
                   </h2>
                   <p className="mt-2 font-serif text-4xl font-bold text-[#e5cba4]">
                     À partir de 999 € <span className="text-sm font-normal text-white/65">/ an</span>
                   </p>
                   <p className="mt-2 text-xs leading-relaxed text-white/75">
-                    Le tarif annuel exact dépend de vos mots-clés (ex: Serrurier Paris), de votre page actuelle sur Google Maps et du nombre d'habitants de votre ville. Création de fiche incluse si vous n'êtes pas encore sur Google Maps.
+                    Le tarif annuel dépend de vos mots-clés, de la concurrence locale et du périmètre retenu après audit. La création ou la reprise de votre fiche peut être intégrée au devis.
                   </p>
                 </div>
 
