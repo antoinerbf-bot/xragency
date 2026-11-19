@@ -10,7 +10,7 @@ export const Route = createFileRoute("/services/")({
       {
         name: "description",
         content:
-          "Sites web, branding, SEO, Google Maps TOP 3, community management, e-commerce et maintenance. Plusieurs expertises, un seul système.",
+          "Sites web, branding, SEO, visibilité Google Maps, community management, e-commerce et maintenance. Plusieurs expertises, un seul système.",
       },
       { property: "og:title", content: "Services — XRagency." },
       {
