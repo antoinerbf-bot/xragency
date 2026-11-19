@@ -432,7 +432,7 @@ export function MapsSimulator() {
           company: leadCompany.trim(),
           phone: leadPhone.trim(),
           email: leadEmail.trim() || `contact@${leadCompany.toLowerCase().replace(/[^a-z0-9]/g, "") || "client"}.fr`,
-          need: `Google Maps Top 3 Garanti 1 An (${animMin} € - ${animMax} € / an)`,
+          need: `Stratégie Google Maps · 1 an (${animMin} € - ${animMax} € / an)`,
           message: `Simulation Google Maps :\n• Établissement : ${leadCompany}\n• Contact : ${leadContact || "Non précisé"}\n• Mots-clés : ${customKeywords || "Standards"}\n• Secteur : ${sectorLabel}\n• Ville : ${cityLabel}\n• Position actuelle : ${rankLabel}\n• Estimation affichée : ${animMin} € à ${animMax} € / an.\n• Téléphone : ${leadPhone}`,
         }),
       });
@@ -541,7 +541,7 @@ export function MapsSimulator() {
           </h2>
 
           <p className="mt-3 text-sm sm:text-base text-neutral-400 leading-relaxed max-w-3xl">
-            À partir de 999 € / an. Top 3 garanti 24h/24, 7j/7 pendant 1 an (ou remboursé) sur les mots-clés validés ensemble avec nos analystes. Ou optez pour la Gestion Annuelle complète de votre fiche à 500 € / an.
+            À partir de 999 € / an, selon votre marché et le périmètre défini après audit. L’objectif de la prestation est d’améliorer votre visibilité locale ; aucune position Google ne peut être garantie. Gestion annuelle de votre fiche disponible à 500 € / an.
           </p>
 
           {/* ── Exclusivity Badge — very visible ── */}
@@ -550,7 +550,7 @@ export function MapsSimulator() {
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white font-black shadow-sm"><svg viewBox="0 0 24 24" className="h-5 w-5" aria-label="Google" role="img"><path fill="#4285F4" d="M21.35 12.27c0-.71-.06-1.4-.18-2.06H12v3.9h5.23a4.47 4.47 0 0 1-1.94 2.94v2.44h3.14c1.84-1.69 2.92-4.18 2.92-7.22Z"/><path fill="#34A853" d="M12 21.55c2.63 0 4.84-.87 6.45-2.36l-3.14-2.44c-.87.58-1.98.92-3.31.92-2.54 0-4.7-1.72-5.47-4.03H3.28v2.52A9.74 9.74 0 0 0 12 21.55Z"/><path fill="#FBBC05" d="M6.53 13.64A5.84 5.84 0 0 1 6.23 12c0-.57.1-1.12.3-1.64V7.84H3.28A9.72 9.72 0 0 0 2.25 12c0 1.57.38 3.06 1.03 4.16l3.25-2.52Z"/><path fill="#EA4335" d="M12 6.33c1.43 0 2.7.49 3.71 1.45l2.78-2.78C16.84 3.42 14.63 2.45 12 2.45a9.74 9.74 0 0 0-8.72 5.39l3.25 2.52c.77-2.31 2.93-4.03 5.47-4.03Z"/></svg></span>
               <Zap className="h-5 w-5 shrink-0 text-[var(--xr-bg)]" />
               <p className="text-sm font-semibold text-foreground leading-snug">
-                À partir de 999 € / an · Top 3 garanti 24h/24, 7j/7 pendant 1 an ou remboursé (validation obligatoire par nos experts)
+                À partir de 999 € / an · objectif de visibilité locale défini après audit, sans garantie de position
               </p>
               <Award className="h-5 w-5 shrink-0 text-[var(--xr-ink)]" />
             </div>
@@ -931,7 +931,7 @@ export function MapsSimulator() {
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 label-mono text-[8px] font-bold text-emerald-500 mb-2">
-                        OFFRE 1 · TOP 3 GARANTI 24H/24 & 7J/7 PENDANT 1 AN (OU REMBOURSÉ)
+                        OFFRE 1 · STRATÉGIE DE VISIBILITÉ LOCALE
                       </span>
                       <p className="label-mono text-xs text-muted-foreground">
                         Estimation selon votre ville, concurrence & mots-clés ({customKeywords || "Vos mots-clés"}) · Dès 999 € / an
@@ -961,7 +961,7 @@ export function MapsSimulator() {
                       <div className="flex items-center gap-2 rounded-xl border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-3 py-2">
                         <ShieldCheck className="h-4 w-4 shrink-0 text-[var(--xr-ink)]" />
                         <span className="label-mono text-[10px] font-bold text-[var(--xr-ink)]">
-                          Garanti Top 3 sur 1 an ou remboursé
+                          Objectif de visibilité défini après audit
                         </span>
                       </div>
                       <div className="flex flex-col gap-2 sm:flex-row">
@@ -995,8 +995,8 @@ export function MapsSimulator() {
                   <div className="mt-4 flex flex-wrap gap-3 border-t border-[var(--xr-ink)]/20 pt-4">
                     {[
                       { icon: CheckCircle2, text: "Validation obligatoire par nos analystes" },
-                      { icon: CheckCircle2, text: "Top 3 24h/24, 7j/7 pendant 1 an" },
-                      { icon: CheckCircle2, text: "Contrat garanti ou remboursé" },
+                      { icon: CheckCircle2, text: "Suivi de visibilité selon le périmètre convenu" },
+                      { icon: CheckCircle2, text: "Conditions et périmètre confirmés au devis" },
                       { icon: CheckCircle2, text: "Zéro abonnement mensuel imposé" },
                     ].map(({ icon: Icon, text }) => (
                       <div key={text} className="flex items-center gap-1.5">
@@ -1116,7 +1116,7 @@ export function MapsSimulator() {
                     </div>
                     <div className="mt-1 flex justify-between text-white/60 text-[11px]">
                       <span>Estimation : <strong className="text-emerald-400">{animMin} € à {animMax} € / an</strong></span>
-                      <span>Contrat : <strong className="text-[#c5a880]">Top 3 Garanti 1 An</strong></span>
+                      <span>Contrat : <strong className="text-[#c5a880]">Stratégie de visibilité locale</strong></span>
                     </div>
                   </div>
 
