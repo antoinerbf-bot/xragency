@@ -1,4 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { createHash } from "node:crypto";
+import { getSupabaseServer } from "@/lib/saas/supabase";
 import {
   COOKIE_NAME,
   loadStore,
@@ -59,7 +61,7 @@ export const Route = createFileRoute("/api/crm")({
       GET: async ({ request }) => {
         const token = readCookie(request, COOKIE_NAME);
         const session = verifySession(token);
-        const store = loadStore();
+        const store = await loadStore();
 
         if (!session) {
           return Response.json({ authenticated: false });
@@ -75,68 +77,51 @@ export const Route = createFileRoute("/api/crm")({
         try {
           const body = (await request.json()) as Record<string, unknown>;
           const action = String(body.action || "");
-          const store = loadStore();
+          const store = await loadStore();
           const now = new Date().toISOString();
 
-          // ── 1. AUTHENTICATION (PUBLIC · CODES PIN 071266 / 07266, 7777, 1234 + EMAIL) ──
+          // ── 1. AUTHENTICATION (EMAIL + UNIQUE PASSWORD, RATE-LIMITED) ──
           if (action === "login") {
-            const rawPin = String(body.pin || body.password || "").trim();
-            let email = String(body.email || "").trim().toLowerCase();
-
-            // Détection directe par code PIN
-            if (rawPin === "071266" || rawPin === "07266") {
-              email = "admin@xragency.fr";
-            } else if (rawPin === "7777" && !email) {
-              email = "lucas@xragency.fr";
-            } else if (rawPin === "1234") {
-              email = "karim@xragency.fr";
+            const email = String(body.email || "").trim().toLowerCase();
+            const password = String(body.password || body.pin || "");
+            if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !password || password.length > 256) {
+              return Response.json({ error: "Adresse e-mail et mot de passe requis." }, { status: 400 });
+            }
+            const identifierHash = createHash("sha256").update(`${email}|${request.headers.get("x-forwarded-for") || "unknown"}`).digest("hex");
+            const since = new Date(Date.now() - 15 * 60_000).toISOString();
+            const supabaseConfigured = Boolean(process.env.VITE_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+            let attemptsClient: ReturnType<typeof getSupabaseServer> | undefined;
+            if (supabaseConfigured) {
+              attemptsClient = getSupabaseServer();
+              const { count, error: countError } = await attemptsClient.from("xr_crm_login_attempts").select("id", { count: "exact", head: true }).eq("identifier_hash", identifierHash).eq("succeeded", false).gte("attempted_at", since);
+              if (countError) throw new Error(`Vérification anti-bruteforce indisponible: ${countError.message}`);
+              if ((count || 0) >= 8) return Response.json({ error: "Trop de tentatives. Réessayez dans 15 minutes." }, { status: 429 });
+            } else {
+              const attempts = (globalThis as typeof globalThis & { __xrLoginAttempts?: Map<string, number[]> }).__xrLoginAttempts ?? new Map<string, number[]>();
+              (globalThis as typeof globalThis & { __xrLoginAttempts?: Map<string, number[]> }).__xrLoginAttempts = attempts;
+              const recent = (attempts.get(identifierHash) || []).filter((time) => time > Date.now() - 15 * 60_000);
+              if (recent.length >= 8) return Response.json({ error: "Trop de tentatives. Réessayez dans 15 minutes." }, { status: 429 });
+              attempts.set(identifierHash, recent);
             }
 
-            if (email === "antoine@xragency.fr" || email === "direction@xragency.fr") {
-              email = "admin@xragency.fr";
+            const user = store.members.find((m) => m.email.toLowerCase() === email && m.active);
+            const isValidPassword = Boolean(user && verifyPassword(password, user.passwordHash));
+            if (attemptsClient) {
+              const { error: attemptError } = await attemptsClient.from("xr_crm_login_attempts").insert({ identifier_hash: identifierHash, succeeded: isValidPassword });
+              if (attemptError) throw new Error(`Enregistrement anti-bruteforce impossible: ${attemptError.message}`);
+            } else if (!isValidPassword) {
+              const attempts = (globalThis as typeof globalThis & { __xrLoginAttempts?: Map<string, number[]> }).__xrLoginAttempts!;
+              attempts.set(identifierHash, [...(attempts.get(identifierHash) || []), Date.now()]);
             }
+            if (!user || !isValidPassword) return Response.json({ error: "Identifiants incorrects." }, { status: 401 });
 
-            let user = store.members.find((m) => m.email.toLowerCase() === email && m.active);
-            
-            // Auto-provisioning des 7 conseillers officiels XR Agency si sélectionnés
-            if (!user && (rawPin === "7777" || rawPin === "1234" || rawPin === "07266" || rawPin === "071266") && email) {
-              const namePart = email.split("@")[0].replace(".", " ");
-              const capitalName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
-              user = {
-                id: `mem-${email.split("@")[0].replace(".", "-")}`,
-                email,
-                fullName: capitalName,
-                title: "Conseiller Commercial Élite XR Agency",
-                role: rawPin === "07266" || rawPin === "071266" ? "admin" : "member",
-                portalType: rawPin === "07266" || rawPin === "071266" ? "director" : "closer",
-                phoneLine: "+33 7 67 56 67 83",
-                commissionPct: 20,
-                passwordHash: hashPassword("EquipeXR2026!"),
-                active: true,
-                createdAt: new Date().toISOString(),
-              };
-              store.members.push(user);
-              saveStore(store);
-            }
-
-            const isValidPassword =
-              user &&
-              (verifyPassword(rawPin, user.passwordHash) ||
-                (user.role === "admin" && (rawPin === "071266" || rawPin === "07266" || rawPin === "AdminXR2026!" || rawPin === "DirecteurXR2026!")) ||
-                (user.role === "member" && (rawPin === "7777" || rawPin === "1234" || rawPin === "07266" || rawPin === "EquipeXR2026!")));
-            if (!user || !isValidPassword) {
-              return Response.json({ error: "Code d'accès incorrect. Vérifiez votre code PIN." }, { status: 401 });
-            }
-            const token = signSession({
-              id: user.id,
-              role: user.role,
-              exp: Date.now() + 1000 * 60 * 60 * 24 * 7,
-            });
+            const token = signSession({ id: user.id, role: user.role, exp: Date.now() + 1000 * 60 * 60 * 8 });
             return new Response(JSON.stringify(buildSnapshot(store, user)), {
               status: 200,
               headers: {
                 "content-type": "application/json",
-                "set-cookie": `${COOKIE_NAME}=${encodeURIComponent(token)}; HttpOnly; Path=/; SameSite=Lax; Max-Age=604800`,
+                "set-cookie": `${COOKIE_NAME}=${encodeURIComponent(token)}; HttpOnly; Secure; Path=/; SameSite=Lax; Max-Age=28800`,
+                "cache-control": "no-store",
               },
             });
           }
@@ -146,7 +131,7 @@ export const Route = createFileRoute("/api/crm")({
               status: 200,
               headers: {
                 "content-type": "application/json",
-                "set-cookie": `${COOKIE_NAME}=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0`,
+                "set-cookie": `${COOKIE_NAME}=; HttpOnly; Secure; Path=/; SameSite=Lax; Max-Age=0`,
               },
             });
           }
@@ -160,6 +145,18 @@ export const Route = createFileRoute("/api/crm")({
           const user = store.members.find((m) => m.id === session.id && m.active);
           if (!user) {
             return Response.json({ error: "Compte introuvable ou désactivé." }, { status: 401 });
+          }
+
+          if (action === "reset_member_password") {
+            if (user.role !== "admin") return Response.json({ error: "Action réservée à la Direction." }, { status: 403 });
+            const memberId = String(body.memberId || "");
+            const newPassword = String(body.newPassword || "");
+            if (newPassword.length < 12 || newPassword.length > 256) return Response.json({ error: "Le nouveau mot de passe doit contenir entre 12 et 256 caractères." }, { status: 400 });
+            const member = store.members.find((m) => m.id === memberId);
+            if (!member) return Response.json({ error: "Membre introuvable." }, { status: 404 });
+            member.passwordHash = hashPassword(newPassword);
+            await saveStore(store);
+            return Response.json({ ok: true, message: "Mot de passe réinitialisé." });
           }
 
           // ── 2. PROSPECTS / LEADS (SAISIE FLEXIBLE : SCREENSHOT, TÉLÉPHONE OU FICHE) ──
@@ -227,7 +224,7 @@ export const Route = createFileRoute("/api/crm")({
                   : `Nouveau lead envoyé à ${targetMember.fullName} : ${lead.company} (${lead.budgetEur.toLocaleString("fr-FR")} €).`,
               createdAt: now,
             });
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -259,7 +256,7 @@ export const Route = createFileRoute("/api/crm")({
               message: `Maquette demandée au QG Direction pour ${lead.company}.`,
               createdAt: now,
             });
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -296,7 +293,7 @@ export const Route = createFileRoute("/api/crm")({
               message: `Maquette livrée & validée pour ${lead.company} (${maquetteUrl}).`,
               createdAt: now,
             });
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -330,7 +327,7 @@ export const Route = createFileRoute("/api/crm")({
                 createdAt: now,
               });
 
-              // ── AUTOMATISATION : CRÉATION CLIENT + FACTURE OFFICIELLE RIB KARMA SASU À LA SIGNATURE ──
+              // ── AUTOMATISATION : CRÉATION CLIENT + FACTURE OFFICIELLE coordonnées bancaires de l’entité contractante À LA SIGNATURE ──
               if (lead.status === "signed") {
                 // 1. Client actif
                 let client = store.clients.find(
@@ -361,7 +358,7 @@ export const Route = createFileRoute("/api/crm")({
                   store.clients.unshift(client);
                 }
 
-                // 2. Facture officielle avec RIB KARMA SASU (Statut: pending_transfer pour validation Direction)
+                // 2. Facture officielle avec coordonnées bancaires de l’entité contractante (Statut: pending_transfer pour validation Direction)
                 const existingInvoice = store.invoices.find(
                   (i) => i.clientCompany.toLowerCase() === lead.company.toLowerCase() && i.status !== "cancelled"
                 );
@@ -371,25 +368,18 @@ export const Route = createFileRoute("/api/crm")({
                   const autoInvoice: CrmInvoiceRecord = {
                     id: invId,
                     clientId: client.id,
+                    clientName: client.contactName,
                     clientCompany: lead.company,
                     clientEmail: client.email,
                     paymentReference: refNum,
-                    items: [
-                      {
-                        label: lead.serviceTarget || "Prestation Officielle XR Agency",
-                        quantity: 1,
-                        unitPriceEur: lead.budgetEur,
-                        totalEur: lead.budgetEur,
-                      },
-                    ],
-                    subtotalEur: lead.budgetEur,
-                    vatEur: 0,
+                    items: [{ label: lead.serviceTarget || "Prestation XR Agency", detail: "À confirmer dans le devis signé", amountEur: lead.budgetEur }],
                     totalEur: lead.budgetEur,
+                    taxRatePct: 0,
+                    taxNotice: "Régime de TVA à confirmer avant émission définitive.",
+                    paymentMethod: "bank_transfer",
+                    bankDetails: { beneficiary: "XR Agency", bankName: "À confirmer par la Direction", ibanMasked: "Non configuré", bic: "Non configuré", instructions: "Ne pas effectuer de virement avant réception des coordonnées bancaires officielles." },
                     status: "pending_transfer",
-                    issueDate: now.slice(0, 10),
-                    dueDate: now.slice(0, 10),
-                    bankDetails: "KARMA SASU · IBAN FR76 1751 5900 0008 1234 5678 901 · BIC QNTOFR22",
-                    notes: `Facture émise automatiquement suite à la signature du prospect par ${user.fullName}. En attente de validation du virement reçu sur le RIB KARMA SASU.`,
+                    dueDate: new Date(Date.now() + 7 * 86_400_000).toISOString(),
                     createdAt: now,
                     updatedAt: now,
                   };
@@ -399,15 +389,17 @@ export const Route = createFileRoute("/api/crm")({
                 // 3. Notification d'alerte pour le QG Direction
                 store.notifications.unshift({
                   id: `notif-${Date.now().toString(36)}`,
-                  targetRole: "admin",
-                  title: "🎉 Contrat Signé — Facture Émise",
-                  body: `${user.fullName} a signé le dossier ${lead.company} (${lead.budgetEur} €). Facture en attente de validation virement sur RIB KARMA SASU.`,
+                  targetMemberId: "all",
+                  type: "quote_accepted",
+                  title: "🎉 Contrat signé — proforma créée",
+                  message: `${user.fullName} a signé le dossier ${lead.company} (${lead.budgetEur} €). Vérifier le devis et les coordonnées bancaires avant émission définitive.`,
+                  link: "/crm?tab=invoices",
                   read: false,
                   createdAt: now,
                 });
               }
             }
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -418,7 +410,7 @@ export const Route = createFileRoute("/api/crm")({
             const leadId = String(body.leadId || "");
             store.leads = store.leads.filter((l) => l.id !== leadId);
             store.activities = store.activities.filter((a) => a.leadId !== leadId);
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -465,7 +457,7 @@ export const Route = createFileRoute("/api/crm")({
               message: `Appel #${lead.callsCount} (${lead.company}) : ${outcome} (${durationMinutes} min).`,
               createdAt: now,
             });
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -503,7 +495,7 @@ export const Route = createFileRoute("/api/crm")({
 
             store.clients.unshift(newClient);
 
-            // Facture officielle avec RIB KARMA SASU (Statut: pending_transfer pour validation Direction)
+            // Facture officielle avec coordonnées bancaires de l’entité contractante (Statut: pending_transfer pour validation Direction)
             const existingInv = store.invoices.find(
               (i) => i.clientCompany.toLowerCase() === lead.company.toLowerCase() && i.status !== "cancelled"
             );
@@ -513,25 +505,18 @@ export const Route = createFileRoute("/api/crm")({
               store.invoices.unshift({
                 id: invId,
                 clientId: newClient.id,
+                clientName: newClient.contactName,
                 clientCompany: lead.company,
-                clientEmail: newClient.email || "comptabilite@client.fr",
+                clientEmail: newClient.email || "",
                 paymentReference: refNum,
-                items: [
-                  {
-                    label: lead.serviceTarget || "Prestation Officielle XR Agency",
-                    quantity: 1,
-                    unitPriceEur: lead.budgetEur,
-                    totalEur: lead.budgetEur,
-                  },
-                ],
-                subtotalEur: lead.budgetEur,
-                vatEur: 0,
+                items: [{ label: lead.serviceTarget || "Prestation XR Agency", detail: "À confirmer dans le devis signé", amountEur: lead.budgetEur }],
                 totalEur: lead.budgetEur,
+                taxRatePct: 0,
+                taxNotice: "Régime de TVA à confirmer avant émission définitive.",
+                paymentMethod: "bank_transfer",
+                bankDetails: { beneficiary: "XR Agency", bankName: "À confirmer par la Direction", ibanMasked: "Non configuré", bic: "Non configuré", instructions: "Ne pas effectuer de virement avant réception des coordonnées bancaires officielles." },
                 status: "pending_transfer",
-                issueDate: now.slice(0, 10),
-                dueDate: now.slice(0, 10),
-                bankDetails: "KARMA SASU · IBAN FR76 1751 5900 0008 1234 5678 901 · BIC QNTOFR22",
-                notes: `Facture émise automatiquement suite à la conversion client par ${user.fullName}. En attente de validation du virement reçu sur le RIB KARMA SASU.`,
+                dueDate: new Date(Date.now() + 7 * 86_400_000).toISOString(),
                 createdAt: now,
                 updatedAt: now,
               });
@@ -548,7 +533,7 @@ export const Route = createFileRoute("/api/crm")({
               createdAt: now,
             });
 
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -579,7 +564,7 @@ export const Route = createFileRoute("/api/crm")({
               updatedAt: now,
             };
             store.clients.unshift(newClient);
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -597,7 +582,7 @@ export const Route = createFileRoute("/api/crm")({
               client.status = body.status as "active" | "vip" | "archived";
             }
             client.updatedAt = now;
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -627,14 +612,14 @@ export const Route = createFileRoute("/api/crm")({
               totalAnnualEur,
               status: "sent",
               validUntil: String(body.validUntil || new Date(Date.now() + 15 * 86_400_000).toISOString()),
-              paymentTerms: String(body.paymentTerms || "Virement bancaire professionnel. Acompte 50% commande / 50% livraison.").trim(),
+              paymentTerms: String(body.paymentTerms || "Conditions de règlement à confirmer sur le devis final.").trim(),
               notes: typeof body.notes === "string" ? body.notes : undefined,
               createdAt: now,
               updatedAt: now,
             };
             store.quotes.unshift(newQuote);
 
-            // Création automatique de la Facture / Proforma officielle avec RIB KARMA SASU intégré
+            // Création automatique de la Facture / Proforma officielle avec coordonnées bancaires de l’entité contractante intégré
             const invoiceId = `VIR-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
             const paymentReference = `XR-${quoteId.slice(-4)}-${Date.now().toString(36).toUpperCase().slice(-4)}`;
             const totalToPay = totalOnceEur + totalAnnualEur + totalMonthlyEur;
@@ -652,15 +637,15 @@ export const Route = createFileRoute("/api/crm")({
               })),
               totalEur: totalToPay,
               taxRatePct: 0,
-              taxNotice: "TVA non applicable, art. 293 B du CGI.",
+              taxNotice: "Régime de TVA à confirmer avant émission définitive.",
               paymentMethod: "bank_transfer",
               paymentReference,
               bankDetails: {
-                beneficiary: "KARMA SASU (XR Agency)",
-                bankName: "Banque Professionnelle France",
-                ibanMasked: "FR76 1005 7000 **** **** **** 42",
-                bic: "BNPAFRPPXXX",
-                instructions: `Mentionner impérativement la référence ${paymentReference} dans le libellé du virement bancaire.`,
+                beneficiary: "Entité contractante à confirmer",
+                bankName: "À confirmer par la Direction",
+                ibanMasked: "Non configuré",
+                bic: "Non configuré",
+                instructions: `Coordonnées bancaires à confirmer par la Direction avant tout virement. Référence : ${paymentReference}.`,
               },
               status: "pending_transfer",
               dueDate: new Date(Date.now() + 7 * 86_400_000).toISOString(),
@@ -681,7 +666,7 @@ export const Route = createFileRoute("/api/crm")({
               id: `notif-${Date.now().toString(36)}`,
               targetMemberId: "mem-admin",
               type: "quote_accepted",
-              title: "📄 Nouveau Devis & RIB généré",
+              title: "📄 Nouveau devis et proforma générés",
               message: `${user.fullName} a généré le devis ${newQuote.id} (${totalToPay.toLocaleString("fr-FR")} €) pour ${newQuote.clientCompany}.`,
               read: false,
               createdAt: now,
@@ -696,7 +681,7 @@ export const Route = createFileRoute("/api/crm")({
               createdAt: now,
             });
 
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -708,7 +693,7 @@ export const Route = createFileRoute("/api/crm")({
             if (["draft", "sent", "accepted", "rejected", "expired"].includes(newStatus)) {
               quote.status = newStatus as CrmQuoteRecord["status"];
               quote.updatedAt = now;
-              saveStore(store);
+              await saveStore(store);
             }
             return Response.json(buildSnapshot(store, user));
           }
@@ -736,7 +721,7 @@ export const Route = createFileRoute("/api/crm")({
               createdAt: now,
             });
 
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -773,7 +758,7 @@ export const Route = createFileRoute("/api/crm")({
               updatedAt: now,
             };
             store.projects.unshift(newProject);
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -791,7 +776,7 @@ export const Route = createFileRoute("/api/crm")({
             if (typeof body.liveUrl === "string") project.liveUrl = body.liveUrl;
             if (Array.isArray(body.milestones)) project.milestones = body.milestones as ProjectMilestone[];
             project.updatedAt = now;
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -814,7 +799,7 @@ export const Route = createFileRoute("/api/crm")({
               createdAt: now,
             };
             store.tasks.unshift(newTask);
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -824,14 +809,14 @@ export const Route = createFileRoute("/api/crm")({
             if (!task) return Response.json({ error: "Tâche introuvable." }, { status: 404 });
             task.status = task.status === "done" ? "todo" : "done";
             if (task.status === "done") task.doneAt = now;
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
           if (action === "delete_task") {
             const taskId = String(body.taskId || "");
             store.tasks = store.tasks.filter((t) => t.id !== taskId);
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -859,7 +844,7 @@ export const Route = createFileRoute("/api/crm")({
               message: `Sous-traitance studio XR validée sur ${lead.company} (${lead.outsourceRequest.scope}).`,
               createdAt: now,
             });
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -887,7 +872,7 @@ export const Route = createFileRoute("/api/crm")({
               createdAt: now,
             };
             store.providers.unshift(newProvider);
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -898,7 +883,7 @@ export const Route = createFileRoute("/api/crm")({
                 n.read = true;
               }
             });
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -909,9 +894,9 @@ export const Route = createFileRoute("/api/crm")({
             }
             const email = String(body.email || "").trim().toLowerCase();
             const fullName = String(body.fullName || "").trim();
-            const password = String(body.password || "EquipeXR2026!");
-            if (!email || !fullName) {
-              return Response.json({ error: "Nom complet et e-mail requis." }, { status: 400 });
+            const password = String(body.password || "");
+            if (!email || !fullName || password.length < 12) {
+              return Response.json({ error: "Nom, e-mail et mot de passe de 12 caractères minimum requis." }, { status: 400 });
             }
             if (store.members.some((m) => m.email.toLowerCase() === email)) {
               return Response.json({ error: "Un compte existe déjà avec cet e-mail." }, { status: 409 });
@@ -929,7 +914,7 @@ export const Route = createFileRoute("/api/crm")({
               createdAt: now,
             };
             store.members.push(member);
-            saveStore(store);
+            await saveStore(store);
             return Response.json(buildSnapshot(store, user));
           }
 
@@ -944,3 +929,5 @@ export const Route = createFileRoute("/api/crm")({
     },
   },
 });
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
