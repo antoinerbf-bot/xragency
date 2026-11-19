@@ -53,7 +53,7 @@ function VietnamLandingPage() {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     name: "XR Agency Vietnam",
-    alternateName: "KARMA SASU",
+    
     url: "https://xragencyai.com/creation-site-internet-vietnam",
     logo: "https://xragencyai.com/logo-xr-agency.svg",
     image: "https://xragencyai.com/og-image.svg",
@@ -62,31 +62,11 @@ function VietnamLandingPage() {
     telephone: "+33 7 67 56 67 83",
     email: "contact.xragency@gmail.com",
     priceRange: "€€€",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "Bureau Asie — Da Nang & Ho Chi Minh",
-      addressLocality: "Đà Nẵng",
-      postalCode: "550000",
-      addressCountry: "VN",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 16.0544,
-      longitude: 108.2022,
-    },
     areaServed: [
       { "@type": "City", name: "Đà Nẵng" },
       { "@type": "City", name: "Thành phố Hồ Chí Minh" },
       { "@type": "City", name: "Hà Nội" },
       { "@type": "Country", name: "Vietnam" },
-    ],
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        opens: "08:00",
-        closes: "20:00",
-      },
     ],
   };
 
@@ -177,7 +157,7 @@ function VietnamLandingPage() {
                 </a>
 
                 <Link
-                  to="/services/websites"
+                  to="/services/$serviceId" params={{ serviceId: "websites" }}
                   className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-4 font-mono text-xs font-bold uppercase tracking-wider text-white transition hover:bg-white/10"
                 >
                   <span>Nos Formules Dès 7j</span>
@@ -345,7 +325,7 @@ function VietnamLandingPage() {
                 <span className="font-mono text-[10px] text-[#d4af37] font-bold uppercase">SIÈGE EUROPÉEN</span>
                 <h3 className="text-2xl font-bold uppercase text-white mt-2">Paris & France</h3>
                 <p className="text-xs sm:text-sm text-[#94a3b8] mt-3 leading-relaxed">
-                  Siège social sur les Champs-Élysées à Paris. La garantie juridique, technique et contractuelle d'une société française (KARMA SASU).
+                  Direction artistique française et accompagnement international. L'entité contractante et les conditions juridiques sont précisées sur le devis final.
                 </p>
               </div>
               <div className="mt-8 pt-6 border-t border-white/10">
@@ -431,3 +411,5 @@ function VietnamLandingPage() {
     </div>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
