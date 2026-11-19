@@ -293,11 +293,6 @@ export const SERVICES_DATA: LocalizedChoice[] = [
     detail: { fr: "Fiche locale, visibilité et optimisation locale", en: "Local Pack top 3, local SEO and reputation setup", vi: "Tối ưu hồ sơ địa phương, vị trí top 3 và đánh giá", ar: "التواجد المحلي، الظهور في أفضل 3 وتحسين التقييمات", ru: "Топ-3 в Local Pack, карточка компании и отзывы" }
   },
   {
-    id: "ads",
-    label: { fr: "Google Ads", en: "Google Ads", vi: "Google Ads", ar: "إعلانات Google Ads", ru: "Google Реклама" },
-    detail: { fr: "Campagnes sponsorisées et acquisition payante", en: "High-ROI sponsored search and paid acquisition", vi: "Chiến dịch quảng cáo tìm kiếm trả phí chuyển đổi cao", ar: "حملات إعلانية ممولة واستقطاب مباشر عالي العائد", ru: "Контекстная реклама и платный целевой трафик" }
-  },
-  {
     id: "social",
     label: { fr: "Social Media", en: "Social Media", vi: "Mạng xã hội", ar: "شبكات التواصل الاجتماعي", ru: "SMM" },
     detail: { fr: "Stratégie, contenus et animation des réseaux", en: "Strategy, high-end content and community growth", vi: "Chiến lược, nội dung cao cấp và quản lý mạng xã hội", ar: "استراتيجية وصناعة محتوى فاخر وإدارة المنصات", ru: "Стратегия, премиальный контент и ведение сетей" }
