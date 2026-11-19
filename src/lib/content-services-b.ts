@@ -85,7 +85,7 @@ export const SERVICES_PART2 = [
       },
       {
         name: { fr: "Croissance Active", en: "Active Growth", vi: "Tăng trưởng Chủ động" },
-        eur: 499,
+        eur: 599,
         period: "month",
         popular: true,
         features: [
@@ -100,7 +100,7 @@ export const SERVICES_PART2 = [
       },
       {
         name: { fr: "Domination Sociale", en: "Social Domination", vi: "Phủ sóng Mạng xã hội" },
-        eur: 899,
+        eur: 799,
         period: "month",
         features: [
           { fr: "Engagement minimum 6 mois (production quotidienne & domination locale/nationale)", en: "6 months minimum commitment (daily production)", vi: "Cam kết tối thiểu 6 tháng" },
