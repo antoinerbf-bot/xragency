@@ -9,12 +9,10 @@ import { NexProWhySection } from "@/components/site/NexProWhySection";
 import { NexProMobileShowcase } from "@/components/site/NexProMobileShowcase";
 import { NexProProcessSection } from "@/components/site/NexProProcessSection";
 import { NexProPricingGrid } from "@/components/site/NexProPricingGrid";
-import { NexProReviews } from "@/components/site/NexProReviews";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
 import { DigitalAudit } from "@/components/site/DigitalAudit";
 import { MapsSimulator } from "@/components/site/MapsSimulator";
 import { ProofAndGuarantees } from "@/components/site/ProofAndGuarantees";
-import { InteractiveGlobalTeamGlobe } from "@/components/site/InteractiveGlobalTeamGlobe";
 import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
 import { SectorSelectionTunnel } from "@/components/site/SectorSelectionTunnel";
@@ -93,14 +91,8 @@ function Index() {
           {/* 07 / CONFIGURATEUR SUR MESURE */}
           <QuoteConfiguratorCompact />
 
-          {/* 08 / AVIS VÉRIFIÉS GOOGLE 5.0 ★ */}
-          <NexProReviews />
-
           <DigitalAudit />
           <AdvisorsShowcase />
-
-          {/* 08 / RAYONNEMENT MONDIAL ET ÉQUIPE */}
-          <InteractiveGlobalTeamGlobe />
 
           {/* 09 / ENGAGEMENTS CONTRACTUELS & SASU KARMA */}
           <ProofAndGuarantees />
