@@ -850,6 +850,9 @@ export async function loadStore(): Promise<CrmStore> {
     const { data, error } = await client.from("xr_crm_state").select("state,version").eq("id", "main").maybeSingle();
     if (error) throw new Error(`Lecture CRM Supabase impossible: ${error.message}`);
     if (data?.state) return attachVersion(data.state as CrmStore, Number(data.version));
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("CRM non initialisé : import des données validées requis avant ouverture du service.");
+    }
     const seeded = createInitialSeed();
     const { error: insertError } = await client.from("xr_crm_state").insert({ id: "main", state: seeded, version: 1 });
     if (insertError && insertError.code !== "23505") throw new Error(`Initialisation CRM impossible: ${insertError.message}`);
