@@ -251,9 +251,14 @@ export function RpgDashboardCommandCenter() {
       owner_id: newLeadForm.owner_id,
       business_name: newLeadForm.business_name.trim(),
       contact_name: newLeadForm.contact_name.trim() || "Dirigeant",
-      phone: newLeadForm.phone.trim() || "+33 6 00 00 00 00",
+      contact_email: null,
+      phone: newLeadForm.phone.trim() || null,
       website_url: newLeadForm.website_url.trim() || "https://exemple.fr",
+      industry: null,
+      country: "France",
+      city: null,
       status: "new",
+      latest_score: null,
       notes: "Lead créé dans le CRM RPG XR Agency.",
       created_at: now,
       updated_at: now,
@@ -497,7 +502,7 @@ export function RpgDashboardCommandCenter() {
                 const waUrl = buildOneClickWhatsAppRelance(
                   lead,
                   currentAdvisor.firstName,
-                  audit?.overall_score,
+                  audit?.total_score ?? undefined,
                 );
                 return (
                   <a
@@ -505,11 +510,11 @@ export function RpgDashboardCommandCenter() {
                     href={waUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => awardXp("call", `Relance SLA 48h ${lead.business_name}`)}
+                    onClick={() => awardXp("call", `Relance SLA 48h ${lead.business_name || "Entreprise"}`)}
                     className="px-3 py-2 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-bold text-xs flex items-center gap-1.5 transition"
                   >
                     <MessageSquare className="w-3.5 h-3.5" />
-                    Relancer {lead.business_name.slice(0, 18)}…
+                    Relancer {(lead.business_name || "Entreprise").slice(0, 18)}…
                   </a>
                 );
               })}
@@ -813,7 +818,7 @@ export function RpgDashboardCommandCenter() {
                         const waLink = buildOneClickWhatsAppRelance(
                           prospect,
                           ownerAdvisor.firstName,
-                          audit?.overall_score,
+                          audit?.total_score ?? undefined,
                         );
 
                         return (
@@ -876,12 +881,12 @@ export function RpgDashboardCommandCenter() {
                                 </span>
                                 <span
                                   className={`font-mono font-bold ${
-                                    audit.overall_score < 50
+                                    (audit.total_score ?? 0) < 50
                                       ? "text-rose-400"
                                       : "text-[#10B981]"
                                   }`}
                                 >
-                                  {audit.overall_score}/100
+                                  {audit.total_score}/100
                                 </span>
                               </div>
                             )}
@@ -1282,3 +1287,5 @@ export function RpgDashboardCommandCenter() {
   );
 }
 export default RpgDashboardCommandCenter;
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
