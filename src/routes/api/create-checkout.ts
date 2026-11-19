@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Resend } from "resend";
 import { CHECKOUT_PRODUCTS } from "@/lib/checkout-catalog";
-import { recordQuoteFromWebsite } from "@/lib/crm-store";
+import { isValidBic, isValidIban, normalizeIban, recordQuoteFromWebsite } from "@/lib/crm-store";
 
 type CheckoutBody = {
   sectorId?: string;
@@ -25,12 +25,12 @@ export const Route = createFileRoute("/api/create-checkout")({
 
           // ── A. ACTION : VIREMENT BANCAIRE PROFESSIONNEL ──
           if (body.action === "bank_transfer") {
-            const bankIban = process.env.XR_BANK_IBAN?.replace(/\s+/g, "") || "";
-            const bankBic = process.env.XR_BANK_BIC?.trim() || "";
+            const bankIban = normalizeIban(process.env.XR_BANK_IBAN || "");
+            const bankBic = process.env.XR_BANK_BIC?.trim().toUpperCase() || "";
             const bankBeneficiary = process.env.XR_BANK_BENEFICIARY?.trim() || "";
             const bankName = process.env.XR_BANK_NAME?.trim() || "";
-            if (!bankIban || !bankBic || !bankBeneficiary || !bankName) {
-              return Response.json({ error: "Le virement bancaire est temporairement indisponible : les coordonnées bancaires officielles doivent être configurées par la Direction." }, { status: 503 });
+            if (!isValidIban(bankIban) || !isValidBic(bankBic) || !bankBeneficiary || !bankName) {
+              return Response.json({ error: "Le virement bancaire est temporairement indisponible : les coordonnées bancaires officielles sont absentes ou invalides." }, { status: 503 });
             }
             const email = body.client?.email?.trim() || "";
             const name = body.client?.name?.trim() || "Client Pro";
