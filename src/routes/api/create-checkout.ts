@@ -25,11 +25,18 @@ export const Route = createFileRoute("/api/create-checkout")({
 
           // ── A. ACTION : VIREMENT BANCAIRE PROFESSIONNEL ──
           if (body.action === "bank_transfer") {
+            const bankIban = process.env.XR_BANK_IBAN?.replace(/\s+/g, "") || "";
+            const bankBic = process.env.XR_BANK_BIC?.trim() || "";
+            const bankBeneficiary = process.env.XR_BANK_BENEFICIARY?.trim() || "";
+            const bankName = process.env.XR_BANK_NAME?.trim() || "";
+            if (!bankIban || !bankBic || !bankBeneficiary || !bankName) {
+              return Response.json({ error: "Le virement bancaire est temporairement indisponible : les coordonnées bancaires officielles doivent être configurées par la Direction." }, { status: 503 });
+            }
             const email = body.client?.email?.trim() || "";
             const name = body.client?.name?.trim() || "Client Pro";
             const summary = body.summary || {};
 
-            const transferRes = recordQuoteFromWebsite({
+            const transferRes = await recordQuoteFromWebsite({
               clientName: name,
               clientCompany: body.client?.company?.trim() || `${name} (Société)`,
               clientEmail: email,
@@ -55,10 +62,10 @@ export const Route = createFileRoute("/api/create-checkout")({
               invoiceId: transferRes.invoiceId,
               paymentReference: transferRes.paymentReference,
               bankDetails: {
-                beneficiary: "KARMA SASU (XR Agency)",
-                bankName: "Banque Professionnelle France",
-                ibanMasked: "FR76 1005 7000 **** **** **** 42",
-                bic: "BNPAFRPPXXX",
+                beneficiary: bankBeneficiary,
+                bankName,
+                ibanMasked: `${bankIban.slice(0, 4)} •••• •••• •••• ${bankIban.slice(-4)}`,
+                bic: bankBic,
                 reference: transferRes.paymentReference,
               },
               message: "Votre ordre de virement et votre devis ont été générés. Mentionnez impérativement la référence de paiement lors du virement.",
@@ -74,7 +81,7 @@ export const Route = createFileRoute("/api/create-checkout")({
             const summary = body.summary || {};
 
             // Enregistrement garanti dans le CRM
-            const quoteRes = recordQuoteFromWebsite({
+            const quoteRes = await recordQuoteFromWebsite({
               clientName: body.client?.name?.trim() || "Client Devis",
               clientCompany: body.client?.company?.trim() || "Société",
               clientEmail: email,
@@ -282,3 +289,5 @@ export const Route = createFileRoute("/api/create-checkout")({
     },
   },
 });
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
