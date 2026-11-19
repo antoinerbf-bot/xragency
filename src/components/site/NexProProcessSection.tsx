@@ -13,33 +13,33 @@ interface Step {
 const STEPS: Step[] = [
   {
     num: "01",
-    days: "Jours 1 – 2",
-    title: "Échange & Maquette démo 24h",
-    desc: "Nous échangeons 15 minutes sur votre activité, vos clients cibles et vos concurrents. Sous 24 à 48 heures, vous recevez un lien privé pour tester votre future maquette interactive sans engagement.",
+    days: "Étape 1",
+    title: "Échange & cadrage du projet",
+    desc: "Nous échangeons sur votre activité, vos clients cibles et vos priorités. Le périmètre, les contenus et les prochaines étapes sont définis ensemble avant le lancement.",
     deliverable: "Maquette interactive sur smartphone & PC",
     icon: <Sparkles className="h-5 w-5 text-[#c5a880]" />,
   },
   {
     num: "02",
-    days: "Jours 3 – 7",
+    days: "Étape 2",
     title: "Développement haute couture",
-    desc: "Nous intégrons votre identité visuelle, rédigeons des textes persuasifs axés sur le closing et optimisons chaque ligne de code pour garantir un score de vitesse supérieur à 95/100 sur Google PageSpeed.",
-    deliverable: "Design responsive & Vitesse ultra-rapide (<1s)",
+    desc: "Nous intégrons votre identité visuelle, rédigeons des textes persuasifs axés sur le closing et optimisons les performances, l’accessibilité et le référencement technique selon les objectifs du projet.",
+    deliverable: "Design responsive & optimisation des performances",
     icon: <FileCode className="h-5 w-5 text-[#dfc39d]" />,
   },
   {
     num: "03",
-    days: "Jours 8 – 11",
+    days: "Étape 3",
     title: "Domination Google Maps & SEO",
     desc: "Configuration chirurgicale de votre fiche Google Business Profile, ciblage des requêtes locales les plus rentables de votre ville et mise en place des boutons d'appel et WhatsApp directs.",
-    deliverable: "Pack Local 3-Pack & Avis automatisés",
+    deliverable: "Visibilité locale & outils de contact",
     icon: <CheckCircle2 className="h-5 w-5 text-emerald-400" />,
   },
   {
     num: "04",
-    days: "Jour 14",
+    days: "Étape 4",
     title: "Lancement officiel & Accompagnement",
-    desc: "Mise en ligne sur votre nom de domaine sécurisé (HTTPS), formation de 30 minutes en visio pour prendre en main vos outils et remise de la propriété intégrale de votre code. Support garanti 7j/7.",
+    desc: "Mise en ligne sur votre nom de domaine sécurisé (HTTPS), formation de 30 minutes en visio pour prendre en main vos outils et remise de la propriété intégrale de votre code. Les modalités d’accompagnement et de support sont précisées dans votre offre.",
     deliverable: "Site en ligne & Accompagnement dédié",
     icon: <Rocket className="h-5 w-5 text-[#c5a880]" />,
   },
@@ -63,7 +63,7 @@ export function NexProProcessSection() {
           <div className="sec-head-line">
             <div className="sec-head-dash" />
             <span className="mono-nex text-white/70">
-              <b className="text-[#c5a880] font-bold">04</b> / DÉROULEMENT DU PROJET · 14 JOURS CHRONO
+              <b className="text-[#c5a880] font-bold">04</b> / DÉROULEMENT DU PROJET · 4 ÉTAPES
             </span>
           </div>
 

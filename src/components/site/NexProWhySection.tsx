@@ -25,18 +25,18 @@ const WHY_ITEMS: WhyItem[] = [
     lead: "Chaque marque, restaurant, domaine ou cabinet bénéficie d'une architecture singulière. Nous ne clonons pas de thèmes WordPress préconçus.",
     details: [
       "Direction artistique de prestige adaptée à votre secteur d'activité",
-      "Vitesse de chargement optimale (score 95+ PageSpeed) et hébergement souverain",
+      "Performance technique, sécurité et hébergement adaptés au projet",
       "Conversion mobile first : vos prospects commandent en 2 taps",
     ],
   },
   {
     num: "03",
-    title: "Un interlocuteur unique & engagement livraison 24–48h",
+    title: "Un interlocuteur dédié & un suivi clair",
     lead: "De la première discussion jusqu'au lancement en ligne, vous échangez directement avec votre directeur de projet dédié.",
     details: [
-      "Maquette démo offerte sous 24 à 48 heures : vous jugez sur pièces avant tout engagement",
+      "Une proposition adaptée au périmètre : vous validez la direction avant la production",
       "Pas de chaîne d'intermédiaires ni de tickets support sans fin",
-      "Garantie contractuelle SASU KARMA enregistrée au RCS de Paris",
+      "Cadre contractuel et périmètre définis avant le démarrage",
     ],
   },
 ];

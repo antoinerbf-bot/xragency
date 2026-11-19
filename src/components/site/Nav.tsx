@@ -13,16 +13,6 @@ import { XR_PHOTOS } from "@/lib/photography";
 const IDS=["websites","branding","seo","maps","social","maintenance","robotics"] as const;
 const ICONS={websites:Monitor,branding:Palette,seo:Search,maps:MapPinned,social:Share2,maintenance:ShieldCheck,robotics:Bot};
 
-const BASE_PRICES: Record<string, { eur: number; period?: string }> = {
-  websites: { eur: 499 },
-  branding: { eur: 199 },
-  seo: { eur: 299, period: "/m" },
-  maps: { eur: 999, period: "/an" },
-  social: { eur: 349, period: "/m" },
-  maintenance: { eur: 29, period: "/m" },
-  robotics: { eur: 499 },
-};
-
 
 function FlagIcon({ code }: { code: string }) {
   const common = { width: 24, height: 16, viewBox: "0 0 30 20", role: "img" as const, focusable: "false" as const, className: "block shrink-0 overflow-hidden rounded-[2px] shadow-[0_1px_3px_rgba(0,0,0,.22)]" };
@@ -79,7 +69,7 @@ export function Nav() {
             scrolled
               ? "border-white/15 bg-black/60 text-white shadow-[0_16px_40px_-15px_rgba(0,0,0,0.6)] backdrop-blur-2xl dark:border-white/15 dark:bg-black/60 dark:text-white"
               : heroTop
-                ? "border-[#101114]/10 bg-[#f8f6f0]/88 text-[#101114] shadow-[0_8px_30px_rgba(16,17,20,0.08)] backdrop-blur-xl dark:border-white/15 dark:bg-black/50 dark:text-white"
+                ? "border-transparent bg-transparent text-white shadow-none backdrop-blur-0"
                 : "border-neutral-200/80 bg-white/80 text-neutral-900 shadow-sm backdrop-blur-xl dark:border-white/15 dark:bg-black/50 dark:text-white"
           )}
         >
@@ -149,7 +139,7 @@ export function Nav() {
                               <div className="mt-3 flex items-center justify-between border-t border-white/20 pt-2.5">
                                 <span className="label-mono text-[6px] tracking-[.14em] text-white/55">{t(UI.navFromPrice)}</span>
                                 <span className="label-mono text-[8px] font-semibold text-white">
-                                  {price(BASE_PRICES[id].eur)}{BASE_PRICES[id].period ?? ""}
+                                  {price(s.fromEur)}{s.fromPeriod === "month" ? "/m" : s.fromPeriod === "year" ? "/an" : ""}
                                 </span>
                               </div>
                             </div>
