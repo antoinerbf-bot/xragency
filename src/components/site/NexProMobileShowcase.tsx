@@ -36,7 +36,7 @@ export function NexProMobileShowcase() {
               </h2>
 
               <p className="mt-4 text-sm sm:text-base text-neutral-300 leading-relaxed">
-                Plus de 78% des recherches locales et des commandes se font aujourd'hui sur smartphone. Nos architectures sont pensées pour convertir instantanément au doigt.
+                Une grande partie des parcours de découverte et de contact se déroule sur smartphone. Nos interfaces sont donc pensées en priorité pour une navigation simple, rapide et naturelle.
               </p>
             </div>
 
@@ -44,8 +44,8 @@ export function NexProMobileShowcase() {
             <div className="mt-8 space-y-4">
               {[
                 {
-                  title: "Temps de chargement inférieur à 1 seconde",
-                  desc: "Chaque milliseconde gagnée augmente vos réservations. Score PageSpeed 95+ garanti.",
+                  title: "Performances pensées pour le mobile",
+                  desc: "Chaque milliseconde gagnée augmente vos réservations. Optimisation des médias, du code et des ressources.",
                 },
                 {
                   title: "Action directe en 1 tap (WhatsApp, Téléphone, Devis)",
