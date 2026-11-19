@@ -47,7 +47,7 @@ const ROBOTICS_DETAILS: Record<Lang, string> = {
   ru: "Аренда сервисных роботов от 499 €/мес · покупка · мероприятия от 250 €.",
 };
 
-const BASE_PRICES: Record<string, number> = { website: 499, branding: 179, seo: 299, maps: 990, ads: 299, social: 299, content: 399, conversion: 299, maintenance: 29, robotics: 499 };
+const BASE_PRICES: Record<string, number> = { website: 499, branding: 179, seo: 299, maps: 990, social: 299, content: 399, conversion: 299, maintenance: 29, robotics: 499 };
 
 const PROFILE_SERVICE_RULES: Record<string, string[]> = Object.fromEntries(
   Object.entries(SERVICE_ORDER).map(([sectorId, services]) => [sectorId, services.slice(0, 4)])
@@ -438,12 +438,12 @@ export function QuoteConfiguratorCompact() {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(6.3);
       doc.setTextColor(...ink);
-      doc.text("KARMA SASU · XRAGENCY", M, 287);
+      doc.text("XRAGENCY", M, 287);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(5.7);
       doc.setTextColor(...muted);
-      doc.text("SIREN 889 178 141 · SIRET 889 178 141 00012 · RCS Paris", M, 292);
-      doc.text("78 Avenue des Champs-Elysees · Bureau 562 · 75008 Paris · France", M, 296);
+      doc.text("Informations legales de l’editeur a confirmer", M, 292);
+      
       doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83 · xragencyai.com", M, 300);
       doc.setTextColor(...blue);
       doc.setFont("helvetica", "bold");
@@ -544,7 +544,7 @@ export function QuoteConfiguratorCompact() {
   const card = (item: Choice, onClick: () => void, selected = false, priceDelta?: string) => {
     const icons: Record<string, string> = {
       restaurant: "🍽️", hospitality: "🏨", realestate: "🏡", automotive: "🚘", fashion: "👜", jewelry: "💎", beauty: "✨", health: "🩺", architecture: "🏛️", construction: "🛠️", legal: "⚖️", finance: "📈", commerce: "🛍️", tourism: "✈️", agency: "🎨", other: "💡",
-      website: "🖥️", branding: "🎨", seo: "🔎", maps: "📍", ads: "🚀", social: "💬", content: "🎬", conversion: "🧭", maintenance: "🛠️", robotics: "🤖",
+      website: "🖥️", branding: "🎨", seo: "🔎", maps: "📍", social: "💬", content: "🎬", conversion: "🧭", maintenance: "🛠️", robotics: "🤖",
       none: "🌱", existing: "🧩", redesign: "✨", outdated: "🕰️", invisible: "👀", selling: "🛒", international: "🌍", launch: "🚀",
       under500: "🌿", "500_1000": "🧱", "1000_2500": "🚀", "2500_5000": "💎", "5000_plus": "🏆",
       google: "🔍", referral: "🤝", mixed: "🌐",
