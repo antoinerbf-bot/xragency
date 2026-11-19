@@ -38,7 +38,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Taille de votre ville": "City size",
     "Nombre de mots-clés principaux": "Number of main keywords",
     "Votre positionnement actuel sur Google Maps": "Your current Google Maps ranking",
-    "Budget indicatif · à partir de 990 € / an": "Indicative budget · from €990 / year",
+    "Budget indicatif · à partir de 999 € / an": "Indicative budget · from €999 / year",
     "/ an": "/ year",
     "Estimation indicative · tarif exact après audit personnalisé": "Indicative estimate · exact price after personalized audit",
     "Objectif Top 3 · étude locale sur mesure": "Top 3 Target · tailored local study",
@@ -50,7 +50,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Méthodologie exclusive": "Exclusive methodology",
     "Le processus en 7 phases": "The 7-Phase Process",
     "Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.": "A structured, transparent and measurable approach to enhance your local visibility.",
-    "à partir de 990 € / an · objectif Top 3 sans garantie de position": "From €990 / year · Top 3 objective without position guarantee",
+    "à partir de 999 € / an · objectif Top 3 sans garantie de position": "From €999 / year · Top 3 objective without position guarantee",
     "Analyse Initiale": "Initial Analysis", "Diagnostic de présence": "Presence Diagnostic", "Audit technique complet de votre fiche actuelle, historique des avis, cohérence des données et pénalités éventuelles.": "Complete technical audit of your current listing, review history, NAP data consistency and potential penalties.",
     "Audit Concurrentiel": "Competitor Audit", "Décryptage du TOP 3": "Top 3 Breakdown", "Analyse chirurgicale des 3 concurrents occupant actuellement le Local Pack : volume d'avis, mots-clés et autorité.": "In-depth analysis of the 3 competitors currently occupying the Local Pack: review volume, keywords and authority.",
     "Stratégie Ciblée": "Targeted Strategy", "Mots-clés & Zones": "Keywords & Areas", "Sélection rigoureuse des requêtes à fort volume de conversion et cartographie des rayons géographiques prioritaires.": "Rigorous selection of high-converting search queries and mapping of priority geographical radiuses.",
@@ -95,7 +95,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Taille de votre ville": "Quy mô thành phố",
     "Nombre de mots-clés principaux": "Số lượng từ khóa chính",
     "Votre positionnement actuel sur Google Maps": "Thứ hạng Google Maps hiện tại",
-    "Budget indicatif · à partir de 990 € / an": "Ngân sách tham khảo · từ 990 € / năm",
+    "Budget indicatif · à partir de 999 € / an": "Ngân sách tham khảo · từ 999 € / năm",
     "/ an": "/ năm",
     "Estimation indicative · tarif exact après audit personnalisé": "Ước tính tham khảo · giá chính xác sau kiểm toán cá nhân hóa",
     "Objectif Top 3 · étude locale sur mesure": "Mục tiêu Top 3 · nghiên cứu địa phương theo yêu cầu",
@@ -107,7 +107,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Méthodologie exclusive": "Phương pháp độc quyền",
     "Le processus en 7 phases": "Quy trình 7 giai đoạn",
     "Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.": "Phương pháp tiếp cận có cấu trúc, minh bạch và đo lường được để nâng cao khả năng hiển thị địa phương của bạn.",
-    "à partir de 990 € / an · objectif Top 3 sans garantie de position": "Từ 990 € / năm · Mục tiêu Top 3 không cam kết vị trí cố định",
+    "à partir de 999 € / an · objectif Top 3 sans garantie de position": "Từ 999 € / năm · Mục tiêu Top 3 không cam kết vị trí cố định",
     "Analyse Initiale": "Phân tích ban đầu", "Diagnostic de présence": "Chẩn đoán hiện diện", "Audit technique complet de votre fiche actuelle, historique des avis, cohérence des données et pénalités éventuelles.": "Kiểm toán kỹ thuật toàn diện hồ sơ hiện tại, lịch sử đánh giá, tính nhất quán dữ liệu và các hình phạt tiềm ẩn.",
     "Audit Concurrentiel": "Kiểm toán đối thủ", "Décryptage du TOP 3": "Phân tích TOP 3", "Analyse chirurgicale des 3 concurrents occupant actuellement le Local Pack : volume d'avis, mots-clés et autorité.": "Phân tích chuyên sâu 3 đối thủ đang chiếm giữ Local Pack: lượng đánh giá, từ khóa và độ uy tín.",
     "Stratégie Ciblée": "Chiến lược mục tiêu", "Mots-clés & Zones": "Từ khóa & Khu vực", "Sélection rigoureuse des requêtes à fort volume de conversion et cartographie des rayons géographiques prioritaires.": "Lựa chọn kỹ lưỡng các truy vấn có tỷ lệ chuyển đổi cao và lập bản đồ bán kính địa lý ưu tiên.",
@@ -152,7 +152,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Taille de votre ville": "Размер города",
     "Nombre de mots-clés principaux": "Количество основных ключевых слов",
     "Votre positionnement actuel sur Google Maps": "Ваше текущее положение в Google Maps",
-    "Budget indicatif · à partir de 990 € / an": "Ориентировочный бюджет · от 990 € в год",
+    "Budget indicatif · à partir de 999 € / an": "Ориентировочный бюджет · от 999 € в год",
     "/ an": "/ год",
     "Estimation indicative · tarif exact après audit personnalisé": "Предварительная оценка · точная цена после персонального аудита",
     "Objectif Top 3 · étude locale sur mesure": "Цель — топ-3 · индивидуальное локальное исследование",
@@ -164,7 +164,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Méthodologie exclusive": "Эксклюзивная методология",
     "Le processus en 7 phases": "Процесс из 7 этапов",
     "Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.": "Структурированный, прозрачный и измеримый подход для усиления вашей локальной видимости.",
-    "à partir de 990 € / an · objectif Top 3 sans garantie de position": "От 990 € в год · Цель — топ-3 без гарантии точной позиции",
+    "à partir de 999 € / an · objectif Top 3 sans garantie de position": "От 999 € в год · Цель — топ-3 без гарантии точной позиции",
     "Analyse Initiale": "Начальный анализ", "Diagnostic de présence": "Диагностика присутствия", "Audit technique complet de votre fiche actuelle, historique des avis, cohérence des données et pénalités éventuelles.": "Полный технический аудит текущего профиля, истории отзывов, согласованности данных и возможных санкций.",
     "Audit Concurrentiel": "Анализ конкурентов", "Décryptage du TOP 3": "Разбор топ-3", "Analyse chirurgicale des 3 concurrents occupant actuellement le Local Pack : volume d'avis, mots-clés et autorité.": "Детальный анализ 3 лидеров в Local Pack: объём отзывов, ключевые слова и авторитет профиля.",
     "Stratégie Ciblée": "Целевая стратегия", "Mots-clés & Zones": "Ключи и зоны", "Sélection rigoureuse des requêtes à fort volume de conversion et cartographie des rayons géographiques prioritaires.": "Тщательный отбор конверсионных запросов и картирование приоритетных географических зон.",
@@ -209,7 +209,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Taille de votre ville": "حجم مدينتك",
     "Nombre de mots-clés principaux": "عدد الكلمات المفتاحية الرئيسية",
     "Votre positionnement actuel sur Google Maps": "ترتيبك الحالي على Google Maps",
-    "Budget indicatif · à partir de 990 € / an": "ميزانية تقديرية · ابتداءً من 990 € سنويًا",
+    "Budget indicatif · à partir de 999 € / an": "ميزانية تقديرية · ابتداءً من 999 € سنويًا",
     "/ an": "/ سنويًا",
     "Estimation indicative · tarif exact après audit personnalisé": "تقدير أولي · السعر الدقيق بعد التدقيق المخصص",
     "Objectif Top 3 · étude locale sur mesure": "هدف أفضل 3 · دراسة محلية مخصصة",
@@ -221,7 +221,7 @@ const MAPS_TRANSLATIONS: Record<string, Record<string, string>> = {
     "Méthodologie exclusive": "منهجية حصرية",
     "Le processus en 7 phases": "العملية في 7 مراحل",
     "Une approche structurée, transparente et mesurable pour travailler votre visibilité locale.": "نهج منظم وشفاف وقابل للقياس لتعزيز ظهورك المحلي.",
-    "à partir de 990 € / an · objectif Top 3 sans garantie de position": "ابتداءً من 990 € سنويًا · هدف الوصول لأفضل 3 دون ضمان ترتيب محدد",
+    "à partir de 999 € / an · objectif Top 3 sans garantie de position": "ابتداءً من 999 € سنويًا · هدف الوصول لأفضل 3 دون ضمان ترتيب محدد",
     "Analyse Initiale": "التحليل الأولي", "Diagnostic de présence": "تشخيص الحضور", "Audit technique complet de votre fiche actuelle, historique des avis, cohérence des données et pénalités éventuelles.": "تدقيق تقني شامل لملفك الحالي، وسجل التقييمات، وتناسق البيانات، وأي عقوبات محتملة.",
     "Audit Concurrentiel": "تدقيق المنافسين", "Décryptage du TOP 3": "تحليل أفضل 3", "Analyse chirurgicale des 3 concurrents occupant actuellement le Local Pack : volume d'avis, mots-clés et autorité.": "تحليل دقيق لأبرز 3 منافسين يتصدرون الحزمة المحلية: حجم التقييمات، والكلمات المفتاحية، والسمعة.",
     "Stratégie Ciblée": "استراتيجية مستهدفة", "Mots-clés & Zones": "الكلمات والمناطق", "Sélection rigoureuse des requêtes à fort volume de conversion et cartographie des rayons géographiques prioritaires.": "اختيار مدروس للعبارات ذات معدل التحويل العالي وتحديد النطاقات الجغرافية ذات الأولوية.",
@@ -481,35 +481,35 @@ export function MapsSimulator() {
       `• Taille de ville : ${cityLabel}\n` +
       `• Mots-clés : ${kwLabel}\n` +
       `• Position actuelle : ${rankLabel}\n\n` +
-      `Référence de départ : à partir de 990 € / an · devis sur mesure\n\n` +
+      `Référence de départ : à partir de 999 € / an · devis sur mesure\n\n` +
       `Pouvons-nous lancer l'audit personnalisé ?`,
     en: `Hello XR Agency, I would like a tailored Google Maps Top 3 study.\n\n` +
       `• Industry: ${sectorLabel}\n` +
       `• City size: ${cityLabel}\n` +
       `• Keywords: ${kwLabel}\n` +
       `• Current ranking: ${rankLabel}\n\n` +
-      `Starting benchmark: from €990 / year · tailored quote\n\n` +
+      `Starting benchmark: from €999 / year · tailored quote\n\n` +
       `Can we start the personalised audit?`,
     vi: `Xin chào XR Agency, tôi muốn được tư vấn gói Google Maps Top 3 theo yêu cầu.\n\n` +
       `• Lĩnh vực: ${sectorLabel}\n` +
       `• Quy mô thành phố: ${cityLabel}\n` +
       `• Từ khóa: ${kwLabel}\n` +
       `• Thứ hạng hiện tại: ${rankLabel}\n\n` +
-      `Mức tham khảo: từ 990 € / năm · báo giá theo yêu cầu\n\n` +
+      `Mức tham khảo: từ 999 € / năm · báo giá theo yêu cầu\n\n` +
       `Chúng ta có thể bắt đầu kiểm toán cá nhân hóa không?`,
     ar: `مرحبًا XR Agency، أود الحصول على دراسة مخصصة لبلوغ أفضل 3 مراتب على Google Maps.\n\n` +
       `• مجال النشاط: ${sectorLabel}\n` +
       `• حجم المدينة: ${cityLabel}\n` +
       `• الكلمات المفتاحية: ${kwLabel}\n` +
       `• الترتيب الحالي: ${rankLabel}\n\n` +
-      `المرجع المبدئي: ابتداءً من 990 € سنويًا · عرض مخصص\n\n` +
+      `المرجع المبدئي: ابتداءً من 999 € سنويًا · عرض مخصص\n\n` +
       `هل يمكننا بدء التدقيق المخصص؟`,
     ru: `Здравствуйте, XR Agency! Хочу заказать индивидуальный расчёт по выводу в топ-3 Google Maps.\n\n` +
       `• Сфера: ${sectorLabel}\n` +
       `• Размер города: ${cityLabel}\n` +
       `• Ключевые слова: ${kwLabel}\n` +
       `• Текущая позиция: ${rankLabel}\n\n` +
-      `Базовый ориентир: от 990 € в год · индивидуальный расчёт\n\n` +
+      `Базовый ориентир: от 999 € в год · индивидуальный расчёт\n\n` +
       `Можем ли мы запустить персональный аудит?`,
   } as const)[(lang as "fr" | "en" | "vi" | "ar" | "ru")] ?? `Bonjour XR Agency, je souhaite une étude Google Maps Top 3 sur mesure.`);
 
@@ -745,7 +745,7 @@ export function MapsSimulator() {
                     {rank === "absent" ? tx("VISIBILITÉ À CONSTRUIRE") : rank === "below20" ? tx("SIGNAL À RENFORCER") : tx("POSITIONNEMENT À DÉVELOPPER")}
                   </span>
                   <span className="font-mono text-[8px] font-bold text-emerald-400">
-                    TOP 3 PACK VISÉ
+                    OBJECTIF DE VISIBILITÉ
                   </span>
                 </div>
               </div>
@@ -777,7 +777,7 @@ export function MapsSimulator() {
                 <div>
                   <label className="label-mono mb-2 flex items-center gap-2 text-xs text-foreground font-bold">
                     <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-black text-black">★</span>
-                    Mots-clés & Ville visés pour le Top 3 (24h/24 · 7j/7)
+                    Recherches locales et zone ciblées
                   </label>
                   <input
                     type="text"
@@ -925,7 +925,7 @@ export function MapsSimulator() {
                 </div>
               </div>
 
-              {/* ── Dynamic Price Result (Offre 1 : Top 3 Garanti 999€+ & Offre 2 : Gestion Annuelle 500€/an) ── */}
+              {/* ── Dynamic Price Result (Offre 1 : visibilité locale sur mesure & Offre 2 : gestion annuelle 500€/an) ── */}
               <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.35fr_0.65fr]">
                 <div className="rounded-2xl border-2 border-primary/30 bg-[var(--xr-ink)]/5 p-5 sm:p-6 flex flex-col justify-between">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -974,7 +974,7 @@ export function MapsSimulator() {
                           className="label-mono inline-flex items-center justify-center gap-2 rounded-full bg-[#c5a880] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-[#090a0d] shadow-lg transition-all duration-200 hover:bg-[#e3c9a4] hover:-translate-y-0.5"
                         >
                           <Sparkles className="h-3.5 w-3.5" />
-                          Réserver mon audit Top 3 (1-Clic)
+                          Demander mon audit de visibilité locale
                         </button>
                         <a
                           href={`${CONTACT.whatsapp}?text=${encodeURIComponent(
@@ -1079,7 +1079,7 @@ export function MapsSimulator() {
                   <span className="label-mono text-[9px] uppercase tracking-widest text-[#c5a880]">
                     XR AGENCY · GOOGLE MAPS AUDIT OFFICIEL
                   </span>
-                  <h3 className="mt-1 text-lg font-bold">Réserver mon Audit Top 3 & Tarif Garanti</h3>
+                  <h3 className="mt-1 text-lg font-bold">Demander mon audit de visibilité locale</h3>
                 </div>
                 <button
                   type="button"
