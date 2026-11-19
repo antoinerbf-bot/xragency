@@ -47,9 +47,9 @@ export function NexProPricingGrid() {
                 <ul className="mt-5 space-y-2.5">
                   {service.highlights.slice(0, 3).map((feature, i) => <li key={i} className={`flex gap-2.5 text-xs leading-5 ${popular ? "text-white/75" : "text-[#57534c]"}`}><Check className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${popular ? "text-[#d9bd98]" : "text-[#9a7956]"}`} /><span>{t(feature)}</span></li>)}
                 </ul>
-                <Link to={href} className={`mt-auto inline-flex min-h-11 items-center justify-between gap-3 pt-7 text-xs font-semibold transition ${popular ? "text-[#e7caa5]" : "text-[#745b40]"}`}>
+                <a href={href} className={`mt-auto inline-flex min-h-11 items-center justify-between gap-3 pt-7 text-xs font-semibold transition ${popular ? "text-[#e7caa5]" : "text-[#745b40]"}`}>
                   Découvrir les formules <span className="grid h-8 w-8 place-items-center rounded-full border border-current/25 transition group-hover:translate-x-1"><ArrowRight className="h-4 w-4" /></span>
-                </Link>
+                </a>
               </article>
             );
           })}
