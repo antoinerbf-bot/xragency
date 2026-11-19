@@ -102,7 +102,7 @@ function Index() {
           {/* 08 / RAYONNEMENT MONDIAL ET ÉQUIPE */}
           <InteractiveGlobalTeamGlobe />
 
-          {/* 09 / ENGAGEMENTS CONTRACTUELS & SASU KARMA */}
+          {/* 09 / ENGAGEMENTS & GARANTIES XR AGENCY */}
           <ProofAndGuarantees />
 
           {/* 10 / QUESTIONS FRÉQUENTES */}
@@ -115,3 +115,5 @@ function Index() {
     </FunnelProvider>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
