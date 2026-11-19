@@ -47,7 +47,7 @@ const ROBOTICS_DETAILS: Record<Lang, string> = {
   ru: "Аренда сервисных роботов от 499 €/мес · покупка · мероприятия от 250 €.",
 };
 
-const BASE_PRICES: Record<string, number> = { website: 499, branding: 179, seo: 299, maps: 990, social: 299, content: 399, conversion: 299, maintenance: 29, robotics: 499 };
+const BASE_PRICES: Record<string, number> = { website: 499, branding: 179, seo: 299, maps: 999, social: 349, content: 399, conversion: 299, maintenance: 29, robotics: 499 };
 
 const PROFILE_SERVICE_RULES: Record<string, string[]> = Object.fromEntries(
   Object.entries(SERVICE_ORDER).map(([sectorId, services]) => [sectorId, services.slice(0, 4)])
@@ -209,14 +209,14 @@ export function QuoteConfiguratorCompact() {
       let label = service.label;
       let detail = service.detail;
       if (service.id === "maps") {
-        price = 990;
-        label = "Google Maps Top 3";
+        price = 999;
+        label = "Google Maps · visibilité locale";
         detail = {
-          fr: "SUR MESURE · à partir de 990 € / an · selon positionnement, zone, concurrence et mots-clés",
-          en: "BESPOKE · from €990 / year · based on ranking, area, competition and keywords",
-          vi: "THEO YÊU CẦU · từ 990 € / năm · tùy vị trí, khu vực, đối thủ và từ khóa",
-          ar: "مخصص · ابتداءً من 990 € سنويًا · وفق الترتيب والمنطقة والمنافسة والكلمات المفتاحية",
-          ru: "ПОД ЗАКАЗ · от 990 € в год · в зависимости от позиций, района, конкуренции и запросов",
+          fr: "SUR MESURE · à partir de 999 € / an · selon positionnement, zone, concurrence et mots-clés",
+          en: "BESPOKE · from €999 / year · based on ranking, area, competition and keywords",
+          vi: "THEO YÊU CẦU · từ 999 € / năm · tùy vị trí, khu vực, đối thủ và từ khóa",
+          ar: "مخصص · ابتداءً من 999 € سنويًا · وفق الترتيب والمنطقة والمنافسة والكلمات المفتاحية",
+          ru: "ПОД ЗАКАЗ · от 999 € в год · в зависимости от позиций, района, конкуренции и запросов",
         }[currentLang];
       }
       if (service.id === "website") {
@@ -779,7 +779,7 @@ export function QuoteConfiguratorCompact() {
                     <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                       {orderedServices.map(x => {
                         const p = proposals.find(item => item.id === x.id);
-                        const deltaTag = p ? p.custom ? QUOTE_UI.onQuote[currentLang] : p.period === "month" ? `${p.price.toLocaleString("fr-FR")} €${QUOTE_UI.perMonth[currentLang]}` : p.id === "maps" ? `990 €${QUOTE_UI.perYear[currentLang]}` : `+${p.price.toLocaleString("fr-FR")} €` : undefined;
+                        const deltaTag = p ? p.custom ? QUOTE_UI.onQuote[currentLang] : p.period === "month" ? `${p.price.toLocaleString("fr-FR")} €${QUOTE_UI.perMonth[currentLang]}` : p.id === "maps" ? `999 €${QUOTE_UI.perYear[currentLang]}` : `+${p.price.toLocaleString("fr-FR")} €` : undefined;
                         return card(x, () => toggleService(x.id), selectedServices.includes(x.id), deltaTag);
                       })}
                     </div>
