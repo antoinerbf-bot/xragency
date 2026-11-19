@@ -25,7 +25,7 @@ const WHY_ITEMS: WhyItem[] = [
     lead: "Chaque marque, restaurant, domaine ou cabinet bénéficie d'une architecture singulière. Nous ne clonons pas de thèmes WordPress préconçus.",
     details: [
       "Direction artistique de prestige adaptée à votre secteur d'activité",
-      "Vitesse de chargement optimale (score 95+ PageSpeed) et hébergement souverain",
+      "Performances techniques optimisées et hébergement web sécurisé",
       "Conversion mobile first : vos prospects commandent en 2 taps",
     ],
   },
@@ -36,7 +36,7 @@ const WHY_ITEMS: WhyItem[] = [
     details: [
       "Maquette démo offerte sous 24 à 48 heures : vous jugez sur pièces avant tout engagement",
       "Pas de chaîne d'intermédiaires ni de tickets support sans fin",
-      "Garantie contractuelle SASU KARMA enregistrée au RCS de Paris",
+      "Engagements, périmètre et garanties précisés dans le devis et le contrat signés",
     ],
   },
 ];
@@ -142,3 +142,5 @@ export function NexProWhySection() {
     </section>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
