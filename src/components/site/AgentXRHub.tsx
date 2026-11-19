@@ -645,7 +645,7 @@ export function AgentXRHub() {
       doc.text("XRAGENCY", M, 14);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(7.5);
-      doc.text("78 Avenue des Champs-Elysees · 75008 Paris", M, 20);
+      doc.text("xragencyai.com · Accompagnement France & international", M, 20);
       doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83", M, 25);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(13);
@@ -733,7 +733,7 @@ export function AgentXRHub() {
       doc.setFontSize(7);
       doc.setFont("helvetica", "normal");
       doc.setTextColor(...muted);
-      doc.text("KARMA SASU · SIREN 889 178 141 · Document indicatif soumis a validation technique finale.", M, 286);
+      doc.text("XR AGENCY · Document indicatif soumis a validation technique finale.", M, 286);
 
       const pdfBase64 = doc.output("datauristring").split(",")[1];
       doc.save(`XRAGENCY-Devis-${quoteNumber}.pdf`);
@@ -2070,3 +2070,5 @@ export function AgentXRHub() {
     </section>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
