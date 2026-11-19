@@ -117,7 +117,7 @@ export function NexProPricingGrid() {
           </h2>
 
           <p className="mt-3 text-sm sm:text-base text-neutral-400 max-w-2xl leading-relaxed">
-            Chaque formule fait l'objet d'un devis officiel détaillé et d'un contrat clair avec la SASU KARMA (Paris). Pas de frais cachés, pas de surprises.
+            Chaque formule fait l'objet d'un devis détaillé. L'identité de l'entité contractante et les conditions applicables sont précisées avant toute signature.
           </p>
         </div>
 
@@ -222,3 +222,5 @@ export function NexProPricingGrid() {
     </section>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
