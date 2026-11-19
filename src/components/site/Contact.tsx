@@ -83,7 +83,7 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const NEED_OPTIONS = [UI.contactFormNeedSite, UI.contactFormNeedRedesign, UI.contactFormNeedSeo, UI.contactFormNeedAds, UI.contactFormNeedAi, UI.contactFormNeedStrategy, UI.contactFormNeedOther];
+  const NEED_OPTIONS = [UI.contactFormNeedSite, UI.contactFormNeedRedesign, UI.contactFormNeedSeo, UI.contactFormNeedAi, UI.contactFormNeedStrategy, UI.contactFormNeedOther];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
