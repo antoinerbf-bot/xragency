@@ -291,6 +291,26 @@ export function getSigningSecret(): string {
   return secret;
 }
 
+export function normalizeIban(value: string): string {
+  return value.replace(/\s+/g, "").toUpperCase();
+}
+
+export function isValidIban(value: string): boolean {
+  const iban = normalizeIban(value);
+  if (!/^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/.test(iban)) return false;
+  const rearranged = iban.slice(4) + iban.slice(0, 4);
+  let remainder = 0;
+  for (const char of rearranged) {
+    const digits = char >= "A" && char <= "Z" ? String(char.charCodeAt(0) - 55) : char;
+    for (const digit of digits) remainder = (remainder * 10 + Number(digit)) % 97;
+  }
+  return remainder === 1;
+}
+
+export function isValidBic(value: string): boolean {
+  return /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}(?:[A-Z0-9]{3})?$/.test(value.trim().toUpperCase());
+}
+
 export function hashPassword(password: string): string {
   if (password.length < 12) throw new Error("Le mot de passe doit contenir au moins 12 caractères.");
   const salt = randomBytes(16);
@@ -1144,8 +1164,10 @@ export async function recordQuoteFromWebsite(params: {
   };
   asBankTransfer?: boolean;
 }): Promise<{ ok: boolean; quoteId: string; invoiceId?: string; paymentReference?: string }> {
-  if (params.asBankTransfer && (!process.env.XR_BANK_IBAN || !process.env.XR_BANK_BIC || !process.env.XR_BANK_BENEFICIARY || !process.env.XR_BANK_NAME)) {
-    throw new Error("Virement indisponible : les coordonnées bancaires officielles ne sont pas configurées.");
+  const configuredIban = normalizeIban(process.env.XR_BANK_IBAN || "");
+  const configuredBic = process.env.XR_BANK_BIC?.trim().toUpperCase() || "";
+  if (params.asBankTransfer && (!isValidIban(configuredIban) || !isValidBic(configuredBic) || !process.env.XR_BANK_BENEFICIARY?.trim() || !process.env.XR_BANK_NAME?.trim())) {
+    throw new Error("Virement indisponible : les coordonnées bancaires officielles sont absentes ou invalides.");
   }
   let store = await loadStore();
   const now = new Date().toISOString();
@@ -1202,8 +1224,8 @@ export async function recordQuoteFromWebsite(params: {
 
   // 3. Si option virement bancaire sélectionnée, génération de la facture proforma
   if (params.asBankTransfer) {
-    const bankIban = process.env.XR_BANK_IBAN?.replace(/\s+/g, "") || "";
-    const bankBic = process.env.XR_BANK_BIC?.trim() || "";
+    const bankIban = configuredIban;
+    const bankBic = configuredBic;
     const bankBeneficiary = process.env.XR_BANK_BENEFICIARY?.trim() || "";
     const bankName = process.env.XR_BANK_NAME?.trim() || "";
     if (!bankIban || !bankBic || !bankBeneficiary || !bankName) {
