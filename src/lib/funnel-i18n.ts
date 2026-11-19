@@ -259,11 +259,11 @@ export const FUNNEL_UI = {
       ru: "Вернуть этих клиентов вместе с XR Agency",
     },
     trustNotice: {
-      fr: "Estimation indicative basée sur les taux moyens de conversion observés en acquisition locale et web.",
-      en: "Indicative estimate based on benchmark conversion rates in local search and digital acquisition.",
-      vi: "Ước tính tham khảo dựa trên tỷ lệ chuyển đổi trung bình của thị trường.",
-      ar: "تقدير إرشادي مبني على متوسط معدلات التحويل في البحث المحلي والويب.",
-      ru: "Ориентировочный расчёт на основе средних показателей конверсии в локальном поиске.",
+      fr: "Simulation indicative calculée à partir des hypothèses que vous renseignez ; les résultats réels varient selon le marché et le projet.",
+      en: "Indicative simulation based on the assumptions you enter; actual results vary by market and project.",
+      vi: "Mô phỏng tham khảo dựa trên các giả định bạn nhập; kết quả thực tế tùy thuộc thị trường và dự án.",
+      ar: "محاكاة إرشادية تستند إلى الافتراضات التي تُدخلها؛ وتختلف النتائج الفعلية حسب السوق والمشروع.",
+      ru: "Ориентировочная модель на основе введённых вами предположений; фактические результаты зависят от рынка и проекта.",
     },
   },
   rail: {
