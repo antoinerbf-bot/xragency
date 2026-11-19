@@ -38,11 +38,11 @@ export const UI: Record<string, L> = {
   heroTitleAccent: { fr: "Digital", en: "Digital", vi: "Digital", ar: "الرقمي", ru: "Digital" },
   heroTitle2: { fr: "Sur-Mesure.", en: "Craftsmanship.", vi: "Craftsmanship.", ar: "المصمم حسب الطلب.", ru: "Индивидуальная работа." },
   heroLead: {
-    fr: "Une maison d'excellence dédiée aux dirigeants exigeants : communication, marketing d'acquisition, sites web sur-mesure, Google Maps Top 3 garanti, automatisation IA, développement de logiciels / CRM & robotique humanoïde.",
-    en: "An independent house for demanding leaders: communication, growth marketing, bespoke websites, guaranteed Google Maps Top 3, AI automation, custom software / CRM & humanoid robotics.",
-    vi: "Một studio độc lập kiến tạo trải nghiệm số cho những thương hiệu khắt khe: truyền thông, marketing, website, SEO, Google Maps Top 3, tự động hóa AI, phần mềm riêng & robot.",
-    ar: "وكالة متكاملة للقادة الطموحين: الاتصالات والتسويق والمواقع المخصصة وGoogle Maps Top 3 وأتمتة الذكاء الاصطناعي وتطوير البرمجيات والروبوتات.",
-    ru: "Независимое агентство полного цикла: коммуникации, маркетинг, сайты на заказ, гарантированный Топ-3 Google Maps, автоматизация ИИ, разработка ПО и гуманоидная робототехника.",
+    fr: "Une maison d'excellence dédiée aux dirigeants exigeants : communication, marketing d'acquisition, sites web sur-mesure, stratégie Google Maps, automatisation IA, développement de logiciels / CRM & robotique humanoïde.",
+    en: "An independent house for demanding leaders: communication, growth marketing, bespoke websites, Google Maps strategy, AI automation, custom software / CRM & humanoid robotics.",
+    vi: "Một studio độc lập kiến tạo trải nghiệm số cho những thương hiệu khắt khe: truyền thông, marketing, website, SEO, chiến lược Google Maps, tự động hóa AI, phần mềm riêng & robot.",
+    ar: "وكالة متكاملة للقادة الطموحين: الاتصالات والتسويق والمواقع المخصصة واستراتيجية Google Maps وأتمتة الذكاء الاصطناعي وتطوير البرمجيات والروبوتات.",
+    ru: "Независимое агентство полного цикла: коммуникации, маркетинг, сайты на заказ, стратегия Google Maps, автоматизация ИИ, разработка ПО и гуманоидная робототехника.",
   },
   heroMeta: {
     fr: "France · Dubaï · Asie · International",
