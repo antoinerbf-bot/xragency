@@ -72,10 +72,10 @@ export function ProofAndGuarantees() {
             <div className="sm:px-6 first:pl-0">
               <span className="label-mono text-[7px] xr-muted-2 block mb-1.5 flex items-center gap-1.5 justify-center sm:justify-start">
                 <Building2 className="h-3 w-3" />
-                SOCIÉTÉ ENREGISTRÉE EN FRANCE
+                INFORMATIONS CONTRACTUELLES
               </span>
-              <p className="text-xs font-semibold">KARMA SASU · SIREN 889 178 141</p>
-              <p className="text-[10px] xr-muted mt-0.5">78 Avenue des Champs-Élysées, 75008 Paris</p>
+              <p className="text-xs font-semibold">Entité contractante précisée au devis</p>
+              <p className="text-[10px] xr-muted mt-0.5">Consultez les mentions légales avant toute commande</p>
             </div>
 
             <div className="pt-4 sm:pt-0 sm:px-6">
@@ -101,3 +101,5 @@ export function ProofAndGuarantees() {
     </section>
   );
 }
+
+[executed on device: MacBook-Air-de-rousseau.local (0e45da18-76cf-43a9-8d87-a4dcd1ea626d)]
