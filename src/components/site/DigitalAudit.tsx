@@ -33,7 +33,7 @@ const UI = {
     openSite: "Ouvrir", exportChapter: "EXPORT / NEXT STEP", exportTitle: "Gardez le diagnostic. Puis agissez.",
     waPrefill: "Bonjour XR Agency, j'ai terminé mon audit digital. Site : ",
     pdfReport: "RAPPORT", pdfSiteAudited: "Site audité", pdfScore: "Score", pdfDetected: "Éléments détectés", pdfTitle: "Titre", pdfMeta: "Meta description", pdfNotDetected: "Non détecté", pdfFindings: "Constats", pdfToImprove: "À améliorer · ", pdfPositive: "Signal positif · ", pdfRecommendations: "Recommandations",
-    hudStatus: "SCANNER HUD DIGITAL", hudLive: "ANALYSE EN TEMPS RÉEL", hudSsl: "SÉCURITÉ SSL/TLS", hudDom: "STRUCTURE DOM", hudSpeed: "CORE WEB VITALS", hudUx: "EXPÉRIENCE MOBILE", hudLaser: "BALAYAGE RADAR XR ACTIF",
+    hudStatus: "SCANNER HUD DIGITAL", hudLive: "PRÊT POUR L’ANALYSE", hudSsl: "SÉCURITÉ SSL/TLS", hudDom: "STRUCTURE DOM", hudSpeed: "CORE WEB VITALS", hudUx: "EXPÉRIENCE MOBILE", hudLaser: "BALAYAGE RADAR XR ACTIF",
     hudAwaiting: "EN ATTENTE", hudAwaitingBadge: "DÉMONSTRATION · EN ATTENTE", hudPending: "En attente de scan", hudBenchmarkSample: "Aperçu de diagnostic",
   },
   en: {
@@ -261,7 +261,7 @@ export function DigitalAudit(){
                     </span>
                   </div>
                   <span className="label-mono text-[6.5px] text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 rounded-full px-2 py-0.5 font-bold">
-                    {loading ? t.hudLive : "SCANNER ACTIF"}
+                    {loading ? t.hudLive : "EN ATTENTE"}
                   </span>
                 </div>
 
@@ -270,7 +270,7 @@ export function DigitalAudit(){
                   <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
                     <span className="block label-mono text-[6.5px] text-white/50">{t.hudSsl}</span>
                     <span className="mt-1 block text-sm font-mono font-bold text-emerald-400">
-                      {loading ? "SCAN EN COURS…" : "ANALYSE ACTIVE"}
+                      {loading ? "SCAN EN COURS…" : "—"}
                     </span>
                     <span className="text-[7.5px] text-white/40 block mt-0.5">Certificat & chiffrement</span>
                   </div>
@@ -278,7 +278,7 @@ export function DigitalAudit(){
                   <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
                     <span className="block label-mono text-[6.5px] text-white/50">{t.hudSpeed}</span>
                     <span className="mt-1 block text-sm font-mono font-bold text-cyan-400">
-                      {loading ? "TEST LATENCE…" : "< 1.2s LCP"}
+                      {loading ? "TEST EN COURS…" : "—"}
                     </span>
                     <span className="text-[7.5px] text-white/40 block mt-0.5">Vitesse & Core Web Vitals</span>
                   </div>
@@ -286,7 +286,7 @@ export function DigitalAudit(){
                   <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
                     <span className="block label-mono text-[6.5px] text-white/50">{t.hudDom}</span>
                     <span className="mt-1 block text-sm font-mono font-bold text-amber-300">
-                      {loading ? "ANALYSE DOM…" : "Sémantique OK"}
+                      {loading ? "ANALYSE DOM…" : "—"}
                     </span>
                     <span className="text-[7.5px] text-white/40 block mt-0.5">Structure & Balisage Hn</span>
                   </div>
