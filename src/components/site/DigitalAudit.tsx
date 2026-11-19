@@ -270,7 +270,7 @@ export function DigitalAudit(){
                   <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
                     <span className="block label-mono text-[6.5px] text-white/50">{t.hudSsl}</span>
                     <span className="mt-1 block text-sm font-mono font-bold text-emerald-400">
-                      {loading ? "SCAN EN COURS…" : "TLS 1.3 · A+"}
+                      {loading ? "SCAN EN COURS…" : "ANALYSE ACTIVE"}
                     </span>
                     <span className="text-[7.5px] text-white/40 block mt-0.5">Certificat & chiffrement</span>
                   </div>
