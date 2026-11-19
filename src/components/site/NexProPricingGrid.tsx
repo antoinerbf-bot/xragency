@@ -1,12 +1,11 @@
 import { ArrowRight, Check, Star } from "lucide-react";
-import { Link } from "@tanstack/react-router";
 import { SERVICES, PERIOD_LABEL } from "@/lib/content";
 import { useLang } from "@/lib/i18n";
 
 const FEATURED_IDS = ["websites", "branding", "seo", "maps", "social", "maintenance", "robotics"];
 
 export function NexProPricingGrid() {
-  const { t, lang, price } = useLang();
+  const { t, price } = useLang();
   const services = FEATURED_IDS
     .map((id) => SERVICES.find((service) => service.id === id))
     .filter((service): service is (typeof SERVICES)[number] => Boolean(service));
