@@ -53,7 +53,7 @@ export function Hero() {
               {copy.services}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </a>
-            <a href="#vsl-showcase" className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-white/35 bg-white/5 px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-white backdrop-blur-sm transition hover:border-white/70 hover:bg-white/12">
+            <a href="#methode" className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-white/35 bg-white/5 px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-white backdrop-blur-sm transition hover:border-white/70 hover:bg-white/12">
               <span className="grid h-7 w-7 place-items-center rounded-full border border-white/45"><Play className="ml-0.5 h-3 w-3 fill-current" /></span>
               {copy.film}
             </a>
