@@ -71,9 +71,11 @@ import { CrmCloserDashboard } from "@/components/crm/CrmCloserDashboard";
 import { CrmUltraLudiqueArena } from "@/components/crm/CrmUltraLudiqueArena";
 import { CharacterSelectLogin } from "@/components/crm/CharacterSelectLogin";
 import { CrmSchoolDashboard } from "@/components/crm/CrmSchoolDashboard";
+import { CrmSimsHQ3D } from "@/components/crm/CrmSimsHQ3D";
 import { XR_ADVISORS } from "@/lib/xr-advisors";
 import { playXpChime, generateLovableArchitecturePrompt } from "@/lib/rpg-engine";
 import { cn } from "@/lib/utils";
+import type { Prospect } from "@/lib/saas/types";
 import agentXrPortrait from "@/assets/agent-xr-portrait.jpg";
 
 export const Route = createFileRoute("/crm")({
@@ -96,8 +98,9 @@ interface SafeMember {
   email: string;
   fullName: string;
   title: string;
-  role: "admin" | "member";
-  portalType?: "director" | "closer" | "student";
+  role: "admin" | "member" | "client";
+  portalType?: "director" | "closer" | "student" | "client";
+  clientId?: string;
   phoneLine: string;
   commissionPct: number;
   active: boolean;
@@ -200,7 +203,7 @@ function playVictorySound() {
 function getWhatsappMessageText(
   templateKey: "maquette" | "relance" | "devis" | "contact",
   lead: CrmLead,
-  senderName: string
+  senderName: string,
 ) {
   const contact = lead.contactName || "Bonjour";
   const company = lead.company || "votre établissement";
@@ -213,7 +216,7 @@ function getWhatsappMessageText(
     return `Bonjour ${contact}, avez-vous pu jeter un œil à la proposition pour ${company} ? Vos concurrents renforcent actuellement leur visibilité sur Google Maps. Si vous souhaitez bloquer votre créneau de mise en ligne cette semaine, confirmez-moi et on valide !`;
   }
   if (templateKey === "devis") {
-    return `Bonjour ${contact}, voici les éléments pour valider votre commande pour ${company} (${lead.serviceTarget} à ${lead.budgetEur} €). Le virement est à adresser sur notre compte officiel KARMA SASU (IBAN transmis sur devis). Nous lançons la production dès réception !`;
+    return `Bonjour ${contact}, voici les éléments pour valider votre commande pour ${company} (${lead.serviceTarget} à ${lead.budgetEur} €). Le virement est à adresser sur les coordonnées bancaires indiquées sur le devis validé. Nous lançons la production dès réception !`;
   }
   return `Bonjour ${contact}, c'est ${senderName} de XR Agency à propos de la visibilité digitale de ${company}. Avez-vous 2 minutes pour échanger par message ?`;
 }
@@ -223,7 +226,7 @@ const OFFICIAL_CATALOG = [
     category: "Sites Internet (30 % Commission)",
     rate: "30 %",
     offers: [
-      { label: "Site Vitrine Pro (Clé en main 7j)", price: 499, period: "once" as const },
+      { label: "Site Vitrine Pro (sur devis)", price: 499, period: "once" as const },
       { label: "Site Business Sur-Mesure + SEO", price: 799, period: "once" as const },
       { label: "Site E-Commerce / Sur-Mesure Avancé", price: 1499, period: "once" as const },
     ],
@@ -232,15 +235,27 @@ const OFFICIAL_CATALOG = [
     category: "Google Maps Top 3 & Gestion (10 % Commission)",
     rate: "10 %",
     offers: [
-      { label: "Google Maps Top 3 Garanti 24/7 (1 An ou Remboursé)", price: 999, period: "year" as const },
-      { label: "Gestion Annuelle Fiche Google Maps (12 mois)", price: 500, period: "year" as const },
+      {
+        label: "Visibilité locale Google Maps (objectif défini après audit)",
+        price: 999,
+        period: "year" as const,
+      },
+      {
+        label: "Gestion Annuelle Fiche Google Maps (12 mois)",
+        price: 500,
+        period: "year" as const,
+      },
     ],
   },
   {
     category: "CRM, Logiciels & Systèmes POS (20 % Commission)",
     rate: "20 %",
     offers: [
-      { label: "CRM / Logiciel Métier Sur-Mesure + Automatisation IA", price: 2000, period: "once" as const },
+      {
+        label: "CRM / Logiciel Métier Sur-Mesure + Automatisation IA",
+        price: 2000,
+        period: "once" as const,
+      },
       { label: "Système Caisse POS & Borne Connectée", price: 2490, period: "once" as const },
     ],
   },
@@ -273,10 +288,10 @@ const SCHOOL_CURRICULUM_90D = [
     title: "Domination Google Maps, Suivi Maquettes & Traitement d'Objections",
     xp: "3 000 XP",
     modules: [
-      "Pitcher le Top 3 Google Maps garanti 24h/24, 7j/7 pendant 1 an ou remboursé + l'offre Gestion Annuelle à 500 €/an.",
+      "Présenter la méthode de travail sur Google Business Profile, sans garantie de positionnement, et détailler les modalités réelles de l’offre.",
       "Présenter la maquette validée par la Direction sur WhatsApp pour déclencher l'effet 'Waouh'.",
       "Désamorcer les 5 objections fatales ('C'est trop cher', 'J'ai déjà un site', 'Je dois réfléchir', 'Mon neveu s'en occupe').",
-      "Verrouiller l'engagement et envoyer le Devis + RIB KARMA SASU en direct pendant l'appel.",
+      "Verrouiller l'engagement et envoyer le Devis + coordonnées bancaires en direct pendant l'appel.",
     ],
   },
   {
@@ -295,16 +310,18 @@ const SCHOOL_CURRICULUM_90D = [
 const SCHOOL_OBJECTION_BATTLES = [
   {
     id: "obj-price",
-    prospectSay: "« J'ai pas le budget en ce moment, 999 € pour Google Maps ou 499 € pour un site c'est trop cher. »",
+    prospectSay:
+      "« J'ai pas le budget en ce moment, 999 € pour Google Maps ou 499 € pour un site c'est trop cher. »",
     goodReply:
-      "« Justement : aujourd'hui, vos concurrents qui sont dans le Top 3 Google Maps récupèrent 70 % des appels de votre ville gratuitement. Un seul nouveau client vous rembourse l'année entière, et en plus c'est garanti Top 3 pendant 1 an ou remboursé. On commence par regarder la maquette gratuite ensemble ? »",
-    badReply: "« D'accord je comprends, je vous rappelle dans 6 mois quand vous aurez de la trésorerie. »",
+      "« Justement : aujourd'hui, la visibilité dans les résultats locaux dépend de nombreux facteurs et varie selon les recherches. Nous pouvons examiner vos objectifs, votre zone et votre présence actuelle avant de définir un périmètre réaliste. Souhaitez-vous regarder les pistes d’amélioration ensemble ? »",
+    badReply:
+      "« D'accord je comprends, je vous rappelle dans 6 mois quand vous aurez de la trésorerie. »",
   },
   {
     id: "obj-already",
     prospectSay: "« J'ai déjà un site internet et une fiche Google Maps, j'ai besoin de rien. »",
     goodReply:
-      "« Super ! Mais quand un client tape votre métier + votre ville sur son téléphone, êtes-vous dans les 3 premiers résultats 24h/24 ? Si vous êtes en 2e page, 92 % des clients cliquent chez les 3 premiers. Je vous prépare un audit visuel et une maquette moderne sans engagement pour comparer ? »",
+      "« Très bien. Nous pouvons analyser votre présence actuelle, vos concurrents et les recherches utiles dans votre zone. Vous aurez un diagnostic concret avant de décider si des améliorations sont pertinentes. »",
     badReply: "« Ah mince, tant pis alors, bonne journée ! »",
   },
   {
@@ -320,12 +337,24 @@ const OPERATIONAL_CALENDAR_PLAYBOOKS = [
   {
     id: "cm",
     title: "📱 Planning Community Management (Réseaux Sociaux)",
-    badge: "349 € à 899 € / mois · Comm 10%/m",
+    badge: "349 € à 799 € / mois · Commission selon contrat",
     steps: [
-      { day: "Lundi", task: "Validation du calendrier éditorial de la semaine + script des Reels / TikTok." },
-      { day: "Mardi & Jeudi", task: "Publication Carrousel / Post HD aux heures d'audience maximale (12h15 / 18h30)." },
-      { day: "Mercredi & Vendredi", task: "Mise en ligne Reel 4K dynamique + Stories interactives (sondages, coulisses)." },
-      { day: "Samedi", task: "Modération des commentaires, réponses aux DM et rapport d'engagement hebdo." },
+      {
+        day: "Lundi",
+        task: "Validation du calendrier éditorial de la semaine + script des Reels / TikTok.",
+      },
+      {
+        day: "Mardi & Jeudi",
+        task: "Publication Carrousel / Post HD aux heures d'audience maximale (12h15 / 18h30).",
+      },
+      {
+        day: "Mercredi & Vendredi",
+        task: "Mise en ligne Reel 4K dynamique + Stories interactives (sondages, coulisses).",
+      },
+      {
+        day: "Samedi",
+        task: "Modération des commentaires, réponses aux DM et rapport d'engagement hebdo.",
+      },
     ],
   },
   {
@@ -333,10 +362,22 @@ const OPERATIONAL_CALENDAR_PLAYBOOKS = [
     title: "📍 Suivi Google Maps Top 3 & Gestion Annuelle",
     badge: "Dès 999 € / an ou Gestion 500 € / an · Comm 10%",
     steps: [
-      { day: "Semaine 1", task: "Validation analystes XR, audit mots-clés + ville, création ou refonte intégrale GBP." },
-      { day: "Hebdomadaire", task: "Ajout de photos géolocalisées, Google Posts optimisés et citations NAP locales." },
-      { day: "Continu 24/7", task: "Surveillance de la position Top 3, réponses aux avis 5★ et protection anti-modifications." },
-      { day: "Bilan Mensuel", task: "Envoi du rapport d'appels générés, clics site web et demandes d'itinéraires." },
+      {
+        day: "Semaine 1",
+        task: "Validation analystes XR, audit mots-clés + ville, création ou refonte intégrale GBP.",
+      },
+      {
+        day: "Hebdomadaire",
+        task: "Ajout de photos géolocalisées, Google Posts optimisés et citations NAP locales.",
+      },
+      {
+        day: "Continu 24/7",
+        task: "Surveillance de la position Top 3, réponses aux avis 5★ et protection anti-modifications.",
+      },
+      {
+        day: "Bilan Mensuel",
+        task: "Envoi du rapport d'appels générés, clics site web et demandes d'itinéraires.",
+      },
     ],
   },
   {
@@ -344,9 +385,18 @@ const OPERATIONAL_CALENDAR_PLAYBOOKS = [
     title: "🔍 Roadmap SEO & Référencement Naturel",
     badge: "299 € à 499 € / mois · Comm 10%/m",
     steps: [
-      { day: "Semaine 1", task: "Audit technique, vitesse mobile, balisage Schema.org et ciblage des requêtes d'achat." },
-      { day: "Semaine 2 & 3", task: "Rédaction et publication des pages piliers et articles SEO optimisés." },
-      { day: "Semaine 4", task: "Campagne de netlinking (backlinks d'autorité) et suivi des positions Google." },
+      {
+        day: "Semaine 1",
+        task: "Audit technique, vitesse mobile, balisage Schema.org et ciblage des requêtes d'achat.",
+      },
+      {
+        day: "Semaine 2 & 3",
+        task: "Rédaction et publication des pages piliers et articles SEO optimisés.",
+      },
+      {
+        day: "Semaine 4",
+        task: "Campagne de netlinking (backlinks d'autorité) et suivi des positions Google.",
+      },
     ],
   },
   {
@@ -354,10 +404,22 @@ const OPERATIONAL_CALENDAR_PLAYBOOKS = [
     title: "💻 Rétroplanning Livraison Site Web 7 Jours + Upsell J+30",
     badge: "499 € / 799 € / 1 499 € · Comm 30%",
     steps: [
-      { day: "J+1", task: "Création de la maquette par la Direction ➔ Lien validé et envoyé au client." },
-      { day: "J+2 à J+5", task: "Intégration responsive mobile/PC, copywriting persuasif et formulaires connectés." },
-      { day: "J+7", task: "Mise en ligne officielle, SSL, indexation Google & validation virement RIB." },
-      { day: "J+30", task: "Appel suivi satisfaction + proposition Upsell Google Maps Top 3 / WebCare / Parrainage." },
+      {
+        day: "J+1",
+        task: "Création de la maquette par la Direction ➔ Lien validé et envoyé au client.",
+      },
+      {
+        day: "J+2 à J+5",
+        task: "Intégration responsive mobile/PC, copywriting persuasif et formulaires connectés.",
+      },
+      {
+        day: "J+7",
+        task: "Mise en ligne officielle, SSL, indexation Google & validation virement RIB.",
+      },
+      {
+        day: "J+30",
+        task: "Appel suivi satisfaction + proposition Upsell Google Maps Top 3 / WebCare / Parrainage.",
+      },
     ],
   },
 ];
@@ -394,13 +456,19 @@ function CrmWorkspacePage() {
   const [successMsg, setSuccessMsg] = useState("");
 
   // ── AUTHENTICATION STATE (3 PORTAILS PAR CODE PIN) ──
-  const [selectedPortalRole, setSelectedPortalRole] = useState<"director" | "closer" | "student">("director");
+  const [selectedPortalRole, setSelectedPortalRole] = useState<"director" | "closer" | "student">(
+    "director",
+  );
   const [pinCode, setPinCode] = useState("");
   const [closerAccountEmail, setCloserAccountEmail] = useState("lucas@xragency.fr");
 
-  // ── DIRECTOR TABS & MODES D'AFFICHAGE (COCKPIT PRO vs BOSS ARCADE vs MONDE METAVERSE vs ARÈNE CLOSER) ──
-  const [directorDisplayMode, setDirectorDisplayMode] = useState<"cockpit" | "boss_arcade" | "game_world" | "closer_arena">("cockpit");
-  const [closerDisplayMode, setCloserDisplayMode] = useState<"missions" | "combat_hub">("combat_hub");
+  // ── DIRECTOR TABS & MODES D'AFFICHAGE (COCKPIT PRO vs BOSS ARCADE vs MONDE METAVERSE vs ARÈNE CLOSER vs SIMS HQ 3D) ──
+  const [directorDisplayMode, setDirectorDisplayMode] = useState<
+    "cockpit" | "boss_arcade" | "game_world" | "closer_arena" | "sims_3d"
+  >("sims_3d");
+  const [closerDisplayMode, setCloserDisplayMode] = useState<"missions" | "combat_hub" | "sims_3d">(
+    "combat_hub",
+  );
   const [directorTab, setDirectorTab] = useState<
     | "overview"
     | "leads"
@@ -430,6 +498,9 @@ function CrmWorkspacePage() {
   // ── STUDENT (XR SCHOOL) STATE + PASSERELLE CRM COMMERCIAL ──
   const [studentViewMode, setStudentViewMode] = useState<"school" | "crm_bridge">("school");
   const [selectedBattleId, setSelectedBattleId] = useState<string>(SCHOOL_OBJECTION_BATTLES[0].id);
+  const activeBattle =
+    SCHOOL_OBJECTION_BATTLES.find((battle) => battle.id === selectedBattleId) ??
+    SCHOOL_OBJECTION_BATTLES[0];
   const [battleOutcome, setBattleOutcome] = useState<"none" | "win" | "retry">("none");
 
   // ── FORMULAIRE RAPIDE D'AJOUT DE LEAD (SCREENSHOT / TÉLÉPHONE / FICHE) ──
@@ -439,7 +510,7 @@ function CrmWorkspacePage() {
   const [leadCompany, setLeadCompany] = useState("");
   const [leadContactName, setLeadContactName] = useState("");
   const [leadCity, setLeadCity] = useState("");
-  const [leadServiceTarget, setLeadServiceTarget] = useState("Site Vitrine Pro (499 €)");
+  const [leadServiceTarget, setLeadServiceTarget] = useState("Site Vitrine Pro (sur devis)");
   const [leadBudgetEur, setLeadBudgetEur] = useState(499);
   const [leadNotes, setLeadNotes] = useState("");
   const [leadScreenshotDataUrl, setLeadScreenshotDataUrl] = useState<string>("");
@@ -450,7 +521,7 @@ function CrmWorkspacePage() {
   // ── CRÉATION RAPIDE DE DEVIS OFFICIEL + RIB ──
   const [quoteCompany, setQuoteCompany] = useState("");
   const [quoteEmail, setQuoteEmail] = useState("");
-  const [quoteServiceLabel, setQuoteServiceLabel] = useState("Site Vitrine Pro (Clé en main 7j)");
+  const [quoteServiceLabel, setQuoteServiceLabel] = useState("Site Vitrine Pro (sur devis)");
   const [quotePriceEur, setQuotePriceEur] = useState(499);
   const [quotePeriod, setQuotePeriod] = useState<"once" | "year" | "month">("once");
 
@@ -501,15 +572,19 @@ function CrmWorkspacePage() {
   const [directionAddMode, setDirectionAddMode] = useState<"flash" | "detailed">("flash");
   const [flashLeadText, setFlashLeadText] = useState("");
   const [flashCloserTarget, setFlashCloserTarget] = useState("mem-lucas");
-  const [flashServiceTarget, setFlashServiceTarget] = useState("Site Vitrine Pro (499 €)");
+  const [flashServiceTarget, setFlashServiceTarget] = useState("Site Vitrine Pro (sur devis)");
 
   // ── MODALE MESSAGES WHATSAPP PRÉ-RÉDIGÉS 1-CLIC ──
   const [whatsappModalLead, setWhatsappModalLead] = useState<CrmLead | null>(null);
-  const [whatsappTemplateKey, setWhatsappTemplateKey] = useState<"maquette" | "relance" | "devis" | "contact">("maquette");
+  const [whatsappTemplateKey, setWhatsappTemplateKey] = useState<
+    "maquette" | "relance" | "devis" | "contact"
+  >("maquette");
 
   // ── SIMULATEUR DE COMMISSION EN DIRECT (COFFRE CLOSER) ──
   const [simulatedPriceEur, setSimulatedPriceEur] = useState(999);
-  const [simulatedServiceLabel, setSimulatedServiceLabel] = useState("Google Maps Top 3 Garanti 24/7 (999 €/an)");
+  const [simulatedServiceLabel, setSimulatedServiceLabel] = useState(
+    "Visibilité locale Google Maps (999 €/an)",
+  );
 
   const flashSuccess = (msg: string) => {
     setSuccessMsg(msg);
@@ -556,6 +631,12 @@ function CrmWorkspacePage() {
     } finally {
       setBusy(false);
     }
+  };
+
+  const openCallModal = (lead: CrmLead) => setActiveCallLead(lead);
+  const openWhatsappModal = (lead: CrmLead) => setWhatsappModalLead(lead);
+  const updateLeadStatus = async (leadId: string, status: LeadStatus) => {
+    await apiCall({ action: "update_lead", leadId, status }, "Statut du prospect mis à jour");
   };
 
   const handleLogout = async () => {
@@ -608,7 +689,11 @@ function CrmWorkspacePage() {
     reader.readAsDataURL(file);
   };
 
-  const handlePinLogin = async (e?: FormEvent, overridePin?: string, overrideRole?: "director" | "closer" | "student") => {
+  const handlePinLogin = async (
+    e?: FormEvent,
+    overridePin?: string,
+    overrideRole?: "director" | "closer" | "student",
+  ) => {
     if (e) e.preventDefault();
     const code = (overridePin ?? pinCode).trim();
     const role = overrideRole ?? selectedPortalRole;
@@ -630,7 +715,7 @@ function CrmWorkspacePage() {
         password: code,
         email: emailForLogin,
       },
-      "Connexion réussie !"
+      "Connexion réussie !",
     );
     setPinCode("");
   };
@@ -663,7 +748,7 @@ function CrmWorkspacePage() {
       },
       leadTargetMode === "mine" && user?.portalType === "director"
         ? "✅ Lead enregistré dans vos Leads Direction !"
-        : "🚀 Lead envoyé instantanément au commercial !"
+        : "🚀 Lead envoyé instantanément au commercial !",
     );
     if (res) {
       setLeadPhone("");
@@ -684,7 +769,10 @@ function CrmWorkspacePage() {
 
     const phoneMatch = raw.match(/(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}/);
     const extractedPhone = phoneMatch ? phoneMatch[0] : "";
-    let extractedCompany = raw.replace(extractedPhone, "").replace(/[-—,;:]/g, " ").trim();
+    let extractedCompany = raw
+      .replace(extractedPhone, "")
+      .replace(/[-—,;:]/g, " ")
+      .trim();
     if (!extractedCompany) {
       extractedCompany = extractedPhone ? `Prospect ${extractedPhone}` : "Nouveau Prospect Direct";
     }
@@ -708,24 +796,30 @@ function CrmWorkspacePage() {
         assignedTo: flashCloserTarget,
         notes: "Lead injecté en Mode Flash (5s) par la Direction",
       },
-      "⚡ Lead flash créé et dispatché instantanément !"
+      "⚡ Lead flash créé et dispatché instantanément !",
     );
 
     if (res) {
       setFlashLeadText("");
-      triggerCelebration("LEAD DISPATCHÉ ! ⚡", `Mission envoyée au closer pour ${extractedCompany}`);
+      triggerCelebration(
+        "LEAD DISPATCHÉ ! ⚡",
+        `Mission envoyée au closer pour ${extractedCompany}`,
+      );
     }
   };
 
   const handleRequestQuoteAndRib = async (lead?: CrmLead) => {
     const company = lead ? lead.company : quoteCompany.trim();
-    const email = lead ? lead.email || "client@entreprise.fr" : quoteEmail.trim() || "client@entreprise.fr";
+    const email = lead
+      ? lead.email || "client@entreprise.fr"
+      : quoteEmail.trim() || "client@entreprise.fr";
     const label = lead ? lead.serviceTarget : quoteServiceLabel;
     const price = lead ? lead.budgetEur : quotePriceEur;
     const period: "once" | "year" | "month" = lead
       ? lead.serviceTarget.toLowerCase().includes("maps")
         ? "year"
-        : lead.serviceTarget.toLowerCase().includes("mois") || lead.serviceTarget.toLowerCase().includes("seo")
+        : lead.serviceTarget.toLowerCase().includes("mois") ||
+            lead.serviceTarget.toLowerCase().includes("seo")
           ? "month"
           : "once"
       : quotePeriod;
@@ -745,29 +839,31 @@ function CrmWorkspacePage() {
         items: [
           {
             label,
-            detail: "Prestation officielle XR Agency — Contrat & RIB KARMA SASU intégrés",
+            detail:
+              "Prestation officielle XR Agency — Contrat et coordonnées bancaires à confirmer",
             priceEur: price,
             period,
             quantity: 1,
           },
         ],
       },
-      `📄 Devis officiel & Facture RIB générés pour ${company} !`
+      `📄 Devis officiel & Facture RIB générés pour ${company} !`,
     );
     setQuoteCompany("");
     setQuoteEmail("");
   };
 
   const user = snapshot?.user;
-  const leads = snapshot?.leads || [];
-  const members = snapshot?.members || [];
-  const clients = snapshot?.clients || [];
-  const quotes = snapshot?.quotes || [];
-  const invoices = snapshot?.invoices || [];
-  const projects = snapshot?.projects || [];
-  const tasks = snapshot?.tasks || [];
-  const providers = snapshot?.providers || [];
-  const notifications = snapshot?.notifications || [];
+  const currentUser = user;
+  const leads = useMemo(() => snapshot?.leads || [], [snapshot?.leads]);
+  const members = useMemo(() => snapshot?.members || [], [snapshot?.members]);
+  const clients = useMemo(() => snapshot?.clients || [], [snapshot?.clients]);
+  const quotes = useMemo(() => snapshot?.quotes || [], [snapshot?.quotes]);
+  const invoices = useMemo(() => snapshot?.invoices || [], [snapshot?.invoices]);
+  const projects = useMemo(() => snapshot?.projects || [], [snapshot?.projects]);
+  const tasks = useMemo(() => snapshot?.tasks || [], [snapshot?.tasks]);
+  const providers = useMemo(() => snapshot?.providers || [], [snapshot?.providers]);
+  const notifications = useMemo(() => snapshot?.notifications || [], [snapshot?.notifications]);
 
   const crmTodos: CrmTodo[] = useMemo(() => {
     return tasks.map((t) => ({
@@ -799,7 +895,7 @@ function CrmWorkspacePage() {
         action: "create_client",
         ...clientData,
       },
-      `Client ${clientData.company} créé avec succès !`
+      `Client ${clientData.company} créé avec succès !`,
     );
   };
 
@@ -816,7 +912,7 @@ function CrmWorkspacePage() {
         action: "create_quote",
         ...quoteData,
       },
-      `Devis créé pour ${quoteData.clientCompany} !`
+      `Devis créé pour ${quoteData.clientCompany} !`,
     );
   };
 
@@ -827,21 +923,21 @@ function CrmWorkspacePage() {
         quoteId,
         status,
       },
-      `Statut du devis ${quoteId} mis à jour : ${status}`
+      `Statut du devis ${quoteId} mis à jour : ${status}`,
     );
   };
 
   const handleValidatePayment = async (invoiceId: string) => {
     triggerCelebration(
       "VIREMENT REÇU & CONFIRMÉ ! 💸",
-      `Fonds reçus sur le RIB KARMA SASU. Les commissions ont été débloquées dans le coffre du closer !`
+      `Fonds reçus sur le coordonnées bancaires. Les commissions ont été débloquées dans le coffre du closer !`,
     );
     await apiCall(
       {
         action: "validate_payment",
         invoiceId,
       },
-      `Virement validé pour ${invoiceId} ! Commissions débloquées dans le coffre du closer.`
+      `Virement validé pour ${invoiceId} ! Commissions débloquées dans le coffre du closer.`,
     );
   };
 
@@ -858,7 +954,7 @@ function CrmWorkspacePage() {
         action: "create_project",
         ...projectData,
       },
-      `Projet "${projectData.projectName}" créé avec succès !`
+      `Projet "${projectData.projectName}" créé avec succès !`,
     );
   };
 
@@ -869,7 +965,7 @@ function CrmWorkspacePage() {
         projectId,
         updates,
       },
-      `Projet ${projectId} mis à jour !`
+      `Projet ${projectId} mis à jour !`,
     );
   };
 
@@ -887,20 +983,20 @@ function CrmWorkspacePage() {
         action: "create_provider",
         ...providerData,
       },
-      `Prestataire ${providerData.name} enregistré !`
+      `Prestataire ${providerData.name} enregistré !`,
     );
   };
 
   const closersList = useMemo(
     () => members.filter((m) => m.role !== "admin" && m.portalType !== "student"),
-    [members]
+    [members],
   );
 
   // Calcul du Coffre-Fort des Commissions (En attente virement vs Débloqué par virement reçu)
   const commissionSummary = useMemo(() => {
     const signedLeads = leads.filter((l) => l.status === "signed" || l.status === "outsourced");
     const paidCompanies = new Set(
-      invoices.filter((i) => i.status === "paid").map((i) => i.clientCompany.toLowerCase())
+      invoices.filter((i) => i.status === "paid").map((i) => i.clientCompany.toLowerCase()),
     );
 
     let unlockedEur = 0;
@@ -919,11 +1015,11 @@ function CrmWorkspacePage() {
 
   const pendingMaquettes = useMemo(
     () => leads.filter((l) => l.maquetteStatus === "pending"),
-    [leads]
+    [leads],
   );
   const validatedMaquettes = useMemo(
     () => leads.filter((l) => l.maquetteStatus === "validated"),
-    [leads]
+    [leads],
   );
 
   const urgentLeads48h = useMemo(() => {
@@ -931,20 +1027,27 @@ function CrmWorkspacePage() {
   }, [leads]);
 
   const handleCopyLovable = (lead: CrmLead) => {
-    const p = {
+    const p: Prospect = {
       id: lead.id,
+      owner_id: lead.assignedTo,
       business_name: lead.company,
-      contact_name: lead.contactName,
-      phone: lead.phone,
       website_url: lead.website || "",
-      status: lead.status,
-      notes: lead.notes,
+      industry: lead.sector || null,
+      country: lead.country || null,
+      city: lead.city || null,
+      contact_name: lead.contactName || null,
+      contact_email: lead.email || null,
+      phone: lead.phone || null,
+      notes: lead.notes || null,
+      status: "new",
+      latest_score: null,
       created_at: lead.createdAt,
+      updated_at: lead.updatedAt,
     };
-    const prompt = generateLovableArchitecturePrompt(p as any);
+    const prompt = generateLovableArchitecturePrompt(p);
     navigator.clipboard.writeText(prompt);
     flashSuccess(`⚡ Prompt Lovable 24h pour ${lead.company} copié dans le presse-papier !`);
-    playXpChime("audit");
+    playXpChime();
   };
 
   // ── COMPOSANTS MODALES PARTAGÉES (WHATSAPP 1-CLIC & CÉLÉBRATION VICTOIRE) ──
@@ -970,7 +1073,11 @@ function CrmWorkspacePage() {
 
   const renderWhatsappModal = () => {
     if (!whatsappModalLead) return null;
-    const messageText = getWhatsappMessageText(whatsappTemplateKey, whatsappModalLead, user.fullName);
+    const messageText = getWhatsappMessageText(
+      whatsappTemplateKey,
+      whatsappModalLead,
+      user?.fullName ?? "Équipe XR Agency",
+    );
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md">
         <div className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-emerald-400/40 bg-[#0f1118] p-6 text-white shadow-2xl">
@@ -996,7 +1103,7 @@ function CrmWorkspacePage() {
             {[
               { key: "maquette", label: "🎨 Maquette Offerte" },
               { key: "relance", label: "🔥 Relance J+2" },
-              { key: "devis", label: "📝 Devis & RIB KARMA" },
+              { key: "devis", label: "📝 Devis & facturation" },
               { key: "contact", label: "🤝 Prise de Contact" },
             ].map((t) => (
               <button
@@ -1007,7 +1114,7 @@ function CrmWorkspacePage() {
                   "rounded-xl border p-2.5 text-xs font-bold transition",
                   whatsappTemplateKey === t.key
                     ? "border-emerald-400 bg-emerald-500/20 text-emerald-200"
-                    : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
+                    : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10",
                 )}
               >
                 {t.label}
@@ -1037,7 +1144,7 @@ function CrmWorkspacePage() {
             </button>
             <a
               href={`https://wa.me/${whatsappModalLead.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                messageText
+                messageText,
               )}`}
               target="_blank"
               rel="noreferrer"
@@ -1067,19 +1174,60 @@ function CrmWorkspacePage() {
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // ÉCRAN DE CONNEXION ULTRA-LUDIQUE : SÉLECTION DE HÉROS & CLAVIER TACTILE ARCADE
+  // ÉCRAN DE CONNEXION SÉCURISÉ : EMAIL + MOT DE PASSE (ZERO PIN EN DUR)
   // ══════════════════════════════════════════════════════════════════════════
   if (!snapshot?.authenticated || !user) {
     return (
       <CharacterSelectLogin
-        onLoginWithPin={async (portal, pin) => {
-          setSelectedPortalRole(portal);
-          setPinCode(pin);
-          await handlePinLogin(undefined, pin);
+        onLogin={async (email, password) => {
+          await apiCall(
+            {
+              action: "login",
+              email,
+              password,
+            },
+            "Connexion réussie !",
+          );
         }}
         isLoading={busy}
         errorMessage={errorMsg}
       />
+    );
+  }
+
+  // Isolation stricte : un compte client est orienté vers son Espace Client (/dashboard)
+  if (user.role === "client") {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#F7F4EE] px-4 text-center text-[#171613]">
+        <div className="max-w-md rounded-3xl border border-[#171613]/12 bg-white p-8 shadow-lg">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#7D6445]">
+            ESPACE CLIENT XR AGENCY
+          </p>
+          <h1 className="mt-3 font-serif text-3xl font-medium">
+            Bienvenue, {user.fullName}
+          </h1>
+          <p className="mt-3 text-sm text-[#57534B]">
+            Votre compte est rattaché à l’Espace Client XR Agency (suivi de projets, documents,
+            factures et messagerie dédiée).
+          </p>
+          <div className="mt-6 flex flex-col gap-2.5">
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#171613] px-6 py-3 text-xs font-semibold text-[#F7F4EE] transition hover:bg-[#2A2823]"
+            >
+              Ouvrir mon Espace Client
+              <ArrowUpRight className="h-4 w-4 text-[#D8BC94]" />
+            </Link>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="rounded-full border border-[#171613]/20 px-6 py-2.5 text-xs font-semibold text-[#57534B] hover:text-[#171613]"
+            >
+              Se déconnecter
+            </button>
+          </div>
+        </div>
+      </div>
     );
   }
 
@@ -1131,10 +1279,52 @@ function CrmWorkspacePage() {
 
   // ══════════════════════════════════════════════════════════════════════════
   // PORTAIL 2 : ARÈNE COMMERCIALE (OU ÉLÈVE EN MODE PASSERELLE CRM)
+  // ══════════════════════════════════════════════════════════════════════════
+  // PORTAIL 2 : ARÈNE COMMERCIALE (OU ÉLÈVE EN MODE PASSERELLE CRM)
+  // MODE S : SIMS HQ 3D v1.5 MIAMI PENTHOUSE
+  // ══════════════════════════════════════════════════════════════════════════
+  if (
+    (effectivePortal === "closer" ||
+      (effectivePortal === "student" && studentViewMode === "crm_bridge")) &&
+    closerDisplayMode === "sims_3d"
+  ) {
+    return (
+      <CrmSimsHQ3D
+        user={{
+          fullName: user.fullName,
+          email: user.email,
+          role: user.role,
+          title: user.title,
+          commissionPct: user.commissionPct,
+        }}
+        leads={leads}
+        clients={clients}
+        quotes={quotes}
+        invoices={invoices}
+        projects={projects}
+        tasks={tasks}
+        todos={crmTodos}
+        members={members}
+        onToggleTodo={handleToggleTodo}
+        onAddTodo={handleAddTodo}
+        onDeleteTodo={handleDeleteTodo}
+        onDispatchLead={(leadId, target) => dispatchLead(leadId, target)}
+        onUpdateLeadStatus={(leadId, status) => updateLeadStatus(leadId, status)}
+        onOpenCallModal={openCallModal}
+        onOpenWhatsappModal={openWhatsappModal}
+        onCreateQuote={handleRequestQuoteAndRib}
+        onValidatePayment={handleValidatePayment}
+        onLogout={handleLogout}
+        onSwitchToProCockpit={() => setCloserDisplayMode("combat_hub")}
+      />
+    );
+  }
+
   // MODE A : ARÈNE COMMERCIALE 200% LUDIQUE & INTUITIVE (BATTLE PASS & TARGET DECK)
   // ══════════════════════════════════════════════════════════════════════════
   if (
-    (effectivePortal === "closer" || (effectivePortal === "student" && studentViewMode === "crm_bridge")) &&
+    (effectivePortal === "closer" ||
+      (effectivePortal === "student" && studentViewMode === "crm_bridge")) &&
     closerDisplayMode === "combat_hub"
   ) {
     return (
@@ -1165,6 +1355,13 @@ function CrmWorkspacePage() {
             </button>
             <button
               type="button"
+              onClick={() => setCloserDisplayMode("sims_3d")}
+              className="rounded-full border border-purple-400/50 bg-purple-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-purple-200 hover:bg-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+            >
+              🌴 Sims HQ 3D
+            </button>
+            <button
+              type="button"
               onClick={() => setCloserDisplayMode("missions")}
               className="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold text-neutral-300 hover:text-white hover:bg-white/20"
             >
@@ -1192,7 +1389,10 @@ function CrmWorkspacePage() {
   // ══════════════════════════════════════════════════════════════════════════
   // MODE B : ARÈNE COMMERCIALE MISSIONS JEU VIDÉO
   // ══════════════════════════════════════════════════════════════════════════
-  if (effectivePortal === "closer" || (effectivePortal === "student" && studentViewMode === "crm_bridge")) {
+  if (
+    effectivePortal === "closer" ||
+    (effectivePortal === "student" && studentViewMode === "crm_bridge")
+  ) {
     return (
       <div className="min-h-screen bg-[#0b0d11] text-[#f8f6f0]">
         {/* Topbar Commerciale Ludique */}
@@ -1239,7 +1439,8 @@ function CrmWorkspacePage() {
                 {
                   id: "maquettes",
                   label: "🎨 Mes Maquettes",
-                  count: leads.filter((l) => l.maquetteStatus && l.maquetteStatus !== "none").length,
+                  count: leads.filter((l) => l.maquetteStatus && l.maquetteStatus !== "none")
+                    .length,
                 },
                 { id: "commissions", label: "💰 Mon Coffre & Barème" },
                 { id: "calendar", label: "📅 Relances & Quêtes" },
@@ -1254,7 +1455,7 @@ function CrmWorkspacePage() {
                     "inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-bold transition",
                     closerTab === t.id
                       ? "bg-emerald-400 text-[#0b0d11] shadow-[0_0_20px_rgba(52,211,153,0.35)]"
-                      : "border border-white/10 bg-white/5 text-white/75 hover:text-white"
+                      : "border border-white/10 bg-white/5 text-white/75 hover:text-white",
                   )}
                 >
                   <span>{t.label}</span>
@@ -1303,13 +1504,14 @@ function CrmWorkspacePage() {
                     ⚠️ ALERTE ROUGE CLOSING 48H · {urgentLeads48h.length} PROSPECT(S) EN DANGER
                   </h4>
                   <p className="text-xs text-white/80">
-                    {urgentLeads48h[0].company} ({urgentLeads48h[0].phone}) dépasse le délai SLA. Relancez immédiatement pour éviter la perte du dossier !
+                    {urgentLeads48h[0].company} ({urgentLeads48h[0].phone}) dépasse le délai SLA.
+                    Relancez immédiatement pour éviter la perte du dossier !
                   </p>
                 </div>
               </div>
               <a
                 href={`https://wa.me/${urgentLeads48h[0].phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                  `Bonjour ${urgentLeads48h[0].contactName || ""}, je reviens vers vous concernant votre projet de visibilité avec XR Agency.`
+                  `Bonjour ${urgentLeads48h[0].contactName || ""}, je reviens vers vous concernant votre projet de visibilité avec XR Agency.`,
                 )}`}
                 target="_blank"
                 rel="noreferrer"
@@ -1360,7 +1562,6 @@ function CrmWorkspacePage() {
           {/* ONGLET 1 : MES CARTES DE MISSION (MODE QUÊTE RPG OU GRILLE) */}
           {closerTab === "missions" && (
             <div className="space-y-6">
-              
               {/* Sélecteur de Mode : Quête Pas-à-Pas (Débutant) vs Grille Complète */}
               <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald-500/30 bg-[#0F172A]/80 p-3 backdrop-blur-xl">
                 <div className="flex items-center gap-2">
@@ -1388,7 +1589,7 @@ function CrmWorkspacePage() {
                       "flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-bold transition",
                       closerQuestMode === "quest_deck"
                         ? "bg-emerald-400 text-black shadow-[0_0_15px_rgba(52,211,153,0.4)]"
-                        : "border border-white/10 bg-white/5 text-neutral-300 hover:text-white"
+                        : "border border-white/10 bg-white/5 text-neutral-300 hover:text-white",
                     )}
                   >
                     <Swords className="h-3.5 w-3.5" />
@@ -1402,7 +1603,7 @@ function CrmWorkspacePage() {
                       "flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-bold transition",
                       closerQuestMode === "grid"
                         ? "bg-emerald-400 text-black shadow-[0_0_15px_rgba(52,211,153,0.4)]"
-                        : "border border-white/10 bg-white/5 text-neutral-300 hover:text-white"
+                        : "border border-white/10 bg-white/5 text-neutral-300 hover:text-white",
                     )}
                   >
                     <LayoutGrid className="h-3.5 w-3.5" />
@@ -1412,180 +1613,205 @@ function CrmWorkspacePage() {
               </div>
 
               {/* ── MODE 1 : QUÊTE GUIDÉE PAS À PAS (ULTRA LUDIQUE POUR NOUVEAUX COMMERCIAUX) ── */}
-              {closerQuestMode === "quest_deck" && leads.length > 0 && (() => {
-                const safeIndex = Math.abs(closerQuestIndex) % leads.length;
-                const lead = leads[safeIndex];
-                const comm = getOfficialCommission(lead.serviceTarget, lead.budgetEur);
-                const urgent48h = isLeadUrgent48h(lead);
+              {closerQuestMode === "quest_deck" &&
+                leads.length > 0 &&
+                (() => {
+                  const safeIndex = Math.abs(closerQuestIndex) % leads.length;
+                  const lead = leads[safeIndex];
+                  const comm = getOfficialCommission(lead.serviceTarget, lead.budgetEur);
+                  const urgent48h = isLeadUrgent48h(lead);
 
-                return (
-                  <div className="space-y-6">
-                    {/* Battle Pass Journalier du Closer */}
-                    <div className="rounded-3xl border border-[#D4AF37]/35 bg-gradient-to-r from-[#0F172A] via-[#1E293B]/70 to-[#0F172A] p-5 shadow-xl">
-                      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
-                        <div className="flex items-center gap-2.5">
-                          <Trophy className="h-5 w-5 text-[#D4AF37] animate-bounce" />
-                          <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[#E2D5BC]">
-                            BATTLE PASS DU JOUR · OBJECTIFS DE PRIMES
-                          </h4>
-                        </div>
-                        <span className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-0.5 font-mono text-[10px] font-bold text-emerald-300">
-                          +400 XP & 150 € DÈS LE 1ER CLOSING
-                        </span>
-                      </div>
-
-                      <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div className="rounded-2xl border border-white/10 bg-black/40 p-3">
-                          <div className="flex items-center justify-between text-xs">
-                            <span className="text-neutral-300">📞 3 Appels passés</span>
-                            <span className="font-mono font-bold text-amber-400">1/3</span>
+                  return (
+                    <div className="space-y-6">
+                      {/* Battle Pass Journalier du Closer */}
+                      <div className="rounded-3xl border border-[#D4AF37]/35 bg-gradient-to-r from-[#0F172A] via-[#1E293B]/70 to-[#0F172A] p-5 shadow-xl">
+                        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
+                          <div className="flex items-center gap-2.5">
+                            <Trophy className="h-5 w-5 text-[#D4AF37] animate-bounce" />
+                            <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[#E2D5BC]">
+                              BATTLE PASS DU JOUR · OBJECTIFS DE PRIMES
+                            </h4>
                           </div>
-                          <div className="mt-2 h-1.5 w-full rounded-full bg-white/10">
-                            <div className="h-full rounded-full bg-amber-400" style={{ width: "33%" }} />
-                          </div>
-                          <span className="mt-1.5 block font-mono text-[9px] text-neutral-400">+50 XP</span>
-                        </div>
-
-                        <div className="rounded-2xl border border-white/10 bg-black/40 p-3">
-                          <div className="flex items-center justify-between text-xs">
-                            <span className="text-neutral-300">🎨 1 Maquette offerte</span>
-                            <span className="font-mono font-bold text-purple-400">
-                              {leads.some((l) => l.maquetteStatus === "validated") ? "1/1 ✓" : "0/1"}
-                            </span>
-                          </div>
-                          <div className="mt-2 h-1.5 w-full rounded-full bg-white/10">
-                            <div
-                              className="h-full rounded-full bg-purple-400"
-                              style={{ width: leads.some((l) => l.maquetteStatus === "validated") ? "100%" : "20%" }}
-                            />
-                          </div>
-                          <span className="mt-1.5 block font-mono text-[9px] text-neutral-400">+100 XP</span>
-                        </div>
-
-                        <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#D4AF37]/10 p-3">
-                          <div className="flex items-center justify-between text-xs">
-                            <span className="font-bold text-[#E2D5BC]">👑 1 Deal closé</span>
-                            <span className="font-mono font-bold text-[#D4AF37]">
-                              {leads.some((l) => l.status === "signed") ? "1/1 ✓" : "0/1"}
-                            </span>
-                          </div>
-                          <div className="mt-2 h-1.5 w-full rounded-full bg-white/10">
-                            <div
-                              className="h-full rounded-full bg-[#D4AF37]"
-                              style={{ width: leads.some((l) => l.status === "signed") ? "100%" : "10%" }}
-                            />
-                          </div>
-                          <span className="mt-1.5 block font-mono text-[9px] text-emerald-400">
-                            +250 XP & Prime Immédiate
+                          <span className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-0.5 font-mono text-[10px] font-bold text-emerald-300">
+                            +400 XP & 150 € DÈS LE 1ER CLOSING
                           </span>
                         </div>
-                      </div>
-                    </div>
 
-                    {/* Carte de Cible Unique — Format Grand Écran / Deck de Cartes */}
-                    <div className="relative overflow-hidden rounded-3xl border-2 border-emerald-400/50 bg-[#10141E] p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
-                      
-                      {/* Contrôles Précédent / Suivant en haut */}
-                      <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                        <div className="flex items-center gap-2">
-                          <span className="rounded-full bg-emerald-500/20 px-3 py-1 font-mono text-xs font-bold text-emerald-300">
-                            CIBLE {safeIndex + 1} SUR {leads.length}
-                          </span>
-                          {urgent48h && (
-                            <span className="rounded-full bg-red-500/20 border border-red-500/40 px-2.5 py-0.5 font-mono text-[10px] font-bold text-red-300 animate-pulse">
-                              🔥 URGENT 48H
+                        <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <div className="rounded-2xl border border-white/10 bg-black/40 p-3">
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="text-neutral-300">📞 3 Appels passés</span>
+                              <span className="font-mono font-bold text-amber-400">1/3</span>
+                            </div>
+                            <div className="mt-2 h-1.5 w-full rounded-full bg-white/10">
+                              <div
+                                className="h-full rounded-full bg-amber-400"
+                                style={{ width: "33%" }}
+                              />
+                            </div>
+                            <span className="mt-1.5 block font-mono text-[9px] text-neutral-400">
+                              +50 XP
                             </span>
-                          )}
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              playXpChime();
-                              setCloserQuestIndex((prev) => (prev > 0 ? prev - 1 : leads.length - 1));
-                            }}
-                            className="rounded-xl border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/10"
-                          >
-                            ⬅️ Cible Précédente
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              playXpChime();
-                              setCloserQuestIndex((prev) => prev + 1);
-                            }}
-                            className="rounded-xl border border-emerald-400/40 bg-emerald-500/20 px-3 py-1.5 text-xs font-bold text-emerald-300 hover:bg-emerald-500/30"
-                          >
-                            Cible Suivante ➡️
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Contenu de la Cible */}
-                      <div className="mt-6 grid lg:grid-cols-12 gap-6 items-center">
-                        <div className="lg:col-span-7">
-                          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-3 py-1 font-mono text-xs font-black text-emerald-300">
-                            💰 PRIME CASH DIRECT : +{formatMoney(comm.amountEur)} ({comm.ratePct} %)
                           </div>
 
-                          <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold text-white">
-                            {lead.company}
-                          </h2>
-                          <p className="mt-1 text-sm text-neutral-300">
-                            {lead.contactName || "Dirigeant"} · {lead.city || "France"} · Offre ciblée :{" "}
-                            <strong className="text-[#D4AF37]">{lead.serviceTarget}</strong> ({formatMoney(lead.budgetEur)})
-                          </p>
-
-                          {/* Le Pitch Téléphone sous les yeux (Script Mot-à-Mot) */}
-                          <div className="mt-5 rounded-2xl border border-cyan-500/30 bg-cyan-950/30 p-4">
-                            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-300">
-                              🗣️ TON PITCH D'OUVERTURE (À LIRE AU TÉLÉPHONE) :
+                          <div className="rounded-2xl border border-white/10 bg-black/40 p-3">
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="text-neutral-300">🎨 1 Maquette offerte</span>
+                              <span className="font-mono font-bold text-purple-400">
+                                {leads.some((l) => l.maquetteStatus === "validated")
+                                  ? "1/1 ✓"
+                                  : "0/1"}
+                              </span>
+                            </div>
+                            <div className="mt-2 h-1.5 w-full rounded-full bg-white/10">
+                              <div
+                                className="h-full rounded-full bg-purple-400"
+                                style={{
+                                  width: leads.some((l) => l.maquetteStatus === "validated")
+                                    ? "100%"
+                                    : "20%",
+                                }}
+                              />
+                            </div>
+                            <span className="mt-1.5 block font-mono text-[9px] text-neutral-400">
+                              +100 XP
                             </span>
-                            <p className="mt-2 text-xs sm:text-sm italic text-neutral-200 leading-relaxed">
-                              « Bonjour {lead.contactName || "Monsieur"} ! Je suis {currentUser?.fullName?.split(" ")[0] || "Lucas"} de XR Agency. On a analysé la visibilité de {lead.company} et on a créé une maquette sur-mesure pour vous montrer comment doubler vos demandes locales. Est-ce que vous avez 2 minutes ou un numéro WhatsApp pour que je vous l'envoie ? »
+                          </div>
+
+                          <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#D4AF37]/10 p-3">
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="font-bold text-[#E2D5BC]">👑 1 Deal closé</span>
+                              <span className="font-mono font-bold text-[#D4AF37]">
+                                {leads.some((l) => l.status === "signed") ? "1/1 ✓" : "0/1"}
+                              </span>
+                            </div>
+                            <div className="mt-2 h-1.5 w-full rounded-full bg-white/10">
+                              <div
+                                className="h-full rounded-full bg-[#D4AF37]"
+                                style={{
+                                  width: leads.some((l) => l.status === "signed") ? "100%" : "10%",
+                                }}
+                              />
+                            </div>
+                            <span className="mt-1.5 block font-mono text-[9px] text-emerald-400">
+                              +250 XP & Prime Immédiate
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Carte de Cible Unique — Format Grand Écran / Deck de Cartes */}
+                      <div className="relative overflow-hidden rounded-3xl border-2 border-emerald-400/50 bg-[#10141E] p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
+                        {/* Contrôles Précédent / Suivant en haut */}
+                        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                          <div className="flex items-center gap-2">
+                            <span className="rounded-full bg-emerald-500/20 px-3 py-1 font-mono text-xs font-bold text-emerald-300">
+                              CIBLE {safeIndex + 1} SUR {leads.length}
+                            </span>
+                            {urgent48h && (
+                              <span className="rounded-full bg-red-500/20 border border-red-500/40 px-2.5 py-0.5 font-mono text-[10px] font-bold text-red-300 animate-pulse">
+                                🔥 URGENT 48H
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                playXpChime();
+                                setCloserQuestIndex((prev) =>
+                                  prev > 0 ? prev - 1 : leads.length - 1,
+                                );
+                              }}
+                              className="rounded-xl border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/10"
+                            >
+                              ⬅️ Cible Précédente
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                playXpChime();
+                                setCloserQuestIndex((prev) => prev + 1);
+                              }}
+                              className="rounded-xl border border-emerald-400/40 bg-emerald-500/20 px-3 py-1.5 text-xs font-bold text-emerald-300 hover:bg-emerald-500/30"
+                            >
+                              Cible Suivante ➡️
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Contenu de la Cible */}
+                        <div className="mt-6 grid lg:grid-cols-12 gap-6 items-center">
+                          <div className="lg:col-span-7">
+                            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-3 py-1 font-mono text-xs font-black text-emerald-300">
+                              💰 PRIME CASH DIRECT : +{formatMoney(comm.amountEur)} ({comm.ratePct}{" "}
+                              %)
+                            </div>
+
+                            <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold text-white">
+                              {lead.company}
+                            </h2>
+                            <p className="mt-1 text-sm text-neutral-300">
+                              {lead.contactName || "Dirigeant"} · {lead.city || "France"} · Offre
+                              ciblée :{" "}
+                              <strong className="text-[#D4AF37]">{lead.serviceTarget}</strong> (
+                              {formatMoney(lead.budgetEur)})
                             </p>
+
+                            {/* Le Pitch Téléphone sous les yeux (Script Mot-à-Mot) */}
+                            <div className="mt-5 rounded-2xl border border-cyan-500/30 bg-cyan-950/30 p-4">
+                              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-300">
+                                🗣️ TON PITCH D'OUVERTURE (À LIRE AU TÉLÉPHONE) :
+                              </span>
+                              <p className="mt-2 text-xs sm:text-sm italic text-neutral-200 leading-relaxed">
+                                « Bonjour {lead.contactName || "Monsieur"} ! Je suis{" "}
+                                {currentUser?.fullName?.split(" ")[0] || "Lucas"} de XR Agency. On a
+                                analysé la visibilité de {lead.company} et on a créé une maquette
+                                sur-mesure pour vous montrer comment doubler vos demandes locales.
+                                Est-ce que vous avez 2 minutes ou un numéro WhatsApp pour que je
+                                vous l'envoie ? »
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Les 3 Boutons d'Action Géants */}
+                          <div className="lg:col-span-5 flex flex-col gap-3">
+                            <button
+                              type="button"
+                              onClick={() => openCallModal(lead)}
+                              className="flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 py-4 px-6 text-sm font-black uppercase text-black shadow-[0_10px_30px_rgba(16,185,129,0.4)] transition hover:scale-[1.02] active:scale-95"
+                            >
+                              <PhoneCall className="h-5 w-5" />
+                              <span>1. Lancer l'Appel Gagnant</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => openWhatsappModal(lead)}
+                              className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-400/50 bg-[#0F172A] py-3.5 px-6 text-xs font-bold text-emerald-300 transition hover:bg-emerald-500/10 active:scale-95"
+                            >
+                              <MessageCircle className="h-4 w-4" />
+                              <span>2. Envoyer Maquette WhatsApp</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                playVictorySound();
+                                updateLeadStatus(lead.id, "signed");
+                              }}
+                              className="flex items-center justify-center gap-2 rounded-2xl border border-[#D4AF37]/60 bg-[#D4AF37]/15 py-3.5 px-6 text-xs font-bold text-[#E2D5BC] transition hover:bg-[#D4AF37] hover:text-black active:scale-95"
+                            >
+                              <Crown className="h-4 w-4" />
+                              <span>3. C'est Signé ! (Encaisser le Cash)</span>
+                            </button>
                           </div>
                         </div>
-
-                        {/* Les 3 Boutons d'Action Géants */}
-                        <div className="lg:col-span-5 flex flex-col gap-3">
-                          <button
-                            type="button"
-                            onClick={() => openCallModal(lead)}
-                            className="flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 py-4 px-6 text-sm font-black uppercase text-black shadow-[0_10px_30px_rgba(16,185,129,0.4)] transition hover:scale-[1.02] active:scale-95"
-                          >
-                            <PhoneCall className="h-5 w-5" />
-                            <span>1. Lancer l'Appel Gagnant</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => openWhatsappModal(lead)}
-                            className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-400/50 bg-[#0F172A] py-3.5 px-6 text-xs font-bold text-emerald-300 transition hover:bg-emerald-500/10 active:scale-95"
-                          >
-                            <MessageCircle className="h-4 w-4" />
-                            <span>2. Envoyer Maquette WhatsApp</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => {
-                              playVictorySound();
-                              updateLeadStatus(lead.id, "signed");
-                            }}
-                            className="flex items-center justify-center gap-2 rounded-2xl border border-[#D4AF37]/60 bg-[#D4AF37]/15 py-3.5 px-6 text-xs font-bold text-[#E2D5BC] transition hover:bg-[#D4AF37] hover:text-black active:scale-95"
-                          >
-                            <Crown className="h-4 w-4" />
-                            <span>3. C'est Signé ! (Encaisser le Cash)</span>
-                          </button>
-                        </div>
                       </div>
-
                     </div>
-                  </div>
-                );
-              })()}
+                  );
+                })()}
 
               {/* ── MODE 2 : GRILLE DE LEADS CLASSIQUE ── */}
               {closerQuestMode === "grid" && (
@@ -1613,208 +1839,208 @@ function CrmWorkspacePage() {
                               ? "border-emerald-500/40 bg-emerald-950/20"
                               : urgent48h
                                 ? "border-red-500/60 bg-gradient-to-b from-red-950/30 to-[#141720]"
-                                : "border-white/15 bg-[#141720]"
+                                : "border-white/15 bg-[#141720]",
                           )}
                         >
-                      <div>
-                        {/* En-tête de la carte : Gain potentiel en vert + Statut Maquette */}
-                        <div className="flex flex-wrap items-center justify-between gap-2">
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-3 py-1 font-mono text-xs font-black text-emerald-300">
-                            💰 +{formatMoney(comm.amountEur)} pour toi ({comm.ratePct} %)
-                          </span>
-
-                          {urgent48h && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-red-500 px-2.5 py-0.5 font-mono text-[10px] font-bold text-white animate-pulse">
-                              <Flame className="h-3 w-3" /> URGENT 48H
-                            </span>
-                          )}
-
-                          {lead.maquetteStatus === "pending" && (
-                            <span className="rounded-full border border-amber-400/40 bg-amber-500/20 px-2.5 py-0.5 font-mono text-[10px] font-bold text-amber-300">
-                              🎨 Maquette : En demande...
-                            </span>
-                          )}
-                          {lead.maquetteStatus === "validated" && (
-                            <span className="rounded-full border border-emerald-400/50 bg-emerald-500/25 px-2.5 py-0.5 font-mono text-[10px] font-bold text-emerald-200">
-                              ✅ Maquette Validée !
-                            </span>
-                          )}
-                        </div>
-
-                        <h3 className="mt-3 text-lg font-bold text-white">{lead.company}</h3>
-                        <p className="text-xs text-white/65">
-                          {lead.contactName} · {lead.city} · Offre :{" "}
-                          <strong className="text-[#e5cba4]">{lead.serviceTarget}</strong> (
-                          {formatMoney(lead.budgetEur)})
-                        </p>
-
-                        {/* Téléphone en gros cliquable */}
-                        <div className="mt-3 flex flex-wrap items-center gap-2">
-                          <a
-                            href={`tel:${lead.phone}`}
-                            className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-black/40 px-3.5 py-2 font-mono text-sm font-bold text-white hover:border-emerald-400"
-                          >
-                            <Phone className="h-4 w-4 text-emerald-400" />
-                            {lead.phone}
-                          </a>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setWhatsappTemplateKey("contact");
-                              setWhatsappModalLead(lead);
-                            }}
-                            className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/35 bg-emerald-500/15 px-3.5 py-2 text-xs font-bold text-emerald-300 hover:bg-emerald-500/25 active:scale-95"
-                          >
-                            <MessageCircle className="h-4 w-4" />
-                            WhatsApp 1-Clic
-                          </button>
-                        </div>
-
-                        {/* Si le directeur a envoyé un screenshot */}
-                        {lead.screenshotUrl && (
-                          <div className="mt-3 overflow-hidden rounded-2xl border border-white/15 bg-black/50 p-2">
-                            <span className="mb-1 block font-mono text-[9px] uppercase text-white/50">
-                              📸 Capture envoyée par la Direction :
-                            </span>
-                            <img
-                              src={lead.screenshotUrl}
-                              alt="Capture prospect"
-                              className="max-h-40 w-full rounded-xl object-contain"
-                            />
-                          </div>
-                        )}
-
-                        {/* Si la maquette est validée, afficher le lien direct */}
-                        {lead.maquetteStatus === "validated" && lead.maquetteUrl && (
-                          <div className="mt-3 flex items-center justify-between gap-2 rounded-2xl border border-emerald-400/40 bg-emerald-500/15 p-3">
-                            <div className="min-w-0">
-                              <span className="block font-mono text-[9px] font-bold uppercase text-emerald-300">
-                                LIEN MAQUETTE PRÊT POUR LE CLIENT :
+                          <div>
+                            {/* En-tête de la carte : Gain potentiel en vert + Statut Maquette */}
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-3 py-1 font-mono text-xs font-black text-emerald-300">
+                                💰 +{formatMoney(comm.amountEur)} pour toi ({comm.ratePct} %)
                               </span>
+
+                              {urgent48h && (
+                                <span className="inline-flex items-center gap-1 rounded-full bg-red-500 px-2.5 py-0.5 font-mono text-[10px] font-bold text-white animate-pulse">
+                                  <Flame className="h-3 w-3" /> URGENT 48H
+                                </span>
+                              )}
+
+                              {lead.maquetteStatus === "pending" && (
+                                <span className="rounded-full border border-amber-400/40 bg-amber-500/20 px-2.5 py-0.5 font-mono text-[10px] font-bold text-amber-300">
+                                  🎨 Maquette : En demande...
+                                </span>
+                              )}
+                              {lead.maquetteStatus === "validated" && (
+                                <span className="rounded-full border border-emerald-400/50 bg-emerald-500/25 px-2.5 py-0.5 font-mono text-[10px] font-bold text-emerald-200">
+                                  ✅ Maquette Validée !
+                                </span>
+                              )}
+                            </div>
+
+                            <h3 className="mt-3 text-lg font-bold text-white">{lead.company}</h3>
+                            <p className="text-xs text-white/65">
+                              {lead.contactName} · {lead.city} · Offre :{" "}
+                              <strong className="text-[#e5cba4]">{lead.serviceTarget}</strong> (
+                              {formatMoney(lead.budgetEur)})
+                            </p>
+
+                            {/* Téléphone en gros cliquable */}
+                            <div className="mt-3 flex flex-wrap items-center gap-2">
                               <a
-                                href={lead.maquetteUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="block truncate text-xs font-bold text-white underline"
+                                href={`tel:${lead.phone}`}
+                                className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-black/40 px-3.5 py-2 font-mono text-sm font-bold text-white hover:border-emerald-400"
                               >
-                                {lead.maquetteUrl}
+                                <Phone className="h-4 w-4 text-emerald-400" />
+                                {lead.phone}
                               </a>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setWhatsappTemplateKey("maquette");
-                                setWhatsappModalLead(lead);
-                              }}
-                              className="shrink-0 rounded-xl bg-emerald-400 px-3 py-1.5 text-[11px] font-bold text-[#0b0d11] transition hover:bg-emerald-300 active:scale-95"
-                            >
-                              Envoyer sur WhatsApp 🚀
-                            </button>
-                          </div>
-                        )}
-
-                        {lead.notes && (
-                          <p className="mt-3 rounded-xl bg-black/30 p-2.5 text-xs text-white/70">
-                            📝 {lead.notes}
-                          </p>
-                        )}
-                      </div>
-
-                      {/* BARRE D'ACTION JEU VIDÉO : 1 GROS BOUTON LUMINEUX PRINCIPAL + RACCOURCIS */}
-                      <div className="mt-5 space-y-2 border-t border-white/10 pt-4">
-                        {lead.status === "signed" ? (
-                          <div className="rounded-2xl bg-emerald-500/20 py-3 text-center text-xs font-black uppercase tracking-wider text-emerald-300">
-                            🏆 DEAL SIGNÉ · COMMISSION {formatMoney(comm.amountEur)} ENREGISTRÉE
-                          </div>
-                        ) : (
-                          <>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setActiveCallLead(lead);
-                                setCallNotesInput(lead.notes || "");
-                              }}
-                              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-400 px-4 py-3 text-xs font-black uppercase tracking-wider text-[#0b0d11] shadow-[0_0_25px_rgba(52,211,153,0.3)] transition hover:bg-emerald-300"
-                            >
-                              <PhoneCall className="h-4 w-4" />
-                              1. Lancer l’Appel Assisté (Script + Tarifs)
-                            </button>
-
-                            <div className="grid grid-cols-4 gap-2">
                               <button
                                 type="button"
-                                disabled={busy || lead.maquetteStatus === "pending"}
-                                onClick={() =>
-                                  void apiCall(
-                                    {
-                                      action: "request_maquette",
-                                      leadId: lead.id,
-                                      brief: `Maquette demandée par ${user.fullName} pour ${lead.company}`,
-                                    },
-                                    "🎨 Demande de maquette envoyée à la Direction !"
-                                  )
-                                }
-                                className="rounded-xl border border-amber-400/40 bg-amber-500/15 px-2 py-2 text-[10.5px] font-bold text-amber-200 hover:bg-amber-500/25 disabled:opacity-50"
-                              >
-                                🎨 Maquette
-                              </button>
-
-                              <button
-                                type="button"
-                                onClick={() => handleCopyLovable(lead)}
-                                className="rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/15 px-2 py-2 text-[10.5px] font-bold text-[#E2D5BC] hover:bg-[#D4AF37]/25"
-                                title="Copier le prompt d'architecture Lovable en 1 clic"
-                              >
-                                ⚡ Lovable
-                              </button>
-
-                              <button
-                                type="button"
-                                disabled={busy}
                                 onClick={() => {
-                                  setQuoteCompany(lead.company);
-                                  setQuoteEmail(lead.email || "");
-                                  setShowOfficialQuoteModal(true);
+                                  setWhatsappTemplateKey("contact");
+                                  setWhatsappModalLead(lead);
                                 }}
-                                className="rounded-xl border border-sky-400/40 bg-sky-500/15 px-2 py-2 text-[10.5px] font-bold text-sky-200 hover:bg-sky-500/25"
+                                className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/35 bg-emerald-500/15 px-3.5 py-2 text-xs font-bold text-emerald-300 hover:bg-emerald-500/25 active:scale-95"
                               >
-                                📄 Devis
-                              </button>
-
-                              <button
-                                type="button"
-                                disabled={busy}
-                                onClick={() => {
-                                  playXpChime("deal_closed");
-                                  triggerCelebration(
-                                    "DEAL SIGNÉ ! 🏆",
-                                    `${lead.company} est désormais client officiel XR Agency !`,
-                                    comm.amountEur
-                                  );
-                                  void apiCall(
-                                    {
-                                      action: "convert_lead_to_client",
-                                      leadId: lead.id,
-                                    },
-                                    `🏆 Bravo ! ${lead.company} est marqué Signé ! (+1000 XP)`
-                                  );
-                                }}
-                                className="rounded-xl border border-emerald-400/50 bg-emerald-500/20 px-2 py-2 text-[10.5px] font-bold text-emerald-200 hover:bg-emerald-500/35 active:scale-95"
-                              >
-                                🏆 Closer
+                                <MessageCircle className="h-4 w-4" />
+                                WhatsApp 1-Clic
                               </button>
                             </div>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+
+                            {/* Si le directeur a envoyé un screenshot */}
+                            {lead.screenshotUrl && (
+                              <div className="mt-3 overflow-hidden rounded-2xl border border-white/15 bg-black/50 p-2">
+                                <span className="mb-1 block font-mono text-[9px] uppercase text-white/50">
+                                  📸 Capture envoyée par la Direction :
+                                </span>
+                                <img
+                                  src={lead.screenshotUrl}
+                                  alt="Capture prospect"
+                                  className="max-h-40 w-full rounded-xl object-contain"
+                                />
+                              </div>
+                            )}
+
+                            {/* Si la maquette est validée, afficher le lien direct */}
+                            {lead.maquetteStatus === "validated" && lead.maquetteUrl && (
+                              <div className="mt-3 flex items-center justify-between gap-2 rounded-2xl border border-emerald-400/40 bg-emerald-500/15 p-3">
+                                <div className="min-w-0">
+                                  <span className="block font-mono text-[9px] font-bold uppercase text-emerald-300">
+                                    LIEN MAQUETTE PRÊT POUR LE CLIENT :
+                                  </span>
+                                  <a
+                                    href={lead.maquetteUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="block truncate text-xs font-bold text-white underline"
+                                  >
+                                    {lead.maquetteUrl}
+                                  </a>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setWhatsappTemplateKey("maquette");
+                                    setWhatsappModalLead(lead);
+                                  }}
+                                  className="shrink-0 rounded-xl bg-emerald-400 px-3 py-1.5 text-[11px] font-bold text-[#0b0d11] transition hover:bg-emerald-300 active:scale-95"
+                                >
+                                  Envoyer sur WhatsApp 🚀
+                                </button>
+                              </div>
+                            )}
+
+                            {lead.notes && (
+                              <p className="mt-3 rounded-xl bg-black/30 p-2.5 text-xs text-white/70">
+                                📝 {lead.notes}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* BARRE D'ACTION JEU VIDÉO : 1 GROS BOUTON LUMINEUX PRINCIPAL + RACCOURCIS */}
+                          <div className="mt-5 space-y-2 border-t border-white/10 pt-4">
+                            {lead.status === "signed" ? (
+                              <div className="rounded-2xl bg-emerald-500/20 py-3 text-center text-xs font-black uppercase tracking-wider text-emerald-300">
+                                🏆 DEAL SIGNÉ · COMMISSION {formatMoney(comm.amountEur)} ENREGISTRÉE
+                              </div>
+                            ) : (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setActiveCallLead(lead);
+                                    setCallNotesInput(lead.notes || "");
+                                  }}
+                                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-400 px-4 py-3 text-xs font-black uppercase tracking-wider text-[#0b0d11] shadow-[0_0_25px_rgba(52,211,153,0.3)] transition hover:bg-emerald-300"
+                                >
+                                  <PhoneCall className="h-4 w-4" />
+                                  1. Lancer l’Appel Assisté (Script + Tarifs)
+                                </button>
+
+                                <div className="grid grid-cols-4 gap-2">
+                                  <button
+                                    type="button"
+                                    disabled={busy || lead.maquetteStatus === "pending"}
+                                    onClick={() =>
+                                      void apiCall(
+                                        {
+                                          action: "request_maquette",
+                                          leadId: lead.id,
+                                          brief: `Maquette demandée par ${user.fullName} pour ${lead.company}`,
+                                        },
+                                        "🎨 Demande de maquette envoyée à la Direction !",
+                                      )
+                                    }
+                                    className="rounded-xl border border-amber-400/40 bg-amber-500/15 px-2 py-2 text-[10.5px] font-bold text-amber-200 hover:bg-amber-500/25 disabled:opacity-50"
+                                  >
+                                    🎨 Maquette
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    onClick={() => handleCopyLovable(lead)}
+                                    className="rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/15 px-2 py-2 text-[10.5px] font-bold text-[#E2D5BC] hover:bg-[#D4AF37]/25"
+                                    title="Copier le prompt d'architecture Lovable en 1 clic"
+                                  >
+                                    ⚡ Lovable
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    disabled={busy}
+                                    onClick={() => {
+                                      setQuoteCompany(lead.company);
+                                      setQuoteEmail(lead.email || "");
+                                      setShowOfficialQuoteModal(true);
+                                    }}
+                                    className="rounded-xl border border-sky-400/40 bg-sky-500/15 px-2 py-2 text-[10.5px] font-bold text-sky-200 hover:bg-sky-500/25"
+                                  >
+                                    📄 Devis
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    disabled={busy}
+                                    onClick={() => {
+                                      playXpChime();
+                                      triggerCelebration(
+                                        "DEAL SIGNÉ ! 🏆",
+                                        `${lead.company} est désormais client officiel XR Agency !`,
+                                        comm.amountEur,
+                                      );
+                                      void apiCall(
+                                        {
+                                          action: "convert_lead_to_client",
+                                          leadId: lead.id,
+                                        },
+                                        `🏆 Bravo ! ${lead.company} est marqué Signé ! (+1000 XP)`,
+                                      );
+                                    }}
+                                    className="rounded-xl border border-emerald-400/50 bg-emerald-500/20 px-2 py-2 text-[10.5px] font-bold text-emerald-200 hover:bg-emerald-500/35 active:scale-95"
+                                  >
+                                    🏆 Closer
+                                  </button>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           )}
-        </div>
-      )}
 
           {/* ONGLET 2 : SUIVI DES MAQUETTES DU COMMERCIAL */}
           {closerTab === "maquettes" && (
@@ -1823,13 +2049,16 @@ function CrmWorkspacePage() {
                 🎨 Suivi de vos Maquettes (« En demande » ➔ « Validée ✓ »)
               </h2>
               <p className="mt-1 text-xs text-white/65">
-                Dès que le Directeur colle le lien de la maquette, elle passe automatiquement en Validée et vous pouvez l'envoyer en 1 clic au client.
+                Dès que le Directeur colle le lien de la maquette, elle passe automatiquement en
+                Validée et vous pouvez l'envoyer en 1 clic au client.
               </p>
 
               <div className="mt-5 space-y-3">
-                {leads.filter((l) => l.maquetteStatus && l.maquetteStatus !== "none").length === 0 ? (
+                {leads.filter((l) => l.maquetteStatus && l.maquetteStatus !== "none").length ===
+                0 ? (
                   <p className="rounded-2xl border border-white/10 bg-black/30 p-6 text-center text-xs text-white/60">
-                    Aucune maquette en cours. Cliquez sur « 🎨 2. Maquette » sur l'une de vos cartes de mission !
+                    Aucune maquette en cours. Cliquez sur « 🎨 2. Maquette » sur l'une de vos cartes
+                    de mission !
                   </p>
                 ) : (
                   leads
@@ -1845,10 +2074,12 @@ function CrmWorkspacePage() {
                               "inline-block rounded-full px-3 py-0.5 font-mono text-[10px] font-bold uppercase",
                               lead.maquetteStatus === "validated"
                                 ? "bg-emerald-500/25 text-emerald-300"
-                                : "bg-amber-500/25 text-amber-300"
+                                : "bg-amber-500/25 text-amber-300",
                             )}
                           >
-                            {lead.maquetteStatus === "validated" ? "✅ VALIDÉE PAR LA DIRECTION" : "⏳ EN DEMANDE"}
+                            {lead.maquetteStatus === "validated"
+                              ? "✅ VALIDÉE PAR LA DIRECTION"
+                              : "⏳ EN DEMANDE"}
                           </span>
                           <h3 className="mt-1.5 text-base font-bold text-white">{lead.company}</h3>
                           <p className="text-xs text-white/60">{lead.serviceTarget}</p>
@@ -1866,7 +2097,7 @@ function CrmWorkspacePage() {
                             </a>
                             <a
                               href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                                `Bonjour ${lead.contactName}, voici votre maquette sur-mesure réalisée par XR Agency : ${lead.maquetteUrl}`
+                                `Bonjour ${lead.contactName}, voici votre maquette sur-mesure réalisée par XR Agency : ${lead.maquetteUrl}`,
                               )}`}
                               target="_blank"
                               rel="noreferrer"
@@ -1906,24 +2137,35 @@ function CrmWorkspacePage() {
                           🔥 SÉRIE 5 JOURS ACTIFS
                         </span>
                       </div>
-                      <h3 className="mt-1 text-xl font-black text-white">Le Coffre-fort de {user.fullName}</h3>
+                      <h3 className="mt-1 text-xl font-black text-white">
+                        Le Coffre-fort de {user.fullName}
+                      </h3>
                     </div>
                   </div>
 
                   <div className="rounded-2xl border border-white/10 bg-black/40 px-4 py-2 text-right">
-                    <span className="font-mono text-[10px] uppercase text-white/50">PROCHAIN BONUS DE PALIER</span>
-                    <p className="font-mono text-sm font-bold text-amber-300">+250 € cash dès 3 000 € de CA</p>
+                    <span className="font-mono text-[10px] uppercase text-white/50">
+                      PROCHAIN BONUS DE PALIER
+                    </span>
+                    <p className="font-mono text-sm font-bold text-amber-300">
+                      +250 € cash dès 3 000 € de CA
+                    </p>
                   </div>
                 </div>
 
                 {/* Barre de progression XP du Closer */}
                 <div className="mt-4">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-mono text-white/70">Progression vers Rang 5 (Légende XR) : 4 250 / 5 000 XP</span>
+                    <span className="font-mono text-white/70">
+                      Progression vers Rang 5 (Légende XR) : 4 250 / 5 000 XP
+                    </span>
                     <span className="font-mono font-bold text-amber-400">85 %</span>
                   </div>
                   <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-black/60 p-0.5 border border-white/10">
-                    <div className="h-full rounded-full bg-gradient-to-r from-amber-500 via-yellow-400 to-emerald-400 shadow-[0_0_15px_rgba(251,191,36,0.6)]" style={{ width: "85%" }} />
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-amber-500 via-yellow-400 to-emerald-400 shadow-[0_0_15px_rgba(251,191,36,0.6)]"
+                      style={{ width: "85%" }}
+                    />
                   </div>
                 </div>
               </div>
@@ -1941,7 +2183,9 @@ function CrmWorkspacePage() {
                     {formatMoney(commissionSummary.pendingVaultEur)}
                   </p>
                   <p className="mt-2 text-xs text-white/65">
-                    Commissions verrouillées dès la signature du devis. Elles sont débloquées immédiatement dès que la Direction valide la réception des fonds sur le RIB officiel KARMA SASU.
+                    Commissions verrouillées dès la signature du devis. Elles sont débloquées
+                    immédiatement dès que la Direction valide la réception des fonds sur les
+                    coordonnées bancaires confirmées par la Direction.
                   </p>
                 </div>
 
@@ -1956,7 +2200,8 @@ function CrmWorkspacePage() {
                     {formatMoney(commissionSummary.unlockedEur)}
                   </p>
                   <p className="mt-2 text-xs text-white/75">
-                    Montant net prêt pour votre virement suite au paiement effectif des clients closés.
+                    Montant net prêt pour votre virement suite au paiement effectif des clients
+                    closés.
                   </p>
                 </div>
               </div>
@@ -1968,7 +2213,9 @@ function CrmWorkspacePage() {
                     <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#c5a880]">
                       🧮 SIMULATEUR DE GAIN EN DIRECT
                     </span>
-                    <h3 className="text-lg font-bold text-white">Calculez votre commission sur votre prochain deal</h3>
+                    <h3 className="text-lg font-bold text-white">
+                      Calculez votre commission sur votre prochain deal
+                    </h3>
                   </div>
                   <span className="text-2xl">💰</span>
                 </div>
@@ -1977,7 +2224,7 @@ function CrmWorkspacePage() {
                   {[
                     { label: "Site Vitrine Pro", price: 499, srv: "site" },
                     { label: "Site Business Sur-Mesure", price: 799, srv: "site" },
-                    { label: "Google Maps Top 3 Garanti", price: 999, srv: "maps" },
+                    { label: "Visibilité locale Google Maps", price: 999, srv: "maps" },
                     { label: "Caisse POS & CRM Métier", price: 2490, srv: "pos" },
                   ].map((item) => (
                     <button
@@ -1991,10 +2238,12 @@ function CrmWorkspacePage() {
                         "rounded-2xl border p-3 text-left transition",
                         simulatedPriceEur === item.price
                           ? "border-emerald-400 bg-emerald-500/20 text-emerald-200"
-                          : "border-white/10 bg-black/40 text-white/70 hover:bg-white/5"
+                          : "border-white/10 bg-black/40 text-white/70 hover:bg-white/5",
                       )}
                     >
-                      <span className="block font-mono text-sm font-black text-white">{formatMoney(item.price)}</span>
+                      <span className="block font-mono text-sm font-black text-white">
+                        {formatMoney(item.price)}
+                      </span>
                       <span className="text-xs">{item.label}</span>
                     </button>
                   ))}
@@ -2010,11 +2259,14 @@ function CrmWorkspacePage() {
                           SUR CE DEAL ({simulatedServiceLabel} à {formatMoney(simulatedPriceEur)}) :
                         </span>
                         <p className="text-xs text-white/80">
-                          Taux officiel appliqué : <strong className="text-emerald-400">{comm.ruleLabel}</strong>
+                          Taux officiel appliqué :{" "}
+                          <strong className="text-emerald-400">{comm.ruleLabel}</strong>
                         </p>
                       </div>
                       <div className="text-right shrink-0">
-                        <span className="font-mono text-[10px] text-white/50 block">VOUS TOUCHEZ EN CASH DIRECT :</span>
+                        <span className="font-mono text-[10px] text-white/50 block">
+                          VOUS TOUCHEZ EN CASH DIRECT :
+                        </span>
                         <span className="font-mono text-2xl font-black text-emerald-300">
                           +{formatMoney(comm.amountEur)}
                         </span>
@@ -2062,7 +2314,9 @@ function CrmWorkspacePage() {
           {closerTab === "calendar" && (
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
               <div className="rounded-3xl border border-white/10 bg-[#141720] p-6">
-                <h3 className="text-lg font-bold text-white">📅 Vos Rappels & Relances Programmées</h3>
+                <h3 className="text-lg font-bold text-white">
+                  📅 Vos Rappels & Relances Programmées
+                </h3>
                 <div className="mt-4 space-y-3">
                   {leads.map((l) => (
                     <div
@@ -2095,7 +2349,7 @@ function CrmWorkspacePage() {
                         "flex w-full items-center justify-between rounded-2xl border p-3.5 text-left transition",
                         task.status === "done"
                           ? "border-emerald-500/30 bg-emerald-500/10 text-white/50 line-through"
-                          : "border-white/10 bg-black/30 text-white"
+                          : "border-white/10 bg-black/30 text-white",
                       )}
                     >
                       <span className="text-xs font-semibold">{task.title}</span>
@@ -2132,7 +2386,7 @@ function CrmWorkspacePage() {
                         "rounded-full px-3.5 py-1.5 text-xs font-semibold transition",
                         selectedBattleId === b.id
                           ? "bg-emerald-400 text-[#101114]"
-                          : "border border-white/15 bg-white/5 text-white/75 hover:text-white"
+                          : "border border-white/15 bg-white/5 text-white/75 hover:text-white",
                       )}
                     >
                       Objection #{idx + 1}
@@ -2145,7 +2399,9 @@ function CrmWorkspacePage() {
                 <span className="font-mono text-[10px] uppercase tracking-widest text-red-300">
                   L'OBJECTION DU PROSPECT :
                 </span>
-                <p className="mt-1 text-base font-semibold text-white">{activeBattle.prospectSay}</p>
+                <p className="mt-1 text-base font-semibold text-white">
+                  {activeBattle.prospectSay}
+                </p>
               </div>
 
               <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -2157,7 +2413,9 @@ function CrmWorkspacePage() {
                   <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-emerald-300">
                     OPTION A (MÉTHODE XR AGENCY) :
                   </span>
-                  <p className="mt-2 text-xs leading-relaxed text-white/90">{activeBattle.goodReply}</p>
+                  <p className="mt-2 text-xs leading-relaxed text-white/90">
+                    {activeBattle.goodReply}
+                  </p>
                 </button>
 
                 <button
@@ -2168,18 +2426,22 @@ function CrmWorkspacePage() {
                   <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-white/60">
                     OPTION B (RÉACTION CLASSIQUE) :
                   </span>
-                  <p className="mt-2 text-xs leading-relaxed text-white/75">{activeBattle.badReply}</p>
+                  <p className="mt-2 text-xs leading-relaxed text-white/75">
+                    {activeBattle.badReply}
+                  </p>
                 </button>
               </div>
 
               {battleOutcome === "win" && (
                 <div className="mt-4 rounded-2xl border border-emerald-400/50 bg-emerald-500/20 p-4 text-xs font-semibold text-emerald-200">
-                  🏆 Réplique validée ! Vous recadrez sur la garantie et la maquette WhatsApp sans engagement.
+                  🏆 Réplique validée ! Vous recadrez sur la garantie et la maquette WhatsApp sans
+                  engagement.
                 </div>
               )}
               {battleOutcome === "retry" && (
                 <div className="mt-4 rounded-2xl border border-amber-400/50 bg-amber-500/20 p-4 text-xs font-semibold text-amber-200">
-                  ⚠️ Ne débattez pas ! Proposez immédiatement la maquette gratuite sur WhatsApp pour désamorcer.
+                  ⚠️ Ne débattez pas ! Proposez immédiatement la maquette gratuite sur WhatsApp pour
+                  désamorcer.
                 </div>
               )}
             </div>
@@ -2214,7 +2476,7 @@ function CrmWorkspacePage() {
                         ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-300"
                         : callTimerSeconds < 300
                           ? "border-amber-500/50 bg-amber-500/20 text-amber-200 animate-pulse"
-                          : "border-red-500/60 bg-red-500/25 text-red-200 animate-pulse"
+                          : "border-red-500/60 bg-red-500/25 text-red-200 animate-pulse",
                     )}
                   >
                     <Clock className="h-3.5 w-3.5" />
@@ -2223,7 +2485,11 @@ function CrmWorkspacePage() {
                       {String(callTimerSeconds % 60).padStart(2, "0")}
                     </span>
                     <span className="text-[10px] text-white/50">
-                      {callTimerSeconds < 180 ? "(Rythme idéal)" : callTimerSeconds < 300 ? "(Conclure)" : "(Trop long > 5m)"}
+                      {callTimerSeconds < 180
+                        ? "(Rythme idéal)"
+                        : callTimerSeconds < 300
+                          ? "(Conclure)"
+                          : "(Trop long > 5m)"}
                     </span>
                   </div>
                 </div>
@@ -2249,9 +2515,12 @@ function CrmWorkspacePage() {
                         leadId: activeCallLead.id,
                         brief: `Maquette demandée suite à appel pour ${activeCallLead.company}`,
                       },
-                      "🎨 Demande de maquette transmise !"
+                      "🎨 Demande de maquette transmise !",
                     );
-                    triggerCelebration("MAQUETTE DEMANDÉE ! 🎨", `En attente de validation Direction pour ${activeCallLead.company}`);
+                    triggerCelebration(
+                      "MAQUETTE DEMANDÉE ! 🎨",
+                      `En attente de validation Direction pour ${activeCallLead.company}`,
+                    );
                   }}
                   className="flex flex-col items-center gap-1 rounded-2xl border border-amber-400/50 bg-amber-500/15 p-2.5 text-center transition hover:bg-amber-500/25 active:scale-95"
                 >
@@ -2296,7 +2565,7 @@ function CrmWorkspacePage() {
                         summary: "Non intéressé pour le moment.",
                         followUpDate: "Dans 1 mois",
                       },
-                      "Noté comme non intéressé."
+                      "Noté comme non intéressé.",
                     );
                     setActiveCallLead(null);
                   }}
@@ -2312,11 +2581,15 @@ function CrmWorkspacePage() {
                   SCRIPT D’ACCRoche RECOMMANDÉ :
                 </span>
                 <p className="mt-1.5 text-xs leading-relaxed text-white/90">
-                  « Bonjour <strong>{activeCallLead.contactName}</strong>, c'est {user.fullName} de l'agence{" "}
-                  <strong>XR Agency</strong>. J'ai regardé la visibilité de{" "}
+                  « Bonjour <strong>{activeCallLead.contactName}</strong>, c'est {user.fullName} de
+                  l'agence <strong>XR Agency</strong>. J'ai regardé la visibilité de{" "}
                   <strong>{activeCallLead.company}</strong> sur{" "}
-                  <strong>{activeCallLead.city}</strong>. Nous accompagnons les dirigeants avec une offre{" "}
-                  <strong>{activeCallLead.serviceTarget}</strong> (Sites dès 499 €, ou Top 3 Google Maps garanti 24h/24 pendant 1 an dès 999 €/an ou remboursé). Mon directeur artistique peut vous préparer une maquette gratuite d'ici demain sur WhatsApp pour que vous voyiez le rendu concret : je vous l'envoie sur ce numéro ? »
+                  <strong>{activeCallLead.city}</strong>. Nous accompagnons les dirigeants avec une
+                  offre <strong>{activeCallLead.serviceTarget}</strong> (Sites dès 499 €, ou
+                  stratégie de visibilité locale Google Maps, avec objectifs définis après audit et
+                  sans garantie de classement). Mon directeur artistique peut vous préparer une
+                  maquette gratuite d'ici demain sur WhatsApp pour que vous voyiez le rendu concret
+                  : je vous l'envoie sur ce numéro ? »
                 </p>
               </div>
 
@@ -2355,7 +2628,7 @@ function CrmWorkspacePage() {
                             summary: callNotesInput,
                             followUpDate: callFollowUpInput,
                           },
-                          "📞 Appel enregistré !"
+                          "📞 Appel enregistré !",
                         );
                         setActiveCallLead(null);
                       }}
@@ -2377,7 +2650,7 @@ function CrmWorkspacePage() {
             onClick={() => setCloserTab("missions")}
             className={cn(
               "flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition active:scale-95",
-              closerTab === "missions" ? "text-emerald-400 font-bold" : "text-white/60"
+              closerTab === "missions" ? "text-emerald-400 font-bold" : "text-white/60",
             )}
           >
             <span className="text-lg">🎯</span>
@@ -2388,7 +2661,7 @@ function CrmWorkspacePage() {
             onClick={() => setCloserTab("maquettes")}
             className={cn(
               "flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition active:scale-95",
-              closerTab === "maquettes" ? "text-emerald-400 font-bold" : "text-white/60"
+              closerTab === "maquettes" ? "text-emerald-400 font-bold" : "text-white/60",
             )}
           >
             <span className="text-lg">🎨</span>
@@ -2399,7 +2672,7 @@ function CrmWorkspacePage() {
             onClick={() => setCloserTab("commissions")}
             className={cn(
               "flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition active:scale-95",
-              closerTab === "commissions" ? "text-emerald-400 font-bold" : "text-white/60"
+              closerTab === "commissions" ? "text-emerald-400 font-bold" : "text-white/60",
             )}
           >
             <span className="text-lg">💰</span>
@@ -2410,7 +2683,7 @@ function CrmWorkspacePage() {
             onClick={() => setCloserTab("rpg_training")}
             className={cn(
               "flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition active:scale-95",
-              closerTab === "rpg_training" ? "text-emerald-400 font-bold" : "text-white/60"
+              closerTab === "rpg_training" ? "text-emerald-400 font-bold" : "text-white/60",
             )}
           >
             <span className="text-lg">⚔️</span>
@@ -2421,7 +2694,7 @@ function CrmWorkspacePage() {
             onClick={() => setCloserTab("leaderboard")}
             className={cn(
               "flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition active:scale-95",
-              closerTab === "leaderboard" ? "text-emerald-400 font-bold" : "text-white/60"
+              closerTab === "leaderboard" ? "text-emerald-400 font-bold" : "text-white/60",
             )}
           >
             <span className="text-lg">🏆</span>
@@ -2436,9 +2709,42 @@ function CrmWorkspacePage() {
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // PORTAIL 1 : QG DIRECTION GÉNÉRALE (CODE 07266 / 071266)
+  // PORTAIL 1 : QG DIRECTION GÉNÉRALE
   // CADRE UNIFIÉ PERMANENT : 10 PILIERS + MODES LUDIQUES INTÉGRÉS
   // ══════════════════════════════════════════════════════════════════════════
+  if (directorDisplayMode === "sims_3d") {
+    return (
+      <CrmSimsHQ3D
+        user={{
+          fullName: user.fullName,
+          email: user.email,
+          role: user.role,
+          title: user.title,
+          commissionPct: user.commissionPct,
+        }}
+        leads={leads}
+        clients={clients}
+        quotes={quotes}
+        invoices={invoices}
+        projects={projects}
+        tasks={tasks}
+        todos={crmTodos}
+        members={members}
+        onToggleTodo={handleToggleTodo}
+        onAddTodo={handleAddTodo}
+        onDeleteTodo={handleDeleteTodo}
+        onDispatchLead={(leadId, target) => dispatchLead(leadId, target)}
+        onUpdateLeadStatus={(leadId, status) => updateLeadStatus(leadId, status)}
+        onOpenCallModal={openCallModal}
+        onOpenWhatsappModal={openWhatsappModal}
+        onCreateQuote={handleRequestQuoteAndRib}
+        onValidatePayment={handleValidatePayment}
+        onLogout={handleLogout}
+        onSwitchToProCockpit={() => setDirectorDisplayMode("cockpit")}
+      />
+    );
+  }
+
   if (directorDisplayMode === "closer_arena") {
     return (
       <div className="relative min-h-screen bg-[#07090e]">
@@ -2514,6 +2820,15 @@ function CrmWorkspacePage() {
               <h1 className="text-base font-bold text-white">{user.fullName}</h1>
             </div>
 
+            {/* Bouton SIMS HQ 3D v1.5 Miami Penthouse */}
+            <button
+              type="button"
+              onClick={() => setDirectorDisplayMode("sims_3d")}
+              className="inline-flex items-center gap-2 rounded-full border border-purple-400/60 bg-gradient-to-r from-purple-600/30 via-indigo-600/30 to-amber-500/30 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-purple-200 shadow-[0_0_25px_rgba(168,85,247,0.4)] transition hover:from-purple-500 hover:to-amber-400 hover:text-black"
+            >
+              <span>🌴 Sims HQ 3D v1.5</span>
+            </button>
+
             {/* Bouton Arène Commerciale Ludique pour la Direction */}
             <button
               type="button"
@@ -2568,7 +2883,7 @@ function CrmWorkspacePage() {
                   "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition",
                   directorDisplayMode === "cockpit" && directorTab === tab.id
                     ? "bg-[#c5a880] text-[#101114] shadow-[0_0_25px_rgba(197,168,128,0.35)]"
-                    : "border border-white/10 bg-white/5 text-white/75 hover:text-white"
+                    : "border border-white/10 bg-white/5 text-white/75 hover:text-white",
                 )}
               >
                 <span>{tab.label}</span>
@@ -2576,7 +2891,7 @@ function CrmWorkspacePage() {
                   <span
                     className={cn(
                       "rounded-full px-1.5 py-0.5 font-mono text-[10px]",
-                      tab.alert ? "bg-red-500 text-white animate-pulse" : "bg-black/30"
+                      tab.alert ? "bg-red-500 text-white animate-pulse" : "bg-black/30",
                     )}
                   >
                     {tab.badge}
@@ -2622,13 +2937,14 @@ function CrmWorkspacePage() {
                   ⚠️ ALERTE DIRECTION : {urgentLeads48h.length} PROSPECT(S) SANS SUIVI &gt; 48H
                 </h4>
                 <p className="text-xs text-white/80">
-                  {urgentLeads48h[0].company} ({urgentLeads48h[0].phone}) — Assignez ou relancez le prospect pour sécuriser le closing.
+                  {urgentLeads48h[0].company} ({urgentLeads48h[0].phone}) — Assignez ou relancez le
+                  prospect pour sécuriser le closing.
                 </p>
               </div>
             </div>
             <a
               href={`https://wa.me/${urgentLeads48h[0].phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                `Bonjour ${urgentLeads48h[0].contactName || ""}, c'est ${user.fullName} de la Direction XR Agency.`
+                `Bonjour ${urgentLeads48h[0].contactName || ""}, c'est ${user.fullName} de la Direction XR Agency.`,
               )}`}
               target="_blank"
               rel="noreferrer"
@@ -2642,36 +2958,42 @@ function CrmWorkspacePage() {
 
         {/* QG DIRECTION UNIFIÉ · 10 PILIERS SANS DISPERSION */}
         {/* KPI Globaux Direction */}
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-              <div className="rounded-2xl border border-white/10 bg-[#12141b] p-4">
-                <span className="font-mono text-[10px] uppercase text-white/55">CA SIGNÉ TOTAL</span>
-                <p className="mt-1 text-xl font-black text-emerald-400">
-                  {formatMoney(snapshot.stats?.revenueEur || 0)}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-[#12141b] p-4">
-                <span className="font-mono text-[10px] uppercase text-white/55">PIPELINE EN COURS</span>
-                <p className="mt-1 text-xl font-black text-[#e5cba4]">
-                  {formatMoney(snapshot.stats?.pipelineEur || 0)}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-amber-400/30 bg-amber-500/10 p-4">
-                <span className="font-mono text-[10px] uppercase text-amber-300">MAQUETTES À LIVRER</span>
-                <p className="mt-1 text-xl font-black text-white">{pendingMaquettes.length}</p>
-              </div>
-              <div className="rounded-2xl border border-sky-400/30 bg-sky-500/10 p-4">
-                <span className="font-mono text-[10px] uppercase text-sky-300">VIREMENTS EN ATTENTE</span>
-                <p className="mt-1 text-xl font-black text-white">
-                  {formatMoney(snapshot.stats?.pendingInvoicesEur || 0)}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-4">
-                <span className="font-mono text-[10px] uppercase text-emerald-300">COMMISSIONS DÉBLOQUÉES</span>
-                <p className="mt-1 text-xl font-black text-emerald-300">
-                  {formatMoney(commissionSummary.unlockedEur)}
-                </p>
-              </div>
-            </div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+          <div className="rounded-2xl border border-white/10 bg-[#12141b] p-4">
+            <span className="font-mono text-[10px] uppercase text-white/55">CA SIGNÉ TOTAL</span>
+            <p className="mt-1 text-xl font-black text-emerald-400">
+              {formatMoney(snapshot.stats?.revenueEur || 0)}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-[#12141b] p-4">
+            <span className="font-mono text-[10px] uppercase text-white/55">PIPELINE EN COURS</span>
+            <p className="mt-1 text-xl font-black text-[#e5cba4]">
+              {formatMoney(snapshot.stats?.pipelineEur || 0)}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-amber-400/30 bg-amber-500/10 p-4">
+            <span className="font-mono text-[10px] uppercase text-amber-300">
+              MAQUETTES À LIVRER
+            </span>
+            <p className="mt-1 text-xl font-black text-white">{pendingMaquettes.length}</p>
+          </div>
+          <div className="rounded-2xl border border-sky-400/30 bg-sky-500/10 p-4">
+            <span className="font-mono text-[10px] uppercase text-sky-300">
+              VIREMENTS EN ATTENTE
+            </span>
+            <p className="mt-1 text-xl font-black text-white">
+              {formatMoney(snapshot.stats?.pendingInvoicesEur || 0)}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-4">
+            <span className="font-mono text-[10px] uppercase text-emerald-300">
+              COMMISSIONS DÉBLOQUÉES
+            </span>
+            <p className="mt-1 text-xl font-black text-emerald-300">
+              {formatMoney(commissionSummary.unlockedEur)}
+            </p>
+          </div>
+        </div>
 
         {/* ══════════════════════════════════════════════════════════════════
             ONGLET 0 DIRECTION : VUE GÉNÉRALE & QG
@@ -2689,7 +3011,9 @@ function CrmWorkspacePage() {
                     Bienvenue au QG XR Agency, {user.fullName}.
                   </h2>
                   <p className="mt-2 text-xs leading-relaxed text-white/70 sm:text-sm">
-                    Gérez vos leads par capture d'écran ou téléphone, validez les maquettes en 1 clic pour vos commerciaux, émettez vos devis et factures officiels avec RIB KARMA SASU, et pilotez vos projets en direct.
+                    Gérez vos leads par capture d'écran ou téléphone, validez les maquettes en 1
+                    clic pour vos commerciaux, émettez vos devis et factures officiels avec
+                    coordonnées bancaires, et pilotez vos projets en direct.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2.5">
@@ -2756,7 +3080,7 @@ function CrmWorkspacePage() {
                         "flex w-full items-center justify-between rounded-2xl border p-3 text-left transition",
                         task.status === "done"
                           ? "border-emerald-500/20 bg-emerald-500/5 text-white/40 line-through"
-                          : "border-white/10 bg-black/30 text-white hover:border-white/20"
+                          : "border-white/10 bg-black/30 text-white hover:border-white/20",
                       )}
                     >
                       <span className="text-xs font-medium">{task.title}</span>
@@ -2805,12 +3129,13 @@ function CrmWorkspacePage() {
                 </div>
               </div>
 
-              {/* Colonne 3 : Factures en Attente de Virement sur RIB KARMA */}
+              {/* Colonne 3 : Factures en attente de règlement */}
               <div className="rounded-3xl border border-sky-400/30 bg-[#12141b] p-6">
                 <div className="flex items-center justify-between border-b border-white/10 pb-3">
                   <h3 className="flex items-center gap-2 text-sm font-bold text-white">
                     <CreditCard className="h-4 w-4 text-sky-300" />
-                    Virements en Attente ({invoices.filter((i) => i.status === "pending_transfer").length})
+                    Règlements en attente (
+                    {invoices.filter((i) => i.status === "pending_transfer").length})
                   </h3>
                   <button
                     type="button"
@@ -2831,7 +3156,9 @@ function CrmWorkspacePage() {
                       >
                         <div>
                           <p className="text-xs font-bold text-white">{inv.clientCompany}</p>
-                          <p className="font-mono text-[10px] text-white/50">{inv.paymentReference}</p>
+                          <p className="font-mono text-[10px] text-white/50">
+                            {inv.paymentReference}
+                          </p>
                         </div>
                         <div className="text-right">
                           <span className="font-mono text-xs font-bold text-emerald-300">
@@ -2864,19 +3191,17 @@ function CrmWorkspacePage() {
                       Karim Zeroual — Jour 14 / 90 (Scripts Sectoriels & Objections RPG)
                     </h3>
                     <p className="text-xs text-white/60">
-                      Entraîné sur 12 simulations · Passerelle CRM active · Peut closer de vrais clients et percevoir ses commissions (Code d'accès : 1234)
+                      Entraîné sur 12 simulations · Passerelle CRM active · Accès sécurisé par
+                      identifiants individuels
                     </p>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    void apiCall({ action: "login", pin: "1234" });
-                  }}
+                <Link
+                  to="/school"
                   className="rounded-xl border border-sky-400/40 bg-sky-500/15 px-4 py-2.5 text-xs font-bold text-sky-200 transition hover:bg-sky-500/25 shrink-0"
                 >
-                  Inspecter l'Académie XR School →
-                </button>
+                  Ouvrir l&apos;Académie XR School →
+                </Link>
               </div>
             </div>
 
@@ -2892,7 +3217,9 @@ function CrmWorkspacePage() {
                   <span className="font-mono text-xs text-white/50">{clients.length}</span>
                 </div>
                 <div className="mt-4">
-                  <h4 className="text-sm font-bold text-white group-hover:text-[#e5cba4]">Annuaire Clients</h4>
+                  <h4 className="text-sm font-bold text-white group-hover:text-[#e5cba4]">
+                    Annuaire Clients
+                  </h4>
                   <p className="text-[11px] text-white/60">Comptes, VIP, CA généré</p>
                 </div>
               </button>
@@ -2907,7 +3234,9 @@ function CrmWorkspacePage() {
                   <span className="font-mono text-xs text-white/50">{quotes.length}</span>
                 </div>
                 <div className="mt-4">
-                  <h4 className="text-sm font-bold text-white group-hover:text-emerald-300">Devis Officiels</h4>
+                  <h4 className="text-sm font-bold text-white group-hover:text-emerald-300">
+                    Devis Officiels
+                  </h4>
                   <p className="text-[11px] text-white/60">Génération & cycle de vente</p>
                 </div>
               </button>
@@ -2922,7 +3251,9 @@ function CrmWorkspacePage() {
                   <span className="font-mono text-xs text-white/50">{projects.length}</span>
                 </div>
                 <div className="mt-4">
-                  <h4 className="text-sm font-bold text-white group-hover:text-sky-300">Projets en cours</h4>
+                  <h4 className="text-sm font-bold text-white group-hover:text-sky-300">
+                    Projets en cours
+                  </h4>
                   <p className="text-[11px] text-white/60">Étapes & jalons de livraison</p>
                 </div>
               </button>
@@ -2937,7 +3268,9 @@ function CrmWorkspacePage() {
                   <span className="font-mono text-xs text-white/50">{providers.length}</span>
                 </div>
                 <div className="mt-4">
-                  <h4 className="text-sm font-bold text-white group-hover:text-purple-300">Prestataires</h4>
+                  <h4 className="text-sm font-bold text-white group-hover:text-purple-300">
+                    Prestataires
+                  </h4>
                   <p className="text-[11px] text-white/60">Développeurs & sous-traitance</p>
                 </div>
               </button>
@@ -2960,11 +3293,10 @@ function CrmWorkspacePage() {
                     "flex-1 flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-black uppercase tracking-wider transition",
                     directionAddMode === "flash"
                       ? "bg-amber-400 text-[#0b0d11] shadow-[0_0_20px_rgba(251,191,36,0.35)]"
-                      : "text-white/60 hover:text-white"
+                      : "text-white/60 hover:text-white",
                   )}
                 >
-                  <Zap className="h-3.5 w-3.5" />
-                  ⚡ Ajout Flash (5s)
+                  <Zap className="h-3.5 w-3.5" />⚡ Ajout Flash (5s)
                 </button>
                 <button
                   type="button"
@@ -2973,7 +3305,7 @@ function CrmWorkspacePage() {
                     "flex-1 flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-black uppercase tracking-wider transition",
                     directionAddMode === "detailed"
                       ? "bg-[#c5a880] text-[#0b0d11] shadow-[0_0_20px_rgba(197,168,128,0.35)]"
-                      : "text-white/60 hover:text-white"
+                      : "text-white/60 hover:text-white",
                   )}
                 >
                   <Camera className="h-3.5 w-3.5" />
@@ -2992,7 +3324,9 @@ function CrmWorkspacePage() {
                       <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-amber-300">
                         ⚡ DISPATCH FLASH EN 5 SECONDES
                       </span>
-                      <h3 className="text-base font-bold text-white">1 Champ · Extraction Automatique</h3>
+                      <h3 className="text-base font-bold text-white">
+                        1 Champ · Extraction Automatique
+                      </h3>
                     </div>
                     <span className="text-2xl">⚡</span>
                   </div>
@@ -3027,7 +3361,7 @@ function CrmWorkspacePage() {
                             "rounded-xl border py-2 text-xs font-bold transition",
                             flashCloserTarget === c.id
                               ? "border-amber-400 bg-amber-400/20 text-amber-200"
-                              : "border-white/10 bg-black/40 text-white/60 hover:text-white"
+                              : "border-white/10 bg-black/40 text-white/60 hover:text-white",
                           )}
                         >
                           {c.fullName.split(" ")[0]}
@@ -3042,7 +3376,7 @@ function CrmWorkspacePage() {
                     </label>
                     <div className="grid grid-cols-2 gap-2">
                       {[
-                        "Site Vitrine Pro (499 €)",
+                        "Site Vitrine Pro (sur devis)",
                         "Google Maps Top 3 (999 €)",
                         "Site E-Commerce (1499 €)",
                         "Système POS & CRM (2490 €)",
@@ -3055,7 +3389,7 @@ function CrmWorkspacePage() {
                             "rounded-xl border p-2 text-left text-[11px] font-semibold transition",
                             flashServiceTarget === srv
                               ? "border-emerald-400 bg-emerald-500/20 text-emerald-200"
-                              : "border-white/10 bg-black/40 text-white/60 hover:text-white"
+                              : "border-white/10 bg-black/40 text-white/60 hover:text-white",
                           )}
                         >
                           {srv}
@@ -3069,8 +3403,7 @@ function CrmWorkspacePage() {
                     disabled={busy || !flashLeadText.trim()}
                     className="w-full flex items-center justify-center gap-2 rounded-2xl bg-amber-400 py-3.5 text-xs font-black uppercase tracking-wider text-[#0b0d11] shadow-[0_0_25px_rgba(251,191,36,0.35)] transition hover:bg-amber-300 disabled:opacity-50 active:scale-95"
                   >
-                    <Zap className="h-4 w-4" />
-                    ⚡ Dispatcher au Vendeur en 1 Clic
+                    <Zap className="h-4 w-4" />⚡ Dispatcher au Vendeur en 1 Clic
                   </button>
                 </form>
               ) : (
@@ -3079,186 +3412,202 @@ function CrmWorkspacePage() {
                   onSubmit={handleQuickAddLead}
                   className="rounded-3xl border border-[#c5a880]/40 bg-[#12141b] p-6 shadow-xl"
                 >
-              <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                <div>
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#c5a880]">
-                    ⚡ AJOUT & DISPATCH EXPRESS
-                  </span>
-                  <h2 className="text-lg font-bold text-white">
-                    Nouveau Lead (Screenshot, Numéro ou Fiche)
-                  </h2>
-                </div>
-                <Camera className="h-5 w-5 text-[#c5a880]" />
-              </div>
+                  <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                    <div>
+                      <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#c5a880]">
+                        ⚡ AJOUT & DISPATCH EXPRESS
+                      </span>
+                      <h2 className="text-lg font-bold text-white">
+                        Nouveau Lead (Screenshot, Numéro ou Fiche)
+                      </h2>
+                    </div>
+                    <Camera className="h-5 w-5 text-[#c5a880]" />
+                  </div>
 
-              {/* Choix : Garder pour moi (Direction) vs Envoyer à un commercial */}
-              <div className="mt-4 grid grid-cols-2 gap-2 rounded-2xl bg-black/40 p-1.5">
-                <button
-                  type="button"
-                  onClick={() => setLeadTargetMode("mine")}
-                  className={cn(
-                    "rounded-xl py-2.5 text-xs font-bold transition",
-                    leadTargetMode === "mine"
-                      ? "bg-[#c5a880] text-[#101114]"
-                      : "text-white/70 hover:text-white"
-                  )}
-                >
-                  👑 Garder dans Mes Leads
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLeadTargetMode("closer")}
-                  className={cn(
-                    "rounded-xl py-2.5 text-xs font-bold transition",
-                    leadTargetMode === "closer"
-                      ? "bg-emerald-400 text-[#101114]"
-                      : "text-white/70 hover:text-white"
-                  )}
-                >
-                  🚀 Envoyer à un Vendeur
-                </button>
-              </div>
-
-              {leadTargetMode === "closer" && (
-                <div className="mt-3">
-                  <label className="mb-1 block text-[11px] font-semibold text-white/70">
-                    Choisir le commercial qui reçoit la mission :
-                  </label>
-                  <select
-                    value={leadAssignedCloser}
-                    onChange={(e) => setLeadAssignedCloser(e.target.value)}
-                    className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2.5 text-xs font-bold text-white"
-                  >
-                    {closersList.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.fullName} ({c.title})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
-              {/* Zone Screenshot / Photo (Ctrl+V ou Upload) */}
-              <div className="mt-4 rounded-2xl border border-dashed border-[#c5a880]/50 bg-black/30 p-3.5 text-center">
-                <label className="cursor-pointer block">
-                  <span className="block text-xs font-bold text-[#e5cba4]">
-                    📸 Collez un Screenshot (Ctrl+V / Cmd+V) ou cliquez pour joindre une photo
-                  </span>
-                  <span className="mt-0.5 block text-[10px] text-white/55">
-                    Idéal pour envoyer une capture Google Maps, Instagram ou carte de visite
-                  </span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                  />
-                </label>
-                {leadScreenshotDataUrl && (
-                  <div className="mt-3 relative">
-                    <img
-                      src={leadScreenshotDataUrl}
-                      alt="Aperçu capture"
-                      className="mx-auto max-h-36 rounded-xl border border-white/20 object-contain"
-                    />
+                  {/* Choix : Garder pour moi (Direction) vs Envoyer à un commercial */}
+                  <div className="mt-4 grid grid-cols-2 gap-2 rounded-2xl bg-black/40 p-1.5">
                     <button
                       type="button"
-                      onClick={() => setLeadScreenshotDataUrl("")}
-                      className="mt-1.5 text-[10px] text-red-300 underline"
+                      onClick={() => setLeadTargetMode("mine")}
+                      className={cn(
+                        "rounded-xl py-2.5 text-xs font-bold transition",
+                        leadTargetMode === "mine"
+                          ? "bg-[#c5a880] text-[#101114]"
+                          : "text-white/70 hover:text-white",
+                      )}
                     >
-                      Retirer l'image
+                      👑 Garder dans Mes Leads
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setLeadTargetMode("closer")}
+                      className={cn(
+                        "rounded-xl py-2.5 text-xs font-bold transition",
+                        leadTargetMode === "closer"
+                          ? "bg-emerald-400 text-[#101114]"
+                          : "text-white/70 hover:text-white",
+                      )}
+                    >
+                      🚀 Envoyer à un Vendeur
                     </button>
                   </div>
-                )}
-              </div>
 
-              <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div>
-                  <label className="mb-1 block text-[11px] text-white/70">
-                    📞 Téléphone (suffit à lui seul) :
-                  </label>
-                  <input
-                    type="text"
-                    value={leadPhone}
-                    onChange={(e) => setLeadPhone(e.target.value)}
-                    placeholder="Ex: 06 12 34 56 78"
-                    className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2 text-xs text-white"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-[11px] text-white/70">
-                    🏢 Nom Entreprise (optionnel) :
-                  </label>
-                  <input
-                    type="text"
-                    value={leadCompany}
-                    onChange={(e) => setLeadCompany(e.target.value)}
-                    placeholder="Ex: Serrurerie Royale Paris"
-                    className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2 text-xs text-white"
-                  />
-                </div>
-              </div>
+                  {leadTargetMode === "closer" && (
+                    <div className="mt-3">
+                      <label className="mb-1 block text-[11px] font-semibold text-white/70">
+                        Choisir le commercial qui reçoit la mission :
+                      </label>
+                      <select
+                        value={leadAssignedCloser}
+                        onChange={(e) => setLeadAssignedCloser(e.target.value)}
+                        className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2.5 text-xs font-bold text-white"
+                      >
+                        {closersList.map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {c.fullName} ({c.title})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
 
-              <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div>
-                  <label className="mb-1 block text-[11px] text-white/70">Offre cible :</label>
-                  <select
-                    value={leadServiceTarget}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      setLeadServiceTarget(val);
-                      if (val.includes("499")) setLeadBudgetEur(499);
-                      else if (val.includes("799")) setLeadBudgetEur(799);
-                      else if (val.includes("1 499")) setLeadBudgetEur(1499);
-                      else if (val.includes("999")) setLeadBudgetEur(999);
-                      else if (val.includes("500")) setLeadBudgetEur(500);
-                      else if (val.includes("2 000")) setLeadBudgetEur(2000);
-                    }}
-                    className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2 text-xs text-white"
+                  {/* Zone Screenshot / Photo (Ctrl+V ou Upload) */}
+                  <div className="mt-4 rounded-2xl border border-dashed border-[#c5a880]/50 bg-black/30 p-3.5 text-center">
+                    <label className="cursor-pointer block">
+                      <span className="block text-xs font-bold text-[#e5cba4]">
+                        📸 Collez un Screenshot (Ctrl+V / Cmd+V) ou cliquez pour joindre une photo
+                      </span>
+                      <span className="mt-0.5 block text-[10px] text-white/55">
+                        Idéal pour envoyer une capture Google Maps, Instagram ou carte de visite
+                      </span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                    </label>
+                    {leadScreenshotDataUrl && (
+                      <div className="mt-3 relative">
+                        <img
+                          src={leadScreenshotDataUrl}
+                          alt="Aperçu capture"
+                          className="mx-auto max-h-36 rounded-xl border border-white/20 object-contain"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setLeadScreenshotDataUrl("")}
+                          className="mt-1.5 text-[10px] text-red-300 underline"
+                        >
+                          Retirer l'image
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div>
+                      <label className="mb-1 block text-[11px] text-white/70">
+                        📞 Téléphone (suffit à lui seul) :
+                      </label>
+                      <input
+                        type="text"
+                        value={leadPhone}
+                        onChange={(e) => setLeadPhone(e.target.value)}
+                        placeholder="Ex: 06 12 34 56 78"
+                        className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2 text-xs text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-[11px] text-white/70">
+                        🏢 Nom Entreprise (optionnel) :
+                      </label>
+                      <input
+                        type="text"
+                        value={leadCompany}
+                        onChange={(e) => setLeadCompany(e.target.value)}
+                        placeholder="Ex: Serrurerie Royale Paris"
+                        className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2 text-xs text-white"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div>
+                      <label className="mb-1 block text-[11px] text-white/70">Offre cible :</label>
+                      <select
+                        value={leadServiceTarget}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setLeadServiceTarget(val);
+                          if (val.includes("499")) setLeadBudgetEur(499);
+                          else if (val.includes("799")) setLeadBudgetEur(799);
+                          else if (val.includes("1 499")) setLeadBudgetEur(1499);
+                          else if (val.includes("999")) setLeadBudgetEur(999);
+                          else if (val.includes("500")) setLeadBudgetEur(500);
+                          else if (val.includes("2 000")) setLeadBudgetEur(2000);
+                        }}
+                        className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2 text-xs text-white"
+                      >
+                        <option value="Site Vitrine Pro (sur devis)">
+                          Site Vitrine Pro (sur devis) — Comm 30%
+                        </option>
+                        <option value="Site Business Sur-Mesure (799 €)">
+                          Site Business (799 €) — Comm 30%
+                        </option>
+                        <option value="Site E-Commerce (1 499 €)">
+                          Site E-Commerce (1 499 €) — Comm 30%
+                        </option>
+                        <option value="Visibilité locale Google Maps 1 An (999 €)">
+                          Google Maps Top 3 (dès 999 €/an) — Comm 10%
+                        </option>
+                        <option value="Gestion Annuelle Google Maps (500 €)">
+                          Gestion Annuelle Maps (500 €/an) — Comm 10%
+                        </option>
+                        <option value="CRM & Système POS Sur-Mesure (2 000 €)">
+                          CRM / POS Sur-Mesure (2 000 €+) — Comm 20%
+                        </option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-[11px] text-white/70">
+                        Budget estimé (€) :
+                      </label>
+                      <input
+                        type="number"
+                        value={leadBudgetEur}
+                        onChange={(e) => setLeadBudgetEur(Number(e.target.value) || 0)}
+                        className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2 text-xs text-white"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mt-3">
+                    <label className="mb-1 block text-[11px] text-white/70">
+                      Consigne / Note rapide :
+                    </label>
+                    <input
+                      type="text"
+                      value={leadNotes}
+                      onChange={(e) => setLeadNotes(e.target.value)}
+                      placeholder="Ex: Pas de site web, 2e page Google Maps, appeler avant 18h"
+                      className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2 text-xs text-white"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={busy}
+                    className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#c5a880] py-3 text-xs font-black uppercase tracking-wider text-[#101114] transition hover:bg-[#d8be98]"
                   >
-                    <option value="Site Vitrine Pro (499 €)">Site Vitrine Pro (499 €) — Comm 30%</option>
-                    <option value="Site Business Sur-Mesure (799 €)">Site Business (799 €) — Comm 30%</option>
-                    <option value="Site E-Commerce (1 499 €)">Site E-Commerce (1 499 €) — Comm 30%</option>
-                    <option value="Google Maps Top 3 Garanti 1 An (999 €)">Google Maps Top 3 (dès 999 €/an) — Comm 10%</option>
-                    <option value="Gestion Annuelle Google Maps (500 €)">Gestion Annuelle Maps (500 €/an) — Comm 10%</option>
-                    <option value="CRM & Système POS Sur-Mesure (2 000 €)">CRM / POS Sur-Mesure (2 000 €+) — Comm 20%</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="mb-1 block text-[11px] text-white/70">Budget estimé (€) :</label>
-                  <input
-                    type="number"
-                    value={leadBudgetEur}
-                    onChange={(e) => setLeadBudgetEur(Number(e.target.value) || 0)}
-                    className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2 text-xs text-white"
-                  />
-                </div>
-              </div>
-
-              <div className="mt-3">
-                <label className="mb-1 block text-[11px] text-white/70">Consigne / Note rapide :</label>
-                <input
-                  type="text"
-                  value={leadNotes}
-                  onChange={(e) => setLeadNotes(e.target.value)}
-                  placeholder="Ex: Pas de site web, 2e page Google Maps, appeler avant 18h"
-                  className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2 text-xs text-white"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={busy}
-                className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#c5a880] py-3 text-xs font-black uppercase tracking-wider text-[#101114] transition hover:bg-[#d8be98]"
-              >
-                <Send className="h-4 w-4" />
-                {leadTargetMode === "mine"
-                  ? "Ajouter à Mes Leads Perso (Direction)"
-                  : "Envoyer la Carte de Mission au Commercial"}
-              </button>
-            </form>
-          )}
-        </div>
+                    <Send className="h-4 w-4" />
+                    {leadTargetMode === "mine"
+                      ? "Ajouter à Mes Leads Perso (Direction)"
+                      : "Envoyer la Carte de Mission au Commercial"}
+                  </button>
+                </form>
+              )}
+            </div>
 
             {/* Liste séparée : Mes Leads Perso vs Leads Équipe Commerciale */}
             <div className="space-y-4 lg:col-span-7">
@@ -3285,7 +3634,7 @@ function CrmWorkspacePage() {
                         "rounded-xl px-3 py-1.5 text-xs font-bold transition",
                         directorLeadScope === f.id
                           ? "bg-[#c5a880] text-[#101114]"
-                          : "text-white/70 hover:text-white"
+                          : "text-white/70 hover:text-white",
                       )}
                     >
                       {f.label}
@@ -3342,7 +3691,7 @@ function CrmWorkspacePage() {
                                   leadId: lead.id,
                                   assignedTo: e.target.value,
                                 },
-                                "🔄 Attribution mise à jour !"
+                                "🔄 Attribution mise à jour !",
                               )
                             }
                             className="rounded-xl border border-white/15 bg-black/50 px-2.5 py-1.5 text-xs text-white"
@@ -3449,7 +3798,9 @@ function CrmWorkspacePage() {
                               Offre : {lead.serviceTarget} · Tél : {lead.phone}
                             </p>
                             {lead.maquetteBrief && (
-                              <p className="mt-1 text-xs text-[#e5cba4]">Brief : {lead.maquetteBrief}</p>
+                              <p className="mt-1 text-xs text-[#e5cba4]">
+                                Brief : {lead.maquetteBrief}
+                              </p>
                             )}
                           </div>
                         </div>
@@ -3482,7 +3833,7 @@ function CrmWorkspacePage() {
                                   leadId: lead.id,
                                   maquetteUrl: url,
                                 },
-                                `✅ Maquette validée et envoyée à ${closer?.fullName || "votre commercial"} !`
+                                `✅ Maquette validée et envoyée à ${closer?.fullName || "votre commercial"} !`,
                               );
                             }}
                             className="rounded-xl bg-emerald-400 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-[#0b0d11] hover:bg-emerald-300"
@@ -3561,10 +3912,11 @@ function CrmWorkspacePage() {
                   GÉNÉRATEUR OFFICIEL DE DEVIS & CONTRAT
                 </span>
                 <h3 className="mt-1 text-lg font-bold text-white">
-                  Édition avec Mentions Légales, Acompte & RIB KARMA SASU
+                  Édition avec Mentions Légales, Acompte & coordonnées bancaires
                 </h3>
                 <p className="text-xs text-white/60">
-                  Générez un contrat PDF prêt à signer ou ajoutez une ligne devis directement au catalogue.
+                  Générez un contrat PDF prêt à signer ou ajoutez une ligne devis directement au
+                  catalogue.
                 </p>
               </div>
               <button
@@ -3587,7 +3939,7 @@ function CrmWorkspacePage() {
         )}
 
         {/* ══════════════════════════════════════════════════════════════════
-            ONGLET 5 DIRECTION : FACTURATION, RIB KARMA SASU & COMMISSIONS
+            ONGLET 5 DIRECTION : FACTURATION, coordonnées bancaires & COMMISSIONS
         ══════════════════════════════════════════════════════════════════ */}
         {directorTab === "invoices" && (
           <div className="space-y-6">
@@ -3598,13 +3950,17 @@ function CrmWorkspacePage() {
                   <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-emerald-300">
                     🏦 COMPTE BANCAIRE OFFICIEL XR AGENCY
                   </span>
-                  <h3 className="mt-1 text-xl font-bold text-white">KARMA SASU — RIB Professionnel</h3>
+                  <h3 className="mt-1 text-xl font-bold text-white">
+                    Coordonnées de paiement à confirmer
+                  </h3>
                   <p className="mt-1 font-mono text-xs text-[#e5cba4]">
-                    IBAN : FR76 1751 5900 0008 1234 5678 901 · BIC : QNTOFR22
+                    Aucune coordonnée bancaire n’est enregistrée dans cette version
                   </p>
                 </div>
                 <div className="text-left sm:text-right">
-                  <span className="font-mono text-[10px] uppercase text-white/60">VIREMENTS EN ATTENTE</span>
+                  <span className="font-mono text-[10px] uppercase text-white/60">
+                    VIREMENTS EN ATTENTE
+                  </span>
                   <p className="font-mono text-2xl font-black text-white">
                     {formatMoney(snapshot.stats?.pendingInvoicesEur || 0)}
                   </p>
@@ -3670,7 +4026,7 @@ function CrmWorkspacePage() {
                     dueDate: newTaskDueDate,
                     priority: "high",
                   },
-                  "📅 Tâche ajoutée à votre calendrier !"
+                  "📅 Tâche ajoutée à votre calendrier !",
                 );
                 setNewTaskTitle("");
               }}
@@ -3723,13 +4079,13 @@ function CrmWorkspacePage() {
                           onClick={() => void apiCall({ action: "toggle_task", taskId: task.id })}
                           className={cn(
                             "flex items-center gap-2.5 text-left text-xs font-semibold",
-                            task.status === "done" ? "text-white/40 line-through" : "text-white"
+                            task.status === "done" ? "text-white/40 line-through" : "text-white",
                           )}
                         >
                           <CheckCircle2
                             className={cn(
                               "h-4 w-4",
-                              task.status === "done" ? "text-emerald-400" : "text-white/30"
+                              task.status === "done" ? "text-emerald-400" : "text-white/30",
                             )}
                           />
                           <span>{task.title}</span>
@@ -3757,13 +4113,13 @@ function CrmWorkspacePage() {
                           onClick={() => void apiCall({ action: "toggle_task", taskId: task.id })}
                           className={cn(
                             "flex items-center gap-2.5 text-left text-xs font-semibold",
-                            task.status === "done" ? "text-white/40 line-through" : "text-white"
+                            task.status === "done" ? "text-white/40 line-through" : "text-white",
                           )}
                         >
                           <CheckCircle2
                             className={cn(
                               "h-4 w-4",
-                              task.status === "done" ? "text-emerald-400" : "text-white/30"
+                              task.status === "done" ? "text-emerald-400" : "text-white/30",
                             )}
                           />
                           <span>{task.title}</span>
@@ -3786,10 +4142,7 @@ function CrmWorkspacePage() {
 
               <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
                 {OPERATIONAL_CALENDAR_PLAYBOOKS.map((play) => (
-                  <div
-                    key={play.id}
-                    className="rounded-2xl border border-white/10 bg-black/40 p-5"
-                  >
+                  <div key={play.id} className="rounded-2xl border border-white/10 bg-black/40 p-5">
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
                       <h4 className="text-sm font-bold text-white">{play.title}</h4>
                       <span className="rounded-full bg-[#c5a880]/20 px-2.5 py-0.5 font-mono text-[10px] font-bold text-[#e5cba4]">
@@ -3827,7 +4180,7 @@ function CrmWorkspacePage() {
           onClick={() => setDirectorTab("overview")}
           className={cn(
             "flex flex-col items-center gap-1 py-1 px-2 rounded-xl transition active:scale-95",
-            directorTab === "overview" ? "text-[#c5a880] font-bold" : "text-white/60"
+            directorTab === "overview" ? "text-[#c5a880] font-bold" : "text-white/60",
           )}
         >
           <span className="text-lg">👑</span>
@@ -3838,7 +4191,7 @@ function CrmWorkspacePage() {
           onClick={() => setDirectorTab("leads")}
           className={cn(
             "flex flex-col items-center gap-1 py-1 px-2 rounded-xl transition active:scale-95",
-            directorTab === "leads" ? "text-[#c5a880] font-bold" : "text-white/60"
+            directorTab === "leads" ? "text-[#c5a880] font-bold" : "text-white/60",
           )}
         >
           <span className="text-lg">📸</span>
@@ -3849,7 +4202,7 @@ function CrmWorkspacePage() {
           onClick={() => setDirectorTab("maquettes")}
           className={cn(
             "flex flex-col items-center gap-1 py-1 px-2 rounded-xl transition active:scale-95",
-            directorTab === "maquettes" ? "text-[#c5a880] font-bold" : "text-white/60"
+            directorTab === "maquettes" ? "text-[#c5a880] font-bold" : "text-white/60",
           )}
         >
           <span className="text-lg">🎨</span>
@@ -3860,7 +4213,7 @@ function CrmWorkspacePage() {
           onClick={() => setDirectorTab("quotes")}
           className={cn(
             "flex flex-col items-center gap-1 py-1 px-2 rounded-xl transition active:scale-95",
-            directorTab === "quotes" ? "text-[#c5a880] font-bold" : "text-white/60"
+            directorTab === "quotes" ? "text-[#c5a880] font-bold" : "text-white/60",
           )}
         >
           <span className="text-lg">📝</span>
@@ -3871,9 +4224,11 @@ function CrmWorkspacePage() {
           onClick={() => setMobileMenuOpen(true)}
           className={cn(
             "flex flex-col items-center gap-1 py-1 px-2 rounded-xl transition active:scale-95",
-            ["clients", "invoices", "projects", "providers", "calendar", "leaderboard"].includes(directorTab)
+            ["clients", "invoices", "projects", "providers", "calendar", "leaderboard"].includes(
+              directorTab,
+            )
               ? "text-[#c5a880] font-bold"
-              : "text-white/60"
+              : "text-white/60",
           )}
         >
           <span className="text-lg">⋯</span>
@@ -3917,7 +4272,7 @@ function CrmWorkspacePage() {
                     "flex items-center gap-2 rounded-xl border p-3 text-left text-xs font-bold transition",
                     directorTab === item.id
                       ? "border-[#c5a880] bg-[#c5a880]/15 text-[#e5cba4]"
-                      : "border-white/10 bg-white/5 text-white/80 hover:bg-white/10"
+                      : "border-white/10 bg-white/5 text-white/80 hover:bg-white/10",
                   )}
                 >
                   <span className="text-base">{item.icon}</span>
@@ -3948,7 +4303,9 @@ function CrmWorkspacePage() {
                 <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#c5a880]">
                   XR AGENCY · STUDIO DEVIS OFFICIEL & CONTRAT
                 </span>
-                <h3 className="text-xl font-bold">Générateur Officiel avec RIB KARMA SASU</h3>
+                <h3 className="text-xl font-bold">
+                  Générateur Officiel avec coordonnées bancaires
+                </h3>
               </div>
               <button
                 type="button"
