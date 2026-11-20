@@ -81,7 +81,11 @@ export function CrmHrDashboard({
   onLogout,
   onSwitchToCloserMode,
 }: CrmHrDashboardProps) {
-  const [activeTab, setActiveTab] = useState<"recruits" | "candidates" | "training" | "schedules" | "commissions">("recruits");
+  const [activeTab, setActiveTab] = useState<
+    "recruits" | "candidates" | "training" | "schedules" | "commissions" | "inbox"
+  >("recruits");
+  const [martinForwardEmail, setMartinForwardEmail] = useState("contact.xragency@gmail.com");
+  const [forwardSaved, setForwardSaved] = useState(false);
 
   // ── COMMERCIAUX RECRUTÉS PAR MARTIN (COMMISSION 20% POUR EUX, 10% OVERRIDE POUR MARTIN) ──
   const [recruits, setRecruits] = useState<RecruitedCloser[]>([
@@ -355,6 +359,7 @@ export function CrmHrDashboard({
           {[
             { id: "recruits", label: "👥 Mon Équipe de Commerciaux", count: recruits.length },
             { id: "candidates", label: "📋 Pipeline Recrutement", count: candidates.filter(c => c.status !== "integre").length },
+            { id: "inbox", label: "📬 Boîte Mail RH & Redirection", count: candidates.length },
             { id: "training", label: "🎓 Formation Académie (90j)" },
             { id: "schedules", label: "📅 Plannings & Shifts d'Appels" },
             { id: "commissions", label: "💰 Barème & Règle des 10% / 20%" },
@@ -700,6 +705,93 @@ export function CrmHrDashboard({
                   <p>• Les équipes voient uniquement le <strong>volume généré</strong> (CA brut &amp; nombre de deals signés) pour le classement de closing.</p>
                   <p>• Seul le <strong>Directeur Général</strong> a une vue consolidée sur l'ensemble des cagnottes de l'agence.</p>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── ONGLET 6 : BOÎTE MAIL INTERNE RH & REDIRECTION E-MAIL ── */}
+        {activeTab === "inbox" && (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-black text-white">
+                📬 Boîte de Réception Interne RH &amp; Configuration de Redirection
+              </h3>
+              <p className="text-xs text-white/60">
+                L'identifiant <strong className="text-indigo-300">martin@xragency.fr</strong> sert d'identifiant de connexion CRM et de boîte de réception centralisée dans cet onglet.
+              </p>
+            </div>
+
+            {/* Configuration de la vraie boîte mail externe de redirection */}
+            <div className="rounded-3xl border border-indigo-400/40 bg-[#121422] p-5 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <span className="font-mono text-[10px] font-bold uppercase text-indigo-300">
+                    REDIRECTION E-MAIL TEMPS RÉEL (RESEND)
+                  </span>
+                  <h4 className="text-base font-bold text-white mt-0.5">
+                    Où recevoir les e-mails externes &amp; candidatures du site ?
+                  </h4>
+                  <p className="text-xs text-white/65 mt-1">
+                    Par défaut, tous les formulaires de recrutement (<code className="text-indigo-300">/recrutement</code>) arrivent instantanément ici dans le CRM <strong>ET</strong> sont envoyés par e-mail sur la boîte principale de Direction (<strong className="text-emerald-300">contact.xragency@gmail.com</strong>). Vous pouvez ajouter ci-dessous l'adresse e-mail personnelle réelle de Martin pour qu'il reçoive une copie directe sur son téléphone :
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+                <input
+                  type="email"
+                  value={martinForwardEmail}
+                  onChange={(e) => {
+                    setMartinForwardEmail(e.target.value);
+                    setForwardSaved(false);
+                  }}
+                  placeholder="Ex: martin.recrutement@gmail.com"
+                  className="flex-1 rounded-xl border border-white/15 bg-black/60 px-4 py-2.5 text-xs text-white outline-none focus:border-indigo-400"
+                />
+                <button
+                  type="button"
+                  onClick={() => setForwardSaved(true)}
+                  className="rounded-xl bg-indigo-600 px-5 py-2.5 text-xs font-black text-white hover:bg-indigo-500 transition"
+                >
+                  {forwardSaved ? "✅ Redirection Enregistrée" : "Enregistrer l'E-mail de Réception"}
+                </button>
+              </div>
+            </div>
+
+            {/* Liste des messages et candidatures reçus dans la boîte interne */}
+            <div className="rounded-3xl border border-white/10 bg-[#121420] p-5 space-y-4">
+              <h4 className="text-sm font-black text-white flex items-center gap-2">
+                <Mail className="h-4 w-4 text-indigo-400" />
+                <span>Messages &amp; Candidatures Reçus sur le Portail RH ({candidates.length})</span>
+              </h4>
+
+              <div className="divide-y divide-white/10">
+                {candidates.map((cand) => (
+                  <div key={cand.id} className="py-3.5 flex flex-wrap items-center justify-between gap-3">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="rounded-md bg-indigo-500/20 px-2 py-0.5 font-mono text-[10px] font-bold text-indigo-300">
+                          CANDIDATURE WEB
+                        </span>
+                        <span className="font-bold text-sm text-white">{cand.fullName}</span>
+                        <span className="text-xs text-white/50">&lt;{cand.email}&gt;</span>
+                      </div>
+                      <p className="text-xs text-white/75">{cand.notes}</p>
+                      <span className="font-mono text-[10px] text-white/50 block">
+                        📞 {cand.phone} · 📍 {cand.city} · Reçu : {cand.appliedDate}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("candidates")}
+                      className="rounded-xl border border-indigo-400/40 bg-indigo-500/15 px-3 py-1.5 text-xs font-bold text-indigo-200 hover:bg-indigo-500/30"
+                    >
+                      Ouvrir la fiche candidat →
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

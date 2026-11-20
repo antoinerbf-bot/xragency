@@ -1392,10 +1392,17 @@ export function recordLeadFromWebsite(
     return { ok: true, leadId: existing.id };
   }
 
-  // Attribution intelligente : Lucas par défaut pour sites/maps, Sarah pour school/conseil
-  const targetMemberId = (params.need || "").toLowerCase().includes("school")
-    ? "mem-sarah"
-    : "mem-lucas";
+  // Attribution intelligente :
+  // - Candidatures recrutement -> automatiquement assignées à Martin (mem-martin) !
+  // - School/conseil -> Sarah (mem-sarah)
+  // - Sites/Maps -> Lucas (mem-lucas)
+  const lowerNeed = (params.need || "").toLowerCase();
+  const targetMemberId =
+    lowerNeed.includes("candidature") || lowerNeed.includes("recrutement") || lowerNeed.includes("rh")
+      ? "mem-martin"
+      : lowerNeed.includes("school")
+        ? "mem-sarah"
+        : "mem-lucas";
   const targetMember = store.members.find((m) => m.id === targetMemberId) || store.members[0];
 
   const newLead: CrmLead = {
