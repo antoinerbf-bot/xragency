@@ -117,8 +117,9 @@ export function computeLeadCommissionRate(
       s.includes("web")) &&
     !s.includes("webcare");
 
-  // RÈGLE SPÉCIALE CHRISTEL THIRION (christelthirion@msn.com) :
+  // RÈGLE SPÉCIALE CHRISTEL THIRION (christelthirion@msn.com) — RECRUTÉE PAR MARTIN :
   // 20% sur les sites internet, 10% sur les mensualités, offres Google Maps ou vente de CRM
+  // + 10% pour Martin sur le CHIFFRE D'AFFAIRES généré
   if (
     member?.id === "mem-christel" ||
     member?.email?.toLowerCase() === "christelthirion@msn.com"
@@ -126,12 +127,14 @@ export function computeLeadCommissionRate(
     if (isWebsite) {
       return {
         ratePct: 20,
-        ruleLabel: "20 % (Sites Internet · Barème Christel)",
+        ruleLabel: "20 % (Sites Internet · Barème Christel · Recrue Martin)",
+        overridePct: 10,
       };
     }
     return {
       ratePct: 10,
-      ruleLabel: "10 % (Maps / Mensualités / CRM · Barème Christel)",
+      ruleLabel: "10 % (Maps / Mensualités / CRM · Barème Christel · Recrue Martin)",
+      overridePct: 10,
     };
   }
 
@@ -526,14 +529,29 @@ export function createInitialSeed(): CrmStore {
         id: "mem-christel",
         email: "christelthirion@msn.com",
         fullName: "Christel Thirion",
-        title: "Conseillère & Closer B2B · Sites (20%) & Maps/CRM/Mensuel (10%)",
+        title: "Closer B2B · Recrue Martin (Sites 20% / Maps·CRM·Mensuel 10%)",
         role: "member",
         portalType: "closer",
         phoneLine: "+33 6 00 00 00 00",
+        recruitedBy: "mem-martin", // Recrutée par Martin (Martin prend 10% sur son CA)
         commissionPct: 20, // 20% sur les sites et 10% sur mensualités / Google Maps / CRM
         passwordHash: hashPassword(staffPass),
         active: true,
         createdAt: iso(11_000),
+      },
+      {
+        id: "mem-camille",
+        email: "camille.b@outlook.fr",
+        fullName: "Camille Bernard",
+        title: "Closer B2B · Recrue Filière Martin",
+        role: "member",
+        portalType: "closer",
+        phoneLine: "+33 6 55 44 33 22",
+        recruitedBy: "mem-martin", // Recrutée par Martin (Martin prend 10% sur son CA)
+        commissionPct: 20, // 20% pour les recrues rentrées par Martin
+        passwordHash: hashPassword(staffPass),
+        active: true,
+        createdAt: iso(10_500),
       },
       {
         id: "mem-martin",
@@ -1078,6 +1096,14 @@ export function loadStore(): CrmStore {
                 email: "martin.leclipteur@gmail.com",
                 portalType: "hr_manager",
                 overrideCommissionPct: 10,
+              };
+            }
+          } else if (seedMember.id === "mem-christel" || seedMember.id === "mem-camille") {
+            const idx = mergedMembers.findIndex((m) => m.id === seedMember.id);
+            if (idx !== -1) {
+              mergedMembers[idx] = {
+                ...mergedMembers[idx],
+                recruitedBy: "mem-martin",
               };
             }
           }

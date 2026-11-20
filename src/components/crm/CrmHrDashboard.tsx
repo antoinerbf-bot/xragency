@@ -39,6 +39,8 @@ export interface RecruitedCloser {
   trainingPhase: "Mois 1 - Fondations" | "Mois 2 - Objections" | "Mois 3 - Haut-Ticket";
   status: "in_training" | "active_closer" | "on_probation";
   generatedRevenueEur: number;
+  commissionRuleLabel?: string;
+  recruitCommissionEur?: number;
   signedDealsCount: number;
   callsCount: number;
   weeklySchedule: {
@@ -87,8 +89,52 @@ export function CrmHrDashboard({
   const [martinForwardEmail, setMartinForwardEmail] = useState("martin.leclipteur@gmail.com");
   const [forwardSaved, setForwardSaved] = useState(true);
 
-  // ── COMMERCIAUX RECRUTÉS PAR MARTIN (COMMISSION 20% POUR EUX, 10% OVERRIDE POUR MARTIN) ──
+  // ── COMMERCIAUX RECRUTÉS PAR MARTIN (MARTIN PREND 10% SUR LE CHIFFRE D'AFFAIRES DE CHAQUE RECRUTEMENT) ──
   const [recruits, setRecruits] = useState<RecruitedCloser[]>([
+    {
+      id: "mem-christel",
+      fullName: "Christel Thirion",
+      email: "christelthirion@msn.com",
+      phone: "+33 6 00 00 00 00",
+      joinedDate: "15 Novembre 2026",
+      trainingDay: 35,
+      trainingPhase: "Mois 2 - Objections",
+      status: "active_closer",
+      generatedRevenueEur: 6490,
+      commissionRuleLabel: "Sa Comm (20% Sites / 10% Maps·CRM)",
+      recruitCommissionEur: 1098,
+      signedDealsCount: 5,
+      callsCount: 118,
+      weeklySchedule: {
+        monday: "09h - 13h (Phoning Sites 20%)",
+        tuesday: "14h - 18h (Offres Google Maps 10%)",
+        wednesday: "09h - 13h (Closing CRM & Mensualités 10%)",
+        thursday: "14h - 18h (Suivi Maquettes 24h)",
+        friday: "10h - 12h (Point Équipe avec Martin)",
+      },
+    },
+    {
+      id: "mem-camille",
+      fullName: "Camille Bernard",
+      email: "camille.b@outlook.fr",
+      phone: "+33 6 55 44 33 22",
+      joinedDate: "19 Novembre 2026",
+      trainingDay: 24,
+      trainingPhase: "Mois 1 - Fondations",
+      status: "active_closer",
+      generatedRevenueEur: 4990,
+      commissionRuleLabel: "Sa Comm (20%)",
+      recruitCommissionEur: 998,
+      signedDealsCount: 4,
+      callsCount: 95,
+      weeklySchedule: {
+        monday: "09h - 13h (Phoning B2B)",
+        tuesday: "14h - 18h (Envoi Maquettes WhatsApp)",
+        wednesday: "09h - 13h (Closing)",
+        thursday: "14h - 18h (Relances Prospects)",
+        friday: "10h - 12h (Point Équipe avec Martin)",
+      },
+    },
     {
       id: "mem-karim",
       fullName: "Karim Diallo",
@@ -99,6 +145,8 @@ export function CrmHrDashboard({
       trainingPhase: "Mois 2 - Objections",
       status: "active_closer",
       generatedRevenueEur: 8400,
+      commissionRuleLabel: "Sa Comm (20%)",
+      recruitCommissionEur: 1680,
       signedDealsCount: 5,
       callsCount: 142,
       weeklySchedule: {
@@ -119,6 +167,8 @@ export function CrmHrDashboard({
       trainingPhase: "Mois 1 - Fondations",
       status: "in_training",
       generatedRevenueEur: 2997,
+      commissionRuleLabel: "Sa Comm (20%)",
+      recruitCommissionEur: 599,
       signedDealsCount: 2,
       callsCount: 68,
       weeklySchedule: {
@@ -139,6 +189,8 @@ export function CrmHrDashboard({
       trainingPhase: "Mois 1 - Fondations",
       status: "in_training",
       generatedRevenueEur: 0,
+      commissionRuleLabel: "Sa Comm (20%)",
+      recruitCommissionEur: 0,
       signedDealsCount: 0,
       callsCount: 12,
       weeklySchedule: {
@@ -172,10 +224,10 @@ export function CrmHrDashboard({
       email: "camille.b@outlook.fr",
       city: "Bordeaux",
       experienceLevel: "Intermédiaire B2B",
-      status: "entretien_valide",
-      interviewDate: "Validé le 19 Nov",
-      notes: "Motivation 10/10. Prête à démarrer la formation 90 jours lundi prochain.",
-      appliedDate: "Il y a 4 jours",
+      status: "integre",
+      interviewDate: "Intégrée par Martin",
+      notes: "Recrutée et formée par Martin · 10 % sur son Chiffre d'Affaires pour Martin.",
+      appliedDate: "Intégrée dans l'équipe",
     },
     {
       id: "cand-3",
@@ -394,9 +446,11 @@ export function CrmHrDashboard({
           <div className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h3 className="text-lg font-black text-white">Commerciaux Recrutés par Martin (Filière 20%)</h3>
+                <h3 className="text-lg font-black text-white">
+                  Commerciaux Recrutés par Martin (10 % sur le CA de chaque recrutement)
+                </h3>
                 <p className="text-xs text-white/60">
-                  Chacun prend 20 % de commission sur tout ce qu'il génère. Martin prend 10 % d'override managérial.
+                  Martin prend <strong>10 % sur le CHIFFRE D'AFFAIRES</strong> généré par chaque commercial qu'il a recruté (Christel, Camille, Karim, Emma...).
                 </p>
               </div>
               <button
@@ -455,13 +509,21 @@ export function CrmHrDashboard({
                       </span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-emerald-400 uppercase font-mono block">Sa Comm (20%)</span>
+                      <span className="text-[10px] text-emerald-400 uppercase font-mono block">
+                        {recruit.commissionRuleLabel || "Sa Comm (20%)"}
+                      </span>
                       <span className="text-sm font-black text-emerald-300">
-                        {Math.round(recruit.generatedRevenueEur * 0.2).toLocaleString("fr-FR")} €
+                        {(
+                          recruit.recruitCommissionEur ??
+                          Math.round(recruit.generatedRevenueEur * 0.2)
+                        ).toLocaleString("fr-FR")}{" "}
+                        €
                       </span>
                     </div>
                     <div className="col-span-2 pt-1 border-t border-white/10 flex justify-between items-center">
-                      <span className="text-[10px] text-amber-300 font-mono">Commission Martin (10%) :</span>
+                      <span className="text-[10px] text-amber-300 font-mono font-bold">
+                        Commission Martin (10% du CA) :
+                      </span>
                       <span className="text-xs font-black text-amber-300">
                         +{Math.round(recruit.generatedRevenueEur * 0.1).toLocaleString("fr-FR")} €
                       </span>
