@@ -101,12 +101,40 @@ export interface CrmLead {
  */
 export function computeLeadCommissionRate(
   serviceTarget: string,
-  member?: { recruitedBy?: string; commissionPct?: number },
+  member?: { id?: string; email?: string; recruitedBy?: string; commissionPct?: number },
 ): {
   ratePct: number;
   ruleLabel: string;
   overridePct?: number;
 } {
+  const s = (serviceTarget || "").toLowerCase();
+  const isWebsite =
+    (s.includes("site") ||
+      s.includes("vitrine") ||
+      s.includes("e-commerce") ||
+      s.includes("ecommerce") ||
+      s.includes("refonte") ||
+      s.includes("web")) &&
+    !s.includes("webcare");
+
+  // RÈGLE SPÉCIALE CHRISTEL THIRION (christelthirion@msn.com) :
+  // 20% sur les sites internet, 10% sur les mensualités, offres Google Maps ou vente de CRM
+  if (
+    member?.id === "mem-christel" ||
+    member?.email?.toLowerCase() === "christelthirion@msn.com"
+  ) {
+    if (isWebsite) {
+      return {
+        ratePct: 20,
+        ruleLabel: "20 % (Sites Internet · Barème Christel)",
+      };
+    }
+    return {
+      ratePct: 10,
+      ruleLabel: "10 % (Maps / Mensualités / CRM · Barème Christel)",
+    };
+  }
+
   // RÈGLE COMMERCIAUX MARTIN : 20% sur tout ce qu'ils génèrent + 10% pour Martin
   if (member?.recruitedBy === "mem-martin") {
     return {
@@ -116,21 +144,11 @@ export function computeLeadCommissionRate(
     };
   }
 
-  const s = (serviceTarget || "").toLowerCase();
   if (s.includes("crm") || s.includes("pos") || s.includes("caisse")) {
     return { ratePct: 20, ruleLabel: "20 % (Offre CRM / POS)" };
   }
-  if (
-    s.includes("site") ||
-    s.includes("vitrine") ||
-    s.includes("e-commerce") ||
-    s.includes("ecommerce") ||
-    s.includes("refonte") ||
-    s.includes("web")
-  ) {
-    if (!s.includes("webcare")) {
-      return { ratePct: 30, ruleLabel: "30 % (Site Internet Classique)" };
-    }
+  if (isWebsite) {
+    return { ratePct: 30, ruleLabel: "30 % (Site Internet Classique)" };
   }
   return { ratePct: member?.commissionPct || 10, ruleLabel: `${member?.commissionPct || 10} % (Barème Standard)` };
 }
@@ -503,6 +521,19 @@ export function createInitialSeed(): CrmStore {
         passwordHash: hashPassword(staffPass),
         active: true,
         createdAt: iso(12_000),
+      },
+      {
+        id: "mem-christel",
+        email: "christelthirion@msn.com",
+        fullName: "Christel Thirion",
+        title: "Conseillère & Closer B2B · Sites (20%) & Maps/CRM/Mensuel (10%)",
+        role: "member",
+        portalType: "closer",
+        phoneLine: "+33 6 00 00 00 00",
+        commissionPct: 20, // 20% sur les sites et 10% sur mensualités / Google Maps / CRM
+        passwordHash: hashPassword(staffPass),
+        active: true,
+        createdAt: iso(11_000),
       },
       {
         id: "mem-martin",

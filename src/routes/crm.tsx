@@ -150,21 +150,50 @@ interface CrmSnapshot {
 }
 
 // ── RÈGLE DE COMMISSION OFFICIELLE XR AGENCY ──
-function getOfficialCommission(serviceTarget: string, budgetEur: number) {
+function getOfficialCommission(
+  serviceTarget: string,
+  budgetEur: number,
+  member?: { id?: string; email?: string; recruitedBy?: string } | null,
+) {
   const s = (serviceTarget || "").toLowerCase();
+  const isWebsite =
+    (s.includes("site") ||
+      s.includes("vitrine") ||
+      s.includes("e-commerce") ||
+      s.includes("ecommerce") ||
+      s.includes("refonte") ||
+      s.includes("web")) &&
+    !s.includes("webcare");
+
+  // 1. RÈGLE SPÉCIALE CHRISTEL THIRION (christelthirion@msn.com) :
+  // 20 % sur les sites internet, 10 % sur les mensualités, offres Google Maps ou vente de CRM
+  if (
+    member?.id === "mem-christel" ||
+    member?.email?.toLowerCase() === "christelthirion@msn.com"
+  ) {
+    const ratePct = isWebsite ? 20 : 10;
+    const ruleLabel = isWebsite
+      ? "20 % (Site Internet · Barème Christel)"
+      : "10 % (Maps / Mensualités / CRM · Barème Christel)";
+    const amountEur = Math.round(((Number(budgetEur) || 0) * ratePct) / 100);
+    return { ratePct, ruleLabel, amountEur };
+  }
+
+  // 2. RÈGLE RECRUES FILIÈRE MARTIN : 20 % sur tout
+  if (member?.recruitedBy === "mem-martin") {
+    const ratePct = 20;
+    const ruleLabel = "20 % (Filière Martin)";
+    const amountEur = Math.round(((Number(budgetEur) || 0) * ratePct) / 100);
+    return { ratePct, ruleLabel, amountEur };
+  }
+
+  // 3. RÈGLE CLASSIQUE
   let ratePct = 10;
   let ruleLabel = "10 % (Google Maps / Abonnement)";
   if (s.includes("crm") || s.includes("pos") || s.includes("caisse")) {
     ratePct = 20;
     ruleLabel = "20 % (CRM & Système POS)";
-  } else if (
-    (s.includes("site") ||
-      s.includes("vitrine") ||
-      s.includes("e-commerce") ||
-      s.includes("ecommerce") ||
-      s.includes("web")) &&
-    !s.includes("webcare")
-  ) {
+  } else if (isWebsite) {
     ratePct = 30;
     ruleLabel = "30 % (Site Internet)";
   }
@@ -1044,7 +1073,8 @@ function CrmWorkspacePage() {
     let pendingVaultEur = 0;
 
     for (const l of signedLeads) {
-      const { amountEur } = getOfficialCommission(l.serviceTarget, l.budgetEur);
+      const assignedMember = members.find((m) => m.id === l.assignedTo) || user;
+      const { amountEur } = getOfficialCommission(l.serviceTarget, l.budgetEur, assignedMember);
       if (paidCompanies.has(l.company.toLowerCase())) {
         unlockedEur += amountEur;
       } else {
@@ -1052,7 +1082,7 @@ function CrmWorkspacePage() {
       }
     }
     return { unlockedEur, pendingVaultEur, totalSignedEur: unlockedEur + pendingVaultEur };
-  }, [leads, invoices]);
+  }, [leads, invoices, members, user]);
 
   const pendingMaquettes = useMemo(
     () => leads.filter((l) => l.maquetteStatus === "pending"),
@@ -1710,7 +1740,7 @@ function CrmWorkspacePage() {
                 (() => {
                   const safeIndex = Math.abs(closerQuestIndex) % leads.length;
                   const lead = leads[safeIndex];
-                  const comm = getOfficialCommission(lead.serviceTarget, lead.budgetEur);
+                  const comm = getOfficialCommission(lead.serviceTarget, lead.budgetEur, user);
                   const urgent48h = isLeadUrgent48h(lead);
 
                   return (
@@ -1919,7 +1949,7 @@ function CrmWorkspacePage() {
 
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     {leads.map((lead) => {
-                      const comm = getOfficialCommission(lead.serviceTarget, lead.budgetEur);
+                      const comm = getOfficialCommission(lead.serviceTarget, lead.budgetEur, user);
                       const urgent48h = isLeadUrgent48h(lead);
 
                       return (
@@ -2343,7 +2373,7 @@ function CrmWorkspacePage() {
 
                 {/* Résultat du calcul de commission */}
                 {(() => {
-                  const comm = getOfficialCommission(simulatedServiceLabel, simulatedPriceEur);
+                  const comm = getOfficialCommission(simulatedServiceLabel, simulatedPriceEur, user);
                   return (
                     <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-emerald-400/50 bg-gradient-to-r from-emerald-950/40 via-emerald-900/20 to-black p-4">
                       <div>
@@ -3796,7 +3826,7 @@ function CrmWorkspacePage() {
 
               <div className="space-y-3">
                 {filteredDirectorLeads.map((lead) => {
-                  const comm = getOfficialCommission(lead.serviceTarget, lead.budgetEur);
+                  const comm = getOfficialCommission(lead.serviceTarget, lead.budgetEur, user);
                   const owner = members.find((m) => m.id === lead.assignedTo);
                   return (
                     <div
