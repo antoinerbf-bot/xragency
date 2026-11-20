@@ -72,6 +72,7 @@ import { CrmUltraLudiqueArena } from "@/components/crm/CrmUltraLudiqueArena";
 import { CharacterSelectLogin } from "@/components/crm/CharacterSelectLogin";
 import { CrmSchoolDashboard } from "@/components/crm/CrmSchoolDashboard";
 import { CrmSimsHQ3D } from "@/components/crm/CrmSimsHQ3D";
+import { CrmHrDashboard } from "@/components/crm/CrmHrDashboard";
 import { XR_ADVISORS } from "@/lib/xr-advisors";
 import { playXpChime, generateLovableArchitecturePrompt } from "@/lib/rpg-engine";
 import { cn } from "@/lib/utils";
@@ -99,10 +100,12 @@ interface SafeMember {
   fullName: string;
   title: string;
   role: "admin" | "member" | "client";
-  portalType?: "director" | "closer" | "student" | "client";
+  portalType?: "director" | "closer" | "student" | "client" | "hr_manager";
   clientId?: string;
   phoneLine: string;
   commissionPct: number;
+  recruitedBy?: string;
+  overrideCommissionPct?: number;
   active: boolean;
   createdAt: string;
 }
@@ -455,12 +458,14 @@ function CrmWorkspacePage() {
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  // ── AUTHENTICATION STATE (3 PORTAILS PAR CODE PIN) ──
-  const [selectedPortalRole, setSelectedPortalRole] = useState<"director" | "closer" | "student">(
-    "director",
-  );
+  // ── AUTHENTICATION STATE (PORTAILS SÉCURISÉS : DIRECTION, RH MARTIN, CLOSER, ACADÉMIE) ──
+  const [selectedPortalRole, setSelectedPortalRole] = useState<
+    "director" | "closer" | "student" | "hr_manager"
+  >("director");
   const [pinCode, setPinCode] = useState("");
   const [closerAccountEmail, setCloserAccountEmail] = useState("lucas@xragency.fr");
+  const [martinViewMode, setMartinViewMode] = useState<"hr" | "closer">("hr");
+  const [directorViewingHr, setDirectorViewingHr] = useState(false);
 
   // ── DIRECTOR TABS & MODES D'AFFICHAGE (COCKPIT PRO vs BOSS ARCADE vs MONDE METAVERSE vs ARÈNE CLOSER vs SIMS HQ 3D) ──
   const [directorDisplayMode, setDirectorDisplayMode] = useState<
@@ -1218,6 +1223,15 @@ function CrmWorkspacePage() {
               Ouvrir mon Espace Client
               <ArrowUpRight className="h-4 w-4 text-[#D8BC94]" />
             </Link>
+            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr") && (
+              <button
+                type="button"
+                onClick={() => setMartinViewMode("hr")}
+                className="rounded-full border border-indigo-400/50 bg-indigo-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-indigo-300 hover:bg-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.3)]"
+              >
+                👥 Retour Espace RH Martin
+              </button>
+            )}
             <button
               type="button"
               onClick={handleLogout}
@@ -1232,6 +1246,30 @@ function CrmWorkspacePage() {
   }
 
   const effectivePortal = user.portalType || (user.role === "admin" ? "director" : "closer");
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // PORTAIL 4 : ESPACE RH & MANAGEMENT COMMERCIAL (MARTIN)
+  // Interface exclusive réservée à Martin (et au Directeur)
+  // Double Casquette : Mode RH Exclusif (10% override) ou Mode Commercial Personnel (Martin)
+  // ══════════════════════════════════════════════════════════════════════════
+  if (
+    (effectivePortal === "hr_manager" || user.id === "mem-martin" || user.email === "martin@xragency.fr") &&
+    martinViewMode === "hr"
+  ) {
+    return (
+      <CrmHrDashboard
+        currentUser={{
+          id: user.id,
+          fullName: user.fullName,
+          email: user.email,
+          role: user.role,
+        }}
+        leads={leads}
+        onLogout={handleLogout}
+        onSwitchToCloserMode={() => setMartinViewMode("closer")}
+      />
+    );
+  }
 
   // ══════════════════════════════════════════════════════════════════════════
   // PORTAIL 3 : ACADÉMIE XR SCHOOL (AVEC PASSERELLE VERS LE CRM COMMERCIAL)
@@ -1249,6 +1287,15 @@ function CrmWorkspacePage() {
           </div>
 
           <div className="flex items-center gap-2">
+            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr") && (
+              <button
+                type="button"
+                onClick={() => setMartinViewMode("hr")}
+                className="rounded-full border border-indigo-400/50 bg-indigo-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-indigo-300 hover:bg-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.3)]"
+              >
+                👥 Retour Espace RH Martin
+              </button>
+            )}
             <button
               type="button"
               onClick={handleLogout}
@@ -1345,6 +1392,15 @@ function CrmWorkspacePage() {
             )}
           </div>
           <div className="flex items-center gap-2">
+            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr") && (
+              <button
+                type="button"
+                onClick={() => setMartinViewMode("hr")}
+                className="rounded-full border border-indigo-400/50 bg-indigo-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-indigo-300 hover:bg-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.3)]"
+              >
+                👥 Retour Espace RH Martin
+              </button>
+            )}
             <button
               type="button"
               onClick={handleLogout}
@@ -2712,6 +2768,37 @@ function CrmWorkspacePage() {
   // PORTAIL 1 : QG DIRECTION GÉNÉRALE
   // CADRE UNIFIÉ PERMANENT : 10 PILIERS + MODES LUDIQUES INTÉGRÉS
   // ══════════════════════════════════════════════════════════════════════════
+  if (directorViewingHr) {
+    return (
+      <div className="relative min-h-screen bg-[#07090e]">
+        <div className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-3 border-b border-indigo-500/30 bg-black/90 px-4 py-2.5 backdrop-blur-xl">
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-indigo-500/20 px-3 py-1 font-mono text-xs font-black text-indigo-300">
+              👑 DIRECTION · SUPERVISION DU PÔLE RH & RECRUTEMENT DE MARTIN
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setDirectorViewingHr(false)}
+            className="rounded-full border border-indigo-400 bg-indigo-500/20 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-indigo-200 hover:bg-indigo-500/30"
+          >
+            ← Revenir au QG Direction
+          </button>
+        </div>
+        <CrmHrDashboard
+          currentUser={{
+            id: user.id,
+            fullName: `${user.fullName} (Supervision Direction)`,
+            email: user.email,
+            role: "admin",
+          }}
+          leads={leads}
+          onLogout={handleLogout}
+        />
+      </div>
+    );
+  }
+
   if (directorDisplayMode === "sims_3d") {
     return (
       <CrmSimsHQ3D
@@ -2762,6 +2849,15 @@ function CrmWorkspacePage() {
             >
               ← Revenir au QG Direction
             </button>
+            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr") && (
+              <button
+                type="button"
+                onClick={() => setMartinViewMode("hr")}
+                className="rounded-full border border-indigo-400/50 bg-indigo-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-indigo-300 hover:bg-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.3)]"
+              >
+                👥 Retour Espace RH Martin
+              </button>
+            )}
             <button
               type="button"
               onClick={handleLogout}
@@ -2839,6 +2935,16 @@ function CrmWorkspacePage() {
               <span>Arène Commerciale Ludique ⚔️</span>
             </button>
 
+            {/* Bouton Pôle RH & Recrutement Martin (Supervision Direction) */}
+            <button
+              type="button"
+              onClick={() => setDirectorViewingHr(true)}
+              className="inline-flex items-center gap-1.5 rounded-full border border-indigo-400/60 bg-indigo-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.3)] transition hover:bg-indigo-500/30"
+            >
+              <Users className="h-3.5 w-3.5" />
+              <span>Pôle RH Martin</span>
+            </button>
+
             {/* Badge War Room Direction */}
             <div className="hidden sm:flex items-center gap-2 rounded-2xl border border-[#c5a880]/35 bg-black/60 px-3 py-1.5">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -2900,6 +3006,15 @@ function CrmWorkspacePage() {
               </button>
             ))}
 
+            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr") && (
+              <button
+                type="button"
+                onClick={() => setMartinViewMode("hr")}
+                className="rounded-full border border-indigo-400/50 bg-indigo-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-indigo-300 hover:bg-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.3)]"
+              >
+                👥 Retour Espace RH Martin
+              </button>
+            )}
             <button
               type="button"
               onClick={handleLogout}

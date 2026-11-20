@@ -12,6 +12,7 @@ import {
   Layers,
   ArrowUpRight,
   HeartHandshake,
+  Lock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -38,6 +39,15 @@ export function CrmEgoLeaderboard({ currentUserName }: CrmEgoLeaderboardProps) {
   const firstPlace = sortedStats[0];
   const secondPlace = sortedStats[1];
   const thirdPlace = sortedStats[2];
+
+  // RÈGLE DE CONFIDENTIALITÉ ABSOLUE : Personne ne peut voir ce que les autres gagnent,
+  // mais tout le monde sait ce qu'ils génèrent en CA ! Seul le commercial lui-même et la Direction voient les gains en €.
+  const canSeeCommission = (sellerName: string) => {
+    if (!currentUserName) return true;
+    const normUser = currentUserName.toLowerCase();
+    if (normUser.includes("direct") || normUser.includes("antoine") || normUser.includes("admin")) return true;
+    return sellerName.toLowerCase().includes(normUser) || normUser.includes(sellerName.toLowerCase());
+  };
 
   return (
     <div className="space-y-6 select-none">
@@ -94,7 +104,13 @@ export function CrmEgoLeaderboard({ currentUserName }: CrmEgoLeaderboardProps) {
             <div className="rounded-2xl bg-black/60 border border-white/10 p-3 space-y-1">
               <span className="text-[9px] font-black uppercase text-neutral-400 block">Commissions Encaissées</span>
               <span className="text-xl font-black text-emerald-400 font-mono">
-                {secondPlace.commissionEarnedEur.toLocaleString()} € 🪙
+                {canSeeCommission(secondPlace.name) ? (
+                  `${secondPlace.commissionEarnedEur.toLocaleString()} € 🪙`
+                ) : (
+                  <span className="inline-flex items-center gap-1 text-xs text-white/50 font-normal">
+                    <Lock className="h-3 w-3" /> Confidentiel
+                  </span>
+                )}
               </span>
               <p className="text-[10px] text-neutral-400">CA Signé : {secondPlace.revenueSignedEur.toLocaleString()} €</p>
             </div>
@@ -125,7 +141,13 @@ export function CrmEgoLeaderboard({ currentUserName }: CrmEgoLeaderboardProps) {
             <div className="rounded-2xl bg-black/70 border-2 border-yellow-400/40 p-3.5 space-y-1">
               <span className="text-[9px] font-black uppercase text-yellow-400 block">Commissions Encaissées</span>
               <span className="text-2xl font-black text-yellow-300 font-mono">
-                {firstPlace.commissionEarnedEur.toLocaleString()} € 🪙
+                {canSeeCommission(firstPlace.name) ? (
+                  `${firstPlace.commissionEarnedEur.toLocaleString()} € 🪙`
+                ) : (
+                  <span className="inline-flex items-center gap-1 text-sm text-yellow-300/60 font-normal">
+                    <Lock className="h-3.5 w-3.5" /> Confidentiel
+                  </span>
+                )}
               </span>
               <div className="flex justify-around text-[10.5px] text-neutral-300 pt-1 border-t border-white/10">
                 <span>CA : {firstPlace.revenueSignedEur.toLocaleString()} €</span>
@@ -159,7 +181,13 @@ export function CrmEgoLeaderboard({ currentUserName }: CrmEgoLeaderboardProps) {
             <div className="rounded-2xl bg-black/60 border border-white/10 p-3 space-y-1">
               <span className="text-[9px] font-black uppercase text-neutral-400 block">Commissions Encaissées</span>
               <span className="text-xl font-black text-emerald-400 font-mono">
-                {thirdPlace.commissionEarnedEur.toLocaleString()} € 🪙
+                {canSeeCommission(thirdPlace.name) ? (
+                  `${thirdPlace.commissionEarnedEur.toLocaleString()} € 🪙`
+                ) : (
+                  <span className="inline-flex items-center gap-1 text-xs text-white/50 font-normal">
+                    <Lock className="h-3 w-3" /> Confidentiel
+                  </span>
+                )}
               </span>
               <p className="text-[10px] text-neutral-400">CA Signé : {thirdPlace.revenueSignedEur.toLocaleString()} €</p>
             </div>
@@ -234,7 +262,13 @@ export function CrmEgoLeaderboard({ currentUserName }: CrmEgoLeaderboardProps) {
                   <div className="text-center sm:text-right rounded-xl bg-black/60 border border-white/10 px-3 py-1.5">
                     <span className="text-[8.5px] font-black uppercase text-yellow-400 block">Commissions</span>
                     <span className="text-lg font-black text-emerald-400 font-mono">
-                      +{seller.commissionEarnedEur.toLocaleString()} € 🪙
+                      {canSeeCommission(seller.name) ? (
+                        `+${seller.commissionEarnedEur.toLocaleString()} € 🪙`
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-xs text-white/50 font-normal">
+                          <Lock className="h-3 w-3" /> Confidentiel
+                        </span>
+                      )}
                     </span>
                   </div>
                 </div>
