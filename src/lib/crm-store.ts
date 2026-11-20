@@ -506,7 +506,7 @@ export function createInitialSeed(): CrmStore {
       },
       {
         id: "mem-martin",
-        email: "martin@xragency.fr",
+        email: "martin.leclipteur@gmail.com",
         fullName: "Martin",
         title: "Manager RH & Closer Senior",
         role: "member",
@@ -1034,9 +1034,26 @@ export function loadStore(): CrmStore {
       const parsed = JSON.parse(fs.readFileSync(STORE_PATH, "utf8")) as Partial<CrmStore>;
       if (parsed && Array.isArray(parsed.members) && Array.isArray(parsed.leads)) {
         const initial = createInitialSeed();
+        const existingMemberIds = new Set(parsed.members.map((m) => m.id));
+        const mergedMembers = [...parsed.members];
+        for (const seedMember of initial.members) {
+          if (!existingMemberIds.has(seedMember.id)) {
+            mergedMembers.push(seedMember);
+          } else if (seedMember.id === "mem-martin") {
+            const idx = mergedMembers.findIndex((m) => m.id === "mem-martin");
+            if (idx !== -1) {
+              mergedMembers[idx] = {
+                ...mergedMembers[idx],
+                email: "martin.leclipteur@gmail.com",
+                portalType: "hr_manager",
+                overrideCommissionPct: 10,
+              };
+            }
+          }
+        }
         const store: CrmStore = {
           version: typeof parsed.version === "number" ? parsed.version : 1,
-          members: parsed.members,
+          members: mergedMembers,
           leads: parsed.leads,
           clients: Array.isArray(parsed.clients) ? parsed.clients : initial.clients,
           quotes: Array.isArray(parsed.quotes) ? parsed.quotes : initial.quotes,

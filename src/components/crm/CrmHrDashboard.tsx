@@ -84,8 +84,8 @@ export function CrmHrDashboard({
   const [activeTab, setActiveTab] = useState<
     "recruits" | "candidates" | "training" | "schedules" | "commissions" | "inbox"
   >("recruits");
-  const [martinForwardEmail, setMartinForwardEmail] = useState("contact.xragency@gmail.com");
-  const [forwardSaved, setForwardSaved] = useState(false);
+  const [martinForwardEmail, setMartinForwardEmail] = useState("martin.leclipteur@gmail.com");
+  const [forwardSaved, setForwardSaved] = useState(true);
 
   // ── COMMERCIAUX RECRUTÉS PAR MARTIN (COMMISSION 20% POUR EUX, 10% OVERRIDE POUR MARTIN) ──
   const [recruits, setRecruits] = useState<RecruitedCloser[]>([
@@ -718,7 +718,7 @@ export function CrmHrDashboard({
                 📬 Boîte de Réception Interne RH &amp; Configuration de Redirection
               </h3>
               <p className="text-xs text-white/60">
-                L'identifiant <strong className="text-indigo-300">martin@xragency.fr</strong> sert d'identifiant de connexion CRM et de boîte de réception centralisée dans cet onglet.
+                L'adresse <strong className="text-indigo-300">martin.leclipteur@gmail.com</strong> (ou <strong className="text-indigo-300">martin@xragency.fr</strong>) sert d'identifiant de connexion CRM et de boîte de réception officielle.
               </p>
             </div>
 
@@ -727,13 +727,13 @@ export function CrmHrDashboard({
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <span className="font-mono text-[10px] font-bold uppercase text-indigo-300">
-                    REDIRECTION E-MAIL TEMPS RÉEL (RESEND)
+                    REDIRECTION E-MAIL TEMPS RÉEL ACTIVE (RESEND)
                   </span>
                   <h4 className="text-base font-bold text-white mt-0.5">
-                    Où recevoir les e-mails externes &amp; candidatures du site ?
+                    Double Réception Active : Direction + Gmail de Martin
                   </h4>
                   <p className="text-xs text-white/65 mt-1">
-                    Par défaut, tous les formulaires de recrutement (<code className="text-indigo-300">/recrutement</code>) arrivent instantanément ici dans le CRM <strong>ET</strong> sont envoyés par e-mail sur la boîte principale de Direction (<strong className="text-emerald-300">contact.xragency@gmail.com</strong>). Vous pouvez ajouter ci-dessous l'adresse e-mail personnelle réelle de Martin pour qu'il reçoive une copie directe sur son téléphone :
+                    Tous les formulaires de recrutement (<code className="text-indigo-300">/recrutement</code>) arrivent instantanément ici dans le CRM <strong>ET</strong> sont envoyés automatiquement par e-mail sur <strong className="text-indigo-300">martin.leclipteur@gmail.com</strong> ainsi qu'en copie de supervision sur <strong className="text-emerald-300">contact.xragency@gmail.com</strong> :
                   </p>
                 </div>
               </div>

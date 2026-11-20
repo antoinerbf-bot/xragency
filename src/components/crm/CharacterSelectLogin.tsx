@@ -72,7 +72,7 @@ const HERO_CLASSES: HeroClass[] = [
       "Accès Closer Martin pour ses propres ventes",
     ],
     powerStat: "Override 10% sur recrues",
-    placeholderEmail: "martin@xragency.fr",
+    placeholderEmail: "martin.leclipteur@gmail.com",
   },
   {
     id: "closer",

@@ -883,6 +883,42 @@ function CrmWorkspacePage() {
     }));
   }, [tasks]);
 
+  const handleToggleTodo = (taskId: string) => {
+    void apiCall({ action: "toggle_task", taskId });
+  };
+
+  const handleAddTodo = (todo: Omit<CrmTodo, "id" | "createdAt">) => {
+    void apiCall(
+      {
+        action: "create_task",
+        title: todo.title,
+        category: todo.category,
+        priority: todo.priority,
+        dueDate: todo.deadline,
+        tag: todo.tag,
+      },
+      "Tâche ajoutée à votre feuille de route !",
+    );
+  };
+
+  const handleDeleteTodo = (taskId: string) => {
+    void apiCall({ action: "delete_task", taskId }, "Tâche supprimée.");
+  };
+
+  const dispatchLead = (leadId: string, memberIdOrEmail: string) => {
+    const resolvedMember = members.find(
+      (m) => m.id === memberIdOrEmail || m.email.toLowerCase() === memberIdOrEmail.toLowerCase(),
+    );
+    void apiCall(
+      {
+        action: "update_lead",
+        leadId,
+        assignedTo: resolvedMember ? resolvedMember.id : memberIdOrEmail,
+      },
+      "Dossier réassigné avec succès !",
+    );
+  };
+
   const handleCreateClient = async (clientData: {
     company: string;
     contactName: string;
@@ -1223,7 +1259,7 @@ function CrmWorkspacePage() {
               Ouvrir mon Espace Client
               <ArrowUpRight className="h-4 w-4 text-[#D8BC94]" />
             </Link>
-            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr") && (
+            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr" || user.email === "martin.leclipteur@gmail.com") && (
               <button
                 type="button"
                 onClick={() => setMartinViewMode("hr")}
@@ -1253,7 +1289,7 @@ function CrmWorkspacePage() {
   // Double Casquette : Mode RH Exclusif (10% override) ou Mode Commercial Personnel (Martin)
   // ══════════════════════════════════════════════════════════════════════════
   if (
-    (effectivePortal === "hr_manager" || user.id === "mem-martin" || user.email === "martin@xragency.fr") &&
+    (effectivePortal === "hr_manager" || user.id === "mem-martin" || user.email === "martin@xragency.fr" || user.email === "martin.leclipteur@gmail.com") &&
     martinViewMode === "hr"
   ) {
     return (
@@ -1287,7 +1323,7 @@ function CrmWorkspacePage() {
           </div>
 
           <div className="flex items-center gap-2">
-            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr") && (
+            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr" || user.email === "martin.leclipteur@gmail.com") && (
               <button
                 type="button"
                 onClick={() => setMartinViewMode("hr")}
@@ -1392,7 +1428,7 @@ function CrmWorkspacePage() {
             )}
           </div>
           <div className="flex items-center gap-2">
-            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr") && (
+            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr" || user.email === "martin.leclipteur@gmail.com") && (
               <button
                 type="button"
                 onClick={() => setMartinViewMode("hr")}
@@ -2849,7 +2885,7 @@ function CrmWorkspacePage() {
             >
               ← Revenir au QG Direction
             </button>
-            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr") && (
+            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr" || user.email === "martin.leclipteur@gmail.com") && (
               <button
                 type="button"
                 onClick={() => setMartinViewMode("hr")}
@@ -3006,7 +3042,7 @@ function CrmWorkspacePage() {
               </button>
             ))}
 
-            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr") && (
+            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr" || user.email === "martin.leclipteur@gmail.com") && (
               <button
                 type="button"
                 onClick={() => setMartinViewMode("hr")}
