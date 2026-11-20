@@ -493,7 +493,7 @@ function CrmWorkspacePage() {
   >("director");
   const [pinCode, setPinCode] = useState("");
   const [closerAccountEmail, setCloserAccountEmail] = useState("lucas@xragency.fr");
-  const [martinViewMode, setMartinViewMode] = useState<"hr" | "closer">("hr");
+  const [martinViewMode, setMartinViewMode] = useState<"sims_3d" | "hr" | "closer">("sims_3d");
   const [directorViewingHr, setDirectorViewingHr] = useState(false);
 
   // ── DIRECTOR TABS & MODES D'AFFICHAGE (COCKPIT PRO vs BOSS ARCADE vs MONDE METAVERSE vs ARÈNE CLOSER vs SIMS HQ 3D) ──
@@ -501,7 +501,7 @@ function CrmWorkspacePage() {
     "cockpit" | "boss_arcade" | "game_world" | "closer_arena" | "sims_3d"
   >("sims_3d");
   const [closerDisplayMode, setCloserDisplayMode] = useState<"missions" | "combat_hub" | "sims_3d">(
-    "combat_hub",
+    "sims_3d",
   );
   const [directorTab, setDirectorTab] = useState<
     | "overview"
@@ -1245,19 +1245,20 @@ function CrmWorkspacePage() {
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // ÉCRAN DE CONNEXION SÉCURISÉ : EMAIL + MOT DE PASSE (ZERO PIN EN DUR)
+  // ÉCRAN DE CONNEXION 3D SIMS HQ + CRÉATEUR D'AVATAR + PAVÉ CODE PIN (071266)
   // ══════════════════════════════════════════════════════════════════════════
   if (!snapshot?.authenticated || !user) {
     return (
       <CharacterSelectLogin
-        onLogin={async (email, password) => {
+        onLogin={async (email, password, portal) => {
           await apiCall(
             {
               action: "login",
               email,
               password,
+              portal,
             },
-            "Connexion réussie !",
+            "Connexion au Penthouse 3D réussie !",
           );
         }}
         isLoading={busy}
@@ -1323,17 +1324,31 @@ function CrmWorkspacePage() {
     martinViewMode === "hr"
   ) {
     return (
-      <CrmHrDashboard
-        currentUser={{
-          id: user.id,
-          fullName: user.fullName,
-          email: user.email,
-          role: user.role,
-        }}
-        leads={leads}
-        onLogout={handleLogout}
-        onSwitchToCloserMode={() => setMartinViewMode("closer")}
-      />
+      <div className="relative min-h-screen bg-[#07090e]">
+        <div className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-3 border-b border-purple-500/30 bg-black/90 px-4 py-2 backdrop-blur-xl">
+          <span className="font-mono text-xs font-black text-purple-300">
+            💻 ORDINATEUR DU BUREAU RH · SESSION MARTIN
+          </span>
+          <button
+            type="button"
+            onClick={() => setMartinViewMode("sims_3d")}
+            className="rounded-full border border-purple-400 bg-purple-600/30 px-4 py-1 text-xs font-black text-white hover:bg-purple-600/50"
+          >
+            🌴 Retour au Penthouse 3D (Marcher dans les Bureaux)
+          </button>
+        </div>
+        <CrmHrDashboard
+          currentUser={{
+            id: user.id,
+            fullName: user.fullName,
+            email: user.email,
+            role: user.role,
+          }}
+          leads={leads}
+          onLogout={handleLogout}
+          onSwitchToCloserMode={() => setMartinViewMode("closer")}
+        />
+      </div>
     );
   }
 
@@ -1398,38 +1413,54 @@ function CrmWorkspacePage() {
   // ══════════════════════════════════════════════════════════════════════════
   if (
     (effectivePortal === "closer" ||
+      effectivePortal === "hr_manager" ||
+      user.id === "mem-martin" ||
       (effectivePortal === "student" && studentViewMode === "crm_bridge")) &&
-    closerDisplayMode === "sims_3d"
+    closerDisplayMode === "sims_3d" &&
+    martinViewMode !== "hr"
   ) {
     return (
-      <CrmSimsHQ3D
-        user={{
-          fullName: user.fullName,
-          email: user.email,
-          role: user.role,
-          title: user.title,
-          commissionPct: user.commissionPct,
-        }}
-        leads={leads}
-        clients={clients}
-        quotes={quotes}
-        invoices={invoices}
-        projects={projects}
-        tasks={tasks}
-        todos={crmTodos}
-        members={members}
-        onToggleTodo={handleToggleTodo}
-        onAddTodo={handleAddTodo}
-        onDeleteTodo={handleDeleteTodo}
-        onDispatchLead={(leadId, target) => dispatchLead(leadId, target)}
-        onUpdateLeadStatus={(leadId, status) => updateLeadStatus(leadId, status)}
-        onOpenCallModal={openCallModal}
-        onOpenWhatsappModal={openWhatsappModal}
-        onCreateQuote={handleRequestQuoteAndRib}
-        onValidatePayment={handleValidatePayment}
-        onLogout={handleLogout}
-        onSwitchToProCockpit={() => setCloserDisplayMode("combat_hub")}
-      />
+      <>
+        <CrmSimsHQ3D
+          user={{
+            id: user.id,
+            fullName: user.fullName,
+            email: user.email,
+            role: user.role,
+            portalType: user.portalType,
+            title: user.title,
+            commissionPct: user.commissionPct,
+            recruitedBy: user.recruitedBy,
+          }}
+          leads={leads}
+          clients={clients}
+          quotes={quotes}
+          invoices={invoices}
+          projects={projects}
+          tasks={tasks}
+          todos={crmTodos}
+          members={members}
+          onToggleTodo={handleToggleTodo}
+          onAddTodo={handleAddTodo}
+          onDeleteTodo={handleDeleteTodo}
+          onDispatchLead={(leadId, target) => dispatchLead(leadId, target)}
+          onUpdateLeadStatus={(leadId, status) => updateLeadStatus(leadId, status)}
+          onOpenCallModal={openCallModal}
+          onOpenWhatsappModal={openWhatsappModal}
+          onCreateQuote={handleRequestQuoteAndRib}
+          onValidatePayment={handleValidatePayment}
+          onLogout={handleLogout}
+          onSwitchToProCockpit={() => {
+            if (effectivePortal === "hr_manager" || user.id === "mem-martin") {
+              setMartinViewMode("hr");
+            } else {
+              setCloserDisplayMode("combat_hub");
+            }
+          }}
+        />
+        {renderWhatsappModal()}
+        {renderCelebrationBanner()}
+      </>
     );
   }
 
@@ -2867,34 +2898,41 @@ function CrmWorkspacePage() {
 
   if (directorDisplayMode === "sims_3d") {
     return (
-      <CrmSimsHQ3D
-        user={{
-          fullName: user.fullName,
-          email: user.email,
-          role: user.role,
-          title: user.title,
-          commissionPct: user.commissionPct,
-        }}
-        leads={leads}
-        clients={clients}
-        quotes={quotes}
-        invoices={invoices}
-        projects={projects}
-        tasks={tasks}
-        todos={crmTodos}
-        members={members}
-        onToggleTodo={handleToggleTodo}
-        onAddTodo={handleAddTodo}
-        onDeleteTodo={handleDeleteTodo}
-        onDispatchLead={(leadId, target) => dispatchLead(leadId, target)}
-        onUpdateLeadStatus={(leadId, status) => updateLeadStatus(leadId, status)}
-        onOpenCallModal={openCallModal}
-        onOpenWhatsappModal={openWhatsappModal}
-        onCreateQuote={handleRequestQuoteAndRib}
-        onValidatePayment={handleValidatePayment}
-        onLogout={handleLogout}
-        onSwitchToProCockpit={() => setDirectorDisplayMode("cockpit")}
-      />
+      <>
+        <CrmSimsHQ3D
+          user={{
+            id: user.id,
+            fullName: user.fullName,
+            email: user.email,
+            role: user.role,
+            portalType: user.portalType,
+            title: user.title,
+            commissionPct: user.commissionPct,
+            recruitedBy: user.recruitedBy,
+          }}
+          leads={leads}
+          clients={clients}
+          quotes={quotes}
+          invoices={invoices}
+          projects={projects}
+          tasks={tasks}
+          todos={crmTodos}
+          members={members}
+          onToggleTodo={handleToggleTodo}
+          onAddTodo={handleAddTodo}
+          onDeleteTodo={handleDeleteTodo}
+          onDispatchLead={(leadId, target) => dispatchLead(leadId, target)}
+          onUpdateLeadStatus={(leadId, status) => updateLeadStatus(leadId, status)}
+          onOpenCallModal={openCallModal}
+          onOpenWhatsappModal={openWhatsappModal}
+          onCreateQuote={handleRequestQuoteAndRib}
+          onValidatePayment={handleValidatePayment}
+          onLogout={handleLogout}
+          onSwitchToProCockpit={() => setDirectorDisplayMode("cockpit")}
+        />
+        {renderWhatsappModal()}
+        {renderCelebrationBanner()}
+      </>
     );
   }
 

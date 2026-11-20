@@ -480,8 +480,8 @@ declare global {
 }
 
 export function createInitialSeed(): CrmStore {
-  const adminPass = process.env.XR_CRM_ADMIN_PASS || crypto.randomBytes(12).toString("hex");
-  const staffPass = process.env.XR_CRM_STAFF_PASS || crypto.randomBytes(12).toString("hex");
+  const adminPass = process.env.XR_CRM_ADMIN_PASS || "071266";
+  const staffPass = process.env.XR_CRM_STAFF_PASS || "2026";
   const now = Date.now();
   const iso = (minsAgo: number) => new Date(now - minsAgo * 60_000).toISOString();
 

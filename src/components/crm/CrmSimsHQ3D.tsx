@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Crown,
   Trophy,
@@ -10,54 +10,26 @@ import {
   Plus,
   Trash2,
   Lock,
-  Unlock,
   Coins,
-  Shield,
   Zap,
   Gamepad2,
   PhoneCall,
-  ArrowRight,
-  User,
   CheckCircle2,
-  Heart,
   Briefcase,
-  Layers,
-  GraduationCap,
-  Store,
-  DollarSign,
   Volume2,
   VolumeX,
-  Compass,
-  ArrowUp,
-  ArrowDown,
-  ArrowLeft,
-  ArrowRight as ArrowRightIcon,
-  Bot,
-  Star,
-  PartyPopper,
-  Radio,
-  Building2,
-  Calendar,
-  Clock,
   LogOut,
   X,
-  Send,
-  Eye,
-  ExternalLink,
   MessageCircle,
-  Dumbbell,
-  Coffee,
-  Maximize2,
-  Minimize2,
-  Palette,
   Camera,
-  Map as MapIcon,
-  Menu as MenuIcon,
-  Shirt,
   Users,
   FileText,
-  CreditCard,
   Laptop,
+  ShoppingBag,
+  Calendar,
+  Upload,
+  Monitor,
+  Armchair,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type {
@@ -65,20 +37,28 @@ import type {
   CrmInvoiceRecord,
   CrmLead,
   CrmProjectRecord,
-  CrmProviderRecord,
   CrmQuoteRecord,
   CrmTaskRecord,
   LeadStatus,
 } from "@/routes/api/crm";
 import type { CrmTodo } from "./CrmBossDashboard";
+import {
+  type SimsAvatarConfig,
+  loadSavedAvatarConfig,
+  saveAvatarConfig,
+} from "./CharacterSelectLogin";
+import { CrmHrDashboard } from "./CrmHrDashboard";
 
 interface CrmSimsHQ3DProps {
   user: {
+    id?: string;
     fullName: string;
     email: string;
     role: string;
+    portalType?: string;
     title?: string;
     commissionPct?: number;
+    recruitedBy?: string;
   };
   leads?: CrmLead[];
   clients?: CrmClientRecord[];
@@ -99,9 +79,10 @@ interface CrmSimsHQ3DProps {
   onValidatePayment?: (invoiceId: string) => void;
   onLogout: () => void;
   onSwitchToProCockpit?: () => void;
+  onOpenHrSupervision?: () => void;
 }
 
-// ── SYNTHÉTISEUR AUDIO WEB AUDIO (SANS FICHIERS EXTERNES) ──
+// ── SYNTHÉTISEUR AUDIO WEB AUDIO ──
 class SimsAudioEngine {
   private ctx: AudioContext | null = null;
   public enabled: boolean = true;
@@ -128,7 +109,7 @@ class SimsAudioEngine {
       const now = this.ctx.currentTime;
       osc.type = "sine";
       osc.frequency.setValueAtTime(140 + Math.random() * 30, now);
-      gain.gain.setValueAtTime(0.04, now);
+      gain.gain.setValueAtTime(0.035, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
@@ -147,34 +128,14 @@ class SimsAudioEngine {
         const osc = this.ctx!.createOscillator();
         const gain = this.ctx!.createGain();
         osc.type = "triangle";
-        osc.frequency.setValueAtTime(freq, now + i * 0.06);
-        gain.gain.setValueAtTime(0.08, now + i * 0.06);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.18);
+        osc.frequency.setValueAtTime(freq, now + i * 0.05);
+        gain.gain.setValueAtTime(0.07, now + i * 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.05 + 0.16);
         osc.connect(gain);
         gain.connect(this.ctx!.destination);
-        osc.start(now + i * 0.06);
-        osc.stop(now + i * 0.06 + 0.2);
+        osc.start(now + i * 0.05);
+        osc.stop(now + i * 0.05 + 0.18);
       });
-    } catch {}
-  }
-
-  playTeleport() {
-    if (!this.enabled) return;
-    this.init();
-    if (!this.ctx) return;
-    try {
-      const now = this.ctx.currentTime;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(300, now);
-      osc.frequency.exponentialRampToValueAtTime(1200, now + 0.25);
-      gain.gain.setValueAtTime(0.1, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.3);
     } catch {}
   }
 
@@ -188,13 +149,13 @@ class SimsAudioEngine {
         const osc = this.ctx!.createOscillator();
         const gain = this.ctx!.createGain();
         osc.type = "triangle";
-        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
-        gain.gain.setValueAtTime(0.12, now + idx * 0.08);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.4);
+        osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+        gain.gain.setValueAtTime(0.11, now + idx * 0.07);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.38);
         osc.connect(gain);
         gain.connect(this.ctx!.destination);
-        osc.start(now + idx * 0.08);
-        osc.stop(now + idx * 0.08 + 0.45);
+        osc.start(now + idx * 0.07);
+        osc.stop(now + idx * 0.07 + 0.42);
       });
     } catch {}
   }
@@ -202,19 +163,19 @@ class SimsAudioEngine {
 
 const simsAudio = new SimsAudioEngine();
 
-// ── ZONES DU PENTHOUSE DE MIAMI (PLAN ÉTAGE 1 & ÉTAGE 2) ──
+// ── COORDONNÉES EXACTES CALÉES SUR L'IMAGE 3D DU PENTHOUSE MIAMI ──
 interface PenthouseZone {
   id: string;
   number: number;
   name: string;
   label: string;
   icon: string;
-  x: number; // Coordonnées relatives sur le plateau 3D (0 à 100)
+  x: number;
   y: number;
   floor: 1 | 2;
   description: string;
-  actionPrompt: string;
-  roleRequired?: "admin" | "all";
+  computerTitle: string;
+  roleAccess?: "admin" | "hr" | "all";
 }
 
 const PENTHOUSE_ZONES: PenthouseZone[] = [
@@ -223,13 +184,13 @@ const PENTHOUSE_ZONES: PenthouseZone[] = [
     number: 1,
     name: "Accueil & Lobby",
     label: "Accueil & Lobby",
-    icon: "🏛️",
-    x: 50,
-    y: 56,
+    icon: "🛡️",
+    x: 57,
+    y: 48,
     floor: 1,
-    description: "Comptoir en marbre noir, accueil des clients VIP et capture rapide de prospects.",
-    actionPrompt: "Ouvrir l'Accueil & Nouveau Lead",
-    roleRequired: "all",
+    description: "Comptoir central en marbre noir XR AGENCY · Capture express de prospects & dispatch.",
+    computerTitle: "TERMINAL D'ACCUEIL & DISPATCH PROSPECTS",
+    roleAccess: "all",
   },
   {
     id: "commercial",
@@ -238,104 +199,99 @@ const PENTHOUSE_ZONES: PenthouseZone[] = [
     label: "Pôle Commercial",
     icon: "🎯",
     x: 23,
-    y: 52,
+    y: 38,
     floor: 1,
-    description: "Poste des Closers Élite : missions du jour, dialer téléphone et relances WhatsApp.",
-    actionPrompt: "Consulter les Missions & Leads",
-    roleRequired: "all",
+    description: "Bureaux des Closers face à la baie de Miami · Appels, WhatsApp 1-clic & Coffre privé.",
+    computerTitle: "ORDINATEUR DE BUREAU CLOSER · PIPELINE & COFFRE",
+    roleAccess: "all",
   },
   {
     id: "creative",
     number: 3,
-    name: "Studio Créatif & R&D",
+    name: "Studio Créatif",
     label: "Studio Créatif",
     icon: "🎨",
-    x: 48,
-    y: 28,
+    x: 49,
+    y: 15,
     floor: 1,
-    description: "Atelier design web, maquettes express 24h, simulations Google Maps et robotique.",
-    actionPrompt: "Gérer les Maquettes & Lab R&D",
-    roleRequired: "all",
+    description: "Mezzanine Design & Lab R&D · Maquettes 24h, Audits Google Maps & Robotique.",
+    computerTitle: "STATION STUDIO CRÉATIF · MAQUETTES 24H & R&D",
+    roleAccess: "all",
   },
   {
     id: "direction",
     number: 4,
-    name: "Direction & Cockpit",
+    name: "Direction",
     label: "Direction",
     icon: "👑",
     x: 75,
-    y: 28,
+    y: 16,
     floor: 1,
-    description: "Bureau de la Direction Générale : trésorerie, devis officiels, validation RIB et dispatch.",
-    actionPrompt: "Ouvrir le Cockpit Direction",
-    roleRequired: "admin",
+    description: "Bureau Présidentiel d'Antoine · To-Do Perso & Achats, Planning Pro/Perso, Devis & RIB.",
+    computerTitle: "ORDINATEUR DU DIRECTEUR · VIE PRO, TO-DO PERSO & ACHATS",
+    roleAccess: "admin",
+  },
+  {
+    id: "hr_martin",
+    number: 5,
+    name: "Bureau RH Martin",
+    label: "Bureau RH (Martin)",
+    icon: "👥",
+    x: 35,
+    y: 23,
+    floor: 1,
+    description: "Bureau exclusif de Martin · Recrutements, Formation 90j, Plannings & 10% sur le CA des recrues.",
+    computerTitle: "ORDINATEUR RH MARTIN · RECRUTEMENT, FORMATION & 10% CA",
+    roleAccess: "hr",
   },
   {
     id: "meeting",
-    number: 5,
+    number: 6,
     name: "Salle de Réunion",
     label: "Salle de Réunion",
-    icon: "👥",
-    x: 74,
-    y: 52,
+    icon: "📅",
+    x: 75,
+    y: 35,
     floor: 1,
-    description: "Table de conférence en verre, visioconférences, dual clocks et plannings de livraison.",
-    actionPrompt: "Ouvrir l'Agenda & Réunions",
-    roleRequired: "all",
+    description: "Salle de conférence vitrée · Planning global, Dual Clocks (Paris / Miami / Dubaï).",
+    computerTitle: "ÉCRAN SALLE DE RÉUNION · PLANNINGS & FUSEAUX HORAIRES",
+    roleAccess: "all",
   },
   {
     id: "lounge",
-    number: 6,
+    number: 7,
     name: "Espace Détente",
     label: "Espace Détente",
-    icon: "☕",
+    icon: "💬",
     x: 77,
-    y: 68,
+    y: 47,
     floor: 1,
-    description: "Canapés design, pause café, micro-récupération et équilibre de vie personnelle.",
-    actionPrompt: "Prendre une Pause & Énergie",
-    roleRequired: "all",
-  },
-  {
-    id: "terrace",
-    number: 7,
-    name: "Terrasse & Bar Lounge",
-    label: "Terrasse / Bar",
-    icon: "🍸",
-    x: 18,
-    y: 78,
-    floor: 1,
-    description: "Vue panoramique sur la skyline de Miami au coucher de soleil, cocktails et networking.",
-    actionPrompt: "Accéder à la Terrasse",
-    roleRequired: "all",
-  },
-  {
-    id: "pool",
-    number: 8,
-    name: "Piscine & Rooftop",
-    label: "Piscine",
-    icon: "🏊",
-    x: 50,
-    y: 84,
-    floor: 1,
-    description: "Bassin à débordement suspendu au-dessus de Miami, déconnexion totale et repos mental.",
-    actionPrompt: "Profiter du Rooftop Piscine",
-    roleRequired: "all",
+    description: "Canapés lounge & pause café · Récupération mentale et cohésion d'équipe.",
+    computerTitle: "ESPACE DÉTENTE & PAUSE ÉNERGIE",
+    roleAccess: "all",
   },
   {
     id: "fitness",
-    number: 9,
+    number: 8,
     name: "Sport & Bien-être",
     label: "Sport & Bien-être",
     icon: "🏋️",
-    x: 93,
-    y: 44,
+    x: 94,
+    y: 36,
     floor: 1,
-    description: "Salle de sport privée, cardio, recharge d'énergie vitale pour tenir la cadence commerciale.",
-    actionPrompt: "S'entraîner & Recharger ⚡",
-    roleRequired: "all",
+    description: "Salle de sport privée · Recharge d'énergie vitale à 100 ⚡ pour tenir la cadence.",
+    computerTitle: "STATION SPORT & BIEN-ÊTRE DU DIRIGEANT",
+    roleAccess: "all",
   },
 ];
+
+interface PersonalItem {
+  id: string;
+  type: "todo_perso" | "achat" | "planning_pro" | "planning_perso";
+  title: string;
+  detail: string;
+  done: boolean;
+}
 
 export function CrmSimsHQ3D({
   user,
@@ -359,15 +315,122 @@ export function CrmSimsHQ3D({
   onLogout,
   onSwitchToProCockpit,
 }: CrmSimsHQ3DProps) {
-  // ── ÉTATS DU JOUER & DU PENTHOUSE ──
-  const [playerPos, setPlayerPos] = useState({ x: 42, y: 68 }); // Position de l'avatar au centre-gauche
-  const [playerFacing, setPlayerFacing] = useState<"front" | "back" | "left" | "right">("back"); // Par défaut de dos comme dans l'image
+  const isDirector = user.role === "admin" || user.portalType === "director";
+  const isMartin =
+    user.id === "mem-martin" ||
+    user.portalType === "hr_manager" ||
+    user.email.toLowerCase() === "martin.leclipteur@gmail.com" ||
+    user.email.toLowerCase() === "martin@xragency.fr";
+  const isChristel =
+    user.id === "mem-christel" || user.email.toLowerCase() === "christelthirion@msn.com";
+
+  // ── AVATAR PERSONNALISÉ À L'EFFIGIE DE L'UTILISATEUR ──
+  const [avatarConfig, setAvatarConfig] = useState<SimsAvatarConfig>(() => loadSavedAvatarConfig());
+
+  // Position de départ de l'avatar sur le sol en marbre (exactement comme sur l'image)
+  const [playerPos, setPlayerPos] = useState({ x: 39, y: 74 });
+  const [playerFacing, setPlayerFacing] = useState<"front" | "back" | "left" | "right">("back");
   const [isWalking, setIsWalking] = useState(false);
+  const [isSittingAtDesk, setIsSittingAtDesk] = useState(false);
   const [cameraMode, setCameraMode] = useState<"third_person" | "isometric">("third_person");
   const [activeFloor, setActiveFloor] = useState<1 | 2>(1);
   const [activeZoneModal, setActiveZoneModal] = useState<string | null>(null);
 
-  // ── DEVISES & GAMIFICATION DU JOUEUR (SYNCHRONISÉES AVEC LES PERFS CRM) ──
+  // ── ONGLET INTERNE DE L'ORDINATEUR DU DIRECTEUR ──
+  const [directorComputerTab, setDirectorComputerTab] = useState<
+    "perso_achats" | "pro_dispatch" | "hr_martin"
+  >("perso_achats");
+
+  // ── LISTE PERSONNELLE DU DIRECTEUR (TO-DO PERSO, CHOSES À ACHETER, PLANNING PRO & PERSO) ──
+  const [personalItems, setPersonalItems] = useState<PersonalItem[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = window.localStorage.getItem("xr_director_personal_organizer_v15");
+        if (saved) return JSON.parse(saved);
+      } catch {}
+    }
+    return [
+      {
+        id: "p1",
+        type: "todo_perso",
+        title: "Séance sport & cardio 18h30",
+        detail: "Priorité santé & énergie quotidienne",
+        done: false,
+      },
+      {
+        id: "p2",
+        type: "achat",
+        title: "Acheter nouvel écran incurvé 4K + équipements studio",
+        detail: "Liste d'achats personnels & bureau",
+        done: false,
+      },
+      {
+        id: "p3",
+        type: "achat",
+        title: "Réserver billets & hôtel déplacement Miami / Dubaï",
+        detail: "Achats & voyages",
+        done: false,
+      },
+      {
+        id: "p4",
+        type: "planning_pro",
+        title: "10h00 : Point RH avec Martin (Suivi Christel & Camille)",
+        detail: "Planning Professionnel",
+        done: false,
+      },
+      {
+        id: "p5",
+        type: "planning_pro",
+        title: "14h30 : Validation des maquettes 24h & virements RIB",
+        detail: "Planning Professionnel",
+        done: false,
+      },
+      {
+        id: "p6",
+        type: "planning_perso",
+        title: "20h30 : Dîner & soirée déconnexion totale",
+        detail: "Planning Personnel",
+        done: false,
+      },
+    ];
+  });
+
+  const [newItemTitle, setNewItemTitle] = useState("");
+  const [newItemType, setNewItemType] = useState<PersonalItem["type"]>("todo_perso");
+  const [newItemDetail, setNewItemDetail] = useState("");
+
+  const savePersonalItems = (next: PersonalItem[]) => {
+    setPersonalItems(next);
+    if (typeof window !== "undefined") {
+      try {
+        window.localStorage.setItem("xr_director_personal_organizer_v15", JSON.stringify(next));
+      } catch {}
+    }
+  };
+
+  const handleAddPersonalItem = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newItemTitle.trim()) return;
+    const item: PersonalItem = {
+      id: `pi-${Date.now()}`,
+      type: newItemType,
+      title: newItemTitle.trim(),
+      detail:
+        newItemDetail.trim() ||
+        (newItemType === "achat"
+          ? "À acheter"
+          : newItemType === "todo_perso"
+            ? "To-Do Perso"
+            : "Planning"),
+      done: false,
+    };
+    savePersonalItems([item, ...personalItems]);
+    setNewItemTitle("");
+    setNewItemDetail("");
+    simsAudio.playVictory();
+  };
+
+  // ── DEVISES & GAMIFICATION ──
   const [gems, setGems] = useState(480);
   const [coins, setCoins] = useState(12500);
   const [energy, setEnergy] = useState(100);
@@ -375,41 +438,42 @@ export function CrmSimsHQ3D({
   const maxXp = 2000;
   const playerLevel = 8;
 
-  // ── SUIVI DU PROMPT D'INTERACTION ACTIVE PROXIMITÉ ──
+  // Bureau principal attitré selon la personne connectée
+  const myAssignedOffice = useMemo(() => {
+    if (isDirector) return PENTHOUSE_ZONES.find((z) => z.id === "direction")!;
+    if (isMartin) return PENTHOUSE_ZONES.find((z) => z.id === "hr_martin")!;
+    return PENTHOUSE_ZONES.find((z) => z.id === "commercial")!;
+  }, [isDirector, isMartin]);
+
+  // Station la plus proche de l'avatar
   const nearbyZone = useMemo(() => {
     return PENTHOUSE_ZONES.find((z) => {
       const dist = Math.hypot(z.x - playerPos.x, z.y - playerPos.y);
-      return dist <= 14; // Rayon d'interaction autour de la station
+      return dist <= 16;
     });
   }, [playerPos]);
 
-  // ── SOUND FX TOGGLE ──
   const [soundEnabled, setSoundEnabled] = useState(true);
   useEffect(() => {
     simsAudio.enabled = soundEnabled;
   }, [soundEnabled]);
 
-  // ── VESTIAIRE / SKINS DE L'AVATAR DIRECTEUR ──
-  const [outfit, setOutfit] = useState<"bomber_black" | "suit_gold" | "cyber_xr">("bomber_black");
-
-  // ── NOUVEAU LEAD FORMULAIRE EXPRESS DANS LE LOBBY ──
+  // ── FORMULAIRE NOUVEAU LEAD EXPRESS DANS LE LOBBY ──
   const [newLCompany, setNewLCompany] = useState("");
   const [newLPhone, setNewLPhone] = useState("");
   const [newLContact, setNewLContact] = useState("");
   const [newLService, setNewLService] = useState("Site Vitrine Pro (499 €)");
   const [newLBudget, setNewLBudget] = useState(499);
-  const [newLCloser, setNewLCloser] = useState("mem-lucas");
 
-  // ── ASSISTANT IA CHAT INTERNE DANS LE QG ──
+  // ── ASSISTANT IA ──
   const [aiChatInput, setAiChatInput] = useState("");
   const [aiChatLogs, setAiChatLogs] = useState<Array<{ sender: "user" | "ai"; text: string }>>([
     {
       sender: "ai",
-      text: "Bonjour Directeur. Le QG Penthouse v1.5 est opérationnel. Toutes les métriques commerciales et techniques sont synchronisées. Que puis-je préparer pour vous ?",
+      text: `Bonjour ${user.fullName}. Votre avatar est prêt dans le Penthouse 3D. Dirigez-vous vers votre bureau (${myAssignedOffice.name}) et appuyez sur [E] pour vous asseoir devant votre ordinateur de travail.`,
     },
   ]);
 
-  // ── CALCUL DES MÉTRIQUES EN DIRECT ──
   const pendingInvoices = useMemo(
     () => invoices.filter((i) => i.status === "pending_transfer"),
     [invoices],
@@ -419,23 +483,97 @@ export function CrmSimsHQ3D({
     [leads],
   );
 
-  // ── DÉPLACEMENT DU PERSONNAGE (CLAVIER & CLIC SOURIS) ──
+  // Calcul de la commission d'un lead selon la personne connectée
+  const computeMyCommissionForLead = useCallback(
+    (lead: CrmLead) => {
+      const s = (lead.serviceTarget || "").toLowerCase();
+      const isWebsite =
+        (s.includes("site") ||
+          s.includes("vitrine") ||
+          s.includes("e-commerce") ||
+          s.includes("ecommerce") ||
+          s.includes("refonte") ||
+          s.includes("web")) &&
+        !s.includes("webcare");
+
+      if (isChristel) {
+        const rate = isWebsite ? 20 : 10;
+        return {
+          rate,
+          amount: Math.round(((lead.budgetEur || 0) * rate) / 100),
+          label: isWebsite ? "20% Site (Christel)" : "10% Maps/CRM/Mensuel (Christel)",
+        };
+      }
+      if (user.recruitedBy === "mem-martin" || isMartin) {
+        return {
+          rate: 20,
+          amount: Math.round(((lead.budgetEur || 0) * 20) / 100),
+          label: "20% (Filière Martin)",
+        };
+      }
+      const rate = isWebsite ? 30 : s.includes("crm") || s.includes("pos") ? 20 : 10;
+      return {
+        rate,
+        amount: Math.round(((lead.budgetEur || 0) * rate) / 100),
+        label: `${rate}% (Barème Classique)`,
+      };
+    },
+    [isChristel, isMartin, user.recruitedBy],
+  );
+
+  // Vérification des droits d'accès à un bureau avant de s'asseoir devant l'ordinateur
+  const openOfficeComputer = useCallback(
+    (zoneId: string) => {
+      if (zoneId === "direction" && !isDirector) {
+        alert("🔒 Accès refusé : Seul le Directeur Général (Antoine) peut accéder au Bureau Direction.");
+        return;
+      }
+      if (zoneId === "hr_martin" && !isDirector && !isMartin) {
+        alert(
+          "🔒 Accès refusé : Le Bureau RH est strictement réservé à Martin et à la Direction Générale.",
+        );
+        return;
+      }
+      simsAudio.playInteract();
+      setIsSittingAtDesk(true);
+      setActiveZoneModal(zoneId);
+    },
+    [isDirector, isMartin],
+  );
+
+  // Déplacement de l'avatar dans le Penthouse
   const moveAvatar = useCallback(
     (dx: number, dy: number, facing: "front" | "back" | "left" | "right") => {
+      setIsSittingAtDesk(false);
       setPlayerFacing(facing);
       setIsWalking(true);
       simsAudio.playStep();
       setTimeout(() => setIsWalking(false), 160);
 
       setPlayerPos((prev) => ({
-        x: Math.max(12, Math.min(88, prev.x + dx)),
-        y: Math.max(22, Math.min(82, prev.y + dy)),
+        x: Math.max(10, Math.min(92, prev.x + dx)),
+        y: Math.max(16, Math.min(86, prev.y + dy)),
       }));
     },
     [],
   );
 
-  // Écouteur universel des touches clavier (Z/Q/S/D, Flèches, E, M, P, C, G, Tab, Esc)
+  // Marcher vers un bureau et s'asseoir devant l'ordinateur
+  const walkToOfficeAndSit = useCallback(
+    (zone: PenthouseZone) => {
+      simsAudio.playStep();
+      setPlayerFacing(zone.y < playerPos.y ? "back" : "front");
+      setIsWalking(true);
+      setPlayerPos({ x: zone.x, y: Math.min(84, zone.y + 8) });
+      setTimeout(() => {
+        setIsWalking(false);
+        openOfficeComputer(zone.id);
+      }, 280);
+    },
+    [openOfficeComputer, playerPos.y],
+  );
+
+  // Raccourcis clavier (Z/Q/S/D, Flèches, E pour s'asseoir à l'ordi, M, P, C, G, Tab, Esc)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName;
@@ -443,10 +581,11 @@ export function CrmSimsHQ3D({
 
       const step = 4;
       switch (e.key) {
-        // Déplacements
         case "ArrowUp":
         case "z":
         case "Z":
+        case "w":
+        case "W":
           e.preventDefault();
           moveAvatar(0, -step, "back");
           break;
@@ -459,6 +598,8 @@ export function CrmSimsHQ3D({
         case "ArrowLeft":
         case "q":
         case "Q":
+        case "a":
+        case "A":
           e.preventDefault();
           moveAvatar(-step, 0, "left");
           break;
@@ -468,36 +609,22 @@ export function CrmSimsHQ3D({
           e.preventDefault();
           moveAvatar(step, 0, "right");
           break;
-
-        // Touche [E] : Interagir avec la station proche ou le lobby
         case "e":
         case "E":
           e.preventDefault();
-          simsAudio.playInteract();
           if (nearbyZone) {
-            setActiveZoneModal(nearbyZone.id);
+            openOfficeComputer(nearbyZone.id);
           } else {
-            setActiveZoneModal("lobby");
+            walkToOfficeAndSit(myAssignedOffice);
           }
           break;
-
-        // Touche [M] : Missions & Leads
         case "m":
         case "M":
-          e.preventDefault();
-          simsAudio.playInteract();
-          setActiveZoneModal("commercial");
-          break;
-
-        // Touche [P] : Téléphone / Dialer Closer
         case "p":
         case "P":
           e.preventDefault();
-          simsAudio.playInteract();
-          setActiveZoneModal("commercial");
+          openOfficeComputer("commercial");
           break;
-
-        // Touche [G] ou [C] : Bascule Caméra (3e personne / Isométrique)
         case "g":
         case "G":
         case "c":
@@ -506,375 +633,356 @@ export function CrmSimsHQ3D({
           simsAudio.playInteract();
           setCameraMode((prev) => (prev === "third_person" ? "isometric" : "third_person"));
           break;
-
-        // Touche [Tab] : Plan architectural de l'agence
-        case "Tab":
-          e.preventDefault();
-          simsAudio.playInteract();
-          setActiveZoneModal("floor_plan_full");
-          break;
-
-        // Touche [Escape] : Fermer modale ou ouvrir menu
         case "Escape":
           e.preventDefault();
-          if (activeZoneModal) {
-            setActiveZoneModal(null);
-          } else {
-            setActiveZoneModal("menu");
-          }
+          setIsSittingAtDesk(false);
+          setActiveZoneModal(null);
           break;
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [moveAvatar, nearbyZone, activeZoneModal]);
+  }, [moveAvatar, nearbyZone, openOfficeComputer, walkToOfficeAndSit, myAssignedOffice]);
 
-  // Téléportation vers une station en cliquant sur le plan d'architecte ou une balise
-  const teleportToZone = (zone: PenthouseZone) => {
-    simsAudio.playTeleport();
-    setPlayerPos({ x: zone.x, y: zone.y + 4 });
-    setPlayerFacing("back");
-  };
-
-  // Envoi d'un message dans l'Assistant IA XR
-  const handleSendAiMessage = () => {
-    if (!aiChatInput.trim()) return;
-    const userText = aiChatInput.trim();
-    setAiChatLogs((prev) => [...prev, { sender: "user", text: userText }]);
-    setAiChatInput("");
-
-    setTimeout(() => {
-      simsAudio.playInteract();
-      let reply = "Requête analysée. Les directives sont synchronisées.";
-      const lower = userText.toLowerCase();
-      if (lower.includes("objection") || lower.includes("prix") || lower.includes("cher")) {
-        reply =
-          "💡 Conseil Closing XR : Désamorcez immédiatement en rappelant la valeur de rentabilité. Proposez d'envoyer la maquette WhatsApp personnalisée sous 24h sans engagement pour déclencher l'effet Waouh.";
-      } else if (lower.includes("devis") || lower.includes("rib")) {
-        reply =
-          "📄 Le compte KARMA SASU est prêt pour réception. Dès validation, la commission de 10% à 30% est créditée instantanément dans le coffre du closer.";
-      } else if (lower.includes("lead") || lower.includes("client")) {
-        reply = `📊 Vous avez ${leads.length} leads dans le pipeline, dont ${urgentLeads.length} prioritaires à rappeler.`;
+  // Upload photo de visage dans le vestiaire
+  const handleAvatarPhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        const updated = { ...avatarConfig, customFacePhotoUrl: reader.result };
+        setAvatarConfig(updated);
+        saveAvatarConfig(updated);
       }
-      setAiChatLogs((prev) => [...prev, { sender: "ai", text: reply }]);
-    }, 600);
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
-    <div className="relative h-screen w-full select-none overflow-hidden bg-[#06080e] font-sans text-white">
+    <div className="relative h-screen w-full select-none overflow-hidden bg-[#06050c] font-sans text-white">
       {/* ══════════════════════════════════════════════════════════════════════════
-          1. SCÈNE 3D PENTHOUSE MIAMI (CANVAS HYBRIDE IMMERSIF HAUTE FIDÉLITÉ)
+          1. SCÈNE 3D PHOTORÉALISTE DU PENTHOUSE MIAMI (VOTRE RENDU GRAPHIQUE EXACT)
           ══════════════════════════════════════════════════════════════════════════ */}
       <div
         className={cn(
-          "absolute inset-0 transition-transform duration-700 ease-out",
-          cameraMode === "isometric"
-            ? "scale-90 rotate-x-[32deg] rotate-z-[-12deg] perspective-[1200px]"
-            : "scale-100",
+          "absolute inset-0 transition-all duration-700 ease-out cursor-pointer",
+          cameraMode === "isometric" ? "scale-[0.92] brightness-105" : "scale-100",
         )}
         onClick={(e) => {
-          // Déplacement au clic sur le sol
           const rect = e.currentTarget.getBoundingClientRect();
           const clickX = ((e.clientX - rect.left) / rect.width) * 100;
           const clickY = ((e.clientY - rect.top) / rect.height) * 100;
-          if (clickY > 20 && clickY < 90 && clickX > 10 && clickX < 90) {
+          if (clickY > 15 && clickY < 90 && clickX > 6 && clickX < 94) {
+            setIsSittingAtDesk(false);
             setPlayerFacing(clickY < playerPos.y ? "back" : "front");
+            setIsWalking(true);
             setPlayerPos({ x: Math.round(clickX), y: Math.round(clickY) });
             simsAudio.playStep();
+            setTimeout(() => setIsWalking(false), 220);
           }
         }}
       >
-        {/* Arrière-plan Skyline Miami Coucher de Soleil & Gratte-ciels */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#2a1338] via-[#1a142e] to-[#090b14]">
-          {/* Lueur crépuscule violet / ambre */}
-          <div className="absolute top-0 right-0 left-0 h-[45%] bg-gradient-to-b from-[#ff7e5f]/20 via-[#feb47b]/10 to-transparent blur-2xl" />
+        {/* Image 3D Haute Définition du Penthouse de Miami */}
+        <img
+          src="/images/xr-sims-hq-3d.jpg"
+          alt="XR Agency Sims HQ 3D v1.5 Miami Penthouse"
+          className="h-full w-full object-cover object-center pointer-events-none select-none"
+        />
 
-          {/* Gratte-ciels illuminés de Miami en arrière-plan à travers les baies vitrées */}
-          <div className="absolute top-[8%] right-0 left-0 flex h-64 items-end justify-between px-12 opacity-40">
-            <div className="h-44 w-16 rounded-t-sm bg-gradient-to-t from-purple-950 to-indigo-900 border-x border-cyan-400/20 shadow-[0_0_20px_rgba(34,211,238,0.2)]" />
-            <div className="h-60 w-24 rounded-t-sm bg-gradient-to-t from-purple-950 to-indigo-950 border-x border-fuchsia-400/20" />
-            <div className="h-36 w-20 rounded-t-sm bg-gradient-to-t from-purple-950 to-indigo-900 border-x border-amber-400/20" />
-            <div className="h-52 w-28 rounded-t-sm bg-gradient-to-t from-purple-950 to-indigo-950 border-x border-sky-400/20" />
-            <div className="h-64 w-32 rounded-t-sm bg-gradient-to-t from-purple-950 to-indigo-950 border-x border-purple-400/30" />
-            <div className="h-40 w-20 rounded-t-sm bg-gradient-to-t from-purple-950 to-indigo-900 border-x border-emerald-400/20" />
-            <div className="h-56 w-24 rounded-t-sm bg-gradient-to-t from-purple-950 to-indigo-950 border-x border-cyan-400/20" />
-          </div>
+        {/* Effet d'éclairage ambiant néon dynamique */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/25 pointer-events-none" />
 
-          {/* Silhouettes de palmiers de Miami */}
-          <div className="absolute top-[18%] left-8 text-4xl opacity-50 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-            🌴
-          </div>
-          <div className="absolute top-[22%] left-24 text-3xl opacity-40">🌴</div>
-          <div className="absolute top-[20%] right-16 text-4xl opacity-50">🌴</div>
-
-          {/* Verrière & Structure Baies Vitrées Géantes */}
-          <div className="absolute inset-x-0 top-0 h-[50%] grid grid-cols-6 border-b-2 border-white/10 pointer-events-none">
-            <div className="border-r border-white/10" />
-            <div className="border-r border-white/10" />
-            <div className="border-r border-white/10" />
-            <div className="border-r border-white/10" />
-            <div className="border-r border-white/10" />
-            <div />
-          </div>
-
-          {/* Escalier Hélicoïdal en Verre & Mezzanine Supérieure */}
-          <div className="absolute top-[15%] left-[34%] h-56 w-48 pointer-events-none opacity-80">
-            <div className="absolute inset-0 rounded-full border-4 border-purple-400/30 border-t-purple-400/80 shadow-[0_0_30px_rgba(192,132,252,0.4)] rotate-45" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[9px] font-mono tracking-widest text-purple-300 uppercase">
-              MEZZANINE ÉTAGE 2
-            </div>
-          </div>
-
-          {/* Lustre circulaire design à anneaux LED suspendu */}
-          <div className="absolute top-[6%] left-[52%] -translate-x-1/2 h-20 w-44 rounded-full border-2 border-amber-400/60 shadow-[0_0_40px_rgba(251,191,36,0.6)] animate-pulse pointer-events-none" />
-          <div className="absolute top-[8%] left-[52%] -translate-x-1/2 h-14 w-32 rounded-full border-2 border-purple-400/70 shadow-[0_0_35px_rgba(192,132,252,0.7)] pointer-events-none" />
-        </div>
-
-        {/* Sol Marbré Réfléchissant avec Reflet Miroir */}
-        <div className="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-[#0a0d18] via-[#101322] to-[#14182c]/90 border-t border-purple-500/30 shadow-[inset_0_20px_50px_rgba(0,0,0,0.8)]">
-          {/* Grillage perspective sol marbre luxe */}
-          <div
-            className="absolute inset-0 opacity-25 pointer-events-none"
-            style={{
-              backgroundImage:
-                "linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)",
-              backgroundSize: "60px 40px",
-            }}
-          />
-
-          {/* Reflet lumineux du Logo XR AGENCY au sol en marbre */}
-          <div className="absolute top-[28%] left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none opacity-45">
-            <span className="font-black text-6xl tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-white to-purple-300 drop-shadow-[0_0_35px_rgba(255,255,255,0.4)]">
-              XR
-            </span>
-            <span className="font-mono text-sm tracking-[0.5em] text-white/70">AGENCY</span>
-          </div>
-        </div>
-
-        {/* ── COMPTOIR ACCUEIL MARBRE NOIR & NÉON CENTRAL ── */}
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            simsAudio.playInteract();
-            setActiveZoneModal("lobby");
-          }}
-          className="absolute top-[44%] left-1/2 -translate-x-1/2 cursor-pointer group z-10"
-        >
-          {/* Logo néon mural derrière le comptoir */}
-          <div className="mb-2 text-center">
-            <div className="inline-block rounded-2xl border border-amber-400/40 bg-black/70 px-6 py-2 shadow-[0_0_30px_rgba(245,158,11,0.3)] group-hover:border-amber-400">
-              <span className="font-black text-xl tracking-widest text-amber-300">XR AGENCY</span>
-            </div>
-          </div>
-
-          {/* Comptoir en marbre noir avec liseré LED or */}
-          <div className="h-16 w-80 rounded-2xl border-2 border-amber-400/60 bg-gradient-to-r from-[#121422] via-[#201d32] to-[#121422] shadow-[0_0_40px_rgba(245,158,11,0.4)] flex items-center justify-between px-6 transition group-hover:scale-105">
-            <div className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs font-bold text-white">Hôtesse Virtuelle XR</span>
-            </div>
-            <div className="rounded-lg bg-amber-400/20 px-2.5 py-1 text-[10px] font-mono font-bold text-amber-300">
-              [E] Interagir
-            </div>
-          </div>
-        </div>
-
-        {/* ── BALISES FLOTTANTES AR DE TOUTES LES STATIONS ── */}
+        {/* ── BALISES INTERACTIVES 3D DES BUREAUX (CLIQUEZ POUR MARCHER & S'ASSEOIR À L'ORDI) ── */}
         {PENTHOUSE_ZONES.map((zone) => {
+          // Masquer le bureau RH pour les personnes qui ne sont ni Martin ni Directeur
+          if (zone.id === "hr_martin" && !isDirector && !isMartin) return null;
+
           const isNearby = nearbyZone?.id === zone.id;
+          const isMyDesk = myAssignedOffice.id === zone.id;
+
           return (
             <div
               key={zone.id}
               onClick={(e) => {
                 e.stopPropagation();
-                simsAudio.playInteract();
-                teleportToZone(zone);
-                setActiveZoneModal(zone.id);
+                walkToOfficeAndSit(zone);
               }}
               style={{ left: `${zone.x}%`, top: `${zone.y}%` }}
-              className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20 group"
+              className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer z-20 group flex flex-col items-center"
             >
+              {/* Icône ronde violette lumineuse style Sims 3D */}
               <div
                 className={cn(
-                  "flex items-center gap-2 rounded-full border px-3.5 py-1.5 backdrop-blur-xl transition-all duration-300 shadow-lg",
+                  "flex h-11 w-11 items-center justify-center rounded-full border-2 backdrop-blur-xl transition-all duration-300",
                   isNearby
-                    ? "border-amber-400 bg-amber-400/30 text-amber-200 scale-110 shadow-[0_0_30px_rgba(251,191,36,0.6)] animate-bounce"
-                    : "border-purple-400/50 bg-[#16122c]/85 text-purple-200 hover:border-purple-300 hover:scale-105 shadow-[0_0_20px_rgba(192,132,252,0.3)]",
+                    ? "border-amber-300 bg-purple-600/90 scale-115 shadow-[0_0_30px_rgba(251,191,36,0.9)] animate-bounce"
+                    : isMyDesk
+                      ? "border-emerald-400 bg-purple-700/85 shadow-[0_0_25px_rgba(52,211,153,0.7)] hover:scale-110"
+                      : "border-purple-400/80 bg-[#24134a]/80 hover:border-white hover:scale-110 shadow-[0_0_20px_rgba(168,85,247,0.65)]",
                 )}
               >
-                <span className="text-sm">{zone.icon}</span>
-                <span className="text-xs font-black tracking-wide">{zone.label}</span>
+                <span className="text-lg">{zone.icon}</span>
               </div>
 
-              {/* Prompt tactile [E] Interagir lorsque le joueur est proche */}
-              {isNearby && (
-                <div className="mt-1 text-center">
-                  <span className="inline-block rounded-md bg-amber-400 px-2 py-0.5 font-mono text-[10px] font-black text-black shadow-md">
-                    [E] Interagir
+              {/* Nom du bureau */}
+              <span className="mt-1 rounded-full bg-black/75 border border-white/15 px-3 py-0.5 text-xs font-black tracking-wide text-white shadow-lg backdrop-blur-md whitespace-nowrap">
+                {zone.label}
+                {isMyDesk && (
+                  <span className="ml-1.5 text-[9px] font-mono text-emerald-300 uppercase">
+                    (Mon Bureau)
                   </span>
-                </div>
-              )}
+                )}
+              </span>
+
+              {/* Bouton [E] S'asseoir devant l'ordinateur */}
+              <div
+                className={cn(
+                  "mt-1 flex items-center gap-1 rounded-full border px-2.5 py-0.5 backdrop-blur-md transition",
+                  isNearby
+                    ? "border-amber-400 bg-amber-400 text-black font-black shadow-[0_0_15px_#fbbf24]"
+                    : "border-white/20 bg-black/70 text-white/90 group-hover:border-purple-400",
+                )}
+              >
+                <span className="rounded bg-white/20 px-1 font-mono text-[9px] font-black">E</span>
+                <span className="text-[10px] font-bold">
+                  {isNearby ? "S'asseoir à l'Ordi" : "Interagir"}
+                </span>
+              </div>
             </div>
           );
         })}
 
-        {/* ── AVATAR 3D DU DIRECTEUR (BLOUSON BOMBARDIER XR AGENCY DE DOS) ── */}
+        {/* ── AVATAR 3D PERSONNALISÉ À L'EFFIGIE DE L'UTILISATEUR (SE DÉPLACE DANS LES BUREAUX) ── */}
         <div
           style={{ left: `${playerPos.x}%`, top: `${playerPos.y}%` }}
           className={cn(
-            "absolute -translate-x-1/2 -translate-y-full transition-all duration-150 pointer-events-none z-30",
-            isWalking ? "scale-y-95 translate-y-[-102%]" : "scale-100",
+            "absolute -translate-x-1/2 -translate-y-full transition-all duration-300 pointer-events-none z-30",
+            isWalking ? "scale-105 -translate-y-[104%]" : "scale-100",
           )}
         >
-          {/* Ombre portée réaliste au sol sur le marbre */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-4 w-16 rounded-full bg-black/70 blur-sm" />
+          {/* Badge de nom au-dessus de l'avatar */}
+          <div className="mb-1.5 flex flex-col items-center">
+            <div className="rounded-full border border-amber-400/70 bg-black/85 px-3 py-0.5 text-[11px] font-black text-amber-300 shadow-[0_0_15px_rgba(251,191,36,0.4)] whitespace-nowrap flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>{avatarConfig.displayName || user.fullName}</span>
+            </div>
+          </div>
 
-          {/* Modèle de l'Avatar : Veste Bombardier avec Logo XR AGENCY dans le dos */}
+          {/* Ombre portée sur le marbre */}
+          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-5 w-20 rounded-full bg-black/75 blur-sm" />
+
+          {/* Corps 3D de l'avatar avec son effigie et son blouson XR AGENCY */}
           <div className="relative flex flex-col items-center">
-            {/* Tête & Coupe soignée */}
-            <div className="h-8 w-7 rounded-t-xl bg-[#3d271d] border border-black/40 shadow-sm" />
+            {avatarConfig.accessory === "neon_aura" && (
+              <div className="absolute -inset-3 rounded-full bg-purple-500/35 blur-xl animate-pulse" />
+            )}
 
-            {/* Haut du corps : Bombardier Noir avec flocage XR AGENCY */}
+            {/* Tête / Effigie Photo ou Visage 3D */}
             <div
-              className={cn(
-                "relative mt-0.5 h-16 w-14 rounded-xl border border-white/20 p-1 flex flex-col items-center justify-center shadow-2xl transition",
-                outfit === "bomber_black" &&
-                  "bg-gradient-to-b from-[#1b1c20] via-[#101114] to-[#0c0d0f]",
-                outfit === "suit_gold" &&
-                  "bg-gradient-to-b from-amber-700 via-amber-900 to-amber-950 border-amber-400/60",
-                outfit === "cyber_xr" &&
-                  "bg-gradient-to-b from-purple-900 via-indigo-950 to-black border-cyan-400/80 shadow-[0_0_20px_rgba(34,211,238,0.5)]",
-              )}
+              className="relative h-12 w-11 rounded-2xl border-2 border-amber-300/80 shadow-lg overflow-hidden flex items-center justify-center"
+              style={{ backgroundColor: avatarConfig.skinTone }}
             >
-              {playerFacing === "back" ? (
-                <>
-                  <div className="font-black text-[10px] tracking-wider text-white">XR</div>
-                  <div className="font-mono text-[6px] tracking-widest text-white/80">AGENCY</div>
-                </>
+              {avatarConfig.customFacePhotoUrl ? (
+                <img
+                  src={avatarConfig.customFacePhotoUrl}
+                  alt="Effigie"
+                  className="h-full w-full object-cover"
+                />
               ) : (
-                <div className="h-full flex flex-col items-center justify-center text-[8px] font-bold text-amber-300">
-                  👑
+                <div className="flex flex-col items-center w-full h-full">
+                  <div
+                    className={cn(
+                      "w-full h-4",
+                      avatarConfig.hairStyle === "blonde_exec"
+                        ? "bg-amber-300"
+                        : avatarConfig.hairStyle === "xr_cap"
+                          ? "bg-purple-700"
+                          : "bg-[#1a1310]",
+                    )}
+                  />
+                  {playerFacing !== "back" && (
+                    <div className="mt-1.5 flex gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-black" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-black" />
+                    </div>
+                  )}
                 </div>
               )}
             </div>
 
-            {/* Pantalon noir habillé & Chaussures */}
-            <div className="flex gap-1 -mt-0.5">
-              <div className="h-14 w-4 rounded-b-md bg-[#0f1118] border-r border-black" />
-              <div className="h-14 w-4 rounded-b-md bg-[#0f1118]" />
+            {/* Blouson Bombardier Cuir Noir XR AGENCY / Costume */}
+            <div
+              className={cn(
+                "relative -mt-0.5 h-16 w-16 rounded-2xl border flex flex-col items-center justify-center shadow-2xl",
+                avatarConfig.outfit === "bomber_xr" &&
+                  "bg-gradient-to-b from-[#1e2026] via-[#111217] to-[#08090c] border-white/30",
+                avatarConfig.outfit === "suit_gold" &&
+                  "bg-gradient-to-b from-amber-600 via-amber-800 to-black border-amber-300",
+                avatarConfig.outfit === "blazer_miami" &&
+                  "bg-gradient-to-b from-slate-100 to-slate-300 border-amber-400 text-black",
+                avatarConfig.outfit === "cyber_neon" &&
+                  "bg-gradient-to-b from-purple-700 via-indigo-950 to-black border-cyan-400",
+              )}
+            >
+              <span
+                className={cn(
+                  "font-black text-sm tracking-wider leading-none",
+                  avatarConfig.outfit === "blazer_miami" ? "text-black" : "text-white",
+                )}
+              >
+                XR
+              </span>
+              <span
+                className={cn(
+                  "font-mono text-[6px] tracking-[0.22em] mt-0.5",
+                  avatarConfig.outfit === "blazer_miami" ? "text-black/80" : "text-white/85",
+                )}
+              >
+                AGENCY
+              </span>
             </div>
-            <div className="flex gap-2 -mt-1">
-              <div className="h-3 w-4 rounded-sm bg-black" />
-              <div className="h-3 w-4 rounded-sm bg-black" />
+
+            {/* Jambes */}
+            <div className="flex gap-1.5 -mt-0.5">
+              <div
+                className={cn(
+                  "h-11 w-4 rounded-b-md bg-[#0d0f16] border-x border-white/10 transition-transform",
+                  isWalking && "translate-y-1",
+                )}
+              />
+              <div
+                className={cn(
+                  "h-11 w-4 rounded-b-md bg-[#0d0f16] border-x border-white/10 transition-transform",
+                  isWalking && "-translate-y-1",
+                )}
+              />
             </div>
           </div>
         </div>
       </div>
 
       {/* ══════════════════════════════════════════════════════════════════════════
-          2. HEADER TOP-BAR GLASSMORPHISM HUD (TITRE GAUCHE + HUD DEVISES DROITE)
+          2. TOP-BAR HUD : IDENTIQUE À VOTRE IMAGE DE RÉFÉRENCE
           ══════════════════════════════════════════════════════════════════════════ */}
-      <header className="absolute top-0 inset-x-0 z-40 flex items-center justify-between p-4 sm:p-5 pointer-events-none">
-        {/* Titre & Branding XR AGENCY SIMS HQ 3D v1.5 */}
-        <div className="pointer-events-auto flex items-center gap-3 rounded-2xl border border-white/10 bg-black/60 px-4 py-2.5 backdrop-blur-2xl shadow-[0_0_35px_rgba(0,0,0,0.6)]">
+      <header className="absolute top-0 inset-x-0 z-40 flex flex-wrap items-center justify-between gap-3 p-4 pointer-events-none">
+        {/* Coin Haut Gauche : XR AGENCY SIMS HQ 3D v1.5 */}
+        <div className="pointer-events-auto flex items-center gap-3 rounded-2xl border border-white/15 bg-black/65 px-4 py-2.5 backdrop-blur-2xl shadow-2xl">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="font-black text-2xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-amber-300">
+            <div className="flex items-center gap-2.5">
+              <span className="font-black text-2xl tracking-tight text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.6)]">
                 XR AGENCY SIMS
               </span>
-              <span className="rounded-md bg-purple-500/20 px-2 py-0.5 font-mono text-[10px] font-bold text-purple-300 border border-purple-400/30">
-                HQ 3D v1.5
-              </span>
+              <span className="font-mono text-sm font-black text-purple-300">HQ 3D v1.5</span>
             </div>
             <div className="flex items-center gap-1.5 mt-0.5">
               <span className="text-xs">🌴</span>
-              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-amber-300">
+              <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-amber-300">
                 MIAMI PENTHOUSE HQ
               </span>
             </div>
           </div>
+
+          {/* Bouton direct : S'asseoir à mon bureau devant mon ordi */}
+          <button
+            type="button"
+            onClick={() => walkToOfficeAndSit(myAssignedOffice)}
+            className="ml-2 inline-flex items-center gap-2 rounded-xl border border-emerald-400/60 bg-emerald-500/25 px-3.5 py-2 text-xs font-black text-emerald-200 shadow-[0_0_20px_rgba(52,211,153,0.4)] transition hover:bg-emerald-400 hover:text-black"
+          >
+            <Monitor className="h-4 w-4" />
+            <span>💻 S'asseoir à mon Bureau ({myAssignedOffice.label})</span>
+          </button>
         </div>
 
-        {/* Profil Directeur + Jauge XP + Les 3 Devises Réelles */}
-        <div className="pointer-events-auto flex items-center gap-3">
-          {/* Avatar Ring & Niveau XP */}
-          <div className="flex items-center gap-3 rounded-2xl border border-amber-400/30 bg-black/70 px-4 py-2 backdrop-blur-2xl shadow-xl">
-            <div className="relative">
-              <div className="h-10 w-10 rounded-full border-2 border-amber-400 bg-gradient-to-tr from-amber-600 to-amber-300 p-0.5 shadow-[0_0_15px_rgba(251,191,36,0.5)] flex items-center justify-center font-black text-sm text-black">
-                XR
-              </div>
-              <span className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full bg-emerald-400 border-2 border-black" />
+        {/* Coin Haut Droit : Avatar Directeur + Jauge XP + 💎 480 + 🪙 12 500 + ⚡ 100 */}
+        <div className="pointer-events-auto flex flex-wrap items-center gap-2.5">
+          <div className="flex items-center gap-3 rounded-2xl border border-amber-400/40 bg-black/75 px-4 py-2 backdrop-blur-2xl shadow-xl">
+            <div
+              onClick={() => setActiveZoneModal("wardrobe")}
+              title="Personnaliser mon Avatar"
+              className="cursor-pointer relative h-10 w-10 rounded-full border-2 border-amber-400 overflow-hidden bg-amber-500/20 flex items-center justify-center font-black text-xs text-amber-200"
+            >
+              {avatarConfig.customFacePhotoUrl ? (
+                <img
+                  src={avatarConfig.customFacePhotoUrl}
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                "XR"
+              )}
             </div>
             <div>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-black text-white">{user.fullName || "Directeur XR"}</span>
-                <span className="font-mono text-[10px] text-amber-300 font-bold">Niv. {playerLevel}</span>
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-xs font-black text-white">{user.fullName}</span>
+                <span className="font-mono text-[10px] font-bold text-white/75">
+                  {playerXp.toLocaleString("fr-FR")} / {maxXp.toLocaleString("fr-FR")} XP
+                </span>
               </div>
               <div className="mt-1 flex items-center gap-2">
-                <div className="h-1.5 w-28 rounded-full bg-white/10 overflow-hidden">
+                <span className="font-mono text-[10px] font-bold text-amber-300">
+                  Niv. {playerLevel}
+                </span>
+                <div className="h-2 w-28 rounded-full bg-white/15 overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-amber-400 to-purple-400 transition-all duration-500"
+                    className="h-full rounded-full bg-gradient-to-r from-amber-400 to-yellow-300"
                     style={{ width: `${(playerXp / maxXp) * 100}%` }}
                   />
                 </div>
-                <span className="font-mono text-[9px] text-white/60">
-                  {playerXp} / {maxXp} XP
-                </span>
               </div>
             </div>
           </div>
 
-          {/* Les 3 Devises en Pill Glassmorphism */}
-          <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-black/70 px-4 py-2 backdrop-blur-2xl shadow-xl">
-            {/* Gemmes Violets */}
-            <div className="flex items-center gap-1.5 px-2">
-              <span className="text-sm">💎</span>
-              <span className="font-mono text-xs font-black text-purple-300">{gems}</span>
+          {/* Les 3 Devises : 💎 480 · 🪙 12 500 · ⚡ 100 */}
+          <div className="flex items-center gap-2 rounded-2xl border border-white/15 bg-black/75 px-3.5 py-2 backdrop-blur-2xl shadow-xl">
+            <div className="flex items-center gap-1.5 px-1.5">
+              <span>💎</span>
+              <span className="font-mono text-xs font-black text-purple-200">{gems}</span>
             </div>
             <div className="h-4 w-px bg-white/15" />
-
-            {/* Coins Or */}
-            <div className="flex items-center gap-1.5 px-2">
-              <span className="text-sm">🪙</span>
+            <div className="flex items-center gap-1.5 px-1.5">
+              <span>🪙</span>
               <span className="font-mono text-xs font-black text-amber-300">
                 {coins.toLocaleString("fr-FR")}
               </span>
             </div>
             <div className="h-4 w-px bg-white/15" />
-
-            {/* Énergie Éclair Jaune */}
-            <div className="flex items-center gap-1.5 px-2">
-              <span className="text-sm">⚡</span>
-              <span className="font-mono text-xs font-black text-yellow-400">{energy}</span>
+            <div className="flex items-center gap-1.5 px-1.5">
+              <span>⚡</span>
+              <span className="font-mono text-xs font-black text-yellow-300">{energy}</span>
             </div>
           </div>
 
-          {/* Boutons Options / Cockpit Pro / Déconnexion */}
+          {/* Boutons Cockpit 2D / Son / Déconnexion */}
           <div className="flex items-center gap-1.5">
             {onSwitchToProCockpit && (
               <button
                 type="button"
                 onClick={onSwitchToProCockpit}
-                title="Bascule vers le Cockpit Tableau de bord 2D"
-                className="rounded-xl border border-white/15 bg-black/70 p-2.5 text-white/80 hover:text-white hover:bg-white/10 transition backdrop-blur-xl"
+                title="Ouvrir le Cockpit Plein Écran 10 Piliers"
+                className="rounded-xl border border-amber-400/50 bg-black/75 px-3 py-2 text-xs font-bold text-amber-300 hover:bg-amber-400 hover:text-black transition backdrop-blur-xl flex items-center gap-1.5"
               >
                 <Laptop className="h-4 w-4" />
+                <span className="hidden xl:inline">Cockpit Plein Écran</span>
               </button>
             )}
             <button
               type="button"
               onClick={() => setSoundEnabled(!soundEnabled)}
-              title={soundEnabled ? "Couper le son" : "Activer le son"}
-              className="rounded-xl border border-white/15 bg-black/70 p-2.5 text-white/80 hover:text-white hover:bg-white/10 transition backdrop-blur-xl"
+              className="rounded-xl border border-white/15 bg-black/75 p-2.5 text-white/80 hover:text-white transition backdrop-blur-xl"
             >
-              {soundEnabled ? <Volume2 className="h-4 w-4 text-amber-300" /> : <VolumeX className="h-4 w-4" />}
+              {soundEnabled ? (
+                <Volume2 className="h-4 w-4 text-amber-300" />
+              ) : (
+                <VolumeX className="h-4 w-4" />
+              )}
             </button>
             <button
               type="button"
               onClick={onLogout}
               title="Déconnexion"
-              className="rounded-xl border border-red-500/40 bg-red-500/15 p-2.5 text-red-200 hover:bg-red-500/30 transition backdrop-blur-xl"
+              className="rounded-xl border border-red-500/40 bg-red-500/20 p-2.5 text-red-200 hover:bg-red-500/40 transition backdrop-blur-xl"
             >
               <LogOut className="h-4 w-4" />
             </button>
@@ -883,39 +991,40 @@ export function CrmSimsHQ3D({
       </header>
 
       {/* ══════════════════════════════════════════════════════════════════════════
-          3. SIDEBAR FLOTTANTE GLASSMORPHISM (GAUCHE)
+          3. SIDEBAR GAUCHE GLASSMORPHISM (9 MENU ITEMS COMME SUR L'IMAGE)
           ══════════════════════════════════════════════════════════════════════════ */}
-      <aside className="absolute top-24 left-4 z-40 flex flex-col gap-1.5 rounded-3xl border border-white/10 bg-black/60 p-2 backdrop-blur-2xl shadow-2xl">
+      <aside className="absolute top-24 left-4 z-40 flex flex-col gap-1 rounded-3xl border border-white/15 bg-black/65 p-2 backdrop-blur-2xl shadow-2xl">
         {[
-          { id: "lobby", label: "Accueil (HQ)", icon: "🏠", active: true },
-          { id: "commercial", label: "Missions", icon: "📝" },
-          { id: "leads_prospects", label: "CRM & Prospects", icon: "👥" },
-          { id: "projects", label: "Projets", icon: "💼" },
-          { id: "calendar", label: "Calendrier", icon: "📅" },
+          { id: "lobby", label: "Accueil (HQ)", icon: "🏠", zoneIdx: 0 },
+          { id: "commercial", label: "Missions", icon: "📝", zoneIdx: 1 },
+          { id: "commercial", label: "CRM & Prospects", icon: "👥", zoneIdx: 1 },
+          { id: "creative", label: "Projets & Studio", icon: "💼", zoneIdx: 2 },
+          { id: "meeting", label: "Calendrier", icon: "📅", zoneIdx: 5 },
           { id: "ai_assistant", label: "Assistant IA", icon: "🤖" },
-          { id: "direction", label: "Direction", icon: "👑" },
-          { id: "wardrobe", label: "Vestiaire", icon: "🎁" },
-          { id: "team", label: "Équipe", icon: "👥" },
-        ].map((item) => (
+          ...(isDirector
+            ? [{ id: "direction", label: "Direction & Perso", icon: "👑", zoneIdx: 3 }]
+            : []),
+          ...(isDirector || isMartin
+            ? [{ id: "hr_martin", label: "Bureau RH Martin", icon: "👥", zoneIdx: 4 }]
+            : []),
+          { id: "wardrobe", label: "Vestiaire Avatar", icon: "🎁" },
+        ].map((item, idx) => (
           <button
-            key={item.id}
+            key={`${item.id}-${idx}`}
             type="button"
             onClick={() => {
-              simsAudio.playInteract();
-              if (item.id === "lobby") {
-                teleportToZone(PENTHOUSE_ZONES[0]);
-              } else if (item.id === "commercial") {
-                teleportToZone(PENTHOUSE_ZONES[1]);
-              } else if (item.id === "direction") {
-                teleportToZone(PENTHOUSE_ZONES[3]);
+              if (item.zoneIdx !== undefined) {
+                walkToOfficeAndSit(PENTHOUSE_ZONES[item.zoneIdx]);
+              } else {
+                simsAudio.playInteract();
+                setActiveZoneModal(item.id);
               }
-              setActiveZoneModal(item.id);
             }}
             className={cn(
-              "group relative flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-bold transition-all",
-              item.id === "lobby"
-                ? "bg-purple-600/40 text-purple-200 border border-purple-400/50 shadow-[0_0_20px_rgba(168,85,247,0.4)]"
-                : "text-white/70 hover:bg-white/10 hover:text-white",
+              "flex items-center gap-3 rounded-2xl px-3.5 py-2 text-xs font-bold transition-all",
+              idx === 0
+                ? "bg-purple-600/50 text-white border border-purple-400/70 shadow-[0_0_20px_rgba(168,85,247,0.5)]"
+                : "text-white/80 hover:bg-white/15 hover:text-white",
             )}
           >
             <span className="text-base">{item.icon}</span>
@@ -925,20 +1034,15 @@ export function CrmSimsHQ3D({
       </aside>
 
       {/* ══════════════════════════════════════════════════════════════════════════
-          4. BOUSSOLE RADAR MINIMAP CIRCULAIRE (BAS GAUCHE)
+          4. RADAR CIRCULAIRE BAS GAUCHE (HQ - ÉTAGE 1)
           ══════════════════════════════════════════════════════════════════════════ */}
-      <div className="absolute bottom-6 left-6 z-40 flex flex-col items-center">
-        <div className="relative h-28 w-28 rounded-full border-2 border-amber-400/80 bg-black/85 backdrop-blur-2xl shadow-[0_0_30px_rgba(251,191,36,0.4)] flex items-center justify-center overflow-hidden">
-          {/* Cercle radar de balayage */}
-          <div className="absolute inset-0 rounded-full border border-amber-400/20" />
-          <div className="absolute inset-2 rounded-full border border-amber-400/20" />
-          <div className="absolute inset-x-0 top-1/2 h-px bg-amber-400/20" />
-          <div className="absolute inset-y-0 left-1/2 w-px bg-amber-400/20" />
+      <div className="absolute bottom-5 left-5 z-40 flex flex-col items-center">
+        <div className="relative h-28 w-28 rounded-full border-2 border-purple-400/70 bg-black/80 backdrop-blur-2xl shadow-[0_0_30px_rgba(168,85,247,0.4)] flex items-center justify-center overflow-hidden">
+          <div className="absolute inset-2 rounded-full border border-white/15" />
+          <div className="absolute inset-x-0 top-1/2 h-px bg-white/15" />
+          <div className="absolute inset-y-0 left-1/2 w-px bg-white/15" />
+          <span className="absolute top-1 font-mono text-[9px] font-black text-white">N</span>
 
-          {/* Indicateur Nord */}
-          <span className="absolute top-1 font-mono text-[9px] font-black text-amber-400">N</span>
-
-          {/* Points d'intérêt des stations */}
           {PENTHOUSE_ZONES.map((z) => (
             <div
               key={z.id}
@@ -946,61 +1050,73 @@ export function CrmSimsHQ3D({
                 left: `${15 + (z.x / 100) * 70}%`,
                 top: `${15 + (z.y / 100) * 70}%`,
               }}
-              className="absolute h-1.5 w-1.5 rounded-full bg-purple-400 shadow-[0_0_6px_#c084fc]"
+              className="absolute h-2 w-2 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc]"
             />
           ))}
 
-          {/* Flèche de position du joueur */}
           <div
             style={{
               left: `${15 + (playerPos.x / 100) * 70}%`,
               top: `${15 + (playerPos.y / 100) * 70}%`,
             }}
-            className="absolute -translate-x-1/2 -translate-y-1/2 text-amber-300 font-bold text-xs"
+            className="absolute -translate-x-1/2 -translate-y-1/2 text-purple-300 font-black text-xs drop-shadow-[0_0_6px_#fff]"
           >
             ▲
           </div>
         </div>
-        <span className="mt-1.5 rounded-full bg-black/70 px-3 py-0.5 font-mono text-[10px] font-bold text-amber-300 border border-amber-400/30">
-          HQ - Étage {activeFloor}
+        <span className="mt-1.5 rounded-full bg-black/80 px-3 py-0.5 font-mono text-[10px] font-bold text-white border border-white/15">
+          HQ – Étage {activeFloor}
         </span>
       </div>
 
       {/* ══════════════════════════════════════════════════════════════════════════
-          5. DOCK ACTIONS & RACCOURCIS CLAVIER (BAS CENTRE)
+          5. DOCK D'ACTIONS BAS CENTRE (COMME SUR L'IMAGE)
           ══════════════════════════════════════════════════════════════════════════ */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center gap-1.5">
-        <div className="flex items-center gap-1.5 rounded-3xl border border-white/15 bg-black/75 px-3 py-2 backdrop-blur-2xl shadow-2xl">
+      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center gap-1.5">
+        <div className="flex items-center gap-1.5 rounded-3xl border border-white/20 bg-black/75 px-3 py-2 backdrop-blur-2xl shadow-2xl">
           {[
-            { id: "commercial", label: "Missions (M)", icon: "✉️" },
-            { id: "phone", label: "Téléphone (P)", icon: "📱" },
-            { id: "interact", label: "Interactions (E)", icon: "👥" },
-            { id: "camera", label: "Caméra (C)", icon: "📷", highlight: true },
-            { id: "map", label: "Carte (Tab)", icon: "🗺️" },
-            { id: "menu", label: "Menu (Esc)", icon: "☰" },
+            {
+              id: "missions",
+              label: "Missions (M)",
+              icon: "📦",
+              action: () => walkToOfficeAndSit(PENTHOUSE_ZONES[1]),
+            },
+            {
+              id: "phone",
+              label: "Téléphone (P)",
+              icon: "📱",
+              action: () => walkToOfficeAndSit(PENTHOUSE_ZONES[1]),
+            },
+            {
+              id: "sit_desk",
+              label: "Mon Ordi (E)",
+              icon: "💻",
+              action: () => walkToOfficeAndSit(myAssignedOffice),
+            },
+            {
+              id: "camera",
+              label: "Caméra (C)",
+              icon: "📷",
+              highlight: true,
+              action: () =>
+                setCameraMode((prev) => (prev === "third_person" ? "isometric" : "third_person")),
+            },
+            {
+              id: "wardrobe",
+              label: "Avatar",
+              icon: "🧑",
+              action: () => setActiveZoneModal("wardrobe"),
+            },
           ].map((act) => (
             <button
               key={act.id}
               type="button"
-              onClick={() => {
-                simsAudio.playInteract();
-                if (act.id === "camera") {
-                  setCameraMode((prev) => (prev === "third_person" ? "isometric" : "third_person"));
-                } else if (act.id === "interact") {
-                  setActiveZoneModal(nearbyZone ? nearbyZone.id : "lobby");
-                } else if (act.id === "phone") {
-                  setActiveZoneModal("commercial");
-                } else if (act.id === "map") {
-                  setActiveZoneModal("floor_plan_full");
-                } else {
-                  setActiveZoneModal(act.id);
-                }
-              }}
+              onClick={act.action}
               className={cn(
                 "inline-flex items-center gap-1.5 rounded-2xl px-3 py-1.5 text-xs font-bold transition",
                 act.highlight
-                  ? "bg-purple-600/50 text-purple-200 border border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.4)]"
-                  : "bg-white/5 text-white/80 hover:bg-white/15 hover:text-white border border-white/5",
+                  ? "bg-purple-600/60 text-white border border-purple-400 shadow-[0_0_18px_rgba(168,85,247,0.5)]"
+                  : "bg-white/5 text-white/85 hover:bg-white/15 hover:text-white border border-white/10",
               )}
             >
               <span>{act.icon}</span>
@@ -1008,132 +1124,613 @@ export function CrmSimsHQ3D({
             </button>
           ))}
         </div>
-        <span className="rounded-full bg-black/70 px-3 py-0.5 font-mono text-[10px] text-white/70 border border-white/10">
-          [G] Changer de caméra : {cameraMode === "third_person" ? "3e personne" : "Isométrique"}
+        <span className="rounded-full bg-black/75 px-3.5 py-0.5 font-mono text-[10px] text-white/80 border border-white/15">
+          [G] Changer de caméra : {cameraMode === "third_person" ? "3e personne" : "Isométrique"} · Cliquez sur un bureau pour vous asseoir à l'ordinateur
         </span>
       </div>
 
       {/* ══════════════════════════════════════════════════════════════════════════
-          6. PLAN ARCHITECTURAL 3D INTERACTIF DU PENTHOUSE (BAS DROITE)
+          6. PLAN ARCHITECTURAL 3D BAS DROITE (CLIQUEZ SUR 1 À 8 POUR Y ALLER)
           ══════════════════════════════════════════════════════════════════════════ */}
-      <div className="absolute bottom-6 right-6 z-40 w-72 rounded-3xl border border-white/15 bg-black/85 p-3.5 backdrop-blur-2xl shadow-2xl">
-        {/* En-tête du plan avec switch d'étage */}
-        <div className="flex items-center justify-between mb-2">
-          <span className="font-mono text-[10px] font-bold text-amber-300">
-            &gt; Plan du HQ - Étage {activeFloor}
-          </span>
-          <div className="flex gap-1">
-            <button
-              type="button"
-              onClick={() => setActiveFloor(1)}
-              className={cn(
-                "rounded-md px-2 py-0.5 font-mono text-[9px] font-bold transition",
-                activeFloor === 1 ? "bg-amber-400 text-black" : "bg-white/10 text-white/60",
-              )}
-            >
-              Étage 1
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveFloor(2)}
-              className={cn(
-                "rounded-md px-2 py-0.5 font-mono text-[9px] font-bold transition",
-                activeFloor === 2 ? "bg-purple-400 text-black" : "bg-white/10 text-white/60",
-              )}
-            >
-              Rooftop
-            </button>
-          </div>
-        </div>
+      <div className="absolute bottom-5 right-5 z-40 w-72 rounded-3xl border border-white/20 bg-black/85 p-3 backdrop-blur-2xl shadow-2xl hidden md:block">
+        <div className="relative h-36 w-full rounded-2xl border border-white/15 bg-[#12131f] overflow-hidden">
+          <img
+            src="/images/xr-sims-hq-3d.jpg"
+            alt="Minimap Plan 3D"
+            className="h-full w-full object-cover opacity-35"
+          />
+          {PENTHOUSE_ZONES.map((z) => {
+            if (z.id === "hr_martin" && !isDirector && !isMartin) return null;
+            return (
+              <button
+                key={z.id}
+                type="button"
+                onClick={() => walkToOfficeAndSit(z)}
+                style={{ left: `${z.x}%`, top: `${z.y}%` }}
+                title={`Aller au bureau : ${z.name}`}
+                className="absolute -translate-x-1/2 -translate-y-1/2 h-6 w-6 rounded-full border border-white bg-purple-600 text-[10px] font-black text-white hover:scale-125 transition shadow-[0_0_10px_#a855f7] flex items-center justify-center"
+              >
+                {z.number}
+              </button>
+            );
+          })}
 
-        {/* Schéma de pièces architecturales numérotées */}
-        <div className="relative h-36 w-full rounded-2xl border border-white/10 bg-[#0d0f18] p-2 overflow-hidden">
-          {PENTHOUSE_ZONES.filter((z) => z.floor === activeFloor).map((z) => (
-            <button
-              key={z.id}
-              type="button"
-              onClick={() => {
-                teleportToZone(z);
-                setActiveZoneModal(z.id);
-              }}
-              style={{
-                left: `${z.x}%`,
-                top: `${z.y}%`,
-              }}
-              title={z.name}
-              className="absolute -translate-x-1/2 -translate-y-1/2 h-6 w-6 rounded-full border border-purple-400/80 bg-purple-600/40 text-[10px] font-black text-white hover:scale-125 transition shadow-[0_0_10px_rgba(168,85,247,0.5)] flex items-center justify-center"
-            >
-              {z.number}
-            </button>
-          ))}
-
-          {/* Position du joueur sur le plan miniature */}
           <div
-            style={{
-              left: `${playerPos.x}%`,
-              top: `${playerPos.y}%`,
-            }}
-            className="absolute -translate-x-1/2 -translate-y-1/2 h-3 w-3 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-ping"
+            style={{ left: `${playerPos.x}%`, top: `${playerPos.y}%` }}
+            className="absolute -translate-x-1/2 -translate-y-1/2 h-3 w-3 rounded-full bg-amber-400 shadow-[0_0_10px_#fbbf24] animate-ping"
           />
         </div>
 
-        {/* Légende miniature des pièces */}
-        <div className="mt-2 grid grid-cols-2 gap-1 text-[9px] text-white/70 font-mono">
-          <span>1: Accueil / Lobby</span>
-          <span>2: Pôle Commercial</span>
-          <span>3: Studio Créatif</span>
-          <span>4: Direction</span>
-          <span>5: Salle Réunion</span>
-          <span>6: Espace Détente</span>
-          <span>7: Terrasse / Bar</span>
-          <span>8: Piscine</span>
+        <div className="mt-2 flex items-center justify-between">
+          <span className="font-mono text-[10px] font-bold text-white/90">
+            &gt; Plan du HQ – Étage {activeFloor}
+          </span>
+          <button
+            type="button"
+            onClick={() => setActiveFloor((f) => (f === 1 ? 2 : 1))}
+            className="rounded-lg border border-purple-400/50 bg-purple-600/30 px-2.5 py-0.5 font-mono text-[10px] font-bold text-purple-200 hover:bg-purple-600/50"
+          >
+            Étage 2 / Rooftop
+          </button>
         </div>
       </div>
 
       {/* ══════════════════════════════════════════════════════════════════════════
-          7. MODALES OPÉRATIONNELLES DES STATIONS & DONNÉES CRM RÉELLES
+          7. ÉCRAN D'ORDINATEUR DE BUREAU LORSQUE L'AVATAR S'ASSOIT À SON POSTE
           ══════════════════════════════════════════════════════════════════════════ */}
       {activeZoneModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md">
-          <div className="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[2.5rem] border-2 border-white/20 bg-gradient-to-b from-[#121422] to-[#090b12] p-6 sm:p-8 shadow-[0_0_80px_rgba(0,0,0,0.9)]">
-            {/* Bouton de fermeture [Esc] */}
-            <button
-              type="button"
-              onClick={() => setActiveZoneModal(null)}
-              className="absolute top-6 right-6 rounded-full border border-white/15 bg-white/10 p-2 text-white/80 hover:bg-white/20 hover:text-white transition"
-            >
-              <X className="h-5 w-5" />
-            </button>
-
-            {/* MODALE 1 : ACCUEIL & LOBBY (CAPTURE RAPIDE DE PROSPECT) */}
-            {activeZoneModal === "lobby" && (
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl border border-amber-400/50 bg-amber-400/20 text-2xl">
-                    🏛️
-                  </span>
-                  <div>
-                    <h2 className="text-xl font-black text-white">Comptoir d'Accueil & Lobby HQ</h2>
-                    <p className="text-xs text-white/70">
-                      Enregistrez un nouveau prospect en direct et assignez-le immédiatement à un Closer.
-                    </p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 sm:p-6 backdrop-blur-md">
+          {/* Cadre Écran d'Ordinateur Incurvé 3D */}
+          <div className="relative max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-[2rem] border-2 border-purple-400/50 bg-gradient-to-b from-[#111322] via-[#0c0e18] to-[#080910] p-5 sm:p-7 shadow-[0_0_90px_rgba(168,85,247,0.35)]">
+            {/* Barre système supérieure de l'ordinateur du bureau */}
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4 mb-6">
+              <div className="flex items-center gap-3">
+                <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-emerald-400/50 bg-emerald-500/20 text-emerald-300">
+                  <Monitor className="h-5 w-5" />
+                </span>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="font-mono text-[10px] font-black uppercase tracking-widest text-emerald-300">
+                      ASSIS DEVANT L'ORDINATEUR · SESSION DE {user.fullName.toUpperCase()}
+                    </span>
                   </div>
+                  <h2 className="text-base sm:text-lg font-black text-white">
+                    {PENTHOUSE_ZONES.find((z) => z.id === activeZoneModal)?.computerTitle ||
+                      "POSTE DE TRAVAIL XR AGENCY"}
+                  </h2>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {isDirector && onSwitchToProCockpit && (
+                  <button
+                    type="button"
+                    onClick={onSwitchToProCockpit}
+                    className="rounded-xl border border-amber-400/60 bg-amber-400/20 px-3.5 py-2 text-xs font-black text-amber-200 hover:bg-amber-400 hover:text-black transition"
+                  >
+                    👑 Basculer sur les 10 Piliers Complets (Plein Écran)
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsSittingAtDesk(false);
+                    setActiveZoneModal(null);
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2 text-xs font-bold text-white hover:bg-red-500/30 hover:border-red-400 transition"
+                >
+                  <Armchair className="h-4 w-4" />
+                  <span>Se lever du bureau (Esc)</span>
+                </button>
+              </div>
+            </div>
+
+            {/* ── CAS 1 : BUREAU DU DIRECTEUR (VIE PRO + TO-DO PERSO + ACHATS + PLANNING + SUPERVISION RH) ── */}
+            {activeZoneModal === "direction" && isDirector && (
+              <div className="space-y-6">
+                {/* Sous-onglets de l'ordinateur du Directeur */}
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    {
+                      id: "perso_achats",
+                      label: "📝 Ma To-Do Perso, Choses à Acheter & Mon Planning Pro/Perso",
+                    },
+                    {
+                      id: "pro_dispatch",
+                      label: "👑 Pilotage Pro : Chiffre d'Affaires, Leads, Devis & RIB",
+                    },
+                    {
+                      id: "hr_martin",
+                      label: "👥 Supervision Pôle RH Martin (Christel, Camille & 10% CA)",
+                    },
+                  ].map((t) => (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() =>
+                        setDirectorComputerTab(t.id as typeof directorComputerTab)
+                      }
+                      className={cn(
+                        "rounded-xl px-4 py-2.5 text-xs font-black transition",
+                        directorComputerTab === t.id
+                          ? "bg-amber-400 text-black shadow-[0_0_20px_rgba(251,191,36,0.4)]"
+                          : "border border-white/15 bg-white/5 text-white/75 hover:bg-white/10",
+                      )}
+                    >
+                      {t.label}
+                    </button>
+                  ))}
                 </div>
 
+                {/* SOUS-ONGLET 1 : TO-DO PERSO, ACHATS & PLANNING COMPLET PRO / PERSO */}
+                {directorComputerTab === "perso_achats" && (
+                  <div className="space-y-6">
+                    <form
+                      onSubmit={handleAddPersonalItem}
+                      className="rounded-2xl border border-amber-400/35 bg-black/50 p-4 grid grid-cols-1 sm:grid-cols-12 gap-3 items-end"
+                    >
+                      <div className="sm:col-span-3">
+                        <label className="block font-mono text-[10px] uppercase text-amber-300 mb-1">
+                          Catégorie
+                        </label>
+                        <select
+                          value={newItemType}
+                          onChange={(e) =>
+                            setNewItemType(e.target.value as PersonalItem["type"])
+                          }
+                          className="w-full rounded-xl border border-white/15 bg-black/80 px-3 py-2.5 text-xs font-bold text-white outline-none focus:border-amber-400"
+                        >
+                          <option value="todo_perso">✅ Chose à faire (Perso)</option>
+                          <option value="achat">🛍️ Chose à acheter</option>
+                          <option value="planning_pro">💼 Planning Pro</option>
+                          <option value="planning_perso">🌴 Planning Perso</option>
+                        </select>
+                      </div>
+                      <div className="sm:col-span-4">
+                        <label className="block font-mono text-[10px] uppercase text-white/70 mb-1">
+                          Titre (Tâche, Achat, RDV...)
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Ex: Acheter montre / Point 14h / Sport..."
+                          value={newItemTitle}
+                          onChange={(e) => setNewItemTitle(e.target.value)}
+                          className="w-full rounded-xl border border-white/15 bg-black/80 px-3 py-2.5 text-xs text-white outline-none focus:border-amber-400"
+                        />
+                      </div>
+                      <div className="sm:col-span-3">
+                        <label className="block font-mono text-[10px] uppercase text-white/70 mb-1">
+                          Horaire / Détail / Budget
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Ex: Aujourd'hui 18h / Urgent"
+                          value={newItemDetail}
+                          onChange={(e) => setNewItemDetail(e.target.value)}
+                          className="w-full rounded-xl border border-white/15 bg-black/80 px-3 py-2.5 text-xs text-white outline-none focus:border-amber-400"
+                        />
+                      </div>
+                      <div className="sm:col-span-2">
+                        <button
+                          type="submit"
+                          className="w-full rounded-xl bg-amber-400 py-2.5 px-4 text-xs font-black text-black hover:bg-amber-300 transition"
+                        >
+                          + Ajouter
+                        </button>
+                      </div>
+                    </form>
+
+                    {/* 3 Colonnes : To-Do Perso & Achats | Planning Pro | Planning Perso */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {/* Colonne A : To-Do Perso & Choses à acheter */}
+                      <div className="rounded-2xl border border-purple-400/30 bg-black/45 p-4 space-y-3">
+                        <h3 className="text-sm font-black text-purple-300 flex items-center gap-2">
+                          <ShoppingBag className="h-4 w-4" />
+                          <span>Ma To-Do Perso &amp; Choses à Acheter</span>
+                        </h3>
+                        <div className="space-y-2">
+                          {personalItems
+                            .filter((i) => i.type === "todo_perso" || i.type === "achat")
+                            .map((item) => (
+                              <div
+                                key={item.id}
+                                className="flex items-center justify-between gap-2 rounded-xl border border-white/10 bg-white/5 p-3"
+                              >
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    savePersonalItems(
+                                      personalItems.map((p) =>
+                                        p.id === item.id ? { ...p, done: !p.done } : p,
+                                      ),
+                                    )
+                                  }
+                                  className="flex items-start gap-2 text-left"
+                                >
+                                  <span
+                                    className={cn(
+                                      "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border",
+                                      item.done
+                                        ? "border-emerald-400 bg-emerald-400 text-black"
+                                        : "border-white/40",
+                                    )}
+                                  >
+                                    {item.done && <Check className="h-3 w-3" />}
+                                  </span>
+                                  <div>
+                                    <span
+                                      className={cn(
+                                        "text-xs font-bold block",
+                                        item.done ? "line-through text-white/40" : "text-white",
+                                      )}
+                                    >
+                                      {item.type === "achat" ? "🛍️ " : "✅ "}
+                                      {item.title}
+                                    </span>
+                                    <span className="text-[10px] text-white/50">{item.detail}</span>
+                                  </div>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    savePersonalItems(
+                                      personalItems.filter((p) => p.id !== item.id),
+                                    )
+                                  }
+                                  className="text-white/40 hover:text-red-400"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+
+                      {/* Colonne B : Mon Planning Professionnel */}
+                      <div className="rounded-2xl border border-amber-400/30 bg-black/45 p-4 space-y-3">
+                        <h3 className="text-sm font-black text-amber-300 flex items-center gap-2">
+                          <Briefcase className="h-4 w-4" />
+                          <span>Mon Planning Professionnel</span>
+                        </h3>
+                        <div className="space-y-2">
+                          {personalItems
+                            .filter((i) => i.type === "planning_pro")
+                            .map((item) => (
+                              <div
+                                key={item.id}
+                                className="flex items-center justify-between gap-2 rounded-xl border border-white/10 bg-white/5 p-3"
+                              >
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    savePersonalItems(
+                                      personalItems.map((p) =>
+                                        p.id === item.id ? { ...p, done: !p.done } : p,
+                                      ),
+                                    )
+                                  }
+                                  className="flex items-start gap-2 text-left"
+                                >
+                                  <span
+                                    className={cn(
+                                      "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border",
+                                      item.done
+                                        ? "border-emerald-400 bg-emerald-400 text-black"
+                                        : "border-white/40",
+                                    )}
+                                  >
+                                    {item.done && <Check className="h-3 w-3" />}
+                                  </span>
+                                  <div>
+                                    <span
+                                      className={cn(
+                                        "text-xs font-bold block",
+                                        item.done ? "line-through text-white/40" : "text-white",
+                                      )}
+                                    >
+                                      💼 {item.title}
+                                    </span>
+                                    <span className="text-[10px] text-amber-200/70">
+                                      {item.detail}
+                                    </span>
+                                  </div>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    savePersonalItems(
+                                      personalItems.filter((p) => p.id !== item.id),
+                                    )
+                                  }
+                                  className="text-white/40 hover:text-red-400"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+
+                      {/* Colonne C : Mon Planning Personnel & Vie Privée */}
+                      <div className="rounded-2xl border border-emerald-400/30 bg-black/45 p-4 space-y-3">
+                        <h3 className="text-sm font-black text-emerald-300 flex items-center gap-2">
+                          <Calendar className="h-4 w-4" />
+                          <span>Mon Planning Personnel &amp; Santé</span>
+                        </h3>
+                        <div className="space-y-2">
+                          {personalItems
+                            .filter((i) => i.type === "planning_perso")
+                            .map((item) => (
+                              <div
+                                key={item.id}
+                                className="flex items-center justify-between gap-2 rounded-xl border border-white/10 bg-white/5 p-3"
+                              >
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    savePersonalItems(
+                                      personalItems.map((p) =>
+                                        p.id === item.id ? { ...p, done: !p.done } : p,
+                                      ),
+                                    )
+                                  }
+                                  className="flex items-start gap-2 text-left"
+                                >
+                                  <span
+                                    className={cn(
+                                      "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border",
+                                      item.done
+                                        ? "border-emerald-400 bg-emerald-400 text-black"
+                                        : "border-white/40",
+                                    )}
+                                  >
+                                    {item.done && <Check className="h-3 w-3" />}
+                                  </span>
+                                  <div>
+                                    <span
+                                      className={cn(
+                                        "text-xs font-bold block",
+                                        item.done ? "line-through text-white/40" : "text-white",
+                                      )}
+                                    >
+                                      🌴 {item.title}
+                                    </span>
+                                    <span className="text-[10px] text-emerald-200/70">
+                                      {item.detail}
+                                    </span>
+                                  </div>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    savePersonalItems(
+                                      personalItems.filter((p) => p.id !== item.id),
+                                    )
+                                  }
+                                  className="text-white/40 hover:text-red-400"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* SOUS-ONGLET 2 : PILOTAGE PRO (CA, DEVIS, FACTURES, LEADS) */}
+                {directorComputerTab === "pro_dispatch" && (
+                  <div className="space-y-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                      <div className="rounded-2xl border border-white/10 bg-black/60 p-4">
+                        <span className="font-mono text-[10px] text-white/60 uppercase">
+                          Leads Totaux
+                        </span>
+                        <h4 className="text-2xl font-black text-white mt-1">{leads.length}</h4>
+                      </div>
+                      <div className="rounded-2xl border border-white/10 bg-black/60 p-4">
+                        <span className="font-mono text-[10px] text-white/60 uppercase">
+                          Factures en attente RIB
+                        </span>
+                        <h4 className="text-2xl font-black text-amber-300 mt-1">
+                          {pendingInvoices.length}
+                        </h4>
+                      </div>
+                      <div className="rounded-2xl border border-white/10 bg-black/60 p-4">
+                        <span className="font-mono text-[10px] text-white/60 uppercase">
+                          Devis Officiels
+                        </span>
+                        <h4 className="text-2xl font-black text-purple-300 mt-1">
+                          {quotes.length}
+                        </h4>
+                      </div>
+                      <div className="rounded-2xl border border-white/10 bg-black/60 p-4">
+                        <span className="font-mono text-[10px] text-white/60 uppercase">
+                          Clients Actifs
+                        </span>
+                        <h4 className="text-2xl font-black text-emerald-300 mt-1">
+                          {clients.length}
+                        </h4>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-3">
+                      {onCreateQuote && (
+                        <button
+                          type="button"
+                          onClick={() => onCreateQuote()}
+                          className="rounded-2xl bg-amber-400 px-5 py-3 text-xs font-black text-black hover:bg-amber-300 transition"
+                        >
+                          📄 + Générer un Devis Officiel avec RIB
+                        </button>
+                      )}
+                      {onSwitchToProCockpit && (
+                        <button
+                          type="button"
+                          onClick={onSwitchToProCockpit}
+                          className="rounded-2xl border border-purple-400 bg-purple-600/30 px-5 py-3 text-xs font-black text-white hover:bg-purple-600/50 transition"
+                        >
+                          🚀 Ouvrir les 10 Piliers Direction (Tableau Complet)
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* SOUS-ONGLET 3 : SUPERVISION DU PÔLE RH DE MARTIN DIRECTEMENT SUR L'ORDI DU DIRECTEUR */}
+                {directorComputerTab === "hr_martin" && (
+                  <div className="rounded-2xl border border-indigo-400/40 overflow-hidden">
+                    <CrmHrDashboard
+                      currentUser={{
+                        id: user.id || "mem-admin",
+                        fullName: `${user.fullName} (Supervision Direction)`,
+                        email: user.email,
+                        role: "admin",
+                      }}
+                      leads={leads}
+                      onLogout={onLogout}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── CAS 2 : BUREAU RH EXCLUSIF DE MARTIN (INTERDIT AUX AUTRES COMMERCIAUX) ── */}
+            {activeZoneModal === "hr_martin" && (isDirector || isMartin) && (
+              <div className="rounded-2xl border border-indigo-400/30 overflow-hidden">
+                <CrmHrDashboard
+                  currentUser={{
+                    id: user.id || "mem-martin",
+                    fullName: user.fullName,
+                    email: user.email,
+                    role: user.role,
+                  }}
+                  leads={leads}
+                  onLogout={onLogout}
+                  onSwitchToCloserMode={() => setActiveZoneModal("commercial")}
+                />
+              </div>
+            )}
+
+            {/* ── CAS 3 : ORDINATEUR DU PÔLE COMMERCIAL (CHRISTEL, CAMILLE, MARTIN CLOSER, LUCAS, SARAH) ── */}
+            {activeZoneModal === "commercial" && (
+              <div className="space-y-6">
+                {/* Bandeau personnalisé selon le barème de la personne assise devant l'ordinateur */}
+                <div className="rounded-2xl border border-emerald-400/40 bg-gradient-to-r from-emerald-950/60 via-black to-purple-950/40 p-4 flex flex-wrap items-center justify-between gap-4">
+                  <div>
+                    <span className="font-mono text-[10px] font-black uppercase text-emerald-300">
+                      SESSION COMMERCIALE PRIVÉE &amp; CONFIDENTIELLE · {user.fullName}
+                    </span>
+                    <h3 className="text-base font-black text-white mt-0.5">
+                      {isChristel
+                        ? "Barème Christel Thirion : 20 % sur les Sites Internet · 10 % sur Google Maps, CRM & Mensualités"
+                        : isMartin
+                          ? "Mode Closer Personnel de Martin (20 % sur vos ventes + 10 % sur le CA de vos recrues)"
+                          : user.recruitedBy === "mem-martin"
+                            ? "Barème Filière Martin : 20 % de commission sur tout ce que vous générez"
+                            : "Barème Commercial Classique : 30 % sur les Sites Internet"}
+                    </h3>
+                    <p className="text-xs text-white/65 mt-0.5">
+                      🔒 Vos gains en euros sont strictement confidentiels. Personne d'autre dans l'équipe ne peut voir votre coffre.
+                    </p>
+                  </div>
+                  {isMartin && (
+                    <button
+                      type="button"
+                      onClick={() => setActiveZoneModal("hr_martin")}
+                      className="rounded-xl border border-indigo-400 bg-indigo-500/25 px-4 py-2 text-xs font-black text-indigo-200 hover:bg-indigo-500/40"
+                    >
+                      👥 Basculer sur mon Ordinateur RH (Recrutements &amp; 10% CA)
+                    </button>
+                  )}
+                </div>
+
+                {/* Liste des prospects à closer */}
+                <div className="space-y-2.5 max-h-[55vh] overflow-y-auto pr-1">
+                  {leads.map((lead) => {
+                    const myComm = computeMyCommissionForLead(lead);
+                    return (
+                      <div
+                        key={lead.id}
+                        className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/55 p-4 hover:border-emerald-400/50 transition"
+                      >
+                        <div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="font-black text-sm text-white">{lead.company}</span>
+                            <span className="rounded-full bg-white/10 px-2.5 py-0.5 font-mono text-[10px] font-bold text-white/90">
+                              CA : {lead.budgetEur} € · {lead.serviceTarget}
+                            </span>
+                            <span className="rounded-full bg-emerald-500/20 border border-emerald-400/40 px-2.5 py-0.5 font-mono text-[10px] font-black text-emerald-300">
+                              Ma Comm privée : +{myComm.amount} € ({myComm.label})
+                            </span>
+                          </div>
+                          <p className="text-xs text-white/65 mt-1">
+                            Décideur : {lead.contactName || "Gérant"} · 📞 {lead.phone} · 📍{" "}
+                            {lead.city}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          {onOpenCallModal && (
+                            <button
+                              type="button"
+                              onClick={() => onOpenCallModal(lead)}
+                              className="rounded-xl border border-emerald-400/50 bg-emerald-500/20 px-3.5 py-2 text-xs font-bold text-emerald-200 hover:bg-emerald-500/35 flex items-center gap-1.5"
+                            >
+                              <PhoneCall className="h-3.5 w-3.5" />
+                              Appeler
+                            </button>
+                          )}
+                          {onOpenWhatsappModal && (
+                            <button
+                              type="button"
+                              onClick={() => onOpenWhatsappModal(lead)}
+                              className="rounded-xl border border-green-400/50 bg-green-500/20 px-3.5 py-2 text-xs font-bold text-green-200 hover:bg-green-500/35 flex items-center gap-1.5"
+                            >
+                              <MessageCircle className="h-3.5 w-3.5" />
+                              WhatsApp 24h
+                            </button>
+                          )}
+                          {onUpdateLeadStatus && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                simsAudio.playVictory();
+                                setCoins((c) => c + myComm.amount);
+                                setPlayerXp((x) => x + 250);
+                                onUpdateLeadStatus(lead.id, "signed");
+                              }}
+                              className="rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-500 px-4 py-2 text-xs font-black text-black hover:brightness-110"
+                            >
+                              ✅ Signer (+{myComm.amount} €)
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* ── CAS 4 : COMPTOIR D'ACCUEIL & LOBBY ── */}
+            {activeZoneModal === "lobby" && (
+              <div className="space-y-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-white/80 mb-1">
-                      Nom de l'Entreprise / Établissement
+                      Nom de l'Entreprise
                     </label>
                     <input
                       type="text"
-                      placeholder="Ex: Brasserie Leffe Miami"
+                      placeholder="Ex: Restaurant Le Miami"
                       value={newLCompany}
                       onChange={(e) => setNewLCompany(e.target.value)}
-                      className="w-full rounded-xl border border-white/15 bg-black/60 px-4 py-2.5 text-sm text-white focus:border-amber-400 outline-none"
+                      className="w-full rounded-xl border border-white/15 bg-black/60 px-4 py-2.5 text-sm text-white outline-none focus:border-amber-400"
                     />
                   </div>
-
                   <div>
                     <label className="block text-xs font-bold text-white/80 mb-1">
                       Téléphone Direct
@@ -1143,400 +1740,185 @@ export function CrmSimsHQ3D({
                       placeholder="06 12 34 56 78"
                       value={newLPhone}
                       onChange={(e) => setNewLPhone(e.target.value)}
-                      className="w-full rounded-xl border border-white/15 bg-black/60 px-4 py-2.5 text-sm text-white focus:border-amber-400 outline-none"
+                      className="w-full rounded-xl border border-white/15 bg-black/60 px-4 py-2.5 text-sm text-white outline-none focus:border-amber-400"
                     />
                   </div>
-
                   <div>
                     <label className="block text-xs font-bold text-white/80 mb-1">
-                      Nom du Gérant / Décideur
+                      Gérant / Contact
                     </label>
                     <input
                       type="text"
-                      placeholder="Ex: Jean Dupont"
+                      placeholder="Ex: Marc Delacroix"
                       value={newLContact}
                       onChange={(e) => setNewLContact(e.target.value)}
-                      className="w-full rounded-xl border border-white/15 bg-black/60 px-4 py-2.5 text-sm text-white focus:border-amber-400 outline-none"
+                      className="w-full rounded-xl border border-white/15 bg-black/60 px-4 py-2.5 text-sm text-white outline-none focus:border-amber-400"
                     />
                   </div>
-
                   <div>
                     <label className="block text-xs font-bold text-white/80 mb-1">
-                      Offre Ciblée
+                      Prestation Ciblée
                     </label>
                     <select
                       value={newLService}
                       onChange={(e) => {
                         setNewLService(e.target.value);
                         if (e.target.value.includes("999")) setNewLBudget(999);
-                        else if (e.target.value.includes("2000")) setNewLBudget(2000);
+                        else if (e.target.value.includes("2 000")) setNewLBudget(2000);
                         else setNewLBudget(499);
                       }}
-                      className="w-full rounded-xl border border-white/15 bg-black/60 px-4 py-2.5 text-sm text-white focus:border-amber-400 outline-none"
+                      className="w-full rounded-xl border border-white/15 bg-black/60 px-4 py-2.5 text-sm text-white outline-none focus:border-amber-400"
                     >
                       <option value="Site Vitrine Pro (499 €)">Site Vitrine Pro (499 €)</option>
-                      <option value="Google Maps Top 3 (999 €/an)">Google Maps Top 3 (999 €/an)</option>
-                      <option value="CRM Sur-Mesure + POS (2 000 €)">CRM Sur-Mesure + POS (2 000 €)</option>
+                      <option value="Visibilité Google Maps (999 €/an)">
+                        Visibilité Google Maps (999 €/an)
+                      </option>
+                      <option value="CRM Sur-Mesure & POS (2 000 €)">
+                        CRM Sur-Mesure &amp; POS (2 000 €)
+                      </option>
                     </select>
                   </div>
                 </div>
-
-                <div className="flex items-center justify-between pt-4 border-t border-white/10">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs text-amber-300">
-                      Commission estimée closer : {Math.round(newLBudget * 0.2)} €
-                    </span>
-                  </div>
+                <div className="flex justify-end">
                   <button
                     type="button"
                     onClick={() => {
-                      if (!newLCompany.trim() || !newLPhone.trim()) {
-                        alert("Veuillez renseigner au moins le nom et le téléphone.");
-                        return;
-                      }
+                      if (!newLCompany.trim() || !newLPhone.trim()) return;
                       simsAudio.playVictory();
                       setCoins((c) => c + 100);
-                      setPlayerXp((x) => x + 50);
-                      alert(`✅ Prospect ${newLCompany} enregistré et assigné ! +100 Coins & +50 XP`);
                       setNewLCompany("");
                       setNewLPhone("");
                       setActiveZoneModal(null);
                     }}
-                    className="rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 px-6 py-3 font-black text-sm text-black shadow-lg hover:from-amber-300 hover:to-amber-400 transition"
+                    className="rounded-2xl bg-amber-400 px-6 py-3 text-xs font-black text-black hover:bg-amber-300"
                   >
-                    🚀 Enregistrer & Dispatcher Immédiatement
+                    🚀 Enregistrer au Lobby
                   </button>
                 </div>
               </div>
             )}
 
-            {/* MODALE 2 : PÔLE COMMERCIAL (MISSIONS DU JOUR, DIALER & CLOSING) */}
-            {(activeZoneModal === "commercial" || activeZoneModal === "leads_prospects") && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="grid h-12 w-12 place-items-center rounded-2xl border border-emerald-400/50 bg-emerald-400/20 text-2xl">
-                      🎯
-                    </span>
-                    <div>
-                      <h2 className="text-xl font-black text-white">Pôle Commercial & Missions</h2>
-                      <p className="text-xs text-white/70">
-                        {leads.length} prospects dans le pipe · {urgentLeads.length} relances urgentes.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2.5 max-h-96 overflow-y-auto pr-1">
-                  {leads.map((lead) => (
-                    <div
-                      key={lead.id}
-                      className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/50 p-4 hover:border-emerald-400/50 transition"
-                    >
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-black text-sm text-white">{lead.company}</span>
-                          <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 font-mono text-[9px] font-bold text-emerald-300">
-                            {lead.serviceTarget} · {lead.budgetEur} €
-                          </span>
-                        </div>
-                        <p className="text-xs text-white/60 mt-0.5">
-                          Contact : {lead.contactName || "Gérant"} · 📞 {lead.phone}
-                        </p>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        {onOpenCallModal && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              simsAudio.playInteract();
-                              onOpenCallModal(lead);
-                            }}
-                            className="rounded-xl border border-emerald-400/40 bg-emerald-500/20 px-3.5 py-1.5 text-xs font-bold text-emerald-200 hover:bg-emerald-500/30 transition flex items-center gap-1.5"
-                          >
-                            <PhoneCall className="h-3.5 w-3.5" />
-                            Appeler (P)
-                          </button>
-                        )}
-                        {onOpenWhatsappModal && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              simsAudio.playInteract();
-                              onOpenWhatsappModal(lead);
-                            }}
-                            className="rounded-xl border border-green-500/40 bg-green-500/20 px-3 py-1.5 text-xs font-bold text-green-200 hover:bg-green-500/30 transition flex items-center gap-1.5"
-                          >
-                            <MessageCircle className="h-3.5 w-3.5" />
-                            WhatsApp
-                          </button>
-                        )}
-                        {onUpdateLeadStatus && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              simsAudio.playVictory();
-                              setCoins((c) => c + Math.round(lead.budgetEur * 0.2));
-                              setGems((g) => g + 50);
-                              setPlayerXp((x) => x + 250);
-                              onUpdateLeadStatus(lead.id, "signed");
-                            }}
-                            className="rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-500 px-3.5 py-1.5 text-xs font-black text-black hover:from-emerald-300 hover:to-emerald-400 transition"
-                          >
-                            ✅ Clôturer Deal
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* MODALE 3 : STUDIO CRÉATIF & R&D ROBOTIQUE */}
+            {/* ── CAS 5 : STUDIO CRÉATIF, SALLE DE RÉUNION, DÉTENTE, SPORT, IA ── */}
             {activeZoneModal === "creative" && (
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl border border-purple-400/50 bg-purple-400/20 text-2xl">
-                    🎨
-                  </span>
-                  <div>
-                    <h2 className="text-xl font-black text-white">Studio Créatif & R&D Robotique</h2>
-                    <p className="text-xs text-white/70">
-                      Générateur de maquettes offertes 24h & Catalogue des robots autonomes XR.
-                    </p>
-                  </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="rounded-2xl border border-purple-400/30 bg-black/60 p-5 space-y-3">
+                  <h3 className="text-base font-black text-purple-300">
+                    🎨 Studio Maquettes 24h WhatsApp
+                  </h3>
+                  <p className="text-xs text-white/70">
+                    Préparez et validez les maquettes envoyées en 24h aux prospects pour déclencher le closing.
+                  </p>
+                  {onSwitchToProCockpit && (
+                    <button
+                      type="button"
+                      onClick={onSwitchToProCockpit}
+                      className="rounded-xl bg-purple-600 px-4 py-2.5 text-xs font-black text-white hover:bg-purple-500"
+                    >
+                      Ouvrir le Studio Maquettes Complet →
+                    </button>
+                  )}
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="rounded-2xl border border-white/10 bg-black/60 p-4">
-                    <h3 className="font-bold text-sm text-purple-300 mb-2">
-                      🎨 Maquette Express WhatsApp 24h
-                    </h3>
-                    <p className="text-xs text-white/70 mb-3">
-                      L'arme fatale pour closer : montrez le site ou l'audit avant de demander un centime.
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        simsAudio.playInteract();
-                        alert("Générateur de maquette IA activé. URL prête pour envoi client !");
-                      }}
-                      className="w-full rounded-xl bg-purple-500/20 border border-purple-400/40 py-2.5 text-xs font-bold text-purple-200 hover:bg-purple-500/30"
-                    >
-                      🚀 Créer une Nouvelle Maquette Démo
-                    </button>
-                  </div>
-
-                  <div className="rounded-2xl border border-white/10 bg-black/60 p-4">
-                    <h3 className="font-bold text-sm text-cyan-300 mb-2">
-                      🤖 R&D Robotique & Humanoïdes
-                    </h3>
-                    <p className="text-xs text-white/70 mb-3">
-                      Offre exclusive XR : Robot de service autonome à 499 € / mois en location.
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        simsAudio.playInteract();
-                        alert("Plaquette Robotique XR chargée dans vos documents partagés.");
-                      }}
-                      className="w-full rounded-xl bg-cyan-500/20 border border-cyan-400/40 py-2.5 text-xs font-bold text-cyan-200 hover:bg-cyan-500/30"
-                    >
-                      📄 Fiche Technique Robot Humanoïde
-                    </button>
-                  </div>
+                <div className="rounded-2xl border border-cyan-400/30 bg-black/60 p-5 space-y-3">
+                  <h3 className="text-base font-black text-cyan-300">
+                    🤖 R&amp;D Robotique &amp; Automatisation IA
+                  </h3>
+                  <p className="text-xs text-white/70">
+                    Catalogue R&amp;D : Robots autonomes de service (499 €/mois) et CRM IA sur-mesure (2 000 €+).
+                  </p>
                 </div>
               </div>
             )}
 
-            {/* MODALE 4 : DIRECTION & COCKPIT BOSS */}
-            {activeZoneModal === "direction" && (
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl border border-amber-400/50 bg-amber-400/20 text-2xl">
-                    👑
-                  </span>
-                  <div>
-                    <h2 className="text-xl font-black text-white">Bureau de la Direction Générale</h2>
-                    <p className="text-xs text-white/70">
-                      Trésorerie, Devis officiels avec RIB KARMA SASU et contrôle des commissions.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="rounded-2xl border border-white/10 bg-black/60 p-4">
-                    <span className="font-mono text-[10px] text-white/60 uppercase">Factures en attente</span>
-                    <h4 className="text-xl font-black text-amber-300 mt-1">
-                      {pendingInvoices.length} à valider
-                    </h4>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-black/60 p-4">
-                    <span className="font-mono text-[10px] text-white/60 uppercase">Devis Émis</span>
-                    <h4 className="text-xl font-black text-purple-300 mt-1">{quotes.length}</h4>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-black/60 p-4">
-                    <span className="font-mono text-[10px] text-white/60 uppercase">Clients Actifs</span>
-                    <h4 className="text-xl font-black text-emerald-300 mt-1">{clients.length}</h4>
-                  </div>
-                </div>
-
-                {onCreateQuote && (
-                  <div className="flex justify-end pt-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        simsAudio.playInteract();
-                        onCreateQuote();
-                      }}
-                      className="rounded-2xl bg-amber-400 px-6 py-2.5 text-xs font-black text-black hover:bg-amber-300 transition"
-                    >
-                      + Générer Devis Officiel & RIB
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* MODALE 5 : SALLE DE RÉUNION & CALENDRIER */}
-            {(activeZoneModal === "meeting" || activeZoneModal === "calendar") && (
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl border border-sky-400/50 bg-sky-400/20 text-2xl">
-                    👥
-                  </span>
-                  <div>
-                    <h2 className="text-xl font-black text-white">Salle de Réunion & Dual Clocks</h2>
-                    <p className="text-xs text-white/70">
-                      Coordination des fuseaux horaires Paris / Miami / Dubaï & Rétroplannings de livraison.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Dual Clocks */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="rounded-2xl border border-white/10 bg-black/60 p-4 text-center">
-                    <span className="font-mono text-xs text-sky-300 font-bold">PARIS (Siège)</span>
-                    <h3 className="text-2xl font-black text-white mt-1">
-                      {new Date().toLocaleTimeString("fr-FR", {
-                        timeZone: "Europe/Paris",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </h3>
-                  </div>
-                  <div className="rounded-2xl border border-amber-400/30 bg-black/60 p-4 text-center">
-                    <span className="font-mono text-xs text-amber-300 font-bold">MIAMI (Penthouse HQ)</span>
-                    <h3 className="text-2xl font-black text-white mt-1">
-                      {new Date().toLocaleTimeString("fr-FR", {
-                        timeZone: "America/New_York",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </h3>
-                  </div>
-                  <div className="rounded-2xl border border-purple-400/30 bg-black/60 p-4 text-center">
-                    <span className="font-mono text-xs text-purple-300 font-bold">DUBAÏ</span>
-                    <h3 className="text-2xl font-black text-white mt-1">
-                      {new Date().toLocaleTimeString("fr-FR", {
-                        timeZone: "Asia/Dubai",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* MODALE 6 : ESPACE DÉTENTE & BIEN-ÊTRE PERSONNEL */}
-            {(activeZoneModal === "lounge" ||
-              activeZoneModal === "fitness" ||
-              activeZoneModal === "pool" ||
-              activeZoneModal === "terrace") && (
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl border border-yellow-400/50 bg-yellow-400/20 text-2xl">
-                    ⚡
-                  </span>
-                  <div>
-                    <h2 className="text-xl font-black text-white">
-                      Espace Détente, Sport & Équilibre Personnel
-                    </h2>
-                    <p className="text-xs text-white/70">
-                      Rechargez votre énergie vitale pour préserver votre clarté mentale et vos performances.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-black/60 p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div>
-                    <h3 className="font-bold text-sm text-yellow-300">Recharge Énergie Vitale ⚡</h3>
-                    <p className="text-xs text-white/70 mt-0.5">
-                      Faites une pause respiration ou une séance de sport pour remonter à 100 Énergie.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      simsAudio.playVictory();
-                      setEnergy(100);
-                      alert("⚡ Énergie rechargée à 100% ! Prêt pour le prochain sprint.");
-                    }}
-                    className="rounded-2xl bg-yellow-400 px-6 py-2.5 font-black text-xs text-black hover:bg-yellow-300 transition"
+            {activeZoneModal === "meeting" && (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {[
+                  { city: "PARIS (Siège)", tz: "Europe/Paris", color: "text-sky-300" },
+                  { city: "MIAMI (Penthouse HQ)", tz: "America/New_York", color: "text-amber-300" },
+                  { city: "DUBAÏ", tz: "Asia/Dubai", color: "text-purple-300" },
+                ].map((clock) => (
+                  <div
+                    key={clock.city}
+                    className="rounded-2xl border border-white/10 bg-black/60 p-5 text-center"
                   >
-                    Recharger à 100 ⚡
-                  </button>
-                </div>
+                    <span className={cn("font-mono text-xs font-bold", clock.color)}>
+                      {clock.city}
+                    </span>
+                    <div className="text-3xl font-black text-white mt-2">
+                      {new Date().toLocaleTimeString("fr-FR", {
+                        timeZone: clock.tz,
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
 
-            {/* MODALE 7 : ASSISTANT IA XR */}
+            {(activeZoneModal === "lounge" || activeZoneModal === "fitness") && (
+              <div className="rounded-2xl border border-yellow-400/30 bg-black/60 p-6 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-base font-black text-yellow-300">
+                    ⚡ Recharge Énergie &amp; Bien-être
+                  </h3>
+                  <p className="text-xs text-white/70 mt-1">
+                    Prenez une pause récupération pour remonter votre jauge d'énergie à 100 ⚡.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    simsAudio.playVictory();
+                    setEnergy(100);
+                  }}
+                  className="rounded-2xl bg-yellow-400 px-6 py-3 text-xs font-black text-black hover:bg-yellow-300"
+                >
+                  Recharger à 100 ⚡
+                </button>
+              </div>
+            )}
+
             {activeZoneModal === "ai_assistant" && (
               <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl border border-purple-400/50 bg-purple-400/20 text-2xl">
-                    🤖
-                  </span>
-                  <div>
-                    <h2 className="text-xl font-black text-white">Assistant Stratégique IA XR</h2>
-                    <p className="text-xs text-white/70">
-                      Génération d'arguments closing, traitement d'objections et conseils business.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="h-64 overflow-y-auto rounded-2xl border border-white/10 bg-black/60 p-4 space-y-3">
+                <div className="h-56 overflow-y-auto rounded-2xl border border-white/10 bg-black/60 p-4 space-y-2.5">
                   {aiChatLogs.map((log, i) => (
                     <div
                       key={i}
                       className={cn(
-                        "rounded-xl p-3 text-xs leading-relaxed max-w-[85%]",
+                        "rounded-xl p-3 text-xs max-w-[85%]",
                         log.sender === "user"
-                          ? "ml-auto bg-purple-600/40 text-purple-100 border border-purple-400/30"
-                          : "mr-auto bg-white/5 text-white/85 border border-white/10",
+                          ? "ml-auto bg-purple-600/40 text-white"
+                          : "mr-auto bg-white/10 text-white/90",
                       )}
                     >
                       {log.text}
                     </div>
                   ))}
                 </div>
-
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="Posez une question ou demandez un contre-argument..."
                     value={aiChatInput}
                     onChange={(e) => setAiChatInput(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleSendAiMessage()}
-                    className="flex-1 rounded-xl border border-white/15 bg-black/60 px-4 py-2.5 text-xs text-white focus:border-purple-400 outline-none"
+                    placeholder="Demandez un script de closing ou une réponse à une objection..."
+                    className="flex-1 rounded-xl border border-white/15 bg-black/60 px-4 py-2.5 text-xs text-white outline-none focus:border-purple-400"
                   />
                   <button
                     type="button"
-                    onClick={handleSendAiMessage}
-                    className="rounded-xl bg-purple-500 px-4 py-2.5 text-xs font-bold text-white hover:bg-purple-400"
+                    onClick={() => {
+                      if (!aiChatInput.trim()) return;
+                      const q = aiChatInput;
+                      setAiChatInput("");
+                      setAiChatLogs((prev) => [
+                        ...prev,
+                        { sender: "user", text: q },
+                        {
+                          sender: "ai",
+                          text: "💡 Argument XR : Proposez immédiatement la maquette gratuite sous 24h sur WhatsApp pour montrer le rendu réel avant toute discussion de budget.",
+                        },
+                      ]);
+                    }}
+                    className="rounded-xl bg-purple-600 px-5 py-2.5 text-xs font-black text-white"
                   >
                     Envoyer
                   </button>
@@ -1544,43 +1926,57 @@ export function CrmSimsHQ3D({
               </div>
             )}
 
-            {/* MODALE 8 : VESTIAIRE DIRECTEUR (SKINS) */}
+            {/* ── CAS 6 : VESTIAIRE & PERSONNALISATION D'AVATAR À SON EFFIGIE ── */}
             {activeZoneModal === "wardrobe" && (
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl border border-amber-400/50 bg-amber-400/20 text-2xl">
-                    🎁
-                  </span>
+              <div className="space-y-5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <h2 className="text-xl font-black text-white">Vestiaire du Directeur XR</h2>
-                    <p className="text-xs text-white/70">
-                      Personnalisez l'apparence de votre avatar dans le Penthouse de Miami.
+                    <h3 className="text-base font-black text-white">
+                      🎁 Studio Avatar 3D à votre Effigie
+                    </h3>
+                    <p className="text-xs text-white/65">
+                      Modifiez votre photo de visage, votre blouson XR AGENCY et votre nom.
                     </p>
                   </div>
+                  <label className="cursor-pointer inline-flex items-center gap-2 rounded-xl bg-amber-400 px-4 py-2 text-xs font-black text-black hover:bg-amber-300">
+                    <Upload className="h-4 w-4" />
+                    <span>Importer ma Photo de Visage</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleAvatarPhotoUpload}
+                      className="hidden"
+                    />
+                  </label>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
                   {[
-                    { id: "bomber_black", label: "Bombardier XR Noir", desc: "Le classique de l'image officielle avec logo XR AGENCY blanc dans le dos." },
-                    { id: "suit_gold", label: "Costume Or VIP Boss", desc: "Pour les closings de luxe et les réunions investisseurs." },
-                    { id: "cyber_xr", label: "Cyber Neon XR", desc: "Veste futuriste avec néons cyan & violet Miami Vice." },
-                  ].map((skin) => (
+                    { id: "bomber_xr", label: "🖤 Bombardier Cuir Noir XR AGENCY" },
+                    { id: "suit_gold", label: "👑 Costume Noir & Or VIP Directeur" },
+                    { id: "blazer_miami", label: "🌴 Blazer Exécutif Miami White" },
+                    { id: "cyber_neon", label: "⚡ Veste Cyberpunk Neon XR" },
+                  ].map((o) => (
                     <button
-                      key={skin.id}
+                      key={o.id}
                       type="button"
                       onClick={() => {
+                        const next = {
+                          ...avatarConfig,
+                          outfit: o.id as SimsAvatarConfig["outfit"],
+                        };
+                        setAvatarConfig(next);
+                        saveAvatarConfig(next);
                         simsAudio.playVictory();
-                        setOutfit(skin.id as typeof outfit);
                       }}
                       className={cn(
-                        "rounded-2xl border p-4 text-left transition",
-                        outfit === skin.id
-                          ? "border-amber-400 bg-amber-400/20 text-white shadow-[0_0_20px_rgba(251,191,36,0.4)]"
-                          : "border-white/10 bg-black/60 text-white/70 hover:border-white/30",
+                        "rounded-2xl border p-4 text-left text-xs font-bold transition",
+                        avatarConfig.outfit === o.id
+                          ? "border-amber-400 bg-amber-400/20 text-amber-200"
+                          : "border-white/10 bg-black/60 text-white/75 hover:border-white/30",
                       )}
                     >
-                      <h4 className="font-bold text-sm text-amber-300">{skin.label}</h4>
-                      <p className="text-xs text-white/60 mt-1">{skin.desc}</p>
+                      {o.label}
                     </button>
                   ))}
                 </div>
