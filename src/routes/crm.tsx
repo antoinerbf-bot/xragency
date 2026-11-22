@@ -1,5 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { jsPDF } from "jspdf";
 import {
   Phone,
   MessageSquare,
@@ -23,7 +24,9 @@ import {
   FileText,
   AlertCircle,
   HelpCircle,
-  Award
+  Award,
+  Download,
+  RotateCcw
 } from "lucide-react";
 
 export const Route = createFileRoute("/crm")({
@@ -52,7 +55,7 @@ interface Lead {
   date: string;
 }
 
-const INITIAL_LEADS: Lead[] = [
+const DEFAULT_LEADS: Lead[] = [
   {
     id: "lead-1",
     name: "Bistrot Le Marais",
@@ -169,13 +172,33 @@ const OBJECTIONS = [
 export function ModernCrmPage() {
   const [activeTab, setActiveTab] = useState<"kanban" | "cockpit" | "finances" | "school">("kanban");
   const [selectedRole, setSelectedRole] = useState<"directeur" | "martin" | "lucas" | "christel">("directeur");
-  const [leads, setLeads] = useState<Lead[]>(INITIAL_LEADS);
+  const [leads, setLeads] = useState<Lead[]>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("xr_crm_leads_v2");
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch {
+          // fallback
+        }
+      }
+    }
+    return DEFAULT_LEADS;
+  });
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeLeadForCockpit, setActiveLeadForCockpit] = useState<Lead>(INITIAL_LEADS[0]);
+  const [activeLeadForCockpit, setActiveLeadForCockpit] = useState<Lead>(leads[0] || DEFAULT_LEADS[0]);
   const [showCelebration, setShowCelebration] = useState(false);
   const [lastWonLead, setLastWonLead] = useState<Lead | null>(null);
   const [openObjection, setOpenObjection] = useState<string | null>("obj-1");
   const [showNewLeadModal, setShowNewLeadModal] = useState(false);
+
+  // Persistence
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("xr_crm_leads_v2", JSON.stringify(leads));
+    }
+  }, [leads]);
 
   // New lead form state
   const [newLeadName, setNewLeadName] = useState("");
@@ -233,7 +256,6 @@ export function ModernCrmPage() {
       prev.map((l) => {
         if (l.id === leadId) {
           if (newStage === "won" && l.stage !== "won") {
-            // Trigger celebration!
             setLastWonLead(l);
             setShowCelebration(true);
             setTimeout(() => setShowCelebration(false), 4500);
@@ -280,6 +302,219 @@ export function ModernCrmPage() {
     setNewLeadPhone("");
     setNewLeadIssue("");
     setShowNewLeadModal(false);
+  };
+
+  // Reset demo data
+  const handleResetDemoData = () => {
+    if (confirm("Réinitialiser les prospects avec les données de démonstration ?")) {
+      setLeads(DEFAULT_LEADS);
+      localStorage.removeItem("xr_crm_leads_v2");
+    }
+  };
+
+  // Export CSV
+  const handleExportCsv = () => {
+    const headers = "ID;Entreprise;Contact;Telephone;Secteur;Valeur;Statut;Closer;Date\n";
+    const rows = leads
+      .map(
+        (l) =>
+          `"${l.id}";"${l.name}";"${l.contact}";"${l.phone}";"${l.sector}";"${l.value}";"${l.stage}";"${l.closer}";"${l.date}"`
+      )
+      .join("\n");
+    const blob = new Blob([headers + rows], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `XR-AGENCY-LEADS-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+  };
+
+  // Generate PDF Quote 1-Click
+  const generatePdfQuote = (lead: Lead) => {
+    const doc = new jsPDF({ unit: "mm", format: "a4" });
+    const W = 210, M = 16, R = 194;
+    const ink = [18, 22, 29] as const;
+    const gold = [217, 153, 30] as const;
+    const muted = [90, 98, 110] as const;
+    const soft = [245, 246, 248] as const;
+    const line = [225, 228, 233] as const;
+
+    const dateStr = new Date().toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
+    const quoteNum = `XR-DEVIS-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    // Header Background
+    doc.setFillColor(...ink);
+    doc.rect(0, 0, W, 36, "F");
+
+    // Header Logo & Brand
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.text("XR AGENCY", M, 16);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(217, 180, 100);
+    doc.text("STUDIO DIGITAL HAUTE PERFORMANCE & IA", M, 24);
+
+    // Right Header Quote Number & Date
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.text("PROPOSITION COMMERCIALE", R, 15, { align: "right" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(200, 205, 215);
+    doc.text(`N° ${quoteNum}`, R, 22, { align: "right" });
+    doc.text(`Date : ${dateStr}`, R, 28, { align: "right" });
+
+    let y = 48;
+
+    // Client Box
+    doc.setFillColor(...soft);
+    doc.roundedRect(M, y, W - 2 * M, 24, 2, 2, "F");
+    doc.setDrawColor(...line);
+    doc.roundedRect(M, y, W - 2 * M, 24, 2, 2, "S");
+
+    doc.setTextColor(...ink);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    doc.text("DESTINATAIRE / CLIENT", M + 5, y + 6);
+
+    doc.setFontSize(11);
+    doc.text(lead.name, M + 5, y + 13);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(...muted);
+    doc.text(`À l'attention de : ${lead.contact}  |  Tél : ${lead.phone}`, M + 5, y + 19);
+
+    y += 34;
+
+    // Table Header
+    doc.setFillColor(...ink);
+    doc.roundedRect(M, y, W - 2 * M, 9, 1.5, 1.5, "F");
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8);
+    doc.text("DESCRIPTION DE LA PRESTATION", M + 5, y + 6);
+    doc.text("DÉLAI", 145, y + 6);
+    doc.text("MONTANT HT", R - 5, y + 6, { align: "right" });
+
+    y += 15;
+
+    // Table Row 1
+    doc.setTextColor(...ink);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9.5);
+    doc.text(`Solution Digitale & Refonte Clé-en-main (${lead.sector})`, M + 5, y);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(...muted);
+    doc.text("Livraison 5j", 145, y);
+
+    doc.setTextColor(...ink);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9.5);
+    doc.text(`${lead.value.toLocaleString("fr-FR")} €`, R - 5, y, { align: "right" });
+
+    y += 6;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(...muted);
+    const descLines = [
+      "• Design immersif 2026 responsive ultra-rapide sur mobile & desktop",
+      "• Optimisation de conversion : formulaire d'urgence / réservation directe en ligne",
+      `• Résolution ciblée : ${lead.issue}`,
+      "• Référencement local Google Maps TOP 3 & fiche entreprise vérifiée",
+      "• Intégration WhatsApp Business & bouton d'appel direct en 1 clic",
+      "• Hébergement haute performance, certificat SSL & nom de domaine inclus 1 an",
+    ];
+    descLines.forEach((lineText) => {
+      doc.text(lineText, M + 5, y);
+      y += 5;
+    });
+
+    y += 10;
+    doc.setDrawColor(...line);
+    doc.line(M, y, R, y);
+    y += 8;
+
+    // Totals Box
+    doc.setFillColor(...soft);
+    doc.roundedRect(120, y, R - 120, 32, 2, 2, "F");
+
+    doc.setTextColor(...muted);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.text("Total HT :", 125, y + 7);
+    doc.setTextColor(...ink);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${lead.value.toLocaleString("fr-FR")} €`, R - 5, y + 7, { align: "right" });
+
+    doc.setTextColor(...muted);
+    doc.setFont("helvetica", "normal");
+    doc.text("TVA (Autoliquidation / Franchise) :", 125, y + 14);
+    doc.setTextColor(...ink);
+    doc.text("0,00 €", R - 5, y + 14, { align: "right" });
+
+    doc.setTextColor(...gold);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10.5);
+    doc.text("NET À PAYER :", 125, y + 23);
+    doc.text(`${lead.value.toLocaleString("fr-FR")} €`, R - 5, y + 23, { align: "right" });
+
+    // Payment Conditions Left Box
+    doc.setTextColor(...ink);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    doc.text("CONDITIONS DE RÈGLEMENT", M, y + 7);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(...muted);
+    doc.text("• Acompte de démarrage : 50% à la commande (" + Math.round(lead.value * 0.5) + " €)", M, y + 14);
+    doc.text("• Solde à la livraison après validation finale (" + Math.round(lead.value * 0.5) + " €)", M, y + 20);
+    doc.text("• Option éligible : étalement en 3x sans frais sur demande", M, y + 26);
+
+    y += 45;
+
+    // Signature Block
+    doc.setDrawColor(...line);
+    doc.roundedRect(M, y, 80, 28, 2, 2, "S");
+    doc.roundedRect(W - M - 80, y, 80, 28, 2, 2, "S");
+
+    doc.setTextColor(...muted);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7.5);
+    doc.text("POUR XR AGENCY", M + 4, y + 6);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7);
+    doc.text("Bon pour accord et lancement immédiat", M + 4, y + 12);
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7.5);
+    doc.text("POUR LE CLIENT", W - M - 76, y + 6);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7);
+    doc.text("Date et signature précédées de 'Bon pour accord' :", W - M - 76, y + 12);
+
+    // Footer Legal
+    doc.setDrawColor(...line);
+    doc.line(M, 282, R, 282);
+    doc.setTextColor(...ink);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(6.5);
+    doc.text("KARMA SASU · XR AGENCY", M, 287);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(...muted);
+    doc.text("SIREN 889 178 141 · SIRET 889 178 141 00012 · 78 Avenue des Champs-Élysées · 75008 Paris", M, 291);
+    doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83 · xragencyai.com", M, 295);
+
+    // Download
+    doc.save(`DEVIS-XRAGENCY-${lead.name.replace(/[^a-zA-Z0-9]/g, "-")}.pdf`);
   };
 
   return (
@@ -382,8 +617,8 @@ export function ModernCrmPage() {
           </div>
         </header>
 
-        {/* Tab Selection */}
-        <div className="flex items-center justify-between border-b border-white/[0.08] mt-6 pb-2">
+        {/* Tab Selection & Utilities */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-white/[0.08] mt-6 pb-2 gap-3">
           <nav className="flex gap-2">
             {[
               { id: "kanban", label: "🎯 Pipeline & Closing", count: leads.length },
@@ -414,16 +649,35 @@ export function ModernCrmPage() {
             ))}
           </nav>
 
-          {/* Quick Search */}
-          <div className="hidden sm:flex items-center gap-2 bg-white/[0.03] border border-white/[0.08] rounded-xl px-3 py-1.5 text-xs text-white/70 w-64 focus-within:border-amber-400/50">
-            <Search className="w-3.5 h-3.5 text-white/40" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Rechercher un prospect, ville..."
-              className="bg-transparent border-none outline-none text-white text-xs placeholder:text-white/30 w-full"
-            />
+          {/* Quick Actions & Search */}
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <button
+              onClick={handleExportCsv}
+              title="Exporter tous les prospects en CSV"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-white/70 hover:text-white border border-white/[0.08] text-xs transition-all"
+            >
+              <Download className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline">Export CSV</span>
+            </button>
+
+            <button
+              onClick={handleResetDemoData}
+              title="Réinitialiser les leads"
+              className="p-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-white/40 hover:text-white border border-white/[0.08] transition-all"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+            </button>
+
+            <div className="flex-1 sm:w-64 flex items-center gap-2 bg-white/[0.03] border border-white/[0.08] rounded-xl px-3 py-1.5 text-xs text-white/70 focus-within:border-amber-400/50">
+              <Search className="w-3.5 h-3.5 text-white/40" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Rechercher un prospect, ville..."
+                className="bg-transparent border-none outline-none text-white text-xs placeholder:text-white/30 w-full"
+              />
+            </div>
           </div>
         </div>
 
@@ -452,6 +706,7 @@ export function ModernCrmPage() {
                       onNext={() => moveStage(lead.id, "mockup")}
                       nextLabel="Envoyer Maquette →"
                       onWin={() => moveStage(lead.id, "won")}
+                      onPdf={() => generatePdfQuote(lead)}
                     />
                   ))}
               </KanbanColumn>
@@ -477,6 +732,7 @@ export function ModernCrmPage() {
                       onNext={() => moveStage(lead.id, "negociation")}
                       nextLabel="Négocier / Objections →"
                       onWin={() => moveStage(lead.id, "won")}
+                      onPdf={() => generatePdfQuote(lead)}
                     />
                   ))}
               </KanbanColumn>
@@ -502,6 +758,7 @@ export function ModernCrmPage() {
                       onNext={() => moveStage(lead.id, "won")}
                       nextLabel="Valider Contrat 🎉"
                       onWin={() => moveStage(lead.id, "won")}
+                      onPdf={() => generatePdfQuote(lead)}
                     />
                   ))}
               </KanbanColumn>
@@ -532,7 +789,13 @@ export function ModernCrmPage() {
                       <p className="text-xs text-white/50">{lead.contact}</p>
 
                       <div className="mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs">
-                        <span className="text-white/40 text-[11px]">Closer : {lead.closer}</span>
+                        <button
+                          onClick={() => generatePdfQuote(lead)}
+                          className="inline-flex items-center gap-1 text-[11px] text-white/60 hover:text-white transition-colors"
+                        >
+                          <FileText className="w-3 h-3 text-amber-400" />
+                          Devis PDF
+                        </button>
                         <span className="text-emerald-300 font-semibold text-xs flex items-center gap-1">
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                           Com. {Math.round(lead.value * 0.25)} €
@@ -603,7 +866,7 @@ export function ModernCrmPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 w-full sm:w-auto">
+                <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                   <a
                     href={`tel:${activeLeadForCockpit.phone.replace(/\s+/g, "")}`}
                     className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-emerald-500/20 transition-all"
@@ -622,6 +885,13 @@ export function ModernCrmPage() {
                     <MessageSquare className="w-4 h-4 text-emerald-400" />
                     WhatsApp
                   </a>
+                  <button
+                    onClick={() => generatePdfQuote(activeLeadForCockpit)}
+                    className="inline-flex items-center gap-1.5 bg-white/[0.08] hover:bg-white/[0.12] text-white font-medium text-xs px-4 py-2.5 rounded-xl border border-white/10 transition-all"
+                  >
+                    <Download className="w-4 h-4 text-amber-400" />
+                    Devis PDF
+                  </button>
                   <button
                     onClick={() => moveStage(activeLeadForCockpit.id, "won")}
                     className="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg transition-all"
@@ -988,12 +1258,14 @@ function LeadCard({
   onNext,
   nextLabel,
   onWin,
+  onPdf,
 }: {
   lead: Lead;
   onCall: () => void;
   onNext: () => void;
   nextLabel: string;
   onWin: () => void;
+  onPdf: () => void;
 }) {
   return (
     <div className="p-4 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:border-white/[0.15] hover:bg-white/[0.06] transition-all shadow-sm group">
@@ -1013,13 +1285,22 @@ function LeadCard({
         {lead.issue}
       </div>
 
-      <div className="mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between gap-2">
+      <div className="mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between gap-1">
         <button
           onClick={onCall}
           className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-300 hover:text-amber-200 transition-colors"
         >
           <Phone className="w-3 h-3" />
-          Appeler
+          Appel
+        </button>
+
+        <button
+          onClick={onPdf}
+          title="Générer Devis PDF"
+          className="p-1 px-1.5 rounded-md bg-white/[0.06] hover:bg-white/[0.12] text-white/70 hover:text-white transition-all text-[10px] flex items-center gap-1"
+        >
+          <FileText className="w-3 h-3 text-amber-400" />
+          PDF
         </button>
 
         <div className="flex items-center gap-1">
