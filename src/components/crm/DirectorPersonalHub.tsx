@@ -14,7 +14,7 @@ import {
   Download,
   Trophy,
 } from "lucide-react";
-import { type Lead, computeDealCommissions, type TeamMember } from "@/lib/crm/data";
+import { type Lead, computeDealCommissions, getLeadTotals, type TeamMember } from "@/lib/crm/data";
 import type { CrmThemeTokens } from "@/lib/crm/theme";
 
 interface PersonalTask {
@@ -104,7 +104,16 @@ export function DirectorPersonalHub({
   const [slotTitle, setSlotTitle] = useState("");
   const [slotKind, setSlotKind] = useState<"pro" | "perso">("pro");
   const [challengeInput, setChallengeInput] = useState(weeklyChallenge);
+  const [exportMonth, setExportMonth] = useState<string>("all");
   const [now, setNow] = useState(() => new Date());
+
+  const payrollMonths = Array.from(
+    new Set(
+      allLeads
+        .filter((l) => l.stage === "won")
+        .map((l) => l.wonMonth || l.wonAt?.slice(0, 7) || new Date().toISOString().slice(0, 7))
+    )
+  ).sort((a, b) => b.localeCompare(a));
 
   useEffect(() => {
     if (typeof window !== "undefined") localStorage.setItem("xr_antoine_private_tasks", JSON.stringify(tasks));
@@ -164,30 +173,35 @@ export function DirectorPersonalHub({
   };
 
   const handleExportPayrollCsv = () => {
-    const headers = "Membre;Role;Commissions_Debloquees_EUR;Commissions_En_Attente_EUR;Dont_Override_Manager_EUR\n";
+    const filteredWon = allLeads.filter((l) => {
+      if (l.stage !== "won") return false;
+      if (exportMonth === "all") return true;
+      const ym = l.wonMonth || l.wonAt?.slice(0, 7) || new Date().toISOString().slice(0, 7);
+      return ym === exportMonth;
+    });
+    const headers = "Periode;Membre;Role;Commissions_Debloquees_EUR;Commissions_En_Attente_EUR;Dont_Override_Manager_EUR\n";
     const rows = members
       .filter((m) => m.roleType !== "studio" && m.roleType !== "direction")
       .map((member) => {
         let unlocked = 0;
         let pending = 0;
         let overrideTotal = 0;
-        allLeads
-          .filter((l) => l.stage === "won")
-          .forEach((deal) => {
-            const b = computeDealCommissions(deal, members);
-            let earned = 0;
-            if (deal.closerId === member.id) earned += b.closerAmount;
-            if (deal.setterId === member.id && deal.setterId !== deal.closerId) earned += b.setterAmount;
-            if (b.managerId === member.id) {
-              earned += b.managerOverrideAmount;
-              overrideTotal += b.managerOverrideAmount;
-            }
-            if (earned > 0) {
-              if (deal.commissionStatus === "unlocked") unlocked += earned;
-              else pending += earned;
-            }
-          });
-        return `"${member.name}";"${member.roleLabel}";"${unlocked}";"${pending}";"${overrideTotal}"`;
+        filteredWon.forEach((deal) => {
+          const b = computeDealCommissions(deal, members);
+          let earned = 0;
+          if (deal.closerId === member.id) earned += b.closerAmount;
+          if (deal.setterId === member.id && deal.setterId !== deal.closerId) earned += b.setterAmount;
+          if (b.managerId === member.id) {
+            earned += b.managerOverrideAmount;
+            overrideTotal += b.managerOverrideAmount;
+          }
+          if (earned > 0) {
+            if (deal.commissionStatus === "unlocked") unlocked += earned;
+            else pending += earned;
+          }
+        });
+        const labelPeriod = exportMonth === "all" ? "Global" : exportMonth;
+        return `"${labelPeriod}";"${member.name}";"${member.roleLabel}";"${unlocked}";"${pending}";"${overrideTotal}"`;
       })
       .join("\n");
 
@@ -195,7 +209,7 @@ export function DirectorPersonalHub({
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `XR-AGENCY-PAIE-COMMISSIONS-${new Date().toISOString().slice(0, 7)}.csv`;
+    link.download = `XR-AGENCY-PAIE-COMMISSIONS-${exportMonth === "all" ? "GLOBAL" : exportMonth}.csv`;
     link.click();
   };
 
@@ -239,6 +253,18 @@ export function DirectorPersonalHub({
               <p className={`text-sm font-mono font-extrabold ${theme.textMain}`}>{asiaTime}</p>
             </div>
           </div>
+          <select
+            value={exportMonth}
+            onChange={(e) => setExportMonth(e.target.value)}
+            className={`px-3 py-2.5 rounded-2xl border text-xs font-bold ${theme.inputBg}`}
+          >
+            <option value="all">📅 Paie : Tous les mois</option>
+            {payrollMonths.map((m) => (
+              <option key={m} value={m}>
+                📅 {m}
+              </option>
+            ))}
+          </select>
           <button
             onClick={handleExportPayrollCsv}
             className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs font-extrabold shadow-md"
@@ -458,6 +484,7 @@ export function DirectorPersonalHub({
           <div className="space-y-2">
             {pendingValidations.map((lead) => {
               const breakdown = computeDealCommissions(lead, members);
+              const totals = getLeadTotals(lead);
               const closer = members.find((m) => m.id === lead.closerId);
               const setter = members.find((m) => m.id === lead.setterId);
               return (
@@ -467,7 +494,9 @@ export function DirectorPersonalHub({
                 >
                   <div className="text-xs space-y-0.5">
                     <p className={`font-extrabold ${theme.textMain}`}>
-                      {lead.name} — {lead.value.toLocaleString("fr-FR")} € ({lead.planLabel})
+                      {lead.name} — {totals.commissionBase.toLocaleString("fr-FR")} € ({lead.planLabel}
+                      {lead.extraItems?.length ? ` + ${lead.extraItems.length} pack` : ""})
+                      {lead.installments?.plan === "3x" && ` · 3x (${lead.installments.paidCount}/3)`}
                     </p>
                     <p className={`text-[11px] ${theme.textMuted}`}>
                       Closer : {closer?.shortName} ({breakdown.closerAmount} €)

@@ -38,7 +38,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 1,
     avatarBg: "from-amber-400 via-amber-500 to-orange-600",
     badge: "👑 Direction",
-    pin: "071266",
+    pin: "", // Vérifié STRICTEMENT côté serveur (/api/crm-auth) — jamais présent dans le JS navigateur
     customPinSet: true,
   },
   {
@@ -298,6 +298,14 @@ export const XR_OFFICIAL_SERVICES: XrOfficialService[] = [
 export type LeadStage = "new" | "rdv" | "mockup" | "negociation" | "won";
 export type CommissionStatus = "estimated" | "pending_payment" | "unlocked";
 
+export interface LeadServiceItem {
+  id: string;
+  serviceId: string;
+  planLabel: string;
+  billing: BillingPeriod;
+  price: number;
+}
+
 export interface Lead {
   id: string;
   name: string;
@@ -310,6 +318,7 @@ export interface Lead {
   planLabel: string;
   billing: BillingPeriod;
   value: number;
+  extraItems?: LeadServiceItem[]; // Pack multi-services (ex: Site + WebCare + Maps Top 3)
   stage: LeadStage;
   setterId: string;
   closerId: string;
@@ -317,10 +326,37 @@ export interface Lead {
   notes: string;
   followUpDate?: string; // YYYY-MM-DD
   createdAt: string;
+  wonAt?: string; // ISO date de signature (pour filtre mensuel paie)
+  wonMonth?: string; // YYYY-MM (ex: "2026-11")
+  installments?: { plan: "1x" | "3x"; paidCount: number }; // Suivi paiement 3x sans frais
   commissionStatus: CommissionStatus;
   mockupReady?: boolean;
   studioStatus?: "pending" | "in_production" | "delivered";
   timeline?: { id: string; date: string; text: string }[];
+}
+
+// ── Somme Multi-Services (One-Shot + MRR + Base de commission) ──
+
+export function getLeadTotals(lead: Lead): {
+  oneShotTotal: number;
+  mrrTotal: number;
+  commissionBase: number;
+  itemsCount: number;
+} {
+  let oneShotTotal = lead.billing === "month" ? 0 : lead.value;
+  let mrrTotal = lead.billing === "month" ? lead.value : 0;
+
+  (lead.extraItems || []).forEach((item) => {
+    if (item.billing === "month") mrrTotal += item.price;
+    else oneShotTotal += item.price;
+  });
+
+  return {
+    oneShotTotal,
+    mrrTotal,
+    commissionBase: oneShotTotal + mrrTotal, // Base 1er mois MRR + One-Shot
+    itemsCount: 1 + (lead.extraItems?.length || 0),
+  };
 }
 
 // ── Règles strictes de visibilité (RBAC) ──
@@ -346,7 +382,7 @@ export function canViewMemberFinances(viewer: TeamMember, target: TeamMember): b
   return false;
 }
 
-// ── Moteur de calcul des commissions (Split Setter / Closer + Override Manager) ──
+// ── Moteur de calcul des commissions (Pack Multi-Services + Split Setter/Closer + Override Manager) ──
 
 export interface DealCommissionBreakdown {
   setterAmount: number;
@@ -358,18 +394,19 @@ export interface DealCommissionBreakdown {
 export function computeDealCommissions(lead: Lead, members: TeamMember[]): DealCommissionBreakdown {
   const setter = members.find((m) => m.id === lead.setterId);
   const closer = members.find((m) => m.id === lead.closerId);
+  const baseValue = getLeadTotals(lead).commissionBase;
 
   let setterAmount = 0;
   let closerAmount = 0;
 
   if (lead.setterId === lead.closerId) {
     const rate = closer?.roleType === "direction" ? 0 : (closer?.fullCycleRate ?? 0.2);
-    closerAmount = Math.round(lead.value * rate);
+    closerAmount = Math.round(baseValue * rate);
   } else {
     const sRate = setter?.roleType === "direction" ? 0 : (setter?.settingRate ?? 0.1);
     const cRate = closer?.roleType === "direction" ? 0 : (closer?.closingRate ?? 0.15);
-    setterAmount = Math.round(lead.value * sRate);
-    closerAmount = Math.round(lead.value * cRate);
+    setterAmount = Math.round(baseValue * sRate);
+    closerAmount = Math.round(baseValue * cRate);
   }
 
   let managerOverrideAmount = 0;
@@ -379,7 +416,7 @@ export function computeDealCommissions(lead: Lead, members: TeamMember[]): DealC
     const manager = members.find((m) => m.id === recruiterId);
     if (manager?.overrideRate) {
       managerId = manager.id;
-      managerOverrideAmount = Math.round(lead.value * manager.overrideRate);
+      managerOverrideAmount = Math.round(baseValue * manager.overrideRate);
     }
   }
 

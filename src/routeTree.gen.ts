@@ -22,6 +22,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as WorkRouteImport } from './routes/work'
 import { Route as ApiAuditRouteImport } from './routes/api/audit'
 import { Route as ApiCreateCheckoutRouteImport } from './routes/api/create-checkout'
+import { Route as ApiCrmAuthRouteImport } from './routes/api/crm-auth'
 import { Route as ApiSendQuoteRouteImport } from './routes/api/send-quote'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardAuditsRouteImport } from './routes/dashboard/audits'
@@ -99,6 +100,11 @@ const ApiAuditRoute = ApiAuditRouteImport.update({
 const ApiCreateCheckoutRoute = ApiCreateCheckoutRouteImport.update({
   id: '/api/create-checkout',
   path: '/api/create-checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCrmAuthRoute = ApiCrmAuthRouteImport.update({
+  id: '/api/crm-auth',
+  path: '/api/crm-auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSendQuoteRoute = ApiSendQuoteRouteImport.update({
@@ -182,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/work': typeof WorkRoute
   '/api/audit': typeof ApiAuditRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
+  '/api/crm-auth': typeof ApiCrmAuthRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
@@ -209,6 +216,7 @@ export interface FileRoutesByTo {
   '/work': typeof WorkRoute
   '/api/audit': typeof ApiAuditRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
+  '/api/crm-auth': typeof ApiCrmAuthRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
@@ -238,6 +246,7 @@ export interface FileRoutesById {
   '/work': typeof WorkRoute
   '/api/audit': typeof ApiAuditRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
+  '/api/crm-auth': typeof ApiCrmAuthRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
@@ -268,6 +277,7 @@ export interface FileRouteTypes {
     | '/work'
     | '/api/audit'
     | '/api/create-checkout'
+    | '/api/crm-auth'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
@@ -295,6 +305,7 @@ export interface FileRouteTypes {
     | '/work'
     | '/api/audit'
     | '/api/create-checkout'
+    | '/api/crm-auth'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
@@ -323,6 +334,7 @@ export interface FileRouteTypes {
     | '/work'
     | '/api/audit'
     | '/api/create-checkout'
+    | '/api/crm-auth'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
@@ -352,6 +364,7 @@ export interface RootRouteChildren {
   WorkRoute: typeof WorkRoute
   ApiAuditRoute: typeof ApiAuditRoute
   ApiCreateCheckoutRoute: typeof ApiCreateCheckoutRoute
+  ApiCrmAuthRoute: typeof ApiCrmAuthRoute
   ApiSendQuoteRoute: typeof ApiSendQuoteRoute
   ServicesServiceIdRoute: typeof ServicesServiceIdRoute
   ServicesRobotiqueRoute: typeof ServicesRobotiqueRoute
@@ -451,6 +464,13 @@ declare module '@tanstack/react-router' {
       path: '/api/create-checkout'
       fullPath: '/api/create-checkout'
       preLoaderRoute: typeof ApiCreateCheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/crm-auth': {
+      id: '/api/crm-auth'
+      path: '/api/crm-auth'
+      fullPath: '/api/crm-auth'
+      preLoaderRoute: typeof ApiCrmAuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/send-quote': {
@@ -604,6 +624,7 @@ const rootRouteChildren: RootRouteChildren = {
   WorkRoute: WorkRoute,
   ApiAuditRoute: ApiAuditRoute,
   ApiCreateCheckoutRoute: ApiCreateCheckoutRoute,
+  ApiCrmAuthRoute: ApiCrmAuthRoute,
   ApiSendQuoteRoute: ApiSendQuoteRoute,
   ServicesServiceIdRoute: ServicesServiceIdRoute,
   ServicesRobotiqueRoute: ServicesRobotiqueRoute,

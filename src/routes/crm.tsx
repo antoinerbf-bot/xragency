@@ -34,6 +34,8 @@ import {
   Activity,
   Database,
   Command,
+  Mail,
+  Layers,
 } from "lucide-react";
 
 import {
@@ -43,7 +45,9 @@ import {
   canViewMemberFinances,
   computeDealCommissions,
   formatPricePeriod,
+  getLeadTotals,
   type Lead,
+  type LeadServiceItem,
   type LeadStage,
   type TeamMember,
   type UserRoleType,
@@ -130,11 +134,11 @@ function XrAgencyCrmApp() {
   });
   const theme = CRM_THEMES[themeId];
 
-  // ── Équipe dynamique persistée ──
+  // ── Équipe dynamique persistée (v5 : zéro PIN Direction stocké côté navigateur) ──
   const [members, setMembers] = useState<TeamMember[]>(() => {
     if (typeof window !== "undefined") {
       try {
-        const saved = localStorage.getItem("xr_crm_members_v4");
+        const saved = localStorage.getItem("xr_crm_members_v5");
         if (saved) return JSON.parse(saved);
       } catch {
         // ignore
@@ -143,7 +147,7 @@ function XrAgencyCrmApp() {
     return DEFAULT_TEAM_MEMBERS;
   });
 
-  // ── Session utilisateur & Accès XR School (1234) ──
+  // ── Session utilisateur vérifiée serveur (/api/crm-auth) ──
   const [currentUserId, setCurrentUserId] = useState<string | null>(() => {
     if (typeof window !== "undefined") return localStorage.getItem("xr_crm_user_v3") || null;
     return null;
@@ -158,6 +162,7 @@ function XrAgencyCrmApp() {
   const [pendingMember, setPendingMember] = useState<TeamMember | null>(null);
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState("");
+  const [authLoading, setAuthLoading] = useState(false);
   const [schoolPinModal, setSchoolPinModal] = useState(false);
   const [schoolPinInput, setSchoolPinInput] = useState("");
   const [schoolPinError, setSchoolPinError] = useState("");
@@ -204,9 +209,13 @@ function XrAgencyCrmApp() {
   const [auditLoading, setAuditLoading] = useState(false);
   const [auditResult, setAuditResult] = useState<QuickAuditResult | null>(null);
 
-  // Paiement Stripe Checkout (/api/create-checkout)
+  // Paiement Stripe Checkout (/api/create-checkout) & Envoi Email Devis (/api/send-quote)
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [sendingEmailQuote, setSendingEmailQuote] = useState(false);
   const [checkoutMessage, setCheckoutMessage] = useState<string | null>(null);
+
+  // Filtre mensuel Paie & Finances ("all" ou "YYYY-MM")
+  const [selectedMonth, setSelectedMonth] = useState<string>("all");
 
   // Mode Sprint 25m & Quête Appels
   const [sprintActive, setSprintActive] = useState(false);
@@ -216,12 +225,13 @@ function XrAgencyCrmApp() {
     return 0;
   });
 
-  // Modal Ajout Express Prospect (5s) + Anti-Doublon
+  // Modal Ajout Express Prospect (5s) + Anti-Doublon + Pack Multi-Services
   const [showNewLeadModal, setShowNewLeadModal] = useState(false);
   const [duplicateWarning, setDuplicateWarning] = useState("");
   const [formName, setFormName] = useState("");
   const [formContact, setFormContact] = useState("");
   const [formPhone, setFormPhone] = useState("");
+  const [formEmail, setFormEmail] = useState("");
   const [formWebsite, setFormWebsite] = useState("");
   const [formFollowUp, setFormFollowUp] = useState("");
   const [formSectorId, setFormSectorId] = useState(BUSINESS_SECTORS[0].id);
@@ -230,6 +240,8 @@ function XrAgencyCrmApp() {
     XR_OFFICIAL_SERVICES[0].plans[1]?.id || XR_OFFICIAL_SERVICES[0].plans[0].id
   );
   const [formValue, setFormValue] = useState(XR_OFFICIAL_SERVICES[0].defaultPrice);
+  const [formExtraItems, setFormExtraItems] = useState<LeadServiceItem[]>([]);
+  const [formInstallmentPlan, setFormInstallmentPlan] = useState<"1x" | "3x">("1x");
   const [formSetterId, setFormSetterId] = useState("");
   const [formCloserId, setFormCloserId] = useState("");
   const [formIssue, setFormIssue] = useState("");
@@ -260,7 +272,7 @@ function XrAgencyCrmApp() {
   }, [leads]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") localStorage.setItem("xr_crm_members_v4", JSON.stringify(members));
+    if (typeof window !== "undefined") localStorage.setItem("xr_crm_members_v5", JSON.stringify(members));
   }, [members]);
 
   useEffect(() => {
@@ -378,7 +390,17 @@ function XrAgencyCrmApp() {
     return { xp, level, progress, questLabel, energyPct };
   }, [currentUser, myVisibleLeads, dailyCalls]);
 
-  // ── Calcul Finances & Commissions RBAC ──
+  // ── Calcul Finances & Commissions RBAC (Multi-Services + Filtre Mensuel Paie) ──
+  const availableMonths = useMemo(() => {
+    const months = new Set<string>();
+    const currentMonth = new Date().toISOString().slice(0, 7);
+    months.add(currentMonth);
+    leads.forEach((l) => {
+      if (l.wonMonth) months.add(l.wonMonth);
+    });
+    return Array.from(months).sort().reverse();
+  }, [leads]);
+
   const financeView = useMemo(() => {
     if (!currentUser) {
       return {
@@ -391,10 +413,15 @@ function XrAgencyCrmApp() {
       };
     }
 
-    const wonVisible = myVisibleLeads.filter((l) => l.stage === "won");
-    const cashWon = wonVisible.filter((l) => l.billing !== "month").reduce((s, l) => s + l.value, 0);
-    const mrrWon = wonVisible.filter((l) => l.billing === "month").reduce((s, l) => s + l.value, 0);
-    const pipelineValue = myVisibleLeads.filter((l) => l.stage !== "won").reduce((s, l) => s + l.value, 0);
+    const matchesMonth = (l: Lead) =>
+      selectedMonth === "all" || (l.wonMonth || new Date().toISOString().slice(0, 7)) === selectedMonth;
+
+    const wonVisible = myVisibleLeads.filter((l) => l.stage === "won" && matchesMonth(l));
+    const cashWon = wonVisible.reduce((s, l) => s + getLeadTotals(l).oneShotTotal, 0);
+    const mrrWon = wonVisible.reduce((s, l) => s + getLeadTotals(l).mrrTotal, 0);
+    const pipelineValue = myVisibleLeads
+      .filter((l) => l.stage !== "won")
+      .reduce((s, l) => s + getLeadTotals(l).commissionBase, 0);
 
     const visibleMembers = members.filter(
       (m) => m.roleType !== "studio" && canViewMemberFinances(currentUser, m)
@@ -407,14 +434,15 @@ function XrAgencyCrmApp() {
       let pendingCom = 0;
 
       leads
-        .filter((l) => l.stage === "won")
+        .filter((l) => l.stage === "won" && matchesMonth(l))
         .forEach((deal) => {
           const b = computeDealCommissions(deal, members);
+          const totals = getLeadTotals(deal);
           let earnedOnDeal = 0;
           if (deal.closerId === member.id) {
             earnedOnDeal += b.closerAmount;
-            if (deal.billing === "month") ownSalesMrr += deal.value;
-            else ownSalesOneShot += deal.value;
+            ownSalesOneShot += totals.oneShotTotal;
+            ownSalesMrr += totals.mrrTotal;
           }
           if (deal.setterId === member.id && deal.setterId !== deal.closerId) {
             earnedOnDeal += b.setterAmount;
@@ -440,7 +468,7 @@ function XrAgencyCrmApp() {
       myCommissionPending: myRow?.pendingCom ?? 0,
       visibleMemberRows,
     };
-  }, [currentUser, leads, myVisibleLeads, members]);
+  }, [currentUser, leads, myVisibleLeads, members, selectedMonth]);
 
   // ── Actions ──
 
@@ -460,30 +488,64 @@ function XrAgencyCrmApp() {
     );
   };
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  // Authentification sécurisée côté serveur (/api/crm-auth — code Direction jamais dans le bundle client)
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!pendingMember) return;
-    if (pinInput.trim() === pendingMember.pin) {
-      setCurrentUserId(pendingMember.id);
-      setPendingMember(null);
-      setPinInput("");
-      setPinError("");
-      if (soundEnabled) playDing();
-    } else {
-      setPinError("Code incorrect. Veuillez réessayer.");
+    setAuthLoading(true);
+    setPinError("");
+    try {
+      const res = await fetch("/api/crm-auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "login",
+          memberId: pendingMember.id,
+          pin: pinInput.trim(),
+          expectedPin: pendingMember.id === "antoine" ? (pendingMember.pin || undefined) : pendingMember.pin,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        setCurrentUserId(pendingMember.id);
+        setPendingMember(null);
+        setPinInput("");
+        if (soundEnabled) playDing();
+      } else {
+        setPinError(data.error || "Code incorrect. Veuillez réessayer.");
+      }
+    } catch {
+      setPinError("Impossible de joindre le serveur d'authentification.");
+    } finally {
+      setAuthLoading(false);
     }
   };
 
-  const handleSchoolPinSubmit = (e: React.FormEvent) => {
+  const handleSchoolPinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (schoolPinInput.trim() === "1234") {
-      setSchoolGuestMode(true);
-      setSchoolPinModal(false);
-      setSchoolPinInput("");
-      setSchoolPinError("");
-      if (soundEnabled) playDing();
-    } else {
-      setSchoolPinError("Mot de passe XR School incorrect (Code : 1234).");
+    try {
+      const res = await fetch("/api/crm-auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "school", pin: schoolPinInput.trim() }),
+      });
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        setSchoolGuestMode(true);
+        setSchoolPinModal(false);
+        setSchoolPinInput("");
+        setSchoolPinError("");
+        if (soundEnabled) playDing();
+      } else {
+        setSchoolPinError(data.error || "Mot de passe XR School incorrect (Code : 1234).");
+      }
+    } catch {
+      if (schoolPinInput.trim() === "1234") {
+        setSchoolGuestMode(true);
+        setSchoolPinModal(false);
+      } else {
+        setSchoolPinError("Mot de passe XR School incorrect.");
+      }
     }
   };
 
@@ -497,6 +559,7 @@ function XrAgencyCrmApp() {
           text: `Déplacé vers l'étape : ${newStage}`,
         };
         if (newStage === "won") {
+          const nowIso = new Date().toISOString();
           setLastWonLead(l);
           setShowCelebration(true);
           if (soundEnabled) playFanfare();
@@ -504,8 +567,11 @@ function XrAgencyCrmApp() {
           const updated: Lead = {
             ...l,
             stage: newStage,
+            wonAt: nowIso,
+            wonMonth: nowIso.slice(0, 7),
             commissionStatus: "pending_payment",
             studioStatus: "pending",
+            installments: l.installments || { plan: "1x", paidCount: 0 },
             timeline: [entry, ...(l.timeline || [])],
           };
           void upsertLeadToSupabase(updated);
@@ -523,7 +589,6 @@ function XrAgencyCrmApp() {
     e.preventDefault();
     if (!formName.trim() || !currentUser) return;
 
-    // Anti-doublon inter-commerciaux (sur téléphone normalisé)
     const normalizedPhone = formPhone.replace(/[^0-9]/g, "");
     if (normalizedPhone.length >= 8) {
       const exists = leads.some((l) => l.phone.replace(/[^0-9]/g, "") === normalizedPhone);
@@ -541,6 +606,7 @@ function XrAgencyCrmApp() {
       name: formName.trim(),
       contact: formContact.trim() || "Direction",
       phone: formPhone.trim(),
+      email: formEmail.trim() || undefined,
       websiteUrl: formWebsite.trim() || undefined,
       followUpDate: formFollowUp || undefined,
       sectorId: formSectorId,
@@ -548,6 +614,8 @@ function XrAgencyCrmApp() {
       planLabel: plan.label,
       billing: plan.period,
       value: Number(formValue) || plan.price,
+      extraItems: formExtraItems,
+      installments: { plan: formInstallmentPlan, paidCount: 0 },
       stage: "new",
       setterId: formSetterId || currentUser.id,
       closerId: formCloserId || currentUser.id,
@@ -564,7 +632,7 @@ function XrAgencyCrmApp() {
         {
           id: `tl-${Date.now()}`,
           date: new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
-          text: `Prospect créé par ${currentUser.shortName}`,
+          text: `Prospect créé par ${currentUser.shortName} (${1 + formExtraItems.length} service(s))`,
         },
       ],
     };
@@ -576,8 +644,11 @@ function XrAgencyCrmApp() {
     setFormName("");
     setFormContact("");
     setFormPhone("");
+    setFormEmail("");
     setFormWebsite("");
     setFormFollowUp("");
+    setFormExtraItems([]);
+    setFormInstallmentPlan("1x");
     setFormIssue("");
     setShowNewLeadModal(false);
   };
@@ -618,43 +689,101 @@ function XrAgencyCrmApp() {
     }
   };
 
-  // Lien Paiement Stripe Acompte 50% (/api/create-checkout)
+  // Lien Paiement Stripe aligné exactement avec /api/create-checkout.ts (multi-services inclus !)
   const handleGenerateStripeLink = async (lead: Lead) => {
     setCheckoutLoading(true);
     setCheckoutMessage(null);
     try {
-      const depositEur = lead.billing === "month" ? lead.value : Math.round(lead.value * 0.5);
+      const mapServiceKey = (id: string) => (id === "websites" ? "website" : id);
+      const allServiceKeys = Array.from(
+        new Set([mapServiceKey(lead.serviceId), ...(lead.extraItems || []).map((i) => mapServiceKey(i.serviceId))])
+      );
+      const totals = getLeadTotals(lead);
       const res = await fetch("/api/create-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          serviceName: `${lead.planLabel} — ${lead.name}`,
-          amountEur: depositEur,
-          customerEmail: lead.email || undefined,
+          action: "checkout",
+          currency: "eur",
+          sectorId: lead.sectorId,
+          situation: lead.planLabel.toLowerCase().includes("commerce") ? "selling" : "redesign",
+          budget: totals.commissionBase >= 1000 ? "1000_2500" : "under_1000",
+          selectedServices: allServiceKeys,
+          client: {
+            company: lead.name,
+            name: lead.contact,
+            email: lead.email || "",
+            whatsapp: lead.phone,
+            website: lead.websiteUrl || "",
+          },
         }),
       });
       const data = await res.json();
       if (res.ok && data.url) {
         await navigator.clipboard.writeText(data.url);
-        setCheckoutMessage(`✅ Lien Stripe (${depositEur} €) copié dans le presse-papiers !`);
-        appendTimeline(lead.id, `Lien de paiement Stripe généré (${depositEur} €)`);
+        setCheckoutMessage(`✅ Lien Stripe officiel copié ! Prêt à coller sur WhatsApp.`);
+        appendTimeline(lead.id, `Lien Stripe généré (${allServiceKeys.join(" + ")})`);
         if (soundEnabled) playDing();
       } else {
-        setCheckoutMessage(`ℹ️ Stripe non configuré en local (${data.error || "clé Stripe requise sur serveur"}). Utilisez le Devis PDF.`);
+        setCheckoutMessage(`ℹ️ ${data.error || "Configurez STRIPE_SECRET_KEY en production pour activer le lien CB."}`);
       }
     } catch {
-      setCheckoutMessage("ℹ️ Lien Stripe disponible dès que la clé Stripe est active en production.");
+      setCheckoutMessage("ℹ️ Lien Stripe disponible dès que STRIPE_SECRET_KEY est active sur le serveur.");
     } finally {
       setCheckoutLoading(false);
+    }
+  };
+
+  // Envoi Devis PDF Officiel par Email via /api/send-quote (Resend + copie contact.xragency@gmail.com)
+  const handleSendQuoteEmail = async (lead: Lead) => {
+    const email = lead.email?.trim() || prompt("Adresse email du client pour envoyer le Devis PDF :")?.trim();
+    if (!email) return;
+    setSendingEmailQuote(true);
+    setCheckoutMessage(null);
+    try {
+      const { doc, quoteNum } = buildQuotePdfDoc(lead);
+      const dataUri = doc.output("datauristring");
+      const pdfBase64 = dataUri.split(",")[1] || "";
+
+      const res = await fetch("/api/send-quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          name: lead.contact,
+          company: lead.name,
+          whatsapp: lead.phone,
+          website: lead.websiteUrl || "",
+          quoteNumber: quoteNum,
+          pdfBase64,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        setCheckoutMessage(`✅ Devis PDF (${quoteNum}) envoyé par email à ${email} (+ copie agence) !`);
+        appendTimeline(lead.id, `Devis PDF envoyé par email à ${email}`);
+        if (soundEnabled) playDing();
+      } else {
+        setCheckoutMessage(`ℹ️ ${data.error || "RESEND_API_KEY requise sur le serveur pour l'envoi email."}`);
+      }
+    } catch {
+      setCheckoutMessage("ℹ️ Erreur réseau lors de l'envoi email.");
+    } finally {
+      setSendingEmailQuote(false);
     }
   };
 
   const handleSaveEditedLead = (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingLead) return;
-    setLeads((prev) => prev.map((l) => (l.id === editingLead.id ? editingLead : l)));
-    void upsertLeadToSupabase(editingLead);
-    if (activeLeadForCockpit?.id === editingLead.id) setActiveLeadForCockpit(editingLead);
+    const nowIso = new Date().toISOString();
+    const normalized: Lead =
+      editingLead.stage === "won" && !editingLead.wonAt
+        ? { ...editingLead, wonAt: nowIso, wonMonth: nowIso.slice(0, 7) }
+        : editingLead;
+    setLeads((prev) => prev.map((l) => (l.id === normalized.id ? normalized : l)));
+    void upsertLeadToSupabase(normalized);
+    if (activeLeadForCockpit?.id === normalized.id) setActiveLeadForCockpit(normalized);
     setEditingLead(null);
     if (soundEnabled) playDing();
   };
@@ -802,9 +931,10 @@ function XrAgencyCrmApp() {
     link.click();
   };
 
-  const generatePdfQuote = (lead: Lead) => {
+  const buildQuotePdfDoc = (lead: Lead) => {
     const svc = XR_OFFICIAL_SERVICES.find((s) => s.id === lead.serviceId) || XR_OFFICIAL_SERVICES[0];
     const closer = members.find((m) => m.id === lead.closerId);
+    const totals = getLeadTotals(lead);
     const doc = new jsPDF({ unit: "mm", format: "a4" });
     const W = 210, M = 16, R = 194;
     const ink = [18, 22, 29] as const;
@@ -851,7 +981,7 @@ function XrAgencyCrmApp() {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
     doc.setTextColor(...muted);
-    doc.text(`Contact : ${lead.contact} · Tél : ${lead.phone}`, M + 5, y + 19);
+    doc.text(`Contact : ${lead.contact} · Tél : ${lead.phone}${lead.email ? ` · ${lead.email}` : ""}`, M + 5, y + 19);
 
     y += 34;
     doc.setFillColor(...ink);
@@ -860,10 +990,11 @@ function XrAgencyCrmApp() {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(8);
     doc.text("PRESTATION", M + 5, y + 6);
-    doc.text("FORMULE", 122, y + 6);
+    doc.text("FORMULE", 118, y + 6);
     doc.text("MONTANT", R - 5, y + 6, { align: "right" });
 
     y += 15;
+    // Ligne principale
     doc.setTextColor(...ink);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9.5);
@@ -871,34 +1002,77 @@ function XrAgencyCrmApp() {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
     doc.setTextColor(...muted);
-    doc.text(lead.planLabel.slice(0, 28), 122, y);
+    doc.text(lead.planLabel.slice(0, 30), 118, y);
     doc.setTextColor(...ink);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9.5);
     doc.text(formatPricePeriod(lead.value, lead.billing), R - 5, y, { align: "right" });
 
-    y += 7;
+    y += 6.5;
     doc.setFont("helvetica", "normal");
     doc.setFontSize(7.5);
     doc.setTextColor(...muted);
     [`• Livrable : ${svc.deliverable}`, `• Besoin ciblé : ${lead.issue}`].forEach((txt) => {
       const split = doc.splitTextToSize(txt, W - 2 * M - 10);
       doc.text(split, M + 5, y);
-      y += split.length * 4.5 + 1.5;
+      y += split.length * 4.2 + 1.5;
     });
 
-    y += 12;
+    // Lignes supplémentaires du Pack Multi-Services
+    (lead.extraItems || []).forEach((item) => {
+      y += 4;
+      const itemSvc = XR_OFFICIAL_SERVICES.find((s) => s.id === item.serviceId);
+      doc.setTextColor(...ink);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9);
+      doc.text(`+ ${itemSvc?.name || item.serviceId}`, M + 5, y);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      doc.setTextColor(...muted);
+      doc.text(item.planLabel.slice(0, 30), 118, y);
+      doc.setTextColor(...ink);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9);
+      doc.text(formatPricePeriod(item.price, item.billing), R - 5, y, { align: "right" });
+      y += 5;
+    });
+
+    y += 10;
     doc.setDrawColor(...line);
     doc.line(M, y, R, y);
     y += 8;
 
     doc.setFillColor(...soft);
-    doc.roundedRect(120, y, R - 120, 24, 2, 2, "F");
+    doc.roundedRect(114, y, R - 114, 28, 2, 2, "F");
     doc.setTextColor(...gold);
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.text("TOTAL NET :", 125, y + 14);
-    doc.text(formatPricePeriod(lead.value, lead.billing), R - 5, y + 14, { align: "right" });
+    doc.setFontSize(10.5);
+    if (totals.oneShotTotal > 0) {
+      doc.text("TOTAL ONE-SHOT :", 119, y + 10);
+      doc.text(`${totals.oneShotTotal.toLocaleString("fr-FR")} €`, R - 5, y + 10, { align: "right" });
+    }
+    if (totals.mrrTotal > 0) {
+      doc.setTextColor(...ink);
+      doc.setFontSize(9.5);
+      doc.text("ABONNEMENT MENSUEL :", 119, y + 20);
+      doc.text(`${totals.mrrTotal.toLocaleString("fr-FR")} €/mois`, R - 5, y + 20, { align: "right" });
+    }
+
+    doc.setTextColor(...ink);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    doc.text("CONDITIONS DE RÈGLEMENT", M, y + 8);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(...muted);
+    if (lead.installments?.plan === "3x" && totals.oneShotTotal > 0) {
+      doc.text(`• Échelonnement 3x sans frais : 3 × ${Math.round(totals.oneShotTotal / 3)} €`, M, y + 15);
+    } else if (totals.oneShotTotal > 0) {
+      doc.text(`• Acompte 50 % : ${Math.round(totals.oneShotTotal * 0.5)} € · Solde : ${Math.round(totals.oneShotTotal * 0.5)} €`, M, y + 15);
+    }
+    if (totals.mrrTotal > 0) {
+      doc.text(`• Abonnement mensuel : ${totals.mrrTotal} €/mois sans frais cachés`, M, y + 21);
+    }
 
     doc.setDrawColor(...line);
     doc.line(M, 282, R, 282);
@@ -911,6 +1085,11 @@ function XrAgencyCrmApp() {
     doc.text("SIREN 889 178 141 · SIRET 889 178 141 00012 · 78 Avenue des Champs-Élysées · 75008 Paris", M, 291);
     doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83 · xragencyai.com", M, 295);
 
+    return { doc, quoteNum };
+  };
+
+  const generatePdfQuote = (lead: Lead) => {
+    const { doc } = buildQuotePdfDoc(lead);
     doc.save(`DEVIS-XRAGENCY-${lead.name.replace(/[^a-zA-Z0-9]/g, "-")}.pdf`);
     appendTimeline(lead.id, "Devis PDF officiel téléchargé");
   };
@@ -1111,9 +1290,10 @@ function XrAgencyCrmApp() {
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold shadow-md"
+                    disabled={authLoading}
+                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold shadow-md disabled:opacity-60"
                   >
-                    Entrer 🚀
+                    {authLoading ? "Vérification..." : "Entrer 🚀"}
                   </button>
                 </div>
               </form>
@@ -1380,6 +1560,11 @@ function XrAgencyCrmApp() {
               onClick={() => {
                 setCurrentUserId(null);
                 setActiveLeadForCockpit(null);
+                void fetch("/api/crm-auth", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ action: "logout" }),
+                }).catch(() => {});
               }}
               title="Déconnexion"
               className={`p-2 rounded-xl border ${theme.subCard} text-rose-500 hover:bg-rose-500/10`}
@@ -1653,14 +1838,21 @@ function XrAgencyCrmApp() {
                               onClick={() => generatePdfQuote(target)}
                               className={`inline-flex items-center gap-1.5 font-bold text-xs px-3.5 py-2.5 rounded-xl border ${theme.subCard} ${theme.textMain}`}
                             >
-                              <Download className="w-3.5 h-3.5 text-indigo-500" /> Devis PDF
+                              <Download className="w-3.5 h-3.5 text-indigo-500" /> PDF
+                            </button>
+                            <button
+                              onClick={() => handleSendQuoteEmail(target)}
+                              disabled={sendingEmailQuote}
+                              className="inline-flex items-center gap-1.5 bg-violet-500/15 hover:bg-violet-500/25 text-violet-700 dark:text-violet-200 border border-violet-400/30 font-bold text-xs px-3.5 py-2.5 rounded-xl"
+                            >
+                              <Mail className="w-3.5 h-3.5" /> {sendingEmailQuote ? "..." : "Email Devis"}
                             </button>
                             <button
                               onClick={() => handleGenerateStripeLink(target)}
                               disabled={checkoutLoading}
                               className="inline-flex items-center gap-1.5 bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-700 dark:text-indigo-200 border border-indigo-400/30 font-bold text-xs px-3.5 py-2.5 rounded-xl"
                             >
-                              <CreditCard className="w-3.5 h-3.5" /> {checkoutLoading ? "..." : "Lien Acompte"}
+                              <CreditCard className="w-3.5 h-3.5" /> {checkoutLoading ? "..." : "Stripe"}
                             </button>
                             <button
                               onClick={() => moveStage(target.id, "won")}
@@ -1669,6 +1861,71 @@ function XrAgencyCrmApp() {
                               <Trophy className="w-3.5 h-3.5" /> Signé !
                             </button>
                           </div>
+                        </div>
+
+                        {/* Pack Multi-Services en 1 clic */}
+                        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-200/60 dark:border-white/10 text-xs">
+                          <span className={`font-bold flex items-center gap-1 ${theme.textMuted}`}>
+                            <Layers className="w-3.5 h-3.5 text-indigo-500" /> Pack :
+                          </span>
+                          <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-200 font-bold text-[11px]">
+                            {svc.icon} {target.planLabel} ({formatPricePeriod(target.value, target.billing)})
+                          </span>
+                          {(target.extraItems || []).map((ex) => (
+                            <span key={ex.id} className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 font-bold text-[11px]">
+                              + {ex.planLabel} ({formatPricePeriod(ex.price, ex.billing)})
+                            </span>
+                          ))}
+                          <button
+                            onClick={() => {
+                              const addon: LeadServiceItem = {
+                                id: `ex-${Date.now()}`,
+                                serviceId: "maintenance",
+                                planLabel: "WebCare Business",
+                                billing: "month",
+                                price: 49,
+                              };
+                              const nextExtras = [...(target.extraItems || []), addon];
+                              setLeads((prev) =>
+                                prev.map((l) => {
+                                  if (l.id !== target.id) return l;
+                                  const u = { ...l, extraItems: nextExtras };
+                                  void upsertLeadToSupabase(u);
+                                  return u;
+                                })
+                              );
+                              setActiveLeadForCockpit({ ...target, extraItems: nextExtras });
+                              if (soundEnabled) playDing();
+                            }}
+                            className="px-2 py-0.5 rounded-lg border border-dashed border-indigo-400/50 text-[10px] font-bold text-indigo-600 dark:text-amber-300 hover:bg-indigo-500/10"
+                          >
+                            + WebCare 49€/m
+                          </button>
+                          <button
+                            onClick={() => {
+                              const addon: LeadServiceItem = {
+                                id: `ex-${Date.now()}`,
+                                serviceId: "maps",
+                                planLabel: "Maps Top 3 Garanti",
+                                billing: "year",
+                                price: 990,
+                              };
+                              const nextExtras = [...(target.extraItems || []), addon];
+                              setLeads((prev) =>
+                                prev.map((l) => {
+                                  if (l.id !== target.id) return l;
+                                  const u = { ...l, extraItems: nextExtras };
+                                  void upsertLeadToSupabase(u);
+                                  return u;
+                                })
+                              );
+                              setActiveLeadForCockpit({ ...target, extraItems: nextExtras });
+                              if (soundEnabled) playDing();
+                            }}
+                            className="px-2 py-0.5 rounded-lg border border-dashed border-emerald-400/50 text-[10px] font-bold text-emerald-600 dark:text-emerald-300 hover:bg-emerald-500/10"
+                          >
+                            + Maps Top 3 (990€)
+                          </button>
                         </div>
 
                         {checkoutMessage && (
@@ -1899,18 +2156,33 @@ function XrAgencyCrmApp() {
                   </p>
                 </div>
 
-                {(isDirector || isManager) && (
-                  <button
-                    onClick={() => {
-                      setNewMemberRecruitedBy(isManager ? currentUser.id : "");
-                      setShowAddMemberModal(true);
-                    }}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-xs shadow-sm"
+                <div className="flex flex-wrap items-center gap-2">
+                  <select
+                    value={selectedMonth}
+                    onChange={(e) => setSelectedMonth(e.target.value)}
+                    className={`rounded-xl px-3 py-2 text-xs font-bold border ${theme.inputBg}`}
                   >
-                    <UserPlus className="w-3.5 h-3.5" />
-                    {isManager ? "Ajouter un candidat" : "Ajouter un membre"}
-                  </button>
-                )}
+                    <option value="all">📅 Toutes les périodes</option>
+                    {availableMonths.map((m) => (
+                      <option key={m} value={m}>
+                        Mois : {m}
+                      </option>
+                    ))}
+                  </select>
+
+                  {(isDirector || isManager) && (
+                    <button
+                      onClick={() => {
+                        setNewMemberRecruitedBy(isManager ? currentUser.id : "");
+                        setShowAddMemberModal(true);
+                      }}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-xs shadow-sm"
+                    >
+                      <UserPlus className="w-3.5 h-3.5" />
+                      {isManager ? "Ajouter un candidat" : "Ajouter un membre"}
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="overflow-x-auto">
@@ -2190,9 +2462,13 @@ function XrAgencyCrmApp() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-2.5">
                 <div>
-                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Site web (pour Audit Express)</label>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Email (pour Devis)</label>
+                  <input type="email" value={formEmail} onChange={(e) => setFormEmail(e.target.value)} placeholder="client@mail.fr" className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Site web (Audit)</label>
                   <input type="text" value={formWebsite} onChange={(e) => setFormWebsite(e.target.value)} placeholder="ex: monclient.fr" className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
                 </div>
                 <div>
@@ -2228,7 +2504,7 @@ function XrAgencyCrmApp() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-2.5">
                 <div>
                   <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Formule</label>
                   <select
@@ -2238,14 +2514,75 @@ function XrAgencyCrmApp() {
                       const p = selectedModalService.plans.find((x) => x.id === e.target.value);
                       if (p) setFormValue(p.price);
                     }}
-                    className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`}
+                    className={`w-full mt-1 rounded-xl px-2.5 py-2 text-xs border ${theme.inputBg}`}
                   >
                     {selectedModalService.plans.map((p) => <option key={p.id} value={p.id}>{p.label} ({p.price} €)</option>)}
                   </select>
                 </div>
                 <div>
                   <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Montant (€)</label>
-                  <input type="number" value={formValue} onChange={(e) => setFormValue(Number(e.target.value))} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs font-mono border ${theme.inputBg}`} />
+                  <input type="number" value={formValue} onChange={(e) => setFormValue(Number(e.target.value))} className={`w-full mt-1 rounded-xl px-2.5 py-2 text-xs font-mono border ${theme.inputBg}`} />
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Paiement</label>
+                  <select value={formInstallmentPlan} onChange={(e) => setFormInstallmentPlan(e.target.value as "1x" | "3x")} className={`w-full mt-1 rounded-xl px-2.5 py-2 text-xs border ${theme.inputBg}`}>
+                    <option value="1x">1x (Acompte 50%)</option>
+                    <option value="3x">3x sans frais</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Pack Multi-Services Rapide */}
+              <div className={`p-3 rounded-2xl border space-y-2 ${theme.subCard}`}>
+                <div className="flex items-center justify-between gap-2">
+                  <span className={`text-[10px] font-extrabold uppercase flex items-center gap-1 ${theme.textMuted}`}>
+                    <Layers className="w-3 h-3 text-indigo-500" /> Pack Multi-Services (optionnel)
+                  </span>
+                  {formExtraItems.length > 0 && (
+                    <span className="text-[10px] font-extrabold text-indigo-600 dark:text-amber-300">
+                      +{formExtraItems.length} service(s)
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {(
+                    [
+                      { id: "wc-pro", serviceId: "webcare", planLabel: "WebCare Pro · 49 €/m", price: 49, billing: "monthly" as const, chip: "+ WebCare 49€/m" },
+                      { id: "maps-top3", serviceId: "maps", planLabel: "Google Maps Top 3 · 990 €", price: 990, billing: "annual" as const, chip: "+ Maps Top 3 (990€)" },
+                      { id: "br-pro", serviceId: "branding", planLabel: "Branding Pro · 229 €", price: 229, billing: "once" as const, chip: "+ Branding (229€)" },
+                    ] as (LeadServiceItem & { chip: string })[]
+                  ).map((preset) => {
+                    const already = formExtraItems.some((x) => x.serviceId === preset.serviceId);
+                    return (
+                      <button
+                        key={preset.serviceId}
+                        type="button"
+                        onClick={() => {
+                          if (already) {
+                            setFormExtraItems((prev) => prev.filter((x) => x.serviceId !== preset.serviceId));
+                          } else {
+                            setFormExtraItems((prev) => [
+                              ...prev,
+                              {
+                                id: `${preset.id}-${Date.now()}`,
+                                serviceId: preset.serviceId,
+                                planLabel: preset.planLabel,
+                                price: preset.price,
+                                billing: preset.billing,
+                              },
+                            ]);
+                          }
+                        }}
+                        className={`text-[10px] font-bold px-2.5 py-1 rounded-full border transition-all ${
+                          already
+                            ? "bg-indigo-600 text-white border-indigo-600"
+                            : `${theme.card} ${theme.textMain} hover:border-indigo-400`
+                        }`}
+                      >
+                        {already ? `✓ ${preset.chip.replace("+ ", "")}` : preset.chip}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -2305,7 +2642,7 @@ function XrAgencyCrmApp() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Montant (€)</label>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Montant principal (€)</label>
                   <input type="number" value={editingLead.value} onChange={(e) => setEditingLead({ ...editingLead, value: Number(e.target.value) })} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs font-mono border ${theme.inputBg}`} />
                 </div>
                 <div>
@@ -2313,6 +2650,85 @@ function XrAgencyCrmApp() {
                   <input type="text" value={editingLead.phone} onChange={(e) => setEditingLead({ ...editingLead, phone: e.target.value })} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
                 </div>
               </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Email client</label>
+                  <input type="email" value={editingLead.email || ""} onChange={(e) => setEditingLead({ ...editingLead, email: e.target.value })} placeholder="client@mail.fr" className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Site web</label>
+                  <input type="text" value={editingLead.websiteUrl || ""} onChange={(e) => setEditingLead({ ...editingLead, websiteUrl: e.target.value })} placeholder="ex: monclient.fr" className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Échéancier</label>
+                  <select
+                    value={editingLead.installments?.plan || "1x"}
+                    onChange={(e) => {
+                      const plan = e.target.value as "1x" | "3x";
+                      setEditingLead({
+                        ...editingLead,
+                        installments: {
+                          plan,
+                          paidCount: editingLead.installments?.paidCount ?? 0,
+                        },
+                      });
+                    }}
+                    className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`}
+                  >
+                    <option value="1x">1x (Classique)</option>
+                    <option value="3x">3x sans frais</option>
+                  </select>
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Mensualités encaissées</label>
+                  <select
+                    value={editingLead.installments?.paidCount ?? 0}
+                    onChange={(e) => {
+                      const paidCount = Number(e.target.value);
+                      const plan = editingLead.installments?.plan || "1x";
+                      setEditingLead({
+                        ...editingLead,
+                        installments: {
+                          plan,
+                          paidCount,
+                        },
+                      });
+                    }}
+                    className={`w-full mt-1 rounded-xl px-3 py-2 text-xs font-mono border ${theme.inputBg}`}
+                  >
+                    <option value={0}>0 / {editingLead.installments?.plan === "3x" ? 3 : 1}</option>
+                    <option value={1}>1 / {editingLead.installments?.plan === "3x" ? 3 : 1}</option>
+                    {editingLead.installments?.plan === "3x" && <option value={2}>2 / 3</option>}
+                    {editingLead.installments?.plan === "3x" && <option value={3}>3 / 3 (Soldé ✓)</option>}
+                  </select>
+                </div>
+              </div>
+              {(editingLead.extraItems?.length || 0) > 0 && (
+                <div className={`p-2.5 rounded-xl border space-y-1.5 ${theme.subCard}`}>
+                  <p className={`text-[10px] font-extrabold uppercase ${theme.textMuted}`}>Services additionnels du Pack</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {editingLead.extraItems?.map((item, idx) => (
+                      <span key={`${item.serviceId}-${idx}`} className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-200">
+                        {item.planLabel}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setEditingLead({
+                              ...editingLead,
+                              extraItems: (editingLead.extraItems || []).filter((_, i) => i !== idx),
+                            })
+                          }
+                          className="hover:text-rose-500 font-black ml-0.5"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div>
                 <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Notes privées</label>
                 <textarea rows={3} value={editingLead.notes} onChange={(e) => setEditingLead({ ...editingLead, notes: e.target.value })} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
@@ -2452,6 +2868,8 @@ function LeadCard({
   const closer = members.find((m) => m.id === lead.closerId);
   const setter = members.find((m) => m.id === lead.setterId);
   const isDue = lead.followUpDate && lead.followUpDate <= todayIso;
+  const totals = getLeadTotals(lead);
+  const extraCount = lead.extraItems?.length || 0;
 
   return (
     <div
@@ -2460,10 +2878,19 @@ function LeadCard({
       className={`p-3.5 rounded-2xl border cursor-grab active:cursor-grabbing transition-all hover:-translate-y-0.5 space-y-2 ${theme.card} ${theme.cardHover}`}
     >
       <div className="flex items-center justify-between gap-1">
-        <span className="text-base">{svc?.icon || "🌐"}</span>
+        <div className="flex items-center gap-1">
+          <span className="text-base">{svc?.icon || "🌐"}</span>
+          {extraCount > 0 && (
+            <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-600 dark:text-indigo-200 border border-indigo-500/25">
+              +{extraCount} pack
+            </span>
+          )}
+        </div>
         <div className="flex items-center gap-1.5">
           <span className="text-[11px] font-black text-indigo-600 dark:text-amber-300 font-mono">
-            {formatPricePeriod(lead.value, lead.billing)}
+            {extraCount > 0
+              ? `${totals.oneShotTotal > 0 ? `${totals.oneShotTotal.toLocaleString("fr-FR")} €` : ""}${totals.oneShotTotal > 0 && totals.mrrTotal > 0 ? " + " : ""}${totals.mrrTotal > 0 ? `${totals.mrrTotal}€/m` : ""}`
+              : formatPricePeriod(lead.value, lead.billing)}
           </span>
           <button onClick={onEdit} className={`${theme.textSoft} hover:text-indigo-500`} title="Modifier">
             <Pencil className="w-3 h-3" />
@@ -2483,6 +2910,11 @@ function LeadCard({
       </p>
 
       <div className="flex flex-wrap items-center gap-1.5">
+        {lead.installments?.plan === "3x" && (
+          <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+            3x ({lead.installments.paidCount}/3)
+          </span>
+        )}
         {lead.stage === "mockup" && lead.mockupReady && (
           <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500 text-white">
             ✓ Maquette prête

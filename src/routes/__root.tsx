@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useLocation,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -112,6 +113,8 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const location = useLocation();
+  const isInternalApp = location.pathname.startsWith("/crm") || location.pathname.startsWith("/dashboard");
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
@@ -132,11 +135,13 @@ function RootComponent() {
       <ThemeProvider>
         <LanguageProvider>
           <CartProvider>
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }} />
-            <CursorGlow />
-            <Cart />
+            {!isInternalApp && (
+              <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }} />
+            )}
+            {!isInternalApp && <CursorGlow />}
+            {!isInternalApp && <Cart />}
             <Outlet />
-            <WhatsAppWidget />
+            {!isInternalApp && <WhatsAppWidget />}
           </CartProvider>
         </LanguageProvider>
       </ThemeProvider>
