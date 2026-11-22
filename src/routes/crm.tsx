@@ -101,7 +101,7 @@ export function XrAgencyCrmApp() {
   const [members, setMembers] = useState<TeamMember[]>(() => {
     if (typeof window !== "undefined") {
       try {
-        const saved = localStorage.getItem("xr_crm_members_v3");
+        const saved = localStorage.getItem("xr_crm_members_v4");
         if (saved) return JSON.parse(saved);
       } catch {
         // ignore
@@ -192,6 +192,12 @@ export function XrAgencyCrmApp() {
   const [newMemberPin, setNewMemberPin] = useState("1234");
   const [newMemberRecruitedBy, setNewMemberRecruitedBy] = useState<string>("");
 
+  // Modal Modification Mot de Passe personnel (pour chaque utilisateur)
+  const [showChangePinModal, setShowChangePinModal] = useState(false);
+  const [newPinValue, setNewPinValue] = useState("");
+  const [confirmPinValue, setConfirmPinValue] = useState("");
+  const [changePinError, setChangePinError] = useState("");
+
   // Persistence
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -201,7 +207,7 @@ export function XrAgencyCrmApp() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("xr_crm_members_v3", JSON.stringify(members));
+      localStorage.setItem("xr_crm_members_v4", JSON.stringify(members));
     }
   }, [members]);
 
@@ -531,6 +537,30 @@ export function XrAgencyCrmApp() {
     setMembers((prev) => prev.map((m) => (m.id === memberId ? { ...m, [field]: clean } : m)));
   };
 
+  const handleSaveOwnPin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentUser) return;
+    const clean = newPinValue.trim();
+    if (clean.length < 4) {
+      setChangePinError("Choisissez un code d'au moins 4 caractères.");
+      return;
+    }
+    if (clean !== confirmPinValue.trim()) {
+      setChangePinError("Les deux codes ne correspondent pas.");
+      return;
+    }
+    setMembers((prev) =>
+      prev.map((m) =>
+        m.id === currentUser.id ? { ...m, pin: clean, customPinSet: true } : m
+      )
+    );
+    setNewPinValue("");
+    setConfirmPinValue("");
+    setChangePinError("");
+    setShowChangePinModal(false);
+    if (soundEnabled) playDing();
+  };
+
   const handleIncrementCall = () => {
     const next = dailyCalls + 1;
     setDailyCalls(next);
@@ -746,46 +776,63 @@ export function XrAgencyCrmApp() {
                 setSchoolPinInput("");
                 setSchoolPinError("");
               }}
-              className="inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-gradient-to-r from-violet-600/25 via-amber-500/15 to-violet-600/25 hover:from-violet-600/35 hover:to-amber-500/25 border border-amber-400/30 text-xs sm:text-sm font-bold text-white shadow-lg transition-all hover:scale-[1.02]"
+              className="inline-flex flex-wrap items-center justify-center gap-2.5 px-5 py-3 rounded-2xl bg-gradient-to-r from-violet-600/25 via-amber-500/15 to-violet-600/25 hover:from-violet-600/35 hover:to-amber-500/25 border border-amber-400/30 text-xs sm:text-sm font-bold text-white shadow-lg transition-all hover:scale-[1.02]"
             >
               <GraduationCap className="w-5 h-5 text-amber-300" />
               Accéder à XR School (Formation Pure · Trames & Dojo)
-              <Lock className="w-3.5 h-3.5 text-amber-300/70" />
+              <span className="font-mono text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-black/50 text-amber-300 border border-amber-400/30">
+                Code : 1234
+              </span>
             </button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-            {members.map((member) => (
-              <button
-                key={member.id}
-                onClick={() => {
-                  setPendingMember(member);
-                  setPinInput("");
-                  setPinError("");
-                }}
-                className="group p-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] hover:border-amber-400/40 transition-all shadow-md hover:scale-[1.015] active:scale-[0.98] flex items-center gap-3.5 text-left"
-              >
-                <div
-                  className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${member.avatarBg} flex items-center justify-center text-white font-bold text-base shadow-lg shrink-0`}
+            {members.map((member) => {
+              const isAntoine = member.id === "antoine";
+              const showPublicCode = !isAntoine && !member.customPinSet;
+              return (
+                <button
+                  key={member.id}
+                  onClick={() => {
+                    setPendingMember(member);
+                    setPinInput("");
+                    setPinError("");
+                  }}
+                  className="group p-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.08] hover:border-amber-400/40 transition-all shadow-md hover:scale-[1.015] active:scale-[0.98] flex items-center gap-3.5 text-left"
                 >
-                  {member.shortName.charAt(0)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-sm text-white group-hover:text-amber-300 transition-colors truncate">
-                    {member.name}
-                  </h3>
-                  <p className="text-[11px] text-white/50 truncate">{member.roleLabel}</p>
-                  <span className="inline-block mt-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-md bg-white/[0.06] text-amber-300/90 border border-white/[0.06]">
-                    {member.badge}
-                  </span>
-                </div>
-                <Lock className="w-3.5 h-3.5 text-white/20 group-hover:text-amber-400/70 shrink-0" />
-              </button>
-            ))}
+                  <div
+                    className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${member.avatarBg} flex items-center justify-center text-white font-bold text-base shadow-lg shrink-0`}
+                  >
+                    {member.shortName.charAt(0)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-sm text-white group-hover:text-amber-300 transition-colors truncate">
+                      {member.name}
+                    </h3>
+                    <p className="text-[11px] text-white/50 truncate">{member.roleLabel}</p>
+                    <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                      <span className="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-md bg-white/[0.06] text-amber-300/90 border border-white/[0.06]">
+                        {member.badge}
+                      </span>
+                      {showPublicCode ? (
+                        <span className="inline-block text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">
+                          Code : {member.pin}
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-md bg-white/[0.05] text-white/45 border border-white/[0.06]">
+                          <Lock className="w-2.5 h-2.5" />
+                          {isAntoine ? "Privé" : "Personnalisé"}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
           </div>
 
-          <p className="text-center text-[11px] text-white/35">
-            Confidentialité stricte · Aucun identifiant ni code confidentiel affiché publiquement
+          <p className="text-center text-[11px] text-white/40">
+            Une fois connecté, chaque membre peut créer son propre mot de passe confidentiel (il sera alors masqué automatiquement).
           </p>
         </div>
 
@@ -807,22 +854,28 @@ export function XrAgencyCrmApp() {
 
               <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <div>
-                  <label className="text-[11px] font-semibold uppercase text-white/60 flex items-center gap-1.5">
-                    <KeyRound className="w-3.5 h-3.5 text-amber-400" />
-                    Code PIN personnel
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-[11px] font-semibold uppercase text-white/60 flex items-center gap-1.5">
+                      <KeyRound className="w-3.5 h-3.5 text-amber-400" />
+                      Code / Mot de passe
+                    </label>
+                    {pendingMember.id !== "antoine" && !pendingMember.customPinSet && (
+                      <span className="text-[11px] font-mono font-bold text-emerald-300">
+                        Code : {pendingMember.pin}
+                      </span>
+                    )}
+                  </div>
                   <input
                     type="password"
-                    inputMode="numeric"
                     autoFocus
-                    maxLength={6}
+                    maxLength={20}
                     value={pinInput}
                     onChange={(e) => {
                       setPinInput(e.target.value);
                       setPinError("");
                     }}
-                    placeholder="••••"
-                    className="w-full mt-2 bg-black/40 border border-white/[0.12] rounded-xl px-4 py-3 text-center text-xl tracking-[0.5em] font-mono text-white focus:outline-none focus:border-amber-400"
+                    placeholder="••••••"
+                    className="w-full mt-2 bg-black/40 border border-white/[0.12] rounded-xl px-4 py-3 text-center text-xl tracking-[0.35em] font-mono text-white focus:outline-none focus:border-amber-400"
                   />
                   {pinError && <p className="text-xs text-red-400 mt-2 text-center">{pinError}</p>}
                 </div>
@@ -1063,6 +1116,19 @@ export function XrAgencyCrmApp() {
                 Nouveau Prospect (5s)
               </button>
             )}
+
+            <button
+              onClick={() => {
+                setNewPinValue("");
+                setConfirmPinValue("");
+                setChangePinError("");
+                setShowChangePinModal(true);
+              }}
+              title="Créer ou modifier mon mot de passe personnel"
+              className="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-white/60 hover:text-amber-300 transition-all"
+            >
+              <KeyRound className="w-4 h-4" />
+            </button>
 
             <button
               onClick={() => {
@@ -2240,6 +2306,81 @@ export function XrAgencyCrmApp() {
                   className="flex-1 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black text-xs font-bold"
                 >
                   Créer le profil
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── MODAL CRÉATION / MODIFICATION MOT DE PASSE PERSONNEL ── */}
+      {showChangePinModal && (
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#0f131d] border border-white/[0.12] rounded-3xl p-6 max-w-sm w-full shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+              <h3 className="font-bold text-base text-white flex items-center gap-2">
+                <KeyRound className="w-4 h-4 text-amber-400" />
+                Mon mot de passe personnel
+              </h3>
+              <button onClick={() => setShowChangePinModal(false)} className="text-white/40 hover:text-white">
+                ✕
+              </button>
+            </div>
+
+            <p className="text-xs text-white/55">
+              Définissez votre propre code ou mot de passe confidentiel. Dès qu'il est enregistré, il est automatiquement masqué sur l'écran de connexion.
+            </p>
+
+            <form onSubmit={handleSaveOwnPin} className="space-y-3">
+              <div>
+                <label className="text-[11px] font-semibold uppercase text-white/60">Nouveau code / mot de passe</label>
+                <input
+                  type="password"
+                  required
+                  minLength={4}
+                  maxLength={20}
+                  value={newPinValue}
+                  onChange={(e) => {
+                    setNewPinValue(e.target.value);
+                    setChangePinError("");
+                  }}
+                  placeholder="Min. 4 caractères"
+                  className="w-full mt-1 bg-black/40 border border-white/[0.12] rounded-xl px-3.5 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-amber-400"
+                />
+              </div>
+
+              <div>
+                <label className="text-[11px] font-semibold uppercase text-white/60">Confirmer</label>
+                <input
+                  type="password"
+                  required
+                  minLength={4}
+                  maxLength={20}
+                  value={confirmPinValue}
+                  onChange={(e) => {
+                    setConfirmPinValue(e.target.value);
+                    setChangePinError("");
+                  }}
+                  placeholder="Répétez votre code"
+                  className="w-full mt-1 bg-black/40 border border-white/[0.12] rounded-xl px-3.5 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-amber-400"
+                />
+              </div>
+
+              {changePinError && <p className="text-xs text-red-400 text-center">{changePinError}</p>}
+
+              <div className="pt-2 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowChangePinModal(false)}
+                  className="flex-1 py-2.5 rounded-xl bg-white/[0.06] text-xs font-semibold text-white/70"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black text-xs font-bold"
+                >
+                  Enregistrer
                 </button>
               </div>
             </form>

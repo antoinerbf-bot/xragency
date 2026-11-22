@@ -22,7 +22,8 @@ export interface TeamMember {
   overrideRate?: number; // % Manager sur les ventes des candidats qu'il ramène
   avatarBg: string;
   badge: string; // JAMAIS de % affiché dans le badge public pour préserver la confidentialité
-  pin: string; // PIN personnel (jamais affiché en clair)
+  pin: string;
+  customPinSet?: boolean; // Passe à true quand le membre personnalise son mot de passe
 }
 
 export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
@@ -37,7 +38,8 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 1,
     avatarBg: "from-amber-400 via-amber-500 to-orange-600",
     badge: "👑 Direction",
-    pin: "0712",
+    pin: "071266",
+    customPinSet: true,
   },
   {
     id: "martin",
@@ -64,7 +66,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 0.3,
     avatarBg: "from-emerald-500 to-teal-700",
     badge: "⚡ Full-Cycle",
-    pin: "1234",
+    pin: "1010",
   },
   {
     id: "sarah",
@@ -77,7 +79,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 0.3,
     avatarBg: "from-pink-500 to-rose-700",
     badge: "⚡ Full-Cycle",
-    pin: "1234",
+    pin: "2020",
   },
   {
     id: "christel",
@@ -91,7 +93,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 0.2,
     avatarBg: "from-purple-500 to-violet-700",
     badge: "🎯 Closer",
-    pin: "1234",
+    pin: "3030",
   },
   {
     id: "camille",
@@ -105,7 +107,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 0.2,
     avatarBg: "from-cyan-500 to-blue-700",
     badge: "📞 Setter",
-    pin: "1234",
+    pin: "4040",
   },
   {
     id: "karim",
@@ -119,7 +121,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 0.15,
     avatarBg: "from-amber-600 to-orange-700",
     badge: "🎓 Élève XR School",
-    pin: "1234",
+    pin: "5050",
   },
   {
     id: "emma",
@@ -133,7 +135,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 0.15,
     avatarBg: "from-fuchsia-500 to-purple-700",
     badge: "🎓 Élève XR School",
-    pin: "1234",
+    pin: "6060",
   },
   {
     id: "studio",
