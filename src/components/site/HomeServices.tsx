@@ -28,13 +28,13 @@ const PRICES: Record<string, number> = {
 };
 
 const ACCENTS: Record<(typeof IDS)[number], string> = {
-  websites: "#d9b48c",
-  branding: "#c7b5df",
-  seo: "#a9c7d8",
-  maps: "#e2b2aa",
-  social: "#b7d6c4",
-  maintenance: "#d4c49a",
-  robotics: "#aeb6bf",
+  websites: "var(--xr-ink)",
+  branding: "var(--xr-ink)",
+  seo: "var(--xr-ink)",
+  maps: "var(--xr-ink)",
+  social: "var(--xr-ink)",
+  maintenance: "var(--xr-ink)",
+  robotics: "var(--xr-ink)",
 };
 
 const COPY = {
@@ -168,12 +168,12 @@ export function HomeServices() {
                   <span className="label-mono text-[7px] tracking-[.22em] xr-muted-2">
                     EXPERTISES {String(index + 1).padStart(2, "0")} / 07
                   </span>
-                  <span className="grid h-10 w-10 place-items-center rounded-full text-black" style={{ background: ACCENTS[active] }}>
+                  <span className="grid h-10 w-10 place-items-center rounded-full bg-[var(--xr-ink)] text-[var(--xr-bg)] shadow-md">
                     <Icon className="h-4 w-4" />
                   </span>
                 </div>
 
-                <h3 className="display-serif mt-10 text-5xl leading-[.82] tracking-[-.05em] sm:text-6xl">
+                <h3 className="display-serif mt-10 text-4xl leading-[.88] tracking-[-.045em] sm:text-5xl text-[var(--xr-ink)]">
                   {t(service.title)}
                 </h3>
                 <p className="mt-6 max-w-xl text-sm leading-6 xr-muted">{t(service.description)}</p>

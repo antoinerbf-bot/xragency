@@ -85,21 +85,34 @@ function WebVisual() {
   return (
     <Stage className="bg-[var(--xr-bg-elev)]" accent="rgba(255,255,255,.08)">
       <Photo src={XR_PHOTOS.websites} position="52% 45%" className="scale-[1.04] opacity-[.92]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/58 via-black/8 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/25" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
-        <Label>01 / WEB DESIGN</Label>
-        <Label>REAL PROJECT VIEW</Label>
+        <span className="label-mono text-[7px] tracking-[.2em] text-white/70">01 / WEB DESIGN ÉLITE</span>
+        <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-0.5 label-mono text-[6px] text-white/80">
+          PROPRIÉTÉ TOTALE · AUCUN TEMPLATE
+        </span>
       </div>
-      <Parallax speed={0.018} direction="both" className="absolute bottom-6 left-5 right-5 sm:bottom-7 sm:left-7 sm:right-7">
-        <Glass className="p-5 sm:p-6">
+
+      <Parallax speed={0.018} direction="both" className="absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6">
+        <Glass className="p-4 sm:p-5">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <Label>DESIGN → UX → CONVERSION</Label>
-              <h3 className="display-serif mt-2 max-w-xl text-3xl text-white sm:text-4xl">Un vrai site. Une vraie expérience.</h3>
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                <Label>CONVERSION · HAUTE VITESSE · DESIGN SIGNATURE</Label>
+              </div>
+              <h3 className="display-serif mt-2 max-w-xl text-2xl text-white sm:text-3xl">
+                L’incarnation de votre marque en ligne.
+              </h3>
             </div>
-            <span className="rounded-full border border-white/15 bg-white/8 px-3 py-2 label-mono text-[6px] text-white/55">
-              RESPONSIVE / SEO / PERFORMANCE
-            </span>
+            <div className="flex gap-2">
+              <span className="rounded-lg border border-white/15 bg-white/5 px-2.5 py-1 label-mono text-[7px] text-white/80">
+                ⚡ 0.8s Vitesse
+              </span>
+              <span className="rounded-lg border border-white/15 bg-white/5 px-2.5 py-1 label-mono text-[7px] text-white/80">
+                📱 100% Responsive
+              </span>
+            </div>
           </div>
         </Glass>
       </Parallax>
@@ -141,23 +154,37 @@ function BrandingVisual() {
 function SeoVisual() {
   return (
     <Stage className="bg-[var(--xr-bg-elev)]" accent="rgba(255,255,255,.08)">
-      <Photo src={XR_PHOTOS.seo} position="50% 45%" className="scale-[1.03] opacity-[.82]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/7 to-transparent" />
+      <Photo src={XR_PHOTOS.seo} position="50% 45%" className="scale-[1.03] opacity-[.88]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/30" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
-        <Label>03 / SEO</Label>
-        <Label>SEARCH VISIBILITY</Label>
+        <span className="label-mono text-[7px] tracking-[.2em] text-white/70">03 / SEO ACQUISITION</span>
+        <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-0.5 label-mono text-[6px] text-white/80">
+          TRAFIC INTENTIONNISTE
+        </span>
       </div>
-      <Parallax speed={0.02} className="absolute bottom-6 left-5 right-5 sm:bottom-7 sm:left-7 sm:right-7">
-        <Glass className="p-5 sm:p-6">
-          <div className="flex items-center gap-3">
-            <Search className="h-4 w-4 text-white/75" />
-            <span className="text-xs font-semibold text-white">Être trouvé au moment de la recherche.</span>
+
+      <Parallax speed={0.02} className="absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6">
+        <Glass className="p-4 sm:p-5">
+          <div className="flex items-center justify-between border-b border-white/10 pb-3">
+            <div className="flex items-center gap-2">
+              <Search className="h-4 w-4 text-emerald-400" />
+              <span className="text-xs font-bold text-white sm:text-sm">Croissance Organique Google</span>
+            </div>
+            <span className="label-mono rounded-md bg-emerald-500/20 px-2 py-0.5 text-[8px] font-bold text-emerald-300">
+              +420% Visiteurs
+            </span>
           </div>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {["TECHNIQUE", "CONTENU", "AUTORITÉ", "PERFORMANCE"].map((x) => (
-              <span key={x} className="rounded-full border border-white/15 px-3 py-2 label-mono text-[6px] text-white/55">
-                {x}
-              </span>
+
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            {[
+              { label: "Mots-clés Top 3", val: "38 requêtes" },
+              { label: "Coût par clic économisé", val: "3 400 € /m" },
+              { label: "Leads qualifiés", val: "x3,8" },
+            ].map((metric, i) => (
+              <div key={i} className="rounded-xl border border-white/10 bg-white/5 p-2.5 text-center">
+                <span className="label-mono block text-[5px] text-white/50">{metric.label}</span>
+                <span className="mt-1 block text-[10px] font-bold text-white">{metric.val}</span>
+              </div>
             ))}
           </div>
         </Glass>
@@ -170,32 +197,48 @@ function MapsVisual() {
   return (
     <Stage className="bg-[var(--xr-bg-elev)]" accent="rgba(255,255,255,.08)">
       <Photo src={XR_PHOTOS.maps} position="50% 18%" className="scale-[1.04] opacity-[.94]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/7 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/30" />
       <div className="absolute inset-x-5 top-5 flex items-center justify-between sm:inset-x-7 sm:top-7">
-        <Label>04 / GOOGLE MAPS</Label>
-        <Label>REAL GOOGLE SEARCH</Label>
+        <span className="label-mono text-[7px] tracking-[.2em] text-white/70">04 / GOOGLE MAPS</span>
+        <span className="rounded-full border border-emerald-400/40 bg-emerald-500/20 px-2.5 py-0.5 label-mono text-[6px] font-bold text-emerald-300">
+          POSITION N°1 GARANTIE
+        </span>
       </div>
-      <Parallax speed={0.018} className="absolute bottom-6 left-5 right-5 sm:bottom-7 sm:left-7 sm:right-7">
-        <Glass className="p-5 sm:p-6">
-          <div className="flex flex-wrap items-center gap-3">
-            <MapPin className="h-4 w-4 shrink-0 text-white/75" />
-            <div className="min-w-0 flex-1">
-              <Label>LOCAL PACK</Label>
-              <p className="mt-1 text-xs font-semibold text-white sm:text-sm">Google Maps Top 3</p>
+
+      <Parallax speed={0.018} className="absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6">
+        <Glass className="p-4 sm:p-5">
+          {/* Header fiche Google My Business */}
+          <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="grid h-4 w-4 place-items-center rounded-full bg-emerald-400 text-[9px] font-black text-black">✓</span>
+                <p className="text-xs font-bold text-white sm:text-sm">Votre Établissement · Top 1 Local Pack</p>
+              </div>
+              <div className="mt-1 flex items-center gap-2 text-[9px] text-white/70">
+                <span className="font-bold text-amber-300">5,0 ★★★★★</span>
+                <span>(184 avis vérifiés)</span>
+                <span>· Ouvert</span>
+              </div>
             </div>
-            <div className="flex gap-1.5">
-              {[1, 2, 3].map((n) => (
-                <span
-                  key={n}
-                  className={
-                    "grid h-8 w-8 place-items-center rounded-full border text-[9px] font-black " +
-                    (n === 1 ? "border-white bg-white text-black" : "border-white/15 text-white/60")
-                  }
-                >
-                  {n}
-                </span>
-              ))}
+            <div className="rounded-lg border border-white/20 bg-white/10 px-2.5 py-1 text-center">
+              <span className="label-mono block text-[5px] text-white/60">RANG GOOGLE</span>
+              <span className="text-xs font-black text-white">#1</span>
             </div>
+          </div>
+
+          {/* Actions & métriques */}
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex gap-2">
+              <span className="rounded-lg border border-white/15 bg-white/5 px-2.5 py-1 text-[8px] font-semibold text-white/90">
+                📞 +240% Appels entrants
+              </span>
+              <span className="rounded-lg border border-white/15 bg-white/5 px-2.5 py-1 text-[8px] font-semibold text-white/90">
+                📍 +310% Itinéraires
+              </span>
+            </div>
+            <span className="label-mono text-[7px] text-emerald-400 font-semibold">
+              Flux continu de clients
+            </span>
           </div>
         </Glass>
       </Parallax>
@@ -258,21 +301,32 @@ function WebcareVisual() {
 function RoboticsVisual() {
   return (
     <Stage className="bg-[var(--xr-bg-elev)]" accent="rgba(255,255,255,.08)">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_22%,rgba(255,255,255,.12),transparent_35%),linear-gradient(145deg,rgba(255,255,255,.05),#111)]" />
-      <Parallax speed={-0.018} className="absolute inset-4 sm:inset-7">
-        <div className="relative h-full overflow-hidden rounded-[1.7rem]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_25%,rgba(255,255,255,.14),transparent_40%),linear-gradient(155deg,#1c1d22,#0a0a0c)]" />
+      <Parallax speed={-0.018} className="absolute inset-4 sm:inset-6">
+        <div className="relative h-full overflow-hidden rounded-[1.7rem] border border-white/10 bg-black/40">
           <img
             src={XR_PHOTOS.robotics}
-            alt=""
-            className="absolute inset-0 h-full w-full object-contain drop-shadow-[0_35px_60px_rgba(0,0,0,.48)]"
+            alt="Robotique de service XR Agency"
+            className="absolute inset-0 h-full w-full object-contain p-4 drop-shadow-[0_25px_50px_rgba(0,0,0,.8)]"
           />
-          <div className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/45 px-3 py-2 backdrop-blur-xl">
-            <Label>07 / ROBOTIQUE</Label>
+          <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full border border-white/15 bg-black/60 px-3 py-1.5 backdrop-blur-xl">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="label-mono text-[7px] text-white">ROBOTIQUE DE SERVICE · RESTAURATION & RETAIL</span>
           </div>
         </div>
       </Parallax>
-      <div className="absolute bottom-6 left-6 right-6 text-center sm:left-10 sm:right-10">
-        <span className="label-mono text-[7px] tracking-[.2em] text-white/55">ACCUEILLIR · LIVRER · NETTOYER · AUTOMATISER</span>
+      <div className="absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6">
+        <Glass className="p-3.5 sm:p-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="label-mono text-[6px] text-white/60">INTELLIGENCE TERRAIN</p>
+              <p className="text-xs font-semibold text-white">Livraison en salle · Accueil prestige · Automatisation</p>
+            </div>
+            <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 label-mono text-[7px] font-bold text-white">
+              Location & Vente
+            </span>
+          </div>
+        </Glass>
       </div>
     </Stage>
   );

@@ -34,7 +34,7 @@ function safeCompare(a: string, b: string): boolean {
 }
 
 function signSession(memberId: string): string {
-  const exp = Date.now() + 7 * 24 * 60 * 60 * 1000; // 7 jours
+  const exp = Date.now() + 7 * 24 * 60 * 60 * 1000; // 7 days
   const payload = `${memberId}.${exp}`;
   const sig = createHmac("sha256", getSecret()).update(payload).digest("hex");
   return `${payload}.${sig}`;
@@ -61,67 +61,94 @@ export const Route = createFileRoute("/api/crm-auth")({
         return Response.json({ authenticated: !!memberId, memberId });
       },
       POST: async ({ request }) => {
-        try {
-          const body = (await request.json()) as {
-            action?: "login" | "school" | "logout";
-            memberId?: string;
-            pin?: string;
-            expectedPin?: string;
-          };
-
-          if (body.action === "logout") {
-            return new Response(JSON.stringify({ ok: true }), {
-              status: 200,
-              headers: {
-                "Content-Type": "application/json",
-                "Set-Cookie": `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`,
-              },
-            });
-          }
-
-          if (body.action === "school") {
-            const candidate = (body.pin || "").trim();
-            if (!safeCompare(candidate, getSchoolPin())) {
-              return Response.json({ ok: false, error: "Mot de passe XR School incorrect." }, { status: 401 });
-            }
-            return Response.json({ ok: true, mode: "school" });
-          }
-
-          if (body.action === "login") {
-            const memberId = (body.memberId || "").trim();
-            const pin = (body.pin || "").trim();
-            if (!memberId || !pin) {
-              return Response.json({ ok: false, error: "Identifiant et code requis." }, { status: 400 });
-            }
-
-            let valid = false;
-            if (memberId === "antoine") {
-              // Code Directeur vérifié STRICTEMENT côté serveur (jamais présent dans le bundle client)
-              const serverPin = body.expectedPin && body.expectedPin.length >= 4 ? body.expectedPin : getDirectorPin();
-              valid = safeCompare(pin, serverPin);
-            } else {
-              const expected = body.expectedPin || DEFAULT_TEAM_PINS[memberId] || "1234";
-              valid = safeCompare(pin, expected);
-            }
-
-            if (!valid) {
-              return Response.json({ ok: false, error: "Code incorrect. Veuillez réessayer." }, { status: 401 });
-            }
-
-            const token = signSession(memberId);
-            return new Response(JSON.stringify({ ok: true, memberId }), {
-              status: 200,
-              headers: {
-                "Content-Type": "application/json",
-                "Set-Cookie": `${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800`,
-              },
-            });
-          }
-
-          return Response.json({ ok: false, error: "Action invalide." }, { status: 400 });
-        } catch {
-          return Response.json({ ok: false, error: "Erreur serveur authentification." }, { status: 500 });
+        // CSRF protection
+        const csrfHeader = request.headers.get("x-csrf-token");
+        const expectedCsrf = process.env.CSRF_TOKEN || "default-csrf-token";
+        if (csrfHeader !== expectedCsrf) {
+          return Response.json({ ok: false, error: "CSRF token invalid" }, { status: 403 });
         }
+
+        // Simple rate limiting: max 5 requests per minute per IP
+        const ip = request.headers.get("x-forwarded-for") || "unknown";
+        const now = Date.now();
+        const windowMs = 60_000;
+        const limit = 5;
+        const store = (globalThis as any).__rateLimitStore || ((globalThis as any).__rateLimitStore = {});
+        const record = store[ip] || (store[ip] = { timestamps: [] });
+        record.timestamps = record.timestamps.filter((t: number) => now - t < windowMs);
+        if (record.timestamps.length >= limit) {
+          return Response.json({ ok: false, error: "Trop de requêtes, réessayez plus tard." }, { status: 429 });
+        }
+        record.timestamps.push(now);
+
+        // Structured logging (pino)
+        const logger = (globalThis as any).__logger || ((globalThis as any).__logger = require("pino")({ level: "info" }));
+        logger.info({ ip, endpoint: "/api/crm-auth", action: "POST" }, "Auth request received");
+
+        // Server‑side validation using Zod
+        const { z } = await import("zod");
+        const schema = z.object({
+          action: z.enum(["login", "school", "logout"]).optional(),
+          memberId: z.string().optional(),
+          pin: z.string().optional(),
+          expectedPin: z.string().optional(),
+        });
+        const body = await request.json();
+        const result = schema.safeParse(body);
+        if (!result.success) {
+          logger.warn({ error: result.error }, "Invalid auth payload");
+          return Response.json({ ok: false, error: "Payload invalide.", details: result.error.format() }, { status: 400 });
+        }
+
+        if (body.action === "logout") {
+          return new Response(JSON.stringify({ ok: true }), {
+            status: 200,
+            headers: {
+              "Content-Type": "application/json",
+              "Set-Cookie": `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`,
+            },
+          });
+        }
+
+        if (body.action === "school") {
+          const candidate = (body.pin || "").trim();
+          if (!safeCompare(candidate, getSchoolPin())) {
+            return Response.json({ ok: false, error: "Mot de passe XR School incorrect." }, { status: 401 });
+          }
+          return Response.json({ ok: true, mode: "school" });
+        }
+
+        if (body.action === "login") {
+          const memberId = (body.memberId || "").trim();
+          const pin = (body.pin || "").trim();
+          if (!memberId || !pin) {
+            return Response.json({ ok: false, error: "Identifiant et code requis." }, { status: 400 });
+          }
+
+          let valid = false;
+          if (memberId === "antoine") {
+            const serverPin = body.expectedPin && body.expectedPin.length >= 4 ? body.expectedPin : getDirectorPin();
+            valid = safeCompare(pin, serverPin);
+          } else {
+            const expected = body.expectedPin || DEFAULT_TEAM_PINS[memberId] || "1234";
+            valid = safeCompare(pin, expected);
+          }
+
+          if (!valid) {
+            return Response.json({ ok: false, error: "Code incorrect. Veuillez réessayer." }, { status: 401 });
+          }
+
+          const token = signSession(memberId);
+          return new Response(JSON.stringify({ ok: true, memberId }), {
+            status: 200,
+            headers: {
+              "Content-Type": "application/json",
+              "Set-Cookie": `${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800`,
+            },
+          });
+        }
+
+        return Response.json({ ok: false, error: "Action invalide." }, { status: 400 });
       },
     },
   },

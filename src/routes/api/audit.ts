@@ -35,6 +35,30 @@ export const Route = createFileRoute("/api/audit")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        // CSRF protection
+        const csrfHeader = request.headers.get("x-csrf-token");
+        const expectedCsrf = process.env.CSRF_TOKEN || "default-csrf-token";
+        if (csrfHeader !== expectedCsrf) {
+          return Response.json({ error: "CSRF token invalid" }, { status: 403 });
+        }
+
+        // Simple rate limiting (5 requests / minute / IP)
+        const ip = request.headers.get("x-forwarded-for") || "unknown";
+        const now = Date.now();
+        const windowMs = 60_000;
+        const limit = 5;
+        const store = (globalThis as any).__rateLimitStore || ((globalThis as any).__rateLimitStore = {});
+        const record = store[ip] || (store[ip] = { timestamps: [] });
+        record.timestamps = record.timestamps.filter((t: number) => now - t < windowMs);
+        if (record.timestamps.length >= limit) {
+          return Response.json({ error: "Trop de requêtes, réessayez plus tard." }, { status: 429 });
+        }
+        record.timestamps.push(now);
+
+        // Structured logging
+        const logger = (globalThis as any).__logger || ((globalThis as any).__logger = require("pino")({ level: "info" }));
+        logger.info({ ip, endpoint: "/api/audit", action: "POST" }, "Audit request received");
+
         try {
           const body = await request.json() as { url?: string; type?: string; types?: string[]; sector?: string; budget?: string };
           if (!body.url) return Response.json({ error: "URL requise." }, { status: 400 });
@@ -72,8 +96,8 @@ export const Route = createFileRoute("/api/audit")({
           const alt = (html.match(/<img[^>]+alt=["'][^"']*["']/gi) || []).length;
           const types = [...new Set((body.types?.length ? body.types : [body.type || "design"]).filter((x): x is string => ["design","seo","security","conversion","technical"].includes(x)))];
           if (!types.length) return Response.json({ error: "Sélectionnez au moins un axe d'audit." }, { status: 400 });
-          const typeScores = types.map(type => scoreAudit(html, response.headers, type));
-          const score = Math.round(typeScores.reduce((sum, value) => sum + value, 0) / typeScores.length);
+          const typeScores = types.map(type => scoreAudit(html, response!.headers, type));
+          const score = Math.round(typeScores.reduce((sum, v) => sum + v, 0) / typeScores.length);
           const recommendations = types.map(type => TYPE_META[type]).filter(Boolean);
           const sector = body.sector || "autre";
           const budget = body.budget || "non renseigné";
@@ -87,12 +111,12 @@ export const Route = createFileRoute("/api/audit")({
               : type === "design"
               ? [
                   { label: "Responsive", status: hasViewport, detail: hasViewport ? "Viewport détecté." : "Viewport non détecté." },
-                  { label: "Images accessibles", status: images === 0 || alt >= Math.ceil(images * .7), detail: images === 0 ? "Aucune image détectée." : String(alt) + "/" + String(images) + " images avec attribut alt." },
+                  { label: "Images accessibles", status: images === 0 || alt >= Math.ceil(images * .7), detail: images === 0 ? "Aucune image détectée." : `${alt}/${images} images avec attribut alt.` },
                 ]
               : type === "security"
               ? [
                   { label: "HTTPS", status: target.protocol === "https:", detail: target.protocol === "https:" ? "Connexion HTTPS utilisée." : "Le site est appelé en HTTP." },
-                  { label: "Headers de sécurité", status: !!response.headers.get("content-security-policy") || !!response.headers.get("strict-transport-security"), detail: "Vérification des principaux headers disponibles." },
+                  { label: "Headers de sécurité", status: !!response!.headers.get("content-security-policy") || !!response!.headers.get("strict-transport-security"), detail: "Vérification des principaux headers disponibles." },
                 ]
               : type === "conversion"
               ? [
@@ -100,13 +124,14 @@ export const Route = createFileRoute("/api/audit")({
                   { label: "Parcours mobile", status: hasViewport, detail: hasViewport ? "Viewport détecté." : "Viewport non détecté." },
                 ]
               : [
-                  { label: "Performance de page", status: html.length < 2200000, detail: String(Math.round(html.length / 1024)) + " Ko de HTML reçu." },
-                  { label: "Cache", status: !!response.headers.get("cache-control"), detail: response.headers.get("cache-control") || "Cache-Control non détecté." },
+                  { label: "Performance de page", status: html.length < 2200000, detail: `${Math.round(html.length / 1024)} Ko de HTML reçu.` },
+                  { label: "Cache", status: !!response!.headers.get("cache-control"), detail: response!.headers.get("cache-control") || "Cache-Control non détecté." },
                 ];
-            return checks.map(item => ({ ...item, label: (TYPE_META[type]?.service || type) + " · " + item.label }));
+            return checks.map(item => ({ ...item, label: `${TYPE_META[type]?.service || type} · ${item.label}` }));
           });
-          return Response.json({ ok: true, url: target.toString(), types, score, title, description, findings, recommendations, status: response.status });
+          return Response.json({ ok: true, url: target.toString(), types, score, title, description, findings, recommendations, status: response!.status });
         } catch (error) {
+          logger.error({ error }, "Audit endpoint failure");
           return Response.json({ error: error instanceof Error ? error.message : "Impossible d'analyser cette URL." }, { status: 502 });
         }
       },
