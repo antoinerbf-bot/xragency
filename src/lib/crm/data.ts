@@ -320,6 +320,7 @@ export interface Lead {
   commissionStatus: CommissionStatus;
   mockupReady?: boolean;
   studioStatus?: "pending" | "in_production" | "delivered";
+  timeline?: { id: string; date: string; text: string }[];
 }
 
 // ── Règles strictes de visibilité (RBAC) ──

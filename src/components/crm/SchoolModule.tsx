@@ -4,8 +4,6 @@ import {
   Phone,
   MessageSquare,
   Sparkles,
-  Trophy,
-  ShieldCheck,
   Copy,
   Check,
   CheckCircle2,
@@ -15,6 +13,7 @@ import {
   Swords,
   Shuffle,
   User,
+  Award,
 } from "lucide-react";
 import { XR_OFFICIAL_SERVICES, type TeamMember } from "@/lib/crm/data";
 import {
@@ -22,29 +21,109 @@ import {
   XR_SCHOOL_CURRICULUM,
   getSectorServicePlaybook,
 } from "@/lib/crm/schoolScripts";
+import type { CrmThemeTokens } from "@/lib/crm/theme";
 
 interface SchoolModuleProps {
   currentUser?: TeamMember | null;
+  theme: CrmThemeTokens;
   onSound?: () => void;
 }
 
-export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
+interface QuizQuestion {
+  id: string;
+  serviceId: string;
+  question: string;
+  options: string[];
+  correctIdx: number;
+  explanation: string;
+}
+
+const QUIZ_QUESTIONS: QuizQuestion[] = [
+  {
+    id: "q1",
+    serviceId: "websites",
+    question: "Quel est le premier objectif d'un appel à froid pour une refonte de site web ?",
+    options: [
+      "Réciter toutes les fonctionnalités techniques pendant 5 minutes",
+      "Pointer un frein concret sur mobile et obtenir l'accord d'envoyer une maquette visuelle",
+      "Envoyer une plaquette PDF générique par email sans rappeler",
+    ],
+    correctIdx: 1,
+    explanation: "On ne vend pas du technique au premier appel : on déclenche l'intérêt avec un constat mobile concret et une maquette sur mesure.",
+  },
+  {
+    id: "q2",
+    serviceId: "maps",
+    question: "Comment rassure-t-on un gérant sceptique sur Google Maps Top 3 ?",
+    options: [
+      "On lui promet verbalement la 1ère place dès demain matin",
+      "On définit ensemble les requêtes, la zone et le cadre contractuel clair au diagnostic",
+      "On lui conseille de supprimer sa fiche actuelle",
+    ],
+    correctIdx: 1,
+    explanation: "La crédibilité repose sur le diagnostic transparent (zone, requêtes ciblées et engagement contractuel clair).",
+  },
+  {
+    id: "q3",
+    serviceId: "robotics",
+    question: "Comment répondre à un dirigeant qui craint qu'un robot Korben paraisse « froid » ou remplace son équipe ?",
+    options: [
+      "Le robot remplace effectivement le personnel d'accueil",
+      "C'est un assistant qui absorbe les tâches pénibles et répétitives pour que l'équipe soit plus disponible pour les clients",
+      "Il vaut mieux éviter d'en parler à son équipe",
+    ],
+    correctIdx: 1,
+    explanation: "Un robot Korben soulage le personnel des trajets répétitifs et crée un effet de modernité immédiat chez les visiteurs.",
+  },
+  {
+    id: "q4",
+    serviceId: "social",
+    question: "Quelle est la bonne réponse si un prospect demande si les tournages sur site sont inclus en Social Media ?",
+    options: [
+      "Oui, un caméraman se déplace chaque semaine gratuitement",
+      "La stratégie, les visuels, la rédaction et l'animation sont inclus ; un tournage sur site est cadré à part sur demande",
+      "Non, on ne fait pas du tout de formats courts",
+    ],
+    correctIdx: 1,
+    explanation: "Transparence totale dès le départ : création digitale et montage inclus, déplacements/tournages cadrés séparément.",
+  },
+  {
+    id: "q5",
+    serviceId: "maintenance",
+    question: "Quand est-il le plus pertinent de proposer WebCare ?",
+    options: [
+      "Uniquement lorsque le site est déjà piraté",
+      "En complément naturel dès la mise en ligne ou pour tout dirigeant qui veut sécurité et réactivité sur ses mises à jour",
+      "Jamais sur les sites vitrines",
+    ],
+    correctIdx: 1,
+    explanation: "WebCare garantit la sérénité technique et la réactivité des mises à jour dès le premier jour.",
+  },
+];
+
+export function SchoolModule({ currentUser, theme, onSound }: SchoolModuleProps) {
   const [selectedSectorId, setSelectedSectorId] = useState(BUSINESS_SECTORS[0].id);
   const [selectedServiceId, setSelectedServiceId] = useState(XR_OFFICIAL_SERVICES[0].id);
   const [scriptTab, setScriptTab] = useState<"coldcall" | "setting" | "pitch" | "closing" | "objections">("coldcall");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [openObjIdx, setOpenObjIdx] = useState<number | null>(0);
-  const [viewMode, setViewMode] = useState<"playbooks" | "dojo" | "curriculum">("playbooks");
+  const [viewMode, setViewMode] = useState<"playbooks" | "dojo" | "quiz" | "curriculum">("playbooks");
 
-  // Personnalisation en direct des variables de trame
+  // Variables live
   const [prospectFirstName, setProspectFirstName] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [myFirstName, setMyFirstName] = useState(currentUser?.shortName || "");
 
-  // Dojo Simulateur d'Objections ludique
+  // Dojo
   const [dojoIndex, setDojoIndex] = useState(0);
   const [dojoRevealed, setDojoRevealed] = useState(false);
   const [dojoScore, setDojoScore] = useState(0);
+
+  // Quiz Certifiant
+  const [quizIdx, setQuizIdx] = useState(0);
+  const [selectedOpt, setSelectedOpt] = useState<number | null>(null);
+  const [quizGood, setQuizGood] = useState(0);
+  const [quizDone, setQuizDone] = useState(false);
 
   const storageKey = `xr_school_progress_${currentUser?.id || "guest"}`;
   const [completedChecks, setCompletedChecks] = useState<string[]>(() => {
@@ -91,116 +170,111 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
     setTimeout(() => setCopiedKey(null), 1800);
   };
 
-  // Objections combinées pour le Dojo interactif
   const currentDojoObj = playbook.objections[dojoIndex % playbook.objections.length];
 
-  const nextDojoChallenge = (mastered: boolean) => {
-    if (mastered) setDojoScore((s) => s + 1);
-    setDojoRevealed(false);
-    setDojoIndex((i) => i + 1);
+  const handleQuizAnswer = (optIdx: number) => {
+    if (selectedOpt !== null) return;
+    setSelectedOpt(optIdx);
+    if (optIdx === QUIZ_QUESTIONS[quizIdx].correctIdx) {
+      setQuizGood((g) => g + 1);
+    }
     onSound?.();
   };
 
+  const nextQuizQuestion = () => {
+    if (quizIdx + 1 >= QUIZ_QUESTIONS.length) {
+      setQuizDone(true);
+    } else {
+      setQuizIdx((i) => i + 1);
+      setSelectedOpt(null);
+    }
+  };
+
   return (
-    <div className="mt-6 space-y-6">
-      {/* Header XR School — Formation Pure (Zéro Argent) */}
-      <div className="p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-violet-500/10 to-transparent border border-white/[0.1] flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+    <div className="mt-6 space-y-5">
+      {/* Header XR School coloré & ludique */}
+      <div className={`p-5 rounded-3xl border ${theme.card} flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4`}>
         <div className="flex items-start gap-3.5">
-          <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-amber-400 to-violet-600 flex items-center justify-center text-black shrink-0 shadow-lg shadow-amber-500/20">
+          <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-amber-400 flex items-center justify-center text-white shrink-0 shadow-lg shadow-fuchsia-500/25">
             <GraduationCap className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white flex flex-wrap items-center gap-2">
-              XR School · Académie & Trames Commerciales
-              <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30">
+            <h2 className={`text-lg font-extrabold flex flex-wrap items-center gap-2 ${theme.textMain}`}>
+              XR School · Académie Ludique & Trames
+              <span className="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-violet-500/15 text-violet-600 dark:text-violet-300 border border-violet-500/30">
                 Formation Pure · 70 Trames (10 Secteurs × 7 Services)
               </span>
             </h2>
-            <p className="text-xs text-white/60 mt-0.5">
-              Espace 100 % pédagogique : choisissez un service et un secteur, personnalisez en direct et entraînez-vous au Dojo objections.
+            <p className={`text-xs mt-0.5 ${theme.textMuted}`}>
+              Maîtrisez nos 7 offres comme un jeu : trames personnalisées en direct, Dojo d'objections, Quiz certifiant et modules pas à pas.
             </p>
           </div>
         </div>
 
         {/* Navigation interne XR School */}
-        <div className="flex flex-wrap items-center bg-black/40 p-1 rounded-xl border border-white/[0.08] gap-1">
-          <button
-            onClick={() => setViewMode("playbooks")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              viewMode === "playbooks"
-                ? "bg-amber-400 text-black shadow-sm"
-                : "text-white/60 hover:text-white"
-            }`}
-          >
-            🎯 Trames Sectorielles
-          </button>
-          <button
-            onClick={() => setViewMode("dojo")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-              viewMode === "dojo"
-                ? "bg-amber-400 text-black shadow-sm"
-                : "text-white/60 hover:text-white"
-            }`}
-          >
-            <Swords className="w-3.5 h-3.5" />
-            Dojo Objections ({dojoScore} ⭐)
-          </button>
-          <button
-            onClick={() => setViewMode("curriculum")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-              viewMode === "curriculum"
-                ? "bg-amber-400 text-black shadow-sm"
-                : "text-white/60 hover:text-white"
-            }`}
-          >
-            <BookOpen className="w-3.5 h-3.5" />
-            Modules ({progressPercent}%)
-          </button>
+        <div className={`flex flex-wrap items-center p-1 rounded-2xl border gap-1 ${theme.subCard}`}>
+          {[
+            { id: "playbooks", label: "🎯 70 Trames" },
+            { id: "dojo", label: `⚔️ Dojo (${dojoScore} ⭐)` },
+            { id: "quiz", label: "🏅 Quiz Certifiant" },
+            { id: "curriculum", label: `📚 Modules (${progressPercent}%)` },
+          ].map((btn) => (
+            <button
+              key={btn.id}
+              onClick={() => {
+                setViewMode(btn.id as typeof viewMode);
+                onSound?.();
+              }}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                viewMode === btn.id ? theme.tabActive : theme.tabIdle
+              }`}
+            >
+              {btn.label}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* MODE 1 : TRAMES SECTORIELLES × SERVICES */}
+      {/* MODE 1 : TRAMES SECTORIELLES */}
       {viewMode === "playbooks" && (
         <div className="space-y-4">
-          {/* Barre de personnalisation en direct */}
-          <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.08] grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-            <div className="flex items-center gap-2 bg-black/30 border border-white/[0.08] rounded-xl px-3 py-2">
-              <User className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+          <div className={`p-3.5 rounded-2xl border ${theme.card} grid grid-cols-1 sm:grid-cols-3 gap-2.5`}>
+            <div className={`flex items-center gap-2 rounded-xl px-3 py-2 border ${theme.inputBg}`}>
+              <User className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
               <input
                 type="text"
                 value={prospectFirstName}
                 onChange={(e) => setProspectFirstName(e.target.value)}
-                placeholder="Prénom du prospect (optionnel)"
-                className="bg-transparent border-none outline-none text-xs text-white placeholder:text-white/35 w-full"
+                placeholder="Prénom du prospect (remplace [Prénom])"
+                className="bg-transparent border-none outline-none text-xs w-full"
               />
             </div>
-            <div className="flex items-center gap-2 bg-black/30 border border-white/[0.08] rounded-xl px-3 py-2">
-              <Sparkles className="w-3.5 h-3.5 text-violet-400 shrink-0" />
+            <div className={`flex items-center gap-2 rounded-xl px-3 py-2 border ${theme.inputBg}`}>
+              <Sparkles className="w-3.5 h-3.5 text-fuchsia-500 shrink-0" />
               <input
                 type="text"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
-                placeholder="Nom de l'entreprise cible (optionnel)"
-                className="bg-transparent border-none outline-none text-xs text-white placeholder:text-white/35 w-full"
+                placeholder="Nom entreprise cible"
+                className="bg-transparent border-none outline-none text-xs w-full"
               />
             </div>
-            <div className="flex items-center gap-2 bg-black/30 border border-white/[0.08] rounded-xl px-3 py-2">
-              <Phone className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+            <div className={`flex items-center gap-2 rounded-xl px-3 py-2 border ${theme.inputBg}`}>
+              <Phone className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
               <input
                 type="text"
                 value={myFirstName}
                 onChange={(e) => setMyFirstName(e.target.value)}
-                placeholder="Votre prénom (pour personnaliser)"
-                className="bg-transparent border-none outline-none text-xs text-white placeholder:text-white/35 w-full"
+                placeholder="Votre prénom"
+                className="bg-transparent border-none outline-none text-xs w-full"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Colonne gauche (4 cols) : Service + Secteur */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
             <div className="lg:col-span-4 space-y-4">
-              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] space-y-2.5">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+              <div className={`p-4 rounded-3xl border ${theme.card} space-y-2`}>
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-indigo-600 dark:text-amber-300 flex items-center gap-1.5">
                   <Target className="w-3.5 h-3.5" />
                   1. Choisir le Service XR Agency
                 </h3>
@@ -214,22 +288,21 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
                       }}
                       className={`w-full text-left px-3 py-2.5 rounded-xl border text-xs transition-all flex items-center justify-between ${
                         selectedServiceId === svc.id
-                          ? "bg-amber-400/15 border-amber-400/50 text-white font-bold shadow-sm"
-                          : "bg-white/[0.02] border-white/[0.06] text-white/70 hover:bg-white/[0.05] hover:text-white"
+                          ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white border-transparent font-bold shadow-md"
+                          : `${theme.subCard} ${theme.textMain} hover:border-indigo-300`
                       }`}
                     >
                       <span className="flex items-center gap-2 truncate">
                         <span>{svc.icon}</span>
                         <span className="truncate">{svc.name}</span>
                       </span>
-                      <span className="text-[10px] text-white/40 shrink-0 ml-2">{svc.category}</span>
                     </button>
                   ))}
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] space-y-2.5">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-violet-300">
+              <div className={`p-4 rounded-3xl border ${theme.card} space-y-2`}>
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-fuchsia-600 dark:text-violet-300">
                   2. Choisir le Secteur d'Activité
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-1.5 max-h-[380px] overflow-y-auto pr-1">
@@ -242,8 +315,8 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
                       }}
                       className={`w-full text-left px-3 py-2 rounded-xl border text-xs transition-all flex items-center gap-2 ${
                         selectedSectorId === sec.id
-                          ? "bg-violet-500/20 border-violet-400/50 text-white font-bold"
-                          : "bg-white/[0.02] border-white/[0.06] text-white/70 hover:bg-white/[0.05] hover:text-white"
+                          ? "bg-gradient-to-r from-fuchsia-600 to-pink-500 text-white border-transparent font-bold shadow-md"
+                          : `${theme.subCard} ${theme.textMain} hover:border-fuchsia-300`
                       }`}
                     >
                       <span>{sec.icon}</span>
@@ -254,36 +327,26 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
               </div>
             </div>
 
-            {/* Colonne droite (8 cols) : Trame Personnalisée Complète */}
             <div className="lg:col-span-8 space-y-4">
-              <div className="p-5 rounded-2xl bg-white/[0.04] border border-white/[0.1] space-y-3">
+              <div className={`p-5 rounded-3xl border ${theme.card} space-y-3`}>
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-2xl">{playbook.sector.icon}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">{playbook.sector.icon}</span>
                     <div>
-                      <h3 className="text-base font-bold text-white">
+                      <h3 className={`text-base font-extrabold ${theme.textMain}`}>
                         {playbook.sector.name} × {selectedService.icon} {selectedService.name}
                       </h3>
-                      <p className="text-[11px] text-white/50">
-                        Interlocuteur : <strong className="text-white/80">{playbook.sector.targetTitle}</strong> · Enjeu clé :{" "}
-                        <strong className="text-amber-300">{playbook.sector.valueMetric}</strong>
+                      <p className={`text-[11px] ${theme.textMuted}`}>
+                        Interlocuteur : <strong>{playbook.sector.targetTitle}</strong> · Enjeu :{" "}
+                        <strong className="text-indigo-600 dark:text-amber-300">{playbook.sector.valueMetric}</strong>
                       </p>
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {selectedService.plans.map((p) => (
-                      <span
-                        key={p.id}
-                        className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-black/40 border border-white/[0.08] text-white/80"
-                      >
-                        {p.label.split("(")[0].trim()}
-                      </span>
-                    ))}
-                  </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-amber-400/10 border border-amber-400/20 text-xs text-amber-100 leading-relaxed">
-                  <strong className="text-amber-300">🎯 Angle d'attaque :</strong> {playbook.angle}
+                <div className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/15 to-orange-500/10 border border-amber-400/30 text-xs leading-relaxed">
+                  <strong className="text-amber-700 dark:text-amber-300">🎯 Angle d'attaque :</strong>{" "}
+                  <span className={theme.textMain}>{playbook.angle}</span>
                 </div>
               </div>
 
@@ -298,10 +361,8 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
                   <button
                     key={t.id}
                     onClick={() => setScriptTab(t.id as typeof scriptTab)}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
-                      scriptTab === t.id
-                        ? "bg-white/[0.12] text-white border border-white/[0.16]"
-                        : "bg-white/[0.03] text-white/50 hover:text-white border border-white/[0.06]"
+                    className={`px-3.5 py-2 rounded-xl text-xs font-bold border transition-all ${
+                      scriptTab === t.id ? theme.tabActive : `${theme.card} ${theme.textMuted}`
                     }`}
                   >
                     {t.label}
@@ -312,36 +373,29 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
               {scriptTab === "coldcall" && (
                 <div className="space-y-4">
                   <ScriptBox
-                    title="1. Accroche 20 secondes (Casser la glace naturellement)"
+                    title="1. Accroche 20 secondes"
                     text={personalize(playbook.coldCall.opener)}
                     copied={copiedKey === "opener"}
                     onCopy={() => handleCopy(personalize(playbook.coldCall.opener), "opener")}
-                    accent="amber"
+                    theme={theme}
                   />
-
-                  <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] space-y-3">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-blue-300">
+                  <div className={`p-5 rounded-3xl border ${theme.card} space-y-2.5`}>
+                    <h4 className="text-xs font-extrabold uppercase tracking-wider text-indigo-600 dark:text-blue-300">
                       2. Questions de découverte & qualification
                     </h4>
-                    <ul className="space-y-2">
-                      {playbook.coldCall.qualification.map((q, i) => (
-                        <li
-                          key={i}
-                          className="p-3 rounded-xl bg-black/30 border border-white/[0.05] text-xs text-white/90 font-mono leading-relaxed"
-                        >
-                          <span className="text-blue-400 font-bold mr-2">Q{i + 1}.</span>
-                          {personalize(q)}
-                        </li>
-                      ))}
-                    </ul>
+                    {playbook.coldCall.qualification.map((q, i) => (
+                      <div key={i} className={`p-3 rounded-xl border text-xs font-mono leading-relaxed ${theme.subCard} ${theme.textMain}`}>
+                        <span className="text-indigo-500 font-extrabold mr-2">Q{i + 1}.</span>
+                        {personalize(q)}
+                      </div>
+                    ))}
                   </div>
-
                   <ScriptBox
-                    title="3. Pont vers le RDV ou l'envoi WhatsApp"
+                    title="3. Pont vers le RDV ou WhatsApp"
                     text={personalize(playbook.coldCall.bridge)}
                     copied={copiedKey === "bridge"}
                     onCopy={() => handleCopy(personalize(playbook.coldCall.bridge), "bridge")}
-                    accent="emerald"
+                    theme={theme}
                   />
                 </div>
               )}
@@ -349,11 +403,11 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
               {scriptTab === "setting" && (
                 <div className="space-y-4">
                   <ScriptBox
-                    title="Message 1 · Premier contact (WhatsApp / Instagram DM / LinkedIn / SMS)"
+                    title="Message 1 · Premier contact (WhatsApp / DM / SMS)"
                     text={personalize(playbook.setting.dm1)}
                     copied={copiedKey === "dm1"}
                     onCopy={() => handleCopy(personalize(playbook.setting.dm1), "dm1")}
-                    accent="emerald"
+                    theme={theme}
                     whatsappText={personalize(playbook.setting.dm1)}
                   />
                   <ScriptBox
@@ -361,7 +415,7 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
                     text={personalize(playbook.setting.followupJ2)}
                     copied={copiedKey === "j2"}
                     onCopy={() => handleCopy(personalize(playbook.setting.followupJ2), "j2")}
-                    accent="amber"
+                    theme={theme}
                     whatsappText={personalize(playbook.setting.followupJ2)}
                   />
                   <ScriptBox
@@ -369,7 +423,7 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
                     text={personalize(playbook.setting.followupJ5)}
                     copied={copiedKey === "j5"}
                     onCopy={() => handleCopy(personalize(playbook.setting.followupJ5), "j5")}
-                    accent="violet"
+                    theme={theme}
                     whatsappText={personalize(playbook.setting.followupJ5)}
                   />
                 </div>
@@ -382,11 +436,11 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
                     text={personalize(playbook.pitchDemo)}
                     copied={copiedKey === "pitch"}
                     onCopy={() => handleCopy(personalize(playbook.pitchDemo), "pitch")}
-                    accent="amber"
+                    theme={theme}
                   />
-                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-xs text-white/70 space-y-1.5">
-                    <p className="font-bold text-white">📦 Contenu concret du livrable XR Agency :</p>
-                    <p>{selectedService.deliverable}</p>
+                  <div className={`p-4 rounded-2xl border ${theme.card} text-xs space-y-1`}>
+                    <p className={`font-bold ${theme.textMain}`}>📦 Ce qui est inclus dans le livrable :</p>
+                    <p className={theme.textMuted}>{selectedService.deliverable}</p>
                   </div>
                 </div>
               )}
@@ -398,14 +452,14 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
                     text={personalize(playbook.closing.mainClose)}
                     copied={copiedKey === "close"}
                     onCopy={() => handleCopy(personalize(playbook.closing.mainClose), "close")}
-                    accent="emerald"
+                    theme={theme}
                   />
                   <ScriptBox
-                    title="Complément de valeur & fidélisation client"
+                    title="Complément de valeur & fidélisation"
                     text={personalize(playbook.closing.upsellLine)}
                     copied={copiedKey === "upsell"}
                     onCopy={() => handleCopy(personalize(playbook.closing.upsellLine), "upsell")}
-                    accent="violet"
+                    theme={theme}
                   />
                 </div>
               )}
@@ -413,39 +467,24 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
               {scriptTab === "objections" && (
                 <div className="space-y-3">
                   {playbook.objections.map((obj, idx) => (
-                    <div
-                      key={idx}
-                      className="rounded-2xl border border-white/[0.08] bg-white/[0.03] overflow-hidden"
-                    >
+                    <div key={idx} className={`rounded-2xl border overflow-hidden ${theme.card}`}>
                       <button
                         onClick={() => setOpenObjIdx(openObjIdx === idx ? null : idx)}
-                        className="w-full flex items-center justify-between p-4 text-left text-xs font-bold text-amber-300 hover:bg-white/[0.04]"
+                        className={`w-full flex items-center justify-between p-4 text-left text-xs font-extrabold text-indigo-600 dark:text-amber-300`}
                       >
                         <span>{obj.q}</span>
-                        <ChevronDown
-                          className={`w-4 h-4 text-white/50 transition-transform ${
-                            openObjIdx === idx ? "rotate-180" : ""
-                          }`}
-                        />
+                        <ChevronDown className={`w-4 h-4 transition-transform ${openObjIdx === idx ? "rotate-180" : ""}`} />
                       </button>
                       {openObjIdx === idx && (
-                        <div className="p-4 pt-0 space-y-3">
-                          <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-200 leading-relaxed font-mono">
+                        <div className="p-4 pt-0 space-y-2.5">
+                          <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-xs font-mono leading-relaxed text-emerald-800 dark:text-emerald-200">
                             {personalize(obj.a)}
                           </div>
                           <button
                             onClick={() => handleCopy(personalize(obj.a), `obj-${idx}`)}
-                            className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-white/60 hover:text-white"
+                            className={`inline-flex items-center gap-1.5 text-[11px] font-bold ${theme.textMuted}`}
                           >
-                            {copiedKey === `obj-${idx}` ? (
-                              <>
-                                <Check className="w-3.5 h-3.5 text-emerald-400" /> Copié !
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-3.5 h-3.5" /> Copier la réplique
-                              </>
-                            )}
+                            {copiedKey === `obj-${idx}` ? <><Check className="w-3.5 h-3.5 text-emerald-500" /> Copié !</> : <><Copy className="w-3.5 h-3.5" /> Copier</>}
                           </button>
                         </div>
                       )}
@@ -458,23 +497,21 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
         </div>
       )}
 
-      {/* MODE 2 : DOJO INTERACTIF D'ENTRAÎNEMENT AUX OBJECTIONS */}
+      {/* MODE 2 : DOJO INTERACTIF */}
       {viewMode === "dojo" && (
-        <div className="max-w-3xl mx-auto space-y-5">
-          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-2">
+        <div className="max-w-3xl mx-auto space-y-4">
+          <div className={`p-4 rounded-2xl border ${theme.card} flex flex-wrap items-center justify-between gap-3`}>
+            <div className="flex flex-wrap gap-2">
               <select
                 value={selectedServiceId}
                 onChange={(e) => {
                   setSelectedServiceId(e.target.value);
                   setDojoRevealed(false);
                 }}
-                className="bg-[#121620] border border-white/[0.1] rounded-xl px-3 py-2 text-xs text-white"
+                className={`rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`}
               >
                 {XR_OFFICIAL_SERVICES.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.icon} {s.name}
-                  </option>
+                  <option key={s.id} value={s.id}>{s.icon} {s.name}</option>
                 ))}
               </select>
               <select
@@ -483,78 +520,69 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
                   setSelectedSectorId(e.target.value);
                   setDojoRevealed(false);
                 }}
-                className="bg-[#121620] border border-white/[0.1] rounded-xl px-3 py-2 text-xs text-white"
+                className={`rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`}
               >
                 {BUSINESS_SECTORS.map((sec) => (
-                  <option key={sec.id} value={sec.id}>
-                    {sec.icon} {sec.name}
-                  </option>
+                  <option key={sec.id} value={sec.id}>{sec.icon} {sec.name}</option>
                 ))}
               </select>
             </div>
-
             <button
               onClick={() => {
-                const randSvc = XR_OFFICIAL_SERVICES[Math.floor(Math.random() * XR_OFFICIAL_SERVICES.length)];
-                const randSec = BUSINESS_SECTORS[Math.floor(Math.random() * BUSINESS_SECTORS.length)];
-                setSelectedServiceId(randSvc.id);
-                setSelectedSectorId(randSec.id);
+                setSelectedServiceId(XR_OFFICIAL_SERVICES[Math.floor(Math.random() * XR_OFFICIAL_SERVICES.length)].id);
+                setSelectedSectorId(BUSINESS_SECTORS[Math.floor(Math.random() * BUSINESS_SECTORS.length)].id);
                 setDojoIndex((i) => i + 1);
                 setDojoRevealed(false);
                 onSound?.();
               }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-violet-500/20 hover:bg-violet-500/30 border border-violet-400/30 text-xs font-bold text-violet-200"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-fuchsia-600 to-violet-600 text-white text-xs font-bold shadow-md"
             >
-              <Shuffle className="w-3.5 h-3.5" /> Scénario Aléatoire
+              <Shuffle className="w-3.5 h-3.5" /> Combat Aléatoire
             </button>
           </div>
 
-          <div className="p-6 rounded-3xl bg-gradient-to-b from-white/[0.05] to-white/[0.02] border border-white/[0.1] space-y-5 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/15 text-amber-300 text-xs font-bold border border-amber-400/30">
+          <div className={`p-7 rounded-3xl border ${theme.card} text-center space-y-5`}>
+            <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-500/15 text-indigo-600 dark:text-amber-300 text-xs font-extrabold">
+              <Swords className="w-3.5 h-3.5" />
               {playbook.sector.icon} {playbook.sector.name} · {selectedService.icon} {selectedService.shortName}
-            </div>
-
-            <div className="space-y-2">
-              <p className="text-xs uppercase tracking-wider text-white/40 font-semibold">
-                Le prospect ({playbook.sector.targetTitle}) vous répond :
-              </p>
-              <h3 className="text-xl sm:text-2xl font-extrabold text-white">
-                {currentDojoObj.q}
-              </h3>
-            </div>
+            </span>
+            <h3 className={`text-xl sm:text-2xl font-black ${theme.textMain}`}>{currentDojoObj.q}</h3>
 
             {!dojoRevealed ? (
-              <div className="pt-2 space-y-3">
-                <p className="text-xs text-white/50">
-                  Formulez votre réponse à voix haute (calme, empathique, orientée résultat), puis vérifiez !
-                </p>
-                <button
-                  onClick={() => {
-                    setDojoRevealed(true);
-                    onSound?.();
-                  }}
-                  className="px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs shadow-lg"
-                >
-                  Révéler la réponse idéale XR Agency
-                </button>
-              </div>
+              <button
+                onClick={() => {
+                  setDojoRevealed(true);
+                  onSound?.();
+                }}
+                className="px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 text-white font-extrabold text-xs shadow-lg"
+              >
+                Révéler la parade XR Agency
+              </button>
             ) : (
               <div className="space-y-4 text-left">
-                <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 text-sm text-emerald-200 font-mono leading-relaxed">
+                <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-sm font-mono leading-relaxed text-emerald-800 dark:text-emerald-200">
                   {personalize(currentDojoObj.a)}
                 </div>
-                <div className="flex items-center justify-center gap-3">
+                <div className="flex justify-center gap-3">
                   <button
-                    onClick={() => nextDojoChallenge(false)}
-                    className="px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-xs font-semibold text-white/75"
+                    onClick={() => {
+                      setDojoRevealed(false);
+                      setDojoIndex((i) => i + 1);
+                    }}
+                    className={`px-4 py-2.5 rounded-xl text-xs font-bold border ${theme.subCard} ${theme.textMain}`}
                   >
-                    À retravailler → Suivante
+                    À revoir → Suivante
                   </button>
                   <button
-                    onClick={() => nextDojoChallenge(true)}
-                    className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-bold shadow-lg"
+                    onClick={() => {
+                      setDojoScore((s) => s + 1);
+                      setDojoRevealed(false);
+                      setDojoIndex((i) => i + 1);
+                      onSound?.();
+                    }}
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs font-extrabold shadow-md"
                   >
-                    ⭐ Maîtrisé ! (+1 étoile)
+                    ⭐ Maîtrisé ! (+1 Étoile)
                   </button>
                 </div>
               </div>
@@ -563,21 +591,101 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
         </div>
       )}
 
-      {/* MODE 3 : PARCOURS DE FORMATION PURE */}
+      {/* MODE 3 : QUIZ CERTIFIANT PAR SERVICE */}
+      {viewMode === "quiz" && (
+        <div className={`max-w-2xl mx-auto p-6 rounded-3xl border ${theme.card} space-y-5`}>
+          {quizDone ? (
+            <div className="text-center space-y-4 py-4">
+              <div className="inline-flex h-16 w-16 rounded-3xl bg-gradient-to-br from-amber-400 to-emerald-500 items-center justify-center text-white shadow-xl">
+                <Award className="w-8 h-8" />
+              </div>
+              <h3 className={`text-2xl font-black ${theme.textMain}`}>
+                Score Certification : {quizGood} / {QUIZ_QUESTIONS.length}
+              </h3>
+              <p className={`text-xs ${theme.textMuted}`}>
+                {quizGood >= 4
+                  ? "🎉 Bravo ! Vous débloquez le Badge Certifié Méthode XR Agency !"
+                  : "Continuez à réviser les trames sectorielles pour atteindre 4/5 !"}
+              </p>
+              <button
+                onClick={() => {
+                  setQuizIdx(0);
+                  setSelectedOpt(null);
+                  setQuizGood(0);
+                  setQuizDone(false);
+                }}
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-xs"
+              >
+                Rejouer le Quiz
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-extrabold text-indigo-600 dark:text-amber-300">
+                  Question {quizIdx + 1} / {QUIZ_QUESTIONS.length}
+                </span>
+                <span className="font-bold text-emerald-600 dark:text-emerald-300">
+                  Score : {quizGood} pt(s)
+                </span>
+              </div>
+              <h3 className={`text-base font-extrabold ${theme.textMain}`}>
+                {QUIZ_QUESTIONS[quizIdx].question}
+              </h3>
+              <div className="space-y-2.5">
+                {QUIZ_QUESTIONS[quizIdx].options.map((opt, idx) => {
+                  const isCorrect = idx === QUIZ_QUESTIONS[quizIdx].correctIdx;
+                  const isPicked = selectedOpt === idx;
+                  let style = `${theme.subCard} ${theme.textMain} hover:border-indigo-400`;
+                  if (selectedOpt !== null) {
+                    if (isCorrect) style = "bg-emerald-500/15 border-emerald-500 text-emerald-700 dark:text-emerald-200 font-bold";
+                    else if (isPicked) style = "bg-rose-500/15 border-rose-500 text-rose-700 dark:text-rose-200";
+                  }
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => handleQuizAnswer(idx)}
+                      className={`w-full text-left p-3.5 rounded-2xl border text-xs transition-all ${style}`}
+                    >
+                      {opt}
+                    </button>
+                  );
+                })}
+              </div>
+              {selectedOpt !== null && (
+                <div className="space-y-3 pt-2">
+                  <p className={`p-3 rounded-xl text-xs ${theme.subCard} ${theme.textMuted}`}>
+                    💡 {QUIZ_QUESTIONS[quizIdx].explanation}
+                  </p>
+                  <button
+                    onClick={nextQuizQuestion}
+                    className="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-xs"
+                  >
+                    {quizIdx + 1 >= QUIZ_QUESTIONS.length ? "Voir mon Badge Certification" : "Question suivante →"}
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+
+      {/* MODE 4 : MODULES DE FORMATION */}
       {viewMode === "curriculum" && (
         <div className="space-y-4">
-          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
+          <div className={`p-4 rounded-2xl border ${theme.card}`}>
             <div className="flex items-center justify-between text-xs mb-2">
-              <span className="font-bold text-white">
-                Progression Formation XR School {currentUser ? `— ${currentUser.name}` : ""}
+              <span className={`font-extrabold flex items-center gap-1.5 ${theme.textMain}`}>
+                <BookOpen className="w-4 h-4 text-indigo-500" />
+                Progression Formation XR School
               </span>
-              <span className="font-bold text-emerald-400">
-                {completedChecks.length} / {totalChecklistItems} compétences validées ({progressPercent}%)
+              <span className="font-extrabold text-emerald-600 dark:text-emerald-300">
+                {completedChecks.length} / {totalChecklistItems} compétences ({progressPercent}%)
               </span>
             </div>
-            <div className="h-2.5 w-full bg-white/[0.06] rounded-full overflow-hidden">
+            <div className="h-3 w-full bg-slate-200/70 dark:bg-white/10 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-amber-400 to-emerald-400 transition-all duration-500"
+                className="h-full bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-emerald-400 transition-all duration-500 rounded-full"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -585,21 +693,18 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {XR_SCHOOL_CURRICULUM.map((lesson) => (
-              <div
-                key={lesson.id}
-                className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] space-y-3"
-              >
+              <div key={lesson.id} className={`p-5 rounded-3xl border ${theme.card} space-y-3`}>
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600 dark:text-amber-300">
                     {lesson.phase}
                   </span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/[0.06] text-white/60">
+                  <span className={`text-[10px] px-2.5 py-0.5 rounded-full border ${theme.subCard} ${theme.textMuted}`}>
                     ⏱️ {lesson.duration}
                   </span>
                 </div>
-                <h4 className="text-sm font-bold text-white">{lesson.title}</h4>
-                <p className="text-xs text-white/60 leading-relaxed">{lesson.summary}</p>
-                <div className="pt-2 space-y-2 border-t border-white/[0.06]">
+                <h4 className={`text-sm font-extrabold ${theme.textMain}`}>{lesson.title}</h4>
+                <p className={`text-xs leading-relaxed ${theme.textMuted}`}>{lesson.summary}</p>
+                <div className="pt-2 space-y-2 border-t border-slate-200/50 dark:border-white/10">
                   {lesson.checklist.map((item, idx) => {
                     const key = `${lesson.id}-${idx}`;
                     const done = completedChecks.includes(key);
@@ -609,15 +714,11 @@ export function SchoolModule({ currentUser, onSound }: SchoolModuleProps) {
                         onClick={() => toggleCheck(key)}
                         className={`w-full text-left p-2.5 rounded-xl border text-xs flex items-start gap-2.5 transition-all ${
                           done
-                            ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-200 line-through decoration-emerald-400/60"
-                            : "bg-black/20 border-white/[0.06] text-white/80 hover:bg-white/[0.05]"
+                            ? "bg-emerald-500/15 border-emerald-500/35 text-emerald-700 dark:text-emerald-200 line-through"
+                            : `${theme.subCard} ${theme.textMain}`
                         }`}
                       >
-                        <CheckCircle2
-                          className={`w-4 h-4 shrink-0 mt-0.5 ${
-                            done ? "text-emerald-400" : "text-white/25"
-                          }`}
-                        />
+                        <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${done ? "text-emerald-500" : "text-slate-400"}`} />
                         <span>{item}</span>
                       </button>
                     );
@@ -637,55 +738,42 @@ function ScriptBox({
   text,
   copied,
   onCopy,
-  accent,
+  theme,
   whatsappText,
 }: {
   title: string;
   text: string;
   copied: boolean;
   onCopy: () => void;
-  accent: "amber" | "emerald" | "violet";
+  theme: CrmThemeTokens;
   whatsappText?: string;
 }) {
-  const accentColor =
-    accent === "emerald"
-      ? "text-emerald-300"
-      : accent === "violet"
-      ? "text-violet-300"
-      : "text-amber-300";
-
   return (
-    <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.08] space-y-3">
+    <div className={`p-5 rounded-3xl border ${theme.card} space-y-3`}>
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h4 className={`text-xs font-bold uppercase tracking-wider ${accentColor}`}>{title}</h4>
+        <h4 className="text-xs font-extrabold uppercase tracking-wider text-indigo-600 dark:text-amber-300">
+          {title}
+        </h4>
         <div className="flex items-center gap-1.5">
           {whatsappText && (
             <a
               href={`https://wa.me/?text=${encodeURIComponent(whatsappText)}`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-[11px] font-semibold text-emerald-300 border border-emerald-500/20"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-[11px] font-bold text-emerald-700 dark:text-emerald-300 border border-emerald-500/25"
             >
               <MessageSquare className="w-3 h-3" /> WhatsApp
             </a>
           )}
           <button
             onClick={onCopy}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-[11px] font-semibold text-white/80 transition-all"
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold border ${theme.subCard} ${theme.textMain}`}
           >
-            {copied ? (
-              <>
-                <Check className="w-3.5 h-3.5 text-emerald-400" /> Copié !
-              </>
-            ) : (
-              <>
-                <Copy className="w-3.5 h-3.5" /> Copier
-              </>
-            )}
+            {copied ? <><Check className="w-3.5 h-3.5 text-emerald-500" /> Copié !</> : <><Copy className="w-3.5 h-3.5" /> Copier</>}
           </button>
         </div>
       </div>
-      <div className="p-4 rounded-xl bg-black/40 border border-white/[0.06] text-xs sm:text-sm text-white/90 font-mono leading-relaxed whitespace-pre-line">
+      <div className={`p-4 rounded-2xl border text-xs sm:text-sm font-mono leading-relaxed whitespace-pre-line ${theme.subCard} ${theme.textMain}`}>
         {text}
       </div>
     </div>
