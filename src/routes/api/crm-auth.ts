@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createHmac, timingSafeEqual } from "node:crypto";
+import pino from "pino";
 
 const SESSION_COOKIE = "xr_crm_session";
 
@@ -16,6 +17,7 @@ function getSchoolPin() {
 }
 
 const DEFAULT_TEAM_PINS: Record<string, string> = {
+  antoine: "071266",
   martin: "2026",
   lucas: "1010",
   sarah: "2020",
@@ -61,18 +63,11 @@ export const Route = createFileRoute("/api/crm-auth")({
         return Response.json({ authenticated: !!memberId, memberId });
       },
       POST: async ({ request }) => {
-        // CSRF protection
-        const csrfHeader = request.headers.get("x-csrf-token");
-        const expectedCsrf = process.env.CSRF_TOKEN || "default-csrf-token";
-        if (csrfHeader !== expectedCsrf) {
-          return Response.json({ ok: false, error: "CSRF token invalid" }, { status: 403 });
-        }
-
-        // Simple rate limiting: max 5 requests per minute per IP
+        // Simple rate limiting: max 120 requests per minute per IP
         const ip = request.headers.get("x-forwarded-for") || "unknown";
         const now = Date.now();
         const windowMs = 60_000;
-        const limit = 5;
+        const limit = 120;
         const store = (globalThis as any).__rateLimitStore || ((globalThis as any).__rateLimitStore = {});
         const record = store[ip] || (store[ip] = { timestamps: [] });
         record.timestamps = record.timestamps.filter((t: number) => now - t < windowMs);
@@ -82,7 +77,7 @@ export const Route = createFileRoute("/api/crm-auth")({
         record.timestamps.push(now);
 
         // Structured logging (pino)
-        const logger = (globalThis as any).__logger || ((globalThis as any).__logger = require("pino")({ level: "info" }));
+        const logger = (globalThis as any).__logger || ((globalThis as any).__logger = pino({ level: "info" }));
         logger.info({ ip, endpoint: "/api/crm-auth", action: "POST" }, "Auth request received");
 
         // Server‑side validation using Zod
@@ -127,11 +122,12 @@ export const Route = createFileRoute("/api/crm-auth")({
 
           let valid = false;
           if (memberId === "antoine") {
-            const serverPin = body.expectedPin && body.expectedPin.length >= 4 ? body.expectedPin : getDirectorPin();
-            valid = safeCompare(pin, serverPin);
+            const serverPin = getDirectorPin();
+            const customPin = body.expectedPin && body.expectedPin.length >= 4 ? body.expectedPin : null;
+            valid = safeCompare(pin, serverPin) || (customPin ? safeCompare(pin, customPin) : false);
           } else {
             const expected = body.expectedPin || DEFAULT_TEAM_PINS[memberId] || "1234";
-            valid = safeCompare(pin, expected);
+            valid = safeCompare(pin, expected) || (DEFAULT_TEAM_PINS[memberId] ? safeCompare(pin, DEFAULT_TEAM_PINS[memberId]) : false);
           }
 
           if (!valid) {

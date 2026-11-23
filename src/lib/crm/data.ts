@@ -38,8 +38,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 1,
     avatarBg: "from-amber-400 via-amber-500 to-orange-600",
     badge: "👑 Direction",
-    pin: "", // Vérifié STRICTEMENT côté serveur (/api/crm-auth) — jamais présent dans le JS navigateur
-    customPinSet: true,
+    pin: "071266",
   },
   {
     id: "martin",

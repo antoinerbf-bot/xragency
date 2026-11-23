@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import pino from "pino";
 
 function text(html: string, re: RegExp) {
   return html.match(re)?.[1]?.replace(/\s+/g, " ").trim() || "";
@@ -56,7 +57,7 @@ export const Route = createFileRoute("/api/audit")({
         record.timestamps.push(now);
 
         // Structured logging
-        const logger = (globalThis as any).__logger || ((globalThis as any).__logger = require("pino")({ level: "info" }));
+        const logger = (globalThis as any).__logger || ((globalThis as any).__logger = pino({ level: "info" }));
         logger.info({ ip, endpoint: "/api/audit", action: "POST" }, "Audit request received");
 
         try {
