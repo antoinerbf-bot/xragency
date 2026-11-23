@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
 import {
   ArrowDown,
   ArrowRight,
   Bot,
   MapPinned,
-  Play,
   Search,
   Sparkles,
 } from "lucide-react";
@@ -12,52 +10,6 @@ import { LANGS, useLang } from "@/lib/i18n";
 import { XR_HERO_PHOTO, XR_PHOTOS } from "@/lib/photography";
 import { UI } from "@/lib/copy";
 import { Parallax, Reveal } from "./primitives";
-
-function useCountUp(target: number, duration = 1100, delay = 220) {
-  const [value, setValue] = useState(target);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    setValue(0);
-    const timeout = window.setTimeout(() => {
-      const start = performance.now();
-      const tick = (now: number) => {
-        const progress = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        setValue(Math.round(target * eased));
-        if (progress < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    }, delay);
-
-    return () => window.clearTimeout(timeout);
-  }, [target, duration, delay]);
-
-  return value;
-}
-
-function Stat({
-  value,
-  suffix = "",
-  label,
-}: {
-  value: number;
-  suffix?: string;
-  label: string;
-}) {
-  return (
-    <div className="border-l border-white/15 pl-4 first:border-l-0 first:pl-0 sm:pl-6">
-      <strong className="display-serif block text-3xl tracking-[-.045em] text-white sm:text-4xl">
-        {useCountUp(value)}
-        {suffix}
-      </strong>
-      <span className="mt-1 block label-mono text-[6px] tracking-[.18em] text-white/55 sm:text-[7px]">
-        {label}
-      </span>
-    </div>
-  );
-}
 
 function DeviceStage() {
   return (
@@ -204,89 +156,16 @@ export function Hero() {
                 </p>
               </Reveal>
 
-              {/* ── BANNIÈRE OFFRE 400 € OFFERTS · VISUEL IMMÉDIAT ── */}
-              <Reveal delay={190}>
-                <div className="mt-7 overflow-hidden rounded-2xl border border-white/20 bg-gradient-to-b from-white/[0.10] to-white/[0.03] p-5 backdrop-blur-2xl shadow-[0_25px_60px_-20px_rgba(0,0,0,0.9)] sm:p-6">
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3 mb-4">
-                    <div className="flex items-center gap-2">
-                      <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                      <span className="label-mono text-[7px] font-bold tracking-[0.22em] text-white/90 uppercase">
-                        Accès Découverte · 400 € de valeur offerte
-                      </span>
-                    </div>
-                    <span className="label-mono rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-[8px] font-bold tracking-wider text-emerald-300">
-                      0 € DÉPENSÉ · SANS ENGAGEMENT
-                    </span>
-                  </div>
+              {
 
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {/* Carte 1 : Maquette */}
-                    <a
-                      href="#offre-exclusive"
-                      className="group flex flex-col justify-between overflow-hidden rounded-xl border border-white/12 bg-black/60 p-3.5 transition-all duration-300 hover:border-white/30 hover:bg-black/80"
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className="relative h-12 w-14 shrink-0 overflow-hidden rounded-lg border border-white/15">
-                          <img
-                            src={XR_PHOTOS.websites}
-                            alt="Aperçu maquette"
-                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          />
-                          <div className="absolute inset-0 bg-black/30" />
-                          <span className="absolute bottom-0.5 right-1 label-mono text-[5px] text-white/80 font-bold">FIGMA</span>
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-1.5">
-                            <span className="label-mono text-[6px] text-white/50">01</span>
-                            <strong className="block text-[11px] font-semibold text-white">Maquette de site sur-mesure</strong>
-                          </div>
-                          <span className="mt-0.5 block text-[9px] leading-4 text-white/60">
-                            Design complet de votre page d'accueil adapté à votre secteur.
-                          </span>
-                        </div>
-                      </div>
-                      <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2 text-[8px]">
-                        <span className="label-mono text-white/40 line-through">200 €</span>
-                        <span className="font-semibold text-emerald-400 group-hover:underline">Voir l'exemple →</span>
-                      </div>
-                    </a>
-
-                    {/* Carte 2 : Audit */}
-                    <a
-                      href="#audit"
-                      className="group flex flex-col justify-between overflow-hidden rounded-xl border border-white/12 bg-black/60 p-3.5 transition-all duration-300 hover:border-white/30 hover:bg-black/80"
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className="grid h-12 w-14 shrink-0 place-items-center rounded-lg border border-white/15 bg-white/5 text-center">
-                          <span className="text-xs font-black text-white">96%</span>
-                          <span className="label-mono text-[5px] text-emerald-400">SCORE</span>
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-1.5">
-                            <span className="label-mono text-[6px] text-white/50">02</span>
-                            <strong className="block text-[11px] font-semibold text-white">Audit digital & SEO complet</strong>
-                          </div>
-                          <span className="mt-0.5 block text-[9px] leading-4 text-white/60">
-                            Analyse concrète de votre vitesse, Google Maps & conversion.
-                          </span>
-                        </div>
-                      </div>
-                      <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2 text-[8px]">
-                        <span className="label-mono text-white/40 line-through">200 €</span>
-                        <span className="font-semibold text-emerald-400 group-hover:underline">Lancer le scan →</span>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </Reveal>
 
               <Reveal delay={240}>
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <a
-                    href="#audit"
+                    href="#quote"
                     className="group inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full bg-white px-8 py-4 text-[10px] font-bold uppercase tracking-[.15em] text-black shadow-[0_18px_55px_-18px_rgba(255,255,255,.5)] transition duration-300 hover:-translate-y-1 hover:bg-neutral-100 hover:shadow-[0_24px_65px_-18px_rgba(255,255,255,.6)]"
                   >
-                    Obtenir mes 400 € offerts
+                    Construire mon projet
                     <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </a>
                   <a
@@ -307,9 +186,16 @@ export function Hero() {
 
               <Reveal delay={290}>
                 <div className="mt-9 grid max-w-2xl grid-cols-3 gap-5 border-y border-white/12 py-5 sm:mt-10 sm:gap-8">
-                  <Stat value={500} suffix="+" label={t(UI.statProjects)} />
-                  <Stat value={98} suffix="%" label={t(UI.statSatisfaction)} />
-                  <Stat value={8} suffix="+" label={t(UI.statYears)} />
+                  {[
+                    ["01", "STRATÉGIE"],
+                    ["02", "CRÉATION"],
+                    ["03", "DÉPLOIEMENT"],
+                  ].map(([number, label]) => (
+                    <div key={number} className="border-l border-white/15 pl-4 first:border-l-0 first:pl-0 sm:pl-6">
+                      <strong className="display-serif block text-3xl tracking-[-.045em] text-white sm:text-4xl">{number}</strong>
+                      <span className="mt-1 block label-mono text-[6px] tracking-[.18em] text-white/55 sm:text-[7px]">{label}</span>
+                    </div>
+                  ))}
                 </div>
               </Reveal>
 
