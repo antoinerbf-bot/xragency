@@ -156,9 +156,6 @@ export function Hero() {
                 </p>
               </Reveal>
 
-              {
-
-
               <Reveal delay={240}>
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <a
