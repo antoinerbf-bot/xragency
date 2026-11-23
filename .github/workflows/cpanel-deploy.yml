@@ -1,0 +1,57 @@
+name: Deploy XR Agency to cPanel
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_production:
+        description: "Type DEPLOY to confirm production deployment"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: ${{ inputs.confirm_production == 'DEPLOY' }}
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 30
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: 109.234.166.149
+          username: puzo3938
+          key: ${{ secrets.CPANEL_SSH_PRIVATE_KEY }}
+          fingerprint: ${{ secrets.CPANEL_SSH_FINGERPRINT }}
+          port: 22
+          command_timeout: 25m
+          script: |
+            set -eu
+            APPROOT="$HOME/repositories/xragency"
+            DEPLOYPATH="/home/puzo3938/public_html"
+            test -d "$APPROOT/.git"
+            cd "$APPROOT"
+            git fetch origin main
+            git checkout main
+            git reset --hard origin/main
+            NODE_MAJOR="$(node -p 'process.versions.node.split(".")[0]')"
+            test "$NODE_MAJOR" -ge 20
+            npm install --include=dev --no-package-lock --legacy-peer-deps --no-audit --no-fund
+            NITRO_PRESET=node_server npm run build
+            test -f "$APPROOT/.output/server/index.mjs"
+            test -d "$APPROOT/.output/public"
+            mkdir -p "$HOME/tmp" "$APPROOT/tmp" "$DEPLOYPATH"
+            STAGING="$HOME/.output.next"
+            rm -rf "$STAGING"
+            cp -R "$APPROOT/.output" "$STAGING"
+            test -f "$STAGING/server/index.mjs"
+            if [ -d "$HOME/.output" ]; then
+              rm -rf "$HOME/.output.previous"
+              mv "$HOME/.output" "$HOME/.output.previous"
+            fi
+            mv "$STAGING" "$HOME/.output"
+            cp -f "$APPROOT/app.js" "$HOME/app.js"
+            cp -R "$APPROOT/.output/public/." "$DEPLOYPATH/"
+            touch "$HOME/tmp/restart.txt" "$APPROOT/tmp/restart.txt"
