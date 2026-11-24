@@ -1754,9 +1754,9 @@ export function QuoteConfiguratorCompact() {
                       className="mt-2.5 w-full accent-[#171613] cursor-pointer"
                     />
                     <div className="mt-1 flex justify-between text-[10px] font-mono text-[#777]">
-                      <span>30 (Démarrage)</span>
-                      <span>300 (Activité soutenue)</span>
-                      <span>1 200+ (Forte affluence)</span>
+                      <span>30 <span className="hidden sm:inline">(Démarrage)</span></span>
+                      <span>300 <span className="hidden sm:inline">(Activité soutenue)</span></span>
+                      <span>1 200+ <span className="hidden sm:inline">(Forte affluence)</span></span>
                     </div>
                   </div>
                 </div>

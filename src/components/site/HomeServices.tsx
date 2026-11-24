@@ -288,8 +288,8 @@ export function HomeServices() {
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono rounded-full border border-[#E5C696]/30 bg-black/50 px-3 py-1 text-xs font-semibold text-[#E5C696] backdrop-blur-md">
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="font-mono rounded-full border border-[#E5C696]/30 bg-black/50 px-3 py-1 text-xs font-semibold text-[#E5C696] backdrop-blur-md whitespace-nowrap">
                           Dès {item.id === "maps" ? "999 €" : price(service.fromEur)}
                           {service.fromPeriod === "month"
                             ? " / mois"

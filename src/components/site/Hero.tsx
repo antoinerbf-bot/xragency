@@ -382,7 +382,7 @@ export function Hero() {
         </div>
 
         {/* Bottom Bar: 4 Pillars */}
-        <div className="flex flex-col justify-between gap-6 border-t border-white/20 pt-6 sm:flex-row sm:items-center">
+        <div className="flex flex-col justify-between gap-6 border-t border-white/20 pt-6 pb-14 sm:pb-0 sm:flex-row sm:items-center">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-8">
             {PILLARS.map((pillar) => {
               const Icon = pillar.icon;

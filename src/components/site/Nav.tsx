@@ -329,7 +329,7 @@ export function Nav() {
             aria-label="XRAGENCY — Accueil"
             className="group inline-flex items-center py-1 transition-opacity duration-200 hover:opacity-80"
           >
-            <span className="font-sans text-[13px] sm:text-[14px] font-black tracking-[0.18em] uppercase text-black select-none">
+            <span className="font-sans text-[13px] sm:text-[14px] font-extrabold tracking-[0.20em] uppercase text-black select-none">
               XRAGENCY
             </span>
           </Link>

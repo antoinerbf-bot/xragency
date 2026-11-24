@@ -1888,44 +1888,44 @@ export function MapsDominationStudioPage() {
                 </div>
               </div>
 
-              {/* OFFRE 02 : GESTION & ANIMATION MENSUELLE (99 € / MOIS) */}
+              {/* OFFRE 02 : GESTION ANNUELLE (500 € / AN) */}
               <div className="relative flex flex-col justify-between rounded-3xl border border-[#16A34A]/30 bg-white p-7 shadow-lg transition-all duration-300 hover:border-[#16A34A] hover:shadow-xl sm:p-8">
                 <div>
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#EBEBE6] pb-4">
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-[#16A34A]/10 px-3 py-1 font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#16A34A]">
                       <Star className="h-3.5 w-3.5 fill-[#16A34A] text-[#16A34A]" />
-                      {t(l("OFFRE 02 · GESTION MENSUELLE ACTIVE", "PLAN 02 · ACTIVE MONTHLY MANAGEMENT", "GÓI 02 · QUẢN TRỊ HẰNG THÁNG", "العرض 02 · إدارة شهرية نشطة", "ТАРИФ 02 · ЕЖЕМЕСЯЧНОЕ ВЕДЕНИЕ"))}
+                      {t(l("OFFRE 02 · PILOTAGE COMPLET 12 MOIS", "PLAN 02 · FULL 12-MONTH MANAGEMENT", "GÓI 02 · QUẢN TRỊ TOÀN DIỆN 12 THÁNG", "العرض 02 · إدارة سنوية شاملة 12 شهرًا", "ТАРИФ 02 · ПОЛНОЕ ГОДОВОЕ ВЕДЕНИЕ 12 МЕСЯЦЕВ"))}
                     </span>
                     <span className="font-mono text-[11px] font-bold text-[#16A34A]">
-                      {t(l("Sans engagement long", "No long-term lock-in", "Linh hoạt hằng tháng", "بدون التزام طويل", "Без долгосрочных обязательств"))}
+                      {t(l("Facturation annuelle unique · 0 abonnement", "Single annual billing · zero monthly subscription", "Thanh toán theo năm · không phí tháng", "دفع سنوي واحد · بدون اشتراك شهري", "Разовая годовая оплата · без ежемесячных списаний"))}
                     </span>
                   </div>
 
                   <h3 className="mt-4 font-serif text-2xl font-medium text-[#12110E] sm:text-3xl">
-                    {t(l("Gestion & Animation Mensuelle Google Business", "Monthly Google Business Management & Updates", "Quản trị & Cập nhật Google Business Hằng tháng", "إدارة ونشر وتحديث شهري لملف خرائط Google", "Ежемесячное ведение профиля Google Business"))}
+                    {t(l("Gestion Annuelle de Fiche Google Maps", "Annual Google Maps Profile Management", "Quản lý Hồ sơ Google Maps Hàng năm", "إدارة سنوية شاملة لملف خرائط Google", "Годовое ведение профиля Google Maps"))}
                   </h3>
 
                   <div className="mt-3 flex items-baseline gap-2">
                     <span className="text-xs font-semibold uppercase tracking-wider text-[#52504A]">
-                      {t(l("Dès", "From", "Từ", "ابتداءً من", "От"))}
+                      {t(l("Tarif fixe", "Fixed rate", "Giá trọn gói", "سعر ثابت", "Фиксированная цена"))}
                     </span>
                     <span className="font-serif text-4xl font-bold text-[#12110E] sm:text-5xl">
-                      {price(99)}
+                      {price(500)}
                     </span>
-                    <span className="font-mono text-xs text-[#52504A]">{perMonth}</span>
+                    <span className="font-mono text-xs text-[#52504A]"> / an</span>
                     <span className="rounded-full bg-[#F0FDF4] px-2.5 py-0.5 font-mono text-[10.5px] font-bold text-[#16A34A]">
-                      {t(l("Formule Essentielle", "Essential Plan", "Gói Cơ bản", "الباقة الأساسية", "Базовый тариф"))}
+                      {t(l("Pack Annuel Clé en Main", "Turnkey Annual Pack", "Gói Trọn Gói Năm", "الباقة السنوية المتكاملة", "Годовой пакет под ключ"))}
                     </span>
                   </div>
 
                   <p className="mt-3 text-xs leading-relaxed text-[#52504A]">
                     {t(
                       l(
-                        "Déléguez l'animation quotidienne de votre établissement sur Google : réponse rédigée et soignée sous 48h à 100% de vos avis clients, publication régulière de posts géolocalisés, mise à jour des horaires et protection contre les modifications frauduleuses.",
-                        "Delegate your day-to-day Google presence: professional replies to 100% of reviews within 48h, regular geotargeted updates, holiday hour adjustments and malicious edit protection.",
-                        "Ủy thác việc chăm sóc hồ sơ Google: phản hồi chuyên nghiệp 100% đánh giá trong 48h, đăng bài định kỳ và bảo vệ hồ sơ.",
-                        "فوّض إدارة وتحديث ملفك على خرائط Google: رد راقٍ على 100% من التقييمات خلال 48 ساعة، ونشر تحديثات وصور دورية وحماية السمعة.",
-                        "Полноценное ведение карточки: ответы на 100% отзывов за 48ч, регулярные публикации, обновление графика и защита от спама.",
+                        "Déléguez l'animation complète de votre établissement sur Google pendant 12 mois : réponse rédigée sous 48h à 100% de vos avis clients, publication de photos géolocalisées et actualités, mise à jour des horaires et protection active anti-modifications.",
+                        "Delegate your complete Google presence for 12 months: professional replies to 100% of reviews within 48h, geotagged photos, regular updates, holiday schedules and active anti-tampering protection.",
+                        "Ủy thác toàn diện hồ sơ Google trong 12 tháng: phản hồi 100% đánh giá trong 48h, đăng ảnh định vị và bảo vệ hồ sơ khỏi đối thủ.",
+                        "إدارة سنوية متكاملة لملفك على خرائط Google لمدة 12 شهراً: رد راقٍ على 100% من التقييمات خلال 48 ساعة، نشر صور وعروض وتحديث مستمر وحماية السمعة.",
+                        "Комплексное ведение карточки 12 месяцев: индивидуальные ответы на 100% отзывов за 48ч, регулярные фото, новости и защита от правок.",
                       ),
                     )}
                   </p>
@@ -1934,10 +1934,10 @@ export function MapsDominationStudioPage() {
                   <ul className="mt-6 space-y-2.5 border-t border-[#EBEBE6] pt-5">
                     {[
                       l("Réponse rédigée sur mesure sous 48h à 100% de vos avis clients", "Custom curated reply to 100% of customer reviews within 48h", "Phản hồi chuyên nghiệp 100% đánh giá trong 48h", "رد مخصص على 100% من التقييمات خلال 48 ساعة", "Индивидуальный ответ на 100% отзывов за 48ч"),
-                      l("Publication de posts géolocalisés & actualités saisonnières", "Monthly localized posts, special offers and announcements", "Đăng bài ưu đãi địa phương định kỳ", "نشر عروض وتحديثات محلية منتظمة", "Публикация новостей и локальных предложений"),
-                      l("Mise à jour continue des horaires d'ouverture, ponts & jours fériés", "Continuous updates for opening hours, holidays and menus", "Cập nhật liên tục giờ mở cửa, ngày lễ và dịch vụ", "تحديث مستمر لمواعيد العمل والعطل والخدمات", "Актуализация часов работы и праздников"),
-                      l("Ajout et sélection de photos professionnelles optimisées", "Curated selection and upload of high-quality photos", "Thêm hình ảnh chất lượng cao định kỳ", "إضافة صور عالية الجودة بانتظام", "Добавление качественных фото заведения"),
-                      l("Assistance directe & veille anti-modifications malveillantes", "Dedicated support & protection against malicious competitor edits", "Hỗ trợ trực tiếp & chống chỉnh sửa sai lệch từ đối thủ", "دعم مباشر وحماية من التعديلات العشوائية للمنافسين", "Прямая поддержка и защита от правок конкурентов"),
+                      l("Publication régulière de photos géolocalisées & actualités", "Regular geotagged photo uploads & special announcements", "Đăng tải hình ảnh định vị & ưu đãi định kỳ", "نشر صور جغرافية وعروض وتحديثات دورية", "Регулярная публикация гео-фото и новостей"),
+                      l("Mise à jour continue des horaires d'ouverture & jours fériés", "Continuous updates for opening hours and holidays", "Cập nhật liên tục giờ mở cửa và ngày lễ", "تحديث مستمر لمواعيد العمل والأعياد", "Актуализация часов работы и праздников"),
+                      l("Protection active anti-modifications malveillantes", "Active protection against malicious competitor edits", "Bảo vệ chủ động khỏi chỉnh sửa xấu từ đối thủ", "حماية استباقية من التعديلات العشوائية للمنافسين", "Защита от несанкционированных правок конкурентов"),
+                      l("Rapport annuel complet de visibilité, appels et itinéraires", "Annual visibility, phone calls and direction requests report", "Báo cáo thường niên về lượt xem, cuộc gọi và chỉ đường", "تقرير سنوي شامل للمكالمات والزيارات وطلبات الاتجاهات", "Годовой отчёт по звонкам, переходам и маршрутам"),
                     ].map((item, idx) => (
                       <li key={idx} className="flex items-start gap-2.5 text-xs text-[#2B2925]">
                         <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#16A34A]" />
@@ -1952,10 +1952,10 @@ export function MapsDominationStudioPage() {
                     item={{
                       serviceId: "maps",
                       serviceName: "Google Maps",
-                      planName: t(l("Gestion Google Business — Essentiel", "Google Business Management — Essential", "Quản trị Google Business — Cơ bản", "إدارة Google Business — الأساسية", "Ведение Google Business — Базовый")),
-                      priceEur: 99,
-                      period: "month",
-                      periodLabel: perMonth,
+                      planName: t(l("Gestion Annuelle Fiche Google Maps", "Annual Google Maps Management", "Quản trị Google Maps Hàng năm", "الإدارة السنوية لخرائط Google", "Годовое ведение Google Maps")),
+                      priceEur: 500,
+                      period: "year",
+                      periodLabel: t(l(" / an", " / year", " / năm", " / سنة", " / год")),
                     }}
                     popular={true}
                   />
@@ -1963,11 +1963,11 @@ export function MapsDominationStudioPage() {
                     href={`${WA_BASE}${encodeURIComponent(
                       t(
                         l(
-                          "Bonjour XR Agency, je souhaite activer la gestion mensuelle de ma fiche Google Maps (99 €/mois).",
-                          "Hello XR Agency, I would like to activate monthly management of my Google Maps profile (€99/month).",
-                          "Xin chào XR Agency, tôi muốn kích hoạt gói quản trị Google Maps hằng tháng (99 €/tháng).",
-                          "مرحبًا XR Agency، أود تفعيل الإدارة الشهرية لملف خرائط Google (99 €/شهر).",
-                          "Здравствуйте, XR Agency! Хочу подключить ежемесячное ведение Google Maps (99 €/мес).",
+                          "Bonjour XRAGENCY, je souhaite souscrire au forfait Gestion Annuelle Fiche Google Maps à 500 € / an.",
+                          "Hello XRAGENCY, I would like to subscribe to the Annual Google Maps Management pack at €500/year.",
+                          "Xin chào XRAGENCY, tôi muốn đăng ký gói Quản lý Google Maps Hàng năm 500 €/năm.",
+                          "مرحبًا XRAGENCY، أود الاشتراك في باقة الإدارة السنوية لملف خرائط Google بـ 500 € / سنة.",
+                          "Здравствуйте, XRAGENCY! Хочу подключить годовое ведение профиля Google Maps за 500 €/год.",
                         ),
                       ),
                     )}`}
@@ -2228,7 +2228,7 @@ export function MapsDominationStudioPage() {
                   </h3>
 
                   <p className="mt-2 text-xs text-[#52504A] sm:text-sm">
-                    {t(l("Devis personnalisé affiné après diagnostic de zone. Possibilité d'ajouter l'option Gestion & Animation Mensuelle continue à 99 € / mois.", "Personalized quote refined after area diagnosis. Option to add continuous Monthly Management at €99/month.", "Báo giá chính xác sau kiểm toán khu vực. Tùy chọn thêm gói Quản trị Hằng tháng 99 €/tháng.", "عرض سعر نهائي بعد تدقيق المنطقة، مع إمكانية إضافة باقة الإدارة الشهرية بـ 99 €/شهر.", "Точный расчёт после аудита. Возможно подключение ежемесячного ведения за 99 €/мес."))}
+                    {t(l("Devis personnalisé affiné après diagnostic de zone. Possibilité d'ajouter l'option Gestion Annuelle continue de Fiche à 500 € / an.", "Personalized quote refined after area diagnosis. Option to add continuous Annual Management at €500/year.", "Báo giá chính xác sau kiểm toán khu vực. Tùy chọn thêm gói Quản lý Hàng năm 500 €/năm.", "عرض سعر نهائي بعد تدقيق المنطقة، مع إمكانية إضافة باقة الإدارة السنوية بـ 500 €/سنة.", "Точный расчёт после аудита. Возможно подключение годового ведения за 500 €/год."))}
                   </p>
                 </div>
 
@@ -3419,8 +3419,8 @@ export function MapsDominationStudioPage() {
                   a: l("Non, et aucun prestataire sérieux ne peut le garantir car Google reste seul souverain de son algorithme. Nous optimisons en revanche 100% des critères officiels (pertinence, distance, autorité des avis) pour maximiser vos chances de conquérir le Top 3.", "No, and no honest agency can guarantee rank #1 as Google controls its algorithm. However, we meticulously optimize 100% of official signals (relevance, distance, authority) to maximize your ranking power.", "Không, không ai có thể can thiệp thuật toán Google. Nhưng chúng tôi tối ưu 100% tiêu chí chính thức để tối đa hóa cơ hội đạt Top 3.", "لا، فخوارزمية جوجل وحدها صاحبة القرار. لكننا نحسن 100% من معايير الترتيب الرسمية لتعظيم فرصك في الصدارة.", "Нет, никто не управляет алгоритмом Google напрямую. Но мы выжимаем 100% из официальных факторов ранжирования."),
                 },
                 {
-                  q: l("Comment fonctionne la gestion mensuelle à 99 € / mois ?", "How does the €99/month management plan work?", "Gói quản trị 99 €/tháng hoạt động thế nào?", "كيف تعمل باقة الإدارة الشهرية بـ 99 €/شهر؟", "Как работает ежемесячное ведение за 99 €/мес?"),
-                  a: l("C'est une gestion active sans engagement long : chaque semaine, nous surveillons votre fiche, répondons professionnellement sous 48h à 100% des nouveaux avis clients, publions vos actualités et protégeons votre e-réputation.", "It is an active, flexible management service: we monitor your listing weekly, respond professionally to all reviews within 48h, publish regular updates and defend your profile.", "Đây là dịch vụ quản trị linh hoạt không cam kết dài hạn: phản hồi 100% đánh giá trong 48h, đăng bài định kỳ và bảo vệ hồ sơ.", "إنها خدمة إدارة مرنة بدون التزام طويل: نتابع ملفك أسبوعياً ونرد باحترافية على جميع التقييمات وننشر التحديثات ونحمي سمعتك.", "Это гибкое ведение без долгосрочного контракта: ответы на все отзывы за 48ч, регулярные посты и защита от спама."),
+                  q: l("Comment fonctionne la formule Gestion Annuelle à 500 € / an ?", "How does the €500/year annual management plan work?", "Gói quản trị hàng năm 500 €/năm hoạt động thế nào?", "كيف تعمل باقة الإدارة السنوية بـ 500 € / سنة؟", "Как работает годовое ведение за 500 €/год?"),
+                  a: l("C'est une gestion active clé en main pendant 12 mois sans abonnement mensuel : nous surveillons votre fiche, répondons sous 48h à 100% des avis clients, publions vos photos et actualités et protégeons votre profil contre les modifications frauduleuses.", "It is an active turnkey management service for 12 months with no monthly fee: we monitor your listing, respond to 100% of reviews within 48h, post photos and updates, and defend your profile.", "Đây là dịch vụ trọn gói 12 tháng không phí tháng: chăm sóc hồ sơ, phản hồi 100% đánh giá trong 48h, đăng ảnh và bảo vệ hồ sơ.", "إنها خدمة إدارة متكاملة لمدة 12 شهرًا بدون اشتراك شهري: نتابع ملفك ونرد على 100% من التقييمات وننشر الصور ونحمي الملف.", "Это комплексное годовое ведение без ежемесячных платежей: ответы на все отзывы за 48ч, регулярные фото и защита от спама."),
                 },
               ].map((faq, i) => (
                 <div key={i} className="rounded-2xl border border-[#E5E5E0] bg-white p-5 shadow-sm">
