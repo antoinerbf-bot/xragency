@@ -276,44 +276,28 @@ export function Hero() {
       aria-label="XR Agency Hero"
       className="xr-hero-refined relative isolate min-h-[100svh] w-full overflow-hidden bg-[#181512] pt-20 text-[#FAF7F2]"
     >
-      {/* ── Luminous Multi-Country Cinematic Photo Reel ── */}
+      {/* ── Cinematic Ambient Video Reel & Daylight Scenery ── */}
       <div className="absolute inset-0 -z-10 overflow-hidden bg-[#181512]">
-        {HUBS.map((hub, idx) => {
-          const isActive = idx === activeHubIndex;
-          return (
-            <div
-              key={hub.id}
-              className={cn(
-                "absolute inset-0 transition-opacity duration-1000 ease-in-out",
-                isActive
-                  ? "opacity-100 z-10 pointer-events-auto"
-                  : "opacity-0 z-0 pointer-events-none",
-              )}
-            >
-              <img
-                src={hub.image}
-                alt={`Studio XRAGENCY à ${hub.name.fr}`}
-                fetchPriority={isActive ? "high" : "low"}
-                loading={isActive ? "eager" : "lazy"}
-                className={cn(
-                  "h-full w-full object-cover brightness-[1.08] contrast-[1.04] saturate-[1.05] transition-transform duration-[7000ms] ease-out",
-                  hub.position ?? "object-center",
-                  isActive ? "scale-105" : "scale-100",
-                )}
-              />
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/videos/clean-poster.jpg"
+          className="absolute inset-0 h-full w-full object-cover brightness-[1.05] contrast-[1.05]"
+        >
+          <source src="/videos/hero-ambient-loop.mp4" type="video/mp4" />
+        </video>
 
-              {/* Luminous, natural lighting: airy and bright, maintaining daylight clarity */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#14110E]/60 via-transparent to-black/20 pointer-events-none" />
-            </div>
-          );
-        })}
+        {/* Luminous luxury daylight grading: airy and deep, maintaining clarity */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/30 to-black/15 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#14110E]/85 via-transparent to-black/25 pointer-events-none" />
       </div>
 
-      {/* Top-Right: Discreet Live Hub Indicator & Auto-Switch Pills (Positioned below fixed navbar) */}
+      {/* Top-Right: Discreet Live Hub Indicator (Positioned below fixed navbar) */}
       <div className="absolute top-24 right-5 sm:right-8 lg:right-12 z-20 flex items-center gap-2.5">
         <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/40 px-3 py-1.5 backdrop-blur-md text-white shadow-lg">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696] animate-pulse" />
           <span className="font-mono text-[11px] font-semibold tracking-wider text-white">
             {activeHub.name[lang] ?? activeHub.name.fr}
           </span>
@@ -341,8 +325,8 @@ export function Hero() {
 
       {/* ── Content Container ── */}
       <div className="relative z-20 mx-auto flex min-h-[calc(100svh-5rem)] max-w-[1540px] flex-col justify-end px-5 py-8 sm:px-8 lg:min-h-[calc(100svh-5rem)] lg:px-12 lg:py-10">
-        {/* Main Content Area (Compact, Luminous & Discreet) */}
-        <div className="max-w-4xl pb-10 sm:pb-14 lg:pb-16">
+        {/* Main Content Area (Compact, Sober Luxury & Discreet) */}
+        <div className="max-w-3xl pb-8 sm:pb-12 lg:pb-14">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/35 px-3 py-1 backdrop-blur-md">
             <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696] animate-pulse" />
             <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#E5C696]">
@@ -350,13 +334,13 @@ export function Hero() {
             </span>
           </div>
 
-          <h1 className="mt-4 max-w-3xl font-serif text-[clamp(2.3rem,5vw,4.4rem)] font-normal leading-[1.06] tracking-[-0.03em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
+          <h1 className="mt-3.5 max-w-2xl font-serif text-[clamp(1.75rem,3.4vw,2.75rem)] font-normal leading-[1.12] tracking-[-0.02em] text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]">
             <span>{c.titlePart1}</span>
             <em className="font-serif italic font-normal text-[#F2D7B0]">{c.titleItalic}</em>{" "}
             <span>{c.titlePart2}</span>
           </h1>
 
-          <p className="mt-4 max-w-xl text-sm sm:text-base leading-relaxed text-white/85 drop-shadow-md">
+          <p className="mt-3.5 max-w-lg text-xs sm:text-sm leading-relaxed text-white/85 drop-shadow-md">
             {c.sub}
           </p>
 

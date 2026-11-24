@@ -383,25 +383,25 @@ export function Nav() {
                 </button>
 
                 {servicesOpen && (
-                  <div className="absolute -left-12 sm:-left-32 lg:-left-56 xl:-left-64 top-full mt-2 w-[min(980px,calc(100vw-2.5rem))] max-w-[980px] rounded-2xl border border-[#D8B788]/25 bg-[#15120E] p-5 text-[#FAF7F2] shadow-[0_32px_90px_-20px_rgba(0,0,0,0.85)] animate-in fade-in slide-in-from-top-2 duration-200">
-                    <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
+                  <div className="fixed left-1/2 -translate-x-1/2 top-[64px] w-[min(1040px,calc(100vw-2rem))] max-w-[1040px] rounded-2xl border border-[#E8E2D8] bg-white/98 backdrop-blur-2xl p-5 sm:p-6 text-[#1A1815] shadow-[0_24px_70px_rgba(26,24,21,0.14)] animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+                    <div className="mb-4 flex items-center justify-between border-b border-[#EBE5DC] pb-3">
                       <div className="flex items-center gap-2.5">
-                        <span className="h-px w-7 bg-[#D8B788]" />
-                        <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[#D8B788]">
+                        <span className="h-px w-7 bg-[#A67C40]" />
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#A67C40]">
                           {c.catalogTag}
                         </span>
                       </div>
                       <Link
                         to="/services"
                         onClick={() => setServicesOpen(false)}
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#D8B788] hover:text-white"
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#A67C40] hover:text-[#1A1815] transition"
                       >
                         {t(UI.navFullCatalog)}
                         <ArrowRight className="h-3.5 w-3.5" />
                       </Link>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                       {IDS.map((id) => {
                         const s = SERVICES.find((x) => x.id === id);
                         const I = ICONS[id];
@@ -412,32 +412,32 @@ export function Nav() {
                             key={id}
                             to={hrefFor(id) as "/services"}
                             onClick={() => setServicesOpen(false)}
-                            className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-white/10 bg-[#1C1813] p-3.5 transition duration-300 hover:-translate-y-0.5 hover:border-[#D8B788]/60 hover:bg-[#241E17]"
+                            className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-[#EBE5DC] bg-[#FAF8F5] p-3.5 transition duration-300 hover:-translate-y-0.5 hover:border-[#A67C40] hover:bg-white hover:shadow-md"
                           >
                             <div>
                               <div className="mb-3 flex items-center justify-between">
-                                <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#D8B788]/15 text-[#D8B788] transition-colors group-hover:bg-[#D8B788] group-hover:text-[#14110D]">
+                                <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#A67C40]/10 text-[#A67C40] transition-colors group-hover:bg-[#A67C40] group-hover:text-white">
                                   <I className="h-4 w-4" />
                                 </span>
                                 <img
                                   src={XR_PHOTOS[id]}
                                   alt=""
                                   loading="lazy"
-                                  className="h-9 w-14 rounded-md object-cover opacity-90"
+                                  className="h-9 w-14 rounded-md object-cover border border-[#E8E2D8]"
                                 />
                               </div>
-                              <span className="block text-xs font-semibold text-white">
+                              <span className="block text-xs font-bold text-[#1A1815] group-hover:text-[#A67C40] transition-colors">
                                 {t(s.title)}
                               </span>
-                              <span className="mt-1 line-clamp-2 block text-[11px] leading-4 text-white/65">
+                              <span className="mt-1 line-clamp-2 block text-[11px] leading-4 text-[#5C554B]">
                                 {t(s.short)}
                               </span>
                             </div>
-                            <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2">
-                              <span className="text-[10px] text-white/50">
+                            <div className="mt-3 flex items-center justify-between border-t border-[#EBE5DC] pt-2">
+                              <span className="text-[10px] text-[#8C8274]">
                                 {t(UI.navFromPrice)}
                               </span>
-                              <span className="font-mono text-[11px] font-semibold text-[#D8B788]">
+                              <span className="font-mono text-[11px] font-bold text-[#A67C40]">
                                 {price(s.fromEur)}
                                 {periodTxt ? ` ${periodTxt}` : ""}
                               </span>

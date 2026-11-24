@@ -484,33 +484,109 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
               </div>
             </div>
 
-            {/* 4 Worldwide Hubs Grid */}
-            <div className="mt-10">
-              <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.2em] text-[#1A73E8]">
-                {t(l("LES 4 HUBS XR AGENCY EN SYNCHRONISATION PERMANENTE", "THE 4 XR AGENCY HUBS IN CONSTANT SYNC", "4 TRUNG TÂM XR AGENCY TRÊN TOÀN CẦU", "مراكز XR AGENCY الأربعة في مزامنة دائمة", "4 МЕЖДУНАРОДНЫХ ХАБА XR AGENCY"))}
-              </span>
+            {/* 4 Worldwide Hubs Grid with Human Warmth & Charm */}
+            <div className="mt-12">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.2em] text-[#A67C40]">
+                  {t(l("LES 4 HUBS XR AGENCY EN SYNCHRONISATION PERMANENTE", "THE 4 XR AGENCY HUBS IN CONSTANT SYNC", "4 TRUNG TÂM XR AGENCY TRÊN TOÀN CẦU", "مراكز XR AGENCY الأربعة في مزامنة دائمة", "4 МЕЖДУНАРОДНЫХ ХАБА XR AGENCY"))}
+                </span>
+                <span className="text-xs text-[#5C574F]">
+                  {t(l("Une équipe humaine, réactive et sans sous-traitance opaque.", "A genuine, responsive team with zero opaque outsourcing.", "Đội ngũ chuyên nghiệp, hỗ trợ tận tâm không trung gian.", "فريق عمل حقيقي ومباشر دون وسطاء.", "Реальная команда экспертов без непрозрачного аутсорсинга."))}
+                </span>
+              </div>
 
               <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {[
-                  { city: "Paris", district: "Triangle d'Or · 8e arrondissement", tag: "Direction artistique, haute couture web & stratégie de marque", flag: "🇫🇷" },
-                  { city: "Dubaï", district: "DIFC · Downtown Dubai", tag: "Hospitality, expansion internationale & marques de prestige", flag: "🇦🇪" },
-                  { city: "Da Nang", district: "An Thuong Coastal District", tag: "Ingénierie logicielle réactive, IA & développement 24/7", flag: "🇻🇳" },
-                  { city: "Genève", district: "Place de la Fusterie · Rue du Rhône", tag: "Clientèle privée, family offices & gestion de patrimoine", flag: "🇨🇭" },
+                  {
+                    city: "Paris",
+                    flag: "🇫🇷",
+                    district: "Triangle d'Or · 8e arr.",
+                    role: "Direction artistique & Stratégie",
+                    charm: "Cadrage stratégique, identité visuelle et développement haute couture. Rendez-vous sur Paris ou session visio privée.",
+                    schedule: "Lun – Ven · 9h00 – 19h00 (CET)",
+                  },
+                  {
+                    city: "Dubaï",
+                    flag: "🇦🇪",
+                    district: "DIFC · Downtown",
+                    role: "Expansion & Hospitality",
+                    charm: "Déploiement pour marques d'exception, hôtellerie et projets du Golfe. Support bilingue FR / EN / AR multi-devises.",
+                    schedule: "Dim – Jeu · 10h00 – 19h00 (GST)",
+                  },
+                  {
+                    city: "Da Nang",
+                    flag: "🇻🇳",
+                    district: "An Thuong Coastal Lab",
+                    role: "Ingénierie & Vidéo 24/7",
+                    charm: "Notre pôle d'ingénieurs web et de monteurs vidéo pour une exécution ultra-rapide et un suivi continu sans rupture.",
+                    schedule: "Opérations actives 24h/24 · 7j/7",
+                  },
+                  {
+                    city: "Genève",
+                    flag: "🇨🇭",
+                    district: "Rue du Rhône · Rive Gauche",
+                    role: "Clientèle Privée & Finance",
+                    charm: "Confidentialité absolue et rigueur suisse pour family offices, maisons de luxe et professions réglementées.",
+                    schedule: "Lun – Ven · 8h30 – 18h30 (CET)",
+                  },
                 ].map((hub, i) => (
                   <div
                     key={i}
-                    className="rounded-2xl border border-[#E5E5E0] bg-white p-4 transition hover:border-[#12110E] shadow-sm flex flex-col justify-between"
+                    className="rounded-2xl border border-[#E5E5E0] bg-white p-5 transition hover:border-[#A67C40] hover:shadow-md shadow-sm flex flex-col justify-between"
                   >
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="text-lg">{hub.flag}</span>
-                        <span className="font-mono text-[9px] uppercase tracking-wider text-[#A67C40] font-semibold">{hub.district}</span>
+                        <span className="text-2xl">{hub.flag}</span>
+                        <span className="font-mono text-[9.5px] uppercase tracking-wider text-[#A67C40] font-semibold">{hub.district}</span>
                       </div>
-                      <h4 className="mt-2 font-serif text-lg font-medium text-[#171613]">{hub.city}</h4>
-                      <p className="mt-1 text-xs text-[#5C574F] leading-relaxed">{hub.tag}</p>
+                      <h4 className="mt-2.5 font-serif text-lg font-medium text-[#171613]">{hub.city}</h4>
+                      <p className="font-mono text-[10px] font-semibold text-[#8C8274] uppercase tracking-wide mt-0.5">{hub.role}</p>
+                      <p className="mt-2 text-xs text-[#5C574F] leading-relaxed">{hub.charm}</p>
+                    </div>
+                    <div className="mt-4 pt-3 border-t border-[#F0EBE1] flex items-center justify-between text-[10px] font-mono text-[#8C8274]">
+                      <span>{hub.schedule}</span>
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#16A34A]" />
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Essential Agency Trust, Legal & Guarantees */}
+            <div className="mt-10 rounded-2xl border border-[#E5E5E0] bg-[#FAF8F5] p-5 sm:p-6">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                  <h5 className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#171613]">
+                    Propriété & Code
+                  </h5>
+                  <p className="mt-1 text-xs text-[#5C574F] leading-relaxed">
+                    100 % propriétaire de votre site, de votre nom de domaine et de vos données. Aucun abonnement caché ni verrou technique.
+                  </p>
+                </div>
+                <div>
+                  <h5 className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#171613]">
+                    Engagement SLA 24h
+                  </h5>
+                  <p className="mt-1 text-xs text-[#5C574F] leading-relaxed">
+                    Devis personnalisé et diagnostic technique remis sous 24h ouvrées. Suivi direct avec votre chef de projet dédié.
+                  </p>
+                </div>
+                <div>
+                  <h5 className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#171613]">
+                    Conformité RGPD & Sécurité
+                  </h5>
+                  <p className="mt-1 text-xs text-[#5C574F] leading-relaxed">
+                    Architecture respectant strictement le RGPD européen. Certificats SSL/TLS automatiques, sauvegardes quotidiennes.
+                  </p>
+                </div>
+                <div>
+                  <h5 className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#171613]">
+                    Hébergement Edge Mondial
+                  </h5>
+                  <p className="mt-1 text-xs text-[#5C574F] leading-relaxed">
+                    Réseau haute disponibilité Vercel & AWS réparti sur 300+ PoPs à travers l'Europe, l'Asie et le Moyen-Orient.
+                  </p>
+                </div>
               </div>
             </div>
 

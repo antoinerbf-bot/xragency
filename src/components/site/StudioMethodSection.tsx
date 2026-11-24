@@ -10,12 +10,12 @@ import {
 } from "lucide-react";
 import { useLang, type Lang } from "@/lib/i18n";
 import storyMeeting from "@/assets/story-business-meeting.jpg";
-import heroAtelier from "@/assets/hero-atelier-editorial.jpg";
-import webLuxuryShowcase from "@/assets/web-luxury-showcase.jpg";
-import storyEntrepreneur from "@/assets/story-entrepreneur-launch.jpg";
+import svcBrandingEditorial from "@/assets/svc-branding-editorial.jpg";
+import svcWebEditorial from "@/assets/svc-web-editorial.jpg";
+import svcSeoEditorial from "@/assets/svc-seo-editorial.jpg";
 import heroCinematic from "@/assets/hero-cinematic.jpg";
 
-const STEP_PHOTOS = [storyMeeting, heroAtelier, webLuxuryShowcase, storyEntrepreneur];
+const STEP_PHOTOS = [storyMeeting, svcBrandingEditorial, svcWebEditorial, svcSeoEditorial];
 const ICONS = [Compass, Layers3, PenTool, RefreshCw];
 
 const COPY: Record<

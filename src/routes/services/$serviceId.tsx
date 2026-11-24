@@ -19,6 +19,7 @@ import {
   AiAndCustomSoftwareStudioPage,
 } from "@/components/site/ImmersiveServicePages";
 import { CustomCrmShowcase } from "@/components/site/CustomCrmShowcase";
+import { RoboticsShowcase } from "@/components/site/RoboticsShowcase";
 import { cn } from "@/lib/utils";
 
 const SERVICE_ALIASES: Record<string, string> = {
@@ -103,6 +104,16 @@ function ServiceDetailPage() {
   if (service.id === "branding") return <BrandingStudioPage />;
   if (service.id === "crm") return <CustomCrmShowcase />;
   if (service.id === "ai" || service.id === "strategy") return <AiAndCustomSoftwareStudioPage />;
+  if (service.id === "robotics")
+    return (
+      <div className="min-h-screen overflow-x-hidden bg-[#FAF8F5] text-[#1A1815]">
+        <Nav />
+        <main>
+          <RoboticsShowcase />
+          <Contact />
+        </main>
+      </div>
+    );
   return <GenericServiceDetailPage />;
 }
 
