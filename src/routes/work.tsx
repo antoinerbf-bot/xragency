@@ -331,9 +331,9 @@ export function WorkPage() {
             <div className="grid items-center lg:grid-cols-12">
               <div className="relative aspect-[16/10] bg-[#171613] lg:col-span-6 lg:aspect-auto lg:h-full">
                 <img
-                  src="/showcase/audit_app_04_poke_case.png"
-                  alt="Pok-N Ball — Réalisation XR Agency"
-                  className="h-full w-full object-cover object-top"
+                  src="/showcase/pokenball_showcase.jpg"
+                  alt="Pok-N Ball (pokenball.be) — Réalisation XRAGENCY Belgique"
+                  className="h-full w-full object-cover object-center"
                 />
               </div>
               <div className="p-6 sm:p-10 lg:col-span-6">

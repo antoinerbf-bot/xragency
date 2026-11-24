@@ -546,6 +546,17 @@ export const SERVICES_PART1 = [
           { fr: "Reporting", en: "Reporting", vi: "Báo cáo" },
         ],
       },
+      {
+        name: { fr: "SEO Domination", en: "SEO Domination", vi: "SEO Domination" },
+        eur: 899,
+        period: "month",
+        features: [
+          { fr: "Tout le Growth", en: "Everything in Growth", vi: "Toàn bộ Growth" },
+          { fr: "Campagnes netlinking & autorité", en: "Netlinking & authority campaigns", vi: "Chiến dịch netlinking & uy tín" },
+          { fr: "Top 1 sectoriel & requêtes clés", en: "Sector Top 1 & high-intent queries", vi: "Top 1 ngành & từ khóa mục tiêu" },
+          { fr: "Suivi stratégique hebdomadaire", en: "Weekly strategic monitoring", vi: "Theo dõi chiến lược hàng tuần" },
+        ],
+      },
     ],
   },
 ];

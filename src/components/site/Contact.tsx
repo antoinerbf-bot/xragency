@@ -623,7 +623,7 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
             <div className="mt-10 flex flex-col gap-4 border-t border-[#12110E]/10 pt-6 pb-20 sm:pb-12 text-xs text-[#5C574F] sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p>
-                  XR AGENCY · © {new Date().getFullYear()} {c.rights}
+                  <strong className="font-sans font-black tracking-wider uppercase text-black">XRAGENCY</strong> · © {new Date().getFullYear()} {c.rights}
                 </p>
                 <p className="mt-1 text-[10px] text-[#5C574F]/70">{c.hosting}</p>
               </div>

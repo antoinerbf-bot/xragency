@@ -248,8 +248,8 @@ export function RealisationsSection() {
 
                         <div className="overflow-hidden rounded-xl border border-[#0B0B0C]/10 bg-white">
                           <img
-                            src="/showcase/audit_app_04_poke_case.png"
-                            alt="Aperçu Poke-N-Ball"
+                            src="/showcase/pokenball_showcase.jpg"
+                            alt="Aperçu Pok-N Ball Belgique"
                             className="h-40 w-full object-cover"
                           />
                         </div>

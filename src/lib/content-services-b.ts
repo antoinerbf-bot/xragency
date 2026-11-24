@@ -280,6 +280,37 @@ export const SERVICES_PART2 = [
           },
         ],
       },
+      {
+        name: {
+          fr: "Pack Multi-Établissements & Réseau",
+          en: "Multi-Location & Network Pack",
+          vi: "Gói chuỗi đa địa điểm",
+        },
+        eur: 1490,
+        period: "year",
+        features: [
+          {
+            fr: "Déploiement jusqu'à 3 fiches établissements ou franchises",
+            en: "Deployment for up to 3 locations or franchise branches",
+            vi: "Triển khai tối đa 3 địa điểm hoặc chi nhánh",
+          },
+          {
+            fr: "Stratégie de conquête locale & synchronisation des signaux",
+            en: "Local conquest strategy & multi-location signal synchronization",
+            vi: "Chiến lược chiếm lĩnh địa phương & đồng bộ tín hiệu",
+          },
+          {
+            fr: "Protection contre les fiches concurrentes & fusions de doublons",
+            en: "Protection against competitor listings & duplicate merging",
+            vi: "Bảo vệ khỏi đối thủ & xử lý trùng lặp hồ sơ",
+          },
+          {
+            fr: "Reporting géolocalisé mensuel par point de vente",
+            en: "Monthly geotargeted reporting per location",
+            vi: "Báo cáo định vị hàng tháng cho từng điểm bán",
+          },
+        ],
+      },
     ],
   },
   {

@@ -67,31 +67,31 @@ const HUBS: CityHub[] = [
     },
   },
   {
-    id: "geneve",
-    name: { fr: "Genève", en: "Geneva", vi: "Genève", ar: "جنيف", ru: "Женева" },
+    id: "newyork",
+    name: { fr: "New York", en: "New York", vi: "New York", ar: "نيويورك", ru: "Нью-Йорк" },
     country: {
-      fr: "Suisse",
-      en: "Switzerland",
-      vi: "Thụy Sĩ",
-      ar: "سويسرا",
-      ru: "Швейцария",
+      fr: "États-Unis",
+      en: "United States",
+      vi: "Hoa Kỳ",
+      ar: "الولايات المتحدة",
+      ru: "США",
     },
-    timezone: "Europe/Zurich",
+    timezone: "America/New_York",
     image: "/showcase/home-v3/hub-newyork.jpg",
     position: "object-center",
     tagline: {
-      fr: "Clientèle privée, family offices, gestion de patrimoine & ingénierie de prestige.",
-      en: "Private wealth, family offices, prestige advisory & executive digital solutions.",
-      vi: "Khách hàng cao cấp, văn phòng quản lý tài sản & giải pháp số uy tín.",
-      ar: "العملاء المميزون، المكاتب العائلية وحلول الهندسة الرقمية الراقية.",
-      ru: "Премиальный консалтинг, private banking и высокотехнологичные решения.",
+      fr: "Direction artistique transatlantique, e-commerce d'envergure & créativité avant-gardiste.",
+      en: "Transatlantic creative direction, high-scale digital commerce & avant-garde design.",
+      vi: "Chỉ đạo nghệ thuật toàn cầu, thương mại điện tử quy mô lớn & thiết kế tiên phong.",
+      ar: "الإشراف الفني العالمي، التجارة الرقمية الكبرى والتصميم الريادي.",
+      ru: "Трансатлантический арт-дирекшн, масштабный e-commerce и передовой дизайн.",
     },
     status: {
-      fr: "Pôle Clientèle Privée · En session",
-      en: "Private Wealth Hub · In session",
-      vi: "Khách hàng Cao cấp",
-      ar: "جلسة عمل نشطة",
-      ru: "Private Hub · В сессии",
+      fr: "Studio Créatif Amériques · Connecté",
+      en: "Americas Creative Hub · Connected",
+      vi: "Studio Châu Mỹ · Trực tuyến",
+      ar: "استوديو الأمريكتين",
+      ru: "Американский хаб · На связи",
     },
   },
   {
@@ -311,7 +311,7 @@ export function Hero() {
       </div>
 
       {/* Top-Right: Discreet Live Hub Indicator (Positioned below fixed navbar) */}
-      <div className="absolute top-24 right-5 sm:right-8 lg:right-12 z-20 flex items-center gap-2.5">
+      <div className="absolute top-24 right-5 sm:right-8 lg:right-12 z-30 pointer-events-auto flex items-center gap-2.5">
         <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/40 px-3 py-1.5 backdrop-blur-md text-white shadow-lg">
           <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696] animate-pulse" />
           <span className="font-mono text-[11px] font-semibold tracking-wider text-white">
@@ -331,7 +331,7 @@ export function Hero() {
               onClick={() => setActiveHubIndex(i)}
               aria-label={`Afficher le studio ${h.name.fr}`}
               className={cn(
-                "h-1.5 rounded-full transition-all duration-300",
+                "h-1.5 rounded-full transition-all duration-300 cursor-pointer pointer-events-auto",
                 i === activeHubIndex ? "w-6 bg-[#E5C696]" : "w-1.5 bg-white/40 hover:bg-white/70",
               )}
             />
@@ -340,9 +340,9 @@ export function Hero() {
       </div>
 
       {/* ── Content Container ── */}
-      <div className="relative z-20 mx-auto flex min-h-[calc(100svh-5rem)] max-w-[1540px] flex-col justify-end px-5 py-8 sm:px-8 lg:min-h-[calc(100svh-5rem)] lg:px-12 lg:py-10">
+      <div className="relative z-20 pointer-events-none mx-auto flex min-h-[calc(100svh-5rem)] max-w-[1540px] flex-col justify-end px-5 py-8 sm:px-8 lg:min-h-[calc(100svh-5rem)] lg:px-12 lg:py-10">
         {/* Main Content Area (Compact, Sober Luxury & Discreet) */}
-        <div className="max-w-3xl pb-8 sm:pb-12 lg:pb-14">
+        <div className="max-w-3xl pb-8 sm:pb-12 lg:pb-14 pointer-events-auto">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/35 px-3 py-1 backdrop-blur-md">
             <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696] animate-pulse" />
             <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#E5C696]">

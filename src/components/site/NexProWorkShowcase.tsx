@@ -27,7 +27,7 @@ const WORKS: WorkItem[] = [
     id: "poke-n-ball",
     category: "food",
     isRealClient: true,
-    image: "/showcase/audit_app_04_poke_case.png",
+    image: "/showcase/pokenball_showcase.jpg",
     url: "https://pokenball.be",
     title: {
       fr: "Pok-N Ball (pokenball.be) – Belgique",
