@@ -276,22 +276,38 @@ export function Hero() {
       aria-label="XR Agency Hero"
       className="xr-hero-refined relative isolate min-h-[100svh] w-full overflow-hidden bg-[#181512] pt-20 text-[#FAF7F2]"
     >
-      {/* ── Cinematic Ambient Video Reel & Daylight Scenery ── */}
+      {/* ── Multi-Country Photo Sequence (Paris, Dubaï, New York, Da Nang) ── */}
       <div className="absolute inset-0 -z-10 overflow-hidden bg-[#181512]">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster="/videos/clean-poster.jpg"
-          className="absolute inset-0 h-full w-full object-cover brightness-[1.05] contrast-[1.05]"
-        >
-          <source src="/videos/hero-ambient-loop.mp4" type="video/mp4" />
-        </video>
+        {HUBS.map((hub, idx) => {
+          const isActive = idx === activeHubIndex;
+          return (
+            <div
+              key={hub.id}
+              className={cn(
+                "absolute inset-0 transition-opacity duration-1000 ease-in-out",
+                isActive
+                  ? "opacity-100 z-10 pointer-events-auto"
+                  : "opacity-0 z-0 pointer-events-none",
+              )}
+            >
+              <img
+                src={hub.image}
+                alt={`Studio XRAGENCY à ${hub.name.fr}`}
+                fetchPriority={isActive ? "high" : "low"}
+                loading={isActive ? "eager" : "lazy"}
+                className={cn(
+                  "h-full w-full object-cover brightness-[1.08] contrast-[1.04] saturate-[1.05] transition-transform duration-[7000ms] ease-out",
+                  hub.position ?? "object-center",
+                  isActive ? "scale-105" : "scale-100",
+                )}
+              />
 
-        {/* Luminous luxury daylight grading: airy and deep, maintaining clarity */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/30 to-black/15 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#14110E]/85 via-transparent to-black/25 pointer-events-none" />
+              {/* Luminous, natural lighting: airy and bright, maintaining daylight clarity */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#14110E]/75 via-transparent to-black/20 pointer-events-none" />
+            </div>
+          );
+        })}
       </div>
 
       {/* Top-Right: Discreet Live Hub Indicator (Positioned below fixed navbar) */}

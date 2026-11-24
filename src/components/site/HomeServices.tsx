@@ -1,36 +1,18 @@
-import {
-  ArrowRight,
-  ArrowUpRight,
-  BarChart3,
-  Bot,
-  Globe2,
-  MapPinned,
-  Palette,
-  ShieldCheck,
-  Users,
-  Layers,
-} from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { useLang, type Lang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
-import { ServiceIllustration } from "./ServiceIllustration";
-import { Parallax, Reveal } from "./primitives";
+import { UI } from "@/lib/copy";
+import { cn } from "@/lib/utils";
 import { useOptionalFunnel } from "@/lib/funnel";
-
-const FUNNEL_SERVICE_BTN: Record<Lang, { added: string; add: string }> = {
-  fr: { added: "✓ Dans votre devis", add: "+ Ajouter au devis" },
-  en: { added: "✓ In your quote", add: "+ Add to quote" },
-  vi: { added: "✓ Đã thêm vào báo giá", add: "+ Thêm vào báo giá" },
-  ar: { added: "✓ مضاف إلى عرض السعر", add: "+ أضف إلى العرض" },
-  ru: { added: "✓ В вашей смете", add: "+ Добавить в смету" },
-};
 
 const SERVICE_IMAGES: Record<string, string> = {
   websites: "/showcase/web-luxury-showcase.jpg",
-  maps: "/showcase/svc-maps-editorial.jpg",
-  social: "/showcase/agency-social-studio-hero.jpg",
   branding: "/showcase/svc-branding-editorial.jpg",
   seo: "/showcase/svc-seo-editorial.jpg",
+  maps: "/showcase/svc-maps-editorial.jpg",
+  social: "/showcase/agency-social-studio-hero.jpg",
   maintenance: "/showcase/svc-webcare-editorial.jpg",
   crm: "/showcase/lot5_crm_leads_pro.png",
   robotics: "/showcase/atlas-o2-studio.jpg",
@@ -48,193 +30,100 @@ export const ORDERED_SERVICES = [
       ar: "01 · عالم الويب · راقٍ ومميز",
       ru: "01 · WEB-ВСЕЛЕННАЯ · ПРЕМИУМ",
     },
-    accent: "#c5a880",
-    halo: "rgba(197, 168, 128, 0.12)",
-    icon: Globe2,
     href: "/services/websites",
-    price: 499,
-    period: "once",
-  },
-  {
-    id: "maps",
-    funnelId: "maps",
-    num: "02",
-    tag: {
-      fr: "02 · VISIBILITÉ LOCALE GOOGLE MAPS",
-      en: "02 · GOOGLE MAPS · LOCAL VISIBILITY",
-      vi: "02 · VŨ TRỤ MAPS · TOP 3 ĐỊA PHƯƠNG",
-      ar: "02 · عالم MAPS · حزمة TOP 3 محلياً",
-      ru: "02 · MAPS-ВСЕЛЕННАЯ · ТОП-3 НА КАРТАХ",
-    },
-    accent: "#ea4335",
-    halo: "rgba(234, 67, 53, 0.12)",
-    icon: MapPinned,
-    href: "/services/maps",
-    price: 999,
-    period: "year",
-  },
-  {
-    id: "social",
-    funnelId: "social",
-    num: "03",
-    tag: {
-      fr: "03 · UNIVERS SOCIAL · TOURNAGES & REELS 4K",
-      en: "03 · SOCIAL UNIVERSE · 4K VIDEO PRODUCTION",
-      vi: "03 · VŨ TRỤ SOCIAL · SẢN XUẤT REELS 4K",
-      ar: "03 · عالم التواصل · إنتاج ريلز 4K",
-      ru: "03 · SOCIAL-ВСЕЛЕННАЯ · 4K-ПРОДАКШН",
-    },
-    accent: "#f43f5e",
-    halo: "rgba(244, 63, 94, 0.12)",
-    icon: Users,
-    href: "/services/social",
-    price: 349,
-    period: "month",
   },
   {
     id: "branding",
     funnelId: "branding",
-    num: "04",
+    num: "02",
     tag: {
-      fr: "04 · UNIVERS BRANDING · IDENTITÉ DE PRESTIGE",
-      en: "04 · BRANDING UNIVERSE · PRESTIGE IDENTITY",
-      vi: "04 · VŨ TRỤ THƯƠNG HIỆU · DẤU ẤN VÀNG",
-      ar: "04 · عالم الهوية · توقيع مميز وراقي",
-      ru: "04 · БРЕНДИНГ · ПРЕМИАЛЬНЫЙ СТИЛЬ",
+      fr: "02 · BRANDING & IDENTITÉ DE PRESTIGE",
+      en: "02 · BRANDING & PRESTIGE IDENTITY",
+      vi: "02 · THƯƠNG HIỆU & DẤU ẤN VÀNG",
+      ar: "02 · الهوية البصرية والعلامة الراقية",
+      ru: "02 · БРЕНДИНГ И ПРЕМИАЛЬНЫЙ СТИЛЬ",
     },
-    accent: "#f59e0b",
-    halo: "rgba(245, 158, 11, 0.12)",
-    icon: Palette,
     href: "/services/branding",
-    price: 199,
-    period: "once",
   },
   {
     id: "seo",
     funnelId: "seo",
+    num: "03",
+    tag: {
+      fr: "03 · SEO GOOGLE & AUTORITÉ ORGANIQUE",
+      en: "03 · GOOGLE SEO & ORGANIC AUTHORITY",
+      vi: "03 · SEO GOOGLE & UY TÍN TỰ NHIÊN",
+      ar: "03 · سيو جوجل والظهور العضوي",
+      ru: "03 · SEO GOOGLE И АВТОРИТЕТ В ПОИСКЕ",
+    },
+    href: "/services/seo",
+  },
+  {
+    id: "maps",
+    funnelId: "maps",
+    num: "04",
+    tag: {
+      fr: "04 · GOOGLE MAPS · VISIBILITÉ PACK LOCAL TOP 3",
+      en: "04 · GOOGLE MAPS · LOCAL 3-PACK VISIBILITY",
+      vi: "04 · GOOGLE MAPS · TOP 3 ĐỊA PHƯƠNG",
+      ar: "04 · خرائط GOOGLE · حزمة TOP 3 محلياً",
+      ru: "04 · GOOGLE MAPS · ТОП-3 НА ЛОКАЛЬНЫХ КАРТАХ",
+    },
+    href: "/services/maps",
+  },
+  {
+    id: "social",
+    funnelId: "social",
     num: "05",
     tag: {
-      fr: "05 · UNIVERS SEO · AUTORITÉ & TOP POSITIONS",
-      en: "05 · SEO UNIVERSE · AUTHORITY & TOP RANKINGS",
-      vi: "05 · VŨ TRỤ SEO · UY TÍN & TOP 1",
-      ar: "05 · عالم SEO · سلطة ومراكز أولى",
-      ru: "05 · SEO-ВСЕЛЕННАЯ · ТОП-ПОЗИЦИИ",
+      fr: "05 · SOCIAL MEDIA & PRODUCTION VIDÉO 4K",
+      en: "05 · SOCIAL MEDIA & 4K VIDEO STUDIO",
+      vi: "05 · MẠNG XÃ HỘI & SẢN XUẤT VIDEO 4K",
+      ar: "05 · إدارة التواصل والإنتاج السينمائي 4K",
+      ru: "05 · СОЦСЕТИ И 4K-ВИДЕОПРОДАКШН",
     },
-    accent: "#8b5cf6",
-    halo: "rgba(139, 92, 246, 0.12)",
-    icon: BarChart3,
-    href: "/services/seo",
-    price: 299,
-    period: "month",
+    href: "/services/social",
   },
   {
     id: "maintenance",
     funnelId: "maintenance",
     num: "06",
     tag: {
-      fr: "06 · UNIVERS WEBCARE · CYBER SÉCURITÉ 24/7",
-      en: "06 · WEBCARE UNIVERSE · 24/7 CYBER SECURITY",
-      vi: "06 · VŨ TRỤ WEBCARE · BẢO MẬT 24/7",
-      ar: "06 · عالم الرعاية · أمان سيبراني 24/7",
-      ru: "06 · WEBCARE · БЕЗОПАСНОСТЬ 24/7",
+      fr: "06 · WEBCARE & CYBER SÉCURITÉ 24/7",
+      en: "06 · WEBCARE & 24/7 CLOUD SECURITY",
+      vi: "06 · BẢO TRÌ & BẢO MẬT 24/7",
+      ar: "06 · صيانة المواقع والأمان السحابي 24/7",
+      ru: "06 · ПОДДЕРЖКА WEBCARE И БЕЗОПАСНОСТЬ 24/7",
     },
-    accent: "#0ea5e9",
-    halo: "rgba(14, 165, 233, 0.12)",
-    icon: ShieldCheck,
     href: "/services/webcare",
-    price: 29,
-    period: "month",
   },
   {
     id: "crm",
     funnelId: "crm",
     num: "07",
     tag: {
-      fr: "07 · UNIVERS CRM SUR-MESURE & LOGICIELS MÉTIER",
+      fr: "07 · CRM SUR-MESURE & LOGICIELS MÉTIER",
       en: "07 · BESPOKE CRM & OPERATIONS SOFTWARE",
-      vi: "07 · VŨ TRỤ CRM MAY ĐO & PHẦN MỀM QUẢN TRỊ",
-      ar: "07 · عالم الـ CRM المخصص وبرمجيات الأعمال",
-      ru: "07 · ЗАКАЗНЫЕ CRM И СИСТЕМЫ УПРАВЛЕНИЯ",
+      vi: "07 · CRM MAY ĐO & PHẦN MỀM QUẢN TRỊ",
+      ar: "07 · أنظمة CRM المخصصة وبرمجيات الأعمال",
+      ru: "07 · ЗАКАЗНЫЕ CRM И УПРАВЛЕНЧЕСКИЙ СОФТ",
     },
-    accent: "#c5a880",
-    halo: "rgba(197, 168, 128, 0.14)",
-    icon: Layers,
     href: "/services/crm",
-    price: 2000,
-    period: "once",
   },
   {
     id: "robotics",
     funnelId: "robotics",
     num: "08",
     tag: {
-      fr: "08 · UNIVERS ROBOTIQUE AUTONOME & IA PHYSIQUE",
-      en: "08 · AUTONOMOUS ROBOTICS & PHYSICAL AI",
-      vi: "08 · VŨ TRỤ ROBOT TỰ HÀNH & AI VẬT LÝ",
-      ar: "08 · عالم الروبوتات الذاتية والذكاء الاصطناعي",
-      ru: "08 · АВТОНОМНЫЕ РОБОТЫ И ФИЗИЧЕСКИЙ ИИ",
+      fr: "08 · ROBOTIQUE AUTONOME & IA PHYSIQUE KORBEN",
+      en: "08 · AUTONOMOUS ROBOTICS & KORBEN PHYSICAL AI",
+      vi: "08 · ROBOT TỰ HÀNH & AI VẬT LÝ KORBEN",
+      ar: "08 · الروبوتات الذاتية والذكاء الاصطناعي KORBEN",
+      ru: "08 · АВТОНОМНАЯ РОБОТОТЕХНИКА KORBEN",
     },
-    accent: "#d4af37",
-    halo: "rgba(212, 175, 55, 0.12)",
-    icon: Bot,
     href: "/services/robotique",
-    price: 499,
-    period: "month",
   },
 ] as const;
-
-const COPY = {
-  fr: {
-    eyebrow: "08 SERVICES D'ÉLITE · LE PARCOURS STRATÉGIQUE",
-    title: "Nos 8 Pôles d'Excellence : Choisissez votre levier, découvrez le dispositif complet.",
-    lead: "Des livrables transparents, des garanties contractuelles et une exécution de prestige pour chaque pilier de votre croissance.",
-    from: "À partir de",
-    open: "Découvrir la prestation",
-    quote: "Configurer avec Alexandre",
-    perMonth: "/ MOIS",
-    perYear: "/ AN",
-  },
-  en: {
-    eyebrow: "08 ELITE SERVICES · STRATEGIC JOURNEY",
-    title: "8 Centres of Excellence: Select your growth lever, explore the complete system.",
-    lead: "Transparent deliverables, contractual guarantees and prestige execution for every pillar of your digital growth.",
-    from: "From",
-    open: "Explore service",
-    quote: "Configure with Alexandre",
-    perMonth: "/ MONTH",
-    perYear: "/ YEAR",
-  },
-  vi: {
-    eyebrow: "08 DỊCH VỤ CAO CẤP · LỘ TRÌNH CHIẾN LƯỢC",
-    title: "8 Trụ cột Chuyên môn: Chọn đòn bẩy phát triển, khám phá giải pháp toàn diện.",
-    lead: "Hạng mục bàn giao minh bạch, cam kết chuẩn mực và chất lượng thi công đỉnh cao cho doanh nghiệp.",
-    from: "Từ",
-    open: "Khám phá dịch vụ",
-    quote: "Cấu hình cùng Alexandre",
-    perMonth: "/ THÁNG",
-    perYear: "/ NĂM",
-  },
-  ar: {
-    eyebrow: "08 خدمات متميزة · المسار الاستراتيجي المتكامل",
-    title: "8 أقطاب تميز: اختر محور نموك واكتشف المنظومة المتكاملة.",
-    lead: "مخرجات واضحة وشفافة، ضمانات موثقة وتنفيذ رفيع المستوى لكل ركيزة من ركائز نموك الرقمي.",
-    from: "ابتداءً من",
-    open: "استكشف الخدمة",
-    quote: "تكوين العرض مع ألكسندر",
-    perMonth: "/ شهريًا",
-    perYear: "/ سنويًا",
-  },
-  ru: {
-    eyebrow: "08 ПРЕМИАЛЬНЫХ УСЛУГ · СТРАТЕГИЧЕСКИЙ МАРШРУТ",
-    title: "8 направлений экспертизы: выберите точку роста и откройте готовую систему.",
-    lead: "Прозрачные результаты, договорные гарантии и безупречное исполнение для каждого направления вашего бизнеса.",
-    from: "От",
-    open: "Подробнее об услуге",
-    quote: "Настроить с Александром",
-    perMonth: "/ МЕСЯЦ",
-    perYear: "/ ГОД",
-  },
-} as const;
 
 function ServiceLink({
   id,
@@ -282,220 +171,237 @@ function ServiceLink({
 
 export function HomeServices() {
   const { t, price, lang } = useLang();
-  const copy = COPY[lang as keyof typeof COPY] ?? COPY.fr;
   const funnel = useOptionalFunnel();
-  const currentLang = (lang in FUNNEL_SERVICE_BTN ? lang : "fr") as Lang;
+  const [active, setActive] = useState(0);
+  const locale = (lang || "fr") as Lang;
+
+  useEffect(() => {
+    const nodes = ORDERED_SERVICES.map((item) =>
+      document.getElementById(`home-service-${item.id}`),
+    ).filter(Boolean) as HTMLElement[];
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        const index = ORDERED_SERVICES.findIndex(
+          (item) => `home-service-${item.id}` === visible.target.id,
+        );
+        if (index >= 0) setActive(index);
+      },
+      { rootMargin: "-30% 0px -40% 0px", threshold: [0.1, 0.35, 0.6] },
+    );
+
+    nodes.forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section
       id="services"
       data-section="homepage-services"
-      className="relative overflow-hidden border-y border-[#151310]/10 bg-[#FAF8F5] py-14 sm:py-20 lg:py-24 text-[#151310]"
+      className="relative bg-[#FAF8F5] py-20 sm:py-28 lg:py-36 text-[#1A1815]"
     >
-      {/* Subtle warm champagne ambient glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-30"
-        style={{
-          background:
-            "radial-gradient(ellipse at 25% 15%, rgba(197, 168, 128, 0.12), transparent 55%), radial-gradient(ellipse at 75% 75%, rgba(212, 175, 55, 0.08), transparent 55%)",
-        }}
-      />
-
-      <div className="relative mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
-        {/* Section Global Header Style NexPro Luminous */}
-        <Reveal>
-          <div className="max-w-5xl pb-10 border-b border-[#151310]/10">
-            <div className="inline-flex items-center gap-3 mb-3">
-              <span className="h-px w-8 bg-[#C5A880]" />
-              <span className="font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-[#8D6C42]">
-                02 / NOS 8 PÔLES D'EXPERTISE & DE CONVERSION
+      <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
+        {/* Header */}
+        <div className="mb-14 grid gap-8 border-b border-[#1A1815]/10 pb-10 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <div className="mb-3 inline-flex items-center gap-2.5">
+              <span className="h-px w-8 bg-[#A67C40]" />
+              <span className="font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-[#A67C40]">
+                NOS 8 PÔLES D'EXCELLENCE · PARCOURS STRATÉGIQUE
               </span>
             </div>
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-              <h2 className="font-serif text-3xl sm:text-5xl lg:text-[3.4rem] font-medium leading-[1.08] tracking-[-0.02em] text-[#12110E]">
-                {copy.title}
-              </h2>
-              <p className="max-w-md text-xs sm:text-sm leading-relaxed text-[#5C564C]">
-                {copy.lead}
-              </p>
-            </div>
+            <h2 className="font-serif text-3xl sm:text-5xl lg:text-[3.8rem] font-medium leading-[1.04] tracking-[-0.03em] text-[#1A1815]">
+              Choisissez votre levier, découvrez le dispositif complet.
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[#5C554B] sm:text-base">
+              Chaque discipline est pensée pour s’intégrer avec rigueur à votre écosystème : livrables documentés, garanties claires et exécution sans compromis.
+            </p>
           </div>
-        </Reveal>
+          <div className="hidden lg:block font-mono text-right text-xs uppercase tracking-[0.2em] text-[#A67C40] font-semibold">
+            {String(active + 1).padStart(2, "0")} / {String(ORDERED_SERVICES.length).padStart(2, "0")}
+          </div>
+        </div>
 
-        {/* 8 Services Unfolding Sequentially with Parallax Effect */}
-        <div className="divide-y divide-[#151310]/10">
-          {ORDERED_SERVICES.map((item, idx) => {
-            const service = SERVICES.find((s) => s.id === item.id) ?? SERVICES[0];
-            const isSelected = funnel?.selectedServices.includes(item.funnelId) ?? false;
-            const isEven = idx % 2 === 0;
-            const photoUrl = SERVICE_IMAGES[item.id] || "/showcase/web-luxury-showcase.jpg";
-
-            return (
-              <article
+        {/* ── PARALLAX CARDS SEQUENCE WITH LATERAL TIMELINE ── */}
+        <div className="grid gap-8 lg:grid-cols-[64px_minmax(0,1fr)]">
+          {/* Vertical Dash Indicator */}
+          <aside className="hidden lg:flex flex-col items-center gap-3 pt-6 sticky top-36 h-fit">
+            {ORDERED_SERVICES.map((item, index) => (
+              <button
                 key={item.id}
-                id={item.id === "websites" ? "services-websites" : `services-${item.id}`}
-                className="relative py-12 sm:py-16 lg:py-20"
+                type="button"
+                onClick={() =>
+                  document
+                    .getElementById(`home-service-${item.id}`)
+                    ?.scrollIntoView({ behavior: "smooth", block: "center" })
+                }
+                aria-label={item.num}
+                className="group flex w-full items-center justify-center py-1.5 transition-all"
               >
-                <div
-                  className={`relative grid grid-cols-1 gap-10 lg:gap-16 items-center ${isEven ? "lg:grid-cols-[1fr_1.18fr]" : "lg:grid-cols-[1.18fr_1fr]"}`}
+                <span
+                  className={cn(
+                    "h-1.5 rounded-full transition-all duration-300",
+                    index === active
+                      ? "w-9 bg-[#A67C40]"
+                      : "w-2.5 bg-[#D5D0C5] hover:w-5 hover:bg-[#8C8274]",
+                  )}
+                />
+              </button>
+            ))}
+          </aside>
+
+          {/* Large Parallax Cards */}
+          <div className="relative space-y-8 sm:space-y-12">
+            {ORDERED_SERVICES.map((item, index) => {
+              const service = SERVICES.find((s) => s.id === item.id) ?? SERVICES[0];
+              const image = SERVICE_IMAGES[item.id] || "/showcase/web-luxury-showcase.jpg";
+              const plans = service.plans.slice(0, 3);
+              const isSelected = funnel?.selectedServices.includes(item.funnelId) ?? false;
+
+              return (
+                <article
+                  id={`home-service-${item.id}`}
+                  key={item.id}
+                  className="group relative min-h-[68vh] overflow-hidden rounded-[2.2rem] border border-[#1A1815]/12 bg-[#12100D] text-white shadow-2xl transition duration-500 hover:border-[#A67C40]/50 lg:min-h-[76vh]"
                 >
-                  {/* Column 1: Editorial Value Proposition */}
-                  <div
-                    className={`flex flex-col justify-between space-y-6 ${isEven ? "lg:order-1" : "lg:order-2"}`}
-                  >
-                    <div>
-                      {/* Category Eyebrow Pill */}
-                      <div
-                        className="inline-flex items-center gap-2 rounded-full border px-3.5 py-1 font-mono text-[10px] font-semibold tracking-[.2em] transition-all"
-                        style={{
-                          borderColor: `${item.accent}66`,
-                          color: "#7D6445",
-                          backgroundColor: `${item.accent}15`,
-                        }}
-                      >
-                        <span
-                          className="h-1.5 w-1.5 rounded-full"
-                          style={{ background: item.accent }}
-                        />
-                        {item.tag[currentLang] ?? item.tag.fr}
+                  {/* Background photo with subtle parallax scale */}
+                  <img
+                    src={image}
+                    alt={t(service.title)}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover opacity-45 brightness-[0.85] transition-transform duration-[1600ms] ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/35" />
+
+                  {/* Card Content Overlay */}
+                  <div className="relative z-10 flex min-h-[68vh] flex-col justify-between p-7 sm:p-10 lg:min-h-[76vh] lg:p-14">
+                    {/* Top Bar inside card */}
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3.5 py-1 backdrop-blur-md">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696] animate-pulse" />
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#E5C696]">
+                          {item.tag[locale] ?? item.tag.fr}
+                        </span>
                       </div>
 
-                      {/* Service Title */}
-                      <h3 className="mt-4 font-serif text-2xl sm:text-3xl lg:text-[2.4rem] font-medium leading-[1.1] text-[#12110E]">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono rounded-full border border-[#E5C696]/30 bg-black/50 px-3 py-1 text-xs font-semibold text-[#E5C696] backdrop-blur-md">
+                          Dès {item.id === "maps" ? "999 €" : price(service.fromEur)}
+                          {service.fromPeriod === "month"
+                            ? " / mois"
+                            : service.fromPeriod === "year"
+                              ? " / an"
+                              : ""}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Main Information */}
+                    <div className="max-w-4xl py-6">
+                      <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-[#E5C696]/80">
+                        {t(service.short)}
+                      </p>
+                      <h3 className="mt-2 font-serif text-3xl sm:text-5xl lg:text-[4.2rem] font-medium leading-[1.02] tracking-[-0.03em] text-white">
                         {t(service.title)}
                       </h3>
-
-                      {/* Description */}
-                      <p className="mt-4 max-w-xl text-sm leading-relaxed text-[#524E46]">
+                      <p className="mt-4 max-w-2xl text-xs sm:text-sm leading-relaxed text-white/80">
                         {t(service.description)}
                       </p>
 
-                      {/* Highlights Deliverables Style NexPro */}
-                      <div className="mt-6 space-y-2.5 border-t border-[#151310]/10 pt-5">
-                        {(service.highlights ?? []).slice(0, 3).map((hl, i) => (
-                          <div key={i} className="flex items-start gap-3 py-1 text-xs">
-                            <span className="font-mono text-[11px] font-bold text-[#A8824C]">
-                              0{i + 1}
+                      {/* Display the 3 Key Plans / Offers directly in the case */}
+                      <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                        {plans.map((plan) => (
+                          <div
+                            key={plan.name.fr}
+                            className="rounded-2xl border border-white/15 bg-black/40 p-4 backdrop-blur-md transition hover:border-[#E5C696]/50 hover:bg-black/60"
+                          >
+                            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#E5C696]">
+                              {t(plan.name)}
                             </span>
-                            <span className="text-[13px] font-medium leading-relaxed text-[#2B2823]">
-                              {t(hl)}
+                            <p className="font-serif mt-1.5 text-2xl font-bold text-white">
+                              {price(plan.eur)}
+                            </p>
+                            <span className="font-mono mt-0.5 block text-[10px] text-white/60">
+                              {plan.period === "month"
+                                ? "/ mois"
+                                : plan.period === "year"
+                                  ? "/ an"
+                                  : "paiement unique"}
                             </span>
                           </div>
                         ))}
                       </div>
-                    </div>
 
-                    {/* Price & Direct Actions */}
-                    <div className="pt-2">
-                      <div className="flex items-baseline justify-between border-y border-[#151310]/10 py-4 mb-6">
-                        <div>
-                          <span className="font-mono text-[10px] uppercase tracking-wider text-[#7D6445]">
-                            {copy.from}
-                          </span>
-                          <p className="font-serif mt-0.5 text-3xl sm:text-4xl font-bold text-[#12110E]">
-                            {item.id === "maps" ? "999 €" : price(service.fromEur)}
-                          </p>
-                        </div>
-                        <span className="font-mono text-[10px] font-semibold text-[#7D6445]">
-                          {item.period === "month"
-                            ? copy.perMonth
-                            : item.period === "year"
-                              ? copy.perYear
-                              : ""}
-                        </span>
-                      </div>
+                      {/* CTAs */}
+                      <div className="mt-8 flex flex-wrap items-center gap-3">
+                        <ServiceLink
+                          id={item.id}
+                          className="inline-flex items-center gap-2 rounded-full bg-[#E5C696] px-6 py-3 text-xs font-bold text-[#14110E] shadow-md transition hover:bg-[#F2D7B0]"
+                        >
+                          <span>Explorer la prestation</span>
+                          <ArrowUpRight className="h-4 w-4" />
+                        </ServiceLink>
 
-                      <div className="flex flex-wrap items-center gap-3">
-                        {/* Direct toggle into custom quote */}
                         <button
                           type="button"
                           onClick={() => funnel?.toggleService(item.funnelId)}
-                          className={
-                            "inline-flex items-center gap-2 rounded-full border px-4 py-2.5 font-mono text-[10px] font-bold tracking-wider transition-all duration-300 " +
-                            (isSelected
-                              ? "border-emerald-600 bg-emerald-50 text-emerald-800 shadow-sm"
-                              : "border-[#151310]/20 bg-white text-[#151310] hover:border-[#151310] hover:bg-[#FAF8F5] shadow-xs")
-                          }
+                          className={cn(
+                            "inline-flex items-center gap-2 rounded-full border px-5 py-3 font-mono text-[11px] font-semibold backdrop-blur-md transition",
+                            isSelected
+                              ? "border-emerald-500 bg-emerald-500/20 text-emerald-300"
+                              : "border-white/25 bg-black/30 text-white hover:border-white/60 hover:bg-black/50",
+                          )}
                         >
-                          {isSelected
-                            ? FUNNEL_SERVICE_BTN[currentLang]?.added || "✓ Dans votre devis"
-                            : FUNNEL_SERVICE_BTN[currentLang]?.add || "+ Ajouter au devis"}
+                          {isSelected ? "✓ Dans votre devis" : "+ Ajouter au devis"}
                         </button>
-
-                        {/* Link to dedicated service page */}
-                        <ServiceLink
-                          id={item.id}
-                          className="inline-flex items-center gap-2 rounded-full bg-[#151310] px-5 py-2.5 font-mono text-[10px] font-bold tracking-wider text-[#FAF8F5] transition hover:bg-[#2F2B24] shadow-sm"
-                        >
-                          {copy.open}
-                          <ArrowUpRight className="h-3.5 w-3.5" />
-                        </ServiceLink>
-
-                        {/* Configure directly with Alexandre */}
-                        <a
-                          href="#quote"
-                          onClick={() => {
-                            if (!isSelected) funnel?.toggleService(item.funnelId);
-                          }}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-[#151310]/15 bg-white px-4 py-2.5 font-mono text-[10px] font-medium text-[#5C564C] transition hover:border-[#C5A880] hover:text-[#151310]"
-                        >
-                          {copy.quote}
-                          <ArrowRight className="h-3 w-3 text-[#A8824C]" />
-                        </a>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Column 2: Rich Interactive Illustration with Parallax */}
-                  <div className={`relative ${isEven ? "lg:order-2" : "lg:order-1"}`}>
-                    <Parallax speed={isEven ? 0.05 : -0.05}>
-                      <div className="group relative overflow-hidden rounded-[2.2rem] border border-[#151310]/12 bg-white shadow-[0_20px_50px_rgba(21,19,16,0.06)]">
-                        {/* Subtle photo ambient backdrop */}
-                        <div className="absolute inset-0 opacity-15 transition-opacity duration-700 group-hover:opacity-25">
-                          <img
-                            src={photoUrl}
-                            alt=""
-                            className="h-full w-full object-cover filter contrast-105"
-                          />
-                        </div>
-                        <div className="relative z-10">
-                          <ServiceIllustration service={item.id} title={t(service.title)} />
-                        </div>
-                      </div>
-                    </Parallax>
+                    {/* Bottom Indicator */}
+                    <div className="flex items-center justify-between border-t border-white/15 pt-4 font-mono text-[10px] text-white/50 uppercase tracking-widest">
+                      <span>
+                        0{index + 1} / 0{ORDERED_SERVICES.length}
+                      </span>
+                      <span className="hidden sm:inline">
+                        Faites défiler pour le service suivant ↓
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </article>
-            );
-          })}
+                </article>
+              );
+            })}
+          </div>
         </div>
 
         {/* ── PANORAMIC CARDS OVERVIEW (Épuré, Grand Format & Équilibré) ── */}
-        <div className="mt-16 sm:mt-24 pt-12 border-t border-[#151310]/10">
-          <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <div className="mt-20 pt-16 border-t border-[#1A1815]/10">
+          <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>
-              <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-[#8D6C42]">
-                VUE D'ENSEMBLE · 8 PILIERS
+              <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.24em] text-[#A67C40]">
+                VUE D'ENSEMBLE · 8 PILIERS D'EXPERTISE
               </span>
-              <h3 className="mt-2 font-serif text-2xl sm:text-4xl font-medium text-[#12110E]">
+              <h3 className="mt-2 font-serif text-2xl sm:text-4xl font-medium text-[#1A1815]">
                 Tous nos services en un coup d'œil.
               </h3>
             </div>
-            <p className="max-w-md text-xs sm:text-sm text-[#5C564C]">
-              Chaque discipline peut être activée individuellement ou combinée au sein d'un écosystème global.
+            <p className="max-w-md text-xs sm:text-sm text-[#5C554B] leading-relaxed">
+              Activez un levier spécifique ou orchestrez un dispositif digital global pour votre marque.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {ORDERED_SERVICES.map((s, idx) => {
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {ORDERED_SERVICES.map((s) => {
               const service = SERVICES.find((item) => item.id === s.id) ?? SERVICES[0];
               const photo = SERVICE_IMAGES[s.id] || "/showcase/web-luxury-showcase.jpg";
               return (
                 <ServiceLink
                   key={s.id}
                   id={s.id}
-                  className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-[#151310]/12 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#C5A880] hover:shadow-xl"
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-[#1A1815]/10 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#A67C40] hover:shadow-xl"
                 >
                   <div>
                     <div className="aspect-[16/10] w-full overflow-hidden rounded-2xl bg-[#EBE7DF] relative mb-5">
@@ -510,25 +416,29 @@ export function HomeServices() {
                       </div>
                     </div>
 
-                    <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-[#8D6C42]">
-                      {s.id === "crm" ? "CRM & LOGICIEL" : s.id === "maps" ? "LOCAL SEO" : s.id.toUpperCase()}
+                    <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-[#A67C40]">
+                      {s.id === "crm"
+                        ? "CRM & LOGICIEL"
+                        : s.id === "maps"
+                          ? "LOCAL SEO"
+                          : s.id.toUpperCase()}
                     </span>
-                    <h4 className="mt-1 font-serif text-lg font-bold text-[#12110E] leading-snug group-hover:text-[#A8824C] transition-colors">
+                    <h4 className="mt-1 font-serif text-lg font-bold text-[#1A1815] leading-snug group-hover:text-[#A67C40] transition-colors">
                       {t(service.title)}
                     </h4>
-                    <p className="mt-2 text-xs leading-relaxed text-[#5C564C] line-clamp-2">
+                    <p className="mt-2 text-xs leading-relaxed text-[#5C554B] line-clamp-2">
                       {t(service.description)}
                     </p>
                   </div>
 
-                  <div className="mt-5 flex items-center justify-between border-t border-[#151310]/10 pt-4">
+                  <div className="mt-5 flex items-center justify-between border-t border-[#1A1815]/10 pt-4">
                     <div>
-                      <span className="font-mono text-[9px] text-[#7D6445] uppercase">Dès</span>
-                      <p className="font-serif text-lg font-bold text-[#12110E]">
+                      <span className="font-mono text-[9px] text-[#8C8274] uppercase">Dès</span>
+                      <p className="font-serif text-lg font-bold text-[#1A1815]">
                         {s.id === "maps" ? "999 €" : price(service.fromEur)}
                       </p>
                     </div>
-                    <span className="grid h-8 w-8 place-items-center rounded-full bg-[#FAF8F5] border border-[#151310]/10 text-[#12110E] transition-all group-hover:bg-[#12110E] group-hover:text-white">
+                    <span className="grid h-8 w-8 place-items-center rounded-full bg-[#FAF8F5] border border-[#1A1815]/10 text-[#1A1815] transition-all group-hover:bg-[#1A1815] group-hover:text-white">
                       <ArrowUpRight className="h-4 w-4" />
                     </span>
                   </div>
