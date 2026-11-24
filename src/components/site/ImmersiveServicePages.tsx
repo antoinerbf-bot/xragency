@@ -1888,44 +1888,44 @@ export function MapsDominationStudioPage() {
                 </div>
               </div>
 
-              {/* OFFRE 02 : GESTION ANNUELLE (500 € / AN) */}
-              <div className="relative flex flex-col justify-between rounded-3xl border border-[#16A34A]/30 bg-white p-7 shadow-lg transition-all duration-300 hover:border-[#16A34A] hover:shadow-xl sm:p-8">
+              {/* OFFRE 02 : PACK CONQUÊTE & DOMINATION TOP 3 (1 490 € / AN) */}
+              <div className="relative flex flex-col justify-between rounded-3xl border border-[#A67C40]/40 bg-white p-7 shadow-lg transition-all duration-300 hover:border-[#A67C40] hover:shadow-xl sm:p-8">
                 <div>
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#EBEBE6] pb-4">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#16A34A]/10 px-3 py-1 font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#16A34A]">
-                      <Star className="h-3.5 w-3.5 fill-[#16A34A] text-[#16A34A]" />
-                      {t(l("OFFRE 02 · PILOTAGE COMPLET 12 MOIS", "PLAN 02 · FULL 12-MONTH MANAGEMENT", "GÓI 02 · QUẢN TRỊ TOÀN DIỆN 12 THÁNG", "العرض 02 · إدارة سنوية شاملة 12 شهرًا", "ТАРИФ 02 · ПОЛНОЕ ГОДОВОЕ ВЕДЕНИЕ 12 МЕСЯЦЕВ"))}
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#A67C40]/10 px-3 py-1 font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#A67C40]">
+                      <Star className="h-3.5 w-3.5 fill-[#A67C40] text-[#A67C40]" />
+                      {t(l("OFFRE 02 · PACK CONQUÊTE TOP 3 LOCAL", "PLAN 02 · TOP 3 LOCAL CONQUEST PACK", "GÓI 02 · CHIẾM LĨNH TOP 3 ĐỊA PHƯƠNG", "العرض 02 · باقة الهيمنة على المراكز الثلاثة الأولى", "ТАРИФ 02 · ЗАВОЕВАНИЕ ТОП-3 НА КАРТАХ"))}
                     </span>
-                    <span className="font-mono text-[11px] font-bold text-[#16A34A]">
-                      {t(l("Facturation annuelle unique · 0 abonnement", "Single annual billing · zero monthly subscription", "Thanh toán theo năm · không phí tháng", "دفع سنوي واحد · بدون اشتراك شهري", "Разовая годовая оплата · без ежемесячных списаний"))}
+                    <span className="font-mono text-[11px] font-bold text-[#A67C40]">
+                      {t(l("Accompagnement intensif 1 an", "Intensive 1-year support", "Đồng hành chuyên sâu 1 năm", "متابعة مكثفة لمدة سنة", "Интенсивное годовое ведение"))}
                     </span>
                   </div>
 
                   <h3 className="mt-4 font-serif text-2xl font-medium text-[#12110E] sm:text-3xl">
-                    {t(l("Gestion Annuelle de Fiche Google Maps", "Annual Google Maps Profile Management", "Quản lý Hồ sơ Google Maps Hàng năm", "إدارة سنوية شاملة لملف خرائط Google", "Годовое ведение профиля Google Maps"))}
+                    {t(l("Pack Conquête & Domination Top 3", "Top 3 Conquest & Local Domination Pack", "Gói Chiếm lĩnh Top 3 Địa phương", "باقة الهيمنة على المراكز الثلاثة الأولى محلياً", "Пакет Завоевание Топ-3 на картах"))}
                   </h3>
 
                   <div className="mt-3 flex items-baseline gap-2">
                     <span className="text-xs font-semibold uppercase tracking-wider text-[#52504A]">
-                      {t(l("Tarif fixe", "Fixed rate", "Giá trọn gói", "سعر ثابت", "Фиксированная цена"))}
+                      {t(l("Tarif annuel", "Annual rate", "Giá theo năm", "سعر سنوي", "Годовой тариф"))}
                     </span>
                     <span className="font-serif text-4xl font-bold text-[#12110E] sm:text-5xl">
-                      {price(500)}
+                      {price(1490)}
                     </span>
                     <span className="font-mono text-xs text-[#52504A]"> / an</span>
-                    <span className="rounded-full bg-[#F0FDF4] px-2.5 py-0.5 font-mono text-[10.5px] font-bold text-[#16A34A]">
-                      {t(l("Pack Annuel Clé en Main", "Turnkey Annual Pack", "Gói Trọn Gói Năm", "الباقة السنوية المتكاملة", "Годовой пакет под ключ"))}
+                    <span className="rounded-full bg-[#FAF8F5] px-2.5 py-0.5 font-mono text-[10.5px] font-bold text-[#A67C40] border border-[#A67C40]/25">
+                      {t(l("Recommandé Forte Concurrence", "Recommended High Competition", "Khuyên dùng Cạnh tranh cao", "موصى به للمنافسة الشديدة", "Рекомендовано при высокой конкуренции"))}
                     </span>
                   </div>
 
                   <p className="mt-3 text-xs leading-relaxed text-[#52504A]">
                     {t(
                       l(
-                        "Déléguez l'animation complète de votre établissement sur Google pendant 12 mois : réponse rédigée sous 48h à 100% de vos avis clients, publication de photos géolocalisées et actualités, mise à jour des horaires et protection active anti-modifications.",
-                        "Delegate your complete Google presence for 12 months: professional replies to 100% of reviews within 48h, geotagged photos, regular updates, holiday schedules and active anti-tampering protection.",
-                        "Ủy thác toàn diện hồ sơ Google trong 12 tháng: phản hồi 100% đánh giá trong 48h, đăng ảnh định vị và bảo vệ hồ sơ khỏi đối thủ.",
-                        "إدارة سنوية متكاملة لملفك على خرائط Google لمدة 12 شهراً: رد راقٍ على 100% من التقييمات خلال 48 ساعة، نشر صور وعروض وتحديث مستمر وحماية السمعة.",
-                        "Комплексное ведение карточки 12 месяцев: индивидуальные ответы на 100% отзывов за 48ч, регулярные фото, новости и защита от правок.",
+                        "Le programme offensif pour passer devant vos concurrents directs : positionnement sur 5 à 10 mots-clés stratégiques, production photo haute définition, stratégie d'avis clients 5 étoiles et défense contre les fiches parasites.",
+                        "The offensive program to outrank your direct competitors: targeting 5 to 10 strategic keywords, high-definition photo production, 5-star review acquisition strategy and protection against duplicate/spam listings.",
+                        "Chương trình bứt phá dẫn đầu đối thủ: định vị 5-10 từ khóa chiến lược, hình ảnh chất lượng cao và bảo vệ toàn diện hồ sơ.",
+                        "البرنامج المتقدم لتصدر المنافسين: استهداف 5 إلى 10 كلمات مفتاحية استراتيجية وتصوير عالي الدقة واستراتيجية تقييمات 5 نجوم وحماية كاملة.",
+                        "Наступательная стратегия для обхода конкурентов: продвижение по 5–10 ключевым словам, качественные фото, сбор отзывов 5 звёзд и защита профиля.",
                       ),
                     )}
                   </p>
@@ -1933,14 +1933,14 @@ export function MapsDominationStudioPage() {
                   {/* Checklist */}
                   <ul className="mt-6 space-y-2.5 border-t border-[#EBEBE6] pt-5">
                     {[
-                      l("Réponse rédigée sur mesure sous 48h à 100% de vos avis clients", "Custom curated reply to 100% of customer reviews within 48h", "Phản hồi chuyên nghiệp 100% đánh giá trong 48h", "رد مخصص على 100% من التقييمات خلال 48 ساعة", "Индивидуальный ответ на 100% отзывов за 48ч"),
-                      l("Publication régulière de photos géolocalisées & actualités", "Regular geotagged photo uploads & special announcements", "Đăng tải hình ảnh định vị & ưu đãi định kỳ", "نشر صور جغرافية وعروض وتحديثات دورية", "Регулярная публикация гео-фото и новостей"),
-                      l("Mise à jour continue des horaires d'ouverture & jours fériés", "Continuous updates for opening hours and holidays", "Cập nhật liên tục giờ mở cửa và ngày lễ", "تحديث مستمر لمواعيد العمل والأعياد", "Актуализация часов работы и праздников"),
-                      l("Protection active anti-modifications malveillantes", "Active protection against malicious competitor edits", "Bảo vệ chủ động khỏi chỉnh sửa xấu từ đối thủ", "حماية استباقية من التعديلات العشوائية للمنافسين", "Защита от несанкционированных правок конкурентов"),
-                      l("Rapport annuel complet de visibilité, appels et itinéraires", "Annual visibility, phone calls and direction requests report", "Báo cáo thường niên về lượt xem, cuộc gọi và chỉ đường", "تقرير سنوي شامل للمكالمات والزيارات وطلبات الاتجاهات", "Годовой отчёт по звонкам, переходам и маршрутам"),
+                      l("Optimisation agressive sur 5 à 10 mots-clés stratégiques locaux", "Aggressive targeting across 5 to 10 high-intent strategic local queries", "Tối ưu hóa 5 đến 10 từ khóa địa phương chiến lược", "استهداف متقدم لـ 5 إلى 10 كلمات مفتاحية محلية", "Продвижение по 5–10 ключевым запросам"),
+                      l("Stratégie complète de collecte et de gestion automatisée des avis", "Full strategy for automated 5-star customer review collection", "Chiến lược tự động hóa thu thập đánh giá 5 sao", "استراتيجية أتمتة جمع التقييمات الإيجابية", "Стратегия сбора отзывов 5 звёзд"),
+                      l("Publication régulière de photos professionnelles géotaggées", "Regular high-definition geotagged photo uploads", "Đăng tải ảnh định vị chất lượng cao định kỳ", "نشر دوري لصور احترافية جغرافية", "Регулярные гео-фото высокого качества"),
+                      l("Protection active anti-modifications malveillantes & spam", "Active defense against competitor spam and malicious edits", "Bảo vệ chủ động chống spam và chỉnh sửa xấu", "حماية استباقية من التعديلات العشوائية والمنافسين", "Защита от спама и правок конкурентов"),
+                      l("Rapports mensuels de performance : appels, clics et itinéraires", "Monthly performance reporting: calls, clicks and directions", "Báo cáo hiệu suất hàng tháng: cuộc gọi, chỉ đường", "تقرير شهري للأداء: مكالمات وزيارات ومسارات", "Ежемесячные отчёты по звонкам и маршрутам"),
                     ].map((item, idx) => (
                       <li key={idx} className="flex items-start gap-2.5 text-xs text-[#2B2925]">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#16A34A]" />
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#A67C40]" />
                         <span>{t(item)}</span>
                       </li>
                     ))}
@@ -1952,8 +1952,8 @@ export function MapsDominationStudioPage() {
                     item={{
                       serviceId: "maps",
                       serviceName: "Google Maps",
-                      planName: t(l("Gestion Annuelle Fiche Google Maps", "Annual Google Maps Management", "Quản trị Google Maps Hàng năm", "الإدارة السنوية لخرائط Google", "Годовое ведение Google Maps")),
-                      priceEur: 500,
+                      planName: t(l("Pack Conquête & Domination Top 3", "Top 3 Conquest & Local Domination Pack", "Gói Chiếm lĩnh Top 3 Địa phương", "باقة الهيمنة على المراكز الثلاثة الأولى", "Пакет Завоевание Топ-3")),
+                      priceEur: 1490,
                       period: "year",
                       periodLabel: t(l(" / an", " / year", " / năm", " / سنة", " / год")),
                     }}
@@ -1963,11 +1963,11 @@ export function MapsDominationStudioPage() {
                     href={`${WA_BASE}${encodeURIComponent(
                       t(
                         l(
-                          "Bonjour XRAGENCY, je souhaite souscrire au forfait Gestion Annuelle Fiche Google Maps à 500 € / an.",
-                          "Hello XRAGENCY, I would like to subscribe to the Annual Google Maps Management pack at €500/year.",
-                          "Xin chào XRAGENCY, tôi muốn đăng ký gói Quản lý Google Maps Hàng năm 500 €/năm.",
-                          "مرحبًا XRAGENCY، أود الاشتراك في باقة الإدارة السنوية لملف خرائط Google بـ 500 € / سنة.",
-                          "Здравствуйте, XRAGENCY! Хочу подключить годовое ведение профиля Google Maps за 500 €/год.",
+                          "Bonjour XRAGENCY, je souhaite souscrire au Pack Conquête & Domination Google Maps Top 3 à 1 490 € / an.",
+                          "Hello XRAGENCY, I would like to subscribe to the Top 3 Conquest Google Maps pack at €1,490/year.",
+                          "Xin chào XRAGENCY, tôi muốn đăng ký gói Chiếm lĩnh Google Maps Top 3 (1.490 €/năm).",
+                          "مرحبًا XRAGENCY، أود الاشتراك في باقة الهيمنة على المراكز الثلاثة الأولى في خرائط Google بـ 1,490 € / سنة.",
+                          "Здравствуйте, XRAGENCY! Хочу подключить пакет Завоевание Топ-3 Google Maps за 1 490 €/год.",
                         ),
                       ),
                     )}`}
@@ -1975,7 +1975,7 @@ export function MapsDominationStudioPage() {
                     rel="noreferrer"
                     className="flex w-full items-center justify-center gap-2 rounded-full border border-[#D5D5CF] bg-white py-3 text-xs font-semibold text-[#12110E] transition hover:border-[#12110E] hover:bg-[#F5F5F0]"
                   >
-                    <MessageCircle className="h-4 w-4 text-[#16A34A]" />
+                    <MessageCircle className="h-4 w-4 text-[#A67C40]" />
                     <span>{t(l("Échanger sur WhatsApp", "Chat on WhatsApp", "Trao đổi WhatsApp", "تواصل عبر واتساب", "Написать в WhatsApp"))}</span>
                   </a>
                 </div>
@@ -2228,7 +2228,7 @@ export function MapsDominationStudioPage() {
                   </h3>
 
                   <p className="mt-2 text-xs text-[#52504A] sm:text-sm">
-                    {t(l("Devis personnalisé affiné après diagnostic de zone. Possibilité d'ajouter l'option Gestion Annuelle continue de Fiche à 500 € / an.", "Personalized quote refined after area diagnosis. Option to add continuous Annual Management at €500/year.", "Báo giá chính xác sau kiểm toán khu vực. Tùy chọn thêm gói Quản lý Hàng năm 500 €/năm.", "عرض سعر نهائي بعد تدقيق المنطقة، مع إمكانية إضافة باقة الإدارة السنوية بـ 500 €/سنة.", "Точный расчёт после аудита. Возможно подключение годового ведения за 500 €/год."))}
+                    {t(l("Devis personnalisé affiné après diagnostic de zone. Stratégie clé en main pour propulser votre fiche dans le Top 3 local.", "Personalized quote refined after area diagnosis. Turnkey strategy to propel your business into the local Top 3.", "Báo giá chính xác sau kiểm toán khu vực. Chiến lược trọn gói đưa hồ sơ vào Top 3 địa phương.", "عرض سعر نهائي بعد تدقيق المنطقة. استراتيجية شاملة لإيصال ملفك إلى المراكز الثلاثة الأولى.", "Точный расчёт после аудита. Стратегия под ключ для вывода карточки в топ-3 на картах."))}
                   </p>
                 </div>
 
@@ -3419,8 +3419,8 @@ export function MapsDominationStudioPage() {
                   a: l("Non, et aucun prestataire sérieux ne peut le garantir car Google reste seul souverain de son algorithme. Nous optimisons en revanche 100% des critères officiels (pertinence, distance, autorité des avis) pour maximiser vos chances de conquérir le Top 3.", "No, and no honest agency can guarantee rank #1 as Google controls its algorithm. However, we meticulously optimize 100% of official signals (relevance, distance, authority) to maximize your ranking power.", "Không, không ai có thể can thiệp thuật toán Google. Nhưng chúng tôi tối ưu 100% tiêu chí chính thức để tối đa hóa cơ hội đạt Top 3.", "لا، فخوارزمية جوجل وحدها صاحبة القرار. لكننا نحسن 100% من معايير الترتيب الرسمية لتعظيم فرصك في الصدارة.", "Нет, никто не управляет алгоритмом Google напрямую. Но мы выжимаем 100% из официальных факторов ранжирования."),
                 },
                 {
-                  q: l("Comment fonctionne la formule Gestion Annuelle à 500 € / an ?", "How does the €500/year annual management plan work?", "Gói quản trị hàng năm 500 €/năm hoạt động thế nào?", "كيف تعمل باقة الإدارة السنوية بـ 500 € / سنة؟", "Как работает годовое ведение за 500 €/год?"),
-                  a: l("C'est une gestion active clé en main pendant 12 mois sans abonnement mensuel : nous surveillons votre fiche, répondons sous 48h à 100% des avis clients, publions vos photos et actualités et protégeons votre profil contre les modifications frauduleuses.", "It is an active turnkey management service for 12 months with no monthly fee: we monitor your listing, respond to 100% of reviews within 48h, post photos and updates, and defend your profile.", "Đây là dịch vụ trọn gói 12 tháng không phí tháng: chăm sóc hồ sơ, phản hồi 100% đánh giá trong 48h, đăng ảnh và bảo vệ hồ sơ.", "إنها خدمة إدارة متكاملة لمدة 12 شهرًا بدون اشتراك شهري: نتابع ملفك ونرد على 100% من التقييمات وننشر الصور ونحمي الملف.", "Это комплексное годовое ведение без ежемесячных платежей: ответы на все отзывы за 48ч, регулярные фото и защита от спама."),
+                  q: l("Comment se déroule la conquête du Top 3 Google Maps ?", "How does ranking in the Top 3 on Google Maps work?", "Quy trình đưa hồ sơ lên Top 3 Google Maps như thế nào?", "كيف تسير خطة الوصول إلى المراكز الثلاثة الأولى؟", "Как проходит вывод в топ-3 на картах Google?"),
+                  a: l("Après l'audit initial de votre zone, nous restructurons intégralement votre profil : catégories sémantiques, photos géotaggées, nettoyage des citations locales et automatisation des avis clients 5 étoiles pour générer un flux d'appels et d'itinéraires régulier.", "After the initial area audit, we fully restructure your profile: semantic categories, geotagged photography, local citation cleanup and 5-star review acceleration to generate consistent calls and direction requests.", "Sau kiểm toán ban đầu, chúng tôi cấu trúc lại toàn bộ hồ sơ: danh mục chuẩn SEO, ảnh định vị và quy trình thu thập đánh giá 5 sao.", "بعد التدقيق الأولي لمنطقتك، نعيد هيكلة ملفك بالكامل: فئات دقيقة وصور احترافية وتنظيف البيانات المحلية وأتمتة تقييمات 5 نجوم لتدفق العملاء.", "После аудита мы полностью перенастраиваем профиль: точные категории, гео-фото, очистка цитирований и система сбора отзывов 5 звёзд."),
                 },
               ].map((faq, i) => (
                 <div key={i} className="rounded-2xl border border-[#E5E5E0] bg-white p-5 shadow-sm">

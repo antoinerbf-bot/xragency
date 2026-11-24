@@ -13,9 +13,9 @@ const SERVICE_IMAGES: Record<string, string> = {
   seo: "/showcase/svc-seo-editorial.jpg",
   maps: "/showcase/svc-maps-editorial.jpg",
   social: "/showcase/agency-social-studio-hero.jpg",
-  maintenance: "/showcase/svc-webcare-editorial.jpg",
-  crm: "/showcase/svc_crm_luxury.jpg",
-  robotics: "/showcase/svc_robotics_luxury.jpg",
+  maintenance: "/showcase/webcare_cyber_luxury.jpg",
+  crm: "/showcase/crm_digital_twin_3d.jpg",
+  robotics: "/showcase/robotics_futuristic_sleek.jpg",
 };
 
 export const ORDERED_SERVICES = [
@@ -254,8 +254,8 @@ export function HomeServices() {
             ))}
           </aside>
 
-          {/* Large Parallax Cards */}
-          <div className="relative space-y-8 sm:space-y-12">
+          {/* Sticky Parallax Cards Sequence */}
+          <div className="relative space-y-12 sm:space-y-16">
             {ORDERED_SERVICES.map((item, index) => {
               const service = SERVICES.find((s) => s.id === item.id) ?? SERVICES[0];
               const image = SERVICE_IMAGES[item.id] || "/showcase/web-luxury-showcase.jpg";
@@ -266,19 +266,20 @@ export function HomeServices() {
                 <article
                   id={`home-service-${item.id}`}
                   key={item.id}
-                  className="group relative min-h-[68vh] overflow-hidden rounded-[2.2rem] border border-[#1A1815]/12 bg-[#12100D] text-white shadow-2xl transition duration-500 hover:border-[#A67C40]/50 lg:min-h-[76vh]"
+                  style={{ top: `calc(5.5rem + ${index * 12}px)` }}
+                  className="sticky group relative min-h-[64vh] overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#12100D] text-white shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500 hover:border-[#A67C40]/50 lg:min-h-[72vh]"
                 >
                   {/* Background photo with subtle parallax scale */}
                   <img
                     src={image}
                     alt={t(service.title)}
                     loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover opacity-45 brightness-[0.85] transition-transform duration-[1600ms] ease-out group-hover:scale-105"
+                    className="absolute inset-0 h-full w-full object-cover opacity-40 brightness-[0.85] transition-transform duration-[1600ms] ease-out group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/35" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/65 to-black/30" />
 
                   {/* Card Content Overlay */}
-                  <div className="relative z-10 flex min-h-[68vh] flex-col justify-between p-7 sm:p-10 lg:min-h-[76vh] lg:p-14">
+                  <div className="relative z-10 flex min-h-[64vh] flex-col justify-between p-7 sm:p-10 lg:min-h-[72vh] lg:p-12">
                     {/* Top Bar inside card */}
                     <div className="flex items-start justify-between gap-4">
                       <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3.5 py-1 backdrop-blur-md">
@@ -289,7 +290,7 @@ export function HomeServices() {
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="font-mono rounded-full border border-[#E5C696]/30 bg-black/50 px-3 py-1 text-xs font-semibold text-[#E5C696] backdrop-blur-md whitespace-nowrap">
+                        <span className="font-mono rounded-full border border-[#E5C696]/30 bg-black/50 px-3.5 py-1 text-xs font-semibold text-[#E5C696] backdrop-blur-md whitespace-nowrap">
                           Dès {item.id === "maps" ? "999 €" : price(service.fromEur)}
                           {service.fromPeriod === "month"
                             ? " / mois"
@@ -301,23 +302,23 @@ export function HomeServices() {
                     </div>
 
                     {/* Main Information */}
-                    <div className="max-w-4xl py-6">
+                    <div className="max-w-4xl py-4 sm:py-6">
                       <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-[#E5C696]/80">
                         {t(service.short)}
                       </p>
-                      <h3 className="mt-2 font-serif text-3xl sm:text-5xl lg:text-[4.2rem] font-medium leading-[1.02] tracking-[-0.03em] text-white">
+                      <h3 className="mt-2 font-serif text-3xl sm:text-5xl lg:text-[3.8rem] font-medium leading-[1.04] tracking-[-0.03em] text-white">
                         {t(service.title)}
                       </h3>
-                      <p className="mt-4 max-w-2xl text-xs sm:text-sm leading-relaxed text-white/80">
+                      <p className="mt-3 max-w-2xl text-xs sm:text-sm leading-relaxed text-white/80">
                         {t(service.description)}
                       </p>
 
                       {/* Display the 3 Key Plans / Offers directly in the case */}
-                      <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                      <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
                         {plans.map((plan) => (
                           <div
                             key={plan.name.fr}
-                            className="rounded-2xl border border-white/15 bg-black/40 p-4 backdrop-blur-md transition hover:border-[#E5C696]/50 hover:bg-black/60"
+                            className="rounded-2xl border border-white/15 bg-black/45 p-4 backdrop-blur-md transition hover:border-[#E5C696]/50 hover:bg-black/65"
                           >
                             <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#E5C696]">
                               {t(plan.name)}
@@ -336,15 +337,24 @@ export function HomeServices() {
                         ))}
                       </div>
 
-                      {/* CTAs */}
-                      <div className="mt-8 flex flex-wrap items-center gap-3">
+                      {/* Conversion-Driven CTAs : Call + Quote + Explore */}
+                      <div className="mt-7 flex flex-wrap items-center gap-3">
                         <ServiceLink
                           id={item.id}
-                          className="inline-flex items-center gap-2 rounded-full bg-[#E5C696] px-6 py-3 text-xs font-bold text-[#14110E] shadow-md transition hover:bg-[#F2D7B0]"
+                          className="inline-flex items-center gap-2 rounded-full bg-[#E5C696] px-6 py-3 text-xs font-bold text-[#14110E] shadow-md transition hover:bg-[#F2D7B0] active:scale-[0.98]"
                         >
-                          <span>Explorer la prestation</span>
+                          <span>Explorer l'offre</span>
                           <ArrowUpRight className="h-4 w-4" />
                         </ServiceLink>
+
+                        <a
+                          href="https://wa.me/33649219808?text=Bonjour%20XRAGENCY%2C%20je%20souhaite%20r%C3%A9server%20un%20appel%20strat%C3%A9gique%20au%20sujet%20de%20vos%20services."
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-xs font-semibold text-white backdrop-blur-md transition hover:bg-white/20 active:scale-[0.98]"
+                        >
+                          <span>📞 Réserver un appel</span>
+                        </a>
 
                         <button
                           type="button"
@@ -364,85 +374,14 @@ export function HomeServices() {
                     {/* Bottom Indicator */}
                     <div className="flex items-center justify-between border-t border-white/15 pt-4 font-mono text-[10px] text-white/50 uppercase tracking-widest">
                       <span>
-                        0{index + 1} / 0{ORDERED_SERVICES.length}
+                        0{index + 1} / 0{ORDERED_SERVICES.length} · {item.id.toUpperCase()}
                       </span>
                       <span className="hidden sm:inline">
-                        Faites défiler pour le service suivant ↓
+                        Défilez pour le service suivant ↓
                       </span>
                     </div>
                   </div>
                 </article>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* ── PANORAMIC CARDS OVERVIEW (Épuré, Grand Format & Équilibré) ── */}
-        <div className="mt-20 pt-16 border-t border-[#1A1815]/10">
-          <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-            <div>
-              <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.24em] text-[#A67C40]">
-                VUE D'ENSEMBLE · 8 PILIERS D'EXPERTISE
-              </span>
-              <h3 className="mt-2 font-serif text-2xl sm:text-4xl font-medium text-[#1A1815]">
-                Tous nos services en un coup d'œil.
-              </h3>
-            </div>
-            <p className="max-w-md text-xs sm:text-sm text-[#5C554B] leading-relaxed">
-              Activez un levier spécifique ou orchestrez un dispositif digital global pour votre marque.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {ORDERED_SERVICES.map((s) => {
-              const service = SERVICES.find((item) => item.id === s.id) ?? SERVICES[0];
-              const photo = SERVICE_IMAGES[s.id] || "/showcase/web-luxury-showcase.jpg";
-              return (
-                <ServiceLink
-                  key={s.id}
-                  id={s.id}
-                  className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-[#1A1815]/10 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#A67C40] hover:shadow-xl"
-                >
-                  <div>
-                    <div className="aspect-[16/10] w-full overflow-hidden rounded-2xl bg-[#EBE7DF] relative mb-5">
-                      <img
-                        src={photo}
-                        alt={t(service.title)}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
-                      />
-                      <div className="absolute top-3 left-3 rounded-full bg-black/60 backdrop-blur-md px-2.5 py-1 font-mono text-[9px] font-bold text-white">
-                        {s.num}
-                      </div>
-                    </div>
-
-                    <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-[#A67C40]">
-                      {s.id === "crm"
-                        ? "CRM & LOGICIEL"
-                        : s.id === "maps"
-                          ? "LOCAL SEO"
-                          : s.id.toUpperCase()}
-                    </span>
-                    <h4 className="mt-1 font-serif text-lg font-bold text-[#1A1815] leading-snug group-hover:text-[#A67C40] transition-colors">
-                      {t(service.title)}
-                    </h4>
-                    <p className="mt-2 text-xs leading-relaxed text-[#5C554B] line-clamp-2">
-                      {t(service.description)}
-                    </p>
-                  </div>
-
-                  <div className="mt-5 flex items-center justify-between border-t border-[#1A1815]/10 pt-4">
-                    <div>
-                      <span className="font-mono text-[9px] text-[#8C8274] uppercase">Dès</span>
-                      <p className="font-serif text-lg font-bold text-[#1A1815]">
-                        {s.id === "maps" ? "999 €" : price(service.fromEur)}
-                      </p>
-                    </div>
-                    <span className="grid h-8 w-8 place-items-center rounded-full bg-[#FAF8F5] border border-[#1A1815]/10 text-[#1A1815] transition-all group-hover:bg-[#1A1815] group-hover:text-white">
-                      <ArrowUpRight className="h-4 w-4" />
-                    </span>
-                  </div>
-                </ServiceLink>
               );
             })}
           </div>

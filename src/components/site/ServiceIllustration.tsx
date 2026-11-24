@@ -573,11 +573,11 @@ function MapsVisual() {
             onClick={() => setSelectedOffer("manage")}
             className={`rounded-full px-3 py-1 font-mono text-[7.5px] font-bold uppercase transition ${
               selectedOffer === "manage"
-                ? "bg-emerald-400 text-black"
+                ? "bg-[#c5a880] text-black"
                 : "text-white/70 hover:text-white"
             }`}
           >
-            Offre 2 : Gestion (500 €/an)
+            Offre 2 : Conquête Top 3 (1 490 €/an)
           </button>
         </div>
       </div>
@@ -646,7 +646,7 @@ function MapsVisual() {
                   <p className="mt-2 text-[10px] text-white/80">
                     {selectedOffer === "top3"
                       ? "Optimisation du profil, des informations et des signaux locaux selon le périmètre défini (dès 999 € / an)."
-                      : "Suivi de votre fiche : informations, publications et recommandations selon le périmètre convenu (500 € / an)."}
+                      : "Accompagnement intensif : 5 à 10 mots-clés stratégiques, photos géotaggées et avis clients (1 490 € / an)."}
                   </p>
                 </div>
               </div>

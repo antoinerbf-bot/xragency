@@ -1383,48 +1383,62 @@ export function CustomCrmShowcase() {
             </div>
 
             {/* TIER 2: PACK ENTERPRISE 3D IMMERSIF 5 000 € */}
-            <div className="rounded-[2.5rem] border border-[#c5a880]/30 bg-gradient-to-b from-[#171613] via-[#101114] to-[#090a0b] p-8 sm:p-10 flex flex-col justify-between shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 rounded-bl-3xl bg-gradient-to-l from-purple-600 to-[#d4af37] px-4 py-1.5 text-[9px] font-black uppercase text-white tracking-widest shadow-lg">
-                EXPÉRIENCE GTA / SIMS
+            <div className="rounded-[2.5rem] border-2 border-[#A67C40] bg-gradient-to-b from-[#171613] via-[#101114] to-[#090a0b] p-8 sm:p-10 flex flex-col justify-between shadow-2xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 rounded-bl-3xl bg-gradient-to-l from-amber-600 via-[#A67C40] to-yellow-500 px-4 py-1.5 text-[9px] font-black uppercase text-black tracking-widest shadow-lg">
+                JUMEAU NUMÉRIQUE 3D MULTI-SITES
               </div>
 
               <div className="space-y-6">
                 <div className="space-y-2 border-b border-white/10 pb-6">
-                  <span className="rounded-full bg-purple-500/20 border border-purple-400/40 px-3 py-1 font-mono text-[9px] font-bold text-purple-300 uppercase">
-                    OFFRE DIGITAL TWIN 3D
+                  <span className="rounded-full bg-[#A67C40]/20 border border-[#A67C40]/40 px-3 py-1 font-mono text-[9px] font-bold text-[#E5C696] uppercase">
+                    HAUTE INGÉNIERIE &amp; SUPERVISION 3D
                   </span>
                   <h3 className="text-2xl font-black text-white mt-2">
                     Jumeau Numérique 3D &amp; Multi-Sites
                   </h3>
                   <p className="text-xs text-neutral-300 leading-relaxed">
-                    Pour les groupes de restauration, franchises, enseignes branchées et concepts
-                    stores qui veulent piloter leur empire comme dans un jeu vidéo.
+                    Pour les groupes hôteliers, chaînes de restauration, cliniques de prestige et réseaux multi-boutiques qui souhaitent piloter l&apos;ensemble de leurs établissements en temps réel dans un univers 3D interactif et ultra-productif.
                   </p>
                   <div className="pt-4 flex items-baseline gap-2">
-                    <span className="text-4xl sm:text-5xl font-black text-white font-mono">
+                    <span className="text-4xl sm:text-5xl font-black text-[#E5C696] font-mono">
                       5 000 €
                     </span>
                     <span className="text-xs text-neutral-400">
-                      à partir de · sur-mesure immersif
+                      à partir de · livrable sur-mesure clé en main
                     </span>
                   </div>
                 </div>
 
+                {/* Visual Preview Banner */}
+                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-white/15 bg-black/60 shadow-lg">
+                  <img
+                    src="/showcase/crm_digital_twin_3d.jpg"
+                    alt="Jumeau Numérique 3D Multi-Sites CRM"
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[10px] font-mono text-white/90">
+                    <span className="rounded bg-black/70 px-2 py-0.5 border border-white/20">3D ISOMÉTRIQUE TEMPS RÉEL</span>
+                    <span className="text-[#E5C696] font-bold">MULTI-ÉTABLISSEMENTS</span>
+                  </div>
+                </div>
+
                 <div className="space-y-3 text-xs">
-                  <p className="font-bold text-purple-300 uppercase tracking-wider text-[10px]">
+                  <p className="font-bold text-[#E5C696] uppercase tracking-wider text-[10px]">
                     Tout le Pack Pro 2 000 € PLUS :
                   </p>
                   {[
-                    "Modélisation 3D temps réel complète de votre restaurant / établissement (style Les Sims)",
-                    "Visualisation isométrique 3D des tables, de l'état des additions et du flux client",
-                    "Mini-map radar style GTA pour traquer votre flotte de livreurs dans la ville",
-                    "Supervision multi-établissements (pilotez de 2 à 50 restaurants sur 1 écran)",
-                    "Borne de commande tactile sur place (Kiosk) et écrans dynamiques",
-                    "Intelligence Artificielle prédictive des ventes et approvisionnements",
-                    "Expérience visuelle unique pour vos investisseurs et votre marque",
+                    "Modélisation architecturale 3D isométrique temps réel de vos bâtiments et espaces",
+                    "Visualisation 3D interactive des tables, suites ou blocs opératoires avec statuts en direct",
+                    "Radar GPS multi-zones pour le suivi en direct de vos flottes de livraison ou équipes terrain",
+                    "Supervision multi-sites centralisée : pilotez de 2 à 50 établissements sur un seul écran",
+                    "Intégration d'écrans tactiles kiosque clients & synchronisation instantanée des stocks",
+                    "Algorithmes d'Intelligence Artificielle prédictive des flux et optimisation des marges",
+                    "Interface haut de gamme ultra valorisante pour vos investisseurs et partenaires",
                   ].map((feat, i) => (
                     <div key={i} className="flex items-start gap-2.5 text-neutral-200">
-                      <Sparkles className="h-4 w-4 text-purple-400 shrink-0 mt-0.5" />
+                      <Sparkles className="h-4 w-4 text-[#A67C40] shrink-0 mt-0.5" />
                       <span>{feat}</span>
                     </div>
                   ))}
@@ -1435,9 +1449,9 @@ export function CustomCrmShowcase() {
                 <a
                   href="#audit-crm"
                   onClick={() => setBudgetTier("5000")}
-                  className="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-purple-500 via-[#d4af37] to-[#00f2fe] p-4 text-xs font-black text-black hover:opacity-90 transition shadow-lg active:scale-95"
+                  className="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#E5C696] via-[#D5B07A] to-[#C3995F] p-4 text-xs font-black text-[#14110E] hover:opacity-95 transition shadow-lg active:scale-95"
                 >
-                  <span>Configurer mon Jumeau 3D 5 000 €</span>
+                  <span>Configurer mon Jumeau 3D (5 000 €)</span>
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </div>

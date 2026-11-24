@@ -52,7 +52,7 @@ function Index() {
           {/* 03 — Nos Univers & Pôles d'Expertise au Scroll Parallaxe */}
           <HomeServices />
 
-          {/* 04 — Google Maps & Visibilité Locale : Offres 999 €/an et 500 €/an */}
+          {/* 04 — Google Maps & Visibilité Locale : Pack Local Top 3 dès 999 €/an */}
           <GoogleMapsShowcase />
 
           {/* 05 — Réalisations : Projets réels d'exception & univers sectoriels */}

@@ -16,6 +16,8 @@ import {
   Sparkles,
   HelpCircle,
   Layers,
+  Phone,
+  ArrowUpRight,
 } from "lucide-react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
@@ -701,21 +703,26 @@ export function Nav() {
 
         {/* Mobile Drawer */}
         {open && (
-          <div className="mb-4 mt-2 max-h-[calc(100svh-90px)] overflow-y-auto rounded-3xl border border-[#EBE5DC] bg-white p-5 text-[#1A1815] shadow-2xl xl:hidden animate-in fade-in slide-in-from-top-2 duration-200">
-            <div className="flex items-center justify-between border-b border-[#F0EBE3] pb-3">
-              <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[#A67C40]">
-                {c.mobileServicesTitle}
-              </span>
+          <div className="mb-4 mt-2 max-h-[calc(100svh-85px)] overflow-y-auto rounded-3xl border border-[#EBE5DC] bg-white p-5 text-[#1A1815] shadow-[0_20px_50px_rgba(20,16,11,0.18)] lg:hidden animate-in fade-in slide-in-from-top-2 duration-200">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-[#F0EBE3] pb-3.5">
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#A67C40]" />
+                <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.2em] text-[#A67C40]">
+                  {c.mobileServicesTitle}
+                </span>
+              </div>
               <Link
                 to="/services"
                 onClick={() => setOpen(false)}
-                className="text-xs font-semibold text-[#D8B788] underline"
+                className="font-mono text-[11px] font-semibold text-[#A67C40] hover:underline"
               >
-                {c.viewAll}
+                {c.viewAll} →
               </Link>
             </div>
 
-            <div className="mt-3 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+            {/* Charming Luxury Service Cards */}
+            <div className="mt-3.5 grid grid-cols-1 gap-2 sm:grid-cols-2">
               {IDS.map((id, i) => {
                 const s = SERVICES.find((x) => x.id === id);
                 const I = ICONS[id];
@@ -726,90 +733,114 @@ export function Nav() {
                     key={id}
                     to={hrefFor(id) as "/services"}
                     onClick={() => setOpen(false)}
-                    className="flex min-h-11 items-center justify-between rounded-xl border border-white/10 bg-[#1C1813] px-3.5 py-2.5 text-xs text-white transition active:scale-[.99]"
+                    className="group flex min-h-[52px] items-center justify-between rounded-2xl border border-[#EBE5DC] bg-[#FAF8F5] px-3.5 py-3 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#A67C40] hover:bg-white hover:shadow-md active:scale-[.99]"
                   >
                     <div className="flex items-center gap-2.5">
-                      <span className="font-mono text-[10px] text-[#D8B788]">0{i + 1}</span>
-                      <I className="h-4 w-4 text-[#D8B788]" />
-                      <span className="font-semibold">{t(s.title)}</span>
+                      <span className="font-mono text-[10px] font-bold text-[#A67C40] rounded-md bg-[#A67C40]/10 px-1.5 py-0.5">
+                        0{i + 1}
+                      </span>
+                      <div className="grid h-7 w-7 place-items-center rounded-lg bg-white border border-[#EBE5DC] text-[#A67C40] shadow-2xs group-hover:bg-[#1A1815] group-hover:text-[#E5C696] group-hover:border-[#1A1815] transition-colors">
+                        <I className="h-3.5 w-3.5" />
+                      </div>
+                      <span className="font-semibold text-xs text-[#1A1815] group-hover:text-[#A67C40] transition-colors">
+                        {t(s.title)}
+                      </span>
                     </div>
-                    <span className="font-mono text-[11px] font-semibold text-[#D8B788]">
-                      {price(s.fromEur)}
-                      {periodTxt ? ` ${periodTxt}` : ""}
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-mono text-[11px] font-bold text-[#A67C40]">
+                        {price(s.fromEur)}
+                        {periodTxt ? ` ${periodTxt}` : ""}
+                      </span>
+                      <ArrowUpRight className="h-3 w-3 text-[#A67C40]/60 opacity-0 transition-opacity group-hover:opacity-100" />
+                    </div>
                   </Link>
                 );
               })}
             </div>
 
-            <div className="mt-4 grid grid-cols-2 gap-2 border-t border-white/10 pt-4">
+            {/* Navigation Secondary Links */}
+            <div className="mt-4 grid grid-cols-2 gap-2 border-t border-[#F0EBE3] pt-4">
               <Link
                 to="/realisations"
                 onClick={() => setOpen(false)}
-                className="flex min-h-11 items-center justify-center rounded-xl border border-white/10 bg-[#1C1813] px-3 text-xs font-semibold text-white"
+                className="flex min-h-10 items-center justify-center rounded-xl border border-[#EBE5DC] bg-[#FAF8F5] px-3 text-xs font-semibold text-[#423C34] hover:bg-white hover:border-[#A67C40] hover:text-[#1A1815] transition"
               >
                 {c.work}
               </Link>
               <Link
                 to="/notre-histoire"
                 onClick={() => setOpen(false)}
-                className="flex min-h-11 items-center justify-center rounded-xl border border-white/10 bg-[#1C1813] px-3 text-xs font-semibold text-white"
+                className="flex min-h-10 items-center justify-center rounded-xl border border-[#EBE5DC] bg-[#FAF8F5] px-3 text-xs font-semibold text-[#423C34] hover:bg-white hover:border-[#A67C40] hover:text-[#1A1815] transition"
               >
                 {c.agency}
               </Link>
               <Link
                 to="/methode"
                 onClick={() => setOpen(false)}
-                className="flex min-h-11 items-center justify-center rounded-xl border border-white/10 bg-[#1C1813] px-3 text-xs font-semibold text-white"
+                className="flex min-h-10 items-center justify-center rounded-xl border border-[#EBE5DC] bg-[#FAF8F5] px-3 text-xs font-semibold text-[#423C34] hover:bg-white hover:border-[#A67C40] hover:text-[#1A1815] transition"
               >
                 {c.method}
               </Link>
               <Link
                 to="/international"
                 onClick={() => setOpen(false)}
-                className="flex min-h-11 items-center justify-center rounded-xl border border-white/10 bg-[#1C1813] px-3 text-xs font-semibold text-white"
+                className="flex min-h-10 items-center justify-center rounded-xl border border-[#EBE5DC] bg-[#FAF8F5] px-3 text-xs font-semibold text-[#423C34] hover:bg-white hover:border-[#A67C40] hover:text-[#1A1815] transition"
               >
                 {c.international}
               </Link>
               <Link
                 to="/affiliation"
                 onClick={() => setOpen(false)}
-                className="flex min-h-11 items-center justify-center rounded-xl border border-white/10 bg-[#1C1813] px-3 text-xs font-semibold text-white"
+                className="flex min-h-10 items-center justify-center rounded-xl border border-[#EBE5DC] bg-[#FAF8F5] px-3 text-xs font-semibold text-[#423C34] hover:bg-white hover:border-[#A67C40] hover:text-[#1A1815] transition"
               >
                 {c.affiliation}
               </Link>
               <Link
                 to="/recrutement"
                 onClick={() => setOpen(false)}
-                className="flex min-h-11 items-center justify-center rounded-xl border border-white/10 bg-[#1C1813] px-3 text-xs font-semibold text-white"
+                className="flex min-h-10 items-center justify-center rounded-xl border border-[#EBE5DC] bg-[#FAF8F5] px-3 text-xs font-semibold text-[#423C34] hover:bg-white hover:border-[#A67C40] hover:text-[#1A1815] transition"
               >
                 {c.recruitment}
               </Link>
               <Link
                 to="/contact"
                 onClick={() => setOpen(false)}
-                className="flex min-h-11 items-center justify-center rounded-xl border border-white/10 bg-[#1C1813] px-3 text-xs font-semibold text-white"
+                className="flex min-h-10 items-center justify-center rounded-xl border border-[#EBE5DC] bg-[#FAF8F5] px-3 text-xs font-semibold text-[#423C34] hover:bg-white hover:border-[#A67C40] hover:text-[#1A1815] transition"
               >
                 {c.contact}
               </Link>
               <Link
                 to="/dashboard"
                 onClick={() => setOpen(false)}
-                className="flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-[#D8B788]/30 bg-[#D8B788]/15 px-3 text-xs font-semibold text-[#D8B788]"
+                className="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-[#A67C40]/30 bg-[#FAF8F5] px-3 text-xs font-semibold text-[#A67C40] hover:bg-[#A67C40]/10 transition"
               >
                 <UserRound className="h-3.5 w-3.5" />
                 {c.clientSpace}
               </Link>
             </div>
 
-            <a
-              href="/#quote"
-              onClick={() => setOpen(false)}
-              className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#E4C595] via-[#D5B07A] to-[#C3995F] px-5 py-3 text-xs font-bold text-[#17130E]"
-            >
-              <span>{c.quoteCta}</span>
-              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-            </a>
+            {/* High-Converting Action Dual Buttons */}
+            <div className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-2 border-t border-[#F0EBE3] pt-4">
+              <a
+                href="https://wa.me/33649219808?text=Bonjour%20XRAGENCY%2C%20je%20souhaite%20r%C3%A9server%20un%20appel%20strat%C3%A9gique%20au%20sujet%20de%20mon%20projet."
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => setOpen(false)}
+                className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#1A1815] bg-white px-4 text-xs font-bold text-[#1A1815] shadow-xs hover:bg-[#FAF8F5] transition"
+              >
+                <Phone className="h-3.5 w-3.5 text-[#A67C40]" />
+                <span>📞 Réserver un appel</span>
+              </a>
+
+              <a
+                href="/#quote"
+                onClick={() => setOpen(false)}
+                className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#1A1815] px-4 text-xs font-bold text-white shadow-md hover:bg-[#332F2B] transition"
+              >
+                <span>{c.quoteCta}</span>
+                <ArrowRight className="h-3.5 w-3.5 text-[#E5C696] rtl:rotate-180" />
+              </a>
+            </div>
           </div>
         )}
       </div>

@@ -391,8 +391,8 @@ const OPERATIONAL_CALENDAR_PLAYBOOKS = [
   },
   {
     id: "maps",
-    title: "📍 Suivi Google Maps Top 3 & Gestion Annuelle",
-    badge: "Dès 999 € / an ou Gestion 500 € / an · Comm 10%",
+    title: "📍 Stratégie Google Maps Pack Local Top 3",
+    badge: "Dès 999 € / an ou Conquête 1 490 € / an · Comm 10%",
     steps: [
       {
         day: "Semaine 1",
@@ -3780,8 +3780,8 @@ function CrmWorkspacePage() {
                         <option value="Visibilité locale Google Maps 1 An (999 €)">
                           Google Maps Top 3 (dès 999 €/an) — Comm 10%
                         </option>
-                        <option value="Gestion Annuelle Google Maps (500 €)">
-                          Gestion Annuelle Maps (500 €/an) — Comm 10%
+                        <option value="Pack Conquête Google Maps Top 3 (1 490 €)">
+                          Pack Conquête Top 3 (1 490 €/an) — Comm 15%
                         </option>
                         <option value="CRM & Système POS Sur-Mesure (2 000 €)">
                           CRM / POS Sur-Mesure (2 000 €+) — Comm 20%

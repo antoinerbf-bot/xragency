@@ -556,7 +556,7 @@ const MAPS_UI: Record<
     headingLead: "Construisons votre visibilité sur Google Maps,",
     headingAccent: "sur mesure.",
     subtitle:
-      "À partir de 999 € / an, selon votre marché et le périmètre défini après audit. L’objectif de la prestation est d’améliorer votre visibilité locale ; aucune position Google ne peut être garantie. Gestion annuelle de fiche disponible à 500 € / an.",
+      "À partir de 999 € / an, selon votre marché et le périmètre défini après audit. L’objectif de la prestation est de propulser votre visibilité locale dans le Top 3 ; les critères officiels sont optimisés sans promesse algorithmique fantaisiste.",
     disclaimerBadge:
       "Simulation pédagogique à titre illustratif · périmètre et objectif définis après audit, sans garantie de position",
     simBadge: "SIMULATION PÉDAGOGIQUE",
@@ -572,12 +572,12 @@ const MAPS_UI: Record<
     offer1NoOnline:
       "Aucun paiement direct en ligne : tarif exact confirmé sur devis après étude de votre zone et de vos mots-clés.",
     offer1Cta: "Demander mon audit local",
-    offer2Badge: "OFFRE 2 · GESTION ANNUELLE DE FICHE",
-    offer2Title: "Gestion Annuelle Fiche Google Maps",
-    offer2Sub: "/ an (forfait annuel unique)",
+    offer2Badge: "OFFRE 2 · PACK CONQUÊTE TOP 3",
+    offer2Title: "Pack Conquête & Domination Top 3",
+    offer2Sub: "/ an (accompagnement intensif 1 an)",
     offer2Desc:
-      "Sans prélèvement mensuel : gestion complète de votre fiche Google Business Profile pendant 12 mois (photos, réponses aux avis, horaires et actualités).",
-    offer2Cta: "Choisir la Gestion Annuelle (500 €/an)",
+      "Positionnement offensif sur 5 à 10 mots-clés stratégiques, photos géotaggées haute définition, gestion automatisée des avis 5 étoiles et suivi mensuel.",
+    offer2Cta: "Choisir le Pack Conquête (1 490 €/an)",
     modalEyebrow: "XR AGENCY · AUDIT VISIBILITÉ LOCALE",
     modalTitle: "Demander mon audit Google Maps",
     modalSuccessTitle: "Demande d'audit transmise",
@@ -1857,7 +1857,7 @@ export function MapsSimulator() {
                   </div>
                 </div>
 
-                {/* Offre 2 : Gestion Annuelle de Fiche Google Maps — 500 € / an */}
+                {/* Offre 2 : Pack Conquête & Domination Top 3 — 1 490 € / an */}
                 <div className="flex flex-col justify-between rounded-2xl border border-[#171613]/12 bg-[#FAF8F4] p-5 sm:p-6">
                   <div>
                     <span className="inline-flex items-center rounded-full border border-[#9E7F5A]/30 bg-[#9E7F5A]/10 px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[#6C5438]">
@@ -1868,7 +1868,7 @@ export function MapsSimulator() {
                     </h4>
                     <div className="mt-2 flex items-baseline gap-1.5">
                       <span className="font-serif text-3xl font-semibold text-[#171613]">
-                        500 €
+                        1 490 €
                       </span>
                       <span className="font-mono text-xs text-[#57534B]">{ui.offer2Sub}</span>
                     </div>
@@ -1879,7 +1879,7 @@ export function MapsSimulator() {
                   <div className="mt-5 border-t border-[#171613]/10 pt-4">
                     <a
                       href={`${CONTACT.whatsapp}?text=${encodeURIComponent(
-                        `Bonjour XR Agency, je souhaite souscrire au forfait Gestion Annuelle Fiche Google Maps à 500 € / an (avis, photos, mises à jour pendant 12 mois).`,
+                        `Bonjour XR Agency, je souhaite souscrire au Pack Conquête & Domination Google Maps Top 3 à 1 490 € / an.`,
                       )}`}
                       target="_blank"
                       rel="noreferrer"

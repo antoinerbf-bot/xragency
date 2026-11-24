@@ -164,8 +164,8 @@ export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
       <div className="relative mx-auto grid max-w-[1500px] gap-10 px-5 sm:px-8 lg:grid-cols-[.78fr_1.22fr] lg:px-12 lg:items-center">
         <div>
           <span className="label-mono text-[9px] tracking-[.3em] text-[#52504A]">07 · XR ROBOTICS / KORBEN</span>
-          <h2 className="display-serif mt-5 max-w-2xl text-[clamp(3.1rem,7vw,6.8rem)] leading-[.82] tracking-[-.06em] text-[#12110E]">{tx("Le digital sort de l’écran.")}</h2>
-          <p className="mt-7 max-w-xl text-base leading-7 text-[#52504A]">{tx("Accueil, livraison, nettoyage, logistique et IA physique : une sélection de robots professionnels avec location, achat et démonstration.")}</p>
+          <h2 className="font-serif mt-4 max-w-2xl text-4xl sm:text-6xl font-medium leading-[1.08] tracking-[-0.02em] text-[#12110E]">{tx("Le digital sort de l’écran.")}</h2>
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-[#52504A]">{tx("Accueil, livraison, nettoyage, logistique et IA physique : une sélection de robots professionnels avec location, achat et démonstration.")}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link to="/services/robotique" className="inline-flex items-center gap-2 rounded-full bg-[#12110E] px-6 py-4 label-mono text-[9px] font-semibold tracking-[.12em] text-white hover:bg-[#2B2925]">{tx("Explorer la gamme")} <ArrowRight className="h-4 w-4"/></Link>
             <a href={wa("Bonjour XRAGENCY, je souhaite une recommandation de robot Korben pour mon entreprise.")} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-[#D5D5CF] bg-white px-6 py-4 label-mono text-[9px] tracking-[.12em] text-[#12110E] hover:border-[#12110E]">{tx("Parler à un expert")}</a>
@@ -193,8 +193,12 @@ export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
         <div className="grid min-h-[76vh] items-center gap-10 lg:grid-cols-[.78fr_1.22fr]">
           <div className="relative z-10">
             <span className="label-mono text-[9px] tracking-[.32em] text-[#52504A]">XRAGENCY · ROBOTIQUE DE SERVICE · KORBEN</span>
-            <h1 className="display-serif mt-7 text-[clamp(3.8rem,8vw,8.7rem)] leading-[.76] tracking-[-.075em] text-[#12110E]">{tx("Louez votre")}<br/><em className="not-italic text-[#C5A880]">{tx("prochain")}</em><br/>{tx("collaborateur.")}</h1>
-            <p className="mt-8 max-w-xl text-base leading-7 text-[#52504A] sm:text-lg">{tx("Des robots professionnels pour absorber les tâches répétitives, fluidifier l’accueil et créer de nouvelles expériences — avec un accompagnement XR de la sélection au déploiement.")}</p>
+            <h1 className="font-serif mt-5 text-[clamp(2.8rem,6vw,5.5rem)] font-medium leading-[1.04] tracking-[-0.03em] text-[#12110E]">
+              {tx("Louez votre")}{" "}
+              <em className="not-italic text-[#A67C40]">{tx("prochain")}</em>{" "}
+              {tx("collaborateur.")}
+            </h1>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-[#52504A] sm:text-lg">{tx("Des robots professionnels pour absorber les tâches répétitives, fluidifier l’accueil et créer de nouvelles expériences — avec un accompagnement XR de la sélection au déploiement.")}</p>
             <div className="mt-9 flex flex-wrap gap-3">
               <a href="#catalogue" className="inline-flex items-center gap-2 rounded-full bg-[#12110E] px-7 py-4 label-mono text-[9px] font-semibold tracking-[.12em] text-white hover:bg-[#2B2925]">{tx("Voir les modèles")} <ArrowRight className="h-4 w-4"/></a>
               <a href="#diagnostic" className="inline-flex items-center gap-2 rounded-full border border-[#D5D5CF] bg-white px-7 py-4 label-mono text-[9px] tracking-[.12em] text-[#12110E] hover:border-[#12110E]">{tx("Trouver le bon robot")}</a>
@@ -219,9 +223,40 @@ export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
           </div>
         </div>
 
+        {/* Futuristic Atmospheric Showcase Banner */}
+        <div className="mt-14 relative overflow-hidden rounded-[2.5rem] border border-[#E5E5E0] bg-[#12100E] shadow-xl">
+          <div className="relative aspect-[21/9] min-h-[300px] w-full overflow-hidden">
+            <img
+              src="/showcase/robotics_futuristic_sleek.jpg"
+              alt="IA Physique & Robotique Haute Couture XRAGENCY"
+              className="h-full w-full object-cover opacity-85 transition-transform duration-1000 hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+            <div className="absolute bottom-6 left-6 right-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end text-white">
+              <div>
+                <span className="font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-[#E5C696]">
+                  INTELLIGENCE PHYSIQUE &amp; CONCIERGERIE PALACE
+                </span>
+                <h3 className="mt-1 font-serif text-2xl sm:text-3xl font-medium text-white">
+                  L&apos;incarnation matérielle de l&apos;excellence digitale.
+                </h3>
+              </div>
+              <a
+                href={wa("Bonjour XRAGENCY, je souhaite une démonstration en direct d'un robot de conciergerie Korben.")}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-[#E5C696] px-6 py-3 text-xs font-bold text-[#14110E] shadow-md transition hover:bg-[#F2D7B0] shrink-0"
+              >
+                <span>Demander une démonstration</span>
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+        </div>
+
         <div id="catalogue" className="mt-16 border-t border-[#E8E6E0] pt-20">
           <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
-            <div><span className="label-mono text-[9px] tracking-[.3em] text-[#52504A]">01 / CATALOGUE</span><h2 className="display-serif mt-3 text-5xl leading-[.85] sm:text-7xl text-[#12110E]">{tx("Choisissez par")}<br/><em className="not-italic text-[#C5A880]">{tx("usage.")}</em></h2></div>
+            <div><span className="label-mono text-[9px] tracking-[.3em] text-[#52504A]">01 / CATALOGUE</span><h2 className="font-serif mt-3 text-4xl font-medium leading-[1.05] sm:text-6xl text-[#12110E]">{tx("Choisissez par")} <em className="not-italic text-[#A67C40]">{tx("usage.")}</em></h2></div>
             <div className="flex max-w-3xl flex-wrap gap-2">{FAMILIES.map(f=><button key={f} onClick={()=>setFamily(f)} className={`rounded-full border px-3 py-2 label-mono text-[8px] tracking-[.1em] transition ${family===f ? "border-[#12110E] bg-[#12110E] text-white" : "border-[#E5E5E0] bg-white text-[#52504A] hover:border-[#12110E] hover:text-[#12110E]"}`}>{tx(f)}</button>)}</div>
           </div>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -383,27 +383,27 @@ const EXPERTISES: Expertise[] = [
       fr: [
         "Optimisation complète Google Business Profile",
         "Géocodage photos, signaux locaux & avis",
-        "Pack Local 999 €/an · Gestion continue 500 €/an",
+        "Pack Stratégie dès 999 €/an · Conquête Top 3",
       ],
       en: [
         "Full Google Business Profile optimization",
         "Geotagged photos, local citations & reviews",
-        "Local Pack 999 €/yr · Ongoing Care 500 €/yr",
+        "Strategy Pack from 999 €/yr · Top 3 Conquest",
       ],
       vi: [
         "Tối ưu toàn diện Google Business Profile",
         "Định vị hình ảnh, tín hiệu địa phương & đánh giá",
-        "Gói Địa phương 999 €/năm · Duy trì 500 €/năm",
+        "Gói Chiến lược từ 999 €/năm · Chiếm lĩnh Top 3",
       ],
       ar: [
         "تحسين شامل لملف Google Business Profile",
         "توطين جغرافي للصور وتقييمات العملاء",
-        "باقة التأسيس 999 €/سنة · إدارة سنوية 500 €/سنة",
+        "باقة الاستراتيجية من 999 €/سنة · تصدر المراكز الأولى",
       ],
       ru: [
         "Полная настройка профиля Google Мой Бизнес",
         "Геотегирование фото, цитирование и отзывы",
-        "Пакет 999 €/год · Сопровождение 500 €/год",
+        "Стратегия от 999 €/год · Вывод в Топ-3",
       ],
     },
   },

@@ -1,386 +1,299 @@
-import { ArrowRight, Check, MapPin } from "lucide-react";
+import { useState } from "react";
+import {
+  ArrowRight,
+  Check,
+  MapPin,
+  Phone,
+  MessageCircle,
+  Star,
+  Search,
+  Navigation,
+  TrendingUp,
+  Sparkles,
+} from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useLang, type Lang } from "@/lib/i18n";
-import { XR_PHOTOS } from "@/lib/photography";
+import { cn } from "@/lib/utils";
+import { useOptionalFunnel } from "@/lib/funnel";
 
-const svcMaps = XR_PHOTOS.maps;
-
-type MapsCopy = {
-  eyebrow: string;
-  title: string;
-  accent: string;
-  intro: string;
-  visualLabel: string;
-  visualTitle: string;
-  visualBody: string;
-  visualPoints: string[];
-  offerLabel: string;
-  strategyTitle: string;
-  strategyDescription: string;
-  strategyFeatures: string[];
-  annualLabel: string;
-  managementTitle: string;
-  managementDescription: string;
-  managementFeatures: string[];
-  annualPayment: string;
-  strategyCta: string;
-  managementCta: string;
-  detailCta: string;
-  disclaimer: string;
-};
-
-const COPY: Record<Lang, MapsCopy> = {
-  fr: {
-    eyebrow: "GOOGLE BUSINESS PROFILE · SEO LOCAL",
-    title: "Faites mieux connaître votre établissement",
-    accent: "localement.",
-    intro:
-      "Nous optimisons votre fiche Google Business Profile et travaillons votre visibilité sur les recherches locales définies avec vous. Les positions Google ne sont jamais garanties.",
-    visualLabel: "VISIBILITÉ LOCALE",
-    visualTitle: "Une fiche claire, complète et utile",
-    visualBody:
-      "Des informations cohérentes pour aider vos clients à vous trouver et à vous contacter.",
-    visualPoints: ["Profil & informations", "Services et contenus", "Suivi des indicateurs"],
-    offerLabel: "STRATÉGIE · 1 AN",
-    strategyTitle: "Stratégie de visibilité Google Maps",
-    strategyDescription:
-      "Audit préalable et plan d’action adapté à votre activité, à votre zone et à la concurrence.",
-    strategyFeatures: [
-      "Diagnostic des mots-clés et de la concurrence locale",
-      "Création ou optimisation de la fiche Google Business Profile",
-      "Catégories, services, description et visuels",
-      "Stratégie locale et indicateurs définis après audit",
-      "Validation préalable par l’équipe · aucune position garantie",
-    ],
-    annualLabel: "GESTION · 12 MOIS",
-    managementTitle: "Gestion annuelle de la fiche",
-    managementDescription:
-      "Un accompagnement régulier pour garder votre profil à jour tout au long de l’année.",
-    managementFeatures: [
-      "Gestion de la fiche pendant 12 mois",
-      "Actualisation régulière des photos, actualités et offres",
-      "Réponses professionnelles aux avis",
-      "Suivi de la visibilité, des appels et des demandes d’itinéraire",
-    ],
-    annualPayment: "Facturation annuelle",
-    strategyCta: "Configurer la stratégie",
-    managementCta: "Choisir la gestion annuelle",
-    detailCta: "Détails du service",
-    disclaimer:
-      "Les résultats dépendent notamment de la concurrence, de la zone et de l’évolution des algorithmes. Aucun classement précis n’est promis.",
-  },
-  en: {
-    eyebrow: "GOOGLE BUSINESS PROFILE · LOCAL SEO",
-    title: "Help more customers discover your business",
-    accent: "locally.",
-    intro:
-      "We optimise your Google Business Profile and work on visibility for local searches agreed with you. Google rankings are never guaranteed.",
-    visualLabel: "LOCAL VISIBILITY",
-    visualTitle: "A clear, complete and useful profile",
-    visualBody: "Consistent information that helps customers find and contact your business.",
-    visualPoints: ["Profile & information", "Services & content", "Performance indicators"],
-    offerLabel: "STRATEGY · 1 YEAR",
-    strategyTitle: "Google Maps visibility strategy",
-    strategyDescription:
-      "An initial audit and action plan tailored to your business, area and competition.",
-    strategyFeatures: [
-      "Keyword and local competition review",
-      "Google Business Profile creation or optimisation",
-      "Categories, services, description and visuals",
-      "Local strategy and indicators defined after audit",
-      "Team review required · no ranking position guaranteed",
-    ],
-    annualLabel: "MANAGEMENT · 12 MONTHS",
-    managementTitle: "Annual profile management",
-    managementDescription: "Ongoing support to keep your profile current throughout the year.",
-    managementFeatures: [
-      "Profile management for 12 months",
-      "Regular updates to photos, news and offers",
-      "Professional review responses",
-      "Visibility, calls and direction-request tracking",
-    ],
-    annualPayment: "Annual billing",
-    strategyCta: "Configure the strategy",
-    managementCta: "Choose annual management",
-    detailCta: "Service details",
-    disclaimer:
-      "Results depend on competition, location and changes to search algorithms. No specific ranking is promised.",
-  },
-  vi: {
-    eyebrow: "GOOGLE BUSINESS PROFILE · SEO ĐỊA PHƯƠNG",
-    title: "Giúp khách hàng biết đến doanh nghiệp của bạn",
-    accent: "tại địa phương.",
-    intro:
-      "Chúng tôi tối ưu Google Business Profile và cải thiện khả năng hiển thị cho các tìm kiếm địa phương đã thống nhất. Không bảo đảm thứ hạng Google.",
-    visualLabel: "HIỂN THỊ ĐỊA PHƯƠNG",
-    visualTitle: "Hồ sơ rõ ràng, đầy đủ và hữu ích",
-    visualBody: "Thông tin nhất quán giúp khách hàng tìm thấy và liên hệ doanh nghiệp.",
-    visualPoints: ["Hồ sơ & thông tin", "Dịch vụ & nội dung", "Chỉ số theo dõi"],
-    offerLabel: "CHIẾN LƯỢC · 1 NĂM",
-    strategyTitle: "Chiến lược hiển thị Google Maps",
-    strategyDescription: "Kiểm toán ban đầu và kế hoạch phù hợp với hoạt động, khu vực và đối thủ.",
-    strategyFeatures: [
-      "Phân tích từ khóa và cạnh tranh địa phương",
-      "Tạo mới hoặc tối ưu Google Business Profile",
-      "Danh mục, dịch vụ, mô tả và hình ảnh",
-      "Chiến lược địa phương và chỉ số sau kiểm toán",
-      "Đội ngũ thẩm định trước · không bảo đảm thứ hạng",
-    ],
-    annualLabel: "QUẢN LÝ · 12 THÁNG",
-    managementTitle: "Quản lý hồ sơ hàng năm",
-    managementDescription: "Đồng hành định kỳ để cập nhật hồ sơ trong suốt năm.",
-    managementFeatures: [
-      "Quản lý hồ sơ trong 12 tháng",
-      "Cập nhật hình ảnh, tin tức và ưu đãi định kỳ",
-      "Phản hồi đánh giá chuyên nghiệp",
-      "Theo dõi hiển thị, cuộc gọi và yêu cầu chỉ đường",
-    ],
-    annualPayment: "Thanh toán hàng năm",
-    strategyCta: "Thiết lập chiến lược",
-    managementCta: "Chọn quản lý hàng năm",
-    detailCta: "Chi tiết dịch vụ",
-    disclaimer:
-      "Kết quả phụ thuộc vào cạnh tranh, khu vực và thay đổi thuật toán. Không cam kết thứ hạng cụ thể.",
-  },
-  ar: {
-    eyebrow: "ملف Google Business · تحسين البحث المحلي",
-    title: "ساعد المزيد من العملاء على اكتشاف نشاطك",
-    accent: "محليًا.",
-    intro:
-      "نحسّن ملف Google Business Profile ونعمل على الظهور في عمليات البحث المحلية المتفق عليها. لا نضمن ترتيبًا محددًا على Google.",
-    visualLabel: "الظهور المحلي",
-    visualTitle: "ملف واضح ومتكامل ومفيد",
-    visualBody: "معلومات متناسقة تساعد العملاء على العثور على نشاطك والتواصل معه.",
-    visualPoints: ["الملف والمعلومات", "الخدمات والمحتوى", "مؤشرات المتابعة"],
-    offerLabel: "استراتيجية · سنة",
-    strategyTitle: "استراتيجية الظهور على Google Maps",
-    strategyDescription: "تدقيق أولي وخطة عمل تناسب نشاطك ومنطقتك والمنافسة.",
-    strategyFeatures: [
-      "تحليل الكلمات المفتاحية والمنافسة المحلية",
-      "إنشاء ملف Google Business Profile أو تحسينه",
-      "الفئات والخدمات والوصف والصور",
-      "استراتيجية محلية ومؤشرات بعد التدقيق",
-      "مراجعة الفريق مسبقًا · لا ضمان لترتيب محدد",
-    ],
-    annualLabel: "إدارة · 12 شهرًا",
-    managementTitle: "إدارة الملف السنوية",
-    managementDescription: "متابعة منتظمة للحفاظ على تحديث ملفك طوال العام.",
-    managementFeatures: [
-      "إدارة الملف لمدة 12 شهرًا",
-      "تحديث الصور والأخبار والعروض بانتظام",
-      "الرد المهني على التقييمات",
-      "متابعة الظهور والمكالمات وطلبات الاتجاهات",
-    ],
-    annualPayment: "فوترة سنوية",
-    strategyCta: "إعداد الاستراتيجية",
-    managementCta: "اختيار الإدارة السنوية",
-    detailCta: "تفاصيل الخدمة",
-    disclaimer: "تعتمد النتائج على المنافسة والمنطقة وتغييرات الخوارزميات. لا نعد بترتيب محدد.",
-  },
-  ru: {
-    eyebrow: "GOOGLE BUSINESS PROFILE · ЛОКАЛЬНОЕ SEO",
-    title: "Помогите клиентам находить ваш бизнес",
-    accent: "рядом.",
-    intro:
-      "Оптимизируем профиль Google Business Profile и работаем над видимостью по согласованным локальным запросам. Позиции Google не гарантируются.",
-    visualLabel: "ЛОКАЛЬНАЯ ВИДИМОСТЬ",
-    visualTitle: "Понятный, полный и полезный профиль",
-    visualBody: "Согласованная информация помогает клиентам найти вас и связаться с компанией.",
-    visualPoints: ["Профиль и данные", "Услуги и контент", "Показатели отслеживания"],
-    offerLabel: "СТРАТЕГИЯ · 1 ГОД",
-    strategyTitle: "Стратегия видимости в Google Maps",
-    strategyDescription: "Первичный аудит и план с учётом бизнеса, региона и конкурентов.",
-    strategyFeatures: [
-      "Анализ ключевых запросов и локальных конкурентов",
-      "Создание или оптимизация Google Business Profile",
-      "Категории, услуги, описание и изображения",
-      "Локальная стратегия и показатели после аудита",
-      "Предварительная проверка команды · без гарантии позиции",
-    ],
-    annualLabel: "ВЕДЕНИЕ · 12 МЕСЯЦЕВ",
-    managementTitle: "Годовое ведение профиля",
-    managementDescription:
-      "Регулярное сопровождение для поддержания актуальности профиля в течение года.",
-    managementFeatures: [
-      "Ведение профиля в течение 12 месяцев",
-      "Регулярное обновление фото, новостей и предложений",
-      "Профессиональные ответы на отзывы",
-      "Отслеживание видимости, звонков и запросов маршрута",
-    ],
-    annualPayment: "Оплата за год",
-    strategyCta: "Настроить стратегию",
-    managementCta: "Выбрать годовое ведение",
-    detailCta: "Подробнее об услуге",
-    disclaimer:
-      "Результаты зависят от конкуренции, региона и изменений алгоритмов. Конкретная позиция не обещается.",
-  },
-};
+const SECTORS = [
+  { id: "resto", label: "Restaurant", query: "Restaurant gastronomique Paris", calls: "+180 appels/mois", route: "+320 itinéraires/mois" },
+  { id: "hotel", label: "Hôtel & Spa", query: "Boutique Hôtel de luxe", calls: "+95 réservations directes", route: "+410 visites" },
+  { id: "sante", label: "Santé & Esthétique", query: "Clinique esthétique d'excellence", calls: "+140 consultations", route: "+280 itinéraires" },
+  { id: "avocat", label: "Cabinet & Conseil", query: "Cabinet d'avocats affaires", calls: "+65 dossiers qualifiés", route: "+120 visites" },
+];
 
 export function GoogleMapsShowcase() {
   const { lang, price } = useLang();
-  const c = COPY[lang] ?? COPY.fr;
+  const funnel = useOptionalFunnel();
+  const [activeSector, setActiveSector] = useState(0);
+  const [mode, setMode] = useState<"after" | "before">("after");
+
+  const sector = SECTORS[activeSector];
+  const isSelected = funnel?.selectedServices.includes("maps") ?? false;
 
   return (
     <section
       id="maps"
-      dir={lang === "ar" ? "rtl" : "ltr"}
-      className="relative border-b border-[#EBE5DC] bg-white py-16 text-[#1A1815] sm:py-20"
+      className="relative border-b border-[#EBE5DC] bg-white py-16 text-[#1A1815] sm:py-24"
     >
       <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
+        {/* Header */}
         <header className="mx-auto max-w-3xl text-center">
-          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-[#A67C40]">
-            {c.eyebrow}
-          </p>
-          <h2 className="mt-3 font-serif text-[clamp(2rem,3.8vw,3.4rem)] font-normal leading-tight tracking-[-0.02em]">
-            {c.title} <em className="text-[#A67C40]">{c.accent}</em>
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#A67C40]/25 bg-[#FAF8F5] px-4 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-[#A67C40]">
+            <MapPin className="h-3.5 w-3.5 text-[#A67C40]" />
+            <span>GOOGLE BUSINESS PROFILE · TOP 3 PACK LOCAL</span>
+          </div>
+          <h2 className="mt-4 font-serif text-[clamp(2rem,3.8vw,3.4rem)] font-normal leading-tight tracking-[-0.02em]">
+            Dominez les recherches Google locales <em className="text-[#A67C40] not-italic">dans votre ville.</em>
           </h2>
-          <p className="mt-4 text-sm leading-relaxed text-[#5C554B] sm:text-base">{c.intro}</p>
+          <p className="mt-4 text-sm leading-relaxed text-[#5C554B] sm:text-base">
+            82 % des consommateurs choisissent parmi les 3 premiers établissements affichés sur la carte Google.
+            Passez devant vos concurrents et transformez chaque recherche à proximité en client direct.
+          </p>
         </header>
 
-        <div className="mt-12 grid items-start gap-8 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-5">
-            <div className="group relative overflow-hidden rounded-[1.5rem] border border-[#EBE5DC] bg-[#171410]">
-              <div className="relative aspect-[4/4.2] overflow-hidden">
-                <img
-                  src={svcMaps}
-                  alt={c.visualTitle}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#120F0C]/90 via-[#120F0C]/25 to-transparent" />
-                <div className="absolute inset-x-5 top-5 flex items-center gap-2 text-[#F2D7B0]">
-                  <MapPin className="h-4 w-4" />
-                  <span className="font-mono text-[10px] uppercase tracking-[0.2em]">
-                    {c.visualLabel}
-                  </span>
-                </div>
-                <div className="absolute inset-x-5 bottom-5 text-white">
-                  <h3 className="font-serif text-2xl leading-tight sm:text-3xl">{c.visualTitle}</h3>
-                  <p className="mt-2 max-w-md text-sm leading-relaxed text-white/75">
-                    {c.visualBody}
-                  </p>
-                </div>
-              </div>
-              <ul className="grid grid-cols-1 gap-3 bg-[#FAF8F5] p-5 sm:grid-cols-3">
-                {c.visualPoints.map((point) => (
-                  <li key={point} className="flex items-center gap-2 text-xs text-[#5C554B]">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#A67C40]" />
-                    {point}
-                  </li>
+        {/* 2-Columns Interactive Tunnel */}
+        <div className="mt-14 grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
+          
+          {/* GAUCHE : Simulateur Ludique Smartphone Google Pack Local */}
+          <div className="lg:col-span-6">
+            <div className="relative mx-auto max-w-lg rounded-[2.5rem] border border-[#1A1815]/15 bg-[#171410] p-4 text-white shadow-2xl sm:p-6">
+              
+              {/* Sector Chips Selector */}
+              <div className="mb-4 flex flex-wrap items-center gap-2">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-[#A67C40]">Secteur :</span>
+                {SECTORS.map((s, idx) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => setActiveSector(idx)}
+                    className={cn(
+                      "rounded-full px-3 py-1 text-xs font-semibold transition",
+                      activeSector === idx
+                        ? "bg-[#E5C696] text-[#14110E]"
+                        : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
+                    )}
+                  >
+                    {s.label}
+                  </button>
                 ))}
-              </ul>
+              </div>
+
+              {/* Mode Toggle Avant / Après */}
+              <div className="mb-4 grid grid-cols-2 rounded-xl bg-black/50 p-1 border border-white/10 font-mono text-xs">
+                <button
+                  type="button"
+                  onClick={() => setMode("after")}
+                  className={cn(
+                    "flex items-center justify-center gap-1.5 rounded-lg py-2 font-bold transition",
+                    mode === "after"
+                      ? "bg-emerald-500 text-white shadow"
+                      : "text-white/60 hover:text-white"
+                  )}
+                >
+                  <Sparkles className="h-3.5 w-3.5" />
+                  <span>AVEC XRAGENCY (Top 1)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMode("before")}
+                  className={cn(
+                    "flex items-center justify-center gap-1.5 rounded-lg py-2 font-bold transition",
+                    mode === "before"
+                      ? "bg-rose-600/80 text-white shadow"
+                      : "text-white/60 hover:text-white"
+                  )}
+                >
+                  <span>SANS OPTIMISATION</span>
+                </button>
+              </div>
+
+              {/* Simulated Google Search View */}
+              <div className="rounded-2xl border border-white/10 bg-[#201D19] p-4 text-start">
+                {/* Search Bar Input */}
+                <div className="flex items-center gap-2 rounded-xl bg-[#12100E] px-3 py-2 text-xs text-white/80 border border-white/10">
+                  <Search className="h-4 w-4 text-[#A67C40]" />
+                  <span className="flex-1 font-mono text-[11px] truncate text-white">{sector.query}</span>
+                  <span className="rounded bg-[#E5C696]/20 px-1.5 py-0.5 text-[9px] font-mono text-[#E5C696]">Google 4G</span>
+                </div>
+
+                {/* Google Maps Mock Result */}
+                {mode === "after" ? (
+                  <div className="mt-4 rounded-xl border border-emerald-500/40 bg-emerald-950/20 p-4 transition-all animate-in fade-in">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-2 py-0.5 font-mono text-[9px] font-bold text-emerald-400">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping" />
+                          POSITION N°1 · PACK LOCAL GOOGLE
+                        </div>
+                        <h4 className="mt-1 font-serif text-lg font-bold text-white">Votre Établissement</h4>
+                        <div className="mt-0.5 flex items-center gap-1 text-xs text-[#E5C696]">
+                          <span className="font-bold">4.9</span>
+                          <div className="flex text-amber-400">
+                            {[...Array(5)].map((_, i) => (
+                              <Star key={i} className="h-3 w-3 fill-amber-400" />
+                            ))}
+                          </div>
+                          <span className="text-[11px] text-white/60">(348 avis vérifiés)</span>
+                        </div>
+                        <p className="mt-1 text-[11px] text-white/70">
+                          Ouvert · Service continu · Réservation directe & Devis instantané
+                        </p>
+                      </div>
+                      <span className="rounded-xl border border-emerald-500/40 bg-emerald-500/20 p-2 text-emerald-400">
+                        <TrendingUp className="h-5 w-5" />
+                      </span>
+                    </div>
+
+                    {/* Performance metrics pill */}
+                    <div className="mt-3 grid grid-cols-2 gap-2 border-t border-white/10 pt-3 text-center">
+                      <div className="rounded-lg bg-black/40 p-2">
+                        <span className="block font-mono text-xs font-bold text-emerald-400">{sector.calls}</span>
+                        <span className="text-[10px] text-white/50">Appels téléphoniques directs</span>
+                      </div>
+                      <div className="rounded-lg bg-black/40 p-2">
+                        <span className="block font-mono text-xs font-bold text-[#E5C696]">{sector.route}</span>
+                        <span className="text-[10px] text-white/50">Demandes d'itinéraire GPS</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-4 rounded-xl border border-rose-500/30 bg-rose-950/20 p-4 transition-all animate-in fade-in">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-500/20 px-2 py-0.5 font-mono text-[9px] font-bold text-rose-400">
+                          POSITION N°28 · INVISIBLE (PAGE 3+)
+                        </span>
+                        <h4 className="mt-1 font-serif text-lg font-semibold text-white/70">Votre Établissement (Non optimisé)</h4>
+                        <div className="mt-0.5 flex items-center gap-1 text-xs text-white/50">
+                          <span>3.8</span>
+                          <span className="text-[11px]">(14 avis) · Horaires non mis à jour</span>
+                        </div>
+                        <p className="mt-1 text-[11px] text-rose-300/80">
+                          Vos concurrents captent 94 % des appels et réservations de votre zone.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Live Action Bar inside Simulator */}
+              <div className="mt-4 flex items-center justify-between gap-2 border-t border-white/10 pt-3 text-xs">
+                <span className="text-white/60 text-[11px]">Audit d'éligibilité immédiat :</span>
+                <a
+                  href="#maps-simulator"
+                  className="font-mono text-[11px] font-bold text-[#E5C696] underline hover:text-white"
+                >
+                  Tester mes mots-clés →
+                </a>
+              </div>
             </div>
           </div>
 
-          <div className="space-y-5 lg:col-span-7">
-            <article className="rounded-[1.5rem] border border-[#D1B07A]/70 bg-[#FAF8F5] p-6 sm:p-8">
-              <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-                <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#A67C40]">
-                    {c.offerLabel}
-                  </p>
-                  <h3 className="mt-2 font-serif text-2xl leading-tight">{c.strategyTitle}</h3>
-                </div>
-                <div className="shrink-0 sm:text-right">
-                  <p className="font-serif text-3xl">{price(999)}</p>
-                  <p className="text-xs text-[#5C554B]">
-                    /{" "}
-                    {lang === "en"
-                      ? "year"
-                      : lang === "vi"
-                        ? "năm"
-                        : lang === "ar"
-                          ? "سنة"
-                          : lang === "ru"
-                            ? "год"
-                            : "an"}
-                  </p>
-                </div>
+          {/* DROITE : Offre Stratégique Unique & Machine de Conversion */}
+          <div className="lg:col-span-6">
+            <article className="rounded-[2.2rem] border-2 border-[#A67C40] bg-[#FAF8F5] p-7 shadow-xl sm:p-10">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#EBE5DC] pb-5">
+                <span className="inline-flex items-center gap-2 rounded-full bg-[#A67C40]/15 px-3.5 py-1 font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#A67C40]">
+                  <Star className="h-3.5 w-3.5 fill-[#A67C40]" />
+                  PACK OFFICIEL DOMINATION GOOGLE MAPS
+                </span>
+                <span className="font-mono text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">
+                  Accompagnement Stratégique 1 An
+                </span>
               </div>
-              <p className="mt-3 text-sm leading-relaxed text-[#5C554B]">{c.strategyDescription}</p>
-              <ul className="mt-5 grid gap-3 border-t border-[#EBE5DC] pt-5 sm:grid-cols-2">
-                {c.strategyFeatures.map((feature) => (
-                  <li
-                    key={feature}
-                    className="flex items-start gap-2.5 text-xs leading-relaxed text-[#3A342D]"
-                  >
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#A67C40]" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-6 flex flex-wrap items-center gap-3">
-                <a
-                  href="/?service=maps&plan=maps_strategy#quote"
-                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#1A1815] px-5 text-xs font-semibold text-white transition hover:bg-[#332F2B]"
-                >
-                  {c.strategyCta}
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </a>
-                <Link
-                  to="/services/$serviceId"
-                  params={{ serviceId: "maps" }}
-                  className="inline-flex min-h-11 items-center rounded-full border border-[#1A1815]/20 px-5 text-xs font-semibold text-[#1A1815] hover:border-[#A67C40]"
-                >
-                  {c.detailCta}
-                </Link>
-              </div>
-            </article>
 
-            <article className="rounded-[1.5rem] border border-[#EBE5DC] bg-white p-6 sm:p-7">
-              <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
-                <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#A67C40]">
-                    {c.annualLabel}
-                  </p>
-                  <h3 className="mt-1 font-serif text-xl">{c.managementTitle}</h3>
-                </div>
-                <div className="shrink-0 sm:text-right">
-                  <p className="font-serif text-2xl">{price(500)}</p>
-                  <p className="text-xs text-[#5C554B]">
-                    /{" "}
-                    {lang === "en"
-                      ? "year"
-                      : lang === "vi"
-                        ? "năm"
-                        : lang === "ar"
-                          ? "سنة"
-                          : lang === "ru"
-                            ? "год"
-                            : "an"}
-                  </p>
+              <div className="mt-6 flex flex-col justify-between gap-3 sm:flex-row sm:items-baseline">
+                <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[#1A1815]">
+                  Stratégie de Visibilité Google Maps
+                </h3>
+                <div className="shrink-0">
+                  <div className="flex items-baseline gap-1">
+                    <span className="font-mono text-xs text-[#5C554B]">Dès</span>
+                    <span className="font-serif text-4xl font-bold text-[#1A1815]">{price(999)}</span>
+                    <span className="font-mono text-xs text-[#5C554B]"> / an</span>
+                  </div>
                 </div>
               </div>
-              <p className="mt-2 text-sm leading-relaxed text-[#5C554B]">
-                {c.managementDescription}
+
+              <p className="mt-3 text-sm leading-relaxed text-[#5C554B]">
+                Un dispositif complet pour faire de votre fiche Google votre meilleur apporteur de chiffre d'affaires :
+                audit technique complet, optimisation algorithmique, renforcement de la géolocalisation et stratégie d'avis clients.
               </p>
-              <ul className="mt-4 grid gap-2 border-t border-[#F0EBE3] pt-4 sm:grid-cols-2">
-                {c.managementFeatures.map((feature) => (
-                  <li
-                    key={feature}
-                    className="flex items-start gap-2 text-xs leading-relaxed text-[#3A342D]"
-                  >
-                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#A67C40]" />
-                    <span>{feature}</span>
+
+              {/* Deliverables Checklist */}
+              <ul className="mt-6 space-y-3 border-t border-[#EBE5DC] pt-5">
+                {[
+                  "Audit complet de vos concurrents directs & mots-clés à fort volume local",
+                  "Création ou restructuration complète de la fiche Google Business Profile",
+                  "Optimisation des catégories primaires, attributs cachés et services",
+                  "Stratégie de collecte et automatisation des avis clients 5 étoiles",
+                  "Nettoyage des citations annuaires (NAP) et cohérence d'autorité locale",
+                  "Suivi mensuel des appels, itinéraires GPS et positions dans votre zone",
+                ].map((feat, i) => (
+                  <li key={i} className="flex items-start gap-3 text-xs sm:text-sm text-[#2E2923]">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#A67C40]" />
+                    <span>{feat}</span>
                   </li>
                 ))}
               </ul>
-              <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-[#F0EBE3] pt-4">
-                <span className="text-xs text-[#5C554B]">{c.annualPayment}</span>
+
+              {/* TUNNEL DE VENTE INTENSE : FORCER LE CALL / LE DEVIS / L'ACTION */}
+              <div className="mt-8 space-y-3 border-t border-[#EBE5DC] pt-6">
+                {/* 1. CALL DIRECT */}
                 <a
-                  href="/?service=maps&plan=maps_annual_management#quote"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#A67C40] hover:text-[#1A1815]"
+                  href="https://wa.me/33649219808?text=Bonjour%20XRAGENCY%2C%20je%20souhaite%20r%C3%A9server%20un%20audit%20t%C3%A9l%C3%A9phonique%20Google%20Maps%20offert%20pour%20mon%20%C3%A9tablissement."
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex w-full items-center justify-center gap-2.5 rounded-full bg-[#1A1815] py-4 text-xs sm:text-sm font-bold text-white shadow-lg transition hover:bg-[#332F2B] hover:scale-[1.01] active:scale-[0.99]"
                 >
-                  {c.managementCta}
-                  <ArrowRight className="h-3.5 w-3.5" />
+                  <Phone className="h-4 w-4 text-[#E5C696]" />
+                  <span>Réserver mon diagnostic téléphonique (15 min offert)</span>
+                  <ArrowRight className="h-4 w-4" />
                 </a>
+
+                {/* 2. ACTIONS SECONDAIRES : AJOUT DEVIS & WHATSAPP */}
+                <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={() => funnel?.toggleService("maps")}
+                    className={cn(
+                      "flex items-center justify-center gap-2 rounded-full border py-3 text-xs font-semibold transition active:scale-[0.99]",
+                      isSelected
+                        ? "border-emerald-600 bg-emerald-50 text-emerald-800"
+                        : "border-[#1A1815]/20 bg-white text-[#1A1815] hover:border-[#1A1815] hover:bg-[#FAF8F5]"
+                    )}
+                  >
+                    <Check className="h-4 w-4 text-[#A67C40]" />
+                    <span>{isSelected ? "✓ Dans votre devis" : "+ Ajouter au devis (999 €)"}</span>
+                  </button>
+
+                  <a
+                    href="https://wa.me/33649219808?text=Bonjour%20XRAGENCY%2C%20pouvez-vous%20analyser%20la%20fiche%20Google%20Maps%20de%20mon%20%C3%A9tablissement%20%3F"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center justify-center gap-2 rounded-full border border-emerald-600/30 bg-emerald-50 py-3 text-xs font-semibold text-emerald-900 transition hover:bg-emerald-100"
+                  >
+                    <MessageCircle className="h-4 w-4 text-emerald-600" />
+                    <span>Échanger sur WhatsApp</span>
+                  </a>
+                </div>
+
+                <div className="pt-2 text-center">
+                  <Link
+                    to="/services/$serviceId"
+                    params={{ serviceId: "maps" }}
+                    className="font-mono text-xs text-[#8C8274] hover:text-[#1A1815] hover:underline"
+                  >
+                    Consulter la méthodologie technique complète de l'agence →
+                  </Link>
+                </div>
               </div>
             </article>
           </div>
         </div>
-        <p className="mx-auto mt-8 max-w-4xl text-center text-xs leading-relaxed text-[#777066]">
-          {c.disclaimer}
-        </p>
       </div>
     </section>
   );
