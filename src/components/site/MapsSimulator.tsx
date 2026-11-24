@@ -1612,11 +1612,11 @@ export function MapsSimulator() {
                 </div>
 
                 {/* Active Keyword Tags */}
-                <div className="mt-3 flex flex-wrap gap-2">
+                <div className="mt-3 flex flex-wrap gap-1.5 max-h-32 overflow-y-auto pr-1">
                   {keywordList.map((kw, i) => (
                     <span
                       key={kw}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-[#171613]/20 bg-white px-3 py-1.5 text-xs font-semibold text-[#171613] shadow-xs transition hover:border-red-300"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#171613]/20 bg-white px-2.5 py-1 text-[11px] font-semibold text-[#171613] shadow-xs transition hover:border-red-300"
                     >
                       <span>{kw}</span>
                       <button
