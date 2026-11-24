@@ -302,9 +302,9 @@ export function Hero() {
                 )}
               />
 
-              {/* Luminous, natural lighting: airy and bright, maintaining daylight clarity */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#14110E]/75 via-transparent to-black/20 pointer-events-none" />
+              {/* Luminous, radiant daylight: airy, bright and crystal clear */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-black/10 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#14110E]/50 via-transparent to-black/10 pointer-events-none" />
             </div>
           );
         })}

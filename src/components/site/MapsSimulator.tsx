@@ -20,6 +20,9 @@ import {
   Navigation,
   Phone,
   ArrowRight,
+  Plus,
+  X,
+  Zap,
   type LucideIcon,
 } from "lucide-react";
 import { useLang, type Lang } from "@/lib/i18n";
@@ -902,6 +905,17 @@ function SelectorBtn({
   );
 }
 
+const SECTOR_SUGGESTIONS: Record<string, string[]> = {
+  resto: ["Restaurant gastronomique", "Terrasse & cocktail", "Meilleur brunch", "Table d'exception"],
+  hotel: ["Hôtel boutique 4★", "Spa & bien-être", "Chambre avec vue", "Séjour de charme"],
+  sante: ["Cabinet médical", "Chirurgien dentiste", "Clinique esthétique", "Prise de rdv rapide"],
+  juridique: ["Cabinet d'avocats affaires", "Étude notariale", "Droit des sociétés", "Conseil fiscal"],
+  immo: ["Agence immobilière prestige", "Estimation immobilière", "Achat appartement luxe", "Gestion locative"],
+  btp: ["Rénovation haut de gamme", "Architecte d'intérieur", "Entreprise générale", "Dépannage urgent"],
+  beaute: ["Salon de coiffure prestige", "Institut de beauté", "Massage & spa", "Soins du visage"],
+  autre: ["Boutique concept store", "Commerce de proximité", "Service premium", "Showroom"],
+};
+
 export function MapsSimulator() {
   const { lang } = useLang();
   const safeLang: Lang = lang in MAPS_UI ? (lang as Lang) : "fr";
@@ -915,8 +929,25 @@ export function MapsSimulator() {
   const [citySize, setCitySize] = useState(CITY_SIZES[0].id);
   const [keywords, setKeywords] = useState(KEYWORD_RANGES[0].id);
   const [rank, setRank] = useState(CURRENT_RANKS[0].id);
-  const [customKeywords, setCustomKeywords] = useState("Restaurant Paris 8e");
+  const [keywordList, setKeywordList] = useState<string[]>([
+    "Restaurant gastronomique Paris",
+    "Terrasse & cocktail",
+  ]);
+  const [newKeywordInput, setNewKeywordInput] = useState("");
   const [hasListing, setHasListing] = useState<"yes" | "no">("yes");
+  const customKeywords = keywordList.join(", ");
+
+  const handleAddKeyword = (kw: string) => {
+    const trimmed = kw.trim();
+    if (!trimmed || keywordList.includes(trimmed)) return;
+    if (keywordList.length >= 8) return;
+    setKeywordList((prev) => [...prev, trimmed]);
+    setNewKeywordInput("");
+  };
+
+  const handleRemoveKeyword = (index: number) => {
+    setKeywordList((prev) => prev.filter((_, i) => i !== index));
+  };
 
   useEffect(() => {
     if (!funnel?.sector) return;
@@ -936,19 +967,58 @@ export function MapsSimulator() {
   }, [funnel?.sector, sector]);
 
   /* ── Dynamic price calculation (Base 999 € / an) ── */
-  const { priceMin, priceMax } = useMemo(() => {
+  const { priceMin, priceMax, competitionInfo } = useMemo(() => {
     const base = 999;
     const sizeMul = CITY_SIZES.find((c) => c.id === citySize)?.multiplier ?? 1;
-    const kwFactor = KEYWORD_RANGES.find((k) => k.id === keywords)?.factor ?? 1;
+
+    // Count of keywords factor
+    const kwCount = Math.max(keywordList.length, 1);
+    const kwCountFactor = kwCount === 1 ? 1.0 : kwCount <= 2 ? 1.15 : kwCount <= 4 ? 1.35 : kwCount <= 6 ? 1.6 : 1.95;
+
+    // Text analysis for hyper-competitive terms
+    const textAll = keywordList.join(" ").toLowerCase();
+    const hasUltraCompetitive = /paris|dubai|lyon|bordeaux|urgence|luxe|prestige|avocat|chirurgien/.test(textAll);
+    const kwDifficultyFactor = hasUltraCompetitive ? 1.2 : 1.0;
+
     const rankPenalty = CURRENT_RANKS.find((r) => r.id === rank)?.penalty ?? 1;
     const noListingBonus = hasListing === "no" ? 1.15 : 1.0;
-    const raw = base * sizeMul * kwFactor * rankPenalty * noListingBonus;
+
+    const raw = base * sizeMul * kwCountFactor * kwDifficultyFactor * rankPenalty * noListingBonus;
     const minVal = raw <= 1050 ? 999 : Math.round(raw / 50) * 50;
+
+    // Calculate Competition Score & Level
+    let compScore = (sizeMul - 1) * 2 + (kwCountFactor - 1) * 2.5 + (rankPenalty - 1) * 1.5;
+    if (hasUltraCompetitive) compScore += 1.5;
+
+    let compLevel = "Modérée";
+    let compColor = "text-emerald-700 bg-emerald-50 border-emerald-300";
+    let compProgress = 40;
+    let compDesc = "Pack Local accessible rapidement avec un travail régulier de signaux et d'avis.";
+
+    if (compScore > 2.8) {
+      compLevel = "Ultra-Élevée (Top 3 disputé)";
+      compColor = "text-amber-800 bg-amber-50 border-amber-300";
+      compProgress = 90;
+      compDesc = "Zone hyper-concurrentielle : autorité forte requise, netlinking local et stratégie multi-points.";
+    } else if (compScore > 1.4) {
+      compLevel = "Compétition Active";
+      compColor = "text-blue-800 bg-blue-50 border-blue-200";
+      compProgress = 68;
+      compDesc = "Zone disputée : optimisation complète GBP, photos géolocalisées et réponses aux avis.";
+    }
+
     return {
       priceMin: minVal,
-      priceMax: Math.round((raw * 1.45) / 50) * 50,
+      priceMax: Math.round((raw * 1.4) / 50) * 50,
+      competitionInfo: {
+        level: compLevel,
+        color: compColor,
+        progress: compProgress,
+        desc: compDesc,
+        count: kwCount,
+      },
     };
-  }, [citySize, keywords, rank, hasListing]);
+  }, [citySize, keywordList, rank, hasListing]);
 
   const animMin = useAnimatedPrice(priceMin);
   const animMax = useAnimatedPrice(priceMax);
@@ -991,7 +1061,7 @@ export function MapsSimulator() {
   const selectedSector = SECTORS.find((s) => s.id === sector);
   const sectorLabel = tx(selectedSector?.label ?? "");
   const cityLabel = tx(CITY_SIZES.find((c) => c.id === citySize)?.label ?? "");
-  const kwLabel = `${KEYWORD_RANGES.find((k) => k.id === keywords)?.label ?? ""} ${tx("mots-clés principaux")}`;
+  const kwLabel = `${keywordList.length} ${keywordList.length > 1 ? "mots-clés" : "mot-clé"} (${keywordList.slice(0, 2).join(", ")}${keywordList.length > 2 ? "..." : ""})`;
   const rankLabel = tx(CURRENT_RANKS.find((r) => r.id === rank)?.label ?? "");
 
   const roiMetrics = useMemo(() => {
@@ -1026,7 +1096,7 @@ export function MapsSimulator() {
       },
     };
 
-    const kwFactor = keywords === "k1" ? 1 : keywords === "k2" ? 1.75 : 2.5;
+    const kwFactor = Math.max(1, keywordList.length * 0.45);
     const baseSearches = Math.round((cityData[citySize]?.searches ?? 5000) * kwFactor);
     const top3Captured = Math.round(baseSearches * 0.38); // 38% CTR Local Pack
     const newClients = Math.max(16, Math.round(top3Captured * 0.045));
@@ -1442,28 +1512,21 @@ export function MapsSimulator() {
             </div>
 
             <div className="space-y-6 p-5 sm:p-7">
-              {/* Step 0 — Exact Keyword & Listing check */}
-              <div className="grid grid-cols-1 gap-4 rounded-2xl border border-[#171613]/10 bg-[#FAF8F4] p-4 md:grid-cols-[1.3fr_0.7fr]">
-                <div>
-                  <label className="mb-2 flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[#171613]">
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#171613] text-[10px] font-bold text-white">
-                      0
-                    </span>
-                    {ui.keywordsLabel}
-                  </label>
-                  <input
-                    type="text"
-                    value={customKeywords}
-                    onChange={(e) => setCustomKeywords(e.target.value)}
-                    placeholder={ui.keywordsPlaceholder}
-                    className="w-full rounded-xl border border-[#171613]/15 bg-white px-4 py-2.5 text-sm font-medium text-[#171613] placeholder:text-[#787167] focus:border-[#9E7F5A] focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="mb-2 block font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[#171613]">
-                    {ui.hasListingLabel}
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
+              {/* Step 0 — Fiche Google Maps Existante */}
+              <div className="rounded-2xl border border-[#171613]/10 bg-[#FAF8F4] p-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div>
+                    <label className="flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[#171613]">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#171613] text-[10px] font-bold text-white">
+                        0
+                      </span>
+                      {ui.hasListingLabel}
+                    </label>
+                    <p className="text-[11px] text-[#666] mt-0.5">
+                      Si vous n'avez pas encore de fiche, la création et la validation sont intégralement incluses.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 sm:w-64 shrink-0">
                     <SelectorBtn
                       selected={hasListing === "yes"}
                       onClick={() => setHasListing("yes")}
@@ -1531,26 +1594,117 @@ export function MapsSimulator() {
                 </div>
               </div>
 
-              {/* Step 3 — Keywords */}
-              <div>
-                <p className="mb-3 flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[#57534B]">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#171613] text-[10px] font-bold text-[#F7F4EE]">
-                    3
-                  </span>
-                  {tx("Nombre de mots-clés principaux")}
-                </p>
-                <div className="grid grid-cols-3 gap-2">
-                  {KEYWORD_RANGES.map((k) => (
-                    <SelectorBtn
-                      key={k.id}
-                      selected={keywords === k.id}
-                      onClick={() => setKeywords(k.id)}
+              {/* Step 3 — Mots-clés Stratégiques & Diagnostic Concurrence */}
+              <div className="rounded-2xl border border-[#9E7F5A]/25 bg-gradient-to-br from-[#FAF7F2] to-[#F5EFE4] p-4 sm:p-5">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-[#7D6445]">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#171613] text-[10px] font-bold text-white">
+                      3
+                    </span>
+                    Vos Mots-clés Stratégiques Ciblés ({keywordList.length}/8)
+                  </p>
+
+                  {/* Real-time competition badge */}
+                  <div className={cn("inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold shadow-xs", competitionInfo.color)}>
+                    <Zap className="h-3.5 w-3.5 text-amber-600" />
+                    <span>Concurrence : {competitionInfo.level}</span>
+                  </div>
+                </div>
+
+                {/* Active Keyword Tags */}
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {keywordList.map((kw, i) => (
+                    <span
+                      key={kw}
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-[#171613]/20 bg-white px-3 py-1.5 text-xs font-semibold text-[#171613] shadow-xs transition hover:border-red-300"
                     >
-                      <BarChart3 className="h-4 w-4 opacity-80" />
-                      <span className="text-sm font-bold">{tx(k.label)}</span>
-                      <span className="text-[10px] opacity-75">{tx(k.sub)}</span>
-                    </SelectorBtn>
+                      <span>{kw}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveKeyword(i)}
+                        className="rounded-full p-0.5 text-[#888] hover:bg-red-50 hover:text-red-600 transition"
+                        aria-label={`Supprimer ${kw}`}
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </span>
                   ))}
+                  {keywordList.length === 0 && (
+                    <span className="text-xs italic text-[#777]">
+                      Aucun mot-clé sélectionné. Cliquez sur une suggestion ci-dessous ou ajoutez le vôtre.
+                    </span>
+                  )}
+                </div>
+
+                {/* Input to add custom keywords */}
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleAddKeyword(newKeywordInput);
+                  }}
+                  className="mt-3 flex gap-2"
+                >
+                  <input
+                    type="text"
+                    value={newKeywordInput}
+                    onChange={(e) => setNewKeywordInput(e.target.value)}
+                    placeholder="Tapez un mot-clé précis (ex: Restaurant terrasse Paris 8e, Traiteur bio...)"
+                    className="flex-1 rounded-xl border border-[#171613]/15 bg-white px-3.5 py-2 text-xs sm:text-sm font-medium text-[#171613] placeholder:text-[#888] focus:border-[#9E7F5A] focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    disabled={!newKeywordInput.trim()}
+                    className="inline-flex items-center gap-1 rounded-xl bg-[#171613] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#2C2924] disabled:opacity-40"
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                    <span>Ajouter</span>
+                  </button>
+                </form>
+
+                {/* Quick 1-Click Suggestions for the chosen sector */}
+                <div className="mt-3.5 pt-3 border-t border-[#171613]/10">
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-[#8C7352]">
+                    Suggestions 1-clic recommandées pour votre secteur :
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {(SECTOR_SUGGESTIONS[sector] ?? SECTOR_SUGGESTIONS.resto).map((sug) => {
+                      const already = keywordList.includes(sug);
+                      return (
+                        <button
+                          key={sug}
+                          type="button"
+                          onClick={() => handleAddKeyword(sug)}
+                          disabled={already}
+                          className={cn(
+                            "inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-medium transition",
+                            already
+                              ? "border-emerald-300 bg-emerald-50 text-emerald-800 opacity-60 cursor-default"
+                              : "border-[#171613]/15 bg-white/80 text-[#3C3831] hover:border-[#9E7F5A] hover:bg-white"
+                          )}
+                        >
+                          {!already && <Plus className="h-3 w-3 text-[#9E7F5A]" />}
+                          <span>{sug}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Competition Progress Bar & Guidance */}
+                <div className="mt-3.5 rounded-xl bg-white/70 p-3 border border-[#171613]/8">
+                  <div className="flex items-center justify-between text-xs font-semibold text-[#171613]">
+                    <span>Indice d'intensité concurrentielle :</span>
+                    <span className="font-mono">{competitionInfo.progress}%</span>
+                  </div>
+                  <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-[#E5DFD5]">
+                    <div
+                      className={cn("h-full transition-all duration-500 rounded-full", competitionInfo.progress > 75 ? "bg-amber-600" : competitionInfo.progress > 50 ? "bg-blue-600" : "bg-emerald-600")}
+                      style={{ width: `${competitionInfo.progress}%` }}
+                    />
+                  </div>
+                  <p className="mt-1.5 text-[11px] text-[#555] leading-relaxed">
+                    {competitionInfo.desc}
+                  </p>
                 </div>
               </div>
 

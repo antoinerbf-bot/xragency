@@ -14,8 +14,8 @@ const SERVICE_IMAGES: Record<string, string> = {
   maps: "/showcase/svc-maps-editorial.jpg",
   social: "/showcase/agency-social-studio-hero.jpg",
   maintenance: "/showcase/svc-webcare-editorial.jpg",
-  crm: "/showcase/lot5_crm_leads_pro.png",
-  robotics: "/showcase/atlas-o2-studio.jpg",
+  crm: "/showcase/svc_crm_luxury.jpg",
+  robotics: "/showcase/svc_robotics_luxury.jpg",
 };
 
 export const ORDERED_SERVICES = [

@@ -34,6 +34,7 @@ import { useOptionalFunnel } from "@/lib/funnel";
 import { useCart } from "@/hooks/useCart";
 import { CONTACT } from "@/lib/content";
 import { SOCIAL_MEDIA_PLANS, getCommitmentLabel, getPeriodShortLabel } from "@/lib/catalog";
+import { cn } from "@/lib/utils";
 
 const l = (fr: string, en: string, vi: string, ar: string, ru: string): L => ({
   fr,
@@ -1210,7 +1211,50 @@ export function QuoteConfiguratorCompact() {
   const [goalId, setGoalId] = useState<string>(GOALS[1].id);
   const [currentSituation, setCurrentSituation] = useState<string>(CURRENT_SITUATIONS[0].id);
   const [budgetTier, setBudgetTier] = useState<string>(BUDGET_TIERS[1].id);
-  const [selectedServices, setSelectedServices] = useState<ServiceKey[]>(["websites", "maps", "crm"]);
+  const [selectedServices, setSelectedServices] = useState<ServiceKey[]>(["maps", "seo", "social"]);
+  const [monthlyVolume, setMonthlyVolume] = useState<number>(180);
+  const [activePackPreset, setActivePackPreset] = useState<string>("leads");
+
+  const PACK_PRESETS = [
+    {
+      id: "launch",
+      emoji: "🌟",
+      badge: "Lancement Rapide",
+      title: "Pack Lancement & Notoriété",
+      sub: "Site web vitrine d'exception, identité visuelle signature et création de votre fiche Google Maps.",
+      services: ["websites", "branding", "maps"] as ServiceKey[],
+    },
+    {
+      id: "leads",
+      emoji: "🚀",
+      badge: "Performance & Flux",
+      title: "Pack Conquête Clients",
+      sub: "Arriver dans le Top 3 Google Maps, dominer le référencement naturel SEO et attirer sur les réseaux.",
+      services: ["maps", "seo", "social"] as ServiceKey[],
+    },
+    {
+      id: "direct",
+      emoji: "💰",
+      badge: "0% Commission",
+      title: "Pack Vente Directe & CRM",
+      sub: "Application web Click & Collect, réservations sans intermédiaire et logiciel CRM caisse sur-mesure.",
+      services: ["websites", "crm", "maintenance"] as ServiceKey[],
+    },
+    {
+      id: "full",
+      emoji: "👑",
+      badge: "Tout-en-un Studio",
+      title: "Écosystème Haute Couture",
+      sub: "Dispositif complet : Identité globale, Site web, Top 3 Google, Automatisation IA & WebCare serein.",
+      services: ["websites", "branding", "maps", "seo", "crm", "maintenance"] as ServiceKey[],
+    },
+  ];
+
+  const estimatedSavings = useMemo(() => {
+    const perOrderSavings = 7.5;
+    return Math.round(monthlyVolume * perOrderSavings);
+  }, [monthlyVolume]);
+
   const [selectedPlans, setSelectedPlans] = useState<Record<ServiceKey, string>>({
     websites: "website_business",
     seo: "seo_growth",
@@ -1602,11 +1646,126 @@ export function QuoteConfiguratorCompact() {
             {/* STEP 1 — BESOINS & DIAGNOSTIC INTERACTIF */}
             {step === 1 && (
               <div className="space-y-8">
-                {/* 1. SECTEUR D'ACTIVITÉ */}
+                {/* 1. CHOIX LUDIQUE : QUEL EST VOTRE GRAND OBJECTIF ? */}
+                <div>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
+                      1. Quel est votre Objectif Principal ? (1 Clic)
+                    </label>
+                    <span className="font-mono text-[10px] text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full font-semibold">
+                      ✨ Pack configuré automatiquement
+                    </span>
+                  </div>
+
+                  <div className="mt-3.5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    {PACK_PRESETS.map((p) => {
+                      const isActive = activePackPreset === p.id;
+                      return (
+                        <button
+                          key={p.id}
+                          type="button"
+                          onClick={() => {
+                            setActivePackPreset(p.id);
+                            setSelectedServices(p.services);
+                          }}
+                          className={cn(
+                            "group relative flex flex-col justify-between rounded-2xl border p-4 sm:p-5 text-start transition-all duration-300 shadow-xs",
+                            isActive
+                              ? "border-[#171613] bg-[#171613] text-[#F7F4EE] shadow-lg -translate-y-1"
+                              : "border-[#171613]/12 bg-[#FAF8F4] text-[#2C2924] hover:border-[#9E7F5A] hover:bg-white"
+                          )}
+                        >
+                          <div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-2xl">{p.emoji}</span>
+                              <span
+                                className={cn(
+                                  "font-mono text-[10px] font-semibold uppercase tracking-wider rounded-full px-2.5 py-0.5",
+                                  isActive
+                                    ? "bg-[#E5C696] text-[#171613]"
+                                    : "bg-[#EEE8DC] text-[#7A6343]"
+                                )}
+                              >
+                                {p.badge}
+                              </span>
+                            </div>
+                            <h4 className="mt-2.5 text-base font-bold tracking-tight">
+                              {p.title}
+                            </h4>
+                            <p
+                              className={cn(
+                                "mt-1.5 text-xs leading-relaxed",
+                                isActive ? "text-white/80" : "text-[#5C554B]"
+                              )}
+                            >
+                              {p.sub}
+                            </p>
+                          </div>
+
+                          <div className="mt-4 flex items-center justify-between border-t border-current/10 pt-3 text-[11px] font-semibold">
+                            <span>{p.services.length} services inclus</span>
+                            <span className={isActive ? "text-[#E5C696]" : "text-[#8D6C42]"}>
+                              {isActive ? "✓ Sélectionné" : "Activer ce pack →"}
+                            </span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 2. SIMULATEUR LUDIQUE DE GAINS & ÉCONOMIES DIRECTES */}
+                <div className="rounded-2xl border border-emerald-300/60 bg-gradient-to-br from-emerald-50/80 via-[#FAF7F0] to-emerald-50/40 p-4 sm:p-5 shadow-xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="h-4 w-4 text-emerald-700" />
+                        <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-emerald-900">
+                          Simulateur d'Économies & Vente Directe
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs text-[#524B40] max-w-md">
+                        En éliminant les commissions de 15% à 30% des plateformes tierces grâce à vos outils de commande & réservation directe XRAGENCY.
+                      </p>
+                    </div>
+
+                    <div className="sm:text-right shrink-0">
+                      <span className="font-mono text-2xl font-black text-emerald-800">
+                        ~{price(estimatedSavings)}
+                      </span>
+                      <span className="text-xs text-emerald-700 block font-semibold">/ mois d'économies</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-emerald-200/60">
+                    <div className="flex items-center justify-between text-xs font-semibold text-[#171613]">
+                      <span>Vos commandes ou clients mensuels :</span>
+                      <span className="font-mono font-bold text-sm bg-white px-2.5 py-0.5 rounded-lg border border-[#171613]/10">
+                        {monthlyVolume} clients / mois
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min={30}
+                      max={1200}
+                      step={10}
+                      value={monthlyVolume}
+                      onChange={(e) => setMonthlyVolume(Number(e.target.value))}
+                      className="mt-2.5 w-full accent-[#171613] cursor-pointer"
+                    />
+                    <div className="mt-1 flex justify-between text-[10px] font-mono text-[#777]">
+                      <span>30 (Démarrage)</span>
+                      <span>300 (Activité soutenue)</span>
+                      <span>1 200+ (Forte affluence)</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. SECTEUR D'ACTIVITÉ */}
                 <div>
                   <div className="flex items-center justify-between">
                     <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
-                      1. Votre Secteur d'Activité
+                      2. Votre Secteur d'Activité
                     </label>
                     <span className="font-mono text-[10px] text-[#9E7F5A] bg-[#F4EFE6] px-2.5 py-0.5 rounded-full">
                       Europe & International

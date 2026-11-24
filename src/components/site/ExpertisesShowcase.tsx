@@ -21,7 +21,7 @@ const svcSeo = XR_PHOTOS.seo;
 const svcMaps = XR_PHOTOS.maps;
 const svcSocial = XR_PHOTOS.social;
 const svcMaint = XR_PHOTOS.maintenance;
-const svcRobot = "/showcase/atlas-o2-studio.jpg";
+const svcRobot = "/showcase/svc_robotics_luxury.jpg";
 
 interface Expertise {
   id: string;
