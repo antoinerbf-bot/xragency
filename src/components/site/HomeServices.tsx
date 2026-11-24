@@ -32,7 +32,7 @@ const SERVICE_IMAGES: Record<string, string> = {
   branding: "/showcase/svc-branding-editorial.jpg",
   seo: "/showcase/svc-seo-editorial.jpg",
   maintenance: "/showcase/svc-webcare-editorial.jpg",
-  crm: "/showcase/sc-food.jpg",
+  crm: "/showcase/lot5_crm_leads_pro.png",
   robotics: "/showcase/atlas-o2-studio.jpg",
 };
 
