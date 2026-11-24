@@ -154,7 +154,7 @@ const NAV_COPY: Record<
     mapsTool: "Simulateur Google Maps",
     quoteTool: "Devis en 3 étapes",
     quoteCta: "Devis personnalisé",
-    catalogTag: "XR AGENCY · NOS EXPERTISES",
+    catalogTag: "XRAGENCY · NOS EXPERTISES",
     menu: "Ouvrir le menu",
     chooseLanguage: "Choisir la langue",
     langPrefix: "Langue : ",
@@ -178,7 +178,7 @@ const NAV_COPY: Record<
     mapsTool: "Google Maps simulator",
     quoteTool: "3-step quote configurator",
     quoteCta: "Request a quote",
-    catalogTag: "XR AGENCY · OUR EXPERTISE",
+    catalogTag: "XRAGENCY · OUR EXPERTISE",
     menu: "Open menu",
     chooseLanguage: "Choose language",
     langPrefix: "Language: ",
@@ -202,7 +202,7 @@ const NAV_COPY: Record<
     mapsTool: "Mô phỏng Google Maps",
     quoteTool: "Báo giá 3 bước",
     quoteCta: "Yêu cầu báo giá",
-    catalogTag: "XR AGENCY · CHUYÊN MÔN",
+    catalogTag: "XRAGENCY · CHUYÊN MÔN",
     menu: "Mở menu",
     chooseLanguage: "Chọn ngôn ngữ",
     langPrefix: "Ngôn ngữ: ",
@@ -226,7 +226,7 @@ const NAV_COPY: Record<
     mapsTool: "محاكي خرائط Google",
     quoteTool: "عرض سعر في 3 خطوات",
     quoteCta: "طلب عرض سعر",
-    catalogTag: "XR AGENCY · خبراتنا",
+    catalogTag: "XRAGENCY · خبراتنا",
     menu: "فتح القائمة",
     chooseLanguage: "اختيار اللغة",
     langPrefix: "اللغة: ",
@@ -250,7 +250,7 @@ const NAV_COPY: Record<
     mapsTool: "Симулятор Google Maps",
     quoteTool: "Смета за 3 шага",
     quoteCta: "Запросить смету",
-    catalogTag: "XR AGENCY · КОМПЕТЕНЦИИ",
+    catalogTag: "XRAGENCY · КОМПЕТЕНЦИИ",
     menu: "Открыть меню",
     chooseLanguage: "Выбрать язык",
     langPrefix: "Язык: ",
@@ -326,11 +326,11 @@ export function Nav() {
         >
           <Link
             to="/"
-            aria-label="XR AGENCY. — Accueil"
+            aria-label="XRAGENCY — Accueil"
             className="group inline-flex items-center py-1 transition-opacity duration-200 hover:opacity-80"
           >
-            <span className="font-sans text-[12px] sm:text-[13px] font-bold tracking-[0.2em] uppercase text-black select-none">
-              XR AGENCY.
+            <span className="font-sans text-[13px] sm:text-[14px] font-black tracking-[0.18em] uppercase text-black select-none">
+              XRAGENCY
             </span>
           </Link>
 

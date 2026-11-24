@@ -1627,7 +1627,12 @@ export function MapsDominationStudioPage() {
     "resto" | "artisan" | "hotel" | "sante" | "avocat" | "beaute"
   >("resto");
   const [currentRank, setCurrentRank] = useState<"invisible" | "inter" | "unoptimized">("invisible");
-  const [keywordCount, setKeywordCount] = useState<"starter" | "growth" | "domination">("growth");
+  const [userKeywords, setUserKeywords] = useState<string[]>([
+    "restaurant gastronomique",
+    "meilleure terrasse",
+    "dîner romantique",
+  ]);
+  const [keywordInput, setKeywordInput] = useState<string>("");
   const [cityScale, setCityScale] = useState<"small" | "medium" | "metro">("medium");
   const [selectedCity, setSelectedCity] = useState<string>("Paris");
   const [customCity, setCustomCity] = useState<string>("");
@@ -1648,6 +1653,7 @@ export function MapsDominationStudioPage() {
       category: l("Restaurant gastronomique français", "Fine French dining", "Nhà hàng Pháp cao cấp", "مطعم فرنسي راقٍ", "Французская кухня"),
       photo: sectorRestaurant,
       searchQuery: l("restaurant gastronomique", "fine dining restaurant", "nhà hàng cao cấp", "مطعم راقٍ", "гастрономический ресторан"),
+      suggestedKeywords: ["restaurant gastronomique", "meilleure terrasse", "brunch dimanche", "privatisation restaurant", "traiteur événementiel"],
     },
     {
       id: "artisan" as const,
@@ -1657,6 +1663,7 @@ export function MapsDominationStudioPage() {
       category: l("Entreprise de rénovation et menuiserie", "Renovation & joinery firm", "Công ty cải tạo & mộc", "شركة ترميم وديكور", "Ремонт и отделка"),
       photo: sectorConstruction,
       searchQuery: l("artisan renovation", "home renovation contractor", "thợ cải tạo nhà", "مقاول ترميم", "мастер по ремонту"),
+      suggestedKeywords: ["entreprise rénovation", "artisan menuisier", "rénovation appartement", "devis travaux btp", "artisan qualifié"],
     },
     {
       id: "hotel" as const,
@@ -1666,6 +1673,7 @@ export function MapsDominationStudioPage() {
       category: l("Hôtel 4 étoiles & Spa", "4-star boutique hotel & spa", "Khách sạn 4 sao & Spa", "فندق 4 نجوم ومنتجع", "Отель 4 звезды и спа"),
       photo: pfMaisonLumiere,
       searchQuery: l("hotel boutique spa", "boutique hotel spa", "khách sạn boutique spa", "فندق بوتيك سبا", "бутик-отель спа"),
+      suggestedKeywords: ["boutique hôtel spa", "séjour de luxe", "chambre vue panoramique", "réservation direct hôtel", "séminaire hôtel de charme"],
     },
     {
       id: "sante" as const,
@@ -1675,6 +1683,7 @@ export function MapsDominationStudioPage() {
       category: l("Cabinet dentaire conventionné", "Dental surgery practice", "Phòng khám nha khoa", "عيادة أسنان معتمدة", "Стоматологическая клиника"),
       photo: sectorHealth,
       searchQuery: l("dentiste cabinet medical", "dentist dental clinic", "nha sĩ phòng khám", "طبيب أسنان عيادة", "стоматолог клиника"),
+      suggestedKeywords: ["chirurgien esthétique", "cabinet dentaire", "blanchiment dentaire", "médecine esthétique", "urgence dentaire"],
     },
     {
       id: "avocat" as const,
@@ -1684,6 +1693,7 @@ export function MapsDominationStudioPage() {
       category: l("Cabinet d'avocats au Barreau", "Bar-registered law firm", "Văn phòng luật sư", "مكتب محاماة معتمد", "Адвокатский кабинет"),
       photo: XR_PHOTOS.strategy,
       searchQuery: l("avocat droit affaires", "business lawyer", "luật sư doanh nghiệp", "محامي شركات", "юрист по бизнесу"),
+      suggestedKeywords: ["avocat droit des affaires", "cabinet avocat fiscaliste", "conseil juridique entreprise", "avocat fusion acquisition", "contentieux commercial"],
     },
     {
       id: "beaute" as const,
@@ -1693,29 +1703,49 @@ export function MapsDominationStudioPage() {
       category: l("Institut de beauté & massages", "Beauty salon & wellness massages", "Spa làm đẹp & massage", "صالون تجميل وعناية", "Салон красоты и массаж"),
       photo: XR_PHOTOS.branding,
       searchQuery: l("institut beaute spa", "beauty salon spa", "spa làm đẹp", "صالون تجميل سبا", "салон красоты спа"),
+      suggestedKeywords: ["institut de beauté de luxe", "soin visage haute technologie", "massage bien-être", "épilation laser définitive", "spa privatif"],
     },
   ];
 
   const currentSector = sectors.find((s) => s.id === selectedSector) ?? sectors[0];
   const citiesList = ["Paris", "Lyon", "Bordeaux", "Marseille", "Nice", "Da Nang", "Genève"];
 
+  const handleAddKeyword = () => {
+    const trimmed = keywordInput.trim();
+    if (trimmed && !userKeywords.includes(trimmed)) {
+      setUserKeywords((prev) => [...prev, trimmed]);
+      setKeywordInput("");
+    }
+  };
+
+  const handleRemoveKeyword = (kw: string) => {
+    setUserKeywords((prev) => prev.filter((k) => k !== kw));
+  };
+
+  const handleToggleSuggested = (kw: string) => {
+    if (userKeywords.includes(kw)) {
+      setUserKeywords((prev) => prev.filter((k) => k !== kw));
+    } else {
+      setUserKeywords((prev) => [...prev, kw]);
+    }
+  };
+
   // Dynamic estimate calculation based on user's exact parameters
   const calculatedEstimate = (() => {
     let base = 999;
-    if (keywordCount === "growth") base += 290;
-    if (keywordCount === "domination") base += 590;
+    const count = userKeywords.length;
+    if (count > 3 && count <= 6) {
+      base += 290;
+    } else if (count > 6) {
+      base += 290 + (count - 6) * 85;
+    }
     if (cityScale === "medium") base += 150;
     if (cityScale === "metro") base += 350;
-    if (currentRank === "invisible") base += 100;
+    if (currentRank === "invisible") base += 120;
     return base;
   })();
 
-  const selectedKeywordsLabel =
-    keywordCount === "starter"
-      ? "1 à 3 mots-clés cibles"
-      : keywordCount === "growth"
-      ? "4 à 6 mots-clés stratégiques"
-      : "7 à 10+ mots-clés domination";
+  const selectedKeywordsLabel = `${userKeywords.length} mot(s)-clé(s) sélectionné(s)`;
 
   const selectedRankLabel =
     currentRank === "invisible"
@@ -2026,31 +2056,92 @@ export function MapsDominationStudioPage() {
                 </div>
               </div>
 
-              {/* CRITÈRE 3 : VOLUME DE MOTS-CLÉS */}
-              <div className="rounded-2xl border border-[#E5E5E0] bg-white p-5 shadow-sm">
-                <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#1A73E8]">
-                  {t(l("3. Mots-clés stratégiques", "3. Target Keywords", "3. Số lượng từ khóa", "3. الكلمات المفتاحية", "3. Ключевые слова"))}
-                </span>
-                <div className="mt-3 space-y-2">
-                  {[
-                    { id: "starter" as const, title: l("1 à 3 mots-clés cibles", "1 to 3 core keywords", "1 đến 3 từ khóa chính", "1 إلى 3 كلمات أساسية", "1–3 ключевых слова"), sub: l("Votre métier + votre ville", "Your core service + city", "Ngành nghề + Thành phố", "مجالك الرئيسي + مدينتك", "Услуга + город") },
-                    { id: "growth" as const, title: l("4 à 6 mots-clés stratégiques", "4 to 6 strategic keywords", "4 đến 6 từ khóa chiến lược", "4 إلى 6 كلمات استراتيجية", "4–6 ключевых слов"), sub: l("Spécialités + arrondissements/zones", "Specialties + local zones", "Chuyên môn + khu vực lân cận", "التخصصات الدقيقة والمناطق المجاورة", "Услуги + районы") },
-                    { id: "domination" as const, title: l("7 à 10+ mots-clés domination", "7 to 10+ domination keywords", "7 đến 10+ từ khóa phủ sóng", "7 إلى 10+ كلمات للسيطرة الكاملة", "7–10+ ключевых слов"), sub: l("Couverture géographique totale", "Full geographical dominance", "Phủ sóng toàn bộ vùng đô thị", "تغطية جغرافية كاملة للمدينة", "Полный охват города") },
-                  ].map((k) => (
+              {/* CRITÈRE 3 : MOTS-CLÉS STRATÉGIQUES PERSONNALISÉS */}
+              <div className="rounded-2xl border border-[#E5E5E0] bg-white p-5 shadow-sm flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#1A73E8]">
+                      {t(l("3. Vos Mots-clés Stratégiques", "3. Your Target Keywords", "3. Từ khóa chiến lược của bạn", "3. كلماتك المفتاحية المستهدفة", "3. Ваши ключевые слова"))}
+                    </span>
+                    <span className="rounded-full bg-[#1A73E8]/10 px-2 py-0.5 font-mono text-[10px] font-bold text-[#1A73E8]">
+                      {userKeywords.length} actif{userKeywords.length > 1 ? "s" : ""}
+                    </span>
+                  </div>
+
+                  <p className="mt-1 text-[11px] text-[#52504A]">
+                    {t(l("Tapez vos requêtes cibles ou piochez dans les suggestions :", "Type your queries or pick from suggestions:", "Nhập từ khóa hoặc chọn gợi ý bên dưới:", "أدخل كلماتك المفتاحية أو اختر من المقترحات:", "Введите свои запросы или выберите из списка:"))}
+                  </p>
+
+                  {/* Input field to add custom keyword */}
+                  <div className="mt-2.5 flex items-center gap-1.5">
+                    <input
+                      type="text"
+                      placeholder={t(l("ex: chirurgien esthétique...", "ex: boutique hotel...", "ex: nhà hàng chay...", "مثال: محامي شركات...", "напр.: бутик отель..."))}
+                      value={keywordInput}
+                      onChange={(e) => setKeywordInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleAddKeyword();
+                        }
+                      }}
+                      className="w-full rounded-xl border border-[#D5D5CF] bg-[#FAF9F5] px-3 py-1.5 text-xs text-[#12110E] placeholder:text-[#999] focus:border-[#1A73E8] focus:bg-white focus:outline-none"
+                    />
                     <button
-                      key={k.id}
                       type="button"
-                      onClick={() => setKeywordCount(k.id)}
-                      className={`w-full rounded-xl p-3 text-start text-xs transition border ${
-                        keywordCount === k.id
-                          ? "border-[#12110E] bg-[#12110E] text-white shadow-sm"
-                          : "border-[#EBEBE6] bg-[#FAF9F5] text-[#2B2925] hover:border-[#12110E]"
-                      }`}
+                      onClick={handleAddKeyword}
+                      className="shrink-0 rounded-xl bg-[#12110E] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#2B2925]"
                     >
-                      <div className="font-semibold">{t(k.title)}</div>
-                      <div className={`mt-0.5 text-[10px] ${keywordCount === k.id ? "text-white/70" : "text-[#52504A]"}`}>{t(k.sub)}</div>
+                      {t(l("Ajouter", "Add", "Thêm", "إضافة", "Добавить"))}
                     </button>
-                  ))}
+                  </div>
+
+                  {/* Active user keywords tag chips */}
+                  <div className="mt-3 flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
+                    {userKeywords.map((kw) => (
+                      <span
+                        key={kw}
+                        className="inline-flex items-center gap-1 rounded-lg bg-[#1A73E8]/10 px-2 py-1 font-mono text-[11px] font-semibold text-[#1A73E8]"
+                      >
+                        <span>{kw}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveKeyword(kw)}
+                          className="hover:text-red-600 transition"
+                          title="Supprimer"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Suggested sector keywords */}
+                <div className="mt-3 border-t border-[#EBEBE6] pt-2.5">
+                  <span className="block font-mono text-[9.5px] uppercase tracking-wider text-[#52504A] mb-1.5">
+                    {t(l("Suggestions recommandées :", "Recommended suggestions:", "Gợi ý hàng đầu:", "مقترحات لهذا القطاع:", "Рекомендованные:"))}
+                  </span>
+                  <div className="flex flex-wrap gap-1">
+                    {currentSector.suggestedKeywords.slice(0, 4).map((sug) => {
+                      const isSelected = userKeywords.includes(sug);
+                      return (
+                        <button
+                          key={sug}
+                          type="button"
+                          onClick={() => handleToggleSuggested(sug)}
+                          className={`rounded-md px-2 py-0.5 text-[10px] transition font-medium ${
+                            isSelected
+                              ? "bg-[#1A73E8] text-white"
+                              : "bg-[#F0EFEA] text-[#52504A] hover:bg-[#E5E4DE] hover:text-[#12110E]"
+                          }`}
+                        >
+                          {isSelected ? "✓ " : "+ "}
+                          {sug}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
 
@@ -2434,7 +2525,7 @@ export function MapsDominationStudioPage() {
                                 ⚠️ {t(l("VOTRE ÉTABLISSEMENT EST EXCLU DU PACK LOCAL (RANG #18)", "YOUR BUSINESS IS EXCLUDED FROM LOCAL PACK (RANK #18)", "CƠ SỞ CỦA BẠN BỊ LOẠI KHỎI LOCAL PACK (HẠNG #18)", "نشاطك مستبعد من حزمة النتائج الأولى (الترتيب 18)", "ВАШ БИЗНЕС НЕ ВХОДИТ В LOCAL PACK (ПОЗИЦИЯ #18)"))}
                               </span>
                               <p className="mt-0.5 text-[9.5px] text-[#777]">
-                                {t(l("92% des mobinautes s'arrêtent au Top 3. Vos concurrents captent 100% de vos clients potentiels.", "92% of mobile users never scroll past Top 3. Your competitors get 100% of your leads.", "92% khách hàng chỉ xem Top 3. Đối thủ đang thâu tóm toàn bộ khách của bạn.", "92% من المستخدمين لا يتجاوزون أول 3 نتائج. المنافسون يسرقون زبائنك.", "92% клиентов не листают дальше топ-3. Конкуренты забирают всех клиентов.")) }
+                                {t(l("92% des utilisateurs sur mobile s'arrêtent au Top 3. Vos concurrents captent 100% de vos clients potentiels.", "92% of mobile users never scroll past Top 3. Your competitors get 100% of your leads.", "92% khách hàng chỉ xem Top 3. Đối thủ đang thâu tóm toàn bộ khách của bạn.", "92% من المستخدمين لا يتجاوزون أول 3 نتائج. المنافسون يسرقون زبائنك.", "92% клиентов не листают дальше топ-3. Конкуренты забирают всех клиентов.")) }
                               </p>
                             </div>
 
@@ -2709,83 +2800,95 @@ export function MapsDominationStudioPage() {
                     </div>
                   </div>
 
-                  {/* ILLUSTRATION RADAR SVG & LIVE VISUAL */}
+                  {/* REALISTIC GOOGLE MAPS 3-PACK SIMULATION (REPLACES ARTIFICIAL RADAR) */}
                   <div className="lg:col-span-6">
-                    <div className="relative mx-auto aspect-[4/3] w-full max-w-[460px] overflow-hidden rounded-2xl border border-[#D5D5CF] bg-[#0E1524] p-5 shadow-2xl">
-                      {/* Radar sweep animation background */}
-                      <div className="pointer-events-none absolute inset-0 opacity-20">
-                        <div className="h-full w-full bg-[radial-gradient(circle_at_50%_50%,rgba(26,115,232,0.4),transparent_70%)]" />
+                    <div className="relative mx-auto aspect-[4/3] w-full max-w-[460px] overflow-hidden rounded-2xl border border-[#D5D5CF] bg-[#F8F9FA] p-4 shadow-xl flex flex-col justify-between">
+                      {/* Realistic Google Maps Search Header */}
+                      <div className="rounded-xl border border-[#E0E0DC] bg-white p-2.5 shadow-sm flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          <div className="grid h-6 w-6 place-items-center rounded-full bg-[#1A73E8] text-white shrink-0">
+                            <MapPin className="h-3.5 w-3.5" />
+                          </div>
+                          <span className="truncate font-sans text-xs text-[#202124] font-medium">
+                            {userKeywords[0] || t(currentSector.searchQuery)} à {displayCity}
+                          </span>
+                        </div>
+                        <span className="rounded-full bg-[#16A34A]/10 px-2 py-0.5 font-mono text-[9px] font-bold text-[#16A34A] shrink-0">
+                          ● EN DIRECT
+                        </span>
                       </div>
 
-                      {/* Concentric distance rings */}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="h-[75%] w-[75%] rounded-full border border-[#1A73E8]/30" />
-                        <div className="absolute h-[50%] w-[50%] rounded-full border border-[#1A73E8]/40" />
-                        <div className="absolute h-[25%] w-[25%] rounded-full border border-[#1A73E8]/50" />
-                        <div className="absolute h-[90%] w-[90%] rounded-full border border-dashed border-[#1A73E8]/20" />
-                      </div>
+                      {/* Google Maps Local 3-Pack Results */}
+                      <div className="my-2 space-y-2">
+                        {/* RESULT #1 : CLIENT ESTABLISHMENT (TOP RANKED) */}
+                        <div className="relative rounded-xl border-2 border-[#1A73E8] bg-white p-3 shadow-md">
+                          <div className="absolute -top-2.5 right-3 rounded-full bg-[#1A73E8] px-2.5 py-0.5 font-mono text-[8.5px] font-bold text-white shadow-sm">
+                            ★ TOP 1 PACK LOCAL
+                          </div>
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <h4 className="font-sans text-xs font-bold text-[#202124]">
+                                {t(currentSector.sampleName)}
+                              </h4>
+                              <div className="mt-0.5 flex items-center gap-1.5 text-[10.5px]">
+                                <span className="font-bold text-[#D97706]">4.9</span>
+                                <div className="flex text-[#F59E0B]">
+                                  {[...Array(5)].map((_, i) => (
+                                    <Star key={i} className="h-3 w-3 fill-amber-400" />
+                                  ))}
+                                </div>
+                                <span className="text-[#5F6368]">(184)</span>
+                                <span className="text-[#5F6368]">· {t(currentSector.category)}</span>
+                              </div>
+                              <p className="mt-0.5 text-[10px] text-[#5F6368]">
+                                <span className="font-semibold text-[#188038]">Ouvert</span> · Ferme à 23:00 · {displayCity}
+                              </p>
+                            </div>
+                          </div>
 
-                      {/* Radar Crosshairs */}
-                      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                        <div className="h-full w-[1px] bg-[#1A73E8]/20" />
-                        <div className="absolute h-[1px] w-full bg-[#1A73E8]/20" />
-                      </div>
-
-                      {/* Radar Center (Your Establishment Target) */}
-                      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                        <div className="relative flex items-center justify-center">
-                          <div className="absolute h-10 w-10 animate-ping rounded-full bg-[#1A73E8]/40" />
-                          <div className="grid h-8 w-8 place-items-center rounded-full bg-[#1A73E8] text-white shadow-lg">
-                            <MapPin className="h-4 w-4" />
+                          {/* Action Buttons (Call, Directions, Website) */}
+                          <div className="mt-2 flex items-center gap-2 border-t border-[#F1F3F4] pt-2">
+                            <span className="inline-flex items-center gap-1 rounded-lg bg-[#E8F0FE] px-2.5 py-1 text-[10px] font-semibold text-[#1A73E8]">
+                              <Phone className="h-3 w-3" /> Appeler
+                            </span>
+                            <span className="inline-flex items-center gap-1 rounded-lg border border-[#DADCE0] px-2.5 py-1 text-[10px] font-medium text-[#3C4043]">
+                              <Compass className="h-3 w-3" /> Itinéraire
+                            </span>
+                            <span className="inline-flex items-center gap-1 rounded-lg border border-[#DADCE0] px-2.5 py-1 text-[10px] font-medium text-[#3C4043]">
+                              <ArrowRight className="h-3 w-3" /> Site web
+                            </span>
                           </div>
                         </div>
-                        <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#1A73E8] px-2 py-0.5 font-mono text-[9px] font-bold text-white shadow">
-                          {t(l("VOTRE ÉTABLISSEMENT", "YOUR BUSINESS", "CƠ SỞ CỦA BẠN", "نشاطك التجاري", "ВАШ БИЗНЕС"))}
-                        </span>
-                      </div>
 
-                      {/* Competitor Blips */}
-                      <div className="absolute left-[30%] top-[25%]">
-                        <div className="grid h-5 w-5 place-items-center rounded-full bg-red-500/80 text-[9px] font-bold text-white">
-                          #1
+                        {/* RESULT #2 : COMPETITOR B */}
+                        <div className="rounded-xl border border-[#E5E5E0] bg-white/70 p-2 text-[10px] text-[#5F6368] flex items-center justify-between">
+                          <div>
+                            <span className="font-semibold text-[#202124]">#2 Établissement Concurrent B</span>
+                            <div className="flex items-center gap-1 text-[9.5px] text-[#70757A]">
+                              <span>4.3 ★ (52)</span>
+                              <span>· 1.2 km</span>
+                            </div>
+                          </div>
+                          <span className="font-mono text-[9px] text-[#70757A]">-48% clics</span>
                         </div>
-                        <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[8.5px] text-red-300">
-                          {t(l("Rival A (1.2 km)", "Rival A (1.2 km)", "Đối thủ A", "المنافس أ", "Конкурент А"))}
-                        </span>
-                      </div>
 
-                      <div className="absolute right-[28%] top-[38%]">
-                        <div className="grid h-5 w-5 place-items-center rounded-full bg-amber-500/80 text-[9px] font-bold text-white">
-                          #2
+                        {/* RESULT #3 : COMPETITOR C */}
+                        <div className="rounded-xl border border-[#E5E5E0] bg-white/50 p-2 text-[10px] text-[#5F6368] flex items-center justify-between">
+                          <div>
+                            <span className="font-semibold text-[#202124]">#3 Établissement Concurrent C</span>
+                            <div className="flex items-center gap-1 text-[9.5px] text-[#70757A]">
+                              <span>4.1 ★ (31)</span>
+                              <span>· 2.4 km</span>
+                            </div>
+                          </div>
+                          <span className="font-mono text-[9px] text-[#70757A]">-75% clics</span>
                         </div>
-                        <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[8.5px] text-amber-300">
-                          {t(l("Rival B (2.8 km)", "Rival B (2.8 km)", "Đối thủ B", "المنافس ب", "Конкурент Б"))}
-                        </span>
                       </div>
 
-                      <div className="absolute bottom-[22%] left-[35%]">
-                        <div className="grid h-5 w-5 place-items-center rounded-full bg-zinc-500/80 text-[9px] font-bold text-white">
-                          #3
-                        </div>
-                        <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[8.5px] text-zinc-400">
-                          {t(l("Rival C (4.5 km)", "Rival C (4.5 km)", "Đối thủ C", "المنافس ج", "Конкурент В"))}
-                        </span>
-                      </div>
-
-                      {/* Radar Status Badge Top */}
-                      <div className="absolute left-3 top-3 flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-2.5 py-1 backdrop-blur-md">
-                        <span className="h-2 w-2 animate-pulse rounded-full bg-[#16A34A]" />
-                        <span className="font-mono text-[9px] font-medium text-white/90">
-                          RADAR SCAN · {displayCity}
-                        </span>
-                      </div>
-
-                      {/* Live metrics bottom overlay */}
-                      <div className="absolute bottom-3 right-3 flex items-center gap-2 rounded-xl border border-white/10 bg-black/50 px-3 py-1.5 backdrop-blur-md">
-                        <span className="font-mono text-[10px] text-white">
-                          {t(l("Potentiel Détecté :", "Detected Potential:", "Tiềm năng:", "الفرص المرصودة:", "Потенциал:"))}{" "}
-                          <strong className="text-[#1A73E8]">+1 450 clics/mois</strong>
-                        </span>
+                      {/* Bottom live metrics */}
+                      <div className="flex items-center justify-between border-t border-[#EBEBE6] pt-2 text-[10px] font-mono text-[#52504A]">
+                        <span>Rayon audité : 15 km autour de {displayCity}</span>
+                        <span className="font-bold text-[#1A73E8]">+1 450 impressions/semaine</span>
                       </div>
                     </div>
                   </div>
@@ -3329,143 +3432,7 @@ export function MapsDominationStudioPage() {
           </div>
         </section>
 
-        {/* ════════════════════════════════════════════════════════════════════
-            5. LE BAS DE PAGE ÉLÉGANT & PRESTIGIEUX : STUDIO LUMINEUX & CORPORATE
-           ════════════════════════════════════════════════════════════════════ */}
-        <footer className="relative bg-[#FAF9F5] text-[#12110E] pt-16 pb-14 border-t border-[#E8E6E0]">
-          <div className="relative mx-auto max-w-[1360px] px-4 sm:px-8">
-            {/* Top Brand Banner */}
-            <div className="flex flex-col gap-6 border-b border-[#E8E6E0] pb-10 lg:flex-row lg:items-center lg:justify-between">
-              <div>
-                <div className="flex items-center gap-3">
-                  <Logo className="text-[#12110E]" />
-                  <div className="flex items-center gap-1.5 pl-2 border-l border-[#D5D5CF]">
-                    <span className="h-2 w-2 rounded-full bg-[#1A73E8]" />
-                    <span className="h-2 w-2 rounded-full bg-[#EA4335]" />
-                    <span className="h-2 w-2 rounded-full bg-[#F59E0B]" />
-                    <span className="h-2 w-2 rounded-full bg-[#16A34A]" />
-                  </div>
-                </div>
-                <p className="mt-3 max-w-xl text-xs text-[#52504A] sm:text-sm leading-relaxed">
-                  {t(
-                    l(
-                      "XR AGENCY · Studio d'Ingénierie & d'Acquisition Locale. Nous propulsons les établissements d'excellence dans le Top 3 du Pack Local Google Maps avec une précision algorithmique et un engagement contractuel sans compromis.",
-                      "XR AGENCY · Local Acquisition & Engineering Studio. Elevating premier establishments to the Google Maps Local Top 3 Pack through algorithmic precision and uncompromising quality.",
-                      "XR AGENCY · Studio Tăng trưởng & Kỹ thuật Địa phương. Đưa các thương hiệu hàng đầu vào Top 3 Google Maps với độ chính xác cao.",
-                      "XR AGENCY · استوديو الهندسة الرقمية والاستحواذ المحلي. نصعد بالأنشطة الرائدة إلى حزمة أفضل 3 نتائج على خرائط Google بدقة خوارزمية مطلقة.",
-                      "XR AGENCY · Студия локального маркетинга и веб-технологий. Выводим ведущие заведения в топ-3 Google Maps с абсолютной надёжностью.",
-                    ),
-                  )}
-                </p>
-              </div>
-
-              {/* Live Agency Performance Badge */}
-              <div className="rounded-2xl border border-[#E5E5E0] bg-white p-4 shadow-sm shrink-0">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 animate-ping rounded-full bg-[#16A34A]" />
-                  <span className="font-mono text-[10.5px] font-bold text-[#12110E] tracking-wider">
-                    XR NETWORK PULSE · EN DIRECT
-                  </span>
-                </div>
-                <div className="mt-2.5 grid grid-cols-2 gap-5 font-mono text-xs">
-                  <div>
-                    <span className="text-[#52504A] block text-[10px]">FICHES SUIVIES</span>
-                    <strong className="text-[#12110E] text-sm">142 Actives</strong>
-                  </div>
-                  <div>
-                    <span className="text-[#52504A] block text-[10px]">MAINTIEN TOP 3</span>
-                    <strong className="text-[#16A34A] text-sm">98.4%</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 4 Worldwide Hubs Grid with Live Timezone */}
-            <div className="mt-10">
-              <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.2em] text-[#1A73E8]">
-                {t(l("LES 4 HUBS XR AGENCY EN SYNCHRONISATION PERMANENTE", "THE 4 XR AGENCY HUBS IN CONSTANT SYNC", "4 TRUNG TÂM XR AGENCY TRÊN TOÀN CẦU", "مراكز XR AGENCY الأربعة في مزامنة دائمة", "4 МЕЖДУНАРОДНЫХ ХАБА XR AGENCY"))}
-              </span>
-
-              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {[
-                  { city: "Paris", tag: "Siège France · Pôle Maps & SEO", flag: "🇫🇷", time: "CET · UTC+1", coord: "48.8566° N, 2.3522° E" },
-                  { city: "Dubaï", tag: "Émirats · Croissance Mondiale", flag: "🇦🇪", time: "GST · UTC+4", coord: "25.2048° N, 55.2708° E" },
-                  { city: "Da Nang", tag: "Vietnam · Ingénierie & Code", flag: "🇻🇳", time: "ICT · UTC+7", coord: "16.0544° N, 108.2022° E" },
-                  { city: "Genève", tag: "Suisse · Clientèle Privée", flag: "🇨🇭", time: "CET · UTC+1", coord: "46.2044° N, 6.1432° E" },
-                ].map((hub, i) => (
-                  <div
-                    key={i}
-                    className="rounded-2xl border border-[#E5E5E0] bg-white p-4 shadow-sm transition hover:border-[#12110E] hover:shadow-md"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-base">{hub.flag}</span>
-                      <span className="font-mono text-[9px] text-[#52504A] bg-[#FAF9F5] px-2 py-0.5 rounded-md border border-[#EBEBE6]">
-                        {hub.time}
-                      </span>
-                    </div>
-                    <h4 className="mt-2.5 font-serif text-lg font-medium text-[#12110E]">{hub.city}</h4>
-                    <p className="mt-0.5 text-xs text-[#52504A]">{hub.tag}</p>
-                    <span className="mt-2 block font-mono text-[9.5px] text-[#1A73E8]">
-                      {hub.coord}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Other Services Exploration Pills */}
-            <div className="mt-10 border-t border-[#E8E6E0] pt-8">
-              <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.2em] text-[#52504A]">
-                {t(l("EXPLORER L'ÉCOSYSTÈME XR AGENCY", "EXPLORE XR AGENCY SERVICES", "KHÁM PHÁ DỊCH VỤ XR AGENCY", "استكشف خدمات XR AGENCY الأخرى", "ДРУГИЕ НАПРАВЛЕНИЯ XR AGENCY"))}
-              </span>
-              <div className="mt-4 flex flex-wrap gap-2.5">
-                {[
-                  { name: l("Création de Sites Web & Refonte", "Websites & Redesign", "Thiết kế Website", "تصميم المواقع", "Создание сайтов"), path: "/services/site-internet" },
-                  { name: l("Branding & Direction Artistique", "Branding & Art Direction", "Bộ nhận diện Thương hiệu", "الهوية البصرية", "Брендинг"), path: "/services/branding" },
-                  { name: l("SEO & Intelligence Artificielle", "SEO & AI Search", "SEO & Trí tuệ Nhân tạo", "السيو والذكاء الاصطناعي", "SEO и ИИ"), path: "/services/seo" },
-                  { name: l("Réseaux Sociaux & Contenu Vidéo", "Social Media & Video", "Mạng xã hội & Video", "وسائل التواصل والفيديو", "Соцсети и видео"), path: "/services/social" },
-                  { name: l("Webcare & Maintenance 24/7", "Webcare & Maintenance", "Bảo trì & Vận hành", "الصيانة والدعم الفني", "Поддержка сайтов"), path: "/services/webcare" },
-                  { name: l("Toutes les Réalisations", "All Case Studies", "Dự án Tiêu biểu", "كافة الأعمال", "Все кейсы"), path: "/realisations" },
-                ].map((s, idx) => (
-                  <Link
-                    key={idx}
-                    to={s.path}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-[#E5E5E0] bg-white px-4 py-2 text-xs font-medium text-[#2B2925] shadow-xs transition hover:border-[#12110E] hover:bg-[#12110E] hover:text-white"
-                  >
-                    <span>{t(s.name)}</span>
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Bottom Copyright & Legal Links */}
-            <div className="mt-10 flex flex-col gap-4 border-t border-[#E8E6E0] pt-6 text-xs text-[#52504A] sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p>
-                  XR AGENCY · © {new Date().getFullYear()} · {t(l("Tous droits réservés. Stratégies 100% conformes aux consignes Google Business Profile.", "All rights reserved. 100% compliant with Google Business Profile policies.", "Bảo lưu mọi quyền. Tuân thủ 100% chính sách Google.", "جميع الحقوق محفوظة. متوافق 100% مع إرشادات جوجل الرسمية.", "Все права защищены. Полное соответствие правилам Google.")) }
-                </p>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <Link to="/mentions-legales" className="hover:text-[#12110E] transition">
-                  {t(l("Mentions légales & Confidentialité", "Legal notice & Privacy", "Pháp lý & Bảo mật", "الشروط القانونية والخصوصية", "Правовая информация"))}
-                </Link>
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[#D5D5CF] bg-white px-3 py-1 text-[11px] font-mono text-[#52504A] hover:border-[#12110E] hover:text-[#12110E] transition shadow-xs"
-                >
-                  <span>RETOUR HAUT</span>
-                  <ArrowUpRight className="h-3.5 w-3.5" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </footer>
+        <Contact />
       </main>
     </div>
   );
@@ -3479,6 +3446,7 @@ export function BrandingStudioPage() {
   const isRtl = lang === "ar";
   const service = SERVICES.find((s) => s.id === "branding")!;
   const [selectedPalette, setSelectedPalette] = useState<number>(0);
+  const [sliderPos, setSliderPos] = useState<number>(50);
 
   const palettes = [
     {
@@ -3626,6 +3594,190 @@ export function BrandingStudioPage() {
                   </p>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════════
+            INTERACTIVE BEFORE / AFTER BRANDING SLIDER
+           ════════════════════════════════════════════════════════════════════ */}
+        <section id="avant-apres" className="border-b border-[#E8E6E0] bg-[#FAF9F5] py-16 sm:py-24">
+          <div className="mx-auto max-w-[1360px] px-4 sm:px-8">
+            <div className="text-center">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#12110E]/15 bg-[#12110E]/5 px-3.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#12110E]">
+                <Sparkles className="h-3 w-3 text-[#C5A880]" />
+                {t(l("MÉTAMORPHOSE & VALEUR PERÇUE", "METAMORPHOSIS & PERCEIVED VALUE", "CHUYỂN HÓA BẢN SẮC & GIÁ TRỊ CẢM NHẬN", "التحول البصري والقيمة المدركة", "ТРАНСФОРМАЦИЯ И ВОСПРИЯТИЕ БРЕНДА"))}
+              </span>
+              <h2 className="mt-3 font-serif text-3xl font-medium tracking-tight text-[#12110E] sm:text-5xl">
+                {t(l("Glissez pour comparer l'Avant / Après.", "Slide to compare Before & After.", "Kéo thanh trượt để so sánh Trước / Sau.", "اسحب للمقارنة بين قبل وبعد صياغة الهوية.", "Сравните До и После создания айдентики."))}
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-xs text-[#52504A] sm:text-sm">
+                {t(l("Une identité amateur brise instantanément la confiance. Un système graphique haute-couture décuple votre valeur perçue dès la première seconde.", "An amateur identity ruins trust instantly. A bespoke haute-couture system multiplies your perceived value from second one.", "Một bộ nhận diện nghiệp dư làm mất niềm tin ngay lập tức. Hệ thống nhận diện cao cấp giúp nhân giá trị thương hiệu lên gấp nhiều lần.", "الهوية العشوائية تضعف ثقة العميل فوراً، بينما النظام البصري الفاخر يرفع قيمتك السوقية من النظرة الأولى.", "Любительский логотип снижает доверие. Высокая айдентика кратно увеличивает воспринимаемую ценность с первой секунды."))}
+              </p>
+            </div>
+
+            {/* Before / After Split Slider */}
+            <div className="mt-12 mx-auto max-w-4xl">
+              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-[#D5D5CF] bg-[#12110E] shadow-2xl select-none">
+                {/* AFTER LAYER (FULL BACKGROUND) */}
+                <div className="absolute inset-0 bg-[#0E0D0B] p-8 sm:p-12 flex flex-col justify-between text-white">
+                  <div className="flex items-center justify-between">
+                    <span className="rounded-full bg-[#C5A880]/20 border border-[#C5A880]/40 px-3 py-1 font-mono text-[10px] font-bold text-[#C5A880]">
+                      ✦ APRÈS : XR AGENCY HAUTE COUTURE
+                    </span>
+                    <span className="font-mono text-xs text-[#C5A880]">VALEUR PERÇUE : ×3</span>
+                  </div>
+
+                  <div className="max-w-md">
+                    <span className="font-mono text-[11px] tracking-[0.25em] text-[#C5A880] uppercase">
+                      MAISON HAUTE PARFUMERIE
+                    </span>
+                    <h3 className="mt-2 font-serif text-3xl sm:text-5xl font-medium tracking-tight text-[#FAF8F5]">
+                      L'ÉLIXIR PUR
+                    </h3>
+                    <p className="mt-2 text-xs text-[#D1C7BD] leading-relaxed">
+                      Système typographique gravé sur-mesure, dorure à chaud, logo vectoriel SVG infini et palette champagne/obsidienne intemporelle.
+                    </p>
+                    <div className="mt-4 flex gap-2">
+                      <span className="rounded-md border border-[#C5A880]/30 bg-white/5 px-2.5 py-1 font-mono text-[9.5px] text-[#C5A880]">
+                        Vectoriel 300 DPI
+                      </span>
+                      <span className="rounded-md border border-[#C5A880]/30 bg-white/5 px-2.5 py-1 font-mono text-[9.5px] text-[#C5A880]">
+                        Brand Book 28 Pages
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[11px] font-mono text-[#A8A49C] border-t border-white/10 pt-3">
+                    <span>Prêt pour print, packaging de luxe, enseigne physique et digital</span>
+                    <span className="text-[#C5A880]">Tarifs clients : +40% acceptés</span>
+                  </div>
+                </div>
+
+                {/* BEFORE LAYER (CLIPPED BY SLIDER) */}
+                <div
+                  className="absolute inset-y-0 left-0 overflow-hidden bg-[#ECEAE4] p-8 sm:p-12 flex flex-col justify-between text-[#2B2925] border-r-2 border-white shadow-2xl"
+                  style={{ width: `${sliderPos}%` }}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="rounded-full bg-red-100 border border-red-300 px-3 py-1 font-mono text-[10px] font-bold text-red-600">
+                      ✕ AVANT : LOGO GÉNÉRIQUE CANVA
+                    </span>
+                    <span className="font-mono text-xs text-red-600">CRÉDIBILITÉ FAIBLE</span>
+                  </div>
+
+                  <div className="max-w-md">
+                    <span className="font-sans text-[11px] uppercase tracking-wide text-zinc-500">
+                      Boutique de parfum
+                    </span>
+                    <h3 className="mt-2 font-sans font-bold text-2xl sm:text-4xl text-zinc-800 tracking-normal">
+                      L'elixir pur
+                    </h3>
+                    <p className="mt-2 text-xs text-zinc-600 leading-relaxed">
+                      Image JPG basse résolution, police par défaut, couleurs criardes, impossible à agrandir pour enseigne ou packaging haut de gamme.
+                    </p>
+                    <div className="mt-4 flex gap-2">
+                      <span className="rounded-md bg-zinc-200 px-2.5 py-1 font-mono text-[9.5px] text-zinc-700">
+                        Pixelisé en grand format
+                      </span>
+                      <span className="rounded-md bg-zinc-200 px-2.5 py-1 font-mono text-[9.5px] text-zinc-700">
+                        Zéro charte graphique
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 border-t border-zinc-300 pt-3">
+                    <span>Aspect amateur qui incite les prospects à négocier les prix</span>
+                    <span className="text-red-600">Pertes de ventes</span>
+                  </div>
+                </div>
+
+                {/* SLIDER HANDLE */}
+                <div
+                  className="absolute inset-y-0 -ml-3 flex items-center justify-center cursor-ew-resize pointer-events-none"
+                  style={{ left: `${sliderPos}%` }}
+                >
+                  <div className="grid h-10 w-10 place-items-center rounded-full bg-white text-[#12110E] shadow-2xl border-2 border-[#12110E]">
+                    <span className="text-xs font-bold">⇄</span>
+                  </div>
+                </div>
+
+                {/* Range input invisible overlay */}
+                <input
+                  type="range"
+                  min="5"
+                  max="95"
+                  value={sliderPos}
+                  onChange={(e) => setSliderPos(Number(e.target.value))}
+                  className="absolute inset-0 opacity-0 cursor-ew-resize w-full h-full z-10"
+                  aria-label="Avant / Après Slider"
+                />
+              </div>
+
+              {/* Helper instruction */}
+              <div className="mt-4 flex items-center justify-center gap-2 font-mono text-xs text-[#52504A]">
+                <span>← Glissez de gauche à droite pour observer la métamorphose →</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════════
+            PARALLAX SYSTEM SHOWCASE CARDS (LIVRABLES BRANDING)
+           ════════════════════════════════════════════════════════════════════ */}
+        <section className="bg-white py-16 sm:py-24 border-b border-[#E8E6E0]">
+          <div className="mx-auto max-w-[1360px] px-4 sm:px-8">
+            <div className="max-w-2xl">
+              <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#12110E]">
+                {t(l("LIVRABLES SUR-MESURE", "BESPOKE DELIVERABLES", "TÀI SẢN BÀN GIAO", "المخرجات الاحترافية المسلّمة", "ЧТО ВХОДИТ В РЕЗУЛЬТАТ"))}
+              </span>
+              <h2 className="mt-2 font-serif text-3xl font-medium text-[#12110E] sm:text-4xl">
+                {t(l("Tout ce dont vous avez besoin pour imposer votre standing.", "Everything you need to assert your stature.", "Mọi thứ cần thiết để khẳng định đẳng cấp.", "كل ما تحتاجه لفرض حضورك وتميزك.", "Всё необходимое для премиального статуса."))}
+              </h2>
+            </div>
+
+            <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                {
+                  n: "01",
+                  title: l("Logo Vectoriel & Déclinaisons", "Vector Logo & Variants", "Logo Vector & Biến thể", "الشعار الفيكتوري والنسخ المتعددة", "Векторный логотип"),
+                  desc: l("Fichiers maîtres SVG, AI, EPS, PDF, PNG transparent 300 DPI pour impression géante sans aucune perte.", "Master SVG, AI, EPS, PDF, high-res transparent PNG files for giant printing without quality loss.", "File gốc SVG, AI, EPS, PDF chất lượng in ấn kích thước lớn không suy giảm.", "ملفات أصلية SVG وAI وPDF قابلة للتكبير اللانهائي دون أي فقد في الدقة.", "Мастер-файлы SVG, AI, PDF для любых форматов."),
+                  icon: Sparkles,
+                },
+                {
+                  n: "02",
+                  title: l("Typographies Éditoriales", "Editorial Typography", "Bộ chữ Độc bản", "الخطوط التحريرية الحصرية", "Шрифтовая система"),
+                  desc: l("Sélection minutieuse de polices haute-couture : titres majestueux, textes de labeur fluides et hiérarchie rigoureuse.", "Carefully curated editorial font pairing: majestic headlines, fluid body copy and rigorous optical balance.", "Kết hợp font chữ thượng lưu: tiêu đề uy nghi, nội dung dễ đọc.", "مواءمة دقيقة لخطوط العناوين الفاخرة والنصوص الانسيابية.", "Пара премиальных шрифтов для заголовков и текста."),
+                  icon: FileText,
+                },
+                {
+                  n: "03",
+                  title: l("Brand Book & Guidelines", "Brand Book & Guidelines", "Brand Book Quy chuẩn", "دليل الهوية الكامل", "Брендбук и гайдлайн"),
+                  desc: l("Guide complet d'utilisation : règles d'interdiction, zones de respiration, palettes hexadécimales, CMJN et Pantone.", "Complete rulebook: clear spacing, forbidden treatments, hex codes, CMYK and Pantone color swatches.", "Cẩm nang hướng dẫn sử dụng: khoảng cách, màu CMYK và Pantone.", "كتيب شامل لقواعد استخدام الشعار وأكواد ألوان CMYK وPantone.", "Правила использования, отступы, CMYK и Pantone."),
+                  icon: Award,
+                },
+                {
+                  n: "04",
+                  title: l("Papeterie & Déclinaisons 360°", "Stationery & 360° Collateral", "Ấn phẩm & Tài sản số", "المطبوعات والتطبيقات الرقمية", "Носители и полиграфия"),
+                  desc: l("Cartes de visite de prestige, en-têtes officiels, signatures e-mail raffinées, bannières réseaux sociaux et favicons.", "Luxury business cards, formal letterheads, refined email signatures, social headers and app favicons.", "Danh thiếp ép kim, tiêu đề thư, chữ ký email và banner mạng xã hội.", "بطاقات أعمال فاخرة، أوراق رسمية، تواقيع بريد إلكتروني وبانرات سوشيال ميديا.", "Визитки, бланки, подписи писем и баннеры."),
+                  icon: CheckCircle2,
+                },
+              ].map((item, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-3xl border border-[#E5E5E0] bg-[#FAF9F5] p-6 flex flex-col justify-between transition-all duration-300 hover:border-[#12110E] hover:bg-white hover:shadow-lg"
+                >
+                  <div>
+                    <span className="font-mono text-xs font-bold text-[#C5A880]">{item.n}</span>
+                    <h3 className="mt-3 font-serif text-lg font-medium text-[#12110E]">{t(item.title)}</h3>
+                    <p className="mt-2 text-xs leading-relaxed text-[#52504A]">{t(item.desc)}</p>
+                  </div>
+                  <div className="mt-6 flex items-center justify-between border-t border-[#E8E6E0] pt-4">
+                    <span className="font-mono text-[10px] text-[#52504A]">100% Propriétaire</span>
+                    <item.icon className="h-4 w-4 text-[#12110E]" />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>

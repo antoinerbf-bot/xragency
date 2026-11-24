@@ -1,13 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import {
+  AlertCircle,
   ArrowLeft,
   ArrowRight,
   Bot,
+  Briefcase,
+  Building2,
   Check,
   CheckCircle2,
   Download,
+  Gem,
   Globe,
+  Hotel,
+  Layers,
   MapPin,
   MessageCircle,
   Palette,
@@ -16,6 +22,11 @@ import {
   Share2,
   ShieldCheck,
   ShoppingBag,
+  Sparkles,
+  Stethoscope,
+  TrendingUp,
+  UtensilsCrossed,
+  Wallet,
   Wrench,
 } from "lucide-react";
 import { useLang, type L, type Lang } from "@/lib/i18n";
@@ -32,7 +43,7 @@ const l = (fr: string, en: string, vi: string, ar: string, ru: string): L => ({
   ru,
 });
 
-type ServiceKey = "websites" | "seo" | "maps" | "social" | "branding" | "maintenance" | "ai";
+type ServiceKey = "websites" | "seo" | "maps" | "social" | "branding" | "maintenance" | "ai" | "crm";
 
 type PlanOption = {
   id: string;
@@ -537,68 +548,311 @@ const CATALOG_GROUPS: ServiceCatalogGroup[] = [
       },
     ],
   },
+  {
+    id: "crm",
+    Icon: Layers,
+    title: l(
+      "CRM & Logiciels Métier",
+      "Custom CRM & Business Software",
+      "CRM & Phần mềm Quản trị",
+      "برمجيات وإدارة علاقات العملاء CRM",
+      "CRM и корпоративное ПО",
+    ),
+    short: l(
+      "Caisse POS, KDS & 0% commission",
+      "POS cashier, KDS & 0% commission",
+      "Thu ngân POS & 0% hoa hồng",
+      "نقاط البيع وبدون عمولات 0%",
+      "Касса POS, KDS и 0% комиссий",
+    ),
+    plans: [
+      {
+        id: "crm_starter",
+        label: l(
+          "CRM Métier & Caisse POS (dès 2 000 €)",
+          "Business CRM & POS (from €2,000)",
+          "CRM & Cổng POS (từ 2.000 €)",
+          "برنامج CRM ونقاط البيع (من 2000 €)",
+          "CRM и POS-касса (от 2 000 €)",
+        ),
+        detail: l(
+          "Zéro commission tierce, gestion commandes, KDS et stocks en temps réel.",
+          "Zero third-party commission, order flow, KDS & real-time inventory.",
+          "0% hoa hồng, quản lý đơn, KDS & kho tức thì.",
+          "صفر عمولة، إدارة طلبات، شاشة مطبخ ومخزون فوري.",
+          "Без комиссий, поток заказов, KDS и склад.",
+        ),
+        priceEur: 2000,
+        period: "once",
+        popular: true,
+      },
+      {
+        id: "crm_enterprise",
+        label: l(
+          "Plateforme Multi-Établissements & API",
+          "Multi-Location Platform & API",
+          "Nền tảng Đa chi nhánh & API",
+          "منصة متعددة الفروع مع API",
+          "Платформа для сети филиалов и API",
+        ),
+        detail: l(
+          "Architecture distribuée, synchronisation multi-sites et connecteurs sur mesure.",
+          "Distributed architecture, multi-site sync & custom integrations.",
+          "Đồng bộ đa điểm và tích hợp kết nối riêng.",
+          "بنية موزعة ومزامنة فروع وربط مخصص.",
+          "Синхронизация нескольких точек и кастомные интеграции.",
+        ),
+        priceEur: 3500,
+        period: "once",
+        customQuote: true,
+      },
+    ],
+  },
 ];
 
-const BUSINESS_TYPES: Array<{ id: string; label: L }> = [
+const BUSINESS_TYPES: Array<{
+  id: string;
+  label: L;
+  icon: typeof UtensilsCrossed;
+  recommendedServices: ServiceKey[];
+  recommendedPlan: string;
+  defaultLossEstimate: number;
+  pitch: L;
+}> = [
   {
-    id: "hospitality",
+    id: "restaurant",
+    icon: UtensilsCrossed,
     label: l(
-      "Hôtellerie & Tourisme",
-      "Hospitality & Hotels",
-      "Khách sạn & Du lịch",
-      "الفنادق والضيافة",
-      "Отели и туризм",
+      "Restauration & Poké / Food",
+      "Restaurants, Poké & Food Bars",
+      "Nhà hàng & Quán ăn",
+      "المطاعم والمقاهي والأغذية",
+      "Рестораны и гастрономия",
+    ),
+    recommendedServices: ["websites", "maps", "crm"],
+    recommendedPlan: "crm_starter",
+    defaultLossEstimate: 12000,
+    pitch: l(
+      "Éliminez 15 à 30 % de commissions UberEats/Deliveroo grâce à votre commande en ligne et caisse POS 100% propriétaire.",
+      "Cut 15-30% platform commissions with your own direct ordering and proprietary POS.",
+      "Loại bỏ 15-30% phí hoa hồng với hệ thống đặt món và POS sở hữu riêng.",
+      "تخلص من عمولات منصات التوصيل عبر موقعك ونقاط البيع الخاصة بك.",
+      "Экономьте 15–30% комиссий платформ доставки со своей системой заказов.",
     ),
   },
   {
-    id: "restaurant",
+    id: "hospitality",
+    icon: Hotel,
     label: l(
-      "Restauration & Lieux de vie",
-      "Restaurants & Venues",
-      "Nhà hàng & Ẩm thực",
-      "المطاعم والمقاهي",
-      "Рестораны и заведения",
+      "Hôtellerie, Resorts & Tourisme",
+      "Hospitality, Resorts & Travel",
+      "Khách sạn & Khu nghỉ dưỡng",
+      "الفنادق والمنتجعات والسياحة",
+      "Отели, курорты и туризм",
+    ),
+    recommendedServices: ["websites", "maps", "crm"],
+    recommendedPlan: "website_business",
+    defaultLossEstimate: 24000,
+    pitch: l(
+      "Reprenez le contrôle de vos réservations directes sans les 18% prélevés par Booking ou Expedia.",
+      "Regain control of direct hotel bookings without 18% OTA commission margins.",
+      "Tăng đặt phòng trực tiếp, chấm dứt phụ thuộc 18% phí Booking/Expedia.",
+      "استعد السيطرة على حجوزاتك المباشرة بدون عمولات منصات الحجز 18%.",
+      "Верните прямые бронирования без 18% комиссий туроператоров и OTA.",
     ),
   },
   {
     id: "realestate",
+    icon: Building2,
     label: l(
-      "Immobilier & Architecture",
-      "Real Estate & Architecture",
-      "Bất động sản & Kiến trúc",
-      "العقار والعمارة",
-      "Недвижимость и архитектура",
+      "Immobilier de prestige & Promoteurs",
+      "Prestige Real Estate & Developers",
+      "Bất động sản & Kiến trúc cao cấp",
+      "العقارات الفاخرة والتطوير العقاري",
+      "Премиальная недвижимость",
+    ),
+    recommendedServices: ["websites", "seo", "social"],
+    recommendedPlan: "website_business",
+    defaultLossEstimate: 0,
+    pitch: l(
+      "Mise en valeur cinématique de vos biens de prestige, captation de mandats exclusifs et SEO d'autorité.",
+      "Cinematic showcase for luxury estates, exclusive listing capture and high-authority SEO.",
+      "Trình diễn bất động sản cao cấp, thu hút khách VIP và nâng tầm thương hiệu.",
+      "عرض سينمائي للعقارات الفاخرة واستقطاب عملاء الشراء بخصوصية تامة.",
+      "Презентация премиальных объектов, эксклюзивные сделки и статусное SEO.",
     ),
   },
   {
     id: "commerce",
+    icon: ShoppingBag,
     label: l(
-      "Commerce & E-Commerce",
-      "Retail & E-Commerce",
-      "Bán lẻ & E-Commerce",
-      "التجارة والمتاجر",
-      "Ритейл и E-Commerce",
+      "Boutiques de luxe, Mode & Retail",
+      "Luxury Retail, Fashion & Goods",
+      "Cửa hàng thời trang & Bán lẻ cao cấp",
+      "متاجر الأزياء والتجزئة الراقية",
+      "Бутики, мода и премиум-ритейл",
     ),
-  },
-  {
-    id: "services",
-    label: l(
-      "Entreprise B2B / Cabinet",
-      "B2B Services / Practice",
-      "Dịch vụ B2B / Tư vấn",
-      "شركة خدمات / مكتب",
-      "B2B-услуги и консалтинг",
+    recommendedServices: ["websites", "branding", "crm"],
+    recommendedPlan: "website_ecommerce",
+    defaultLossEstimate: 8000,
+    pitch: l(
+      "E-commerce haute performance synchronisé avec votre caisse en boutique et programme fidélité VIP.",
+      "High-performance e-commerce synced with physical boutique cashier and VIP loyalty.",
+      "Bán lẻ đa kênh đồng bộ kho tức thì và chăm sóc khách hàng VIP.",
+      "متجر إلكتروني فائق السرعة متزامن مع نقاط البيع في المتجر وبرنامج الولاء.",
+      "Интернет-магазин с синхронизацией физических касс и VIP-лояльностью.",
     ),
   },
   {
     id: "beauty",
+    icon: Stethoscope,
     label: l(
-      "Beauté, Santé & Bien-être",
-      "Beauty, Health & Wellness",
-      "Làm đẹp, Y tế & Spa",
-      "الجمال والصحة والعافية",
-      "Красота, медицина и спа",
+      "Cliniques privées, Esthétique & Santé",
+      "Private Clinics, Aesthetic & Health",
+      "Phòng khám, Thẩm mỹ & Y tế",
+      "العيادات الطبية والتجميل والصحة",
+      "Клиники, косметология и здоровье",
     ),
+    recommendedServices: ["websites", "maps", "maintenance"],
+    recommendedPlan: "maps_strategy",
+    defaultLossEstimate: 0,
+    pitch: l(
+      "Classement Top 3 Google Maps, respect du secret médical et prise de rendez-vous qualifiée sans intermédiaire.",
+      "Top 3 Google Maps visibility, medical-grade compliance and direct qualified appointments.",
+      "Định vị Top 3 Google Maps, bảo mật y tế và đặt lịch hẹn chuẩn xác.",
+      "تصدر خرائط Google وتعيين مواعيد المرضى مباشرة مع أمان البيانات.",
+      "Выход в топ-3 Google Maps, медицинские стандарты и прямой поток пациентов.",
+    ),
+  },
+  {
+    id: "services",
+    icon: Briefcase,
+    label: l(
+      "Conseil B2B, Avocats & Finance",
+      "B2B Advisory, Law & Wealth",
+      "Tư vấn Doanh nghiệp & Luật",
+      "الاستشارات والشركات المالية والقانونية",
+      "B2B-консалтинг, право и финансы",
+    ),
+    recommendedServices: ["websites", "seo", "branding"],
+    recommendedPlan: "seo_growth",
+    defaultLossEstimate: 0,
+    pitch: l(
+      "Positionnement d'autorité, réassurance institutionnelle et génération de mandats stratégiques.",
+      "Institutional credibility, high-authority positioning and high-value mandate generation.",
+      "Xây dựng uy tín thể chế và thu hút các hợp đồng chiến lược lớn.",
+      "ترسيخ المكانة المهنية وجلب عقود وصفقات أعمال استراتيجية.",
+      "Институциональный авторитет и привлечение крупных корпоративных контрактов.",
+    ),
+  },
+  {
+    id: "craft",
+    icon: Gem,
+    label: l(
+      "Artisans d'Art & Créateurs de luxe",
+      "Fine Crafts & Master Artisans",
+      "Nghệ nhân & Thủ công tinh xảo",
+      "الحرف اليدوية والفنون الراقية",
+      "Ремесленники и премиум-мастера",
+    ),
+    recommendedServices: ["branding", "websites", "social"],
+    recommendedPlan: "branding_foundation",
+    defaultLossEstimate: 0,
+    pitch: l(
+      "Sublimation photographique de vos créations, storytelling d'orfèvre et clientèle internationale.",
+      "Photographic sublimation of your craft, heritage storytelling and international reach.",
+      "Tôn vinh nghệ thuật chế tác thủ công và tiếp cận tệp khách hàng quốc tế.",
+      "إبراز الحرفية العالية وسرد قصة علامتك لاجتذاب عملاء النخبة حول العالم.",
+      "Фотографическая подача мастерства, сторителлинг и выход на международный рынок.",
+    ),
+  },
+];
+
+const CURRENT_SITUATIONS: Array<{
+  id: string;
+  label: L;
+  recommendedBoost: ServiceKey;
+}> = [
+  {
+    id: "no_presence",
+    label: l(
+      "Tout à créer · Aucun site web ni identité visuelle",
+      "Starting from scratch · No website or branding yet",
+      "Dự án mới hoàn toàn · Chưa có website & nhận diện",
+      "مشروع جديد تماماً · لا يوجد موقع أو هوية بصرية حتى الآن",
+      "С нуля: нет сайта и визуального стиля",
+    ),
+    recommendedBoost: "websites",
+  },
+  {
+    id: "outdated",
+    label: l(
+      "Site web existant obsolète · Taux de conversion faible",
+      "Outdated existing site · Low visitor conversion rate",
+      "Website hiện tại lỗi thời · Tỷ lệ chuyển đổi thấp",
+      "موقع قديم وبطيء · معدل تحويل العملاء منخفض",
+      "Сайт устарел и плохо конвертирует посетителей",
+    ),
+    recommendedBoost: "websites",
+  },
+  {
+    id: "invisible_google",
+    label: l(
+      "Invisible sur Google & Google Maps face aux concurrents",
+      "Invisible on Google & Google Maps vs competitors",
+      "Vắng bóng trên Google Maps & Tìm kiếm so với đối thủ",
+      "ضعف الظهور على خرائط وجوجل أمام المنافسين",
+      "Невидимы в Google и на картах на фоне конкурентов",
+    ),
+    recommendedBoost: "maps",
+  },
+  {
+    id: "high_commissions",
+    label: l(
+      "Trop de commissions prélevées (Uber, Booking : 15–30 %)",
+      "Losing too much to platforms (Uber, Booking: 15-30%)",
+      "Mất quá nhiều hoa hồng cho nền tảng (Booking, Grab: 15-30%)",
+      "عمولات مرتفعة جداً للمنصات الوسيطة (15-30%)",
+      "Слишком большие комиссии посредникам (15–30%)",
+    ),
+    recommendedBoost: "crm",
+  },
+  {
+    id: "manual_tools",
+    label: l(
+      "Processus manuels · Manque de CRM & automatisation",
+      "Manual processes · Need custom CRM & automation",
+      "Quy trình thủ công · Cần phần mềm CRM & tự động hóa",
+      "إجراءات يدوية مجهدة · نحتاج نظام CRM وأتمتة ذكية",
+      "Рутина и ручные процессы: нужна автоматизация и CRM",
+    ),
+    recommendedBoost: "crm",
+  },
+];
+
+const BUDGET_TIERS: Array<{
+  id: string;
+  range: string;
+  label: L;
+  tag: string;
+}> = [
+  {
+    id: "essential",
+    range: "500 € – 1 500 €",
+    label: l("Démarrage Essentiel", "Starter Essential", "Khởi đầu Vững chắc", "الباقة الأساسية", "Базовый старт"),
+    tag: "Rapide & Rentable",
+  },
+  {
+    id: "growth",
+    range: "1 500 € – 3 500 €",
+    label: l("Croissance Élite", "Growth Elite", "Tăng trưởng Cao cấp", "نمو متسارع متميز", "Активный рост"),
+    tag: "Le Plus Choisi ★",
+  },
+  {
+    id: "bespoke",
+    range: "3 500 € – 10 000 €+",
+    label: l("Haute Performance Sur-Mesure", "Bespoke Enterprise", "Đặc quyền May đo", "حلول متقدمة وشاملة", "Премиум под ключ"),
+    tag: "Sur-Mesure Intégral",
   },
 ];
 
@@ -954,7 +1208,9 @@ export function QuoteConfiguratorCompact() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [businessType, setBusinessType] = useState<string>(BUSINESS_TYPES[0].id);
   const [goalId, setGoalId] = useState<string>(GOALS[1].id);
-  const [selectedServices, setSelectedServices] = useState<ServiceKey[]>([]);
+  const [currentSituation, setCurrentSituation] = useState<string>(CURRENT_SITUATIONS[0].id);
+  const [budgetTier, setBudgetTier] = useState<string>(BUDGET_TIERS[1].id);
+  const [selectedServices, setSelectedServices] = useState<ServiceKey[]>(["websites", "maps", "crm"]);
   const [selectedPlans, setSelectedPlans] = useState<Record<ServiceKey, string>>({
     websites: "website_business",
     seo: "seo_growth",
@@ -963,6 +1219,7 @@ export function QuoteConfiguratorCompact() {
     branding: "branding_suite",
     maintenance: "webcare_business",
     ai: "ai_custom_workflow",
+    crm: "crm_starter",
   });
   const [stepError, setStepError] = useState("");
   const [cartSynced, setCartSynced] = useState(false);
@@ -1342,66 +1599,158 @@ export function QuoteConfiguratorCompact() {
         <div className="mt-10 grid items-start gap-6 lg:grid-cols-12">
           {/* Left Column: Active Step */}
           <div className="rounded-3xl border border-[#171613]/12 bg-white p-5 shadow-[0_20px_50px_rgba(23,22,19,0.05)] sm:p-8 lg:col-span-8">
-            {/* STEP 1 — BESOINS */}
+            {/* STEP 1 — BESOINS & DIAGNOSTIC INTERACTIF */}
             {step === 1 && (
-              <div className="space-y-7">
+              <div className="space-y-8">
+                {/* 1. SECTEUR D'ACTIVITÉ */}
                 <div>
-                  <label className="block font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7D6445]">
-                    {ui.businessLabel}
-                  </label>
-                  <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
+                  <div className="flex items-center justify-between">
+                    <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
+                      1. Votre Secteur d'Activité
+                    </label>
+                    <span className="font-mono text-[10px] text-[#9E7F5A] bg-[#F4EFE6] px-2.5 py-0.5 rounded-full">
+                      Europe & International
+                    </span>
+                  </div>
+                  <div className="mt-3.5 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
                     {BUSINESS_TYPES.map((b) => {
                       const active = businessType === b.id;
+                      const SectorIcon = b.icon;
                       return (
                         <button
                           key={b.id}
                           type="button"
-                          onClick={() => setBusinessType(b.id)}
-                          className={`rounded-2xl border px-3.5 py-3 text-start text-xs font-semibold transition ${
+                          onClick={() => {
+                            setBusinessType(b.id);
+                            // Auto-apply recommended services
+                            setSelectedServices(b.recommendedServices);
+                          }}
+                          className={`group flex items-center gap-3 rounded-2xl border p-3.5 text-start text-xs font-semibold transition-all duration-200 ${
                             active
-                              ? "border-[#171613] bg-[#171613] text-[#F7F4EE]"
-                              : "border-[#171613]/12 bg-[#FAF8F4] text-[#45413A] hover:border-[#9E7F5A]"
+                              ? "border-[#171613] bg-[#171613] text-[#F7F4EE] shadow-md -translate-y-0.5"
+                              : "border-[#171613]/12 bg-[#FAF8F4] text-[#45413A] hover:border-[#9E7F5A] hover:bg-white"
                           }`}
                         >
-                          {t(b.label)}
+                          <span
+                            className={`grid h-8 w-8 shrink-0 place-items-center rounded-xl transition ${
+                              active ? "bg-white/20 text-[#E5C696]" : "bg-white text-[#8D6C42] border border-[#171613]/10"
+                            }`}
+                          >
+                            <SectorIcon className="h-4 w-4" />
+                          </span>
+                          <span className="leading-snug">{t(b.label)}</span>
                         </button>
                       );
                     })}
                   </div>
                 </div>
 
+                {/* 2. SITUATION ACTUELLE */}
                 <div>
-                  <label className="block font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7D6445]">
-                    {ui.goalLabel}
+                  <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
+                    2. Votre Situation Actuelle
                   </label>
                   <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                    {GOALS.map((g) => {
-                      const active = goalId === g.id;
+                    {CURRENT_SITUATIONS.map((sit) => {
+                      const active = currentSituation === sit.id;
                       return (
                         <button
-                          key={g.id}
+                          key={sit.id}
                           type="button"
-                          onClick={() => setGoalId(g.id)}
-                          className={`flex items-center justify-between gap-2 rounded-2xl border px-4 py-3 text-start text-xs font-semibold transition ${
+                          onClick={() => {
+                            setCurrentSituation(sit.id);
+                            if (!selectedServices.includes(sit.recommendedBoost)) {
+                              setSelectedServices((prev) => [...prev, sit.recommendedBoost]);
+                            }
+                          }}
+                          className={`flex items-start gap-2.5 rounded-2xl border p-3 text-start text-xs font-medium transition ${
                             active
-                              ? "border-[#9E7F5A] bg-[#F4EFE6] text-[#171613]"
-                              : "border-[#171613]/12 bg-[#FAF8F4] text-[#45413A] hover:border-[#9E7F5A]"
+                              ? "border-[#9E7F5A] bg-[#F7F2EA] text-[#171613] font-semibold"
+                              : "border-[#171613]/10 bg-[#FAF8F4] text-[#57534B] hover:border-[#9E7F5A]"
                           }`}
                         >
-                          <span>{t(g.label)}</span>
-                          {active && <Check className="h-4 w-4 shrink-0 text-[#9E7F5A]" />}
+                          <span
+                            className={`mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full border ${
+                              active ? "border-[#9E7F5A] bg-[#9E7F5A] text-white" : "border-[#171613]/25 bg-white"
+                            }`}
+                          >
+                            {active && <Check className="h-2.5 w-2.5" />}
+                          </span>
+                          <span className="leading-relaxed">{t(sit.label)}</span>
                         </button>
                       );
                     })}
                   </div>
                 </div>
 
+                {/* 3. FOURCHETTE BUDGÉTAIRE */}
+                <div>
+                  <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
+                    3. Budget Envisagé
+                  </label>
+                  <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+                    {BUDGET_TIERS.map((tier) => {
+                      const active = budgetTier === tier.id;
+                      return (
+                        <button
+                          key={tier.id}
+                          type="button"
+                          onClick={() => setBudgetTier(tier.id)}
+                          className={`flex flex-col justify-between rounded-2xl border p-3.5 text-start transition ${
+                            active
+                              ? "border-[#171613] bg-[#171613] text-[#F7F4EE] shadow-md"
+                              : "border-[#171613]/12 bg-[#FAF8F4] text-[#171613] hover:border-[#9E7F5A]"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="font-mono text-[10px] tracking-wider uppercase text-[#E5C696]">
+                              {tier.tag}
+                            </span>
+                            {active && <Check className="h-3.5 w-3.5 text-[#E5C696]" />}
+                          </div>
+                          <span className="mt-2 text-sm font-bold">{tier.range}</span>
+                          <span className={`text-[11px] mt-0.5 ${active ? "text-white/70" : "text-[#57534B]"}`}>
+                            {t(tier.label)}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 4. CARTE DE RECOMMANDATION INTELLIGENTE SECTORIELLE */}
+                {(() => {
+                  const currBiz = BUSINESS_TYPES.find((b) => b.id === businessType) ?? BUSINESS_TYPES[0];
+                  return (
+                    <div className="rounded-2xl border border-[#D8B788]/40 bg-gradient-to-br from-[#FAF5EC] to-[#F3EDE2] p-4 sm:p-5 shadow-sm">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 text-[#B58D59]" />
+                        <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#8F6A38]">
+                          Diagnostic & Recommandation XRAGENCY
+                        </span>
+                      </div>
+                      <p className="mt-2 text-xs sm:text-[13px] leading-relaxed text-[#4A443B]">
+                        {t(currBiz.pitch)}
+                      </p>
+                      {currBiz.defaultLossEstimate > 0 && (
+                        <div className="mt-3 inline-flex items-center gap-2 rounded-xl border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">
+                          <TrendingUp className="h-3.5 w-3.5" />
+                          <span>
+                            Économie estimée : jusqu'à {price(currBiz.defaultLossEstimate)} / an de commissions tierces récupérées.
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* 5. SERVICES À SÉLECTIONNER */}
                 <div>
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <label className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7D6445]">
-                      {ui.servicesLabel}
+                    <label className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
+                      4. Vos Leviers d'Action & Services
                     </label>
-                    <span className="text-xs text-[#57534B]">{ui.servicesHint}</span>
+                    <span className="text-xs text-[#57534B]">Sélectionnez ou ajustez librement</span>
                   </div>
                   <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                     {CATALOG_GROUPS.map(({ id, Icon, title, short, plans }) => {
@@ -1415,7 +1764,7 @@ export function QuoteConfiguratorCompact() {
                           className={`group flex items-start gap-3.5 rounded-2xl border p-4 text-start transition ${
                             checked
                               ? "border-[#171613] bg-[#171613] text-[#F7F4EE] shadow-md"
-                              : "border-[#171613]/12 bg-[#FAF8F4] text-[#171613] hover:border-[#9E7F5A]"
+                              : "border-[#171613]/12 bg-[#FAF8F4] text-[#171613] hover:border-[#9E7F5A] hover:bg-white"
                           }`}
                         >
                           <span

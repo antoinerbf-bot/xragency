@@ -13,14 +13,13 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>('light');
 
-  // Initialize theme from localStorage or system preference
+  // Initialize theme from localStorage, default to 'light' for luminous luxury agency aesthetic
   useEffect(() => {
     const stored = window.localStorage.getItem('xr-theme') as Theme | null;
     if (stored && (stored === 'light' || stored === 'dark')) {
       setTheme(stored);
     } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(prefersDark ? 'dark' : 'light');
+      setTheme('light');
     }
   }, []);
 

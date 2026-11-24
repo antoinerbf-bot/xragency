@@ -264,7 +264,7 @@ export function Hero() {
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveHubIndex((prev) => (prev + 1) % HUBS.length);
-    }, 5500);
+    }, 4200);
     return () => clearInterval(timer);
   }, []);
 
@@ -274,17 +274,17 @@ export function Hero() {
     <section
       id="hero"
       aria-label="XR Agency Hero"
-      className="xr-hero-refined relative isolate min-h-[100svh] w-full overflow-hidden bg-[#120F0C] pt-20 text-[#FAF7F2]"
+      className="xr-hero-refined relative isolate min-h-[100svh] w-full overflow-hidden bg-[#181512] pt-20 text-[#FAF7F2]"
     >
-      {/* ── Luminous Multi-Country Cinematic Carousel ── */}
-      <div className="absolute inset-0 -z-10 overflow-hidden bg-[#120F0C]">
+      {/* ── Luminous Multi-Country Cinematic Photo Reel ── */}
+      <div className="absolute inset-0 -z-10 overflow-hidden bg-[#181512]">
         {HUBS.map((hub, idx) => {
           const isActive = idx === activeHubIndex;
           return (
             <div
               key={hub.id}
               className={cn(
-                "absolute inset-0 transition-opacity duration-1000 ease-out",
+                "absolute inset-0 transition-opacity duration-1000 ease-in-out",
                 isActive
                   ? "opacity-100 z-10 pointer-events-auto"
                   : "opacity-0 z-0 pointer-events-none",
@@ -292,19 +292,19 @@ export function Hero() {
             >
               <img
                 src={hub.image}
-                alt={`Ambiance visuelle de ${hub.name.fr}`}
+                alt={`Studio XRAGENCY à ${hub.name.fr}`}
                 fetchPriority={isActive ? "high" : "low"}
                 loading={isActive ? "eager" : "lazy"}
                 className={cn(
-                  "h-full w-full object-cover brightness-[1.02] contrast-[1.02] saturate-[1.02] transition-transform duration-[9000ms] ease-out xr-hero-bg",
+                  "h-full w-full object-cover brightness-[1.08] contrast-[1.04] saturate-[1.05] transition-transform duration-[7000ms] ease-out",
                   hub.position ?? "object-center",
                   isActive ? "scale-105" : "scale-100",
                 )}
               />
 
-              {/* Luminous, natural lighting: soft subtle vignette only at the very bottom, keeping 85% of daylight unobstructed */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#15120e]/75 via-[#15120e]/30 to-transparent pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#100e0b]/80 via-transparent to-transparent pointer-events-none" />
+              {/* Luminous, natural lighting: airy and bright, maintaining daylight clarity */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#14110E]/60 via-transparent to-black/20 pointer-events-none" />
             </div>
           );
         })}

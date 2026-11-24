@@ -105,6 +105,9 @@ export function CustomCrmShowcase() {
   const threeYearsNetSavings = threeYearsCommissionLost - crmBasePrice;
   const curr = selectedCountry === "suisse" ? "CHF" : "€";
 
+  // --- 1.5 MULTI-SECTOR CRM SHOWCASE ---
+  const [sectorCrmTab, setSectorCrmTab] = useState<"restaurant" | "hotel" | "clinic" | "immo" | "retail">("restaurant");
+
   // --- 2. INTERACTIVE DEMO VIEWS (POS, KDS, LIVREUR, STOCKS, 3D GTA) ---
   const [demoTab, setDemoTab] = useState<"pos" | "kds" | "driver" | "stocks" | "gta3d">("pos");
 
@@ -286,30 +289,30 @@ export function CustomCrmShowcase() {
   return (
     <section
       id="crm-sur-mesure"
-      className="relative overflow-hidden border-b border-white/10 bg-[#030406] py-16 sm:py-24 text-white"
+      className="relative overflow-hidden border-b border-[#E8E6E0] bg-[#FAF8F5] py-16 sm:py-24 text-[#12110E]"
     >
       {/* Background ambient lighting */}
-      <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[900px] rounded-full bg-gradient-to-b from-[#d4af37]/15 via-[#00f2fe]/10 to-transparent blur-[140px] pointer-events-none" />
+      <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[900px] rounded-full bg-gradient-to-b from-[#C5A880]/15 via-transparent to-transparent blur-[140px] pointer-events-none" />
 
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 space-y-16 relative z-10">
         {/* ════════════════════════════════════════════════════════════════
             1. HERO & POSITIONNEMENT COMMERCIAL CHOC
             ════════════════════════════════════════════════════════════════ */}
         <div className="text-center max-w-4xl mx-auto space-y-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#d4af37]/40 bg-[#d4af37]/10 px-4 py-1.5 shadow-md">
-            <Sparkles className="h-4 w-4 text-[#d4af37]" />
-            <span className="font-mono text-[9px] font-bold tracking-[.2em] text-[#d4af37] uppercase">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#C5A880]/40 bg-[#C5A880]/10 px-4 py-1.5 shadow-sm">
+            <Sparkles className="h-4 w-4 text-[#C5A880]" />
+            <span className="font-mono text-[9px] font-bold tracking-[.2em] text-[#C5A880] uppercase">
               NOUVELLE OFFRE · LOGICIEL CAISSE POS, STOCKS &amp; CRM OMNICANAL
             </span>
           </div>
 
-          <h1 className="text-[clamp(2.5rem,5.5vw,4.8rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-white">
+          <h2 className="text-[clamp(2.5rem,5.5vw,4.8rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-[#12110E]">
             Arrêtez de donner{" "}
             <span className="text-red-500 underline decoration-red-500/50">30% à Uber Eats</span>.{" "}
-            <span className="text-[#d4af37] font-light italic">Reprenez le contrôle.</span>
-          </h1>
+            <span className="text-[#C5A880] font-light italic">Reprenez le contrôle.</span>
+          </h2>
 
-          <p className="text-base sm:text-lg text-neutral-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg text-[#52504A] max-w-3xl mx-auto leading-relaxed">
             Votre propre <strong>logiciel de caisse tactile</strong> qui génère de vrais tickets,
             gère vos <strong>stocks au gramme près</strong>, synchronise votre{" "}
             <strong>site de commande directe sans commission</strong>, pilote l&apos;écran cuisine
@@ -317,17 +320,17 @@ export function CustomCrmShowcase() {
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <span className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3.5 py-2 text-xs font-semibold text-neutral-300">
-              <Check className="h-4 w-4 text-[#d4af37]" /> Caisse tactile &amp; Tickets certifiés
+            <span className="inline-flex items-center gap-2 rounded-xl border border-[#E5E5E0] bg-white px-3.5 py-2 text-xs font-semibold text-[#2B2925] shadow-sm">
+              <Check className="h-4 w-4 text-[#C5A880]" /> Caisse tactile &amp; Tickets certifiés
             </span>
-            <span className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3.5 py-2 text-xs font-semibold text-neutral-300">
-              <Check className="h-4 w-4 text-[#d4af37]" /> Gestion des stocks en direct
+            <span className="inline-flex items-center gap-2 rounded-xl border border-[#E5E5E0] bg-white px-3.5 py-2 text-xs font-semibold text-[#2B2925] shadow-sm">
+              <Check className="h-4 w-4 text-[#C5A880]" /> Gestion des stocks en direct
             </span>
-            <span className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3.5 py-2 text-xs font-semibold text-neutral-300">
-              <Check className="h-4 w-4 text-[#00f2fe]" /> 0% de commission à vie
+            <span className="inline-flex items-center gap-2 rounded-xl border border-[#E5E5E0] bg-white px-3.5 py-2 text-xs font-semibold text-[#2B2925] shadow-sm">
+              <Check className="h-4 w-4 text-[#16A34A]" /> 0% de commission à vie
             </span>
-            <span className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3.5 py-2 text-xs font-semibold text-neutral-300">
-              <Check className="h-4 w-4 text-purple-400" /> Option Jumeau 3D style GTA / Les Sims
+            <span className="inline-flex items-center gap-2 rounded-xl border border-[#E5E5E0] bg-white px-3.5 py-2 text-xs font-semibold text-[#2B2925] shadow-sm">
+              <Check className="h-4 w-4 text-[#C5A880]" /> Multi-établissements &amp; Franchise
             </span>
           </div>
         </div>
@@ -454,6 +457,259 @@ export function CustomCrmShowcase() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* ════════════════════════════════════════════════════════════════
+            2.5 DES CRM SUR-MESURE PAR SECTEUR D'ACTIVITÉ (DÈS 2 000 €)
+            ════════════════════════════════════════════════════════════════ */}
+        <div className="rounded-[2.5rem] border border-[#d4af37]/30 bg-gradient-to-br from-[#0c0d16] via-[#090a12] to-[#120f0a] p-6 sm:p-10 shadow-2xl space-y-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-6">
+            <div>
+              <div className="inline-flex items-center gap-2 text-xs font-bold text-[#d4af37] uppercase tracking-wider mb-1">
+                <Sparkles className="h-4 w-4" /> SECTEURS D'EXCELLENCE
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-extrabold text-white">
+                Un CRM Taillé pour Votre Métier, Zéro Abonnement Prédateur.
+              </h2>
+            </div>
+            <p className="text-xs sm:text-sm text-neutral-300 max-w-md leading-relaxed">
+              Restaurants, hôtels, cliniques ou immobilier : nos logiciels métier sont 100% propriétaires, sans commission sur votre chiffre d'affaires, dès 2 000 € clé en main.
+            </p>
+          </div>
+
+          {/* Sector Tabs */}
+          <div className="flex flex-wrap gap-2.5">
+            {[
+              { id: "restaurant" as const, label: "🍣 Restauration & Dark Kitchens", gain: "0% commission Uber Eats" },
+              { id: "hotel" as const, label: "🏨 Hôtellerie & Conciergerie", gain: "0% commission Booking.com" },
+              { id: "clinic" as const, label: "⚕️ Cliniques & Médecine Esthétique", gain: "Zéro abonnement Doctolib" },
+              { id: "immo" as const, label: "🏛️ Immobilier & Promoteurs", gain: "Mandats & matching off-market" },
+              { id: "retail" as const, label: "🛍️ Retail & Boutiques de Luxe", gain: "Caisse & omnicanal unifié" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setSectorCrmTab(tab.id)}
+                className={cn(
+                  "flex items-center gap-2.5 rounded-2xl px-4 py-3 text-xs font-bold transition-all duration-200 border",
+                  sectorCrmTab === tab.id
+                    ? "bg-[#d4af37] text-black border-[#d4af37] shadow-lg shadow-[#d4af37]/20 -translate-y-0.5"
+                    : "bg-white/5 text-neutral-300 border-white/10 hover:bg-white/10 hover:border-white/20",
+                )}
+              >
+                <span>{tab.label}</span>
+                <span className={cn(
+                  "font-mono text-[9px] uppercase px-2 py-0.5 rounded-md",
+                  sectorCrmTab === tab.id ? "bg-black/20 text-black font-extrabold" : "bg-white/10 text-[#d4af37]"
+                )}>
+                  {tab.gain}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* Active Sector Content */}
+          <div className="rounded-3xl border border-white/10 bg-black/40 p-6 sm:p-8">
+            {sectorCrmTab === "restaurant" && (
+              <div className="grid gap-8 lg:grid-cols-12 items-center">
+                <div className="lg:col-span-7 space-y-5">
+                  <span className="font-mono text-[10px] font-bold text-[#d4af37] uppercase tracking-wider">
+                    SECTEUR RESTAURATION · FOOD &amp; POKÉ BARS
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+                    Caisse tactile NF525, Commande en ligne directe &amp; KDS cuisine
+                  </h3>
+                  <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
+                    Comme pour notre client <strong>Pok-N Ball (pokenball.be)</strong>, vos clients commandent directement sur votre propre application web. Les commandes partent instantanément en cuisine sur l'écran KDS et s'impriment en caisse. Vous économisez 30% sur chaque commande.
+                  </p>
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <strong className="block text-white mb-1">✓ Caisse Tactile &amp; Tickets</strong>
+                      <span className="text-neutral-400">Encaissement CB, espèces, tickets restaurant, conformité légale.</span>
+                    </div>
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <strong className="block text-white mb-1">✓ Fiches Recettes &amp; Stocks</strong>
+                      <span className="text-neutral-400">Décompte automatique des ingrédients au gramme près.</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="lg:col-span-5 rounded-2xl border border-[#d4af37]/30 bg-gradient-to-br from-[#161208] to-[#0A0B0E] p-6 text-center space-y-4">
+                  <div className="text-4xl">🍣</div>
+                  <h4 className="text-lg font-bold text-white">Pack Restauration Clé en Main</h4>
+                  <p className="text-xs text-neutral-300">
+                    Caisse + Menu interactif + Click &amp; Collect + Module cuisine KDS.
+                  </p>
+                  <p className="text-2xl font-black text-[#d4af37] font-mono">Dès 2 000 {curr}</p>
+                  <a
+                    href="#configurateur"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#d4af37] px-4 py-2.5 text-xs font-bold text-black transition hover:bg-[#e6c24d]"
+                  >
+                    Configurer mon CRM Restauration <ArrowRight className="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {sectorCrmTab === "hotel" && (
+              <div className="grid gap-8 lg:grid-cols-12 items-center">
+                <div className="lg:col-span-7 space-y-5">
+                  <span className="font-mono text-[10px] font-bold text-[#d4af37] uppercase tracking-wider">
+                    HÔTELLERIE, RESORTS &amp; CONCIERGERIE
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+                    Moteur de Réservation Direct 0% OTA &amp; Conciergerie VIP
+                  </h3>
+                  <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
+                    Ne laissez plus Booking.com ou Expedia capter 18% de votre revenu chambre. Vos clients réservent en direct avec paiement sécurisé Stripe, choix des extras, room-service sur QR code en chambre et planning d'entretien des étages en temps réel.
+                  </p>
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <strong className="block text-white mb-1">✓ PMS &amp; Planning Chambres</strong>
+                      <span className="text-neutral-400">Check-in autonome, attribution des clés, synchronisation iCal/Channel.</span>
+                    </div>
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <strong className="block text-white mb-1">✓ Fiches Clients VIP</strong>
+                      <span className="text-neutral-400">Historique des séjours, préférences alimentaires et conciergerie privée.</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="lg:col-span-5 rounded-2xl border border-[#d4af37]/30 bg-gradient-to-br from-[#161208] to-[#0A0B0E] p-6 text-center space-y-4">
+                  <div className="text-4xl">🏨</div>
+                  <h4 className="text-lg font-bold text-white">Pack Hôtellerie &amp; Réservation</h4>
+                  <p className="text-xs text-neutral-300">
+                    Moteur direct sans commission + Gestion des chambres &amp; Room-service.
+                  </p>
+                  <p className="text-2xl font-black text-[#d4af37] font-mono">Dès 2 500 {curr}</p>
+                  <a
+                    href="#configurateur"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#d4af37] px-4 py-2.5 text-xs font-bold text-black transition hover:bg-[#e6c24d]"
+                  >
+                    Demander une étude Hôtellerie <ArrowRight className="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {sectorCrmTab === "clinic" && (
+              <div className="grid gap-8 lg:grid-cols-12 items-center">
+                <div className="lg:col-span-7 space-y-5">
+                  <span className="font-mono text-[10px] font-bold text-[#d4af37] uppercase tracking-wider">
+                    CLINIQUES PRIVÉES, MÉDECINE ESTHÉTIQUE &amp; BIEN-ÊTRE
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+                    Dossier Patient Sécurisé &amp; Rappels Automatisés Zéro Doctolib
+                  </h3>
+                  <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
+                    Reprenez la souveraineté sur votre fichier patient. Prise de rendez-vous qualifiée en ligne, rappels automatiques par SMS et WhatsApp pour réduire les rendez-vous manqués à moins de 2%, et dossiers cliniques chiffrés avec historique des actes.
+                  </p>
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <strong className="block text-white mb-1">✓ Rappels WhatsApp / SMS</strong>
+                      <span className="text-neutral-400">Confirmation automatique, consignes pré-opératoires et suivi post-acte.</span>
+                    </div>
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <strong className="block text-white mb-1">✓ Multi-Praticiens &amp; Cabines</strong>
+                      <span className="text-neutral-400">Gestion des plannings de salles, machines laser et praticiens.</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="lg:col-span-5 rounded-2xl border border-[#d4af37]/30 bg-gradient-to-br from-[#161208] to-[#0A0B0E] p-6 text-center space-y-4">
+                  <div className="text-4xl">⚕️</div>
+                  <h4 className="text-lg font-bold text-white">Pack Médical &amp; Esthétique</h4>
+                  <p className="text-xs text-neutral-300">
+                    Prise de RDV + Dossier patient chiffré + Rappels WhatsApp automatiques.
+                  </p>
+                  <p className="text-2xl font-black text-[#d4af37] font-mono">Dès 2 000 {curr}</p>
+                  <a
+                    href="#configurateur"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#d4af37] px-4 py-2.5 text-xs font-bold text-black transition hover:bg-[#e6c24d]"
+                  >
+                    Consulter nos experts Santé <ArrowRight className="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {sectorCrmTab === "immo" && (
+              <div className="grid gap-8 lg:grid-cols-12 items-center">
+                <div className="lg:col-span-7 space-y-5">
+                  <span className="font-mono text-[10px] font-bold text-[#d4af37] uppercase tracking-wider">
+                    IMMOBILIER DE PRESTIGE &amp; PROMOTEURS
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+                    Matching Acquéreurs / Mandats Off-Market &amp; Signature Électronique
+                  </h3>
+                  <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
+                    Centralisez vos mandats exclusifs, vos programmes neufs et votre portefeuille d'acquéreurs qualifiés. L'algorithme croise instantanément les critères financiers d'un acquéreur avec vos biens off-market pour accélérer les ventes privées.
+                  </p>
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <strong className="block text-white mb-1">✓ Portail Investisseurs VIP</strong>
+                      <span className="text-neutral-400">Accès sécurisé sous accord de confidentialité pour biens d'exception.</span>
+                    </div>
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <strong className="block text-white mb-1">✓ Pipeline Transactions</strong>
+                      <span className="text-neutral-400">Du mandat à l'acte notarié avec documents et relances automatiques.</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="lg:col-span-5 rounded-2xl border border-[#d4af37]/30 bg-gradient-to-br from-[#161208] to-[#0A0B0E] p-6 text-center space-y-4">
+                  <div className="text-4xl">🏛️</div>
+                  <h4 className="text-lg font-bold text-white">Pack Immobilier de Prestige</h4>
+                  <p className="text-xs text-neutral-300">
+                    Mandats + Matching acquéreurs + Portail privé sécurisé.
+                  </p>
+                  <p className="text-2xl font-black text-[#d4af37] font-mono">Dès 2 500 {curr}</p>
+                  <a
+                    href="#configurateur"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#d4af37] px-4 py-2.5 text-xs font-bold text-black transition hover:bg-[#e6c24d]"
+                  >
+                    Déployer mon CRM Immobilier <ArrowRight className="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {sectorCrmTab === "retail" && (
+              <div className="grid gap-8 lg:grid-cols-12 items-center">
+                <div className="lg:col-span-7 space-y-5">
+                  <span className="font-mono text-[10px] font-bold text-[#d4af37] uppercase tracking-wider">
+                    COMMERCE, BOUTIQUES DE LUXE &amp; RETAIL
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+                    Caisse Magasin Unifiée, E-Commerce &amp; Fidélité Omnicanale
+                  </h3>
+                  <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
+                    Fini les écarts entre les ventes en boutique et les ventes sur votre site. Votre stock physique et votre catalogue e-commerce se synchronisent en temps réel. Vos clients cumulent leurs privilèges fidélité en ligne comme en boutique physique.
+                  </p>
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <strong className="block text-white mb-1">✓ Caisse &amp; Douchette Code-barres</strong>
+                      <span className="text-neutral-400">Scan ultra-rapide, gestion des retours, avoirs et cartes cadeaux.</span>
+                    </div>
+                    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <strong className="block text-white mb-1">✓ Alertes de Réassort</strong>
+                      <span className="text-neutral-400">Commandes fournisseurs suggérées dès franchissement du seuil minimum.</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="lg:col-span-5 rounded-2xl border border-[#d4af37]/30 bg-gradient-to-br from-[#161208] to-[#0A0B0E] p-6 text-center space-y-4">
+                  <div className="text-4xl">🛍️</div>
+                  <h4 className="text-lg font-bold text-white">Pack Retail &amp; Commerce</h4>
+                  <p className="text-xs text-neutral-300">
+                    Caisse boutique + E-commerce synchronisé + Carte fidélité.
+                  </p>
+                  <p className="text-2xl font-black text-[#d4af37] font-mono">Dès 2 000 {curr}</p>
+                  <a
+                    href="#configurateur"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#d4af37] px-4 py-2.5 text-xs font-bold text-black transition hover:bg-[#e6c24d]"
+                  >
+                    Découvrir l'offre Commerce <ArrowRight className="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

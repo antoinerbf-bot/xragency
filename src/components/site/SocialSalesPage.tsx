@@ -61,11 +61,11 @@ const plans = service.plans;
 
 const waFor = (name: string, lang: Lang = "fr") => {
   const messages = {
-    fr: `Bonjour XR AGENCY., je souhaite échanger sur la formule ${name} pour mes réseaux sociaux.`,
-    en: `Hello XR AGENCY., I'd like to discuss the ${name} social media plan.`,
-    vi: `Xin chào XR AGENCY., tôi muốn trao đổi về gói mạng xã hội ${name}.`,
-    ar: `مرحباً XR AGENCY.، أود مناقشة باقة إدارة التواصل الاجتماعي ${name}.`,
-    ru: `Здравствуйте, XR AGENCY.! Хочу обсудить тариф ведения соцсетей «${name}».`,
+    fr: `Bonjour XRAGENCY, je souhaite échanger sur la formule ${name} pour mes réseaux sociaux.`,
+    en: `Hello XRAGENCY, I'd like to discuss the ${name} social media plan.`,
+    vi: `Xin chào XRAGENCY, tôi muốn trao đổi về gói mạng xã hội ${name}.`,
+    ar: `مرحباً XRAGENCY، أود مناقشة باقة إدارة التواصل الاجتماعي ${name}.`,
+    ru: `Здравствуйте, XRAGENCY! Хочу обсудить тариф ведения соцсетей «${name}».`,
   };
   return `https://wa.me/33767566783?text=${encodeURIComponent(messages[lang])}`;
 };
@@ -248,56 +248,55 @@ export function SocialSalesPage() {
         {/* ════════════════════════════════════════════════════════════════════
             01. HERO IMMERSIF AVEC PHOTOGRAPHIE STUDIO COHÉRENTE & LÉCHÉE
            ════════════════════════════════════════════════════════════════════ */}
-        <section className="relative isolate overflow-hidden border-b border-[#E8E6E0] bg-[#0E0D0B] text-white pb-20 pt-12 sm:pb-28 sm:pt-16">
-          {/* Vraie image de fond cinématique haute définition */}
+        <section className="relative isolate overflow-hidden border-b border-[#E8E6E0] bg-white text-[#12110E] pb-20 pt-12 sm:pb-28 sm:pt-16">
+          {/* Vraie image de fond lumineuse haute définition */}
           <div className="absolute inset-0 -z-10">
             <img
               src={agencySocialStudioHero}
-              alt="Studio de Production Social Media XR AGENCY."
-              className="h-full w-full object-cover object-center opacity-35 brightness-[0.82] contrast-[1.12]"
+              alt="Studio de Production Social Media XRAGENCY"
+              className="h-full w-full object-cover object-center opacity-15 brightness-[1.05] contrast-[1.05]"
             />
-            {/* Dégradés d'éclairage de studio pour sublimer le texte */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0E0D0B] via-[#0E0D0B]/75 to-[#0E0D0B]/90" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(22,163,74,0.18),transparent_50%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_70%,rgba(26,115,232,0.14),transparent_50%)]" />
+            {/* Dégradé doux et lumineux */}
+            <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-white/95" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(197,168,128,0.12),transparent_50%)]" />
           </div>
 
           <div className="mx-auto max-w-[1360px] px-4 sm:px-8">
             {/* Top Bar : Fil d'ariane & Tag */}
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#EBEBE6] pb-4">
               <Link
                 to="/services"
-                className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/70 transition hover:text-white"
+                className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-[#52504A] transition hover:text-[#12110E]"
               >
                 <span>←</span> {t(l("Toutes les expertises", "All services", "Tất cả dịch vụ", "كل الخدمات", "Все услуги"))}
               </Link>
-              <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-white/60">
-                <span className="text-white font-bold tracking-[0.2em]">XR AGENCY.</span>
+              <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#52504A]">
+                <span className="text-[#12110E] font-black tracking-[0.18em]">XRAGENCY</span>
                 <span>/</span>
-                <span className="text-emerald-400 font-semibold">PÔLE SOCIAL MEDIA & REELS 4K</span>
+                <span className="text-[#C5A880] font-bold">PÔLE SOCIAL MEDIA & REELS 4K</span>
               </div>
             </div>
 
             <div className="mt-12 grid items-center gap-12 lg:grid-cols-12 lg:gap-14">
               {/* Colonne Gauche : Vision, Accroche & Call to Actions */}
               <div className="space-y-6 lg:col-span-7">
-                <div className="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 backdrop-blur-md">
-                  <span className="h-2 w-2 rounded-full bg-[#16A34A] animate-ping" />
-                  <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-400">
+                <div className="inline-flex items-center gap-2.5 rounded-full border border-[#C5A880]/30 bg-[#C5A880]/10 px-4 py-1.5 backdrop-blur-md">
+                  <span className="h-2 w-2 rounded-full bg-[#C5A880] animate-ping" />
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-[#C5A880]">
                     {t(l("PRODUCTION VIDÉO 4K & DIRECTION ÉDITORIALE", "4K VIDEO PRODUCTION & EDITORIAL DIRECTION", "SẢN XUẤT 4K & NỘI DUNG CAO CẤP", "إنتاج فيديو 4K وإخراج تحريري", "ПРОДАКШН 4K И ВЕДЕНИЕ"))}
                   </span>
                 </div>
 
                 <Parallax speed={-0.03}>
-                  <h1 className="font-serif text-[clamp(2.4rem,5vw,4.5rem)] font-normal leading-[1.04] tracking-[-0.03em] text-white">
+                  <h1 className="font-serif text-[clamp(2.4rem,5vw,4.5rem)] font-normal leading-[1.04] tracking-[-0.03em] text-[#12110E]">
                     {t(l("Des vidéos qui captivent,", "Content that captivates,", "Nội dung cuốn hút,", "محتوى يأسر القلوب،", "Контент, который увлекает,"))}{" "}
-                    <em className="font-serif italic font-normal text-emerald-300 underline decoration-emerald-400/50 underline-offset-8">
+                    <em className="font-serif italic font-normal text-[#12110E] underline decoration-[#C5A880]/60 underline-offset-8">
                       {t(l("des clients qui réservent", "clients who convert", "khách hàng đến thật", "وزبائن يقصدونك فعلياً", "и приводит клиентов"))}
                     </em>.
                   </h1>
                 </Parallax>
 
-                <p className="max-w-2xl text-[15px] leading-relaxed text-white/80 sm:text-base">
+                <p className="max-w-2xl text-[15px] leading-relaxed text-[#52504A] sm:text-base">
                   {t(
                     l(
                       "Nous créons vos Reels 4K scénarisés, orchestrons votre présence sur Instagram, TikTok & LinkedIn, et animons vos commentaires au quotidien. Fini les posts amateurs : transformez votre audience en chiffre d'affaires régulier dès 349 € / mois.",
@@ -311,13 +310,13 @@ export function SocialSalesPage() {
 
                 {/* Badges d'Engagement Concret */}
                 <div className="flex flex-wrap gap-2.5 pt-1">
-                  <span className="rounded-full border border-white/15 bg-white/5 px-3.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm">
+                  <span className="rounded-full border border-[#E5E5E0] bg-[#FAF9F5] px-3.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#52504A]">
                     ✦ REELS & TIKTOKS 4K 60FPS
                   </span>
-                  <span className="rounded-full border border-white/15 bg-white/5 px-3.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm">
+                  <span className="rounded-full border border-[#E5E5E0] bg-[#FAF9F5] px-3.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#52504A]">
                     ✦ HOOKS 3 SECONDES ALGORITHMIQUES
                   </span>
-                  <span className="rounded-full border border-white/15 bg-white/5 px-3.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm">
+                  <span className="rounded-full border border-[#E5E5E0] bg-[#FAF9F5] px-3.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#52504A]">
                     ✦ 100% CESSION DROITS COMMERCIAUX
                   </span>
                 </div>
@@ -326,7 +325,7 @@ export function SocialSalesPage() {
                 <div className="flex flex-wrap items-center gap-3.5 pt-2">
                   <a
                     href="#offres-directes"
-                    className="inline-flex items-center gap-2.5 rounded-full bg-[#16A34A] px-7 py-4 text-xs font-bold uppercase tracking-wider text-white shadow-lg transition hover:bg-[#15803D] hover:scale-[1.01]"
+                    className="inline-flex items-center gap-2.5 rounded-full bg-[#12110E] px-7 py-4 text-xs font-bold uppercase tracking-wider text-white shadow-lg transition hover:bg-[#2B2925] hover:scale-[1.01]"
                   >
                     <span>{t(l("Découvrir les 3 Formules Claires", "Explore 3 Transparent Plans", "Khám phá 3 Gói Dịch vụ", "استعرض الباقات الـ 3 الواضحة", "Смотреть 3 прозрачных тарифа"))}</span>
                     <ArrowRight className="h-4 w-4" />
@@ -334,15 +333,15 @@ export function SocialSalesPage() {
 
                   <a
                     href="#avant-apres"
-                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-4 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-md transition hover:border-white hover:bg-white/20"
+                    className="inline-flex items-center gap-2 rounded-full border border-[#D5D5CF] bg-white px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#12110E] shadow-sm transition hover:border-[#12110E] hover:bg-[#F5F5F0]"
                   >
-                    <Sparkles className="h-4 w-4 text-emerald-400" />
+                    <Sparkles className="h-4 w-4 text-[#C5A880]" />
                     <span>{t(l("Voir l'Avant / Après en direct", "View Live Before / After", "Xem Trước / Sau Trực quan", "شاهد قبل وبعد في الواقع", "Смотреть До / После"))}</span>
                   </a>
                 </div>
 
-                <div className="flex items-center gap-3 pt-2 text-xs text-white/70">
-                  <ShieldCheck className="h-4 w-4 text-emerald-400 shrink-0" />
+                <div className="flex items-center gap-3 pt-2 text-xs text-[#52504A]">
+                  <ShieldCheck className="h-4 w-4 text-[#C5A880] shrink-0" />
                   <span>
                     {t(l("Tarifs fixes dès 349 € / mois · Engagement dès 3 mois · Validation 100% WhatsApp", "Fixed pricing from €349/mo · 3-month term · 100% WhatsApp approval", "Giá minh bạch từ 349 €/tháng · Cam kết từ 3 tháng · Duyệt bài 1 chạm qua WhatsApp", "أسعار ثابتة من 349 €/شهر · التزام مرن من 3 أشهر · اعتماد بنقرة واحدة عبر واتساب", "Фиксированные цены от 349 €/мес · Договор от 3 месяцев · Согласование в WhatsApp"))}
                   </span>
@@ -351,9 +350,9 @@ export function SocialSalesPage() {
 
               {/* Colonne Droite : Showcase de Production Studio (Vraie image d'agence cohérente) */}
               <div className="lg:col-span-5">
-                <div className="relative mx-auto overflow-hidden rounded-3xl border border-white/20 bg-white/5 p-4 shadow-2xl backdrop-blur-xl">
+                <div className="relative mx-auto overflow-hidden rounded-3xl border border-[#E5E5E0] bg-white p-4 shadow-xl">
                   {/* Sélecteur de volet de production */}
-                  <div className="flex items-center justify-between gap-1.5 rounded-2xl border border-white/10 bg-black/50 p-1.5">
+                  <div className="flex items-center justify-between gap-1.5 rounded-2xl border border-[#E8E6E0] bg-[#FAF9F5] p-1.5">
                     {[
                       { id: "tournage", label: "Tournage & Rushs 4K", icon: Video },
                       { id: "direction", label: "Grille & Direction DA", icon: Layers },
@@ -368,8 +367,8 @@ export function SocialSalesPage() {
                           onClick={() => setHeroMode(mode.id as typeof heroMode)}
                           className={`flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2 font-mono text-[9px] font-bold uppercase tracking-wider transition ${
                             isActive
-                              ? "bg-[#16A34A] text-white shadow-md"
-                              : "text-white/70 hover:text-white hover:bg-white/5"
+                              ? "bg-[#12110E] text-white shadow-sm"
+                              : "text-[#52504A] hover:text-[#12110E] hover:bg-white"
                           }`}
                         >
                           <Icon className="h-3.5 w-3.5" />
@@ -380,7 +379,7 @@ export function SocialSalesPage() {
                   </div>
 
                   {/* Visualiseur Studio Photographique */}
-                  <div className="relative mt-3 aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/10 bg-black">
+                  <div className="relative mt-3 aspect-[4/3] w-full overflow-hidden rounded-2xl border border-[#E5E5E0] bg-[#12110E]">
                     <img
                       src={
                         heroMode === "tournage"
@@ -389,10 +388,10 @@ export function SocialSalesPage() {
                             ? svcSocialEditorial
                             : svcSocialCinematic
                       }
-                      alt="Atelier de création XR AGENCY."
+                      alt="Atelier de création XRAGENCY"
                       className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-black/30" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
                     {/* Tag Supérieur */}
                     <div className="absolute inset-x-3 top-3 z-20 flex items-center justify-between text-white">
@@ -404,7 +403,7 @@ export function SocialSalesPage() {
                           {heroMode === "acquisition" && "VIRALITÉ ALGORITHMIQUE & LEADS"}
                         </span>
                       </div>
-                      <span className="rounded-full bg-black/60 px-2 py-0.5 font-mono text-[8px] text-emerald-400 border border-emerald-400/30">
+                      <span className="rounded-full bg-black/60 px-2 py-0.5 font-mono text-[8px] text-[#C5A880] border border-[#C5A880]/30 backdrop-blur-md">
                         STUDIO XR
                       </span>
                     </div>
@@ -421,7 +420,7 @@ export function SocialSalesPage() {
                         <div className="mt-2.5 grid grid-cols-3 gap-2 border-t border-white/10 pt-2 font-mono text-[8.5px]">
                           <div>
                             <span className="text-white/60 block">RÉSOLUTION</span>
-                            <strong className="text-emerald-400 font-bold">4K 60FPS</strong>
+                            <strong className="text-[#C5A880] font-bold">4K 60FPS</strong>
                           </div>
                           <div>
                             <span className="text-white/60 block">RÉTENTION</span>
@@ -429,7 +428,7 @@ export function SocialSalesPage() {
                           </div>
                           <div>
                             <span className="text-white/60 block">GESTION</span>
-                            <strong className="text-emerald-300 font-bold">100% Studio</strong>
+                            <strong className="text-[#C5A880] font-bold">100% Studio</strong>
                           </div>
                         </div>
                       </div>
@@ -447,13 +446,13 @@ export function SocialSalesPage() {
         <section id="offres-directes" className="relative border-b border-[#E8E6E0] bg-[#FAF9F5] py-20 sm:py-28">
           <div className="mx-auto max-w-[1360px] px-4 sm:px-8">
             <div className="mx-auto max-w-3xl text-center">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#16A34A]/30 bg-[#16A34A]/10 px-3.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#16A34A]">
-                <Sparkles className="h-3 w-3 text-[#16A34A]" />
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#C5A880]/30 bg-[#C5A880]/10 px-3.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#C5A880]">
+                <Sparkles className="h-3 w-3 text-[#C5A880]" />
                 {t(l("NOS 3 FORMULES CONCRÈTES & TARIFS FIXES", "OUR 3 CONCRETE TIERS & FIXED PRICING", "3 GÓI DỊCH VỤ RÕ RÀNG", "الباقات الـ 3 المحددة بدقة والأسعار الثابتة", "3 ЧЁТКИХ ТАРИФА"))}
               </span>
               <h2 className="mt-3 font-serif text-3xl font-medium tracking-tight text-[#12110E] sm:text-5xl">
                 {t(l("Trois formules pensées pour votre ambition :", "Three plans crafted for your ambition:", "Ba gói dịch vụ thiết kế cho mục tiêu của bạn:", "ثلاث باقات مصممة لتلائم طموحك:", "Три тарифа под ваши задачи:"))}{" "}
-                <em className="font-serif italic font-normal text-[#12110E] underline decoration-[#16A34A]/40 underline-offset-8">
+                <em className="font-serif italic font-normal text-[#12110E] underline decoration-[#C5A880]/50 underline-offset-8">
                   {t(l("visibles, concrètes et sans frais cachés", "transparent, direct, zero hidden fees", "rõ ràng, trực tiếp, không phụ phí", "واضحة ومباشرة دون رسوم خفية", "прозрачно и без доплат"))}
                 </em>.
               </h2>
@@ -472,7 +471,7 @@ export function SocialSalesPage() {
                     <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-[#E5E5E0] bg-black mb-5">
                       <img
                         src={svcSocialEditorial}
-                        alt="Vitrine Signature XR AGENCY."
+                        alt="Vitrine Signature XRAGENCY"
                         className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -526,23 +525,23 @@ export function SocialSalesPage() {
 
                       <div className="space-y-2 text-xs text-[#2B2925]">
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>1 réseau clé géré</strong> (Instagram ou Facebook au choix)</span>
                         </div>
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>4 à 6 publications soignées / mois</strong> avec retouche et charte graphique</span>
                         </div>
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>Stories bi-hebdomadaires</strong> pour animer votre actualité</span>
                         </div>
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>100% Cession des droits</strong> d'auteur commerciaux</span>
                         </div>
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>Validation 1-clic sur WhatsApp</strong> : zéro temps perdu pour vous</span>
                         </div>
                       </div>
@@ -579,24 +578,24 @@ export function SocialSalesPage() {
               {/* OFFRE 02 : MOTEUR REELS & VIRALITÉ (N°1 RECOMMANDÉ) */}
               <Parallax speed={-0.02}>
                 <article className="relative flex h-full flex-col justify-between rounded-3xl border-2 border-[#12110E] bg-white p-7 shadow-2xl transition hover:shadow-3xl sm:p-9 lg:-my-3">
-                  <div className="absolute -top-3.5 inset-x-0 mx-auto w-fit rounded-full bg-[#16A34A] px-4 py-1 font-mono text-[9.5px] font-bold uppercase tracking-wider text-white shadow-md">
+                  <div className="absolute -top-3.5 inset-x-0 mx-auto w-fit rounded-full bg-[#12110E] px-4 py-1 font-mono text-[9.5px] font-bold uppercase tracking-wider text-[#C5A880] shadow-md border border-[#C5A880]/30">
                     ★ FORMULE N°1 RECOMMANDÉE · 74% DE NOS CLIENTS
                   </div>
 
                   <div>
                     {/* Illustration Concrète de l'Offre */}
-                    <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-[#16A34A]/40 bg-black mb-5 shadow-sm">
+                    <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-[#E5E5E0] bg-black mb-5 shadow-sm">
                       <img
                         src={svcSocialCinematic}
-                        alt="Moteur Reels 4K XR AGENCY."
+                        alt="Moteur Reels 4K XRAGENCY"
                         className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
                       <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white">
-                        <span className="font-mono text-[9px] font-bold text-emerald-400 uppercase tracking-wider">
+                        <span className="font-mono text-[9px] font-bold text-[#C5A880] uppercase tracking-wider">
                           REELS 4K & RÉTENTION ALGORITHMIQUE
                         </span>
-                        <span className="rounded bg-[#16A34A] px-2 py-0.5 font-mono text-[8px] font-bold text-white">
+                        <span className="rounded bg-[#C5A880] px-2 py-0.5 font-mono text-[8px] font-bold text-[#12110E]">
                           2 RÉSEAUX
                         </span>
                       </div>
@@ -605,14 +604,14 @@ export function SocialSalesPage() {
                     {/* Header Carte */}
                     <div className="flex items-center justify-between border-b border-[#E8E6E0] pb-4">
                       <div>
-                        <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#16A34A]">
+                        <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#C5A880]">
                           FORMULE 02 · LE MOTEUR COMMERCIAL
                         </span>
                         <h3 className="mt-1 font-serif text-3xl font-medium text-[#12110E]">
                           Moteur Reels & Ventes
                         </h3>
                       </div>
-                      <span className="rounded-full bg-[#16A34A]/10 px-3 py-1 font-mono text-[9.5px] font-bold text-[#16A34A]">
+                      <span className="rounded-full bg-[#C5A880]/10 px-3 py-1 font-mono text-[9.5px] font-bold text-[#C5A880]">
                         Acquisition 4K
                       </span>
                     </div>
@@ -621,15 +620,15 @@ export function SocialSalesPage() {
                       {t(l("Le format qui remplit votre établissement : nous scénarisons vos Reels 4K avec accroches virales, synchronisons Instagram & TikTok et modérons quotidiennement les commentaires.", "The format driving real foot traffic: scripted 4K Reels with viral hooks across Instagram & TikTok plus daily comment moderation turning views into revenue.", "Gói tạo dòng khách thực tế: video Reel 4K kịch bản cuốn hút trên Instagram & TikTok cùng trực phản hồi bình luận hàng ngày.", "الباقة التي تجلب لك عملاء فعليين: ريلز 4K سينمائية وإدارة يومية للتعليقات عبر إنستغرام وتيك توك.", "Формат, приводящий клиентов: сценарии для Reels 4K в Instagram и TikTok, хуки и ежедневная модерация.")) }
                     </p>
 
-                    {/* Prix Concret avec Highlight Vert */}
-                    <div className="mt-5 rounded-2xl border border-[#16A34A]/30 bg-[#F4FBF6] p-4 text-center">
+                    {/* Prix Concret */}
+                    <div className="mt-5 rounded-2xl border border-[#E8E6E0] bg-[#FAF9F5] p-4 text-center">
                       <div className="flex items-baseline justify-center gap-1.5">
                         <span className="font-serif text-5xl font-bold tracking-tight text-[#12110E]">
                           599 €
                         </span>
                         <span className="font-mono text-xs text-[#52504A]">/ mois</span>
                       </div>
-                      <span className="mt-1 block font-mono text-[10px] font-semibold text-[#16A34A]">
+                      <span className="mt-1 block font-mono text-[10px] font-semibold text-[#C5A880]">
                         Le meilleur retour sur investissement constaté
                       </span>
                     </div>
@@ -642,27 +641,27 @@ export function SocialSalesPage() {
 
                       <div className="space-y-2 text-xs text-[#2B2925]">
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>2 réseaux synchronisés</strong> (Instagram + TikTok ou Facebook)</span>
                         </div>
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>8 à 12 publications 4K / mois</strong> dont des Reels scénarisés et montés en 4K 60FPS</span>
                         </div>
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>Hooks 3 secondes</strong> et sous-titres animés lisibles sans le son</span>
                         </div>
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>Modération quotidienne active (6j/7)</strong> : réponses soignées pour convertir en réservations</span>
                         </div>
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>Stories 3 fois par semaine</strong> pour maintenir l'engagement</span>
                         </div>
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>Reporting mensuel chiffré</strong> sur les réservations et nouveaux clients</span>
                         </div>
                       </div>
@@ -704,7 +703,7 @@ export function SocialSalesPage() {
                     <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-[#E5E5E0] bg-black mb-5">
                       <img
                         src={agencySocialStudioHero}
-                        alt="Domination Omnicanale XR AGENCY."
+                        alt="Domination Omnicanale XRAGENCY"
                         className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -758,23 +757,23 @@ export function SocialSalesPage() {
 
                       <div className="space-y-2 text-xs text-[#2B2925]">
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>3 à 4 réseaux complets</strong> (Instagram, TikTok, LinkedIn & Facebook)</span>
                         </div>
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>16+ contenus 4K / mois</strong> : saturation algorithmique intensive</span>
                         </div>
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>Modération prioritaire 7j/7</strong> et gestion des messages privés</span>
                         </div>
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>Stories quasi-quotidiennes</strong> pour une omniprésence totale</span>
                         </div>
                         <div className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
+                          <Check className="h-4 w-4 shrink-0 text-[#C5A880] mt-0.5" />
                           <span><strong>Direction artistique dédiée</strong> et veille concurrentielle active</span>
                         </div>
                       </div>
@@ -822,7 +821,7 @@ export function SocialSalesPage() {
                 {t(l("TRANSFORMATION CONCRÈTE & IMMERSIVE", "IMMERSIVE & REAL TRANSFORMATION", "BIẾN ĐỔI THỰC TẾ & CHẤT LƯỢNG", "التحول الحقيقي الملموس", "НАГЛЯДНОЕ ПРЕОБРАЖЕНИЕ"))}
               </span>
               <h2 className="mt-3 font-serif text-3xl font-medium tracking-tight text-[#12110E] sm:text-5xl">
-                {t(l("Sans XR AGENCY. vs Avec XR AGENCY. :", "Without XR AGENCY. vs With XR AGENCY.:", "Chưa có XR AGENCY. vs Có XR AGENCY.:", "بدون التعامل معنا مقابل بعد التعامل معنا:", "Без нас и с нами:"))}{" "}
+                {t(l("Sans XRAGENCY vs Avec XRAGENCY :", "Without XRAGENCY vs With XRAGENCY:", "Chưa có XRAGENCY vs Có XRAGENCY:", "بدون التعامل معنا مقابل بعد التعامل معنا:", "Без нас и с нами:"))}{" "}
                 <em className="font-serif italic font-normal text-[#12110E] underline decoration-[#16A34A]/40 underline-offset-8">
                   {t(l("la métamorphose de votre image", "the visual metamorphosis", "sự lột xác hình ảnh", "التحول الجذري في صورتك", "преображение бренда"))}
                 </em>.
@@ -837,7 +836,7 @@ export function SocialSalesPage() {
               <div className="relative aspect-[16/9] w-full max-h-[460px] overflow-hidden">
                 <img
                   src={agencyBeforeAfterStudio}
-                  alt="Comparatif Avant Après Social Media Studio XR AGENCY."
+                  alt="Comparatif Avant Après Social Media Studio XRAGENCY"
                   className="h-full w-full object-cover object-center"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent pointer-events-none" />
@@ -884,7 +883,7 @@ export function SocialSalesPage() {
                   <div className="flex items-center gap-2">
                     <span className="grid h-5 w-5 place-items-center rounded-full bg-rose-500 text-xs font-bold text-white">✕</span>
                     <span className="font-mono text-xs font-bold uppercase tracking-wider text-rose-700">
-                      SANS XR AGENCY. · ÉTAT AMATEUR
+                      SANS XRAGENCY · ÉTAT AMATEUR
                     </span>
                   </div>
                   <span className="rounded-full bg-rose-50 px-2.5 py-0.5 font-mono text-[9px] font-semibold text-rose-600 border border-rose-200">
@@ -937,7 +936,7 @@ export function SocialSalesPage() {
                   <div className="flex items-center gap-2">
                     <span className="grid h-5 w-5 place-items-center rounded-full bg-[#16A34A] text-xs font-bold text-white">✓</span>
                     <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#16A34A]">
-                      AVEC XR AGENCY. · SIGNATURE STUDIO 4K
+                      AVEC XRAGENCY · SIGNATURE STUDIO 4K
                     </span>
                   </div>
                   <span className="rounded-full bg-[#16A34A]/10 px-2.5 py-0.5 font-mono text-[9px] font-bold text-[#16A34A] border border-[#16A34A]/30">
@@ -1208,7 +1207,7 @@ export function SocialSalesPage() {
                 Questions Fréquentes
               </h2>
               <p className="mt-2 text-xs text-[#52504A] sm:text-sm">
-                Tout ce que vous devez savoir avant de lancer votre stratégie avec XR AGENCY.
+                Tout ce que vous devez savoir avant de lancer votre stratégie avec XRAGENCY
               </p>
             </div>
 
@@ -1264,11 +1263,11 @@ export function SocialSalesPage() {
                 <p className="mt-3 max-w-xl text-xs text-[#52504A] sm:text-sm leading-relaxed">
                   {t(
                     l(
-                      "XR AGENCY. · Studio d'Ingénierie & de Direction Artistique Social Media. Nous produisons des flux de contenus 4K exigeants et orchestrons votre présence sur Instagram, TikTok, Facebook & LinkedIn.",
-                      "XR AGENCY. · Social Media Art Direction & Production Studio. Crafting cinematic 4K video feeds and orchestrating brand dominance across Instagram, TikTok, Facebook & LinkedIn.",
-                      "XR AGENCY. · Studio Định hướng Nghệ thuật & Sản xuất Mạng Xã hội. Sản xuất video 4K chất lượng cao và quản trị đa kênh chuyên nghiệp.",
-                      "XR AGENCY. · استوديو الإخراج الفني وإنتاج محتوى التواصل الاجتماعي. ننتج مقاطع 4K سينمائية وندير حضورك على كافة المنصات باحترافية.",
-                      "XR AGENCY. · Студия продакшна и арт-дирекшна для соцсетей. Создаём вирусные Reels 4K и полностью ведём ваши каналы.",
+                      "XRAGENCY · Studio d'Ingénierie & de Direction Artistique Social Media. Nous produisons des flux de contenus 4K exigeants et orchestrons votre présence sur Instagram, TikTok, Facebook & LinkedIn.",
+                      "XRAGENCY · Social Media Art Direction & Production Studio. Crafting cinematic 4K video feeds and orchestrating brand dominance across Instagram, TikTok, Facebook & LinkedIn.",
+                      "XRAGENCY · Studio Định hướng Nghệ thuật & Sản xuất Mạng Xã hội. Sản xuất video 4K chất lượng cao và quản trị đa kênh chuyên nghiệp.",
+                      "XRAGENCY · استوديو الإخراج الفني وإنتاج محتوى التواصل الاجتماعي. ننتج مقاطع 4K سينمائية وندير حضورك على كافة المنصات باحترافية.",
+                      "XRAGENCY · Студия продакшна и арт-дирекшна для соцсетей. Создаём вирусные Reels 4K и полностью ведём ваши каналы.",
                     ),
                   )}
                 </p>
@@ -1358,7 +1357,7 @@ export function SocialSalesPage() {
             <div className="mt-10 flex flex-col gap-4 border-t border-[#E8E6E0] pt-6 text-xs text-[#52504A] sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p>
-                  XR AGENCY. · © {new Date().getFullYear()} · {t(l("Tous droits réservés. Cession commerciale 100% contractuelle.", "All rights reserved. 100% contractual commercial ownership.", "Bảo lưu mọi quyền. Chuyển giao 100% bản quyền thương mại.", "جميع الحقوق محفوظة. تنازل تجاري كامل 100%.", "Все права защищены. 100% передача прав.")) }
+                  XRAGENCY · © {new Date().getFullYear()} · {t(l("Tous droits réservés. Cession commerciale 100% contractuelle.", "All rights reserved. 100% contractual commercial ownership.", "Bảo lưu mọi quyền. Chuyển giao 100% bản quyền thương mại.", "جميع الحقوق محفوظة. تنازل تجاري كامل 100%.", "Все права защищены. 100% передача прав.")) }
                 </p>
               </div>
 

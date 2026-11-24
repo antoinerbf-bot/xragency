@@ -20,13 +20,13 @@ import { AddToCartBtn } from "@/components/site/Cart";
 export const Route = createFileRoute("/services/seo")({
   head: () => ({
     meta: [
-      { title: "SEO Google — Stratégie & Référencement Naturel | XR Agency" },
+      { title: "SEO Google — Stratégie & Référencement Naturel | XRAGENCY" },
       {
         name: "description",
         content:
           "Programmes SEO mensuels et annuels pour positionner durablement votre marque sur Google : audit technique, mots-clés, contenu éditorial et reporting.",
       },
-      { property: "og:title", content: "SEO & Référencement Naturel — XR Agency" },
+      { property: "og:title", content: "SEO & Référencement Naturel — XRAGENCY" },
       {
         property: "og:description",
         content: "Faites de Google un levier durable de visibilité et d'acquisition qualifiée.",
@@ -222,11 +222,11 @@ function PlanCard({ plan, t, lang }: { plan: Plan; t: (v: Copy) => string; lang:
   const { price } = useLang();
   const isFeatured = Boolean(plan.popular);
   const waMsg = {
-    fr: `Bonjour XR Agency, je souhaite échanger sur la formule ${t(plan.name)} (${plan.priceEur} € ${t(plan.period)}).`,
-    en: `Hello XR Agency, I would like to discuss the ${t(plan.name)} plan (€${plan.priceEur} ${t(plan.period)}).`,
-    vi: `Xin chào XR Agency, tôi muốn trao đổi về gói ${t(plan.name)} (${plan.priceEur} € ${t(plan.period)}).`,
-    ar: `مرحبًا XR Agency، أود مناقشة باقة ${t(plan.name)} (${plan.priceEur} € ${t(plan.period)}).`,
-    ru: `Здравствуйте, XR Agency! Хочу обсудить тариф ${t(plan.name)} (${plan.priceEur} € ${t(plan.period)}).`,
+    fr: `Bonjour XRAGENCY, je souhaite échanger sur la formule ${t(plan.name)} (${plan.priceEur} € ${t(plan.period)}).`,
+    en: `Hello XRAGENCY, I would like to discuss the ${t(plan.name)} plan (€${plan.priceEur} ${t(plan.period)}).`,
+    vi: `Xin chào XRAGENCY, tôi muốn trao đổi về gói ${t(plan.name)} (${plan.priceEur} € ${t(plan.period)}).`,
+    ar: `مرحبًا XRAGENCY، أود مناقشة باقة ${t(plan.name)} (${plan.priceEur} € ${t(plan.period)}).`,
+    ru: `Здравствуйте, XRAGENCY! Хочу обсудить тариф ${t(plan.name)} (${plan.priceEur} € ${t(plan.period)}).`,
   }[lang];
 
   return (
@@ -302,6 +302,22 @@ function SEOPage() {
   const { t, lang } = useLang();
   const isRtl = lang === "ar";
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [simulatedRank, setSimulatedRank] = useState<number>(1);
+  const [targetQuery, setTargetQuery] = useState<string>("cabinet avocat droit des affaires");
+
+  const rankStats: Record<number, { ctr: number; label: string; desc: string }> = {
+    1: { ctr: 32.8, label: "Position #1 sur Google", desc: "1 internaute sur 3 clique directement sur votre site" },
+    2: { ctr: 18.4, label: "Position #2 sur Google", desc: "Trafic soutenu mais 45% de volume capté par le #1" },
+    3: { ctr: 11.2, label: "Position #3 sur Google", desc: "Dernière place sur le podium des clics majeurs" },
+    5: { ctr: 6.1, label: "Position #5 sur Google", desc: "Visibilité modérée, seulement 6% des clics" },
+    8: { ctr: 2.8, label: "Position #8 (Bas de page 1)", desc: "Moins de 3 clics pour 100 recherches" },
+    15: { ctr: 0.7, label: "Page 2 de Google", desc: "Moins de 1% des internautes dépassent la première page" },
+  };
+
+  const activeStat = rankStats[simulatedRank] || rankStats[1];
+  const estVisits = Math.round((10000 * activeStat.ctr) / 100);
+  const estAdsSavings = Math.round(estVisits * 3.8);
+  const formatNum = (n: number) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
   const faq: [Copy, Copy][] = [
     [
@@ -430,7 +446,7 @@ function SEOPage() {
               <div className="group relative overflow-hidden rounded-[2rem] border border-[#171613]/12 bg-[#171613] shadow-[0_24px_60px_rgba(23,22,19,0.12)]">
                 <img
                   src={XR_PHOTOS.seo}
-                  alt="SEO Google XR Agency"
+                  alt="SEO Google XRAGENCY"
                   className="aspect-[4/3] w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.04]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
@@ -504,6 +520,175 @@ function SEOPage() {
                   ),
                 )}
               </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════════
+            SIMULATEUR DE POSITION & D'IMPACT BUSINESS SEO EN DIRECT
+           ════════════════════════════════════════════════════════════════════ */}
+        <section className="border-b border-[#171613]/10 bg-white py-20 sm:py-28">
+          <div className="mx-auto max-w-7xl px-5 sm:px-8">
+            <div className="text-center">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#9E7F5A]/30 bg-[#9E7F5A]/10 px-3.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#7D6445]">
+                <Sparkles className="h-3 w-3 text-[#9E7F5A]" />
+                {t(c("SIMULATEUR DE TRAFIC & ROI NATUREL", "TRAFFIC & ORGANIC ROI SIMULATOR", "MÔ PHỎNG LƯỢNG TRUY CẬP & ROI", "محاكاة الزيارات والعائد الاستثماري", "СИМУЛЯТОР ТРАФИКА И ROI"))}
+              </span>
+              <h2 className="mt-3 font-serif text-3xl font-medium tracking-tight text-[#171613] sm:text-5xl">
+                {t(c("L'impact d'une 1ère place sur votre chiffre d'affaires.", "The business impact of ranking #1 on Google.", "Tác động của vị trí #1 đối với doanh thu.", "أثر المركز الأول على نمو مبيعاتك وأرباحك.", "Влияние первой позиции на продажи и выручку."))}
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-xs text-[#57534B] sm:text-sm">
+                {t(c("Sur Google, les 3 premiers résultats captent 62% des clics. Ajustez votre rang cible pour visualiser le trafic qualifié et l'économie équivalente en publicité Ads :", "On Google, the top 3 results capture 62% of clicks. Adjust your simulated rank to see estimated traffic and Ads cost savings:", "Trên Google, top 3 kết quả nắm giữ 62% số lượt nhấp. Di chuyển thanh trượt để dự báo lưu lượng và chi phí quảng cáo tiết kiệm:", "تستحوذ النتائج الـ 3 الأولى على 62% من النقرات. اختر المركز لرؤية الزيارات والوفر الإعلاني:", "Топ-3 результатов Google забирают 62% всех кликов. Оцените трафик и экономию на рекламе:"))}
+              </p>
+            </div>
+
+            {/* Interactive Control & Visualizer */}
+            <div className="mt-12 rounded-3xl border border-[#171613]/12 bg-[#FAF8F5] p-6 sm:p-10 shadow-sm">
+              <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center">
+                {/* Left: Rank selector & dynamic input */}
+                <div className="space-y-6 lg:col-span-5">
+                  <div>
+                    <label className="block font-mono text-[11px] font-bold uppercase tracking-wider text-[#7D6445]">
+                      {t(c("Exemple de requête commerciale ciblée :", "Sample targeted commercial query:", "Ví dụ từ khóa thương mại mục tiêu:", "نموذج عبارة بحث تجارية مستهدفة:", "Пример коммерческого поискового запроса:"))}
+                    </label>
+                    <input
+                      type="text"
+                      value={targetQuery}
+                      onChange={(e) => setTargetQuery(e.target.value)}
+                      className="mt-2 w-full rounded-xl border border-[#171613]/15 bg-white px-4 py-2.5 text-xs font-medium text-[#171613] focus:border-[#171613] focus:outline-none shadow-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-xs font-semibold text-[#171613]">
+                        {t(c("Position simulée sur Google :", "Simulated Google Rank:", "Vị trí mô phỏng:", "الترتيب الافتراضي:", "Позиция в поиске:"))}
+                      </span>
+                      <span className="rounded-full bg-[#171613] px-3 py-1 font-mono text-xs font-bold text-white">
+                        {activeStat.label}
+                      </span>
+                    </div>
+
+                    <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-6">
+                      {[1, 2, 3, 5, 8, 15].map((rk) => (
+                        <button
+                          key={rk}
+                          type="button"
+                          onClick={() => setSimulatedRank(rk)}
+                          className={`rounded-xl py-2.5 text-xs font-mono font-bold transition border ${
+                            simulatedRank === rk
+                              ? "border-[#171613] bg-[#171613] text-white shadow-sm"
+                              : "border-[#171613]/10 bg-white text-[#57534B] hover:border-[#171613]"
+                          }`}
+                        >
+                          {rk === 15 ? "Page 2" : `#${rk}`}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="mt-2 text-xs italic text-[#57534B]">{activeStat.desc}</p>
+                  </div>
+
+                  {/* Calculated metrics live badges */}
+                  <div className="grid grid-cols-2 gap-3 border-t border-[#171613]/10 pt-5">
+                    <div className="rounded-2xl border border-[#171613]/10 bg-white p-4">
+                      <span className="block font-mono text-[10px] text-[#57534B]">TAUX DE CLIC (CTR)</span>
+                      <strong className="mt-1 block font-serif text-2xl font-bold text-[#171613]">
+                        {activeStat.ctr}%
+                      </strong>
+                      <span className="text-[10px] text-[#57534B]">des recherches totales</span>
+                    </div>
+                    <div className="rounded-2xl border border-[#171613]/10 bg-white p-4">
+                      <span className="block font-mono text-[10px] text-[#57534B]">VISITES / MOIS</span>
+                      <strong className="mt-1 block font-serif text-2xl font-bold text-[#171613]">
+                        ~{formatNum(estVisits)}
+                      </strong>
+                      <span className="text-[10px] text-[#57534B]">sur 10 000 requêtes</span>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-[#9E7F5A]/30 bg-[#9E7F5A]/10 p-4">
+                    <span className="block font-mono text-[10px] font-bold text-[#7D6445]">
+                      ÉCONOMIE ÉQUIVALENTE ADS (CPC ~3,80 €)
+                    </span>
+                    <div className="mt-1 flex items-baseline gap-2">
+                      <span className="font-serif text-3xl font-bold text-[#171613]">
+                        +{formatNum(estAdsSavings)} €
+                      </span>
+                      <span className="text-xs text-[#57534B]">/ mois en budget publicitaire sauvé</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: Realistic SERP Simulation Card Preview */}
+                <div className="lg:col-span-7">
+                  <div className="rounded-2xl border border-[#171613]/12 bg-white p-5 sm:p-6 shadow-md space-y-4">
+                    <div className="flex items-center justify-between border-b border-[#171613]/10 pb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="h-3 w-3 rounded-full bg-red-400" />
+                        <span className="h-3 w-3 rounded-full bg-amber-400" />
+                        <span className="h-3 w-3 rounded-full bg-green-400" />
+                        <span className="ml-2 font-mono text-[11px] text-[#57534B]">google.com/search?q={encodeURIComponent(targetQuery)}</span>
+                      </div>
+                      <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#7D6445]">
+                        SERP SIMULATION
+                      </span>
+                    </div>
+
+                    {/* Google Search Bar Mockup */}
+                    <div className="rounded-full border border-[#D5D5CF] bg-[#F8F9FA] px-4 py-2 text-xs flex items-center justify-between text-[#202124]">
+                      <span className="truncate">{targetQuery}</span>
+                      <Search className="h-3.5 w-3.5 text-[#5F6368] shrink-0" />
+                    </div>
+
+                    {/* Dynamic Simulated Google Organic Snippet */}
+                    <div className={`rounded-xl p-4 transition-all border ${
+                      simulatedRank <= 3
+                        ? "border-[#9E7F5A]/40 bg-[#FAF8F5] shadow-sm"
+                        : "border-[#E5E5E0] bg-white opacity-60"
+                    }`}>
+                      <div className="flex items-center gap-2">
+                        <div className="grid h-5 w-5 place-items-center rounded-full bg-[#12110E] text-[10px] font-bold text-white">
+                          XR
+                        </div>
+                        <div className="text-[11px] text-[#202124] leading-none">
+                          <span className="font-medium">Votre Entreprise</span>
+                          <span className="text-[#5F6368] ml-1.5">https://votresite.com › {targetQuery.replace(/\s+/g, '-')}</span>
+                        </div>
+                        <span className={`ml-auto rounded-full px-2 py-0.5 font-mono text-[9px] font-bold ${
+                          simulatedRank === 1
+                            ? "bg-[#12110E] text-white"
+                            : simulatedRank <= 3
+                              ? "bg-[#9E7F5A]/20 text-[#7D6445]"
+                              : "bg-zinc-200 text-zinc-600"
+                        }`}>
+                          {simulatedRank <= 3 ? `RANG #${simulatedRank}` : `RANG #${simulatedRank}`}
+                        </span>
+                      </div>
+
+                      <h4 className="mt-2 font-sans text-base font-semibold text-[#1A0DAB] hover:underline cursor-pointer">
+                        {targetQuery.charAt(0).toUpperCase() + targetQuery.slice(1)} — Excellence & Accompagnement Sur Mesure
+                      </h4>
+
+                      <p className="mt-1 text-xs text-[#4D5156] leading-relaxed">
+                        Spécialiste reconnu pour votre secteur. Bénéficiez d'une expertise éprouvée, de processus transparents et d'une équipe dédiée pour maximiser vos résultats durables.
+                      </p>
+
+                      <div className="mt-2.5 flex items-center gap-3 text-[10.5px] font-mono text-[#70757A]">
+                        <span>★ 4.9 (184 avis)</span>
+                        <span>· Devis en ligne</span>
+                        <span>· Contact direct</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs font-mono text-[#57534B] border-t border-[#171613]/10 pt-3">
+                      <span>Stratégie pérenne sans dépendance au budget pub</span>
+                      <a href="#plans" className="font-bold text-[#171613] hover:underline">
+                        Découvrir les formules SEO →
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>

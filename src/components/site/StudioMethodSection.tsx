@@ -229,10 +229,10 @@ export function StudioMethodSection() {
             return (
               <article
                 key={step.title}
-                className="group relative flex flex-col justify-between rounded-2xl border border-[#171613]/10 bg-[#FAF7F2] p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#C8A16E] hover:bg-white"
+                className="group relative flex flex-col justify-between rounded-2xl border border-[#171613]/10 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#C8A16E] hover:shadow-md"
               >
                 <div>
-                  <div className="aspect-[16/10] w-full overflow-hidden rounded-xl bg-[#EAE2D3]">
+                  <div className="aspect-[16/8.5] max-h-36 w-full overflow-hidden rounded-xl bg-[#EAE2D3] border border-[#171613]/8">
                     <img
                       src={STEP_PHOTOS[index]}
                       alt={step.title}
@@ -240,14 +240,14 @@ export function StudioMethodSection() {
                       className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
-                  <div className="mt-4 flex items-center justify-between">
+                  <div className="mt-3.5 flex items-center justify-between">
                     <span className="inline-flex items-center gap-2 font-serif text-lg font-semibold text-[#8D6C42]">
                       {step.num}
                     </span>
                     <Icon className="h-4 w-4 text-[#8D6C42]" />
                   </div>
-                  <h3 className="mt-1 text-base font-semibold text-[#171613]">{step.title}</h3>
-                  <p className="mt-1.5 text-xs leading-5 text-[#5C574F]">{step.body}</p>
+                  <h3 className="mt-1 text-sm sm:text-base font-semibold text-[#171613]">{step.title}</h3>
+                  <p className="mt-1 text-xs leading-5 text-[#5C574F]">{step.body}</p>
                 </div>
               </article>
             );
