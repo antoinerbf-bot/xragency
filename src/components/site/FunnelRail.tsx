@@ -39,12 +39,25 @@ export function FunnelRail() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const progressLabel = (
+    {
+      fr: "Progression du parcours",
+      en: "Journey progress",
+      vi: "Tiến trình hành trình",
+      ar: "تقدم الرحلة",
+      ru: "Прогресс пути",
+    } as const
+  )[currentLang];
+  const stepPrefix = (
+    { fr: "Étape", en: "Step", vi: "Bước", ar: "الخطوة", ru: "Шаг" } as const
+  )[currentLang];
+
   return (
     <aside
-      aria-label="Progression du parcours"
-      className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col items-end gap-3 pointer-events-none"
+      aria-label={progressLabel}
+      className="pointer-events-none fixed end-3 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-end gap-3 2xl:flex"
     >
-      <div className="flex flex-col items-center gap-3 rounded-full border border-white/10 bg-[var(--xr-surface)]/70 p-2 backdrop-blur-2xl shadow-[0_10px_35px_-10px_rgba(0,0,0,0.5)] pointer-events-auto">
+      <div className="pointer-events-auto flex flex-col items-center gap-2.5 rounded-full border border-[#171613]/12 bg-[#FAF8F4]/90 p-2 shadow-lg backdrop-blur-xl">
         {STEPS.map((step, idx) => {
           const isActive = activeId === step.id;
           const label = FUNNEL_UI.rail[step.key][currentLang] ?? FUNNEL_UI.rail[step.key].fr;
@@ -55,24 +68,20 @@ export function FunnelRail() {
               key={step.id}
               type="button"
               onClick={() => scrollToSection(step.id)}
-              className="group relative flex items-center justify-center p-1.5 focus:outline-none"
-              aria-label={`Étape ${stepNumber} : ${label}`}
+              className="group relative flex items-center justify-center p-1.5"
+              aria-label={`${stepPrefix} ${stepNumber}: ${label}`}
             >
-              {/* Tooltip on hover */}
-              <span
-                className="pointer-events-none absolute right-8 whitespace-nowrap rounded-xl border border-white/10 bg-[var(--xr-surface-strong)] px-3 py-1.5 font-mono text-[9px] font-semibold text-[var(--xr-ink)] opacity-0 shadow-xl backdrop-blur-xl transition-all duration-200 group-hover:opacity-100 group-hover:-translate-x-1"
-              >
-                <span className="text-[var(--xr-accent)] mr-1.5">{stepNumber}</span>
+              <span className="pointer-events-none absolute end-9 whitespace-nowrap rounded-lg border border-[#171613]/12 bg-[#171613] px-3 py-1.5 font-mono text-[10px] font-medium text-[#F7F4EE] opacity-0 shadow-lg transition-all duration-200 group-hover:opacity-100">
+                <span className="me-1.5 text-white/60">{stepNumber}</span>
                 {label}
               </span>
 
-              {/* Indicator Dot */}
               <span
                 className={
                   "relative block rounded-full transition-all duration-300 " +
                   (isActive
-                    ? "h-5 w-2 bg-[var(--xr-accent)] shadow-[0_0_12px_var(--xr-accent)]"
-                    : "h-2 w-2 bg-[var(--xr-ink)] opacity-25 group-hover:opacity-60 group-hover:scale-125")
+                    ? "h-5 w-2 bg-[#12110E]"
+                    : "h-2 w-2 bg-[#171613]/25 group-hover:scale-125 group-hover:bg-[#12110E]")
                 }
               />
             </button>

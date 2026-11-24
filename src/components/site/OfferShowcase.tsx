@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { ArrowRight, Check, Eye, FileSearch, Sparkles, Wand2, ShieldCheck, Laptop, PhoneCall } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  Eye,
+  FileSearch,
+  Sparkles,
+  Wand2,
+  ShieldCheck,
+  Laptop,
+  PhoneCall,
+} from "lucide-react";
 import { Reveal, Parallax } from "./primitives";
 import { XR_PHOTOS } from "@/lib/photography";
 import { CONTACT } from "@/lib/content";
@@ -12,255 +22,355 @@ export function OfferShowcase() {
   const [siteUrl, setSiteUrl] = useState("");
   const [activity, setActivity] = useState("");
 
-  const waMessage = encodeURIComponent(({
-    fr: "Bonjour XR Agency, je souhaite réserver mes 400 € d'avantages offerts :\n- Maquette personnalisée (200 €)\n- Audit digital complet (200 €)\nActivité : " + (activity || "Non spécifiée") + "\nSite : " + (siteUrl || "En création / non spécifié"),
-    en: "Hello XR Agency, I would like to claim my €400 in free benefits:\n- Custom mockup (€200)\n- Full digital audit (€200)\nIndustry: " + (activity || "Not specified") + "\nWebsite: " + (siteUrl || "To be created / not specified"),
-    vi: "Xin chào XR Agency, tôi muốn nhận ưu đãi miễn phí trị giá 400 €:\n- Bản mẫu riêng (200 €)\n- Kiểm toán số toàn diện (200 €)\nNgành nghề: " + (activity || "Chưa xác định") + "\nWebsite: " + (siteUrl || "Đang tạo / chưa xác định"),
-    ar: "مرحبًا XR Agency، أود الحصول على مزايا مجانية بقيمة 400 يورو:\n- نموذج تصميم مخصص (200 يورو)\n- تدقيق رقمي شامل (200 يورو)\nالمجال: " + (activity || "غير محدد") + "\nالموقع: " + (siteUrl || "قيد الإنشاء / غير محدد"),
-    ru: "Здравствуйте, XR Agency! Хочу получить бесплатные услуги на 400 €:\n- Индивидуальный макет (200 €)\n- Полный цифровой аудит (200 €)\nСфера: " + (activity || "Не указана") + "\nСайт: " + (siteUrl || "В разработке / не указан"),
-  } as const)[lang]);
+  const waMessage = encodeURIComponent(
+    (
+      {
+        fr:
+          "Bonjour XR Agency, je souhaite réserver mes 400 € d'avantages offerts :\n- Maquette personnalisée (200 €)\n- Audit digital complet (200 €)\nActivité : " +
+          (activity || "Non spécifiée") +
+          "\nSite : " +
+          (siteUrl || "En création / non spécifié"),
+        en:
+          "Hello XR Agency, I would like to claim my €400 in free benefits:\n- Custom mockup (€200)\n- Full digital audit (€200)\nIndustry: " +
+          (activity || "Not specified") +
+          "\nWebsite: " +
+          (siteUrl || "To be created / not specified"),
+        vi:
+          "Xin chào XR Agency, tôi muốn nhận ưu đãi miễn phí trị giá 400 €:\n- Bản mẫu riêng (200 €)\n- Kiểm toán số toàn diện (200 €)\nNgành nghề: " +
+          (activity || "Chưa xác định") +
+          "\nWebsite: " +
+          (siteUrl || "Đang tạo / chưa xác định"),
+        ar:
+          "مرحبًا XR Agency، أود الحصول على مزايا مجانية بقيمة 400 يورو:\n- نموذج تصميم مخصص (200 يورو)\n- تدقيق رقمي شامل (200 يورو)\nالمجال: " +
+          (activity || "غير محدد") +
+          "\nالموقع: " +
+          (siteUrl || "قيد الإنشاء / غير محدد"),
+        ru:
+          "Здравствуйте, XR Agency! Хочу получить бесплатные услуги на 400 €:\n- Индивидуальный макет (200 €)\n- Полный цифровой аудит (200 €)\nСфера: " +
+          (activity || "Не указана") +
+          "\nСайт: " +
+          (siteUrl || "В разработке / не указан"),
+      } as const
+    )[lang],
+  );
 
-const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
-  fr: {
-    "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT",
-    "400 € de valeur offerte.": "400 € de valeur offerte.",
-    "Voyez le résultat avant d'investir.": "Voyez le résultat avant d'investir.",
-    "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.": "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.",
-    "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)": "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)",
-    "2. AUDIT DIGITAL & SEO (VALEUR 200 €)": "2. AUDIT DIGITAL & SEO (VALEUR 200 €)",
-    "Une maquette sur mesure taillée pour convertir.": "Une maquette sur mesure taillée pour convertir.",
-    "Un audit impitoyable de vos performances actuelles.": "Un audit impitoyable de vos performances actuelles.",
-    "Réserver mes 400 € offerts": "Réserver mes 400 € offerts",
-    "Lancer l'audit en direct": "Lancer l'audit en direct",
-    "Votre activité (ex: Restaurant, Hôtel...)": "Votre activité (ex: Restaurant, Hôtel...)",
-    "Votre site actuel (optionnel)": "Votre site actuel (optionnel)",
-    "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE": "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE",
-    "45 POINTS DE CONTRÔLE SCRUTÉS": "45 POINTS DE CONTRÔLE SCRUTÉS",
-    "Prototypes Figma + Vue Interactive Mobile & Desktop": "Prototypes Figma + Vue Interactive Mobile & Desktop",
-    "XR PROPOSITION VISUELLE HAUT DE GAMME": "XR PROPOSITION VISUELLE HAUT DE GAMME",
-    "SUR MESURE": "SUR MESURE",
-    "LIVRABLE OFFERT": "LIVRABLE OFFERT",
-    "0 € au lieu de 200 €": "0 € au lieu de 200 €",
-    "Rapport de Diagnostic XR": "Rapport de Diagnostic XR",
-    "Temps de chargement < 1s": "Temps de chargement < 1s",
-    "Balisage & métadonnées": "Balisage & métadonnées",
-    "Expérience sans friction": "Expérience sans friction",
-    "Architecture des CTA": "Architecture des CTA",
-    "Inclus dans votre rapport PDF :": "Inclus dans votre rapport PDF :",
-    "liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.": "liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.",
-    "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE": "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE",
-    "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE": "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE",
-    "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.": "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.",
-    "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.": "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.",
-    "Direction artistique premium & typographies de caractère": "Direction artistique premium & typographies de caractère",
-    "Adaptation smartphone & ordinateur haute résolution": "Adaptation smartphone & ordinateur haute résolution",
-    "Structure de persuasion éprouvée pour déclencher l'achat": "Structure de persuasion éprouvée pour déclencher l'achat",
-    "Livraison en 48h sans aucun frais": "Livraison en 48h sans aucun frais",
-    "Analyse de votre positionnement sur Google Maps & Moteur de recherche": "Analyse de votre positionnement sur Google Maps & Moteur de recherche",
-    "Audit des pertes de clients sur votre parcours actuel": "Audit des pertes de clients sur votre parcours actuel",
-    "Benchmarking précis de vos 3 principaux concurrents": "Benchmarking précis de vos 3 principaux concurrents",
-    "Rapport PDF complet téléchargeable & échange direct": "Rapport PDF complet téléchargeable & échange direct",
-    "OFFERT (VALEUR 200 €)": "OFFERT (VALEUR 200 €)",
-    "Vitesse & WebPerf": "Vitesse & WebPerf",
-    "SEO Google": "SEO Google",
-    "UX & Mobile": "UX & Mobile",
-    "Conversion": "Conversion",
-    "Optimal": "Optimal",
-    "Élevée": "Élevée",
-  },
-  en: {
-    "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "INSTANT ACCESS OFFER · NO COMMITMENT",
-    "400 € de valeur offerte.": "€400 worth of value, free.",
-    "Voyez le résultat avant d'investir.": "See the result before you invest.",
-    "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.": "We don't ask you to take our word for it. We create a tailored mockup and audit your digital presence upfront, free of charge and with no commitment.",
-    "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)": "1. CUSTOM MOCKUP (VALUE €200)",
-    "2. AUDIT DIGITAL & SEO (VALEUR 200 €)": "2. DIGITAL & SEO AUDIT (VALUE €200)",
-    "Une maquette sur mesure taillée pour convertir.": "A tailored mockup designed to convert.",
-    "Un audit impitoyable de vos performances actuelles.": "A rigorous audit of your current performance.",
-    "Réserver mes 400 € offerts": "Claim my €400 in free value",
-    "Lancer l'audit en direct": "Start the live audit",
-    "Votre activité (ex: Restaurant, Hôtel...)": "Your industry (e.g. restaurant, hotel...)",
-    "Votre site actuel (optionnel)": "Your current website (optional)",
-    "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE": "REPLY IN UNDER 2 HOURS · NO COMMITMENT · REAL VALUE GUARANTEED",
-    "45 POINTS DE CONTRÔLE SCRUTÉS": "45 CHECKPOINTS REVIEWED",
-    "Prototypes Figma + Vue Interactive Mobile & Desktop": "Figma prototypes + interactive mobile and desktop preview",
-    "XR PROPOSITION VISUELLE HAUT DE GAMME": "PREMIUM VISUAL CONCEPT",
-    "SUR MESURE": "TAILORED",
-    "LIVRABLE OFFERT": "FREE DELIVERABLE",
-    "0 € au lieu de 200 €": "€0 instead of €200",
-    "Rapport de Diagnostic XR": "XR Diagnostic Report",
-    "Temps de chargement < 1s": "Load time < 1s",
-    "Balisage & métadonnées": "Markup & metadata",
-    "Expérience sans friction": "Frictionless experience",
-    "Architecture des CTA": "CTA structure",
-    "Inclus dans votre rapport PDF :": "Included in your PDF report:",
-    "liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.": "a list of current weaknesses, untapped keyword opportunities in your industry, and an immediate action plan.",
-    "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE": "STEP 1 · PREVIEW YOUR FUTURE WEBSITE",
-    "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE": "STEP 2 · IDENTIFY GROWTH OPPORTUNITIES",
-    "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.": "Our art directors design your future homepage around your competitors and positioning, so you can see the intended result before making any commitment.",
-    "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.": "We assess your existing website or project across SEO, speed, visual appeal, credibility and conversion, then provide a clear, actionable report.",
-    "Direction artistique premium & typographies de caractère": "Premium art direction and distinctive typography",
-    "Adaptation smartphone & ordinateur haute résolution": "High-resolution mobile and desktop layouts",
-    "Structure de persuasion éprouvée pour déclencher l'achat": "Proven persuasive structure to drive purchases",
-    "Livraison en 48h sans aucun frais": "Delivery within 48 hours at no cost",
-    "Analyse de votre positionnement sur Google Maps & Moteur de recherche": "Analysis of your Google Maps and search engine positioning",
-    "Audit des pertes de clients sur votre parcours actuel": "Audit of customer drop-off in your current journey",
-    "Benchmarking précis de vos 3 principaux concurrents": "Detailed benchmarking of your top 3 competitors",
-    "Rapport PDF complet téléchargeable & échange direct": "Downloadable full PDF report and direct consultation",
-    "OFFERT (VALEUR 200 €)": "FREE (VALUE €200)",
-    "Vitesse & WebPerf": "Speed & WebPerf",
-    "SEO Google": "Google SEO",
-    "UX & Mobile": "UX & Mobile",
-    "Conversion": "Conversion",
-    "Optimal": "Optimal",
-    "Élevée": "High",
-  },
-  vi: {
-    "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "ƯU ĐÃI TRUY CẬP NGAY · KHÔNG CAM KẾT",
-    "400 € de valeur offerte.": "Tặng giá trị tương đương 400 €.",
-    "Voyez le résultat avant d'investir.": "Xem kết quả trước khi đầu tư.",
-    "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.": "Chúng tôi không yêu cầu bạn chỉ tin vào lời nói. Chúng tôi thiết kế bản mẫu riêng và kiểm tra hiện diện số trước, hoàn toàn miễn phí và không ràng buộc.",
-    "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)": "1. BẢN MẪU RIÊNG (TRỊ GIÁ 200 €)",
-    "2. AUDIT DIGITAL & SEO (VALEUR 200 €)": "2. KIỂM TOÁN SỐ & SEO (TRỊ GIÁ 200 €)",
-    "Une maquette sur mesure taillée pour convertir.": "Bản mẫu riêng được thiết kế để tăng chuyển đổi.",
-    "Un audit impitoyable de vos performances actuelles.": "Kiểm toán chuyên sâu hiệu quả hiện tại.",
-    "Réserver mes 400 € offerts": "Nhận ưu đãi miễn phí trị giá 400 €",
-    "Lancer l'audit en direct": "Bắt đầu kiểm toán trực tiếp",
-    "Votre activité (ex: Restaurant, Hôtel...)": "Ngành nghề của bạn (ví dụ: nhà hàng, khách sạn...)",
-    "Votre site actuel (optionnel)": "Website hiện tại (không bắt buộc)",
-    "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE": "PHẢN HỒI TRONG 2 GIỜ · KHÔNG RÀNG BUỘC · GIÁ TRỊ THỰC",
-    "45 POINTS DE CONTRÔLE SCRUTÉS": "45 ĐIỂM ĐƯỢC KIỂM TRA",
-    "Prototypes Figma + Vue Interactive Mobile & Desktop": "Bản mẫu Figma + xem trước tương tác trên điện thoại và máy tính",
-    "XR PROPOSITION VISUELLE HAUT DE GAMME": "BẢN THIẾT KẾ CAO CẤP",
-    "SUR MESURE": "THIẾT KẾ RIÊNG",
-    "LIVRABLE OFFERT": "SẢN PHẨM TẶNG",
-    "0 € au lieu de 200 €": "0 € thay vì 200 €",
-    "Rapport de Diagnostic XR": "Báo cáo chẩn đoán XR",
-    "Temps de chargement < 1s": "Thời gian tải dưới 1 giây",
-    "Balisage & métadonnées": "Cấu trúc đánh dấu và metadata",
-    "Expérience sans friction": "Trải nghiệm liền mạch",
-    "Architecture des CTA": "Cấu trúc CTA",
-    "Inclus dans votre rapport PDF :": "Có trong báo cáo PDF:",
-    "liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.": "danh sách điểm yếu hiện tại, cơ hội từ khóa chưa khai thác trong ngành và kế hoạch hành động tức thì.",
-    "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE": "BƯỚC 1 · XEM TRƯỚC WEBSITE TƯƠNG LAI",
-    "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE": "BƯỚC 2 · XÁC ĐỊNH CƠ HỘI TĂNG TRƯỞNG",
-    "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.": "Đội ngũ giám đốc nghệ thuật thiết kế trang chủ tương lai dựa trên đối thủ và định vị của bạn, để bạn xem trước kết quả trước khi cam kết.",
-    "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.": "Chúng tôi đánh giá website hoặc dự án của bạn về SEO, tốc độ, hình ảnh, độ tin cậy và chuyển đổi, sau đó gửi báo cáo có thể hành động.",
-    "Direction artistique premium & typographies de caractère": "Định hướng nghệ thuật cao cấp và kiểu chữ đặc trưng",
-    "Adaptation smartphone & ordinateur haute résolution": "Tối ưu độ phân giải cao cho điện thoại và máy tính",
-    "Structure de persuasion éprouvée pour déclencher l'achat": "Cấu trúc thuyết phục đã được kiểm chứng để thúc đẩy mua hàng",
-    "Livraison en 48h sans aucun frais": "Bàn giao trong 48 giờ, hoàn toàn miễn phí",
-    "Analyse de votre positionnement sur Google Maps & Moteur de recherche": "Phân tích vị trí trên Google Maps và công cụ tìm kiếm",
-    "Audit des pertes de clients sur votre parcours actuel": "Kiểm tra điểm rơi khách hàng trong hành trình hiện tại",
-    "Benchmarking précis de vos 3 principaux concurrents": "So sánh chi tiết 3 đối thủ chính",
-    "Rapport PDF complet téléchargeable & échange direct": "Báo cáo PDF đầy đủ có thể tải xuống và trao đổi trực tiếp",
-    "OFFERT (VALEUR 200 €)": "MIỄN PHÍ (TRỊ GIÁ 200 €)",
-    "Vitesse & WebPerf": "Tốc độ & WebPerf",
-    "SEO Google": "SEO Google",
-    "UX & Mobile": "UX & Di động",
-    "Conversion": "Chuyển đổi",
-    "Optimal": "Tối ưu",
-    "Élevée": "Cao",
-  },
-  ar: {
-    "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "عرض وصول فوري · دون التزام",
-    "400 € de valeur offerte.": "قيمة مجانية بقيمة 400 يورو.",
-    "Voyez le résultat avant d'investir.": "شاهد النتيجة قبل الاستثمار.",
-    "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.": "لا نطلب منك الاكتفاء بكلامنا. نصمم نموذجًا مخصصًا ونراجع حضورك الرقمي مسبقًا مجانًا ودون أي التزام.",
-    "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)": "1. نموذج تصميم مخصص (بقيمة 200 يورو)",
-    "2. AUDIT DIGITAL & SEO (VALEUR 200 €)": "2. تدقيق رقمي وSEO (بقيمة 200 يورو)",
-    "Une maquette sur mesure taillée pour convertir.": "نموذج مخصص مصمم لزيادة التحويل.",
-    "Un audit impitoyable de vos performances actuelles.": "تدقيق دقيق لأدائك الحالي.",
-    "Réserver mes 400 € offerts": "احصل على مزايا مجانية بقيمة 400 يورو",
-    "Lancer l'audit en direct": "ابدأ التدقيق المباشر",
-    "Votre activité (ex: Restaurant, Hôtel...)": "مجالك (مثل مطعم أو فندق...)",
-    "Votre site actuel (optionnel)": "موقعك الحالي (اختياري)",
-    "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE": "الرد خلال أقل من ساعتين · دون التزام · قيمة حقيقية مضمونة",
-    "45 POINTS DE CONTRÔLE SCRUTÉS": "فحص 45 نقطة",
-    "Prototypes Figma + Vue Interactive Mobile & Desktop": "نماذج Figma + معاينة تفاعلية للهاتف والكمبيوتر",
-    "XR PROPOSITION VISUELLE HAUT DE GAMME": "تصور بصري فاخر",
-    "SUR MESURE": "مخصص",
-    "LIVRABLE OFFERT": "مخرج مجاني",
-    "0 € au lieu de 200 €": "0 يورو بدلًا من 200 يورو",
-    "Rapport de Diagnostic XR": "تقرير تشخيص XR",
-    "Temps de chargement < 1s": "وقت التحميل أقل من ثانية",
-    "Balisage & métadonnées": "الترميز والبيانات الوصفية",
-    "Expérience sans friction": "تجربة سلسة",
-    "Architecture des CTA": "هيكلة أزرار الدعوة للإجراء",
-    "Inclus dans votre rapport PDF :": "يتضمن تقرير PDF الخاص بك:",
-    "liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.": "قائمة بنقاط الضعف الحالية وفرص الكلمات المفتاحية غير المستغلة في مجالك وخطة عمل فورية.",
-    "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE": "الخطوة 1 · معاينة موقعك المستقبلي",
-    "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE": "الخطوة 2 · تحديد فرص النمو",
-    "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.": "يصمم مديرونا الفنيون الصفحة الرئيسية المستقبلية وفقًا لمنافسيك وتموضعك، لتشاهد النتيجة قبل أي التزام.",
-    "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.": "نفحص موقعك الحالي أو مشروعك من حيث SEO والسرعة والجاذبية البصرية والمصداقية والتحويل، ثم نقدم تقريرًا عمليًا واضحًا.",
-    "Direction artistique premium & typographies de caractère": "توجيه فني فاخر وخطوط مميزة",
-    "Adaptation smartphone & ordinateur haute résolution": "تصميم متوافق عالي الدقة للهاتف والكمبيوتر",
-    "Structure de persuasion éprouvée pour déclencher l'achat": "هيكل إقناعي مجرّب لتحفيز الشراء",
-    "Livraison en 48h sans aucun frais": "التسليم خلال 48 ساعة مجانًا",
-    "Analyse de votre positionnement sur Google Maps & Moteur de recherche": "تحليل ترتيبك على خرائط Google ومحركات البحث",
-    "Audit des pertes de clients sur votre parcours actuel": "تدقيق فقدان العملاء خلال مسارهم الحالي",
-    "Benchmarking précis de vos 3 principaux concurrents": "مقارنة دقيقة لأهم 3 منافسين",
-    "Rapport PDF complet téléchargeable & échange direct": "تقرير PDF كامل قابل للتنزيل مع استشارة مباشرة",
-    "OFFERT (VALEUR 200 €)": "مجاني (بقيمة 200 يورو)",
-    "Vitesse & WebPerf": "السرعة وأداء الويب",
-    "SEO Google": "سيو Google",
-    "UX & Mobile": "تجربة المستخدم والجوال",
-    "Conversion": "التحويل",
-    "Optimal": "مثالي",
-    "Élevée": "مرتفعة",
-  },
-  ru: {
-    "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "ПРЕДЛОЖЕНИЕ СРАЗУ · БЕЗ ОБЯЗАТЕЛЬСТВ",
-    "400 € de valeur offerte.": "Бесплатные услуги стоимостью 400 €.",
-    "Voyez le résultat avant d'investir.": "Оцените результат до инвестиций.",
-    "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.": "Мы предлагаем не верить на слово: заранее создаём индивидуальный макет и проводим аудит вашего цифрового присутствия бесплатно и без обязательств.",
-    "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)": "1. ИНДИВИДУАЛЬНЫЙ МАКЕТ (СТОИМОСТЬ 200 €)",
-    "2. AUDIT DIGITAL & SEO (VALEUR 200 €)": "2. ЦИФРОВОЙ SEO-АУДИТ (СТОИМОСТЬ 200 €)",
-    "Une maquette sur mesure taillée pour convertir.": "Индивидуальный макет, созданный для конверсии.",
-    "Un audit impitoyable de vos performances actuelles.": "Тщательный аудит текущих показателей.",
-    "Réserver mes 400 € offerts": "Получить бесплатные услуги на 400 €",
-    "Lancer l'audit en direct": "Запустить аудит",
-    "Votre activité (ex: Restaurant, Hôtel...)": "Ваша сфера (например, ресторан, отель...)",
-    "Votre site actuel (optionnel)": "Ваш текущий сайт (необязательно)",
-    "RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE": "ОТВЕТ МЕНЕЕ ЧЕМ ЗА 2 ЧАСА · БЕЗ ОБЯЗАТЕЛЬСТВ · РЕАЛЬНАЯ ЦЕННОСТЬ",
-    "45 POINTS DE CONTRÔLE SCRUTÉS": "ПРОВЕРЕНО 45 ПАРАМЕТРОВ",
-    "Prototypes Figma + Vue Interactive Mobile & Desktop": "Прототипы Figma + интерактивный просмотр на мобильных устройствах и компьютерах",
-    "XR PROPOSITION VISUELLE HAUT DE GAMME": "ПРЕМИАЛЬНАЯ ВИЗУАЛЬНАЯ КОНЦЕПЦИЯ",
-    "SUR MESURE": "ИНДИВИДУАЛЬНО",
-    "LIVRABLE OFFERT": "БЕСПЛАТНЫЙ РЕЗУЛЬТАТ",
-    "0 € au lieu de 200 €": "0 € вместо 200 €",
-    "Rapport de Diagnostic XR": "Диагностический отчёт XR",
-    "Temps de chargement < 1s": "Загрузка менее чем за 1 с",
-    "Balisage & métadonnées": "Разметка и метаданные",
-    "Expérience sans friction": "Удобный пользовательский опыт",
-    "Architecture des CTA": "Структура CTA",
-    "Inclus dans votre rapport PDF :": "В ваш PDF-отчёт входят:",
-    "liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.": "список текущих слабых мест, неиспользованных ключевых запросов в вашей отрасли и немедленный план действий.",
-    "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE": "ШАГ 1 · ПРЕДВАРИТЕЛЬНЫЙ ПРОСМОТР САЙТА",
-    "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE": "ШАГ 2 · ПОИСК ВОЗМОЖНОСТЕЙ РОСТА",
-    "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.": "Наши арт-директора проектируют будущую главную страницу с учётом конкурентов и позиционирования, чтобы вы увидели результат до каких-либо обязательств.",
-    "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.": "Мы анализируем сайт или проект по SEO, скорости, визуальной привлекательности, доверию и конверсии и предоставляем понятный план действий.",
-    "Direction artistique premium & typographies de caractère": "Премиальная арт-дирекция и выразительная типографика",
-    "Adaptation smartphone & ordinateur haute résolution": "Адаптация для смартфонов и компьютеров высокого разрешения",
-    "Structure de persuasion éprouvée pour déclencher l'achat": "Проверенная структура убеждения для стимулирования покупок",
-    "Livraison en 48h sans aucun frais": "Готовность за 48 часов бесплатно",
-    "Analyse de votre positionnement sur Google Maps & Moteur de recherche": "Анализ позиций в Google Maps и поисковых системах",
-    "Audit des pertes de clients sur votre parcours actuel": "Анализ потери клиентов на текущем пути",
-    "Benchmarking précis de vos 3 principaux concurrents": "Подробное сравнение трёх главных конкурентов",
-    "Rapport PDF complet téléchargeable & échange direct": "Полный PDF-отчёт для скачивания и прямое обсуждение",
-    "OFFERT (VALEUR 200 €)": "БЕСПЛАТНО (СТОИМОСТЬ 200 €)",
-    "Vitesse & WebPerf": "Скорость и WebPerf",
-    "SEO Google": "Google SEO",
-    "UX & Mobile": "UX и мобильные",
-    "Conversion": "Конверсия",
-    "Optimal": "Оптимально",
-    "Élevée": "Высокая",
-  },
-};
-function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[lang][value] ?? value; }
+  const OFFER_TRANSLATIONS: Record<Lang, Record<string, string>> = {
+    fr: {
+      "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT",
+      "400 € de valeur offerte.": "400 € de valeur offerte.",
+      "Voyez le résultat avant d'investir.": "Voyez le résultat avant d'investir.",
+      "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.":
+        "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.",
+      "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)": "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)",
+      "2. AUDIT DIGITAL & SEO (VALEUR 200 €)": "2. AUDIT DIGITAL & SEO (VALEUR 200 €)",
+      "Une maquette sur mesure taillée pour convertir.":
+        "Une maquette sur mesure taillée pour convertir.",
+      "Un audit impitoyable de vos performances actuelles.":
+        "Un audit impitoyable de vos performances actuelles.",
+      "Réserver mes 400 € offerts": "Réserver mes 400 € offerts",
+      "Lancer l'audit en direct": "Lancer l'audit en direct",
+      "Votre activité (ex: Restaurant, Hôtel...)": "Votre activité (ex: Restaurant, Hôtel...)",
+      "Votre site actuel (optionnel)": "Votre site actuel (optionnel)",
+      "RÉPONSE PERSONNALISÉE · SANS ENGAGEMENT · PÉRIMÈTRE CLAIR":
+        "RÉPONSE PERSONNALISÉE · SANS ENGAGEMENT · PÉRIMÈTRE CLAIR",
+      "45 POINTS DE CONTRÔLE SCRUTÉS": "45 POINTS DE CONTRÔLE SCRUTÉS",
+      "Prototypes Figma + Vue Interactive Mobile & Desktop":
+        "Prototypes Figma + Vue Interactive Mobile & Desktop",
+      "XR PROPOSITION VISUELLE HAUT DE GAMME": "XR PROPOSITION VISUELLE HAUT DE GAMME",
+      "SUR MESURE": "SUR MESURE",
+      "LIVRABLE OFFERT": "LIVRABLE OFFERT",
+      "0 € au lieu de 200 €": "0 € au lieu de 200 €",
+      "Rapport de Diagnostic XR": "Rapport de Diagnostic XR",
+      "Temps de chargement < 1s": "Temps de chargement < 1s",
+      "Balisage & métadonnées": "Balisage & métadonnées",
+      "Expérience sans friction": "Expérience sans friction",
+      "Architecture des CTA": "Architecture des CTA",
+      "Inclus dans votre rapport PDF :": "Inclus dans votre rapport PDF :",
+      "liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.":
+        "liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.",
+      "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE":
+        "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE",
+      "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE":
+        "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE",
+      "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.":
+        "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.",
+      "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.":
+        "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.",
+      "Direction artistique premium & typographies de caractère":
+        "Direction artistique premium & typographies de caractère",
+      "Adaptation smartphone & ordinateur haute résolution":
+        "Adaptation smartphone & ordinateur haute résolution",
+      "Structure de persuasion éprouvée pour déclencher l'achat":
+        "Structure de persuasion éprouvée pour déclencher l'achat",
+      "Livraison en 48h sans aucun frais": "Livraison en 48h sans aucun frais",
+      "Analyse de votre positionnement sur Google Maps & Moteur de recherche":
+        "Analyse de votre positionnement sur Google Maps & Moteur de recherche",
+      "Audit des pertes de clients sur votre parcours actuel":
+        "Audit des pertes de clients sur votre parcours actuel",
+      "Benchmarking précis de vos 3 principaux concurrents":
+        "Benchmarking précis de vos 3 principaux concurrents",
+      "Rapport PDF complet téléchargeable & échange direct":
+        "Rapport PDF complet téléchargeable & échange direct",
+      "OFFERT (VALEUR 200 €)": "OFFERT (VALEUR 200 €)",
+      "Vitesse & WebPerf": "Vitesse & WebPerf",
+      "SEO Google": "SEO Google",
+      "UX & Mobile": "UX & Mobile",
+      Conversion: "Conversion",
+      Optimal: "Optimal",
+      Élevée: "Élevée",
+    },
+    en: {
+      "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "INSTANT ACCESS OFFER · NO COMMITMENT",
+      "400 € de valeur offerte.": "€400 worth of value, free.",
+      "Voyez le résultat avant d'investir.": "See the result before you invest.",
+      "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.":
+        "We don't ask you to take our word for it. We create a tailored mockup and audit your digital presence upfront, free of charge and with no commitment.",
+      "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)": "1. CUSTOM MOCKUP (VALUE €200)",
+      "2. AUDIT DIGITAL & SEO (VALEUR 200 €)": "2. DIGITAL & SEO AUDIT (VALUE €200)",
+      "Une maquette sur mesure taillée pour convertir.": "A tailored mockup designed to convert.",
+      "Un audit impitoyable de vos performances actuelles.":
+        "A rigorous audit of your current performance.",
+      "Réserver mes 400 € offerts": "Claim my €400 in free value",
+      "Lancer l'audit en direct": "Start the live audit",
+      "Votre activité (ex: Restaurant, Hôtel...)": "Your industry (e.g. restaurant, hotel...)",
+      "Votre site actuel (optionnel)": "Your current website (optional)",
+      "RÉPONSE PERSONNALISÉE · SANS ENGAGEMENT · PÉRIMÈTRE CLAIR":
+        "PERSONALISED REPLY · NO COMMITMENT · CLEAR SCOPE",
+      "45 POINTS DE CONTRÔLE SCRUTÉS": "45 CHECKPOINTS REVIEWED",
+      "Prototypes Figma + Vue Interactive Mobile & Desktop":
+        "Figma prototypes + interactive mobile and desktop preview",
+      "XR PROPOSITION VISUELLE HAUT DE GAMME": "PREMIUM VISUAL CONCEPT",
+      "SUR MESURE": "TAILORED",
+      "LIVRABLE OFFERT": "FREE DELIVERABLE",
+      "0 € au lieu de 200 €": "€0 instead of €200",
+      "Rapport de Diagnostic XR": "XR Diagnostic Report",
+      "Temps de chargement < 1s": "Load time < 1s",
+      "Balisage & métadonnées": "Markup & metadata",
+      "Expérience sans friction": "Frictionless experience",
+      "Architecture des CTA": "CTA structure",
+      "Inclus dans votre rapport PDF :": "Included in your PDF report:",
+      "liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.":
+        "a list of current weaknesses, untapped keyword opportunities in your industry, and an immediate action plan.",
+      "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE": "STEP 1 · PREVIEW YOUR FUTURE WEBSITE",
+      "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE": "STEP 2 · IDENTIFY GROWTH OPPORTUNITIES",
+      "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.":
+        "Our art directors design your future homepage around your competitors and positioning, so you can see the intended result before making any commitment.",
+      "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.":
+        "We assess your existing website or project across SEO, speed, visual appeal, credibility and conversion, then provide a clear, actionable report.",
+      "Direction artistique premium & typographies de caractère":
+        "Premium art direction and distinctive typography",
+      "Adaptation smartphone & ordinateur haute résolution":
+        "High-resolution mobile and desktop layouts",
+      "Structure de persuasion éprouvée pour déclencher l'achat":
+        "Proven persuasive structure to drive purchases",
+      "Livraison en 48h sans aucun frais": "Delivery within 48 hours at no cost",
+      "Analyse de votre positionnement sur Google Maps & Moteur de recherche":
+        "Analysis of your Google Maps and search engine positioning",
+      "Audit des pertes de clients sur votre parcours actuel":
+        "Audit of customer drop-off in your current journey",
+      "Benchmarking précis de vos 3 principaux concurrents":
+        "Detailed benchmarking of your top 3 competitors",
+      "Rapport PDF complet téléchargeable & échange direct":
+        "Downloadable full PDF report and direct consultation",
+      "OFFERT (VALEUR 200 €)": "FREE (VALUE €200)",
+      "Vitesse & WebPerf": "Speed & WebPerf",
+      "SEO Google": "Google SEO",
+      "UX & Mobile": "UX & Mobile",
+      Conversion: "Conversion",
+      Optimal: "Optimal",
+      Élevée: "High",
+    },
+    vi: {
+      "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "ƯU ĐÃI TRUY CẬP NGAY · KHÔNG CAM KẾT",
+      "400 € de valeur offerte.": "Tặng giá trị tương đương 400 €.",
+      "Voyez le résultat avant d'investir.": "Xem kết quả trước khi đầu tư.",
+      "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.":
+        "Chúng tôi không yêu cầu bạn chỉ tin vào lời nói. Chúng tôi thiết kế bản mẫu riêng và kiểm tra hiện diện số trước, hoàn toàn miễn phí và không ràng buộc.",
+      "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)": "1. BẢN MẪU RIÊNG (TRỊ GIÁ 200 €)",
+      "2. AUDIT DIGITAL & SEO (VALEUR 200 €)": "2. KIỂM TOÁN SỐ & SEO (TRỊ GIÁ 200 €)",
+      "Une maquette sur mesure taillée pour convertir.":
+        "Bản mẫu riêng được thiết kế để tăng chuyển đổi.",
+      "Un audit impitoyable de vos performances actuelles.":
+        "Kiểm toán chuyên sâu hiệu quả hiện tại.",
+      "Réserver mes 400 € offerts": "Nhận ưu đãi miễn phí trị giá 400 €",
+      "Lancer l'audit en direct": "Bắt đầu kiểm toán trực tiếp",
+      "Votre activité (ex: Restaurant, Hôtel...)":
+        "Ngành nghề của bạn (ví dụ: nhà hàng, khách sạn...)",
+      "Votre site actuel (optionnel)": "Website hiện tại (không bắt buộc)",
+      "RÉPONSE PERSONNALISÉE · SANS ENGAGEMENT · PÉRIMÈTRE CLAIR":
+        "PHẢN HỒI CÁ NHÂN HÓA · KHÔNG RÀNG BUỘC · PHẠM VI RÕ RÀNG",
+      "45 POINTS DE CONTRÔLE SCRUTÉS": "45 ĐIỂM ĐƯỢC KIỂM TRA",
+      "Prototypes Figma + Vue Interactive Mobile & Desktop":
+        "Bản mẫu Figma + xem trước tương tác trên điện thoại và máy tính",
+      "XR PROPOSITION VISUELLE HAUT DE GAMME": "BẢN THIẾT KẾ CAO CẤP",
+      "SUR MESURE": "THIẾT KẾ RIÊNG",
+      "LIVRABLE OFFERT": "SẢN PHẨM TẶNG",
+      "0 € au lieu de 200 €": "0 € thay vì 200 €",
+      "Rapport de Diagnostic XR": "Báo cáo chẩn đoán XR",
+      "Temps de chargement < 1s": "Thời gian tải dưới 1 giây",
+      "Balisage & métadonnées": "Cấu trúc đánh dấu và metadata",
+      "Expérience sans friction": "Trải nghiệm liền mạch",
+      "Architecture des CTA": "Cấu trúc CTA",
+      "Inclus dans votre rapport PDF :": "Có trong báo cáo PDF:",
+      "liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.":
+        "danh sách điểm yếu hiện tại, cơ hội từ khóa chưa khai thác trong ngành và kế hoạch hành động tức thì.",
+      "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE": "BƯỚC 1 · XEM TRƯỚC WEBSITE TƯƠNG LAI",
+      "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE": "BƯỚC 2 · XÁC ĐỊNH CƠ HỘI TĂNG TRƯỞNG",
+      "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.":
+        "Đội ngũ giám đốc nghệ thuật thiết kế trang chủ tương lai dựa trên đối thủ và định vị của bạn, để bạn xem trước kết quả trước khi cam kết.",
+      "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.":
+        "Chúng tôi đánh giá website hoặc dự án của bạn về SEO, tốc độ, hình ảnh, độ tin cậy và chuyển đổi, sau đó gửi báo cáo có thể hành động.",
+      "Direction artistique premium & typographies de caractère":
+        "Định hướng nghệ thuật cao cấp và kiểu chữ đặc trưng",
+      "Adaptation smartphone & ordinateur haute résolution":
+        "Tối ưu độ phân giải cao cho điện thoại và máy tính",
+      "Structure de persuasion éprouvée pour déclencher l'achat":
+        "Cấu trúc thuyết phục đã được kiểm chứng để thúc đẩy mua hàng",
+      "Livraison en 48h sans aucun frais": "Bàn giao trong 48 giờ, hoàn toàn miễn phí",
+      "Analyse de votre positionnement sur Google Maps & Moteur de recherche":
+        "Phân tích vị trí trên Google Maps và công cụ tìm kiếm",
+      "Audit des pertes de clients sur votre parcours actuel":
+        "Kiểm tra điểm rơi khách hàng trong hành trình hiện tại",
+      "Benchmarking précis de vos 3 principaux concurrents": "So sánh chi tiết 3 đối thủ chính",
+      "Rapport PDF complet téléchargeable & échange direct":
+        "Báo cáo PDF đầy đủ có thể tải xuống và trao đổi trực tiếp",
+      "OFFERT (VALEUR 200 €)": "MIỄN PHÍ (TRỊ GIÁ 200 €)",
+      "Vitesse & WebPerf": "Tốc độ & WebPerf",
+      "SEO Google": "SEO Google",
+      "UX & Mobile": "UX & Di động",
+      Conversion: "Chuyển đổi",
+      Optimal: "Tối ưu",
+      Élevée: "Cao",
+    },
+    ar: {
+      "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "عرض وصول فوري · دون التزام",
+      "400 € de valeur offerte.": "قيمة مجانية بقيمة 400 يورو.",
+      "Voyez le résultat avant d'investir.": "شاهد النتيجة قبل الاستثمار.",
+      "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.":
+        "لا نطلب منك الاكتفاء بكلامنا. نصمم نموذجًا مخصصًا ونراجع حضورك الرقمي مسبقًا مجانًا ودون أي التزام.",
+      "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)": "1. نموذج تصميم مخصص (بقيمة 200 يورو)",
+      "2. AUDIT DIGITAL & SEO (VALEUR 200 €)": "2. تدقيق رقمي وSEO (بقيمة 200 يورو)",
+      "Une maquette sur mesure taillée pour convertir.": "نموذج مخصص مصمم لزيادة التحويل.",
+      "Un audit impitoyable de vos performances actuelles.": "تدقيق دقيق لأدائك الحالي.",
+      "Réserver mes 400 € offerts": "احصل على مزايا مجانية بقيمة 400 يورو",
+      "Lancer l'audit en direct": "ابدأ التدقيق المباشر",
+      "Votre activité (ex: Restaurant, Hôtel...)": "مجالك (مثل مطعم أو فندق...)",
+      "Votre site actuel (optionnel)": "موقعك الحالي (اختياري)",
+      "RÉPONSE PERSONNALISÉE · SANS ENGAGEMENT · PÉRIMÈTRE CLAIR":
+        "رد مخصص · دون التزام · نطاق واضح",
+      "45 POINTS DE CONTRÔLE SCRUTÉS": "فحص 45 نقطة",
+      "Prototypes Figma + Vue Interactive Mobile & Desktop":
+        "نماذج Figma + معاينة تفاعلية للهاتف والكمبيوتر",
+      "XR PROPOSITION VISUELLE HAUT DE GAMME": "تصور بصري فاخر",
+      "SUR MESURE": "مخصص",
+      "LIVRABLE OFFERT": "مخرج مجاني",
+      "0 € au lieu de 200 €": "0 يورو بدلًا من 200 يورو",
+      "Rapport de Diagnostic XR": "تقرير تشخيص XR",
+      "Temps de chargement < 1s": "وقت التحميل أقل من ثانية",
+      "Balisage & métadonnées": "الترميز والبيانات الوصفية",
+      "Expérience sans friction": "تجربة سلسة",
+      "Architecture des CTA": "هيكلة أزرار الدعوة للإجراء",
+      "Inclus dans votre rapport PDF :": "يتضمن تقرير PDF الخاص بك:",
+      "liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.":
+        "قائمة بنقاط الضعف الحالية وفرص الكلمات المفتاحية غير المستغلة في مجالك وخطة عمل فورية.",
+      "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE": "الخطوة 1 · معاينة موقعك المستقبلي",
+      "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE": "الخطوة 2 · تحديد فرص النمو",
+      "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.":
+        "يصمم مديرونا الفنيون الصفحة الرئيسية المستقبلية وفقًا لمنافسيك وتموضعك، لتشاهد النتيجة قبل أي التزام.",
+      "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.":
+        "نفحص موقعك الحالي أو مشروعك من حيث SEO والسرعة والجاذبية البصرية والمصداقية والتحويل، ثم نقدم تقريرًا عمليًا واضحًا.",
+      "Direction artistique premium & typographies de caractère": "توجيه فني فاخر وخطوط مميزة",
+      "Adaptation smartphone & ordinateur haute résolution":
+        "تصميم متوافق عالي الدقة للهاتف والكمبيوتر",
+      "Structure de persuasion éprouvée pour déclencher l'achat": "هيكل إقناعي مجرّب لتحفيز الشراء",
+      "Livraison en 48h sans aucun frais": "التسليم خلال 48 ساعة مجانًا",
+      "Analyse de votre positionnement sur Google Maps & Moteur de recherche":
+        "تحليل ترتيبك على خرائط Google ومحركات البحث",
+      "Audit des pertes de clients sur votre parcours actuel":
+        "تدقيق فقدان العملاء خلال مسارهم الحالي",
+      "Benchmarking précis de vos 3 principaux concurrents": "مقارنة دقيقة لأهم 3 منافسين",
+      "Rapport PDF complet téléchargeable & échange direct":
+        "تقرير PDF كامل قابل للتنزيل مع استشارة مباشرة",
+      "OFFERT (VALEUR 200 €)": "مجاني (بقيمة 200 يورو)",
+      "Vitesse & WebPerf": "السرعة وأداء الويب",
+      "SEO Google": "سيو Google",
+      "UX & Mobile": "تجربة المستخدم والجوال",
+      Conversion: "التحويل",
+      Optimal: "مثالي",
+      Élevée: "مرتفعة",
+    },
+    ru: {
+      "OFFRE D'ACCÈS IMMÉDIAT · 0 € ENGAGEMENT": "ПРЕДЛОЖЕНИЕ СРАЗУ · БЕЗ ОБЯЗАТЕЛЬСТВ",
+      "400 € de valeur offerte.": "Бесплатные услуги стоимостью 400 €.",
+      "Voyez le résultat avant d'investir.": "Оцените результат до инвестиций.",
+      "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.":
+        "Мы предлагаем не верить на слово: заранее создаём индивидуальный макет и проводим аудит вашего цифрового присутствия бесплатно и без обязательств.",
+      "1. MAQUETTE PERSONNALISÉE (VALEUR 200 €)": "1. ИНДИВИДУАЛЬНЫЙ МАКЕТ (СТОИМОСТЬ 200 €)",
+      "2. AUDIT DIGITAL & SEO (VALEUR 200 €)": "2. ЦИФРОВОЙ SEO-АУДИТ (СТОИМОСТЬ 200 €)",
+      "Une maquette sur mesure taillée pour convertir.":
+        "Индивидуальный макет, созданный для конверсии.",
+      "Un audit impitoyable de vos performances actuelles.":
+        "Тщательный аудит текущих показателей.",
+      "Réserver mes 400 € offerts": "Получить бесплатные услуги на 400 €",
+      "Lancer l'audit en direct": "Запустить аудит",
+      "Votre activité (ex: Restaurant, Hôtel...)": "Ваша сфера (например, ресторан, отель...)",
+      "Votre site actuel (optionnel)": "Ваш текущий сайт (необязательно)",
+      "RÉPONSE PERSONNALISÉE · SANS ENGAGEMENT · PÉRIMÈTRE CLAIR":
+        "ПЕРСОНАЛЬНЫЙ ОТВЕТ · БЕЗ ОБЯЗАТЕЛЬСТВ · ЧЁТКИЙ ОБЪЁМ РАБОТ",
+      "45 POINTS DE CONTRÔLE SCRUTÉS": "ПРОВЕРЕНО 45 ПАРАМЕТРОВ",
+      "Prototypes Figma + Vue Interactive Mobile & Desktop":
+        "Прототипы Figma + интерактивный просмотр на мобильных устройствах и компьютерах",
+      "XR PROPOSITION VISUELLE HAUT DE GAMME": "ПРЕМИАЛЬНАЯ ВИЗУАЛЬНАЯ КОНЦЕПЦИЯ",
+      "SUR MESURE": "ИНДИВИДУАЛЬНО",
+      "LIVRABLE OFFERT": "БЕСПЛАТНЫЙ РЕЗУЛЬТАТ",
+      "0 € au lieu de 200 €": "0 € вместо 200 €",
+      "Rapport de Diagnostic XR": "Диагностический отчёт XR",
+      "Temps de chargement < 1s": "Загрузка менее чем за 1 с",
+      "Balisage & métadonnées": "Разметка и метаданные",
+      "Expérience sans friction": "Удобный пользовательский опыт",
+      "Architecture des CTA": "Структура CTA",
+      "Inclus dans votre rapport PDF :": "В ваш PDF-отчёт входят:",
+      "liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.":
+        "список текущих слабых мест, неиспользованных ключевых запросов в вашей отрасли и немедленный план действий.",
+      "ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE": "ШАГ 1 · ПРЕДВАРИТЕЛЬНЫЙ ПРОСМОТР САЙТА",
+      "ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE": "ШАГ 2 · ПОИСК ВОЗМОЖНОСТЕЙ РОСТА",
+      "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.":
+        "Наши арт-директора проектируют будущую главную страницу с учётом конкурентов и позиционирования, чтобы вы увидели результат до каких-либо обязательств.",
+      "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.":
+        "Мы анализируем сайт или проект по SEO, скорости, визуальной привлекательности, доверию и конверсии и предоставляем понятный план действий.",
+      "Direction artistique premium & typographies de caractère":
+        "Премиальная арт-дирекция и выразительная типографика",
+      "Adaptation smartphone & ordinateur haute résolution":
+        "Адаптация для смартфонов и компьютеров высокого разрешения",
+      "Structure de persuasion éprouvée pour déclencher l'achat":
+        "Проверенная структура убеждения для стимулирования покупок",
+      "Livraison en 48h sans aucun frais": "Готовность за 48 часов бесплатно",
+      "Analyse de votre positionnement sur Google Maps & Moteur de recherche":
+        "Анализ позиций в Google Maps и поисковых системах",
+      "Audit des pertes de clients sur votre parcours actuel":
+        "Анализ потери клиентов на текущем пути",
+      "Benchmarking précis de vos 3 principaux concurrents":
+        "Подробное сравнение трёх главных конкурентов",
+      "Rapport PDF complet téléchargeable & échange direct":
+        "Полный PDF-отчёт для скачивания и прямое обсуждение",
+      "OFFERT (VALEUR 200 €)": "БЕСПЛАТНО (СТОИМОСТЬ 200 €)",
+      "Vitesse & WebPerf": "Скорость и WebPerf",
+      "SEO Google": "Google SEO",
+      "UX & Mobile": "UX и мобильные",
+      Conversion: "Конверсия",
+      Optimal: "Оптимально",
+      Élevée: "Высокая",
+    },
+  };
+  function translateOffer(value: string, lang: Lang) {
+    return OFFER_TRANSLATIONS[lang][value] ?? value;
+  }
 
   return (
-    <section id="offre-exclusive" className="relative overflow-hidden border-b xr-line bg-gradient-to-b from-[var(--xr-bg)] via-[var(--xr-bg-elev)] to-[var(--xr-bg)] py-20 sm:py-28 lg:py-32">
+    <section
+      id="offre-exclusive"
+      className="relative overflow-hidden border-b xr-line bg-gradient-to-b from-[var(--xr-bg)] via-[var(--xr-bg-elev)] to-[var(--xr-bg)] py-20 sm:py-28 lg:py-32"
+    >
       {/* Halo subtil */}
       <div
         aria-hidden
@@ -280,12 +390,15 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
             </div>
 
             <h2 className="display-serif mt-5 text-[clamp(2.6rem,5.5vw,5.5rem)] leading-[0.88] tracking-[-0.05em]">
-              {tx("400 € de valeur offerte.")}<br />
+              {tx("400 € de valeur offerte.")}
+              <br />
               <em className="not-italic xr-muted">{tx("Voyez le résultat avant d'investir.")}</em>
             </h2>
 
             <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 xr-muted sm:text-base">
-              {tx("Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.")}
+              {tx(
+                "Nous ne vous demandons pas de nous croire sur parole. Nous concevons votre maquette sur-mesure et auditons votre présence en amont, gratuitement et sans engagement.",
+              )}
             </p>
           </div>
         </Reveal>
@@ -358,8 +471,12 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
                     <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-white/15 bg-black/75 p-3.5 backdrop-blur-xl sm:bottom-6 sm:left-6 sm:right-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="label-mono text-[6px] text-white/60">{tx("LIVRABLE OFFERT")}</p>
-                          <p className="text-xs font-semibold text-white">{tx("Prototypes Figma + Vue Interactive Mobile & Desktop")}</p>
+                          <p className="label-mono text-[6px] text-white/60">
+                            {tx("LIVRABLE OFFERT")}
+                          </p>
+                          <p className="text-xs font-semibold text-white">
+                            {tx("Prototypes Figma + Vue Interactive Mobile & Desktop")}
+                          </p>
                         </div>
                         <span className="label-mono rounded-lg border border-white/20 bg-white/10 px-2.5 py-1 text-[8px] font-bold text-emerald-400">
                           {tx("0 € au lieu de 200 €")}
@@ -377,8 +494,12 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
                         <ShieldCheck className="h-4 w-4" />
                       </div>
                       <div>
-                        <p className="text-xs font-bold text-[var(--xr-ink)]">{tx("Rapport de Diagnostic XR")}</p>
-                        <p className="label-mono text-[6px] xr-muted">{tx("45 POINTS DE CONTRÔLE SCRUTÉS")}</p>
+                        <p className="text-xs font-bold text-[var(--xr-ink)]">
+                          {tx("Rapport de Diagnostic XR")}
+                        </p>
+                        <p className="label-mono text-[6px] xr-muted">
+                          {tx("45 POINTS DE CONTRÔLE SCRUTÉS")}
+                        </p>
                       </div>
                     </div>
                     <span className="label-mono rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[7px] font-bold text-emerald-600 dark:text-emerald-400">
@@ -388,22 +509,45 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
 
                   <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
                     {[
-                      { label: tx("Vitesse & WebPerf"), score: "A+", desc: tx("Temps de chargement < 1s") },
+                      {
+                        label: tx("Vitesse & WebPerf"),
+                        score: "A+",
+                        desc: tx("Temps de chargement < 1s"),
+                      },
                       { label: tx("SEO Google"), score: "96%", desc: tx("Balisage & métadonnées") },
-                      { label: tx("UX & Mobile"), score: tx("Optimal"), desc: tx("Expérience sans friction") },
-                      { label: tx("Conversion"), score: tx("Élevée"), desc: tx("Architecture des CTA") },
+                      {
+                        label: tx("UX & Mobile"),
+                        score: tx("Optimal"),
+                        desc: tx("Expérience sans friction"),
+                      },
+                      {
+                        label: tx("Conversion"),
+                        score: tx("Élevée"),
+                        desc: tx("Architecture des CTA"),
+                      },
                     ].map((item, i) => (
-                      <div key={i} className="rounded-xl border xr-line bg-[var(--xr-surface-strong)] p-3 text-center">
-                        <span className="block text-lg font-black text-[var(--xr-ink)]">{item.score}</span>
-                        <p className="mt-1 text-[9px] font-semibold text-[var(--xr-ink)]">{item.label}</p>
+                      <div
+                        key={i}
+                        className="rounded-xl border xr-line bg-[var(--xr-surface-strong)] p-3 text-center"
+                      >
+                        <span className="block text-lg font-black text-[var(--xr-ink)]">
+                          {item.score}
+                        </span>
+                        <p className="mt-1 text-[9px] font-semibold text-[var(--xr-ink)]">
+                          {item.label}
+                        </p>
                         <p className="mt-0.5 text-[7px] xr-muted">{item.desc}</p>
                       </div>
                     ))}
                   </div>
 
                   <div className="mt-5 rounded-xl border border-dashed xr-line bg-[var(--xr-surface)] p-4 text-xs leading-relaxed xr-muted">
-                    <span className="font-semibold text-[var(--xr-ink)]">{tx("Inclus dans votre rapport PDF :")}</span>{" "}
-                    {tx("liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.")}
+                    <span className="font-semibold text-[var(--xr-ink)]">
+                      {tx("Inclus dans votre rapport PDF :")}
+                    </span>{" "}
+                    {tx(
+                      "liste de vos faiblesses actuelles, opportunités de mots-clés inexploitées sur votre secteur et plan d’action immédiat.",
+                    )}
                   </div>
                 </div>
               )}
@@ -414,7 +558,9 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
           <Reveal delay={180}>
             <div className="rounded-[2.5rem] border xr-line bg-[var(--xr-surface)] p-7 sm:p-9">
               <span className="label-mono text-[7px] tracking-[.24em] xr-muted">
-                {activeTab === "mockup" ? tx("ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE") : tx("ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE")}
+                {activeTab === "mockup"
+                  ? tx("ÉTAPE 1 · VOTRE FUTUR SITE EN AVANT-PREMIÈRE")
+                  : tx("ÉTAPE 2 · IDENTIFIER VOS GISEMENTS DE CROISSANCE")}
               </span>
 
               <h3 className="display-serif mt-3 text-3xl text-[var(--xr-ink)] sm:text-4xl">
@@ -425,8 +571,12 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
 
               <p className="mt-4 text-sm leading-6 xr-muted">
                 {activeTab === "mockup"
-                  ? tx("Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.")
-                  : tx("Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.")}
+                  ? tx(
+                      "Nos directeurs artistiques modélisent la page d'accueil de votre futur site web en tenant compte de vos concurrents et de votre positionnement. Vous visualisez le rendu exact avant toute prise d'engagement.",
+                    )
+                  : tx(
+                      "Nous passons votre site existant (ou votre projet) au crible : SEO, vitesse, attractivité visuelle, crédibilité et taux de conversion. Vous recevez un rapport actionnable clair.",
+                    )}
               </p>
 
               <ul className="mt-6 space-y-2.5">
@@ -492,7 +642,7 @@ function translateOffer(value: string, lang: Lang) { return OFFER_TRANSLATIONS[l
                 </div>
 
                 <p className="mt-3 text-center label-mono text-[6px] xr-muted-2">
-                  {tx("RÉPONSE EN MOINS DE 2H · AUCUN ENGAGEMENT · VALEUR RÉELLE GARANTIE")}
+                  {tx("RÉPONSE PERSONNALISÉE · SANS ENGAGEMENT · PÉRIMÈTRE CLAIR")}
                 </p>
               </div>
             </div>

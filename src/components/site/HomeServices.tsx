@@ -1,10 +1,21 @@
-import { ArrowRight, ArrowUpRight, BarChart3, Bot, Globe2, MapPinned, Palette, ShieldCheck, Users } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  BarChart3,
+  Bot,
+  Globe2,
+  MapPinned,
+  Palette,
+  ShieldCheck,
+  Users,
+  Layers,
+} from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useLang, type Lang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
 import { ServiceIllustration } from "./ServiceIllustration";
 import { Parallax, Reveal } from "./primitives";
-import { useFunnel } from "@/lib/funnel";
+import { useOptionalFunnel } from "@/lib/funnel";
 
 const FUNNEL_SERVICE_BTN: Record<Lang, { added: string; add: string }> = {
   fr: { added: "✓ Dans votre devis", add: "+ Ajouter au devis" },
@@ -38,11 +49,11 @@ export const ORDERED_SERVICES = [
     funnelId: "maps",
     num: "02",
     tag: {
-      fr: "02 · UNIVERS GOOGLE MAPS · PACK LOCAL #1",
-      en: "02 · GOOGLE MAPS · LOCAL 3-PACK #1",
-      vi: "02 · VŨ TRỤ MAPS · TOP 1 ĐỊA PHƯƠNG",
-      ar: "02 · عالم MAPS · المركز الأول محلياً",
-      ru: "02 · MAPS-ВСЕЛЕННАЯ · ТОП-1 НА КАРТАХ",
+      fr: "02 · VISIBILITÉ LOCALE GOOGLE MAPS",
+      en: "02 · GOOGLE MAPS · LOCAL VISIBILITY",
+      vi: "02 · VŨ TRỤ MAPS · TOP 3 ĐỊA PHƯƠNG",
+      ar: "02 · عالم MAPS · حزمة TOP 3 محلياً",
+      ru: "02 · MAPS-ВСЕЛЕННАЯ · ТОП-3 НА КАРТАХ",
     },
     accent: "#ea4335",
     halo: "rgba(234, 67, 53, 0.12)",
@@ -124,15 +135,33 @@ export const ORDERED_SERVICES = [
     period: "month",
   },
   {
-    id: "robotics",
-    funnelId: "robotics",
+    id: "crm",
+    funnelId: "crm",
     num: "07",
     tag: {
-      fr: "07 · UNIVERS IA, CRM SUR-MESURE & ROBOTIQUE HUMANOÏDE",
-      en: "07 · AI, CUSTOM CRM & HUMANOID ROBOTICS",
-      vi: "07 · VŨ TRỤ AI, CRM & ROBOT DỊCH VỤ",
-      ar: "07 · عالم الذكاء الاصطناعي والـ CRM والروبوتات",
-      ru: "07 · ИИ, CRM И СЕРВИСНАЯ РОБОТОТЕХНИКА",
+      fr: "07 · UNIVERS CRM SUR-MESURE & LOGICIELS MÉTIER",
+      en: "07 · BESPOKE CRM & OPERATIONS SOFTWARE",
+      vi: "07 · VŨ TRỤ CRM MAY ĐO & PHẦN MỀM QUẢN TRỊ",
+      ar: "07 · عالم الـ CRM المخصص وبرمجيات الأعمال",
+      ru: "07 · ЗАКАЗНЫЕ CRM И СИСТЕМЫ УПРАВЛЕНИЯ",
+    },
+    accent: "#c5a880",
+    halo: "rgba(197, 168, 128, 0.14)",
+    icon: Layers,
+    href: "/services/crm",
+    price: 2000,
+    period: "once",
+  },
+  {
+    id: "robotics",
+    funnelId: "robotics",
+    num: "08",
+    tag: {
+      fr: "08 · UNIVERS ROBOTIQUE AUTONOME & IA PHYSIQUE",
+      en: "08 · AUTONOMOUS ROBOTICS & PHYSICAL AI",
+      vi: "08 · VŨ TRỤ ROBOT TỰ HÀNH & AI VẬT LÝ",
+      ar: "08 · عالم الروبوتات الذاتية والذكاء الاصطناعي",
+      ru: "08 · АВТОНОМНЫЕ РОБОТЫ И ФИЗИЧЕСКИЙ ИИ",
     },
     accent: "#d4af37",
     halo: "rgba(212, 175, 55, 0.12)",
@@ -145,8 +174,8 @@ export const ORDERED_SERVICES = [
 
 const COPY = {
   fr: {
-    eyebrow: "07 SERVICES D'ÉLITE · LE PARCOURS STRATÉGIQUE",
-    title: "Nos Services d'Élite : Choisissez votre levier, découvrez le dispositif complet.",
+    eyebrow: "08 SERVICES D'ÉLITE · LE PARCOURS STRATÉGIQUE",
+    title: "Nos 8 Pôles d'Excellence : Choisissez votre levier, découvrez le dispositif complet.",
     lead: "Des livrables transparents, des garanties contractuelles et une exécution de prestige pour chaque pilier de votre croissance.",
     from: "À partir de",
     open: "Découvrir la prestation",
@@ -155,8 +184,8 @@ const COPY = {
     perYear: "/ AN",
   },
   en: {
-    eyebrow: "07 ELITE SERVICES · STRATEGIC JOURNEY",
-    title: "Elite Services: Select your growth lever, explore the complete system.",
+    eyebrow: "08 ELITE SERVICES · STRATEGIC JOURNEY",
+    title: "8 Centres of Excellence: Select your growth lever, explore the complete system.",
     lead: "Transparent deliverables, contractual guarantees and prestige execution for every pillar of your digital growth.",
     from: "From",
     open: "Explore service",
@@ -165,8 +194,8 @@ const COPY = {
     perYear: "/ YEAR",
   },
   vi: {
-    eyebrow: "07 DỊCH VỤ CAO CẤP · LỘ TRÌNH CHIẾN LƯỢC",
-    title: "Dịch vụ Cao cấp: Chọn đòn bẩy phát triển, khám phá giải pháp toàn diện.",
+    eyebrow: "08 DỊCH VỤ CAO CẤP · LỘ TRÌNH CHIẾN LƯỢC",
+    title: "8 Trụ cột Chuyên môn: Chọn đòn bẩy phát triển, khám phá giải pháp toàn diện.",
     lead: "Hạng mục bàn giao minh bạch, cam kết chuẩn mực và chất lượng thi công đỉnh cao cho doanh nghiệp.",
     from: "Từ",
     open: "Khám phá dịch vụ",
@@ -175,8 +204,8 @@ const COPY = {
     perYear: "/ NĂM",
   },
   ar: {
-    eyebrow: "07 خدمات متميزة · المسار الاستراتيجي المتكامل",
-    title: "خدماتنا المتميزة: اختر محور نموك واكتشف المنظومة المتكاملة.",
+    eyebrow: "08 خدمات متميزة · المسار الاستراتيجي المتكامل",
+    title: "8 أقطاب تميز: اختر محور نموك واكتشف المنظومة المتكاملة.",
     lead: "مخرجات واضحة وشفافة، ضمانات موثقة وتنفيذ رفيع المستوى لكل ركيزة من ركائز نموك الرقمي.",
     from: "ابتداءً من",
     open: "استكشف الخدمة",
@@ -185,8 +214,8 @@ const COPY = {
     perYear: "/ سنويًا",
   },
   ru: {
-    eyebrow: "07 ПРЕМИАЛЬНЫХ УСЛУГ · СТРАТЕГИЧЕСКИЙ МАРШРУТ",
-    title: "Премиальные услуги: выберите точку роста и откройте готовую систему.",
+    eyebrow: "08 ПРЕМИАЛЬНЫХ УСЛУГ · СТРАТЕГИЧЕСКИЙ МАРШРУТ",
+    title: "8 направлений экспертизы: выберите точку роста и откройте готовую систему.",
     lead: "Прозрачные результаты, договорные гарантии и безупречное исполнение для каждого направления вашего бизнеса.",
     from: "От",
     open: "Подробнее об услуге",
@@ -205,6 +234,13 @@ function ServiceLink({
   children: React.ReactNode;
   className?: string;
 }) {
+  if (id === "crm") {
+    return (
+      <Link to="/services/crm" className={className}>
+        {children}
+      </Link>
+    );
+  }
   if (id === "robotics") {
     return (
       <Link to="/services/robotique" className={className}>
@@ -236,22 +272,22 @@ function ServiceLink({
 export function HomeServices() {
   const { t, price, lang } = useLang();
   const copy = COPY[lang as keyof typeof COPY] ?? COPY.fr;
-  let funnel: ReturnType<typeof useFunnel> | null = null;
-  try {
-    funnel = useFunnel();
-  } catch {
-    funnel = null;
-  }
+  const funnel = useOptionalFunnel();
   const currentLang = (lang in FUNNEL_SERVICE_BTN ? lang : "fr") as Lang;
 
   return (
-    <section id="services" data-section="homepage-services" className="xr-section relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-10 sm:py-14 lg:py-16">
+    <section
+      id="services"
+      data-section="homepage-services"
+      className="xr-section relative overflow-hidden border-y xr-line bg-[var(--xr-bg)] py-10 sm:py-14 lg:py-16"
+    >
       {/* Dynamic ambient halo */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-40"
         style={{
-          background: "radial-gradient(ellipse at 25% 15%, rgba(197, 168, 128, 0.08), transparent 50%), radial-gradient(ellipse at 75% 75%, rgba(6, 182, 212, 0.06), transparent 50%)",
+          background:
+            "radial-gradient(ellipse at 25% 15%, rgba(197, 168, 128, 0.08), transparent 50%), radial-gradient(ellipse at 75% 75%, rgba(6, 182, 212, 0.06), transparent 50%)",
         }}
       />
 
@@ -269,7 +305,9 @@ export function HomeServices() {
               <h2 className="h-nex text-3xl sm:text-5xl lg:text-[3.6rem] text-white">
                 {copy.title}
               </h2>
-              <p className="max-w-md text-xs sm:text-sm leading-relaxed text-neutral-400">{copy.lead}</p>
+              <p className="max-w-md text-xs sm:text-sm leading-relaxed text-neutral-400">
+                {copy.lead}
+              </p>
             </div>
           </div>
         </Reveal>
@@ -296,10 +334,13 @@ export function HomeServices() {
                   }}
                 />
 
-                <div className={`relative grid grid-cols-1 gap-8 lg:gap-12 items-center ${isEven ? "lg:grid-cols-[1fr_1.15fr]" : "lg:grid-cols-[1.15fr_1fr]"}`}>
-                  
+                <div
+                  className={`relative grid grid-cols-1 gap-8 lg:gap-12 items-center ${isEven ? "lg:grid-cols-[1fr_1.15fr]" : "lg:grid-cols-[1.15fr_1fr]"}`}
+                >
                   {/* Column 1: Editorial Value Proposition */}
-                  <div className={`flex flex-col justify-between space-y-4 ${isEven ? "lg:order-1" : "lg:order-2"}`}>
+                  <div
+                    className={`flex flex-col justify-between space-y-4 ${isEven ? "lg:order-1" : "lg:order-2"}`}
+                  >
                     <div>
                       {/* Category Eyebrow Pill */}
                       <div
@@ -310,7 +351,10 @@ export function HomeServices() {
                           backgroundColor: `${item.accent}12`,
                         }}
                       >
-                        <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: item.accent }} />
+                        <span
+                          className="h-1.5 w-1.5 rounded-full animate-pulse"
+                          style={{ background: item.accent }}
+                        />
                         {item.tag[currentLang] ?? item.tag.fr}
                       </div>
 
@@ -343,13 +387,19 @@ export function HomeServices() {
                     <div className="pt-2">
                       <div className="flex items-baseline justify-between border-y xr-line py-4 mb-5">
                         <div>
-                          <span className="label-mono text-[6.5px] xr-muted-2 uppercase tracking-wider">{copy.from}</span>
+                          <span className="label-mono text-[6.5px] xr-muted-2 uppercase tracking-wider">
+                            {copy.from}
+                          </span>
                           <p className="display-serif mt-0.5 text-3xl font-bold text-[var(--xr-ink)]">
                             {item.id === "maps" ? "999 €" : price(service.fromEur)}
                           </p>
                         </div>
                         <span className="label-mono text-[7px] font-semibold xr-muted-2">
-                          {item.period === "month" ? copy.perMonth : item.period === "year" ? copy.perYear : ""}
+                          {item.period === "month"
+                            ? copy.perMonth
+                            : item.period === "year"
+                              ? copy.perYear
+                              : ""}
                         </span>
                       </div>
 

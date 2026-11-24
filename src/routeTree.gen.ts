@@ -16,7 +16,9 @@ import { Route as CreationSiteInternetVietnamRouteImport } from './routes/creati
 import { Route as CrmRouteImport } from './routes/crm'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as InternationalRouteImport } from './routes/international'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
+import { Route as MethodeRouteImport } from './routes/methode'
 import { Route as NotreHistoireRouteImport } from './routes/notre-histoire'
 import { Route as RealisationsRouteImport } from './routes/realisations'
 import { Route as RecrutementRouteImport } from './routes/recrutement'
@@ -38,6 +40,7 @@ import { Route as DashboardNewRouteImport } from './routes/dashboard/new'
 import { Route as DashboardProspectsRouteImport } from './routes/dashboard/prospects'
 import { Route as ServicesIndexRouteImport } from './routes/services/index'
 import { Route as ServicesServiceIdRouteImport } from './routes/services/$serviceId'
+import { Route as ServicesCrmRouteImport } from './routes/services/crm'
 import { Route as ServicesRobotiqueRouteImport } from './routes/services/robotique'
 import { Route as ServicesSeoRouteImport } from './routes/services/seo'
 import { Route as ServicesWebcareRouteImport } from './routes/services/webcare'
@@ -80,9 +83,19 @@ const FaqRoute = FaqRouteImport.update({
   path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InternationalRoute = InternationalRouteImport.update({
+  id: '/international',
+  path: '/international',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
   id: '/mentions-legales',
   path: '/mentions-legales',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MethodeRoute = MethodeRouteImport.update({
+  id: '/methode',
+  path: '/methode',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotreHistoireRoute = NotreHistoireRouteImport.update({
@@ -190,6 +203,11 @@ const ServicesServiceIdRoute = ServicesServiceIdRouteImport.update({
   path: '/services/$serviceId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServicesCrmRoute = ServicesCrmRouteImport.update({
+  id: '/services/crm',
+  path: '/services/crm',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRobotiqueRoute = ServicesRobotiqueRouteImport.update({
   id: '/services/robotique',
   path: '/services/robotique',
@@ -225,7 +243,9 @@ export interface FileRoutesByFullPath {
   '/crm': typeof CrmRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/faq': typeof FaqRoute
+  '/international': typeof InternationalRoute
   '/mentions-legales': typeof MentionsLegalesRoute
+  '/methode': typeof MethodeRoute
   '/notre-histoire': typeof NotreHistoireRoute
   '/realisations': typeof RealisationsRoute
   '/recrutement': typeof RecrutementRoute
@@ -245,6 +265,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/new': typeof DashboardNewRoute
   '/dashboard/prospects': typeof DashboardProspectsRouteWithChildren
   '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/services/crm': typeof ServicesCrmRoute
   '/services/robotique': typeof ServicesRobotiqueRoute
   '/services/seo': typeof ServicesSeoRoute
   '/services/webcare': typeof ServicesWebcareRoute
@@ -260,7 +281,9 @@ export interface FileRoutesByTo {
   '/creation-site-internet-vietnam': typeof CreationSiteInternetVietnamRoute
   '/crm': typeof CrmRoute
   '/faq': typeof FaqRoute
+  '/international': typeof InternationalRoute
   '/mentions-legales': typeof MentionsLegalesRoute
+  '/methode': typeof MethodeRoute
   '/notre-histoire': typeof NotreHistoireRoute
   '/realisations': typeof RealisationsRoute
   '/recrutement': typeof RecrutementRoute
@@ -280,6 +303,7 @@ export interface FileRoutesByTo {
   '/dashboard/new': typeof DashboardNewRoute
   '/dashboard/prospects': typeof DashboardProspectsRouteWithChildren
   '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/services/crm': typeof ServicesCrmRoute
   '/services/robotique': typeof ServicesRobotiqueRoute
   '/services/seo': typeof ServicesSeoRoute
   '/services/webcare': typeof ServicesWebcareRoute
@@ -297,7 +321,9 @@ export interface FileRoutesById {
   '/crm': typeof CrmRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/faq': typeof FaqRoute
+  '/international': typeof InternationalRoute
   '/mentions-legales': typeof MentionsLegalesRoute
+  '/methode': typeof MethodeRoute
   '/notre-histoire': typeof NotreHistoireRoute
   '/realisations': typeof RealisationsRoute
   '/recrutement': typeof RecrutementRoute
@@ -317,6 +343,7 @@ export interface FileRoutesById {
   '/dashboard/new': typeof DashboardNewRoute
   '/dashboard/prospects': typeof DashboardProspectsRouteWithChildren
   '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/services/crm': typeof ServicesCrmRoute
   '/services/robotique': typeof ServicesRobotiqueRoute
   '/services/seo': typeof ServicesSeoRoute
   '/services/webcare': typeof ServicesWebcareRoute
@@ -335,7 +362,9 @@ export interface FileRouteTypes {
     | '/crm'
     | '/dashboard'
     | '/faq'
+    | '/international'
     | '/mentions-legales'
+    | '/methode'
     | '/notre-histoire'
     | '/realisations'
     | '/recrutement'
@@ -355,6 +384,7 @@ export interface FileRouteTypes {
     | '/dashboard/new'
     | '/dashboard/prospects'
     | '/services/$serviceId'
+    | '/services/crm'
     | '/services/robotique'
     | '/services/seo'
     | '/services/webcare'
@@ -370,7 +400,9 @@ export interface FileRouteTypes {
     | '/creation-site-internet-vietnam'
     | '/crm'
     | '/faq'
+    | '/international'
     | '/mentions-legales'
+    | '/methode'
     | '/notre-histoire'
     | '/realisations'
     | '/recrutement'
@@ -390,6 +422,7 @@ export interface FileRouteTypes {
     | '/dashboard/new'
     | '/dashboard/prospects'
     | '/services/$serviceId'
+    | '/services/crm'
     | '/services/robotique'
     | '/services/seo'
     | '/services/webcare'
@@ -406,7 +439,9 @@ export interface FileRouteTypes {
     | '/crm'
     | '/dashboard'
     | '/faq'
+    | '/international'
     | '/mentions-legales'
+    | '/methode'
     | '/notre-histoire'
     | '/realisations'
     | '/recrutement'
@@ -426,6 +461,7 @@ export interface FileRouteTypes {
     | '/dashboard/new'
     | '/dashboard/prospects'
     | '/services/$serviceId'
+    | '/services/crm'
     | '/services/robotique'
     | '/services/seo'
     | '/services/webcare'
@@ -443,7 +479,9 @@ export interface RootRouteChildren {
   CrmRoute: typeof CrmRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   FaqRoute: typeof FaqRoute
+  InternationalRoute: typeof InternationalRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
+  MethodeRoute: typeof MethodeRoute
   NotreHistoireRoute: typeof NotreHistoireRoute
   RealisationsRoute: typeof RealisationsRoute
   RecrutementRoute: typeof RecrutementRoute
@@ -459,6 +497,7 @@ export interface RootRouteChildren {
   ApiCrmRoute: typeof ApiCrmRoute
   ApiSendQuoteRoute: typeof ApiSendQuoteRoute
   ServicesServiceIdRoute: typeof ServicesServiceIdRoute
+  ServicesCrmRoute: typeof ServicesCrmRoute
   ServicesRobotiqueRoute: typeof ServicesRobotiqueRoute
   ServicesSeoRoute: typeof ServicesSeoRoute
   ServicesWebcareRoute: typeof ServicesWebcareRoute
@@ -516,11 +555,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/international': {
+      id: '/international'
+      path: '/international'
+      fullPath: '/international'
+      preLoaderRoute: typeof InternationalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mentions-legales': {
       id: '/mentions-legales'
       path: '/mentions-legales'
       fullPath: '/mentions-legales'
       preLoaderRoute: typeof MentionsLegalesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/methode': {
+      id: '/methode'
+      path: '/methode'
+      fullPath: '/methode'
+      preLoaderRoute: typeof MethodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notre-histoire': {
@@ -670,6 +723,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesServiceIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/services/crm': {
+      id: '/services/crm'
+      path: '/services/crm'
+      fullPath: '/services/crm'
+      preLoaderRoute: typeof ServicesCrmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services/robotique': {
       id: '/services/robotique'
       path: '/services/robotique'
@@ -759,7 +819,9 @@ const rootRouteChildren: RootRouteChildren = {
   CrmRoute: CrmRoute,
   DashboardRoute: DashboardRouteWithChildren,
   FaqRoute: FaqRoute,
+  InternationalRoute: InternationalRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
+  MethodeRoute: MethodeRoute,
   NotreHistoireRoute: NotreHistoireRoute,
   RealisationsRoute: RealisationsRoute,
   RecrutementRoute: RecrutementRoute,
@@ -775,6 +837,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCrmRoute: ApiCrmRoute,
   ApiSendQuoteRoute: ApiSendQuoteRoute,
   ServicesServiceIdRoute: ServicesServiceIdRoute,
+  ServicesCrmRoute: ServicesCrmRoute,
   ServicesRobotiqueRoute: ServicesRobotiqueRoute,
   ServicesSeoRoute: ServicesSeoRoute,
   ServicesWebcareRoute: ServicesWebcareRoute,

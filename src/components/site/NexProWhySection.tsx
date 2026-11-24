@@ -36,14 +36,17 @@ const WHY_ITEMS: WhyItem[] = [
     details: [
       "Maquette démo offerte sous 24 à 48 heures : vous jugez sur pièces avant tout engagement",
       "Pas de chaîne d'intermédiaires ni de tickets support sans fin",
-      "Garantie contractuelle SASU KARMA enregistrée au RCS de Paris",
+      "Engagements, livrables et conditions détaillés dans le devis validé",
     ],
   },
 ];
 
 export function NexProWhySection() {
   return (
-    <section id="pourquoi" className="relative bg-[#06080d] text-[#f8f6f0] py-20 sm:py-28 lg:py-36 border-t border-white/10 overflow-hidden">
+    <section
+      id="pourquoi"
+      className="relative bg-[#06080d] text-[#f8f6f0] py-20 sm:py-28 lg:py-36 border-t border-white/10 overflow-hidden"
+    >
       {/* Halo de lumière or */}
       <div
         aria-hidden="true"
@@ -71,7 +74,8 @@ export function NexProWhySection() {
           </h2>
 
           <p className="mt-3 text-sm sm:text-base text-neutral-400 leading-relaxed">
-            Pourquoi les artisans, professionnels libéraux, hôteliers et marques prestigieuses nous confient leur acquisition digitale.
+            Pourquoi les artisans, professionnels libéraux, hôteliers et marques prestigieuses nous
+            confient leur acquisition digitale.
           </p>
         </div>
 
@@ -103,7 +107,10 @@ export function NexProWhySection() {
               <div className="lg:col-span-5">
                 <ul className="space-y-2.5">
                   {item.details.map((detail, idx) => (
-                    <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-neutral-400">
+                    <li
+                      key={idx}
+                      className="flex items-start gap-2.5 text-xs sm:text-sm text-neutral-400"
+                    >
                       <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
                       <span>{detail}</span>
                     </li>
@@ -125,15 +132,13 @@ export function NexProWhySection() {
                 Testez notre réactivité dès aujourd'hui
               </h4>
               <p className="text-xs sm:text-sm text-neutral-400">
-                Recevez votre première ébauche de maquette personnalisée sous 24 à 48h, sans engagement.
+                Recevez votre première ébauche de maquette personnalisée sous 24 à 48h, sans
+                engagement.
               </p>
             </div>
           </div>
 
-          <a
-            href="#quote"
-            className="btn-nex text-xs uppercase tracking-wider shrink-0"
-          >
+          <a href="#quote" className="btn-nex text-xs uppercase tracking-wider shrink-0">
             <span>Obtenir ma maquette gratuite</span>
             <ArrowRight className="h-4 w-4" />
           </a>

@@ -72,7 +72,7 @@ import {
   type MapsPopulationId,
   type MapsPresenceId,
 } from "@/lib/maps-pricing";
-import { useFunnel } from "@/lib/funnel";
+import { useOptionalFunnel } from "@/lib/funnel";
 
 type HubMode = "devis" | "audit" | "guided";
 type AuditType = "design" | "seo" | "security" | "conversion" | "technical";
@@ -93,16 +93,78 @@ type ProposalItem = {
 };
 
 const SERVICE_ORDER: Record<string, string[]> = {
-  restaurant: ["website", "maps_top3", "maps_management", "social", "seo", "branding", "maintenance", "robotics"],
-  hospitality: ["website", "maps_top3", "maps_management", "seo", "social", "branding", "maintenance", "robotics"],
-  realestate: ["website", "maps_top3", "branding", "seo", "maps_management", "social", "maintenance", "robotics"],
-  automotive: ["website", "maps_top3", "maps_management", "conversion", "seo", "content", "maintenance", "robotics"],
-  beauty: ["website", "maps_top3", "maps_management", "social", "seo", "branding", "maintenance", "robotics"],
+  restaurant: [
+    "website",
+    "maps_top3",
+    "maps_management",
+    "social",
+    "seo",
+    "branding",
+    "maintenance",
+    "robotics",
+  ],
+  hospitality: [
+    "website",
+    "maps_top3",
+    "maps_management",
+    "seo",
+    "social",
+    "branding",
+    "maintenance",
+    "robotics",
+  ],
+  realestate: [
+    "website",
+    "maps_top3",
+    "branding",
+    "seo",
+    "maps_management",
+    "social",
+    "maintenance",
+    "robotics",
+  ],
+  automotive: [
+    "website",
+    "maps_top3",
+    "maps_management",
+    "conversion",
+    "seo",
+    "content",
+    "maintenance",
+    "robotics",
+  ],
+  beauty: [
+    "website",
+    "maps_top3",
+    "maps_management",
+    "social",
+    "seo",
+    "branding",
+    "maintenance",
+    "robotics",
+  ],
   health: ["website", "maps_top3", "maps_management", "seo", "branding", "maintenance", "robotics"],
-  construction: ["website", "maps_top3", "maps_management", "seo", "branding", "maintenance", "robotics"],
+  construction: [
+    "website",
+    "maps_top3",
+    "maps_management",
+    "seo",
+    "branding",
+    "maintenance",
+    "robotics",
+  ],
   events: ["website", "social", "branding", "maps_top3", "seo", "maintenance", "robotics"],
   education: ["website", "seo", "robotics", "social", "branding", "maps_top3", "maintenance"],
-  other: ["website", "maps_top3", "maps_management", "branding", "seo", "social", "maintenance", "robotics"],
+  other: [
+    "website",
+    "maps_top3",
+    "maps_management",
+    "branding",
+    "seo",
+    "social",
+    "maintenance",
+    "robotics",
+  ],
 };
 
 const SECTOR_TO_MAPS_ID: Record<string, string> = {
@@ -117,24 +179,66 @@ const SECTOR_TO_MAPS_ID: Record<string, string> = {
 };
 
 const SECTOR_SHORT_LABELS: Record<string, Record<Lang, string>> = {
-  health: { fr: "Cliniques & Santé", en: "Clinics & Health", vi: "Phòng khám & Y tế", ar: "العيادات والصحة", ru: "Клиники" },
-  realestate: { fr: "Immobilier", en: "Real Estate", vi: "Bất động sản", ar: "العقارات", ru: "Недвижимость" },
+  health: {
+    fr: "Cliniques & Santé",
+    en: "Clinics & Health",
+    vi: "Phòng khám & Y tế",
+    ar: "العيادات والصحة",
+    ru: "Клиники",
+  },
+  realestate: {
+    fr: "Immobilier",
+    en: "Real Estate",
+    vi: "Bất động sản",
+    ar: "العقارات",
+    ru: "Недвижимость",
+  },
   hospitality: { fr: "Hôtels", en: "Hotels", vi: "Khách sạn", ar: "الفنادق", ru: "Отели" },
-  construction: { fr: "Construction", en: "Construction", vi: "Xây dựng", ar: "البناء", ru: "Строительство" },
-  restaurant: { fr: "Restaurants", en: "Restaurants", vi: "Nhà hàng", ar: "المطاعم", ru: "Рестораны" },
+  construction: {
+    fr: "Construction",
+    en: "Construction",
+    vi: "Xây dựng",
+    ar: "البناء",
+    ru: "Строительство",
+  },
+  restaurant: {
+    fr: "Restaurants",
+    en: "Restaurants",
+    vi: "Nhà hàng",
+    ar: "المطاعم",
+    ru: "Рестораны",
+  },
   automotive: { fr: "Automobile", en: "Automotive", vi: "Ô tô", ar: "السيارات", ru: "Авто" },
   events: { fr: "Événementiel", en: "Events", vi: "Sự kiện", ar: "الفعاليات", ru: "События" },
   education: { fr: "Éducation", en: "Education", vi: "Giáo dục", ar: "التعليم", ru: "Образование" },
-  beauty: { fr: "Bien-être & Spa", en: "Wellness & Spa", vi: "Làm đẹp", ar: "السبا", ru: "Спа и красота" },
+  beauty: {
+    fr: "Bien-être & Spa",
+    en: "Wellness & Spa",
+    vi: "Làm đẹp",
+    ar: "السبا",
+    ru: "Спа и красота",
+  },
   fashion: { fr: "Mode", en: "Fashion", vi: "Thời trang", ar: "الأزياء", ru: "Мода" },
   jewelry: { fr: "Joaillerie", en: "Jewelry", vi: "Trang sức", ar: "المجوهرات", ru: "Ювелирка" },
-  architecture: { fr: "Architecture", en: "Architecture", vi: "Kiến trúc", ar: "العمارة", ru: "Архитектура" },
+  architecture: {
+    fr: "Architecture",
+    en: "Architecture",
+    vi: "Kiến trúc",
+    ar: "العمارة",
+    ru: "Архитектура",
+  },
   legal: { fr: "Juridique", en: "Legal", vi: "Pháp lý", ar: "القانون", ru: "Право" },
   finance: { fr: "Finance", en: "Finance", vi: "Tài chính", ar: "المالية", ru: "Финансы" },
   commerce: { fr: "Commerce", en: "Retail", vi: "Bán lẻ", ar: "التجارة", ru: "Ритейл" },
   tourism: { fr: "Tourisme", en: "Tourism", vi: "Du lịch", ar: "السياحة", ru: "Туризм" },
   agency: { fr: "Studio / Agence", en: "Agency", vi: "Agency", ar: "وكالة", ru: "Агентство" },
-  other: { fr: "Autre secteur", en: "Other industry", vi: "Lĩnh vực khác", ar: "نشاط آخر", ru: "Другая сфера" },
+  other: {
+    fr: "Autre secteur",
+    en: "Other industry",
+    vi: "Lĩnh vực khác",
+    ar: "نشاط آخر",
+    ru: "Другая сфера",
+  },
 };
 
 const SECTOR_ICONS: Record<string, typeof Utensils> = {
@@ -188,12 +292,7 @@ export function AgentXRHub() {
   const currentLang = (lang in QUOTE_UI.kicker ? lang : "fr") as Lang;
   const isEn = currentLang === "en";
 
-  let funnel: ReturnType<typeof useFunnel> | null = null;
-  try {
-    funnel = useFunnel();
-  } catch {
-    funnel = null;
-  }
+  const funnel = useOptionalFunnel();
 
   // Unified hub mode: Option 1 (devis), Option 2 (audit), Option 3 (guided)
   const [hubMode, setHubMode] = useState<HubMode>("devis");
@@ -246,7 +345,9 @@ export function AgentXRHub() {
   const [mapsAddPostCare, setMapsAddPostCare] = useState(false);
 
   // Conditional parameters state — Parcours 2 & Other Services
-  const [mapsMgmtTier, setMapsMgmtTier] = useState<"essentiel" | "croissance" | "intensif">("croissance");
+  const [mapsMgmtTier, setMapsMgmtTier] = useState<"essentiel" | "croissance" | "intensif">(
+    "croissance",
+  );
   const [webTier, setWebTier] = useState<"showcase" | "business" | "ecommerce">("business");
   const [webLanguages, setWebLanguages] = useState<"mono" | "bi" | "intl">("mono");
   const [webContentReady, setWebContentReady] = useState<"ready" | "guided">("guided");
@@ -255,9 +356,17 @@ export function AgentXRHub() {
   const [socialTier, setSocialTier] = useState<"essential" | "growth" | "signature">("essential");
   const [webcareTier, setWebcareTier] = useState<"essential" | "pro" | "custom">("pro");
   const [webcareIncludeInfra, setWebcareIncludeInfra] = useState(true);
-  const [aiFocus, setAiFocus] = useState<"crm_custom" | "agents" | "integrations" | "korben">("crm_custom");
+  const [aiFocus, setAiFocus] = useState<"crm_custom" | "agents" | "integrations" | "korben">(
+    "crm_custom",
+  );
 
-  const [client, setClient] = useState({ company: "", name: "", email: "", whatsapp: "", website: "" });
+  const [client, setClient] = useState({
+    company: "",
+    name: "",
+    email: "",
+    whatsapp: "",
+    website: "",
+  });
   const [generated, setGenerated] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendMessage, setSendMessage] = useState("");
@@ -269,7 +378,7 @@ export function AgentXRHub() {
       setSectorId(funnel.sector);
       setMapsSectorId(SECTOR_TO_MAPS_ID[funnel.sector] ?? "other");
     }
-  }, [funnel?.sector]);
+  }, [funnel?.sector, sectorId]);
 
   useEffect(() => {
     if (funnel?.selectedServices?.length && selectedServices.length === 0) {
@@ -290,7 +399,7 @@ export function AgentXRHub() {
       robotique: "robotics",
       crm: "robotics",
     };
-    const normalized = requested ? aliasMap[requested] ?? requested : null;
+    const normalized = requested ? (aliasMap[requested] ?? requested) : null;
     if (normalized && SERVICES_DATA.some((x) => x.id === normalized)) {
       if (requested === "ecommerce") setWebTier("ecommerce");
       if (requested === "crm" || requested === "robotique") setAiFocus("crm_custom");
@@ -306,7 +415,12 @@ export function AgentXRHub() {
   const [auditFocus, setAuditFocus] = useState<"site" | "maps" | "full">("site");
   const [auditUrl, setAuditUrl] = useState("");
   const [auditSector, setAuditSector] = useState("restaurant");
-  const [auditTypes, setAuditTypes] = useState<AuditType[]>(["design", "seo", "conversion", "technical"]);
+  const [auditTypes, setAuditTypes] = useState<AuditType[]>([
+    "design",
+    "seo",
+    "conversion",
+    "technical",
+  ]);
   const [auditLoading, setAuditLoading] = useState(false);
   const [auditError, setAuditError] = useState("");
   const [auditResult, setAuditResult] = useState<{
@@ -335,7 +449,7 @@ export function AgentXRHub() {
         detail: s.detail[currentLang] ?? s.detail.fr,
         goals: s.goals.map((g) => g[currentLang] ?? g.fr),
       })),
-    [currentLang]
+    [currentLang],
   );
 
   const SERVICES = useMemo(
@@ -345,12 +459,17 @@ export function AgentXRHub() {
         label: s.label[currentLang] ?? s.label.fr,
         detail: s.detail[currentLang] ?? s.detail.fr,
       })),
-    [currentLang]
+    [currentLang],
   );
 
   const SITUATIONS = useMemo(
-    () => SITUATIONS_DATA.map((s) => ({ id: s.id, label: s.label[currentLang], detail: s.detail[currentLang] })),
-    [currentLang]
+    () =>
+      SITUATIONS_DATA.map((s) => ({
+        id: s.id,
+        label: s.label[currentLang],
+        detail: s.detail[currentLang],
+      })),
+    [currentLang],
   );
 
   const sector = SECTORS.find((x) => x.id === sectorId) ?? SECTORS[0];
@@ -361,14 +480,22 @@ export function AgentXRHub() {
   const situationChoice = SITUATIONS.find((x) => x.id === situation);
 
   // Featured 9 exact sectors requested cleanly in order (Clinics, Real Estate, Hotels, Construction, Restaurants, Automotive, Events, Education, Other)
-  const featuredSectorIds = ["health", "realestate", "hospitality", "construction", "restaurant", "automotive", "events", "education", "other"];
-  const visibleSectors = useMemo(
-    () =>
-      showAllSectors
-        ? SECTORS
-        : (featuredSectorIds.map((id) => SECTORS.find((s) => s.id === id)).filter(Boolean) as typeof SECTORS),
-    [SECTORS, showAllSectors]
-  );
+  const featuredSectorIds = [
+    "health",
+    "realestate",
+    "hospitality",
+    "construction",
+    "restaurant",
+    "automotive",
+    "events",
+    "education",
+    "other",
+  ];
+  const visibleSectors = showAllSectors
+    ? SECTORS
+    : (featuredSectorIds
+        .map((id) => SECTORS.find((s) => s.id === id))
+        .filter(Boolean) as typeof SECTORS);
 
   const orderedServices = (SERVICE_ORDER[sectorId] ?? SERVICE_ORDER.other)
     .map((id) => SERVICES.find((x) => x.id === id))
@@ -376,7 +503,8 @@ export function AgentXRHub() {
 
   const paramScreens: ParamScreenId[] = useMemo(() => {
     const list: ParamScreenId[] = [];
-    if (selectedServices.includes("maps_top3")) list.push("maps_zone", "maps_market", "maps_keywords");
+    if (selectedServices.includes("maps_top3"))
+      list.push("maps_zone", "maps_market", "maps_keywords");
     if (selectedServices.includes("maps_management")) list.push("maps_mgmt");
     if (selectedServices.includes("website")) list.push("web_scope");
     if (selectedServices.includes("branding")) list.push("branding_scope");
@@ -408,10 +536,23 @@ export function AgentXRHub() {
         geoScope: mapsGeoScope,
         goal: mapsGoal,
       }),
-    [mapsSectorId, mapsCity, mapsPostal, mapsDistrict, mapsPopulation, mapsCompetition, mapsPresence, mapsKeywords, mapsKwVolume, mapsGeoScope, mapsGoal]
+    [
+      mapsSectorId,
+      mapsCity,
+      mapsPostal,
+      mapsDistrict,
+      mapsPopulation,
+      mapsCompetition,
+      mapsPresence,
+      mapsKeywords,
+      mapsKwVolume,
+      mapsGeoScope,
+      mapsGoal,
+    ],
   );
 
-  const selectedMgmtTier = MAPS_MANAGEMENT_TIERS.find((t) => t.id === mapsMgmtTier) ?? MAPS_MANAGEMENT_TIERS[1];
+  const selectedMgmtTier =
+    MAPS_MANAGEMENT_TIERS.find((t) => t.id === mapsMgmtTier) ?? MAPS_MANAGEMENT_TIERS[1];
 
   const activeProposals: ProposalItem[] = useMemo(() => {
     const items: ProposalItem[] = [];
@@ -419,7 +560,9 @@ export function AgentXRHub() {
       if (id === "maps_top3") {
         items.push({
           id: "maps_top3",
-          label: isEn ? "Google Maps Top 3 SEO (Custom)" : "Google Maps Top 3 · Référencement local sur mesure",
+          label: isEn
+            ? "Google Maps Top 3 SEO (Custom)"
+            : "Google Maps Top 3 · Référencement local sur mesure",
           detail: `${mapsCity.trim() || "Zone ciblée"} · ${mapsEstimate.difficultyLabel[currentLang]} (${mapsEstimate.difficultyScore}/100) · Sans garantie fixe`,
           price: mapsEstimate.fromEur,
           maxPrice: mapsEstimate.maxEur,
@@ -448,52 +591,94 @@ export function AgentXRHub() {
         const hasLanguageScope = webLanguages !== "mono";
         const label =
           webTier === "ecommerce"
-            ? isEn ? "E-commerce & Booking Website" : "Site E-commerce & Réservation"
+            ? isEn
+              ? "E-commerce & Booking Website"
+              : "Site E-commerce & Réservation"
             : webTier === "business"
-              ? isEn ? "Business Custom Website" : "Site Business Sur-Mesure"
-              : isEn ? "Signature Showcase Website" : "Site Vitrine Pro";
+              ? isEn
+                ? "Business Custom Website"
+                : "Site Business Sur-Mesure"
+              : isEn
+                ? "Signature Showcase Website"
+                : "Site Vitrine Pro";
         items.push({
           id: "website",
           label,
           detail:
-            (webTier === "ecommerce" ? "Boutique, paiement Stripe & tunnel" : webTier === "business" ? "5+ pages éditoriales, analytics & conversion" : "Jusqu'à 3 pages responsives, contact & SEO") +
-            (hasLanguageScope ? ` + Multilingue (${webLanguages === "intl" ? "3+" : "2"} langues, complément sur devis)` : ""),
+            (webTier === "ecommerce"
+              ? "Boutique, paiement Stripe & tunnel"
+              : webTier === "business"
+                ? "5+ pages éditoriales, analytics & conversion"
+                : "Jusqu'à 3 pages responsives, contact & SEO") +
+            (hasLanguageScope
+              ? ` + Multilingue (${webLanguages === "intl" ? "3+" : "2"} langues, complément sur devis)`
+              : ""),
           price: base,
           period: "once",
-          checkoutId: webTier === "ecommerce" ? undefined : webTier === "business" ? "website_business" : "website_showcase",
+          checkoutId:
+            webTier === "ecommerce"
+              ? undefined
+              : webTier === "business"
+                ? "website_business"
+                : "website_showcase",
           isQuoteOnly: webTier === "ecommerce" || hasLanguageScope,
         });
       } else if (id === "branding") {
         const p = brandingTier === "premium" ? 399 : brandingTier === "identity" ? 299 : 199;
         items.push({
           id: "branding",
-          label: brandingTier === "premium" ? "Full Brand Suite" : brandingTier === "identity" ? "Brand Identity Kit" : "Logo Signature",
-          detail: brandingTier === "premium" ? "Brand Book, papeterie, signatures et droits cédés" : brandingTier === "identity" ? "Logo, palette, typographies et modèles pour réseaux sociaux" : "Logo vectoriel, déclinaisons et fichiers maîtres",
+          label:
+            brandingTier === "premium"
+              ? "Full Brand Suite"
+              : brandingTier === "identity"
+                ? "Brand Identity Kit"
+                : "Logo Signature",
+          detail:
+            brandingTier === "premium"
+              ? "Brand Book, papeterie, signatures et droits cédés"
+              : brandingTier === "identity"
+                ? "Logo, palette, typographies et modèles pour réseaux sociaux"
+                : "Logo vectoriel, déclinaisons et fichiers maîtres",
           price: p,
           period: "once",
-          checkoutId: brandingTier === "premium" ? "branding_full" : brandingTier === "identity" ? "branding_identity" : "branding_logo",
+          checkoutId:
+            brandingTier === "premium"
+              ? "branding_full"
+              : brandingTier === "identity"
+                ? "branding_identity"
+                : "branding_logo",
         });
       } else if (id === "seo") {
         const p = seoTier === "growth" ? 499 : 299;
         items.push({
           id: "seo",
           label: `SEO · ${seoTier === "growth" ? "Growth" : "Starter"}`,
-          detail: seoTier === "growth" ? "SEO Starter inclus, contenu mensuel et reporting" : "Audit, mots-clés et optimisations on-page",
+          detail:
+            seoTier === "growth"
+              ? "SEO Starter inclus, contenu mensuel et reporting"
+              : "Audit, mots-clés et optimisations on-page",
           price: p,
           period: "month",
           checkoutId: seoTier === "growth" ? "seo_growth" : "seo_starter",
         });
       } else if (id === "social") {
         const commitmentMonths = socialTier === "essential" ? 3 : 6;
-        const p = socialTier === "signature" ? 799 : socialTier === "growth" ? 499 : 349;
+        const p = socialTier === "signature" ? 799 : socialTier === "growth" ? 599 : 349;
         items.push({
           id: "social",
           label: `Social Media · ${socialTier === "signature" ? "Domination Sociale" : socialTier === "growth" ? "Croissance Active" : "Présence Essentielle"}`,
           detail: "Calendrier éditorial, publications et animation selon la formule sélectionnée",
           price: p,
           period: "month",
-          checkoutId: socialTier === "signature" ? "social_domination" : socialTier === "growth" ? "social_growth" : "social_essential",
-          commitment: isEn ? `Minimum commitment: ${commitmentMonths} months` : `Engagement minimum de ${commitmentMonths} mois`,
+          checkoutId:
+            socialTier === "signature"
+              ? "social_domination"
+              : socialTier === "growth"
+                ? "social_growth"
+                : "social_essential",
+          commitment: isEn
+            ? `Minimum commitment: ${commitmentMonths} months`
+            : `Engagement minimum de ${commitmentMonths} mois`,
           commitmentMonths,
         });
       } else if (id === "maintenance") {
@@ -501,10 +686,16 @@ export function AgentXRHub() {
         items.push({
           id: "maintenance",
           label: `WebCare ${webcareTier === "custom" ? "Unlimited" : webcareTier === "pro" ? "Business" : "Essentiel"}`,
-          detail: "Mises à jour sécurisées, sauvegardes cloud, surveillance et support selon la formule",
+          detail:
+            "Mises à jour sécurisées, sauvegardes cloud, surveillance et support selon la formule",
           price: p,
           period: "month",
-          checkoutId: webcareTier === "custom" ? "webcare_unlimited" : webcareTier === "pro" ? "webcare_business" : "webcare_essential",
+          checkoutId:
+            webcareTier === "custom"
+              ? "webcare_unlimited"
+              : webcareTier === "pro"
+                ? "webcare_business"
+                : "webcare_essential",
         });
         if (webcareIncludeInfra) {
           items.push({
@@ -522,7 +713,11 @@ export function AgentXRHub() {
         const isCrm = aiFocus === "crm_custom";
         items.push({
           id: "robotics",
-          label: isCrm ? "CRM Personnalisé Sur-Mesure" : isKorben ? "Robotique Autonome Korben" : "Automatisations IA & Agents",
+          label: isCrm
+            ? "CRM Personnalisé Sur-Mesure"
+            : isKorben
+              ? "Robotique Autonome Korben"
+              : "Automatisations IA & Agents",
           detail: isCrm
             ? "Pipeline métier, relances automatiques & options développées sur cahier des charges"
             : isKorben
@@ -546,19 +741,48 @@ export function AgentXRHub() {
       }
     });
     return items;
-  }, [selectedServices, currentLang, isEn, mapsCity, mapsEstimate, selectedMgmtTier, webTier, webLanguages, brandingTier, seoTier, socialTier, webcareTier, webcareIncludeInfra, aiFocus, SERVICES]);
+  }, [
+    selectedServices,
+    currentLang,
+    isEn,
+    mapsCity,
+    mapsEstimate,
+    selectedMgmtTier,
+    webTier,
+    webLanguages,
+    brandingTier,
+    seoTier,
+    socialTier,
+    webcareTier,
+    webcareIncludeInfra,
+    aiFocus,
+    SERVICES,
+  ]);
 
-  const onceFixed = activeProposals.reduce((s, p) => s + (!p.isFromEstimate && p.period === "once" ? p.price : 0), 0);
-  const onceFromCustom = activeProposals.reduce((s, p) => s + (p.isFromEstimate && p.period === "once" ? p.price : 0), 0);
-  const monthlyTotal = activeProposals.reduce((s, p) => s + (p.period === "month" ? p.price : 0), 0);
+  const onceFixed = activeProposals.reduce(
+    (s, p) => s + (!p.isFromEstimate && p.period === "once" ? p.price : 0),
+    0,
+  );
+  const onceFromCustom = activeProposals.reduce(
+    (s, p) => s + (p.isFromEstimate && p.period === "once" ? p.price : 0),
+    0,
+  );
+  const monthlyTotal = activeProposals.reduce(
+    (s, p) => s + (p.period === "month" ? p.price : 0),
+    0,
+  );
   const annualTotal = activeProposals.reduce((s, p) => s + (p.period === "year" ? p.price : 0), 0);
-  const hasCheckoutableFixedItems = activeProposals.length > 0 && activeProposals.every((p) => !p.isQuoteOnly && p.checkoutId);
+  const hasCheckoutableFixedItems =
+    activeProposals.length > 0 && activeProposals.every((p) => !p.isQuoteOnly && p.checkoutId);
   const hasMinimumCommitment = activeProposals.some((p) => (p.commitmentMonths ?? 0) > 0);
 
   const goToStep = (next: number) => {
     setStepValidationMsg("");
     setStep(next);
-    window.setTimeout(() => journeyRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 60);
+    window.setTimeout(
+      () => journeyRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }),
+      60,
+    );
   };
 
   const handleSectorStepContinue = () => {
@@ -566,7 +790,7 @@ export function AgentXRHub() {
       setStepValidationMsg(
         isEn
           ? "Please enter your industry before moving to the next step."
-          : "Merci de préciser votre secteur d'activité ci-dessus avant de continuer."
+          : "Merci de préciser votre secteur d'activité ci-dessus avant de continuer.",
       );
       return;
     }
@@ -575,7 +799,9 @@ export function AgentXRHub() {
 
   const handleNextFromParams = () => {
     if (currentParam === "maps_zone" && mapsCity.trim().length < 2) {
-      setStepValidationMsg("Indiquez la ville ciblée (ex : Orléans, Paris, Lyon...) pour calculer un budget juste.");
+      setStepValidationMsg(
+        "Indiquez la ville ciblée (ex : Orléans, Paris, Lyon...) pour calculer un budget juste.",
+      );
       return;
     }
     setStepValidationMsg("");
@@ -597,7 +823,9 @@ export function AgentXRHub() {
   const toggleSuggestedKw = (kw: string) => {
     const clean = `${kw} ${mapsCity.trim()}`.trim();
     const exists = mapsKeywords.some((k) => k.toLowerCase() === clean.toLowerCase());
-    setMapsKeywords((prev) => (exists ? prev.filter((k) => k.toLowerCase() !== clean.toLowerCase()) : [...prev, clean]));
+    setMapsKeywords((prev) =>
+      exists ? prev.filter((k) => k.toLowerCase() !== clean.toLowerCase()) : [...prev, clean],
+    );
   };
 
   const addCustomKw = () => {
@@ -616,7 +844,9 @@ export function AgentXRHub() {
     setSendMessage("");
     try {
       const doc = new jsPDF({ unit: "mm", format: "a4" });
-      const W = 210, M = 14, R = 196;
+      const W = 210,
+        M = 14,
+        R = 196;
       const ink = [18, 22, 29] as const;
       const soft = [245, 242, 236] as const;
       const lineColor = [220, 214, 204] as const;
@@ -649,11 +879,21 @@ export function AgentXRHub() {
       doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83", M, 25);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(13);
-      doc.text(cleanForPdf(isEn ? "CUSTOM COMMERCIAL PROPOSAL" : "ESTIMATION COMMERCIALE SUR MESURE"), R, 13, { align: "right" });
+      doc.text(
+        cleanForPdf(isEn ? "CUSTOM COMMERCIAL PROPOSAL" : "ESTIMATION COMMERCIALE SUR MESURE"),
+        R,
+        13,
+        { align: "right" },
+      );
       doc.setFont("helvetica", "normal");
       doc.setFontSize(7.5);
       doc.text(quoteNumber, R, 19, { align: "right" });
-      doc.text(`Date : ${issueDate.toLocaleDateString("fr-FR")} · Validite : ${validity.toLocaleDateString("fr-FR")}`, R, 25, { align: "right" });
+      doc.text(
+        `Date : ${issueDate.toLocaleDateString("fr-FR")} · Validite : ${validity.toLocaleDateString("fr-FR")}`,
+        R,
+        25,
+        { align: "right" },
+      );
 
       let y = 44;
       const box = (heading: string) => {
@@ -672,7 +912,13 @@ export function AgentXRHub() {
       y += 5;
       doc.setFont("helvetica", "normal");
       doc.setTextColor(...muted);
-      doc.text(cleanForPdf(`${client.email} · ${client.whatsapp}${client.website ? ` · ${client.website}` : ""}`), M, y);
+      doc.text(
+        cleanForPdf(
+          `${client.email} · ${client.whatsapp}${client.website ? ` · ${client.website}` : ""}`,
+        ),
+        M,
+        y,
+      );
       y += 9;
 
       box(isEn ? "Project Scope" : "Cadrage & Objectif");
@@ -682,13 +928,22 @@ export function AgentXRHub() {
       y += 5;
       doc.setFont("helvetica", "normal");
       doc.setTextColor(...muted);
-      if (situationChoice) { doc.text(cleanForPdf(`Situation : ${situationChoice.label}`), M, y); y += 5; }
-      if (goal) { doc.text(cleanForPdf(`Objectif : ${goal}`), M, y); y += 5; }
+      if (situationChoice) {
+        doc.text(cleanForPdf(`Situation : ${situationChoice.label}`), M, y);
+        y += 5;
+      }
+      if (goal) {
+        doc.text(cleanForPdf(`Objectif : ${goal}`), M, y);
+        y += 5;
+      }
       y += 5;
 
       box(isEn ? "Configured Services & Estimate" : "Prestations configurees & Estimation");
       activeProposals.forEach((p) => {
-        if (y > 250) { doc.addPage(); y = 20; }
+        if (y > 250) {
+          doc.addPage();
+          y = 20;
+        }
         doc.setTextColor(...ink);
         doc.setFont("helvetica", "bold");
         doc.setFontSize(9);
@@ -711,29 +966,51 @@ export function AgentXRHub() {
       doc.setTextColor(...ink);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(10);
-      if (onceFixed > 0) { doc.text(cleanForPdf(`Total forfaits fixes : ${onceFixed} EUR`), R, y, { align: "right" }); y += 5.5; }
-      if (onceFromCustom > 0) { doc.text(cleanForPdf(`Sur mesure (a partir de) : ${onceFromCustom} EUR`), R, y, { align: "right" }); y += 5.5; }
-      if (monthlyTotal > 0) { doc.text(cleanForPdf(`Abonnements mensuels : ${monthlyTotal} EUR / mois`), R, y, { align: "right" }); y += 5.5; }
-      if (annualTotal > 0) { doc.text(cleanForPdf(`Hébergement & domaine : ${annualTotal} EUR / an`), R, y, { align: "right" }); y += 5.5; }
+      if (onceFixed > 0) {
+        doc.text(cleanForPdf(`Total forfaits fixes : ${onceFixed} EUR`), R, y, { align: "right" });
+        y += 5.5;
+      }
+      if (onceFromCustom > 0) {
+        doc.text(cleanForPdf(`Sur mesure (a partir de) : ${onceFromCustom} EUR`), R, y, {
+          align: "right",
+        });
+        y += 5.5;
+      }
+      if (monthlyTotal > 0) {
+        doc.text(cleanForPdf(`Abonnements mensuels : ${monthlyTotal} EUR / mois`), R, y, {
+          align: "right",
+        });
+        y += 5.5;
+      }
+      if (annualTotal > 0) {
+        doc.text(cleanForPdf(`Hébergement & domaine : ${annualTotal} EUR / an`), R, y, {
+          align: "right",
+        });
+        y += 5.5;
+      }
 
       y += 5;
       doc.setFont("helvetica", "normal");
       doc.setFontSize(7.5);
       doc.setTextColor(...muted);
-      const paymentTerms = cleanForPdf(isEn
-        ? "Custom projects: a deposit is due at order; the remaining balance follows milestones stated in the final signed quote."
-        : "Projets sur mesure : acompte à la commande ; solde réparti selon les jalons précisés dans le devis final signé.");
+      const paymentTerms = cleanForPdf(
+        isEn
+          ? "Custom projects: a deposit is due at order; the remaining balance follows milestones stated in the final signed quote."
+          : "Projets sur mesure : acompte à la commande ; solde réparti selon les jalons précisés dans le devis final signé.",
+      );
       doc.text(doc.splitTextToSize(paymentTerms, W - 2 * M), M, y);
       y += 7;
-      const taxTerms = cleanForPdf(isEn
-        ? "EUR reference prices. VAT treatment is confirmed on the final quote/invoice according to the seller's tax regime and the client's location. International currency conversions are indicative only."
-        : "Prix de référence en EUR. TVA confirmée sur le devis ou la facture selon le régime fiscal du prestataire et la localisation du client. Les conversions internationales sont indicatives.");
+      const taxTerms = cleanForPdf(
+        isEn
+          ? "EUR reference prices. VAT treatment is confirmed on the final quote/invoice according to the seller's tax regime and the client's location. International currency conversions are indicative only."
+          : "Prix de référence en EUR. TVA confirmée sur le devis ou la facture selon le régime fiscal du prestataire et la localisation du client. Les conversions internationales sont indicatives.",
+      );
       doc.text(doc.splitTextToSize(taxTerms, W - 2 * M), M, y);
 
       doc.setFontSize(7);
       doc.setFont("helvetica", "normal");
       doc.setTextColor(...muted);
-      doc.text("KARMA SASU · SIREN 889 178 141 · Document indicatif soumis a validation technique finale.", M, 286);
+      doc.text("XR Agency · Document indicatif soumis à validation du périmètre final.", M, 286);
 
       const pdfBase64 = doc.output("datauristring").split(",")[1];
       doc.save(`XRAGENCY-Devis-${quoteNumber}.pdf`);
@@ -753,8 +1030,15 @@ export function AgentXRHub() {
                 sector: resolvedSectorLabel,
                 goal,
                 situation: situationChoice?.label || "",
-                recommendation: mapsAddPostCare ? "Inclut suite mensuelle Parcours 2 souhaitée." : "",
-                services: activeProposals.map((p) => ({ label: p.label, detail: p.detail, price: p.price, period: p.period })),
+                recommendation: mapsAddPostCare
+                  ? "Inclut suite mensuelle Parcours 2 souhaitée."
+                  : "",
+                services: activeProposals.map((p) => ({
+                  label: p.label,
+                  detail: p.detail,
+                  price: p.price,
+                  period: p.period,
+                })),
                 once: onceFixed + onceFromCustom,
                 monthly: monthlyTotal,
                 annual: annualTotal,
@@ -770,7 +1054,7 @@ export function AgentXRHub() {
       setSendMessage(
         emailDelivered
           ? `Votre pré-devis PDF (${quoteNumber}) a été téléchargé et transmis à ${client.email} ainsi qu'à notre équipe.`
-          : QUOTE_UI.pdfGeneratedSuccess[currentLang]
+          : QUOTE_UI.pdfGeneratedSuccess[currentLang],
       );
     } catch (error) {
       setSendMessage(error instanceof Error ? error.message : QUOTE_UI.pdfError[currentLang]);
@@ -780,8 +1064,16 @@ export function AgentXRHub() {
   };
 
   const createCheckout = async () => {
-    const checkoutIds = activeProposals.map((p) => p.checkoutId).filter((id): id is string => Boolean(id));
-    if (!client.email || !checkoutIds.length || paying || (hasMinimumCommitment && !acceptCommitments)) return;
+    const checkoutIds = activeProposals
+      .map((p) => p.checkoutId)
+      .filter((id): id is string => Boolean(id));
+    if (
+      !client.email ||
+      !checkoutIds.length ||
+      paying ||
+      (hasMinimumCommitment && !acceptCommitments)
+    )
+      return;
     setPaying(true);
     setSendMessage("");
     try {
@@ -792,14 +1084,20 @@ export function AgentXRHub() {
           action: "checkout",
           sectorId,
           situation: webTier === "ecommerce" ? "selling" : situation,
-          budget: webTier === "business" ? "1000_2500" : brandingTier === "premium" ? "2500_5000" : "500_1000",
+          budget:
+            webTier === "business"
+              ? "1000_2500"
+              : brandingTier === "premium"
+                ? "2500_5000"
+                : "500_1000",
           selectedServices: checkoutIds,
           acceptCommitmentTerms: acceptCommitments,
           client,
         }),
       });
       const data = (await response.json()) as { url?: string; error?: string };
-      if (!response.ok || !data.url) throw new Error(data.error || QUOTE_UI.paymentError[currentLang]);
+      if (!response.ok || !data.url)
+        throw new Error(data.error || QUOTE_UI.paymentError[currentLang]);
       window.location.href = data.url;
     } catch (error) {
       setSendMessage(error instanceof Error ? error.message : QUOTE_UI.paymentError[currentLang]);
@@ -812,7 +1110,9 @@ export function AgentXRHub() {
   const runAudit = async (overrideTypes?: AuditType[]) => {
     const activeTypes = overrideTypes ?? auditTypes;
     if (!auditUrl.trim()) {
-      setAuditError("Entrez l'adresse de votre site web (ex : monentreprise.fr) pour lancer l'analyse.");
+      setAuditError(
+        "Entrez l'adresse de votre site web (ex : monentreprise.fr) pour lancer l'analyse.",
+      );
       auditInputRef.current?.focus();
       return;
     }
@@ -823,7 +1123,12 @@ export function AgentXRHub() {
       const res = await fetch("/api/audit", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ url: auditUrl.trim(), types: activeTypes, sector: auditSector, budget: "1000_2500" }),
+        body: JSON.stringify({
+          url: auditUrl.trim(),
+          types: activeTypes,
+          sector: auditSector,
+          budget: "1000_2500",
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Audit momentanément indisponible");
@@ -849,7 +1154,10 @@ export function AgentXRHub() {
     let y = 42;
     doc.setTextColor(20, 19, 18);
     auditResult.findings.forEach((f, idx) => {
-      if (y > 265) { doc.addPage(); y = 20; }
+      if (y > 265) {
+        doc.addPage();
+        y = 20;
+      }
       doc.setFont("helvetica", "bold");
       doc.setFontSize(8.5);
       doc.text(`${idx + 1}. ${f.label}`, 14, y);
@@ -867,33 +1175,40 @@ export function AgentXRHub() {
     if (guidedGoal === "local") {
       return {
         title: "Visibilité Locale & Fiche Google Maps",
-        reason: "Vous souhaitez attirer des clients autour de vous : le combo Site Web rapide + Référencement Google Maps est le levier le plus direct.",
+        reason:
+          "Vous souhaitez attirer des clients autour de vous : le combo Site Web rapide + Référencement Google Maps est le levier le plus direct.",
         services: ["website", "maps_top3"],
       };
     }
     if (guidedGoal === "brand") {
       return {
         title: "Identité Premium & Site Vitrine Haute Conversion",
-        reason: "Soigner votre image de marque et votre site internet inspire immédiatement confiance à vos prospects.",
+        reason:
+          "Soigner votre image de marque et votre site internet inspire immédiatement confiance à vos prospects.",
         services: ["branding", "website", "social"],
       };
     }
     if (guidedGoal === "automation") {
       return {
         title: "CRM Sur-Mesure & Automatisations IA",
-        reason: "Pour ne plus perdre de prospects et structurer vos relances, un CRM personnalisé dès 999 € connecté à vos outils s'impose.",
+        reason:
+          "Pour ne plus perdre de prospects et structurer vos relances, un CRM personnalisé dès 999 € connecté à vos outils s'impose.",
         services: ["robotics", "website"],
       };
     }
     return {
       title: "Croissance Multi-Canaux (Site + SEO + Social Media)",
-      reason: "Associer présence sur Google, contenus réseaux sociaux et site performant sécurise vos demandes régulières.",
+      reason:
+        "Associer présence sur Google, contenus réseaux sociaux et site performant sécurise vos demandes régulières.",
       services: ["website", "seo", "social"],
     };
   }, [guidedGoal]);
 
   const activeMilestoneIdx = step <= 2 ? 0 : step === 3 ? 1 : step === 4 ? 2 : 3;
-  const milestones = (currentLang === "en" ? ["Profile", "Services", "Parameters", "Proposal"] : ["Profil", "Prestations", "Paramètres", "Proposition"]);
+  const milestones =
+    currentLang === "en"
+      ? ["Profile", "Services", "Parameters", "Proposal"]
+      : ["Profil", "Prestations", "Paramètres", "Proposition"];
   const subtitles = isEn
     ? [
         "What is your industry?",
@@ -937,19 +1252,30 @@ export function AgentXRHub() {
           "group relative w-full rounded-2xl border p-4 text-left transition-all flex items-center justify-between gap-3",
           selected
             ? "border-[#d4af37] bg-[#0c0e18] text-white shadow-sm ring-1 ring-[#b48f5a]"
-            : "border-white/10 bg-[#0c0e18] text-white hover:border-[#d4af37]"
+            : "border-white/10 bg-[#0c0e18] text-white hover:border-[#d4af37]",
         )}
       >
         <div className="flex items-center gap-3 min-w-0">
-          <span className={cn("grid h-9 w-9 shrink-0 place-items-center rounded-xl transition-colors", selected ? "bg-white text-black text-[#e8cfa6]" : "bg-[#f5efe4] text-[#d4af37]")}>
+          <span
+            className={cn(
+              "grid h-9 w-9 shrink-0 place-items-center rounded-xl transition-colors",
+              selected ? "bg-white text-black text-[#e8cfa6]" : "bg-[#f5efe4] text-[#d4af37]",
+            )}
+          >
             <Icon className="h-4 w-4" />
           </span>
           <div className="min-w-0">
             <span className="block text-xs sm:text-sm font-bold leading-snug">{item.label}</span>
-            <span className="block text-[10.5px] sm:text-xs text-[#94a3b8] leading-snug mt-0.5">{item.detail}</span>
+            <span className="block text-[10.5px] sm:text-xs text-[#94a3b8] leading-snug mt-0.5">
+              {item.detail}
+            </span>
           </div>
         </div>
-        {tag && <span className="shrink-0 rounded-full bg-[#f5efe4] px-2.5 py-1 label-mono text-[7.5px] font-bold text-[#d4af37]">{tag}</span>}
+        {tag && (
+          <span className="shrink-0 rounded-full bg-[#f5efe4] px-2.5 py-1 label-mono text-[7.5px] font-bold text-[#d4af37]">
+            {tag}
+          </span>
+        )}
       </button>
     );
   };
@@ -995,13 +1321,15 @@ export function AgentXRHub() {
                       ASSISTANT COMMERCIAL XR
                     </span>
                     <h2 className="text-xl sm:text-2xl leading-snug font-bold mt-0.5 drop-shadow text-white">
-                      Bonjour et bienvenue chez <em className="italic text-[#d4af37]">XR Agency</em> !
+                      Bonjour et bienvenue chez <em className="italic text-[#d4af37]">XR Agency</em>{" "}
+                      !
                     </h2>
                   </div>
                 </div>
                 <div className="p-4 bg-[#0a0c14] border-t border-white/5">
                   <p className="text-xs sm:text-sm font-medium text-[#94a3b8] leading-relaxed">
-                    Comment pouvons-nous vous accompagner aujourd&apos;hui ? Sélectionnez votre point d&apos;entrée :
+                    Comment pouvons-nous vous accompagner aujourd&apos;hui ? Sélectionnez votre
+                    point d&apos;entrée :
                   </p>
                 </div>
               </div>
@@ -1045,27 +1373,44 @@ export function AgentXRHub() {
                         "group flex w-full items-center gap-3.5 rounded-2xl border p-3.5 text-left transition-all",
                         active
                           ? "border-[#d4af37] bg-white text-black text-white shadow-md"
-                          : "border-[#d4af37]/12 bg-[#0c0e18] text-white hover:border-[#d4af37]"
+                          : "border-[#d4af37]/12 bg-[#0c0e18] text-white hover:border-[#d4af37]",
                       )}
                     >
                       <span
                         className={cn(
                           "grid h-10 w-10 shrink-0 place-items-center rounded-xl transition",
-                          active ? "bg-[#c5a880] text-white" : "bg-[#f5efe4] text-[#d4af37]"
+                          active ? "bg-[#c5a880] text-white" : "bg-[#f5efe4] text-[#d4af37]",
                         )}
                       >
                         <Icon className="h-4.5 w-4.5" />
                       </span>
                       <div className="min-w-0 flex-1">
-                        <span className={cn("label-mono text-[6.5px] font-bold tracking-[.16em] block", active ? "text-[#e8cfa6]" : "text-[#8b704f]")}>
+                        <span
+                          className={cn(
+                            "label-mono text-[6.5px] font-bold tracking-[.16em] block",
+                            active ? "text-[#e8cfa6]" : "text-[#8b704f]",
+                          )}
+                        >
                           {opt.badge}
                         </span>
-                        <span className="block text-xs sm:text-[13px] font-bold leading-snug mt-0.5">{opt.title}</span>
-                        <span className={cn("block text-[10.5px] truncate mt-0.5", active ? "text-white/75" : "text-[#94a3b8]")}>
+                        <span className="block text-xs sm:text-[13px] font-bold leading-snug mt-0.5">
+                          {opt.title}
+                        </span>
+                        <span
+                          className={cn(
+                            "block text-[10.5px] truncate mt-0.5",
+                            active ? "text-white/75" : "text-[#94a3b8]",
+                          )}
+                        >
                           {opt.desc}
                         </span>
                       </div>
-                      <ArrowRight className={cn("h-4 w-4 shrink-0 transition-transform group-hover:translate-x-1", active ? "text-[#e8cfa6]" : "text-[#8b704f]")} />
+                      <ArrowRight
+                        className={cn(
+                          "h-4 w-4 shrink-0 transition-transform group-hover:translate-x-1",
+                          active ? "text-[#e8cfa6]" : "text-[#8b704f]",
+                        )}
+                      />
                     </button>
                   );
                 })}
@@ -1074,7 +1419,12 @@ export function AgentXRHub() {
 
             <div className="mt-6 pt-4 border-t border-[#d4af37]/10 flex items-center justify-between text-[11px] text-[#94a3b8]">
               <span>Accompagnement 100% humain · Devis gratuit</span>
-              <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="font-bold text-[#d4af37] hover:underline">
+              <a
+                href={CONTACT.whatsapp}
+                target="_blank"
+                rel="noreferrer"
+                className="font-bold text-[#d4af37] hover:underline"
+              >
                 WhatsApp direct ↗
               </a>
             </div>
@@ -1102,7 +1452,7 @@ export function AgentXRHub() {
                             ? "border-[#d4af37] bg-[#d4af37] text-black font-bold shadow-[0_0_12px_rgba(212,175,55,0.4)]"
                             : idx < activeMilestoneIdx
                               ? "border-[#d4af37]/40 bg-[#d4af37]/10 text-[#d4af37]"
-                              : "border-white/10 bg-[#0c0e18]/5 text-[#64748b]"
+                              : "border-white/10 bg-[#0c0e18]/5 text-[#64748b]",
                         )}
                       >
                         <span className="font-mono text-[9px]">{idx + 1}</span>
@@ -1151,7 +1501,9 @@ export function AgentXRHub() {
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                       {visibleSectors.map((item) => {
                         const isSel = item.id === sectorId;
-                        const photo = XR_SECTOR_PHOTOS[item.id as keyof typeof XR_SECTOR_PHOTOS] ?? XR_SECTOR_PHOTOS.other;
+                        const photo =
+                          XR_SECTOR_PHOTOS[item.id as keyof typeof XR_SECTOR_PHOTOS] ??
+                          XR_SECTOR_PHOTOS.other;
                         const Icon = SECTOR_ICONS[item.id] ?? Sparkles;
                         return (
                           <button
@@ -1170,10 +1522,14 @@ export function AgentXRHub() {
                               "group relative aspect-[4/3] overflow-hidden rounded-2xl border text-left transition-all shadow-2xs",
                               isSel
                                 ? "border-[#d4af37] ring-2 ring-[#b48f5a]"
-                                : "border-[#e3dcd0] hover:border-[#d4af37]"
+                                : "border-[#e3dcd0] hover:border-[#d4af37]",
                             )}
                           >
-                            <img src={photo} alt={item.shortLabel} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                            <img
+                              src={photo}
+                              alt={item.shortLabel}
+                              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                            />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
                             {isSel && (
                               <span className="absolute top-2.5 right-2.5 grid h-6 w-6 place-items-center rounded-full bg-[#c5a880] text-white shadow-md">
@@ -1182,7 +1538,9 @@ export function AgentXRHub() {
                             )}
                             <div className="absolute bottom-2.5 left-3 right-3 flex items-center gap-1.5 text-white">
                               <Icon className="h-3.5 w-3.5 text-[#e8cfa6] shrink-0" />
-                              <span className="text-xs font-bold truncate drop-shadow">{item.shortLabel}</span>
+                              <span className="text-xs font-bold truncate drop-shadow">
+                                {item.shortLabel}
+                              </span>
                             </div>
                           </button>
                         );
@@ -1261,14 +1619,18 @@ export function AgentXRHub() {
                         onClick={() => setShowAllSectors((v) => !v)}
                         className="rounded-full border border-white/15 bg-[#0c0e18] px-4 py-2 label-mono text-[7.5px] font-bold text-white hover:border-[#d4af37]"
                       >
-                        {showAllSectors ? QUOTE_UI.collapseSectors[currentLang] : QUOTE_UI.seeAllSectors[currentLang]}
+                        {showAllSectors
+                          ? QUOTE_UI.collapseSectors[currentLang]
+                          : QUOTE_UI.seeAllSectors[currentLang]}
                       </button>
                       <button
                         type="button"
                         onClick={handleSectorStepContinue}
                         className="inline-flex items-center gap-2 rounded-full bg-white text-black px-6 py-3 text-xs font-bold text-white hover:bg-[#8b704f] transition"
                       >
-                        {sectorId === "other" ? "Continuer avec mon activité →" : `${QUOTE_UI.continue[currentLang]} →`}
+                        {sectorId === "other"
+                          ? "Continuer avec mon activité →"
+                          : `${QUOTE_UI.continue[currentLang]} →`}
                       </button>
                     </div>
                   </div>
@@ -1285,8 +1647,8 @@ export function AgentXRHub() {
                           if (x.id === "selling") setWebTier("ecommerce");
                           goToStep(2);
                         },
-                        situation === x.id
-                      )
+                        situation === x.id,
+                      ),
                     )}
                   </div>
                 )}
@@ -1299,14 +1661,16 @@ export function AgentXRHub() {
                         {
                           id: g,
                           label: g,
-                          detail: isEn ? "Guides recommended service scope" : "Oriente les recommandations et le budget",
+                          detail: isEn
+                            ? "Guides recommended service scope"
+                            : "Oriente les recommandations et le budget",
                         },
                         () => {
                           setGoal(g);
                           goToStep(3);
                         },
-                        goal === g
-                      )
+                        goal === g,
+                      ),
                     )}
                   </div>
                 )}
@@ -1316,7 +1680,8 @@ export function AgentXRHub() {
                   <div className="space-y-4">
                     <div className="rounded-2xl border border-white/10 bg-[#0c0e18] px-4 py-3 flex items-center justify-between gap-2">
                       <p className="text-xs text-[#94a3b8]">
-                        Google Maps sépare le <strong>Top 3 sur mesure</strong> de la <strong>Gestion mensuelle</strong>. Vous pouvez combiner plusieurs services.
+                        Google Maps sépare le <strong>Top 3 sur mesure</strong> de la{" "}
+                        <strong>Gestion mensuelle</strong>. Vous pouvez combiner plusieurs services.
                       </p>
                       <span className="shrink-0 rounded-full bg-white text-black px-3 py-1 label-mono text-[7px] font-bold text-[#e8cfa6]">
                         {selectedServices.length} choisi(s)
@@ -1341,17 +1706,26 @@ export function AgentXRHub() {
                                       : x.id === "maintenance"
                                         ? "Dès 29 €/m"
                                         : "POS / CRM dès 2 000 €";
-                        return choiceBtn(x, () => toggleService(x.id), selectedServices.includes(x.id), tag);
+                        return choiceBtn(
+                          x,
+                          () => toggleService(x.id),
+                          selectedServices.includes(x.id),
+                          tag,
+                        );
                       })}
                     </div>
 
-                    {stepValidationMsg && <p className="text-xs font-bold text-red-600">{stepValidationMsg}</p>}
+                    {stepValidationMsg && (
+                      <p className="text-xs font-bold text-red-600">{stepValidationMsg}</p>
+                    )}
 
                     <button
                       type="button"
                       onClick={() => {
                         if (selectedServices.length === 0) {
-                          setStepValidationMsg("Sélectionnez au moins un service pour paramétrer votre projet.");
+                          setStepValidationMsg(
+                            "Sélectionnez au moins un service pour paramétrer votre projet.",
+                          );
                           return;
                         }
                         setParamIdx(0);
@@ -1368,32 +1742,85 @@ export function AgentXRHub() {
                 {step === 4 && currentParam && (
                   <div className="space-y-4">
                     <div className="h-1.5 rounded-full bg-[#efeae0] overflow-hidden">
-                      <div className="h-full bg-[#9b7b4b] transition-all duration-300" style={{ width: `${((paramIdx + 1) / paramScreens.length) * 100}%` }} />
+                      <div
+                        className="h-full bg-[#9b7b4b] transition-all duration-300"
+                        style={{ width: `${((paramIdx + 1) / paramScreens.length) * 100}%` }}
+                      />
                     </div>
 
                     {currentParam === "maps_zone" && (
                       <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-5 space-y-4">
-                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">GOOGLE MAPS TOP 3 · LOCALISATION</span>
-                        <h4 className="display-serif text-2xl">Où souhaitez-vous positionner votre établissement ?</h4>
+                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">
+                          GOOGLE MAPS TOP 3 · LOCALISATION
+                        </span>
+                        <h4 className="display-serif text-2xl">
+                          Où souhaitez-vous positionner votre établissement ?
+                        </h4>
                         <div className="grid gap-3 sm:grid-cols-2">
-                          <select value={mapsSectorId} onChange={(e) => setMapsSectorId(e.target.value)} className="rounded-xl border border-white/15 bg-[#0c0e18] px-3.5 py-2.5 text-xs font-semibold">
-                            {MAPS_SECTORS.map((s) => <option key={s.id} value={s.id}>{s.label[currentLang]}</option>)}
+                          <select
+                            value={mapsSectorId}
+                            onChange={(e) => setMapsSectorId(e.target.value)}
+                            className="rounded-xl border border-white/15 bg-[#0c0e18] px-3.5 py-2.5 text-xs font-semibold"
+                          >
+                            {MAPS_SECTORS.map((s) => (
+                              <option key={s.id} value={s.id}>
+                                {s.label[currentLang]}
+                              </option>
+                            ))}
                           </select>
-                          <input value={mapsCity} onChange={(e) => { setMapsCity(e.target.value); setStepValidationMsg(""); }} placeholder="Ville cible * (ex: Orléans, Paris...)" className="rounded-xl border border-white/15 bg-[#0c0e18] px-3.5 py-2.5 text-xs" />
-                          <input value={mapsPostal} onChange={(e) => setMapsPostal(e.target.value)} placeholder="Code postal" className="rounded-xl border border-white/15 bg-[#0c0e18] px-3.5 py-2.5 text-xs" />
-                          <input value={mapsDistrict} onChange={(e) => setMapsDistrict(e.target.value)} placeholder="Quartier (facultatif)" className="rounded-xl border border-white/15 bg-[#0c0e18] px-3.5 py-2.5 text-xs" />
+                          <input
+                            value={mapsCity}
+                            onChange={(e) => {
+                              setMapsCity(e.target.value);
+                              setStepValidationMsg("");
+                            }}
+                            placeholder="Ville cible * (ex: Orléans, Paris...)"
+                            className="rounded-xl border border-white/15 bg-[#0c0e18] px-3.5 py-2.5 text-xs"
+                          />
+                          <input
+                            value={mapsPostal}
+                            onChange={(e) => setMapsPostal(e.target.value)}
+                            placeholder="Code postal"
+                            className="rounded-xl border border-white/15 bg-[#0c0e18] px-3.5 py-2.5 text-xs"
+                          />
+                          <input
+                            value={mapsDistrict}
+                            onChange={(e) => setMapsDistrict(e.target.value)}
+                            placeholder="Quartier (facultatif)"
+                            className="rounded-xl border border-white/15 bg-[#0c0e18] px-3.5 py-2.5 text-xs"
+                          />
                         </div>
                         <div className="grid gap-3 sm:grid-cols-2">
                           <div>
                             <label className="text-[11px] font-bold block mb-1">Population</label>
-                            <select value={mapsPopulation} onChange={(e) => setMapsPopulation(e.target.value as MapsPopulationId)} className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-3 py-2 text-xs">
-                              {MAPS_POPULATIONS.map((p) => <option key={p.id} value={p.id}>{p.label[currentLang]}</option>)}
+                            <select
+                              value={mapsPopulation}
+                              onChange={(e) =>
+                                setMapsPopulation(e.target.value as MapsPopulationId)
+                              }
+                              className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-3 py-2 text-xs"
+                            >
+                              {MAPS_POPULATIONS.map((p) => (
+                                <option key={p.id} value={p.id}>
+                                  {p.label[currentLang]}
+                                </option>
+                              ))}
                             </select>
                           </div>
                           <div>
-                            <label className="text-[11px] font-bold block mb-1">Étendue géographique</label>
-                            <select value={mapsGeoScope} onChange={(e) => setMapsGeoScope(e.target.value as MapsGeoScopeId)} className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-3 py-2 text-xs">
-                              {MAPS_GEO_SCOPES.map((g) => <option key={g.id} value={g.id}>{g.label[currentLang]}</option>)}
+                            <label className="text-[11px] font-bold block mb-1">
+                              Étendue géographique
+                            </label>
+                            <select
+                              value={mapsGeoScope}
+                              onChange={(e) => setMapsGeoScope(e.target.value as MapsGeoScopeId)}
+                              className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-3 py-2 text-xs"
+                            >
+                              {MAPS_GEO_SCOPES.map((g) => (
+                                <option key={g.id} value={g.id}>
+                                  {g.label[currentLang]}
+                                </option>
+                              ))}
                             </select>
                           </div>
                         </div>
@@ -1402,77 +1829,187 @@ export function AgentXRHub() {
 
                     {currentParam === "maps_market" && (
                       <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-5 space-y-4">
-                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">GOOGLE MAPS TOP 3 · CONCURRENCE &amp; RANG ACTUEL</span>
+                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">
+                          GOOGLE MAPS TOP 3 · CONCURRENCE &amp; RANG ACTUEL
+                        </span>
                         <div className="grid grid-cols-2 gap-2">
                           {MAPS_COMPETITION_LEVELS.map((lv) => (
-                            <button key={lv.id} type="button" onClick={() => setMapsCompetition(lv.id)} className={cn("rounded-xl border p-2.5 text-left text-xs font-bold", mapsCompetition === lv.id ? "border-[#d4af37] bg-white text-black text-white" : "border-white/15 bg-[#0c0e18]")}>
+                            <button
+                              key={lv.id}
+                              type="button"
+                              onClick={() => setMapsCompetition(lv.id)}
+                              className={cn(
+                                "rounded-xl border p-2.5 text-left text-xs font-bold",
+                                mapsCompetition === lv.id
+                                  ? "border-[#d4af37] bg-white text-black text-white"
+                                  : "border-white/15 bg-[#0c0e18]",
+                              )}
+                            >
                               {lv.label[currentLang]}
                             </button>
                           ))}
                         </div>
                         <div className="grid sm:grid-cols-2 gap-2">
                           {MAPS_PRESENCE_STATES.map((st) => (
-                            <button key={st.id} type="button" onClick={() => setMapsPresence(st.id)} className={cn("rounded-xl border p-2.5 text-left text-[11px]", mapsPresence === st.id ? "border-[#d4af37] bg-[#f5efe4] font-bold" : "border-white/15 bg-[#0c0e18]")}>
+                            <button
+                              key={st.id}
+                              type="button"
+                              onClick={() => setMapsPresence(st.id)}
+                              className={cn(
+                                "rounded-xl border p-2.5 text-left text-[11px]",
+                                mapsPresence === st.id
+                                  ? "border-[#d4af37] bg-[#f5efe4] font-bold"
+                                  : "border-white/15 bg-[#0c0e18]",
+                              )}
+                            >
                               {st.label[currentLang]}
                             </button>
                           ))}
                         </div>
-                        <select value={mapsGoal} onChange={(e) => setMapsGoal(e.target.value as MapsGoalId)} className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-3 py-2 text-xs font-semibold">
-                          {MAPS_GOALS.map((g) => <option key={g.id} value={g.id}>{g.label[currentLang]}</option>)}
+                        <select
+                          value={mapsGoal}
+                          onChange={(e) => setMapsGoal(e.target.value as MapsGoalId)}
+                          className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-3 py-2 text-xs font-semibold"
+                        >
+                          {MAPS_GOALS.map((g) => (
+                            <option key={g.id} value={g.id}>
+                              {g.label[currentLang]}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     )}
 
                     {currentParam === "maps_keywords" && (
                       <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-5 space-y-4">
-                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">GOOGLE MAPS TOP 3 · MOTS-CLÉS</span>
+                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">
+                          GOOGLE MAPS TOP 3 · MOTS-CLÉS
+                        </span>
                         <div className="flex flex-wrap gap-1.5">
-                          {(activeMapsSector.suggestedKeywords[currentLang] ?? activeMapsSector.suggestedKeywords.fr).map((kw) => {
+                          {(
+                            activeMapsSector.suggestedKeywords[currentLang] ??
+                            activeMapsSector.suggestedKeywords.fr
+                          ).map((kw) => {
                             const label = `${kw} ${mapsCity.trim()}`.trim();
-                            const active = mapsKeywords.some((k) => k.toLowerCase() === label.toLowerCase());
+                            const active = mapsKeywords.some(
+                              (k) => k.toLowerCase() === label.toLowerCase(),
+                            );
                             return (
-                              <button key={kw} type="button" onClick={() => toggleSuggestedKw(kw)} className={cn("rounded-full border px-3 py-1 text-[10.5px] font-medium", active ? "border-[#d4af37] bg-white text-black text-[#e8cfa6]" : "border-white/15 bg-[#0c0e18]")}>
-                                {active ? "✓ " : "+ "}{label}
+                              <button
+                                key={kw}
+                                type="button"
+                                onClick={() => toggleSuggestedKw(kw)}
+                                className={cn(
+                                  "rounded-full border px-3 py-1 text-[10.5px] font-medium",
+                                  active
+                                    ? "border-[#d4af37] bg-white text-black text-[#e8cfa6]"
+                                    : "border-white/15 bg-[#0c0e18]",
+                                )}
+                              >
+                                {active ? "✓ " : "+ "}
+                                {label}
                               </button>
                             );
                           })}
                         </div>
                         <div className="flex gap-2">
-                          <input value={mapsKwInput} onChange={(e) => setMapsKwInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCustomKw(); } }} placeholder="Ajouter un mot-clé personnalisé..." className="flex-1 rounded-xl border border-white/15 bg-[#0c0e18] px-3 py-2 text-xs" />
-                          <button type="button" onClick={addCustomKw} className="rounded-xl bg-white text-black px-4 py-2 text-xs font-bold text-white"><Plus className="h-4 w-4" /></button>
+                          <input
+                            value={mapsKwInput}
+                            onChange={(e) => setMapsKwInput(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                addCustomKw();
+                              }
+                            }}
+                            placeholder="Ajouter un mot-clé personnalisé..."
+                            className="flex-1 rounded-xl border border-white/15 bg-[#0c0e18] px-3 py-2 text-xs"
+                          />
+                          <button
+                            type="button"
+                            onClick={addCustomKw}
+                            className="rounded-xl bg-white text-black px-4 py-2 text-xs font-bold text-white"
+                          >
+                            <Plus className="h-4 w-4" />
+                          </button>
                         </div>
                         {mapsKeywords.length > 0 && (
                           <div className="flex flex-wrap gap-1.5">
                             {mapsKeywords.map((kw) => (
-                              <span key={kw} className="inline-flex items-center gap-1 rounded-lg bg-[#f5efe4] px-2.5 py-1 text-[10px] font-semibold">
-                                {kw}<button type="button" onClick={() => setMapsKeywords((p) => p.filter((x) => x !== kw))}><X className="h-3 w-3" /></button>
+                              <span
+                                key={kw}
+                                className="inline-flex items-center gap-1 rounded-lg bg-[#f5efe4] px-2.5 py-1 text-[10px] font-semibold"
+                              >
+                                {kw}
+                                <button
+                                  type="button"
+                                  onClick={() => setMapsKeywords((p) => p.filter((x) => x !== kw))}
+                                >
+                                  <X className="h-3 w-3" />
+                                </button>
                               </span>
                             ))}
                           </div>
                         )}
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                           {MAPS_KEYWORD_VOLUMES.map((kv) => (
-                            <button key={kv.id} type="button" onClick={() => setMapsKwVolume(kv.id)} className={cn("rounded-xl border p-2.5 text-[10.5px] font-semibold", mapsKwVolume === kv.id ? "border-[#d4af37] bg-white text-black text-white" : "border-white/15 bg-[#0c0e18]")}>
+                            <button
+                              key={kv.id}
+                              type="button"
+                              onClick={() => setMapsKwVolume(kv.id)}
+                              className={cn(
+                                "rounded-xl border p-2.5 text-[10.5px] font-semibold",
+                                mapsKwVolume === kv.id
+                                  ? "border-[#d4af37] bg-white text-black text-white"
+                                  : "border-white/15 bg-[#0c0e18]",
+                              )}
+                            >
                               {kv.label[currentLang]}
                             </button>
                           ))}
                         </div>
                         <label className="flex items-start gap-2.5 rounded-xl bg-[#0c0e18] p-3 text-xs cursor-pointer border border-white/10">
-                          <input type="checkbox" checked={mapsAddPostCare} onChange={(e) => setMapsAddPostCare(e.target.checked)} className="mt-0.5 accent-[#9b7b4b]" />
-                          <span>Envisager aussi une gestion mensuelle à distance après le référencement Top 3.</span>
+                          <input
+                            type="checkbox"
+                            checked={mapsAddPostCare}
+                            onChange={(e) => setMapsAddPostCare(e.target.checked)}
+                            className="mt-0.5 accent-[#9b7b4b]"
+                          />
+                          <span>
+                            Envisager aussi une gestion mensuelle à distance après le référencement
+                            Top 3.
+                          </span>
                         </label>
                       </div>
                     )}
 
                     {currentParam === "maps_mgmt" && (
                       <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-5 space-y-3">
-                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">GESTION MENSUELLE GOOGLE MAPS (100 % À DISTANCE)</span>
+                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">
+                          GESTION MENSUELLE GOOGLE MAPS (100 % À DISTANCE)
+                        </span>
                         {MAPS_MANAGEMENT_TIERS.map((tier) => (
-                          <button key={tier.id} type="button" onClick={() => setMapsMgmtTier(tier.id)} className={cn("w-full rounded-xl border p-3.5 text-left flex items-center justify-between gap-3", mapsMgmtTier === tier.id ? "border-[#d4af37] bg-white text-black text-white" : "border-white/15 bg-[#0c0e18]")}>
+                          <button
+                            key={tier.id}
+                            type="button"
+                            onClick={() => setMapsMgmtTier(tier.id)}
+                            className={cn(
+                              "w-full rounded-xl border p-3.5 text-left flex items-center justify-between gap-3",
+                              mapsMgmtTier === tier.id
+                                ? "border-[#d4af37] bg-white text-black text-white"
+                                : "border-white/15 bg-[#0c0e18]",
+                            )}
+                          >
                             <div>
                               <strong className="text-xs block">{tier.name[currentLang]}</strong>
-                              <span className={cn("text-[10.5px]", mapsMgmtTier === tier.id ? "text-[#d7d1c6]" : "text-[#94a3b8]")}>
-                                {tier.postsPerMonth} Posts · {tier.photosPerMonth} visuels · {tier.reviewsPerMonth} avis/mois
+                              <span
+                                className={cn(
+                                  "text-[10.5px]",
+                                  mapsMgmtTier === tier.id ? "text-[#d7d1c6]" : "text-[#94a3b8]",
+                                )}
+                              >
+                                {tier.postsPerMonth} Posts · {tier.photosPerMonth} visuels ·{" "}
+                                {tier.reviewsPerMonth} avis/mois
                               </span>
                             </div>
                             <span className="text-sm font-black shrink-0">{tier.eurMonth} €/m</span>
@@ -1483,26 +2020,75 @@ export function AgentXRHub() {
 
                     {currentParam === "web_scope" && (
                       <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-5 space-y-3">
-                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">SITE WEB SUR-MESURE</span>
+                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">
+                          SITE WEB SUR-MESURE
+                        </span>
                         <div className="grid sm:grid-cols-3 gap-2.5">
                           {[
-                            { id: "showcase" as const, t: "Vitrine Pro", p: "499 €", d: "Jusqu'à 3 pages, responsive" },
-                            { id: "business" as const, t: "Business", p: "799 €", d: "5+ pages, blog & SEO" },
-                            { id: "ecommerce" as const, t: "E-commerce", p: "1 499 €", d: "Catalogue, Stripe & RDV" },
+                            {
+                              id: "showcase" as const,
+                              t: "Vitrine Pro",
+                              p: "499 €",
+                              d: "Jusqu'à 3 pages, responsive",
+                            },
+                            {
+                              id: "business" as const,
+                              t: "Business",
+                              p: "799 €",
+                              d: "5+ pages, blog & SEO",
+                            },
+                            {
+                              id: "ecommerce" as const,
+                              t: "E-commerce",
+                              p: "1 499 €",
+                              d: "Catalogue, Stripe & RDV",
+                            },
                           ].map((w) => (
-                            <button key={w.id} type="button" onClick={() => setWebTier(w.id)} className={cn("rounded-xl border p-3 text-left", webTier === w.id ? "border-[#d4af37] bg-white text-black text-white" : "border-white/15 bg-[#0c0e18]")}>
-                              <div className="flex justify-between font-bold text-xs"><span>{w.t}</span><span>{w.p}</span></div>
-                              <p className={cn("mt-1 text-[10px]", webTier === w.id ? "text-[#d7d1c6]" : "text-[#94a3b8]")}>{w.d}</p>
+                            <button
+                              key={w.id}
+                              type="button"
+                              onClick={() => setWebTier(w.id)}
+                              className={cn(
+                                "rounded-xl border p-3 text-left",
+                                webTier === w.id
+                                  ? "border-[#d4af37] bg-white text-black text-white"
+                                  : "border-white/15 bg-[#0c0e18]",
+                              )}
+                            >
+                              <div className="flex justify-between font-bold text-xs">
+                                <span>{w.t}</span>
+                                <span>{w.p}</span>
+                              </div>
+                              <p
+                                className={cn(
+                                  "mt-1 text-[10px]",
+                                  webTier === w.id ? "text-[#d7d1c6]" : "text-[#94a3b8]",
+                                )}
+                              >
+                                {w.d}
+                              </p>
                             </button>
                           ))}
                         </div>
                         <div className="grid sm:grid-cols-2 gap-3">
-                          <select value={webLanguages} onChange={(e) => setWebLanguages(e.target.value as "mono" | "bi" | "intl")} className="rounded-xl border border-white/15 bg-[#0c0e18] px-3 py-2 text-xs">
+                          <select
+                            value={webLanguages}
+                            onChange={(e) =>
+                              setWebLanguages(e.target.value as "mono" | "bi" | "intl")
+                            }
+                            className="rounded-xl border border-white/15 bg-[#0c0e18] px-3 py-2 text-xs"
+                          >
                             <option value="mono">1 langue (inclus)</option>
                             <option value="bi">Bilingue FR / EN · sur devis</option>
                             <option value="intl">Multilingue 3+ · sur devis</option>
                           </select>
-                          <select value={webContentReady} onChange={(e) => setWebContentReady(e.target.value as "ready" | "guided")} className="rounded-xl border border-white/15 bg-[#0c0e18] px-3 py-2 text-xs">
+                          <select
+                            value={webContentReady}
+                            onChange={(e) =>
+                              setWebContentReady(e.target.value as "ready" | "guided")
+                            }
+                            className="rounded-xl border border-white/15 bg-[#0c0e18] px-3 py-2 text-xs"
+                          >
                             <option value="guided">Contenus à structurer ensemble</option>
                             <option value="ready">Textes & visuels déjà prêts</option>
                           </select>
@@ -1512,19 +2098,54 @@ export function AgentXRHub() {
 
                     {currentParam === "branding_scope" && (
                       <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-5 space-y-3">
-                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">BRANDING &amp; IDENTITÉ</span>
+                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">
+                          BRANDING &amp; IDENTITÉ
+                        </span>
                         <div className="grid sm:grid-cols-3 gap-3">
-                          <button type="button" onClick={() => setBrandingTier("starter")} className={cn("rounded-xl border p-4 text-left", brandingTier === "starter" ? "border-[#d4af37] bg-white text-black text-white" : "border-white/15 bg-[#0c0e18]")}>
+                          <button
+                            type="button"
+                            onClick={() => setBrandingTier("starter")}
+                            className={cn(
+                              "rounded-xl border p-4 text-left",
+                              brandingTier === "starter"
+                                ? "border-[#d4af37] bg-white text-black text-white"
+                                : "border-white/15 bg-[#0c0e18]",
+                            )}
+                          >
                             <strong className="text-sm block">Logo Signature · 199 €</strong>
-                            <span className="text-[11px] opacity-80">Vectoriel HD et déclinaisons essentielles</span>
+                            <span className="text-[11px] opacity-80">
+                              Vectoriel HD et déclinaisons essentielles
+                            </span>
                           </button>
-                          <button type="button" onClick={() => setBrandingTier("identity")} className={cn("rounded-xl border p-4 text-left", brandingTier === "identity" ? "border-[#d4af37] bg-white text-black text-white" : "border-white/15 bg-[#0c0e18]")}>
+                          <button
+                            type="button"
+                            onClick={() => setBrandingTier("identity")}
+                            className={cn(
+                              "rounded-xl border p-4 text-left",
+                              brandingTier === "identity"
+                                ? "border-[#d4af37] bg-white text-black text-white"
+                                : "border-white/15 bg-[#0c0e18]",
+                            )}
+                          >
                             <strong className="text-sm block">Brand Identity Kit · 299 €</strong>
-                            <span className="text-[11px] opacity-80">Palette, typographies & modèles sociaux</span>
+                            <span className="text-[11px] opacity-80">
+                              Palette, typographies & modèles sociaux
+                            </span>
                           </button>
-                          <button type="button" onClick={() => setBrandingTier("premium")} className={cn("rounded-xl border p-4 text-left", brandingTier === "premium" ? "border-[#d4af37] bg-white text-black text-white" : "border-white/15 bg-[#0c0e18]")}>
+                          <button
+                            type="button"
+                            onClick={() => setBrandingTier("premium")}
+                            className={cn(
+                              "rounded-xl border p-4 text-left",
+                              brandingTier === "premium"
+                                ? "border-[#d4af37] bg-white text-black text-white"
+                                : "border-white/15 bg-[#0c0e18]",
+                            )}
+                          >
                             <strong className="text-sm block">Full Brand Suite · 399 €</strong>
-                            <span className="text-[11px] opacity-80">Brand Book, papeterie & droits cédés</span>
+                            <span className="text-[11px] opacity-80">
+                              Brand Book, papeterie & droits cédés
+                            </span>
                           </button>
                         </div>
                       </div>
@@ -1532,13 +2153,25 @@ export function AgentXRHub() {
 
                     {currentParam === "seo_scope" && (
                       <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-5 space-y-3">
-                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">SEO ORGANIQUE GOOGLE</span>
+                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">
+                          SEO ORGANIQUE GOOGLE
+                        </span>
                         <div className="grid sm:grid-cols-2 gap-2.5">
                           {[
                             { id: "foundation" as const, l: "SEO Starter · 299 €/m" },
                             { id: "growth" as const, l: "SEO Growth · 499 €/m" },
                           ].map((s) => (
-                            <button key={s.id} type="button" onClick={() => setSeoTier(s.id)} className={cn("rounded-xl border p-3.5 text-left text-xs font-bold", seoTier === s.id ? "border-[#d4af37] bg-white text-black text-white" : "border-white/15 bg-[#0c0e18]")}>
+                            <button
+                              key={s.id}
+                              type="button"
+                              onClick={() => setSeoTier(s.id)}
+                              className={cn(
+                                "rounded-xl border p-3.5 text-left text-xs font-bold",
+                                seoTier === s.id
+                                  ? "border-[#d4af37] bg-white text-black text-white"
+                                  : "border-white/15 bg-[#0c0e18]",
+                              )}
+                            >
                               {s.l}
                             </button>
                           ))}
@@ -1548,14 +2181,26 @@ export function AgentXRHub() {
 
                     {currentParam === "social_scope" && (
                       <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-5 space-y-3">
-                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">RÉSEAUX SOCIAUX</span>
+                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">
+                          RÉSEAUX SOCIAUX
+                        </span>
                         <div className="grid sm:grid-cols-3 gap-2.5">
                           {[
                             { id: "essential" as const, l: "Essentielle · 349 €/m" },
-                            { id: "growth" as const, l: "Croissance · 499 €/m" },
+                            { id: "growth" as const, l: "Croissance · 599 €/m" },
                             { id: "signature" as const, l: "Domination · 799 €/m" },
                           ].map((s) => (
-                            <button key={s.id} type="button" onClick={() => setSocialTier(s.id)} className={cn("rounded-xl border p-3.5 text-left text-xs font-bold", socialTier === s.id ? "border-[#d4af37] bg-white text-black text-white" : "border-white/15 bg-[#0c0e18]")}>
+                            <button
+                              key={s.id}
+                              type="button"
+                              onClick={() => setSocialTier(s.id)}
+                              className={cn(
+                                "rounded-xl border p-3.5 text-left text-xs font-bold",
+                                socialTier === s.id
+                                  ? "border-[#d4af37] bg-white text-black text-white"
+                                  : "border-white/15 bg-[#0c0e18]",
+                              )}
+                            >
                               {s.l}
                             </button>
                           ))}
@@ -1565,20 +2210,37 @@ export function AgentXRHub() {
 
                     {currentParam === "webcare_scope" && (
                       <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-5 space-y-3">
-                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">WEBCARE · MAINTENANCE</span>
+                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">
+                          WEBCARE · MAINTENANCE
+                        </span>
                         <div className="grid sm:grid-cols-3 gap-2.5">
                           {[
                             { id: "essential" as const, l: "Essentiel · 29 €/m" },
                             { id: "pro" as const, l: "Business · 49 €/m" },
                             { id: "custom" as const, l: "Unlimited · 99 €/m" },
                           ].map((s) => (
-                            <button key={s.id} type="button" onClick={() => setWebcareTier(s.id)} className={cn("rounded-xl border p-3.5 text-left text-xs font-bold", webcareTier === s.id ? "border-[#d4af37] bg-white text-black text-white" : "border-white/15 bg-[#0c0e18]")}>
+                            <button
+                              key={s.id}
+                              type="button"
+                              onClick={() => setWebcareTier(s.id)}
+                              className={cn(
+                                "rounded-xl border p-3.5 text-left text-xs font-bold",
+                                webcareTier === s.id
+                                  ? "border-[#d4af37] bg-white text-black text-white"
+                                  : "border-white/15 bg-[#0c0e18]",
+                              )}
+                            >
                               {s.l}
                             </button>
                           ))}
                         </div>
                         <label className="flex items-center gap-2 text-xs cursor-pointer">
-                          <input type="checkbox" checked={webcareIncludeInfra} onChange={(e) => setWebcareIncludeInfra(e.target.checked)} className="accent-[#9b7b4b]" />
+                          <input
+                            type="checkbox"
+                            checked={webcareIncludeInfra}
+                            onChange={(e) => setWebcareIncludeInfra(e.target.checked)}
+                            className="accent-[#9b7b4b]"
+                          />
                           <span>Inclure hébergement + domaine annuel (79 €/an à part)</span>
                         </label>
                       </div>
@@ -1586,15 +2248,43 @@ export function AgentXRHub() {
 
                     {currentParam === "ai_scope" && (
                       <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-5 space-y-3">
-                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">CRM SUR-MESURE, AUTOMATISATION IA &amp; ROBOTIQUE</span>
+                        <span className="label-mono text-[7.5px] font-bold text-[#d4af37]">
+                          CRM SUR-MESURE, AUTOMATISATION IA &amp; ROBOTIQUE
+                        </span>
                         <div className="grid sm:grid-cols-2 gap-2.5">
                           {[
-                            { id: "crm_custom" as const, l: "CRM Personnalisé · Dès 999 €", d: "Conception métier sur cahier des charges & relances auto" },
-                            { id: "agents" as const, l: "Agents Conversationnels IA", d: "Qualification web / WhatsApp & prise de RDV 24/7" },
-                            { id: "integrations" as const, l: "Automatisations & API Métier", d: "Connexion Stripe, mails, agendas et workflows internes" },
-                            { id: "korben" as const, l: "Robotique d'accueil Korben", d: "Location dès 499 €/m ou achat 8–21 K€ HT" },
+                            {
+                              id: "crm_custom" as const,
+                              l: "CRM Personnalisé · Dès 999 €",
+                              d: "Conception métier sur cahier des charges & relances auto",
+                            },
+                            {
+                              id: "agents" as const,
+                              l: "Agents Conversationnels IA",
+                              d: "Qualification web / WhatsApp & prise de RDV 24/7",
+                            },
+                            {
+                              id: "integrations" as const,
+                              l: "Automatisations & API Métier",
+                              d: "Connexion Stripe, mails, agendas et workflows internes",
+                            },
+                            {
+                              id: "korben" as const,
+                              l: "Robotique d'accueil Korben",
+                              d: "Location dès 499 €/m ou achat 8–21 K€ HT",
+                            },
                           ].map((a) => (
-                            <button key={a.id} type="button" onClick={() => setAiFocus(a.id)} className={cn("rounded-xl border p-3.5 text-left", aiFocus === a.id ? "border-[#d4af37] bg-white text-black text-white" : "border-white/15 bg-[#0c0e18]")}>
+                            <button
+                              key={a.id}
+                              type="button"
+                              onClick={() => setAiFocus(a.id)}
+                              className={cn(
+                                "rounded-xl border p-3.5 text-left",
+                                aiFocus === a.id
+                                  ? "border-[#d4af37] bg-white text-black text-white"
+                                  : "border-white/15 bg-[#0c0e18]",
+                              )}
+                            >
                               <strong className="text-xs block">{a.l}</strong>
                               <span className="text-[10px] opacity-80">{a.d}</span>
                             </button>
@@ -1603,10 +2293,18 @@ export function AgentXRHub() {
                       </div>
                     )}
 
-                    {stepValidationMsg && <p className="text-xs font-bold text-red-600">{stepValidationMsg}</p>}
+                    {stepValidationMsg && (
+                      <p className="text-xs font-bold text-red-600">{stepValidationMsg}</p>
+                    )}
 
-                    <button type="button" onClick={handleNextFromParams} className="w-full rounded-full bg-white text-black py-3.5 text-xs font-bold text-white shadow-md hover:bg-[#8b704f] transition">
-                      {paramIdx < paramScreens.length - 1 ? "Question suivante →" : "Calculer mon estimation personnalisée →"}
+                    <button
+                      type="button"
+                      onClick={handleNextFromParams}
+                      className="w-full rounded-full bg-white text-black py-3.5 text-xs font-bold text-white shadow-md hover:bg-[#8b704f] transition"
+                    >
+                      {paramIdx < paramScreens.length - 1
+                        ? "Question suivante →"
+                        : "Calculer mon estimation personnalisée →"}
                     </button>
                   </div>
                 )}
@@ -1616,10 +2314,15 @@ export function AgentXRHub() {
                   <div className="space-y-4">
                     <div className="grid gap-3">
                       {activeProposals.map((p) => (
-                        <div key={p.id} className="rounded-2xl border border-white/10 bg-[#0c0e18] p-5 space-y-2.5">
+                        <div
+                          key={p.id}
+                          className="rounded-2xl border border-white/10 bg-[#0c0e18] p-5 space-y-2.5"
+                        >
                           <div className="flex flex-wrap items-start justify-between gap-3">
                             <div>
-                              <h4 className="text-sm sm:text-base font-bold text-white">{p.label}</h4>
+                              <h4 className="text-sm sm:text-base font-bold text-white">
+                                {p.label}
+                              </h4>
                               <p className="mt-1 text-xs text-[#94a3b8]">{p.detail}</p>
                             </div>
                             <div className="text-right">
@@ -1629,16 +2332,25 @@ export function AgentXRHub() {
                                   : `${p.price.toLocaleString("fr-FR")} €`}
                               </span>
                               <span className="block label-mono text-[7px] text-[#d4af37]">
-                                {p.period === "month" ? "PAR MOIS" : p.period === "year" ? "PAR AN" : p.isQuoteOnly ? "ESTIMATION INDICATIVE" : "FORFAIT PONCTUEL"}
+                                {p.period === "month"
+                                  ? "PAR MOIS"
+                                  : p.period === "year"
+                                    ? "PAR AN"
+                                    : p.isQuoteOnly
+                                      ? "ESTIMATION INDICATIVE"
+                                      : "FORFAIT PONCTUEL"}
                               </span>
                             </div>
                           </div>
                           {p.factors && (
                             <div className="rounded-xl bg-[#0c0e18] p-3 text-[11px] text-[#94a3b8] space-y-1 border border-white/10">
                               <strong className="text-white flex items-center gap-1.5">
-                                <Gauge className="h-3.5 w-3.5 text-[#d4af37]" /> Facteurs pris en compte :
+                                <Gauge className="h-3.5 w-3.5 text-[#d4af37]" /> Facteurs pris en
+                                compte :
                               </strong>
-                              {p.factors.map((f, idx) => <p key={idx}>• {f}</p>)}
+                              {p.factors.map((f, idx) => (
+                                <p key={idx}>• {f}</p>
+                              ))}
                             </div>
                           )}
                         </div>
@@ -1646,10 +2358,21 @@ export function AgentXRHub() {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3">
-                      <button type="button" onClick={() => { setParamIdx(0); goToStep(4); }} className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-[#0c0e18] px-5 py-3.5 text-xs font-bold text-white">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setParamIdx(0);
+                          goToStep(4);
+                        }}
+                        className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-[#0c0e18] px-5 py-3.5 text-xs font-bold text-white"
+                      >
                         <Edit3 className="h-3.5 w-3.5" /> Modifier mes paramètres
                       </button>
-                      <button type="button" onClick={() => goToStep(6)} className="flex-1 rounded-full bg-white text-black px-6 py-3.5 text-xs font-bold text-white shadow-md hover:bg-[#8b704f] transition">
+                      <button
+                        type="button"
+                        onClick={() => goToStep(6)}
+                        className="flex-1 rounded-full bg-white text-black px-6 py-3.5 text-xs font-bold text-white shadow-md hover:bg-[#8b704f] transition"
+                      >
                         Voir le récapitulatif complet →
                       </button>
                     </div>
@@ -1662,44 +2385,88 @@ export function AgentXRHub() {
                     <div className="rounded-2xl border border-white/10 bg-[#0c0e18] divide-y divide-[#e6dfd2]">
                       {[
                         { k: "Secteur d'activité", v: resolvedSectorLabel, editStep: 0 },
-                        { k: "Situation actuelle", v: situationChoice?.label || "Non précisée", editStep: 1 },
+                        {
+                          k: "Situation actuelle",
+                          v: situationChoice?.label || "Non précisée",
+                          editStep: 1,
+                        },
                         { k: "Objectif prioritaire", v: goal || "Non précisé", editStep: 2 },
-                        { k: "Prestations retenues", v: activeProposals.map((p) => p.label).join(" · "), editStep: 3 },
+                        {
+                          k: "Prestations retenues",
+                          v: activeProposals.map((p) => p.label).join(" · "),
+                          editStep: 3,
+                        },
                       ].map((rowItem) => (
-                        <div key={rowItem.k} className="flex items-center justify-between gap-4 p-4">
+                        <div
+                          key={rowItem.k}
+                          className="flex items-center justify-between gap-4 p-4"
+                        >
                           <div>
-                            <span className="label-mono text-[7px] text-[#d4af37] font-bold block">{rowItem.k}</span>
-                            <span className="text-xs sm:text-sm font-semibold text-white">{rowItem.v}</span>
+                            <span className="label-mono text-[7px] text-[#d4af37] font-bold block">
+                              {rowItem.k}
+                            </span>
+                            <span className="text-xs sm:text-sm font-semibold text-white">
+                              {rowItem.v}
+                            </span>
                           </div>
-                          <button type="button" onClick={() => goToStep(rowItem.editStep)} className="shrink-0 rounded-full border border-white/15 bg-[#0c0e18] px-3 py-1 text-[10px] font-bold hover:border-[#d4af37]">
+                          <button
+                            type="button"
+                            onClick={() => goToStep(rowItem.editStep)}
+                            className="shrink-0 rounded-full border border-white/15 bg-[#0c0e18] px-3 py-1 text-[10px] font-bold hover:border-[#d4af37]"
+                          >
                             Modifier
                           </button>
                         </div>
                       ))}
                     </div>
 
-                    <div className={cn("grid gap-3", annualTotal > 0 ? "sm:grid-cols-4" : "sm:grid-cols-3")}>
+                    <div
+                      className={cn(
+                        "grid gap-3",
+                        annualTotal > 0 ? "sm:grid-cols-4" : "sm:grid-cols-3",
+                      )}
+                    >
                       <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-4 text-center">
-                        <span className="label-mono text-[6.5px] text-[#6b655c] block">FORFAITS FIXES</span>
-                        <span className="text-xl font-bold">{onceFixed.toLocaleString("fr-FR")} €</span>
+                        <span className="label-mono text-[6.5px] text-[#6b655c] block">
+                          FORFAITS FIXES
+                        </span>
+                        <span className="text-xl font-bold">
+                          {onceFixed.toLocaleString("fr-FR")} €
+                        </span>
                       </div>
                       <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-4 text-center">
-                        <span className="label-mono text-[6.5px] text-[#6b655c] block">SUR MESURE « DÈS »</span>
-                        <span className="text-xl font-bold">{onceFromCustom.toLocaleString("fr-FR")} €</span>
+                        <span className="label-mono text-[6.5px] text-[#6b655c] block">
+                          SUR MESURE « DÈS »
+                        </span>
+                        <span className="text-xl font-bold">
+                          {onceFromCustom.toLocaleString("fr-FR")} €
+                        </span>
                       </div>
                       <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-4 text-center">
-                        <span className="label-mono text-[6.5px] text-[#6b655c] block">MENSUEL</span>
-                        <span className="text-xl font-bold">{monthlyTotal.toLocaleString("fr-FR")} €/m</span>
+                        <span className="label-mono text-[6.5px] text-[#6b655c] block">
+                          MENSUEL
+                        </span>
+                        <span className="text-xl font-bold">
+                          {monthlyTotal.toLocaleString("fr-FR")} €/m
+                        </span>
                       </div>
                       {annualTotal > 0 && (
                         <div className="rounded-2xl border border-white/10 bg-[#0c0e18] p-4 text-center">
-                          <span className="label-mono text-[6.5px] text-[#6b655c] block">ANNUEL</span>
-                          <span className="text-xl font-bold">{annualTotal.toLocaleString("fr-FR")} €/an</span>
+                          <span className="label-mono text-[6.5px] text-[#6b655c] block">
+                            ANNUEL
+                          </span>
+                          <span className="text-xl font-bold">
+                            {annualTotal.toLocaleString("fr-FR")} €/an
+                          </span>
                         </div>
                       )}
                     </div>
 
-                    <button type="button" onClick={() => goToStep(7)} className="w-full rounded-full bg-white text-black px-6 py-4 text-xs font-bold text-white shadow-md hover:bg-[#8b704f] transition">
+                    <button
+                      type="button"
+                      onClick={() => goToStep(7)}
+                      className="w-full rounded-full bg-white text-black px-6 py-4 text-xs font-bold text-white shadow-md hover:bg-[#8b704f] transition"
+                    >
                       {QUOTE_UI.getQuotePdf[currentLang]}
                     </button>
                   </div>
@@ -1711,55 +2478,138 @@ export function AgentXRHub() {
                     <form
                       onSubmit={(e: FormEvent) => {
                         e.preventDefault();
-                        if (!client.company || !client.name || !client.email || !client.whatsapp || sending) return;
+                        if (
+                          !client.company ||
+                          !client.name ||
+                          !client.email ||
+                          !client.whatsapp ||
+                          sending
+                        )
+                          return;
                         void generatePdf();
                       }}
                       className="space-y-3"
                     >
                       <div className="grid gap-3 sm:grid-cols-2">
-                        <input value={client.company} onChange={(e) => setClient({ ...client, company: e.target.value })} placeholder={QUOTE_UI.formCompany[currentLang]} className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-4 py-3 text-xs" required />
-                        <input value={client.name} onChange={(e) => setClient({ ...client, name: e.target.value })} placeholder={QUOTE_UI.formName[currentLang]} className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-4 py-3 text-xs" required />
-                        <input value={client.email} onChange={(e) => setClient({ ...client, email: e.target.value })} type="email" placeholder={QUOTE_UI.formEmail[currentLang]} className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-4 py-3 text-xs" required />
-                        <input value={client.whatsapp} onChange={(e) => setClient({ ...client, whatsapp: e.target.value })} type="tel" placeholder={QUOTE_UI.formPhone[currentLang]} className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-4 py-3 text-xs" required />
+                        <input
+                          value={client.company}
+                          onChange={(e) => setClient({ ...client, company: e.target.value })}
+                          placeholder={QUOTE_UI.formCompany[currentLang]}
+                          className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-4 py-3 text-xs"
+                          required
+                        />
+                        <input
+                          value={client.name}
+                          onChange={(e) => setClient({ ...client, name: e.target.value })}
+                          placeholder={QUOTE_UI.formName[currentLang]}
+                          className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-4 py-3 text-xs"
+                          required
+                        />
+                        <input
+                          value={client.email}
+                          onChange={(e) => setClient({ ...client, email: e.target.value })}
+                          type="email"
+                          placeholder={QUOTE_UI.formEmail[currentLang]}
+                          className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-4 py-3 text-xs"
+                          required
+                        />
+                        <input
+                          value={client.whatsapp}
+                          onChange={(e) => setClient({ ...client, whatsapp: e.target.value })}
+                          type="tel"
+                          placeholder={QUOTE_UI.formPhone[currentLang]}
+                          className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-4 py-3 text-xs"
+                          required
+                        />
                       </div>
-                      <input value={client.website} onChange={(e) => setClient({ ...client, website: e.target.value })} type="url" placeholder={QUOTE_UI.formWebsite[currentLang]} className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-4 py-3 text-xs" />
+                      <input
+                        value={client.website}
+                        onChange={(e) => setClient({ ...client, website: e.target.value })}
+                        type="url"
+                        placeholder={QUOTE_UI.formWebsite[currentLang]}
+                        className="w-full rounded-xl border border-white/15 bg-[#0c0e18] px-4 py-3 text-xs"
+                      />
 
                       {hasMinimumCommitment && (
                         <label className="flex items-start gap-2 rounded-xl border border-[#d4af37]/30 bg-[#0c0e18] p-3 text-xs text-[#e8e1d4]">
-                          <input type="checkbox" checked={acceptCommitments} onChange={(e) => setAcceptCommitments(e.target.checked)} className="mt-0.5 accent-[#9b7b4b]" />
-                          <span>{isEn ? "I acknowledge and accept the minimum commitment period shown in my selected Social Media plan (3 or 6 months)." : "Je reconnais et accepte la durée minimale d’engagement indiquée pour la formule Social Media sélectionnée (3 ou 6 mois)."}</span>
+                          <input
+                            type="checkbox"
+                            checked={acceptCommitments}
+                            onChange={(e) => setAcceptCommitments(e.target.checked)}
+                            className="mt-0.5 accent-[#9b7b4b]"
+                          />
+                          <span>
+                            {isEn
+                              ? "I acknowledge and accept the minimum commitment period shown in my selected Social Media plan (3 or 6 months)."
+                              : "Je reconnais et accepte la durée minimale d’engagement indiquée pour la formule Social Media sélectionnée (3 ou 6 mois)."}
+                          </span>
                         </label>
                       )}
 
                       <div className="rounded-xl border border-white/10 bg-[#0c0e18] p-3 text-[10px] leading-relaxed text-[#a6a09a]">
-                        {isEn ? "Prices are referenced in EUR. VAT treatment is confirmed on the final quote/invoice according to the seller's tax regime and the client's location." : "Prix de référence en EUR. Le traitement de la TVA sera confirmé sur le devis ou la facture selon le régime fiscal du prestataire et la localisation du client."}
+                        {isEn
+                          ? "Prices are referenced in EUR. VAT treatment is confirmed on the final quote/invoice according to the seller's tax regime and the client's location."
+                          : "Prix de référence en EUR. Le traitement de la TVA sera confirmé sur le devis ou la facture selon le régime fiscal du prestataire et la localisation du client."}
                       </div>
 
                       <div className="grid gap-2.5 sm:grid-cols-2 pt-2">
-                        <button type="submit" disabled={!client.company || !client.name || !client.email || !client.whatsapp || sending} className="w-full rounded-full bg-white text-black px-6 py-3.5 text-xs font-bold text-white shadow-md disabled:opacity-30">
-                          {sending ? QUOTE_UI.generatingPdf[currentLang] : generated ? QUOTE_UI.downloadAgain[currentLang] : QUOTE_UI.downloadPdf[currentLang]}
+                        <button
+                          type="submit"
+                          disabled={
+                            !client.company ||
+                            !client.name ||
+                            !client.email ||
+                            !client.whatsapp ||
+                            sending
+                          }
+                          className="w-full rounded-full bg-white text-black px-6 py-3.5 text-xs font-bold text-white shadow-md disabled:opacity-30"
+                        >
+                          {sending
+                            ? QUOTE_UI.generatingPdf[currentLang]
+                            : generated
+                              ? QUOTE_UI.downloadAgain[currentLang]
+                              : QUOTE_UI.downloadPdf[currentLang]}
                         </button>
 
                         {hasCheckoutableFixedItems ? (
-                          <button type="button" onClick={createCheckout} disabled={!client.company || !client.name || !client.email || !client.whatsapp || paying || (hasMinimumCommitment && !acceptCommitments)} className="w-full rounded-full border border-[#d4af37] bg-[#0c0e18] px-6 py-3.5 text-xs font-bold text-white disabled:opacity-30">
-                            {paying ? QUOTE_UI.preparingPayment[currentLang] : "Régler les forfaits éligibles (CB)"}
+                          <button
+                            type="button"
+                            onClick={createCheckout}
+                            disabled={
+                              !client.company ||
+                              !client.name ||
+                              !client.email ||
+                              !client.whatsapp ||
+                              paying ||
+                              (hasMinimumCommitment && !acceptCommitments)
+                            }
+                            className="w-full rounded-full border border-[#d4af37] bg-[#0c0e18] px-6 py-3.5 text-xs font-bold text-white disabled:opacity-30"
+                          >
+                            {paying
+                              ? QUOTE_UI.preparingPayment[currentLang]
+                              : "Régler les forfaits éligibles (CB)"}
                           </button>
                         ) : (
                           <a
                             href={`https://wa.me/33767566783?text=${encodeURIComponent(
-                              `Bonjour XR Agency, voici ma demande personnalisée (${resolvedSectorLabel}) — ${activeProposals.map((p) => p.label).join(", ")} — Estimation : ${liveBadgeEstimate}.`
+                              `Bonjour XR Agency, voici ma demande personnalisée (${resolvedSectorLabel}) — ${activeProposals.map((p) => p.label).join(", ")} — Estimation : ${liveBadgeEstimate}.`,
                             )}`}
                             target="_blank"
                             rel="noreferrer"
                             className="inline-flex items-center justify-center gap-2 rounded-full border border-[#d4af37] bg-[#0c0e18] px-6 py-3.5 text-xs font-bold text-white"
                           >
-                            <MessageCircle className="h-4 w-4 text-emerald-600" /> Envoyer ma demande sur WhatsApp
+                            <MessageCircle className="h-4 w-4 text-emerald-600" /> Envoyer ma
+                            demande sur WhatsApp
                           </a>
                         )}
                       </div>
                     </form>
 
-                    {sendMessage && <div className="rounded-xl border border-white/10 bg-[#0c0e18] p-3 text-center text-xs text-white">{sendMessage}</div>}
+                    {sendMessage && (
+                      <div className="rounded-xl border border-white/10 bg-[#0c0e18] p-3 text-center text-xs text-white">
+                        {sendMessage}
+                      </div>
+                    )}
                     <button
                       type="button"
                       onClick={() => {
@@ -1789,7 +2639,8 @@ export function AgentXRHub() {
                     Analysons votre site et vos leviers de croissance
                   </h3>
                   <p className="mt-1 text-xs sm:text-sm text-[#94a3b8]">
-                    Entrez votre site pour un scan technique/SEO immédiat, ou explorez nos points de blocage fréquents.
+                    Entrez votre site pour un scan technique/SEO immédiat, ou explorez nos points de
+                    blocage fréquents.
                   </p>
                 </div>
 
@@ -1797,9 +2648,24 @@ export function AgentXRHub() {
                   <div className="space-y-5">
                     <div className="grid sm:grid-cols-3 gap-2.5">
                       {[
-                        { id: "site" as const, icon: Laptop, title: "Site internet", sub: "Vitesse, UX, SEO" },
-                        { id: "maps" as const, icon: MapPin, title: "Visibilité locale", sub: "Google Maps & avis" },
-                        { id: "full" as const, icon: BarChart3, title: "Audit complet", sub: "Site + SEO + Conversion" },
+                        {
+                          id: "site" as const,
+                          icon: Laptop,
+                          title: "Site internet",
+                          sub: "Vitesse, UX, SEO",
+                        },
+                        {
+                          id: "maps" as const,
+                          icon: MapPin,
+                          title: "Visibilité locale",
+                          sub: "Google Maps & avis",
+                        },
+                        {
+                          id: "full" as const,
+                          icon: BarChart3,
+                          title: "Audit complet",
+                          sub: "Site + SEO + Conversion",
+                        },
                       ].map((m) => {
                         const Icon = m.icon;
                         const act = auditFocus === m.id;
@@ -1809,12 +2675,22 @@ export function AgentXRHub() {
                             type="button"
                             onClick={() => {
                               setAuditFocus(m.id);
-                              if (m.id === "full") setAuditTypes(["design", "seo", "security", "conversion", "technical"]);
-                              else if (m.id === "site") setAuditTypes(["design", "seo", "conversion", "technical"]);
+                              if (m.id === "full")
+                                setAuditTypes([
+                                  "design",
+                                  "seo",
+                                  "security",
+                                  "conversion",
+                                  "technical",
+                                ]);
+                              else if (m.id === "site")
+                                setAuditTypes(["design", "seo", "conversion", "technical"]);
                             }}
                             className={cn(
                               "rounded-2xl border p-3.5 text-left transition",
-                              act ? "border-[#d4af37] bg-[#0c0e18] ring-1 ring-[#9b7b4b]" : "border-white/10 bg-[#0c0e18]"
+                              act
+                                ? "border-[#d4af37] bg-[#0c0e18] ring-1 ring-[#9b7b4b]"
+                                : "border-white/10 bg-[#0c0e18]",
                             )}
                           >
                             <Icon className="h-4.5 w-4.5 text-[#d4af37] mb-2" />
@@ -1842,8 +2718,16 @@ export function AgentXRHub() {
                         ref={auditInputRef}
                         type="text"
                         value={auditUrl}
-                        onChange={(e) => { setAuditUrl(e.target.value); setAuditError(""); }}
-                        onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); void runAudit(); } }}
+                        onChange={(e) => {
+                          setAuditUrl(e.target.value);
+                          setAuditError("");
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            void runAudit();
+                          }
+                        }}
                         placeholder="https://votre-site.fr"
                         className="rounded-xl border border-white/15 bg-[#0c0e18] px-4 py-3 text-xs sm:text-sm outline-none focus:border-[#d4af37]"
                       />
@@ -1874,23 +2758,39 @@ export function AgentXRHub() {
                   <div className="space-y-4">
                     <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#d4af37]/35 bg-[#0c0e18] p-5">
                       <div>
-                        <span className="label-mono text-[7px] font-bold text-[#d4af37]">RÉSULTAT ANALYSE</span>
+                        <span className="label-mono text-[7px] font-bold text-[#d4af37]">
+                          RÉSULTAT ANALYSE
+                        </span>
                         <h4 className="text-base font-bold text-white mt-0.5 flex items-center gap-2">
                           {auditResult.url}
-                          <a href={auditResult.url} target="_blank" rel="noreferrer"><ExternalLink className="h-3.5 w-3.5 text-[#d4af37]" /></a>
+                          <a href={auditResult.url} target="_blank" rel="noreferrer">
+                            <ExternalLink className="h-3.5 w-3.5 text-[#d4af37]" />
+                          </a>
                         </h4>
-                        <p className="text-xs text-[#94a3b8] mt-0.5">{auditResult.title || "Titre page détecté"}</p>
+                        <p className="text-xs text-[#94a3b8] mt-0.5">
+                          {auditResult.title || "Titre page détecté"}
+                        </p>
                       </div>
                       <div className="text-center rounded-2xl bg-[#0c0e18] px-5 py-3 border border-white/10 shadow-2xs">
-                        <span className="display-serif text-4xl font-bold text-[#d4af37]">{auditResult.score}</span>
+                        <span className="display-serif text-4xl font-bold text-[#d4af37]">
+                          {auditResult.score}
+                        </span>
                         <span className="text-xs font-bold text-[#94a3b8]">/100</span>
                       </div>
                     </div>
 
                     <div className="grid gap-2.5 max-h-60 overflow-y-auto pr-1">
                       {auditResult.findings.map((f, idx) => (
-                        <div key={idx} className="rounded-xl border border-white/10 bg-[#0c0e18] p-3 text-xs">
-                          <span className={cn("font-bold", f.status === false ? "text-amber-700" : "text-emerald-700")}>
+                        <div
+                          key={idx}
+                          className="rounded-xl border border-white/10 bg-[#0c0e18] p-3 text-xs"
+                        >
+                          <span
+                            className={cn(
+                              "font-bold",
+                              f.status === false ? "text-amber-700" : "text-emerald-700",
+                            )}
+                          >
                             {f.status === false ? "▲ " : "✓ "} {f.label}
                           </span>
                           <p className="text-[#94a3b8] mt-0.5">{f.detail}</p>
@@ -1899,7 +2799,11 @@ export function AgentXRHub() {
                     </div>
 
                     <div className="flex flex-wrap gap-2.5">
-                      <button type="button" onClick={makeAuditPdf} className="rounded-full bg-white text-black px-5 py-3 text-xs font-bold text-white">
+                      <button
+                        type="button"
+                        onClick={makeAuditPdf}
+                        className="rounded-full bg-white text-black px-5 py-3 text-xs font-bold text-white"
+                      >
                         Télécharger l&apos;Audit PDF
                       </button>
                       <button
@@ -1913,7 +2817,11 @@ export function AgentXRHub() {
                       >
                         Transformer en devis sur mesure →
                       </button>
-                      <button type="button" onClick={() => setAuditResult(null)} className="rounded-full border border-white/15 px-4 py-3 text-xs font-semibold text-[#94a3b8]">
+                      <button
+                        type="button"
+                        onClick={() => setAuditResult(null)}
+                        className="rounded-full border border-white/15 px-4 py-3 text-xs font-semibold text-[#94a3b8]"
+                      >
                         Nouvelle analyse
                       </button>
                     </div>
@@ -1931,14 +2839,19 @@ export function AgentXRHub() {
                       OPTION 3 · ACCOMPAGNEMENT GUIDÉ · ÉTAPE 0{Math.min(guidedStep + 1, 4)} / 04
                     </span>
                     <h3 className="display-serif text-2xl sm:text-3xl text-white mt-1">
-                      {guidedStep === 0 && "Quel résultat ferait la plus grande différence pour vous ?"}
+                      {guidedStep === 0 &&
+                        "Quel résultat ferait la plus grande différence pour vous ?"}
                       {guidedStep === 1 && "Où en est votre présence digitale aujourd'hui ?"}
                       {guidedStep === 2 && "Quel rythme d'accompagnement préférez-vous ?"}
                       {guidedStep === 3 && "Voici la feuille de route recommandée pour vous"}
                     </h3>
                   </div>
                   {guidedStep > 0 && (
-                    <button type="button" onClick={() => setGuidedStep((guidedStep - 1) as 0 | 1 | 2 | 3)} className="rounded-full border border-white/15 bg-[#0c0e18] px-4 py-1.5 text-xs font-bold">
+                    <button
+                      type="button"
+                      onClick={() => setGuidedStep((guidedStep - 1) as 0 | 1 | 2 | 3)}
+                      className="rounded-full border border-white/15 bg-[#0c0e18] px-4 py-1.5 text-xs font-bold"
+                    >
                       Retour
                     </button>
                   )}
@@ -1947,20 +2860,45 @@ export function AgentXRHub() {
                 {guidedStep === 0 && (
                   <div className="grid gap-3 sm:grid-cols-2">
                     {[
-                      { id: "local", l: "Attirer plus de clients locaux", d: "Être trouvé sur Google Maps et recevoir des appels directs.", i: MapPin },
-                      { id: "brand", l: "Moderniser mon image et mon site", d: "Inspirer confiance immédiatement dès le premier clic.", i: Globe2 },
-                      { id: "growth", l: "Développer ma visibilité sur Google & Réseaux", d: "Attirer de nouveaux prospects régulièrement chaque mois.", i: TrendingUp },
-                      { id: "automation", l: "Structurer mes ventes avec un CRM & l'IA", d: "Centraliser mes prospects, automatiser les relances & gagner du temps.", i: Database },
+                      {
+                        id: "local",
+                        l: "Attirer plus de clients locaux",
+                        d: "Être trouvé sur Google Maps et recevoir des appels directs.",
+                        i: MapPin,
+                      },
+                      {
+                        id: "brand",
+                        l: "Moderniser mon image et mon site",
+                        d: "Inspirer confiance immédiatement dès le premier clic.",
+                        i: Globe2,
+                      },
+                      {
+                        id: "growth",
+                        l: "Développer ma visibilité sur Google & Réseaux",
+                        d: "Attirer de nouveaux prospects régulièrement chaque mois.",
+                        i: TrendingUp,
+                      },
+                      {
+                        id: "automation",
+                        l: "Structurer mes ventes avec un CRM & l'IA",
+                        d: "Centraliser mes prospects, automatiser les relances & gagner du temps.",
+                        i: Database,
+                      },
                     ].map((g) => {
                       const I = g.i;
                       return (
                         <button
                           key={g.id}
                           type="button"
-                          onClick={() => { setGuidedGoal(g.id); setGuidedStep(1); }}
+                          onClick={() => {
+                            setGuidedGoal(g.id);
+                            setGuidedStep(1);
+                          }}
                           className={cn(
                             "rounded-2xl border p-4 text-left transition hover:border-[#d4af37]",
-                            guidedGoal === g.id ? "border-[#d4af37] bg-[#0c0e18]" : "border-white/10 bg-[#0c0e18]"
+                            guidedGoal === g.id
+                              ? "border-[#d4af37] bg-[#0c0e18]"
+                              : "border-white/10 bg-[#0c0e18]",
                           )}
                         >
                           <I className="h-5 w-5 text-[#d4af37] mb-2" />
@@ -1975,17 +2913,34 @@ export function AgentXRHub() {
                 {guidedStep === 1 && (
                   <div className="grid gap-3">
                     {[
-                      { id: "start", l: "Je pars de zéro ou presque", d: "Besoin de fondations solides rapidement opérationnelles." },
-                      { id: "improve", l: "J'ai déjà un site ou des fiches mais trop peu de retours", d: "Besoin d'optimiser la crédibilité et la conversion." },
-                      { id: "scale", l: "Je veux passer au niveau supérieur", d: "Automatisation, SEO structuré et présence multi-canaux." },
+                      {
+                        id: "start",
+                        l: "Je pars de zéro ou presque",
+                        d: "Besoin de fondations solides rapidement opérationnelles.",
+                      },
+                      {
+                        id: "improve",
+                        l: "J'ai déjà un site ou des fiches mais trop peu de retours",
+                        d: "Besoin d'optimiser la crédibilité et la conversion.",
+                      },
+                      {
+                        id: "scale",
+                        l: "Je veux passer au niveau supérieur",
+                        d: "Automatisation, SEO structuré et présence multi-canaux.",
+                      },
                     ].map((s) => (
                       <button
                         key={s.id}
                         type="button"
-                        onClick={() => { setGuidedStage(s.id); setGuidedStep(2); }}
+                        onClick={() => {
+                          setGuidedStage(s.id);
+                          setGuidedStep(2);
+                        }}
                         className={cn(
                           "rounded-2xl border p-4 text-left transition hover:border-[#d4af37]",
-                          guidedStage === s.id ? "border-[#d4af37] bg-[#0c0e18]" : "border-white/10 bg-[#0c0e18]"
+                          guidedStage === s.id
+                            ? "border-[#d4af37] bg-[#0c0e18]"
+                            : "border-white/10 bg-[#0c0e18]",
                         )}
                       >
                         <strong className="block text-sm font-bold">{s.l}</strong>
@@ -1998,17 +2953,34 @@ export function AgentXRHub() {
                 {guidedStep === 2 && (
                   <div className="grid gap-3 sm:grid-cols-3">
                     {[
-                      { id: "targeted", l: "Démarrer ciblé", d: "Corriger la priorité #1 sans superflu." },
-                      { id: "complete", l: "Écosystème complet", d: "Construire l'ensemble de façon cohérente." },
-                      { id: "expert", l: "Avis d'un expert", d: "Confirmer ensemble avant de lancer." },
+                      {
+                        id: "targeted",
+                        l: "Démarrer ciblé",
+                        d: "Corriger la priorité #1 sans superflu.",
+                      },
+                      {
+                        id: "complete",
+                        l: "Écosystème complet",
+                        d: "Construire l'ensemble de façon cohérente.",
+                      },
+                      {
+                        id: "expert",
+                        l: "Avis d'un expert",
+                        d: "Confirmer ensemble avant de lancer.",
+                      },
                     ].map((t) => (
                       <button
                         key={t.id}
                         type="button"
-                        onClick={() => { setGuidedTempo(t.id); setGuidedStep(3); }}
+                        onClick={() => {
+                          setGuidedTempo(t.id);
+                          setGuidedStep(3);
+                        }}
                         className={cn(
                           "rounded-2xl border p-4 text-left transition hover:border-[#d4af37]",
-                          guidedTempo === t.id ? "border-[#d4af37] bg-[#0c0e18]" : "border-white/10 bg-[#0c0e18]"
+                          guidedTempo === t.id
+                            ? "border-[#d4af37] bg-[#0c0e18]"
+                            : "border-white/10 bg-[#0c0e18]",
                         )}
                       >
                         <strong className="block text-sm font-bold">{t.l}</strong>
@@ -2023,14 +2995,21 @@ export function AgentXRHub() {
                     <div className="flex items-center gap-2 text-xs font-bold text-[#d4af37]">
                       <CheckCircle2 className="h-4.5 w-4.5" /> ORIENTATION RECOMMANDÉE
                     </div>
-                    <h4 className="display-serif text-2xl sm:text-3xl text-white">{guidedRecommendation.title}</h4>
-                    <p className="text-sm text-[#94a3b8] leading-relaxed">{guidedRecommendation.reason}</p>
+                    <h4 className="display-serif text-2xl sm:text-3xl text-white">
+                      {guidedRecommendation.title}
+                    </h4>
+                    <p className="text-sm text-[#94a3b8] leading-relaxed">
+                      {guidedRecommendation.reason}
+                    </p>
 
                     <div className="flex flex-wrap gap-2">
                       {guidedRecommendation.services.map((sid) => {
                         const found = SERVICES.find((s) => s.id === sid);
                         return (
-                          <span key={sid} className="rounded-full bg-[#0c0e18] border border-white/15 px-3.5 py-1.5 text-xs font-bold text-white">
+                          <span
+                            key={sid}
+                            className="rounded-full bg-[#0c0e18] border border-white/15 px-3.5 py-1.5 text-xs font-bold text-white"
+                          >
                             ✓ {found?.label ?? sid}
                           </span>
                         );
@@ -2042,7 +3021,8 @@ export function AgentXRHub() {
                         type="button"
                         onClick={() => {
                           setSelectedServices(guidedRecommendation.services);
-                          if (guidedRecommendation.services.includes("robotics")) setAiFocus("crm_custom");
+                          if (guidedRecommendation.services.includes("robotics"))
+                            setAiFocus("crm_custom");
                           setHubMode("devis");
                           setParamIdx(0);
                           setStep(0);
@@ -2057,7 +3037,8 @@ export function AgentXRHub() {
                         rel="noreferrer"
                         className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-[#0c0e18] px-5 py-3.5 text-xs font-bold text-white"
                       >
-                        <MessageCircle className="h-4 w-4 text-emerald-600" /> Parler à un conseiller
+                        <MessageCircle className="h-4 w-4 text-emerald-600" /> Parler à un
+                        conseiller
                       </a>
                     </div>
                   </div>

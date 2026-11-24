@@ -289,7 +289,7 @@ export const XR_ADVISORS: XrAdvisor[] = [
     cameraSpec: "85mm f/1.8 · Portrait Éditorial · Fond Sombre Texturé",
     LensSpec: "85mm f/1.8 • Fond Sombre Texturé",
     studioFilter: "contrast(1.08) saturate(0.88) brightness(0.96)",
-    kpiHighlight: "ROAS Meta x4.6",
+    kpiHighlight: "Stratégie social media",
     xpPoints: 6850,
     xp: 6850,
     rankName: "Closer Pro",
@@ -305,20 +305,14 @@ export const XR_ADVISORS: XrAdvisor[] = [
 
 export function getAdvisorByService(serviceId: string): XrAdvisor {
   const normalized = serviceId.toLowerCase();
-  return (
-    XR_ADVISORS.find((a) => a.assignedServices.includes(normalized)) ??
-    XR_ADVISORS[1]
-  );
+  return XR_ADVISORS.find((a) => a.assignedServices.includes(normalized)) ?? XR_ADVISORS[1];
 }
 
 export function getAdvisorById(id: string): XrAdvisor {
   return XR_ADVISORS.find((a) => a.id === id.toLowerCase()) ?? XR_ADVISORS[0];
 }
 
-export function buildAdvisorWhatsAppUrl(
-  advisor: XrAdvisor,
-  customContext?: string,
-): string {
+export function buildAdvisorWhatsAppUrl(advisor: XrAdvisor, customContext?: string): string {
   const msg = customContext
     ? `Bonjour ${advisor.firstName} (XR Agency), ${customContext}`
     : `Bonjour ${advisor.firstName}, je découvre votre profil sur XR Agency (${advisor.specialtyBadge}) et je souhaite échanger sur mon projet.`;

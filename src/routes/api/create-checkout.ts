@@ -12,7 +12,23 @@ type CheckoutBody = {
   selectedServices?: string[];
   action?: "checkout" | "send_quote" | "bank_transfer";
   pdfBase64?: string;
-  summary?: { sector?: string; goal?: string; situation?: string; budget?: string; discovery?: string; recommendation?: string; services?: Array<{ label: string; detail: string; price: number; period: "once" | "month" | "year" }>; once?: number; monthly?: number; annual?: number };
+  summary?: {
+    sector?: string;
+    goal?: string;
+    situation?: string;
+    budget?: string;
+    discovery?: string;
+    recommendation?: string;
+    services?: Array<{
+      label: string;
+      detail: string;
+      price: number;
+      period: "once" | "month" | "year";
+    }>;
+    once?: number;
+    monthly?: number;
+    annual?: number;
+  };
   client?: { company?: string; name?: string; email?: string; whatsapp?: string; website?: string };
 };
 
@@ -21,7 +37,7 @@ export const Route = createFileRoute("/api/create-checkout")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          const body = await request.json() as CheckoutBody;
+          const body = (await request.json()) as CheckoutBody;
 
           // ── A. ACTION : VIREMENT BANCAIRE PROFESSIONNEL ──
           if (body.action === "bank_transfer") {
@@ -54,14 +70,10 @@ export const Route = createFileRoute("/api/create-checkout")({
               quoteId: transferRes.quoteId,
               invoiceId: transferRes.invoiceId,
               paymentReference: transferRes.paymentReference,
-              bankDetails: {
-                beneficiary: "KARMA SASU (XR Agency)",
-                bankName: "Banque Professionnelle France",
-                ibanMasked: "FR76 1005 7000 **** **** **** 42",
-                bic: "BNPAFRPPXXX",
-                reference: transferRes.paymentReference,
-              },
-              message: "Votre ordre de virement et votre devis ont été générés. Mentionnez impérativement la référence de paiement lors du virement.",
+              bankDetails: null,
+              paymentDetailsStatus: "to_be_confirmed_by_agency",
+              message:
+                "Votre ordre de virement et votre devis ont été générés. Mentionnez impérativement la référence de paiement lors du virement.",
             });
           }
 
@@ -96,7 +108,12 @@ export const Route = createFileRoute("/api/create-checkout")({
             if (process.env.RESEND_API_KEY && pdfBase64) {
               try {
                 const resend = new Resend(process.env.RESEND_API_KEY);
-                const services = (summary.services || []).map((service) => `<li><strong>${service.label}</strong> — ${service.price.toLocaleString("fr-FR")} €${service.period === "month" ? " / mois" : service.period === "year" ? " / an" : ""}<br><span style="color:#666">${service.detail}</span></li>`).join("");
+                const services = (summary.services || [])
+                  .map(
+                    (service) =>
+                      `<li><strong>${service.label}</strong> — ${service.price.toLocaleString("fr-FR")} €${service.period === "month" ? " / mois" : service.period === "year" ? " / an" : ""}<br><span style="color:#666">${service.detail}</span></li>`,
+                  )
+                  .join("");
                 await resend.emails.send({
                   from: process.env.RESEND_FROM_EMAIL || "XR Agency <onboarding@resend.dev>",
                   to: [email],
@@ -127,8 +144,11 @@ export const Route = createFileRoute("/api/create-checkout")({
           }
           if (!process.env.STRIPE_SECRET_KEY) {
             return Response.json(
-              { error: "Paiement en ligne temporairement indisponible. Veuillez finaliser par virement ou sur WhatsApp." },
-              { status: 503 }
+              {
+                error:
+                  "Paiement en ligne temporairement indisponible. Veuillez finaliser par virement ou sur WhatsApp.",
+              },
+              { status: 503 },
             );
           }
 
@@ -140,22 +160,33 @@ export const Route = createFileRoute("/api/create-checkout")({
             return Response.json({ error: "Aucune prestation sélectionnée." }, { status: 400 });
           }
           if (selectedServices.length !== body.selectedServices?.length) {
-            return Response.json({ error: "La sélection contient des doublons ou trop de prestations." }, { status: 400 });
+            return Response.json(
+              { error: "La sélection contient des doublons ou trop de prestations." },
+              { status: 400 },
+            );
           }
           if (body.currency && body.currency !== "eur") {
-            return Response.json({
-              error: "Le paiement en ligne est actuellement disponible en EUR uniquement. Les conversions internationales restent indicatives.",
-            }, { status: 400 });
+            return Response.json(
+              {
+                error:
+                  "Le paiement en ligne est actuellement disponible en EUR uniquement. Les conversions internationales restent indicatives.",
+              },
+              { status: 400 },
+            );
           }
 
           const invalidIds = selectedServices.filter(
             (id) => !Object.prototype.hasOwnProperty.call(CHECKOUT_PRODUCTS, id),
           );
           if (invalidIds.length) {
-            return Response.json({
-              error: "Une ou plusieurs prestations nécessitent un devis personnalisé et ne peuvent pas être réglées par ce parcours.",
-              invalidServices: invalidIds,
-            }, { status: 400 });
+            return Response.json(
+              {
+                error:
+                  "Une ou plusieurs prestations nécessitent un devis personnalisé et ne peuvent pas être réglées par ce parcours.",
+                invalidServices: invalidIds,
+              },
+              { status: 400 },
+            );
           }
 
           const lineItems: Array<{
@@ -171,15 +202,20 @@ export const Route = createFileRoute("/api/create-checkout")({
               label: product.label,
               amountEur: product.amountEur,
               interval: product.interval,
-              commitmentMonths: "commitmentMonths" in product ? product.commitmentMonths : undefined,
+              commitmentMonths:
+                "commitmentMonths" in product ? product.commitmentMonths : undefined,
             };
           });
 
           const hasMinimumCommitment = lineItems.some((item) => Boolean(item.commitmentMonths));
           if (hasMinimumCommitment && body.acceptCommitmentTerms !== true) {
-            return Response.json({
-              error: "Veuillez accepter la durée minimale d'engagement de la formule Social Media sélectionnée.",
-            }, { status: 400 });
+            return Response.json(
+              {
+                error:
+                  "Veuillez accepter la durée minimale d'engagement de la formule Social Media sélectionnée.",
+              },
+              { status: 400 },
+            );
           }
 
           const hasRecurring = lineItems.some((item) => item.interval !== "once");
@@ -189,7 +225,10 @@ export const Route = createFileRoute("/api/create-checkout")({
           const form = new URLSearchParams();
 
           form.set("mode", mode);
-          form.set("success_url", `${process.env.SITE_URL || new URL(request.url).origin}/?payment=success&session_id={CHECKOUT_SESSION_ID}`);
+          form.set(
+            "success_url",
+            `${process.env.SITE_URL || new URL(request.url).origin}/?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+          );
           form.set("cancel_url", `${process.env.SITE_URL || new URL(request.url).origin}/#quote`);
           form.set("billing_address_collection", "required");
           form.set("automatic_tax[enabled]", "true");
@@ -199,7 +238,8 @@ export const Route = createFileRoute("/api/create-checkout")({
 
           if (body.client?.email) {
             form.set("customer_email", body.client.email);
-            if (mode === "payment") form.set("payment_intent_data[receipt_email]", body.client.email);
+            if (mode === "payment")
+              form.set("payment_intent_data[receipt_email]", body.client.email);
           }
           if (body.client?.name) form.set("metadata[customer_name]", body.client.name);
           if (body.client?.company) form.set("metadata[company]", body.client.company);
@@ -210,7 +250,10 @@ export const Route = createFileRoute("/api/create-checkout")({
           form.set("metadata[budget]", body.budget || "");
           form.set("metadata[services]", selectedServices.join(","));
           form.set("metadata[currency]", currency);
-          form.set("metadata[commitment_terms_accepted]", String(body.acceptCommitmentTerms === true));
+          form.set(
+            "metadata[commitment_terms_accepted]",
+            String(body.acceptCommitmentTerms === true),
+          );
           form.set(
             "metadata[minimum_commitments]",
             lineItems
@@ -232,12 +275,18 @@ export const Route = createFileRoute("/api/create-checkout")({
                 .map((item) => item.id + ":" + item.commitmentMonths + "m")
                 .join(","),
             );
-            form.set("subscription_data[metadata][commitment_terms_accepted]", String(body.acceptCommitmentTerms === true));
+            form.set(
+              "subscription_data[metadata][commitment_terms_accepted]",
+              String(body.acceptCommitmentTerms === true),
+            );
           }
 
           lineItems.forEach((item, index) => {
             form.set(`line_items[${index}][price_data][currency]`, currency);
-            form.set(`line_items[${index}][price_data][unit_amount]`, String(Math.round(item.amountEur * 100)));
+            form.set(
+              `line_items[${index}][price_data][unit_amount]`,
+              String(Math.round(item.amountEur * 100)),
+            );
             form.set(`line_items[${index}][price_data][tax_behavior]`, stripeTaxBehavior);
             form.set(`line_items[${index}][price_data][product_data][name]`, item.label);
             form.set(`line_items[${index}][price_data][product_data][metadata][sku]`, item.id);
@@ -262,7 +311,10 @@ export const Route = createFileRoute("/api/create-checkout")({
             body: form,
           });
 
-          const stripeData = await stripeResponse.json() as { url?: string; error?: { message?: string } };
+          const stripeData = (await stripeResponse.json()) as {
+            url?: string;
+            error?: { message?: string };
+          };
 
           if (!stripeResponse.ok || !stripeData.url) {
             return Response.json(
@@ -274,7 +326,10 @@ export const Route = createFileRoute("/api/create-checkout")({
           return Response.json({ url: stripeData.url });
         } catch (error) {
           return Response.json(
-            { error: error instanceof Error ? error.message : "Erreur lors de la création du paiement." },
+            {
+              error:
+                error instanceof Error ? error.message : "Erreur lors de la création du paiement.",
+            },
             { status: 500 },
           );
         }

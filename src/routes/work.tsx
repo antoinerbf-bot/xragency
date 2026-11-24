@@ -20,28 +20,28 @@ export const Route = createFileRoute("/work")({
 
 const copy = {
   fr: {
-    kicker:"XRAGENCY · WORK", title:"Des univers digitaux", accent:"pensés pour être vécus.", intro:"Sites, identités et expériences : une seule collection, avec les homepages visibles avant même d’ouvrir chaque référence.", search:"Rechercher…", all:"Toutes les prestations", industries:"Tous les secteurs", open:"Ouvrir le site", close:"Fermer", reset:"Réinitialiser", catalogue:"Catalogue créatif", index:"projets sélectionnés", reel:"REEL HOMEPAGES", showcase:"Voir les univers en situation", reference:"Référence", agency:"XR Agency", homepage:"HOMEPAGE", visit:"VISITER",
-    catHeading:"Chaque référence,", catAccent:"en image.", catDesc:"Les références sont présentées avec leur homepage comme première matière visuelle : structure, rythme, direction artistique et expérience.",
+    kicker:"XR AGENCY · RÉFÉRENCES VISUELLES", title:"Des univers digitaux", accent:"pour nourrir la création.", intro:"Une sélection de sites externes qui servent de références visuelles et d’inspiration. Ils ne sont pas présentés comme des réalisations ou des clients XR Agency.", search:"Rechercher…", all:"Toutes les prestations", industries:"Tous les secteurs", open:"Ouvrir le site", close:"Fermer", reset:"Réinitialiser", catalogue:"Références visuelles", index:"sites sélectionnés", reel:"REEL HOMEPAGES", showcase:"Voir les univers en situation", reference:"Référence", agency:"XR Agency", homepage:"HOMEPAGE", visit:"VISITER",
+    catHeading:"Chaque inspiration,", catAccent:"en contexte.", catDesc:"Ces sites externes sont présentés pour leur structure, leur rythme, leur direction artistique et leur expérience. Ils ne constituent pas des références clients XR Agency.",
     moreBtn:"AFFICHER 18 RÉFÉRENCES DE PLUS", remaining:"RESTANTES", empty:"Aucune référence ne correspond à ces filtres.", modalNote:"Capture visuelle de la homepage publique. Le bouton ouvre le site réel dans un nouvel onglet."
   },
   en: {
-    kicker:"XRAGENCY · WORK", title:"Digital worlds", accent:"designed to be experienced.", intro:"Websites, identities and experiences: one collection, with homepage previews visible before opening each reference.", search:"Search…", all:"All services", industries:"All industries", open:"Open website", close:"Close", reset:"Reset", catalogue:"Creative catalogue", index:"selected projects", reel:"HOMEPAGE REEL", showcase:"See the work in context", reference:"Reference", agency:"XR Agency", homepage:"HOMEPAGE", visit:"VISIT",
-    catHeading:"Every reference,", catAccent:"in images.", catDesc:"References are showcased with their homepage as first visual material: structure, rhythm, art direction, and experience.",
+    kicker:"XR AGENCY · VISUAL REFERENCES", title:"Digital worlds", accent:"to inspire the craft.", intro:"A selection of external websites used as visual references and inspiration. They are not presented as XR Agency work or clients.", search:"Search…", all:"All services", industries:"All industries", open:"Open website", close:"Close", reset:"Reset", catalogue:"Visual references", index:"selected websites", reel:"HOMEPAGE REEL", showcase:"See the work in context", reference:"Reference", agency:"XR Agency", homepage:"HOMEPAGE", visit:"VISIT",
+    catHeading:"Every inspiration,", catAccent:"in context.", catDesc:"These external websites are shown for their structure, rhythm, art direction and experience. They are not XR Agency client work.",
     moreBtn:"SHOW 18 MORE REFERENCES", remaining:"REMAINING", empty:"No references match these filters.", modalNote:"Visual capture of the public homepage. The button opens the live website in a new tab."
   },
   vi: {
-    kicker:"XRAGENCY · WORK", title:"Những thế giới số", accent:"được thiết kế để trải nghiệm.", intro:"Website, nhận diện và trải nghiệm: một bộ sưu tập thống nhất, với bản xem trước homepage.", search:"Tìm kiếm…", all:"Tất cả dịch vụ", industries:"Tất cả lĩnh vực", open:"Mở website", close:"Đóng", reset:"Đặt lại", catalogue:"Bộ sưu tập sáng tạo", index:"dự án được chọn", reel:"REEL HOMEPAGE", showcase:"Xem các universes thực tế", reference:"Tham khảo", agency:"XR Agency", homepage:"HOMEPAGE", visit:"MỞ",
-    catHeading:"Từng dự án,", catAccent:"qua hình ảnh.", catDesc:"Các dự án được hiển thị với homepage làm điểm nhấn thị giác đầu tiên: cấu trúc, nhịp điệu, định hướng nghệ thuật và trải nghiệm.",
+    kicker:"XR AGENCY · THAM KHẢO HÌNH ẢNH", title:"Những thế giới số", accent:"khơi nguồn sáng tạo.", intro:"Tuyển chọn website bên ngoài dùng làm tư liệu tham khảo và cảm hứng thiết kế. Đây không phải dự án hay khách hàng của XR Agency.", search:"Tìm kiếm…", all:"Tất cả dịch vụ", industries:"Tất cả lĩnh vực", open:"Mở website", close:"Đóng", reset:"Đặt lại", catalogue:"Tư liệu tham khảo", index:"website được chọn", reel:"REEL HOMEPAGE", showcase:"Xem các universes thực tế", reference:"Tham khảo", agency:"XR Agency", homepage:"HOMEPAGE", visit:"MỞ",
+    catHeading:"Từng nguồn cảm hứng,", catAccent:"trong bối cảnh.", catDesc:"Các website bên ngoài được giới thiệu để tham khảo cấu trúc, nhịp điệu, định hướng nghệ thuật và trải nghiệm. Đây không phải dự án khách hàng của XR Agency.",
     moreBtn:"HIỂN THỊ THÊM 18 DỰ ÁN", remaining:"CÒN LẠI", empty:"Không có dự án nào phù hợp với bộ lọc này.", modalNote:"Bản chụp giao diện homepage thực tế. Nút bấm sẽ mở website trực tiếp trong tab mới."
   },
   ar: {
-    kicker:"XRAGENCY · WORK", title:"عوالم رقمية", accent:"مصممة لتُعاش.", intro:"مواقع وهويات وتجارب رقمية ضمن مجموعة واحدة، مع معاينات للصفحات الرئيسية.", search:"بحث…", all:"جميع الخدمات", industries:"جميع القطاعات", open:"فتح الموقع", close:"إغلاق", reset:"إعادة ضبط", catalogue:"المجموعة الإبداعية", index:"مشاريع مختارة", reel:"REEL HOMEPAGES", showcase:"شاهد العمل في سياقه", reference:"مرجع", agency:"XR Agency", homepage:"HOMEPAGE", visit:"زيارة",
+    kicker:"XR AGENCY · مراجع بصرية", title:"عوالم رقمية", accent:"تلهم الإبداع.", intro:"مجموعة مختارة من مواقع خارجية تُستخدم كمراجع وإلهام بصري. لا تمثل هذه المواقع أعمالاً أو عملاء لـ XR Agency.", search:"بحث…", all:"جميع الخدمات", industries:"جميع القطاعات", open:"فتح الموقع", close:"إغلاق", reset:"إعادة ضبط", catalogue:"مراجع بصرية", index:"مواقع مختارة", reel:"REEL HOMEPAGES", showcase:"شاهد العمل في سياقه", reference:"مرجع", agency:"XR Agency", homepage:"HOMEPAGE", visit:"زيارة",
     catHeading:"كل مرجع،", catAccent:"في صور.", catDesc:"يتم عرض المراجع مع صفحتها الرئيسية كأول مادة بصرية: الهيكل، الإيقاع، التوجيه الفني والتجربة.",
     moreBtn:"عرض 18 مرجعاً إضافياً", remaining:"متبقية", empty:"لا توجد مراجع تطابق هذه الفلاتر.", modalNote:"لقطة بصرية للصفحة الرئيسية العامة. الزر يفتح الموقع الفعلي في نافذة جديدة."
   },
   ru: {
-    kicker:"XRAGENCY · WORK", title:"Цифровые миры", accent:"созданные для опыта.", intro:"Сайты, айдентика и цифровые впечатления в одной коллекции с видимыми превью главных страниц.", search:"Поиск…", all:"Все услуги", industries:"Все отрасли", open:"Открыть сайт", close:"Закрыть", reset:"Сбросить", catalogue:"Креативная коллекция", index:"выбранных проектов", reel:"REEL HOMEPAGES", showcase:"Смотреть проекты в контексте", reference:"Референс", agency:"XR Agency", homepage:"HOMEPAGE", visit:"ОТКРЫТЬ",
-    catHeading:"Каждый проект,", catAccent:"в изображениях.", catDesc:"Проекты представлены своими главными страницами как основой визуального восприятия: структура, ритм, арт-дирекшн и впечатления.",
+    kicker:"XR AGENCY · ВИЗУАЛЬНЫЕ РЕФЕРЕНСЫ", title:"Цифровые миры", accent:"для творческого вдохновения.", intro:"Подборка внешних сайтов для визуальных референсов и вдохновения. Они не представлены как проекты или клиенты XR Agency.", search:"Поиск…", all:"Все услуги", industries:"Все отрасли", open:"Открыть сайт", close:"Закрыть", reset:"Сбросить", catalogue:"Визуальные референсы", index:"выбранных сайтов", reel:"REEL HOMEPAGES", showcase:"Смотреть проекты в контексте", reference:"Референс", agency:"XR Agency", homepage:"HOMEPAGE", visit:"ОТКРЫТЬ",
+    catHeading:"Каждый источник вдохновения,", catAccent:"в контексте.", catDesc:"Эти внешние сайты представлены как ориентиры по структуре, ритму, арт-дирекшну и опыту. Это не проекты клиентов XR Agency.",
     moreBtn:"ПОКАЗАТЬ ЕЩЁ 18 ПРОЕКТОВ", remaining:"ОСТАЛОСЬ", empty:"Нет проектов, соответствующих этим фильтрам.", modalNote:"Визуальный снимок публичной главной страницы. Кнопка открывает реальный сайт в новой вкладке."
   },
 } as const;
@@ -51,7 +51,7 @@ const sectorLabels: Record<string, Record<string,string>> = {
   restaurant:{fr:"Restauration",en:"Restaurant",vi:"Nhà hàng",ar:"مطاعم",ru:"Рестораны"}, immobilier:{fr:"Immobilier",en:"Real Estate",vi:"Bất động sản",ar:"عقارات",ru:"Недвижимость"},
   auto:{fr:"Automobile",en:"Automotive",vi:"Ô tô",ar:"سيارات",ru:"Авто"}, architecture:{fr:"Architecture",en:"Architecture",vi:"Kiến trúc",ar:"عمارة",ru:"Архитектура"},
   mode:{fr:"Mode",en:"Fashion",vi:"Thời trang",ar:"أزياء",ru:"Мода"}, beaute:{fr:"Beauté",en:"Beauty",vi:"Làm đẹp",ar:"جمال",ru:"Красота"},
-  sante:{fr:"Santé",en:"Health",vi:"Sức khỏe",ar:"صحة",ru:"Здоровье"}, droit:{fr:"Droit",en:"Legal",vi:"Pháp lý",ar:"قانون",ru:"Jurisprudence"},
+  sante:{fr:"Santé",en:"Health",vi:"Sức khỏe",ar:"صحة",ru:"Здоровье"}, droit:{fr:"Droit",en:"Legal",vi:"Pháp lý",ar:"قانون",ru:"Право"},
   finance:{fr:"Finance",en:"Finance",vi:"Tài chính",ar:"مالية",ru:"Финансы"}, tech:{fr:"Tech / SaaS",en:"Tech / SaaS",vi:"Công nghệ / SaaS",ar:"تقنية / SaaS",ru:"Tech / SaaS"},
   education:{fr:"Éducation",en:"Education",vi:"Giáo dục",ar:"تعليم",ru:"Образование"}, sport:{fr:"Sport",en:"Sports",vi:"Thể thao",ar:"رياضة",ru:"Спорт"},
   voyage:{fr:"Voyage",en:"Travel",vi:"Du lịch",ar:"سفر",ru:"Путешествия"}, maison:{fr:"Maison / Design",en:"Home / Design",vi:"Nhà / Thiết kế",ar:"منزل / تصميم",ru:"Дом / Дизайн"},
@@ -167,11 +167,11 @@ function ReferencePreview({
   if (hasImgError) {
     return (
       <div
-        className={`relative h-full w-full overflow-hidden bg-[#0a0d12] text-white flex flex-col justify-between p-6 sm:p-7 select-none ${className}`}
+        className={`relative h-full w-full overflow-hidden bg-[#24231F] text-white flex flex-col justify-between p-6 sm:p-7 select-none ${className}`}
         aria-label={alt ?? item.name}
       >
         {/* Subtle background glow */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(16,185,129,.12),transparent_40%),linear-gradient(135deg,#0d1117,#07090c_65%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(168,138,101,.14),transparent_40%),linear-gradient(135deg,#0d1117,#07090c_65%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent_0%,rgba(255,255,255,.05)_50%,transparent_65%)]" />
 
         {/* Browser header mockup */}
@@ -184,7 +184,7 @@ function ReferencePreview({
               {hostname}
             </span>
           </div>
-          <span className="rounded-full bg-white/10 px-2 py-0.5 font-mono text-[6.5px] uppercase tracking-wider text-emerald-400">
+          <span className="rounded-full bg-white/10 px-2 py-0.5 font-mono text-[6.5px] uppercase tracking-wider text-white/80">
             {item.type}
           </span>
         </div>
@@ -202,10 +202,10 @@ function ReferencePreview({
           </div>
           <div className="mt-3 flex items-center gap-2">
             <span className="rounded-md border border-white/10 bg-white/5 px-2 py-1 label-mono text-[6.5px] text-white/60">
-              EXPÉRIENCE DIGITALE VÉRIFIÉE
+              RÉFÉRENCE VISUELLE
             </span>
-            <span className="rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2 py-1 label-mono text-[6.5px] text-emerald-400">
-              RÉFÉRENCE ACTIVE
+            <span className="rounded-md border border-emerald-400/30 bg-emerald-500/10 px-2 py-1 label-mono text-[6.5px] text-emerald-300">
+              SITE EXTERNE
             </span>
           </div>
         </div>
@@ -213,7 +213,7 @@ function ReferencePreview({
         {/* Footer info */}
         <div className="relative z-10 flex items-center justify-between border-t border-white/10 pt-3">
           <span className="label-mono text-[6.5px] text-white/40">EXPLORER L'UNIVERS DIGITAL</span>
-          <span className="inline-flex items-center gap-1 label-mono text-[7px] font-bold text-emerald-400">
+          <span className="inline-flex items-center gap-1 label-mono text-[7px] font-bold text-white">
             SITE OFFICIEL ↗
           </span>
         </div>
@@ -263,23 +263,153 @@ export function WorkPage() {
   const [visibleCount,setVisibleCount]=useState(18);
   useEffect(() => { setVisibleCount(18); }, [query,sector,service]);
 
-  return <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
+  const quickFilters = [
+    { id: "all", kind: "reset" as const, label: { fr: "Tous", en: "All", vi: "Tất cả", ar: "الكل", ru: "Все" }[lang] ?? "Tous" },
+    { id: "hotel", kind: "sector" as const, label: { fr: "Hôtellerie", en: "Hospitality", vi: "Khách sạn", ar: "الفنادق", ru: "Отели" }[lang] ?? "Hôtellerie" },
+    { id: "restaurant", kind: "sector" as const, label: { fr: "Restauration", en: "Restaurants", vi: "Nhà hàng", ar: "المطاعم", ru: "Рестораны" }[lang] ?? "Restauration" },
+    { id: "immobilier", kind: "sector" as const, label: { fr: "Immobilier", en: "Real Estate", vi: "Bất động sản", ar: "العقارات", ru: "Недвижимость" }[lang] ?? "Immobilier" },
+    { id: "websites", kind: "service" as const, label: { fr: "Sites web", en: "Websites", vi: "Website", ar: "المواقع", ru: "Сайты" }[lang] ?? "Sites web" },
+    { id: "seo", kind: "service" as const, label: "SEO" },
+    { id: "social", kind: "service" as const, label: "Social Media" },
+    { id: "branding", kind: "service" as const, label: "Branding" },
+  ];
+
+  const pokeCase = {
+    badge: {
+      fr: "ÉTUDE DE CAS RÉELLE · XR AGENCY",
+      en: "REAL CASE STUDY · XR AGENCY",
+      vi: "DỰ ÁN THỰC TẾ · XR AGENCY",
+      ar: "دراسة حالة حقيقية · XR AGENCY",
+      ru: "РЕАЛЬНЫЙ КЕЙС · XR AGENCY",
+    }[lang] ?? "ÉTUDE DE CAS RÉELLE · XR AGENCY",
+    desc: {
+      fr: "Conception et mise en ligne du site web de Pok-N Ball : univers de marque frais et moderne, présentation claire de la carte, expérience mobile-first et accès rapide à la découverte du restaurant.",
+      en: "Website design and launch for Pok-N Ball: fresh brand atmosphere, structured menu showcase, mobile-first browsing and effortless restaurant discovery.",
+      vi: "Thiết kế và ra mắt website cho Pok-N Ball: hình ảnh thương hiệu tươi mới, trình bày thực đơn rõ ràng và trải nghiệm tối ưu cho di động.",
+      ar: "تصميم وإطلاق موقع Pok-N Ball بهوية عصرية وقائمة طعام واضحة وتجربة سلسة على الهواتف الذكية.",
+      ru: "Разработка и запуск сайта Pok-N Ball: свежая айдентика, наглядное меню и быстрый mobile-first интерфейс.",
+    }[lang] ?? "",
+    cta: {
+      fr: "Visiter pokebowlfresh.vercel.app",
+      en: "Visit pokebowlfresh.vercel.app",
+      vi: "Xem pokebowlfresh.vercel.app",
+      ar: "زيارة pokebowlfresh.vercel.app",
+      ru: "Открыть pokebowlfresh.vercel.app",
+    }[lang] ?? "Visiter pokebowlfresh.vercel.app",
+    quoteCta: {
+      fr: "Lancer un projet similaire",
+      en: "Start a similar project",
+      vi: "Triển khai dự án tương tự",
+      ar: "ابدأ مشروعاً مشابهاً",
+      ru: "Заказать похожий проект",
+    }[lang] ?? "Lancer un projet similaire",
+  };
+
+  return <div dir={lang === "ar" ? "rtl" : "ltr"} className="min-h-screen overflow-x-hidden bg-[#F7F4EE] text-[#171613]">
     <Nav/>
     <main className="pt-20 sm:pt-24">
-      <section className="relative min-h-[72vh] overflow-hidden bg-[#050608] text-white">
-        <div className="absolute inset-0 bg-[#050608]"><ReferencePreview item={reelItem} alt="" loading="eager" className="absolute inset-0 opacity-52 contrast-[1.02] brightness-[.58] transition-opacity duration-1000" /><div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(5,6,8,.90),rgba(5,6,8,.42)_54%,rgba(5,6,8,.72))]" /></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_12%,rgba(220,185,113,.18),transparent_26%),linear-gradient(120deg,rgba(5,6,8,.86),rgba(11,17,23,.48)_55%,rgba(5,6,8,.78))]"/>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_78%,rgba(255,255,255,.07),transparent_28%)]"/>
-        <div aria-hidden className="absolute inset-0 opacity-30 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,.08)_50%,transparent_100%)]"/>
-        <div className="relative mx-auto flex min-h-[72vh] max-w-[1500px] flex-col justify-end px-5 pb-12 pt-28 sm:px-8 sm:pb-16 lg:px-12 lg:pb-20">
-          <p className="label-mono text-[9px] tracking-[.32em] text-white/42">{tx.kicker}</p>
-          <h1 className="display-serif mt-5 max-w-6xl text-[clamp(4rem,9vw,9rem)] leading-[.76] tracking-[-.075em]">{tx.title}<br/><em className="not-italic text-white/35">{tx.accent}</em></h1>
-          <p className="mt-7 max-w-2xl text-sm leading-6 text-white/55 sm:text-base">{tx.intro}</p>\n          {reelItem && <div className="mt-7 flex flex-wrap items-center gap-3"><div className="rounded-full border border-white/12 bg-white/[.045] px-4 py-2 backdrop-blur-xl"><span className="label-mono text-[8px] tracking-[.18em] text-white/55">{tx.reel} · {String(reelIndex + 1).padStart(2,"0")}/{String(featured.length).padStart(2,"0")}</span></div><div className="rounded-full border border-white/12 bg-black/45 px-4 py-2 backdrop-blur-xl"><span className="text-xs text-white/70">{reelItem.name}</span><span className="ml-2 text-[10px] text-white/35">{sectorLabels[reelItem.sector]?.[lang] ?? reelItem.sector}</span></div></div>}
-          <div className="mt-12 grid gap-2 rounded-[1.6rem] border border-white/10 bg-black/45 p-2 backdrop-blur-2xl lg:grid-cols-[1fr_.28fr_.28fr_auto]">
-            <div className="relative"><Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder={tx.search} className="w-full rounded-xl border border-white/10 bg-white/[.035] py-3.5 pl-11 pr-4 text-sm text-white placeholder:text-white/25 outline-none focus:border-white/30"/></div>
-            <label className="relative"><select value={sector} onChange={e=>setSector(e.target.value)} className="w-full appearance-none rounded-xl border border-white/10 bg-white/[.035] px-4 py-3.5 pr-9 text-xs text-white outline-none"><option value="all">{tx.industries}</option>{PORTFOLIO_SECTORS.map(([id,label])=><option key={id} value={id} className="text-black">{sectorLabels[id]?.[lang] ?? label}</option>)}</select><ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/35"/></label>
-            <label className="relative"><select value={service} onChange={e=>setService(e.target.value)} className="w-full appearance-none rounded-xl border border-white/10 bg-white/[.035] px-4 py-3.5 pr-9 text-xs text-white outline-none"><option value="all">{tx.all}</option>{serviceOptions.slice(1).map(x=><option key={x.id} value={x.id} className="text-black">{x.label}</option>)}</select><ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/35"/></label>
-            <div className="flex items-center justify-center rounded-xl border border-white/10 bg-white/[.035] px-4 py-3 label-mono text-[8px] text-white/45">{filtered.length} {tx.index}</div>
+      <section className="relative min-h-[68vh] overflow-hidden bg-[#171613] text-[#F7F4EE]">
+        <div className="absolute inset-0 bg-[#171613]"><ReferencePreview item={reelItem} alt="" loading="eager" className="absolute inset-0 opacity-45 contrast-[1.02] brightness-[.55] transition-opacity duration-1000" /><div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(23,22,19,.92),rgba(23,22,19,.52)_54%,rgba(23,22,19,.82))]" /></div>
+        <div className="relative mx-auto flex min-h-[68vh] max-w-[1500px] flex-col justify-end px-5 pb-12 pt-24 sm:px-8 sm:pb-16 lg:px-12 lg:pb-20">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[.26em] text-white/70">{tx.kicker}</p>
+          <h1 className="display-serif mt-4 max-w-5xl text-[clamp(3rem,7.5vw,6.8rem)] leading-[.9] tracking-[-0.04em]">{tx.title}<br/><em className="italic font-normal text-white">{tx.accent}</em></h1>
+          <p className="mt-6 max-w-2xl text-sm leading-6 text-[#F7F4EE]/75 sm:text-base">{tx.intro}</p>
+          {reelItem && <div className="mt-6 flex flex-wrap items-center gap-3"><div className="rounded-full border border-[#F7F4EE]/15 bg-white/[.05] px-4 py-2 backdrop-blur-xl"><span className="font-mono text-[10px] tracking-[.16em] text-white/80">{tx.reel} · {String(reelIndex + 1).padStart(2,"0")}/{String(featured.length).padStart(2,"0")}</span></div><div className="rounded-full border border-[#F7F4EE]/15 bg-black/45 px-4 py-2 backdrop-blur-xl"><span className="text-xs text-[#F7F4EE]">{reelItem.name}</span><span className="ms-2 text-[10px] text-[#F7F4EE]/55">{sectorLabels[reelItem.sector]?.[lang] ?? reelItem.sector}</span></div></div>}
+          <div className="mt-10 grid gap-2 rounded-[1.6rem] border border-white/12 bg-black/45 p-2 backdrop-blur-2xl lg:grid-cols-[1fr_.28fr_.28fr_auto]">
+            <div className="relative"><Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder={tx.search} className="w-full rounded-xl border border-white/12 bg-white/[.05] py-3.5 pl-11 pr-4 text-sm text-white placeholder:text-white/40 outline-none focus:border-white"/></div>
+            <label className="relative"><select value={sector} onChange={e=>setSector(e.target.value)} className="w-full appearance-none rounded-xl border border-white/12 bg-white/[.05] px-4 py-3.5 pr-9 text-xs text-white outline-none"><option value="all" className="text-black">{tx.industries}</option>{PORTFOLIO_SECTORS.map(([id,label])=><option key={id} value={id} className="text-black">{sectorLabels[id]?.[lang] ?? label}</option>)}</select><ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/45"/></label>
+            <label className="relative"><select value={service} onChange={e=>setService(e.target.value)} className="w-full appearance-none rounded-xl border border-white/12 bg-white/[.05] px-4 py-3.5 pr-9 text-xs text-white outline-none"><option value="all" className="text-black">{tx.all}</option>{serviceOptions.slice(1).map(x=><option key={x.id} value={x.id} className="text-black">{x.label}</option>)}</select><ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/45"/></label>
+            <div className="flex items-center justify-center rounded-xl border border-white/12 bg-white/[.05] px-4 py-3 font-mono text-[10px] text-white/90">{filtered.length} {tx.index}</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Dedicated Verified Case Study: Pok-N Ball */}
+      <section className="border-b border-[#171613]/10 bg-[#EEE9E0] py-14 sm:py-20">
+        <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+          <div className="overflow-hidden rounded-3xl border border-[#171613]/12 bg-white shadow-[0_20px_50px_rgba(23,22,19,0.06)]">
+            <div className="grid items-center lg:grid-cols-12">
+              <div className="relative aspect-[16/10] bg-[#171613] lg:col-span-6 lg:aspect-auto lg:h-full">
+                <img
+                  src="/showcase/audit_app_04_poke_case.png"
+                  alt="Pok-N Ball — Réalisation XR Agency"
+                  className="h-full w-full object-cover object-top"
+                />
+              </div>
+              <div className="p-6 sm:p-10 lg:col-span-6">
+                <span className="inline-flex items-center rounded-full border border-[#9E7F5A]/35 bg-[#9E7F5A]/10 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[#7D6445]">
+                  {pokeCase.badge}
+                </span>
+                <h2 className="mt-4 font-serif text-3xl font-medium text-[#171613] sm:text-5xl">
+                  Pok-N Ball
+                </h2>
+                <p className="mt-4 text-sm leading-relaxed text-[#57534B] sm:text-base">
+                  {pokeCase.desc}
+                </p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {["Site web", "Restauration", "Mobile-first", "Branding"].map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-[#171613]/12 bg-[#FAF8F4] px-3 py-1 font-mono text-[10px] font-medium text-[#45413A]"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <a
+                    href="https://pokebowlfresh.vercel.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full bg-[#171613] px-6 py-3 text-xs font-semibold text-[#F7F4EE] transition hover:bg-[#2A2823]"
+                  >
+                    {pokeCase.cta}
+                    <ExternalLink className="h-3.5 w-3.5 text-white" />
+                  </a>
+                  <a
+                    href="/#quote"
+                    className="inline-flex items-center gap-2 rounded-full border border-[#171613]/20 bg-white px-6 py-3 text-xs font-semibold text-[#171613] transition hover:border-[#9E7F5A]"
+                  >
+                    {pokeCase.quoteCta}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick One-Click Editorial Filter Pills */}
+          <div className="mt-8 flex flex-wrap items-center gap-2">
+            {quickFilters.map((qf) => {
+              const isActive =
+                (qf.kind === "reset" && sector === "all" && service === "all") ||
+                (qf.kind === "sector" && sector === qf.id) ||
+                (qf.kind === "service" && service === qf.id);
+              return (
+                <button
+                  key={qf.id}
+                  type="button"
+                  onClick={() => {
+                    if (qf.kind === "reset") {
+                      setSector("all");
+                      setService("all");
+                    } else if (qf.kind === "sector") {
+                      setSector(qf.id);
+                      setService("all");
+                    } else {
+                      setService(qf.id);
+                      setSector("all");
+                    }
+                  }}
+                  className={`rounded-full border px-4 py-2 text-xs font-semibold transition ${
+                    isActive
+                      ? "border-[#171613] bg-[#171613] text-[#F7F4EE]"
+                      : "border-[#171613]/15 bg-white text-[#45413A] hover:border-[#9E7F5A]"
+                  }`}
+                >
+                  {qf.label}
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>

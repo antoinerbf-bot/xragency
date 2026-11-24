@@ -48,7 +48,7 @@ function FaqPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div dir={lang === "ar" ? "rtl" : "ltr"} className="min-h-screen bg-[#F7F4EE] text-[#171613]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <Nav />
       <main className="pt-28">

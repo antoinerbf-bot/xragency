@@ -1288,7 +1288,7 @@ function CrmWorkspacePage() {
               className="inline-flex items-center justify-center gap-2 rounded-full bg-[#171613] px-6 py-3 text-xs font-semibold text-[#F7F4EE] transition hover:bg-[#2A2823]"
             >
               Ouvrir mon Espace Client
-              <ArrowUpRight className="h-4 w-4 text-[#D8BC94]" />
+              <ArrowUpRight className="h-4 w-4 text-white" />
             </Link>
             {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr" || user.email === "martin.leclipteur@gmail.com") && (
               <button

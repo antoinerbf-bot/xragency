@@ -1,65 +1,310 @@
-import { ArrowUpRight, Compass, Layers3, PenTool, RefreshCw } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Compass,
+  Layers3,
+  MessageCircle,
+  PenTool,
+  RefreshCw,
+} from "lucide-react";
 import { useLang, type Lang } from "@/lib/i18n";
+import storyMeeting from "@/assets/story-business-meeting.jpg";
+import heroAtelier from "@/assets/hero-atelier-editorial.jpg";
+import webLuxuryShowcase from "@/assets/web-luxury-showcase.jpg";
+import storyEntrepreneur from "@/assets/story-entrepreneur-launch.jpg";
+import heroCinematic from "@/assets/hero-cinematic.jpg";
 
-const COPY: Record<Lang, { eyebrow: string; title: string; accent: string; intro: string; steps: { title: string; body: string }[]; cta: string }> = {
-  fr: { eyebrow: "NOTRE MÉTHODE", title: "De la réflexion", accent: "à la mise en œuvre.", intro: "Un cadre de travail lisible, des décisions partagées et une exécution structurée à chaque étape.", steps: [
-    { title: "Comprendre", body: "Nous clarifions votre activité, vos clients, vos priorités et les contraintes du projet." },
-    { title: "Définir la stratégie", body: "Nous sélectionnons les leviers adaptés et cadrons le périmètre, les livrables et les objectifs." },
-    { title: "Concevoir & réaliser", body: "Nous construisons une solution cohérente, testée sur les usages réels et les supports ciblés." },
-    { title: "Suivre & améliorer", body: "Nous organisons le suivi, les ajustements et les prochaines actions selon les besoins convenus." },
-  ], cta: "Parler de votre projet" },
-  en: { eyebrow: "OUR APPROACH", title: "From clear thinking", accent: "to considered execution.", intro: "A transparent process, shared decisions and structured delivery at every stage.", steps: [
-    { title: "Understand", body: "We clarify your business, customers, priorities and project constraints." },
-    { title: "Set the strategy", body: "We select the right levers and define scope, deliverables and objectives." },
-    { title: "Design & deliver", body: "We build a coherent solution, tested against real use cases and target devices." },
-    { title: "Review & improve", body: "We organise follow-up, refinements and next steps around agreed needs." },
-  ], cta: "Discuss your project" },
-  vi: { eyebrow: "QUY TRÌNH", title: "Từ tư duy rõ ràng", accent: "đến triển khai chỉn chu.", intro: "Quy trình minh bạch, quyết định thống nhất và triển khai có cấu trúc ở từng giai đoạn.", steps: [
-    { title: "Thấu hiểu", body: "Làm rõ hoạt động, khách hàng, ưu tiên và các giới hạn của dự án." },
-    { title: "Xây dựng chiến lược", body: "Chọn giải pháp phù hợp và xác định phạm vi, bàn giao và mục tiêu." },
-    { title: "Thiết kế & triển khai", body: "Xây dựng giải pháp đồng bộ, kiểm thử theo nhu cầu thực tế và thiết bị mục tiêu." },
-    { title: "Theo dõi & cải thiện", body: "Tổ chức theo dõi, điều chỉnh và các bước tiếp theo theo nhu cầu đã thống nhất." },
-  ], cta: "Trao đổi dự án" },
-  ar: { eyebrow: "منهجيتنا", title: "من التفكير الواضح", accent: "إلى التنفيذ المتقن.", intro: "عملية شفافة وقرارات مشتركة وتنفيذ منظم في كل مرحلة.", steps: [
-    { title: "الفهم", body: "نحدد نشاطك وعملاءك وأولوياتك وقيود المشروع." },
-    { title: "تحديد الاستراتيجية", body: "نختار الأدوات المناسبة ونحدد النطاق والمخرجات والأهداف." },
-    { title: "التصميم والتنفيذ", body: "نبني حلاً متكاملاً ونختبره وفق الاستخدام الفعلي والأجهزة المستهدفة." },
-    { title: "المتابعة والتحسين", body: "ننظم المتابعة والتعديلات والخطوات التالية وفق الاحتياجات المتفق عليها." },
-  ], cta: "ناقش مشروعك" },
-  ru: { eyebrow: "НАШ ПОДХОД", title: "От ясной стратегии", accent: "к продуманной реализации.", intro: "Прозрачный процесс, совместные решения и последовательная работа на каждом этапе.", steps: [
-    { title: "Понять задачу", body: "Разбираемся в бизнесе, клиентах, приоритетах и ограничениях проекта." },
-    { title: "Определить стратегию", body: "Выбираем подходящие инструменты, объём работ, результаты и цели." },
-    { title: "Спроектировать и создать", body: "Создаём целостное решение и проверяем его на реальных сценариях и устройствах." },
-    { title: "Сопровождать и улучшать", body: "Организуем поддержку, доработки и следующие шаги в рамках согласованных задач." },
-  ], cta: "Обсудить проект" },
-};
-
+const STEP_PHOTOS = [storyMeeting, heroAtelier, webLuxuryShowcase, storyEntrepreneur];
 const ICONS = [Compass, Layers3, PenTool, RefreshCw];
+
+const COPY: Record<
+  Lang,
+  {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    steps: { num: string; title: string; body: string }[];
+    detailsCta: string;
+    bannerTitle: string;
+    bannerAccent: string;
+    bannerQuote: string;
+    bannerWa: string;
+  }
+> = {
+  fr: {
+    eyebrow: "NOTRE MÉTHODE",
+    title: "Un processus clair et efficace.",
+    intro:
+      "Une approche en 4 étapes, pensée pour transformer vos objectifs en résultats concrets et mesurables.",
+    steps: [
+      {
+        num: "01.",
+        title: "Échange & diagnostic",
+        body: "Analyse de vos besoins, vos objectifs et votre marché.",
+      },
+      {
+        num: "02.",
+        title: "Stratégie",
+        body: "Définition d’un plan d’action clair et sur mesure.",
+      },
+      {
+        num: "03.",
+        title: "Production",
+        body: "Création et mise en place des solutions adaptées.",
+      },
+      {
+        num: "04.",
+        title: "Suivi & optimisation",
+        body: "Mesure des performances et ajustements continus.",
+      },
+    ],
+    detailsCta: "Voir les livrables par étape",
+    bannerTitle: "Vous avez un projet ?",
+    bannerAccent: "Parlons-en.",
+    bannerQuote: "Demander un devis",
+    bannerWa: "Discuter sur WhatsApp",
+  },
+  en: {
+    eyebrow: "OUR METHOD",
+    title: "A clear and effective process.",
+    intro:
+      "A 4-stage approach designed to turn your business objectives into concrete, measurable outcomes.",
+    steps: [
+      {
+        num: "01.",
+        title: "Discovery & diagnostic",
+        body: "Analysis of your needs, goals and market landscape.",
+      },
+      {
+        num: "02.",
+        title: "Strategy",
+        body: "Definition of a clear, tailored action plan.",
+      },
+      {
+        num: "03.",
+        title: "Production",
+        body: "Design, engineering and deployment of tailored solutions.",
+      },
+      {
+        num: "04.",
+        title: "Follow-up & optimisation",
+        body: "Performance tracking and continuous refinement.",
+      },
+    ],
+    detailsCta: "View deliverables by stage",
+    bannerTitle: "Have a project in mind?",
+    bannerAccent: "Let’s talk.",
+    bannerQuote: "Request a quote",
+    bannerWa: "Chat on WhatsApp",
+  },
+  vi: {
+    eyebrow: "PHƯƠNG PHÁP CỦA CHÚNG TÔI",
+    title: "Quy trình rõ ràng và hiệu quả.",
+    intro:
+      "Phương pháp 4 bước được thiết kế để chuyển hóa mục tiêu kinh doanh thành kết quả thực tế.",
+    steps: [
+      {
+        num: "01.",
+        title: "Trao đổi & chẩn đoán",
+        body: "Phân tích nhu cầu, mục tiêu và thị trường của bạn.",
+      },
+      {
+        num: "02.",
+        title: "Chiến lược",
+        body: "Xây dựng kế hoạch hành động rõ ràng và may đo.",
+      },
+      {
+        num: "03.",
+        title: "Sản xuất & triển khai",
+        body: "Thiết kế và triển khai các giải pháp phù hợp.",
+      },
+      {
+        num: "04.",
+        title: "Theo dõi & tối ưu",
+        body: "Đo lường hiệu quả và cải thiện liên tục.",
+      },
+    ],
+    detailsCta: "Xem bàn giao theo từng bước",
+    bannerTitle: "Bạn có dự án?",
+    bannerAccent: "Hãy trao đổi cùng chúng tôi.",
+    bannerQuote: "Yêu cầu báo giá",
+    bannerWa: "Trao đổi qua WhatsApp",
+  },
+  ar: {
+    eyebrow: "منهجيتنا",
+    title: "عملية واضحة وفعّالة.",
+    intro: "منهجية من 4 مراحل لتحويل أهدافك إلى نتائج ملموسة وقابلة للقياس.",
+    steps: [
+      {
+        num: "01.",
+        title: "التواصل والتشخيص",
+        body: "تحليل احتياجاتك وأهدافك وسوقك المستهدف.",
+      },
+      {
+        num: "02.",
+        title: "الاستراتيجية",
+        body: "تحديد خطة عمل واضحة ومصممة خصيصًا.",
+      },
+      {
+        num: "03.",
+        title: "الإنتاج والتنفيذ",
+        body: "تصميم وتنفيذ الحلول الرقمية المناسبة.",
+      },
+      {
+        num: "04.",
+        title: "المتابعة والتحسين",
+        body: "قياس الأداء وإجراء التحسينات المستمرة.",
+      },
+    ],
+    detailsCta: "عرض المخرجات لكل مرحلة",
+    bannerTitle: "هل لديك مشروع؟",
+    bannerAccent: "لنتحدث عنه.",
+    bannerQuote: "طلب عرض سعر",
+    bannerWa: "تحدث عبر واتساب",
+  },
+  ru: {
+    eyebrow: "НАШ МЕТОД",
+    title: "Понятный и эффективный процесс.",
+    intro:
+      "Подход из 4 этапов, созданный для превращения ваших целей в измеримый результат.",
+    steps: [
+      {
+        num: "01.",
+        title: "Обсуждение и диагностика",
+        body: "Анализ ваших задач, целей и рынка.",
+      },
+      {
+        num: "02.",
+        title: "Стратегия",
+        body: "Разработка чёткого индивидуального плана действий.",
+      },
+      {
+        num: "03.",
+        title: "Производство",
+        body: "Создание и внедрение адаптированных решений.",
+      },
+      {
+        num: "04.",
+        title: "Сопровождение и оптимизация",
+        body: "Оценка эффективности и постоянное улучшение.",
+      },
+    ],
+    detailsCta: "Посмотреть результаты по этапам",
+    bannerTitle: "У вас есть проект?",
+    bannerAccent: "Давайте обсудим.",
+    bannerQuote: "Запросить смету",
+    bannerWa: "Написать в WhatsApp",
+  },
+};
 
 export function StudioMethodSection() {
   const { lang } = useLang();
   const copy = COPY[lang] ?? COPY.fr;
+
   return (
-    <section id="methode" className="bg-[#EEE9E0] py-20 sm:py-28 lg:py-32">
-      <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
-        <div className="grid gap-8 border-b border-[#28251F]/15 pb-9 lg:grid-cols-[1.1fr_.9fr] lg:items-end sm:pb-12">
+    <section
+      id="methode"
+      dir={lang === "ar" ? "rtl" : "ltr"}
+      className="bg-[#EFE9DD] pt-16 text-[#171613] sm:pt-20"
+    >
+      <div className="mx-auto max-w-[1540px] px-5 pb-14 sm:px-8 lg:px-10">
+        {/* Header */}
+        <div className="grid gap-6 border-b border-[#171613]/12 pb-8 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
           <div>
-            <div className="mb-4 flex items-center gap-3"><span className="h-px w-8 bg-[#B99A73]" /><span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#8B7051]">{copy.eyebrow}</span></div>
-            <h2 className="max-w-3xl text-[clamp(2.25rem,4.8vw,4.5rem)] font-medium leading-[.98] tracking-[-.055em] text-[#1B1A17]">{copy.title} <span className="font-serif italic font-normal text-[#A88A65]">{copy.accent}</span></h2>
+            <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.26em] text-[#9E7B4F]">
+              {copy.eyebrow}
+            </p>
+            <h2 className="mt-2 font-serif text-[clamp(1.9rem,3.6vw,3.1rem)] font-normal leading-tight tracking-[-0.02em] text-[#171613]">
+              {copy.title}
+            </h2>
           </div>
-          <p className="max-w-xl text-sm leading-7 text-[#625E56] sm:text-base">{copy.intro}</p>
+          <p className="max-w-xl text-sm leading-6 text-[#5C574F] sm:text-base">{copy.intro}</p>
         </div>
-        <div className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-[#28251F]/12 bg-[#28251F]/12 sm:grid-cols-2 xl:grid-cols-4">
+
+        {/* 4 Steps with Photos + Connecting Arrows matching mockup */}
+        <div className="mt-9 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {copy.steps.map((step, index) => {
             const Icon = ICONS[index];
-            return <article key={step.title} className="group min-h-[235px] bg-[#F7F4EE] p-6 transition-colors hover:bg-white sm:p-7">
-              <div className="flex items-center justify-between"><span className="font-mono text-[10px] tracking-[.18em] text-[#9A805E]">0{index + 1}</span><Icon className="h-5 w-5 text-[#9A805E] transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" /></div>
-              <h3 className="mt-12 text-xl font-medium tracking-[-.03em] text-[#211F1A]">{step.title}</h3>
-              <p className="mt-3 text-sm leading-6 text-[#625E56]">{step.body}</p>
-            </article>;
+            return (
+              <article
+                key={step.title}
+                className="group relative flex flex-col justify-between rounded-2xl border border-[#171613]/10 bg-[#FAF7F2] p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#C8A16E] hover:bg-white"
+              >
+                <div>
+                  <div className="aspect-[16/10] w-full overflow-hidden rounded-xl bg-[#EAE2D3]">
+                    <img
+                      src={STEP_PHOTOS[index]}
+                      alt={step.title}
+                      loading="lazy"
+                      className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="mt-4 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-2 font-serif text-lg font-semibold text-[#8D6C42]">
+                      {step.num}
+                    </span>
+                    <Icon className="h-4 w-4 text-[#8D6C42]" />
+                  </div>
+                  <h3 className="mt-1 text-base font-semibold text-[#171613]">{step.title}</h3>
+                  <p className="mt-1.5 text-xs leading-5 text-[#5C574F]">{step.body}</p>
+                </div>
+              </article>
+            );
           })}
         </div>
-        <a href="#contact" className="group mt-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[.14em] text-[#292720] transition hover:text-[#9E805B]">{copy.cta}<ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></a>
+
+        <div className="mt-7 flex justify-center">
+          <Link
+            to="/methode"
+            className="group inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5E3A] hover:text-[#171613]"
+          >
+            <span>{copy.detailsCta}</span>
+            <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </div>
+
+      {/* Full-bleed Parisian Dusk CTA Banner matching mockup bottom of Method section */}
+      <div className="relative isolate overflow-hidden border-y border-[#D8B788]/25 bg-[#120F0C] py-14 text-[#FAF7F2] sm:py-16">
+        <img
+          src={heroCinematic}
+          alt=""
+          loading="lazy"
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center opacity-35"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#0F0C09]/95 via-[#0F0C09]/80 to-[#0F0C09]/45" />
+
+        <div className="relative z-10 mx-auto flex max-w-[1540px] flex-col items-start justify-between gap-6 px-5 sm:px-8 lg:flex-row lg:items-center lg:px-10">
+          <div>
+            <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.26em] text-[#E5C696]">
+              XR AGENCY · PARIS & INTERNATIONAL
+            </p>
+            <h3 className="mt-2 font-serif text-[clamp(2rem,3.8vw,3.3rem)] font-normal leading-tight text-white">
+              {copy.bannerTitle}{" "}
+              <span className="italic text-[#E5C696]">{copy.bannerAccent}</span>
+            </h3>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3.5">
+            <a
+              href="#quote"
+              className="inline-flex min-h-[46px] items-center gap-2.5 rounded-xl bg-gradient-to-r from-[#E5C696] via-[#D5AF79] to-[#C2985E] px-6 py-3 text-xs font-bold text-[#17130E] shadow-[0_12px_28px_-8px_rgba(213,175,121,0.5)] transition hover:brightness-105"
+            >
+              <span>{copy.bannerQuote}</span>
+              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+            </a>
+            <a
+              href="https://wa.me/33767566783"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-[46px] items-center gap-2.5 rounded-xl border border-white/25 bg-white/10 px-6 py-3 text-xs font-semibold text-white backdrop-blur-md transition hover:border-[#E5C696] hover:bg-white/15"
+            >
+              <MessageCircle className="h-4 w-4 text-[#E5C696]" />
+              <span>{copy.bannerWa}</span>
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -24,7 +24,7 @@ import {
   TrendingUp,
   X,
   Send,
-  PartyPopper
+  PartyPopper,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CrmLead } from "@/routes/api/crm";
@@ -46,17 +46,20 @@ interface CrmUltraLudiqueArenaProps {
 const QUICK_OBJECTIONS = [
   {
     objection: "« C'est trop cher ! »",
-    reponse: "« Monsieur, sur 10 000 € de chiffre d'affaires, vous perdez 2 500 € en commissions tierces chaque mois. Notre solution est amortie en seulement 15 jours. Est-ce que vous préférez continuer à donner 30 000 € par an aux plateformes ou garder votre marge ? »",
+    reponse:
+      "« Monsieur, sur 10 000 € de chiffre d'affaires, vous perdez 2 500 € en commissions tierces chaque mois. Notre solution est amortie en seulement 15 jours. Est-ce que vous préférez continuer à donner 30 000 € par an aux plateformes ou garder votre marge ? »",
     tag: "Frappe Chirurgicale ROI",
   },
   {
     objection: "« Je n'ai pas le temps en ce moment ! »",
-    reponse: "« C'est justement pour ça que je vous appelle : notre système vous fait gagner 2h par jour sur vos stocks et réservations. Ça prend 45 secondes sur votre WhatsApp pour voir la maquette gratuite. Je vous l'envoie ? »",
+    reponse:
+      "« C'est justement pour ça que je vous appelle : notre système vous fait gagner 2h par jour sur vos stocks et réservations. Ça prend 45 secondes sur votre WhatsApp pour voir la maquette gratuite. Je vous l'envoie ? »",
     tag: "Gain de Temps Immédiat",
   },
   {
     objection: "« J'ai déjà quelqu'un qui gère mon site ! »",
-    reponse: "« Parfait ! Est-ce qu'il vous garantit d'être dans le Top 3 Google Maps de votre ville sous 30 jours avec avis 5★ automatisés ? Regardez notre maquette démo gratuite, comparez et jugez sur pièces ! »",
+    reponse:
+      "« Parfait ! Est-ce qu'il vous garantit d'être dans le Top 3 Google Maps de votre ville sous 30 jours avec avis 5★ automatisés ? Regardez notre maquette démo gratuite, comparez et jugez sur pièces ! »",
     tag: "Démarquage Qualité",
   },
 ];
@@ -69,7 +72,9 @@ export function CrmUltraLudiqueArena({
   onOpenWhatsappModal,
   onSignDeal,
 }: CrmUltraLudiqueArenaProps) {
-  const [activeTab, setActiveTab] = useState<"arena" | "vault" | "training" | "leaderboard">("arena");
+  const [activeTab, setActiveTab] = useState<"arena" | "vault" | "training" | "leaderboard">(
+    "arena",
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showObjectionModal, setShowObjectionModal] = useState(false);
@@ -85,7 +90,9 @@ export function CrmUltraLudiqueArena({
   const playSound = (type: "coin" | "win" | "click" | "powerup") => {
     if (!soundEnabled || typeof window === "undefined") return;
     try {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (!AudioCtx) return;
       const ctx = new AudioCtx();
       const osc = ctx.createOscillator();
@@ -130,39 +137,60 @@ export function CrmUltraLudiqueArena({
     }
   };
 
-  const safeLeads = leads && leads.length > 0 ? leads : [
-    {
-      id: "lead-demo-1",
-      company: "Brasserie de la Mer",
-      contactName: "Marc Vasseur (Gérant)",
-      phone: "06 22 33 44 55",
-      city: "Marseille",
-      serviceTarget: "Site Vitrine & Google Maps Top 3 (999 €)",
-      budgetEur: 999,
-      status: "to_call" as const,
-      priority: "urgent" as const,
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: "lead-demo-2",
-      company: "Boutique Hôtel Les Palmiers",
-      contactName: "Claire Dujardin",
-      phone: "06 88 99 00 11",
-      city: "Cannes",
-      serviceTarget: "Site Web Immersif & Réservation (1 499 €)",
-      budgetEur: 1499,
-      status: "to_call" as const,
-      priority: "high" as const,
-      createdAt: new Date().toISOString(),
-    },
-  ];
+  const safeLeads: CrmLead[] =
+    leads && leads.length > 0
+      ? leads
+      : [
+          {
+            id: "lead-demo-1",
+            company: "Brasserie de la Mer",
+            contactName: "Marc Vasseur (Gérant)",
+            phone: "06 22 33 44 55",
+            email: "",
+            sector: "Restauration",
+            assignedTo: "demo",
+            sentBy: "demo",
+            source: "Exemple de démonstration",
+            notes: "Données fictives de démonstration",
+            nextFollowUp: "",
+            callsCount: 0,
+            city: "Marseille",
+            serviceTarget: "Site Vitrine & Google Maps Top 3 (999 €)",
+            budgetEur: 999,
+            status: "to_call" as const,
+            priority: "urgent" as const,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+          {
+            id: "lead-demo-2",
+            company: "Boutique Hôtel Les Palmiers",
+            contactName: "Claire Dujardin",
+            phone: "06 88 99 00 11",
+            email: "",
+            sector: "Hôtellerie",
+            assignedTo: "demo",
+            sentBy: "demo",
+            source: "Exemple de démonstration",
+            notes: "Données fictives de démonstration",
+            nextFollowUp: "",
+            callsCount: 0,
+            city: "Cannes",
+            serviceTarget: "Site Web Immersif & Réservation (1 499 €)",
+            budgetEur: 1499,
+            status: "to_call" as const,
+            priority: "high" as const,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+        ];
 
   const currentLead = safeLeads[currentIndex % safeLeads.length];
   const isLeadSigned = signedLeads.includes(currentLead.id);
 
   // Calcul commission
   const commissionAmount = Math.round(
-    (currentLead.budgetEur || 999) * (user.commissionPct ? user.commissionPct / 100 : 0.2)
+    (currentLead.budgetEur || 999) * (user.commissionPct ? user.commissionPct / 100 : 0.2),
   );
 
   const handleNextLead = () => {
@@ -194,7 +222,6 @@ export function CrmUltraLudiqueArena({
 
   return (
     <div className="min-h-screen bg-[#07090E] text-[#F8FAFC] pb-24 sm:pb-12 select-none">
-      
       {/* ── BANNIÈRE DE CÉLÉBRATION VICTOIRE ── */}
       {celebration && (
         <div className="fixed inset-x-4 top-6 z-50 mx-auto max-w-lg rounded-3xl border-2 border-[#D4AF37] bg-gradient-to-r from-amber-950/95 via-black to-emerald-950/95 p-5 shadow-[0_0_60px_rgba(212,175,55,0.7)] backdrop-blur-2xl animate-bounce flex items-center gap-4">
@@ -211,7 +238,6 @@ export function CrmUltraLudiqueArena({
       {/* ── TOPBAR DU HÉROS DE VENTE ── */}
       <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0A0D14]/90 backdrop-blur-2xl px-4 py-3 sm:px-8">
         <div className="mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-3">
-          
           {/* Avatar et stats du Closer */}
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -233,9 +259,7 @@ export function CrmUltraLudiqueArena({
                   SÉRIE 5D
                 </span>
               </div>
-              <h1 className="text-lg font-extrabold text-white leading-tight">
-                {user.fullName}
-              </h1>
+              <h1 className="text-lg font-extrabold text-white leading-tight">{user.fullName}</h1>
             </div>
           </div>
 
@@ -261,7 +285,11 @@ export function CrmUltraLudiqueArena({
                 className="grid h-9 w-9 place-items-center rounded-xl border border-white/10 bg-white/5 text-neutral-400 hover:text-white"
                 title="Sons d'arcade"
               >
-                {soundEnabled ? <Volume2 className="h-4 w-4 text-emerald-400" /> : <VolumeX className="h-4 w-4" />}
+                {soundEnabled ? (
+                  <Volume2 className="h-4 w-4 text-emerald-400" />
+                ) : (
+                  <VolumeX className="h-4 w-4" />
+                )}
               </button>
 
               <button
@@ -274,13 +302,11 @@ export function CrmUltraLudiqueArena({
               </button>
             </div>
           </div>
-
         </div>
       </header>
 
       {/* ── CONTENU PRINCIPAL ── */}
       <main className="mx-auto max-w-5xl px-4 pt-6 space-y-6">
-        
         {/* ── BATTLE PASS DU JOUR : 3 OBJECTIFS ULTRA LISIBLES ── */}
         <section className="rounded-3xl border border-white/15 bg-gradient-to-r from-[#0F1420] via-[#151B2B] to-[#0F1420] p-4 sm:p-5 shadow-xl">
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
@@ -290,13 +316,10 @@ export function CrmUltraLudiqueArena({
                 BATTLE PASS DU JOUR · OBJECTIF : 450 € DE COMMISSIONS
               </h2>
             </div>
-            <span className="font-mono text-[10px] text-neutral-400">
-              XP TOTAL : {xp} / 5 000
-            </span>
+            <span className="font-mono text-[10px] text-neutral-400">XP TOTAL : {xp} / 5 000</span>
           </div>
 
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-            
             {/* Quête 1 */}
             <div className="rounded-2xl border border-white/10 bg-black/40 p-3">
               <div className="flex items-center justify-between text-xs">
@@ -309,7 +332,9 @@ export function CrmUltraLudiqueArena({
                   style={{ width: `${Math.min((dailyCalls / 3) * 100, 100)}%` }}
                 />
               </div>
-              <span className="mt-1.5 block font-mono text-[9px] text-neutral-400">+50 XP · Entraînement voix</span>
+              <span className="mt-1.5 block font-mono text-[9px] text-neutral-400">
+                +50 XP · Entraînement voix
+              </span>
             </div>
 
             {/* Quête 2 */}
@@ -324,7 +349,9 @@ export function CrmUltraLudiqueArena({
                   style={{ width: `${Math.min((dailyMaquettes / 1) * 100, 100)}%` }}
                 />
               </div>
-              <span className="mt-1.5 block font-mono text-[9px] text-emerald-400">+100 XP · Débloqué !</span>
+              <span className="mt-1.5 block font-mono text-[9px] text-emerald-400">
+                +100 XP · Débloqué !
+              </span>
             </div>
 
             {/* Quête 3 */}
@@ -342,17 +369,15 @@ export function CrmUltraLudiqueArena({
                 />
               </div>
               <span className="mt-1.5 block font-mono text-[9px] text-emerald-400 font-bold">
-                +250 XP &amp; +150 € DANS LE COFFRE
+                +250 XP &amp; commission selon barème
               </span>
             </div>
-
           </div>
         </section>
 
         {/* ── ARÈNE DE CHASSE : LA CARTE CIBLE UNIQUE (100% INTUITIVE) ── */}
         {activeTab === "arena" && (
           <div className="space-y-4">
-            
             {/* Contrôles Suivant / Précédent */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -386,7 +411,6 @@ export function CrmUltraLudiqueArena({
 
             {/* FICHE DE COMBAT DU PROSPECT (GRAND FORMAT ARCADE) */}
             <div className="relative overflow-hidden rounded-[2.5rem] border-2 border-emerald-400/50 bg-gradient-to-b from-[#0F1422] to-[#0A0D14] p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.85)]">
-              
               {/* Badge Gains & Statut */}
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/50 bg-emerald-500/20 px-4 py-1.5 font-mono text-xs font-black text-emerald-300 shadow-[0_0_20px_rgba(52,211,153,0.3)]">
@@ -412,7 +436,8 @@ export function CrmUltraLudiqueArena({
                 </h2>
                 <p className="mt-1 text-sm sm:text-base text-neutral-300 font-light">
                   {currentLead.contactName} · {currentLead.city} · Offre :{" "}
-                  <strong className="text-[#E2D5BC]">{currentLead.serviceTarget}</strong> ({currentLead.budgetEur} €)
+                  <strong className="text-[#E2D5BC]">{currentLead.serviceTarget}</strong> (
+                  {currentLead.budgetEur} €)
                 </p>
               </div>
 
@@ -424,7 +449,9 @@ export function CrmUltraLudiqueArena({
                     🎯 FAIBLESSE DÉTECTÉE (TON ANGLE D&apos;ATTAQUE) :
                   </span>
                   <p className="mt-0.5 text-xs sm:text-sm text-neutral-200">
-                    Perd en moyenne 25 à 40 réservations par mois au profit de ses concurrents locaux à cause d&apos;une fiche Maps mal positionnée et d&apos;un site non responsive.
+                    Perd en moyenne 25 à 40 réservations par mois au profit de ses concurrents
+                    locaux à cause d&apos;une fiche Maps mal positionnée et d&apos;un site non
+                    responsive.
                   </p>
                 </div>
               </div>
@@ -438,13 +465,17 @@ export function CrmUltraLudiqueArena({
                   </span>
                 </div>
                 <p className="text-sm sm:text-base italic text-white font-medium leading-relaxed bg-black/30 p-3 rounded-xl border border-white/5">
-                  « Bonjour {currentLead.contactName?.split(" ")[0] || "Monsieur"} ! Je suis {user.fullName.split(" ")[0]} de l&apos;agence XR Agency. J&apos;ai vu votre établissement {currentLead.company} à {currentLead.city}. On vous a préparé une maquette sur-mesure 100% offerte pour vous montrer comment doubler vos demandes directes sans payer de commissions. Est-ce que vous avez 1 minute ou un numéro WhatsApp pour que je vous l&apos;envoie tout de suite ? »
+                  « Bonjour {currentLead.contactName?.split(" ")[0] || "Monsieur"} ! Je suis{" "}
+                  {user.fullName.split(" ")[0]} de l&apos;agence XR Agency. J&apos;ai vu votre
+                  établissement {currentLead.company} à {currentLead.city}. On vous a préparé une
+                  maquette sur-mesure 100% offerte pour vous montrer comment doubler vos demandes
+                  directes sans payer de commissions. Est-ce que vous avez 1 minute ou un numéro
+                  WhatsApp pour que je vous l&apos;envoie tout de suite ? »
                 </p>
               </div>
 
               {/* ── LES 4 BOUTONS D'ATTAQUE GÉANTS DU COMBAT ── */}
               <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                
                 {/* 1. Lancer l'Appel Gagnant */}
                 <button
                   type="button"
@@ -473,9 +504,12 @@ export function CrmUltraLudiqueArena({
                       onOpenWhatsappModal(currentLead);
                     } else {
                       const text = encodeURIComponent(
-                        `Bonjour ${currentLead.contactName || ""}, voici la maquette sur-mesure conçue pour ${currentLead.company} par XR Agency : https://xragencyai.com/`
+                        `Bonjour ${currentLead.contactName || ""}, voici la maquette sur-mesure conçue pour ${currentLead.company} par XR Agency : https://xragencyai.com/`,
                       );
-                      window.open(`https://wa.me/${currentLead.phone.replace(/[^0-9]/g, "")}?text=${text}`, "_blank");
+                      window.open(
+                        `https://wa.me/${currentLead.phone.replace(/[^0-9]/g, "")}?text=${text}`,
+                        "_blank",
+                      );
                     }
                   }}
                   className="flex items-center justify-center gap-2.5 rounded-2xl border border-emerald-400/50 bg-[#0F172A] py-4 px-6 text-sm font-bold text-emerald-300 hover:bg-emerald-500/15 transition active:scale-95"
@@ -507,11 +541,8 @@ export function CrmUltraLudiqueArena({
                   <Crown className="h-4 w-4" />
                   <span>4. C&apos;est Signé ! (+{commissionAmount} €)</span>
                 </button>
-
               </div>
-
             </div>
-
           </div>
         )}
 
@@ -530,16 +561,21 @@ export function CrmUltraLudiqueArena({
                 {vaultCommissionEur.toLocaleString()} €
               </h2>
               <p className="mt-2 text-sm text-neutral-300">
-                Commissions calculées en direct sur le compte de virement SASU KARMA.
+                Les commissions affichées sont indicatives ; leur versement dépend du contrat et des
+                règlements confirmés.
               </p>
 
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto">
                 <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-left">
-                  <span className="font-mono text-[10px] text-neutral-400">🔒 En Coffre (Validation)</span>
+                  <span className="font-mono text-[10px] text-neutral-400">
+                    🔒 En Coffre (Validation)
+                  </span>
                   <p className="font-mono text-xl font-bold text-amber-300 mt-1">450 €</p>
                 </div>
                 <div className="rounded-2xl border border-emerald-500/30 bg-emerald-950/20 p-4 text-left">
-                  <span className="font-mono text-[10px] text-emerald-400">💸 Viré &amp; Débloqué</span>
+                  <span className="font-mono text-[10px] text-emerald-400">
+                    💸 Viré &amp; Débloqué
+                  </span>
                   <p className="font-mono text-xl font-bold text-emerald-300 mt-1">1 000 €</p>
                 </div>
               </div>
@@ -600,26 +636,50 @@ export function CrmUltraLudiqueArena({
 
               <div className="mt-6 space-y-3">
                 {[
-                  { name: "Lucas Martin", role: "Apex Closer", deals: 8, cash: "2 450 €", badge: "🥇 1er" },
-                  { name: "Karim Meziane", role: "Closer Senior", deals: 6, cash: "1 800 €", badge: "🥈 2ème" },
-                  { name: "Sarah Benali", role: "Chasseuse d'Élite", deals: 5, cash: "1 500 €", badge: "🥉 3ème" },
+                  {
+                    name: "Lucas Martin",
+                    role: "Apex Closer",
+                    deals: 8,
+                    cash: "2 450 €",
+                    badge: "🥇 1er",
+                  },
+                  {
+                    name: "Karim Meziane",
+                    role: "Closer Senior",
+                    deals: 6,
+                    cash: "1 800 €",
+                    badge: "🥈 2ème",
+                  },
+                  {
+                    name: "Sarah Benali",
+                    role: "Chasseuse d'Élite",
+                    deals: 5,
+                    cash: "1 500 €",
+                    badge: "🥉 3ème",
+                  },
                 ].map((closer, i) => (
-                  <div key={i} className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/40 p-4">
+                  <div
+                    key={i}
+                    className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/40 p-4"
+                  >
                     <div className="flex items-center gap-3">
                       <span className="font-mono text-base font-black">{closer.badge}</span>
                       <div>
                         <h4 className="font-bold text-white text-sm">{closer.name}</h4>
-                        <span className="font-mono text-[10px] text-neutral-400">{closer.role} · {closer.deals} signatures</span>
+                        <span className="font-mono text-[10px] text-neutral-400">
+                          {closer.role} · {closer.deals} signatures
+                        </span>
                       </div>
                     </div>
-                    <span className="font-mono text-base font-black text-[#D4AF37]">{closer.cash}</span>
+                    <span className="font-mono text-base font-black text-[#D4AF37]">
+                      {closer.cash}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
         )}
-
       </main>
 
       {/* ── NAVIGATION STICKY AU POUCE (SMARTPHONE ET PC) ── */}
@@ -642,7 +702,7 @@ export function CrmUltraLudiqueArena({
                 "flex flex-col items-center gap-1 rounded-2xl px-4 py-1.5 transition text-[11px] font-bold",
                 activeTab === tab.id
                   ? "bg-emerald-400 text-black shadow-[0_0_15px_rgba(52,211,153,0.4)]"
-                  : "text-neutral-400 hover:text-white"
+                  : "text-neutral-400 hover:text-white",
               )}
             >
               {tab.icon}
@@ -666,7 +726,9 @@ export function CrmUltraLudiqueArena({
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div className="flex items-center gap-2">
                 <Shield className="h-5 w-5 text-purple-400" />
-                <h3 className="text-base font-bold text-white">Parades d&apos;Objections Magiques</h3>
+                <h3 className="text-base font-bold text-white">
+                  Parades d&apos;Objections Magiques
+                </h3>
               </div>
               <button
                 type="button"
@@ -678,7 +740,8 @@ export function CrmUltraLudiqueArena({
             </div>
 
             <p className="text-xs text-neutral-300">
-              Cliquez sur l&apos;objection prononcée par le client pour lire immédiatement la réplique exacte :
+              Cliquez sur l&apos;objection prononcée par le client pour lire immédiatement la
+              réplique exacte :
             </p>
 
             <div className="space-y-3">
@@ -690,7 +753,9 @@ export function CrmUltraLudiqueArena({
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-white text-sm">{obj.objection}</span>
-                    <span className="text-[10px] font-mono text-purple-300">Afficher la réplique</span>
+                    <span className="text-[10px] font-mono text-purple-300">
+                      Afficher la réplique
+                    </span>
                   </div>
                   {selectedObjection === i && (
                     <p className="mt-3 text-xs sm:text-sm text-emerald-300 italic bg-purple-950/40 p-3 rounded-xl border border-purple-500/30 animate-in fade-in">
@@ -703,7 +768,6 @@ export function CrmUltraLudiqueArena({
           </div>
         </div>
       )}
-
     </div>
   );
 }

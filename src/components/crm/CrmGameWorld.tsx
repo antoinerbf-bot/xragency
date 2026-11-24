@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import {
   Crown,
   Trophy,
@@ -77,7 +77,9 @@ class RetroAudioSynth {
 
   private initCtx() {
     if (!this.ctx && typeof window !== "undefined") {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (AudioCtx) this.ctx = new AudioCtx();
     }
     if (this.ctx && this.ctx.state === "suspended") {
@@ -102,7 +104,9 @@ class RetroAudioSynth {
       gain.connect(this.ctx.destination);
       osc.start(now);
       osc.stop(now + 0.35);
-    } catch {}
+    } catch {
+      /* Audio or storage fallback: keep the interface usable. */
+    }
   }
 
   playHit() {
@@ -122,7 +126,9 @@ class RetroAudioSynth {
       gain.connect(this.ctx.destination);
       osc.start(now);
       osc.stop(now + 0.2);
-    } catch {}
+    } catch {
+      /* Audio or storage fallback: keep the interface usable. */
+    }
   }
 
   playVictory() {
@@ -144,7 +150,9 @@ class RetroAudioSynth {
         osc.start(start);
         osc.stop(start + 0.25);
       });
-    } catch {}
+    } catch {
+      /* Audio or storage fallback: keep the interface usable. */
+    }
   }
 
   playStep() {
@@ -163,7 +171,9 @@ class RetroAudioSynth {
       gain.connect(this.ctx.destination);
       osc.start(now);
       osc.stop(now + 0.05);
-    } catch {}
+    } catch {
+      /* Audio or storage fallback: keep the interface usable. */
+    }
   }
 }
 
@@ -263,7 +273,9 @@ export function CrmGameWorld({
   membersList = [],
 }: CrmGameWorldProps) {
   const isAdmin = currentUser.role === "admin";
-  const [activeRoom, setActiveRoom] = useState<RoomZone["id"] | null>(isAdmin ? "boss_office" : "closing_arena");
+  const [activeRoom, setActiveRoom] = useState<RoomZone["id"] | null>(
+    isAdmin ? "boss_office" : "closing_arena",
+  );
 
   // Personnage position & orientation
   const [charPos, setCharPos] = useState<{ x: number; y: number }>({
@@ -278,7 +290,9 @@ export function CrmGameWorld({
   // Score et pièces collectées
   const [playerGold, setPlayerGold] = useState<number>(isAdmin ? 48500 : 1240);
   const [playerXp, setPlayerXp] = useState<number>(850);
-  const [floatingTexts, setFloatingTexts] = useState<{ id: string; text: string; x: number; y: number }[]>([]);
+  const [floatingTexts, setFloatingTexts] = useState<
+    { id: string; text: string; x: number; y: number }[]
+  >([]);
 
   // Pièces à ramasser sur la carte
   const [coins, setCoins] = useState<FloatingCoin[]>([
@@ -305,47 +319,55 @@ export function CrmGameWorld({
   const [newTodoPriority, setNewTodoPriority] = useState<"urgent" | "high" | "normal">("urgent");
 
   // Déplacement du personnage
-  const moveCharacter = (dx: number, dy: number, dir: "down" | "up" | "left" | "right") => {
-    setCharDirection(dir);
-    setIsWalking(true);
-    audioSynth.playStep();
-    setTimeout(() => setIsWalking(false), 200);
+  const moveCharacter = useCallback(
+    (dx: number, dy: number, dir: "down" | "up" | "left" | "right") => {
+      setCharDirection(dir);
+      setIsWalking(true);
+      audioSynth.playStep();
+      setTimeout(() => setIsWalking(false), 200);
 
-    const newX = Math.max(50, Math.min(740, charPos.x + dx));
-    const newY = Math.max(50, Math.min(520, charPos.y + dy));
-    setCharPos({ x: newX, y: newY });
+      const newX = Math.max(50, Math.min(740, charPos.x + dx));
+      const newY = Math.max(50, Math.min(520, charPos.y + dy));
+      setCharPos({ x: newX, y: newY });
 
-    // Vérifier ramassage de pièces
-    setCoins((prev) => {
-      const remaining: FloatingCoin[] = [];
-      prev.forEach((coin) => {
-        const dist = Math.hypot(coin.x - newX, coin.y - newY);
-        if (dist < 40) {
-          // Ramassé !
-          audioSynth.playCoin();
-          const bonus = coin.type === "diamond" ? 100 : 50;
-          setPlayerGold((g) => g + bonus);
-          setPlayerXp((x) => x + 25);
+      // Vérifier ramassage de pièces
+      setCoins((prev) => {
+        const remaining: FloatingCoin[] = [];
+        prev.forEach((coin) => {
+          const dist = Math.hypot(coin.x - newX, coin.y - newY);
+          if (dist < 40) {
+            // Ramassé !
+            audioSynth.playCoin();
+            const bonus = coin.type === "diamond" ? 100 : 50;
+            setPlayerGold((g) => g + bonus);
+            setPlayerXp((x) => x + 25);
 
-          const floatId = `fl-${Date.now()}`;
-          setFloatingTexts((ft) => [...ft, { id: floatId, text: `+${bonus} € 🪙`, x: coin.x, y: coin.y }]);
-          setTimeout(() => {
-            setFloatingTexts((ft) => ft.filter((f) => f.id !== floatId));
-          }, 1200);
-        } else {
-          remaining.push(coin);
-        }
+            const floatId = `fl-${Date.now()}`;
+            setFloatingTexts((ft) => [
+              ...ft,
+              { id: floatId, text: `+${bonus} € 🪙`, x: coin.x, y: coin.y },
+            ]);
+            setTimeout(() => {
+              setFloatingTexts((ft) => ft.filter((f) => f.id !== floatId));
+            }, 1200);
+          } else {
+            remaining.push(coin);
+          }
+        });
+        return remaining;
       });
-      return remaining;
-    });
 
-    // Détection de la salle
-    const detected = ROOMS.find((r) => newX >= r.x && newX <= r.x + r.w && newY >= r.y && newY <= r.y + r.h);
-    if (detected) {
-      if (detected.roleRequired === "admin" && !isAdmin) return;
-      setActiveRoom(detected.id);
-    }
-  };
+      // Détection de la salle
+      const detected = ROOMS.find(
+        (r) => newX >= r.x && newX <= r.x + r.w && newY >= r.y && newY <= r.y + r.h,
+      );
+      if (detected) {
+        if (detected.roleRequired === "admin" && !isAdmin) return;
+        setActiveRoom(detected.id);
+      }
+    },
+    [charPos, isAdmin],
+  );
 
   // Écouteur clavier
   useEffect(() => {
@@ -353,18 +375,23 @@ export function CrmGameWorld({
       if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement)?.tagName)) return;
       const step = 25;
       if (e.key === "ArrowUp" || e.key === "z" || e.key === "Z") moveCharacter(0, -step, "up");
-      else if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") moveCharacter(0, step, "down");
-      else if (e.key === "ArrowLeft" || e.key === "q" || e.key === "Q") moveCharacter(-step, 0, "left");
-      else if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") moveCharacter(step, 0, "right");
+      else if (e.key === "ArrowDown" || e.key === "s" || e.key === "S")
+        moveCharacter(0, step, "down");
+      else if (e.key === "ArrowLeft" || e.key === "q" || e.key === "Q")
+        moveCharacter(-step, 0, "left");
+      else if (e.key === "ArrowRight" || e.key === "d" || e.key === "D")
+        moveCharacter(step, 0, "right");
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [charPos, isAdmin]);
+  }, [charPos, isAdmin, moveCharacter]);
 
   const teleportToRoom = (room: RoomZone) => {
     if (room.roleRequired === "admin" && !isAdmin) {
-      alert("⛔ Bureau privé du Patron (Antoine) ! Choisissez le personnage Boss pour déverrouiller cette porte.");
+      alert(
+        "⛔ Bureau privé du Patron (Antoine) ! Choisissez le personnage Boss pour déverrouiller cette porte.",
+      );
       return;
     }
     audioSynth.playCoin();
@@ -395,14 +422,18 @@ export function CrmGameWorld({
       setShowConfetti(true);
       setPlayerGold((g) => g + battleMonster.reward);
       setPlayerXp((x) => x + 250);
-      setBattleMessage(`🎉 VICTOIRE ÉPIQUE avec [${moveName}] ! CONTRAT SIGNÉ ! +${battleMonster.reward} € dans votre cagnotte et +250 XP ! 🏆`);
+      setBattleMessage(
+        `🎉 VICTOIRE ÉPIQUE avec [${moveName}] ! CONTRAT SIGNÉ ! +${battleMonster.reward} € dans votre cagnotte et +250 XP ! 🏆`,
+      );
       setTimeout(() => {
         setBattleMonster(null);
         setBattleMessage(null);
         setShowConfetti(false);
       }, 3500);
     } else {
-      setBattleMessage(`💥 [${moveName}] inflige -${power} HP ! La résistance du client baisse à ${newHp}%.`);
+      setBattleMessage(
+        `💥 [${moveName}] inflige -${power} HP ! La résistance du client baisse à ${newHp}%.`,
+      );
     }
   };
 
@@ -459,10 +490,14 @@ export function CrmGameWorld({
                 "flex items-center gap-2 rounded-2xl border px-3 py-2 text-xs font-bold transition",
                 audioMuted
                   ? "border-red-500/40 bg-red-500/10 text-red-300"
-                  : "border-emerald-500/40 bg-emerald-500/10 text-emerald-300 shadow-sm"
+                  : "border-emerald-500/40 bg-emerald-500/10 text-emerald-300 shadow-sm",
               )}
             >
-              {audioMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4 animate-pulse" />}
+              {audioMuted ? (
+                <VolumeX className="h-4 w-4" />
+              ) : (
+                <Volume2 className="h-4 w-4 animate-pulse" />
+              )}
               <span>{audioMuted ? "Son : Muet" : "Sons 8-Bit : ON"}</span>
             </button>
 
@@ -484,7 +519,9 @@ export function CrmGameWorld({
                   }}
                   className={cn(
                     "rounded-xl px-2 py-1 text-sm transition",
-                    avatarHat === hat.id ? "bg-[#d4af37] text-black scale-110 shadow-sm" : "hover:bg-white/10"
+                    avatarHat === hat.id
+                      ? "bg-[#d4af37] text-black scale-110 shadow-sm"
+                      : "hover:bg-white/10",
                   )}
                 >
                   {hat.label}
@@ -515,15 +552,21 @@ export function CrmGameWorld({
           <div className="rounded-2xl bg-black/50 border border-white/10 p-3 flex items-center gap-3">
             <Coins className="h-6 w-6 text-[#d4af37] animate-spin" />
             <div>
-              <span className="text-[9px] text-neutral-400 uppercase tracking-widest block font-bold">Cagnotte Or</span>
-              <span className="text-base font-black text-[#d4af37]">{playerGold.toLocaleString("fr-FR")} €</span>
+              <span className="text-[9px] text-neutral-400 uppercase tracking-widest block font-bold">
+                Cagnotte Or
+              </span>
+              <span className="text-base font-black text-[#d4af37]">
+                {playerGold.toLocaleString("fr-FR")} €
+              </span>
             </div>
           </div>
 
           <div className="rounded-2xl bg-black/50 border border-white/10 p-3 flex items-center gap-3">
             <Star className="h-6 w-6 text-yellow-400 fill-yellow-400" />
             <div>
-              <span className="text-[9px] text-neutral-400 uppercase tracking-widest block font-bold">Points XP</span>
+              <span className="text-[9px] text-neutral-400 uppercase tracking-widest block font-bold">
+                Points XP
+              </span>
               <span className="text-base font-black text-yellow-300">{playerXp} XP (Niv. 14)</span>
             </div>
           </div>
@@ -531,16 +574,24 @@ export function CrmGameWorld({
           <div className="rounded-2xl bg-black/50 border border-white/10 p-3 flex items-center gap-3">
             <Flame className="h-6 w-6 text-red-500 animate-pulse" />
             <div>
-              <span className="text-[9px] text-neutral-400 uppercase tracking-widest block font-bold">Quêtes Chaudes</span>
-              <span className="text-base font-black text-red-400">{hotLeads.length} leads à closer</span>
+              <span className="text-[9px] text-neutral-400 uppercase tracking-widest block font-bold">
+                Quêtes Chaudes
+              </span>
+              <span className="text-base font-black text-red-400">
+                {hotLeads.length} leads à closer
+              </span>
             </div>
           </div>
 
           <div className="rounded-2xl bg-black/50 border border-white/10 p-3 flex items-center gap-3">
             <Target className="h-6 w-6 text-[#00f2fe]" />
             <div>
-              <span className="text-[9px] text-neutral-400 uppercase tracking-widest block font-bold">Missions To-Do</span>
-              <span className="text-base font-black text-[#00f2fe]">{todos.filter((t) => !t.done).length} en attente</span>
+              <span className="text-[9px] text-neutral-400 uppercase tracking-widest block font-bold">
+                Missions To-Do
+              </span>
+              <span className="text-base font-black text-[#00f2fe]">
+                {todos.filter((t) => !t.done).length} en attente
+              </span>
             </div>
           </div>
         </div>
@@ -602,7 +653,7 @@ export function CrmGameWorld({
                   isSelected
                     ? cn("scale-[1.02]", room.borderGlow, `bg-gradient-to-br ${room.bgGrad}`)
                     : "border-white/10 bg-black/50 hover:border-white/30 hover:bg-white/5",
-                  isLocked && "opacity-50 border-dashed border-red-500/50"
+                  isLocked && "opacity-50 border-dashed border-red-500/50",
                 )}
               >
                 <div className="flex items-start justify-between">
@@ -634,7 +685,9 @@ export function CrmGameWorld({
                   ) : null}
                 </div>
 
-                <p className="text-xs text-neutral-300 leading-relaxed my-3 font-medium">{room.desc}</p>
+                <p className="text-xs text-neutral-300 leading-relaxed my-3 font-medium">
+                  {room.desc}
+                </p>
 
                 <div className="flex items-center justify-between border-t border-white/10 pt-3 text-xs">
                   {room.id === "boss_office" && (
@@ -648,9 +701,7 @@ export function CrmGameWorld({
                     </span>
                   )}
                   {room.id === "school_dojo" && (
-                    <span className="text-[#00f2fe] font-bold font-mono">
-                      🥋 Dojo 90j actif
-                    </span>
+                    <span className="text-[#00f2fe] font-bold font-mono">🥋 Dojo 90j actif</span>
                   )}
                   {room.id === "production_lab" && (
                     <span className="text-purple-400 font-bold font-mono">
@@ -692,7 +743,7 @@ export function CrmGameWorld({
               isAdmin
                 ? "bg-gradient-to-tr from-[#d4af37] via-[#fef08a] to-[#ca8a04] text-black"
                 : "bg-gradient-to-tr from-cyan-400 via-emerald-300 to-blue-500 text-black",
-              isWalking && "scale-125 -translate-y-2 animate-bounce"
+              isWalking && "scale-125 -translate-y-2 animate-bounce",
             )}
           >
             <User className="h-7 w-7" />
@@ -753,7 +804,7 @@ export function CrmGameWorld({
               </h3>
             </div>
             <div className="rounded-2xl border border-[#d4af37]/40 bg-[#d4af37]/10 px-4 py-2 font-mono text-xs font-bold text-[#d4af37]">
-              Trésorerie Agence : 48 500 € 🪙
+              Trésorerie agence · données à synchroniser
             </div>
           </div>
 
@@ -816,7 +867,8 @@ export function CrmGameWorld({
             {/* Missions Pro */}
             <div className="rounded-2xl border border-[#d4af37]/30 bg-black/50 p-5 space-y-3">
               <span className="text-xs font-black text-[#d4af37] uppercase tracking-wider flex items-center gap-2 border-b border-white/10 pb-2">
-                <Briefcase className="h-4 w-4" /> Missions Pro ({proTodos.filter((t) => !t.done).length} en attente)
+                <Briefcase className="h-4 w-4" /> Missions Pro (
+                {proTodos.filter((t) => !t.done).length} en attente)
               </span>
               <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
                 {proTodos.map((t) => (
@@ -826,7 +878,7 @@ export function CrmGameWorld({
                       "flex items-center justify-between rounded-xl border p-3.5 transition",
                       t.done
                         ? "border-white/5 bg-white/5 opacity-50 line-through"
-                        : "border-white/10 bg-white/5 hover:border-[#d4af37]"
+                        : "border-white/10 bg-white/5 hover:border-[#d4af37]",
                     )}
                   >
                     <div className="flex items-center gap-3">
@@ -838,14 +890,18 @@ export function CrmGameWorld({
                         }}
                         className={cn(
                           "flex h-6 w-6 items-center justify-center rounded-lg border transition",
-                          t.done ? "border-emerald-500 bg-emerald-500 text-black" : "border-white/30 hover:border-white"
+                          t.done
+                            ? "border-emerald-500 bg-emerald-500 text-black"
+                            : "border-white/30 hover:border-white",
                         )}
                       >
                         {t.done && <Check className="h-4 w-4" />}
                       </button>
                       <div>
                         <p className="text-xs font-bold text-white leading-tight">{t.title}</p>
-                        <span className="text-[10px] text-neutral-400 font-mono">{t.deadline} · {t.tag}</span>
+                        <span className="text-[10px] text-neutral-400 font-mono">
+                          {t.deadline} · {t.tag}
+                        </span>
                       </div>
                     </div>
                     <button
@@ -863,7 +919,8 @@ export function CrmGameWorld({
             {/* Objectifs Personnels */}
             <div className="rounded-2xl border border-purple-500/30 bg-black/50 p-5 space-y-3">
               <span className="text-xs font-black text-purple-300 uppercase tracking-wider flex items-center gap-2 border-b border-white/10 pb-2">
-                <Heart className="h-4 w-4 text-red-400" /> Routine Perso &amp; Énergie ({persoTodos.filter((t) => !t.done).length} en attente)
+                <Heart className="h-4 w-4 text-red-400" /> Routine Perso &amp; Énergie (
+                {persoTodos.filter((t) => !t.done).length} en attente)
               </span>
               <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
                 {persoTodos.map((t) => (
@@ -873,7 +930,7 @@ export function CrmGameWorld({
                       "flex items-center justify-between rounded-xl border p-3.5 transition",
                       t.done
                         ? "border-white/5 bg-white/5 opacity-50 line-through"
-                        : "border-white/10 bg-white/5 hover:border-purple-400"
+                        : "border-white/10 bg-white/5 hover:border-purple-400",
                     )}
                   >
                     <div className="flex items-center gap-3">
@@ -885,14 +942,18 @@ export function CrmGameWorld({
                         }}
                         className={cn(
                           "flex h-6 w-6 items-center justify-center rounded-lg border transition",
-                          t.done ? "border-emerald-500 bg-emerald-500 text-black" : "border-white/30 hover:border-white"
+                          t.done
+                            ? "border-emerald-500 bg-emerald-500 text-black"
+                            : "border-white/30 hover:border-white",
                         )}
                       >
                         {t.done && <Check className="h-4 w-4" />}
                       </button>
                       <div>
                         <p className="text-xs font-bold text-white leading-tight">{t.title}</p>
-                        <span className="text-[10px] text-neutral-400 font-mono">{t.deadline} · {t.tag}</span>
+                        <span className="text-[10px] text-neutral-400 font-mono">
+                          {t.deadline} · {t.tag}
+                        </span>
                       </div>
                     </div>
                     <button
@@ -937,7 +998,8 @@ export function CrmGameWorld({
             <div className="rounded-3xl border-2 border-red-500 bg-black/90 p-6 sm:p-8 space-y-6 shadow-2xl animate-in zoom-in-95">
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <span className="text-xs font-black text-red-400 uppercase font-mono flex items-center gap-2">
-                  <Flame className="h-4 w-4 text-orange-500 animate-bounce" /> PROSPECT : {battleMonster.leadName}
+                  <Flame className="h-4 w-4 text-orange-500 animate-bounce" /> PROSPECT :{" "}
+                  {battleMonster.leadName}
                 </span>
                 <span className="text-sm font-mono font-black text-yellow-300">
                   Prime : +{battleMonster.reward} € 🪙
@@ -948,7 +1010,9 @@ export function CrmGameWorld({
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-bold text-neutral-300">
                   <span>Défense psychologique du client :</span>
-                  <span className="text-red-400 font-mono font-black">{battleMonster.hp} / {battleMonster.maxHp} HP</span>
+                  <span className="text-red-400 font-mono font-black">
+                    {battleMonster.hp} / {battleMonster.maxHp} HP
+                  </span>
                 </div>
                 <div className="h-4 w-full rounded-full bg-white/10 overflow-hidden border border-white/20">
                   <div
@@ -977,7 +1041,9 @@ export function CrmGameWorld({
                   className="rounded-2xl bg-gradient-to-r from-orange-600 to-red-600 p-4 text-xs font-bold text-white hover:scale-105 transition active:scale-95 text-left shadow-lg border border-orange-400"
                 >
                   <p className="font-black text-sm">⚔️ Attaque ROI 20 Jours (-40 HP)</p>
-                  <p className="text-[11px] text-white/80 mt-1">« Vous donnez 3 000 €/mois à Uber, votre CRM est rentabilisé en 20 jours. »</p>
+                  <p className="text-[11px] text-white/80 mt-1">
+                    « Vous donnez 3 000 €/mois à Uber, votre CRM est rentabilisé en 20 jours. »
+                  </p>
                 </button>
 
                 <button
@@ -986,7 +1052,9 @@ export function CrmGameWorld({
                   className="rounded-2xl bg-gradient-to-r from-yellow-500 to-amber-600 p-4 text-xs font-bold text-black hover:scale-105 transition active:scale-95 text-left shadow-lg border border-yellow-300"
                 >
                   <p className="font-black text-sm">🛡️ Attaque Zéro Com (-50 HP)</p>
-                  <p className="text-[11px] text-black/80 mt-1">« Vrais tickets, stocks au gramme, écran cuisine et 0% prélevé à vie. »</p>
+                  <p className="text-[11px] text-black/80 mt-1">
+                    « Vrais tickets, stocks au gramme, écran cuisine et 0% prélevé à vie. »
+                  </p>
                 </button>
 
                 <button
@@ -995,7 +1063,9 @@ export function CrmGameWorld({
                   className="rounded-2xl bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 p-4 text-xs font-bold text-white hover:scale-105 transition active:scale-95 text-left shadow-lg border border-purple-400"
                 >
                   <p className="font-black text-sm">✨ Jumeau 3D GTA (-100 HP · KO)</p>
-                  <p className="text-[11px] text-white/80 mt-1">« Jumeau 3D digne d'un jeu vidéo pour impressionner vos investisseurs. »</p>
+                  <p className="text-[11px] text-white/80 mt-1">
+                    « Jumeau 3D digne d'un jeu vidéo pour impressionner vos investisseurs. »
+                  </p>
                 </button>
               </div>
 
@@ -1028,12 +1098,17 @@ export function CrmGameWorld({
                     <h4 className="text-base font-black text-white mt-1 group-hover:text-red-400 transition">
                       {lead.company}
                     </h4>
-                    <p className="text-xs text-neutral-400">{lead.contactName} · {lead.city}</p>
+                    <p className="text-xs text-neutral-400">
+                      {lead.contactName} · {lead.city}
+                    </p>
                   </div>
 
                   <div className="border-t border-white/8 pt-3 flex items-center justify-between">
                     <span className="text-xs text-neutral-300">
-                      Prime : <strong className="text-yellow-300 font-mono">+{Math.round(lead.budgetEur * 0.2)} € 🪙</strong>
+                      Prime :{" "}
+                      <strong className="text-yellow-300 font-mono">
+                        +{Math.round(lead.budgetEur * 0.2)} € 🪙
+                      </strong>
                     </span>
                     <button
                       type="button"
@@ -1089,7 +1164,10 @@ export function CrmGameWorld({
                 reward: "+500 XP 💎",
               },
             ].map((m, idx) => (
-              <div key={idx} className="rounded-3xl border border-white/10 bg-black/60 p-6 space-y-3 hover:border-[#00f2fe] transition">
+              <div
+                key={idx}
+                className="rounded-3xl border border-white/10 bg-black/60 p-6 space-y-3 hover:border-[#00f2fe] transition"
+              >
                 <div className="flex justify-between items-center text-xs font-bold">
                   <span className="text-[#00f2fe] font-mono">{m.step}</span>
                   <span className="rounded-full bg-[#00f2fe]/10 text-[#00f2fe] px-2.5 py-0.5 text-[10px] font-black">
@@ -1133,12 +1211,35 @@ export function CrmGameWorld({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[
-              { client: "Poké Bowl Fresh Paris", type: "Pack Pro 2 000 €", progress: 85, status: "Imprimantes thermiques connectées" },
-              { client: "Burger Lounge Bruxelles", type: "Pack Digital Twin 3D 5 000 €", progress: 60, status: "Modélisation 3D GTA de la salle" },
-              { client: "Trattoria Milano Lyon", type: "Pack Pro 2 000 €", progress: 95, status: "Tests livreurs GPS validés" },
-              { client: "Concept Store Saint-Honoré", type: "Pack Pro 2 000 €", progress: 45, status: "Catalogue & fiches stocks" },
+              {
+                client: "Poké Bowl Fresh Paris",
+                type: "Pack Pro 2 000 €",
+                progress: 85,
+                status: "Imprimantes thermiques connectées",
+              },
+              {
+                client: "Burger Lounge Bruxelles",
+                type: "Pack Digital Twin 3D 5 000 €",
+                progress: 60,
+                status: "Modélisation 3D GTA de la salle",
+              },
+              {
+                client: "Trattoria Milano Lyon",
+                type: "Pack Pro 2 000 €",
+                progress: 95,
+                status: "Tests livreurs GPS validés",
+              },
+              {
+                client: "Concept Store Saint-Honoré",
+                type: "Pack Pro 2 000 €",
+                progress: 45,
+                status: "Catalogue & fiches stocks",
+              },
             ].map((p, idx) => (
-              <div key={idx} className="rounded-3xl border border-white/10 bg-black/60 p-5 space-y-3">
+              <div
+                key={idx}
+                className="rounded-3xl border border-white/10 bg-black/60 p-5 space-y-3"
+              >
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-black text-white text-sm">{p.client}</span>
                   <span className="font-mono text-[#d4af37] font-bold">{p.type}</span>

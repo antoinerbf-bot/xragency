@@ -74,7 +74,7 @@ export function ImmersiveStudioHero() {
   };
 
   const waUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(
-    "Bonjour Antoine, je découvre les bureaux immersifs de XR Agency et je souhaite échanger sur mon projet."
+    "Bonjour Antoine, je découvre les bureaux immersifs de XR Agency et je souhaite échanger sur mon projet.",
   )}`;
 
   return (
@@ -99,7 +99,8 @@ export function ImmersiveStudioHero() {
           ref={spotlightRef}
           className="absolute inset-0 transition-opacity duration-200 pointer-events-none mix-blend-screen"
           style={{
-            background: "radial-gradient(900px circle at 60% 40%, rgba(212,175,55,0.14), transparent 70%)",
+            background:
+              "radial-gradient(900px circle at 60% 40%, rgba(212,175,55,0.14), transparent 70%)",
           }}
         />
 
@@ -149,7 +150,6 @@ export function ImmersiveStudioHero() {
 
       {/* ── 3. HERO CONTENT & INTERACTIVE SHOWROOM OVERLAY ── */}
       <div className="relative z-10 mx-auto w-full max-w-[1680px] px-5 sm:px-8 lg:px-14 py-8 sm:py-12 my-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-        
         {/* Left Column: Monumental Editorial Value Proposition */}
         <div className="lg:col-span-7 space-y-6 text-left max-w-[760px]">
           {/* Trust Badge */}
@@ -157,7 +157,7 @@ export function ImmersiveStudioHero() {
             <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/40 bg-amber-400/10 px-3.5 py-1.5 backdrop-blur-xl shadow-lg">
               <Star className="h-3.5 w-3.5 fill-current text-amber-400" />
               <span className="font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-amber-300">
-                ★ 4.9/5 · STUDIO DE PRESTIGE &amp; RÉSULTATS
+                STUDIO DIGITAL · STRATÉGIE & CRÉATION
               </span>
             </div>
 
@@ -176,7 +176,8 @@ export function ImmersiveStudioHero() {
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base lg:text-lg leading-[1.75] text-[#f7f4eb] font-normal max-w-[620px] drop-shadow-md">
-            Des sites web exceptionnels, une image de marque forte et une visibilité locale puissante sur Google Maps.
+            Des sites web exceptionnels, une image de marque forte et une visibilité locale
+            puissante sur Google Maps.
           </p>
 
           {/* Dual Action CTAs */}
@@ -211,14 +212,15 @@ export function ImmersiveStudioHero() {
           {/* Quick Assurance */}
           <p className="text-[11px] text-neutral-400 pt-1 flex items-center gap-2">
             <ShieldCheck className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
-            <span>0 € de frais cachés · Devis contractuel ferme et définitif · Accompagnement dédié</span>
+            <span>
+              0 € de frais cachés · Devis contractuel ferme et définitif · Accompagnement dédié
+            </span>
           </p>
         </div>
 
         {/* Right Column: Live Interactive Studio Displays (Holographic Workspace) */}
         <div className="lg:col-span-5 pointer-events-auto">
           <div className="rounded-3xl border border-white/15 bg-[#090b10]/90 p-5 sm:p-6 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] space-y-4">
-            
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div className="flex items-center gap-2">
                 <Laptop className="h-4 w-4 text-[#d4af37]" />
@@ -237,7 +239,9 @@ export function ImmersiveStudioHero() {
                 type="button"
                 onClick={() => setActiveScreen("poke")}
                 className={`py-2 px-2 rounded-lg font-bold text-[10px] transition ${
-                  activeScreen === "poke" ? "bg-[#d4af37] text-black shadow" : "text-neutral-400 hover:text-white"
+                  activeScreen === "poke"
+                    ? "bg-[#d4af37] text-black shadow"
+                    : "text-neutral-400 hover:text-white"
                 }`}
               >
                 1. Poke-N-Ball
@@ -246,16 +250,20 @@ export function ImmersiveStudioHero() {
                 type="button"
                 onClick={() => setActiveScreen("maps")}
                 className={`py-2 px-2 rounded-lg font-bold text-[10px] transition ${
-                  activeScreen === "maps" ? "bg-[#d4af37] text-black shadow" : "text-neutral-400 hover:text-white"
+                  activeScreen === "maps"
+                    ? "bg-[#d4af37] text-black shadow"
+                    : "text-neutral-400 hover:text-white"
                 }`}
               >
-                2. Maps Top 3
+                2. Visibilité locale
               </button>
               <button
                 type="button"
                 onClick={() => setActiveScreen("code")}
                 className={`py-2 px-2 rounded-lg font-bold text-[10px] transition ${
-                  activeScreen === "code" ? "bg-[#d4af37] text-black shadow" : "text-neutral-400 hover:text-white"
+                  activeScreen === "code"
+                    ? "bg-[#d4af37] text-black shadow"
+                    : "text-neutral-400 hover:text-white"
                 }`}
               >
                 3. VSL Film 55s
@@ -273,11 +281,15 @@ export function ImmersiveStudioHero() {
                     </span>
                   </div>
                   <p className="text-xs text-neutral-300 leading-relaxed">
-                    Plateforme web mobile sur-mesure déployée en 6 jours. Zéro commission prélevée sur les habitués.
+                    Plateforme web mobile sur-mesure déployée en 6 jours. Zéro commission prélevée
+                    sur les habitués.
                   </p>
                   <div className="pt-1 flex items-center justify-between text-[11px] font-mono text-[#d4af37]">
                     <span>Score Vitesse : 98/100</span>
-                    <a href="#case-study-poke" className="underline hover:text-white flex items-center gap-1">
+                    <a
+                      href="#case-study-poke"
+                      className="underline hover:text-white flex items-center gap-1"
+                    >
                       Voir l&apos;étude de cas →
                     </a>
                   </div>
@@ -295,7 +307,8 @@ export function ImmersiveStudioHero() {
                     </span>
                   </div>
                   <p className="text-xs text-neutral-300 leading-relaxed">
-                    Positionnement agressif dans le pack local Google pour capter les appels et itinéraires des clients de votre ville.
+                    Positionnement agressif dans le pack local Google pour capter les appels et
+                    itinéraires des clients de votre ville.
                   </p>
                   <div className="pt-1 flex items-center justify-between text-[11px] font-mono text-[#d4af37]">
                     <span>Dès 550 € contractuel</span>
@@ -317,11 +330,15 @@ export function ImmersiveStudioHero() {
                     </span>
                   </div>
                   <p className="text-xs text-neutral-300 leading-relaxed">
-                    Plongez dans les coulisses de nos productions digitales de prestige et découvrez notre méthode opérationnelle.
+                    Plongez dans les coulisses de nos productions digitales de prestige et découvrez
+                    notre méthode opérationnelle.
                   </p>
                   <div className="pt-1 flex items-center justify-between text-[11px] font-mono text-[#d4af37]">
                     <span>Visionner la vidéo</span>
-                    <a href="#vsl-showcase" className="underline hover:text-white flex items-center gap-1">
+                    <a
+                      href="#vsl-showcase"
+                      className="underline hover:text-white flex items-center gap-1"
+                    >
                       Lancer le lecteur →
                     </a>
                   </div>
@@ -340,10 +357,8 @@ export function ImmersiveStudioHero() {
               </div>
               <ArrowRight className="h-4 w-4 text-[#d4af37]" />
             </a>
-
           </div>
         </div>
-
       </div>
 
       {/* ── 4. BOTTOM TELEMETRY HUD TILES ── */}
@@ -351,19 +366,31 @@ export function ImmersiveStudioHero() {
         <div className="mx-auto max-w-[1680px] grid grid-cols-2 md:grid-cols-4 gap-6 text-left">
           <div>
             <p className="font-serif text-2xl sm:text-3xl font-extrabold text-white">5 à 7 j</p>
-            <p className="text-[11px] font-medium text-neutral-400 mt-0.5">Délai moyen garanti vitrine &amp; business</p>
+            <p className="text-[11px] font-medium text-neutral-400 mt-0.5">
+              Planning défini selon le périmètre
+            </p>
           </div>
           <div className="border-l border-white/10 pl-6">
-            <p className="font-serif text-2xl sm:text-3xl font-extrabold text-[#d4af37]">Top 3</p>
-            <p className="text-[11px] font-medium text-neutral-400 mt-0.5">Objectif d&apos;autorité Google Maps local</p>
+            <p className="font-serif text-2xl sm:text-3xl font-extrabold text-[#d4af37]">
+              SEO local
+            </p>
+            <p className="text-[11px] font-medium text-neutral-400 mt-0.5">
+              Travail de visibilité locale sans garantie de rang
+            </p>
           </div>
           <div className="border-l border-white/10 pl-6">
             <p className="font-serif text-2xl sm:text-3xl font-extrabold text-white">100%</p>
-            <p className="text-[11px] font-medium text-neutral-400 mt-0.5">Propriétaire exclusif du code &amp; domaine</p>
+            <p className="text-[11px] font-medium text-neutral-400 mt-0.5">
+              Propriétaire exclusif du code &amp; domaine
+            </p>
           </div>
           <div className="border-l border-white/10 pl-6">
-            <p className="font-serif text-2xl sm:text-3xl font-extrabold text-emerald-400">48 500 €</p>
-            <p className="text-[11px] font-medium text-neutral-400 mt-0.5">Trésorerie &amp; solvabilité garantie agence</p>
+            <p className="font-serif text-2xl sm:text-3xl font-extrabold text-emerald-400">
+              Sur devis
+            </p>
+            <p className="text-[11px] font-medium text-neutral-400 mt-0.5">
+              Périmètre et budget validés avant démarrage
+            </p>
           </div>
         </div>
       </div>

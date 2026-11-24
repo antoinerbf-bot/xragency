@@ -174,7 +174,9 @@ export const DAILY_QUEST_POOL: DailyQuest[] = [
 export function playXpChime() {
   if (typeof window === "undefined") return;
   try {
-    const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const AudioCtx =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     const ctx = new AudioCtx();
     const now = ctx.currentTime;
 
@@ -199,7 +201,9 @@ export function playXpChime() {
 export function playVictoryFanfare() {
   if (typeof window === "undefined") return;
   try {
-    const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const AudioCtx =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     const ctx = new AudioCtx();
     const now = ctx.currentTime;
 
@@ -254,7 +258,7 @@ export function triggerVictoryConfetti() {
   // Palette stricte Dark Luxury : Or Champagne (#D4AF37), Émeraude Finance (#10B981), Ivoire (#F8FAFC)
   const colors = ["#D4AF37", "#10B981", "#F5D061", "#34D399", "#F8FAFC"];
   const particles = Array.from({ length: 130 }, () => {
-    const angle = (Math.random() * Math.PI) + Math.PI;
+    const angle = Math.random() * Math.PI + Math.PI;
     const speed = 7 + Math.random() * 14;
     return {
       x: canvas.width * (0.25 + Math.random() * 0.5),
@@ -352,7 +356,10 @@ export function buildOneClickWhatsAppRelance(
   return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(script)}`;
 }
 
-export function generateLovableArchitecturePrompt(prospect: Prospect, audit?: Audit | null): string {
+export function generateLovableArchitecturePrompt(
+  prospect: Prospect,
+  audit?: Audit | null,
+): string {
   const advisor = getAdvisorById(prospect.owner_id || "romain");
   const company = prospect.business_name || "Entreprise Client";
   const city = prospect.city || "Paris";
@@ -381,10 +388,10 @@ export function generateLovableArchitecturePrompt(prospect: Prospect, audit?: Au
 
 ### 3. STRUCTURE DE LA LANDING PAGE À GÉNÉRER
 1. **Hero Haute Conversion** : Proposition de valeur immédiate pour ${company} à ${city}, badge d'autorité locale, double CTA (« Demander un devis » + « Appeler maintenant »).
-2. **Preuve Sociale & Ancrage Local (${city})** : Intégration des avis Google Maps vérifiés, carte interactive et garanties métier.
+2. **Preuve Sociale & Ancrage Local (${city})** : Intégration des avis Google Maps vérifiés, carte interactive et informations métier vérifiables.
 3. **Catalogue Clair des Prestations** : Présentation structurée des offres phares de ${company} avec appels à l'action directs.
 4. **Module de Devis / Réservation en 3 clics** : Formulaire qualifié relié au CRM sans friction.
-5. **FAQ SEO Locale & Footer Complet** : Balisage Schema.org LocalBusiness optimisé pour dominer le Top 3 Google Maps sur « ${industry} ${city} ».`;
+5. **FAQ SEO Locale & Footer Complet** : Balisage Schema.org LocalBusiness optimisé pour renforcer la visibilité locale sur « ${industry} ${city} ».`;
 }
 
 /* ==========================================================================
@@ -402,7 +409,8 @@ export const INITIAL_SUPABASE_PROSPECTS: Prospect[] = [
     contact_name: "Édouard Vasseur",
     contact_email: "direction@maison-bellecour-lyon.fr",
     phone: "+33 6 14 28 91 04",
-    notes: "Hors du Top 3 Google Maps sur 'Joaillier Lyon'. Intéressé par Domination Locale (299€) + SEO Local Conquête (550€) + 4 plaques NFC comptoir.",
+    notes:
+      "Hors du Top 3 Google Maps sur 'Joaillier Lyon'. Intéressé par Domination Locale (299€) + SEO Local Conquête (550€) + 4 plaques NFC comptoir.",
     status: "qualified",
     latest_score: 46,
     created_at: new Date(Date.now() - 3600000 * 90).toISOString(),
@@ -419,7 +427,8 @@ export const INITIAL_SUPABASE_PROSPECTS: Prospect[] = [
     contact_name: "Claire Valmont",
     contact_email: "c.valmont@valmont-architectes.fr",
     phone: "+33 6 72 45 19 88",
-    notes: "Site lent sous WordPress datant de 2019. Devis préparé pour Site Business (799 €) + Identité de Marque (299 €).",
+    notes:
+      "Site lent sous WordPress datant de 2019. Devis préparé pour Site Business (799 €) + Identité de Marque (299 €).",
     status: "contacted",
     latest_score: 52,
     created_at: new Date(Date.now() - 3600000 * 36).toISOString(),
@@ -436,7 +445,8 @@ export const INITIAL_SUPABASE_PROSPECTS: Prospect[] = [
     contact_name: "Marc-Antoine Delmas",
     contact_email: "contact@brasserie-imperial-bordeaux.fr",
     phone: "+33 6 88 12 34 59",
-    notes: "Perd 2 400 €/mois en commissions plateformes. Souhaite le Système Caisse POS (2 000 €) + E-commerce Click & Collect (1 499 €) + Démo Robot (250 €).",
+    notes:
+      "Perd 2 400 €/mois en commissions plateformes. Souhaite le Système Caisse POS (2 000 €) + E-commerce Click & Collect (1 499 €) + Démo Robot (250 €).",
     status: "qualified",
     latest_score: 38,
     created_at: new Date(Date.now() - 3600000 * 72).toISOString(),
@@ -453,7 +463,8 @@ export const INITIAL_SUPABASE_PROSPECTS: Prospect[] = [
     contact_name: "Dr. Sophie Moreau",
     contact_email: "s.moreau@clinique-vendome.fr",
     phone: "+33 6 51 90 23 11",
-    notes: "Audit 5 piliers généré. Fort besoin sur le Protocole SEO Croissance (499 €/mois) + refonte tunnel de prise de RDV.",
+    notes:
+      "Audit 5 piliers généré. Fort besoin sur le Protocole SEO Croissance (499 €/mois) + refonte tunnel de prise de RDV.",
     status: "audited",
     latest_score: 58,
     created_at: new Date(Date.now() - 3600000 * 20).toISOString(),
@@ -470,7 +481,8 @@ export const INITIAL_SUPABASE_PROSPECTS: Prospect[] = [
     contact_name: "Laurent Giraud",
     contact_email: "l.giraud@horizon-prestige.fr",
     phone: "+33 6 33 81 09 42",
-    notes: "Contrat signé : Site Business (799 €) + WebCare Business avec Julie (99 €/mois) + Infrastructure annuelle (79 €/an).",
+    notes:
+      "Contrat signé : Site Business (799 €) + WebCare Business avec Julie (99 €/mois) + Infrastructure annuelle (79 €/an).",
     status: "client",
     latest_score: 94,
     created_at: new Date(Date.now() - 3600000 * 120).toISOString(),
@@ -487,7 +499,8 @@ export const INITIAL_SUPABASE_PROSPECTS: Prospect[] = [
     contact_name: "Hélène Garnier",
     contact_email: "direction@roches-blanches-annecy.fr",
     phone: "+33 6 44 19 82 70",
-    notes: "Demande Charte Graphique Complète (399 €) + E-commerce & Réservation (1 499 €). En attente de relance depuis 52h.",
+    notes:
+      "Demande Charte Graphique Complète (399 €) + E-commerce & Réservation (1 499 €). En attente de relance depuis 52h.",
     status: "new",
     latest_score: 49,
     created_at: new Date(Date.now() - 3600000 * 55).toISOString(),
@@ -504,7 +517,8 @@ export const INITIAL_SUPABASE_PROSPECTS: Prospect[] = [
     contact_name: "Direction Poke-N-Ball",
     contact_email: "contact@poke-n-ball.fr",
     phone: "+33 7 67 56 67 83",
-    notes: "Client actif : Site Web + Commande en ligne + Système de caisse POS + Pack Croissance Social Media (499 €/mois).",
+    notes:
+      "Client actif : Site Web + Commande en ligne + Système de caisse POS + Pack Croissance Social Media (599 €/mois).",
     status: "client",
     latest_score: 96,
     created_at: new Date(Date.now() - 3600000 * 240).toISOString(),

@@ -38,48 +38,53 @@ const STRATEGIC_PACKS: Pack[] = [
   {
     id: "pack-visibilite",
     name: "Pack Visibilité Immédiate",
-    tagline: "Pour commerces, restaurants et artisans qui veulent dépasser leurs concurrents locaux sur Google Maps en 21 jours.",
+    tagline:
+      "Pour commerces, restaurants et artisans qui veulent dépasser leurs concurrents locaux sur Google Maps en 21 jours.",
     photo: svcMapsEditorial,
     priceEur: 990,
     installments: "ou 2x 495 € sans frais",
     deliveryDays: "Livré sous 5 à 7 jours",
     deliverables: [
-      "Conquête Google Maps Top 3 (valeur 550 €)",
+      "Stratégie de visibilité locale Google Maps (valeur indicative 550 €)",
       "Audit concurrentiel & mots-clés de votre zone de chalandise",
       "Restructuration complète de votre fiche Google Business",
       "Page mobile ultra-rapide de conversion (Click-to-Call, itinéraire)",
-      "Stratégie d'acquisition d'avis 5 étoiles authentiques",
+      "Accompagnement à la collecte d’avis clients authentiques",
       "1 mois de maintenance Maps Care inclus",
     ],
     ctaLabel: "Choisir le Pack Visibilité",
-    waMessage: "Bonjour Antoine, je souhaite réserver le Pack Visibilité Immédiate à 990 € pour positionner mon entreprise dans le Top 3 Google Maps.",
+    waMessage:
+      "Bonjour Antoine, je souhaite réserver le Pack Visibilité Immédiate à 990 € pour améliorer la visibilité locale de mon entreprise sur Google Maps.",
   },
   {
     id: "pack-agence-pro",
     name: "Pack Agence Tout-en-Un",
-    tagline: "La solution clé en main complète : votre marque, votre site web sur-mesure et vos premiers clients locaux dès la semaine prochaine.",
+    tagline:
+      "La solution clé en main complète : votre marque, votre site web sur-mesure et vos une base digitale cohérente pour développer votre activité.",
     photo: svcWebEditorial,
     priceEur: 1290,
     installments: "ou 3x 430 € sans frais",
     popular: true,
     savingsEur: 358,
-    deliveryDays: "Livré sous 5 à 7 jours ouvrés",
+    deliveryDays: "Planning défini après validation du périmètre",
     deliverables: [
       "Site Web Business sur-mesure TanStack / React 19 (valeur 799 €)",
-      "Conquête Google Maps Top 3 local (valeur 550 €)",
+      "Travail de visibilité locale Google Maps (valeur indicative 550 €)",
       "Pack Logo & Identité Visuelle complète (valeur 299 €)",
-      "Performance PageSpeed 95+ garantie & responsive mobile",
+      "Performance mesurée et optimisée, avec conception responsive",
       "Formulaire de qualification & intégration WhatsApp direct",
       "Hébergement haute disponibilité 1 an offert (valeur 79 €)",
       "100% propriétaire de votre code et nom de domaine",
     ],
     ctaLabel: "Choisir le Pack Best-Seller",
-    waMessage: "Bonjour Antoine, je souhaite démarrer le Pack Agence Tout-en-Un (1 290 €) pour créer mon site, mon identité et ma visibilité Google.",
+    waMessage:
+      "Bonjour Antoine, je souhaite démarrer le Pack Agence Tout-en-Un (1 290 €) pour créer mon site, mon identité et ma visibilité Google.",
   },
   {
     id: "pack-domination",
     name: "Pack Domination & Croissance",
-    tagline: "Pour les marques et entreprises qui veulent écraser la concurrence locale et déléguer 100% de leur acquisition digitale.",
+    tagline:
+      "Pour les marques et entreprises qui veulent écraser la concurrence locale et déléguer 100% de leur acquisition digitale.",
     photo: svcBrandingEditorial,
     priceEur: 1499,
     monthlyEur: 499,
@@ -93,7 +98,8 @@ const STRATEGIC_PACKS: Pack[] = [
       "Ligne directe WhatsApp avec la Direction 6j/7",
     ],
     ctaLabel: "Lancer le Pack Domination",
-    waMessage: "Bonjour Antoine, je souhaite échanger sur le Pack Domination & Croissance pour mon entreprise afin de déléguer mon acquisition.",
+    waMessage:
+      "Bonjour Antoine, je souhaite échanger sur le Pack Domination & Croissance pour mon entreprise afin de déléguer mon acquisition.",
   },
 ];
 
@@ -105,7 +111,10 @@ export function PackOffersSection() {
   };
 
   return (
-    <section id="offres" className="relative py-20 sm:py-28 bg-[#030406] text-white overflow-hidden border-t border-white/10 scroll-mt-20">
+    <section
+      id="offres"
+      className="relative py-20 sm:py-28 bg-[#030406] text-white overflow-hidden border-t border-white/10 scroll-mt-20"
+    >
       <div id="packs" className="absolute -top-10" />
       {/* Background ambient lighting */}
       <div
@@ -125,12 +134,15 @@ export function PackOffersSection() {
 
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white leading-tight">
             3 Packs Conçus pour <br className="hidden sm:inline" />
-            <span className="font-serif font-light italic text-[#d4af37]">Vendre Immédiatement.</span>
+            <span className="font-serif font-light italic text-[#d4af37]">
+              Vendre Immédiatement.
+            </span>
           </h2>
 
           <p className="text-sm sm:text-base text-neutral-300 leading-relaxed max-w-2xl mx-auto">
-            Pas de jargon ni de devis à rallonge. Des forfaits clés en main avec des livrables précis,
-            un délai garanti de 5 à 7 jours ouvrés et un accompagnement humain direct.
+            Pas de jargon ni de devis à rallonge. Des forfaits clés en main avec des livrables
+            précis, un planning de production convenu selon le périmètre et un accompagnement
+            humain.
           </p>
 
           {/* Trust Guarantees Strip */}
@@ -162,8 +174,8 @@ export function PackOffersSection() {
                   isPopular
                     ? "border-[#d4af37] bg-gradient-to-b from-[#14120a] via-[#090b10] to-[#040508] shadow-[0_0_50px_rgba(212,175,55,0.22)] md:-translate-y-3"
                     : isSelected
-                    ? "border-[#d4af37]/60 bg-[#090b10] shadow-2xl"
-                    : "border-white/10 bg-[#06070a]/80 hover:border-white/25"
+                      ? "border-[#d4af37]/60 bg-[#090b10] shadow-2xl"
+                      : "border-white/10 bg-[#06070a]/80 hover:border-white/25",
                 )}
               >
                 {/* Popularity Badge */}
@@ -254,7 +266,7 @@ export function PackOffersSection() {
                       "w-full flex items-center justify-center gap-2 rounded-2xl py-3.5 px-4 text-xs font-black uppercase tracking-wider transition shadow-xl",
                       isPopular
                         ? "bg-gradient-to-r from-[#f3e8c8] via-[#d4af37] to-[#8f7422] text-[#050608] hover:scale-[1.02]"
-                        : "bg-white text-black hover:bg-neutral-200"
+                        : "bg-white text-black hover:bg-neutral-200",
                     )}
                   >
                     <span>{pack.ctaLabel}</span>
@@ -279,8 +291,12 @@ export function PackOffersSection() {
         {/* Custom Project Prompt */}
         <div className="mt-12 text-center rounded-2xl border border-white/10 bg-[#090b10] p-6 max-w-2xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-center sm:text-left">
-            <p className="text-sm font-bold text-white">Besoin d&apos;une solution sur-mesure ou spécifique ?</p>
-            <p className="text-xs text-neutral-400">Application métier, robotique de service, refonte complexe ou réseau multi-sites.</p>
+            <p className="text-sm font-bold text-white">
+              Besoin d&apos;une solution sur-mesure ou spécifique ?
+            </p>
+            <p className="text-xs text-neutral-400">
+              Application métier, robotique de service, refonte complexe ou réseau multi-sites.
+            </p>
           </div>
           <a
             href="#quote"

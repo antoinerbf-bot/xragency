@@ -1,894 +1,1896 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { FormEvent } from "react";
-import { ArrowRight, Check, ChevronRight, MessageCircle, RotateCcw, Sparkles } from "lucide-react";
-import { Parallax, Reveal } from "./primitives";
-import { useLang, type Lang } from "@/lib/i18n";
-import { useFunnel } from "@/lib/funnel";
 import {
-  SECTORS_DATA,
-  SERVICES_DATA,
-  SITUATIONS_DATA,
-  BUDGETS_DATA,
-  DISCOVERY_DATA,
-  ALEXANDRE_MESSAGES,
-  STEP_TITLES,
-  STEP_SUBTITLES,
-  QUOTE_UI,
-} from "@/lib/quote-i18n";
+  ArrowLeft,
+  ArrowRight,
+  Bot,
+  Check,
+  CheckCircle2,
+  Download,
+  Globe,
+  MapPin,
+  MessageCircle,
+  Palette,
+  RotateCcw,
+  Search,
+  Share2,
+  ShieldCheck,
+  ShoppingBag,
+  Wrench,
+} from "lucide-react";
+import { useLang, type L, type Lang } from "@/lib/i18n";
+import { useOptionalFunnel } from "@/lib/funnel";
+import { useCart } from "@/hooks/useCart";
+import { CONTACT } from "@/lib/content";
+import { SOCIAL_MEDIA_PLANS, getCommitmentLabel, getPeriodShortLabel } from "@/lib/catalog";
 
-type Choice = { id: string; label: string; detail: string };
-type Sector = Choice & { goals: string[] };
-type Proposal = { id: string; label: string; detail: string; price: number; period: "once" | "month"; custom?: boolean };
+const l = (fr: string, en: string, vi: string, ar: string, ru: string): L => ({
+  fr,
+  en,
+  vi,
+  ar,
+  ru,
+});
 
-const SERVICE_ORDER: Record<string, string[]> = {
-  restaurant: ["website","maps","social","seo","branding","maintenance","robotics"],
-  hospitality: ["website","maps","seo","social","branding","maintenance","robotics"],
-  realestate: ["website","maps","branding","seo","social","maintenance","robotics"],
-  automotive: ["website","maps","conversion","seo","content","maintenance","robotics"],
-  fashion: ["website","branding","social","content","seo","maintenance","robotics"],
-  jewelry: ["website","branding","content","seo","social","maintenance","robotics"],
-  beauty: ["website","maps","social","seo","branding","maintenance","robotics"],
-  health: ["website","maps","seo","branding","content","maintenance","robotics"],
-  architecture: ["website","branding","content","seo","maps","maintenance","robotics"],
-  construction: ["website","maps","seo","branding","content","maintenance","robotics"],
-  legal: ["website","seo","branding","maps","content","maintenance","robotics"],
-  finance: ["website","seo","branding","content","maps","maintenance","robotics"],
-  commerce: ["website","social","seo","branding","conversion","maintenance","robotics"],
-  tourism: ["website","maps","seo","social","content","maintenance","robotics"],
-  agency: ["website","branding","conversion","seo","content","maintenance","robotics"],
-  other: ["website","branding","seo","maps","social","maintenance","robotics"]
+type ServiceKey = "websites" | "seo" | "maps" | "social" | "branding" | "maintenance" | "ai";
+
+type PlanOption = {
+  id: string;
+  label: L;
+  detail: L;
+  priceEur: number;
+  period: "once" | "month" | "year";
+  commitmentMonths?: number;
+  customQuote?: boolean;
+  popular?: boolean;
 };
 
-const ROBOTICS_DETAILS: Record<Lang, string> = {
-  fr: "Location robot de service dès 499 € / mois · achat selon modèle · événement dès 250 €.",
-  en: "Service robot rental from €499/mo · purchase options · event from €250.",
-  vi: "Thuê robot dịch vụ từ 499 € / tháng · tùy chọn mua · sự kiện từ 250 €.",
-  ar: "إيجار روبوتات الخدمة من 499 € شهرياً · خيارات الشراء · فعاليات من 250 €.",
-  ru: "Аренда сервисных роботов от 499 €/мес · покупка · мероприятия от 250 €.",
+type ServiceCatalogGroup = {
+  id: ServiceKey;
+  Icon: typeof Globe;
+  title: L;
+  short: L;
+  plans: PlanOption[];
 };
 
-const BASE_PRICES: Record<string, number> = { website: 499, branding: 179, seo: 299, maps: 999, social: 349, content: 399, conversion: 299, maintenance: 29, robotics: 499 };
+const CATALOG_GROUPS: ServiceCatalogGroup[] = [
+  {
+    id: "websites",
+    Icon: Globe,
+    title: l(
+      "Création de site web",
+      "Website Design",
+      "Thiết kế Website",
+      "تصميم موقع إلكتروني",
+      "Создание сайта",
+    ),
+    short: l(
+      "Vitrine, Business ou E-commerce",
+      "Showcase, Business or E-commerce",
+      "Giới thiệu, Doanh nghiệp, E-commerce",
+      "تعريفي، أعمال أو متجر إلكتروني",
+      "Визитка, бизнес или магазин",
+    ),
+    plans: [
+      {
+        id: "website_showcase",
+        label: l(
+          "Site Vitrine Pro",
+          "Pro Showcase Website",
+          "Website Giới thiệu Pro",
+          "موقع تعريفي احترافي",
+          "Сайт-визитка Pro",
+        ),
+        detail: l(
+          "Jusqu'à 3 pages, responsive mobile-first, contact & SEO de base.",
+          "Up to 3 pages, mobile-first responsive, contact & core SEO.",
+          "Tối đa 3 trang, tối ưu di động & SEO cơ bản.",
+          "حتى 3 صفحات متجاوبة مع تواصل وSEO أساسي.",
+          "До 3 страниц, адаптив, форма и базовое SEO.",
+        ),
+        priceEur: 499,
+        period: "once",
+      },
+      {
+        id: "website_business",
+        label: l(
+          "Site Business Sur-Mesure",
+          "Bespoke Business Website",
+          "Website Doanh nghiệp",
+          "موقع أعمال مخصص",
+          "Бизнес-сайт под ключ",
+        ),
+        detail: l(
+          "Jusqu'à 5 pages, architecture conversion, blog/galerie & analytics.",
+          "Up to 5 pages, conversion UX, blog/gallery & analytics.",
+          "Tối đa 5 trang, tối ưu chuyển đổi, blog & phân tích.",
+          "حتى 5 صفحات، تجربة تحويل، مدونة وتحليلات.",
+          "До 5 страниц, акцент на конверсию и аналитика.",
+        ),
+        priceEur: 799,
+        period: "once",
+        popular: true,
+      },
+      {
+        id: "website_ecommerce",
+        label: l(
+          "Site E-Commerce & Réservation",
+          "E-Commerce & Booking Site",
+          "Website E-Commerce & Đặt chỗ",
+          "متجر إلكتروني ونظام حجز",
+          "Интернет-магазин и бронирование",
+        ),
+        detail: l(
+          "Catalogue produits ou réservation, tunnel d'achat et gestion complète.",
+          "Product catalogue or booking flow, streamlined checkout & management.",
+          "Danh mục sản phẩm hoặc đặt chỗ, thanh toán mượt mà.",
+          "كتالوج منتجات أو حجز ومسار شراء متكامل.",
+          "Каталог или бронирование, корзина и управление.",
+        ),
+        priceEur: 1499,
+        period: "once",
+      },
+    ],
+  },
+  {
+    id: "seo",
+    Icon: Search,
+    title: l("SEO Google", "Google SEO", "SEO Google", "تحسين محركات البحث SEO", "SEO Google"),
+    short: l(
+      "Référencement naturel durable",
+      "Sustainable organic search",
+      "Tăng trưởng tìm kiếm tự nhiên",
+      "ظهور عضوي مستدام على Google",
+      "Устойчивое органическое SEO",
+    ),
+    plans: [
+      {
+        id: "seo_starter",
+        label: l(
+          "SEO Foundation",
+          "SEO Foundation",
+          "SEO Foundation",
+          "SEO Foundation",
+          "SEO Foundation",
+        ),
+        detail: l(
+          "Audit technique, recherche de mots-clés, on-page & rapport mensuel.",
+          "Technical audit, keyword mapping, on-page SEO & monthly report.",
+          "Audit kỹ thuật, từ khóa, on-page & báo cáo tháng.",
+          "تدقيق تقني، كلمات مفتاحية، تحسين الصفحات وتقرير شهري.",
+          "Технический аудит, семантика, on-page и отчёт.",
+        ),
+        priceEur: 299,
+        period: "month",
+      },
+      {
+        id: "seo_growth",
+        label: l("SEO Growth", "SEO Growth", "SEO Growth", "SEO Growth", "SEO Growth"),
+        detail: l(
+          "Jusqu'à 4 contenus/mois, SEO local, autorité & suivi mensuel.",
+          "Up to 4 SEO assets/mo, local SEO, authority & strategy review.",
+          "Tối đa 4 bài SEO/tháng, SEO địa phương & uy tín.",
+          "حتى 4 مقالات شهرياً، سيو محلي وبناء سلطة.",
+          "До 4 SEO-материалов/мес, локальное SEO и ссылки.",
+        ),
+        priceEur: 499,
+        period: "month",
+        popular: true,
+      },
+      {
+        id: "seo_domination",
+        label: l(
+          "SEO Domination",
+          "SEO Domination",
+          "SEO Domination",
+          "SEO Domination",
+          "SEO Domination",
+        ),
+        detail: l(
+          "Jusqu'à 8 contenus/mois, marchés compétitifs & SEO international.",
+          "Up to 8 assets/mo, competitive markets & international SEO.",
+          "Tối đa 8 bài/tháng, thị trường cạnh tranh & SEO quốc tế.",
+          "حتى 8 مقالات شهرياً، أسواق تنافسية وسيو دولي.",
+          "До 8 материалов/мес, конкурентные и мировые рынки.",
+        ),
+        priceEur: 699,
+        period: "month",
+      },
+    ],
+  },
+  {
+    id: "maps",
+    Icon: MapPin,
+    title: l("Google Maps", "Google Maps", "Google Maps", "خرائط Google", "Google Maps"),
+    short: l(
+      "Visibilité locale & fiche Google",
+      "Local presence & GBP",
+      "Hiển thị địa phương & hồ sơ",
+      "الحضور المحلي وملف Google",
+      "Локальная видимость на картах",
+    ),
+    plans: [
+      {
+        id: "maps_strategy",
+        label: l(
+          "Stratégie Google Maps (dès 999 €/an)",
+          "Google Maps Strategy (from €999/yr)",
+          "Chiến lược Google Maps (từ 999 €/năm)",
+          "استراتيجية خرائط Google (من 999 €/سنة)",
+          "Стратегия Google Maps (от 999 €/год)",
+        ),
+        detail: l(
+          "Audit local, optimisation fiche & signaux locaux — tarif exact sur devis.",
+          "Local audit, GBP restructuring & local signals — exact scope on quote.",
+          "Kiểm toán địa phương và tối ưu hồ sơ — báo giá cụ thể.",
+          "تدقيق محلي وتحسين شامل للملف — السعر النهائي بالعرض.",
+          "Локальный аудит и усиление карточки — по смете.",
+        ),
+        priceEur: 999,
+        period: "year",
+        customQuote: true,
+        popular: true,
+      },
+      {
+        id: "maps_annual_management",
+        label: l(
+          "Gestion Annuelle Fiche Google Maps",
+          "Annual GBP Profile Management",
+          "Quản trị Hồ sơ Google Maps 1 năm",
+          "إدارة سنوية لملف خرائط Google",
+          "Годовое ведение карточки Maps",
+        ),
+        detail: l(
+          "12 mois de gestion : photos, réponses aux avis, horaires et actualités.",
+          "12 months of photos, professional review replies, hours & updates.",
+          "12 tháng quản trị ảnh, phản hồi đánh giá và cập nhật.",
+          "12 شهراً من الصور والرد على التقييمات والتحديثات.",
+          "12 месяцев: фото, ответы на отзывы и обновления.",
+        ),
+        priceEur: 500,
+        period: "year",
+      },
+    ],
+  },
+  {
+    id: "social",
+    Icon: Share2,
+    title: l(
+      "Social Media",
+      "Social Media",
+      "Mạng xã hội",
+      "وسائل التواصل الاجتماعي",
+      "Социальные сети",
+    ),
+    short: l(
+      "Instagram, TikTok, Facebook, LinkedIn",
+      "Instagram, TikTok, Facebook, LinkedIn",
+      "Instagram, TikTok, Facebook, LinkedIn",
+      "إنستغرام، تيك توك، فيسبوك، لينكدإن",
+      "Instagram, TikTok, Facebook, LinkedIn",
+    ),
+    plans: SOCIAL_MEDIA_PLANS.map((sp) => ({
+      id: sp.sku,
+      label: sp.name,
+      detail:
+        sp.id === "essential"
+          ? l(
+              "Gestion 1 à 2 réseaux, création et publication, suivi mensuel.",
+              "1–2 platforms, content creation & publishing, monthly review.",
+              "Quản lý 1–2 kênh, sáng tạo nội dung & theo dõi tháng.",
+              "إدارة منصة إلى منصتين، إنشاء محتوى ومتابعة شهرية.",
+              "Ведение 1–2 сетей, контент и ежемесячный отчёт.",
+            )
+          : sp.id === "growth"
+            ? l(
+                "Gestion 2 à 3 réseaux, calendrier éditorial, contenus pro & optimisations.",
+                "2–3 platforms, editorial calendar, pro visuals & ongoing optimisation.",
+                "Quản lý 2–3 kênh, lịch nội dung & tối ưu liên tục.",
+                "إدارة 2 إلى 3 منصات، تقويم تحريري ومحتوى احترافي.",
+                "Ведение 2–3 сетей, контент-план и оптимизация.",
+              )
+            : l(
+                "Gestion avancée 3 réseaux, stratégie sur mesure, contenus premium & reporting.",
+                "Advanced 3-platform management, bespoke growth strategy & priority reporting.",
+                "Quản lý chuyên sâu 3 kênh, chiến lược riêng & báo cáo ưu tiên.",
+                "إدارة متقدمة لـ 3 منصات، استراتيجية مخصصة وتقارير أولوية.",
+                "Продвинутое ведение 3 сетей, стратегия и отчётность.",
+              ),
+      priceEur: sp.eur,
+      period: "month" as const,
+      commitmentMonths: sp.commitmentMonths,
+      popular: sp.popular,
+    })),
+  },
+  {
+    id: "branding",
+    Icon: Palette,
+    title: l(
+      "Branding & Identité",
+      "Branding & Identity",
+      "Thương hiệu & Nhận diện",
+      "الهوية البصرية والعلامة",
+      "Брендинг и айдентика",
+    ),
+    short: l(
+      "Logo, charte & univers visuel",
+      "Logo, guidelines & visual system",
+      "Logo, quy chuẩn & nhận diện",
+      "الشعار، دليل الهوية والنسق البصري",
+      "Логотип, брендбук и стиль",
+    ),
+    plans: [
+      {
+        id: "branding_logo",
+        label: l(
+          "Logo Signature",
+          "Signature Logo",
+          "Logo Đặc trưng",
+          "شعار احترافي",
+          "Фирменный логотип",
+        ),
+        detail: l(
+          "Logo vectoriel, déclinaisons et fichiers sources.",
+          "Vector logo, variations and source files.",
+          "Logo vector, các phiên bản và tệp nguồn.",
+          "شعار فيكتور مع النسخ والملفات المصدرية.",
+          "Векторный логотип, вариации и исходники.",
+        ),
+        priceEur: 199,
+        period: "once",
+      },
+      {
+        id: "branding_suite",
+        label: l(
+          "Full Brand Suite",
+          "Full Brand Suite",
+          "Bộ nhận diện toàn diện",
+          "هوية بصرية شاملة",
+          "Полный брендбук",
+        ),
+        detail: l(
+          "Identité complète, palette, typographie & Brand Book.",
+          "Complete identity, palette, typography & Brand Book.",
+          "Nhận diện đầy đủ, bảng màu, chữ & Brand Book.",
+          "هوية متكاملة مع الألوان والخطوط ودليل العلامة.",
+          "Полная айдентика, цвета, типографика и брендбук.",
+        ),
+        priceEur: 399,
+        period: "once",
+        popular: true,
+      },
+      {
+        id: "branding_flagship",
+        label: l(
+          "Brand Direction Flagship",
+          "Flagship Brand Direction",
+          "Định hướng Thương hiệu Cao cấp",
+          "توجيه فني متكامل للعلامة",
+          "Флагманский брендинг",
+        ),
+        detail: l(
+          "Direction artistique globale, kit social media & supports print.",
+          "Full art direction, social media kit & print templates.",
+          "Định hướng nghệ thuật tổng thể, bộ social & ấn phẩm.",
+          "إخراج فني شامل، حزمة التواصل الاجتماعي والمطبوعات.",
+          "Арт-дирекшн, шаблоны соцсетей и печатные носители.",
+        ),
+        priceEur: 699,
+        period: "once",
+      },
+    ],
+  },
+  {
+    id: "maintenance",
+    Icon: Wrench,
+    title: l(
+      "WebCare & Maintenance",
+      "WebCare & Maintenance",
+      "WebCare & Bảo trì",
+      "الصيانة والاستضافة WebCare",
+      "WebCare и поддержка",
+    ),
+    short: l(
+      "Sécurité, mises à jour & hébergement",
+      "Security, updates & hosting",
+      "Bảo mật, cập nhật & hạ tầng",
+      "الأمان، التحديثات والاستضافة",
+      "Безопасность, правки и хостинг",
+    ),
+    plans: [
+      {
+        id: "webcare_infra",
+        label: l(
+          "Infrastructure annuelle",
+          "Annual Infrastructure",
+          "Hạ tầng hằng năm",
+          "البنية التحتية السنوية",
+          "Годовая инфраструктура",
+        ),
+        detail: l(
+          "Hébergement, nom de domaine et sécurité gérés pendant 12 mois.",
+          "Managed hosting, domain name and security for 12 months.",
+          "Hosting, tên miền và bảo mật trọn gói 12 tháng.",
+          "استضافة ونطاق وأمان مُدار لمدة 12 شهراً.",
+          "Хостинг, домен и безопасность на 12 месяцев.",
+        ),
+        priceEur: 79,
+        period: "year",
+      },
+      {
+        id: "webcare_essential",
+        label: l(
+          "WebCare Essentiel",
+          "WebCare Essential",
+          "WebCare Cơ bản",
+          "WebCare الأساسي",
+          "WebCare Базовый",
+        ),
+        detail: l(
+          "4 modifications courantes / mois & suivi technique.",
+          "4 routine updates / month & standard monitoring.",
+          "4 chỉnh sửa / tháng & giám sát kỹ thuật.",
+          "4 تعديلات شهرياً ومتابعة تقنية قياسية.",
+          "4 правки в месяц и технический контроль.",
+        ),
+        priceEur: 29,
+        period: "month",
+      },
+      {
+        id: "webcare_business",
+        label: l(
+          "WebCare Business",
+          "WebCare Business",
+          "WebCare Doanh nghiệp",
+          "WebCare الأعمال",
+          "WebCare Бизнес",
+        ),
+        detail: l(
+          "10 modifications / mois, priorité de traitement & conseils.",
+          "10 updates / month, priority handling & ongoing advice.",
+          "10 chỉnh sửa / tháng, ưu tiên xử lý & tư vấn.",
+          "10 تعديلات شهرياً وأولوية في المعالجة.",
+          "10 правок в месяц, приоритет и рекомендации.",
+        ),
+        priceEur: 49,
+        period: "month",
+        popular: true,
+      },
+      {
+        id: "webcare_unlimited",
+        label: l(
+          "WebCare Unlimited",
+          "WebCare Unlimited",
+          "WebCare Không giới hạn",
+          "WebCare غير المحدود",
+          "WebCare Безлимит",
+        ),
+        detail: l(
+          "Modifications courantes illimitées dans le périmètre & suivi prioritaire.",
+          "Unlimited routine changes within scope & priority technical support.",
+          "Chỉnh sửa thông thường không giới hạn trong phạm vi.",
+          "تعديلات اعتيادية غير محدودة ضمن النطاق ودعم أولوية.",
+          "Безлимитные текущие правки и приоритетная поддержка.",
+        ),
+        priceEur: 99,
+        period: "month",
+      },
+    ],
+  },
+  {
+    id: "ai",
+    Icon: Bot,
+    title: l(
+      "IA, Automatisation & Robotique",
+      "AI, Automation & Robotics",
+      "AI, Tự động hóa & Robot",
+      "الذكاء الاصطناعي والروبوتات",
+      "ИИ, автоматизация и роботы",
+    ),
+    short: l(
+      "Outils métiers & robots de service",
+      "Custom tools & service robots",
+      "Phần mềm riêng & robot dịch vụ",
+      "أدوات مخصصة وروبوتات خدمة",
+      "ПО под ключ и сервисные роботы",
+    ),
+    plans: [
+      {
+        id: "ai_custom_workflow",
+        label: l(
+          "Automatisation & Outils IA",
+          "AI & Workflow Automation",
+          "Tự động hóa & Công cụ AI",
+          "أتمتة العمليات والذكاء الاصطناعي",
+          "Автоматизация и ИИ-инструменты",
+        ),
+        detail: l(
+          "Cadrage technique sur mesure : CRM, API, agents et gain de productivité.",
+          "Bespoke technical scope: internal tools, CRM, APIs & automation.",
+          "Giải pháp kỹ thuật may đo: phần mềm nội bộ, API & tự động hóa.",
+          "نطاق تقني مخصص للأدوات الداخلية وواجهات API والأتمتة.",
+          "Индивидуальная разработка: CRM, API и автоматизация.",
+        ),
+        priceEur: 0,
+        period: "once",
+        customQuote: true,
+      },
+      {
+        id: "robotics_rental",
+        label: l(
+          "Robot de service (location dès 499 €/mois)",
+          "Service Robot (rental from €499/mo)",
+          "Thuê Robot dịch vụ (từ 499 €/tháng)",
+          "تأجير روبوت خدمة (من 499 €/شهر)",
+          "Аренда сервисного робота (от 499 €/мес)",
+        ),
+        detail: l(
+          "Hôtellerie, restauration, accueil ou événementiel (dès 250 €). Sur devis.",
+          "Hospitality, restaurants, reception or events (from €250). Quoted.",
+          "Khách sạn, nhà hàng, lễ tân hoặc sự kiện. Báo giá riêng.",
+          "للفنادق والمطاعم والاستقبال والفعاليات. حسب العرض.",
+          "Для отелей, ресторанов и мероприятий. По смете.",
+        ),
+        priceEur: 499,
+        period: "month",
+        customQuote: true,
+      },
+    ],
+  },
+];
 
-const PROFILE_SERVICE_RULES: Record<string, string[]> = Object.fromEntries(
-  Object.entries(SERVICE_ORDER).map(([sectorId, services]) => [sectorId, services.slice(0, 4)])
-);
+const BUSINESS_TYPES: Array<{ id: string; label: L }> = [
+  {
+    id: "hospitality",
+    label: l(
+      "Hôtellerie & Tourisme",
+      "Hospitality & Hotels",
+      "Khách sạn & Du lịch",
+      "الفنادق والضيافة",
+      "Отели и туризм",
+    ),
+  },
+  {
+    id: "restaurant",
+    label: l(
+      "Restauration & Lieux de vie",
+      "Restaurants & Venues",
+      "Nhà hàng & Ẩm thực",
+      "المطاعم والمقاهي",
+      "Рестораны и заведения",
+    ),
+  },
+  {
+    id: "realestate",
+    label: l(
+      "Immobilier & Architecture",
+      "Real Estate & Architecture",
+      "Bất động sản & Kiến trúc",
+      "العقار والعمارة",
+      "Недвижимость и архитектура",
+    ),
+  },
+  {
+    id: "commerce",
+    label: l(
+      "Commerce & E-Commerce",
+      "Retail & E-Commerce",
+      "Bán lẻ & E-Commerce",
+      "التجارة والمتاجر",
+      "Ритейл и E-Commerce",
+    ),
+  },
+  {
+    id: "services",
+    label: l(
+      "Entreprise B2B / Cabinet",
+      "B2B Services / Practice",
+      "Dịch vụ B2B / Tư vấn",
+      "شركة خدمات / مكتب",
+      "B2B-услуги и консалтинг",
+    ),
+  },
+  {
+    id: "beauty",
+    label: l(
+      "Beauté, Santé & Bien-être",
+      "Beauty, Health & Wellness",
+      "Làm đẹp, Y tế & Spa",
+      "الجمال والصحة والعافية",
+      "Красота, медицина и спа",
+    ),
+  },
+];
+
+const GOALS: Array<{ id: string; label: L }> = [
+  {
+    id: "visibility",
+    label: l(
+      "Gagner en visibilité sur Google",
+      "Grow visibility on Google",
+      "Tăng độ phủ trên Google",
+      "زيادة الظهور على Google",
+      "Усилить видимость в Google",
+    ),
+  },
+  {
+    id: "leads",
+    label: l(
+      "Générer plus de demandes & réservations",
+      "Generate more leads & bookings",
+      "Tăng khách hàng & đặt lịch",
+      "زيادة الطلبات والحجوزات",
+      "Привлечь больше заявок",
+    ),
+  },
+  {
+    id: "brand",
+    label: l(
+      "Moderniser mon image de marque",
+      "Elevate my brand image",
+      "Nâng tầm hình ảnh thương hiệu",
+      "ترقية صورة العلامة التجارية",
+      "Обновить имидж бренда",
+    ),
+  },
+  {
+    id: "launch",
+    label: l(
+      "Lancer une nouvelle activité",
+      "Launch a new business",
+      "Ra mắt dự án mới",
+      "إطلاق نشاط جديد",
+      "Запустить новый проект",
+    ),
+  },
+];
+
+const UI_COPY: Record<
+  Lang,
+  {
+    eyebrow: string;
+    heading: string;
+    headingAccent: string;
+    subtitle: string;
+    step1: string;
+    step2: string;
+    step3: string;
+    businessLabel: string;
+    goalLabel: string;
+    servicesLabel: string;
+    servicesHint: string;
+    continueBtn: string;
+    backBtn: string;
+    step2Title: string;
+    step2Sub: string;
+    step3Title: string;
+    step3Sub: string;
+    summaryTitle: string;
+    emptySelection: string;
+    onceTotal: string;
+    monthlyTotal: string;
+    annualTotal: string;
+    customBadge: string;
+    customNote: string;
+    addAllToCart: string;
+    addedAllToCart: string;
+    contactHeading: string;
+    companyLabel: string;
+    nameLabel: string;
+    emailLabel: string;
+    phoneLabel: string;
+    websiteLabel: string;
+    submitBtn: string;
+    sendingBtn: string;
+    whatsappBtn: string;
+    resetBtn: string;
+    vatNotice: string;
+    successTitle: string;
+    successSub: string;
+    errorFallback: string;
+    selectAtLeastOne: string;
+    editStep: string;
+  }
+> = {
+  fr: {
+    eyebrow: "CONFIGURATEUR DE DEVIS EN 3 ÉTAPES",
+    heading: "Votre projet,",
+    headingAccent: "notre solution.",
+    subtitle:
+      "Sélectionnez vos besoins, ajustez vos formules aux tarifs officiels XR Agency et obtenez votre récapitulatif PDF instantané.",
+    step1: "1. Besoins",
+    step2: "2. Options",
+    step3: "3. Récapitulatif",
+    businessLabel: "Votre secteur d’activité",
+    goalLabel: "Votre objectif principal",
+    servicesLabel: "Quels services vous intéressent ?",
+    servicesHint: "Sélectionnez un ou plusieurs leviers",
+    continueBtn: "Continuer",
+    backBtn: "Retour",
+    step2Title: "Affinez vos formules",
+    step2Sub: "Choisissez le niveau officiel adapté à votre rythme pour chaque service retenu.",
+    step3Title: "Récapitulatif & envoi du devis",
+    step3Sub: "Vérifiez vos prestations, vos engagements et recevez votre proposition officielle.",
+    summaryTitle: "Votre sélection",
+    emptySelection: "Sélectionnez au moins un service pour afficher votre estimation.",
+    onceTotal: "Total ponctuel",
+    monthlyTotal: "Total mensuel",
+    annualTotal: "Total annuel",
+    customBadge: "Sur devis",
+    customNote:
+      "Certaines prestations sur mesure sont confirmées après étude de votre zone ou cahier des charges.",
+    addAllToCart: "Ajouter toute la sélection au panier",
+    addedAllToCart: "Sélection ajoutée au panier",
+    contactHeading: "Recevoir mon devis officiel PDF",
+    companyLabel: "Entreprise / Établissement *",
+    nameLabel: "Nom complet *",
+    emailLabel: "E-mail professionnel *",
+    phoneLabel: "Téléphone / WhatsApp *",
+    websiteLabel: "Site web actuel (optionnel)",
+    submitBtn: "Générer mon PDF & envoyer ma demande",
+    sendingBtn: "Enregistrement en cours...",
+    whatsappBtn: "Envoyer sur WhatsApp",
+    resetBtn: "Réinitialiser",
+    vatNotice:
+      "Tarifs de référence en EUR. Le périmètre définitif, le régime de TVA applicable et les modalités de règlement sont confirmés sur devis avant tout engagement.",
+    successTitle: "Devis enregistré et PDF téléchargé",
+    successSub: "Votre demande a bien été transmise à l’équipe XR Agency.",
+    errorFallback:
+      "Impossible d’enregistrer le devis pour le moment. Vous pouvez aussi nous écrire directement sur WhatsApp.",
+    selectAtLeastOne: "Sélectionnez au moins un service pour continuer.",
+    editStep: "Modifier",
+  },
+  en: {
+    eyebrow: "3-STEP QUOTE CONFIGURATOR",
+    heading: "Your project,",
+    headingAccent: "our solution.",
+    subtitle:
+      "Select your needs, pick official XR Agency tiers and receive an instant PDF summary tailored to your scope.",
+    step1: "1. Needs",
+    step2: "2. Options",
+    step3: "3. Summary",
+    businessLabel: "Your business sector",
+    goalLabel: "Your primary goal",
+    servicesLabel: "Which services are you interested in?",
+    servicesHint: "Select one or more disciplines",
+    continueBtn: "Continue",
+    backBtn: "Back",
+    step2Title: "Fine-tune your tiers",
+    step2Sub: "Select the official plan that best fits your pace for each chosen service.",
+    step3Title: "Summary & quote request",
+    step3Sub:
+      "Review your selected services, minimum commitments and request your official proposal.",
+    summaryTitle: "Your selection",
+    emptySelection: "Select at least one service to preview your live estimate.",
+    onceTotal: "One-time total",
+    monthlyTotal: "Monthly total",
+    annualTotal: "Annual total",
+    customBadge: "On quote",
+    customNote:
+      "Tailored services are confirmed in writing after reviewing your local market or brief.",
+    addAllToCart: "Add entire selection to cart",
+    addedAllToCart: "Selection added to cart",
+    contactHeading: "Receive my official PDF quote",
+    companyLabel: "Company / Venue *",
+    nameLabel: "Full name *",
+    emailLabel: "Work email *",
+    phoneLabel: "Phone / WhatsApp *",
+    websiteLabel: "Current website (optional)",
+    submitBtn: "Download PDF & send quote request",
+    sendingBtn: "Saving quote...",
+    whatsappBtn: "Send via WhatsApp",
+    resetBtn: "Reset",
+    vatNotice:
+      "Reference pricing in EUR. Final scope, applicable VAT treatment and payment terms are confirmed in writing prior to commitment.",
+    successTitle: "Quote saved and PDF downloaded",
+    successSub: "Your request has been received by the XR Agency team.",
+    errorFallback:
+      "Could not save your quote right now. You can also message us directly on WhatsApp.",
+    selectAtLeastOne: "Please select at least one service to continue.",
+    editStep: "Edit",
+  },
+  vi: {
+    eyebrow: "CÔNG CỤ BÁO GIÁ 3 BƯỚC",
+    heading: "Dự án của bạn,",
+    headingAccent: "giải pháp của chúng tôi.",
+    subtitle:
+      "Chọn nhu cầu, điều chỉnh gói dịch vụ theo bảng giá chính thức của XR Agency và tải bản tóm tắt PDF ngay.",
+    step1: "1. Nhu cầu",
+    step2: "2. Tùy chọn",
+    step3: "3. Tóm tắt",
+    businessLabel: "Lĩnh vực kinh doanh",
+    goalLabel: "Mục tiêu chính",
+    servicesLabel: "Bạn quan tâm đến dịch vụ nào?",
+    servicesHint: "Chọn một hoặc nhiều dịch vụ",
+    continueBtn: "Tiếp tục",
+    backBtn: "Quay lại",
+    step2Title: "Chọn gói chi tiết",
+    step2Sub: "Lựa chọn gói chính thức phù hợp với từng dịch vụ đã chọn.",
+    step3Title: "Tóm tắt & gửi yêu cầu báo giá",
+    step3Sub: "Kiểm tra lại các hạng mục, cam kết và nhận đề xuất chính thức.",
+    summaryTitle: "Lựa chọn của bạn",
+    emptySelection: "Chọn ít nhất một dịch vụ để xem ước tính.",
+    onceTotal: "Tổng một lần",
+    monthlyTotal: "Tổng hằng tháng",
+    annualTotal: "Tổng hằng năm",
+    customBadge: "Báo giá riêng",
+    customNote: "Các hạng mục theo yêu cầu sẽ được xác nhận chi tiết sau khi khảo sát.",
+    addAllToCart: "Thêm tất cả vào giỏ lựa chọn",
+    addedAllToCart: "Đã thêm vào lựa chọn",
+    contactHeading: "Nhận báo giá PDF chính thức",
+    companyLabel: "Công ty / Cơ sở *",
+    nameLabel: "Họ và tên *",
+    emailLabel: "Email *",
+    phoneLabel: "Điện thoại / WhatsApp *",
+    websiteLabel: "Website hiện tại (tùy chọn)",
+    submitBtn: "Tải PDF & gửi yêu cầu",
+    sendingBtn: "Đang lưu...",
+    whatsappBtn: "Gửi qua WhatsApp",
+    resetBtn: "Làm lại",
+    vatNotice:
+      "Giá tham chiếu tính bằng EUR. Phạm vi chính thức, thuế VAT và điều khoản thanh toán được xác nhận trong báo giá.",
+    successTitle: "Đã lưu báo giá và tải PDF",
+    successSub: "Yêu cầu của bạn đã được chuyển tới đội ngũ XR Agency.",
+    errorFallback: "Chưa thể lưu báo giá lúc này. Bạn có thể liên hệ trực tiếp qua WhatsApp.",
+    selectAtLeastOne: "Vui lòng chọn ít nhất một dịch vụ.",
+    editStep: "Sửa",
+  },
+  ar: {
+    eyebrow: "مُهيّئ عرض السعر في 3 خطوات",
+    heading: "مشروعك،",
+    headingAccent: "حلّنا المصمم لك.",
+    subtitle:
+      "اختر احتياجاتك، وحدد الباقات الرسمية من XR Agency، واحصل فوراً على ملخص عرض السعر بصيغة PDF.",
+    step1: "1. الاحتياجات",
+    step2: "2. الخيارات",
+    step3: "3. الملخص",
+    businessLabel: "قطاع نشاطك",
+    goalLabel: "هدفك الرئيسي",
+    servicesLabel: "ما هي الخدمات التي تهمك؟",
+    servicesHint: "اختر خدمة واحدة أو أكثر",
+    continueBtn: "متابعة",
+    backBtn: "رجوع",
+    step2Title: "اختر الباقات المناسبة",
+    step2Sub: "حدد المستوى الرسمي الملائم لكل خدمة قمت باختيارها.",
+    step3Title: "الملخص وإرسال طلب العرض",
+    step3Sub: "راجع خدماتك المختارة ومدة الالتزام وأرسل طلبك الرسمي.",
+    summaryTitle: "اختياراتك",
+    emptySelection: "اختر خدمة واحدة على الأقل لعرض التقدير المباشر.",
+    onceTotal: "الإجمالي لمرة واحدة",
+    monthlyTotal: "الإجمالي الشهري",
+    annualTotal: "الإجمالي السنوي",
+    customBadge: "حسب العرض",
+    customNote: "تُؤكد الخدمات المخصصة كتابياً بعد دراسة السوق أو متطلبات المشروع.",
+    addAllToCart: "إضافة كل الاختيارات إلى السلة",
+    addedAllToCart: "تمت الإضافة إلى السلة",
+    contactHeading: "استلام عرض السعر الرسمي PDF",
+    companyLabel: "الشركة / المؤسسة *",
+    nameLabel: "الاسم الكامل *",
+    emailLabel: "البريد الإلكتروني *",
+    phoneLabel: "الهاتف / واتساب *",
+    websiteLabel: "الموقع الحالي (اختياري)",
+    submitBtn: "تحميل PDF وإرسال الطلب",
+    sendingBtn: "جارٍ الحفظ...",
+    whatsappBtn: "إرسال عبر واتساب",
+    resetBtn: "إعادة تعيين",
+    vatNotice:
+      "الأسعار المرجعية باليورو (EUR). يتم تأكيد النطاق النهائي والضريبة وشروط الدفع رسمياً قبل أي التزام.",
+    successTitle: "تم حفظ العرض وتحميل PDF",
+    successSub: "وصل طلبك بنجاح إلى فريق XR Agency.",
+    errorFallback: "تعذر حفظ العرض حالياً. يمكنك التواصل معنا مباشرة عبر واتساب.",
+    selectAtLeastOne: "يرجى اختيار خدمة واحدة على الأقل للمتابعة.",
+    editStep: "تعديل",
+  },
+  ru: {
+    eyebrow: "КОНФИГУРАТОР СМЕТЫ В 3 ШАГА",
+    heading: "Ваш проект,",
+    headingAccent: "наше решение.",
+    subtitle:
+      "Выберите задачи, подберите официальные тарифы XR Agency и получите готовый PDF-расчёт за минуту.",
+    step1: "1. Задачи",
+    step2: "2. Опции",
+    step3: "3. Итог",
+    businessLabel: "Сфера деятельности",
+    goalLabel: "Главная цель",
+    servicesLabel: "Какие услуги вас интересуют?",
+    servicesHint: "Выберите одно или несколько направлений",
+    continueBtn: "Продолжить",
+    backBtn: "Назад",
+    step2Title: "Уточните тарифы",
+    step2Sub: "Выберите официальный уровень сопровождения по каждому направлению.",
+    step3Title: "Итог и отправка сметы",
+    step3Sub: "Проверьте состав услуг, условия контракта и отправьте заявку.",
+    summaryTitle: "Ваш выбор",
+    emptySelection: "Выберите хотя бы одну услугу для расчёта.",
+    onceTotal: "Разовый платёж",
+    monthlyTotal: "В месяц",
+    annualTotal: "В год",
+    customBadge: "По смете",
+    customNote: "Индивидуальные услуги уточняются после анализа вашего рынка и задач.",
+    addAllToCart: "Добавить всё в корзину",
+    addedAllToCart: "Добавлено в корзину",
+    contactHeading: "Получить официальный PDF-расчёт",
+    companyLabel: "Компания / бренд *",
+    nameLabel: "Ваше имя *",
+    emailLabel: "Рабочий email *",
+    phoneLabel: "Телефон / WhatsApp *",
+    websiteLabel: "Текущий сайт (необязательно)",
+    submitBtn: "Скачать PDF и отправить заявку",
+    sendingBtn: "Сохранение...",
+    whatsappBtn: "Отправить в WhatsApp",
+    resetBtn: "Сбросить",
+    vatNotice:
+      "Ориентировочные тарифы в EUR. Финальный объём, НДС и условия оплаты подтверждаются в официальном предложении.",
+    successTitle: "Смета сохранена, PDF скачан",
+    successSub: "Ваша заявка успешно передана команде XR Agency.",
+    errorFallback: "Не удалось сохранить заявку сейчас. Вы также можете написать нам в WhatsApp.",
+    selectAtLeastOne: "Выберите хотя бы одну услугу, чтобы продолжить.",
+    editStep: "Изменить",
+  },
+};
+
+function mapServiceParam(raw: string | null): ServiceKey | null {
+  if (!raw) return null;
+  const v = raw.toLowerCase();
+  if (v === "websites" || v === "website") return "websites";
+  if (v === "seo") return "seo";
+  if (v === "maps") return "maps";
+  if (v === "social") return "social";
+  if (v === "branding") return "branding";
+  if (v === "maintenance" || v === "webcare") return "maintenance";
+  if (v === "ai" || v === "robotics" || v === "strategy") return "ai";
+  return null;
+}
 
 export function QuoteConfiguratorCompact() {
-  const { lang } = useLang();
-  const currentLang = (lang in QUOTE_UI.kicker ? lang : "fr") as Lang;
-  let funnel: ReturnType<typeof useFunnel> | null = null;
-  try {
-    funnel = useFunnel();
-  } catch {
-    funnel = null;
-  }
+  const { lang, t, price } = useLang();
+  const safeLang: Lang = lang in UI_COPY ? (lang as Lang) : "fr";
+  const ui = UI_COPY[safeLang];
+  const isRtl = safeLang === "ar";
+  const funnel = useOptionalFunnel();
+  const { addItem } = useCart();
 
-  const SECTORS = useMemo(() => SECTORS_DATA.map((s) => ({
-    id: s.id,
-    label: s.label[currentLang],
-    detail: s.detail[currentLang],
-    goals: s.goals.map((g) => g[currentLang])
-  })), [currentLang]);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [businessType, setBusinessType] = useState<string>(BUSINESS_TYPES[0].id);
+  const [goalId, setGoalId] = useState<string>(GOALS[1].id);
+  const [selectedServices, setSelectedServices] = useState<ServiceKey[]>([]);
+  const [selectedPlans, setSelectedPlans] = useState<Record<ServiceKey, string>>({
+    websites: "website_business",
+    seo: "seo_growth",
+    maps: "maps_strategy",
+    social: "social_growth",
+    branding: "branding_suite",
+    maintenance: "webcare_business",
+    ai: "ai_custom_workflow",
+  });
+  const [stepError, setStepError] = useState("");
+  const [cartSynced, setCartSynced] = useState(false);
 
-  const SERVICES = useMemo(() => SERVICES_DATA.map((s) => ({
-    id: s.id,
-    label: s.label[currentLang],
-    detail: s.detail[currentLang]
-  })), [currentLang]);
-
-  const SITUATIONS = useMemo(() => SITUATIONS_DATA.map((s) => ({
-    id: s.id,
-    label: s.label[currentLang],
-    detail: s.detail[currentLang]
-  })), [currentLang]);
-
-  const BUDGETS = useMemo(() => BUDGETS_DATA.map((b) => ({
-    id: b.id,
-    label: b.label[currentLang],
-    detail: b.detail[currentLang]
-  })), [currentLang]);
-
-  const DISCOVERY = useMemo(() => DISCOVERY_DATA.map((d) => ({
-    id: d.id,
-    label: d.label[currentLang],
-    detail: d.detail[currentLang]
-  })), [currentLang]);
-
-  const websiteTiers = useMemo(() => ({
-    showcase: {
-      price: 499,
-      label: { fr: "Site Vitrine Pro", en: "Pro Showcase Site", vi: "Website Giới thiệu Pro", ar: "موقع تعريفي احترافي", ru: "Сайт-витрина Pro" }[currentLang],
-      detail: { fr: "Site premium jusqu'à 3 pages, responsive, contact et SEO de base", en: "Premium site up to 3 pages, responsive, contact and basic SEO", vi: "Website cao cấp tối đa 3 trang, responsive, liên hệ và chuẩn SEO cơ bản", ar: "موقع متميز حتى 3 صفحات، متجاوب، تواصل وSEO أساسي", ru: "Премиум сайт до 3 страниц, адаптивный, контакты и базовое SEO" }[currentLang],
-    },
-    business: {
-      price: 799,
-      label: { fr: "Site Business", en: "Business Site", vi: "Website Doanh nghiệp", ar: "موقع أعمال متقدم", ru: "Бизнес-сайт" }[currentLang],
-      detail: { fr: "Site jusqu'à 5 pages, blog, galerie, chat et analytics avancés", en: "Site up to 5 pages, blog, gallery, chat and advanced analytics", vi: "Website tối đa 5 trang, blog, thư viện ảnh, chat và analytics nâng cao", ar: "موقع حتى 5 صفحات، مدونة، معرض، دردشة وتحليلات متقدمة", ru: "Сайт до 5 страниц, блог, галерея, чат и расширенная аналитика" }[currentLang],
-    },
-    ecommerce: {
-      price: 1499,
-      label: { fr: "E-commerce & Réservation", en: "E-commerce & Booking", vi: "Thương mại điện tử & Đặt chỗ", ar: "تجارة إلكترونية وحجز", ru: "E-commerce и бронирование" }[currentLang],
-      detail: { fr: "Catalogue, paiement sécurisé, gestion des stocks et parcours de réservation", en: "Catalog, secure payment, inventory management and booking flow", vi: "Danh mục sản phẩm, thanh toán bảo mật, quản lý kho và luồng đặt chỗ", ar: "كتالوج ودفع آمن وإدارة مخزون ومسار حجز", ru: "Каталог, безопасная оплата, складской учёт и модуль бронирования" }[currentLang],
-    },
-  }), [currentLang]);
-
-  const brandingTiers = useMemo(() => ({
-    starter: {
-      price: 179,
-      label: { fr: "Logo Signature", en: "Signature Logo", vi: "Logo Đặc trưng", ar: "شعار توقيع مميز", ru: "Фирменный логотип" }[currentLang],
-      detail: { fr: "Logo, déclinaisons essentielles et fichiers maîtres", en: "Logo, essential variations and master files", vi: "Logo, các phiên bản cơ bản và tệp gốc", ar: "الشعار والنسخ الأساسية والملفات المصدرية", ru: "Логотип, базовые версии и исходные файлы" }[currentLang],
-    },
-    premium: {
-      price: 349,
-      label: { fr: "Full Brand Suite", en: "Full Brand Suite", vi: "Bộ nhận diện toàn diện", ar: "هوية بصرية شاملة", ru: "Полный брендинг" }[currentLang],
-      detail: { fr: "Système de marque étendu, direction artistique et Brand Book", en: "Extended brand system, art direction and Brand Book", vi: "Hệ thống thương hiệu mở rộng, định hướng nghệ thuật và Brand Book", ar: "نظام علامة تجارية موسع وتوجيه فني ودليل الهوية", ru: "Расширенная бренд-система, арт-дирекшн и брендбук" }[currentLang],
-    },
-  }), [currentLang]);
-
-  const journeyRef = useRef<HTMLDivElement>(null);
-  const [step, setStep] = useState(0);
-  const [isTyping, setIsTyping] = useState(false);
-  const [sectorId, setSectorId] = useState(() => funnel?.sector || "");
-  const [showAllSectors, setShowAllSectors] = useState(false);
-  const [goal, setGoal] = useState(() => funnel?.goal || "");
-  const [situation, setSituation] = useState("");
-  const [budget, setBudget] = useState("");
-  const [discovery, setDiscovery] = useState("");
-  const [selectedServices, setSelectedServices] = useState<string[]>(() => funnel?.selectedServices || []);
-  const [client, setClient] = useState({ company: "", name: "", email: "", whatsapp: "", website: "" });
-  const [generated, setGenerated] = useState(false);
+  const [client, setClient] = useState({
+    company: "",
+    name: "",
+    email: "",
+    whatsapp: "",
+    website: "",
+  });
   const [sending, setSending] = useState(false);
-  const [sendMessage, setSendMessage] = useState("");
-  const [paying, setPaying] = useState(false);
-  const [checkoutUrl, setCheckoutUrl] = useState("");
+  const [submitOk, setSubmitOk] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
+  // Respect URL query ?service=xxx if linked from service pages
   useEffect(() => {
-    if (funnel?.sector && !sectorId) {
-      setSectorId(funnel.sector);
-    }
-  }, [funnel?.sector, sectorId]);
-
-  useEffect(() => {
-    if (funnel?.selectedServices?.length && selectedServices.length === 0) {
-      setSelectedServices(funnel.selectedServices);
-    }
-  }, [funnel?.selectedServices, selectedServices.length]);
-
-  useEffect(() => {
-    setIsTyping(true);
-    const timer = window.setTimeout(() => setIsTyping(false), 380);
-    return () => window.clearTimeout(timer);
-  }, [step]);
-  const sector = SECTORS.find((x) => x.id === sectorId);
-  const situationChoice = SITUATIONS.find((x) => x.id === situation);
-  const budgetChoice = BUDGETS.find((x) => x.id === budget);
-  const discoveryChoice = DISCOVERY.find((x) => x.id === discovery);
-  const orderedServices = (SERVICE_ORDER[sectorId] ?? SERVICE_ORDER.other)
-    .map((id) => SERVICES.find((x) => x.id === id))
-    .filter(Boolean) as Choice[];
-
-  const profileRecommendation = useMemo(() => {
-    const base = PROFILE_SERVICE_RULES[sectorId] ?? PROFILE_SERVICE_RULES.other;
-    const services = new Set<string>(base);
-
-    // The budget changes the scope, not just the displayed price.
-    if (budget === "under500") {
-      services.clear();
-      services.add(situation === "selling" ? "website" : base[0]);
-    } else if (budget === "500_1000") {
-      services.delete("social");
-      services.delete("branding");
-    } else if (budget === "1000_2500") {
-      services.add("website");
-      if (situation === "selling") services.add("maps");
-    } else if (budget === "2500_5000" || budget === "5000_plus") {
-      services.add("website");
-      if (goal.toLowerCase().includes("premium") || sectorId === "realestate") services.add("branding");
-      if (discovery !== "social") services.add("seo");
-    }
-
-    if (situation === "none" || situation === "redesign") services.add("website");
-    if (situation === "selling") {
-      services.add("website");
-      services.add("seo");
-    }
-    if (discovery === "google") {
-      services.add("seo");
-      if (sectorId === "hospitality" || sectorId === "realestate") services.add("maps");
-    }
-    if (discovery === "social") services.add("social");
-    if (goal.toLowerCase().includes("crédibilité") || goal.toLowerCase().includes("premium")) services.add("branding");
-
-    const order = SERVICE_ORDER[sectorId] ?? SERVICE_ORDER.other;
-    return order.filter((id) => services.has(id)).slice(0, budget === "under500" ? 1 : budget === "500_1000" ? 2 : budget === "1000_2500" ? 3 : 4);
-  }, [sectorId, budget, situation, discovery, goal]);
-
-  const proposals = useMemo<Proposal[]>(() => {
-    return orderedServices.map((service) => {
-      let price = BASE_PRICES[service.id];
-      let label = service.label;
-      let detail = service.detail;
-      if (service.id === "maps") {
-        price = 999;
-        label = "Google Maps · visibilité locale";
-        detail = {
-          fr: "SUR MESURE · à partir de 999 € / an · selon positionnement, zone, concurrence et mots-clés",
-          en: "BESPOKE · from €999 / year · based on ranking, area, competition and keywords",
-          vi: "THEO YÊU CẦU · từ 999 € / năm · tùy vị trí, khu vực, đối thủ và từ khóa",
-          ar: "مخصص · ابتداءً من 999 € سنويًا · وفق الترتيب والمنطقة والمنافسة والكلمات المفتاحية",
-          ru: "ПОД ЗАКАЗ · от 999 € в год · в зависимости от позиций, района, конкуренции и запросов",
-        }[currentLang];
-      }
-      if (service.id === "website") {
-        if (situation === "selling") {
-          price = websiteTiers.ecommerce.price; label = websiteTiers.ecommerce.label; detail = websiteTiers.ecommerce.detail;
-        } else if (budget === "1000_2500" || budget === "2500_5000" || budget === "5000_plus" || situation === "redesign") {
-          price = websiteTiers.business.price; label = websiteTiers.business.label; detail = websiteTiers.business.detail;
-        } else {
-          price = websiteTiers.showcase.price; label = websiteTiers.showcase.label; detail = websiteTiers.showcase.detail;
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const mapped = mapServiceParam(params.get("service"));
+    const requestedPlan = params.get("plan");
+    if (mapped) {
+      // A service-specific CTA should start with that service only, not unrelated defaults.
+      setSelectedServices([mapped]);
+      if (requestedPlan) {
+        const group = CATALOG_GROUPS.find((item) => item.id === mapped);
+        if (group?.plans.some((plan) => plan.id === requestedPlan)) {
+          setSelectedPlans((prev) => ({ ...prev, [mapped]: requestedPlan }));
         }
       }
-      if (service.id === "branding" && (budget === "2500_5000" || budget === "5000_plus" || sectorId === "realestate")) {
-        price = brandingTiers.premium.price; label = brandingTiers.premium.label; detail = brandingTiers.premium.detail;
-      }
-      return { id: service.id, label, detail, price, period: service.id === "seo" || service.id === "social" || service.id === "maintenance" ? "month" : "once", custom: service.id === "maps" };
-    });
-  }, [orderedServices, situation, budget, sectorId, currentLang, websiteTiers, brandingTiers]);
-
-  const recommendedIds = profileRecommendation;
-  const activeRecommended = recommendedIds.filter((id) => proposals.some((p) => p.id === id));
-  useEffect(() => {
-    if (step === 4 && selectedServices.length === 0 && activeRecommended.length) {
-      setSelectedServices(activeRecommended);
     }
-  }, [step, activeRecommended.join(",")]);
-  const total = selectedServices.reduce((sum, id) => { const p = proposals.find((x) => x.id === id); return sum + (p?.custom ? 0 : (p?.price ?? 0)); }, 0);
-  const monthly = selectedServices.reduce((sum, id) => { const p = proposals.find((x) => x.id === id); return sum + (p?.custom ? 0 : (p?.period === "month" ? p.price : 0)); }, 0);
-  const once = total - monthly;
+  }, []);
 
-  const generatePdf = async () => {
+  // Sync sector from funnel context when provided
+  useEffect(() => {
+    if (funnel?.sector) {
+      const found = BUSINESS_TYPES.find((b) => b.id === funnel.sector);
+      if (found) setBusinessType(found.id);
+    }
+  }, [funnel?.sector]);
+
+  const toggleService = (id: ServiceKey) => {
+    setStepError("");
+    setCartSynced(false);
+    setSelectedServices((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
+    );
+  };
+
+  const selectPlan = (serviceId: ServiceKey, planId: string) => {
+    setCartSynced(false);
+    setSelectedPlans((prev) => ({ ...prev, [serviceId]: planId }));
+  };
+
+  const chosenItems = useMemo(() => {
+    return selectedServices
+      .map((serviceId) => {
+        const group = CATALOG_GROUPS.find((g) => g.id === serviceId);
+        if (!group) return null;
+        const planId = selectedPlans[serviceId];
+        const plan = group.plans.find((p) => p.id === planId) ?? group.plans[0];
+        return { group, plan };
+      })
+      .filter((x): x is { group: ServiceCatalogGroup; plan: PlanOption } => x !== null);
+  }, [selectedServices, selectedPlans]);
+
+  const totals = useMemo(() => {
+    let once = 0;
+    let monthly = 0;
+    let annual = 0;
+    let hasCustom = false;
+    for (const { plan } of chosenItems) {
+      if (plan.customQuote) {
+        hasCustom = true;
+        continue;
+      }
+      if (plan.period === "once") once += plan.priceEur;
+      else if (plan.period === "month") monthly += plan.priceEur;
+      else if (plan.period === "year") annual += plan.priceEur;
+    }
+    return { once, monthly, annual, hasCustom };
+  }, [chosenItems]);
+
+  const goStep = (target: 1 | 2 | 3) => {
+    if (target > 1 && selectedServices.length === 0) {
+      setStepError(ui.selectAtLeastOne);
+      return;
+    }
+    setStepError("");
+    setStep(target);
+    sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  };
+
+  const syncAllToCart = () => {
+    for (const { group, plan } of chosenItems) {
+      if (plan.customQuote && plan.priceEur === 0) continue;
+      addItem({
+        id: `${group.id}-${plan.id}`,
+        serviceId: group.id,
+        serviceName: t(group.title),
+        planName: t(plan.label),
+        priceEur: plan.priceEur,
+        period: plan.period,
+        periodLabel: getPeriodShortLabel(plan.period, safeLang),
+        commitment: plan.commitmentMonths
+          ? getCommitmentLabel(plan.commitmentMonths, safeLang)
+          : undefined,
+      });
+    }
+    setCartSynced(true);
+  };
+
+  const resetAll = () => {
+    setStep(1);
+    setSelectedServices([]);
+    setSubmitOk(null);
+    setSubmitError(null);
+    setStepError("");
+    setCartSynced(false);
+  };
+
+  const activeBusiness = BUSINESS_TYPES.find((b) => b.id === businessType) ?? BUSINESS_TYPES[0];
+  const activeGoal = GOALS.find((g) => g.id === goalId) ?? GOALS[0];
+
+  const whatsappHref = useMemo(() => {
+    const lines = chosenItems.map(({ group, plan }) => {
+      const pLabel = plan.customQuote
+        ? plan.priceEur > 0
+          ? `dès ${plan.priceEur} €${getPeriodShortLabel(plan.period, safeLang)} (sur devis)`
+          : ui.customBadge
+        : `${plan.priceEur} €${getPeriodShortLabel(plan.period, safeLang)}`;
+      const commit = plan.commitmentMonths
+        ? ` · ${getCommitmentLabel(plan.commitmentMonths, safeLang)}`
+        : "";
+      return `• ${t(group.title)} — ${t(plan.label)} : ${pLabel}${commit}`;
+    });
+    const text =
+      `${safeLang === "en" ? "Hello XR Agency, here is my project quote selection:" : "Bonjour XR Agency, voici ma configuration de devis :"}\n\n` +
+      `${ui.businessLabel} : ${t(activeBusiness.label)}\n` +
+      `${ui.goalLabel} : ${t(activeGoal.label)}\n\n` +
+      `${lines.join("\n")}\n\n` +
+      (totals.once > 0 ? `${ui.onceTotal} : ${totals.once} €\n` : "") +
+      (totals.monthly > 0 ? `${ui.monthlyTotal} : ${totals.monthly} € / mois\n` : "") +
+      (totals.annual > 0 ? `${ui.annualTotal} : ${totals.annual} € / an\n` : "") +
+      (client.company ? `\n${ui.companyLabel.replace(" *", "")} : ${client.company}` : "");
+    return `${CONTACT.whatsapp}?text=${encodeURIComponent(text)}`;
+  }, [chosenItems, activeBusiness, activeGoal, totals, client.company, safeLang, t, ui]);
+
+  const handleSubmitQuote = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!client.company.trim() || !client.name.trim() || !client.email.trim()) return;
     setSending(true);
-    setSendMessage("");
+    setSubmitError(null);
+    setSubmitOk(null);
+
     try {
       const { jsPDF } = await import("jspdf");
       const doc = new jsPDF({ unit: "mm", format: "a4" });
-      const W = 210, M = 14, R = 196;
-      const ink = [18, 22, 29] as const;
-      const soft = [241, 244, 247] as const;
-      const lineColor = [218, 223, 229] as const;
-      const muted = [92, 100, 112] as const;
-      const white = [255, 255, 255] as const;
-      const blue = [32, 32, 32] as const;
-      const issueDate = new Date();
-      const validity = new Date(issueDate);
-      validity.setDate(validity.getDate() + 15);
-      const stamp = issueDate.toISOString().slice(0, 10).replace(/-/g, "");
-      const quoteNumber = "XR-" + stamp + "-" + String(Math.floor(1000 + Math.random() * 9000));
-      const pdfLang = (currentLang === "ar" || currentLang === "ru") ? "en" : currentLang;
-      const cleanForPdf = (str: string) => {
-        if (!str) return "";
-        return str
-          .replace(/đ/g, "d").replace(/Đ/g, "D")
+      const clean = (s: string) =>
+        s
+          .replace(/đ/g, "d")
+          .replace(/Đ/g, "D")
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "")
           .replace(/[^\x20-\x7E\xA0-\xFF]/g, " ")
           .replace(/\s+/g, " ")
           .trim();
-      };
-      const date = (d: Date) => d.toLocaleDateString(pdfLang === "fr" ? "fr-FR" : "en-US", { day: "2-digit", month: "2-digit", year: "numeric" });
 
-      const allPdfLabels = {
-        fr: { devis: "DEVIS", subtitle: "STUDIO DIGITAL · STRATÉGIE · DESIGN · CROISSANCE", client: "Client", company: "Entreprise", contact: "Contact", email: "E-mail", whatsapp: "WhatsApp", website: "Site", project: "Projet", activity: "Activité", priority: "Priorité", situation: "Situation", budget: "Budget", acquisition: "Acquisition", services: "Prestations sélectionnées", colService: "PRESTATION", colMode: "MODE", colAmount: "MONTANT", frame: "Cadre du devis", validity: "Validité", validText: "15 jours · jusqu’au ", start: "Démarrage", startText: "Après validation du devis et réception des éléments nécessaires au projet.", nature: "Nature", natureText: "Pré-devis généré automatiquement à partir de votre configuration XR Quote Studio.", validation: "Validation client", valText1: "Ce document récapitule les prestations sélectionnées et leur modèle de facturation.", valText2: "Le périmètre définitif est confirmé avec XRAGENCY avant engagement.", dateSig: "Date / signature", nameQuality: "Nom / qualité", totalOnce: "TOTAL PONCTUEL", totalMonth: "TOTAL MENSUEL", recurring: "RÉCURRENT", custom: "SUR MESURE", once: "PONCTUEL", onQuote: "Sur devis" },
-        en: { devis: "QUOTATION", subtitle: "DIGITAL STUDIO · STRATEGY · DESIGN · GROWTH", client: "Client", company: "Company", contact: "Contact", email: "Email", whatsapp: "WhatsApp", website: "Website", project: "Project", activity: "Industry", priority: "Priority", situation: "Situation", budget: "Budget", acquisition: "Acquisition", services: "Selected Services", colService: "SERVICE", colMode: "MODE", colAmount: "AMOUNT", frame: "Quote Terms", validity: "Validity", validText: "15 days · until ", start: "Kickoff", startText: "Upon quote sign-off and reception of necessary project assets.", nature: "Nature", natureText: "Automated estimate generated from your XR Quote Studio configuration.", validation: "Client Approval", valText1: "This document outlines selected services and their billing model.", valText2: "Definitive scope is verified with XRAGENCY prior to kickoff.", dateSig: "Date / signature", nameQuality: "Name / title", totalOnce: "ONE-TIME TOTAL", totalMonth: "MONTHLY TOTAL", recurring: "RECURRING", custom: "CUSTOM", once: "ONE-TIME", onQuote: "Custom quote" },
-        vi: { devis: "BAO GIA", subtitle: "STUDIO KY THUAT SO · CHIEN LUOC · THIET KE · TANG TRUONG", client: "Khach hang", company: "Cong ty", contact: "Nguoi lien he", email: "Email", whatsapp: "WhatsApp", website: "Website", project: "Du an", activity: "Linh vuc", priority: "Uu tien", situation: "Tinh trang", budget: "Ngan sach", acquisition: "Kenh tiep can", services: "Dich vu da chon", colService: "DICH VU", colMode: "HINH THUC", colAmount: "SO TIEN", frame: "Dieu khoan bao gia", validity: "Hieu luc", validText: "15 ngay · den ngay ", start: "Khoi dong", startText: "Sau khi xac nhan bao gia va nhan du tu lieu du an.", nature: "Phan loai", natureText: "Bao gia uoc tinh tu dong tu XR Quote Studio.", validation: "Xac nhan cua khach hang", valText1: "Tai lieu nay tong hop cac dich vu da chon va mo hinh thanh toan.", valText2: "Pham vi chinh thuc se duoc XRAGENCY thong nhat truoc khi trien khai.", dateSig: "Ngay / Chu ky", nameQuality: "Ho ten / Chuc vu", totalOnce: "TONG MOT LAN", totalMonth: "TONG HANG THANG", recurring: "DINH KY", custom: "THEO YEU CAU", once: "MOT LAN", onQuote: "Theo bao gia" },
-      } as const;
+      const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+      const quoteRef = `XR-${stamp}-${Math.floor(1000 + Math.random() * 9000)}`;
 
-      const pdfLabels = allPdfLabels[pdfLang as "fr" | "vi"] ?? allPdfLabels.en;
-
-      const section = (label: string, y: number) => {
-        doc.setFillColor(...soft);
-        doc.roundedRect(M, y - 4, W - M * 2, 8, 1.5, 1.5, "F");
-        doc.setTextColor(...ink);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(7.5);
-        doc.text(cleanForPdf(label).toUpperCase(), M + 3, y + 1);
-        return y + 12;
-      };
-
-      const infoRow = (label: string, value: string, y: number, x = M, maxWidth = 150) => {
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(6.7);
-        doc.setTextColor(...muted);
-        doc.text(cleanForPdf(label), x, y);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(...ink);
-        const lines = doc.splitTextToSize(cleanForPdf(value || "—"), maxWidth);
-        doc.text(lines, x + 30, y);
-        return y + Math.max(5, lines.length * 4.5);
-      };
-
-      doc.setFillColor(...ink);
-      doc.rect(0, 0, W, 33, "F");
-      doc.setTextColor(...white);
+      // Editorial Charcoal & Champagne Bronze PDF Header
+      doc.setFillColor(23, 22, 19);
+      doc.rect(0, 0, 210, 32, "F");
+      doc.setTextColor(247, 244, 238);
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(18);
-      doc.text("XRAGENCY", M, 14);
+      doc.setFontSize(17);
+      doc.text("XR AGENCY", 14, 15);
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(7);
-      doc.setTextColor(198, 203, 211);
-      doc.text(cleanForPdf(pdfLabels.subtitle), M, 21);
-      doc.setTextColor(...white);
+      doc.setFontSize(8);
+      doc.setTextColor(216, 188, 148);
+      doc.text("AGENCE DIGITALE INTERNATIONALE · PRE-DEVIS", 14, 22);
+      doc.setTextColor(247, 244, 238);
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(13);
-      doc.text(cleanForPdf(pdfLabels.devis), R - M, 13, { align: "right" });
+      doc.setFontSize(11);
+      doc.text(quoteRef, 196, 15, { align: "right" });
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(6.5);
-      doc.setTextColor(198, 203, 211);
-      doc.text(quoteNumber, R - M, 20, { align: "right" });
-      doc.text(date(issueDate), R - M, 26, { align: "right" });
+      doc.setFontSize(8);
+      doc.text(new Date().toLocaleDateString("fr-FR"), 196, 22, { align: "right" });
 
       let y = 44;
-      y = section(pdfLabels.client, y);
-      y = infoRow(pdfLabels.company, client.company, y);
-      y = infoRow(pdfLabels.contact, client.name, y);
-      y = infoRow(pdfLabels.email, client.email, y);
-      y = infoRow(pdfLabels.whatsapp, client.whatsapp, y);
-      y = infoRow(pdfLabels.website, client.website || "—", y);
-      y += 4;
-
-      y = section(pdfLabels.project, y);
-      y = infoRow(pdfLabels.activity, sector?.label || "—", y);
-      y = infoRow(pdfLabels.priority, goal || "—", y);
-      y = infoRow(pdfLabels.situation, situationChoice?.label || "—", y);
-      y = infoRow(pdfLabels.budget, budgetChoice?.label || "—", y);
-      y = infoRow(pdfLabels.acquisition, discoveryChoice?.label || "—", y);
-      y += 5;
-
-      y = section(pdfLabels.services, y);
-      doc.setFillColor(...ink);
-      doc.roundedRect(M, y - 4, W - M * 2, 8, 1.2, 1.2, "F");
-      doc.setTextColor(...white);
+      doc.setTextColor(23, 22, 19);
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(6.5);
-      doc.text(cleanForPdf(pdfLabels.colService), M + 3, y + 1);
-      doc.text(cleanForPdf(pdfLabels.colMode), 124, y + 1);
-      doc.text(cleanForPdf(pdfLabels.colAmount), R - 3, y + 1, { align: "right" });
-      y += 10;
+      doc.setFontSize(10);
+      doc.text("CLIENT & PROJET", 14, y);
+      y += 7;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.text(clean(`Entreprise : ${client.company}`), 14, y);
+      y += 5;
+      doc.text(clean(`Contact : ${client.name} · ${client.email} · ${client.whatsapp}`), 14, y);
+      y += 5;
+      doc.text(
+        clean(`Secteur : ${activeBusiness.label.fr} | Objectif : ${activeGoal.label.fr}`),
+        14,
+        y,
+      );
+      if (client.website.trim()) {
+        y += 5;
+        doc.text(clean(`Site actuel : ${client.website}`), 14, y);
+      }
 
-      selectedServices.forEach((id) => {
-        const p = proposals.find((x) => x.id === id);
-        if (!p) return;
-        const rawDetail = p.id === "robotics"
-          ? (ROBOTICS_DETAILS[pdfLang] ?? ROBOTICS_DETAILS.en)
-          : p.detail;
-        const detail = cleanForPdf(rawDetail);
-        if (y > 255) {
+      y += 10;
+      doc.setFillColor(238, 233, 224);
+      doc.rect(14, y - 5, 182, 8, "F");
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.5);
+      doc.text("PRESTATION SELECTIONNEE", 17, y);
+      doc.text("TARIF REFERENCE (EUR)", 193, y, { align: "right" });
+      y += 8;
+
+      doc.setFont("helvetica", "normal");
+      chosenItems.forEach(({ group, plan }) => {
+        if (y > 250) {
           doc.addPage();
-          y = 22;
+          y = 20;
         }
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(7.4);
-        doc.setTextColor(...ink);
-        doc.text(cleanForPdf(p.label), M + 3, y);
+        doc.setFontSize(9.5);
+        doc.setTextColor(23, 22, 19);
+        doc.text(clean(`${group.title.fr} — ${plan.label.fr}`), 16, y);
+        const amountStr = plan.customQuote
+          ? plan.priceEur > 0
+            ? `Des ${plan.priceEur} EUR / ${plan.period === "year" ? "an" : "mois"} (devis)`
+            : "Sur devis"
+          : `${plan.priceEur} EUR${plan.period === "month" ? " / mois" : plan.period === "year" ? " / an" : ""}`;
+        doc.text(clean(amountStr), 193, y, { align: "right" });
+        y += 4.5;
         doc.setFont("helvetica", "normal");
-        doc.setFontSize(5.9);
-        doc.setTextColor(...muted);
-        doc.text(doc.splitTextToSize(detail, 86).slice(0, 2), M + 3, y + 3.5);
-        doc.setFontSize(6.4);
-        doc.text(cleanForPdf(p.period === "month" ? pdfLabels.recurring : p.custom ? pdfLabels.custom : pdfLabels.once), 124, y);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(7.2);
-        doc.setTextColor(...ink);
-        doc.text(
-          p.custom ? cleanForPdf(pdfLabels.onQuote) : p.price.toLocaleString("fr-FR") + " €" + (p.period === "month" ? " / mois" : ""),
-          R - 3,
-          y,
-          { align: "right" }
-        );
-        y += 12;
-        doc.setDrawColor(...lineColor);
-        doc.line(M, y - 3, R, y - 3);
+        doc.setFontSize(8);
+        doc.setTextColor(87, 83, 75);
+        const detailLine = plan.commitmentMonths
+          ? `${plan.detail.fr} (Engagement minimum ${plan.commitmentMonths} mois)`
+          : plan.detail.fr;
+        doc.text(doc.splitTextToSize(clean(detailLine), 140).slice(0, 2), 16, y);
+        y += 10;
       });
 
-      y += 3;
-      if (y > 250) {
-        doc.addPage();
-        y = 22;
-      }
-      doc.setFillColor(...ink);
-      doc.roundedRect(110, y - 4, 86, 28, 2.5, 2.5, "F");
+      y += 4;
+      doc.setFillColor(23, 22, 19);
+      doc.roundedRect(112, y, 84, 28, 2, 2, "F");
+      doc.setTextColor(216, 188, 148);
+      doc.setFontSize(8);
+      doc.text("TOTAL PONCTUEL", 117, y + 8);
+      doc.text("TOTAL MENSUEL", 117, y + 16);
+      doc.text("TOTAL ANNUEL", 117, y + 24);
+      doc.setTextColor(247, 244, 238);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.text(`${totals.once} EUR`, 191, y + 8, { align: "right" });
+      doc.text(`${totals.monthly} EUR / mois`, 191, y + 16, { align: "right" });
+      doc.text(`${totals.annual} EUR / an`, 191, y + 24, { align: "right" });
+
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(6.7);
-      doc.setTextColor(186, 192, 202);
-      doc.text(cleanForPdf(pdfLabels.totalOnce), 114, y + 3);
-      doc.text(cleanForPdf(pdfLabels.totalMonth), 114, y + 12);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(9.4);
-      doc.setTextColor(...white);
-      doc.text(once.toLocaleString("fr-FR") + " €", 192, y + 3, { align: "right" });
-      doc.text(monthly.toLocaleString("fr-FR") + " € / mois", 192, y + 12, { align: "right" });
-      y += 36;
-
-      y = section(pdfLabels.frame, y);
-      y = infoRow(pdfLabels.validity, pdfLabels.validText + date(validity), y);
-      y = infoRow(pdfLabels.start, pdfLabels.startText, y);
-      y = infoRow(pdfLabels.nature, pdfLabels.natureText, y, M, 150);
-      y += 5;
-
-      doc.setFillColor(247, 249, 252);
-      doc.roundedRect(M, y - 3, W - M * 2, 29, 2.5, 2.5, "F");
-      doc.setTextColor(...ink);
-      doc.setFont("helvetica", "bold");
       doc.setFontSize(7.5);
-      doc.text(cleanForPdf(pdfLabels.validation), M + 4, y + 5);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(6.4);
-      doc.setTextColor(...muted);
-      doc.text(cleanForPdf(pdfLabels.valText1), M + 4, y + 11);
-      doc.text(cleanForPdf(pdfLabels.valText2), M + 4, y + 16);
-      doc.setDrawColor(...lineColor);
-      doc.line(111, y + 8, 188, y + 8);
-      doc.line(111, y + 21, 188, y + 21);
-      doc.setFontSize(5.9);
-      doc.text(cleanForPdf(pdfLabels.dateSig), 111, y + 6);
-      doc.text(cleanForPdf(pdfLabels.nameQuality), 111, y + 19);
+      doc.setTextColor(87, 83, 75);
+      doc.text(
+        "Tarifs de reference en EUR. Le perimetre definitif et les conditions sont confirmes sur devis avant engagement.",
+        14,
+        282,
+      );
+      doc.text(
+        "XR Agency · contact.xragency@gmail.com · WhatsApp +33 7 67 56 67 83 · xragencyai.com",
+        14,
+        288,
+      );
 
-      doc.setDrawColor(...lineColor);
-      doc.line(M, 281, R, 281);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(6.3);
-      doc.setTextColor(...ink);
-      doc.text("XRAGENCY", M, 287);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(5.7);
-      doc.setTextColor(...muted);
-      doc.text("Informations legales de l’editeur a confirmer", M, 292);
-      
-      doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83 · xragencyai.com", M, 300);
-      doc.setTextColor(...blue);
-      doc.setFont("helvetica", "bold");
-      doc.text(quoteNumber, R, 300, { align: "right" });
+      const pdfDataUri = doc.output("datauristring");
+      const pdfBase64 = pdfDataUri.split(",")[1] || "";
 
-      doc.save("XRAGENCY-Devis-" + quoteNumber + ".pdf");
-      setGenerated(true);
-      setSendMessage(QUOTE_UI.pdfGeneratedSuccess[currentLang]);
-    } catch (error) {
-      setSendMessage(error instanceof Error ? error.message : QUOTE_UI.pdfError[currentLang]);
+      const response = await fetch("/api/create-checkout", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          action: "send_quote",
+          pdfBase64,
+          client,
+          summary: {
+            sector: activeBusiness.label.fr,
+            goal: activeGoal.label.fr,
+            services: chosenItems.map(({ group, plan }) => ({
+              label: `${group.title.fr} — ${plan.label.fr}`,
+              detail: plan.commitmentMonths
+                ? `${plan.detail.fr} (Engagement ${plan.commitmentMonths} mois)`
+                : plan.detail.fr,
+              price: plan.priceEur,
+              period: plan.period,
+            })),
+            once: totals.once,
+            monthly: totals.monthly,
+            annual: totals.annual,
+          },
+        }),
+      });
+      const result = (await response.json()) as {
+        sent?: boolean;
+        quoteId?: string;
+        error?: string;
+      };
+      if (!response.ok || !result.sent) {
+        throw new Error(result.error || ui.errorFallback);
+      }
+
+      doc.save(`XR-Agency-Devis-${result.quoteId || quoteRef}.pdf`);
+      setSubmitOk(result.quoteId || quoteRef);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : ui.errorFallback);
     } finally {
       setSending(false);
     }
   };
 
-  const goToStep = (next: number) => {
-    setStep(next);
-    window.setTimeout(() => journeyRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
-  };
-
-  const choose = (setter: (value: string) => void, value: string, next: number) => {
-    setter(value);
-    goToStep(next);
-  };
-  const toggleService = (id: string) => setSelectedServices((current) => current.includes(id) ? current.filter((x) => x !== id) : [...current, id]);
-  useEffect(() => {
-    if (step > 0) journeyRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, [step]);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const requested = params.get("service");
-    const normalized = requested === "ecommerce" ? "website" : requested;
-    if (normalized && SERVICES.some((x) => x.id === normalized)) {
-      if (requested === "ecommerce") setSituation("selling");
-      setSelectedServices((current) => current.includes(normalized) ? current : [normalized]);
-      setStep(4);
-    }
-  }, []);
-
-  const createCheckout = async () => {
-    if (!client.email || !selectedServices.length || paying) return;
-    setPaying(true); setSendMessage("");
-    try {
-      const response = await fetch("/api/create-checkout", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ action: "checkout", sectorId, situation, budget, selectedServices, client }) });
-      const data = await response.json() as { url?: string; error?: string };
-      if (!response.ok || !data.url) throw new Error(data.error || QUOTE_UI.paymentError[currentLang]);
-      setCheckoutUrl(data.url); window.location.href = data.url;
-    } catch (error) { setSendMessage(error instanceof Error ? error.message : QUOTE_UI.paymentError[currentLang]); } finally { setPaying(false); }
-  };
-
-  const reset = () => { setStep(0); setSectorId(""); setGoal(""); setSituation(""); setBudget(""); setDiscovery(""); setSelectedServices([]); setClient({ company: "", name: "", email: "", whatsapp: "", website: "" }); setGenerated(false); setSendMessage(""); };
-  const quoteDownloadLabel = sending ? QUOTE_UI.generatingPdf[currentLang] : generated ? QUOTE_UI.downloadAgain[currentLang] : QUOTE_UI.downloadPdf[currentLang];
-  const handleQuoteSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!client.company || !client.name || !client.email || !client.whatsapp || sending) return;
-    void generatePdf();
-  };
-
-  const recommendation = useMemo(() => {
-    if (!sector || !discoveryChoice) return "";
-    const channels: Record<string, string> = {
-      google: { fr: "Google et la visibilité locale", en: "Google and local search visibility", vi: "Google và khả năng hiển thị địa phương", ar: "Google والظهور المحلي", ru: "Google и локальную видимость" }[currentLang],
-      social: { fr: "les réseaux sociaux", en: "social media channels", vi: "mạng xã hội", ar: "شبكات التواصل الاجتماعي", ru: "социальные сети" }[currentLang],
-      referral: { fr: "la conversion du bouche-à-oreille", en: "word-of-mouth conversion", vi: "chuyển đổi từ truyền miệng", ar: "تحويل توصيات العملاء", ru: "конверсию рекомендаций" }[currentLang],
-      mixed: { fr: "la complémentarité de vos canaux", en: "cross-channel synergy", vi: "sự kết hợp đa kênh", ar: "تكامل قنواتك", ru: "синергию всех каналов" }[currentLang],
-    };
-    const channel = channels[discovery] ?? channels.mixed;
-    const budgetTexts: Record<string, string> = {
-      under500: { fr: "un premier levier ciblé", en: "a focused initial lever", vi: "một đòn bẩy trọng tâm ban đầu", ar: "أداة تركيز أولية", ru: "точечный стартовый инструмент" }[currentLang],
-      "500_1000": { fr: "une présence solide sans disperser le budget", en: "a solid presence without scattering the budget", vi: "sự hiện diện vững chắc không lãng phí ngân sách", ar: "حضوراً قوياً دون تشتيت الميزانية", ru: "уверенное присутствие без распыления бюджета" }[currentLang],
-      "1000_2500": { fr: "un dispositif cohérent qui couvre votre socle digital et votre acquisition", en: "a coherent setup covering your digital foundation and acquisition", vi: "hệ thống hoàn chỉnh bao quát nền tảng số và thu hút khách hàng", ar: "منظومة متكاملة تغطي قاعدتك الرقمية والاستقطاب", ru: "комплекс, закрывающий цифровую базу и привлечение клиентов" }[currentLang],
-      default: { fr: "un dispositif plus complet, sans ajouter des prestations qui ne servent pas votre objectif", en: "a comprehensive setup without adding unnecessary services", vi: "hệ thống toàn diện mà không thêm dịch vụ thừa", ar: "منظومة شاملة دون إضافة خدمات لا تخدم أهدافك", ru: "полноценную систему без лишних нецелевых услуг" }[currentLang],
-    };
-    const budgetText = budgetTexts[budget] ?? budgetTexts.default;
-    const recServices = activeRecommended.map((id) => SERVICES.find((x) => x.id === id)?.label).filter(Boolean).join(", ");
-
-    if (currentLang === "en") {
-      return `For ${sector.label.toLowerCase()}, XR Quote Studio recommends ${budgetText}, prioritizing ${recServices}. Your focus on ${channel} reinforces this strategic direction.`;
-    }
-    if (currentLang === "vi") {
-      return `Đối với ${sector.label.toLowerCase()}, XR Quote Studio khuyến nghị ${budgetText}, ưu tiên ${recServices}. Việc bạn chú trọng ${channel} càng củng cố định hướng này.`;
-    }
-    if (currentLang === "ar") {
-      return `بالنسبة لـ ${sector.label}، يوصي XR Quote Studio بـ ${budgetText}، مع إعطاء الأولوية لـ ${recServices}. كما أن تركيزك على ${channel} يعزز هذه التوصية.`;
-    }
-    if (currentLang === "ru") {
-      return `Для сферы «${sector.label.toLowerCase()}» XR Quote Studio рекомендует ${budgetText}, с приоритетом на ${recServices}. Выбор направления «${channel}» подтверждает этот подход.`;
-    }
-    return `Pour ${sector.label.toLowerCase()}, XR Quote Studio recommande ${budgetText}, en donnant la priorité à ${recServices}. Votre choix de ${channel} renforce cette recommandation.`;
-  }, [sector, discoveryChoice, discovery, budget, activeRecommended, currentLang, SERVICES]);
-
-  const titles = useMemo(() => [0, 1, 2, 3, 4, 5, 6, 7].map((i) => STEP_TITLES[i][currentLang]), [currentLang]);
-  const subtitles = useMemo(() => [0, 1, 2, 3, 4, 5, 6, 7].map((i) => STEP_SUBTITLES[i][currentLang]), [currentLang]);
-  const alexMessages = useMemo(() => [0, 1, 2, 3, 4, 5, 6, 7].map((i) => ALEXANDRE_MESSAGES[i][currentLang]), [currentLang]);
-
-  const progress = ((step + 1) / 8) * 100;
-  const card = (item: Choice, onClick: () => void, selected = false, priceDelta?: string) => {
-    const icons: Record<string, string> = {
-      restaurant: "🍽️", hospitality: "🏨", realestate: "🏡", automotive: "🚘", fashion: "👜", jewelry: "💎", beauty: "✨", health: "🩺", architecture: "🏛️", construction: "🛠️", legal: "⚖️", finance: "📈", commerce: "🛍️", tourism: "✈️", agency: "🎨", other: "💡",
-      website: "🖥️", branding: "🎨", seo: "🔎", maps: "📍", social: "💬", content: "🎬", conversion: "🧭", maintenance: "🛠️", robotics: "🤖",
-      none: "🌱", existing: "🧩", redesign: "✨", outdated: "🕰️", invisible: "👀", selling: "🛒", international: "🌍", launch: "🚀",
-      under500: "🌿", "500_1000": "🧱", "1000_2500": "🚀", "2500_5000": "💎", "5000_plus": "🏆",
-      google: "🔍", referral: "🤝", mixed: "🌐",
-    };
-    return (
-      <button
-        key={item.id}
-        type="button"
-        aria-pressed={selected}
-        onClick={onClick}
-        className={"choice-card group relative min-h-[58px] sm:min-h-[64px] w-full rounded-xl border p-3 sm:p-3.5 text-left transition-all duration-200 flex items-center justify-between gap-3 " + (selected ? "is-active border-emerald-500/60 bg-[var(--xr-accent-soft)] text-[var(--xr-ink)] shadow-md ring-1 ring-emerald-500/30" : "border-[var(--xr-line)] bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] hover:border-[var(--xr-ink)]/40 hover:-translate-y-0.5")}
-      >
-        <div className="flex items-center gap-2.5 min-w-0">
-          <span aria-hidden="true" className={"grid h-8 w-8 shrink-0 place-items-center rounded-lg text-base transition-transform group-hover:scale-105 " + (selected ? "bg-emerald-500 text-white shadow-sm" : "bg-[var(--xr-accent-soft)]")}>{icons[item.id] ?? "✦"}</span>
-          <div className="min-w-0">
-            <span className="block text-xs font-semibold leading-tight text-[var(--xr-ink)] sm:text-[13px] truncate">{item.label}</span>
-            <span className="mt-0.5 block text-[10px] leading-snug xr-muted line-clamp-1">{item.detail}</span>
+  return (
+    <section
+      id="quote"
+      ref={sectionRef}
+      dir={isRtl ? "rtl" : "ltr"}
+      className="scroll-mt-20 border-y border-[#171613]/10 bg-[#F7F4EE] py-16 text-[#171613] sm:py-24"
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-3">
+              <span className="h-[1px] w-7 bg-[#9E7F5A]" aria-hidden />
+              <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-[#7D6445]">
+                {ui.eyebrow}
+              </span>
+            </div>
+            <h2 className="mt-4 font-serif text-3xl font-medium leading-[1.06] tracking-[-0.02em] text-[#12110E] sm:text-5xl">
+              {ui.heading}{" "}
+              <span className="italic font-normal text-[#12110E]">{ui.headingAccent}</span>
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-[#57534B] sm:text-base">
+              {ui.subtitle}
+            </p>
           </div>
-        </div>
-        <div className="flex items-center gap-1.5 shrink-0">
-          {priceDelta && (
-            <span className={"rounded-full px-2 py-0.5 label-mono text-[6.5px] font-bold tracking-wider " + (selected ? "bg-emerald-500 text-white" : "border xr-line bg-[var(--xr-bg)] text-[var(--xr-ink)]")}>
-              {priceDelta}
-            </span>
-          )}
-          <span className={"grid h-6 w-6 place-items-center rounded-full border transition-all " + (selected ? "border-emerald-500 bg-emerald-500 text-white" : "xr-line bg-[var(--xr-bg)] xr-muted-2 group-hover:border-[var(--xr-ink)]/50 group-hover:text-[var(--xr-ink)]")}>
-            {selected ? <Check className="h-3 w-3 stroke-[2.5]" /> : <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />}
-          </span>
-        </div>
-      </button>
-    );
-  };
 
-  const totalLabel = once > 0 && monthly > 0
-    ? once.toLocaleString("fr-FR") + " € + " + monthly.toLocaleString("fr-FR") + " €" + QUOTE_UI.perMonth[currentLang]
-    : once > 0
-      ? once.toLocaleString("fr-FR") + " €"
-      : monthly > 0
-        ? monthly.toLocaleString("fr-FR") + " €" + QUOTE_UI.perMonth[currentLang]
-        : QUOTE_UI.calculating[currentLang];
-
-  const SystemStack = () => (
-    <div className="relative overflow-hidden rounded-[1.15rem] border xr-line bg-[var(--xr-surface)] p-4 shadow-[var(--xr-shadow)] sm:p-5">
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-70 [background-image:linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] [background-size:28px_28px]" />
-      <div className="relative flex items-center justify-between gap-4">
-        <div>
-          <span className="label-mono text-[7px] tracking-[.18em] xr-muted-2">{QUOTE_UI.archTitle[currentLang]}</span>
-          <p className="mt-1 text-xs font-semibold text-[var(--xr-ink)]">{QUOTE_UI.archSub[currentLang]}</p>
-        </div>
-        <span className="rounded-full border xr-line bg-[var(--xr-bg)] px-2.5 py-1 label-mono text-[6px] tracking-[.16em] xr-muted-2">{selectedServices.length} {QUOTE_UI.activeBricks[currentLang]}</span>
-      </div>
-      <div className="relative mt-5 grid grid-cols-1 gap-2 sm:grid-cols-3">
-        <div className="rounded-2xl border xr-line bg-[var(--xr-surface-strong)] p-4 sm:col-span-1">
-          <span className="label-mono text-[6px] xr-muted-2">CORE</span>
-          <div className="mt-3 flex items-center gap-3">
-            <div className="grid h-11 w-11 place-items-center rounded-full border xr-line bg-[var(--xr-ink)] text-[var(--xr-bg)] font-black tracking-[-.08em]">XR</div>
-            <div><p className="text-[10px] font-semibold text-[var(--xr-ink)]">XRAGENCY</p><p className="mt-1 text-[7px] xr-muted-2">{QUOTE_UI.archTagline[currentLang]}</p></div>
-          </div>
-        </div>
-        <div className="relative sm:col-span-2">
-          <div aria-hidden className="absolute left-0 top-1/2 hidden h-px w-6 bg-white/10 sm:block" />
-          <div className="grid gap-2 sm:grid-cols-2">
-            {(selectedServices.length ? selectedServices : ["website", "seo", "social", "branding"]).slice(0,4).map((id, index) => {
-              const service = SERVICES.find((x) => x.id === id);
+          {/* 3-Step Indicator Bar */}
+          <nav aria-label="Étapes du configurateur" className="flex items-center gap-2">
+            {([1, 2, 3] as const).map((s) => {
+              const label = s === 1 ? ui.step1 : s === 2 ? ui.step2 : ui.step3;
+              const isActive = step === s;
+              const isDone = step > s;
               return (
-                <div key={id} className="group rounded-2xl border xr-line bg-[var(--xr-surface-strong)] p-3 transition hover:-translate-y-0.5 hover:border-[var(--xr-ink)]/18 hover:bg-[var(--xr-accent-soft)]">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="label-mono text-[6px] xr-muted-2">0{index + 1}</span>
-                    <span className="h-1.5 w-1.5 rounded-full bg-[var(--xr-ink)]/50 transition group-hover:scale-150" />
-                  </div>
-                  <p className="mt-2 text-[9px] font-semibold text-[var(--xr-ink)]">{service?.label ?? id}</p>
-                  <p className="mt-1 text-[7px] leading-4 xr-muted-2">{service?.detail ?? "Brique sur mesure du dispositif."}</p>
-                </div>
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => goStep(s)}
+                  className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-semibold transition sm:px-4 ${
+                    isActive
+                      ? "border-[#171613] bg-[#171613] text-[#F7F4EE]"
+                      : isDone
+                        ? "border-[#9E7F5A]/50 bg-[#EEE9E0] text-[#171613]"
+                        : "border-[#171613]/15 bg-white text-[#57534B] hover:border-[#9E7F5A]"
+                  }`}
+                >
+                  {isDone && <Check className="h-3.5 w-3.5 text-[#9E7F5A]" />}
+                  <span>{label}</span>
+                </button>
               );
             })}
-          </div>
-        </div>
-      </div>
-      <div className="relative mt-4 flex items-center justify-between border-t border-[var(--xr-line)] pt-3">
-        <span className="label-mono text-[6px] tracking-[.14em] xr-muted-2">{QUOTE_UI.estimatedInvestment[currentLang]}</span>
-        <span className="text-[9px] font-semibold text-[var(--xr-ink)]">{totalLabel}</span>
-      </div>
-    </div>
-  );
-
-  return (
-    <section id="quote" className="xr-section-elevated relative overflow-hidden border-y xr-line bg-[#f3efe7] py-10 sm:py-14 lg:py-16 dark:bg-[#0d0f12]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,var(--xr-accent-soft),transparent_26%),radial-gradient(circle_at_82%_78%,rgba(120,120,140,.08),transparent_24%)]"/>
-      <div className="relative mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-        <Parallax speed={-0.02}><Reveal>
-          <div className="grid gap-6 border-b xr-line pb-6 lg:grid-cols-[1.15fr_.85fr] lg:items-center">
-            <div className="sec-head max-w-4xl">
-              <div className="sec-head-line">
-                <div className="sec-head-dash" />
-                <span className="mono-nex text-foreground/70">
-                  <b className="text-[#c5a880] font-bold">05</b> / CONFIGURATEUR TRANSPARENT & FORMULES
-                </span>
-              </div>
-              <h2 className="h-nex text-3xl sm:text-4xl lg:text-[2.8rem] text-foreground">
-                {QUOTE_UI.title1[currentLang]} <span className="text-[#c5a880] font-serif font-light italic">{QUOTE_UI.titleAccent[currentLang]}</span>{QUOTE_UI.title2[currentLang]}
-              </h2>
-              <p className="mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground max-w-xl">
-                {QUOTE_UI.lead[currentLang]}
-              </p>
-            </div>
-
-            {/* Alexandre Sleek Live Advisor & Realtime Estimate */}
-            <div className="relative overflow-hidden rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5 shadow-sm sm:p-4">
-              <div aria-hidden="true" className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-[var(--xr-accent-soft)] blur-2xl" />
-              <div className="relative flex items-center justify-between gap-3 border-b xr-line pb-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="relative grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#1c2430] to-[#0c0e12] border border-white/10 text-white shadow-md">
-                    <span className="font-serif text-sm font-bold tracking-tight text-white/95">AX</span>
-                    <span className="absolute -bottom-0.5 -right-0.5 flex h-3 w-3 items-center justify-center rounded-full border-2 border-[var(--xr-surface)] bg-emerald-500">
-                      <span className="h-1 w-1 rounded-full bg-white animate-ping" />
-                    </span>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <p className="text-xs font-bold text-[var(--xr-ink)]">Alexandre</p>
-                      <span className="rounded-full bg-emerald-500/10 px-1.5 py-0.5 label-mono text-[5.5px] font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">{QUOTE_UI.online[currentLang]}</span>
-                    </div>
-                    <p className="label-mono text-[6.5px] tracking-wider xr-muted-2 truncate">{QUOTE_UI.advisorRole[currentLang]}</p>
-                  </div>
-                </div>
-
-                <div className="text-right">
-                  <span className="label-mono text-[5.5px] tracking-wider xr-muted-2 block">{QUOTE_UI.liveEstimate[currentLang]}</span>
-                  <span className="text-base font-bold text-[var(--xr-ink)]">{totalLabel}</span>
-                </div>
-              </div>
-
-              {/* Dynamic message quote */}
-              <div aria-live="polite" className="relative mt-2.5 flex items-start gap-2 rounded-xl bg-[var(--xr-surface-strong)] px-3 py-2 text-[11px] leading-snug text-[var(--xr-ink)]">
-                <MessageCircle className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                <p className="text-[11px] font-medium leading-relaxed">{alexMessages[step]}</p>
-              </div>
-            </div>
-          </div>
-        </Reveal></Parallax>
-
-        {/* Unified Horizontal Step Progress Bar */}
-        <div className="mt-5 overflow-x-auto pb-1">
-          <div className="flex min-w-max gap-1.5 rounded-xl border xr-line bg-[var(--xr-surface)] p-1.5 shadow-sm">
-            {titles.map((title, index) => (
-              <button
-                key={title + index}
-                type="button"
-                onClick={() => index <= step && setStep(index)}
-                className={"group flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-left transition " + (index === step ? "bg-[var(--xr-ink)] text-[var(--xr-bg)] shadow-sm" : index < step ? "bg-[var(--xr-accent-soft)] text-[var(--xr-ink)]" : "opacity-45 text-[var(--xr-ink)]")}
-              >
-                <span className={"grid h-5 w-5 shrink-0 place-items-center rounded-full text-[7.5px] font-bold " + (index === step ? "bg-white/20 text-white" : "border xr-line")}>
-                  {index < step ? <Check className="h-2.5 w-2.5" /> : index + 1}
-                </span>
-                <span className="truncate text-[9.5px] font-semibold">{title}</span>
-              </button>
-            ))}
-          </div>
+          </nav>
         </div>
 
-        {/* Main Sleek Stage Container */}
-        <div ref={journeyRef} className="mt-5">
-          <Reveal delay={60}>
-            <div className="xr-depth-card rounded-2xl border xr-line bg-[var(--xr-surface)] p-4 sm:p-6 lg:p-7 shadow-sm">
-              <div className="flex items-center justify-between gap-3 border-b xr-line pb-4">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--xr-line)] bg-[var(--xr-accent-soft)] px-2.5 py-0.5 label-mono text-[6.5px] font-semibold tracking-wider text-[var(--xr-ink)]">
-                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"/>
-                      {step === 7 ? QUOTE_UI.lastStretch[currentLang] : QUOTE_UI.stepWord[currentLang] + " " + String(step + 1).padStart(2, "0") + " / 08"}
-                    </span>
-                    <span className="label-mono text-[7px] text-muted-foreground">{titles[step]}</span>
+        {/* Main 2-Column Workspace (Left: Step Form | Right: Live Sticky Summary) */}
+        <div className="mt-10 grid items-start gap-6 lg:grid-cols-12">
+          {/* Left Column: Active Step */}
+          <div className="rounded-3xl border border-[#171613]/12 bg-white p-5 shadow-[0_20px_50px_rgba(23,22,19,0.05)] sm:p-8 lg:col-span-8">
+            {/* STEP 1 — BESOINS */}
+            {step === 1 && (
+              <div className="space-y-7">
+                <div>
+                  <label className="block font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7D6445]">
+                    {ui.businessLabel}
+                  </label>
+                  <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
+                    {BUSINESS_TYPES.map((b) => {
+                      const active = businessType === b.id;
+                      return (
+                        <button
+                          key={b.id}
+                          type="button"
+                          onClick={() => setBusinessType(b.id)}
+                          className={`rounded-2xl border px-3.5 py-3 text-start text-xs font-semibold transition ${
+                            active
+                              ? "border-[#171613] bg-[#171613] text-[#F7F4EE]"
+                              : "border-[#171613]/12 bg-[#FAF8F4] text-[#45413A] hover:border-[#9E7F5A]"
+                          }`}
+                        >
+                          {t(b.label)}
+                        </button>
+                      );
+                    })}
                   </div>
-                  <h3 className="mt-2 text-xl font-bold tracking-tight text-[var(--xr-ink)] sm:text-2xl">{subtitles[step]}</h3>
                 </div>
-                {step > 0 && (
-                  <button type="button" onClick={() => goToStep(step - 1)} className="shrink-0 rounded-full border xr-line px-3.5 py-1.5 text-xs font-semibold transition hover:bg-[var(--xr-accent-soft)]">
-                    {QUOTE_UI.back[currentLang]}
-                  </button>
-                )}
-              </div>
 
-              <div className="mt-5">
-                {step === 0 && (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
-                      {(showAllSectors ? SECTORS : SECTORS.slice(0, 8)).map((x) =>
-                        card(x, () => { setSectorId(x.id); goToStep(1); }, x.id === sectorId)
-                      )}
-                    </div>
-                    <button type="button" onClick={() => setShowAllSectors(v => !v)} className="mx-auto block rounded-full border xr-line px-5 py-2 label-mono text-[7px] font-semibold xr-muted hover:text-[var(--xr-ink)] transition">
-                      {showAllSectors ? QUOTE_UI.collapseSectors[currentLang] : QUOTE_UI.seeAllSectors[currentLang]}
-                    </button>
+                <div>
+                  <label className="block font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7D6445]">
+                    {ui.goalLabel}
+                  </label>
+                  <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    {GOALS.map((g) => {
+                      const active = goalId === g.id;
+                      return (
+                        <button
+                          key={g.id}
+                          type="button"
+                          onClick={() => setGoalId(g.id)}
+                          className={`flex items-center justify-between gap-2 rounded-2xl border px-4 py-3 text-start text-xs font-semibold transition ${
+                            active
+                              ? "border-[#9E7F5A] bg-[#F4EFE6] text-[#171613]"
+                              : "border-[#171613]/12 bg-[#FAF8F4] text-[#45413A] hover:border-[#9E7F5A]"
+                          }`}
+                        >
+                          <span>{t(g.label)}</span>
+                          {active && <Check className="h-4 w-4 shrink-0 text-[#9E7F5A]" />}
+                        </button>
+                      );
+                    })}
                   </div>
-                )}
+                </div>
 
-                {step === 1 && sector && (
-                  <div className="space-y-4">
-                    <div className="rounded-xl border xr-line bg-[var(--xr-accent-soft)] p-3 text-xs">
-                      <span className="label-mono text-[6px] text-muted-foreground block">{QUOTE_UI.activityBadge[currentLang]}</span>
-                      <span className="font-bold text-[var(--xr-ink)]">{sector.label}</span> · <span className="xr-muted">{sector.detail}</span>
-                    </div>
-                    <div className="grid gap-2 sm:grid-cols-3">
-                      {sector.goals.map(x => card({ id: x, label: x, detail: currentLang === "en" ? "Tailored priority for your sector" : currentLang === "vi" ? "Ưu tiên phù hợp với ngành của bạn" : currentLang === "ar" ? "أولوية مناسبة لمجالك" : currentLang === "ru" ? "Приоритетная задача для вашей сферы" : "Priorité adaptée à votre secteur" }, () => choose(setGoal, x, 2)))}
-                    </div>
+                <div>
+                  <div className="flex flex-wrap items-baseline justify-between gap-2">
+                    <label className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7D6445]">
+                      {ui.servicesLabel}
+                    </label>
+                    <span className="text-xs text-[#57534B]">{ui.servicesHint}</span>
                   </div>
-                )}
-
-                {step === 2 && (
-                  <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                    {SITUATIONS.map(x => card(x, () => choose(setSituation, x.id, 3), x.id === situation))}
-                  </div>
-                )}
-
-                {step === 3 && (
-                  <div className="grid gap-2 sm:grid-cols-3">
-                    {BUDGETS.map(x => card(x, () => { setBudget(x.id); setSelectedServices([]); window.setTimeout(() => setStep(4), 180); }, x.id === budget))}
-                  </div>
-                )}
-
-                {step === 4 && (
-                  <div className="space-y-4">
-                    <div className="rounded-xl border xr-line bg-[var(--xr-accent-soft)] p-3 flex items-center justify-between">
-                      <div>
-                        <span className="label-mono text-[6px] text-emerald-600 dark:text-emerald-400 font-bold block">{QUOTE_UI.preparedSelection[currentLang]}</span>
-                        <p className="text-xs font-semibold text-[var(--xr-ink)]">{QUOTE_UI.preparedTitle[currentLang]}</p>
-                      </div>
-                      <span className="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 label-mono text-[7px] font-bold text-emerald-600 dark:text-emerald-400">
-                        {selectedServices.length} {QUOTE_UI.activeBricks[currentLang]}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                      {orderedServices.map(x => {
-                        const p = proposals.find(item => item.id === x.id);
-                        const deltaTag = p ? p.custom ? QUOTE_UI.onQuote[currentLang] : p.period === "month" ? `${p.price.toLocaleString("fr-FR")} €${QUOTE_UI.perMonth[currentLang]}` : p.id === "maps" ? `999 €${QUOTE_UI.perYear[currentLang]}` : `+${p.price.toLocaleString("fr-FR")} €` : undefined;
-                        return card(x, () => toggleService(x.id), selectedServices.includes(x.id), deltaTag);
-                      })}
-                    </div>
-                    <button type="button" disabled={!selectedServices.length} onClick={() => goToStep(5)} className="w-full rounded-full bg-[var(--xr-ink)] px-5 py-3 label-mono text-[8px] font-semibold text-[var(--xr-bg)] hover:opacity-90 transition disabled:opacity-30">
-                      {QUOTE_UI.continue[currentLang]}
-                    </button>
-                  </div>
-                )}
-
-                {step === 5 && (
-                  <div className="space-y-4">
-                    <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                      {DISCOVERY.map(x => card(x, () => choose(setDiscovery, x.id, 6), x.id === discovery))}
-                    </div>
-                  </div>
-                )}
-
-                {step === 6 && sector && (
-                  <div className="space-y-4">
-                    <div className="rounded-xl border xr-line bg-[var(--xr-accent-soft)] p-4">
-                      <span className="label-mono text-[6px] text-emerald-600 dark:text-emerald-400 font-bold block">{QUOTE_UI.recommendationBadge[currentLang]}</span>
-                      <p className="mt-1 text-sm leading-relaxed text-[var(--xr-ink)] font-medium">{recommendation}</p>
-                    </div>
-
-                    <div className="grid gap-2 sm:grid-cols-2">
-                      {selectedServices.map(id => {
-                        const p = proposals.find(x => x.id === id);
-                        return p ? (
-                          <div key={id} className="flex items-center justify-between gap-3 rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3.5 py-2.5">
-                            <span className="text-xs font-semibold text-[var(--xr-ink)] truncate">{p.label}</span>
-                            <span className="shrink-0 label-mono text-[7.5px] font-bold text-emerald-600 dark:text-emerald-400">
-                              {p.custom ? QUOTE_UI.onQuote[currentLang] : p.price.toLocaleString("fr-FR") + " €" + (p.period === "month" ? QUOTE_UI.perMonth[currentLang] : "")}
-                            </span>
+                  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    {CATALOG_GROUPS.map(({ id, Icon, title, short, plans }) => {
+                      const checked = selectedServices.includes(id);
+                      const minPlan = plans[0];
+                      return (
+                        <button
+                          key={id}
+                          type="button"
+                          onClick={() => toggleService(id)}
+                          className={`group flex items-start gap-3.5 rounded-2xl border p-4 text-start transition ${
+                            checked
+                              ? "border-[#171613] bg-[#171613] text-[#F7F4EE] shadow-md"
+                              : "border-[#171613]/12 bg-[#FAF8F4] text-[#171613] hover:border-[#9E7F5A]"
+                          }`}
+                        >
+                          <span
+                            className={`mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl ${
+                              checked
+                                ? "bg-white/15 text-white"
+                                : "border border-[#171613]/12 bg-white text-[#706A61]"
+                            }`}
+                          >
+                            <Icon className="h-4 w-4" />
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-sm font-semibold">{t(title)}</span>
+                              <span
+                                className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border ${
+                                  checked
+                                    ? "border-white bg-white text-[#12110E]"
+                                    : "border-[#171613]/20 bg-white"
+                                }`}
+                              >
+                                {checked && <Check className="h-3 w-3" />}
+                              </span>
+                            </div>
+                            <p
+                              className={`mt-1 text-xs ${
+                                checked ? "text-[#F7F4EE]/75" : "text-[#57534B]"
+                              }`}
+                            >
+                              {t(short)}
+                            </p>
+                            <p
+                              className={`mt-2 font-mono text-[11px] font-semibold ${
+                                checked ? "text-emerald-300" : "text-[#12110E]"
+                              }`}
+                            >
+                              {minPlan.priceEur > 0
+                                ? `${safeLang === "en" ? "From" : "Dès"} ${price(minPlan.priceEur)}${getPeriodShortLabel(minPlan.period, safeLang)}`
+                                : ui.customBadge}
+                            </p>
                           </div>
-                        ) : null;
-                      })}
-                    </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
 
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 text-center">
-                        <span className="label-mono text-[6px] xr-muted-2 block">{QUOTE_UI.oneOff[currentLang]}</span>
-                        <span className="text-xl font-bold text-[var(--xr-ink)] sm:text-2xl">{once.toLocaleString("fr-FR")} €</span>
-                      </div>
-                      <div className="rounded-xl border xr-line bg-[var(--xr-surface)] p-3 text-center">
-                        <span className="label-mono text-[6px] xr-muted-2 block">{QUOTE_UI.monthly[currentLang]}</span>
-                        <span className="text-xl font-bold text-[var(--xr-ink)] sm:text-2xl">{monthly.toLocaleString("fr-FR")} €<span className="text-xs font-normal xr-muted">{QUOTE_UI.perMonth[currentLang]}</span></span>
-                      </div>
-                    </div>
+                {stepError && (
+                  <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-medium text-red-700">
+                    {stepError}
+                  </p>
+                )}
 
-                    <div className="grid gap-2 sm:grid-cols-2 pt-2">
-                      <button type="button" onClick={() => goToStep(7)} className="rounded-full bg-[var(--xr-ink)] px-5 py-3 label-mono text-[8px] font-semibold text-[var(--xr-bg)] hover:opacity-90 transition">
-                        {QUOTE_UI.getQuotePdf[currentLang]}
-                      </button>
+                <div className="flex justify-end border-t border-[#171613]/10 pt-5">
+                  <button
+                    type="button"
+                    onClick={() => goStep(2)}
+                    className="inline-flex items-center gap-2 rounded-full bg-[#12110E] px-7 py-3.5 text-xs font-semibold text-white shadow-md transition hover:bg-[#2B2925]"
+                  >
+                    {ui.continueBtn}
+                    <ArrowRight className="h-4 w-4 text-white" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 2 — OPTIONS & FORMULES */}
+            {step === 2 && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="font-serif text-2xl font-medium text-[#171613]">
+                    {ui.step2Title}
+                  </h3>
+                  <p className="mt-1 text-sm text-[#57534B]">{ui.step2Sub}</p>
+                </div>
+
+                <div className="space-y-6">
+                  {selectedServices.map((serviceId) => {
+                    const group = CATALOG_GROUPS.find((g) => g.id === serviceId);
+                    if (!group) return null;
+                    const Icon = group.Icon;
+                    const activePlanId = selectedPlans[serviceId] ?? group.plans[0].id;
+                    return (
+                      <div
+                        key={serviceId}
+                        className="rounded-2xl border border-[#171613]/10 bg-[#FAF8F4] p-4 sm:p-5"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Icon className="h-4 w-4 text-[#9E7F5A]" />
+                          <h4 className="font-serif text-lg font-medium text-[#171613]">
+                            {t(group.title)}
+                          </h4>
+                        </div>
+                        <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+                          {group.plans.map((plan) => {
+                            const active = activePlanId === plan.id;
+                            return (
+                              <button
+                                key={plan.id}
+                                type="button"
+                                onClick={() => selectPlan(serviceId, plan.id)}
+                                className={`flex flex-col justify-between rounded-2xl border p-4 text-start transition ${
+                                  active
+                                    ? "border-[#171613] bg-[#171613] text-[#F7F4EE] shadow-md"
+                                    : "border-[#171613]/12 bg-white text-[#171613] hover:border-[#9E7F5A]"
+                                }`}
+                              >
+                                <div>
+                                  <div className="flex items-center justify-between gap-2">
+                                    <span className="text-xs font-semibold">{t(plan.label)}</span>
+                                    {plan.popular && (
+                                      <span
+                                        className={`rounded-full px-2 py-0.5 font-mono text-[9px] font-semibold uppercase ${
+                                          active
+                                            ? "bg-white/20 text-white"
+                                            : "bg-[#EEE9E0] text-[#12110E]"
+                                        }`}
+                                      >
+                                        ★
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p
+                                    className={`mt-1.5 text-[11px] leading-relaxed ${
+                                      active ? "text-[#F7F4EE]/75" : "text-[#57534B]"
+                                    }`}
+                                  >
+                                    {t(plan.detail)}
+                                  </p>
+                                </div>
+                                <div className="mt-3 border-t border-current/12 pt-2.5">
+                                  <p
+                                    className={`font-serif text-lg font-semibold ${
+                                      active ? "text-emerald-300" : "text-[#12110E]"
+                                    }`}
+                                  >
+                                    {plan.priceEur > 0
+                                      ? `${plan.customQuote ? `${safeLang === "en" ? "From" : "Dès"} ` : ""}${price(plan.priceEur)}${getPeriodShortLabel(plan.period, safeLang)}`
+                                      : ui.customBadge}
+                                  </p>
+                                  {plan.commitmentMonths && (
+                                    <p
+                                      className={`mt-0.5 font-mono text-[10px] ${
+                                        active ? "text-[#F7F4EE]/70" : "text-[#706A61]"
+                                      }`}
+                                    >
+                                      {getCommitmentLabel(plan.commitmentMonths, safeLang)}
+                                    </p>
+                                  )}
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="flex items-center justify-between border-t border-[#171613]/10 pt-5">
+                  <button
+                    type="button"
+                    onClick={() => goStep(1)}
+                    className="inline-flex items-center gap-2 rounded-full border border-[#171613]/20 bg-white px-5 py-3 text-xs font-semibold text-[#171613] transition hover:border-[#9E7F5A]"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    {ui.backBtn}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => goStep(3)}
+                    className="inline-flex items-center gap-2 rounded-full bg-[#12110E] px-7 py-3.5 text-xs font-semibold text-white shadow-md transition hover:bg-[#2B2925]"
+                  >
+                    {ui.continueBtn}
+                    <ArrowRight className="h-4 w-4 text-white" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 3 — RÉCAPITULATIF & ENVOI */}
+            {step === 3 && (
+              <div className="space-y-6">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <h3 className="font-serif text-2xl font-medium text-[#171613]">
+                      {ui.step3Title}
+                    </h3>
+                    <p className="mt-1 text-sm text-[#57534B]">{ui.step3Sub}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={resetAll}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-[#171613]/15 px-3.5 py-1.5 text-xs font-medium text-[#57534B] hover:border-[#171613] hover:text-[#171613]"
+                  >
+                    <RotateCcw className="h-3.5 w-3.5" />
+                    {ui.resetBtn}
+                  </button>
+                </div>
+
+                {/* Editable Context Summary */}
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#171613]/10 bg-[#FAF8F4] px-4 py-3 text-xs">
+                  <div className="space-y-0.5">
+                    <p>
+                      <span className="text-[#57534B]">{ui.businessLabel} : </span>
+                      <strong className="text-[#171613]">{t(activeBusiness.label)}</strong>
+                    </p>
+                    <p>
+                      <span className="text-[#57534B]">{ui.goalLabel} : </span>
+                      <strong className="text-[#171613]">{t(activeGoal.label)}</strong>
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => goStep(1)}
+                    className="font-semibold text-[#7D6445] underline underline-offset-4 hover:text-[#171613]"
+                  >
+                    {ui.editStep}
+                  </button>
+                </div>
+
+                {submitOk ? (
+                  <div className="rounded-3xl border border-[#9E7F5A]/40 bg-[#FAF8F4] p-7 text-center">
+                    <CheckCircle2 className="mx-auto h-10 w-10 text-[#7D6445]" />
+                    <h4 className="mt-3 font-serif text-2xl font-medium text-[#171613]">
+                      {ui.successTitle}
+                    </h4>
+                    <p className="mt-2 text-sm text-[#57534B]">
+                      {ui.successSub}{" "}
+                      <strong className="font-mono text-[#171613]">({submitOk})</strong>
+                    </p>
+                    <div className="mt-6 flex flex-wrap justify-center gap-3">
                       <a
-                        href={"https://wa.me/33767566783?text=" + encodeURIComponent(currentLang === "en" ? `Hello XR Agency, I have completed my XR Quote Studio setup.\n• Industry: ${sector?.label}\n• Budget: ${budgetChoice?.label}\n• Services: ${selectedServices.map(id => proposals.find(p => p.id === id)?.label).filter(Boolean).join(", ")}\n• Total: ${totalLabel}` : currentLang === "vi" ? `Xin chào XR Agency, tôi đã hoàn thành cấu hình XR Quote Studio.\n• Ngành nghề: ${sector?.label}\n• Ngân sách: ${budgetChoice?.label}\n• Dịch vụ: ${selectedServices.map(id => proposals.find(p => p.id === id)?.label).filter(Boolean).join(", ")}\n• Tổng cộng: ${totalLabel}` : currentLang === "ar" ? `مرحبًا XR Agency، لقد أكملت تكوين XR Quote Studio.\n• القطاع: ${sector?.label}\n• الميزانية: ${budgetChoice?.label}\n• الخدمات: ${selectedServices.map(id => proposals.find(p => p.id === id)?.label).filter(Boolean).join(", ")}\n• الإجمالي: ${totalLabel}` : currentLang === "ru" ? `Здравствуйте, XR Agency! Я завершил расчёт в XR Quote Studio.\n• Сфера: ${sector?.label}\n• Бюджет: ${budgetChoice?.label}\n• Услуги: ${selectedServices.map(id => proposals.find(p => p.id === id)?.label).filter(Boolean).join(", ")}\n• Итого: ${totalLabel}` : `Bonjour XR Agency, j'ai terminé mon diagnostic XR Quote Studio. Secteur : ${sector?.label}. Budget : ${budgetChoice?.label}. Prestations : ${selectedServices.map(id => proposals.find(p => p.id === id)?.label).filter(Boolean).join(", ")}. Total : ${totalLabel}.`)}
+                        href={whatsappHref}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center justify-center gap-2 rounded-full border xr-line px-5 py-3 label-mono text-[8px] xr-muted hover:border-[var(--xr-ink)] hover:text-[var(--xr-ink)] transition"
+                        className="inline-flex items-center gap-2 rounded-full bg-[#171613] px-6 py-3 text-xs font-semibold text-[#F7F4EE] hover:bg-[#2A2823]"
                       >
-                        {QUOTE_UI.continueWhatsApp[currentLang]} <ArrowRight className="h-3 w-3"/>
+                        <MessageCircle className="h-4 w-4 text-emerald-400" />
+                        {ui.whatsappBtn}
                       </a>
+                      <button
+                        type="button"
+                        onClick={resetAll}
+                        className="inline-flex items-center gap-2 rounded-full border border-[#171613]/20 bg-white px-5 py-3 text-xs font-semibold text-[#171613]"
+                      >
+                        {ui.resetBtn}
+                      </button>
                     </div>
                   </div>
-                )}
+                ) : (
+                  <form onSubmit={handleSubmitQuote} className="space-y-4">
+                    <h4 className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7D6445]">
+                      {ui.contactHeading}
+                    </h4>
 
-                {step === 7 && (
-                  <div className="space-y-4">
-                    <div className="rounded-xl border xr-line bg-[var(--xr-accent-soft)] p-3">
-                      <span className="label-mono text-[6px] text-emerald-600 dark:text-emerald-400 font-bold block">{QUOTE_UI.finalizationBadge[currentLang]}</span>
-                      <p className="text-xs font-semibold text-[var(--xr-ink)]">{QUOTE_UI.finalizationTitle[currentLang]}</p>
+                    <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+                      <div>
+                        <label className="mb-1 block text-xs font-medium text-[#45413A]">
+                          {ui.companyLabel}
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={client.company}
+                          onChange={(e) => setClient({ ...client, company: e.target.value })}
+                          className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3.5 py-2.5 text-sm text-[#171613] focus:border-[#9E7F5A] focus:bg-white focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-xs font-medium text-[#45413A]">
+                          {ui.nameLabel}
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={client.name}
+                          onChange={(e) => setClient({ ...client, name: e.target.value })}
+                          className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3.5 py-2.5 text-sm text-[#171613] focus:border-[#9E7F5A] focus:bg-white focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-xs font-medium text-[#45413A]">
+                          {ui.emailLabel}
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={client.email}
+                          onChange={(e) => setClient({ ...client, email: e.target.value })}
+                          className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3.5 py-2.5 text-sm text-[#171613] focus:border-[#9E7F5A] focus:bg-white focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-xs font-medium text-[#45413A]">
+                          {ui.phoneLabel}
+                        </label>
+                        <input
+                          type="tel"
+                          required
+                          value={client.whatsapp}
+                          onChange={(e) => setClient({ ...client, whatsapp: e.target.value })}
+                          className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3.5 py-2.5 text-sm text-[#171613] focus:border-[#9E7F5A] focus:bg-white focus:outline-none"
+                        />
+                      </div>
                     </div>
 
-                    <form onSubmit={handleQuoteSubmit} className="space-y-2.5">
-                      <div className="grid gap-2.5 sm:grid-cols-2">
-                        <input value={client.company} onChange={e => setClient({ ...client, company: e.target.value })} placeholder={QUOTE_UI.formCompany[currentLang]} autoComplete="organization" className="w-full rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3.5 py-2.5 text-xs outline-none focus:border-emerald-500" required />
-                        <input value={client.name} onChange={e => setClient({ ...client, name: e.target.value })} placeholder={QUOTE_UI.formName[currentLang]} autoComplete="name" className="w-full rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3.5 py-2.5 text-xs outline-none focus:border-emerald-500" required />
-                        <input value={client.email} onChange={e => setClient({ ...client, email: e.target.value })} type="email" placeholder={QUOTE_UI.formEmail[currentLang]} autoComplete="email" className="w-full rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3.5 py-2.5 text-xs outline-none focus:border-emerald-500" required />
-                        <input value={client.whatsapp} onChange={e => setClient({ ...client, whatsapp: e.target.value })} type="tel" placeholder={QUOTE_UI.formPhone[currentLang]} autoComplete="tel" className="w-full rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3.5 py-2.5 text-xs outline-none focus:border-emerald-500" required />
-                      </div>
-                      <input value={client.website} onChange={e => setClient({ ...client, website: e.target.value })} type="url" placeholder={QUOTE_UI.formWebsite[currentLang]} autoComplete="url" className="w-full rounded-xl border xr-line bg-[var(--xr-surface-strong)] px-3.5 py-2.5 text-xs outline-none focus:border-emerald-500" />
-                      
-                      <div className="grid gap-2 sm:grid-cols-2 pt-2">
-                        <button type="submit" disabled={!client.company || !client.name || !client.email || !client.whatsapp || sending} className="w-full rounded-full bg-[var(--xr-ink)] px-5 py-3 label-mono text-[8px] font-semibold text-[var(--xr-bg)] disabled:opacity-30 hover:opacity-90 transition">
-                          {quoteDownloadLabel}
-                        </button>
-                        <button type="button" onClick={createCheckout} disabled={!client.company || !client.name || !client.email || !client.whatsapp || paying} className="w-full rounded-full border border-[var(--xr-ink)]/50 bg-[var(--xr-accent-soft)] px-5 py-3 label-mono text-[8px] font-bold text-[var(--xr-ink)] hover:bg-[var(--xr-ink)] hover:text-[var(--xr-bg)] transition disabled:opacity-30">
-                          {paying ? QUOTE_UI.preparingPayment[currentLang] : QUOTE_UI.payDeposit[currentLang]}
-                        </button>
-                      </div>
-                    </form>
+                    <div>
+                      <label className="mb-1 block text-xs font-medium text-[#45413A]">
+                        {ui.websiteLabel}
+                      </label>
+                      <input
+                        type="text"
+                        value={client.website}
+                        onChange={(e) => setClient({ ...client, website: e.target.value })}
+                        placeholder="https://..."
+                        className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3.5 py-2.5 text-sm text-[#171613] focus:border-[#9E7F5A] focus:bg-white focus:outline-none"
+                      />
+                    </div>
 
-                    {generated && (
-                      <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs text-center text-emerald-500 font-medium">
-                        {QUOTE_UI.pdfSuccess[currentLang]}
-                      </div>
+                    {submitError && (
+                      <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-medium text-red-700">
+                        {submitError}
+                      </p>
                     )}
-                    {sendMessage && (
-                      <div aria-live="polite" className="rounded-xl border xr-line bg-[var(--xr-surface)] p-2.5 text-center text-[10px] xr-muted">
-                        {sendMessage}
+
+                    <div className="flex flex-col gap-3 border-t border-[#171613]/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
+                      <button
+                        type="button"
+                        onClick={() => goStep(2)}
+                        className="inline-flex items-center justify-center gap-2 rounded-full border border-[#171613]/20 bg-white px-5 py-3 text-xs font-semibold text-[#171613] transition hover:border-[#9E7F5A]"
+                      >
+                        <ArrowLeft className="h-4 w-4" />
+                        {ui.backBtn}
+                      </button>
+
+                      <div className="flex flex-col gap-2.5 sm:flex-row">
+                        <a
+                          href={whatsappHref}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center justify-center gap-2 rounded-full border border-[#171613]/20 bg-[#FAF8F4] px-5 py-3 text-xs font-semibold text-[#171613] transition hover:border-[#9E7F5A]"
+                        >
+                          <MessageCircle className="h-4 w-4 text-[#7D6445]" />
+                          {ui.whatsappBtn}
+                        </a>
+                        <button
+                          type="submit"
+                          disabled={sending}
+                          className="inline-flex items-center justify-center gap-2 rounded-full bg-[#171613] px-6 py-3 text-xs font-semibold text-[#F7F4EE] transition hover:bg-[#2A2823] disabled:opacity-50"
+                        >
+                          <Download className="h-4 w-4 text-white" />
+                          {sending ? ui.sendingBtn : ui.submitBtn}
+                        </button>
                       </div>
-                    )}
-                    <button type="button" onClick={reset} className="mx-auto flex items-center gap-1.5 label-mono text-[6.5px] xr-muted-2 hover:text-[var(--xr-ink)] transition">
-                      <span>↺</span> {QUOTE_UI.restart[currentLang]}
-                    </button>
-                  </div>
+                    </div>
+                  </form>
                 )}
               </div>
+            )}
+          </div>
+
+          {/* Right Column: Live Editorial Summary Card */}
+          <aside className="rounded-3xl border border-[#E5E5E0] bg-white p-6 text-[#12110E] shadow-[0_20px_50px_rgba(23,22,19,0.06)] lg:sticky lg:top-24 lg:col-span-4">
+            <div className="flex items-center justify-between border-b border-[#E5E5E0] pb-4">
+              <div>
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[#706A61]">
+                  {ui.summaryTitle}
+                </p>
+                <p className="mt-0.5 text-xs text-[#5A554E]">{t(activeBusiness.label)}</p>
+              </div>
+              <span className="rounded-full bg-[#12110E] px-2.5 py-0.5 font-mono text-xs font-bold text-white">
+                {chosenItems.length}
+              </span>
             </div>
-          </Reveal>
+
+            {chosenItems.length === 0 ? (
+              <p className="py-8 text-center text-xs text-[#5A554E]">{ui.emptySelection}</p>
+            ) : (
+              <>
+                <ul className="divide-y divide-[#E5E5E0] py-2">
+                  {chosenItems.map(({ group, plan }) => (
+                    <li key={group.id} className="flex items-start justify-between gap-3 py-3">
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold text-[#12110E]">{t(group.title)}</p>
+                        <p className="text-[11px] text-[#5A554E]">{t(plan.label)}</p>
+                        {plan.commitmentMonths && (
+                          <p className="mt-0.5 font-mono text-[10px] text-[#706A61]">
+                            {getCommitmentLabel(plan.commitmentMonths, safeLang)}
+                          </p>
+                        )}
+                      </div>
+                      <span className="shrink-0 font-mono text-xs font-semibold text-[#12110E]">
+                        {plan.customQuote
+                          ? plan.priceEur > 0
+                            ? `${price(plan.priceEur)}${getPeriodShortLabel(plan.period, safeLang)}*`
+                            : ui.customBadge
+                          : `${price(plan.priceEur)}${getPeriodShortLabel(plan.period, safeLang)}`}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-2 space-y-2 border-t border-[#E5E5E0] pt-4">
+                  {totals.once > 0 && (
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-xs text-[#5A554E]">{ui.onceTotal}</span>
+                      <span className="font-serif text-2xl font-semibold text-[#12110E]">
+                        {price(totals.once)}
+                      </span>
+                    </div>
+                  )}
+                  {totals.monthly > 0 && (
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-xs text-[#5A554E]">{ui.monthlyTotal}</span>
+                      <span className="font-serif text-xl font-semibold text-[#12110E]">
+                        {price(totals.monthly)}
+                        {getPeriodShortLabel("month", safeLang)}
+                      </span>
+                    </div>
+                  )}
+                  {totals.annual > 0 && (
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-xs text-[#5A554E]">{ui.annualTotal}</span>
+                      <span className="font-serif text-xl font-semibold text-[#12110E]">
+                        {price(totals.annual)}
+                        {getPeriodShortLabel("year", safeLang)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {totals.hasCustom && (
+                  <p className="mt-3 rounded-xl border border-[#E5E5E0] bg-[#FAF9F5] p-3 text-[11px] leading-relaxed text-[#5A554E]">
+                    * {ui.customNote}
+                  </p>
+                )}
+
+                <div className="mt-5 space-y-2.5">
+                  <button
+                    type="button"
+                    onClick={syncAllToCart}
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[#12110E] px-4 py-3 text-xs font-semibold text-white shadow-md transition hover:bg-[#2B2925]"
+                  >
+                    {cartSynced ? (
+                      <>
+                        <Check className="h-4 w-4 text-emerald-400" />
+                        {ui.addedAllToCart}
+                      </>
+                    ) : (
+                      <>
+                        <ShoppingBag className="h-4 w-4" />
+                        {ui.addAllToCart}
+                      </>
+                    )}
+                  </button>
+                  {step < 3 && (
+                    <button
+                      type="button"
+                      onClick={() => goStep(3)}
+                      className="flex w-full items-center justify-center gap-2 rounded-full border border-[#E5E5E0] bg-white px-4 py-2.5 text-xs font-semibold text-[#12110E] transition hover:bg-[#FAF9F5]"
+                    >
+                      {ui.step3}
+                      <ArrowRight className="h-3.5 w-3.5 text-[#12110E]" />
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
+
+            <div className="mt-5 flex items-start gap-2 border-t border-[#E5E5E0] pt-4 text-[11px] leading-relaxed text-[#706A61]">
+              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+              <span>{ui.vatNotice}</span>
+            </div>
+          </aside>
         </div>
       </div>
     </section>

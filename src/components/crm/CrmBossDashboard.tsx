@@ -35,11 +35,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CrmLead } from "@/routes/api/crm";
-import {
-  type MaquetteRequest,
-  getSavedMaquettes,
-  saveMaquettes,
-} from "@/lib/crm-gamified-state";
+import { type MaquetteRequest, getSavedMaquettes, saveMaquettes } from "@/lib/crm-gamified-state";
 import { CrmEgoLeaderboard } from "./CrmEgoLeaderboard";
 
 export interface CrmTodo {
@@ -101,7 +97,9 @@ export function CrmBossDashboard({
   const playSound = (type: "coin" | "click" | "win") => {
     if (!soundEnabled || typeof window === "undefined") return;
     try {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (!AudioCtx) return;
       const ctx = new AudioCtx();
       const osc = ctx.createOscillator();
@@ -125,7 +123,9 @@ export function CrmBossDashboard({
         osc.start(now);
         osc.stop(now + 0.15);
       }
-    } catch {}
+    } catch {
+      /* Audio or storage fallback: keep the interface usable. */
+    }
   };
 
   const handleCreateTodo = (e: React.FormEvent) => {
@@ -143,7 +143,12 @@ export function CrmBossDashboard({
     playSound("coin");
   };
 
-  const handleDispatch = (leadId: string, leadContact: string, targetName: string, targetEmail: string) => {
+  const handleDispatch = (
+    leadId: string,
+    leadContact: string,
+    targetName: string,
+    targetEmail: string,
+  ) => {
     if (onDispatchLead) onDispatchLead(leadId, targetEmail);
     playSound("coin");
     setDispatchedNotif(`⚡ Lead "${leadContact}" envoyé à ${targetName} !`);
@@ -200,10 +205,14 @@ export function CrmBossDashboard({
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white mt-1">
-              Antoine <span className="text-[#d4af37] font-serif italic font-normal">· Direction Suprême</span>
+              Antoine{" "}
+              <span className="text-[#d4af37] font-serif italic font-normal">
+                · Direction Suprême
+              </span>
             </h1>
             <p className="text-xs text-neutral-300">
-              Trésorerie QG · Validation des Maquettes 3D · Envoi de listes aux vendeurs &amp; To-Do Secrète
+              Trésorerie QG · Validation des Maquettes 3D · Envoi de listes aux vendeurs &amp; To-Do
+              Secrète
             </p>
           </div>
         </div>
@@ -220,7 +229,7 @@ export function CrmBossDashboard({
               "flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition",
               bossTab === "qg"
                 ? "bg-[#d4af37] text-black shadow-[0_0_20px_rgba(212,175,55,0.5)]"
-                : "bg-white/5 text-neutral-300 hover:bg-white/10"
+                : "bg-white/5 text-neutral-300 hover:bg-white/10",
             )}
           >
             <Crown className="h-4 w-4" />
@@ -237,7 +246,7 @@ export function CrmBossDashboard({
               "flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition relative",
               bossTab === "maquettes"
                 ? "bg-pink-500 text-white shadow-[0_0_20px_rgba(236,72,153,0.5)]"
-                : "bg-white/5 text-neutral-300 hover:bg-white/10"
+                : "bg-white/5 text-neutral-300 hover:bg-white/10",
             )}
           >
             <Palette className="h-4 w-4" />
@@ -259,7 +268,7 @@ export function CrmBossDashboard({
               "flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition",
               bossTab === "dispatch"
                 ? "bg-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.5)]"
-                : "bg-white/5 text-neutral-300 hover:bg-white/10"
+                : "bg-white/5 text-neutral-300 hover:bg-white/10",
             )}
           >
             <Package className="h-4 w-4" />
@@ -276,7 +285,7 @@ export function CrmBossDashboard({
               "flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition",
               bossTab === "todos"
                 ? "bg-purple-500 text-white shadow-[0_0_20px_rgba(168,85,247,0.5)]"
-                : "bg-white/5 text-neutral-300 hover:bg-white/10"
+                : "bg-white/5 text-neutral-300 hover:bg-white/10",
             )}
           >
             <Target className="h-4 w-4" />
@@ -293,7 +302,7 @@ export function CrmBossDashboard({
               "flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition",
               bossTab === "ego"
                 ? "bg-yellow-400 text-black shadow-[0_0_20px_rgba(250,204,21,0.5)]"
-                : "bg-white/5 text-neutral-300 hover:bg-white/10"
+                : "bg-white/5 text-neutral-300 hover:bg-white/10",
             )}
           >
             <Trophy className="h-4 w-4" />
@@ -336,9 +345,11 @@ export function CrmBossDashboard({
                 LE COFFRE DE L&apos;AGENCE
               </span>
               <div className="mt-2 text-3xl sm:text-4xl font-black text-[#d4af37] font-mono">
-                48 500 €
+                Données à synchroniser
               </div>
-              <p className="mt-1 text-xs text-neutral-300 font-medium">Trésorerie disponible sécurisée</p>
+              <p className="mt-1 text-xs text-neutral-300 font-medium">
+                Trésorerie disponible sécurisée
+              </p>
               <div className="mt-3 flex items-center gap-1 text-[11px] text-emerald-400 font-bold">
                 <TrendingUp className="h-3.5 w-3.5" /> +14 200 € cette semaine
               </div>
@@ -349,9 +360,7 @@ export function CrmBossDashboard({
               <span className="font-mono text-[9px] font-black uppercase tracking-widest text-neutral-400">
                 CHIFFRE D&apos;AFFAIRES MOIS
               </span>
-              <div className="mt-2 text-3xl font-black text-white font-mono">
-                64 200 €
-              </div>
+              <div className="mt-2 text-3xl font-black text-white font-mono">64 200 €</div>
               <p className="mt-1 text-xs text-neutral-400">Objectif du mois : 80 000 €</p>
               <div className="mt-3 h-2 w-full rounded-full bg-white/10 overflow-hidden">
                 <div className="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 w-[80%]" />
@@ -363,9 +372,7 @@ export function CrmBossDashboard({
               <span className="font-mono text-[9px] font-black uppercase tracking-widest text-neutral-400">
                 COMMISSIONS ÉQUIPE
               </span>
-              <div className="mt-2 text-3xl font-black text-yellow-300 font-mono">
-                11 500 €
-              </div>
+              <div className="mt-2 text-3xl font-black text-yellow-300 font-mono">11 500 €</div>
               <p className="mt-1 text-xs text-neutral-400">Versées aux closers &amp; élèves</p>
               <div className="mt-3 flex items-center gap-1 text-[11px] text-yellow-300 font-bold">
                 ⚔️ Lucas (5 040 €) · 🎯 Sarah (6 500 €)
@@ -399,7 +406,9 @@ export function CrmBossDashboard({
                   <span className="font-mono text-[9px] font-black uppercase tracking-widest text-[#d4af37]">
                     ÉTAT DES FORCES DE L&apos;AGENCE
                   </span>
-                  <h3 className="text-lg font-black text-white">Barres de Vie &amp; Quêtes de l&apos;Équipe</h3>
+                  <h3 className="text-lg font-black text-white">
+                    Barres de Vie &amp; Quêtes de l&apos;Équipe
+                  </h3>
                 </div>
               </div>
               <span className="font-mono text-xs text-neutral-400">4 membres connectés</span>
@@ -424,7 +433,9 @@ export function CrmBossDashboard({
                     <div className="h-full bg-gradient-to-r from-pink-500 to-rose-400 w-[95%]" />
                   </div>
                 </div>
-                <p className="text-[10px] text-yellow-300 font-bold">👑 Numéro 1 au Concours d&apos;Ego</p>
+                <p className="text-[10px] text-yellow-300 font-bold">
+                  👑 Numéro 1 au Concours d&apos;Ego
+                </p>
               </div>
 
               {/* Lucas */}
@@ -455,7 +466,9 @@ export function CrmBossDashboard({
                     <span className="text-2xl">🥋</span>
                     <span className="text-xs font-black text-white">Karim Diallo</span>
                   </div>
-                  <span className="font-mono text-[10px] text-cyan-400 font-bold">Ceinture Marron</span>
+                  <span className="font-mono text-[10px] text-cyan-400 font-bold">
+                    Ceinture Marron
+                  </span>
                 </div>
                 <div className="space-y-1">
                   <div className="flex justify-between text-[10px] text-neutral-300">
@@ -506,7 +519,8 @@ export function CrmBossDashboard({
                 Demandes de Maquette à Modéliser &amp; Valider
               </h2>
               <p className="text-xs text-neutral-300">
-                Les vendeurs inscrivent les informations client (Google Maps, Instagram, Facebook, site actuel) pour que le studio 3D prépare la maquette.
+                Les vendeurs inscrivent les informations client (Google Maps, Instagram, Facebook,
+                site actuel) pour que le studio 3D prépare la maquette.
               </p>
             </div>
             <span className="rounded-full bg-pink-500/20 border border-pink-500/40 px-3 py-1 font-mono text-xs font-bold text-pink-300">
@@ -524,7 +538,7 @@ export function CrmBossDashboard({
                     "rounded-3xl border-2 p-5 space-y-3.5 backdrop-blur-xl shadow-2xl transition",
                     isPending
                       ? "border-pink-500 bg-gradient-to-b from-pink-950/40 to-black shadow-[0_0_35px_rgba(236,72,153,0.3)]"
-                      : "border-white/10 bg-black/70"
+                      : "border-white/10 bg-black/70",
                   )}
                 >
                   <div className="flex items-start justify-between gap-2 border-b border-white/10 pb-3">
@@ -533,7 +547,9 @@ export function CrmBossDashboard({
                         Demandé par : {maq.closerName}
                       </span>
                       <h4 className="text-lg font-black text-white mt-0.5">{maq.company}</h4>
-                      <p className="text-xs text-neutral-400">{maq.contactName} · {maq.phone} · {maq.city}</p>
+                      <p className="text-xs text-neutral-400">
+                        {maq.contactName} · {maq.phone} · {maq.city}
+                      </p>
                     </div>
                     <span className="rounded-xl bg-yellow-400/20 border border-yellow-400/40 px-2.5 py-1 text-xs font-mono font-black text-yellow-300">
                       {maq.budgetEur} €
@@ -541,19 +557,27 @@ export function CrmBossDashboard({
                   </div>
 
                   <div className="space-y-1">
-                    <span className="text-[10px] font-mono uppercase text-neutral-400 block">TYPE DE MAQUETTE</span>
+                    <span className="text-[10px] font-mono uppercase text-neutral-400 block">
+                      TYPE DE MAQUETTE
+                    </span>
                     <p className="text-xs font-black text-[#d4af37]">{maq.serviceType}</p>
                   </div>
 
                   {/* Notes & brief du client */}
                   <div className="rounded-2xl bg-white/5 border border-white/10 p-3 space-y-1">
-                    <span className="text-[9px] font-mono uppercase text-neutral-400 block">NOTES DU CLOSER</span>
-                    <p className="text-xs text-neutral-200 leading-relaxed font-sans">{maq.notes}</p>
+                    <span className="text-[9px] font-mono uppercase text-neutral-400 block">
+                      NOTES DU CLOSER
+                    </span>
+                    <p className="text-xs text-neutral-200 leading-relaxed font-sans">
+                      {maq.notes}
+                    </p>
                   </div>
 
                   {/* LIENS DIRECTS GOOGLE MAPS, INSTAGRAM, FACEBOOK, SITE WEB */}
                   <div className="space-y-1.5 pt-1">
-                    <span className="text-[9px] font-mono uppercase text-neutral-400 block">LIENS CLIENT DIRECTS</span>
+                    <span className="text-[9px] font-mono uppercase text-neutral-400 block">
+                      LIENS CLIENT DIRECTS
+                    </span>
                     <div className="flex flex-wrap gap-2">
                       {maq.googleMapsUrl && (
                         <a
@@ -611,7 +635,9 @@ export function CrmBossDashboard({
 
                   {/* BOUTONS D'ACTION POUR ANTOINE */}
                   <div className="pt-2 border-t border-white/10 space-y-2">
-                    <span className="text-[9px] font-mono uppercase text-neutral-400 block">ACTION DIRECTION</span>
+                    <span className="text-[9px] font-mono uppercase text-neutral-400 block">
+                      ACTION DIRECTION
+                    </span>
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         type="button"
@@ -620,7 +646,7 @@ export function CrmBossDashboard({
                           "rounded-xl p-2 text-center text-xs font-black transition",
                           maq.status === "in_design"
                             ? "bg-purple-600 text-white"
-                            : "bg-purple-950/60 border border-purple-500/40 text-purple-200 hover:bg-purple-800"
+                            : "bg-purple-950/60 border border-purple-500/40 text-purple-200 hover:bg-purple-800",
                         )}
                       >
                         🎨 En cours studio 3D
@@ -633,7 +659,7 @@ export function CrmBossDashboard({
                           "rounded-xl p-2 text-center text-xs font-black transition",
                           maq.status === "ready_to_close"
                             ? "bg-emerald-600 text-white"
-                            : "bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 hover:bg-emerald-800"
+                            : "bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 hover:bg-emerald-800",
                         )}
                       >
                         ✅ Prête à Closer !
@@ -655,9 +681,12 @@ export function CrmBossDashboard({
               <span className="font-mono text-[9px] font-black uppercase tracking-widest text-red-400">
                 DISTRIBUTION DE MUNITIONS COMMERCIALES
               </span>
-              <h2 className="text-2xl font-black text-white">Envoi de Listes &amp; Packs de Leads</h2>
+              <h2 className="text-2xl font-black text-white">
+                Envoi de Listes &amp; Packs de Leads
+              </h2>
               <p className="text-xs text-neutral-300">
-                Envoyez des packs complets de 5 ou 10 leads d&apos;un seul clic dans l&apos;arène de Lucas ou Sarah.
+                Envoyez des packs complets de 5 ou 10 leads d&apos;un seul clic dans l&apos;arène de
+                Lucas ou Sarah.
               </p>
             </div>
           </div>
@@ -669,11 +698,14 @@ export function CrmBossDashboard({
                 <span className="text-3xl">⚔️</span>
                 <div>
                   <h3 className="text-base font-black text-white">Pack Closer · Lucas Martin</h3>
-                  <span className="text-xs font-mono text-red-400">Spécialiste Caisse POS &amp; Web</span>
+                  <span className="text-xs font-mono text-red-400">
+                    Spécialiste Caisse POS &amp; Web
+                  </span>
                 </div>
               </div>
               <p className="text-xs text-neutral-300">
-                Envoyer les prochains leads Restauration à Lucas pour ses appels de l&apos;après-midi.
+                Envoyer les prochains leads Restauration à Lucas pour ses appels de
+                l&apos;après-midi.
               </p>
               <div className="grid grid-cols-2 gap-2 pt-2">
                 <button
@@ -697,8 +729,12 @@ export function CrmBossDashboard({
               <div className="flex items-center gap-3">
                 <span className="text-3xl">🎯</span>
                 <div>
-                  <h3 className="text-base font-black text-white">Pack High-Ticket · Sarah Benali</h3>
-                  <span className="text-xs font-mono text-pink-400">Spécialiste 3D Immersif &amp; SEO</span>
+                  <h3 className="text-base font-black text-white">
+                    Pack High-Ticket · Sarah Benali
+                  </h3>
+                  <span className="text-xs font-mono text-pink-400">
+                    Spécialiste 3D Immersif &amp; SEO
+                  </span>
                 </div>
               </div>
               <p className="text-xs text-neutral-300">
@@ -768,28 +804,53 @@ export function CrmBossDashboard({
                         {lead.budgetEur} €
                       </span>
                     </div>
-                    <p className="text-xs text-neutral-400">{lead.company} · {lead.city} · {lead.phone}</p>
-                    <span className="text-[11px] text-[#d4af37] font-medium">{lead.serviceTarget}</span>
+                    <p className="text-xs text-neutral-400">
+                      {lead.company} · {lead.city} · {lead.phone}
+                    </p>
+                    <span className="text-[11px] text-[#d4af37] font-medium">
+                      {lead.serviceTarget}
+                    </span>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
-                      onClick={() => handleDispatch(lead.id, lead.contactName, "Lucas Martin", "lucas@xragency.fr")}
+                      onClick={() =>
+                        handleDispatch(
+                          lead.id,
+                          lead.contactName,
+                          "Lucas Martin",
+                          "lucas@xragency.fr",
+                        )
+                      }
                       className="rounded-xl bg-red-950/60 border border-red-500/40 px-3 py-1.5 text-xs font-black text-red-200 hover:bg-red-800 transition"
                     >
                       ⚔️ Lucas
                     </button>
                     <button
                       type="button"
-                      onClick={() => handleDispatch(lead.id, lead.contactName, "Sarah Benali", "sarah@xragency.fr")}
+                      onClick={() =>
+                        handleDispatch(
+                          lead.id,
+                          lead.contactName,
+                          "Sarah Benali",
+                          "sarah@xragency.fr",
+                        )
+                      }
                       className="rounded-xl bg-pink-950/60 border border-pink-500/40 px-3 py-1.5 text-xs font-black text-pink-200 hover:bg-pink-800 transition"
                     >
                       🎯 Sarah
                     </button>
                     <button
                       type="button"
-                      onClick={() => handleDispatch(lead.id, lead.contactName, "Karim Diallo", "karim@xragency.fr")}
+                      onClick={() =>
+                        handleDispatch(
+                          lead.id,
+                          lead.contactName,
+                          "Karim Diallo",
+                          "karim@xragency.fr",
+                        )
+                      }
                       className="rounded-xl bg-cyan-950/60 border border-cyan-500/40 px-3 py-1.5 text-xs font-black text-cyan-200 hover:bg-cyan-800 transition"
                     >
                       🥋 Karim
@@ -819,7 +880,9 @@ export function CrmBossDashboard({
                     <Lock className="h-2.5 w-2.5" /> Invisible pour l&apos;équipe
                   </span>
                 </div>
-                <h2 className="text-2xl font-black text-white">To-Do List Secrète · Pro &amp; Perso</h2>
+                <h2 className="text-2xl font-black text-white">
+                  To-Do List Secrète · Pro &amp; Perso
+                </h2>
               </div>
             </div>
 
@@ -835,7 +898,7 @@ export function CrmBossDashboard({
                   "rounded-xl px-4 py-2 text-xs font-black transition",
                   todoTab === "pro"
                     ? "bg-[#d4af37] text-black shadow-md"
-                    : "text-neutral-400 hover:text-white"
+                    : "text-neutral-400 hover:text-white",
                 )}
               >
                 💼 Pro Agence ({todos.filter((t) => t.category === "pro" && !t.done).length})
@@ -850,7 +913,7 @@ export function CrmBossDashboard({
                   "rounded-xl px-4 py-2 text-xs font-black transition",
                   todoTab === "perso"
                     ? "bg-purple-500 text-white shadow-md"
-                    : "text-neutral-400 hover:text-white"
+                    : "text-neutral-400 hover:text-white",
                 )}
               >
                 🏠 Perso Antoine ({todos.filter((t) => t.category === "perso" && !t.done).length})
@@ -895,7 +958,9 @@ export function CrmBossDashboard({
             {filteredTodos.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-white/20 p-8 text-center text-neutral-400">
                 <CheckCircle2 className="mx-auto h-8 w-8 text-emerald-400 mb-2 opacity-50" />
-                <p className="text-sm font-bold">Toutes les tâches de cette catégorie sont terminées !</p>
+                <p className="text-sm font-bold">
+                  Toutes les tâches de cette catégorie sont terminées !
+                </p>
               </div>
             ) : (
               filteredTodos.map((todo) => {
@@ -912,8 +977,8 @@ export function CrmBossDashboard({
                       todo.done
                         ? "border-emerald-500/20 bg-emerald-950/20 opacity-60"
                         : isUrgent
-                        ? "border-red-500/60 bg-red-950/20 hover:border-red-400"
-                        : "border-white/10 bg-black/50 hover:border-purple-400/60"
+                          ? "border-red-500/60 bg-red-950/20 hover:border-red-400"
+                          : "border-white/10 bg-black/50 hover:border-purple-400/60",
                     )}
                   >
                     <div className="flex items-center gap-3 min-w-0">
@@ -922,7 +987,7 @@ export function CrmBossDashboard({
                           "flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border-2 transition",
                           todo.done
                             ? "border-emerald-400 bg-emerald-500 text-black"
-                            : "border-white/30 group-hover:border-purple-400"
+                            : "border-white/30 group-hover:border-purple-400",
                         )}
                       >
                         {todo.done && <Check className="h-4 w-4 font-black" />}
@@ -931,7 +996,7 @@ export function CrmBossDashboard({
                         <p
                           className={cn(
                             "text-xs sm:text-sm font-bold truncate",
-                            todo.done ? "line-through text-neutral-400" : "text-white"
+                            todo.done ? "line-through text-neutral-400" : "text-white",
                           )}
                         >
                           {todo.title}
@@ -940,7 +1005,7 @@ export function CrmBossDashboard({
                           <span
                             className={cn(
                               "font-mono font-bold uppercase",
-                              isUrgent ? "text-red-400" : "text-purple-400"
+                              isUrgent ? "text-red-400" : "text-purple-400",
                             )}
                           >
                             {isUrgent ? "🔥 Urgent" : "⭐ Normal"}
@@ -971,9 +1036,7 @@ export function CrmBossDashboard({
       )}
 
       {/* VUE 5 : CONCOURS D'EGO DES VENDEURS */}
-      {bossTab === "ego" && (
-        <CrmEgoLeaderboard currentUserName="Antoine" />
-      )}
+      {bossTab === "ego" && <CrmEgoLeaderboard currentUserName="Antoine" />}
     </div>
   );
 }

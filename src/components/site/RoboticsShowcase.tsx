@@ -107,7 +107,7 @@ type Product = {
 };
 
 const PRODUCTS: Product[] = [
-  { id:"tribot", name:"TriBot", family:"Collecte & tri", use:"Hôtel · retail · espaces publics", image:"https://www.korbenforpeople.com/wp-content/uploads/2026/01/S3J0900-scaled.png", url:"https://www.korbenforpeople.com/robot/tribot/", stats:["24 h","120 L","18,5\" écran"], desc:"Robot intelligent de collecte et de tri avec deux bacs de 60 L, batterie interchangeable et écran publicitaire." },
+  { id:"tribot", name:"TriBot", family:"Collecte & tri", use:"Hôtel · retail · espaces publics", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/CLEANING-BOOT55-VUE-01.png", url:"https://www.korbenforpeople.com/robot/tribot/", stats:["24 h","120 L","18,5\" écran"], desc:"Robot intelligent de collecte et de tri avec deux bacs de 60 L, batterie interchangeable et écran publicitaire." },
   { id:"welcome-plus", name:"Welcome Plus", family:"Accueil", use:"Hôtel · entreprise · retail · accueil", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/ROBOT-ACCUEIL-02-scaled.png", url:"https://www.korbenforpeople.com/robot/welcome-plus/", stats:["9 h","30+ langues","Écran 27\""], desc:"Robot d’accueil haut de gamme avec grand écran HD, interaction et assistance aux visiteurs." },
   { id:"welcome-mini", name:"Welcome Mini", family:"Accueil", use:"Accueil · retail · événement", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/GREETING-BOT-MINI.png", url:"https://www.korbenforpeople.com/robot/welcome-mini/", stats:["12 h","30+ langues","Voix"], desc:"Format compact pour accueillir, informer et interagir dans les espaces recevant du public." },
   { id:"welcome-nova", name:"Welcome Nova", family:"Accueil", use:"Hôtel · santé · entreprise", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/GREETING-BOT-MINI.png", url:"https://www.korbenforpeople.com/robot/welcome-nova/", tech:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/korben-Greeting-Nova-FR-Fiche-Technique.pptx.pdf", stats:["12 h","≤ 5 000 m²","14\" FHD"], desc:"Robot d’accueil avec navigation LiDAR, positionnement visuel, reconnaissance vocale et personnalisation." },
@@ -119,9 +119,9 @@ const PRODUCTS: Product[] = [
   { id:"scrubber", name:"Cleaning Scrubber", family:"Nettoyage", use:"Hôtel · centre commercial · grands espaces", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/SCRUBBER-VUE-01.png", url:"https://www.korbenforpeople.com/robot/cleaning-scrubber/", stats:["8 h","0,9 m/s","2 000 m²/charge"], desc:"Robot de nettoyage des sols pensé pour automatiser les cycles réguliers." },
   { id:"phantas", name:"Cleaning Phantas", family:"Nettoyage", use:"Hôtel · bureaux · espaces publics", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/PHANTAS-VUE-02.png", url:"https://www.korbenforpeople.com/robot/cleaning-phantas/", stats:["10 h","0,8 m/s","500 m²/h"], desc:"Solution de nettoyage autonome compacte pour maintenir les sols propres sans interrompre l’activité." },
   { id:"cleaning55", name:"Cleaning 55", family:"Nettoyage", use:"Hôtel · bureaux · retail", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/CLEANING-BOOT55-VUE-01.png", url:"https://www.korbenforpeople.com/robot/cleaning-55/", stats:["9 h","1 200 m²/h","2,5 L"], desc:"Robot de nettoyage compact pour les opérations quotidiennes." },
-  { id:"aura-g1", name:"Aura G1", family:"Humanoïde", use:"R&D · accueil · innovation", image:"https://www.korbenforpeople.com/wp-content/uploads/2025/08/ROBOT-ACCUEIL-02-scaled.png", url:"https://www.korbenforpeople.com/robot/robot-x/", stats:["43 DOF","120 Nm","ROS2"], desc:"Humanoïde compact à plateforme ouverte, destiné à l’interaction, la perception et le développement." },
-  { id:"aura-e", name:"Aura E", family:"Humanoïde", use:"Hôtel · santé · événement · R&D", image:"https://image.thum.io/get/width/1200/noanimate/https://www.korbenforpeople.com/robot/korben-aura-e/", url:"https://www.korbenforpeople.com/robot/korben-aura-e/", tech:"https://www.korbenforpeople.com/wp-content/uploads/2025/11/Korben-Aura-E-FR-Fiche-Technique.pdf", stats:["42 DOF","300 Nm","550 TOPS"], desc:"Humanoïde grandeur nature orienté recherche, développement et intelligence incarnée." },
-  { id:"atlas-o2", name:"Atlas O2", family:"Quadrupède", use:"Inspection · R&D · environnements complexes", image:"https://image.thum.io/get/width/1200/noanimate/https://www.korbenforpeople.com/robot/robot-atlas-o2/", url:"https://www.korbenforpeople.com/robot/robot-atlas-o2/", stats:["45 Nm","≈5 m/s","4D LiDAR"], desc:"Plateforme quadrupède agile avec perception avancée et connectivité Wi-Fi 6, Bluetooth et 4G." },
+  { id:"aura-g1", name:"Aura G1", family:"Humanoïde", use:"R&D · accueil · innovation", image:"https://www.korbenforpeople.com/wp-content/uploads/2026/01/S3J0900-scaled.png", url:"https://www.korbenforpeople.com/robot/robot-x/", stats:["43 DOF","120 Nm","ROS2"], desc:"Humanoïde compact à plateforme ouverte, destiné à l’interaction, la perception et le développement." },
+  { id:"aura-e", name:"Aura E", family:"Humanoïde", use:"Hôtel · santé · événement · R&D", image:"https://www.korbenforpeople.com/wp-content/uploads/2026/01/S3J0900-scaled.png", url:"https://www.korbenforpeople.com/robot/korben-aura-e/", tech:"https://www.korbenforpeople.com/wp-content/uploads/2025/11/Korben-Aura-E-FR-Fiche-Technique.pdf", stats:["42 DOF","300 Nm","550 TOPS"], desc:"Humanoïde grandeur nature orienté recherche, développement et intelligence incarnée." },
+  { id:"atlas-o2", name:"Atlas O2", family:"Quadrupède", use:"Inspection · R&D · environnements complexes", image:"/showcase/atlas-o2-studio.jpg", url:"https://www.korbenforpeople.com/robot/robot-atlas-o2/", stats:["45 Nm","≈5 m/s","4D LiDAR"], desc:"Plateforme quadrupède agile avec perception avancée et connectivité Wi-Fi 6, Bluetooth et 4G." },
 ];
 
 const FAMILIES = ["Tous","Accueil","Livraison","Livraison sécurisée","Logistique","Nettoyage","Humanoïde","Quadrupède","Collecte & tri"];
@@ -149,6 +149,14 @@ export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
   const [family,setFamily]=useState("Tous");
   const [active,setActive]=useState(PRODUCTS[0]); // TriBot en vedette par défaut
   const filtered=useMemo(()=>family==="Tous"?PRODUCTS:PRODUCTS.filter(p=>p.family===family),[family]);
+
+  const handleSelect = (p: Product) => {
+    setActive(p);
+    const target = document.getElementById("featured-robot");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
 
   if(compact) return (
     <section id="robotique" dir={lang === "ar" ? "rtl" : "ltr"} className="relative overflow-hidden border-y border-white/10 bg-[#050608] py-24 text-white sm:py-32">
@@ -198,7 +206,7 @@ export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
             </div>
           </div>
 
-          <div className="group relative overflow-hidden rounded-[2.8rem] border border-white/10 bg-[#080a0d] shadow-[0_70px_180px_-80px_rgba(0,0,0,.95)]">
+          <div id="featured-robot" className="group relative overflow-hidden rounded-[2.8rem] border border-white/10 bg-[#080a0d] shadow-[0_70px_180px_-80px_rgba(0,0,0,.95)] scroll-mt-28">
             <ProductVisual product={active} large />
             <div className="absolute bottom-6 left-6 right-6 rounded-[1.6rem] border border-white/10 bg-black/72 p-5 backdrop-blur-2xl sm:p-6">
               <div className="flex flex-wrap items-start justify-between gap-4">
@@ -218,13 +226,20 @@ export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
           </div>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map(p=>(
-              <div key={p.id} className={`group flex flex-col justify-between overflow-hidden rounded-[1.8rem] border text-left transition duration-500 ${active.id===p.id ? "border-white/30 bg-white/[.07]" : "border-white/10 bg-white/[.018] hover:-translate-y-1 hover:border-white/20"}`}>
-                <div onClick={()=>setActive(p)} className="cursor-pointer">
+              <div key={p.id} className={`group flex flex-col justify-between overflow-hidden rounded-[1.8rem] border text-left transition duration-500 ${active.id===p.id ? "border-white bg-white/[.08] shadow-[0_0_35px_rgba(255,255,255,0.1)] ring-1 ring-white/40" : "border-white/10 bg-white/[.018] hover:-translate-y-1 hover:border-white/20"}`}>
+                <div onClick={()=>handleSelect(p)} className="cursor-pointer">
                   <ProductVisual product={p}/>
                   <div className="p-5">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <span className="label-mono text-[7px] text-white/30">{p.family}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="label-mono text-[7px] text-white/30">{p.family}</span>
+                          {active.id === p.id && (
+                            <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 label-mono text-[6.5px] font-semibold text-emerald-300 border border-emerald-400/40">
+                              ● ACTIF
+                            </span>
+                          )}
+                        </div>
                         <h3 className="display-serif mt-1 text-2xl">{p.name}</h3>
                         <p className="mt-1 text-xs text-white/38">{p.use}</p>
                       </div>
@@ -236,8 +251,8 @@ export function RoboticsShowcase({ compact=false }: { compact?: boolean }) {
                   </div>
                 </div>
                 <div className="border-t border-white/10 px-5 py-3 flex items-center justify-between bg-black/40">
-                  <button type="button" onClick={()=>setActive(p)} className="label-mono text-[7px] text-white/60 hover:text-white">
-                    {tx("Voir les détails")}
+                  <button type="button" onClick={()=>handleSelect(p)} className="label-mono text-[7px] text-white/70 hover:text-white transition flex items-center gap-1.5">
+                    {tx("Voir les détails")} <ArrowRight className="h-3 w-3 text-white"/>
                   </button>
                   <a href={p.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 label-mono text-[7.5px] font-semibold text-emerald-400 hover:text-emerald-300">
                     {tx("Fiche officielle site")} <ExternalLink className="h-3 w-3"/>

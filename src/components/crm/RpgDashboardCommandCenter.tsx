@@ -100,20 +100,16 @@ export function RpgDashboardCommandCenter() {
   const [xpToast, setXpToast] = useState<string | null>(null);
 
   // Supabase-compatible 'prospects' & 'audits' state
-  const [prospects, setProspects] = useState<Prospect[]>(
-    INITIAL_SUPABASE_PROSPECTS,
-  );
+  const [prospects, setProspects] = useState<Prospect[]>(INITIAL_SUPABASE_PROSPECTS);
   const [audits, setAudits] = useState<Audit[]>(INITIAL_SUPABASE_AUDITS);
-  const [draggedProspectId, setDraggedProspectId] = useState<string | null>(
-    null,
-  );
+  const [draggedProspectId, setDraggedProspectId] = useState<string | null>(null);
 
   // Modals & selected prospect for Lovable Prompt / Quote Studio
-  const [lovableModalProspect, setLovableModalProspect] =
-    useState<Prospect | null>(null);
+  const [lovableModalProspect, setLovableModalProspect] = useState<Prospect | null>(null);
   const [copiedLovable, setCopiedLovable] = useState(false);
-  const [quoteTargetProspect, setQuoteTargetProspect] =
-    useState<Prospect | null>(INITIAL_SUPABASE_PROSPECTS[0]);
+  const [quoteTargetProspect, setQuoteTargetProspect] = useState<Prospect | null>(
+    INITIAL_SUPABASE_PROSPECTS[0],
+  );
 
   // New prospect quick creation form (100% compatible with Supabase 'prospects' schema)
   const [showAddLead, setShowAddLead] = useState(false);
@@ -137,11 +133,8 @@ export function RpgDashboardCommandCenter() {
           .order("created_at", { ascending: false });
         if (pData && pData.length > 0) {
           setProspects((prev) => {
-            const existingIds = new Set(pData.map((d: any) => d.id));
-            return [
-              ...(pData as Prospect[]),
-              ...prev.filter((p) => !existingIds.has(p.id)),
-            ];
+            const existingIds = new Set((pData as Array<{ id: string }>).map((d) => d.id));
+            return [...(pData as Prospect[]), ...prev.filter((p) => !existingIds.has(p.id))];
           });
         }
         const { data: aData } = await supabase
@@ -151,7 +144,7 @@ export function RpgDashboardCommandCenter() {
         if (aData && aData.length > 0) {
           setAudits((prev) => [
             ...(aData as Audit[]),
-            ...prev.filter((a) => !aData.some((d: any) => d.id === a.id)),
+            ...prev.filter((a) => !(aData as Array<{ id: string }>).some((d) => d.id === a.id)),
           ]);
         }
       } catch {
@@ -208,19 +201,14 @@ export function RpgDashboardCommandCenter() {
     setTimeout(() => setXpToast(null), 4200);
   };
 
-  const updateProspectStatus = async (
-    prospectId: string,
-    newStatus: ProspectStatus,
-  ) => {
+  const updateProspectStatus = async (prospectId: string, newStatus: ProspectStatus) => {
     const target = prospects.find((p) => p.id === prospectId);
     if (!target || target.status === newStatus) return;
 
     const updatedTimestamp = new Date().toISOString();
     setProspects((prev) =>
       prev.map((p) =>
-        p.id === prospectId
-          ? { ...p, status: newStatus, updated_at: updatedTimestamp }
-          : p,
+        p.id === prospectId ? { ...p, status: newStatus, updated_at: updatedTimestamp } : p,
       ),
     );
 
@@ -253,6 +241,11 @@ export function RpgDashboardCommandCenter() {
       contact_name: newLeadForm.contact_name.trim() || "Dirigeant",
       phone: newLeadForm.phone.trim() || "+33 6 00 00 00 00",
       website_url: newLeadForm.website_url.trim() || "https://exemple.fr",
+      industry: null,
+      country: null,
+      city: null,
+      contact_email: null,
+      latest_score: null,
       status: "new",
       notes: "Lead créé dans le CRM RPG XR Agency.",
       created_at: now,
@@ -284,17 +277,9 @@ export function RpgDashboardCommandCenter() {
     audits.find((a) => a.prospect_id === prospectId);
 
   // Direction KPIs
-  const inactiveLeads = prospects.filter((p) =>
-    isLeadInactive48h(p.updated_at, p.status),
-  );
-  const totalMonthlyCa = XR_ADVISORS.reduce(
-    (sum, a) => sum + a.monthlyRevenueGenerated,
-    0,
-  );
-  const totalRecurringMrr = XR_ADVISORS.reduce(
-    (sum, a) => sum + a.mrrManaged,
-    0,
-  );
+  const inactiveLeads = prospects.filter((p) => isLeadInactive48h(p.updated_at, p.status));
+  const totalMonthlyCa = XR_ADVISORS.reduce((sum, a) => sum + a.monthlyRevenueGenerated, 0);
+  const totalRecurringMrr = XR_ADVISORS.reduce((sum, a) => sum + a.mrrManaged, 0);
 
   const sortedLeaderboard = [...XR_ADVISORS].sort(
     (a, b) => (advisorXpMap[b.id] ?? b.xp) - (advisorXpMap[a.id] ?? a.xp),
@@ -335,9 +320,7 @@ export function RpgDashboardCommandCenter() {
 
             {/* Active Closer Selector */}
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400 hidden sm:inline">
-                Closer actif :
-              </span>
+              <span className="text-xs text-slate-400 hidden sm:inline">Closer actif :</span>
               <select
                 value={activeAdvisorId}
                 onChange={(e) => setActiveAdvisorId(e.target.value)}
@@ -360,15 +343,10 @@ export function RpgDashboardCommandCenter() {
               className="flex items-center gap-3 px-3.5 py-2 rounded-xl bg-[#0F172A] border border-white/10"
               data-testid="rpg-rank-badge"
             >
-              <Crown
-                className="w-5 h-5 shrink-0"
-                style={{ color: currentRank.badgeColor }}
-              />
+              <Crown className="w-5 h-5 shrink-0" style={{ color: currentRank.badgeColor }} />
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-white">
-                    {currentRank.title}
-                  </span>
+                  <span className="text-xs font-bold text-white">{currentRank.title}</span>
                   <span
                     className="text-xs font-mono font-bold text-[#D4AF37]"
                     data-testid="rpg-current-xp"
@@ -483,10 +461,8 @@ export function RpgDashboardCommandCenter() {
                 </div>
                 <p className="text-xs text-slate-200 mt-0.5">
                   Les prospects suivants n'ont reçu aucune action depuis plus de 48h :{" "}
-                  <strong>
-                    {inactiveLeads.map((l) => l.business_name).join(" • ")}
-                  </strong>
-                  . Déclenchez une relance WhatsApp en 1 clic immédiatement.
+                  <strong>{inactiveLeads.map((l) => l.business_name).join(" • ")}</strong>.
+                  Déclenchez une relance WhatsApp en 1 clic immédiatement.
                 </p>
               </div>
             </div>
@@ -497,7 +473,7 @@ export function RpgDashboardCommandCenter() {
                 const waUrl = buildOneClickWhatsAppRelance(
                   lead,
                   currentAdvisor.firstName,
-                  audit?.overall_score,
+                  audit?.total_score ?? undefined,
                 );
                 return (
                   <a
@@ -509,7 +485,7 @@ export function RpgDashboardCommandCenter() {
                     className="px-3 py-2 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-bold text-xs flex items-center gap-1.5 transition"
                   >
                     <MessageSquare className="w-3.5 h-3.5" />
-                    Relancer {lead.business_name.slice(0, 18)}…
+                    Relancer {(lead.business_name ?? "Entreprise").slice(0, 18)}…
                   </a>
                 );
               })}
@@ -601,9 +577,7 @@ export function RpgDashboardCommandCenter() {
                 type="text"
                 required
                 value={newLeadForm.business_name}
-                onChange={(e) =>
-                  setNewLeadForm({ ...newLeadForm, business_name: e.target.value })
-                }
+                onChange={(e) => setNewLeadForm({ ...newLeadForm, business_name: e.target.value })}
                 placeholder="Ex: Clinique Champs-Élysées"
                 className="w-full px-3 py-2 rounded-xl bg-[#080B10] border border-white/15 text-xs text-white"
               />
@@ -615,37 +589,27 @@ export function RpgDashboardCommandCenter() {
               <input
                 type="text"
                 value={newLeadForm.contact_name}
-                onChange={(e) =>
-                  setNewLeadForm({ ...newLeadForm, contact_name: e.target.value })
-                }
+                onChange={(e) => setNewLeadForm({ ...newLeadForm, contact_name: e.target.value })}
                 placeholder="Ex: Dr. Marc Lévy"
                 className="w-full px-3 py-2 rounded-xl bg-[#080B10] border border-white/15 text-xs text-white"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-mono text-slate-400 mb-1">
-                phone
-              </label>
+              <label className="block text-[11px] font-mono text-slate-400 mb-1">phone</label>
               <input
                 type="text"
                 value={newLeadForm.phone}
-                onChange={(e) =>
-                  setNewLeadForm({ ...newLeadForm, phone: e.target.value })
-                }
+                onChange={(e) => setNewLeadForm({ ...newLeadForm, phone: e.target.value })}
                 placeholder="+33 6 12 34 56 78"
                 className="w-full px-3 py-2 rounded-xl bg-[#080B10] border border-white/15 text-xs text-white"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-mono text-slate-400 mb-1">
-                website_url
-              </label>
+              <label className="block text-[11px] font-mono text-slate-400 mb-1">website_url</label>
               <input
                 type="text"
                 value={newLeadForm.website_url}
-                onChange={(e) =>
-                  setNewLeadForm({ ...newLeadForm, website_url: e.target.value })
-                }
+                onChange={(e) => setNewLeadForm({ ...newLeadForm, website_url: e.target.value })}
                 placeholder="https://..."
                 className="w-full px-3 py-2 rounded-xl bg-[#080B10] border border-white/15 text-xs text-white"
               />
@@ -656,9 +620,7 @@ export function RpgDashboardCommandCenter() {
               </label>
               <select
                 value={newLeadForm.owner_id}
-                onChange={(e) =>
-                  setNewLeadForm({ ...newLeadForm, owner_id: e.target.value })
-                }
+                onChange={(e) => setNewLeadForm({ ...newLeadForm, owner_id: e.target.value })}
                 className="w-full px-3 py-2 rounded-xl bg-[#080B10] border border-white/15 text-xs text-white"
               >
                 {XR_ADVISORS.map((a) => (
@@ -709,17 +671,13 @@ export function RpgDashboardCommandCenter() {
                           +{q.bonusXp} XP
                         </span>
                       </div>
-                      <p className="text-[11px] text-slate-400 mt-1">
-                        {q.description}
-                      </p>
+                      <p className="text-[11px] text-slate-400 mt-1">{q.description}</p>
                       <div className="mt-2 flex items-center justify-between text-[10px] font-mono">
                         <span className="text-slate-300">
                           Progression : {q.currentCount}/{q.targetCount}
                         </span>
                         {q.completed && (
-                          <span className="text-[#10B981] font-bold">
-                            COMPLÉTÉ ✓
-                          </span>
+                          <span className="text-[#10B981] font-bold">COMPLÉTÉ ✓</span>
                         )}
                       </div>
                     </div>
@@ -766,9 +724,7 @@ export function RpgDashboardCommandCenter() {
             {/* KANBAN BOARD WITH DRAG & DROP TO "SIGNÉ / GAGNÉ" */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
               {KANBAN_COLUMNS.map((col) => {
-                const colProspects = prospects.filter(
-                  (p) => p.status === col.status,
-                );
+                const colProspects = prospects.filter((p) => p.status === col.status);
                 return (
                   <div
                     key={col.status}
@@ -799,21 +755,15 @@ export function RpgDashboardCommandCenter() {
 
                     <div className="space-y-3">
                       {colProspects.map((prospect) => {
-                        const inactive48h = isLeadInactive48h(
-                          prospect.updated_at,
-                          prospect.status,
-                        );
-                        const inactiveHours = getInactiveHours(
-                          prospect.updated_at,
-                        );
+                        const inactive48h = isLeadInactive48h(prospect.updated_at, prospect.status);
+                        const inactiveHours = getInactiveHours(prospect.updated_at);
                         const ownerAdvisor =
-                          XR_ADVISORS.find((a) => a.id === prospect.owner_id) ||
-                          currentAdvisor;
+                          XR_ADVISORS.find((a) => a.id === prospect.owner_id) || currentAdvisor;
                         const audit = getLatestAuditForProspect(prospect.id);
                         const waLink = buildOneClickWhatsAppRelance(
                           prospect,
                           ownerAdvisor.firstName,
-                          audit?.overall_score,
+                          audit?.total_score ?? undefined,
                         );
 
                         return (
@@ -859,10 +809,7 @@ export function RpgDashboardCommandCenter() {
                                   rel="noopener noreferrer"
                                   className="text-[11px] font-mono text-[#D4AF37] hover:underline inline-flex items-center gap-1 mt-0.5"
                                 >
-                                  {prospect.website_url.replace(
-                                    /^https?:\/\//,
-                                    "",
-                                  )}
+                                  {prospect.website_url.replace(/^https?:\/\//, "")}
                                   <ExternalLink className="w-2.5 h-2.5" />
                                 </a>
                               )}
@@ -871,17 +818,15 @@ export function RpgDashboardCommandCenter() {
                             {/* Audit Score Pill if audited */}
                             {audit && (
                               <div className="p-2 rounded-lg bg-[#0F172A] border border-white/5 flex items-center justify-between text-[11px]">
-                                <span className="text-slate-400">
-                                  Score Audit 5 Piliers :
-                                </span>
+                                <span className="text-slate-400">Score Audit 5 Piliers :</span>
                                 <span
                                   className={`font-mono font-bold ${
-                                    audit.overall_score < 50
+                                    (audit.total_score ?? 0) < 50
                                       ? "text-rose-400"
                                       : "text-[#10B981]"
                                   }`}
                                 >
-                                  {audit.overall_score}/100
+                                  {audit.total_score ?? "—"}/100
                                 </span>
                               </div>
                             )}
@@ -893,10 +838,7 @@ export function RpgDashboardCommandCenter() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={() =>
-                                  awardXp(
-                                    "call",
-                                    `Relance WhatsApp ${prospect.business_name}`,
-                                  )
+                                  awardXp("call", `Relance WhatsApp ${prospect.business_name}`)
                                 }
                                 data-testid={`wa-relance-${prospect.id}`}
                                 className="py-1.5 px-2 rounded-lg bg-[#10B981]/15 hover:bg-[#10B981] text-[#10B981] hover:text-[#080B10] border border-[#10B981]/40 text-[10px] font-bold flex items-center justify-center gap-1 transition"
@@ -957,9 +899,7 @@ export function RpgDashboardCommandCenter() {
                               {prospect.status !== "client" && (
                                 <button
                                   type="button"
-                                  onClick={() =>
-                                    updateProspectStatus(prospect.id, "client")
-                                  }
+                                  onClick={() => updateProspectStatus(prospect.id, "client")}
                                   data-testid={`win-deal-btn-${prospect.id}`}
                                   className="px-2 py-1 rounded bg-[#10B981] text-[#080B10] font-mono font-bold text-[10px] hover:bg-[#14d496] transition"
                                   title="Passer en Signé / Gagné (Confettis Or & Émeraude + Son Triomphal + 1000 XP)"
@@ -982,12 +922,8 @@ export function RpgDashboardCommandCenter() {
         {/* TAB 2: OFFICIAL STANDARDIZED QUOTE GENERATOR */}
         {activeTab === "QUOTE_STUDIO" && (
           <OfficialQuoteGenerator
-            initialClientName={
-              quoteTargetProspect?.business_name || "Clinique Esthétique Vendôme"
-            }
-            initialContactName={
-              quoteTargetProspect?.contact_name || "Dr. Laurent Moreau"
-            }
+            initialClientName={quoteTargetProspect?.business_name || "Clinique Esthétique Vendôme"}
+            initialContactName={quoteTargetProspect?.contact_name || "Dr. Laurent Moreau"}
             initialAdvisorId={quoteTargetProspect?.owner_id || activeAdvisorId}
             onQuoteSigned={() => {
               if (quoteTargetProspect) {
@@ -1001,10 +937,7 @@ export function RpgDashboardCommandCenter() {
 
         {/* TAB 3: DIRECTION DASHBOARD (MONTHLY CA, MRR, 7-ADVISOR LEADERBOARD & ALERTS) */}
         {activeTab === "DIRECTION_BOARD" && (
-          <div
-            className="space-y-6"
-            data-testid="direction-dashboard-view"
-          >
+          <div className="space-y-6" data-testid="direction-dashboard-view">
             {/* Top Executive Financial Metrics */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="p-5 rounded-2xl bg-[#0F172A] border border-[#D4AF37]/40">
@@ -1035,9 +968,7 @@ export function RpgDashboardCommandCenter() {
                 <div className="text-xs font-mono uppercase text-slate-400">
                   Taux de Closing Global
                 </div>
-                <div className="text-3xl font-mono font-bold text-white mt-2">
-                  41.8 %
-                </div>
+                <div className="text-3xl font-mono font-bold text-white mt-2">41.8 %</div>
                 <div className="text-xs text-[#D4AF37] mt-1">
                   Délai moyen de signature : 4,2 jours
                 </div>
@@ -1088,10 +1019,7 @@ export function RpgDashboardCommandCenter() {
                       const xp = advisorXpMap[adv.id] ?? adv.xp;
                       const rank = getRankForXp(xp);
                       return (
-                        <tr
-                          key={adv.id}
-                          className="hover:bg-white/5 transition"
-                        >
+                        <tr key={adv.id} className="hover:bg-white/5 transition">
                           <td className="py-3.5 px-3 font-mono font-bold text-[#D4AF37]">
                             #{index + 1}
                           </td>
@@ -1104,18 +1032,12 @@ export function RpgDashboardCommandCenter() {
                                 style={{ filter: adv.studioFilter }}
                               />
                               <div>
-                                <div className="font-bold text-white text-sm">
-                                  {adv.firstName}
-                                </div>
-                                <div className="text-[11px] text-slate-400">
-                                  {adv.role}
-                                </div>
+                                <div className="font-bold text-white text-sm">{adv.firstName}</div>
+                                <div className="text-[11px] text-slate-400">{adv.role}</div>
                               </div>
                             </div>
                           </td>
-                          <td className="py-3.5 px-3 text-slate-300">
-                            {adv.specialtyShort}
-                          </td>
+                          <td className="py-3.5 px-3 text-slate-300">{adv.specialtyShort}</td>
                           <td className="py-3.5 px-3">
                             <span
                               className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-[#080B10] border"
@@ -1131,8 +1053,7 @@ export function RpgDashboardCommandCenter() {
                             {xp.toLocaleString("fr-FR")} XP
                           </td>
                           <td className="py-3.5 px-3 font-mono font-bold text-white">
-                            {adv.monthlyRevenueGenerated.toLocaleString("fr-FR")}{" "}
-                            €
+                            {adv.monthlyRevenueGenerated.toLocaleString("fr-FR")} €
                           </td>
                           <td className="py-3.5 px-3 font-mono font-bold text-[#10B981]">
                             {adv.mrrManaged > 0
@@ -1158,7 +1079,8 @@ export function RpgDashboardCommandCenter() {
                   RÉTROCOMPATIBILITÉ ABSOLUE SUPABASE
                 </span>
                 <h3 className="text-lg font-bold text-white mt-0.5">
-                  Tables `prospects` (`owner_id`, `website_url`, `business_name`, `contact_name`, `phone`, `status`) & `audits`
+                  Tables `prospects` (`owner_id`, `website_url`, `business_name`, `contact_name`,
+                  `phone`, `status`) & `audits`
                 </h3>
               </div>
               <Link
@@ -1185,14 +1107,10 @@ export function RpgDashboardCommandCenter() {
                   {prospects.map((p) => (
                     <tr key={p.id}>
                       <td className="py-2.5 px-3 text-[#D4AF37]">{p.owner_id}</td>
-                      <td className="py-2.5 px-3 font-bold text-white">
-                        {p.business_name}
-                      </td>
+                      <td className="py-2.5 px-3 font-bold text-white">{p.business_name}</td>
                       <td className="py-2.5 px-3">{p.contact_name}</td>
                       <td className="py-2.5 px-3">{p.phone}</td>
-                      <td className="py-2.5 px-3 text-sky-400">
-                        {p.website_url}
-                      </td>
+                      <td className="py-2.5 px-3 text-sky-400">{p.website_url}</td>
                       <td className="py-2.5 px-3">
                         <span className="px-2 py-0.5 rounded bg-white/5 text-[#10B981]">
                           {p.status}
@@ -1249,10 +1167,7 @@ export function RpgDashboardCommandCenter() {
                   );
                   navigator.clipboard?.writeText(promptText);
                   setCopiedLovable(true);
-                  awardXp(
-                    "audit",
-                    `Prompt Lovable généré (${lovableModalProspect.business_name})`,
-                  );
+                  awardXp("audit", `Prompt Lovable généré (${lovableModalProspect.business_name})`);
                   setTimeout(() => setCopiedLovable(false), 2500);
                 }}
                 data-testid="copy-lovable-prompt-btn"

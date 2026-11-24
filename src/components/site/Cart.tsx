@@ -1,20 +1,160 @@
 import { useEffect, useRef, useState } from "react";
-import { X, Trash2, MessageCircle, ShoppingBag, Check } from "lucide-react";
+import type { FormEvent } from "react";
+import { X, Trash2, MessageCircle, ShoppingBag, Check, Send, CheckCircle2 } from "lucide-react";
 import { useCart, type CartItem } from "@/hooks/useCart";
 import { CONTACT } from "@/lib/content";
 import { useLang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 const CART_COPY = {
-  fr:{emptyCount:"Aucune prestation choisie",empty:"Votre sélection est vide",choose:"Choisissez une formule dans la grille tarifaire",total:"Estimation totale",request:"Demander un devis WhatsApp",send:"Envoyer ma sélection WhatsApp",terms:"Sans engagement · Réponse en moins de 2 h",selected:"Ma sélection",add:"Ajouter à ma sélection",added:"Ajouté à ma sélection",close:"Fermer",open:"Ouvrir ma sélection",remove:"Retirer",quote:"Bonjour XR Agency, je souhaite obtenir un devis personnalisé.",intro:"Bonjour XR Agency, je suis intéressé par les services suivants :",finish:"Pouvons-nous planifier un échange ?"},
-  en:{emptyCount:"No services selected",empty:"Your selection is empty",choose:"Choose a plan from the pricing table",total:"Estimated total",request:"Request a quote on WhatsApp",send:"Send my selection on WhatsApp",terms:"No obligation · Reply within 2 hours",selected:"My selection",add:"Add to my selection",added:"Added to my selection",close:"Close",open:"Open my selection",remove:"Remove",quote:"Hello XR Agency, I'd like a personalised quote.",intro:"Hello XR Agency, I'm interested in the following services:",finish:"Can we schedule a call?"},
-  vi:{emptyCount:"Chưa chọn dịch vụ nào",empty:"Danh sách lựa chọn đang trống",choose:"Chọn gói dịch vụ trong bảng giá",total:"Tổng chi phí dự kiến",request:"Yêu cầu báo giá qua WhatsApp",send:"Gửi lựa chọn qua WhatsApp",terms:"Không ràng buộc · Phản hồi trong 2 giờ",selected:"Lựa chọn của tôi",add:"Thêm vào lựa chọn",added:"Đã thêm vào lựa chọn",close:"Đóng",open:"Mở danh sách lựa chọn",remove:"Xóa",quote:"Xin chào XR Agency, tôi muốn nhận báo giá tùy chỉnh.",intro:"Xin chào XR Agency, tôi quan tâm đến các dịch vụ sau:",finish:"Chúng ta có thể lên lịch trao đổi không?"},
-  ar:{emptyCount:"لم يتم اختيار أي خدمة",empty:"قائمة اختياراتك فارغة",choose:"اختر باقة من جدول الأسعار",total:"الإجمالي التقديري",request:"طلب عرض سعر عبر واتساب",send:"إرسال اختياراتي عبر واتساب",terms:"دون التزام · الرد خلال ساعتين",selected:"اختياراتي",add:"أضف إلى اختياراتي",added:"تمت الإضافة إلى اختياراتي",close:"إغلاق",open:"فتح اختياراتي",remove:"إزالة",quote:"مرحباً XR Agency، أود الحصول على عرض سعر مخصص.",intro:"مرحباً XR Agency، أنا مهتم بالخدمات التالية:",finish:"هل يمكننا تحديد موعد للتواصل؟"},
-  ru:{emptyCount:"Услуги не выбраны",empty:"Список выбранных услуг пуст",choose:"Выберите пакет в таблице цен",total:"Предварительная сумма",request:"Запросить смету в WhatsApp",send:"Отправить выбранные услуги в WhatsApp",terms:"Без обязательств · Ответ в течение 2 часов",selected:"Мой выбор",add:"Добавить в мой выбор",added:"Добавлено в мой выбор",close:"Закрыть",open:"Открыть мой выбор",remove:"Удалить",quote:"Здравствуйте, XR Agency! Хочу получить индивидуальную смету.",intro:"Здравствуйте, XR Agency! Меня интересуют следующие услуги:",finish:"Можем ли мы договориться о звонке?"},
+  fr: {
+    emptyCount: "Aucune prestation choisie",
+    empty: "Votre sélection est vide",
+    choose: "Ajoutez des prestations depuis nos pages services ou le configurateur.",
+    total: "Total ponctuel",
+    monthly: "Total mensuel",
+    annual: "Total annuel",
+    request: "Demander un devis WhatsApp",
+    send: "Envoyer ma sélection sur WhatsApp",
+    requestQuoteCrm: "Recevoir mon devis officiel par email",
+    clear: "Vider",
+    terms: "Tarifs de référence en EUR · Périmètre et conditions confirmés sur devis avant engagement.",
+    selected: "Ma sélection",
+    add: "Ajouter à ma sélection",
+    added: "Dans ma sélection",
+    close: "Fermer",
+    open: "Ouvrir ma sélection",
+    remove: "Retirer",
+    quote: "Bonjour XR Agency, je souhaite obtenir un devis personnalisé.",
+    intro: "Bonjour XR Agency, je suis intéressé par les services suivants :",
+    finish: "Pouvons-nous planifier un échange ?",
+    formName: "Nom / Société *",
+    formEmail: "E-mail *",
+    formPhone: "Téléphone / WhatsApp",
+    formSubmit: "Envoyer ma sélection à XR Agency",
+    formSending: "Envoi...",
+    formSuccess: "Sélection transmise ! Référence :",
+    formError: "Erreur lors de l'envoi. Essayez WhatsApp.",
+  },
+  en: {
+    emptyCount: "No services selected",
+    empty: "Your selection is empty",
+    choose: "Add services from our service pages or the 3-step configurator.",
+    total: "One-time total",
+    monthly: "Monthly total",
+    annual: "Annual total",
+    request: "Request a quote on WhatsApp",
+    send: "Send my selection on WhatsApp",
+    requestQuoteCrm: "Receive my official quote by email",
+    clear: "Clear",
+    terms: "Reference pricing in EUR · Scope and terms confirmed in writing before commitment.",
+    selected: "My selection",
+    add: "Add to my selection",
+    added: "In my selection",
+    close: "Close",
+    open: "Open my selection",
+    remove: "Remove",
+    quote: "Hello XR Agency, I'd like a personalised quote.",
+    intro: "Hello XR Agency, I'm interested in the following services:",
+    finish: "Can we schedule a call?",
+    formName: "Name / Company *",
+    formEmail: "Email *",
+    formPhone: "Phone / WhatsApp",
+    formSubmit: "Send selection to XR Agency",
+    formSending: "Sending...",
+    formSuccess: "Selection received! Reference:",
+    formError: "Could not send right now. Try WhatsApp.",
+  },
+  vi: {
+    emptyCount: "Chưa chọn dịch vụ nào",
+    empty: "Danh sách lựa chọn đang trống",
+    choose: "Thêm dịch vụ từ trang dịch vụ hoặc công cụ báo giá.",
+    total: "Tổng một lần",
+    monthly: "Tổng hàng tháng",
+    annual: "Tổng hàng năm",
+    request: "Yêu cầu báo giá qua WhatsApp",
+    send: "Gửi lựa chọn qua WhatsApp",
+    requestQuoteCrm: "Nhận báo giá chính thức qua email",
+    clear: "Xóa tất cả",
+    terms: "Giá tham chiếu EUR · Phạm vi và điều khoản xác nhận trước khi ký.",
+    selected: "Lựa chọn của tôi",
+    add: "Thêm vào lựa chọn",
+    added: "Đã chọn",
+    close: "Đóng",
+    open: "Mở danh sách lựa chọn",
+    remove: "Xóa",
+    quote: "Xin chào XR Agency, tôi muốn nhận báo giá tùy chỉnh.",
+    intro: "Xin chào XR Agency, tôi quan tâm đến các dịch vụ sau:",
+    finish: "Chúng ta có thể lên lịch trao đổi không?",
+    formName: "Tên / Công ty *",
+    formEmail: "Email *",
+    formPhone: "Điện thoại / WhatsApp",
+    formSubmit: "Gửi lựa chọn tới XR Agency",
+    formSending: "Đang gửi...",
+    formSuccess: "Đã tiếp nhận! Mã tham chiếu:",
+    formError: "Chưa thể gửi lúc này. Hãy thử WhatsApp.",
+  },
+  ar: {
+    emptyCount: "لم يتم اختيار أي خدمة",
+    empty: "قائمة اختياراتك فارغة",
+    choose: "أضف خدمات من صفحات الخدمات أو من مُهيّئ العرض.",
+    total: "الإجمالي لمرة واحدة",
+    monthly: "الإجمالي الشهري",
+    annual: "الإجمالي السنوي",
+    request: "طلب عرض سعر عبر واتساب",
+    send: "إرسال اختياراتي عبر واتساب",
+    requestQuoteCrm: "استلام عرض رسمي عبر البريد",
+    clear: "تفريغ",
+    terms: "أسعار مرجعية باليورو · يُؤكد النطاق والشروط كتابياً قبل الالتزام.",
+    selected: "اختياراتي",
+    add: "أضف إلى اختياراتي",
+    added: "في اختياراتي",
+    close: "إغلاق",
+    open: "فتح اختياراتي",
+    remove: "إزالة",
+    quote: "مرحباً XR Agency، أود الحصول على عرض سعر مخصص.",
+    intro: "مرحباً XR Agency، أنا مهتم بالخدمات التالية:",
+    finish: "هل يمكننا تحديد موعد للتواصل؟",
+    formName: "الاسم / الشركة *",
+    formEmail: "البريد الإلكتروني *",
+    formPhone: "الهاتف / واتساب",
+    formSubmit: "إرسال اختياراتي إلى XR Agency",
+    formSending: "جارٍ الإرسال...",
+    formSuccess: "تم استلام اختياراتك! المرجع:",
+    formError: "تعذر الإرسال حالياً. جرّب واتساب.",
+  },
+  ru: {
+    emptyCount: "Услуги не выбраны",
+    empty: "Список выбранных услуг пуст",
+    choose: "Добавьте услуги со страниц каталога или в конфигураторе сметы.",
+    total: "Разовая сумма",
+    monthly: "В месяц",
+    annual: "В год",
+    request: "Запросить смету в WhatsApp",
+    send: "Отправить выбор в WhatsApp",
+    requestQuoteCrm: "Получить официальную смету на email",
+    clear: "Очистить",
+    terms: "Тарифы в EUR · Финальный объём и условия подтверждаются в смете.",
+    selected: "Мой выбор",
+    add: "Добавить в мой выбор",
+    added: "В корзине",
+    close: "Закрыть",
+    open: "Открыть мой выбор",
+    remove: "Удалить",
+    quote: "Здравствуйте, XR Agency! Хочу получить индивидуальную смету.",
+    intro: "Здравствуйте, XR Agency! Меня интересуют следующие услуги:",
+    finish: "Можем ли мы договориться о звонке?",
+    formName: "Имя / Компания *",
+    formEmail: "Email *",
+    formPhone: "Телефон / WhatsApp",
+    formSubmit: "Отправить выбор в XR Agency",
+    formSending: "Отправка...",
+    formSuccess: "Заявка принята! Номер:",
+    formError: "Не удалось отправить. Попробуйте WhatsApp.",
+  },
 } as const;
 
-/* ── Animated counter for total ── */
-function useCountUpTo(target: number, duration = 400) {
+function useCountUpTo(target: number, duration = 350) {
   const [val, setVal] = useState(target);
   const prevRef = useRef(target);
   const rafRef = useRef<number>(0);
@@ -38,102 +178,174 @@ function useCountUpTo(target: number, duration = 400) {
 }
 
 export function Cart() {
-  const { items, isOpen, close, removeItem, total, count } = useCart();
+  const { items, isOpen, close, removeItem, clearCart, total, totalMonthly, totalAnnual, count } =
+    useCart();
   const { lang, price } = useLang();
   const copy = CART_COPY[lang] ?? CART_COPY.fr;
-  const animatedTotal = useCountUpTo(total, 400);
+  const isRtl = lang === "ar";
+  const animatedTotal = useCountUpTo(total, 350);
+
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [sending, setSending] = useState(false);
+  const [quoteId, setQuoteId] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const periodShort: Record<string, string> = {
     once: "",
-    month: lang === "en" ? "/mo" : lang === "vi" ? "/tháng" : lang === "ar" ? "/شهر" : lang === "ru" ? "/мес." : "/mois",
-    year: lang === "en" ? "/yr" : lang === "vi" ? "/năm" : lang === "ar" ? "/سنة" : lang === "ru" ? "/год" : "/an",
+    month:
+      lang === "en"
+        ? "/mo"
+        : lang === "vi"
+          ? "/tháng"
+          : lang === "ar"
+            ? "/شهر"
+            : lang === "ru"
+              ? "/мес."
+              : "/mois",
+    year:
+      lang === "en"
+        ? "/yr"
+        : lang === "vi"
+          ? "/năm"
+          : lang === "ar"
+            ? "/سنة"
+            : lang === "ru"
+              ? "/год"
+              : "/an",
   };
 
-  // Build WhatsApp message from cart
   const waMessage = encodeURIComponent(
     items.length === 0
       ? copy.quote
       : `${copy.intro}\n\n${items
           .map(
             (i) =>
-              `• ${i.serviceName} — ${i.planName} : ${price(i.priceEur)}${periodShort[i.period]}`,
+              `• ${i.serviceName} — ${i.planName} : ${price(i.priceEur)}${periodShort[i.period]}${i.commitment ? ` (${i.commitment})` : ""}`,
           )
-          .join("\n")}\n\n ${copy.total} : ${price(total)}\n\n ${copy.finish}`,
+          .join("\n")}\n\n${total > 0 ? `${copy.total} : ${price(total)}` : ""}${
+          totalMonthly ? `\n${copy.monthly} : ${price(totalMonthly)}${periodShort.month}` : ""
+        }${totalAnnual ? `\n${copy.annual} : ${price(totalAnnual)}${periodShort.year}` : ""}\n\n${copy.finish}`,
   );
+
+  const handleSubmitCartQuote = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || !name.trim() || items.length === 0) return;
+    setSending(true);
+    setErrorMsg(null);
+    try {
+      const res = await fetch("/api/create-checkout", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          action: "send_quote",
+          client: {
+            name: name.trim(),
+            company: name.trim(),
+            email: email.trim(),
+            whatsapp: phone.trim(),
+          },
+          summary: {
+            services: items.map((item) => ({
+              label: `${item.serviceName} — ${item.planName}`,
+              detail: item.commitment || item.periodLabel || "Prestation sélectionnée",
+              price: item.priceEur,
+              period: item.period,
+            })),
+            once: total,
+            monthly: totalMonthly,
+            annual: totalAnnual,
+          },
+        }),
+      });
+      const data = (await res.json()) as { sent?: boolean; quoteId?: string; error?: string };
+      if (!res.ok || !data.sent) throw new Error(data.error || copy.formError);
+      setQuoteId(data.quoteId || "XR");
+    } catch (err) {
+      setErrorMsg(err instanceof Error ? err.message : copy.formError);
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <>
-      {/* ── Floating cart button ── */}
-      <button
-        id="cart-toggle-btn"
-        onClick={close}
-        aria-label={copy.open}
-        className={cn(
-          "fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-300",
-          "bg-primary text-primary-foreground hover:scale-105 hover:shadow-xl",
-          isOpen && "rotate-90 scale-95",
-        )}
-        style={{ display: "none" }} /* shown via CartFloatingButton below */
-      >
-        <ShoppingBag className="h-5 w-5" />
-      </button>
-
-      {/* ── Backdrop ── */}
+      {/* Backdrop */}
       <div
         aria-hidden
         onClick={close}
         className={cn(
-          "fixed inset-0 z-40 bg-black/20 backdrop-blur-[2px] transition-opacity duration-300",
-          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
+          "fixed inset-0 z-[80] bg-[#171613]/45 backdrop-blur-[2px] transition-opacity duration-300",
+          isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
         )}
       />
 
-      {/* ── Cart Panel ── */}
+      {/* Editorial Drawer */}
       <div
         id="cart-panel"
         role="dialog"
+        dir={isRtl ? "rtl" : "ltr"}
         aria-label={copy.selected}
         aria-modal="true"
         className={cn(
-          "fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-card shadow-2xl transition-transform duration-350 ease-out",
-          "border-l border-border/60",
-          isOpen ? "translate-x-0" : "translate-x-full",
+          "fixed top-0 z-[90] flex h-full w-full max-w-md flex-col border-[#171613]/12 bg-[#F7F4EE] text-[#171613] shadow-2xl transition-transform duration-300 ease-out",
+          isRtl ? "left-0 border-r" : "right-0 border-l",
+          isOpen ? "translate-x-0" : isRtl ? "-translate-x-full" : "translate-x-full",
         )}
-        style={{ transitionTimingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-border/60 px-6 py-5">
+        <div className="flex items-center justify-between border-b border-[#171613]/10 bg-white px-6 py-5">
           <div>
-            <h2 className="display-serif text-xl text-foreground">{copy.selected}</h2>
-            <p className="label-mono mt-0.5 text-xs text-muted-foreground">
+            <h2 className="font-serif text-xl font-medium text-[#171613]">{copy.selected}</h2>
+            <p className="mt-0.5 font-mono text-[11px] text-[#57534B]">
               {count === 0
                 ? copy.emptyCount
-                : `${count} ${lang === "en" ? "service(s) selected" : lang === "vi" ? "dịch vụ đã chọn" : lang === "ar" ? "خدمة محددة" : lang === "ru" ? "услуг выбрано" : `prestation${count > 1 ? "s" : ""} sélectionnée${count > 1 ? "s" : ""}`}`}
+                : `${count} ${
+                    lang === "en"
+                      ? "service(s) selected"
+                      : lang === "vi"
+                        ? "dịch vụ đã chọn"
+                        : lang === "ar"
+                          ? "خدمة محددة"
+                          : lang === "ru"
+                            ? "услуг выбрано"
+                            : `prestation${count > 1 ? "s" : ""} sélectionnée${count > 1 ? "s" : ""}`
+                  }`}
             </p>
           </div>
-          <button
-            onClick={close}
-            aria-label={copy.close}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-          >
-            <X className="h-4 w-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            {items.length > 0 && (
+              <button
+                type="button"
+                onClick={clearCart}
+                className="rounded-full border border-[#171613]/15 px-3 py-1.5 text-[11px] font-medium text-[#57534B] transition hover:border-[#171613] hover:text-[#171613]"
+              >
+                {copy.clear}
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={close}
+              aria-label={copy.close}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[#171613]/15 bg-[#FAF8F4] text-[#171613] transition hover:border-[#9E7F5A]"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
         </div>
 
         {/* Items */}
         <div className="flex-1 overflow-y-auto px-6 py-4">
           {items.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed border-border">
-                <ShoppingBag className="h-6 w-6 text-muted-foreground/40" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-dashed border-[#171613]/20 bg-white">
+                <ShoppingBag className="h-6 w-6 text-[#7D6445]" />
               </div>
               <div>
-                <p className="display-serif text-lg text-muted-foreground/60">
-                  {copy.empty}
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground/40">
-                  {copy.choose}
-                </p>
+                <p className="font-serif text-lg text-[#171613]">{copy.empty}</p>
+                <p className="mt-1 max-w-xs text-xs text-[#57534B]">{copy.choose}</p>
               </div>
             </div>
           ) : (
@@ -141,22 +353,28 @@ export function Cart() {
               {items.map((item) => (
                 <li
                   key={item.id}
-                  className="group flex items-start justify-between gap-4 rounded-2xl border border-border/60 bg-background/70 px-4 py-4 transition-all duration-200 hover:border-border"
+                  className="flex items-start justify-between gap-3 rounded-2xl border border-[#171613]/10 bg-white px-4 py-4 shadow-sm"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="label-mono text-[10px] text-muted-foreground/60">
+                    <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[#7D6445]">
                       {item.serviceName}
                     </p>
-                    <p className="display-serif mt-0.5 text-base text-foreground">{item.planName}</p>
-                    <p className="label-mono mt-1 text-xs font-semibold text-primary">
+                    <p className="mt-0.5 font-serif text-base font-medium text-[#171613]">
+                      {item.planName}
+                    </p>
+                    <p className="mt-1 font-mono text-xs font-semibold text-[#171613]">
                       {price(item.priceEur)}
                       {periodShort[item.period]}
                     </p>
+                    {item.commitment ? (
+                      <p className="mt-1 text-[11px] text-[#7D6445]">{item.commitment}</p>
+                    ) : null}
                   </div>
                   <button
+                    type="button"
                     onClick={() => removeItem(item.id)}
                     aria-label={`${copy.remove} ${item.planName}`}
-                    className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/30 opacity-0 transition-all duration-200 hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
+                    className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#171613]/10 bg-[#FAF8F4] text-[#57534B] transition hover:border-red-300 hover:bg-red-50 hover:text-red-700"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
@@ -164,38 +382,118 @@ export function Cart() {
               ))}
             </ul>
           )}
+
+          {/* Optional Direct CRM Quote Request inside Cart */}
+          {items.length > 0 && showEmailForm && (
+            <div className="mt-4 rounded-2xl border border-[#9E7F5A]/35 bg-white p-4">
+              {quoteId ? (
+                <div className="flex items-start gap-2.5 text-xs text-[#171613]">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#7D6445]" />
+                  <span>
+                    {copy.formSuccess} <strong className="font-mono">{quoteId}</strong>
+                  </span>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmitCartQuote} className="space-y-2.5">
+                  <input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder={copy.formName}
+                    className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3 py-2 text-xs text-[#171613] focus:border-[#9E7F5A] focus:outline-none"
+                  />
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder={copy.formEmail}
+                    className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3 py-2 text-xs text-[#171613] focus:border-[#9E7F5A] focus:outline-none"
+                  />
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder={copy.formPhone}
+                    className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3 py-2 text-xs text-[#171613] focus:border-[#9E7F5A] focus:outline-none"
+                  />
+                  {errorMsg && <p className="text-[11px] text-red-600">{errorMsg}</p>}
+                  <button
+                    type="submit"
+                    disabled={sending}
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[#12110E] py-2.5 text-xs font-semibold text-white transition hover:bg-[#2B2925] disabled:opacity-50"
+                  >
+                    <Send className="h-3.5 w-3.5 text-white" />
+                    {sending ? copy.formSending : copy.formSubmit}
+                  </button>
+                </form>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Footer */}
-        <div className="border-t border-border/60 px-6 py-5">
+        <div className="border-t border-[#171613]/10 bg-white px-6 py-5">
           {items.length > 0 && (
-            <div className="mb-4 flex items-baseline justify-between">
-              <span className="label-mono text-xs text-muted-foreground">{copy.total}</span>
-              <span
-                key={animatedTotal}
-                className="display-serif text-2xl text-primary animate-price-reveal"
-              >
-                {price(animatedTotal)}
-              </span>
+            <div className="mb-4 space-y-2">
+              {total > 0 ? (
+                <div className="flex items-baseline justify-between">
+                  <span className="font-mono text-xs text-[#57534B]">{copy.total}</span>
+                  <span key={animatedTotal} className="font-serif text-2xl font-semibold text-[#171613]">
+                    {price(animatedTotal)}
+                  </span>
+                </div>
+              ) : null}
+              {totalMonthly > 0 ? (
+                <div className="flex items-baseline justify-between">
+                  <span className="font-mono text-xs text-[#57534B]">{copy.monthly}</span>
+                  <span className="font-serif text-lg font-semibold text-[#7D6445]">
+                    {price(totalMonthly)}
+                    {periodShort.month}
+                  </span>
+                </div>
+              ) : null}
+              {totalAnnual > 0 ? (
+                <div className="flex items-baseline justify-between">
+                  <span className="font-mono text-xs text-[#57534B]">{copy.annual}</span>
+                  <span className="font-serif text-lg font-semibold text-[#171613]">
+                    {price(totalAnnual)}
+                    {periodShort.year}
+                  </span>
+                </div>
+              ) : null}
             </div>
           )}
 
-          <a
-            href={`${CONTACT.whatsapp}?text=${waMessage}`}
-            target="_blank"
-            rel="noreferrer"
-            className={cn(
-              "label-mono flex w-full items-center justify-center gap-2.5 rounded-full py-3.5 text-xs font-semibold transition-all duration-300",
-              "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5",
+          <div className="space-y-2.5">
+            {items.length > 0 && !showEmailForm && (
+              <button
+                type="button"
+                onClick={() => {
+                  setShowEmailForm(true);
+                  setQuoteId(null);
+                  setErrorMsg(null);
+                }}
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-[#12110E] py-3 text-xs font-semibold text-white transition hover:bg-[#2B2925]"
+              >
+                <Send className="h-3.5 w-3.5 text-white" />
+                {copy.requestQuoteCrm}
+              </button>
             )}
-          >
-            <MessageCircle className="h-4 w-4 text-emerald-400" />
-            {items.length === 0 ? copy.request : copy.send}
-          </a>
 
-          <p className="label-mono mt-3 text-center text-[10px] text-muted-foreground/50">
-            {copy.terms}
-          </p>
+            <a
+              href={`${CONTACT.whatsapp}?text=${waMessage}`}
+              target="_blank"
+              rel="noreferrer"
+              className="flex w-full items-center justify-center gap-2 rounded-full border border-[#171613]/20 bg-[#FAF8F4] py-3 text-xs font-semibold text-[#171613] transition hover:border-[#9E7F5A] hover:bg-white"
+            >
+              <MessageCircle className="h-4 w-4 text-[#7D6445]" />
+              {items.length === 0 ? copy.request : copy.send}
+            </a>
+          </div>
+
+          <p className="mt-3 text-center text-[10px] leading-relaxed text-[#57534B]">{copy.terms}</p>
         </div>
       </div>
     </>
@@ -221,21 +519,22 @@ export function CartFloatingButton() {
 
   return (
     <button
+      type="button"
       onClick={toggle}
       aria-label={`${copy.selected} (${count})`}
       className={cn(
         "relative flex h-9 w-9 items-center justify-center rounded-full border transition-all duration-200",
         isOpen
-          ? "border-primary bg-primary text-primary-foreground"
-          : "border-border bg-card text-foreground hover:border-primary hover:text-primary",
+          ? "border-[#171613] bg-[#171613] text-[#F7F4EE]"
+          : "border-[#171613]/15 bg-white text-[#171613] hover:border-[#9E7F5A]",
       )}
     >
       <ShoppingBag className="h-4 w-4" />
       {count > 0 && (
         <span
           className={cn(
-            "absolute -right-1.5 -top-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-primary-foreground transition-all duration-200",
-            justAdded && "animate-cart-pop",
+            "absolute -right-1.5 -top-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-[#9E7F5A] text-[9px] font-bold text-white transition-all duration-200",
+            justAdded && "scale-110",
           )}
         >
           {count > 9 ? "9+" : count}
@@ -268,26 +567,26 @@ export function AddToCartBtn({ item, popular, className }: AddToCartBtnProps) {
 
   return (
     <button
+      type="button"
       onClick={handleAdd}
       className={cn(
-        "label-mono flex w-full items-center justify-center gap-2 rounded-full py-3 text-xs font-semibold uppercase tracking-wider transition-all min-h-[44px]",
-        "duration-200 active:scale-95",
+        "flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-xs font-semibold transition-all duration-200 active:scale-[0.98]",
         isInCart || added
-          ? "bg-jade/20 border border-jade/40 text-jade"
+          ? "border border-[#12110E] bg-[#12110E] text-white"
           : popular
-            ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:-translate-y-0.5"
-            : "border border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground hover:-translate-y-0.5",
+            ? "bg-[#12110E] text-white shadow-md hover:bg-[#2B2925] hover:scale-[1.01]"
+            : "border border-[#D5D5CF] bg-white text-[#12110E] hover:border-[#12110E] hover:bg-[#F5F5F0]",
         className,
       )}
     >
       {added || isInCart ? (
         <>
-          <Check className="h-3.5 w-3.5" />
+          <Check className="h-4 w-4" />
           {copy.added}
         </>
       ) : (
         <>
-          <ShoppingBag className="h-3.5 w-3.5" />
+          <ShoppingBag className="h-4 w-4" />
           {copy.add}
         </>
       )}

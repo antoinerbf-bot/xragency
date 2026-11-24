@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "@tanstack/react-router";
 import { MessageCircle, X } from "lucide-react";
 import { useLang, type Lang } from "@/lib/i18n";
 import { CONTACT } from "@/lib/content";
@@ -46,12 +47,16 @@ const WA_MESSAGES: Record<Lang, string> = {
 
 export function WhatsAppWidget() {
   const { lang } = useLang();
+  const location = useLocation();
   const currentLang = (lang in NOTIFICATIONS ? lang : "fr") as Lang;
   const copy = NOTIFICATIONS[currentLang];
 
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [altMessage, setAltMessage] = useState(false);
+
+  const isInternalApp =
+    location.pathname.startsWith("/crm") || location.pathname.startsWith("/dashboard");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -72,83 +77,73 @@ export function WhatsAppWidget() {
     return () => clearInterval(interval);
   }, [visible, dismissed]);
 
-  if (!visible || dismissed) return null;
+  if (isInternalApp || !visible || dismissed) return null;
 
   const waPrefill = encodeURIComponent(WA_MESSAGES[currentLang] ?? WA_MESSAGES.fr);
   const waUrl = `${CONTACT.whatsapp}?text=${waPrefill}`;
 
   return (
     <aside
-      aria-label="Assistant à votre service - WhatsApp"
-      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 transition-all duration-500 ease-out rtl:right-auto rtl:left-6 animate-in fade-in slide-in-from-bottom-3"
+      aria-label="WhatsApp XR Agency"
+      className="fixed bottom-4 right-4 z-40 flex items-center gap-1.5 transition-all duration-300 ease-out rtl:right-auto rtl:left-4"
     >
-      {/* Dynamic Floating Charming Notification Pill */}
       <a
         href={waUrl}
         target="_blank"
         rel="noreferrer"
-        className="group relative flex items-center gap-2.5 rounded-full border border-white/20 bg-[#090b10]/95 py-1.5 pl-2 pr-3.5 shadow-[0_12px_32px_rgba(0,0,0,0.65)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/60 hover:bg-[#111622] hover:shadow-[0_16px_40px_rgba(16,185,129,0.25)]"
+        className="group relative flex items-center gap-2 rounded-full border border-[#E5E5E0] bg-white p-2 sm:py-2 sm:pl-2.5 sm:pr-4 text-[#12110E] shadow-[0_14px_34px_rgba(18,17,14,0.12)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-[#12110E] hover:bg-[#FAF9F5]"
         aria-label={`${copy.title} · ${copy.role}`}
         title={`${copy.title} · ${copy.role}`}
       >
-        {/* Subtle breathing glow */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute -inset-0.5 rounded-full bg-emerald-500/10 blur-sm opacity-50 group-hover:opacity-100 transition duration-500"
-        />
-
-        {/* Alexandre bespoke avatar badge */}
-        <div className="relative flex h-7 w-7 items-center justify-center rounded-full border border-white/25 bg-gradient-to-br from-[#1e2533] to-[#0c0f16] text-white shrink-0">
-          <span className="font-serif text-[10px] font-bold tracking-tight">AX</span>
-          <span className="absolute -bottom-0.5 -right-0.5 flex h-2.5 w-2.5 items-center justify-center rounded-full border border-black bg-emerald-500">
-            <span className="h-1 w-1 rounded-full bg-white animate-ping" />
+        <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#E5E5E0] bg-[#FAF9F5] text-[#12110E]">
+          <span className="font-serif text-[11px] font-semibold tracking-tight text-[#12110E]">
+            XR
           </span>
+          <span
+            aria-hidden
+            className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-500"
+          />
         </div>
 
-        {/* Dynamic Charming Text Transition */}
-        <div className="flex flex-col text-left overflow-hidden min-w-[130px]">
+        <div className="hidden sm:flex min-w-[132px] flex-col overflow-hidden text-start">
           {!altMessage ? (
-            <div className="animate-in fade-in slide-in-from-bottom-1 duration-300">
+            <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-[11px] font-bold tracking-tight text-white group-hover:text-emerald-300 transition">
+                <span className="text-[11px] font-semibold tracking-tight text-[#12110E]">
                   {copy.title}
                 </span>
-                <span className="text-[9px] text-white/35">·</span>
-                <span className="text-[10px] text-emerald-400 font-medium">WhatsApp</span>
+                <span className="text-[9px] text-[#706A61]">·</span>
+                <span className="text-[10px] font-semibold text-emerald-600">WhatsApp</span>
               </div>
-              <span className="label-mono text-[7px] text-white/65 -mt-0.5 tracking-wider block truncate">
+              <span className="block truncate font-mono text-[9px] tracking-wide text-[#706A61]">
                 {copy.role}
               </span>
             </div>
           ) : (
-            <div className="animate-in fade-in slide-in-from-top-1 duration-300">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[11px] font-bold tracking-tight text-emerald-300">
-                  {copy.prompt}
-                </span>
-              </div>
-              <span className="label-mono text-[7px] text-emerald-400/80 -mt-0.5 tracking-wider block truncate">
+            <div>
+              <span className="block text-[11px] font-semibold tracking-tight text-[#12110E]">
+                {copy.prompt}
+              </span>
+              <span className="block truncate font-mono text-[9px] tracking-wide text-[#706A61]">
                 {copy.subprompt}
               </span>
             </div>
           )}
         </div>
 
-        {/* Official WhatsApp Icon Badge with micro-bounce on hover */}
-        <div className="ml-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 transition-transform group-hover:scale-115">
-          <MessageCircle className="h-3.5 w-3.5 fill-emerald-500/20" />
+        <div className="ms-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 text-emerald-600 transition-transform group-hover:scale-105">
+          <MessageCircle className="h-3.5 w-3.5" />
         </div>
       </a>
 
-      {/* Discrete close button */}
       <button
         type="button"
         onClick={() => setDismissed(true)}
         title="Masquer"
-        aria-label="Fermer la notification"
-        className="flex h-6 w-6 items-center justify-center rounded-full border border-white/10 bg-[#090b10]/85 text-white/40 hover:bg-white/20 hover:text-white transition shadow-sm backdrop-blur-md"
+        aria-label="Fermer le raccourci WhatsApp"
+        className="flex h-7 w-7 items-center justify-center rounded-full border border-[#171613]/15 bg-[#F7F4EE]/95 text-[#57534B] shadow-sm backdrop-blur-md transition hover:border-[#171613]/30 hover:text-[#171613]"
       >
-        <X className="h-3 w-3" />
+        <X className="h-3.5 w-3.5" />
       </button>
     </aside>
   );

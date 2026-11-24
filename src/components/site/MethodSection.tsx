@@ -1,5 +1,16 @@
 import { useState } from "react";
-import { ArrowRight, CheckCircle2, Compass, FileCheck, Layers, Rocket, ShieldCheck, Sparkles, Clock, Target } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Compass,
+  FileCheck,
+  Layers,
+  Rocket,
+  ShieldCheck,
+  Sparkles,
+  Clock,
+  Target,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLang } from "@/lib/i18n";
 
@@ -62,7 +73,7 @@ const STEPS: Step[] = [
     subtitle: "Direction artistique haute fidélité & code sur-mesure",
     icon: Layers,
     duration: "5 à 7 jours ouvrés (Vitrine)",
-    kpi: "Lighthouse 95+ garanti",
+    kpi: "Performance mesurée et optimisée",
     deliverables: [
       "Design d'exception adapté à votre identité de marque",
       "Développement Next-Gen (React 19 / TanStack) ultra-rapide",
@@ -72,7 +83,7 @@ const STEPS: Step[] = [
     summary:
       "Notre studio conçoit une expérience sur-mesure, élégante et fluide. Vous suivez l'avancement sur une URL de prévisualisation dédiée et validez chaque étape clé.",
     details:
-      "Nous combinons une direction artistique d'inspiration studio de luxe avec une rigueur d'ingénierie moderne : code propre, zéro template générique, micro-animations discrètes et vitesse de chargement instantanée.",
+      "Nous combinons une direction artistique d'inspiration studio de luxe avec une rigueur d'ingénierie moderne : code propre, zéro template générique, micro-animations discrètes et vitesse de chargement optimisée et mesurée.",
   },
   {
     num: "04",
@@ -143,7 +154,7 @@ export function MethodSection() {
                   "relative flex flex-col text-left p-5 sm:p-6 rounded-2xl border transition-all duration-300 backdrop-blur-xl group",
                   isActive
                     ? "border-[#d4af37] bg-white/[0.06] shadow-[0_0_35px_rgba(212,175,55,0.18)]"
-                    : "border-white/[0.08] bg-[#080a10]/60 hover:border-white/20 hover:bg-white/[0.03]"
+                    : "border-white/[0.08] bg-[#080a10]/60 hover:border-white/20 hover:bg-white/[0.03]",
                 )}
               >
                 {/* Active Indicator Top Line */}
@@ -155,7 +166,7 @@ export function MethodSection() {
                   <span
                     className={cn(
                       "font-mono text-xs font-bold tracking-widest",
-                      isActive ? "text-[#d4af37]" : "text-[#64748b] group-hover:text-[#94a3b8]"
+                      isActive ? "text-[#d4af37]" : "text-[#64748b] group-hover:text-[#94a3b8]",
                     )}
                   >
                     ÉTAPE {step.num}
@@ -172,7 +183,7 @@ export function MethodSection() {
                       "h-9 w-9 rounded-xl flex items-center justify-center border transition-all",
                       isActive
                         ? "border-[#d4af37]/60 bg-[#d4af37]/20 text-[#d4af37]"
-                        : "border-white/10 bg-white/5 text-[#94a3b8] group-hover:text-white"
+                        : "border-white/10 bg-white/5 text-[#94a3b8] group-hover:text-white",
                     )}
                   >
                     <Icon className="h-4 w-4" />
@@ -180,7 +191,7 @@ export function MethodSection() {
                   <h3
                     className={cn(
                       "text-sm sm:text-base font-bold tracking-tight transition-colors",
-                      isActive ? "text-white" : "text-[#cbd5e1] group-hover:text-white"
+                      isActive ? "text-white" : "text-[#cbd5e1] group-hover:text-white",
                     )}
                   >
                     {step.title}
@@ -212,9 +223,7 @@ export function MethodSection() {
                 {activeStep.summary}
               </p>
 
-              <p className="text-sm text-[#94a3b8] leading-relaxed">
-                {activeStep.details}
-              </p>
+              <p className="text-sm text-[#94a3b8] leading-relaxed">{activeStep.details}</p>
 
               {/* Actions */}
               <div className="pt-4 flex flex-wrap items-center gap-4">
@@ -251,7 +260,10 @@ export function MethodSection() {
 
               <ul className="space-y-3.5">
                 {activeStep.deliverables.map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-[#cbd5e1] leading-snug">
+                  <li
+                    key={i}
+                    className="flex items-start gap-3 text-sm text-[#cbd5e1] leading-snug"
+                  >
                     <CheckCircle2 className="h-4 w-4 text-[#d4af37] shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>

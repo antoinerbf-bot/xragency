@@ -34,11 +34,11 @@ export interface CatalogItem {
 
 export const XR_OFFICIAL_CATALOG: CatalogItem[] = [
   {
-    id: "cat-maps-top3-guaranteed",
+    id: "cat-maps-local-visibility",
     category: "MAPS_NFC",
-    title: "Offre Google Maps Top 3 Garanti 1 An (Ou Remboursé)",
+    title: "Optimisation & visibilité locale Google Maps",
     description:
-      "Garantie contractuelle d'apparition dans le Top 3 Google Maps 24h/24 et 7j/7 pendant 1 an. Optimisation GBP complète, géocodage et citations NAP.",
+      "Audit du profil Google Business, optimisation des informations, catégories, services et suivi des indicateurs locaux. Aucun classement n’est garanti.",
     unitPriceHt: 999,
     billing: "ONE_SHOT",
     advisorId: "martin",
@@ -146,10 +146,10 @@ export const XR_OFFICIAL_CATALOG: CatalogItem[] = [
   {
     id: "cat-social-growth",
     category: "SOCIAL",
-    title: "Direction Social Media & Campagnes Meta Ads Haute Conversion",
+    title: "Gestion Social Media — Croissance Active",
     description:
-      "Production Reels/Carrousels, retargeting Meta Pixel et pilotage du coût par acquisition.",
-    unitPriceHt: 890,
+      "Calendrier éditorial, création et rédaction de contenus, 20 publications mensuelles, diffusion sur les réseaux prévus au périmètre et reporting mensuel. Publicité payante non incluse.",
+    unitPriceHt: 599,
     billing: "MONTHLY",
     advisorId: "edgar",
   },
@@ -196,9 +196,7 @@ export function OfficialQuoteGenerator({
   const sigCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [hasDrawnSignature, setHasDrawnSignature] = useState(false);
-  const [signatoryTitle, setSignatoryTitle] = useState(
-    "Dr. Laurent Moreau — Bon pour accord",
-  );
+  const [signatoryTitle, setSignatoryTitle] = useState("Dr. Laurent Moreau — Bon pour accord");
   const [isSignedOnline, setIsSignedOnline] = useState(false);
 
   useEffect(() => {
@@ -210,17 +208,14 @@ export function OfficialQuoteGenerator({
     if (initialAdvisorId) setAdvisorId(initialAdvisorId);
   }, [initialClientName, initialContactName, initialAdvisorId]);
 
-  const currentAdvisor: XRAdvisor =
-    XR_ADVISORS.find((a) => a.id === advisorId) || XR_ADVISORS[1];
+  const currentAdvisor: XRAdvisor = XR_ADVISORS.find((a) => a.id === advisorId) || XR_ADVISORS[1];
 
   const addCatalogItem = (item: CatalogItem) => {
     playXpChime();
     setLines((prev) => {
       const existing = prev.find((l) => l.item.id === item.id);
       if (existing) {
-        return prev.map((l) =>
-          l.item.id === item.id ? { ...l, quantity: l.quantity + 1 } : l,
-        );
+        return prev.map((l) => (l.item.id === item.id ? { ...l, quantity: l.quantity + 1 } : l));
       }
       return [...prev, { item, quantity: 1 }];
     });
@@ -231,9 +226,7 @@ export function OfficialQuoteGenerator({
       setLines((prev) => prev.filter((l) => l.item.id !== id));
       return;
     }
-    setLines((prev) =>
-      prev.map((l) => (l.item.id === id ? { ...l, quantity: qty } : l)),
-    );
+    setLines((prev) => prev.map((l) => (l.item.id === id ? { ...l, quantity: qty } : l)));
   };
 
   const oneShotTotalHt = lines
@@ -251,19 +244,15 @@ export function OfficialQuoteGenerator({
 
   // Signature canvas handlers
   const startDraw = (
-    e:
-      | React.MouseEvent<HTMLCanvasElement>
-      | React.TouchEvent<HTMLCanvasElement>,
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>,
   ) => {
     const canvas = sigCanvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const rect = canvas.getBoundingClientRect();
-    const clientX =
-      "touches" in e ? e.touches[0].clientX : e.nativeEvent.clientX;
-    const clientY =
-      "touches" in e ? e.touches[0].clientY : e.nativeEvent.clientY;
+    const clientX = "touches" in e ? e.touches[0].clientX : e.nativeEvent.clientX;
+    const clientY = "touches" in e ? e.touches[0].clientY : e.nativeEvent.clientY;
     ctx.strokeStyle = "#D4AF37";
     ctx.lineWidth = 2.4;
     ctx.lineCap = "round";
@@ -274,9 +263,7 @@ export function OfficialQuoteGenerator({
   };
 
   const moveDraw = (
-    e:
-      | React.MouseEvent<HTMLCanvasElement>
-      | React.TouchEvent<HTMLCanvasElement>,
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>,
   ) => {
     if (!isDrawing) return;
     const canvas = sigCanvasRef.current;
@@ -284,10 +271,8 @@ export function OfficialQuoteGenerator({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const rect = canvas.getBoundingClientRect();
-    const clientX =
-      "touches" in e ? e.touches[0].clientX : e.nativeEvent.clientX;
-    const clientY =
-      "touches" in e ? e.touches[0].clientY : e.nativeEvent.clientY;
+    const clientX = "touches" in e ? e.touches[0].clientX : e.nativeEvent.clientX;
+    const clientY = "touches" in e ? e.touches[0].clientY : e.nativeEvent.clientY;
     ctx.lineTo(clientX - rect.left, clientY - rect.top);
     ctx.stroke();
   };
@@ -334,11 +319,7 @@ export function OfficialQuoteGenerator({
     doc.setTextColor(248, 250, 252);
     doc.setFontSize(9);
     doc.setFont("helvetica", "normal");
-    doc.text(
-      "INGÉNIERIE DIGITALE HAUTE CONVERSION • GOOGLE MAPS • IA & ROBOTIQUE",
-      15,
-      27,
-    );
+    doc.text("INGÉNIERIE DIGITALE HAUTE CONVERSION • GOOGLE MAPS • IA & ROBOTIQUE", 15, 27);
     doc.text("https://xragencyai.com • Direction Commerciale", 15, 33);
 
     doc.setTextColor(212, 175, 55);
@@ -347,12 +328,9 @@ export function OfficialQuoteGenerator({
     doc.text(`DEVIS OFFICIEL N° ${quoteNumber}`, 195, 20, { align: "right" });
     doc.setTextColor(200, 208, 220);
     doc.setFontSize(9);
-    doc.text(
-      `Date d'émission : ${new Date().toLocaleDateString("fr-FR")}`,
-      195,
-      27,
-      { align: "right" },
-    );
+    doc.text(`Date d'émission : ${new Date().toLocaleDateString("fr-FR")}`, 195, 27, {
+      align: "right",
+    });
     doc.text(
       `Conseiller référent : ${currentAdvisor.firstName} (${currentAdvisor.role})`,
       195,
@@ -390,19 +368,12 @@ export function OfficialQuoteGenerator({
       doc.text(line.item.title.slice(0, 64), 18, y);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8.5);
-      doc.text(
-        line.item.billing === "MONTHLY" ? "Mensuel" : "Forfait",
-        132,
-        y,
-      );
+      doc.text(line.item.billing === "MONTHLY" ? "Mensuel" : "Forfait", 132, y);
       doc.text(String(line.quantity), 158, y);
       doc.setFont("helvetica", "bold");
-      doc.text(
-        `${(line.item.unitPriceHt * line.quantity).toLocaleString("fr-FR")} €`,
-        192,
-        y,
-        { align: "right" },
-      );
+      doc.text(`${(line.item.unitPriceHt * line.quantity).toLocaleString("fr-FR")} €`, 192, y, {
+        align: "right",
+      });
 
       y += 4.5;
       doc.setFont("helvetica", "normal");
@@ -448,12 +419,7 @@ export function OfficialQuoteGenerator({
     doc.setTextColor(16, 185, 129);
     doc.setFontSize(9.5);
     doc.text(`Acompte démarrage (${depositPercent}%) :`, 114, y + 37);
-    doc.text(
-      `${depositAmountTtc.toLocaleString("fr-FR")} € TTC`,
-      191,
-      y + 37,
-      { align: "right" },
-    );
+    doc.text(`${depositAmountTtc.toLocaleString("fr-FR")} € TTC`, 191, y + 37, { align: "right" });
 
     // Electronic Signature Block
     doc.setTextColor(15, 23, 42);
@@ -531,9 +497,7 @@ export function OfficialQuoteGenerator({
           <div className="space-y-2.5 max-h-[600px] overflow-y-auto pr-1">
             {XR_OFFICIAL_CATALOG.map((item) => {
               const isSelected = lines.some((l) => l.item.id === item.id);
-              const itemAdvisor = XR_ADVISORS.find(
-                (a) => a.id === item.advisorId,
-              );
+              const itemAdvisor = XR_ADVISORS.find((a) => a.id === item.advisorId);
               return (
                 <button
                   key={item.id}
@@ -553,19 +517,12 @@ export function OfficialQuoteGenerator({
                       </span>
                       {itemAdvisor && (
                         <span className="text-[11px] text-slate-400">
-                          Référent :{" "}
-                          <strong className="text-white">
-                            {itemAdvisor.firstName}
-                          </strong>
+                          Référent : <strong className="text-white">{itemAdvisor.firstName}</strong>
                         </span>
                       )}
                     </div>
-                    <div className="text-sm font-bold text-white">
-                      {item.title}
-                    </div>
-                    <p className="text-xs text-slate-400 line-clamp-2">
-                      {item.description}
-                    </p>
+                    <div className="text-sm font-bold text-white">{item.title}</div>
+                    <p className="text-xs text-slate-400 line-clamp-2">{item.description}</p>
                   </div>
                   <div className="shrink-0 text-right">
                     <div className="text-sm font-mono font-bold text-[#10B981]">
@@ -600,15 +557,11 @@ export function OfficialQuoteGenerator({
                     (e.currentTarget as HTMLImageElement).style.display = "none";
                   }}
                 />
-                <span className="font-serif font-bold text-[#D4AF37] text-sm">
-                  XR
-                </span>
+                <span className="font-serif font-bold text-[#D4AF37] text-sm">XR</span>
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold tracking-wider text-white">
-                    XR AGENCY
-                  </span>
+                  <span className="text-lg font-bold tracking-wider text-white">XR AGENCY</span>
                   <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/40">
                     DEVIS OFFICIEL CERTIFIÉ
                   </span>
@@ -620,9 +573,7 @@ export function OfficialQuoteGenerator({
             </div>
 
             <div className="text-left sm:text-right font-mono">
-              <div className="text-sm font-bold text-[#D4AF37]">
-                N° {quoteNumber}
-              </div>
+              <div className="text-sm font-bold text-[#D4AF37]">N° {quoteNumber}</div>
               <div className="text-xs text-slate-400">
                 Validité : 15 jours • Référent : {currentAdvisor.firstName}
               </div>
@@ -711,7 +662,8 @@ export function OfficialQuoteGenerator({
 
             {lines.length === 0 ? (
               <div className="p-6 rounded-xl bg-[#080B10] border border-white/10 text-center text-xs text-slate-400">
-                Cliquez sur une prestation dans le catalogue à gauche pour l'ajouter au devis officiel.
+                Cliquez sur une prestation dans le catalogue à gauche pour l'ajouter au devis
+                officiel.
               </div>
             ) : (
               <div className="space-y-2">
@@ -721,12 +673,8 @@ export function OfficialQuoteGenerator({
                     className="p-3 rounded-xl bg-[#080B10] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
                   >
                     <div className="space-y-0.5">
-                      <div className="text-sm font-bold text-white">
-                        {item.title}
-                      </div>
-                      <div className="text-xs text-slate-400">
-                        {item.description}
-                      </div>
+                      <div className="text-sm font-bold text-white">{item.title}</div>
+                      <div className="text-xs text-slate-400">{item.description}</div>
                     </div>
                     <div className="flex items-center gap-3 shrink-0">
                       <div className="flex items-center rounded-lg bg-[#0F172A] border border-white/15">
@@ -785,9 +733,7 @@ export function OfficialQuoteGenerator({
               </div>
             </div>
             <div className="p-3 rounded-xl bg-[#0F172A] border border-white/10">
-              <div className="text-[10px] font-mono uppercase text-slate-400">
-                Récurrent MRR HT
-              </div>
+              <div className="text-[10px] font-mono uppercase text-slate-400">Récurrent MRR HT</div>
               <div
                 className="text-lg font-mono font-bold text-[#D4AF37] mt-1"
                 data-testid="quote-monthly-ht"
@@ -875,9 +821,7 @@ export function OfficialQuoteGenerator({
                     className="flex-1 py-2.5 px-4 rounded-xl bg-[#10B981] text-[#080B10] font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-[#14d496] transition shadow-[0_0_25px_rgba(16,185,129,0.3)]"
                   >
                     <ShieldCheck className="w-4 h-4" />
-                    {isSignedOnline
-                      ? "Devis Signé & Certifié ✓"
-                      : "Signer Électroniquement"}
+                    {isSignedOnline ? "Devis Signé & Certifié ✓" : "Signer Électroniquement"}
                   </button>
 
                   <button
@@ -912,10 +856,15 @@ export function OfficialQuoteGenerator({
                 Mentions Légales & Conditions Générales de Prestation — XR Agency
               </div>
               <p>
-                • <strong>Validité & Règlement</strong> : Devis valable 15 jours. Acompte de {depositPercent}% ({depositAmountTtc.toLocaleString("fr-FR")} € TTC) payable à la signature pour blocage du sprint de production ; solde à la mise en ligne.
+                • <strong>Validité & Règlement</strong> : Devis valable 15 jours. Acompte de{" "}
+                {depositPercent}% ({depositAmountTtc.toLocaleString("fr-FR")} € TTC) payable à la
+                signature pour blocage du sprint de production ; solde à la mise en ligne.
               </p>
               <p>
-                • <strong>Propriété Intellectuelle & Conformité</strong> : Cession intégrale du code source et des actifs graphiques au règlement complet (Loi n°80-335). Pénalités de retard : 3× taux d'intérêt légal + indemnité forfaitaire de recouvrement de 40 € (Art. L441-10 du Code de commerce).
+                • <strong>Propriété Intellectuelle & Conformité</strong> : Cession intégrale du code
+                source et des actifs graphiques au règlement complet (Loi n°80-335). Pénalités de
+                retard : 3× taux d'intérêt légal + indemnité forfaitaire de recouvrement de 40 €
+                (Art. L441-10 du Code de commerce).
               </p>
             </div>
           </div>

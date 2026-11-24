@@ -5,36 +5,33 @@ import { useLang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import type { L } from "@/lib/i18n";
 
-export function Logo({ className }: { className?: string }) {
+export function Logo({ className, asLink = true }: { className?: string; asLink?: boolean }) {
   const handleHomeClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    if (window.location.pathname === "/") {
+    if (typeof window !== "undefined" && window.location.pathname === "/") {
+      event.preventDefault();
       window.history.replaceState(null, "", "/");
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      return;
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     }
-    window.location.assign("/");
   };
+
+  const content = (
+    <span className={cn("inline-flex items-center select-none leading-none", className)}>
+      <span className="font-sans text-[12px] sm:text-[13px] font-bold tracking-[0.2em] uppercase text-black">
+        XR AGENCY.
+      </span>
+    </span>
+  );
+
+  if (!asLink) return content;
 
   return (
     <Link
       to="/"
-      aria-label="XRAGENCY — Accueil"
+      aria-label="XR AGENCY. — Accueil"
       onClick={handleHomeClick}
-      className={cn(
-        "group inline-flex min-h-11 items-center tracking-[0.16em] transition-opacity duration-200 hover:opacity-80",
-        className,
-      )}
+      className="inline-flex min-h-11 items-center transition-opacity duration-200 hover:opacity-80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black"
     >
-      <span className="flex items-center gap-2.5">
-        <span className="xr-logo-lockup flex items-center font-sans text-[17px] sm:text-[19px] font-black leading-none text-current">
-          <span className="font-black transition-transform duration-200 group-hover:scale-105">X</span>
-          <span className="font-extrabold tracking-[0.16em]">RAGENCY</span>
-          <sup className="text-[9px] ml-0.5 text-[#BFA27E] font-bold">®</sup>
-        </span>
-      </span>
+      {content}
     </Link>
   );
 }
@@ -68,9 +65,44 @@ export function Parallax({ children, speed = 0.12, direction = "y", className }:
 export function FloatingBadge({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) { return <div className={cn("animate-float", className)} style={{ animationDelay: `${delay}ms` }}>{children}</div>; }
 
 export function Reveal({ children, delay = 0, className }: { children: ReactNode; delay?: number; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null); const [shown, setShown] = useState(false);
-  useEffect(() => { const el = ref.current; if (!el) return; const obs = new IntersectionObserver((entries) => { if (entries[0].isIntersecting) { setShown(true); obs.disconnect(); } }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }); obs.observe(el); return () => obs.disconnect(); }, []);
-  return <div ref={ref} className={cn("transition-none", className)} style={shown ? { animation: `ember-rise 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}ms both` } : { opacity: 0 }}>{children}</div>;
+  const ref = useRef<HTMLDivElement>(null);
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setShown(true);
+      return;
+    }
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setShown(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.01, rootMargin: "50px 0px 50px 0px" },
+    );
+    obs.observe(el);
+    const fallbackTimer = setTimeout(() => setShown(true), 450);
+    return () => {
+      obs.disconnect();
+      clearTimeout(fallbackTimer);
+    };
+  }, []);
+  return (
+    <div
+      ref={ref}
+      className={cn("transition-none", className)}
+      style={
+        shown
+          ? { animation: `ember-rise 0.72s cubic-bezier(0.16,1,0.3,1) ${delay}ms both` }
+          : { opacity: 0 }
+      }
+    >
+      {children}
+    </div>
+  );
 }
 
 export function ChapterMarker({ num, title, page }: { num: string; title: L; page: string }) { const { t } = useLang(); return <div className="mx-auto flex max-w-7xl items-center gap-6 border-t border-border/70 px-6 py-5 lg:px-10"><span className="label-mono text-primary">{num}</span><span className="label-mono flex-1 text-muted-foreground">{t(title)}</span><span className="label-mono text-muted-foreground/70">{page}</span></div>; }

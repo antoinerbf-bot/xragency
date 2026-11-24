@@ -12,7 +12,7 @@ This is not a request to add a 3D sphere to the existing hero. It is a full webs
 3. Do not remove services or hide important offers to simplify the design.
 4. Social Media pricing must remain exactly:
    - Présence Essentielle — 349 €/mois — engagement 3 mois.
-   - Croissance Active — 499 €/mois — engagement 6 mois — “Le plus choisi”.
+   - Croissance Active — 599 €/mois — engagement 6 mois — “Le plus choisi”.
    - Domination Sociale — 799 €/mois — engagement 6 mois.
 5. Preserve “Ajouter à ma sélection” and the WhatsApp destination https://wa.me/33767566783.
 6. Preserve working checkout, quote, CRM, contact, analytics, language and routing integrations. Do not replace working functionality with decorative mock interactions.
@@ -165,3 +165,6 @@ The work is not done when a shader looks attractive. It is done when:
 
 **Instruction:** begin with Phase 0. Do not jump directly to implementation. Report findings and the proposed prototype direction before making broad changes.
 
+
+
+> Mise à jour 20 novembre 2026 : ce brief immersif est historique. La direction visuelle publique retenue est la Direction 1 Premium Éditorial validée le 16 novembre : ivoire/crème, charbon, bronze discret, typographie éditoriale et photographie documentaire. Lusion et NexPro sont des références de profondeur et de structure commerciale, pas une autorisation de revenir à une esthétique noire/néon ou gamifiée. Le CRM reste séparé du site public.

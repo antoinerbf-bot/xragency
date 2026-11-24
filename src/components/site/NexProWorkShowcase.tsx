@@ -1,212 +1,329 @@
-import React, { useState } from "react";
-import { ArrowRight, ArrowUpRight, CheckCircle2, ExternalLink, Globe2, Sparkles } from "lucide-react";
-import scLuxe from "@/assets/pf-03-noir-or.jpg";
-import scHotel from "@/assets/pf-02-villa-azur.jpg";
-import scImmo from "@/assets/pf-04-cabinet-mercier.jpg";
-import scFood from "@/assets/pf-01-maison-lumiere.jpg";
+import { useState } from "react";
+import { ArrowRight, ArrowUpRight, ExternalLink } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { cn } from "@/lib/utils";
+import { useLang, type Lang } from "@/lib/i18n";
+const scLuxe = "/showcase/sc-luxe.jpg";
+const scHotel = "/showcase/sc-hotel.jpg";
+const scImmo = "/showcase/sc-immo.jpg";
+const scFood = "/showcase/sc-food.jpg";
 
-interface CaseStudy {
+type Category = "hotel" | "food" | "immo" | "commerce";
+
+interface WorkItem {
   id: string;
-  category: "luxe" | "hotel" | "immo" | "food";
-  sectorBadge: string;
-  title: string;
-  url: string;
+  category: Category;
+  isRealClient: boolean;
   image: string;
-  deliveredText: string;
-  scope: string;
-  results: string;
+  url?: string;
+  title: Record<Lang, string>;
+  deliverables: Record<Lang, string>;
+  badge: Record<Lang, string>;
 }
 
-const CASE_STUDIES: CaseStudy[] = [
+const WORKS: WorkItem[] = [
   {
-    id: "luxe",
-    category: "luxe",
-    sectorBadge: "Haute Horlogerie & Luxe",
-    title: "Maison Noir & Or — Joaillerie Paris",
-    url: "maison-noir-or.fr",
-    image: scLuxe,
-    deliveredText: "Site livrable en 24–48h",
-    scope: "Refonte intégrale avec vitrine 3D immersive, storytelling horloger, tunnel de prise de rendez-vous privé et référencement Google Maps.",
-    results: "+280% de prises de rendez-vous en salon privé sous 30 jours et positionnement #1 sur Google Maps Paris 8e.",
-  },
-  {
-    id: "hotel",
+    id: "hotel-danang",
     category: "hotel",
-    sectorBadge: "Hôtellerie & Domaines",
-    title: "Villa Azur — Résidence & Suites Privées",
-    url: "villa-azur-cannes.com",
+    isRealClient: false,
     image: scHotel,
-    deliveredText: "Système de réservation direct",
-    scope: "Plateforme web haute couture avec moteur de réservation en direct sans commissions Booking, visite vidéo 4K et multilingue FR/EN.",
-    results: "38 000 € d'économies annuelles en commissions tierces récupérées et taux de conversion direct multiplié par 3.",
+    title: {
+      fr: "Hôtel & Resort – Da Nang",
+      en: "Hotel & Resort – Da Nang",
+      vi: "Hotel & Resort – Đà Nẵng",
+      ar: "فندق ومنتجع – دا نانغ",
+      ru: "Отель и курорт – Дананг",
+    },
+    deliverables: {
+      fr: "Site web · SEO · Google Maps",
+      en: "Website · SEO · Google Maps",
+      vi: "Website · SEO · Google Maps",
+      ar: "الموقع · تحسين محركات البحث · خرائط Google",
+      ru: "Сайт · SEO · Google Maps",
+    },
+    badge: {
+      fr: "Hôtellerie",
+      en: "Hospitality",
+      vi: "Khách sạn",
+      ar: "فنادق",
+      ru: "Отели",
+    },
   },
   {
-    id: "immo",
-    category: "immo",
-    sectorBadge: "Immobilier & Conseil",
-    title: "Cabinet Mercier — Gestion de Patrimoine",
-    url: "cabinet-mercier.fr",
-    image: scImmo,
-    deliveredText: "Génération de leads qualifiés",
-    scope: "Architecture sobre et statutaire, simulateur fiscal interactif intégré, automatisation des formulaires WhatsApp et tunnel d'audit patrimonial.",
-    results: "45 dossiers qualifiés par mois dès le premier trimestre avec un coût par lead divisé par deux.",
-  },
-  {
-    id: "food",
+    id: "poke-n-ball",
     category: "food",
-    sectorBadge: "Gastronomie & Restauration",
-    title: "Maison Lumière — Table Étoilée",
-    url: "maison-lumiere-paris.fr",
+    isRealClient: true,
     image: scFood,
-    deliveredText: "Pack Local Google Maps #1",
-    scope: "Création de site vitrine ultra-rapide, menu digital interactif sur QR Code, pack domination Google Maps et gestion automatisée des avis 5★.",
-    results: "+150 couverts réservés en direct chaque semaine via le profil Google Maps optimisé.",
+    url: "https://pokebowlfresh.vercel.app/",
+    title: {
+      fr: "Pok-N Ball Paris – Projet Réel",
+      en: "Pok-N Ball Paris – Real Project",
+      vi: "Pok-N Ball Paris – Dự án thực tế",
+      ar: "Pok-N Ball Paris – مشروع حقيقي",
+      ru: "Pok-N Ball Paris – Реальный проект",
+    },
+    deliverables: {
+      fr: "Site web · Click & Collect · Caisse POS · Mobile First",
+      en: "Website · Click & Collect · POS Cashier · Mobile First",
+      vi: "Website · Đặt món online · POS · Mobile First",
+      ar: "الموقع · الطلب والاستلام · كاشير POS · للجوال أولاً",
+      ru: "Сайт · Онлайн-заказ · POS-касса · Mobile First",
+    },
+    badge: {
+      fr: "★ Client Réel XR",
+      en: "★ Real XR Client",
+      vi: "★ Khách hàng thực tế",
+      ar: "★ عميل حقيقي",
+      ru: "★ Реальный клиент",
+    },
+  },
+  {
+    id: "immo-marbella",
+    category: "immo",
+    isRealClient: false,
+    image: scImmo,
+    title: {
+      fr: "Agence Immobilière – Marbella",
+      en: "Real Estate Agency – Marbella",
+      vi: "Bất động sản – Marbella",
+      ar: "وكالة عقارات – ماربيا",
+      ru: "Агентство недвижимости – Марбелья",
+    },
+    deliverables: {
+      fr: "Site web · Visibilité locale · SEO",
+      en: "Website · Local SEO · Google Visibility",
+      vi: "Website · SEO địa phương · Hiển thị Google",
+      ar: "الموقع · الظهور المحلي · سيو",
+      ru: "Сайт · Локальный SEO · Видимость",
+    },
+    badge: {
+      fr: "Immobilier",
+      en: "Real Estate",
+      vi: "Bất động sản",
+      ar: "عقارات",
+      ru: "Недвижимость",
+    },
+  },
+  {
+    id: "boutique-paris",
+    category: "commerce",
+    isRealClient: false,
+    image: scLuxe,
+    title: {
+      fr: "Maison & Boutique – Paris",
+      en: "House & Boutique – Paris",
+      vi: "Thương hiệu & Cửa hàng – Paris",
+      ar: "دار أزياء ومتجر – باريس",
+      ru: "Бутик и бренд – Париж",
+    },
+    deliverables: {
+      fr: "Branding · Social Media · Site web",
+      en: "Branding · Social Media · Website",
+      vi: "Thương hiệu · Mạng xã hội · Website",
+      ar: "الهوية · التواصل الاجتماعي · الموقع",
+      ru: "Брендинг · Соцсети · Сайт",
+    },
+    badge: {
+      fr: "Commerce & Luxe",
+      en: "Commerce & Luxury",
+      vi: "Thương mại & Cao cấp",
+      ar: "التجارة والرفاهية",
+      ru: "Ритейл и люкс",
+    },
   },
 ];
 
-export function NexProWorkShowcase() {
-  const [filter, setFilter] = useState<"all" | "luxe" | "hotel" | "immo" | "food">("all");
+const COPY: Record<
+  Lang,
+  {
+    eyebrow: string;
+    heading: string;
+    allBtn: string;
+    conceptLabel: string;
+    filters: Record<"all" | Category, string>;
+  }
+> = {
+  fr: {
+    eyebrow: "NOS RÉALISATIONS",
+    heading: "Projets réels & explorations de studio.",
+    conceptLabel: "Étude conceptuelle",
+    allBtn: "Voir toutes les réalisations",
+    filters: {
+      all: "Tous",
+      hotel: "Hôtellerie",
+      food: "Restauration",
+      immo: "Immobilier",
+      commerce: "Commerce",
+    },
+  },
+  en: {
+    eyebrow: "OUR WORK",
+    heading: "Verified work & studio explorations.",
+    conceptLabel: "Studio concept",
+    allBtn: "View all projects",
+    filters: {
+      all: "All",
+      hotel: "Hospitality",
+      food: "Restaurants",
+      immo: "Real Estate",
+      commerce: "Commerce",
+    },
+  },
+  vi: {
+    eyebrow: "DỰ ÁN CỦA CHÚNG TÔI",
+    heading: "Dự án thực tế & ý tưởng sáng tạo.",
+    conceptLabel: "Ý tưởng studio",
+    allBtn: "Xem tất cả dự án",
+    filters: {
+      all: "Tất cả",
+      hotel: "Khách sạn",
+      food: "Nhà hàng",
+      immo: "Bất động sản",
+      commerce: "Thương mại",
+    },
+  },
+  ar: {
+    eyebrow: "مشاريعنا",
+    heading: "أعمال موثقة واستكشافات الاستوديو.",
+    conceptLabel: "تصور إبداعي",
+    allBtn: "عرض كل الأعمال",
+    filters: {
+      all: "الكل",
+      hotel: "الفنادق",
+      food: "المطاعم",
+      immo: "العقارات",
+      commerce: "التجارة",
+    },
+  },
+  ru: {
+    eyebrow: "НАШИ ПРОЕКТЫ",
+    heading: "Подтверждённые проекты и студийные концепции.",
+    conceptLabel: "Концепция студии",
+    allBtn: "Смотреть все проекты",
+    filters: {
+      all: "Все",
+      hotel: "Отели",
+      food: "Рестораны",
+      immo: "Недвижимость",
+      commerce: "Ритейл",
+    },
+  },
+};
 
-  const filtered = filter === "all" ? CASE_STUDIES : CASE_STUDIES.filter((c) => c.category === filter);
+export function NexProWorkShowcase() {
+  const { lang } = useLang();
+  const c = COPY[lang] ?? COPY.fr;
+  const [filter, setFilter] = useState<"all" | Category>("all");
+
+  const filtered = filter === "all" ? WORKS : WORKS.filter((item) => item.category === filter);
 
   return (
-    <section id="realisations" className="relative bg-[#07090e] text-[#f8f6f0] py-20 sm:py-28 lg:py-36 border-t border-white/10 overflow-hidden">
-      {/* Halo d'ambiance or/bronze */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-40 right-1/4 h-[500px] w-[500px] rounded-full opacity-15 blur-[120px]"
-        style={{
-          background: "radial-gradient(circle, #c5a880 0%, transparent 70%)",
-        }}
-      />
-
-      <div className="relative z-10 mx-auto max-w-[1560px] px-5 sm:px-8 lg:px-12">
-        {/* En-tête de section format NexPro Digital */}
-        <div className="sec-head max-w-4xl">
-          <div className="sec-head-line">
-            <div className="sec-head-dash" />
-            <span className="mono-nex text-white/70">
-              <b className="text-[#c5a880] font-bold">03</b> / NOS RÉALISATIONS & ÉTUDES DE CAS
-            </span>
-          </div>
-
-          <h2 className="h-nex text-3xl sm:text-5xl lg:text-[3.8rem] text-white">
-            Des projets concrets,{" "}
-            <span className="text-[#dfc39d] font-serif font-light italic">
-              des marques qui grandissent.
-            </span>
+    <section
+      id="realisations"
+      dir={lang === "ar" ? "rtl" : "ltr"}
+      className="border-b border-[#EBE5DC] bg-white py-20 text-[#1A1815]"
+    >
+      <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-10">
+        {/* Header + Filter Pills */}
+        <div className="flex flex-col items-center text-center">
+          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.26em] text-[#A67C40]">
+            {c.eyebrow}
+          </p>
+          <h2 className="mt-2.5 font-serif text-[clamp(2.1rem,3.8vw,3.2rem)] font-normal tracking-[-0.02em] text-[#1A1815]">
+            {c.heading}
           </h2>
 
-          <p className="mt-3 text-sm sm:text-base text-neutral-400 max-w-2xl leading-relaxed">
-            Pas de templates génériques. Chaque projet est pensé pour votre activité, vos clients cibles et la façon dont ils vous cherchent sur Google et mobile.
-          </p>
+          {/* Filter Pills */}
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
+            {(["all", "hotel", "food", "immo", "commerce"] as const).map((key) => {
+              const active = filter === key;
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setFilter(key)}
+                  className={cn(
+                    "rounded-full px-5 py-2 text-xs font-semibold transition-all duration-200",
+                    active
+                      ? "bg-[#1A1815] text-white shadow-sm"
+                      : "border border-[#EBE5DC] bg-[#FAF8F5] text-[#5C554B] hover:border-[#1A1815] hover:text-[#1A1815]",
+                  )}
+                >
+                  {c.filters[key]}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Filtres par secteur style NexPro Chips */}
-        <div className="mt-8 mb-12 flex flex-wrap items-center gap-2">
-          {[
-            { id: "all", label: "Toutes nos réalisations" },
-            { id: "luxe", label: "Luxe & Horlogerie" },
-            { id: "hotel", label: "Hôtellerie & Domaines" },
-            { id: "immo", label: "Patrimoine & Conseil" },
-            { id: "food", label: "Gastronomie & Tables" },
-          ].map((cat) => (
-            <button
-              key={cat.id}
-              type="button"
-              onClick={() => setFilter(cat.id as typeof filter)}
-              className={`rounded-full px-4 py-2 font-mono text-[11px] font-semibold uppercase tracking-wider transition ${
-                filter === cat.id
-                  ? "bg-[#c5a880] text-[#080a10] shadow-[0_0_20px_rgba(197,168,128,0.35)]"
-                  : "border border-white/10 bg-white/5 text-white/70 hover:border-[#c5a880]/50 hover:text-white"
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
+        {/* Photographic Cards Grid */}
+        <div className="mt-12 grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-4">
+          {filtered.map((item) => {
+            const cardBody = (
+              <div className="group relative aspect-[16/11] w-full overflow-hidden rounded-3xl border border-[#EBE5DC] bg-[#120F0C] shadow-lg transition duration-500 hover:border-[#D1B07A] hover:shadow-[0_15px_40px_rgba(166,124,64,0.18)]">
+                <img
+                  src={item.image}
+                  alt={item.title[lang]}
+                  loading="lazy"
+                  className="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent" />
 
-        {/* Grille des Études de Cas avec Frame Navigateur Réaliste */}
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-          {filtered.map((item, idx) => (
-            <article
-              key={item.id}
-              className="group flex flex-col justify-between rounded-3xl border border-white/10 bg-[#0d1017]/80 p-6 sm:p-8 backdrop-blur-xl transition-all duration-300 hover:border-[#c5a880]/40 hover:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)]"
-            >
-              <div>
-                {/* Métadonnées & Badges */}
-                <div className="flex flex-wrap items-center gap-2 mb-4">
-                  <span className="chip-nex">{item.sectorBadge}</span>
-                  <span className="chip-nex chip-nex-ok">
-                    <CheckCircle2 className="h-3 w-3 inline mr-1" />
-                    {item.deliveredText}
+                {/* Top pill badge */}
+                <div className="absolute left-3.5 top-3.5">
+                  <span
+                    className={cn(
+                      "inline-flex items-center rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wider backdrop-blur-md",
+                      item.isRealClient
+                        ? "border border-[#E5C696] bg-[#1A1815]/95 text-[#E5C696] shadow-md"
+                        : "border border-white/20 bg-black/60 text-white/90",
+                    )}
+                  >
+                    {item.isRealClient
+                      ? item.badge[lang]
+                      : `${c.conceptLabel} · ${item.badge[lang]}`}
                   </span>
                 </div>
 
-                {/* Titre */}
-                <h3 className="h-nex text-2xl sm:text-3xl text-white group-hover:text-[#dfc39d] transition">
-                  {item.title}
-                </h3>
-
-                {/* Cadre Navigateur Style NexPro */}
-                <div className="frame-nex my-6 group-hover:border-[#c5a880]/40 transition">
-                  <div className="frame-bar">
-                    <span className="frame-dot bg-red-500/80" />
-                    <span className="frame-dot bg-yellow-500/80" />
-                    <span className="frame-dot bg-emerald-500/80" />
-                    <div className="frame-url flex items-center gap-1.5">
-                      <Globe2 className="h-3 w-3 text-neutral-400" />
-                      <span>https://{item.url}</span>
-                    </div>
-                  </div>
-                  <div className="relative aspect-[16/10] overflow-hidden bg-black/60">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      loading="lazy"
-                      className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#090c14] via-transparent to-transparent opacity-40" />
-                  </div>
-                </div>
-
-                {/* Definition List : Scope & Results */}
-                <div className="space-y-4 border-t border-white/10 pt-5 text-xs sm:text-sm">
+                {/* Bottom title + deliverables + round arrow button */}
+                <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-3">
                   <div>
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#c5a880]">
-                      Ce qui a été réalisé :
-                    </span>
-                    <p className="mt-1 text-neutral-300 leading-relaxed">{item.scope}</p>
+                    <h3 className="font-serif text-lg font-medium leading-snug text-white">
+                      {item.title[lang]}
+                    </h3>
+                    <p className="mt-0.5 text-xs text-[#E5C696]">{item.deliverables[lang]}</p>
                   </div>
-                  <div>
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-                      Impact & Résultat mesuré :
-                    </span>
-                    <p className="mt-1 text-white font-medium leading-relaxed">{item.results}</p>
-                  </div>
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/35 bg-white/10 text-white backdrop-blur-sm transition group-hover:border-[#E5C696] group-hover:bg-[#E5C696] group-hover:text-[#17130E]">
+                    {item.url ? (
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    ) : (
+                      <ArrowRight className="h-3.5 w-3.5 rtl:rotate-180" />
+                    )}
+                  </span>
                 </div>
               </div>
+            );
 
-              {/* Boutons d'Action */}
-              <div className="mt-8 flex flex-wrap items-center gap-3 pt-4 border-t border-white/10">
-                <a
-                  href="#quote"
-                  className="btn-nex text-xs uppercase tracking-wider"
-                >
-                  <span>Demander un site dans cet esprit</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </a>
+            return item.url ? (
+              <a key={item.id} href={item.url} target="_blank" rel="noreferrer" className="block">
+                {cardBody}
+              </a>
+            ) : (
+              <Link key={item.id} to="/work" className="block">
+                {cardBody}
+              </Link>
+            );
+          })}
+        </div>
 
-                <a
-                  href={`#tunnel-secteurs`}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 font-mono text-[11px] font-bold text-neutral-400 hover:text-white transition"
-                >
-                  <span>Configurer ce modèle</span>
-                  <ArrowUpRight className="h-3.5 w-3.5" />
-                </a>
-              </div>
-            </article>
-          ))}
+        <div className="mt-12 flex justify-center">
+          <Link
+            to="/work"
+            className="group inline-flex items-center gap-2 rounded-full border border-[#1A1815]/20 bg-[#FAF8F5] px-7 py-3 text-xs font-semibold uppercase tracking-wider text-[#1A1815] transition hover:bg-[#1A1815] hover:text-white shadow-sm"
+          >
+            <span>{c.allBtn}</span>
+            <ArrowUpRight className="h-4 w-4 text-[#A67C40] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-white" />
+          </Link>
         </div>
       </div>
     </section>

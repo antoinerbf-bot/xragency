@@ -1,6 +1,6 @@
 import React from "react";
 import { ArrowRight, Check, HelpCircle, ShieldCheck, Sparkles, Star, Zap } from "lucide-react";
-import { useFunnel } from "@/lib/funnel";
+import { useOptionalFunnel } from "@/lib/funnel";
 
 interface Plan {
   id: string;
@@ -18,14 +18,15 @@ const PLANS: Plan[] = [
   {
     id: "essential",
     name: "Formule Essentiel",
-    subtitle: "Pour les artisans et professionnels qui veulent une vitrine mobile crédible et rapide.",
+    subtitle:
+      "Pour les artisans et professionnels qui veulent une vitrine mobile crédible et rapide.",
     price: "499 €",
     period: "Paiement unique",
     features: [
       "Site vitrine d'une page haute conversion",
       "Design sur mesure adapté à votre métier (zéro template)",
       "Boutons d'appel téléphonique et WhatsApp directs en 1 tap",
-      "Optimisation vitesse mobile (score PageSpeed 95+)",
+      "Optimisation des performances mobiles, mesurée sur les pages livrées",
       "Nom de domaine personnalisé et certificat HTTPS sécurisé",
       "Maquette démo offerte sous 24 à 48h",
     ],
@@ -33,7 +34,7 @@ const PLANS: Plan[] = [
   },
   {
     id: "business",
-    name: "Formule Business & Pack Local #1",
+    name: "Formule Business & visibilité locale",
     subtitle: "Notre formule phare pour dominer Google Maps et capter un flux régulier de clients.",
     price: "999 €",
     period: "Paiement unique",
@@ -41,7 +42,7 @@ const PLANS: Plan[] = [
     badge: "LE PLUS CHOISI · ROI MAXIMUM",
     features: [
       "Site multi-pages complet (Accueil, Services, Réalisations, Devis)",
-      "Domination Google Maps Pack Local Top 3 garanti 1 an (ou remboursé)",
+      "Stratégie de visibilité locale Google Maps, avec objectifs définis après audit",
       "Rédaction persuasive de vos textes axée sur la vente",
       "Galerie de réalisations haute définition avec filtre",
       "Système de collecte d'avis 5★ automatisé avec QR Code",
@@ -69,12 +70,7 @@ const PLANS: Plan[] = [
 ];
 
 export function NexProPricingGrid() {
-  let funnel: ReturnType<typeof useFunnel> | null = null;
-  try {
-    funnel = useFunnel();
-  } catch {
-    funnel = null;
-  }
+  const funnel = useOptionalFunnel();
 
   const handleSelectPlan = (planId: string) => {
     if (funnel) {
@@ -89,7 +85,10 @@ export function NexProPricingGrid() {
   };
 
   return (
-    <section id="formules" className="relative bg-[#080a11] text-[#f8f6f0] py-20 sm:py-28 lg:py-36 border-t border-white/10 overflow-hidden">
+    <section
+      id="formules"
+      className="relative bg-[#080a11] text-[#f8f6f0] py-20 sm:py-28 lg:py-36 border-t border-white/10 overflow-hidden"
+    >
       {/* Halo d'ambiance */}
       <div
         aria-hidden="true"
@@ -117,7 +116,8 @@ export function NexProPricingGrid() {
           </h2>
 
           <p className="mt-3 text-sm sm:text-base text-neutral-400 max-w-2xl leading-relaxed">
-            Chaque formule fait l'objet d'un devis officiel détaillé et d'un contrat clair avec la SASU KARMA (Paris). Pas de frais cachés, pas de surprises.
+            Chaque formule fait l'objet d'un devis officiel détaillé et d'un contrat clair avec la
+            SASU KARMA (Paris). Pas de frais cachés, pas de surprises.
           </p>
         </div>
 
@@ -206,14 +206,13 @@ export function NexProPricingGrid() {
               Abonnement Sérénité WebCare : zéro maintenance pour vous.
             </h4>
             <p className="mt-1 text-xs sm:text-sm text-neutral-400 leading-relaxed">
-              Couvre l'hébergement cloud souverain, la sécurité SSL, les sauvegardes quotidiennes, les petites modifications mensuelles (textes, photos, tarifs) et l'assistance prioritaire 7j/7.
+              Couvre l'hébergement cloud souverain, la sécurité SSL, les sauvegardes quotidiennes,
+              les petites modifications mensuelles (textes, photos, tarifs) et l'assistance
+              prioritaire 7j/7.
             </p>
           </div>
 
-          <a
-            href="#contact"
-            className="btn-nex text-xs uppercase tracking-wider shrink-0"
-          >
+          <a href="#contact" className="btn-nex text-xs uppercase tracking-wider shrink-0">
             <span>En savoir plus sur la Sérénité</span>
             <ArrowRight className="h-4 w-4" />
           </a>

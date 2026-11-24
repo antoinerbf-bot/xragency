@@ -21,14 +21,12 @@ interface CrmInvoicesTabProps {
   onValidatePayment: (invoiceId: string) => Promise<void>;
 }
 
-export function CrmInvoicesTab({
-  invoices,
-  isAdmin,
-  onValidatePayment,
-}: CrmInvoicesTabProps) {
+export function CrmInvoicesTab({ invoices, isAdmin, onValidatePayment }: CrmInvoicesTabProps) {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [selectedInvoiceId, setSelectedInvoiceId] = useState<string | null>(invoices[0]?.id || null);
+  const [selectedInvoiceId, setSelectedInvoiceId] = useState<string | null>(
+    invoices[0]?.id || null,
+  );
   const [validatingId, setValidatingId] = useState<string | null>(null);
   const [copiedRef, setCopiedRef] = useState(false);
 
@@ -47,7 +45,7 @@ export function CrmInvoicesTab({
 
   const selectedInvoice = useMemo(
     () => invoices.find((i) => i.id === selectedInvoiceId) || filteredInvoices[0],
-    [invoices, selectedInvoiceId, filteredInvoices]
+    [invoices, selectedInvoiceId, filteredInvoices],
   );
 
   const handleValidate = async (invoiceId: string) => {
@@ -67,7 +65,9 @@ export function CrmInvoicesTab({
   };
 
   const totalPaid = invoices.filter((i) => i.status === "paid").reduce((s, i) => s + i.totalEur, 0);
-  const totalPending = invoices.filter((i) => i.status === "pending_transfer").reduce((s, i) => s + i.totalEur, 0);
+  const totalPending = invoices
+    .filter((i) => i.status === "pending_transfer")
+    .reduce((s, i) => s + i.totalEur, 0);
 
   const exportAccountingCsv = () => {
     const headers = [
@@ -86,7 +86,9 @@ export function CrmInvoicesTab({
     ];
 
     const rows = invoices.map((inv) => {
-      const itemsDetail = (inv.items || []).map((it) => `${it.label} (${it.amountEur}€)`).join(" + ");
+      const itemsDetail = (inv.items || [])
+        .map((it) => `${it.label} (${it.amountEur}€)`)
+        .join(" + ");
       return [
         `"${inv.id}"`,
         `"${new Date(inv.createdAt).toLocaleDateString("fr-FR")}"`,
@@ -96,7 +98,7 @@ export function CrmInvoicesTab({
         `"${inv.status === "paid" ? "Encaissé / Réglé" : inv.status === "pending_transfer" ? "En attente virement" : "Annulé"}"`,
         inv.totalEur,
         `"${inv.paymentReference}"`,
-        `"${inv.bankDetails?.beneficiary || "KARMA SASU"}"`,
+        `"${inv.bankDetails?.beneficiary || "À confirmer"}"`,
         `"${inv.bankDetails?.ibanMasked || ""}"`,
         `"${inv.bankDetails?.bic || ""}"`,
         `"${itemsDetail.replace(/"/g, '""')}"`,
@@ -108,7 +110,10 @@ export function CrmInvoicesTab({
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", `export-comptable-xr-agency-${new Date().toISOString().slice(0, 10)}.csv`);
+    link.setAttribute(
+      "download",
+      `export-comptable-xr-agency-${new Date().toISOString().slice(0, 10)}.csv`,
+    );
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -120,7 +125,9 @@ export function CrmInvoicesTab({
       {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="rounded-2xl border border-white/10 bg-[#0a0d14]/80 p-5 backdrop-blur-xl">
-          <span className="font-mono text-xs uppercase tracking-wider text-emerald-400">Total Encaissé Validé</span>
+          <span className="font-mono text-xs uppercase tracking-wider text-emerald-400">
+            Total Encaissé Validé
+          </span>
           <p className="mt-2 text-3xl font-extrabold text-emerald-400 font-serif">
             {totalPaid.toLocaleString("fr-FR")} €
           </p>
@@ -130,7 +137,9 @@ export function CrmInvoicesTab({
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-[#0a0d14]/80 p-5 backdrop-blur-xl">
-          <span className="font-mono text-xs uppercase tracking-wider text-[#d4af37]">En Attente de Virement</span>
+          <span className="font-mono text-xs uppercase tracking-wider text-[#d4af37]">
+            En Attente de Virement
+          </span>
           <p className="mt-2 text-3xl font-extrabold text-[#d4af37] font-serif">
             {totalPending.toLocaleString("fr-FR")} €
           </p>
@@ -140,10 +149,14 @@ export function CrmInvoicesTab({
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-[#0a0d14]/80 p-5 backdrop-blur-xl flex flex-col justify-between">
-          <span className="font-mono text-xs uppercase tracking-wider text-[#94a3b8]">Protocole Virement</span>
+          <span className="font-mono text-xs uppercase tracking-wider text-[#94a3b8]">
+            Protocole Virement
+          </span>
           <div className="mt-1 flex items-center gap-2 text-xs text-[#cbd5e1]">
             <ShieldCheck className="h-4 w-4 text-emerald-400 shrink-0" />
-            <span>Validation manuelle par la Direction obligatoire avant lancement de production</span>
+            <span>
+              Validation manuelle par la Direction obligatoire avant lancement de production
+            </span>
           </div>
         </div>
       </div>
@@ -156,14 +169,17 @@ export function CrmInvoicesTab({
               <Clock className="h-4 w-4" />
             </span>
             <div>
-              <h3 className="text-sm font-bold text-white">🔄 Abonnements Mensuels Récurrents & MRR</h3>
+              <h3 className="text-sm font-bold text-white">
+                🔄 Abonnements Mensuels Récurrents & MRR
+              </h3>
               <p className="text-[11px] text-white/60">
-                Suivi des échéances mensuelles (Webcare, Community Management, SEO) · Commission closer : 10 % par mois
+                Suivi des échéances mensuelles (Webcare, Community Management, SEO) · Commission
+                closer : 10 % par mois
               </p>
             </div>
           </div>
           <span className="rounded-full border border-sky-400/40 bg-sky-500/10 px-3 py-1 font-mono text-[10px] font-bold text-sky-300">
-            COMPTE BANCAIRE : KARMA SASU
+            COORDONNÉES DE PAIEMENT À CONFIRMER
           </span>
         </div>
 
@@ -207,17 +223,21 @@ export function CrmInvoicesTab({
                 </div>
                 <p className="mt-1 text-[11px] text-white/70">{sub.service}</p>
                 <div className="mt-2 flex items-baseline justify-between border-t border-white/5 pt-2">
-                  <span className="font-mono text-sm font-black text-white">{sub.amount} € / mois</span>
+                  <span className="font-mono text-sm font-black text-white">
+                    {sub.amount} € / mois
+                  </span>
                   <span className="font-mono text-[10px] text-emerald-400 font-bold">
                     +{sub.closerComm} € / m closer (10%)
                   </span>
                 </div>
-                <p className="mt-1 font-mono text-[10px] text-white/50">Prochaine échéance : {sub.nextDue}</p>
+                <p className="mt-1 font-mono text-[10px] text-white/50">
+                  Prochaine échéance : {sub.nextDue}
+                </p>
               </div>
 
               <a
                 href={`https://wa.me/?text=${encodeURIComponent(
-                  `Bonjour ${sub.client}, voici le rappel pour le renouvellement mensuel de votre abonnement ${sub.service} (${sub.amount} € TTC).\nRIB Officiel KARMA SASU : FR76 1751 5900 0008 1234 5678 901 (BIC QNTOFR22).\nMerci pour votre confiance, l'équipe XR Agency.`
+                  `Bonjour ${sub.client}, voici le rappel pour le renouvellement mensuel de votre abonnement ${sub.service} (${sub.amount} € TTC).\nLes coordonnées de paiement figurent sur le devis validé.\nMerci pour votre confiance, l'équipe XR Agency.`,
                 )}`}
                 target="_blank"
                 rel="noreferrer"
@@ -254,10 +274,16 @@ export function CrmInvoicesTab({
                 "rounded-xl px-3 py-1.5 font-mono text-[10px] font-bold uppercase transition",
                 statusFilter === st
                   ? "bg-[#d4af37] text-black"
-                  : "bg-white/5 text-[#94a3b8] hover:bg-white/10 hover:text-white"
+                  : "bg-white/5 text-[#94a3b8] hover:bg-white/10 hover:text-white",
               )}
             >
-              {st === "all" ? "Tous" : st === "pending_transfer" ? "En attente" : st === "paid" ? "Payé" : "Annulé"}
+              {st === "all"
+                ? "Tous"
+                : st === "pending_transfer"
+                  ? "En attente"
+                  : st === "paid"
+                    ? "Payé"
+                    : "Annulé"}
             </button>
           ))}
 
@@ -294,7 +320,7 @@ export function CrmInvoicesTab({
                     "cursor-pointer rounded-2xl border p-4 transition-all backdrop-blur-xl",
                     isSelected
                       ? "border-[#d4af37] bg-white/[0.07] shadow-[0_0_25px_rgba(212,175,55,0.15)]"
-                      : "border-white/10 bg-[#080a10]/70 hover:border-white/20 hover:bg-white/[0.03]"
+                      : "border-white/10 bg-[#080a10]/70 hover:border-white/20 hover:bg-white/[0.03]",
                   )}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -305,7 +331,9 @@ export function CrmInvoicesTab({
                           {inv.paymentReference}
                         </span>
                       </div>
-                      <h4 className="mt-1 font-bold text-sm text-white tracking-tight">{inv.clientCompany}</h4>
+                      <h4 className="mt-1 font-bold text-sm text-white tracking-tight">
+                        {inv.clientCompany}
+                      </h4>
                       <p className="text-[11px] text-[#94a3b8]">{inv.clientName}</p>
                     </div>
 
@@ -316,7 +344,7 @@ export function CrmInvoicesTab({
                           ? "border-emerald-400/40 bg-emerald-400/10 text-emerald-400"
                           : isPending
                             ? "border-amber-400/40 bg-amber-400/10 text-amber-300 animate-pulse"
-                            : "border-red-400/30 bg-red-400/10 text-red-400"
+                            : "border-red-400/30 bg-red-400/10 text-red-400",
                       )}
                     >
                       {inv.status === "paid" ? "Payé" : isPending ? "En attente" : inv.status}
@@ -325,7 +353,9 @@ export function CrmInvoicesTab({
 
                   <div className="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-[10px] font-mono">
                     <span className="text-[#94a3b8]">{inv.items.length} prestation(s)</span>
-                    <span className="font-bold text-lg text-white">{inv.totalEur.toLocaleString("fr-FR")} €</span>
+                    <span className="font-bold text-lg text-white">
+                      {inv.totalEur.toLocaleString("fr-FR")} €
+                    </span>
                   </div>
                 </div>
               );
@@ -343,14 +373,19 @@ export function CrmInvoicesTab({
                   <span className="font-mono text-xs font-bold text-[#d4af37] tracking-widest block">
                     BORDEREAU DE PAIEMENT & FACTURATION
                   </span>
-                  <h3 className="text-2xl font-black text-white font-mono mt-1">{selectedInvoice.id}</h3>
+                  <h3 className="text-2xl font-black text-white font-mono mt-1">
+                    {selectedInvoice.id}
+                  </h3>
                   <p className="text-xs text-[#94a3b8] mt-0.5">
-                    Échéance : {selectedInvoice.dueDate.slice(0, 10)} · Créé le {selectedInvoice.createdAt.slice(0, 10)}
+                    Échéance : {selectedInvoice.dueDate.slice(0, 10)} · Créé le{" "}
+                    {selectedInvoice.createdAt.slice(0, 10)}
                   </p>
                 </div>
 
                 <div className="text-right">
-                  <span className="font-mono text-[10px] uppercase text-[#94a3b8] block">Montant Facturé</span>
+                  <span className="font-mono text-[10px] uppercase text-[#94a3b8] block">
+                    Montant Facturé
+                  </span>
                   <span className="font-serif text-3xl font-black text-white">
                     {selectedInvoice.totalEur.toLocaleString("fr-FR")} €
                   </span>
@@ -365,20 +400,29 @@ export function CrmInvoicesTab({
                     <span>En attente de réception sur le compte bancaire</span>
                   </div>
                   <p className="text-xs text-[#e2e8f0]">
-                    Le client doit émettre un virement avec le libellé ci-dessous. Dès réception sur votre relevé bancaire professionnel, cliquez sur le bouton de validation.
+                    Le client doit émettre un virement avec le libellé ci-dessous. Dès réception sur
+                    votre relevé bancaire professionnel, cliquez sur le bouton de validation.
                   </p>
 
                   <div className="flex items-center justify-between bg-black/50 p-3 rounded-xl border border-white/10">
                     <div className="font-mono text-xs">
-                      <span className="text-[#94a3b8] block text-[9px] uppercase">Référence à rapprocher</span>
-                      <span className="text-[#d4af37] font-bold text-sm tracking-wider">{selectedInvoice.paymentReference}</span>
+                      <span className="text-[#94a3b8] block text-[9px] uppercase">
+                        Référence à rapprocher
+                      </span>
+                      <span className="text-[#d4af37] font-bold text-sm tracking-wider">
+                        {selectedInvoice.paymentReference}
+                      </span>
                     </div>
                     <button
                       type="button"
                       onClick={() => copyPaymentRef(selectedInvoice.paymentReference)}
                       className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 hover:bg-white/20 px-3 py-1.5 text-xs text-white transition font-mono"
                     >
-                      {copiedRef ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
+                      {copiedRef ? (
+                        <Check className="h-3 w-3 text-emerald-400" />
+                      ) : (
+                        <Copy className="h-3 w-3" />
+                      )}
                       <span>{copiedRef ? "Copié !" : "Copier"}</span>
                     </button>
                   </div>
@@ -407,7 +451,9 @@ export function CrmInvoicesTab({
                     <CheckCircle2 className="h-4 w-4 text-emerald-400" />
                     <span>Fonds reçus et validés le {selectedInvoice.paidAt?.slice(0, 10)}</span>
                   </div>
-                  <span className="text-[10px] text-[#94a3b8]">Réf: {selectedInvoice.paymentReference}</span>
+                  <span className="text-[10px] text-[#94a3b8]">
+                    Réf: {selectedInvoice.paymentReference}
+                  </span>
                 </div>
               )}
 
@@ -419,19 +465,29 @@ export function CrmInvoicesTab({
                 <div className="grid grid-cols-2 gap-3 font-mono">
                   <div>
                     <span className="text-[#94a3b8] block text-[10px]">Bénéficiaire</span>
-                    <span className="text-white font-semibold">{selectedInvoice.bankDetails.beneficiary}</span>
+                    <span className="text-white font-semibold">
+                      {selectedInvoice.bankDetails.beneficiary}
+                    </span>
                   </div>
                   <div>
                     <span className="text-[#94a3b8] block text-[10px]">Établissement</span>
-                    <span className="text-white font-semibold">{selectedInvoice.bankDetails.bankName}</span>
+                    <span className="text-white font-semibold">
+                      {selectedInvoice.bankDetails.bankName}
+                    </span>
                   </div>
                   <div>
-                    <span className="text-[#94a3b8] block text-[10px]">IBAN (Compte Professionnel)</span>
-                    <span className="text-white font-semibold">{selectedInvoice.bankDetails.ibanMasked}</span>
+                    <span className="text-[#94a3b8] block text-[10px]">IBAN (à confirmer)</span>
+                    <span className="text-white font-semibold">
+                      {selectedInvoice.bankDetails.ibanMasked}
+                    </span>
                   </div>
                   <div>
-                    <span className="text-[#94a3b8] block text-[10px]">Code BIC / SWIFT</span>
-                    <span className="text-white font-semibold">{selectedInvoice.bankDetails.bic}</span>
+                    <span className="text-[#94a3b8] block text-[10px]">
+                      Code BIC / SWIFT (à confirmer)
+                    </span>
+                    <span className="text-white font-semibold">
+                      {selectedInvoice.bankDetails.bic}
+                    </span>
                   </div>
                 </div>
                 <p className="text-[11px] text-[#94a3b8] italic pt-1 border-t border-white/5">
@@ -451,11 +507,15 @@ export function CrmInvoicesTab({
                         <p className="font-bold text-white">{item.label}</p>
                         <p className="text-[11px] text-[#94a3b8]">{item.detail}</p>
                       </div>
-                      <span className="font-mono font-bold text-white">{item.amountEur.toLocaleString("fr-FR")} €</span>
+                      <span className="font-mono font-bold text-white">
+                        {item.amountEur.toLocaleString("fr-FR")} €
+                      </span>
                     </div>
                   ))}
                 </div>
-                <p className="text-[10px] text-[#94a3b8] font-mono text-right">{selectedInvoice.taxNotice}</p>
+                <p className="text-[10px] text-[#94a3b8] font-mono text-right">
+                  {selectedInvoice.taxNotice}
+                </p>
               </div>
             </div>
           ) : (
