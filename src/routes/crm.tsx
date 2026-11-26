@@ -142,8 +142,18 @@ function XrAgencyCrmApp() {
         const saved = localStorage.getItem("xr_crm_members_v5");
         if (saved) {
           const parsed = JSON.parse(saved);
-          // Credentials are never restored from browser storage.
-          return parsed.map((m: TeamMember) => ({ ...m, pin: "" }));
+          // Always keep server-known profiles available; never restore credentials from browser storage.
+          const storedById = new Map(parsed.map((m: TeamMember) => [m.id, m]));
+          const known = DEFAULT_TEAM_MEMBERS.map((member) => ({
+            ...member,
+            ...(storedById.get(member.id) || {}),
+            roleType: member.roleType,
+            recruitedBy: member.recruitedBy,
+            pin: "",
+          }));
+          const knownIds = new Set(DEFAULT_TEAM_MEMBERS.map((member) => member.id));
+          const localOnly = parsed.filter((member: TeamMember) => !knownIds.has(member.id)).map((member: TeamMember) => ({ ...member, pin: "" }));
+          return [...known, ...localOnly];
         }
       } catch {
         // ignore
