@@ -124,7 +124,7 @@ export async function upsertMemberToSupabase(member: TeamMember): Promise<boolea
       override_rate: member.overrideRate || 0,
       avatar_bg: member.avatarBg,
       badge: member.badge,
-      pin_hash: member.pin,
+      pin_hash: 'server-managed',
       custom_pin_set: Boolean(member.customPinSet),
     });
     return !error;
