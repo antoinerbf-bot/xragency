@@ -66,6 +66,30 @@ const leadSchema = z.object({
   timeline: z.array(z.object({ id: z.string().max(128), date: z.string().max(50), text: z.string().max(2000) })).max(500).optional(),
 }).strict();
 
+async function ensureCrmMembers(supabase: ReturnType<typeof getSupabaseServer>): Promise<boolean> {
+  // Seed uniquement les membres absents : ne jamais écraser les taux personnalisés déjà en base.
+  for (const member of DEFAULT_TEAM_MEMBERS) {
+    const { error } = await supabase.from("crm_members").upsert({
+      id: member.id,
+      name: member.name,
+      short_name: member.shortName,
+      role_label: member.roleLabel,
+      role_type: member.roleType,
+      recruited_by: member.recruitedBy || null,
+      setting_rate: member.settingRate,
+      closing_rate: member.closingRate,
+      full_cycle_rate: member.fullCycleRate,
+      override_rate: member.overrideRate || 0,
+      avatar_bg: member.avatarBg,
+      badge: member.badge,
+      pin_hash: "server-managed",
+      custom_pin_set: false,
+    }, { onConflict: "id", ignoreDuplicates: true });
+    if (error) return false;
+  }
+  return true;
+}
+
 function canEditLead(member: TeamMember, lead: Lead, members: TeamMember[]): boolean {
   if (!canViewLead(member, lead, members)) return false;
   if (member.roleType === "direction") return true;
@@ -82,6 +106,7 @@ export const Route = createFileRoute("/api/crm-data")({
         if (!member) return Response.json({ error: "Authentification requise." }, { status: 401 });
         try {
           const supabase = getSupabaseServer();
+          if (!(await ensureCrmMembers(supabase))) return Response.json({ error: "Initialisation des membres CRM impossible." }, { status: 503 });
           const { data, error } = await supabase.from("crm_leads").select("*").order("created_at", { ascending: false });
           if (error) return Response.json({ error: "Lecture CRM impossible." }, { status: 503 });
           const members = DEFAULT_TEAM_MEMBERS;
@@ -104,6 +129,7 @@ export const Route = createFileRoute("/api/crm-data")({
 
         try {
           const supabase = getSupabaseServer();
+          if (!(await ensureCrmMembers(supabase))) return Response.json({ error: "Initialisation des membres CRM impossible." }, { status: 503 });
           const { data: existing, error: lookupError } = await supabase.from("crm_leads").select("*").eq("id", lead.id).maybeSingle();
           if (lookupError) return Response.json({ error: "Vérification du prospect impossible." }, { status: 503 });
           if (existing) {
