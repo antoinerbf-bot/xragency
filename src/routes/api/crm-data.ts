@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { getSupabaseServer } from "@/lib/saas/supabase";
 import { DEFAULT_TEAM_MEMBERS, canViewLead, type Lead, type TeamMember } from "@/lib/crm/data";
-import { getCrmSessionSecret, verifyCrmSessionCookie } from "./crm-auth";
+import { getCrmSessionSecret, verifyCrmSessionCookie, hashCrmPin } from "./crm-auth";
 
 async function authenticate(request: Request): Promise<TeamMember | null> {
   const secret = getCrmSessionSecret();
@@ -173,7 +173,7 @@ export const Route = createFileRoute("/api/crm-data")({
             overrideRate: z.number().min(0).max(1).optional(),
             avatarBg: z.string().max(200),
             badge: z.string().max(100),
-            customPinSet: z.boolean().optional(),
+            customPinSet: z.boolean().optional(),\n            initialPin: z.string().min(6).max(128).optional(),
           }).strict();
           const memberParsed = memberSchema.safeParse(body);
           if (!memberParsed.success) return Response.json({ error: "Profil membre invalide." }, { status: 400 });
@@ -181,12 +181,15 @@ export const Route = createFileRoute("/api/crm-data")({
             const supabase = getSupabaseServer();
             if (!(await ensureCrmMembers(supabase))) return Response.json({ error: "Initialisation des membres CRM impossible." }, { status: 503 });
             const m = memberParsed.data;
+            const { data: existingMember } = await supabase.from("crm_members").select("pin_hash,custom_pin_set").eq("id", m.id).maybeSingle();
+            if (!existingMember && !m.initialPin) return Response.json({ error: "Un code initial de 6 caractères minimum est requis pour un nouveau membre." }, { status: 400 });
+            const pinHash = m.initialPin ? hashCrmPin(m.initialPin) : existingMember?.pin_hash || "server-managed";
             const { error } = await supabase.from("crm_members").upsert({
               id: m.id, name: m.name, short_name: m.shortName, role_label: m.roleLabel,
               role_type: m.roleType, recruited_by: m.recruitedBy || null,
               setting_rate: m.settingRate, closing_rate: m.closingRate, full_cycle_rate: m.fullCycleRate,
               override_rate: m.overrideRate || 0, avatar_bg: m.avatarBg, badge: m.badge,
-              pin_hash: "server-managed", custom_pin_set: Boolean(m.customPinSet),
+              pin_hash: pinHash, custom_pin_set: Boolean(m.initialPin || existingMember?.custom_pin_set || m.customPinSet),
             });
             if (error) return Response.json({ error: "Enregistrement du membre impossible." }, { status: 503 });
             return Response.json({ ok: true });
