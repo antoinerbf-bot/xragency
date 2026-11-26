@@ -91,7 +91,7 @@ export const Route = createFileRoute("/api/crm-auth")({
         if (payload.action === "logout") {
           return new Response(JSON.stringify({ ok: true }), {
             status: 200,
-            headers: { "Content-Type": "application/json", "Set-Cookie": `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=0` },
+            headers: { "Content-Type": "application/json", "Set-Cookie": `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; ${process.env.NODE_ENV === "production" ? "Secure; " : ""}Max-Age=0` },
           });
         }
 
@@ -115,7 +115,7 @@ export const Route = createFileRoute("/api/crm-auth")({
           status: 200,
           headers: {
             "Content-Type": "application/json",
-            "Set-Cookie": `${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=${SESSION_TTL_SECONDS}`,
+            "Set-Cookie": `${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; ${process.env.NODE_ENV === "production" ? "Secure; " : ""}Max-Age=${SESSION_TTL_SECONDS}`,
           },
         });
       },
