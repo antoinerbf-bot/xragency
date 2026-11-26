@@ -30,7 +30,7 @@ function getMemberPins(): Record<string, string> {
 export function hashCrmPin(pin: string): string {
   const salt = randomBytes(16);
   const hash = scryptSync(pin, salt, 64);
-  return `scrypt${salt.toString("hex")}${hash.toString("hex")}`;
+  return "scrypt$" + salt.toString("hex") + "$" + hash.toString("hex");
 }
 
 function verifyStoredCrmPin(pin: string, stored: string): boolean {
@@ -128,7 +128,9 @@ export const Route = createFileRoute("/api/crm-auth")({
         const schema = z.object({
           action: z.enum(["login", "school", "logout", "change-pin"]),
           memberId: z.string().min(1).max(64).optional(),
-          pin: z.string().min(1).max(128).optional(),\n          currentPin: z.string().min(1).max(128).optional(),\n          newPin: z.string().min(1).max(128).optional(),
+          pin: z.string().min(1).max(128).optional(),
+          currentPin: z.string().min(1).max(128).optional(),
+          newPin: z.string().min(1).max(128).optional(),
         }).strict();
         const parsed = schema.safeParse(body);
         if (!parsed.success) return Response.json({ ok: false, error: "Payload invalide." }, { status: 400 });
