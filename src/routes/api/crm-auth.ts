@@ -159,8 +159,8 @@ export const Route = createFileRoute("/api/crm-auth")({
           if (!(await verifyMemberPin(memberId, currentPin))) return Response.json({ ok: false, error: "Code actuel incorrect." }, { status: 401 });
           try {
             const supabase = getSupabaseServer();
-            const { error } = await supabase.from("crm_members").update({ pin_hash: hashCrmPin(newPin), custom_pin_set: true }).eq("id", memberId);
-            if (error) return Response.json({ ok: false, error: "Modification du code impossible." }, { status: 503 });
+            const { data: updatedMember, error } = await supabase.from("crm_members").update({ pin_hash: hashCrmPin(newPin), custom_pin_set: true }).eq("id", memberId).select("id").maybeSingle();
+            if (error || !updatedMember) return Response.json({ ok: false, error: "Modification du code impossible." }, { status: 503 });
             return Response.json({ ok: true });
           } catch {
             return Response.json({ ok: false, error: "Stockage CRM serveur non configuré." }, { status: 503 });
