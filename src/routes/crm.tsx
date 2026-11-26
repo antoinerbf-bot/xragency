@@ -350,7 +350,7 @@ function XrAgencyCrmApp() {
     }
     let active = true;
     setSyncStatus("syncing");
-    if (currentUserId === "antoine") {
+    if (currentUserId) {
       fetchMembersFromSupabase().then((team) => {
         if (active && team && team.length > 0) setMembers(team);
       });
