@@ -1344,7 +1344,10 @@ export function QuoteConfiguratorCompact() {
       else if (plan.period === "month") monthly += plan.priceEur;
       else if (plan.period === "year") annual += plan.priceEur;
     }
-    return { once, monthly, annual, hasCustom };
+    const isMultiPack = chosenItems.length >= 2 || once >= 799;
+    const bundleDiscount = isMultiPack && once > 0 ? Math.round(once * 0.15) : 0;
+    const finalOnce = Math.max(0, once - bundleDiscount);
+    return { once, monthly, annual, hasCustom, isMultiPack, bundleDiscount, finalOnce };
   }, [chosenItems]);
 
   const goStep = (target: 1 | 2 | 3) => {
@@ -2250,6 +2253,22 @@ export function QuoteConfiguratorCompact() {
                       </p>
                     )}
 
+                    {/* Reassurance & Fast-Track Box */}
+                    <div className="rounded-2xl border border-amber-500/30 bg-amber-50/70 p-4 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-amber-950 flex items-center gap-1.5">
+                          <span className="text-base">🚀</span>
+                          Démarrage Express garanti sous 48h
+                        </span>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200/70 text-amber-900">
+                          3 créneaux restants
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-amber-900 leading-relaxed">
+                        Chaque projet est livré clé en main sous 10 à 14 jours ouvrés. Validez votre configuration directement avec un expert sur WhatsApp ou téléchargez votre devis officiel PDF.
+                      </p>
+                    </div>
+
                     <div className="flex flex-col gap-3 border-t border-[#171613]/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
                       <button
                         type="button"
@@ -2265,10 +2284,10 @@ export function QuoteConfiguratorCompact() {
                           href={whatsappHref}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center justify-center gap-2 rounded-full border border-[#171613]/20 bg-[#FAF8F4] px-5 py-3 text-xs font-semibold text-[#171613] transition hover:border-[#9E7F5A]"
+                          className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-3 text-xs font-bold text-white shadow-md transition hover:bg-emerald-700 hover:scale-[1.02]"
                         >
-                          <MessageCircle className="h-4 w-4 text-[#7D6445]" />
-                          {ui.whatsappBtn}
+                          <MessageCircle className="h-4 w-4 text-white" />
+                          <span>💬 Valider sur WhatsApp (15m)</span>
                         </a>
                         <button
                           type="submit"
@@ -2327,13 +2346,32 @@ export function QuoteConfiguratorCompact() {
                   ))}
                 </ul>
 
+                {totals.bundleDiscount > 0 && (
+                  <div className="rounded-2xl border border-emerald-500/30 bg-emerald-50/80 p-3 my-2 text-xs">
+                    <div className="flex items-center justify-between text-emerald-800 font-bold">
+                      <span>🎁 Pack Synergie (-15%)</span>
+                      <span>-{price(totals.bundleDiscount)}</span>
+                    </div>
+                    <p className="text-[10.5px] text-emerald-700 mt-1 font-medium">
+                      + 1er mois WebCare offert (valeur 99 €)
+                    </p>
+                  </div>
+                )}
+
                 <div className="mt-2 space-y-2 border-t border-[#E5E5E0] pt-4">
                   {totals.once > 0 && (
                     <div className="flex items-baseline justify-between">
                       <span className="text-xs text-[#5A554E]">{ui.onceTotal}</span>
-                      <span className="font-serif text-2xl font-semibold text-[#12110E]">
-                        {price(totals.once)}
-                      </span>
+                      <div className="text-right">
+                        {totals.bundleDiscount > 0 && (
+                          <span className="text-xs line-through text-slate-400 mr-2">
+                            {price(totals.once)}
+                          </span>
+                        )}
+                        <span className="font-serif text-2xl font-bold text-emerald-700">
+                          {price(totals.finalOnce)}
+                        </span>
+                      </div>
                     </div>
                   )}
                   {totals.monthly > 0 && (

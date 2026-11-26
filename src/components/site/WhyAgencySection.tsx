@@ -15,53 +15,53 @@ const COPY: Record<
   }
 > = {
   fr: {
-    eyebrow: "POURQUOI XR AGENCY",
-    title: "Une agence engagée",
-    accent: "à vos côtés.",
+    eyebrow: "LES ENGAGEMENTS XR AGENCY",
+    title: "Des résultats concrets,",
+    accent: "pas de promesses en l'air.",
     pillars: [
       {
-        title: "Conseil stratégique",
-        detail: "Des recommandations claires et adaptées à votre marché.",
+        title: "⚡ Vitesse d'exécution : 10 jours",
+        detail: "Votre site et vos outils livrés clé en main en 10 à 14 jours ouvrés. Aucun retard, zéro perte de temps.",
       },
       {
-        title: "Exécution sur mesure",
-        detail: "Des solutions concrètes, créatives et performantes.",
+        title: "💎 0% de commission prélevée",
+        detail: "Émancipation totale des plateformes tierces (Uber, Booking, intermédiaires). 100% de vos marges vous reviennent.",
       },
       {
-        title: "Expertise digitale 360°",
-        detail: "Une vision d'ensemble de vos leviers de croissance.",
+        title: "🚀 Domination Google & Réseaux",
+        detail: "Technologies ultra-rapides, SEO local agressif et montage vidéo cinéma 4K pour capter les clients de votre secteur.",
       },
       {
-        title: "Accompagnement international",
-        detail: "Une coordination internationale adaptée au périmètre du projet.",
+        title: "🤝 Interlocuteur VIP dédié",
+        detail: "Accès direct par WhatsApp 6j/7, suivi hebdomadaire et transparence absolue sur les coûts et les résultats.",
       },
     ],
-    cta: "Découvrir notre histoire",
+    cta: "Découvrir notre méthode",
     photoAlt: "Scène de réunion de travail",
   },
   en: {
-    eyebrow: "WHY XR AGENCY",
-    title: "A committed agency",
-    accent: "by your side.",
+    eyebrow: "XR AGENCY COMMITMENT",
+    title: "Tangible business results,",
+    accent: "zero empty promises.",
     pillars: [
       {
-        title: "Strategic consulting",
-        detail: "Clear, tailored recommendations built for your market.",
+        title: "⚡ 10-Day Turnkey Delivery",
+        detail: "Your bespoke website and digital assets delivered in 10 to 14 business days. On time, on budget.",
       },
       {
-        title: "Bespoke execution",
-        detail: "Concrete, creative and high-performing digital solutions.",
+        title: "💎 0% Platform Commission",
+        detail: "Total independence from middlemen (Uber, Booking, OTA). 100% of your customer revenue stays in your pocket.",
       },
       {
-        title: "360° digital expertise",
-        detail: "A full comprehensive perspective on business growth.",
+        title: "🚀 Google & Social Dominance",
+        detail: "Next-gen tech stack, aggressive local SEO and cinematic 4K video editing to capture high-value clients.",
       },
       {
-        title: "International presence",
-        detail: "International coordination shaped around the project scope.",
+        title: "🤝 Dedicated VIP Contact",
+        detail: "Direct WhatsApp communication 6 days a week, weekly progress syncs and complete pricing transparency.",
       },
     ],
-    cta: "Discover our story",
+    cta: "Explore our method",
     photoAlt: "A team meeting scene",
   },
   vi: {

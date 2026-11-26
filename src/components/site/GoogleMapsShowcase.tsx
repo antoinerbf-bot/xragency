@@ -54,12 +54,23 @@ export function GoogleMapsShowcase() {
         </header>
 
         {/* 2-Columns Interactive Tunnel */}
-        <div className="mt-14 grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
+        <div className="mt-14 grid items-start gap-10 lg:grid-cols-12 lg:gap-14">
           
           {/* GAUCHE : Simulateur Ludique Smartphone Google Pack Local */}
           <div className="lg:col-span-6">
             <div className="relative mx-auto max-w-lg rounded-[2.5rem] border border-[#1A1815]/15 bg-[#171410] p-4 text-white shadow-2xl sm:p-6">
               
+              {/* Header Simulateur */}
+              <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
+                <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#E5C696] flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5 text-amber-300" />
+                  Simulateur Live · Pack Local Google
+                </span>
+                <span className="rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2 py-0.5 border border-emerald-500/30">
+                  Algorithme 2026
+                </span>
+              </div>
+
               {/* Sector Chips Selector */}
               <div className="mb-4 flex flex-wrap items-center gap-2">
                 <span className="font-mono text-[10px] uppercase tracking-wider text-[#A67C40]">Secteur :</span>
@@ -71,7 +82,7 @@ export function GoogleMapsShowcase() {
                     className={cn(
                       "rounded-full px-3 py-1 text-xs font-semibold transition",
                       activeSector === idx
-                        ? "bg-[#E5C696] text-[#14110E]"
+                        ? "bg-[#E5C696] text-[#14110E] shadow"
                         : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
                     )}
                   >
@@ -205,7 +216,15 @@ export function GoogleMapsShowcase() {
                 </span>
               </div>
 
-              <div className="mt-6 flex flex-col justify-between gap-3 sm:flex-row sm:items-baseline">
+              {/* Exclusivité & Rareté */}
+              <div className="mt-4 rounded-xl border border-amber-500/30 bg-amber-50/70 p-3 text-xs text-amber-900 flex items-center gap-2">
+                <span className="text-base">⚡</span>
+                <span className="font-medium">
+                  <strong>Exclusivité sectorielle :</strong> nous n'accompagnons qu'un seul établissement par ville et par spécialité pour garantir la première place.
+                </span>
+              </div>
+
+              <div className="mt-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-baseline">
                 <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[#1A1815]">
                   Stratégie de Visibilité Google Maps
                 </h3>
@@ -266,8 +285,8 @@ export function GoogleMapsShowcase() {
                         : "border-[#1A1815]/20 bg-white text-[#1A1815] hover:border-[#1A1815] hover:bg-[#FAF8F5]"
                     )}
                   >
-                    <Check className="h-4 w-4 text-[#A67C40]" />
-                    <span>{isSelected ? "✓ Dans votre devis" : "+ Ajouter au devis (999 €)"}</span>
+                    <Check className={cn("h-4 w-4", isSelected ? "text-emerald-600" : "text-[#A67C40]")} />
+                    <span>{isSelected ? "Sélectionné dans votre devis" : "+ Ajouter au devis (999 €)"}</span>
                   </button>
 
                   <a

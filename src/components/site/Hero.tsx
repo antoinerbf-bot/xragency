@@ -120,43 +120,40 @@ const HUBS: CityHub[] = [
 
 const COPY = {
   fr: {
-    eyebrow: "AGENCE DIGITALE INTERNATIONALE",
+    eyebrow: "★ STUDIO DIGITAL HAUTE COUTURE · LIVRAISON EN 10 JOURS",
     titlePart1: "L’art du ",
     titleItalic: "digital",
-    titlePart2: "sur mesure.",
-    sub: "Nous réunissons stratégie, design, développement et visibilité pour construire une présence digitale cohérente et utile à votre activité.",
-    ctaPrimary: "Parler de mon projet",
-    ctaBadge: "",
-    ctaSecondary: "Notre méthode",
-    ctaAgency: "Nos réalisations",
+    titlePart2: "qui fait vendre.",
+    sub: "Sites d'exception, domination Google & automatisation IA. Conçus pour convertir immédiatement vos visiteurs en clients fidèles, sans abonnement forcé.",
+    ctaPrimary: "🚀 Configurer mon projet en 30s",
+    ctaWhatsapp: "💬 WhatsApp Direct (15 min)",
+    ctaSecondary: "Nos réalisations",
     modalTitle: "XR AGENCY — SHOWREEL OFFICIEL",
     modalClose: "Fermer",
-    scroll: "Découvrir nos expertises",
+    scroll: "Découvrir nos offres & simulateur",
   },
   en: {
-    eyebrow: "INTERNATIONAL DIGITAL AGENCY",
+    eyebrow: "★ BESPOKE DIGITAL STUDIO · 10-DAY TURNKEY DELIVERY",
     titlePart1: "The art of ",
     titleItalic: "digital",
-    titlePart2: "made to measure.",
-    sub: "Strategy, design, development and visibility—combined to build a coherent digital presence that serves your business.",
-    ctaPrimary: "Discuss my project",
-    ctaBadge: "",
-    ctaSecondary: "Our approach",
-    ctaAgency: "Selected work",
+    titlePart2: "that drives revenue.",
+    sub: "Prestige websites, Google dominance & AI automation. Engineered to convert visitors into loyal clients, with 0% third-party fees.",
+    ctaPrimary: "🚀 Configure my project (30s)",
+    ctaWhatsapp: "💬 WhatsApp VIP (15 min)",
+    ctaSecondary: "Selected work",
     modalTitle: "XR AGENCY — OFFICIAL SHOWREEL",
     modalClose: "Close",
-    scroll: "Discover our services",
+    scroll: "Explore packages & simulator",
   },
   vi: {
-    eyebrow: "AGENCY KỸ THUẬT SỐ QUỐC TẾ",
+    eyebrow: "★ STUDIO KỸ THUẬT SỐ CAO CẤP · BÀN GIAO TRONG 10 NGÀY",
     titlePart1: "Nghệ thuật ",
     titleItalic: "số",
-    titlePart2: "đo ni đóng giày.",
-    sub: "Chiến lược, thiết kế, phát triển và khả năng hiển thị được kết hợp để xây dựng sự hiện diện số phù hợp với doanh nghiệp của bạn.",
-    ctaPrimary: "Trao đổi dự án",
-    ctaBadge: "",
-    ctaSecondary: "Phương pháp",
-    ctaAgency: "Dự án tiêu biểu",
+    titlePart2: "tạo ra doanh thu.",
+    sub: "Website đẳng cấp, thống lĩnh Google & tự động hóa AI. Thiết kế để chuyển đổi khách hàng ngay lập tức mà không mất hoa hồng trung gian.",
+    ctaPrimary: "🚀 Bắt đầu mô phỏng (30s)",
+    ctaWhatsapp: "💬 Chat WhatsApp ngay",
+    ctaSecondary: "Dự án tiêu biểu",
     modalTitle: "XR AGENCY — SHOWREEL CHÍNH THỨC",
     modalClose: "Đóng",
     scroll: "Khám phá chuyên môn",
@@ -360,24 +357,57 @@ export function Hero() {
             {c.sub}
           </p>
 
+          {/* Badges Ludiques & Réassurance Haute Conversion */}
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/40 bg-black/45 px-3 py-1 text-[11px] font-bold text-amber-200 backdrop-blur-md shadow-sm">
+              <span className="text-amber-400">★★★★★</span> 4.9/5 · +40 marques propulsées
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-black/45 px-3 py-1 text-[11px] font-bold text-emerald-300 backdrop-blur-md shadow-sm">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
+              ⚡ Livré clé en main en 10j
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-400/40 bg-black/45 px-3 py-1 text-[11px] font-bold text-rose-300 backdrop-blur-md shadow-sm">
+              🔥 Plus que 3 créneaux ce mois-ci
+            </span>
+          </div>
+
           <div className="mt-5 flex flex-wrap items-center gap-2.5">
-            {/* Primary Action: Sleek Luxury White Pill */}
+            {/* Primary Action: Sleek Luxury Gold Pill */}
             <a
               href="#quote"
-              className="inline-flex min-h-11 items-center gap-3 rounded-full bg-[#E5C696] px-6 text-xs sm:text-sm font-semibold text-[#17130e] shadow-[0_10px_30px_rgba(0,0,0,0.22)] transition-all duration-300 hover:bg-[#F0D7B1] hover:-translate-y-0.5 active:translate-y-0"
+              className="inline-flex min-h-11 items-center gap-3 rounded-full bg-[#E5C696] px-6 text-xs sm:text-sm font-extrabold text-[#17130e] shadow-[0_10px_30px_rgba(229,198,150,0.3)] transition-all duration-300 hover:bg-[#F0D7B1] hover:scale-105 active:scale-95"
             >
               <span>{c.ctaPrimary}</span>
-              <ArrowRight className="h-3.5 w-3.5 text-black" />
+              <ArrowRight className="h-4 w-4 text-black" />
             </a>
 
-            {/* Secondary Action: Minimalist Translucent Method Link */}
+            {/* Direct WhatsApp Callout */}
             <a
-              href="/methode"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/45 bg-white/8 px-5 text-xs sm:text-sm font-medium text-white backdrop-blur-md transition-all duration-300 hover:bg-white/15 hover:border-white/70"
+              href="https://wa.me/33649219808?text=Bonjour%20XR%20Agency%2C%20je%20souhaite%20un%20devis%20ou%20un%20audit%20pour%20mon%20projet."
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-5 text-xs sm:text-sm font-bold text-emerald-300 backdrop-blur-md transition-all duration-300 hover:bg-emerald-500/25 hover:border-emerald-400"
+            >
+              <span>{c.ctaWhatsapp ?? "💬 WhatsApp (15m)"}</span>
+            </a>
+
+            {/* Work Link */}
+            <a
+              href="#work"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/40 bg-white/10 px-5 text-xs sm:text-sm font-medium text-white backdrop-blur-md transition-all duration-300 hover:bg-white/20 hover:border-white/70"
             >
               <span>{c.ctaSecondary}</span>
               <ArrowRight className="h-3.5 w-3.5 text-[#E5C696]" />
             </a>
+          </div>
+
+          {/* Transparent Price Anchor */}
+          <div className="mt-4 flex flex-wrap items-center gap-2 text-[11px] font-mono text-white/75">
+            <span className="text-white/45">Transparence totale :</span>
+            <span className="rounded-lg bg-black/40 border border-white/10 px-2 py-0.5 text-[#E5C696] font-semibold">Sites dès 499 €</span>
+            <span className="rounded-lg bg-black/40 border border-white/10 px-2 py-0.5 text-[#E5C696] font-semibold">Google Maps 999 €/an</span>
+            <span className="rounded-lg bg-black/40 border border-white/10 px-2 py-0.5 text-[#E5C696] font-semibold">Social 349 €/m</span>
+            <span className="rounded-lg bg-black/40 border border-white/10 px-2 py-0.5 text-emerald-300 font-semibold">0% com. tierce</span>
           </div>
         </div>
 

@@ -287,7 +287,7 @@ export const SERVICES_PART2 = [
           en: "Multi-Location & Network Pack",
           vi: "Gói chuỗi đa địa điểm",
         },
-        eur: 1490,
+        eur: 2490,
         period: "year",
         features: [
           {

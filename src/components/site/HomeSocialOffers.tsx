@@ -130,9 +130,17 @@ export function HomeSocialOffers() {
                     </span>
                   </div>
 
-                  {/* Deliverables List */}
+                  {/* Deliverables List (Exciting creative outputs first) */}
                   <ul className="mt-6 space-y-3">
-                    {plan.features.map((feat, idx) => (
+                    {[...plan.features]
+                      .sort((a, b) => {
+                        const isCommitA = a.fr.toLowerCase().includes("engagement");
+                        const isCommitB = b.fr.toLowerCase().includes("engagement");
+                        if (isCommitA && !isCommitB) return 1;
+                        if (!isCommitA && isCommitB) return -1;
+                        return 0;
+                      })
+                      .map((feat, idx) => (
                       <li
                         key={idx}
                         className={`flex items-start gap-2.5 text-xs ${popular ? "text-white/85" : "text-[#3A342D]"}`}

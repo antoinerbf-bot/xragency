@@ -199,9 +199,9 @@ const COPY: Record<
   }
 > = {
   fr: {
-    eyebrow: "NOS RÉALISATIONS",
-    heading: "Projets réels & explorations de studio.",
-    conceptLabel: "Étude conceptuelle",
+    eyebrow: "RÉALISATIONS & STANDARDS DE PRODUCTION",
+    heading: "Des expériences digitales conçues pour dominer leur marché.",
+    conceptLabel: "💎 Projet Signature XR",
     allBtn: "Voir toutes les réalisations",
     filters: {
       all: "Tous les projets",
@@ -213,9 +213,9 @@ const COPY: Record<
     },
   },
   en: {
-    eyebrow: "OUR WORK",
-    heading: "Verified work & studio explorations.",
-    conceptLabel: "Studio concept",
+    eyebrow: "OUR WORK & PRODUCTION BENCHMARKS",
+    heading: "Digital experiences engineered to dominate the market.",
+    conceptLabel: "💎 XR Signature Project",
     allBtn: "View all projects",
     filters: {
       all: "All Projects",
@@ -352,6 +352,9 @@ export function NexProWorkShowcase() {
                       {item.title[lang]}
                     </h3>
                     <p className="mt-0.5 text-xs text-[#E5C696]">{item.deliverables[lang]}</p>
+                    <span className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold text-amber-300 group-hover:underline">
+                      Créer un projet similaire dès 499 € →
+                    </span>
                   </div>
                   <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/35 bg-white/10 text-white backdrop-blur-sm transition group-hover:border-[#E5C696] group-hover:bg-[#E5C696] group-hover:text-[#17130E]">
                     {item.url ? (
@@ -369,17 +372,25 @@ export function NexProWorkShowcase() {
                 {cardBody}
               </a>
             ) : (
-              <Link key={item.id} to="/work" className="block">
+              <a key={item.id} href="#quote" className="block">
                 {cardBody}
-              </Link>
+              </a>
             );
           })}
         </div>
 
-        <div className="mt-12 flex justify-center">
+        <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
+          <a
+            href="#quote"
+            className="inline-flex items-center gap-2 rounded-full bg-[#1A1815] px-7 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[#332F2B] hover:scale-105 shadow-md"
+          >
+            <span>🚀 Lancer mon site sous 10 jours</span>
+            <ArrowRight className="h-4 w-4 text-[#E5C696]" />
+          </a>
+
           <Link
             to="/work"
-            className="group inline-flex items-center gap-2 rounded-full border border-[#1A1815]/20 bg-[#FAF8F5] px-7 py-3 text-xs font-semibold uppercase tracking-wider text-[#1A1815] transition hover:bg-[#1A1815] hover:text-white shadow-sm"
+            className="group inline-flex items-center gap-2 rounded-full border border-[#1A1815]/20 bg-[#FAF8F5] px-6 py-3 text-xs font-semibold uppercase tracking-wider text-[#1A1815] transition hover:bg-[#1A1815] hover:text-white shadow-sm"
           >
             <span>{c.allBtn}</span>
             <ArrowUpRight className="h-4 w-4 text-[#A67C40] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-white" />
