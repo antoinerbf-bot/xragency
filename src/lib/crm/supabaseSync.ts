@@ -102,9 +102,44 @@ export async function deleteLeadFromSupabase(leadId: string): Promise<boolean> {
 
 // Les membres et taux de commission seront écrits par une route Direction dédiée.
 // Ne jamais écrire de PIN ni de pin_hash depuis le navigateur.
-export async function upsertMemberToSupabase(_member: TeamMember): Promise<boolean> {
-  emitSyncState("error");
-  return false;
+export async function fetchMembersFromSupabase(): Promise<TeamMember[] | null> {
+  try {
+    const response = await fetch("/api/crm-data?resource=members", { credentials: "same-origin", cache: "no-store" });
+    if (!response.ok) return null;
+    const body = await response.json();
+    if (!Array.isArray(body?.members)) return null;
+    return body.members.map((m: any) => ({
+      id: m.id, name: m.name, shortName: m.shortName, roleLabel: m.roleLabel,
+      roleType: m.roleType, recruitedBy: m.recruitedBy || undefined,
+      settingRate: Number(m.settingRate), closingRate: Number(m.closingRate),
+      fullCycleRate: Number(m.fullCycleRate), overrideRate: Number(m.overrideRate || 0),
+      avatarBg: m.avatarBg, badge: m.badge, pin: "", customPinSet: Boolean(m.customPinSet),
+    }));
+  } catch {
+    return null;
+  }
+}
+
+export async function upsertMemberToSupabase(member: TeamMember): Promise<boolean> {
+  try {
+    const response = await fetch("/api/crm-data?resource=members", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: member.id, name: member.name, shortName: member.shortName, roleLabel: member.roleLabel,
+        roleType: member.roleType, recruitedBy: member.recruitedBy,
+        settingRate: member.settingRate, closingRate: member.closingRate,
+        fullCycleRate: member.fullCycleRate, overrideRate: member.overrideRate || 0,
+        avatarBg: member.avatarBg, badge: member.badge, customPinSet: Boolean(member.customPinSet),
+      }),
+    });
+    emitSyncState(response.ok ? "supabase_live" : "error");
+    return response.ok;
+  } catch {
+    emitSyncState("error");
+    return false;
+  }
 }
 
 // Polling léger : l'API serveur applique l'authentification et le RBAC à chaque lecture.
