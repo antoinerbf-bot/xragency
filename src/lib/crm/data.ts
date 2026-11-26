@@ -38,7 +38,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 1,
     avatarBg: "from-amber-400 via-amber-500 to-orange-600",
     badge: "👑 Direction",
-    pin: "071266",
+    pin: "",
   },
   {
     id: "martin",
@@ -52,7 +52,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     overrideRate: 0.1,
     avatarBg: "from-blue-500 to-indigo-600",
     badge: "👥 Manager",
-    pin: "2026",
+    pin: "",
   },
   {
     id: "lucas",
@@ -65,7 +65,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 0.3,
     avatarBg: "from-emerald-500 to-teal-700",
     badge: "⚡ Full-Cycle",
-    pin: "1010",
+    pin: "",
   },
   {
     id: "sarah",
@@ -78,7 +78,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 0.3,
     avatarBg: "from-pink-500 to-rose-700",
     badge: "⚡ Full-Cycle",
-    pin: "2020",
+    pin: "",
   },
   {
     id: "christel",
@@ -92,7 +92,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 0.2,
     avatarBg: "from-purple-500 to-violet-700",
     badge: "🎯 Closer",
-    pin: "3030",
+    pin: "",
   },
   {
     id: "camille",
@@ -106,7 +106,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 0.2,
     avatarBg: "from-cyan-500 to-blue-700",
     badge: "📞 Setter",
-    pin: "4040",
+    pin: "",
   },
   {
     id: "karim",
@@ -120,7 +120,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 0.15,
     avatarBg: "from-amber-600 to-orange-700",
     badge: "🎓 Élève XR School",
-    pin: "5050",
+    pin: "",
   },
   {
     id: "emma",
@@ -134,7 +134,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 0.15,
     avatarBg: "from-fuchsia-500 to-purple-700",
     badge: "🎓 Élève XR School",
-    pin: "6060",
+    pin: "",
   },
   {
     id: "studio",
@@ -147,7 +147,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 0,
     avatarBg: "from-zinc-600 to-zinc-900",
     badge: "🎨 Studio",
-    pin: "0000",
+    pin: "",
   },
 ];
 
@@ -248,13 +248,13 @@ export const XR_OFFICIAL_SERVICES: XrOfficialService[] = [
     icon: "📱",
     category: "Réseaux Sociaux",
     billing: "month",
-    defaultPrice: 499,
+    defaultPrice: 599,
     deliverable: "Calendrier éditorial, création visuels/Reels, rédaction, programmation et modération.",
     upsellHint: "Ajouter Branding Identity Kit pour une direction artistique pro",
     plans: [
-      { id: "social-1", label: "Présence Essentielle (1 réseau · 8 posts)", price: 299, period: "month" },
-      { id: "social-2", label: "Croissance Active (2 réseaux · 20 posts)", price: 499, period: "month" },
-      { id: "social-3", label: "Domination Sociale (3 réseaux · 30 posts)", price: 699, period: "month" },
+      { id: "social-1", label: "Présence Essentielle", price: 349, period: "month" },
+      { id: "social-2", label: "Croissance Active", price: 599, period: "month" },
+      { id: "social-3", label: "Domination Sociale", price: 799, period: "month" },
     ],
   },
   {

@@ -56,10 +56,12 @@ import { CRM_THEMES, type CrmThemeId } from "@/lib/crm/theme";
 import {
   checkSupabaseStatus,
   fetchLeadsFromSupabase,
+  fetchMembersFromSupabase,
   upsertLeadToSupabase,
   deleteLeadFromSupabase,
   upsertMemberToSupabase,
   subscribeCrmRealtime,
+  type SyncState,
 } from "@/lib/crm/supabaseSync";
 import { BUSINESS_SECTORS, getSectorServicePlaybook } from "@/lib/crm/schoolScripts";
 import { SchoolModule } from "@/components/crm/SchoolModule";
@@ -141,12 +143,18 @@ function XrAgencyCrmApp() {
         const saved = localStorage.getItem("xr_crm_members_v5");
         if (saved) {
           const parsed = JSON.parse(saved);
-          return parsed.map((m: TeamMember) => {
-            if (m.id === "antoine" && (!m.pin || m.pin === "")) {
-              return { ...m, pin: "071266" };
-            }
-            return m;
-          });
+          // Always keep server-known profiles available; never restore credentials from browser storage.
+          const storedById = new Map(parsed.map((m: TeamMember) => [m.id, m]));
+          const known = DEFAULT_TEAM_MEMBERS.map((member) => ({
+            ...member,
+            ...(storedById.get(member.id) || {}),
+            roleType: member.roleType,
+            recruitedBy: member.recruitedBy,
+            pin: "",
+          }));
+          const knownIds = new Set(DEFAULT_TEAM_MEMBERS.map((member) => member.id));
+          const localOnly = parsed.filter((member: TeamMember) => !knownIds.has(member.id)).map((member: TeamMember) => ({ ...member, pin: "" }));
+          return [...known, ...localOnly];
         }
       } catch {
         // ignore
@@ -156,10 +164,7 @@ function XrAgencyCrmApp() {
   });
 
   // ── Session utilisateur vérifiée serveur (/api/crm-auth) ──
-  const [currentUserId, setCurrentUserId] = useState<string | null>(() => {
-    if (typeof window !== "undefined") return localStorage.getItem("xr_crm_user_v3") || null;
-    return null;
-  });
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   const currentUser = useMemo(
     () => members.find((m) => m.id === currentUserId) || null,
@@ -195,7 +200,7 @@ function XrAgencyCrmApp() {
     return "Objectif Semaine : +50 XP bonus sur chaque Pack Site + WebCare !";
   });
 
-  const syncStatus = checkSupabaseStatus();
+  const [syncStatus, setSyncStatus] = useState<SyncState>(checkSupabaseStatus());
 
   const [activeTab, setActiveTab] = useState<CrmTab>("kanban");
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -261,11 +266,12 @@ function XrAgencyCrmApp() {
   const [newMemberSettingPct, setNewMemberSettingPct] = useState(10);
   const [newMemberClosingPct, setNewMemberClosingPct] = useState(20);
   const [newMemberFullPct, setNewMemberFullPct] = useState(20);
-  const [newMemberPin, setNewMemberPin] = useState("1234");
+  const [newMemberPin, setNewMemberPin] = useState("");
   const [newMemberRecruitedBy, setNewMemberRecruitedBy] = useState("");
 
   // Modal Changement Mot de Passe personnel
   const [showChangePinModal, setShowChangePinModal] = useState(false);
+  const [currentPinValue, setCurrentPinValue] = useState("");
   const [newPinValue, setNewPinValue] = useState("");
   const [confirmPinValue, setConfirmPinValue] = useState("");
   const [changePinError, setChangePinError] = useState("");
@@ -284,6 +290,52 @@ function XrAgencyCrmApp() {
   }, [members]);
 
   useEffect(() => {
+    const onSyncStatus = (event: Event) => {
+      const state = (event as CustomEvent<SyncState>).detail;
+      if (state) setSyncStatus(state);
+    };
+    window.addEventListener("xr-crm-sync-status", onSyncStatus);
+    return () => window.removeEventListener("xr-crm-sync-status", onSyncStatus);
+  }, []);
+
+  // Load only safe profile labels for the login picker; no credentials or commission rates.
+  useEffect(() => {
+    let active = true;
+    fetch("/api/crm-auth?profiles=1", { credentials: "same-origin", cache: "no-store" })
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (!active || !Array.isArray(data?.profiles)) return;
+        setMembers((prev) => {
+          const previous = new Map(prev.map((m) => [m.id, m]));
+          const profiles = data.profiles.map((p: any) => {
+            const base = previous.get(p.id) || DEFAULT_TEAM_MEMBERS.find((m) => m.roleType === p.roleType) || DEFAULT_TEAM_MEMBERS[0];
+            return { ...base, ...p, pin: "" };
+          });
+          const ids = new Set(profiles.map((m: TeamMember) => m.id));
+          return [...profiles, ...prev.filter((m) => !ids.has(m.id)).map((m) => ({ ...m, pin: "" }))];
+        });
+      })
+      .catch(() => {});
+    return () => { active = false; };
+  }, []);
+
+  // Restore a session only after the server validates the HttpOnly signed cookie.
+  useEffect(() => {
+    let active = true;
+    fetch("/api/crm-auth", { credentials: "same-origin" })
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (active && data?.authenticated && typeof data.memberId === "string") {
+          setCurrentUserId(data.memberId);
+        }
+      })
+      .catch(() => {
+        if (active) setCurrentUserId(null);
+      });
+    return () => { active = false; };
+  }, []);
+
+  useEffect(() => {
     if (typeof window !== "undefined") {
       if (currentUserId) localStorage.setItem("xr_crm_user_v3", currentUserId);
       else localStorage.removeItem("xr_crm_user_v3");
@@ -294,22 +346,66 @@ function XrAgencyCrmApp() {
     if (typeof window !== "undefined") localStorage.setItem("xr_weekly_challenge", weeklyChallenge);
   }, [weeklyChallenge]);
 
-  // Synchronisation initiale & temps réel Supabase si configuré
+  // Synchronisation après authentification serveur. Les erreurs sont visibles et ne sont pas masquées.
   useEffect(() => {
+    if (!currentUserId) {
+      setSyncStatus("local_ready");
+      return;
+    }
     let active = true;
-    fetchLeadsFromSupabase().then((remote) => {
-      if (active && remote && remote.length > 0) setLeads(remote);
-    });
-    const unsub = subscribeCrmRealtime(() => {
-      fetchLeadsFromSupabase().then((remote) => {
-        if (active && remote) setLeads(remote);
+    setSyncStatus("syncing");
+    if (currentUserId) {
+      fetchMembersFromSupabase().then((team) => {
+        if (active && team && team.length > 0) setMembers(team);
       });
-    });
+    }
+
+    const refresh = async (initial = false) => {
+      const remote = await fetchLeadsFromSupabase();
+      if (!active) return;
+      if (remote === null) {
+        setSyncStatus("error");
+        return;
+      }
+
+      if (initial && remote.length === 0) {
+        let localSnapshot: Lead[] = [];
+        try {
+          const stored = localStorage.getItem("xr_crm_leads_v3");
+          if (stored) localSnapshot = JSON.parse(stored);
+        } catch { /* ignore invalid local cache */ }
+
+        if (localSnapshot.length > 0) {
+          if (currentUserId === "antoine") {
+            const results = await Promise.all(localSnapshot.map((lead) => upsertLeadToSupabase(lead)));
+            if (!active) return;
+            if (results.every(Boolean)) {
+              const migrated = await fetchLeadsFromSupabase();
+              if (!active) return;
+              if (migrated !== null) {
+                setLeads(migrated);
+                setSyncStatus("supabase_live");
+                return;
+              }
+            }
+          }
+          // Keep local data visible rather than silently deleting it, but clearly mark it unsynced.
+          setSyncStatus("error");
+          return;
+        }
+      }
+
+      setLeads(remote);
+      setSyncStatus("supabase_live");
+    };
+
+    void refresh(true);
+    const unsub = subscribeCrmRealtime(() => { void refresh(false); });
     return () => {
       active = false;
       unsub?.();
     };
-  }, []);
+  }, [currentUserId]);
 
   // Raccourci Ctrl+K
   useEffect(() => {
@@ -496,64 +592,29 @@ function XrAgencyCrmApp() {
     );
   };
 
-  // Authentification sécurisée (serveur /api/crm-auth + fallback sécurisé)
+  // Authentification serveur uniquement : aucun PIN de secours dans le navigateur.
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!pendingMember) return;
     setAuthLoading(true);
     setPinError("");
-    const entered = pinInput.trim();
-
-    const checkDirect = () => {
-      if (pendingMember.id === "antoine") {
-        return entered === "071266" || (pendingMember.pin && entered === pendingMember.pin);
-      }
-      return (
-        entered === pendingMember.pin ||
-        DEFAULT_TEAM_MEMBERS.find((m) => m.id === pendingMember.id)?.pin === entered ||
-        (pendingMember.pin === "" && entered === "1234")
-      );
-    };
-
     try {
       const res = await fetch("/api/crm-auth", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-csrf-token": "default-csrf-token",
-        },
-        body: JSON.stringify({
-          action: "login",
-          memberId: pendingMember.id,
-          pin: entered,
-          expectedPin: pendingMember.id === "antoine" ? (pendingMember.pin || "071266") : pendingMember.pin,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "login", memberId: pendingMember.id, pin: pinInput.trim() }),
       });
       const data = await res.json().catch(() => null);
-      if (res.ok && data?.ok) {
-        setCurrentUserId(pendingMember.id);
-        setPendingMember(null);
-        setPinInput("");
-        if (soundEnabled) playDing();
+      if (!res.ok || !data?.ok || data.memberId !== pendingMember.id) {
+        setPinError(data?.error || "Code incorrect. Veuillez réessayer.");
         return;
       }
-      if (checkDirect()) {
-        setCurrentUserId(pendingMember.id);
-        setPendingMember(null);
-        setPinInput("");
-        if (soundEnabled) playDing();
-        return;
-      }
-      setPinError(data?.error || "Code incorrect. Veuillez réessayer.");
+      setCurrentUserId(pendingMember.id);
+      setPendingMember(null);
+      setPinInput("");
+      if (soundEnabled) playDing();
     } catch {
-      if (checkDirect()) {
-        setCurrentUserId(pendingMember.id);
-        setPendingMember(null);
-        setPinInput("");
-        if (soundEnabled) playDing();
-      } else {
-        setPinError("Code incorrect. Veuillez réessayer.");
-      }
+      setPinError("Serveur d'authentification indisponible. Connexion refusée.");
     } finally {
       setAuthLoading(false);
     }
@@ -562,14 +623,6 @@ function XrAgencyCrmApp() {
   const handleSchoolPinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const entered = schoolPinInput.trim();
-    if (entered === "1234") {
-      setSchoolGuestMode(true);
-      setSchoolPinModal(false);
-      setSchoolPinInput("");
-      setSchoolPinError("");
-      if (soundEnabled) playDing();
-      return;
-    }
     try {
       const res = await fetch("/api/crm-auth", {
         method: "POST",
@@ -587,10 +640,10 @@ function XrAgencyCrmApp() {
         setSchoolPinError("");
         if (soundEnabled) playDing();
       } else {
-        setSchoolPinError(data?.error || "Mot de passe XR School incorrect (Code : 1234).");
+        setSchoolPinError(data?.error || "Mot de passe XR School incorrect.");
       }
     } catch {
-      setSchoolPinError("Mot de passe XR School incorrect (Code : 1234).");
+      setSchoolPinError("Mot de passe XR School incorrect.");
     }
   };
 
@@ -868,15 +921,19 @@ function XrAgencyCrmApp() {
       fullCycleRate: 0.2,
       avatarBg: "from-violet-500 to-fuchsia-600",
       badge: roleType === "student" ? "🎓 Élève XR School" : "🎯 Commercial",
-      pin: String(Math.floor(1000 + Math.random() * 9000)),
+      pin: "",
     };
     setMembers((prev) => [...prev, newMem]);
-    void upsertMemberToSupabase(newMem);
+
   };
 
-  const handleAddMember = (e: React.FormEvent) => {
+  const handleAddMember = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMemberName.trim() || !currentUser) return;
+    if (currentUser.roleType === "direction" && newMemberPin.trim().length < 6) {
+      setDuplicateWarning("Le code initial doit contenir au moins 6 caractères.");
+      return;
+    }
     const short = newMemberName.trim().split(" ")[0];
     const id = `${short.toLowerCase().replace(/[^a-z0-9]/g, "")}-${Date.now().toString().slice(-3)}`;
     const roleMeta: Record<UserRoleType, { label: string; badge: string; bg: string }> = {
@@ -901,11 +958,19 @@ function XrAgencyCrmApp() {
       fullCycleRate: Math.max(0, Math.min(100, newMemberFullPct)) / 100,
       avatarBg: meta.bg,
       badge: meta.badge,
-      pin: newMemberPin.trim() || "1234",
+      pin: "",
     };
-    setMembers([...members, created]);
-    void upsertMemberToSupabase(created);
+    if (currentUser.roleType === "direction") {
+      const saved = await upsertMemberToSupabase(created, newMemberPin.trim());
+      if (!saved) {
+        setDuplicateWarning("Le profil n'a pas été enregistré côté serveur. Vérifiez la connexion CRM.");
+        return;
+      }
+    }
+    setMembers((prev) => [...prev, created]);
     setNewMemberName("");
+    setNewMemberPin("");
+    setDuplicateWarning("");
     setShowAddMemberModal(false);
     if (soundEnabled) playDing();
   };
@@ -926,31 +991,37 @@ function XrAgencyCrmApp() {
     );
   };
 
-  const handleSaveOwnPin = (e: React.FormEvent) => {
+  const handleSaveOwnPin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!currentUser) return;
-    const clean = newPinValue.trim();
-    if (clean.length < 4) {
-      setChangePinError("Choisissez un code d'au moins 4 caractères.");
-      return;
-    }
-    if (clean !== confirmPinValue.trim()) {
-      setChangePinError("Les deux codes ne correspondent pas.");
-      return;
-    }
-    setMembers((prev) =>
-      prev.map((m) => {
-        if (m.id !== currentUser.id) return m;
-        const updated = { ...m, pin: clean, customPinSet: true };
-        void upsertMemberToSupabase(updated);
-        return updated;
-      })
-    );
-    setNewPinValue("");
-    setConfirmPinValue("");
     setChangePinError("");
-    setShowChangePinModal(false);
-    if (soundEnabled) playDing();
+    if (newPinValue.trim().length < 6) {
+      setChangePinError("Le nouveau code doit contenir au moins 6 caractères.");
+      return;
+    }
+    if (newPinValue.trim() !== confirmPinValue.trim()) {
+      setChangePinError("Les deux nouveaux codes ne correspondent pas.");
+      return;
+    }
+    try {
+      const response = await fetch("/api/crm-auth", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "change-pin", currentPin: currentPinValue.trim(), newPin: newPinValue.trim() }),
+      });
+      const data = await response.json().catch(() => null);
+      if (!response.ok || !data?.ok) {
+        setChangePinError(data?.error || "Modification du code impossible.");
+        return;
+      }
+      setCurrentPinValue("");
+      setNewPinValue("");
+      setConfirmPinValue("");
+      setShowChangePinModal(false);
+      if (soundEnabled) playDing();
+    } catch {
+      setChangePinError("Serveur d'authentification indisponible.");
+    }
   };
 
   const handleIncrementCall = () => {
@@ -1161,7 +1232,7 @@ function XrAgencyCrmApp() {
   );
 
   // ═══════════════════════════════════════════════════════════
-  // MODE ACCÈS LIBRE XR SCHOOL (1234 · FORMATION PURE)
+  // MODE XR SCHOOL — formation pure, accès protégé côté serveur
   // ═══════════════════════════════════════════════════════════
   if (schoolGuestMode && !currentUser) {
     return (
@@ -1227,9 +1298,6 @@ function XrAgencyCrmApp() {
             >
               <GraduationCap className="w-5 h-5 text-amber-300" />
               Entrer dans XR School (Formation Pure · 70 Trames & Dojo)
-              <span className="font-mono text-[11px] font-black px-2.5 py-0.5 rounded-lg bg-black/30 text-amber-200 border border-white/20">
-                Code : 1234
-              </span>
             </button>
           </div>
 
@@ -1304,9 +1372,6 @@ function XrAgencyCrmApp() {
                       <KeyRound className="w-3.5 h-3.5 text-indigo-500" />
                       Code / Mot de passe
                     </label>
-                    <span className="text-[11px] font-mono font-extrabold text-emerald-600 dark:text-emerald-300">
-                      Code : {pendingMember.id === "antoine" ? (pendingMember.pin || "071266") : (pendingMember.pin || "1234")}
-                    </span>
                   </div>
                   <input
                     type="password"
@@ -1344,7 +1409,7 @@ function XrAgencyCrmApp() {
           </div>
         )}
 
-        {/* Modal XR School (1234) */}
+        {/* Modal XR School */}
         {schoolPinModal && (
           <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
             <div className={`border rounded-3xl p-6 max-w-sm w-full space-y-5 ${theme.modalBg}`}>
@@ -1354,7 +1419,7 @@ function XrAgencyCrmApp() {
                 </div>
                 <div>
                   <h3 className={`font-extrabold text-base ${theme.textMain}`}>Accès XR School</h3>
-                  <p className={`text-xs ${theme.textMuted}`}>Formation pure · Code : 1234</p>
+                  <p className={`text-xs ${theme.textMuted}`}>Formation pure · Code privé requis</p>
                 </div>
               </div>
 
@@ -1369,7 +1434,7 @@ function XrAgencyCrmApp() {
                     setSchoolPinInput(e.target.value);
                     setSchoolPinError("");
                   }}
-                  placeholder="1234"
+                  placeholder="Code privé"
                   className={`w-full rounded-2xl px-4 py-3 text-center text-xl tracking-[0.5em] font-mono border focus:outline-none focus:border-indigo-500 ${theme.inputBg}`}
                 />
                 {schoolPinError && <p className="text-xs text-rose-500 font-bold text-center">{schoolPinError}</p>}
@@ -1481,11 +1546,13 @@ function XrAgencyCrmApp() {
                   className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
                     syncStatus === "supabase_live"
                       ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
-                      : "bg-sky-500/15 text-sky-700 dark:text-sky-300"
+                      : syncStatus === "error"
+                        ? "bg-rose-500/15 text-rose-700 dark:text-rose-300"
+                        : "bg-sky-500/15 text-sky-700 dark:text-sky-300"
                   }`}
                 >
                   <Database className="w-2.5 h-2.5" />
-                  {syncStatus === "supabase_live" ? "Supabase Live" : "Local · Prêt Supabase"}
+                  {syncStatus === "supabase_live" ? "Supabase synchronisé" : syncStatus === "error" ? "Local · Non synchronisé" : syncStatus === "syncing" ? "Connexion serveur…" : "Local · Hors ligne"}
                 </span>
                 {dueFollowUpsCount > 0 && !isStudio && (
                   <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-500 text-white shadow-sm">
@@ -1587,12 +1654,7 @@ function XrAgencyCrmApp() {
             )}
 
             <button
-              onClick={() => {
-                setNewPinValue("");
-                setConfirmPinValue("");
-                setChangePinError("");
-                setShowChangePinModal(true);
-              }}
+              onClick={() => setShowChangePinModal(true)}
               title="Mon mot de passe"
               className={`p-2 rounded-xl border ${theme.subCard} ${theme.textMuted} hover:text-indigo-500`}
             >
@@ -2816,10 +2878,17 @@ function XrAgencyCrmApp() {
                     <option value="student">🎓 Élève XR School</option>
                   </select>
                 </div>
-                <div>
-                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Code initial</label>
-                  <input type="text" maxLength={8} value={newMemberPin} onChange={(e) => setNewMemberPin(e.target.value)} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs font-mono border ${theme.inputBg}`} />
-                </div>
+                {currentUser?.roleType === "direction" ? (
+                  <div className="col-span-2">
+                    <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Code initial privé (6 caractères minimum) *</label>
+                    <input type="password" autoComplete="new-password" minLength={6} maxLength={128} required value={newMemberPin} onChange={(e) => setNewMemberPin(e.target.value)} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs font-mono border ${theme.inputBg}`} />
+                    <p className={`text-[10px] mt-1 ${theme.textMuted}`}>Le code est transmis uniquement à l'API serveur et stocké sous forme de hash salé. Il n'est pas conservé dans le profil local.</p>
+                  </div>
+                ) : (
+                  <div className="col-span-2">
+                    <p className={`text-[11px] ${theme.textMuted}`}>Le candidat sera ajouté à votre filière locale. La création d'un compte d'accès est réservée à la direction.</p>
+                  </div>
+                )}
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <div>
@@ -2853,26 +2922,25 @@ function XrAgencyCrmApp() {
         </div>
       )}
 
-      {/* ── MODAL CHANGER MON MOT DE PASSE ── */}
+      {/* ── MODAL GESTION DU CODE ── */}
       {showChangePinModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
           <div className={`border rounded-3xl p-6 max-w-sm w-full space-y-4 ${theme.modalBg}`}>
             <div className={`flex items-center justify-between pb-3 border-b ${theme.border}`}>
               <h3 className={`font-extrabold text-base flex items-center gap-2 ${theme.textMain}`}>
-                <KeyRound className="w-4 h-4 text-indigo-500" /> Mon mot de passe
+                <KeyRound className="w-4 h-4 text-indigo-500" /> Code d'accès
               </h3>
               <button onClick={() => setShowChangePinModal(false)} className={theme.textSoft}>✕</button>
             </div>
-            <p className={`text-xs ${theme.textMuted}`}>
-              Dès que vous créez votre mot de passe personnel, il est masqué automatiquement sur l'écran de connexion.
-            </p>
+            <p className={`text-xs ${theme.textMuted}`}>Le code est vérifié et hashé côté serveur. Utilisez au moins 6 caractères.</p>
             <form onSubmit={handleSaveOwnPin} className="space-y-3">
-              <input type="password" required minLength={4} maxLength={20} value={newPinValue} onChange={(e) => { setNewPinValue(e.target.value); setChangePinError(""); }} placeholder="Nouveau mot de passe (min. 4 car.)" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
-              <input type="password" required minLength={4} maxLength={20} value={confirmPinValue} onChange={(e) => { setConfirmPinValue(e.target.value); setChangePinError(""); }} placeholder="Confirmer le mot de passe" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
+              <input type="password" required autoComplete="current-password" maxLength={128} value={currentPinValue} onChange={(e) => { setCurrentPinValue(e.target.value); setChangePinError(""); }} placeholder="Code actuel" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
+              <input type="password" required minLength={6} autoComplete="new-password" maxLength={128} value={newPinValue} onChange={(e) => { setNewPinValue(e.target.value); setChangePinError(""); }} placeholder="Nouveau code (6 caractères min.)" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
+              <input type="password" required minLength={6} autoComplete="new-password" maxLength={128} value={confirmPinValue} onChange={(e) => { setConfirmPinValue(e.target.value); setChangePinError(""); }} placeholder="Confirmer le nouveau code" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
               {changePinError && <p className="text-xs text-rose-500 font-bold text-center">{changePinError}</p>}
               <div className="pt-1 flex gap-2">
                 <button type="button" onClick={() => setShowChangePinModal(false)} className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}>Annuler</button>
-                <button type="submit" className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold">Enregistrer</button>
+                <button type="submit" className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold">Modifier</button>
               </div>
             </form>
           </div>
