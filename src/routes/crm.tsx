@@ -265,7 +265,7 @@ function XrAgencyCrmApp() {
   const [newMemberRole, setNewMemberRole] = useState<UserRoleType>("closer");
   const [newMemberSettingPct, setNewMemberSettingPct] = useState(10);
   const [newMemberClosingPct, setNewMemberClosingPct] = useState(20);
-  const [newMemberFullPct, setNewMemberFullPct] = useState(20);
+  const [newMemberFullPct, setNewMemberFullPct] = useState(20);\n  const [newMemberPin, setNewMemberPin] = useState("");
   const [newMemberRecruitedBy, setNewMemberRecruitedBy] = useState("");
 
   // Modal Changement Mot de Passe personnel
@@ -901,9 +901,13 @@ function XrAgencyCrmApp() {
     void upsertMemberToSupabase(newMem);
   };
 
-  const handleAddMember = (e: React.FormEvent) => {
+  const handleAddMember = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMemberName.trim() || !currentUser) return;
+    if (currentUser.roleType === "direction" && newMemberPin.trim().length < 6) {
+      setDuplicateWarning("Le code initial doit contenir au moins 6 caractères.");
+      return;
+    }
     const short = newMemberName.trim().split(" ")[0];
     const id = `${short.toLowerCase().replace(/[^a-z0-9]/g, "")}-${Date.now().toString().slice(-3)}`;
     const roleMeta: Record<UserRoleType, { label: string; badge: string; bg: string }> = {
@@ -930,9 +934,17 @@ function XrAgencyCrmApp() {
       badge: meta.badge,
       pin: "",
     };
-    setMembers([...members, created]);
-    void upsertMemberToSupabase(created);
+    if (currentUser.roleType === "direction") {
+      const saved = await upsertMemberToSupabase(created, newMemberPin.trim());
+      if (!saved) {
+        setDuplicateWarning("Le profil n'a pas été enregistré côté serveur. Vérifiez la connexion CRM.");
+        return;
+      }
+    }
+    setMembers((prev) => [...prev, created]);
     setNewMemberName("");
+    setNewMemberPin("");
+    setDuplicateWarning("");
     setShowAddMemberModal(false);
     if (soundEnabled) playDing();
   };
@@ -2807,9 +2819,17 @@ function XrAgencyCrmApp() {
                     <option value="student">🎓 Élève XR School</option>
                   </select>
                 </div>
-                <div className="col-span-2">
-                  <p className={`text-[11px] ${theme.textMuted}`}>Le code d'accès est défini côté serveur par la direction après création du profil.</p>
-                </div>
+                {currentUser?.roleType === "direction" ? (
+                  <div className="col-span-2">
+                    <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Code initial privé (6 caractères minimum) *</label>
+                    <input type="password" autoComplete="new-password" minLength={6} maxLength={128} required value={newMemberPin} onChange={(e) => setNewMemberPin(e.target.value)} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs font-mono border ${theme.inputBg}`} />
+                    <p className={`text-[10px] mt-1 ${theme.textMuted}`}>Le code est transmis uniquement à l'API serveur et stocké sous forme de hash salé. Il n'est pas conservé dans le profil local.</p>
+                  </div>
+                ) : (
+                  <div className="col-span-2">
+                    <p className={`text-[11px] ${theme.textMuted}`}>Le candidat sera ajouté à votre filière locale. La création d'un compte d'accès est réservée à la direction.</p>
+                  </div>
+                )}
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <div>
