@@ -2848,7 +2848,7 @@ function XrAgencyCrmApp() {
             <button type="button" onClick={() => setShowChangePinModal(false)} className="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold">Fermer</button>
           </div>
         </div>
-      )}}
+      )}
     </div>
   );
 }
