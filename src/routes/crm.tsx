@@ -294,6 +294,27 @@ function XrAgencyCrmApp() {
     return () => window.removeEventListener("xr-crm-sync-status", onSyncStatus);
   }, []);
 
+  // Load only safe profile labels for the login picker; no credentials or commission rates.
+  useEffect(() => {
+    let active = true;
+    fetch("/api/crm-auth?profiles=1", { credentials: "same-origin", cache: "no-store" })
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (!active || !Array.isArray(data?.profiles)) return;
+        setMembers((prev) => {
+          const previous = new Map(prev.map((m) => [m.id, m]));
+          const profiles = data.profiles.map((p: any) => {
+            const base = previous.get(p.id) || DEFAULT_TEAM_MEMBERS.find((m) => m.roleType === p.roleType) || DEFAULT_TEAM_MEMBERS[0];
+            return { ...base, ...p, pin: "" };
+          });
+          const ids = new Set(profiles.map((m: TeamMember) => m.id));
+          return [...profiles, ...prev.filter((m) => !ids.has(m.id)).map((m) => ({ ...m, pin: "" }))];
+        });
+      })
+      .catch(() => {});
+    return () => { active = false; };
+  }, []);
+
   // Restore a session only after the server validates the HttpOnly signed cookie.
   useEffect(() => {
     let active = true;
