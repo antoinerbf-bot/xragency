@@ -248,13 +248,13 @@ export const XR_OFFICIAL_SERVICES: XrOfficialService[] = [
     icon: "📱",
     category: "Réseaux Sociaux",
     billing: "month",
-    defaultPrice: 499,
+    defaultPrice: 599,
     deliverable: "Calendrier éditorial, création visuels/Reels, rédaction, programmation et modération.",
     upsellHint: "Ajouter Branding Identity Kit pour une direction artistique pro",
     plans: [
-      { id: "social-1", label: "Présence Essentielle (1 réseau · 8 posts)", price: 299, period: "month" },
-      { id: "social-2", label: "Croissance Active (2 réseaux · 20 posts)", price: 499, period: "month" },
-      { id: "social-3", label: "Domination Sociale (3 réseaux · 30 posts)", price: 699, period: "month" },
+      { id: "social-1", label: "Présence Essentielle", price: 349, period: "month" },
+      { id: "social-2", label: "Croissance Active", price: 599, period: "month" },
+      { id: "social-3", label: "Domination Sociale", price: 799, period: "month" },
     ],
   },
   {
