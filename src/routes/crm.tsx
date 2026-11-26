@@ -255,7 +255,6 @@ function XrAgencyCrmApp() {
   const [newMemberSettingPct, setNewMemberSettingPct] = useState(10);
   const [newMemberClosingPct, setNewMemberClosingPct] = useState(20);
   const [newMemberFullPct, setNewMemberFullPct] = useState(20);
-  const [newMemberPin, setNewMemberPin] = useState("1234");
   const [newMemberRecruitedBy, setNewMemberRecruitedBy] = useState("");
 
   // Modal Changement Mot de Passe personnel
@@ -916,7 +915,7 @@ function XrAgencyCrmApp() {
       fullCycleRate: Math.max(0, Math.min(100, newMemberFullPct)) / 100,
       avatarBg: meta.bg,
       badge: meta.badge,
-      pin: newMemberPin.trim() || "1234",
+      pin: "",
     };
     setMembers([...members, created]);
     void upsertMemberToSupabase(created);
@@ -1154,7 +1153,7 @@ function XrAgencyCrmApp() {
   );
 
   // ═══════════════════════════════════════════════════════════
-  // MODE ACCÈS LIBRE XR SCHOOL (1234 · FORMATION PURE)
+  // MODE XR SCHOOL — formation pure, accès protégé côté serveur
   // ═══════════════════════════════════════════════════════════
   if (schoolGuestMode && !currentUser) {
     return (
@@ -1220,9 +1219,6 @@ function XrAgencyCrmApp() {
             >
               <GraduationCap className="w-5 h-5 text-amber-300" />
               Entrer dans XR School (Formation Pure · 70 Trames & Dojo)
-              <span className="font-mono text-[11px] font-black px-2.5 py-0.5 rounded-lg bg-black/30 text-amber-200 border border-white/20">
-                Code : 1234
-              </span>
             </button>
           </div>
 
@@ -1297,9 +1293,6 @@ function XrAgencyCrmApp() {
                       <KeyRound className="w-3.5 h-3.5 text-indigo-500" />
                       Code / Mot de passe
                     </label>
-                    <span className="text-[11px] font-mono font-extrabold text-emerald-600 dark:text-emerald-300">
-                      Code : {pendingMember.id === "antoine" ? (pendingMember.pin || "071266") : (pendingMember.pin || "1234")}
-                    </span>
                   </div>
                   <input
                     type="password"
@@ -1337,7 +1330,7 @@ function XrAgencyCrmApp() {
           </div>
         )}
 
-        {/* Modal XR School (1234) */}
+        {/* Modal XR School */}
         {schoolPinModal && (
           <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
             <div className={`border rounded-3xl p-6 max-w-sm w-full space-y-5 ${theme.modalBg}`}>
@@ -1347,7 +1340,7 @@ function XrAgencyCrmApp() {
                 </div>
                 <div>
                   <h3 className={`font-extrabold text-base ${theme.textMain}`}>Accès XR School</h3>
-                  <p className={`text-xs ${theme.textMuted}`}>Formation pure · Code : 1234</p>
+                  <p className={`text-xs ${theme.textMuted}`}>Formation pure · Code privé requis</p>
                 </div>
               </div>
 
@@ -1362,7 +1355,7 @@ function XrAgencyCrmApp() {
                     setSchoolPinInput(e.target.value);
                     setSchoolPinError("");
                   }}
-                  placeholder="1234"
+                  placeholder="Code privé"
                   className={`w-full rounded-2xl px-4 py-3 text-center text-xl tracking-[0.5em] font-mono border focus:outline-none focus:border-indigo-500 ${theme.inputBg}`}
                 />
                 {schoolPinError && <p className="text-xs text-rose-500 font-bold text-center">{schoolPinError}</p>}
@@ -2811,9 +2804,8 @@ function XrAgencyCrmApp() {
                     <option value="student">🎓 Élève XR School</option>
                   </select>
                 </div>
-                <div>
-                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Code initial</label>
-                  <input type="text" maxLength={8} value={newMemberPin} onChange={(e) => setNewMemberPin(e.target.value)} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs font-mono border ${theme.inputBg}`} />
+                <div className="col-span-2">
+                  <p className={`text-[11px] ${theme.textMuted}`}>Le code d'accès est défini côté serveur par la direction après création du profil.</p>
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-2">
