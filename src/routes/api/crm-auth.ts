@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createHmac, timingSafeEqual, scryptSync, randomBytes } from "node:crypto";\nimport { getSupabaseServer } from "@/lib/saas/supabase";\nimport { DEFAULT_TEAM_MEMBERS } from "@/lib/crm/data";
+import { createHmac, timingSafeEqual, scryptSync, randomBytes } from "node:crypto";
+import { getSupabaseServer } from "@/lib/saas/supabase";
+import { DEFAULT_TEAM_MEMBERS } from "@/lib/crm/data";
 
 const SESSION_COOKIE = "xr_crm_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 8;
