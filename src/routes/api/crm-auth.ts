@@ -45,6 +45,18 @@ function verifyStoredCrmPin(pin: string, stored: string): boolean {
   } catch { return false; }
 }
 
+async function verifyMemberPin(memberId: string, pin: string): Promise<boolean> {
+  try {
+    const supabase = getSupabaseServer();
+    const { data: member } = await supabase.from("crm_members").select("pin_hash").eq("id", memberId).maybeSingle();
+    if (member?.pin_hash && String(member.pin_hash).startsWith("scrypt$")) {
+      return verifyStoredCrmPin(pin, String(member.pin_hash));
+    }
+  } catch { /* allow configured server environment PINs when DB is not initialized */ }
+  const configured = getMemberPins()[memberId];
+  return Boolean(configured && safeCompare(pin, configured));
+}
+
 function safeCompare(a: string, b: string): boolean {
   const bufA = Buffer.from(a);
   const bufB = Buffer.from(b);
@@ -114,9 +126,9 @@ export const Route = createFileRoute("/api/crm-auth")({
         try { body = await request.json(); } catch { return Response.json({ ok: false, error: "JSON invalide." }, { status: 400 }); }
         const { z } = await import("zod");
         const schema = z.object({
-          action: z.enum(["login", "school", "logout"]),
+          action: z.enum(["login", "school", "logout", "change-pin"]),
           memberId: z.string().min(1).max(64).optional(),
-          pin: z.string().min(1).max(128).optional(),
+          pin: z.string().min(1).max(128).optional(),\n          currentPin: z.string().min(1).max(128).optional(),\n          newPin: z.string().min(1).max(128).optional(),
         }).strict();
         const parsed = schema.safeParse(body);
         if (!parsed.success) return Response.json({ ok: false, error: "Payload invalide." }, { status: 400 });
@@ -136,20 +148,26 @@ export const Route = createFileRoute("/api/crm-auth")({
           return Response.json({ ok: true, mode: "school" });
         }
 
-        const memberId = payload.memberId?.trim();
-        const pin = payload.pin?.trim();
-        const pins = getMemberPins();
-        let verified = Boolean(memberId && pin && pins[memberId] && safeCompare(pin, pins[memberId]));
-        if (!verified && memberId && pin) {
+        if (payload.action === "change-pin") {
+          const memberId = verifyCrmSessionCookie(request.headers.get("cookie"), secret);
+          const currentPin = payload.currentPin?.trim();
+          const newPin = payload.newPin?.trim();
+          if (!memberId) return Response.json({ ok: false, error: "Session expirée. Reconnectez-vous." }, { status: 401 });
+          if (!currentPin || !newPin || newPin.length < 6) return Response.json({ ok: false, error: "Le nouveau code doit contenir au moins 6 caractères." }, { status: 400 });
+          if (!(await verifyMemberPin(memberId, currentPin))) return Response.json({ ok: false, error: "Code actuel incorrect." }, { status: 401 });
           try {
             const supabase = getSupabaseServer();
-            const { data: member } = await supabase.from("crm_members").select("pin_hash").eq("id", memberId).maybeSingle();
-            if (member?.pin_hash && String(member.pin_hash).startsWith("scrypt$")) {
-              verified = verifyStoredCrmPin(pin, String(member.pin_hash));
-            }
-          } catch { /* fail closed below */ }
+            const { error } = await supabase.from("crm_members").update({ pin_hash: hashCrmPin(newPin), custom_pin_set: true }).eq("id", memberId);
+            if (error) return Response.json({ ok: false, error: "Modification du code impossible." }, { status: 503 });
+            return Response.json({ ok: true });
+          } catch {
+            return Response.json({ ok: false, error: "Stockage CRM serveur non configuré." }, { status: 503 });
+          }
         }
-        if (!memberId || !pin || !verified) {
+
+        const memberId = payload.memberId?.trim();
+        const pin = payload.pin?.trim();
+        if (!memberId || !pin || !(await verifyMemberPin(memberId, pin))) {
           return Response.json({ ok: false, error: "Identifiant ou code incorrect." }, { status: 401 });
         }
 
