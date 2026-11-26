@@ -120,7 +120,7 @@ export async function fetchMembersFromSupabase(): Promise<TeamMember[] | null> {
   }
 }
 
-export async function upsertMemberToSupabase(member: TeamMember): Promise<boolean> {
+export async function upsertMemberToSupabase(member: TeamMember, initialPin?: string): Promise<boolean> {
   try {
     const response = await fetch("/api/crm-data?resource=members", {
       method: "POST",
@@ -131,7 +131,7 @@ export async function upsertMemberToSupabase(member: TeamMember): Promise<boolea
         roleType: member.roleType, recruitedBy: member.recruitedBy,
         settingRate: member.settingRate, closingRate: member.closingRate,
         fullCycleRate: member.fullCycleRate, overrideRate: member.overrideRate || 0,
-        avatarBg: member.avatarBg, badge: member.badge, customPinSet: Boolean(member.customPinSet),
+        avatarBg: member.avatarBg, badge: member.badge, customPinSet: Boolean(member.customPinSet),\n        ...(initialPin ? { initialPin } : {}),
       }),
     });
     emitSyncState(response.ok ? "supabase_live" : "error");
