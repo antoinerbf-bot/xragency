@@ -113,6 +113,15 @@ function playFanfare() {
   playTone(1046.5, "triangle", 0.48, 0.34);
 }
 
+export function formatWaPhone(rawPhone?: string): string {
+  if (!rawPhone) return "";
+  const digits = rawPhone.replace(/[^0-9]/g, "");
+  if (digits.startsWith("0") && digits.length === 10) {
+    return "33" + digits.slice(1);
+  }
+  return digits;
+}
+
 type CrmTab = "kanban" | "cockpit" | "contest" | "school" | "finances" | "studio" | "rh" | "qg";
 
 interface QuickAuditResult {
@@ -200,6 +209,7 @@ function XrAgencyCrmApp() {
   const [activeTab, setActiveTab] = useState<CrmTab>("kanban");
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [kanbanFilter, setKanbanFilter] = useState<"all" | "urgent" | "websites" | "recurring">("all");
   const [activeLeadForCockpit, setActiveLeadForCockpit] = useState<Lead | null>(null);
   const [editingLead, setEditingLead] = useState<Lead | null>(null);
   const [openObjIdx, setOpenObjIdx] = useState<number | null>(0);
@@ -353,17 +363,6 @@ function XrAgencyCrmApp() {
     return leads.filter((l) => canViewLead(currentUser, l, members));
   }, [leads, currentUser, members]);
 
-  const filteredLeads = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) return myVisibleLeads;
-    return myVisibleLeads.filter(
-      (l) =>
-        l.name.toLowerCase().includes(q) ||
-        l.contact.toLowerCase().includes(q) ||
-        l.phone.toLowerCase().includes(q)
-    );
-  }, [myVisibleLeads, searchQuery]);
-
   const todayIso = new Date().toISOString().slice(0, 10);
   const dueFollowUpsCount = useMemo(
     () =>
@@ -372,6 +371,35 @@ function XrAgencyCrmApp() {
       ).length,
     [myVisibleLeads, todayIso]
   );
+
+  const filteredLeads = useMemo(() => {
+    let list = myVisibleLeads;
+
+    if (kanbanFilter === "urgent") {
+      list = list.filter((l) => l.stage !== "won" && l.followUpDate && l.followUpDate <= todayIso);
+    } else if (kanbanFilter === "websites") {
+      list = list.filter((l) => l.serviceId === "websites");
+    } else if (kanbanFilter === "recurring") {
+      list = list.filter(
+        (l) =>
+          l.billing === "monthly" ||
+          l.billing === "annual" ||
+          l.serviceId.includes("seo") ||
+          l.serviceId.includes("social") ||
+          l.serviceId.includes("webcare") ||
+          l.serviceId.includes("maps")
+      );
+    }
+
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return list;
+    return list.filter(
+      (l) =>
+        l.name.toLowerCase().includes(q) ||
+        l.contact.toLowerCase().includes(q) ||
+        l.phone.toLowerCase().includes(q)
+    );
+  }, [myVisibleLeads, kanbanFilter, searchQuery, todayIso]);
 
   // ── Calcul Gamification / XP / Niveau personnel adapté au rôle ──
   const gameHud = useMemo(() => {
@@ -976,6 +1004,29 @@ function XrAgencyCrmApp() {
     link.click();
   };
 
+  const handleExportCommissionsCsv = () => {
+    const wonDeals = leads.filter(
+      (l) => l.stage === "won" && (selectedMonth === "all" || (l.wonMonth || todayIso.slice(0, 7)) === selectedMonth)
+    );
+    const headers = "\uFEFFDate Signature;Entreprise;Contact;Service;Facturation;CA HT (€);Closer;Com Closer (€);Setter;Com Setter (€);Statut Commission\n";
+    const rows = wonDeals
+      .map((deal) => {
+        const com = computeDealCommissions(deal, members);
+        const totals = getLeadTotals(deal);
+        const closer = members.find((m) => m.id === deal.closerId);
+        const setter = members.find((m) => m.id === deal.setterId);
+        return `"${deal.wonAt || deal.wonMonth || deal.createdAt || ""}";"${deal.name}";"${deal.contact}";"${deal.planLabel || deal.serviceId}";"${deal.billing === "monthly" ? "Mensuel" : deal.billing === "annual" ? "Annuel" : "Unique"}";"${totals.commissionBase}";"${closer?.name || deal.closerId}";"${com.closerAmount}";"${setter?.name || deal.setterId}";"${com.setterAmount}";"${deal.commissionStatus === "unlocked" ? "Débloquée" : "En attente"}"`;
+      })
+      .join("\n");
+    const blob = new Blob([headers + rows], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `XR-AGENCY-COMMISSIONS-${selectedMonth === "all" ? "TOUTES-PERIODES" : selectedMonth}.csv`;
+    link.click();
+    if (soundEnabled) playDing();
+  };
+
   const buildQuotePdfDoc = (lead: Lead) => {
     const svc = XR_OFFICIAL_SERVICES.find((s) => s.id === lead.serviceId) || XR_OFFICIAL_SERVICES[0];
     const closer = members.find((m) => m.id === lead.closerId);
@@ -1516,22 +1567,66 @@ function XrAgencyCrmApp() {
           </nav>
 
           {activeTab === "kanban" && (
-            <div className="flex items-center gap-2 w-full sm:w-auto">
+            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+              <div className="flex items-center gap-1 overflow-x-auto py-1">
+                <button
+                  onClick={() => setKanbanFilter("all")}
+                  className={`text-[11px] font-bold px-2.5 py-1.5 rounded-xl border transition-all ${
+                    kanbanFilter === "all"
+                      ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
+                      : `${theme.card} ${theme.textMuted}`
+                  }`}
+                >
+                  Tous ({myVisibleLeads.length})
+                </button>
+                <button
+                  onClick={() => setKanbanFilter("urgent")}
+                  className={`text-[11px] font-bold px-2.5 py-1.5 rounded-xl border transition-all flex items-center gap-1 ${
+                    kanbanFilter === "urgent"
+                      ? "bg-rose-600 text-white border-rose-600 shadow-sm"
+                      : `${theme.card} ${dueFollowUpsCount > 0 ? "text-rose-600 dark:text-rose-400 font-extrabold border-rose-500/30" : theme.textMuted}`
+                  }`}
+                >
+                  <Flame className="w-3 h-3 text-amber-400" />
+                  À relancer ({dueFollowUpsCount})
+                </button>
+                <button
+                  onClick={() => setKanbanFilter("websites")}
+                  className={`text-[11px] font-bold px-2.5 py-1.5 rounded-xl border transition-all ${
+                    kanbanFilter === "websites"
+                      ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
+                      : `${theme.card} ${theme.textMuted}`
+                  }`}
+                >
+                  🌐 Sites
+                </button>
+                <button
+                  onClick={() => setKanbanFilter("recurring")}
+                  className={`text-[11px] font-bold px-2.5 py-1.5 rounded-xl border transition-all ${
+                    kanbanFilter === "recurring"
+                      ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
+                      : `${theme.card} ${theme.textMuted}`
+                  }`}
+                >
+                  🔄 Mensuels
+                </button>
+              </div>
+
               {myVisibleLeads.length > 0 && (
                 <button
                   onClick={handleExportCsv}
-                  className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-bold ${theme.card} ${theme.textMain}`}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold ${theme.card} ${theme.textMain}`}
                 >
                   <Download className="w-3.5 h-3.5 text-indigo-500" /> CSV
                 </button>
               )}
-              <div className={`flex-1 sm:w-60 flex items-center gap-2 rounded-xl px-3 py-2 text-xs border ${theme.card}`}>
+              <div className={`flex-1 sm:w-52 flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs border ${theme.card}`}>
                 <Search className={`w-3.5 h-3.5 ${theme.textSoft}`} />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Rechercher un prospect..."
+                  placeholder="Rechercher..."
                   className={`bg-transparent border-none outline-none text-xs w-full ${theme.textMain}`}
                 />
               </div>
@@ -1739,7 +1834,7 @@ function XrAgencyCrmApp() {
                               <Phone className="w-3.5 h-3.5" /> Appeler
                             </a>
                             <a
-                              href={`https://wa.me/${target.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(fillVars(playbook.setting.dm1))}`}
+                              href={`https://wa.me/${formatWaPhone(target.phone)}?text=${encodeURIComponent(fillVars(playbook.setting.dm1))}`}
                               target="_blank"
                               rel="noreferrer"
                               onClick={() => appendTimeline(target.id, "Message WhatsApp (J0) envoyé")}
@@ -1851,7 +1946,7 @@ function XrAgencyCrmApp() {
                         <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-200/60 dark:border-white/10 text-xs">
                           <span className={`font-bold ${theme.textMuted}`}>Relances express :</span>
                           <a
-                            href={`https://wa.me/${target.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(fillVars(playbook.setting.followupJ2))}`}
+                            href={`https://wa.me/${formatWaPhone(target.phone)}?text=${encodeURIComponent(fillVars(playbook.setting.followupJ2))}`}
                             target="_blank"
                             rel="noreferrer"
                             onClick={() => appendTimeline(target.id, "Relance WhatsApp J+2 envoyée")}
@@ -1860,7 +1955,7 @@ function XrAgencyCrmApp() {
                             ⚡ Envoyer Relance J+2
                           </a>
                           <a
-                            href={`https://wa.me/${target.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(fillVars(playbook.setting.followupJ5))}`}
+                            href={`https://wa.me/${formatWaPhone(target.phone)}?text=${encodeURIComponent(fillVars(playbook.setting.followupJ5))}`}
                             target="_blank"
                             rel="noreferrer"
                             onClick={() => appendTimeline(target.id, "Relance WhatsApp J+5 envoyée")}
@@ -2082,6 +2177,15 @@ function XrAgencyCrmApp() {
                       </option>
                     ))}
                   </select>
+
+                  <button
+                    onClick={handleExportCommissionsCsv}
+                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition-all hover:scale-105 ${theme.subCard} ${theme.textMain}`}
+                    title="Télécharger le fichier comptable des commissions (format Excel CSV)"
+                  >
+                    <Download className="w-3.5 h-3.5 text-emerald-500" />
+                    Exporter Commissions (CSV)
+                  </button>
 
                   {(isDirector || isManager) && (
                     <button
@@ -2781,14 +2885,19 @@ function LeadCard({
   const closer = members.find((m) => m.id === lead.closerId);
   const setter = members.find((m) => m.id === lead.setterId);
   const isDue = lead.followUpDate && lead.followUpDate <= todayIso;
+  const isUrgent = lead.stage !== "won" && isDue;
   const totals = getLeadTotals(lead);
   const extraCount = lead.extraItems?.length || 0;
+
+  const cleanWa = formatWaPhone(lead.phone);
+  const waMsg = `Bonjour ${lead.contact || ""}, je vous contacte de la part de XR Agency concernant votre projet ${lead.name}.`;
+  const waUrl = cleanWa.length >= 8 ? `https://wa.me/${cleanWa}?text=${encodeURIComponent(waMsg)}` : null;
 
   return (
     <div
       draggable
       onDragStart={onDragStart}
-      className={`p-3.5 rounded-2xl border cursor-grab active:cursor-grabbing transition-all hover:-translate-y-0.5 space-y-2 ${theme.card} ${theme.cardHover}`}
+      className={`p-3.5 rounded-2xl border cursor-grab active:cursor-grabbing transition-all hover:-translate-y-0.5 space-y-2 ${theme.card} ${theme.cardHover} ${isUrgent ? "ring-2 ring-rose-500/30" : ""}`}
     >
       <div className="flex items-center justify-between gap-1">
         <div className="flex items-center gap-1">
@@ -2823,6 +2932,11 @@ function LeadCard({
       </p>
 
       <div className="flex flex-wrap items-center gap-1.5">
+        {isUrgent && (
+          <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-rose-500 text-white flex items-center gap-1 shadow-sm animate-pulse">
+            <Flame className="w-2.5 h-2.5 text-amber-300" /> À relancer
+          </span>
+        )}
         {lead.installments?.plan === "3x" && (
           <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
             3x ({lead.installments.paidCount}/3)
@@ -2833,13 +2947,9 @@ function LeadCard({
             ✓ Maquette prête
           </span>
         )}
-        {lead.followUpDate && (
+        {lead.followUpDate && !isUrgent && (
           <span
-            className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-1 ${
-              isDue
-                ? "bg-rose-500 text-white"
-                : `${theme.subCard} ${theme.textMuted}`
-            }`}
+            className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-1 ${theme.subCard} ${theme.textMuted}`}
           >
             <Calendar className="w-2.5 h-2.5" /> {lead.followUpDate}
           </span>
@@ -2852,9 +2962,23 @@ function LeadCard({
       </div>
 
       <div className={`pt-2 border-t flex items-center justify-between gap-1 ${theme.border}`}>
-        <button onClick={onCall} className="text-[10px] font-extrabold text-indigo-600 dark:text-amber-300 flex items-center gap-1">
-          <Phone className="w-3 h-3" /> Appel
-        </button>
+        <div className="flex items-center gap-1.5">
+          <button onClick={onCall} className="text-[10px] font-extrabold text-indigo-600 dark:text-amber-300 flex items-center gap-1 hover:underline">
+            <Phone className="w-3 h-3" /> Appel
+          </button>
+          {waUrl && (
+            <a
+              href={waUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 hover:underline"
+              title="Ouvrir WhatsApp direct"
+            >
+              <MessageSquare className="w-3 h-3 text-emerald-500" /> WhatsApp
+            </a>
+          )}
+        </div>
         <button onClick={onPdf} className={`text-[10px] font-bold flex items-center gap-0.5 ${theme.textMuted}`}>
           <FileText className="w-3 h-3 text-amber-500" /> PDF
         </button>
