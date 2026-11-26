@@ -140,13 +140,13 @@ function XrAgencyCrmApp() {
       try {
         const saved = localStorage.getItem("xr_crm_members_v5");
         if (saved) {
-          const parsed = JSON.parse(saved);
-          return parsed.map((m: TeamMember) => {
-            if (m.id === "antoine" && (!m.pin || m.pin === "")) {
-              return { ...m, pin: "071266" };
-            }
-            return m;
-          });
+          const parsed: TeamMember[] = JSON.parse(saved);
+          const hasPilar = parsed.some((m) => m.id === "pilar");
+          if (!hasPilar) {
+            const pilarDef = DEFAULT_TEAM_MEMBERS.find((m) => m.id === "pilar");
+            if (pilarDef) parsed.splice(3, 0, pilarDef);
+          }
+          return parsed;
         }
       } catch {
         // ignore
@@ -1212,186 +1212,56 @@ function XrAgencyCrmApp() {
               Bienvenue sur XR Agency Studio 🚀
             </h1>
             <p className={`text-sm max-w-lg mx-auto ${theme.textMuted}`}>
-              Votre espace commercial gamifié, simple et coloré. Cliquez sur votre profil pour entrer, ou démarrez la formation XR School.
+              Votre espace commercial gamifié, simple et coloré. Cliquez sur votre profil pour vous connecter directement, ou ouvrez l'académie XR School.
             </p>
           </div>
 
           <div className="flex justify-center">
             <button
               onClick={() => {
-                setSchoolPinModal(true);
-                setSchoolPinInput("");
-                setSchoolPinError("");
+                setSchoolGuestMode(true);
+                if (soundEnabled) playDing();
               }}
               className="inline-flex flex-wrap items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 hover:brightness-110 text-xs sm:text-sm font-extrabold text-white shadow-xl shadow-indigo-500/25 transition-all hover:scale-[1.02]"
             >
               <GraduationCap className="w-5 h-5 text-amber-300" />
               Entrer dans XR School (Formation Pure · 70 Trames & Dojo)
-              <span className="font-mono text-[11px] font-black px-2.5 py-0.5 rounded-lg bg-black/30 text-amber-200 border border-white/20">
-                Code : 1234
-              </span>
             </button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {members.map((member) => {
-              const isAntoine = member.id === "antoine";
-              const showPublicCode = !isAntoine && !member.customPinSet;
-              return (
-                <button
-                  key={member.id}
-                  onClick={() => {
-                    setPendingMember(member);
-                    setPinInput("");
-                    setPinError("");
-                  }}
-                  className={`group p-4 rounded-3xl border transition-all hover:-translate-y-0.5 active:scale-[0.98] flex items-center gap-3.5 text-left ${theme.card} ${theme.cardHover}`}
+            {members.map((member) => (
+              <button
+                key={member.id}
+                onClick={() => {
+                  setCurrentUserId(member.id);
+                  if (soundEnabled) playDing();
+                }}
+                className={`group p-4 rounded-3xl border transition-all hover:-translate-y-0.5 active:scale-[0.98] flex items-center gap-3.5 text-left ${theme.card} ${theme.cardHover}`}
+              >
+                <div
+                  className={`h-13 w-13 p-3.5 rounded-2xl bg-gradient-to-br ${member.avatarBg} flex items-center justify-center text-white font-black text-lg shadow-md shrink-0`}
                 >
-                  <div
-                    className={`h-13 w-13 p-3.5 rounded-2xl bg-gradient-to-br ${member.avatarBg} flex items-center justify-center text-white font-black text-lg shadow-md shrink-0`}
-                  >
-                    {member.shortName.charAt(0)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className={`font-extrabold text-sm truncate group-hover:text-indigo-600 dark:group-hover:text-amber-300 transition-colors ${theme.textMain}`}>
-                      {member.name}
-                    </h3>
-                    <p className={`text-[11px] truncate ${theme.textMuted}`}>{member.roleLabel}</p>
-                    <div className="flex flex-wrap items-center gap-1.5 mt-2">
-                      <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border ${theme.badgeSoft}`}>
-                        {member.badge}
-                      </span>
-                      {showPublicCode ? (
-                        <span className="inline-block text-[10px] font-mono font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
-                          Code : {member.pin}
-                        </span>
-                      ) : (
-                        <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${theme.subCard} ${theme.textMuted}`}>
-                          <Lock className="w-2.5 h-2.5" />
-                          {isAntoine ? "Privé" : "Personnalisé"}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          <p className={`text-center text-[11px] ${theme.textMuted}`}>
-            Astuce : une fois connecté, cliquez sur l'icône 🔑 en haut à droite pour définir votre propre mot de passe confidentiel.
-          </p>
-        </div>
-
-        {/* Modal PIN Profil Membre */}
-        {pendingMember && (
-          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
-            <div className={`border rounded-3xl p-6 max-w-sm w-full space-y-5 ${theme.modalBg}`}>
-              <div className="flex items-center gap-3">
-                <div className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${pendingMember.avatarBg} flex items-center justify-center text-white font-black text-lg shadow-md`}>
-                  {pendingMember.shortName.charAt(0)}
+                  {member.shortName.charAt(0)}
                 </div>
-                <div>
-                  <h3 className={`font-extrabold text-base ${theme.textMain}`}>{pendingMember.name}</h3>
-                  <p className={`text-xs ${theme.textMuted}`}>{pendingMember.roleLabel}</p>
-                </div>
-              </div>
-
-              <form onSubmit={handleLoginSubmit} className="space-y-4">
-                <div>
-                  <div className="flex items-center justify-between">
-                    <label className={`text-[11px] font-bold uppercase flex items-center gap-1.5 ${theme.textMuted}`}>
-                      <KeyRound className="w-3.5 h-3.5 text-indigo-500" />
-                      Code / Mot de passe
-                    </label>
-                    <span className="text-[11px] font-mono font-extrabold text-emerald-600 dark:text-emerald-300">
-                      Code : {pendingMember.id === "antoine" ? (pendingMember.pin || "071266") : (pendingMember.pin || "1234")}
+                <div className="flex-1 min-w-0">
+                  <h3 className={`font-extrabold text-sm truncate group-hover:text-indigo-600 dark:group-hover:text-amber-300 transition-colors ${theme.textMain}`}>
+                    {member.name}
+                  </h3>
+                  <p className={`text-[11px] truncate ${theme.textMuted}`}>{member.roleLabel}</p>
+                  <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                    <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border ${theme.badgeSoft}`}>
+                      {member.badge}
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                      ⚡ Accès direct
                     </span>
                   </div>
-                  <input
-                    type="password"
-                    autoFocus
-                    maxLength={20}
-                    value={pinInput}
-                    onChange={(e) => {
-                      setPinInput(e.target.value);
-                      setPinError("");
-                    }}
-                    placeholder="••••••"
-                    className={`w-full mt-2 rounded-2xl px-4 py-3 text-center text-xl tracking-[0.35em] font-mono border focus:outline-none focus:border-indigo-500 ${theme.inputBg}`}
-                  />
-                  {pinError && <p className="text-xs text-rose-500 font-bold mt-2 text-center">{pinError}</p>}
                 </div>
-
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setPendingMember(null)}
-                    className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}
-                  >
-                    Annuler
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={authLoading}
-                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold shadow-md disabled:opacity-60"
-                  >
-                    {authLoading ? "Vérification..." : "Entrer 🚀"}
-                  </button>
-                </div>
-              </form>
-            </div>
+              </button>
+            ))}
           </div>
-        )}
-
-        {/* Modal XR School (1234) */}
-        {schoolPinModal && (
-          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
-            <div className={`border rounded-3xl p-6 max-w-sm w-full space-y-5 ${theme.modalBg}`}>
-              <div className="flex items-center gap-3">
-                <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 to-amber-400 flex items-center justify-center text-white shadow-md">
-                  <GraduationCap className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className={`font-extrabold text-base ${theme.textMain}`}>Accès XR School</h3>
-                  <p className={`text-xs ${theme.textMuted}`}>Formation pure · Code : 1234</p>
-                </div>
-              </div>
-
-              <form onSubmit={handleSchoolPinSubmit} className="space-y-4">
-                <input
-                  type="password"
-                  inputMode="numeric"
-                  autoFocus
-                  maxLength={6}
-                  value={schoolPinInput}
-                  onChange={(e) => {
-                    setSchoolPinInput(e.target.value);
-                    setSchoolPinError("");
-                  }}
-                  placeholder="1234"
-                  className={`w-full rounded-2xl px-4 py-3 text-center text-xl tracking-[0.5em] font-mono border focus:outline-none focus:border-indigo-500 ${theme.inputBg}`}
-                />
-                {schoolPinError && <p className="text-xs text-rose-500 font-bold text-center">{schoolPinError}</p>}
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setSchoolPinModal(false)}
-                    className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}
-                  >
-                    Annuler
-                  </button>
-                  <button
-                    type="submit"
-                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white text-xs font-extrabold shadow-md"
-                  >
-                    Ouvrir l'École 🎓
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
+        </div>
       </div>
     );
   }

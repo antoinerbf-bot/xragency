@@ -81,6 +81,19 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     pin: "2020",
   },
   {
+    id: "pilar",
+    name: "Pilar",
+    shortName: "Pilar",
+    roleLabel: "Commerciale Partenaire",
+    roleType: "closer",
+    settingRate: 0.1,
+    closingRate: 0.2,
+    fullCycleRate: 0.2,
+    avatarBg: "from-rose-500 to-amber-600",
+    badge: "🎯 Closer (20% Sites / 10% Mensuel)",
+    pin: "",
+  },
+  {
     id: "christel",
     name: "Christel Thirion",
     shortName: "Christel",
@@ -395,15 +408,32 @@ export function computeDealCommissions(lead: Lead, members: TeamMember[]): DealC
   const closer = members.find((m) => m.id === lead.closerId);
   const baseValue = getLeadTotals(lead).commissionBase;
 
+  // Détection si l'offre concerne un site web (20%) ou un forfait récurrent mensuel/annuel (10%)
+  const isWebsite =
+    lead.serviceId === "websites" ||
+    (lead.billing === "once" && !lead.serviceId.includes("maps"));
+
   let setterAmount = 0;
   let closerAmount = 0;
 
   if (lead.setterId === lead.closerId) {
-    const rate = closer?.roleType === "direction" ? 0 : (closer?.fullCycleRate ?? 0.2);
+    let rate = closer?.roleType === "direction" ? 0 : (closer?.fullCycleRate ?? 0.2);
+    // Règle spécifique Pilar & Christel : 20% sur les sites, 10% sur les offres annuelles / mensuelles
+    if (closer?.id === "pilar" || closer?.id === "christel") {
+      rate = isWebsite ? 0.20 : 0.10;
+    }
     closerAmount = Math.round(baseValue * rate);
   } else {
-    const sRate = setter?.roleType === "direction" ? 0 : (setter?.settingRate ?? 0.1);
-    const cRate = closer?.roleType === "direction" ? 0 : (closer?.closingRate ?? 0.15);
+    let sRate = setter?.roleType === "direction" ? 0 : (setter?.settingRate ?? 0.1);
+    let cRate = closer?.roleType === "direction" ? 0 : (closer?.closingRate ?? 0.15);
+
+    if (closer?.id === "pilar" || closer?.id === "christel") {
+      cRate = isWebsite ? 0.20 : 0.10;
+    }
+    if (setter?.id === "pilar" || setter?.id === "christel") {
+      sRate = 0.10;
+    }
+
     setterAmount = Math.round(baseValue * sRate);
     closerAmount = Math.round(baseValue * cRate);
   }
