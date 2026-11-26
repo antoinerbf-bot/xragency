@@ -56,6 +56,7 @@ import { CRM_THEMES, type CrmThemeId } from "@/lib/crm/theme";
 import {
   checkSupabaseStatus,
   fetchLeadsFromSupabase,
+  fetchMembersFromSupabase,
   upsertLeadToSupabase,
   deleteLeadFromSupabase,
   upsertMemberToSupabase,
@@ -327,6 +328,11 @@ function XrAgencyCrmApp() {
     }
     let active = true;
     setSyncStatus("syncing");
+    if (currentUserId === "antoine") {
+      fetchMembersFromSupabase().then((team) => {
+        if (active && team && team.length > 0) setMembers(team);
+      });
+    }
 
     const refresh = async (initial = false) => {
       const remote = await fetchLeadsFromSupabase();
