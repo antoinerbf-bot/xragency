@@ -325,7 +325,7 @@ function XrAgencyCrmApp() {
     fetch("/api/crm-auth", { credentials: "same-origin" })
       .then((res) => res.ok ? res.json() : null)
       .then((data) => {
-        if (active && data?.authenticated && typeof data.memberId === "string" && members.some((m) => m.id === data.memberId)) {
+        if (active && data?.authenticated && typeof data.memberId === "string") {
           setCurrentUserId(data.memberId);
         }
       })
