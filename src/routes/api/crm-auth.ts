@@ -65,7 +65,7 @@ export const Route = createFileRoute("/api/crm-auth")({
         return Response.json({ authenticated: !!memberId, memberId });
       },
       POST: async ({ request }) => {
-        const secret = getSecret();
+        const secret = getCrmSessionSecret();
         if (!secret) return Response.json({ ok: false, error: "Authentification CRM non configurée côté serveur." }, { status: 503 });
 
         const ip = (request.headers.get("x-forwarded-for") || "unknown").split(",")[0].trim().slice(0, 80);
