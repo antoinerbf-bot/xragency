@@ -54,6 +54,7 @@ export function WhatsAppWidget() {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [altMessage, setAltMessage] = useState(false);
+  const [overQuote, setOverQuote] = useState(false);
 
   const isInternalApp =
     location.pathname.startsWith("/crm") || location.pathname.startsWith("/dashboard");
@@ -62,6 +63,11 @@ export function WhatsAppWidget() {
     const handleScroll = () => {
       if (window.scrollY > 280 && !dismissed) {
         setVisible(true);
+      }
+      const quoteEl = document.getElementById("quote");
+      if (quoteEl) {
+        const rect = quoteEl.getBoundingClientRect();
+        setOverQuote(rect.top < window.innerHeight && rect.bottom > 100);
       }
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -77,7 +83,7 @@ export function WhatsAppWidget() {
     return () => clearInterval(interval);
   }, [visible, dismissed]);
 
-  if (isInternalApp || !visible || dismissed) return null;
+  if (isInternalApp || !visible || dismissed || overQuote) return null;
 
   const waPrefill = encodeURIComponent(WA_MESSAGES[currentLang] ?? WA_MESSAGES.fr);
   const waUrl = `${CONTACT.whatsapp}?text=${waPrefill}`;
