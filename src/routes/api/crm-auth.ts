@@ -6,7 +6,7 @@ const SESSION_TTL_SECONDS = 60 * 60 * 8;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 10;
 
-function getSecret(): string | null {
+export function getCrmSessionSecret(): string | null {
   const secret = process.env.CRM_SESSION_SECRET;
   return secret && Buffer.byteLength(secret, "utf8") >= 32 ? secret : null;
 }
@@ -38,7 +38,7 @@ function signSession(memberId: string, secret: string): string {
   return `${payload}.${sig}`;
 }
 
-function verifySessionCookie(cookieHeader: string | null, secret: string): string | null {
+export function verifyCrmSessionCookie(cookieHeader: string | null, secret: string): string | null {
   if (! cookieHeader) return null;
   const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${SESSION_COOKIE}=([^;]+)`));
   if (!match) return null;
@@ -59,9 +59,9 @@ export const Route = createFileRoute("/api/crm-auth")({
   server: {
     handlers: {
       GET: async ({ request }) => {
-        const secret = getSecret();
+        const secret = getCrmSessionSecret();
         if (!secret) return Response.json({ authenticated: false, error: "CRM_SESSION_SECRET absent ou trop court." }, { status: 503 });
-        const memberId = verifySessionCookie(request.headers.get("cookie"), secret);
+        const memberId = verifyCrmSessionCookie(request.headers.get("cookie"), secret);
         return Response.json({ authenticated: !!memberId, memberId });
       },
       POST: async ({ request }) => {
