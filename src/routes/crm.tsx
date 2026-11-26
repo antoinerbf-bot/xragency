@@ -896,7 +896,7 @@ function XrAgencyCrmApp() {
       fullCycleRate: 0.2,
       avatarBg: "from-violet-500 to-fuchsia-600",
       badge: roleType === "student" ? "🎓 Élève XR School" : "🎯 Commercial",
-      pin: String(Math.floor(1000 + Math.random() * 9000)),
+      pin: "",
     };
     setMembers((prev) => [...prev, newMem]);
     void upsertMemberToSupabase(newMem);
