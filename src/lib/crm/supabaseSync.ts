@@ -131,7 +131,8 @@ export async function upsertMemberToSupabase(member: TeamMember, initialPin?: st
         roleType: member.roleType, recruitedBy: member.recruitedBy,
         settingRate: member.settingRate, closingRate: member.closingRate,
         fullCycleRate: member.fullCycleRate, overrideRate: member.overrideRate || 0,
-        avatarBg: member.avatarBg, badge: member.badge, customPinSet: Boolean(member.customPinSet),\n        ...(initialPin ? { initialPin } : {}),
+        avatarBg: member.avatarBg, badge: member.badge, customPinSet: Boolean(member.customPinSet),
+        ...(initialPin ? { initialPin } : {}),
       }),
     });
     emitSyncState(response.ok ? "supabase_live" : "error");
