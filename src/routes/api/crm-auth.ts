@@ -27,7 +27,7 @@ function getMemberPins(): Record<string, string> {
   }
 }
 
-function hashCrmPin(pin: string): string {
+export function hashCrmPin(pin: string): string {
   const salt = randomBytes(16);
   const hash = scryptSync(pin, salt, 64);
   return `scrypt${salt.toString("hex")}${hash.toString("hex")}`;
