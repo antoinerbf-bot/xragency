@@ -4,12 +4,41 @@ import { getSupabaseServer } from "@/lib/saas/supabase";
 import { DEFAULT_TEAM_MEMBERS, canViewLead, type Lead, type TeamMember } from "@/lib/crm/data";
 import { getCrmSessionSecret, verifyCrmSessionCookie } from "./crm-auth";
 
-function authenticate(request: Request): TeamMember | null {
+async function authenticate(request: Request): Promise<TeamMember | null> {
   const secret = getCrmSessionSecret();
   if (!secret) return null;
   const memberId = verifyCrmSessionCookie(request.headers.get("cookie"), secret);
   if (!memberId) return null;
-  return DEFAULT_TEAM_MEMBERS.find((member) => member.id === memberId) || null;
+  const known = DEFAULT_TEAM_MEMBERS.find((member) => member.id === memberId);
+  if (known) return known;
+  try {
+    const supabase = getSupabaseServer();
+    const { data, error } = await supabase.from("crm_members").select("*").eq("id", memberId).maybeSingle();
+    if (error || !data) return null;
+    return {
+      id: data.id, name: data.name, shortName: data.short_name, roleLabel: data.role_label,
+      roleType: data.role_type, recruitedBy: data.recruited_by || undefined,
+      settingRate: Number(data.setting_rate), closingRate: Number(data.closing_rate),
+      fullCycleRate: Number(data.full_cycle_rate), overrideRate: Number(data.override_rate || 0),
+      avatarBg: data.avatar_bg, badge: data.badge, pin: "", customPinSet: Boolean(data.custom_pin_set),
+    } as TeamMember;
+  } catch { return null; }
+}
+
+function toTeamMember(row: any): TeamMember {
+  return {
+    id: row.id, name: row.name, shortName: row.short_name, roleLabel: row.role_label,
+    roleType: row.role_type, recruitedBy: row.recruited_by || undefined,
+    settingRate: Number(row.setting_rate), closingRate: Number(row.closing_rate),
+    fullCycleRate: Number(row.full_cycle_rate), overrideRate: Number(row.override_rate || 0),
+    avatarBg: row.avatar_bg, badge: row.badge, pin: "", customPinSet: Boolean(row.custom_pin_set),
+  } as TeamMember;
+}
+
+async function loadCrmMembers(supabase: ReturnType<typeof getSupabaseServer>): Promise<TeamMember[] | null> {
+  const { data, error } = await supabase.from("crm_members").select("id,name,short_name,role_label,role_type,recruited_by,setting_rate,closing_rate,full_cycle_rate,override_rate,avatar_bg,badge,custom_pin_set");
+  if (error || !data) return null;
+  return data.map(toTeamMember);
 }
 
 function toLeadAccessShape(row: any): Lead {
@@ -104,14 +133,20 @@ export const Route = createFileRoute("/api/crm-data")({
   server: {
     handlers: {
       GET: async ({ request }) => {
-        const member = authenticate(request);
+        const member = await authenticate(request);
         if (!member) return Response.json({ error: "Authentification requise." }, { status: 401 });
         try {
           const supabase = getSupabaseServer();
           if (!(await ensureCrmMembers(supabase))) return Response.json({ error: "Initialisation des membres CRM impossible." }, { status: 503 });
+          if (new URL(request.url).searchParams.get("resource") === "members") {
+            if (member.roleType !== "direction") return Response.json({ error: "Accès réservé à la direction." }, { status: 403 });
+            const team = await loadCrmMembers(supabase);
+            return team ? Response.json({ members: team }) : Response.json({ error: "Lecture de l'équipe impossible." }, { status: 503 });
+          }
           const { data, error } = await supabase.from("crm_leads").select("*").order("created_at", { ascending: false });
           if (error) return Response.json({ error: "Lecture CRM impossible." }, { status: 503 });
-          const members = DEFAULT_TEAM_MEMBERS;
+          const members = await loadCrmMembers(supabase);
+          if (!members) return Response.json({ error: "Lecture des permissions CRM impossible." }, { status: 503 });
           const visible = (data || []).filter((row: any) => canViewLead(member, toLeadAccessShape(row), members));
           return Response.json({ leads: visible });
         } catch {
@@ -119,10 +154,45 @@ export const Route = createFileRoute("/api/crm-data")({
         }
       },
       POST: async ({ request }) => {
-        const member = authenticate(request);
+        const member = await authenticate(request);
         if (!member) return Response.json({ error: "Authentification requise." }, { status: 401 });
         let body: unknown;
         try { body = await request.json(); } catch { return Response.json({ error: "JSON invalide." }, { status: 400 }); }
+        if (new URL(request.url).searchParams.get("resource") === "members") {
+          if (member.roleType !== "direction") return Response.json({ error: "Accès réservé à la direction." }, { status: 403 });
+          const memberSchema = z.object({
+            id: z.string().regex(/^[a-z0-9_-]{1,64}$/i),
+            name: z.string().min(1).max(200),
+            shortName: z.string().min(1).max(80),
+            roleLabel: z.string().min(1).max(150),
+            roleType: z.enum(["direction", "manager", "setter", "closer", "full_cycle", "student", "studio"]),
+            recruitedBy: z.string().max(64).optional(),
+            settingRate: z.number().min(0).max(1),
+            closingRate: z.number().min(0).max(1),
+            fullCycleRate: z.number().min(0).max(1),
+            overrideRate: z.number().min(0).max(1).optional(),
+            avatarBg: z.string().max(200),
+            badge: z.string().max(100),
+            customPinSet: z.boolean().optional(),
+          }).strict();
+          const memberParsed = memberSchema.safeParse(body);
+          if (!memberParsed.success) return Response.json({ error: "Profil membre invalide." }, { status: 400 });
+          try {
+            const supabase = getSupabaseServer();
+            if (!(await ensureCrmMembers(supabase))) return Response.json({ error: "Initialisation des membres CRM impossible." }, { status: 503 });
+            const m = memberParsed.data;
+            const { error } = await supabase.from("crm_members").upsert({
+              id: m.id, name: m.name, short_name: m.shortName, role_label: m.roleLabel,
+              role_type: m.roleType, recruited_by: m.recruitedBy || null,
+              setting_rate: m.settingRate, closing_rate: m.closingRate, full_cycle_rate: m.fullCycleRate,
+              override_rate: m.overrideRate || 0, avatar_bg: m.avatarBg, badge: m.badge,
+              pin_hash: "server-managed", custom_pin_set: Boolean(m.customPinSet),
+            });
+            if (error) return Response.json({ error: "Enregistrement du membre impossible." }, { status: 503 });
+            return Response.json({ ok: true });
+          } catch { return Response.json({ error: "Stockage CRM serveur non configuré." }, { status: 503 }); }
+        }
+
         const parsed = leadSchema.safeParse(body);
         if (!parsed.success) return Response.json({ error: "Données prospect invalides." }, { status: 400 });
         const lead = parsed.data as Lead;
@@ -174,7 +244,7 @@ export const Route = createFileRoute("/api/crm-data")({
         }
       },
       DELETE: async ({ request }) => {
-        const member = authenticate(request);
+        const member = await authenticate(request);
         if (!member) return Response.json({ error: "Authentification requise." }, { status: 401 });
         let body: unknown;
         try { body = await request.json(); } catch { return Response.json({ error: "JSON invalide." }, { status: 400 }); }
