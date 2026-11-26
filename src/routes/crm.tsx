@@ -60,6 +60,7 @@ import {
   deleteLeadFromSupabase,
   upsertMemberToSupabase,
   subscribeCrmRealtime,
+  type SyncState,
 } from "@/lib/crm/supabaseSync";
 import { BUSINESS_SECTORS, getSectorServicePlaybook } from "@/lib/crm/schoolScripts";
 import { SchoolModule } from "@/components/crm/SchoolModule";
@@ -188,7 +189,7 @@ function XrAgencyCrmApp() {
     return "Objectif Semaine : +50 XP bonus sur chaque Pack Site + WebCare !";
   });
 
-  const syncStatus = checkSupabaseStatus();
+  const [syncStatus, setSyncStatus] = useState<SyncState>(checkSupabaseStatus());
 
   const [activeTab, setActiveTab] = useState<CrmTab>("kanban");
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -303,22 +304,61 @@ function XrAgencyCrmApp() {
     if (typeof window !== "undefined") localStorage.setItem("xr_weekly_challenge", weeklyChallenge);
   }, [weeklyChallenge]);
 
-  // Synchronisation initiale & temps réel Supabase si configuré
+  // Synchronisation après authentification serveur. Les erreurs sont visibles et ne sont pas masquées.
   useEffect(() => {
+    if (!currentUserId) {
+      setSyncStatus("local_ready");
+      return;
+    }
     let active = true;
-    fetchLeadsFromSupabase().then((remote) => {
-      if (active && remote && remote.length > 0) setLeads(remote);
-    });
-    const unsub = subscribeCrmRealtime(() => {
-      fetchLeadsFromSupabase().then((remote) => {
-        if (active && remote) setLeads(remote);
-      });
-    });
+    setSyncStatus("syncing");
+
+    const refresh = async (initial = false) => {
+      const remote = await fetchLeadsFromSupabase();
+      if (!active) return;
+      if (remote === null) {
+        setSyncStatus("error");
+        return;
+      }
+
+      if (initial && remote.length === 0) {
+        let localSnapshot: Lead[] = [];
+        try {
+          const stored = localStorage.getItem("xr_crm_leads_v3");
+          if (stored) localSnapshot = JSON.parse(stored);
+        } catch { /* ignore invalid local cache */ }
+
+        if (localSnapshot.length > 0) {
+          if (currentUserId === "antoine") {
+            const results = await Promise.all(localSnapshot.map((lead) => upsertLeadToSupabase(lead)));
+            if (!active) return;
+            if (results.every(Boolean)) {
+              const migrated = await fetchLeadsFromSupabase();
+              if (!active) return;
+              if (migrated !== null) {
+                setLeads(migrated);
+                setSyncStatus("supabase_live");
+                return;
+              }
+            }
+          }
+          // Keep local data visible rather than silently deleting it, but clearly mark it unsynced.
+          setSyncStatus("error");
+          return;
+        }
+      }
+
+      setLeads(remote);
+      setSyncStatus("supabase_live");
+    };
+
+    void refresh(true);
+    const unsub = subscribeCrmRealtime(() => { void refresh(false); });
     return () => {
       active = false;
       unsub?.();
     };
-  }, []);
+  }, [currentUserId]);
 
   // Raccourci Ctrl+K
   useEffect(() => {
@@ -1425,11 +1465,13 @@ function XrAgencyCrmApp() {
                   className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
                     syncStatus === "supabase_live"
                       ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
-                      : "bg-sky-500/15 text-sky-700 dark:text-sky-300"
+                      : syncStatus === "error"
+                        ? "bg-rose-500/15 text-rose-700 dark:text-rose-300"
+                        : "bg-sky-500/15 text-sky-700 dark:text-sky-300"
                   }`}
                 >
                   <Database className="w-2.5 h-2.5" />
-                  {syncStatus === "supabase_live" ? "Supabase Live" : "Local · Prêt Supabase"}
+                  {syncStatus === "supabase_live" ? "Supabase synchronisé" : syncStatus === "error" ? "Local · Non synchronisé" : syncStatus === "syncing" ? "Connexion serveur…" : "Local · Hors ligne"}
                 </span>
                 {dueFollowUpsCount > 0 && !isStudio && (
                   <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-500 text-white shadow-sm">
