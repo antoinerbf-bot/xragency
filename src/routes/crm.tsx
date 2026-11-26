@@ -141,12 +141,8 @@ function XrAgencyCrmApp() {
         const saved = localStorage.getItem("xr_crm_members_v5");
         if (saved) {
           const parsed = JSON.parse(saved);
-          return parsed.map((m: TeamMember) => {
-            if (m.id === "antoine" && (!m.pin || m.pin === "")) {
-              return { ...m, pin: "071266" };
-            }
-            return m;
-          });
+          // Credentials are never restored from browser storage.
+          return parsed.map((m: TeamMember) => ({ ...m, pin: "" }));
         }
       } catch {
         // ignore
@@ -156,10 +152,7 @@ function XrAgencyCrmApp() {
   });
 
   // ── Session utilisateur vérifiée serveur (/api/crm-auth) ──
-  const [currentUserId, setCurrentUserId] = useState<string | null>(() => {
-    if (typeof window !== "undefined") return localStorage.getItem("xr_crm_user_v3") || null;
-    return null;
-  });
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   const currentUser = useMemo(
     () => members.find((m) => m.id === currentUserId) || null,
@@ -282,6 +275,22 @@ function XrAgencyCrmApp() {
   useEffect(() => {
     if (typeof window !== "undefined") localStorage.setItem("xr_crm_members_v5", JSON.stringify(members));
   }, [members]);
+
+  // Restore a session only after the server validates the HttpOnly signed cookie.
+  useEffect(() => {
+    let active = true;
+    fetch("/api/crm-auth", { credentials: "same-origin" })
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (active && data?.authenticated && typeof data.memberId === "string" && members.some((m) => m.id === data.memberId)) {
+          setCurrentUserId(data.memberId);
+        }
+      })
+      .catch(() => {
+        if (active) setCurrentUserId(null);
+      });
+    return () => { active = false; };
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -885,29 +894,7 @@ function XrAgencyCrmApp() {
 
   const handleSaveOwnPin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!currentUser) return;
-    const clean = newPinValue.trim();
-    if (clean.length < 4) {
-      setChangePinError("Choisissez un code d'au moins 4 caractères.");
-      return;
-    }
-    if (clean !== confirmPinValue.trim()) {
-      setChangePinError("Les deux codes ne correspondent pas.");
-      return;
-    }
-    setMembers((prev) =>
-      prev.map((m) => {
-        if (m.id !== currentUser.id) return m;
-        const updated = { ...m, pin: clean, customPinSet: true };
-        void upsertMemberToSupabase(updated);
-        return updated;
-      })
-    );
-    setNewPinValue("");
-    setConfirmPinValue("");
-    setChangePinError("");
-    setShowChangePinModal(false);
-    if (soundEnabled) playDing();
+    setChangePinError("Le code d'accès est géré côté serveur. Contactez la direction pour le modifier.");
   };
 
   const handleIncrementCall = () => {
