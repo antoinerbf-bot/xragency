@@ -2961,8 +2961,8 @@ function LeadCard({
         )}
       </div>
 
-      <div className={`pt-2 border-t flex items-center justify-between gap-1 ${theme.border}`}>
-        <div className="flex items-center gap-1.5">
+      <div className={`pt-2 border-t flex flex-wrap items-center justify-between gap-1.5 ${theme.border}`}>
+        <div className="flex flex-wrap items-center gap-1.5">
           <button onClick={onCall} className="text-[10px] font-extrabold text-indigo-600 dark:text-amber-300 flex items-center gap-1 hover:underline">
             <Phone className="w-3 h-3" /> Appel
           </button>
@@ -2978,11 +2978,11 @@ function LeadCard({
               <MessageSquare className="w-3 h-3 text-emerald-500" /> WhatsApp
             </a>
           )}
+          <button onClick={onPdf} className={`text-[10px] font-bold flex items-center gap-0.5 ${theme.textMuted}`} title="Générer Devis PDF">
+            <FileText className="w-3 h-3 text-amber-500" /> PDF
+          </button>
         </div>
-        <button onClick={onPdf} className={`text-[10px] font-bold flex items-center gap-0.5 ${theme.textMuted}`}>
-          <FileText className="w-3 h-3 text-amber-500" /> PDF
-        </button>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 ml-auto">
           {onNext && (
             <button
               onClick={onNext}
