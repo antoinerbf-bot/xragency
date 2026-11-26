@@ -28,7 +28,7 @@ Après configuration, redéployer la branche de prévisualisation et tester : co
 ## Limites restantes avant production
 
 - Le rate limit est en mémoire par instance ; il ne remplace pas un limiteur distribué (Upstash/Redis/WAF).
-- Les PIN sont actuellement fournis par variable serveur ; le changement de PIN depuis l'interface est suspendu et doit être implémenté via une route serveur sécurisée.
+- Les codes initiaux des profils historiques sont fournis par variable serveur. Les nouveaux profils sont provisionnés par l'API direction avec un hash scrypt salé. Le changement de code personnel est disponible via une route serveur authentifiée.
 - L'API CRM utilise la clé service-role exclusivement côté serveur et applique le RBAC à chaque requête. Cette clé contourne RLS : les contrôles serveur sont donc obligatoires et doivent être couverts par des tests. Ne pas exposer de clé service-role dans le navigateur.
 - La clé service-role est obligatoire pour lire/écrire les leads via l'API serveur. Sans elle, l'interface affiche l'état « Local · Non synchronisé » et les données locales restent visibles. Les données locales du navigateur ne sont pas une sauvegarde fiable ni une synchronisation multi-appareils.
 
