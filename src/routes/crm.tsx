@@ -270,7 +270,7 @@ function XrAgencyCrmApp() {
   const [newMemberRecruitedBy, setNewMemberRecruitedBy] = useState("");
 
   // Modal Changement Mot de Passe personnel
-  const [showChangePinModal, setShowChangePinModal] = useState(false);
+  const [showChangePinModal, setShowChangePinModal] = useState(false);\n  const [currentPinValue, setCurrentPinValue] = useState("");\n  const [newPinValue, setNewPinValue] = useState("");\n  const [confirmPinValue, setConfirmPinValue] = useState("");\n  const [changePinError, setChangePinError] = useState("");
 
   // ── Persistance & Supabase Realtime ──
   useEffect(() => {
@@ -985,6 +985,39 @@ function XrAgencyCrmApp() {
         return updated;
       })
     );
+  };
+
+  const handleSaveOwnPin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setChangePinError("");
+    if (newPinValue.trim().length < 6) {
+      setChangePinError("Le nouveau code doit contenir au moins 6 caractères.");
+      return;
+    }
+    if (newPinValue.trim() !== confirmPinValue.trim()) {
+      setChangePinError("Les deux nouveaux codes ne correspondent pas.");
+      return;
+    }
+    try {
+      const response = await fetch("/api/crm-auth", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "change-pin", currentPin: currentPinValue.trim(), newPin: newPinValue.trim() }),
+      });
+      const data = await response.json().catch(() => null);
+      if (!response.ok || !data?.ok) {
+        setChangePinError(data?.error || "Modification du code impossible.");
+        return;
+      }
+      setCurrentPinValue("");
+      setNewPinValue("");
+      setConfirmPinValue("");
+      setShowChangePinModal(false);
+      if (soundEnabled) playDing();
+    } catch {
+      setChangePinError("Serveur d'authentification indisponible.");
+    }
   };
 
   const handleIncrementCall = () => {
@@ -2897,10 +2930,17 @@ function XrAgencyCrmApp() {
               </h3>
               <button onClick={() => setShowChangePinModal(false)} className={theme.textSoft}>✕</button>
             </div>
-            <p className={`text-xs ${theme.textMuted}`}>
-              Pour protéger les comptes, le code n'est pas modifiable depuis le navigateur. Demandez à la direction de le renouveler côté serveur.
-            </p>
-            <button type="button" onClick={() => setShowChangePinModal(false)} className="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold">Fermer</button>
+            <p className={`text-xs ${theme.textMuted}`}>Le code est vérifié et hashé côté serveur. Utilisez au moins 6 caractères.</p>
+            <form onSubmit={handleSaveOwnPin} className="space-y-3">
+              <input type="password" required autoComplete="current-password" maxLength={128} value={currentPinValue} onChange={(e) => { setCurrentPinValue(e.target.value); setChangePinError(""); }} placeholder="Code actuel" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
+              <input type="password" required minLength={6} autoComplete="new-password" maxLength={128} value={newPinValue} onChange={(e) => { setNewPinValue(e.target.value); setChangePinError(""); }} placeholder="Nouveau code (6 caractères min.)" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
+              <input type="password" required minLength={6} autoComplete="new-password" maxLength={128} value={confirmPinValue} onChange={(e) => { setConfirmPinValue(e.target.value); setChangePinError(""); }} placeholder="Confirmer le nouveau code" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
+              {changePinError && <p className="text-xs text-rose-500 font-bold text-center">{changePinError}</p>}
+              <div className="pt-1 flex gap-2">
+                <button type="button" onClick={() => setShowChangePinModal(false)} className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}>Annuler</button>
+                <button type="submit" className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold">Modifier</button>
+              </div>
+            </form>
           </div>
         </div>
       )}
