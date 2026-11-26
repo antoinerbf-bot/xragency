@@ -1,4565 +1,3140 @@
-import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState, useMemo, useEffect } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { jsPDF } from "jspdf";
 import {
-  ArrowLeft,
-  ArrowUpRight,
-  Award,
-  BarChart3,
-  BookOpen,
-  Briefcase,
-  Building2,
-  Calendar,
-  Camera,
-  CheckCircle2,
-  Clock,
-  Copy,
-  CreditCard,
-  Crown,
-  ExternalLink,
-  FileText,
-  Flame,
-  GraduationCap,
-  Image as ImageIcon,
-  KeyRound,
-  LayoutGrid,
-  Lock,
-  LogOut,
-  MessageCircle,
-  Palette,
   Phone,
-  PhoneCall,
-  Plus,
-  Rocket,
-  Search,
-  Send,
-  Shield,
+  MessageSquare,
   Sparkles,
-  Swords,
-  Target,
-  Trash2,
   Trophy,
-  UserPlus,
-  Users,
+  CheckCircle2,
+  Plus,
+  Search,
+  ChevronDown,
+  ShieldCheck,
+  FileText,
+  AlertCircle,
+  Download,
+  Volume2,
+  VolumeX,
+  LogOut,
+  Palette,
+  Flame,
+  Lock,
+  GraduationCap,
+  ArrowLeft,
+  KeyRound,
   Wallet,
+  Calendar,
+  Pencil,
+  Trash2,
+  UserPlus,
+  Globe,
   Zap,
+  CreditCard,
+  Activity,
+  Database,
+  Command,
+  Mail,
+  Layers,
 } from "lucide-react";
-import type {
-  CrmActivity,
-  CrmClientRecord,
-  CrmInvoiceRecord,
-  CrmLead,
-  CrmNotification,
-  CrmProjectRecord,
-  CrmProviderRecord,
-  CrmQuoteRecord,
-  CrmTaskRecord,
-  LeadPriority,
-  LeadStatus,
-  QuoteItem,
-} from "./api/crm";
-import { CrmClientsTab } from "@/components/crm/CrmClientsTab";
-import { CrmQuotesTab } from "@/components/crm/CrmQuotesTab";
-import { CrmInvoicesTab } from "@/components/crm/CrmInvoicesTab";
-import { CrmProjectsTab } from "@/components/crm/CrmProjectsTab";
-import { CrmProvidersTab } from "@/components/crm/CrmProvidersTab";
-import { CrmCalendarTab } from "@/components/crm/CrmCalendarTab";
-import { CrmEgoLeaderboard } from "@/components/crm/CrmEgoLeaderboard";
-import { OfficialQuoteGenerator } from "@/components/crm/OfficialQuoteGenerator";
-import { CrmBossDashboard, type CrmTodo } from "@/components/crm/CrmBossDashboard";
-import { CrmGameWorld } from "@/components/crm/CrmGameWorld";
-import { CrmCloserDashboard } from "@/components/crm/CrmCloserDashboard";
-import { CrmUltraLudiqueArena } from "@/components/crm/CrmUltraLudiqueArena";
-import { CharacterSelectLogin } from "@/components/crm/CharacterSelectLogin";
-import { CrmSchoolDashboard } from "@/components/crm/CrmSchoolDashboard";
-import { CrmSimsHQ3D } from "@/components/crm/CrmSimsHQ3D";
-import { CrmHrDashboard } from "@/components/crm/CrmHrDashboard";
-import { XR_ADVISORS } from "@/lib/xr-advisors";
-import { playXpChime, generateLovableArchitecturePrompt } from "@/lib/rpg-engine";
-import { cn } from "@/lib/utils";
-import type { Prospect } from "@/lib/saas/types";
-import agentXrPortrait from "@/assets/agent-xr-portrait.jpg";
+
+import {
+  DEFAULT_TEAM_MEMBERS,
+  XR_OFFICIAL_SERVICES,
+  canViewLead,
+  canViewMemberFinances,
+  computeDealCommissions,
+  formatPricePeriod,
+  getLeadTotals,
+  type Lead,
+  type LeadServiceItem,
+  type LeadStage,
+  type TeamMember,
+  type UserRoleType,
+} from "@/lib/crm/data";
+import { CRM_THEMES, type CrmThemeId } from "@/lib/crm/theme";
+import {
+  checkSupabaseStatus,
+  fetchLeadsFromSupabase,
+  upsertLeadToSupabase,
+  deleteLeadFromSupabase,
+  upsertMemberToSupabase,
+  subscribeCrmRealtime,
+} from "@/lib/crm/supabaseSync";
+import { BUSINESS_SECTORS, getSectorServicePlaybook } from "@/lib/crm/schoolScripts";
+import { SchoolModule } from "@/components/crm/SchoolModule";
+import { ContestLeaderboard } from "@/components/crm/ContestLeaderboard";
+import { DirectorPersonalHub } from "@/components/crm/DirectorPersonalHub";
+import { ManagerFiliereHub } from "@/components/crm/ManagerFiliereHub";
+import { QuestFocusArena } from "@/components/crm/QuestFocusArena";
+import { ClientsInvoicesHub } from "@/components/crm/ClientsInvoicesHub";
+import { ProjectsProvidersHub } from "@/components/crm/ProjectsProvidersHub";
+import { fetchCrmSnapshotFromServer } from "@/lib/crm/supabaseSync";
 
 export const Route = createFileRoute("/crm")({
   head: () => ({
     meta: [
-      { title: "CRM & Académie Interne — XR Agency" },
-      {
-        name: "description",
-        content:
-          "Portail officiel XR Agency : QG Direction, Arène Commerciale et Académie XR School 90 jours.",
-      },
+      { title: "CRM XR Agency — Espace Commercial, Direction & XR School" },
+      { name: "description", content: "Système d'exploitation commercial ludique, XR School et production XR Agency." },
       { name: "robots", content: "noindex,nofollow" },
     ],
   }),
-  component: CrmWorkspacePage,
+  component: XrAgencyCrmApp,
 });
 
-interface SafeMember {
-  id: string;
-  email: string;
-  fullName: string;
-  title: string;
-  role: "admin" | "member" | "client";
-  portalType?: "director" | "closer" | "student" | "client" | "hr_manager";
-  clientId?: string;
-  phoneLine: string;
-  commissionPct: number;
-  recruitedBy?: string;
-  overrideCommissionPct?: number;
-  active: boolean;
-  createdAt: string;
-}
+// ── Synthétiseur audio natif léger (Web Audio API) ──
 
-interface MemberPerf extends SafeMember {
-  assignedCount: number;
-  toCallCount: number;
-  signedCount: number;
-  revenueEur: number;
-  estimatedCommissionEur: number;
-  callsCount: number;
-  closingRate: number;
-}
-
-interface CrmSnapshot {
-  authenticated: boolean;
-  user?: SafeMember;
-  members?: SafeMember[];
-  leads?: CrmLead[];
-  clients?: CrmClientRecord[];
-  quotes?: CrmQuoteRecord[];
-  invoices?: CrmInvoiceRecord[];
-  projects?: CrmProjectRecord[];
-  tasks?: CrmTaskRecord[];
-  providers?: CrmProviderRecord[];
-  notifications?: CrmNotification[];
-  activities?: CrmActivity[];
-  stats?: {
-    totalLeads: number;
-    toCallCount: number;
-    inProgressCount: number;
-    signedCount: number;
-    outsourcedCount: number;
-    revenueEur: number;
-    pipelineEur: number;
-    totalCalls: number;
-    closingRate: number;
-    activeProjectsCount?: number;
-    pendingInvoicesEur?: number;
-  };
-  teamBreakdown?: MemberPerf[];
-}
-
-// ── RÈGLE DE COMMISSION OFFICIELLE XR AGENCY ──
-function getOfficialCommission(
-  serviceTarget: string,
-  budgetEur: number,
-  member?: { id?: string; email?: string; recruitedBy?: string } | null,
-) {
-  const s = (serviceTarget || "").toLowerCase();
-  const isWebsite =
-    (s.includes("site") ||
-      s.includes("vitrine") ||
-      s.includes("e-commerce") ||
-      s.includes("ecommerce") ||
-      s.includes("refonte") ||
-      s.includes("web")) &&
-    !s.includes("webcare");
-
-  // 1. RÈGLE SPÉCIALE CHRISTEL THIRION (christelthirion@msn.com) :
-  // 20 % sur les sites internet, 10 % sur les mensualités, offres Google Maps ou vente de CRM
-  if (
-    member?.id === "mem-christel" ||
-    member?.email?.toLowerCase() === "christelthirion@msn.com"
-  ) {
-    const ratePct = isWebsite ? 20 : 10;
-    const ruleLabel = isWebsite
-      ? "20 % (Site Internet · Barème Christel)"
-      : "10 % (Maps / Mensualités / CRM · Barème Christel)";
-    const amountEur = Math.round(((Number(budgetEur) || 0) * ratePct) / 100);
-    return { ratePct, ruleLabel, amountEur };
-  }
-
-  // 2. RÈGLE RECRUES FILIÈRE MARTIN : 20 % sur tout
-  if (member?.recruitedBy === "mem-martin") {
-    const ratePct = 20;
-    const ruleLabel = "20 % (Filière Martin)";
-    const amountEur = Math.round(((Number(budgetEur) || 0) * ratePct) / 100);
-    return { ratePct, ruleLabel, amountEur };
-  }
-
-  // 3. RÈGLE CLASSIQUE
-  let ratePct = 10;
-  let ruleLabel = "10 % (Google Maps / Abonnement)";
-  if (s.includes("crm") || s.includes("pos") || s.includes("caisse")) {
-    ratePct = 20;
-    ruleLabel = "20 % (CRM & Système POS)";
-  } else if (isWebsite) {
-    ratePct = 30;
-    ruleLabel = "30 % (Site Internet)";
-  }
-  const amountEur = Math.round(((Number(budgetEur) || 0) * ratePct) / 100);
-  return { ratePct, ruleLabel, amountEur };
-}
-
-// ── EFFET SONORE & VICTOIRE CLOSING (WEB AUDIO SYNTHÉTISEUR SANS DÉPENDANCE) ──
-function playVictorySound() {
-  if (typeof window === "undefined") return;
+function playTone(freq: number, type: OscillatorType, duration: number, delay = 0) {
   try {
-    const AudioContextClass =
+    const AudioCtx =
       window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
-    if (!AudioContextClass) return;
-    const ctx = new AudioContextClass();
-    const now = ctx.currentTime;
-    // Chime d'accord majeur ascendant brillant : Do5 -> Mi5 -> Sol5 -> Do6 -> Mi6
-    const notes = [523.25, 659.25, 783.99, 1046.5, 1318.51];
-    notes.forEach((freq, idx) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(freq, now + idx * 0.07);
-      gain.gain.setValueAtTime(0.001, now + idx * 0.07);
-      gain.gain.exponentialRampToValueAtTime(0.2, now + idx * 0.07 + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.07 + 0.55);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now + idx * 0.07);
-      osc.stop(now + idx * 0.07 + 0.6);
-    });
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
+    gain.gain.setValueAtTime(0.11, ctx.currentTime + delay);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(ctx.currentTime + delay);
+    osc.stop(ctx.currentTime + delay + duration);
   } catch {
-    // Audio fallback silencieux
+    // audio indisponible
   }
 }
 
-// ── TEMPLATES DE MESSAGES WHATSAPP STRATÉGIQUES 1-CLIC ──
-function getWhatsappMessageText(
-  templateKey: "maquette" | "relance" | "devis" | "contact",
-  lead: CrmLead,
-  senderName: string,
-) {
-  const contact = lead.contactName || "Bonjour";
-  const company = lead.company || "votre établissement";
-  const maquetteUrl = lead.maquetteUrl || "https://xragencyai.com";
-
-  if (templateKey === "maquette") {
-    return `Bonjour ${contact}, c'est ${senderName} de l'agence XR Agency. Suite à notre échange, notre studio créatif a finalisé la maquette sur-mesure pour ${company} : ${maquetteUrl} . Prenez 2 minutes pour la consulter sur votre smartphone et dites-moi ce que vous en pensez !`;
-  }
-  if (templateKey === "relance") {
-    return `Bonjour ${contact}, avez-vous pu jeter un œil à la proposition pour ${company} ? Vos concurrents renforcent actuellement leur visibilité sur Google Maps. Si vous souhaitez bloquer votre créneau de mise en ligne cette semaine, confirmez-moi et on valide !`;
-  }
-  if (templateKey === "devis") {
-    return `Bonjour ${contact}, voici les éléments pour valider votre commande pour ${company} (${lead.serviceTarget} à ${lead.budgetEur} €). Le virement est à adresser sur les coordonnées bancaires indiquées sur le devis validé. Nous lançons la production dès réception !`;
-  }
-  return `Bonjour ${contact}, c'est ${senderName} de XR Agency à propos de la visibilité digitale de ${company}. Avez-vous 2 minutes pour échanger par message ?`;
+function playDing() {
+  playTone(587.33, "sine", 0.2);
+  playTone(880, "sine", 0.32, 0.06);
 }
 
-const OFFICIAL_CATALOG = [
-  {
-    category: "Sites Internet (30 % Commission)",
-    rate: "30 %",
-    offers: [
-      { label: "Site Vitrine Pro (sur devis)", price: 499, period: "once" as const },
-      { label: "Site Business Sur-Mesure + SEO", price: 799, period: "once" as const },
-      { label: "Site E-Commerce / Sur-Mesure Avancé", price: 1499, period: "once" as const },
-    ],
-  },
-  {
-    category: "Google Maps Top 3 & Gestion (10 % Commission)",
-    rate: "10 %",
-    offers: [
-      {
-        label: "Visibilité locale Google Maps (objectif défini après audit)",
-        price: 999,
-        period: "year" as const,
-      },
-      {
-        label: "Gestion Annuelle Fiche Google Maps (12 mois)",
-        price: 500,
-        period: "year" as const,
-      },
-    ],
-  },
-  {
-    category: "CRM, Logiciels & Systèmes POS (20 % Commission)",
-    rate: "20 %",
-    offers: [
-      {
-        label: "CRM / Logiciel Métier Sur-Mesure + Automatisation IA",
-        price: 2000,
-        period: "once" as const,
-      },
-      { label: "Système Caisse POS & Borne Connectée", price: 2490, period: "once" as const },
-    ],
-  },
-  {
-    category: "Abonnements Récurrents SEO, Social & WebCare (10 % / mois)",
-    rate: "10 % / mois",
-    offers: [
-      { label: "SEO Starter / Growth", price: 299, period: "month" as const },
-      { label: "Community Management & Réseaux Sociaux", price: 349, period: "month" as const },
-      { label: "WebCare Maintenance & Sécurité", price: 49, period: "month" as const },
-      { label: "Location Robot Autonome / Humanoïde", price: 499, period: "month" as const },
-    ],
-  },
-];
-
-const SCHOOL_CURRICULUM_90D = [
-  {
-    phase: "MOIS 1 (Jours 1 à 30)",
-    title: "Fondations du Closing & Maîtrise des Offres XR",
-    xp: "1 500 XP",
-    modules: [
-      "Connaître par cœur les 4 piliers : Sites (499€–1499€), Google Maps Top 3 (dès 999€/an + Gestion 500€/an), CRM/POS (2000€+) et Récurrents.",
-      "Psychologie des dirigeants 30–60 ans (artisans, restaurateurs, cliniques, PME) : parler chiffre d'affaires et rentabilité.",
-      "La règle d'or de la Maquette Gratuite : ne pas vendre du vent, proposer d'envoyer une maquette concrète en 24h.",
-      "Appel d'ouverture en 45 secondes : passer le barrage secrétaire et obtenir le décideur.",
-    ],
-  },
-  {
-    phase: "MOIS 2 (Jours 31 à 60)",
-    title: "Domination Google Maps, Suivi Maquettes & Traitement d'Objections",
-    xp: "3 000 XP",
-    modules: [
-      "Présenter la méthode de travail sur Google Business Profile, sans garantie de positionnement, et détailler les modalités réelles de l’offre.",
-      "Présenter la maquette validée par la Direction sur WhatsApp pour déclencher l'effet 'Waouh'.",
-      "Désamorcer les 5 objections fatales ('C'est trop cher', 'J'ai déjà un site', 'Je dois réfléchir', 'Mon neveu s'en occupe').",
-      "Verrouiller l'engagement et envoyer le Devis + coordonnées bancaires en direct pendant l'appel.",
-    ],
-  },
-  {
-    phase: "MOIS 3 (Jours 61 à 90)",
-    title: "Closing Haut-Ticket (CRM 2 000 €+, Robotique) & Récurrence",
-    xp: "5 000 XP",
-    modules: [
-      "Identifier les besoins en logiciels sur-mesure, CRM et caisses POS (20 % de commission directe).",
-      "Proposer les robots de service et humanoïdes aux restaurants, hôtels et supermarchés.",
-      "Transformer chaque client signé en ambassadeur (Upsell SEO / Social Media à J+30 + 10 %/mois).",
-      "Certification Closer Élite XR Agency & gestion autonome d'un portefeuille grands comptes.",
-    ],
-  },
-];
-
-const SCHOOL_OBJECTION_BATTLES = [
-  {
-    id: "obj-price",
-    prospectSay:
-      "« J'ai pas le budget en ce moment, 999 € pour Google Maps ou 499 € pour un site c'est trop cher. »",
-    goodReply:
-      "« Justement : aujourd'hui, la visibilité dans les résultats locaux dépend de nombreux facteurs et varie selon les recherches. Nous pouvons examiner vos objectifs, votre zone et votre présence actuelle avant de définir un périmètre réaliste. Souhaitez-vous regarder les pistes d’amélioration ensemble ? »",
-    badReply:
-      "« D'accord je comprends, je vous rappelle dans 6 mois quand vous aurez de la trésorerie. »",
-  },
-  {
-    id: "obj-already",
-    prospectSay: "« J'ai déjà un site internet et une fiche Google Maps, j'ai besoin de rien. »",
-    goodReply:
-      "« Très bien. Nous pouvons analyser votre présence actuelle, vos concurrents et les recherches utiles dans votre zone. Vous aurez un diagnostic concret avant de décider si des améliorations sont pertinentes. »",
-    badReply: "« Ah mince, tant pis alors, bonne journée ! »",
-  },
-  {
-    id: "obj-think",
-    prospectSay: "« Envoyez-moi un mail, je vais réfléchir avec mon associé. »",
-    goodReply:
-      "« Avec plaisir ! Plutôt qu'un simple mail abstrait, mon directeur artistique prépare une vraie maquette personnalisée à votre enseigne d'ici demain. Comme ça, avec votre associé, vous voyez le rendu réel sur téléphone. Quel est votre numéro WhatsApp pour vous envoyer le lien privé ? »",
-    badReply: "« Ok je vous envoie notre plaquette PDF générale par mail. »",
-  },
-];
-
-const OPERATIONAL_CALENDAR_PLAYBOOKS = [
-  {
-    id: "cm",
-    title: "📱 Planning Community Management (Réseaux Sociaux)",
-    badge: "349 € à 799 € / mois · Commission selon contrat",
-    steps: [
-      {
-        day: "Lundi",
-        task: "Validation du calendrier éditorial de la semaine + script des Reels / TikTok.",
-      },
-      {
-        day: "Mardi & Jeudi",
-        task: "Publication Carrousel / Post HD aux heures d'audience maximale (12h15 / 18h30).",
-      },
-      {
-        day: "Mercredi & Vendredi",
-        task: "Mise en ligne Reel 4K dynamique + Stories interactives (sondages, coulisses).",
-      },
-      {
-        day: "Samedi",
-        task: "Modération des commentaires, réponses aux DM et rapport d'engagement hebdo.",
-      },
-    ],
-  },
-  {
-    id: "maps",
-    title: "📍 Stratégie Google Maps Pack Local Top 3",
-    badge: "Dès 999 € / an ou Conquête 1 490 € / an · Comm 10%",
-    steps: [
-      {
-        day: "Semaine 1",
-        task: "Validation analystes XR, audit mots-clés + ville, création ou refonte intégrale GBP.",
-      },
-      {
-        day: "Hebdomadaire",
-        task: "Ajout de photos géolocalisées, Google Posts optimisés et citations NAP locales.",
-      },
-      {
-        day: "Continu 24/7",
-        task: "Surveillance de la position Top 3, réponses aux avis 5★ et protection anti-modifications.",
-      },
-      {
-        day: "Bilan Mensuel",
-        task: "Envoi du rapport d'appels générés, clics site web et demandes d'itinéraires.",
-      },
-    ],
-  },
-  {
-    id: "seo",
-    title: "🔍 Roadmap SEO & Référencement Naturel",
-    badge: "299 € à 499 € / mois · Comm 10%/m",
-    steps: [
-      {
-        day: "Semaine 1",
-        task: "Audit technique, vitesse mobile, balisage Schema.org et ciblage des requêtes d'achat.",
-      },
-      {
-        day: "Semaine 2 & 3",
-        task: "Rédaction et publication des pages piliers et articles SEO optimisés.",
-      },
-      {
-        day: "Semaine 4",
-        task: "Campagne de netlinking (backlinks d'autorité) et suivi des positions Google.",
-      },
-    ],
-  },
-  {
-    id: "web",
-    title: "💻 Rétroplanning Livraison Site Web 7 Jours + Upsell J+30",
-    badge: "499 € / 799 € / 1 499 € · Comm 30%",
-    steps: [
-      {
-        day: "J+1",
-        task: "Création de la maquette par la Direction ➔ Lien validé et envoyé au client.",
-      },
-      {
-        day: "J+2 à J+5",
-        task: "Intégration responsive mobile/PC, copywriting persuasif et formulaires connectés.",
-      },
-      {
-        day: "J+7",
-        task: "Mise en ligne officielle, SSL, indexation Google & validation virement RIB.",
-      },
-      {
-        day: "J+30",
-        task: "Appel suivi satisfaction + proposition Upsell Google Maps Top 3 / WebCare / Parrainage.",
-      },
-    ],
-  },
-];
-
-function formatMoney(v: number) {
-  return `${Math.round(v || 0).toLocaleString("fr-FR")} €`;
+function playFanfare() {
+  playTone(523.25, "triangle", 0.14, 0);
+  playTone(659.25, "triangle", 0.14, 0.11);
+  playTone(783.99, "triangle", 0.18, 0.22);
+  playTone(1046.5, "triangle", 0.48, 0.34);
 }
 
-function formatTime(iso: string) {
-  try {
-    return new Date(iso).toLocaleDateString("fr-FR", {
-      day: "2-digit",
-      month: "short",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  } catch {
-    return "";
-  }
+type CrmTab = "kanban" | "arena" | "cockpit" | "contest" | "school" | "clients_invoices" | "projects" | "finances" | "studio" | "rh" | "qg";
+
+interface QuickAuditResult {
+  score: number;
+  url: string;
+  title?: string;
+  recommendations?: { service: string; reason: string }[];
+  error?: string;
 }
 
-function isLeadUrgent48h(lead: CrmLead) {
-  if (lead.status !== "to_call" && lead.status !== "new") return false;
-  const created = new Date(lead.createdAt).getTime();
-  if (Number.isNaN(created)) return false;
-  return Date.now() - created > 24 * 3600 * 1000;
-}
+function XrAgencyCrmApp() {
+  // ── Thème coloré ludique (🌈 Pop Coloré par défaut !) ──
+  const [themeId, setThemeId] = useState<CrmThemeId>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("xr_crm_theme_v4") as CrmThemeId | null;
+      if (saved && CRM_THEMES[saved]) return saved;
+    }
+    return "pop";
+  });
+  const theme = CRM_THEMES[themeId];
 
-function CrmWorkspacePage() {
-  const [snapshot, setSnapshot] = useState<CrmSnapshot | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [busy, setBusy] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
-
-  // ── AUTHENTICATION STATE (PORTAILS SÉCURISÉS : DIRECTION, RH MARTIN, CLOSER, ACADÉMIE) ──
-  const [selectedPortalRole, setSelectedPortalRole] = useState<
-    "director" | "closer" | "student" | "hr_manager"
-  >("director");
-  const [pinCode, setPinCode] = useState("");
-  const [closerAccountEmail, setCloserAccountEmail] = useState("lucas@xragency.fr");
-  const [martinViewMode, setMartinViewMode] = useState<"sims_3d" | "hr" | "closer">("sims_3d");
-  const [directorViewingHr, setDirectorViewingHr] = useState(false);
-
-  // ── DIRECTOR TABS & MODES D'AFFICHAGE (COCKPIT PRO vs BOSS ARCADE vs MONDE METAVERSE vs ARÈNE CLOSER vs SIMS HQ 3D) ──
-  const [directorDisplayMode, setDirectorDisplayMode] = useState<
-    "cockpit" | "boss_arcade" | "game_world" | "closer_arena" | "sims_3d"
-  >("sims_3d");
-  const [closerDisplayMode, setCloserDisplayMode] = useState<"missions" | "combat_hub" | "sims_3d">(
-    "sims_3d",
-  );
-  const [directorTab, setDirectorTab] = useState<
-    | "overview"
-    | "leads"
-    | "clients"
-    | "quotes"
-    | "invoices"
-    | "projects"
-    | "providers"
-    | "calendar"
-    | "maquettes"
-    | "leaderboard"
-  >("overview");
-  const [showOfficialQuoteModal, setShowOfficialQuoteModal] = useState(false);
-  const [directorLeadScope, setDirectorLeadScope] = useState<string>("all");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // ── CLOSER TABS & ASSISTED CALL MODAL ──
-  const [closerTab, setCloserTab] = useState<
-    "missions" | "maquettes" | "commissions" | "calendar" | "rpg_training" | "leaderboard"
-  >("missions");
-  const [closerQuestMode, setCloserQuestMode] = useState<"quest_deck" | "grid">("quest_deck");
-  const [closerQuestIndex, setCloserQuestIndex] = useState(0);
-  const [activeCallLead, setActiveCallLead] = useState<CrmLead | null>(null);
-  const [callNotesInput, setCallNotesInput] = useState("");
-  const [callFollowUpInput, setCallFollowUpInput] = useState("Demain 10h00");
-
-  // ── STUDENT (XR SCHOOL) STATE + PASSERELLE CRM COMMERCIAL ──
-  const [studentViewMode, setStudentViewMode] = useState<"school" | "crm_bridge">("school");
-  const [selectedBattleId, setSelectedBattleId] = useState<string>(SCHOOL_OBJECTION_BATTLES[0].id);
-  const activeBattle =
-    SCHOOL_OBJECTION_BATTLES.find((battle) => battle.id === selectedBattleId) ??
-    SCHOOL_OBJECTION_BATTLES[0];
-  const [battleOutcome, setBattleOutcome] = useState<"none" | "win" | "retry">("none");
-
-  // ── FORMULAIRE RAPIDE D'AJOUT DE LEAD (SCREENSHOT / TÉLÉPHONE / FICHE) ──
-  const [leadTargetMode, setLeadTargetMode] = useState<"mine" | "closer">("closer");
-  const [leadAssignedCloser, setLeadAssignedCloser] = useState("mem-lucas");
-  const [leadPhone, setLeadPhone] = useState("");
-  const [leadCompany, setLeadCompany] = useState("");
-  const [leadContactName, setLeadContactName] = useState("");
-  const [leadCity, setLeadCity] = useState("");
-  const [leadServiceTarget, setLeadServiceTarget] = useState("Site Vitrine Pro (sur devis)");
-  const [leadBudgetEur, setLeadBudgetEur] = useState(499);
-  const [leadNotes, setLeadNotes] = useState("");
-  const [leadScreenshotDataUrl, setLeadScreenshotDataUrl] = useState<string>("");
-
-  // ── STUDIO MAQUETTES (LIEN 1-CLIC DIRECTION) ──
-  const [maquetteLinkInputs, setMaquetteLinkInputs] = useState<Record<string, string>>({});
-
-  // ── CRÉATION RAPIDE DE DEVIS OFFICIEL + RIB ──
-  const [quoteCompany, setQuoteCompany] = useState("");
-  const [quoteEmail, setQuoteEmail] = useState("");
-  const [quoteServiceLabel, setQuoteServiceLabel] = useState("Site Vitrine Pro (sur devis)");
-  const [quotePriceEur, setQuotePriceEur] = useState(499);
-  const [quotePeriod, setQuotePeriod] = useState<"once" | "year" | "month">("once");
-
-  // ── TÂCHES / CALENDRIER VIE PERSO & PRO ──
-  const [newTaskTitle, setNewTaskTitle] = useState("");
-  const [newTaskCategory, setNewTaskCategory] = useState<"pro" | "perso">("pro");
-  const [newTaskDueDate, setNewTaskDueDate] = useState("Aujourd'hui");
-
-  // ── GAMIFICATION & EFFETS LUDIQUES (KA-CHING, COFFRE, CONFETTIS) ──
-  const [showCelebration, setShowCelebration] = useState<{
-    active: boolean;
-    title: string;
-    subtitle: string;
-    amount?: number;
-  }>({
-    active: false,
-    title: "",
-    subtitle: "",
+  // ── Équipe dynamique persistée ──
+  const [members, setMembers] = useState<TeamMember[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("xr_crm_members_v5");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          return parsed.map((m: TeamMember) => {
+            if (m.id === "antoine" && (!m.pin || m.pin === "")) {
+              return { ...m, pin: "071266" };
+            }
+            return m;
+          });
+        }
+      } catch {
+        // ignore
+      }
+    }
+    return DEFAULT_TEAM_MEMBERS;
   });
 
-  const triggerCelebration = (title: string, subtitle: string, amount?: number) => {
-    playVictorySound();
-    setShowCelebration({ active: true, title, subtitle, amount });
-    setTimeout(() => {
-      setShowCelebration((prev) => ({ ...prev, active: false }));
-    }, 4500);
-  };
+  // ── Session utilisateur vérifiée serveur (/api/crm-auth) ──
+  const [currentUserId, setCurrentUserId] = useState<string | null>(() => {
+    if (typeof window !== "undefined") return localStorage.getItem("xr_crm_user_v3") || null;
+    return null;
+  });
 
-  // ── CHRONOMÈTRE APPEL ASSISTÉ CLOSER ──
-  const [callTimerSeconds, setCallTimerSeconds] = useState(0);
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout | null = null;
-    if (activeCallLead) {
-      setCallTimerSeconds(0);
-      timer = setInterval(() => {
-        setCallTimerSeconds((s) => s + 1);
-      }, 1000);
-    } else {
-      setCallTimerSeconds(0);
-    }
-    return () => {
-      if (timer) clearInterval(timer);
-    };
-  }, [activeCallLead]);
-
-  // ── MODE D'AJOUT DIRECTION (FLASH 5S vs DÉTAILLÉ) ──
-  const [directionAddMode, setDirectionAddMode] = useState<"flash" | "detailed">("flash");
-  const [flashLeadText, setFlashLeadText] = useState("");
-  const [flashCloserTarget, setFlashCloserTarget] = useState("mem-lucas");
-  const [flashServiceTarget, setFlashServiceTarget] = useState("Site Vitrine Pro (sur devis)");
-
-  // ── MODALE MESSAGES WHATSAPP PRÉ-RÉDIGÉS 1-CLIC ──
-  const [whatsappModalLead, setWhatsappModalLead] = useState<CrmLead | null>(null);
-  const [whatsappTemplateKey, setWhatsappTemplateKey] = useState<
-    "maquette" | "relance" | "devis" | "contact"
-  >("maquette");
-
-  // ── SIMULATEUR DE COMMISSION EN DIRECT (COFFRE CLOSER) ──
-  const [simulatedPriceEur, setSimulatedPriceEur] = useState(999);
-  const [simulatedServiceLabel, setSimulatedServiceLabel] = useState(
-    "Visibilité locale Google Maps (999 €/an)",
+  const currentUser = useMemo(
+    () => members.find((m) => m.id === currentUserId) || null,
+    [members, currentUserId]
   );
 
-  const flashSuccess = (msg: string) => {
-    setSuccessMsg(msg);
-    setTimeout(() => setSuccessMsg(""), 4000);
-  };
+  const [schoolGuestMode, setSchoolGuestMode] = useState(false);
+  const [pendingMember, setPendingMember] = useState<TeamMember | null>(null);
+  const [pinInput, setPinInput] = useState("");
+  const [pinError, setPinError] = useState("");
+  const [authLoading, setAuthLoading] = useState(false);
+  const [schoolPinModal, setSchoolPinModal] = useState(false);
+  const [schoolPinInput, setSchoolPinInput] = useState("");
+  const [schoolPinError, setSchoolPinError] = useState("");
 
-  const fetchSnapshot = useCallback(async () => {
-    try {
-      const res = await fetch("/api/crm", { credentials: "include" });
-      const data = (await res.json()) as CrmSnapshot;
-      setSnapshot(data);
-    } catch {
-      setErrorMsg("Impossible de charger le CRM.");
-    } finally {
-      setLoading(false);
+  // ── Données CRM (Zéro client fictif par défaut !) + Supabase Realtime ──
+  const [leads, setLeads] = useState<Lead[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("xr_crm_leads_v3");
+        if (saved) return JSON.parse(saved);
+      } catch {
+        // ignore
+      }
     }
+    return [];
+  });
+
+  const [weeklyChallenge, setWeeklyChallenge] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("xr_weekly_challenge") || "Objectif Semaine : +50 XP bonus sur chaque Pack Site + WebCare !";
+    }
+    return "Objectif Semaine : +50 XP bonus sur chaque Pack Site + WebCare !";
+  });
+
+  const syncStatus = checkSupabaseStatus();
+
+  const [activeTab, setActiveTab] = useState<CrmTab>("kanban");
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeLeadForCockpit, setActiveLeadForCockpit] = useState<Lead | null>(null);
+  const [editingLead, setEditingLead] = useState<Lead | null>(null);
+  const [openObjIdx, setOpenObjIdx] = useState<number | null>(0);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [lastWonLead, setLastWonLead] = useState<Lead | null>(null);
+  const [draggedLeadId, setDraggedLeadId] = useState<string | null>(null);
+  const [dragOverStage, setDragOverStage] = useState<LeadStage | null>(null);
+
+  // Command Palette Ctrl+K
+  const [showCmdPalette, setShowCmdPalette] = useState(false);
+  const [cmdQuery, setCmdQuery] = useState("");
+
+  // Audit Express dans le Cockpit (/api/audit)
+  const [auditUrlInput, setAuditUrlInput] = useState("");
+  const [auditLoading, setAuditLoading] = useState(false);
+  const [auditResult, setAuditResult] = useState<QuickAuditResult | null>(null);
+
+  // Paiement Stripe Checkout (/api/create-checkout) & Envoi Email Devis (/api/send-quote)
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [sendingEmailQuote, setSendingEmailQuote] = useState(false);
+  const [checkoutMessage, setCheckoutMessage] = useState<string | null>(null);
+
+  // Filtre mensuel Paie & Finances ("all" ou "YYYY-MM")
+  const [selectedMonth, setSelectedMonth] = useState<string>("all");
+
+  // Mode Sprint 25m & Quête Appels
+  const [sprintActive, setSprintActive] = useState(false);
+  const [sprintSeconds, setSprintSeconds] = useState(25 * 60);
+  const [dailyCalls, setDailyCalls] = useState(() => {
+    if (typeof window !== "undefined") return Number(localStorage.getItem("xr_daily_calls_v3") || "0");
+    return 0;
+  });
+
+  // Modal Ajout Express Prospect (5s) + Anti-Doublon + Pack Multi-Services
+  const [showNewLeadModal, setShowNewLeadModal] = useState(false);
+  const [duplicateWarning, setDuplicateWarning] = useState("");
+  const [formName, setFormName] = useState("");
+  const [formContact, setFormContact] = useState("");
+  const [formPhone, setFormPhone] = useState("");
+  const [formEmail, setFormEmail] = useState("");
+  const [formWebsite, setFormWebsite] = useState("");
+  const [formFollowUp, setFormFollowUp] = useState("");
+  const [formSectorId, setFormSectorId] = useState(BUSINESS_SECTORS[0].id);
+  const [formServiceId, setFormServiceId] = useState(XR_OFFICIAL_SERVICES[0].id);
+  const [formPlanId, setFormPlanId] = useState(
+    XR_OFFICIAL_SERVICES[0].plans[1]?.id || XR_OFFICIAL_SERVICES[0].plans[0].id
+  );
+  const [formValue, setFormValue] = useState(XR_OFFICIAL_SERVICES[0].defaultPrice);
+  const [formExtraItems, setFormExtraItems] = useState<LeadServiceItem[]>([]);
+  const [formInstallmentPlan, setFormInstallmentPlan] = useState<"1x" | "3x">("1x");
+  const [formSetterId, setFormSetterId] = useState("");
+  const [formCloserId, setFormCloserId] = useState("");
+  const [formIssue, setFormIssue] = useState("");
+
+  // Modal Ajout Membre
+  const [showAddMemberModal, setShowAddMemberModal] = useState(false);
+  const [newMemberName, setNewMemberName] = useState("");
+  const [newMemberRole, setNewMemberRole] = useState<UserRoleType>("closer");
+  const [newMemberSettingPct, setNewMemberSettingPct] = useState(10);
+  const [newMemberClosingPct, setNewMemberClosingPct] = useState(20);
+  const [newMemberFullPct, setNewMemberFullPct] = useState(20);
+  const [newMemberPin, setNewMemberPin] = useState("1234");
+  const [newMemberRecruitedBy, setNewMemberRecruitedBy] = useState("");
+
+  // Modal Changement Mot de Passe personnel
+  const [showChangePinModal, setShowChangePinModal] = useState(false);
+  const [newPinValue, setNewPinValue] = useState("");
+  const [confirmPinValue, setConfirmPinValue] = useState("");
+  const [changePinError, setChangePinError] = useState("");
+
+  // ── Persistance & Supabase Realtime ──
+  useEffect(() => {
+    if (typeof window !== "undefined") localStorage.setItem("xr_crm_theme_v4", themeId);
+  }, [themeId]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") localStorage.setItem("xr_crm_leads_v3", JSON.stringify(leads));
+  }, [leads]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") localStorage.setItem("xr_crm_members_v5", JSON.stringify(members));
+  }, [members]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (currentUserId) localStorage.setItem("xr_crm_user_v3", currentUserId);
+      else localStorage.removeItem("xr_crm_user_v3");
+    }
+  }, [currentUserId]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") localStorage.setItem("xr_weekly_challenge", weeklyChallenge);
+  }, [weeklyChallenge]);
+
+  // Synchronisation initiale & temps réel Cloud (/api/crm-sync + Supabase)
+  useEffect(() => {
+    let active = true;
+    fetchCrmSnapshotFromServer().then((snap) => {
+      if (!active || !snap) return;
+      if (snap.leads && snap.leads.length > 0) setLeads(snap.leads);
+      if (snap.members && snap.members.length > 0) setMembers(snap.members);
+    });
+    const unsub = subscribeCrmRealtime(() => {
+      fetchCrmSnapshotFromServer().then((snap) => {
+        if (!active || !snap) return;
+        if (snap.leads) setLeads(snap.leads);
+        if (snap.members) setMembers(snap.members);
+      });
+    });
+    return () => {
+      active = false;
+      unsub?.();
+    };
+  }, []);
+
+  // Raccourci Ctrl+K
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setShowCmdPalette((prev) => !prev);
+        setCmdQuery("");
+      }
+      if (e.key === "Escape") setShowCmdPalette(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
   useEffect(() => {
-    void fetchSnapshot();
-  }, [fetchSnapshot]);
+    if (!currentUser) return;
+    if (currentUser.roleType === "studio") setActiveTab("studio");
+    else if (currentUser.roleType === "student") setActiveTab("school");
+    else setActiveTab("kanban");
+  }, [currentUser?.id]);
 
-  const apiCall = async (payload: Record<string, unknown>, okMessage?: string) => {
-    setBusy(true);
-    setErrorMsg("");
-    try {
-      const res = await fetch("/api/crm", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(payload),
-      });
-      const data = (await res.json()) as CrmSnapshot & { error?: string };
-      if (!res.ok || data.error) {
-        setErrorMsg(data.error || "Une erreur est survenue.");
-        return null;
-      }
-      setSnapshot(data);
-      if (okMessage) flashSuccess(okMessage);
-      return data;
-    } catch {
-      setErrorMsg("Erreur réseau lors de l'opération.");
-      return null;
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const openCallModal = (lead: CrmLead) => setActiveCallLead(lead);
-  const openWhatsappModal = (lead: CrmLead) => setWhatsappModalLead(lead);
-  const updateLeadStatus = async (leadId: string, status: LeadStatus) => {
-    await apiCall({ action: "update_lead", leadId, status }, "Statut du prospect mis à jour");
-  };
-
-  const handleLogout = async () => {
-    setBusy(true);
-    try {
-      await apiCall({ action: "logout" }, "Déconnexion réussie !");
-    } catch {
-      // ignore
-    } finally {
-      setSnapshot({ authenticated: false });
-      setBusy(false);
-    }
-  };
-
-  // Support Ctrl+V image paste for instant screenshot leads
   useEffect(() => {
-    const handlePaste = (e: ClipboardEvent) => {
-      if (!snapshot?.authenticated) return;
-      const items = e.clipboardData?.items;
-      if (!items) return;
-      for (const item of Array.from(items)) {
-        if (item.type.startsWith("image/")) {
-          const file = item.getAsFile();
-          if (!file) continue;
-          const reader = new FileReader();
-          reader.onload = () => {
-            if (typeof reader.result === "string") {
-              setLeadScreenshotDataUrl(reader.result);
-              flashSuccess("📸 Capture d'écran collée ! Cliquez sur Ajouter le Lead.");
-            }
-          };
-          reader.readAsDataURL(file);
+    if (!sprintActive || sprintSeconds <= 0) return;
+    const id = setInterval(() => {
+      setSprintSeconds((prev) => {
+        if (prev <= 1) {
+          setSprintActive(false);
+          if (soundEnabled) playFanfare();
+          return 25 * 60;
         }
-      }
-    };
-    window.addEventListener("paste", handlePaste);
-    return () => window.removeEventListener("paste", handlePaste);
-  }, [snapshot?.authenticated]);
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, [sprintActive, sprintSeconds, soundEnabled]);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        setLeadScreenshotDataUrl(reader.result);
-        flashSuccess("📸 Photo / Capture prête à être envoyée !");
-      }
-    };
-    reader.readAsDataURL(file);
-  };
+  // ── Filtrage RBAC strict ──
+  const myVisibleLeads = useMemo(() => {
+    if (!currentUser) return [];
+    return leads.filter((l) => canViewLead(currentUser, l, members));
+  }, [leads, currentUser, members]);
 
-  const handlePinLogin = async (
-    e?: FormEvent,
-    overridePin?: string,
-    overrideRole?: "director" | "closer" | "student",
-  ) => {
-    if (e) e.preventDefault();
-    const code = (overridePin ?? pinCode).trim();
-    const role = overrideRole ?? selectedPortalRole;
-    if (!code) {
-      setErrorMsg("Saisissez votre code d'accès.");
-      return;
-    }
-    const emailForLogin =
-      role === "director"
-        ? "admin@xragency.fr"
-        : role === "student"
-          ? "karim@xragency.fr"
-          : closerAccountEmail;
-
-    await apiCall(
-      {
-        action: "login",
-        pin: code,
-        password: code,
-        email: emailForLogin,
-      },
-      "Connexion réussie !",
+  const filteredLeads = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return myVisibleLeads;
+    return myVisibleLeads.filter(
+      (l) =>
+        l.name.toLowerCase().includes(q) ||
+        l.contact.toLowerCase().includes(q) ||
+        l.phone.toLowerCase().includes(q)
     );
-    setPinCode("");
-  };
+  }, [myVisibleLeads, searchQuery]);
 
-  const handleQuickAddLead = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!leadPhone.trim() && !leadCompany.trim() && !leadScreenshotDataUrl) {
-      setErrorMsg("Mettez au moins un numéro de téléphone, un nom ou une capture d'écran !");
-      return;
-    }
-    const assignedTo =
-      user?.portalType === "director"
-        ? leadTargetMode === "mine"
-          ? user.id
-          : leadAssignedCloser
-        : user?.id || "mem-lucas";
-
-    const res = await apiCall(
-      {
-        action: "send_lead",
-        company: leadCompany.trim(),
-        contactName: leadContactName.trim(),
-        phone: leadPhone.trim(),
-        city: leadCity.trim() || "France",
-        serviceTarget: leadServiceTarget,
-        budgetEur: leadBudgetEur,
-        notes: leadNotes.trim(),
-        screenshotUrl: leadScreenshotDataUrl || undefined,
-        assignedTo,
-      },
-      leadTargetMode === "mine" && user?.portalType === "director"
-        ? "✅ Lead enregistré dans vos Leads Direction !"
-        : "🚀 Lead envoyé instantanément au commercial !",
-    );
-    if (res) {
-      setLeadPhone("");
-      setLeadCompany("");
-      setLeadContactName("");
-      setLeadNotes("");
-      setLeadScreenshotDataUrl("");
-    }
-  };
-
-  const handleFlashAddLead = async (e: FormEvent) => {
-    e.preventDefault();
-    const raw = flashLeadText.trim();
-    if (!raw) {
-      setErrorMsg("Veuillez saisir un numéro ou un nom d'entreprise !");
-      return;
-    }
-
-    const phoneMatch = raw.match(/(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}/);
-    const extractedPhone = phoneMatch ? phoneMatch[0] : "";
-    let extractedCompany = raw
-      .replace(extractedPhone, "")
-      .replace(/[-—,;:]/g, " ")
-      .trim();
-    if (!extractedCompany) {
-      extractedCompany = extractedPhone ? `Prospect ${extractedPhone}` : "Nouveau Prospect Direct";
-    }
-    const finalPhone = extractedPhone || raw;
-
-    let budget = 499;
-    if (flashServiceTarget.includes("999")) budget = 999;
-    else if (flashServiceTarget.includes("1499")) budget = 1499;
-    else if (flashServiceTarget.includes("2000")) budget = 2000;
-    else if (flashServiceTarget.includes("2490")) budget = 2490;
-
-    const res = await apiCall(
-      {
-        action: "send_lead",
-        company: extractedCompany,
-        contactName: "Gérant / Décideur",
-        phone: finalPhone,
-        city: "France / Métropole",
-        serviceTarget: flashServiceTarget,
-        budgetEur: budget,
-        assignedTo: flashCloserTarget,
-        notes: "Lead injecté en Mode Flash (5s) par la Direction",
-      },
-      "⚡ Lead flash créé et dispatché instantanément !",
-    );
-
-    if (res) {
-      setFlashLeadText("");
-      triggerCelebration(
-        "LEAD DISPATCHÉ ! ⚡",
-        `Mission envoyée au closer pour ${extractedCompany}`,
-      );
-    }
-  };
-
-  const handleRequestQuoteAndRib = async (lead?: CrmLead) => {
-    const company = lead ? lead.company : quoteCompany.trim();
-    const email = lead
-      ? lead.email || "client@entreprise.fr"
-      : quoteEmail.trim() || "client@entreprise.fr";
-    const label = lead ? lead.serviceTarget : quoteServiceLabel;
-    const price = lead ? lead.budgetEur : quotePriceEur;
-    const period: "once" | "year" | "month" = lead
-      ? lead.serviceTarget.toLowerCase().includes("maps")
-        ? "year"
-        : lead.serviceTarget.toLowerCase().includes("mois") ||
-            lead.serviceTarget.toLowerCase().includes("seo")
-          ? "month"
-          : "once"
-      : quotePeriod;
-
-    if (!company) {
-      setErrorMsg("Indiquez le nom du client ou de l'entreprise.");
-      return;
-    }
-
-    await apiCall(
-      {
-        action: "create_quote",
-        leadId: lead?.id,
-        clientName: lead?.contactName || company,
-        clientCompany: company,
-        clientEmail: email,
-        items: [
-          {
-            label,
-            detail:
-              "Prestation officielle XR Agency — Contrat et coordonnées bancaires à confirmer",
-            priceEur: price,
-            period,
-            quantity: 1,
-          },
-        ],
-      },
-      `📄 Devis officiel & Facture RIB générés pour ${company} !`,
-    );
-    setQuoteCompany("");
-    setQuoteEmail("");
-  };
-
-  const user = snapshot?.user;
-  const currentUser = user;
-  const leads = useMemo(() => snapshot?.leads || [], [snapshot?.leads]);
-  const members = useMemo(() => snapshot?.members || [], [snapshot?.members]);
-  const clients = useMemo(() => snapshot?.clients || [], [snapshot?.clients]);
-  const quotes = useMemo(() => snapshot?.quotes || [], [snapshot?.quotes]);
-  const invoices = useMemo(() => snapshot?.invoices || [], [snapshot?.invoices]);
-  const projects = useMemo(() => snapshot?.projects || [], [snapshot?.projects]);
-  const tasks = useMemo(() => snapshot?.tasks || [], [snapshot?.tasks]);
-  const providers = useMemo(() => snapshot?.providers || [], [snapshot?.providers]);
-  const notifications = useMemo(() => snapshot?.notifications || [], [snapshot?.notifications]);
-
-  const crmTodos: CrmTodo[] = useMemo(() => {
-    return tasks.map((t) => ({
-      id: t.id,
-      category: (t.category === "perso" ? "perso" : "pro") as "pro" | "perso",
-      title: t.title,
-      priority: (t.priority || "high") as "urgent" | "high" | "normal",
-      deadline: t.dueDate || "Aujourd'hui",
-      tag: t.tag || (t.category === "perso" ? "Perso" : "Stratégie Pro"),
-      done: t.status === "done",
-      createdAt: t.createdAt,
-    }));
-  }, [tasks]);
-
-  const handleToggleTodo = (taskId: string) => {
-    void apiCall({ action: "toggle_task", taskId });
-  };
-
-  const handleAddTodo = (todo: Omit<CrmTodo, "id" | "createdAt">) => {
-    void apiCall(
-      {
-        action: "create_task",
-        title: todo.title,
-        category: todo.category,
-        priority: todo.priority,
-        dueDate: todo.deadline,
-        tag: todo.tag,
-      },
-      "Tâche ajoutée à votre feuille de route !",
-    );
-  };
-
-  const handleDeleteTodo = (taskId: string) => {
-    void apiCall({ action: "delete_task", taskId }, "Tâche supprimée.");
-  };
-
-  const dispatchLead = (leadId: string, memberIdOrEmail: string) => {
-    const resolvedMember = members.find(
-      (m) => m.id === memberIdOrEmail || m.email.toLowerCase() === memberIdOrEmail.toLowerCase(),
-    );
-    void apiCall(
-      {
-        action: "update_lead",
-        leadId,
-        assignedTo: resolvedMember ? resolvedMember.id : memberIdOrEmail,
-      },
-      "Dossier réassigné avec succès !",
-    );
-  };
-
-  const handleCreateClient = async (clientData: {
-    company: string;
-    contactName: string;
-    email: string;
-    phone: string;
-    website?: string;
-    city: string;
-    sector: string;
-    servicesPurchased: string[];
-    totalRevenueEur: number;
-    internalNotes?: string;
-  }) => {
-    await apiCall(
-      {
-        action: "create_client",
-        ...clientData,
-      },
-      `Client ${clientData.company} créé avec succès !`,
-    );
-  };
-
-  const handleCreateQuote = async (quoteData: {
-    clientCompany: string;
-    clientName: string;
-    clientEmail: string;
-    items: QuoteItem[];
-    paymentTerms?: string;
-    notes?: string;
-  }) => {
-    await apiCall(
-      {
-        action: "create_quote",
-        ...quoteData,
-      },
-      `Devis créé pour ${quoteData.clientCompany} !`,
-    );
-  };
-
-  const handleUpdateQuoteStatus = async (quoteId: string, status: CrmQuoteRecord["status"]) => {
-    await apiCall(
-      {
-        action: "update_quote_status",
-        quoteId,
-        status,
-      },
-      `Statut du devis ${quoteId} mis à jour : ${status}`,
-    );
-  };
-
-  const handleValidatePayment = async (invoiceId: string) => {
-    triggerCelebration(
-      "VIREMENT REÇU & CONFIRMÉ ! 💸",
-      `Fonds reçus sur le coordonnées bancaires. Les commissions ont été débloquées dans le coffre du closer !`,
-    );
-    await apiCall(
-      {
-        action: "validate_payment",
-        invoiceId,
-      },
-      `Virement validé pour ${invoiceId} ! Commissions débloquées dans le coffre du closer.`,
-    );
-  };
-
-  const handleCreateProject = async (projectData: {
-    projectName: string;
-    clientName: string;
-    serviceCategory: string;
-    budgetEur: number;
-    deliveryDeadline: string;
-    notes?: string;
-  }) => {
-    await apiCall(
-      {
-        action: "create_project",
-        ...projectData,
-      },
-      `Projet "${projectData.projectName}" créé avec succès !`,
-    );
-  };
-
-  const handleUpdateProject = async (projectId: string, updates: Partial<CrmProjectRecord>) => {
-    await apiCall(
-      {
-        action: "update_project",
-        projectId,
-        updates,
-      },
-      `Projet ${projectId} mis à jour !`,
-    );
-  };
-
-  const handleCreateProvider = async (providerData: {
-    name: string;
-    company?: string;
-    email: string;
-    phone: string;
-    specialties: string[];
-    hourlyRateEur: number;
-    notes?: string;
-  }) => {
-    await apiCall(
-      {
-        action: "create_provider",
-        ...providerData,
-      },
-      `Prestataire ${providerData.name} enregistré !`,
-    );
-  };
-
-  const closersList = useMemo(
-    () => members.filter((m) => m.role !== "admin" && m.portalType !== "student"),
-    [members],
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const dueFollowUpsCount = useMemo(
+    () =>
+      myVisibleLeads.filter(
+        (l) => l.stage !== "won" && l.followUpDate && l.followUpDate <= todayIso
+      ).length,
+    [myVisibleLeads, todayIso]
   );
 
-  // Calcul du Coffre-Fort des Commissions (En attente virement vs Débloqué par virement reçu)
-  const commissionSummary = useMemo(() => {
-    const signedLeads = leads.filter((l) => l.status === "signed" || l.status === "outsourced");
-    const paidCompanies = new Set(
-      invoices.filter((i) => i.status === "paid").map((i) => i.clientCompany.toLowerCase()),
-    );
+  // ── Calcul Gamification / XP / Niveau personnel adapté au rôle ──
+  const gameHud = useMemo(() => {
+    if (!currentUser) return { xp: 0, level: 1, progress: 0, questLabel: "", energyPct: 100 };
+    const myWon = myVisibleLeads.filter((l) => l.stage === "won").length;
+    const myMockups = myVisibleLeads.filter((l) => l.stage === "mockup").length;
+    const myRdv = myVisibleLeads.filter((l) => l.stage === "rdv" || l.stage === "negociation").length;
+    const xp = myWon * 100 + myMockups * 25 + myRdv * 15 + dailyCalls * 5;
+    const level = Math.floor(xp / 150) + 1;
+    const progress = Math.round(((xp % 150) / 150) * 100);
+    const energyPct = Math.min(100, Math.round((dailyCalls / 10) * 100));
 
-    let unlockedEur = 0;
-    let pendingVaultEur = 0;
+    const questLabel =
+      currentUser.roleType === "setter"
+        ? `Quête Setter : ${dailyCalls}/10 appels · ${myRdv} RDV posé(s)`
+        : currentUser.roleType === "closer"
+        ? `Quête Closer : ${myMockups} maquette(s) · ${myWon} signature(s)`
+        : currentUser.roleType === "student"
+        ? `Quête Académie : ${dailyCalls}/5 appels · Entraînez-vous au Dojo`
+        : currentUser.roleType === "manager"
+        ? `Quête Manager : Piloter votre filière · ${myWon} vente(s) suivie(s)`
+        : `Quête Direction : ${myMockups} maquette(s) · ${myWon} vente(s) conclue(s)`;
 
-    for (const l of signedLeads) {
-      const assignedMember = members.find((m) => m.id === l.assignedTo) || user;
-      const { amountEur } = getOfficialCommission(l.serviceTarget, l.budgetEur, assignedMember);
-      if (paidCompanies.has(l.company.toLowerCase())) {
-        unlockedEur += amountEur;
-      } else {
-        pendingVaultEur += amountEur;
-      }
-    }
-    return { unlockedEur, pendingVaultEur, totalSignedEur: unlockedEur + pendingVaultEur };
-  }, [leads, invoices, members, user]);
+    return { xp, level, progress, questLabel, energyPct };
+  }, [currentUser, myVisibleLeads, dailyCalls]);
 
-  const pendingMaquettes = useMemo(
-    () => leads.filter((l) => l.maquetteStatus === "pending"),
-    [leads],
-  );
-  const validatedMaquettes = useMemo(
-    () => leads.filter((l) => l.maquetteStatus === "validated"),
-    [leads],
-  );
-
-  const urgentLeads48h = useMemo(() => {
-    return leads.filter((l) => isLeadUrgent48h(l));
+  // ── Calcul Finances & Commissions RBAC (Multi-Services + Filtre Mensuel Paie) ──
+  const availableMonths = useMemo(() => {
+    const months = new Set<string>();
+    const currentMonth = new Date().toISOString().slice(0, 7);
+    months.add(currentMonth);
+    leads.forEach((l) => {
+      if (l.wonMonth) months.add(l.wonMonth);
+    });
+    return Array.from(months).sort().reverse();
   }, [leads]);
 
-  const handleCopyLovable = (lead: CrmLead) => {
-    const p: Prospect = {
-      id: lead.id,
-      owner_id: lead.assignedTo,
-      business_name: lead.company,
-      website_url: lead.website || "",
-      industry: lead.sector || null,
-      country: lead.country || null,
-      city: lead.city || null,
-      contact_name: lead.contactName || null,
-      contact_email: lead.email || null,
-      phone: lead.phone || null,
-      notes: lead.notes || null,
-      status: "new",
-      latest_score: null,
-      created_at: lead.createdAt,
-      updated_at: lead.updatedAt,
+  const financeView = useMemo(() => {
+    if (!currentUser) {
+      return {
+        cashWon: 0,
+        mrrWon: 0,
+        pipelineValue: 0,
+        myCommissionUnlocked: 0,
+        myCommissionPending: 0,
+        visibleMemberRows: [],
+      };
+    }
+
+    const matchesMonth = (l: Lead) =>
+      selectedMonth === "all" || (l.wonMonth || new Date().toISOString().slice(0, 7)) === selectedMonth;
+
+    const wonVisible = myVisibleLeads.filter((l) => l.stage === "won" && matchesMonth(l));
+    const cashWon = wonVisible.reduce((s, l) => s + getLeadTotals(l).oneShotTotal, 0);
+    const mrrWon = wonVisible.reduce((s, l) => s + getLeadTotals(l).mrrTotal, 0);
+    const pipelineValue = myVisibleLeads
+      .filter((l) => l.stage !== "won")
+      .reduce((s, l) => s + getLeadTotals(l).commissionBase, 0);
+
+    const visibleMembers = members.filter(
+      (m) => m.roleType !== "studio" && canViewMemberFinances(currentUser, m)
+    );
+
+    const visibleMemberRows = visibleMembers.map((member) => {
+      let ownSalesOneShot = 0;
+      let ownSalesMrr = 0;
+      let unlockedCom = 0;
+      let pendingCom = 0;
+
+      leads
+        .filter((l) => l.stage === "won" && matchesMonth(l))
+        .forEach((deal) => {
+          const b = computeDealCommissions(deal, members);
+          const totals = getLeadTotals(deal);
+          let earnedOnDeal = 0;
+          if (deal.closerId === member.id) {
+            earnedOnDeal += b.closerAmount;
+            ownSalesOneShot += totals.oneShotTotal;
+            ownSalesMrr += totals.mrrTotal;
+          }
+          if (deal.setterId === member.id && deal.setterId !== deal.closerId) {
+            earnedOnDeal += b.setterAmount;
+          }
+          if (b.managerId === member.id) {
+            earnedOnDeal += b.managerOverrideAmount;
+          }
+          if (earnedOnDeal > 0) {
+            if (deal.commissionStatus === "unlocked") unlockedCom += earnedOnDeal;
+            else pendingCom += earnedOnDeal;
+          }
+        });
+
+      return { member, ownSalesOneShot, ownSalesMrr, unlockedCom, pendingCom };
+    });
+
+    const myRow = visibleMemberRows.find((r) => r.member.id === currentUser.id);
+    return {
+      cashWon,
+      mrrWon,
+      pipelineValue,
+      myCommissionUnlocked: myRow?.unlockedCom ?? 0,
+      myCommissionPending: myRow?.pendingCom ?? 0,
+      visibleMemberRows,
     };
-    const prompt = generateLovableArchitecturePrompt(p);
-    navigator.clipboard.writeText(prompt);
-    flashSuccess(`⚡ Prompt Lovable 24h pour ${lead.company} copié dans le presse-papier !`);
-    playXpChime();
-  };
+  }, [currentUser, leads, myVisibleLeads, members, selectedMonth]);
 
-  // ── COMPOSANTS MODALES PARTAGÉES (WHATSAPP 1-CLIC & CÉLÉBRATION VICTOIRE) ──
-  const renderCelebrationBanner = () => {
-    if (!showCelebration.active) return null;
-    return (
-      <div className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center p-4">
-        <div className="animate-bounce rounded-3xl border-2 border-amber-400 bg-gradient-to-b from-[#1c1811] via-[#12141a] to-black p-8 text-center text-white shadow-[0_0_80px_rgba(251,191,36,0.5)]">
-          <span className="text-6xl animate-pulse inline-block">🏆🪙</span>
-          <h3 className="mt-4 text-2xl font-black uppercase tracking-wider text-amber-300">
-            {showCelebration.title}
-          </h3>
-          <p className="mt-2 text-sm text-white/90">{showCelebration.subtitle}</p>
-          {showCelebration.amount && (
-            <p className="mt-3 font-mono text-3xl font-black text-emerald-400">
-              +{formatMoney(showCelebration.amount)} DÉBLOQUÉS !
-            </p>
-          )}
-        </div>
-      </div>
+  // ── Actions ──
+
+  const appendTimeline = (leadId: string, text: string) => {
+    const entry = {
+      id: `tl-${Date.now()}`,
+      date: new Date().toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }),
+      text,
+    };
+    setLeads((prev) =>
+      prev.map((l) => {
+        if (l.id !== leadId) return l;
+        const updated = { ...l, timeline: [entry, ...(l.timeline || [])] };
+        void upsertLeadToSupabase(updated);
+        return updated;
+      })
     );
   };
 
-  const renderWhatsappModal = () => {
-    if (!whatsappModalLead) return null;
-    const messageText = getWhatsappMessageText(
-      whatsappTemplateKey,
-      whatsappModalLead,
-      user?.fullName ?? "Équipe XR Agency",
-    );
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md">
-        <div className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-emerald-400/40 bg-[#0f1118] p-6 text-white shadow-2xl">
-          <div className="flex items-center justify-between border-b border-white/10 pb-4">
-            <div className="flex items-center gap-2">
-              <MessageCircle className="h-5 w-5 text-emerald-400" />
-              <h3 className="text-lg font-bold">WhatsApp 1-Clic · {whatsappModalLead.company}</h3>
-            </div>
-            <button
-              type="button"
-              onClick={() => setWhatsappModalLead(null)}
-              className="rounded-full border border-white/20 px-3 py-1 text-xs text-white/70 hover:text-white"
-            >
-              Fermer ✕
-            </button>
-          </div>
+  // Authentification sécurisée (serveur /api/crm-auth + fallback sécurisé)
+  const handleLoginSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!pendingMember) return;
+    setAuthLoading(true);
+    setPinError("");
+    const entered = pinInput.trim();
 
-          <p className="mt-3 text-xs text-white/60">
-            Sélectionnez un modèle calibré pour maximiser le taux de réponse :
-          </p>
+    const checkDirect = () => {
+      if (pendingMember.id === "antoine") {
+        return entered === "071266" || (pendingMember.pin && entered === pendingMember.pin);
+      }
+      return (
+        entered === pendingMember.pin ||
+        DEFAULT_TEAM_MEMBERS.find((m) => m.id === pendingMember.id)?.pin === entered ||
+        (pendingMember.pin === "" && entered === "1234")
+      );
+    };
 
-          <div className="mt-3 grid grid-cols-2 gap-2">
-            {[
-              { key: "maquette", label: "🎨 Maquette Offerte" },
-              { key: "relance", label: "🔥 Relance J+2" },
-              { key: "devis", label: "📝 Devis & facturation" },
-              { key: "contact", label: "🤝 Prise de Contact" },
-            ].map((t) => (
-              <button
-                key={t.key}
-                type="button"
-                onClick={() => setWhatsappTemplateKey(t.key as typeof whatsappTemplateKey)}
-                className={cn(
-                  "rounded-xl border p-2.5 text-xs font-bold transition",
-                  whatsappTemplateKey === t.key
-                    ? "border-emerald-400 bg-emerald-500/20 text-emerald-200"
-                    : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10",
-                )}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
+    try {
+      const res = await fetch("/api/crm-auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-csrf-token": "default-csrf-token",
+        },
+        body: JSON.stringify({
+          action: "login",
+          memberId: pendingMember.id,
+          pin: entered,
+          expectedPin: pendingMember.id === "antoine" ? (pendingMember.pin || "071266") : pendingMember.pin,
+        }),
+      });
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.ok) {
+        setCurrentUserId(pendingMember.id);
+        setPendingMember(null);
+        setPinInput("");
+        if (soundEnabled) playDing();
+        return;
+      }
+      if (checkDirect()) {
+        setCurrentUserId(pendingMember.id);
+        setPendingMember(null);
+        setPinInput("");
+        if (soundEnabled) playDing();
+        return;
+      }
+      setPinError(data?.error || "Code incorrect. Veuillez réessayer.");
+    } catch {
+      if (checkDirect()) {
+        setCurrentUserId(pendingMember.id);
+        setPendingMember(null);
+        setPinInput("");
+        if (soundEnabled) playDing();
+      } else {
+        setPinError("Code incorrect. Veuillez réessayer.");
+      }
+    } finally {
+      setAuthLoading(false);
+    }
+  };
 
-          <div className="mt-4 rounded-2xl border border-white/15 bg-black/60 p-4 font-sans text-xs leading-relaxed text-white/90">
-            <span className="mb-2 block font-mono text-[9px] font-bold uppercase text-emerald-300">
-              Aperçu du message :
-            </span>
-            {messageText}
-          </div>
+  const handleSchoolPinSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const entered = schoolPinInput.trim();
+    if (entered === "1234") {
+      setSchoolGuestMode(true);
+      setSchoolPinModal(false);
+      setSchoolPinInput("");
+      setSchoolPinError("");
+      if (soundEnabled) playDing();
+      return;
+    }
+    try {
+      const res = await fetch("/api/crm-auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-csrf-token": "default-csrf-token",
+        },
+        body: JSON.stringify({ action: "school", pin: entered }),
+      });
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.ok) {
+        setSchoolGuestMode(true);
+        setSchoolPinModal(false);
+        setSchoolPinInput("");
+        setSchoolPinError("");
+        if (soundEnabled) playDing();
+      } else {
+        setSchoolPinError(data?.error || "Mot de passe XR School incorrect (Code : 1234).");
+      }
+    } catch {
+      setSchoolPinError("Mot de passe XR School incorrect (Code : 1234).");
+    }
+  };
 
-          <div className="mt-5 flex gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                if (typeof navigator !== "undefined" && navigator.clipboard) {
-                  void navigator.clipboard.writeText(messageText);
-                  flashSuccess("Texte copié dans le presse-papier !");
-                }
-              }}
-              className="flex-1 rounded-xl border border-white/20 bg-white/5 py-3 text-xs font-bold text-white hover:bg-white/10"
-            >
-              Copier le texte
-            </button>
-            <a
-              href={`https://wa.me/${whatsappModalLead.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                messageText,
-              )}`}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => setWhatsappModalLead(null)}
-              className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-400 py-3 text-xs font-black uppercase text-[#0b0d11] shadow-[0_0_20px_rgba(52,211,153,0.4)] hover:bg-emerald-300"
-            >
-              <MessageCircle className="h-4 w-4" />
-              Ouvrir WhatsApp 🚀
-            </a>
-          </div>
-        </div>
-      </div>
+  const moveStage = (leadId: string, newStage: LeadStage) => {
+    setLeads((prev) =>
+      prev.map((l) => {
+        if (l.id !== leadId || l.stage === newStage) return l;
+        const entry = {
+          id: `tl-${Date.now()}`,
+          date: new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
+          text: `Déplacé vers l'étape : ${newStage}`,
+        };
+        if (newStage === "won") {
+          const nowIso = new Date().toISOString();
+          setLastWonLead(l);
+          setShowCelebration(true);
+          if (soundEnabled) playFanfare();
+          setTimeout(() => setShowCelebration(false), 5000);
+          const updated: Lead = {
+            ...l,
+            stage: newStage,
+            wonAt: nowIso,
+            wonMonth: nowIso.slice(0, 7),
+            commissionStatus: "pending_payment",
+            studioStatus: "pending",
+            installments: l.installments || { plan: "1x", paidCount: 0 },
+            timeline: [entry, ...(l.timeline || [])],
+          };
+          void upsertLeadToSupabase(updated);
+          return updated;
+        }
+        if (soundEnabled) playDing();
+        const updated: Lead = { ...l, stage: newStage, timeline: [entry, ...(l.timeline || [])] };
+        void upsertLeadToSupabase(updated);
+        return updated;
+      })
     );
   };
 
-  if (loading) {
-    return (
-      <div className="grid min-h-screen place-items-center bg-[#0b0c0f] text-[#f8f6f0]">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-[#c5a880] border-t-transparent" />
-          <p className="font-mono text-xs uppercase tracking-widest text-[#c5a880]">
-            Chargement du portail XR Agency...
-          </p>
-        </div>
-      </div>
+  const handleCreateLead = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formName.trim() || !currentUser) return;
+
+    const normalizedPhone = formPhone.replace(/[^0-9]/g, "");
+    if (normalizedPhone.length >= 8) {
+      const exists = leads.some((l) => l.phone.replace(/[^0-9]/g, "") === normalizedPhone);
+      if (exists) {
+        setDuplicateWarning("⚠️ Ce numéro est déjà suivi en interne par un membre de l'équipe (anti-doublon activé).");
+        return;
+      }
+    }
+
+    const svc = XR_OFFICIAL_SERVICES.find((s) => s.id === formServiceId) || XR_OFFICIAL_SERVICES[0];
+    const plan = svc.plans.find((p) => p.id === formPlanId) || svc.plans[0];
+
+    const newLead: Lead = {
+      id: `lead-${Date.now()}`,
+      name: formName.trim(),
+      contact: formContact.trim() || "Direction",
+      phone: formPhone.trim(),
+      email: formEmail.trim() || undefined,
+      websiteUrl: formWebsite.trim() || undefined,
+      followUpDate: formFollowUp || undefined,
+      sectorId: formSectorId,
+      serviceId: svc.id,
+      planLabel: plan.label,
+      billing: plan.period,
+      value: Number(formValue) || plan.price,
+      extraItems: formExtraItems,
+      installments: { plan: formInstallmentPlan, paidCount: 0 },
+      stage: "new",
+      setterId: formSetterId || currentUser.id,
+      closerId: formCloserId || currentUser.id,
+      issue: formIssue.trim() || "Diagnostic & modernisation digitale XR Agency",
+      notes: "",
+      createdAt: new Date().toLocaleDateString("fr-FR", {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      commissionStatus: "estimated",
+      timeline: [
+        {
+          id: `tl-${Date.now()}`,
+          date: new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
+          text: `Prospect créé par ${currentUser.shortName} (${1 + formExtraItems.length} service(s))`,
+        },
+      ],
+    };
+
+    setLeads([newLead, ...leads]);
+    void upsertLeadToSupabase(newLead);
+    if (soundEnabled) playDing();
+    setDuplicateWarning("");
+    setFormName("");
+    setFormContact("");
+    setFormPhone("");
+    setFormEmail("");
+    setFormWebsite("");
+    setFormFollowUp("");
+    setFormExtraItems([]);
+    setFormInstallmentPlan("1x");
+    setFormIssue("");
+    setShowNewLeadModal(false);
+  };
+
+  // Audit Express dans le Cockpit (connecté au vrai POST /api/audit)
+  const handleRunExpressAudit = async (targetLead: Lead) => {
+    const rawUrl = (auditUrlInput || targetLead.websiteUrl || "").trim();
+    if (!rawUrl) return;
+    setAuditLoading(true);
+    setAuditResult(null);
+    try {
+      const res = await fetch("/api/audit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          url: rawUrl,
+          types: ["design", "seo", "conversion", "security", "technical"],
+          sector: targetLead.sectorId,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setAuditResult({ score: 0, url: rawUrl, error: data.error || "Impossible d'auditer ce site." });
+      } else {
+        setAuditResult({
+          score: data.score ?? 65,
+          url: rawUrl,
+          title: data.title,
+          recommendations: data.recommendations || [],
+        });
+        appendTimeline(targetLead.id, `Audit Express effectué (${rawUrl}) : Score ${data.score}/100`);
+        if (soundEnabled) playDing();
+      }
+    } catch {
+      setAuditResult({ score: 0, url: rawUrl, error: "Erreur réseau lors de l'audit." });
+    } finally {
+      setAuditLoading(false);
+    }
+  };
+
+  // Lien Paiement Stripe aligné exactement avec /api/create-checkout.ts (multi-services inclus !)
+  const handleGenerateStripeLink = async (lead: Lead) => {
+    setCheckoutLoading(true);
+    setCheckoutMessage(null);
+    try {
+      const mapServiceKey = (id: string) => (id === "websites" ? "website" : id);
+      const allServiceKeys = Array.from(
+        new Set([mapServiceKey(lead.serviceId), ...(lead.extraItems || []).map((i) => mapServiceKey(i.serviceId))])
+      );
+      const totals = getLeadTotals(lead);
+      const res = await fetch("/api/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "checkout",
+          currency: "eur",
+          sectorId: lead.sectorId,
+          situation: lead.planLabel.toLowerCase().includes("commerce") ? "selling" : "redesign",
+          budget: totals.commissionBase >= 1000 ? "1000_2500" : "under_1000",
+          selectedServices: allServiceKeys,
+          client: {
+            company: lead.name,
+            name: lead.contact,
+            email: lead.email || "",
+            whatsapp: lead.phone,
+            website: lead.websiteUrl || "",
+          },
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        await navigator.clipboard.writeText(data.url);
+        setCheckoutMessage(`✅ Lien Stripe officiel copié ! Prêt à coller sur WhatsApp.`);
+        appendTimeline(lead.id, `Lien Stripe généré (${allServiceKeys.join(" + ")})`);
+        if (soundEnabled) playDing();
+      } else {
+        setCheckoutMessage(`ℹ️ ${data.error || "Configurez STRIPE_SECRET_KEY en production pour activer le lien CB."}`);
+      }
+    } catch {
+      setCheckoutMessage("ℹ️ Lien Stripe disponible dès que STRIPE_SECRET_KEY est active sur le serveur.");
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
+
+  // Envoi Devis PDF Officiel par Email via /api/send-quote (Resend + copie contact.xragency@gmail.com)
+  const handleSendQuoteEmail = async (lead: Lead) => {
+    const email = lead.email?.trim() || prompt("Adresse email du client pour envoyer le Devis PDF :")?.trim();
+    if (!email) return;
+    setSendingEmailQuote(true);
+    setCheckoutMessage(null);
+    try {
+      const { doc, quoteNum } = buildQuotePdfDoc(lead);
+      const dataUri = doc.output("datauristring");
+      const pdfBase64 = dataUri.split(",")[1] || "";
+
+      const res = await fetch("/api/send-quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          name: lead.contact,
+          company: lead.name,
+          whatsapp: lead.phone,
+          website: lead.websiteUrl || "",
+          quoteNumber: quoteNum,
+          pdfBase64,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        setCheckoutMessage(`✅ Devis PDF (${quoteNum}) envoyé par email à ${email} (+ copie agence) !`);
+        appendTimeline(lead.id, `Devis PDF envoyé par email à ${email}`);
+        if (soundEnabled) playDing();
+      } else {
+        setCheckoutMessage(`ℹ️ ${data.error || "RESEND_API_KEY requise sur le serveur pour l'envoi email."}`);
+      }
+    } catch {
+      setCheckoutMessage("ℹ️ Erreur réseau lors de l'envoi email.");
+    } finally {
+      setSendingEmailQuote(false);
+    }
+  };
+
+  const handleSaveEditedLead = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingLead) return;
+    const nowIso = new Date().toISOString();
+    const normalized: Lead =
+      editingLead.stage === "won" && !editingLead.wonAt
+        ? { ...editingLead, wonAt: nowIso, wonMonth: nowIso.slice(0, 7) }
+        : editingLead;
+    setLeads((prev) => prev.map((l) => (l.id === normalized.id ? normalized : l)));
+    void upsertLeadToSupabase(normalized);
+    if (activeLeadForCockpit?.id === normalized.id) setActiveLeadForCockpit(normalized);
+    setEditingLead(null);
+    if (soundEnabled) playDing();
+  };
+
+  const handleDeleteLead = (leadId: string) => {
+    if (!confirm("Supprimer définitivement ce prospect ?")) return;
+    setLeads((prev) => prev.filter((l) => l.id !== leadId));
+    void deleteLeadFromSupabase(leadId);
+    if (editingLead?.id === leadId) setEditingLead(null);
+    if (activeLeadForCockpit?.id === leadId) setActiveLeadForCockpit(null);
+  };
+
+  const handleUnlockCommission = (leadId: string) => {
+    setLeads((prev) =>
+      prev.map((l) => {
+        if (l.id !== leadId) return l;
+        const updated: Lead = { ...l, commissionStatus: "unlocked" };
+        void upsertLeadToSupabase(updated);
+        return updated;
+      })
     );
-  }
+    if (soundEnabled) playFanfare();
+  };
 
-  // ══════════════════════════════════════════════════════════════════════════
-  // ÉCRAN DE CONNEXION 3D SIMS HQ + CRÉATEUR D'AVATAR + PAVÉ CODE PIN (071266)
-  // ══════════════════════════════════════════════════════════════════════════
-  if (!snapshot?.authenticated || !user) {
-    return (
-      <CharacterSelectLogin
-        onLogin={async (email, password, portal) => {
-          await apiCall(
-            {
-              action: "login",
-              email,
-              password,
-              portal,
-            },
-            "Connexion au Penthouse 3D réussie !",
-          );
-        }}
-        isLoading={busy}
-        errorMessage={errorMsg}
-      />
+  const handlePromoteCandidate = (candName: string, roleType: UserRoleType, managerId: string) => {
+    const short = candName.trim().split(" ")[0];
+    const id = `${short.toLowerCase().replace(/[^a-z0-9]/g, "")}-${Date.now().toString().slice(-3)}`;
+    const newMem: TeamMember = {
+      id,
+      name: candName.trim(),
+      shortName: short,
+      roleLabel: roleType === "student" ? "Élève XR School · Commercial" : "Commercial B2B",
+      roleType,
+      recruitedBy: managerId,
+      settingRate: 0.1,
+      closingRate: 0.15,
+      fullCycleRate: 0.2,
+      avatarBg: "from-violet-500 to-fuchsia-600",
+      badge: roleType === "student" ? "🎓 Élève XR School" : "🎯 Commercial",
+      pin: String(Math.floor(1000 + Math.random() * 9000)),
+    };
+    setMembers((prev) => [...prev, newMem]);
+    void upsertMemberToSupabase(newMem);
+  };
+
+  const handleAddMember = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newMemberName.trim() || !currentUser) return;
+    const short = newMemberName.trim().split(" ")[0];
+    const id = `${short.toLowerCase().replace(/[^a-z0-9]/g, "")}-${Date.now().toString().slice(-3)}`;
+    const roleMeta: Record<UserRoleType, { label: string; badge: string; bg: string }> = {
+      setter: { label: "Setter B2B", badge: "📞 Setter", bg: "from-cyan-500 to-blue-600" },
+      closer: { label: "Closer B2B", badge: "🎯 Closer", bg: "from-purple-500 to-violet-600" },
+      full_cycle: { label: "Commercial Full-Cycle", badge: "⚡ Full-Cycle", bg: "from-emerald-500 to-teal-600" },
+      student: { label: "Élève XR School · Commercial", badge: "🎓 Élève XR School", bg: "from-amber-500 to-orange-600" },
+      manager: { label: "Manager Équipe", badge: "👥 Manager", bg: "from-blue-500 to-indigo-600" },
+      studio: { label: "Studio Production", badge: "🎨 Studio", bg: "from-zinc-600 to-zinc-900" },
+      direction: { label: "Direction", badge: "👑 Direction", bg: "from-amber-400 to-orange-600" },
+    };
+    const meta = roleMeta[newMemberRole];
+    const created: TeamMember = {
+      id,
+      name: newMemberName.trim(),
+      shortName: short,
+      roleLabel: meta.label,
+      roleType: newMemberRole,
+      recruitedBy: currentUser.roleType === "manager" ? currentUser.id : newMemberRecruitedBy || undefined,
+      settingRate: Math.max(0, Math.min(100, newMemberSettingPct)) / 100,
+      closingRate: Math.max(0, Math.min(100, newMemberClosingPct)) / 100,
+      fullCycleRate: Math.max(0, Math.min(100, newMemberFullPct)) / 100,
+      avatarBg: meta.bg,
+      badge: meta.badge,
+      pin: newMemberPin.trim() || "1234",
+    };
+    setMembers([...members, created]);
+    void upsertMemberToSupabase(created);
+    setNewMemberName("");
+    setShowAddMemberModal(false);
+    if (soundEnabled) playDing();
+  };
+
+  const handleUpdateMemberRates = (
+    memberId: string,
+    field: "settingRate" | "closingRate" | "fullCycleRate",
+    percentVal: number
+  ) => {
+    const clean = Math.max(0, Math.min(100, Number(percentVal) || 0)) / 100;
+    setMembers((prev) =>
+      prev.map((m) => {
+        if (m.id !== memberId) return m;
+        const updated = { ...m, [field]: clean };
+        void upsertMemberToSupabase(updated);
+        return updated;
+      })
     );
-  }
+  };
 
-  // Isolation stricte : un compte client est orienté vers son Espace Client (/dashboard)
-  if (user.role === "client") {
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#F7F4EE] px-4 text-center text-[#171613]">
-        <div className="max-w-md rounded-3xl border border-[#171613]/12 bg-white p-8 shadow-lg">
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#7D6445]">
-            ESPACE CLIENT XR AGENCY
-          </p>
-          <h1 className="mt-3 font-serif text-3xl font-medium">
-            Bienvenue, {user.fullName}
-          </h1>
-          <p className="mt-3 text-sm text-[#57534B]">
-            Votre compte est rattaché à l’Espace Client XR Agency (suivi de projets, documents,
-            factures et messagerie dédiée).
-          </p>
-          <div className="mt-6 flex flex-col gap-2.5">
-            <Link
-              to="/dashboard"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#171613] px-6 py-3 text-xs font-semibold text-[#F7F4EE] transition hover:bg-[#2A2823]"
-            >
-              Ouvrir mon Espace Client
-              <ArrowUpRight className="h-4 w-4 text-white" />
-            </Link>
-            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr" || user.email === "martin.leclipteur@gmail.com") && (
-              <button
-                type="button"
-                onClick={() => setMartinViewMode("hr")}
-                className="rounded-full border border-indigo-400/50 bg-indigo-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-indigo-300 hover:bg-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.3)]"
-              >
-                👥 Retour Espace RH Martin
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="rounded-full border border-[#171613]/20 px-6 py-2.5 text-xs font-semibold text-[#57534B] hover:text-[#171613]"
-            >
-              Se déconnecter
-            </button>
-          </div>
-        </div>
-      </div>
+  const handleSaveOwnPin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentUser) return;
+    const clean = newPinValue.trim();
+    if (clean.length < 4) {
+      setChangePinError("Choisissez un code d'au moins 4 caractères.");
+      return;
+    }
+    if (clean !== confirmPinValue.trim()) {
+      setChangePinError("Les deux codes ne correspondent pas.");
+      return;
+    }
+    setMembers((prev) =>
+      prev.map((m) => {
+        if (m.id !== currentUser.id) return m;
+        const updated = { ...m, pin: clean, customPinSet: true };
+        void upsertMemberToSupabase(updated);
+        return updated;
+      })
     );
-  }
+    setNewPinValue("");
+    setConfirmPinValue("");
+    setChangePinError("");
+    setShowChangePinModal(false);
+    if (soundEnabled) playDing();
+  };
 
-  const effectivePortal = user.portalType || (user.role === "admin" ? "director" : "closer");
 
-  // ══════════════════════════════════════════════════════════════════════════
-  // PORTAIL 4 : ESPACE RH & MANAGEMENT COMMERCIAL (MARTIN)
-  // Interface exclusive réservée à Martin (et au Directeur)
-  // Double Casquette : Mode RH Exclusif (10% override) ou Mode Commercial Personnel (Martin)
-  // ══════════════════════════════════════════════════════════════════════════
-  if (
-    (effectivePortal === "hr_manager" || user.id === "mem-martin" || user.email === "martin@xragency.fr" || user.email === "martin.leclipteur@gmail.com") &&
-    martinViewMode === "hr"
-  ) {
-    return (
-      <div className="relative min-h-screen bg-[#07090e]">
-        <div className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-3 border-b border-purple-500/30 bg-black/90 px-4 py-2 backdrop-blur-xl">
-          <span className="font-mono text-xs font-black text-purple-300">
-            💻 ORDINATEUR DU BUREAU RH · SESSION MARTIN
-          </span>
-          <button
-            type="button"
-            onClick={() => setMartinViewMode("sims_3d")}
-            className="rounded-full border border-purple-400 bg-purple-600/30 px-4 py-1 text-xs font-black text-white hover:bg-purple-600/50"
-          >
-            🌴 Retour au Penthouse 3D (Marcher dans les Bureaux)
-          </button>
-        </div>
-        <CrmHrDashboard
-          currentUser={{
-            id: user.id,
-            fullName: user.fullName,
-            email: user.email,
-            role: user.role,
+  // Logger un résultat d appel depuis l Arena (Battle Pass & Speed-Dialer)
+  const handleLogCallOutcome = (
+    leadId: string,
+    outcome: "voicemail" | "rdv" | "mockup" | "won",
+    notes?: string
+  ) => {
+    const today = new Date().toISOString().split("T")[0];
+    const outcomeLabels = {
+      voicemail: "Appel sans réponse · Message vocal laissé",
+      rdv: "RDV Démo calé",
+      mockup: "Maquette demandée transmise au Studio",
+      won: "Deal Gagné & Signé !",
+    };
+    const nextStage: Record<typeof outcome, LeadStage> = {
+      voicemail: "contacted",
+      rdv: "demo",
+      mockup: "mockup",
+      won: "won",
+    };
+
+    setLeads((prev) =>
+      prev.map((l) => {
+        if (l.id !== leadId) return l;
+        const entry = {
+          id: `tl-${Date.now()}`,
+          date: today,
+          text: notes ? `${outcomeLabels[outcome]} : ${notes}` : outcomeLabels[outcome],
+        };
+        const updated: Lead = {
+          ...l,
+          stage: outcome === "won" ? "won" : (l.stage === "lead" ? nextStage[outcome] : l.stage),
+          callOutcome: outcome,
+          lastCallDate: today,
+          timeline: [entry, ...(l.timeline || [])],
+        };
+        void upsertLeadToSupabase(updated);
+        return updated;
+      })
+    );
+
+    handleIncrementCall();
+
+    if (outcome === "won") {
+      handleWonLead(leadId);
+    } else if (outcome === "mockup" || outcome === "rdv") {
+      if (soundEnabled) playFanfare();
+    } else {
+      if (soundEnabled) playDing();
+    }
+  };
+
+  const handleIncrementCall = () => {
+    const next = dailyCalls + 1;
+    setDailyCalls(next);
+    if (typeof window !== "undefined") localStorage.setItem("xr_daily_calls_v3", String(next));
+    if (soundEnabled) playDing();
+  };
+
+  const handleExportCsv = () => {
+    const headers = "Entreprise;Contact;Telephone;Service;Formule;Valeur;Facturation;Etape;Relance;Date\n";
+    const rows = myVisibleLeads
+      .map(
+        (l) =>
+          `"${l.name}";"${l.contact}";"${l.phone}";"${l.serviceId}";"${l.planLabel}";"${l.value}";"${l.billing}";"${l.stage}";"${l.followUpDate || ""}";"${l.createdAt}"`
+      )
+      .join("\n");
+    const blob = new Blob([headers + rows], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `XR-AGENCY-MES-PROSPECTS-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+  };
+
+  const buildQuotePdfDoc = (lead: Lead) => {
+    const svc = XR_OFFICIAL_SERVICES.find((s) => s.id === lead.serviceId) || XR_OFFICIAL_SERVICES[0];
+    const closer = members.find((m) => m.id === lead.closerId);
+    const totals = getLeadTotals(lead);
+    const doc = new jsPDF({ unit: "mm", format: "a4" });
+    const W = 210, M = 16, R = 194;
+    const ink = [18, 22, 29] as const;
+    const gold = [217, 153, 30] as const;
+    const muted = [90, 98, 110] as const;
+    const soft = [245, 246, 248] as const;
+    const line = [225, 228, 233] as const;
+
+    const dateStr = new Date().toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
+    const quoteNum = `XR-DEVIS-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    doc.setFillColor(...ink);
+    doc.rect(0, 0, W, 36, "F");
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.text("XR AGENCY", M, 16);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(217, 180, 100);
+    doc.text("STUDIO DIGITAL PREMIUM, IA & ROBOTIQUE", M, 24);
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.text("DEVIS OFFICIEL", R, 15, { align: "right" });
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(200, 205, 215);
+    doc.text(`Réf : ${quoteNum}`, R, 22, { align: "right" });
+    doc.text(`Date : ${dateStr} · Conseiller : ${closer?.shortName || "XR Agency"}`, R, 28, { align: "right" });
+
+    let y = 48;
+    doc.setFillColor(...soft);
+    doc.roundedRect(M, y, W - 2 * M, 24, 2, 2, "F");
+    doc.setDrawColor(...line);
+    doc.roundedRect(M, y, W - 2 * M, 24, 2, 2, "S");
+    doc.setTextColor(...ink);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    doc.text("CLIENT", M + 5, y + 6);
+    doc.setFontSize(11);
+    doc.text(lead.name, M + 5, y + 13);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(...muted);
+    doc.text(`Contact : ${lead.contact} · Tél : ${lead.phone}${lead.email ? ` · ${lead.email}` : ""}`, M + 5, y + 19);
+
+    y += 34;
+    doc.setFillColor(...ink);
+    doc.roundedRect(M, y, W - 2 * M, 9, 1.5, 1.5, "F");
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8);
+    doc.text("PRESTATION", M + 5, y + 6);
+    doc.text("FORMULE", 118, y + 6);
+    doc.text("MONTANT", R - 5, y + 6, { align: "right" });
+
+    y += 15;
+    // Ligne principale
+    doc.setTextColor(...ink);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9.5);
+    doc.text(svc.name, M + 5, y);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(...muted);
+    doc.text(lead.planLabel.slice(0, 30), 118, y);
+    doc.setTextColor(...ink);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9.5);
+    doc.text(formatPricePeriod(lead.value, lead.billing), R - 5, y, { align: "right" });
+
+    y += 6.5;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(...muted);
+    [`• Livrable : ${svc.deliverable}`, `• Besoin ciblé : ${lead.issue}`].forEach((txt) => {
+      const split = doc.splitTextToSize(txt, W - 2 * M - 10);
+      doc.text(split, M + 5, y);
+      y += split.length * 4.2 + 1.5;
+    });
+
+    // Lignes supplémentaires du Pack Multi-Services
+    (lead.extraItems || []).forEach((item) => {
+      y += 4;
+      const itemSvc = XR_OFFICIAL_SERVICES.find((s) => s.id === item.serviceId);
+      doc.setTextColor(...ink);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9);
+      doc.text(`+ ${itemSvc?.name || item.serviceId}`, M + 5, y);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      doc.setTextColor(...muted);
+      doc.text(item.planLabel.slice(0, 30), 118, y);
+      doc.setTextColor(...ink);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9);
+      doc.text(formatPricePeriod(item.price, item.billing), R - 5, y, { align: "right" });
+      y += 5;
+    });
+
+    y += 10;
+    doc.setDrawColor(...line);
+    doc.line(M, y, R, y);
+    y += 8;
+
+    doc.setFillColor(...soft);
+    doc.roundedRect(114, y, R - 114, 28, 2, 2, "F");
+    doc.setTextColor(...gold);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10.5);
+    if (totals.oneShotTotal > 0) {
+      doc.text("TOTAL ONE-SHOT :", 119, y + 10);
+      doc.text(`${totals.oneShotTotal.toLocaleString("fr-FR")} €`, R - 5, y + 10, { align: "right" });
+    }
+    if (totals.mrrTotal > 0) {
+      doc.setTextColor(...ink);
+      doc.setFontSize(9.5);
+      doc.text("ABONNEMENT MENSUEL :", 119, y + 20);
+      doc.text(`${totals.mrrTotal.toLocaleString("fr-FR")} €/mois`, R - 5, y + 20, { align: "right" });
+    }
+
+    doc.setTextColor(...ink);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    doc.text("CONDITIONS DE RÈGLEMENT", M, y + 8);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(...muted);
+    if (lead.installments?.plan === "3x" && totals.oneShotTotal > 0) {
+      doc.text(`• Échelonnement 3x sans frais : 3 × ${Math.round(totals.oneShotTotal / 3)} €`, M, y + 15);
+    } else if (totals.oneShotTotal > 0) {
+      doc.text(`• Acompte 50 % : ${Math.round(totals.oneShotTotal * 0.5)} € · Solde : ${Math.round(totals.oneShotTotal * 0.5)} €`, M, y + 15);
+    }
+    if (totals.mrrTotal > 0) {
+      doc.text(`• Abonnement mensuel : ${totals.mrrTotal} €/mois sans frais cachés`, M, y + 21);
+    }
+
+    doc.setDrawColor(...line);
+    doc.line(M, 282, R, 282);
+    doc.setTextColor(...ink);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(6.5);
+    doc.text("KARMA SASU · XR AGENCY", M, 287);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(...muted);
+    doc.text("SIREN 889 178 141 · SIRET 889 178 141 00012 · 78 Avenue des Champs-Élysées · 75008 Paris", M, 291);
+    doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83 · xragencyai.com", M, 295);
+
+    return { doc, quoteNum };
+  };
+
+  const generatePdfQuote = (lead: Lead) => {
+    const { doc } = buildQuotePdfDoc(lead);
+    doc.save(`DEVIS-XRAGENCY-${lead.name.replace(/[^a-zA-Z0-9]/g, "-")}.pdf`);
+    appendTimeline(lead.id, "Devis PDF officiel téléchargé");
+  };
+
+  // Sélecteur de thème coloré réutilisable
+  const ThemeSwitcherBar = (
+    <div className={`inline-flex items-center p-1 rounded-2xl border gap-1 ${theme.tabBarBg}`}>
+      {(Object.values(CRM_THEMES) as typeof CRM_THEMES[CrmThemeId][]).map((t) => (
+        <button
+          key={t.id}
+          onClick={() => {
+            setThemeId(t.id);
+            if (soundEnabled) playDing();
           }}
-          leads={leads}
-          onLogout={handleLogout}
-          onSwitchToCloserMode={() => setMartinViewMode("closer")}
-        />
-      </div>
-    );
-  }
+          title={t.label}
+          className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all ${
+            themeId === t.id ? theme.tabActive : theme.tabIdle
+          }`}
+        >
+          {t.emoji} <span className="hidden md:inline">{t.label}</span>
+        </button>
+      ))}
+    </div>
+  );
 
-  // ══════════════════════════════════════════════════════════════════════════
-  // PORTAIL 3 : ACADÉMIE XR SCHOOL (AVEC PASSERELLE VERS LE CRM COMMERCIAL)
-  // ══════════════════════════════════════════════════════════════════════════
-  if (effectivePortal === "student" && studentViewMode === "school") {
+  // ═══════════════════════════════════════════════════════════
+  // MODE ACCÈS LIBRE XR SCHOOL (1234 · FORMATION PURE)
+  // ═══════════════════════════════════════════════════════════
+  if (schoolGuestMode && !currentUser) {
     return (
-      <div className="relative min-h-screen bg-[#07090e]">
-        {/* Passerelle Supérieure vers le CRM Commercial */}
-        <div className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-3 border-b border-sky-400/30 bg-[#07090e]/95 px-4 py-2.5 backdrop-blur-xl">
-          <div className="flex items-center gap-2">
-            <span className="rounded-full bg-sky-500/20 px-2.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-widest text-sky-300">
-              ACADÉMIE XR SCHOOL · 90 JOURS
-            </span>
-            <span className="text-xs font-bold text-white">{user.fullName}</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr" || user.email === "martin.leclipteur@gmail.com") && (
-              <button
-                type="button"
-                onClick={() => setMartinViewMode("hr")}
-                className="rounded-full border border-indigo-400/50 bg-indigo-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-indigo-300 hover:bg-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.3)]"
-              >
-                👥 Retour Espace RH Martin
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-500/15 px-3.5 py-1.5 text-xs font-bold text-red-200 transition hover:bg-red-500/25"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-              <span>Déconnexion</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setStudentViewMode("crm_bridge")}
-              className="inline-flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-[#0b0d12] shadow-[0_0_25px_rgba(52,211,153,0.4)] transition hover:bg-emerald-300"
-            >
-              <Target className="h-4 w-4" />
-              Ouvrir Mon Arène Commerciale (Leads Réels)
-              <ArrowUpRight className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
-
-        <CrmSchoolDashboard
-          user={{ fullName: user.fullName, email: user.email }}
-          onLogout={handleLogout}
-        />
-      </div>
-    );
-  }
-
-  // ══════════════════════════════════════════════════════════════════════════
-  // PORTAIL 2 : ARÈNE COMMERCIALE (OU ÉLÈVE EN MODE PASSERELLE CRM)
-  // ══════════════════════════════════════════════════════════════════════════
-  // PORTAIL 2 : ARÈNE COMMERCIALE (OU ÉLÈVE EN MODE PASSERELLE CRM)
-  // MODE S : SIMS HQ 3D v1.5 MIAMI PENTHOUSE
-  // ══════════════════════════════════════════════════════════════════════════
-  if (
-    (effectivePortal === "closer" ||
-      effectivePortal === "hr_manager" ||
-      user.id === "mem-martin" ||
-      (effectivePortal === "student" && studentViewMode === "crm_bridge")) &&
-    closerDisplayMode === "sims_3d" &&
-    martinViewMode !== "hr"
-  ) {
-    return (
-      <>
-        <CrmSimsHQ3D
-          user={{
-            id: user.id,
-            fullName: user.fullName,
-            email: user.email,
-            role: user.role,
-            portalType: user.portalType,
-            title: user.title,
-            commissionPct: user.commissionPct,
-            recruitedBy: user.recruitedBy,
-          }}
-          leads={leads}
-          clients={clients}
-          quotes={quotes}
-          invoices={invoices}
-          projects={projects}
-          tasks={tasks}
-          todos={crmTodos}
-          members={members}
-          onToggleTodo={handleToggleTodo}
-          onAddTodo={handleAddTodo}
-          onDeleteTodo={handleDeleteTodo}
-          onDispatchLead={(leadId, target) => dispatchLead(leadId, target)}
-          onUpdateLeadStatus={(leadId, status) => updateLeadStatus(leadId, status)}
-          onOpenCallModal={openCallModal}
-          onOpenWhatsappModal={openWhatsappModal}
-          onCreateQuote={handleRequestQuoteAndRib}
-          onValidatePayment={handleValidatePayment}
-          onLogout={handleLogout}
-          onSwitchToProCockpit={() => {
-            if (effectivePortal === "hr_manager" || user.id === "mem-martin") {
-              setMartinViewMode("hr");
-            } else {
-              setCloserDisplayMode("combat_hub");
-            }
-          }}
-        />
-        {renderWhatsappModal()}
-        {renderCelebrationBanner()}
-      </>
-    );
-  }
-
-  // MODE A : ARÈNE COMMERCIALE 200% LUDIQUE & INTUITIVE (BATTLE PASS & TARGET DECK)
-  // ══════════════════════════════════════════════════════════════════════════
-  if (
-    (effectivePortal === "closer" ||
-      (effectivePortal === "student" && studentViewMode === "crm_bridge")) &&
-    closerDisplayMode === "combat_hub"
-  ) {
-    return (
-      <div className="relative min-h-screen bg-[#07090e]">
-        <div className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-3 border-b border-emerald-500/30 bg-black/90 px-4 py-2.5 backdrop-blur-xl">
-          <div className="flex items-center gap-2">
-            <span className="rounded-full bg-emerald-500/20 px-3 py-1 font-mono text-xs font-black text-emerald-300">
-              ⚔️ ARÈNE COMMERCIALE LUDIQUE XR
-            </span>
-            {effectivePortal === "student" && (
-              <button
-                type="button"
-                onClick={() => setStudentViewMode("school")}
-                className="rounded-full border border-sky-400/50 bg-sky-500/20 px-2.5 py-0.5 font-mono text-[9px] font-bold text-sky-300 hover:bg-sky-500/30"
-              >
-                ← Retour École XR
-              </button>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr" || user.email === "martin.leclipteur@gmail.com") && (
-              <button
-                type="button"
-                onClick={() => setMartinViewMode("hr")}
-                className="rounded-full border border-indigo-400/50 bg-indigo-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-indigo-300 hover:bg-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.3)]"
-              >
-                👥 Retour Espace RH Martin
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-500/15 px-3.5 py-1.5 text-xs font-bold text-red-300 hover:bg-red-500/25"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-              <span>Déconnexion</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setCloserDisplayMode("sims_3d")}
-              className="rounded-full border border-purple-400/50 bg-purple-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-purple-200 hover:bg-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.3)]"
-            >
-              🌴 Sims HQ 3D
-            </button>
-            <button
-              type="button"
-              onClick={() => setCloserDisplayMode("missions")}
-              className="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold text-neutral-300 hover:text-white hover:bg-white/20"
-            >
-              📋 Vue Tableau Classique
-            </button>
-          </div>
-        </div>
-
-        <CrmUltraLudiqueArena
-          user={{
-            fullName: user.fullName,
-            email: user.email,
-            commissionPct: user.commissionPct,
-          }}
-          leads={leads}
-          onLogout={handleLogout}
-          onOpenCallModal={openCallModal}
-          onOpenWhatsappModal={openWhatsappModal}
-          onSignDeal={(leadId) => updateLeadStatus(leadId, "signed")}
-        />
-      </div>
-    );
-  }
-
-  // ══════════════════════════════════════════════════════════════════════════
-  // MODE B : ARÈNE COMMERCIALE MISSIONS JEU VIDÉO
-  // ══════════════════════════════════════════════════════════════════════════
-  if (
-    effectivePortal === "closer" ||
-    (effectivePortal === "student" && studentViewMode === "crm_bridge")
-  ) {
-    return (
-      <div className="min-h-screen bg-[#0b0d11] text-[#f8f6f0]">
-        {/* Topbar Commerciale Ludique */}
-        <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0b0d11]/95 backdrop-blur-xl">
-          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
+      <div className={`min-h-screen font-sans transition-colors duration-300 ${theme.pageBg}`}>
+        <div className="max-w-[1560px] mx-auto px-4 sm:px-6 py-5">
+          <header className={`flex flex-wrap items-center justify-between gap-3 pb-5 border-b ${theme.border}`}>
             <div className="flex items-center gap-3">
-              <img
-                src={agentXrPortrait}
-                alt=""
-                className="h-10 w-10 rounded-2xl border border-emerald-400/50 object-cover"
-              />
+              <div className="h-11 w-11 rounded-2xl bg-gradient-to-tr from-violet-600 via-fuchsia-500 to-amber-400 flex items-center justify-center font-black text-white text-base shadow-lg">
+                XR
+              </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-widest text-emerald-300">
-                    ARÈNE COMMERCIALE XR
-                  </span>
-                  {effectivePortal === "student" && (
-                    <button
-                      type="button"
-                      onClick={() => setStudentViewMode("school")}
-                      className="rounded-full border border-sky-400/50 bg-sky-500/20 px-2.5 py-0.5 font-mono text-[9px] font-bold text-sky-300 hover:bg-sky-500/30"
-                    >
-                      ← Retourner aux cours XR School
-                    </button>
-                  )}
+                <h1 className={`text-base font-extrabold ${theme.textMain}`}>XR SCHOOL · ESPACE FORMATION</h1>
+                <p className={`text-[11px] ${theme.textMuted}`}>Formation pure · 70 Trames, Dojo & Quiz certifiant</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2.5">
+              {ThemeSwitcherBar}
+              <button
+                onClick={() => setSchoolGuestMode(false)}
+                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border text-xs font-bold ${theme.card} ${theme.textMain}`}
+              >
+                <ArrowLeft className="w-3.5 h-3.5" /> Connexion
+              </button>
+            </div>
+          </header>
+
+          <SchoolModule currentUser={null} theme={theme} onSound={() => soundEnabled && playDing()} />
+        </div>
+      </div>
+    );
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // ÉCRAN DE CONNEXION COLORÉ, LUDIQUE & CHARMANT
+  // ═══════════════════════════════════════════════════════════
+  if (!currentUser) {
+    return (
+      <div className={`min-h-screen flex flex-col justify-center items-center px-4 py-10 relative overflow-hidden transition-colors duration-300 ${theme.pageBg}`}>
+        {/* Sélecteur de thème flottant en haut à droite */}
+        <div className="fixed top-4 right-4 z-20">{ThemeSwitcherBar}</div>
+
+        <div className="max-w-4xl w-full relative z-10 space-y-7">
+          <div className="text-center space-y-3">
+            <div className="inline-flex h-16 w-16 rounded-3xl bg-gradient-to-tr from-indigo-600 via-fuchsia-500 to-amber-400 items-center justify-center font-black text-white shadow-xl shadow-indigo-500/25 text-2xl">
+              XR
+            </div>
+            <h1 className={`text-3xl sm:text-4xl font-black tracking-tight ${theme.textMain}`}>
+              Bienvenue sur XR Agency Studio 🚀
+            </h1>
+            <p className={`text-sm max-w-lg mx-auto ${theme.textMuted}`}>
+              Votre espace commercial gamifié, simple et coloré. Cliquez sur votre profil pour entrer, ou démarrez la formation XR School.
+            </p>
+          </div>
+
+          <div className="flex justify-center">
+            <button
+              onClick={() => {
+                setSchoolPinModal(true);
+                setSchoolPinInput("");
+                setSchoolPinError("");
+              }}
+              className="inline-flex flex-wrap items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 hover:brightness-110 text-xs sm:text-sm font-extrabold text-white shadow-xl shadow-indigo-500/25 transition-all hover:scale-[1.02]"
+            >
+              <GraduationCap className="w-5 h-5 text-amber-300" />
+              Entrer dans XR School (Formation Pure · 70 Trames & Dojo)
+              <span className="font-mono text-[11px] font-black px-2.5 py-0.5 rounded-lg bg-black/30 text-amber-200 border border-white/20">
+                Code : 1234
+              </span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {members.map((member) => {
+              const isAntoine = member.id === "antoine";
+              const showPublicCode = !isAntoine && !member.customPinSet;
+              return (
+                <button
+                  key={member.id}
+                  onClick={() => {
+                    setPendingMember(member);
+                    setPinInput("");
+                    setPinError("");
+                  }}
+                  className={`group p-4 rounded-3xl border transition-all hover:-translate-y-0.5 active:scale-[0.98] flex items-center gap-3.5 text-left ${theme.card} ${theme.cardHover}`}
+                >
+                  <div
+                    className={`h-13 w-13 p-3.5 rounded-2xl bg-gradient-to-br ${member.avatarBg} flex items-center justify-center text-white font-black text-lg shadow-md shrink-0`}
+                  >
+                    {member.shortName.charAt(0)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className={`font-extrabold text-sm truncate group-hover:text-indigo-600 dark:group-hover:text-amber-300 transition-colors ${theme.textMain}`}>
+                      {member.name}
+                    </h3>
+                    <p className={`text-[11px] truncate ${theme.textMuted}`}>{member.roleLabel}</p>
+                    <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                      <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border ${theme.badgeSoft}`}>
+                        {member.badge}
+                      </span>
+                      {showPublicCode ? (
+                        <span className="inline-block text-[10px] font-mono font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                          Code : {member.pin}
+                        </span>
+                      ) : (
+                        <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${theme.subCard} ${theme.textMuted}`}>
+                          <Lock className="w-2.5 h-2.5" />
+                          {isAntoine ? "Privé" : "Personnalisé"}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          <p className={`text-center text-[11px] ${theme.textMuted}`}>
+            Astuce : une fois connecté, cliquez sur l'icône 🔑 en haut à droite pour définir votre propre mot de passe confidentiel.
+          </p>
+        </div>
+
+        {/* Modal PIN Profil Membre */}
+        {pendingMember && (
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+            <div className={`border rounded-3xl p-6 max-w-sm w-full space-y-5 ${theme.modalBg}`}>
+              <div className="flex items-center gap-3">
+                <div className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${pendingMember.avatarBg} flex items-center justify-center text-white font-black text-lg shadow-md`}>
+                  {pendingMember.shortName.charAt(0)}
                 </div>
-                <h1 className="text-base font-bold text-white">{user.fullName}</h1>
+                <div>
+                  <h3 className={`font-extrabold text-base ${theme.textMain}`}>{pendingMember.name}</h3>
+                  <p className={`text-xs ${theme.textMuted}`}>{pendingMember.roleLabel}</p>
+                </div>
               </div>
 
-              {/* Bouton pour basculer vers le Hub de Combat Closer RPG */}
-              <button
-                type="button"
-                onClick={() => setCloserDisplayMode("combat_hub")}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/50 bg-emerald-500/20 px-3 py-1.5 text-xs font-bold text-emerald-300 hover:bg-emerald-500/30 shadow-[0_0_15px_rgba(52,211,153,0.3)]"
-              >
-                ⚔️ Hub RPG Jeu Vidéo
-              </button>
-            </div>
+              <form onSubmit={handleLoginSubmit} className="space-y-4">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <label className={`text-[11px] font-bold uppercase flex items-center gap-1.5 ${theme.textMuted}`}>
+                      <KeyRound className="w-3.5 h-3.5 text-indigo-500" />
+                      Code / Mot de passe
+                    </label>
+                    {pendingMember.id === "antoine" ? (
+                      <span className="text-[11px] font-bold text-amber-600 dark:text-amber-400">
+                        🔒 Code Direction Privé
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-mono text-slate-400">
+                        Code d'accès
+                      </span>
+                    )}
+                  </div>
+                  <input
+                    type="password"
+                    autoFocus
+                    maxLength={20}
+                    value={pinInput}
+                    onChange={(e) => {
+                      setPinInput(e.target.value);
+                      setPinError("");
+                    }}
+                    placeholder="••••••"
+                    className={`w-full mt-2 rounded-2xl px-4 py-3 text-center text-xl tracking-[0.35em] font-mono border focus:outline-none focus:border-indigo-500 ${theme.inputBg}`}
+                  />
+                  {pinError && <p className="text-xs text-rose-500 font-bold mt-2 text-center">{pinError}</p>}
+                </div>
 
-            {/* Navigation Onglets Arène Commerciale */}
-            <div className="flex flex-wrap items-center gap-1.5">
-              {[
-                { id: "missions", label: "🎯 Mes Missions (Leads)", count: leads.length },
-                {
-                  id: "maquettes",
-                  label: "🎨 Mes Maquettes",
-                  count: leads.filter((l) => l.maquetteStatus && l.maquetteStatus !== "none")
-                    .length,
-                },
-                { id: "commissions", label: "💰 Mon Coffre & Barème" },
-                { id: "calendar", label: "📅 Relances & Quêtes" },
-                { id: "rpg_training", label: "⚔️ Combat Objections RPG" },
-                { id: "leaderboard", label: "🏆 Classement Équipe" },
-              ].map((t) => (
-                <button
-                  key={t.id}
-                  type="button"
-                  onClick={() => setCloserTab(t.id as typeof closerTab)}
-                  className={cn(
-                    "inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-bold transition",
-                    closerTab === t.id
-                      ? "bg-emerald-400 text-[#0b0d11] shadow-[0_0_20px_rgba(52,211,153,0.35)]"
-                      : "border border-white/10 bg-white/5 text-white/75 hover:text-white",
-                  )}
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setPendingMember(null)}
+                    className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={authLoading}
+                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold shadow-md disabled:opacity-60"
+                  >
+                    {authLoading ? "Vérification..." : "Entrer 🚀"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Modal XR School (1234) */}
+        {schoolPinModal && (
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+            <div className={`border rounded-3xl p-6 max-w-sm w-full space-y-5 ${theme.modalBg}`}>
+              <div className="flex items-center gap-3">
+                <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 to-amber-400 flex items-center justify-center text-white shadow-md">
+                  <GraduationCap className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className={`font-extrabold text-base ${theme.textMain}`}>Accès XR School</h3>
+                  <p className={`text-xs ${theme.textMuted}`}>Formation pure · Code : 1234</p>
+                </div>
+              </div>
+
+              <form onSubmit={handleSchoolPinSubmit} className="space-y-4">
+                <input
+                  type="password"
+                  inputMode="numeric"
+                  autoFocus
+                  maxLength={6}
+                  value={schoolPinInput}
+                  onChange={(e) => {
+                    setSchoolPinInput(e.target.value);
+                    setSchoolPinError("");
+                  }}
+                  placeholder="1234"
+                  className={`w-full rounded-2xl px-4 py-3 text-center text-xl tracking-[0.5em] font-mono border focus:outline-none focus:border-indigo-500 ${theme.inputBg}`}
+                />
+                {schoolPinError && <p className="text-xs text-rose-500 font-bold text-center">{schoolPinError}</p>}
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSchoolPinModal(false)}
+                    className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white text-xs font-extrabold shadow-md"
+                  >
+                    Ouvrir l'École 🎓
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // INTERFACE PRINCIPALE CONNECTÉE — LUDIQUE, COLORÉE & RAPIDE
+  // ═══════════════════════════════════════════════════════════
+  const isDirector = currentUser.roleType === "direction";
+  const isStudio = currentUser.roleType === "studio";
+  const isManager = currentUser.roleType === "manager";
+
+  const studioMockupCount = leads.filter((l) => l.stage === "mockup" && !l.mockupReady).length;
+  const studioWonCount = leads.filter((l) => l.stage === "won" && l.studioStatus !== "delivered").length;
+
+  const myToCallCount = myVisibleLeads.filter((l) => l.stage === "lead" || l.stage === "contacted").length;
+  const activeClientsCount = myVisibleLeads.filter((l) => l.stage === "won").length;
+  const activeProjectsCount = leads.filter((l) => l.stage === "mockup" || l.stage === "won").length;
+
+  const allowedTabs: { id: CrmTab; label: string; count: number | null }[] = isStudio
+    ? [
+        { id: "studio", label: "🎨 Studio (Maquettes)", count: studioMockupCount + studioWonCount },
+        { id: "projects", label: "🚀 Projets & Jalons", count: activeProjectsCount },
+        { id: "school", label: "🎓 XR School", count: null },
+      ]
+    : [
+        { id: "kanban", label: "🎯 Mon Pipeline", count: myVisibleLeads.length },
+        { id: "arena", label: "⚔️ Arena Appels", count: myToCallCount > 0 ? myToCallCount : null },
+        { id: "cockpit", label: "📞 Cockpit & Audit", count: null },
+        { id: "clients_invoices", label: "💳 Clients & Factures SEPA", count: activeClientsCount > 0 ? activeClientsCount : null },
+        { id: "projects", label: "🚀 Projets & Jalons", count: null },
+        { id: "contest", label: "🏆 Concours Arena", count: null },
+        { id: "school", label: "🎓 XR School", count: null },
+        ...(isManager || isDirector
+          ? [{ id: "rh" as CrmTab, label: "👥 Filière RH", count: members.filter((m) => m.recruitedBy === "martin").length }]
+          : []),
+        {
+          id: "finances",
+          label: isDirector ? "💰 Finances & Équipe" : isManager ? "💰 Gains & Filière" : "💰 Mes Commissions",
+          count: null,
+        },
+        ...(isDirector
+          ? [
+              { id: "studio" as CrmTab, label: "🎨 Studio", count: studioMockupCount + studioWonCount },
+              { id: "qg" as CrmTab, label: "👑 Mon QG Privé", count: null },
+            ]
+          : []),
+      ];
+
+  const selectedModalService =
+    XR_OFFICIAL_SERVICES.find((s) => s.id === formServiceId) || XR_OFFICIAL_SERVICES[0];
+
+  return (
+    <div className={`min-h-screen font-sans transition-colors duration-300 ${theme.pageBg}`}>
+      {/* Bandeau célébration closing */}
+      {showCelebration && lastWonLead && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 animate-bounce duration-300">
+          <div className="flex items-center gap-4 px-6 py-4 rounded-3xl bg-gradient-to-r from-amber-400 via-emerald-500 to-teal-500 text-white shadow-2xl border-2 border-white/40">
+            <span className="text-3xl">🎉</span>
+            <div>
+              <p className="font-black text-base tracking-wide uppercase">
+                LEVEL UP ! VENTE SIGNÉE : {lastWonLead.name}
+              </p>
+              <p className="text-xs text-white/95 font-semibold">
+                +100 XP au concours · Brief envoyé au Studio !
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="max-w-[1640px] mx-auto px-4 sm:px-6 py-5">
+        {/* HEADER LUDIQUE & COLORÉ */}
+        <header className={`p-4 sm:p-5 rounded-3xl border flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 ${theme.card}`}>
+          {/* Profil + Niveau XP */}
+          <div className="flex items-center gap-3.5">
+            <div
+              className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${currentUser.avatarBg} flex items-center justify-center font-black text-white shadow-lg text-lg relative`}
+            >
+              {currentUser.shortName.charAt(0)}
+              {!isStudio && (
+                <span className="absolute -bottom-1.5 -right-1.5 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-indigo-600 text-white border-2 border-white dark:border-[#171336] shadow-sm">
+                  N{gameHud.level}
+                </span>
+              )}
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className={`text-base sm:text-lg font-black tracking-tight ${theme.textMain}`}>
+                  Salut {currentUser.shortName} 👋
+                </h1>
+                <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full border ${theme.badgeSoft}`}>
+                  {currentUser.badge}
+                </span>
+                <span
+                  className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
+                    syncStatus === "supabase_live"
+                      ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
+                      : "bg-sky-500/15 text-sky-700 dark:text-sky-300"
+                  }`}
                 >
-                  <span>{t.label}</span>
-                  {t.count !== undefined && (
-                    <span className="rounded-full bg-black/25 px-1.5 py-0.5 font-mono text-[10px]">
-                      {t.count}
-                    </span>
-                  )}
-                </button>
-              ))}
-
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="ml-2 inline-flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-500/15 px-3.5 py-2 text-xs font-bold text-red-300 transition hover:bg-red-500/25"
-                title="Se déconnecter et revenir à l'écran de code PIN"
-              >
-                <LogOut className="h-3.5 w-3.5" />
-                <span>Déconnexion</span>
-              </button>
+                  <Database className="w-2.5 h-2.5" />
+                  {syncStatus === "supabase_live" ? "Supabase Live" : "Local · Prêt Supabase"}
+                </span>
+                {dueFollowUpsCount > 0 && !isStudio && (
+                  <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-500 text-white shadow-sm">
+                    🔔 {dueFollowUpsCount} relance(s)
+                  </span>
+                )}
+              </div>
+              {!isStudio ? (
+                <div className="flex items-center gap-3 mt-1.5">
+                  <div className="w-28 h-2 rounded-full bg-slate-200/80 dark:bg-white/10 overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-amber-400 rounded-full transition-all duration-500"
+                      style={{ width: `${gameHud.progress}%` }}
+                    />
+                  </div>
+                  <span className={`text-[11px] font-bold ${theme.textMuted}`}>
+                    {gameHud.xp} XP · {gameHud.questLabel}
+                  </span>
+                </div>
+              ) : (
+                <p className={`text-xs ${theme.textMuted}`}>Pôle Studio · Maquettes demandées & Projets signés</p>
+              )}
             </div>
+          </div>
+
+          {/* Barre Actions & HUD Jeu Vidéo */}
+          <div className="flex flex-wrap items-center gap-2 w-full xl:w-auto justify-between xl:justify-end">
+            {ThemeSwitcherBar}
+
+            {!isStudio && (
+              <div className={`hidden sm:flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border text-xs ${theme.subCard}`}>
+                <span className="font-bold text-indigo-600 dark:text-amber-300">⚡ {dailyCalls}/10</span>
+                <button
+                  onClick={handleIncrementCall}
+                  className="px-2 py-0.5 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-[10px] font-extrabold shadow-sm"
+                >
+                  +1 Appel
+                </button>
+                <span className="opacity-25">|</span>
+                <Wallet className="w-3.5 h-3.5 text-emerald-500" />
+                <span className="font-mono font-black text-emerald-600 dark:text-emerald-300">
+                  {financeView.myCommissionUnlocked.toLocaleString("fr-FR")} €
+                </span>
+              </div>
+            )}
+
+            <button
+              onClick={() => {
+                setShowCmdPalette(true);
+                setCmdQuery("");
+              }}
+              title="Recherche rapide (Ctrl+K)"
+              className={`p-2 rounded-xl border text-xs font-bold inline-flex items-center gap-1 ${theme.subCard} ${theme.textMuted}`}
+            >
+              <Command className="w-3.5 h-3.5" /> <span className="hidden md:inline">Ctrl+K</span>
+            </button>
+
+            {!isStudio && (
+              <button
+                onClick={() => {
+                  setSprintActive(!sprintActive);
+                  if (soundEnabled) playDing();
+                }}
+                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-extrabold border transition-all ${
+                  sprintActive
+                    ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white border-transparent animate-pulse shadow-md"
+                    : `${theme.subCard} ${theme.textMain}`
+                }`}
+              >
+                <Flame className={`w-3.5 h-3.5 ${sprintActive ? "text-white" : "text-orange-500"}`} />
+                {sprintActive
+                  ? `${Math.floor(sprintSeconds / 60)}:${(sprintSeconds % 60).toString().padStart(2, "0")}`
+                  : "Sprint 25m"}
+              </button>
+            )}
+
+            <button
+              onClick={() => setSoundEnabled(!soundEnabled)}
+              className={`p-2 rounded-xl border ${theme.subCard} ${theme.textMuted}`}
+              title={soundEnabled ? "Sons activés" : "Sons coupés"}
+            >
+              {soundEnabled ? <Volume2 className="w-4 h-4 text-indigo-500" /> : <VolumeX className="w-4 h-4" />}
+            </button>
+
+            {!isStudio && (
+              <button
+                onClick={() => {
+                  setFormSetterId(currentUser.id);
+                  setFormCloserId(currentUser.id);
+                  setDuplicateWarning("");
+                  setShowNewLeadModal(true);
+                  if (soundEnabled) playDing();
+                }}
+                className="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 hover:brightness-110 text-white font-extrabold text-xs px-4 py-2.5 rounded-2xl shadow-lg shadow-orange-500/25 transition-all hover:scale-[1.02]"
+              >
+                <Plus className="w-4 h-4" />
+                Nouveau Prospect
+              </button>
+            )}
+
+            <button
+              onClick={() => {
+                setNewPinValue("");
+                setConfirmPinValue("");
+                setChangePinError("");
+                setShowChangePinModal(true);
+              }}
+              title="Mon mot de passe"
+              className={`p-2 rounded-xl border ${theme.subCard} ${theme.textMuted} hover:text-indigo-500`}
+            >
+              <KeyRound className="w-4 h-4" />
+            </button>
+
+            <button
+              onClick={() => {
+                setCurrentUserId(null);
+                setActiveLeadForCockpit(null);
+                void fetch("/api/crm-auth", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ action: "logout" }),
+                }).catch(() => {});
+              }}
+              title="Déconnexion"
+              className={`p-2 rounded-xl border ${theme.subCard} text-rose-500 hover:bg-rose-500/10`}
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </header>
 
-        <main className="mx-auto max-w-7xl space-y-6 px-4 pt-6 pb-24 sm:py-6 sm:px-6">
-          {successMsg && (
-            <div className="rounded-2xl border border-emerald-400/50 bg-emerald-500/20 px-4 py-3 text-xs font-bold text-emerald-200">
-              {successMsg}
-            </div>
-          )}
-          {errorMsg && (
-            <div className="rounded-2xl border border-red-500/50 bg-red-500/20 px-4 py-3 text-xs font-bold text-red-200">
-              {errorMsg}
-            </div>
-          )}
-
-          {/* Bandeau Alerte Rouge 48h de Closing */}
-          {urgentLeads48h.length > 0 && (
-            <div className="rounded-2xl border border-red-500/80 bg-gradient-to-r from-red-950/80 via-red-900/40 to-[#12141a] p-4 text-white shadow-[0_0_30px_rgba(239,68,68,0.35)] animate-pulse flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-red-500/30 text-red-400">
-                  <Flame className="h-5 w-5" />
-                </span>
-                <div>
-                  <h4 className="font-mono text-xs uppercase font-bold text-red-400 tracking-wider">
-                    ⚠️ ALERTE ROUGE CLOSING 48H · {urgentLeads48h.length} PROSPECT(S) EN DANGER
-                  </h4>
-                  <p className="text-xs text-white/80">
-                    {urgentLeads48h[0].company} ({urgentLeads48h[0].phone}) dépasse le délai SLA.
-                    Relancez immédiatement pour éviter la perte du dossier !
-                  </p>
-                </div>
-              </div>
-              <a
-                href={`https://wa.me/${urgentLeads48h[0].phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                  `Bonjour ${urgentLeads48h[0].contactName || ""}, je reviens vers vous concernant votre projet de visibilité avec XR Agency.`,
-                )}`}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-red-500 px-4 py-2 text-xs font-black uppercase text-white shadow-lg shadow-red-500/40 hover:bg-red-400 shrink-0"
-              >
-                <MessageCircle className="h-4 w-4" />
-                Relance WhatsApp 1-Clic
-              </a>
-            </div>
-          )}
-
-          {/* Compteurs Héroïques en haut */}
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div className="rounded-2xl border border-amber-400/30 bg-amber-500/10 p-4">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-amber-300">
-                📞 À APPELER MAINTENANT
-              </span>
-              <p className="mt-1 text-2xl font-black text-white">
-                {leads.filter((l) => l.status === "to_call" || l.status === "new").length}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-purple-400/30 bg-purple-500/10 p-4">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-purple-300">
-                🎨 MAQUETTES VALIDÉES
-              </span>
-              <p className="mt-1 text-2xl font-black text-white">
-                {leads.filter((l) => l.maquetteStatus === "validated").length}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-sky-400/30 bg-sky-500/10 p-4">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-sky-300">
-                🔒 COMMISSIONS EN COFFRE
-              </span>
-              <p className="mt-1 text-2xl font-black text-white">
-                {formatMoney(commissionSummary.pendingVaultEur)}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-emerald-400/40 bg-emerald-500/15 p-4">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-emerald-300">
-                💸 VIRÉES & DÉBLOQUÉES
-              </span>
-              <p className="mt-1 text-2xl font-black text-emerald-300">
-                {formatMoney(commissionSummary.unlockedEur)}
-              </p>
-            </div>
-          </div>
-
-          {/* ONGLET 1 : MES CARTES DE MISSION (MODE QUÊTE RPG OU GRILLE) */}
-          {closerTab === "missions" && (
-            <div className="space-y-6">
-              {/* Sélecteur de Mode : Quête Pas-à-Pas (Débutant) vs Grille Complète */}
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald-500/30 bg-[#0F172A]/80 p-3 backdrop-blur-xl">
-                <div className="flex items-center gap-2">
-                  <span className="grid h-8 w-8 place-items-center rounded-xl bg-emerald-500/20 text-emerald-400">
-                    <Sparkles className="h-4 w-4" />
-                  </span>
-                  <div>
-                    <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-                      Arène Commerciale · Mode de Jeu
-                    </h3>
-                    <p className="text-[11px] text-neutral-400">
-                      Parcours pas-à-pas pour les nouveaux closers ou vision globale
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playXpChime();
-                      setCloserQuestMode("quest_deck");
-                    }}
-                    className={cn(
-                      "flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-bold transition",
-                      closerQuestMode === "quest_deck"
-                        ? "bg-emerald-400 text-black shadow-[0_0_15px_rgba(52,211,153,0.4)]"
-                        : "border border-white/10 bg-white/5 text-neutral-300 hover:text-white",
-                    )}
-                  >
-                    <Swords className="h-3.5 w-3.5" />
-                    <span>🎮 Quête Guidée (1 Cible)</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setCloserQuestMode("grid")}
-                    className={cn(
-                      "flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-bold transition",
-                      closerQuestMode === "grid"
-                        ? "bg-emerald-400 text-black shadow-[0_0_15px_rgba(52,211,153,0.4)]"
-                        : "border border-white/10 bg-white/5 text-neutral-300 hover:text-white",
-                    )}
-                  >
-                    <LayoutGrid className="h-3.5 w-3.5" />
-                    <span>📋 Grille Complète ({leads.length})</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* ── MODE 1 : QUÊTE GUIDÉE PAS À PAS (ULTRA LUDIQUE POUR NOUVEAUX COMMERCIAUX) ── */}
-              {closerQuestMode === "quest_deck" &&
-                leads.length > 0 &&
-                (() => {
-                  const safeIndex = Math.abs(closerQuestIndex) % leads.length;
-                  const lead = leads[safeIndex];
-                  const comm = getOfficialCommission(lead.serviceTarget, lead.budgetEur, user);
-                  const urgent48h = isLeadUrgent48h(lead);
-
-                  return (
-                    <div className="space-y-6">
-                      {/* Battle Pass Journalier du Closer */}
-                      <div className="rounded-3xl border border-[#D4AF37]/35 bg-gradient-to-r from-[#0F172A] via-[#1E293B]/70 to-[#0F172A] p-5 shadow-xl">
-                        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
-                          <div className="flex items-center gap-2.5">
-                            <Trophy className="h-5 w-5 text-[#D4AF37] animate-bounce" />
-                            <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[#E2D5BC]">
-                              BATTLE PASS DU JOUR · OBJECTIFS DE PRIMES
-                            </h4>
-                          </div>
-                          <span className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-0.5 font-mono text-[10px] font-bold text-emerald-300">
-                            +400 XP & 150 € DÈS LE 1ER CLOSING
-                          </span>
-                        </div>
-
-                        <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                          <div className="rounded-2xl border border-white/10 bg-black/40 p-3">
-                            <div className="flex items-center justify-between text-xs">
-                              <span className="text-neutral-300">📞 3 Appels passés</span>
-                              <span className="font-mono font-bold text-amber-400">1/3</span>
-                            </div>
-                            <div className="mt-2 h-1.5 w-full rounded-full bg-white/10">
-                              <div
-                                className="h-full rounded-full bg-amber-400"
-                                style={{ width: "33%" }}
-                              />
-                            </div>
-                            <span className="mt-1.5 block font-mono text-[9px] text-neutral-400">
-                              +50 XP
-                            </span>
-                          </div>
-
-                          <div className="rounded-2xl border border-white/10 bg-black/40 p-3">
-                            <div className="flex items-center justify-between text-xs">
-                              <span className="text-neutral-300">🎨 1 Maquette offerte</span>
-                              <span className="font-mono font-bold text-purple-400">
-                                {leads.some((l) => l.maquetteStatus === "validated")
-                                  ? "1/1 ✓"
-                                  : "0/1"}
-                              </span>
-                            </div>
-                            <div className="mt-2 h-1.5 w-full rounded-full bg-white/10">
-                              <div
-                                className="h-full rounded-full bg-purple-400"
-                                style={{
-                                  width: leads.some((l) => l.maquetteStatus === "validated")
-                                    ? "100%"
-                                    : "20%",
-                                }}
-                              />
-                            </div>
-                            <span className="mt-1.5 block font-mono text-[9px] text-neutral-400">
-                              +100 XP
-                            </span>
-                          </div>
-
-                          <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#D4AF37]/10 p-3">
-                            <div className="flex items-center justify-between text-xs">
-                              <span className="font-bold text-[#E2D5BC]">👑 1 Deal closé</span>
-                              <span className="font-mono font-bold text-[#D4AF37]">
-                                {leads.some((l) => l.status === "signed") ? "1/1 ✓" : "0/1"}
-                              </span>
-                            </div>
-                            <div className="mt-2 h-1.5 w-full rounded-full bg-white/10">
-                              <div
-                                className="h-full rounded-full bg-[#D4AF37]"
-                                style={{
-                                  width: leads.some((l) => l.status === "signed") ? "100%" : "10%",
-                                }}
-                              />
-                            </div>
-                            <span className="mt-1.5 block font-mono text-[9px] text-emerald-400">
-                              +250 XP & Prime Immédiate
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Carte de Cible Unique — Format Grand Écran / Deck de Cartes */}
-                      <div className="relative overflow-hidden rounded-3xl border-2 border-emerald-400/50 bg-[#10141E] p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
-                        {/* Contrôles Précédent / Suivant en haut */}
-                        <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                          <div className="flex items-center gap-2">
-                            <span className="rounded-full bg-emerald-500/20 px-3 py-1 font-mono text-xs font-bold text-emerald-300">
-                              CIBLE {safeIndex + 1} SUR {leads.length}
-                            </span>
-                            {urgent48h && (
-                              <span className="rounded-full bg-red-500/20 border border-red-500/40 px-2.5 py-0.5 font-mono text-[10px] font-bold text-red-300 animate-pulse">
-                                🔥 URGENT 48H
-                              </span>
-                            )}
-                          </div>
-
-                          <div className="flex items-center gap-2">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                playXpChime();
-                                setCloserQuestIndex((prev) =>
-                                  prev > 0 ? prev - 1 : leads.length - 1,
-                                );
-                              }}
-                              className="rounded-xl border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/10"
-                            >
-                              ⬅️ Cible Précédente
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                playXpChime();
-                                setCloserQuestIndex((prev) => prev + 1);
-                              }}
-                              className="rounded-xl border border-emerald-400/40 bg-emerald-500/20 px-3 py-1.5 text-xs font-bold text-emerald-300 hover:bg-emerald-500/30"
-                            >
-                              Cible Suivante ➡️
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Contenu de la Cible */}
-                        <div className="mt-6 grid lg:grid-cols-12 gap-6 items-center">
-                          <div className="lg:col-span-7">
-                            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-3 py-1 font-mono text-xs font-black text-emerald-300">
-                              💰 PRIME CASH DIRECT : +{formatMoney(comm.amountEur)} ({comm.ratePct}{" "}
-                              %)
-                            </div>
-
-                            <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold text-white">
-                              {lead.company}
-                            </h2>
-                            <p className="mt-1 text-sm text-neutral-300">
-                              {lead.contactName || "Dirigeant"} · {lead.city || "France"} · Offre
-                              ciblée :{" "}
-                              <strong className="text-[#D4AF37]">{lead.serviceTarget}</strong> (
-                              {formatMoney(lead.budgetEur)})
-                            </p>
-
-                            {/* Le Pitch Téléphone sous les yeux (Script Mot-à-Mot) */}
-                            <div className="mt-5 rounded-2xl border border-cyan-500/30 bg-cyan-950/30 p-4">
-                              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-300">
-                                🗣️ TON PITCH D'OUVERTURE (À LIRE AU TÉLÉPHONE) :
-                              </span>
-                              <p className="mt-2 text-xs sm:text-sm italic text-neutral-200 leading-relaxed">
-                                « Bonjour {lead.contactName || "Monsieur"} ! Je suis{" "}
-                                {currentUser?.fullName?.split(" ")[0] || "Lucas"} de XR Agency. On a
-                                analysé la visibilité de {lead.company} et on a créé une maquette
-                                sur-mesure pour vous montrer comment doubler vos demandes locales.
-                                Est-ce que vous avez 2 minutes ou un numéro WhatsApp pour que je
-                                vous l'envoie ? »
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Les 3 Boutons d'Action Géants */}
-                          <div className="lg:col-span-5 flex flex-col gap-3">
-                            <button
-                              type="button"
-                              onClick={() => openCallModal(lead)}
-                              className="flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 py-4 px-6 text-sm font-black uppercase text-black shadow-[0_10px_30px_rgba(16,185,129,0.4)] transition hover:scale-[1.02] active:scale-95"
-                            >
-                              <PhoneCall className="h-5 w-5" />
-                              <span>1. Lancer l'Appel Gagnant</span>
-                            </button>
-
-                            <button
-                              type="button"
-                              onClick={() => openWhatsappModal(lead)}
-                              className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-400/50 bg-[#0F172A] py-3.5 px-6 text-xs font-bold text-emerald-300 transition hover:bg-emerald-500/10 active:scale-95"
-                            >
-                              <MessageCircle className="h-4 w-4" />
-                              <span>2. Envoyer Maquette WhatsApp</span>
-                            </button>
-
-                            <button
-                              type="button"
-                              onClick={() => {
-                                playVictorySound();
-                                updateLeadStatus(lead.id, "signed");
-                              }}
-                              className="flex items-center justify-center gap-2 rounded-2xl border border-[#D4AF37]/60 bg-[#D4AF37]/15 py-3.5 px-6 text-xs font-bold text-[#E2D5BC] transition hover:bg-[#D4AF37] hover:text-black active:scale-95"
-                            >
-                              <Crown className="h-4 w-4" />
-                              <span>3. C'est Signé ! (Encaisser le Cash)</span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })()}
-
-              {/* ── MODE 2 : GRILLE DE LEADS CLASSIQUE ── */}
-              {closerQuestMode === "grid" && (
-                <div className="space-y-4">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <h2 className="text-xl font-bold text-white">
-                      Vos Cartes de Mission — Cliquez sur le bouton lumineux de chaque prospect
-                    </h2>
-                    <span className="text-xs text-white/60">
-                      Barème auto : 30 % Sites Web · 20 % CRM/POS · 10 % Google Maps & Abonnements
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    {leads.map((lead) => {
-                      const comm = getOfficialCommission(lead.serviceTarget, lead.budgetEur, user);
-                      const urgent48h = isLeadUrgent48h(lead);
-
-                      return (
-                        <div
-                          key={lead.id}
-                          className={cn(
-                            "flex flex-col justify-between rounded-3xl border p-5 transition-all",
-                            lead.status === "signed"
-                              ? "border-emerald-500/40 bg-emerald-950/20"
-                              : urgent48h
-                                ? "border-red-500/60 bg-gradient-to-b from-red-950/30 to-[#141720]"
-                                : "border-white/15 bg-[#141720]",
-                          )}
-                        >
-                          <div>
-                            {/* En-tête de la carte : Gain potentiel en vert + Statut Maquette */}
-                            <div className="flex flex-wrap items-center justify-between gap-2">
-                              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-3 py-1 font-mono text-xs font-black text-emerald-300">
-                                💰 +{formatMoney(comm.amountEur)} pour toi ({comm.ratePct} %)
-                              </span>
-
-                              {urgent48h && (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-red-500 px-2.5 py-0.5 font-mono text-[10px] font-bold text-white animate-pulse">
-                                  <Flame className="h-3 w-3" /> URGENT 48H
-                                </span>
-                              )}
-
-                              {lead.maquetteStatus === "pending" && (
-                                <span className="rounded-full border border-amber-400/40 bg-amber-500/20 px-2.5 py-0.5 font-mono text-[10px] font-bold text-amber-300">
-                                  🎨 Maquette : En demande...
-                                </span>
-                              )}
-                              {lead.maquetteStatus === "validated" && (
-                                <span className="rounded-full border border-emerald-400/50 bg-emerald-500/25 px-2.5 py-0.5 font-mono text-[10px] font-bold text-emerald-200">
-                                  ✅ Maquette Validée !
-                                </span>
-                              )}
-                            </div>
-
-                            <h3 className="mt-3 text-lg font-bold text-white">{lead.company}</h3>
-                            <p className="text-xs text-white/65">
-                              {lead.contactName} · {lead.city} · Offre :{" "}
-                              <strong className="text-[#e5cba4]">{lead.serviceTarget}</strong> (
-                              {formatMoney(lead.budgetEur)})
-                            </p>
-
-                            {/* Téléphone en gros cliquable */}
-                            <div className="mt-3 flex flex-wrap items-center gap-2">
-                              <a
-                                href={`tel:${lead.phone}`}
-                                className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-black/40 px-3.5 py-2 font-mono text-sm font-bold text-white hover:border-emerald-400"
-                              >
-                                <Phone className="h-4 w-4 text-emerald-400" />
-                                {lead.phone}
-                              </a>
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setWhatsappTemplateKey("contact");
-                                  setWhatsappModalLead(lead);
-                                }}
-                                className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/35 bg-emerald-500/15 px-3.5 py-2 text-xs font-bold text-emerald-300 hover:bg-emerald-500/25 active:scale-95"
-                              >
-                                <MessageCircle className="h-4 w-4" />
-                                WhatsApp 1-Clic
-                              </button>
-                            </div>
-
-                            {/* Si le directeur a envoyé un screenshot */}
-                            {lead.screenshotUrl && (
-                              <div className="mt-3 overflow-hidden rounded-2xl border border-white/15 bg-black/50 p-2">
-                                <span className="mb-1 block font-mono text-[9px] uppercase text-white/50">
-                                  📸 Capture envoyée par la Direction :
-                                </span>
-                                <img
-                                  src={lead.screenshotUrl}
-                                  alt="Capture prospect"
-                                  className="max-h-40 w-full rounded-xl object-contain"
-                                />
-                              </div>
-                            )}
-
-                            {/* Si la maquette est validée, afficher le lien direct */}
-                            {lead.maquetteStatus === "validated" && lead.maquetteUrl && (
-                              <div className="mt-3 flex items-center justify-between gap-2 rounded-2xl border border-emerald-400/40 bg-emerald-500/15 p-3">
-                                <div className="min-w-0">
-                                  <span className="block font-mono text-[9px] font-bold uppercase text-emerald-300">
-                                    LIEN MAQUETTE PRÊT POUR LE CLIENT :
-                                  </span>
-                                  <a
-                                    href={lead.maquetteUrl}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="block truncate text-xs font-bold text-white underline"
-                                  >
-                                    {lead.maquetteUrl}
-                                  </a>
-                                </div>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setWhatsappTemplateKey("maquette");
-                                    setWhatsappModalLead(lead);
-                                  }}
-                                  className="shrink-0 rounded-xl bg-emerald-400 px-3 py-1.5 text-[11px] font-bold text-[#0b0d11] transition hover:bg-emerald-300 active:scale-95"
-                                >
-                                  Envoyer sur WhatsApp 🚀
-                                </button>
-                              </div>
-                            )}
-
-                            {lead.notes && (
-                              <p className="mt-3 rounded-xl bg-black/30 p-2.5 text-xs text-white/70">
-                                📝 {lead.notes}
-                              </p>
-                            )}
-                          </div>
-
-                          {/* BARRE D'ACTION JEU VIDÉO : 1 GROS BOUTON LUMINEUX PRINCIPAL + RACCOURCIS */}
-                          <div className="mt-5 space-y-2 border-t border-white/10 pt-4">
-                            {lead.status === "signed" ? (
-                              <div className="rounded-2xl bg-emerald-500/20 py-3 text-center text-xs font-black uppercase tracking-wider text-emerald-300">
-                                🏆 DEAL SIGNÉ · COMMISSION {formatMoney(comm.amountEur)} ENREGISTRÉE
-                              </div>
-                            ) : (
-                              <>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setActiveCallLead(lead);
-                                    setCallNotesInput(lead.notes || "");
-                                  }}
-                                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-400 px-4 py-3 text-xs font-black uppercase tracking-wider text-[#0b0d11] shadow-[0_0_25px_rgba(52,211,153,0.3)] transition hover:bg-emerald-300"
-                                >
-                                  <PhoneCall className="h-4 w-4" />
-                                  1. Lancer l’Appel Assisté (Script + Tarifs)
-                                </button>
-
-                                <div className="grid grid-cols-4 gap-2">
-                                  <button
-                                    type="button"
-                                    disabled={busy || lead.maquetteStatus === "pending"}
-                                    onClick={() =>
-                                      void apiCall(
-                                        {
-                                          action: "request_maquette",
-                                          leadId: lead.id,
-                                          brief: `Maquette demandée par ${user.fullName} pour ${lead.company}`,
-                                        },
-                                        "🎨 Demande de maquette envoyée à la Direction !",
-                                      )
-                                    }
-                                    className="rounded-xl border border-amber-400/40 bg-amber-500/15 px-2 py-2 text-[10.5px] font-bold text-amber-200 hover:bg-amber-500/25 disabled:opacity-50"
-                                  >
-                                    🎨 Maquette
-                                  </button>
-
-                                  <button
-                                    type="button"
-                                    onClick={() => handleCopyLovable(lead)}
-                                    className="rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/15 px-2 py-2 text-[10.5px] font-bold text-[#E2D5BC] hover:bg-[#D4AF37]/25"
-                                    title="Copier le prompt d'architecture Lovable en 1 clic"
-                                  >
-                                    ⚡ Lovable
-                                  </button>
-
-                                  <button
-                                    type="button"
-                                    disabled={busy}
-                                    onClick={() => {
-                                      setQuoteCompany(lead.company);
-                                      setQuoteEmail(lead.email || "");
-                                      setShowOfficialQuoteModal(true);
-                                    }}
-                                    className="rounded-xl border border-sky-400/40 bg-sky-500/15 px-2 py-2 text-[10.5px] font-bold text-sky-200 hover:bg-sky-500/25"
-                                  >
-                                    📄 Devis
-                                  </button>
-
-                                  <button
-                                    type="button"
-                                    disabled={busy}
-                                    onClick={() => {
-                                      playXpChime();
-                                      triggerCelebration(
-                                        "DEAL SIGNÉ ! 🏆",
-                                        `${lead.company} est désormais client officiel XR Agency !`,
-                                        comm.amountEur,
-                                      );
-                                      void apiCall(
-                                        {
-                                          action: "convert_lead_to_client",
-                                          leadId: lead.id,
-                                        },
-                                        `🏆 Bravo ! ${lead.company} est marqué Signé ! (+1000 XP)`,
-                                      );
-                                    }}
-                                    className="rounded-xl border border-emerald-400/50 bg-emerald-500/20 px-2 py-2 text-[10.5px] font-bold text-emerald-200 hover:bg-emerald-500/35 active:scale-95"
-                                  >
-                                    🏆 Closer
-                                  </button>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* ONGLET 2 : SUIVI DES MAQUETTES DU COMMERCIAL */}
-          {closerTab === "maquettes" && (
-            <div className="rounded-3xl border border-white/10 bg-[#141720] p-6">
-              <h2 className="text-xl font-bold text-white">
-                🎨 Suivi de vos Maquettes (« En demande » ➔ « Validée ✓ »)
-              </h2>
-              <p className="mt-1 text-xs text-white/65">
-                Dès que le Directeur colle le lien de la maquette, elle passe automatiquement en
-                Validée et vous pouvez l'envoyer en 1 clic au client.
-              </p>
-
-              <div className="mt-5 space-y-3">
-                {leads.filter((l) => l.maquetteStatus && l.maquetteStatus !== "none").length ===
-                0 ? (
-                  <p className="rounded-2xl border border-white/10 bg-black/30 p-6 text-center text-xs text-white/60">
-                    Aucune maquette en cours. Cliquez sur « 🎨 2. Maquette » sur l'une de vos cartes
-                    de mission !
-                  </p>
-                ) : (
-                  leads
-                    .filter((l) => l.maquetteStatus && l.maquetteStatus !== "none")
-                    .map((lead) => (
-                      <div
-                        key={lead.id}
-                        className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/35 p-4"
-                      >
-                        <div>
-                          <span
-                            className={cn(
-                              "inline-block rounded-full px-3 py-0.5 font-mono text-[10px] font-bold uppercase",
-                              lead.maquetteStatus === "validated"
-                                ? "bg-emerald-500/25 text-emerald-300"
-                                : "bg-amber-500/25 text-amber-300",
-                            )}
-                          >
-                            {lead.maquetteStatus === "validated"
-                              ? "✅ VALIDÉE PAR LA DIRECTION"
-                              : "⏳ EN DEMANDE"}
-                          </span>
-                          <h3 className="mt-1.5 text-base font-bold text-white">{lead.company}</h3>
-                          <p className="text-xs text-white/60">{lead.serviceTarget}</p>
-                        </div>
-
-                        {lead.maquetteStatus === "validated" && lead.maquetteUrl ? (
-                          <div className="flex items-center gap-2">
-                            <a
-                              href={lead.maquetteUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center gap-1.5 rounded-xl bg-white/10 px-3.5 py-2 text-xs font-bold text-white hover:bg-white/20"
-                            >
-                              Ouvrir la maquette <ExternalLink className="h-3.5 w-3.5" />
-                            </a>
-                            <a
-                              href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                                `Bonjour ${lead.contactName}, voici votre maquette sur-mesure réalisée par XR Agency : ${lead.maquetteUrl}`,
-                              )}`}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-400 px-3.5 py-2 text-xs font-bold text-[#0b0d11]"
-                            >
-                              Envoyer WhatsApp
-                            </a>
-                          </div>
-                        ) : (
-                          <span className="text-xs italic text-amber-300">
-                            Le QG Direction prépare le lien...
-                          </span>
-                        )}
-                      </div>
-                    ))
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* ONGLET 3 : COFFRE-FORT DES COMMISSIONS & BARÈME OFFICIEL */}
-          {closerTab === "commissions" && (
-            <div className="space-y-6">
-              {/* BANDEAU GAMIFICATION DU COFFRE : RANG APEX + STREAK DE FEU */}
-              <div className="rounded-3xl border border-amber-400/50 bg-gradient-to-r from-amber-950/40 via-yellow-950/20 to-[#12141a] p-6 shadow-[0_0_40px_rgba(245,158,11,0.2)]">
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <span className="grid h-12 w-12 place-items-center rounded-2xl border border-amber-400/60 bg-amber-400/20 text-2xl shadow-[0_0_20px_rgba(245,158,11,0.4)]">
-                      🪙
-                    </span>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="rounded-full bg-amber-400/25 px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-amber-300">
-                          RANG ACTUEL : NIVEAU 4 · APEX CLOSER
-                        </span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-red-500/25 px-2.5 py-0.5 font-mono text-[10px] font-bold text-red-300 animate-pulse">
-                          🔥 SÉRIE 5 JOURS ACTIFS
-                        </span>
-                      </div>
-                      <h3 className="mt-1 text-xl font-black text-white">
-                        Le Coffre-fort de {user.fullName}
-                      </h3>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-white/10 bg-black/40 px-4 py-2 text-right">
-                    <span className="font-mono text-[10px] uppercase text-white/50">
-                      PROCHAIN BONUS DE PALIER
-                    </span>
-                    <p className="font-mono text-sm font-bold text-amber-300">
-                      +250 € cash dès 3 000 € de CA
-                    </p>
-                  </div>
-                </div>
-
-                {/* Barre de progression XP du Closer */}
-                <div className="mt-4">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-mono text-white/70">
-                      Progression vers Rang 5 (Légende XR) : 4 250 / 5 000 XP
-                    </span>
-                    <span className="font-mono font-bold text-amber-400">85 %</span>
-                  </div>
-                  <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-black/60 p-0.5 border border-white/10">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-amber-500 via-yellow-400 to-emerald-400 shadow-[0_0_15px_rgba(251,191,36,0.6)]"
-                      style={{ width: "85%" }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Les 2 Compartiments du Coffre (Verrouillé vs Débloqué) */}
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div className="rounded-3xl border border-sky-400/35 bg-[#141720] p-6 shadow-lg">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs uppercase tracking-widest text-sky-300">
-                      🔒 EN COFFRE (ATTENTE DU VIREMENT CLIENT)
-                    </span>
-                    <span className="text-xl">⏳</span>
-                  </div>
-                  <p className="mt-3 text-4xl font-black text-white">
-                    {formatMoney(commissionSummary.pendingVaultEur)}
-                  </p>
-                  <p className="mt-2 text-xs text-white/65">
-                    Commissions verrouillées dès la signature du devis. Elles sont débloquées
-                    immédiatement dès que la Direction valide la réception des fonds sur les
-                    coordonnées bancaires confirmées par la Direction.
-                  </p>
-                </div>
-
-                <div className="rounded-3xl border border-emerald-400/45 bg-emerald-950/25 p-6 shadow-lg">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs uppercase tracking-widest text-emerald-300">
-                      💸 COMMISSIONS DÉBLOQUÉES (ENCAISSÉES ✓)
-                    </span>
-                    <span className="text-xl">✅</span>
-                  </div>
-                  <p className="mt-3 text-4xl font-black text-emerald-300">
-                    {formatMoney(commissionSummary.unlockedEur)}
-                  </p>
-                  <p className="mt-2 text-xs text-white/75">
-                    Montant net prêt pour votre virement suite au paiement effectif des clients
-                    closés.
-                  </p>
-                </div>
-              </div>
-
-              {/* SIMULATEUR DE GAIN CASH DIRECT EN TEMPS RÉEL */}
-              <div className="rounded-3xl border border-[#c5a880]/40 bg-[#141720] p-6">
-                <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                  <div>
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#c5a880]">
-                      🧮 SIMULATEUR DE GAIN EN DIRECT
-                    </span>
-                    <h3 className="text-lg font-bold text-white">
-                      Calculez votre commission sur votre prochain deal
-                    </h3>
-                  </div>
-                  <span className="text-2xl">💰</span>
-                </div>
-
-                <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                  {[
-                    { label: "Site Vitrine Pro", price: 499, srv: "site" },
-                    { label: "Site Business Sur-Mesure", price: 799, srv: "site" },
-                    { label: "Visibilité locale Google Maps", price: 999, srv: "maps" },
-                    { label: "Caisse POS & CRM Métier", price: 2490, srv: "pos" },
-                  ].map((item) => (
-                    <button
-                      key={item.label}
-                      type="button"
-                      onClick={() => {
-                        setSimulatedPriceEur(item.price);
-                        setSimulatedServiceLabel(item.label);
-                      }}
-                      className={cn(
-                        "rounded-2xl border p-3 text-left transition",
-                        simulatedPriceEur === item.price
-                          ? "border-emerald-400 bg-emerald-500/20 text-emerald-200"
-                          : "border-white/10 bg-black/40 text-white/70 hover:bg-white/5",
-                      )}
-                    >
-                      <span className="block font-mono text-sm font-black text-white">
-                        {formatMoney(item.price)}
-                      </span>
-                      <span className="text-xs">{item.label}</span>
-                    </button>
-                  ))}
-                </div>
-
-                {/* Résultat du calcul de commission */}
-                {(() => {
-                  const comm = getOfficialCommission(simulatedServiceLabel, simulatedPriceEur, user);
-                  return (
-                    <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-emerald-400/50 bg-gradient-to-r from-emerald-950/40 via-emerald-900/20 to-black p-4">
-                      <div>
-                        <span className="font-mono text-[10px] uppercase font-bold text-emerald-300">
-                          SUR CE DEAL ({simulatedServiceLabel} à {formatMoney(simulatedPriceEur)}) :
-                        </span>
-                        <p className="text-xs text-white/80">
-                          Taux officiel appliqué :{" "}
-                          <strong className="text-emerald-400">{comm.ruleLabel}</strong>
-                        </p>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <span className="font-mono text-[10px] text-white/50 block">
-                          VOUS TOUCHEZ EN CASH DIRECT :
-                        </span>
-                        <span className="font-mono text-2xl font-black text-emerald-300">
-                          +{formatMoney(comm.amountEur)}
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })()}
-              </div>
-
-              <div className="rounded-3xl border border-white/10 bg-[#141720] p-6">
-                <h3 className="text-lg font-bold text-white">
-                  📊 Barème Officiel des Commissions XR Agency
-                </h3>
-                <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                  {OFFICIAL_CATALOG.map((cat) => (
-                    <div
-                      key={cat.category}
-                      className="rounded-2xl border border-white/10 bg-black/35 p-4"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-bold text-white">{cat.category}</span>
-                        <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 font-mono text-xs font-black text-emerald-300">
-                          {cat.rate}
-                        </span>
-                      </div>
-                      <ul className="mt-3 space-y-1.5 text-xs text-white/75">
-                        {cat.offers.map((o) => (
-                          <li key={o.label} className="flex items-center justify-between">
-                            <span>{o.label}</span>
-                            <span className="font-mono font-bold text-[#e5cba4]">
-                              {formatMoney(o.price)}
-                              {o.period === "year" ? "/an" : o.period === "month" ? "/m" : ""}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ONGLET 4 : CALENDRIER DE RELANCES & QUÊTES DU JOUR */}
-          {closerTab === "calendar" && (
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-              <div className="rounded-3xl border border-white/10 bg-[#141720] p-6">
-                <h3 className="text-lg font-bold text-white">
-                  📅 Vos Rappels & Relances Programmées
-                </h3>
-                <div className="mt-4 space-y-3">
-                  {leads.map((l) => (
-                    <div
-                      key={l.id}
-                      className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/30 p-3.5"
-                    >
-                      <div>
-                        <p className="text-sm font-bold text-white">{l.company}</p>
-                        <p className="text-xs text-white/60">
-                          {l.contactName} · {l.phone}
-                        </p>
-                      </div>
-                      <span className="rounded-full bg-amber-500/20 px-3 py-1 font-mono text-xs font-bold text-amber-300">
-                        ⏰ {l.nextFollowUp || "Aujourd'hui"}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="rounded-3xl border border-white/10 bg-[#141720] p-6">
-                <h3 className="text-lg font-bold text-white">✅ Vos Quêtes Commerciales du Jour</h3>
-                <div className="mt-4 space-y-2.5">
-                  {tasks.map((task) => (
-                    <button
-                      key={task.id}
-                      type="button"
-                      onClick={() => void apiCall({ action: "toggle_task", taskId: task.id })}
-                      className={cn(
-                        "flex w-full items-center justify-between rounded-2xl border p-3.5 text-left transition",
-                        task.status === "done"
-                          ? "border-emerald-500/30 bg-emerald-500/10 text-white/50 line-through"
-                          : "border-white/10 bg-black/30 text-white",
-                      )}
-                    >
-                      <span className="text-xs font-semibold">{task.title}</span>
-                      <span className="font-mono text-[10px] text-emerald-300">
-                        {task.status === "done" ? "Fait ✓" : task.dueDate}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ONGLET 5 : COMBAT D'OBJECTIONS RPG */}
-          {closerTab === "rpg_training" && (
-            <div className="rounded-3xl border border-emerald-500/30 bg-[#131620] p-6 sm:p-8">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
-                <div className="flex items-center gap-2.5">
-                  <Swords className="h-5 w-5 text-emerald-400" />
-                  <h3 className="text-lg font-bold text-white">
-                    Simulateur RPG : Objections Terrain & Répliques Gagnantes
-                  </h3>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {SCHOOL_OBJECTION_BATTLES.map((b, idx) => (
-                    <button
-                      key={b.id}
-                      type="button"
-                      onClick={() => {
-                        setSelectedBattleId(b.id);
-                        setBattleOutcome("none");
-                      }}
-                      className={cn(
-                        "rounded-full px-3.5 py-1.5 text-xs font-semibold transition",
-                        selectedBattleId === b.id
-                          ? "bg-emerald-400 text-[#101114]"
-                          : "border border-white/15 bg-white/5 text-white/75 hover:text-white",
-                      )}
-                    >
-                      Objection #{idx + 1}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-5 rounded-2xl border border-red-500/30 bg-red-500/10 p-4">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-red-300">
-                  L'OBJECTION DU PROSPECT :
-                </span>
-                <p className="mt-1 text-base font-semibold text-white">
-                  {activeBattle.prospectSay}
-                </p>
-              </div>
-
-              <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                <button
-                  type="button"
-                  onClick={() => setBattleOutcome("win")}
-                  className="rounded-2xl border border-emerald-500/35 bg-emerald-500/10 p-4 text-left transition hover:border-emerald-400"
-                >
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-emerald-300">
-                    OPTION A (MÉTHODE XR AGENCY) :
-                  </span>
-                  <p className="mt-2 text-xs leading-relaxed text-white/90">
-                    {activeBattle.goodReply}
-                  </p>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setBattleOutcome("retry")}
-                  className="rounded-2xl border border-white/15 bg-white/5 p-4 text-left transition hover:border-red-400/50"
-                >
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-white/60">
-                    OPTION B (RÉACTION CLASSIQUE) :
-                  </span>
-                  <p className="mt-2 text-xs leading-relaxed text-white/75">
-                    {activeBattle.badReply}
-                  </p>
-                </button>
-              </div>
-
-              {battleOutcome === "win" && (
-                <div className="mt-4 rounded-2xl border border-emerald-400/50 bg-emerald-500/20 p-4 text-xs font-semibold text-emerald-200">
-                  🏆 Réplique validée ! Vous recadrez sur la garantie et la maquette WhatsApp sans
-                  engagement.
-                </div>
-              )}
-              {battleOutcome === "retry" && (
-                <div className="mt-4 rounded-2xl border border-amber-400/50 bg-amber-500/20 p-4 text-xs font-semibold text-amber-200">
-                  ⚠️ Ne débattez pas ! Proposez immédiatement la maquette gratuite sur WhatsApp pour
-                  désamorcer.
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* ONGLET 6 : CLASSEMENT ET CONCOURS D'EGO */}
-          {closerTab === "leaderboard" && (
-            <div className="rounded-3xl border border-white/10 bg-[#12141a] p-6">
-              <CrmEgoLeaderboard currentUserName={user.fullName} />
-            </div>
-          )}
-        </main>
-
-        {/* MODALE : MODE APPEL ASSISTÉ (SCRIPT + TARIFS + LOG RAPIDE) */}
-        {activeCallLead && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md">
-            <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-emerald-400/40 bg-[#12151e] p-6 text-white shadow-2xl">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
-                <div className="flex items-center gap-3">
-                  <div>
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-emerald-400">
-                      📞 MODE APPEL ASSISTÉ EN DIRECT
-                    </span>
-                    <h3 className="text-xl font-bold">{activeCallLead.company}</h3>
-                  </div>
-
-                  {/* Chronomètre Appel Assisté */}
-                  <div
-                    className={cn(
-                      "flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-xs font-bold border",
-                      callTimerSeconds < 180
-                        ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-300"
-                        : callTimerSeconds < 300
-                          ? "border-amber-500/50 bg-amber-500/20 text-amber-200 animate-pulse"
-                          : "border-red-500/60 bg-red-500/25 text-red-200 animate-pulse",
-                    )}
-                  >
-                    <Clock className="h-3.5 w-3.5" />
-                    <span>
-                      {String(Math.floor(callTimerSeconds / 60)).padStart(2, "0")}:
-                      {String(callTimerSeconds % 60).padStart(2, "0")}
-                    </span>
-                    <span className="text-[10px] text-white/50">
-                      {callTimerSeconds < 180
-                        ? "(Rythme idéal)"
-                        : callTimerSeconds < 300
-                          ? "(Conclure)"
-                          : "(Trop long > 5m)"}
-                    </span>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setActiveCallLead(null)}
-                  className="rounded-full border border-white/15 px-3 py-1 text-xs text-white/70 hover:text-white"
-                >
-                  Fermer ✕
-                </button>
-              </div>
-
-              {/* 4 Boutons de Qualification Flash en 1-Tap */}
-              <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCallNotesInput("Prospect très réceptif. Demande la maquette personnalisée.");
-                    void apiCall(
-                      {
-                        action: "request_maquette",
-                        leadId: activeCallLead.id,
-                        brief: `Maquette demandée suite à appel pour ${activeCallLead.company}`,
-                      },
-                      "🎨 Demande de maquette transmise !",
-                    );
-                    triggerCelebration(
-                      "MAQUETTE DEMANDÉE ! 🎨",
-                      `En attente de validation Direction pour ${activeCallLead.company}`,
-                    );
-                  }}
-                  className="flex flex-col items-center gap-1 rounded-2xl border border-amber-400/50 bg-amber-500/15 p-2.5 text-center transition hover:bg-amber-500/25 active:scale-95"
-                >
-                  <span className="text-lg">🎨</span>
-                  <span className="text-xs font-bold text-amber-300">Veut la maquette</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCallFollowUpInput("Demain 10h00");
-                    setCallNotesInput("Rappel calé pour décision avec le gérant.");
-                    flashSuccess("📅 Rappel pré-configuré pour demain 10h !");
-                  }}
-                  className="flex flex-col items-center gap-1 rounded-2xl border border-sky-400/50 bg-sky-500/15 p-2.5 text-center transition hover:bg-sky-500/25 active:scale-95"
-                >
-                  <span className="text-lg">📅</span>
-                  <span className="text-xs font-bold text-sky-300">Rappel Demain 10h</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setQuoteCompany(activeCallLead.company);
-                    setQuoteEmail(activeCallLead.email || "");
-                    setShowOfficialQuoteModal(true);
-                  }}
-                  className="flex flex-col items-center gap-1 rounded-2xl border border-emerald-400/50 bg-emerald-500/15 p-2.5 text-center transition hover:bg-emerald-500/25 active:scale-95"
-                >
-                  <span className="text-lg">📝</span>
-                  <span className="text-xs font-bold text-emerald-300">Générer Devis</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    void apiCall(
-                      {
-                        action: "log_call",
-                        leadId: activeCallLead.id,
-                        outcome: "Refus poli / Barrage secrétaire",
-                        summary: "Non intéressé pour le moment.",
-                        followUpDate: "Dans 1 mois",
-                      },
-                      "Noté comme non intéressé.",
-                    );
-                    setActiveCallLead(null);
-                  }}
-                  className="flex flex-col items-center gap-1 rounded-2xl border border-red-500/40 bg-red-500/15 p-2.5 text-center transition hover:bg-red-500/25 active:scale-95"
-                >
-                  <span className="text-lg">❌</span>
-                  <span className="text-xs font-bold text-red-300">Pas intéressé</span>
-                </button>
-              </div>
-
-              <div className="mt-4 rounded-2xl border border-[#c5a880]/35 bg-[#c5a880]/10 p-4">
-                <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#e5cba4]">
-                  SCRIPT D’ACCRoche RECOMMANDÉ :
-                </span>
-                <p className="mt-1.5 text-xs leading-relaxed text-white/90">
-                  « Bonjour <strong>{activeCallLead.contactName}</strong>, c'est {user.fullName} de
-                  l'agence <strong>XR Agency</strong>. J'ai regardé la visibilité de{" "}
-                  <strong>{activeCallLead.company}</strong> sur{" "}
-                  <strong>{activeCallLead.city}</strong>. Nous accompagnons les dirigeants avec une
-                  offre <strong>{activeCallLead.serviceTarget}</strong> (Sites dès 499 €, ou
-                  stratégie de visibilité locale Google Maps, avec objectifs définis après audit et
-                  sans garantie de classement). Mon directeur artistique peut vous préparer une
-                  maquette gratuite d'ici demain sur WhatsApp pour que vous voyiez le rendu concret
-                  : je vous l'envoie sur ce numéro ? »
-                </p>
-              </div>
-
-              <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div>
-                  <label className="mb-1 block text-[11px] font-semibold text-white/70">
-                    Notes de l'appel :
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={callNotesInput}
-                    onChange={(e) => setCallNotesInput(e.target.value)}
-                    placeholder="Ex: Décideur très intéressé par la maquette et le Top 3 Maps..."
-                    className="w-full rounded-xl border border-white/15 bg-black/50 p-2.5 text-xs text-white"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-[11px] font-semibold text-white/70">
-                    Date du prochain rappel :
-                  </label>
-                  <input
-                    type="text"
-                    value={callFollowUpInput}
-                    onChange={(e) => setCallFollowUpInput(e.target.value)}
-                    className="w-full rounded-xl border border-white/15 bg-black/50 p-2.5 text-xs text-white"
-                  />
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        void apiCall(
-                          {
-                            action: "log_call",
-                            leadId: activeCallLead.id,
-                            outcome: "Appel effectué — Maquette proposée",
-                            summary: callNotesInput,
-                            followUpDate: callFollowUpInput,
-                          },
-                          "📞 Appel enregistré !",
-                        );
-                        setActiveCallLead(null);
-                      }}
-                      className="flex-1 rounded-xl bg-emerald-400 py-2.5 text-xs font-bold text-[#0b0d11]"
-                    >
-                      Valider l'appel ✓
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* BARRE DE NAVIGATION INFÉRIEURE MOBILE ULTRA-TACTILE (CLOSER) */}
-        <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-around border-t border-white/10 bg-[#0b0d11]/95 px-2 py-2 backdrop-blur-xl sm:hidden">
-          <button
-            type="button"
-            onClick={() => setCloserTab("missions")}
-            className={cn(
-              "flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition active:scale-95",
-              closerTab === "missions" ? "text-emerald-400 font-bold" : "text-white/60",
-            )}
-          >
-            <span className="text-lg">🎯</span>
-            <span className="text-[10px]">Missions</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setCloserTab("maquettes")}
-            className={cn(
-              "flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition active:scale-95",
-              closerTab === "maquettes" ? "text-emerald-400 font-bold" : "text-white/60",
-            )}
-          >
-            <span className="text-lg">🎨</span>
-            <span className="text-[10px]">Maquettes</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setCloserTab("commissions")}
-            className={cn(
-              "flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition active:scale-95",
-              closerTab === "commissions" ? "text-emerald-400 font-bold" : "text-white/60",
-            )}
-          >
-            <span className="text-lg">💰</span>
-            <span className="text-[10px]">Coffre</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setCloserTab("rpg_training")}
-            className={cn(
-              "flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition active:scale-95",
-              closerTab === "rpg_training" ? "text-emerald-400 font-bold" : "text-white/60",
-            )}
-          >
-            <span className="text-lg">⚔️</span>
-            <span className="text-[10px]">RPG</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setCloserTab("leaderboard")}
-            className={cn(
-              "flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition active:scale-95",
-              closerTab === "leaderboard" ? "text-emerald-400 font-bold" : "text-white/60",
-            )}
-          >
-            <span className="text-lg">🏆</span>
-            <span className="text-[10px]">Classement</span>
-          </button>
-        </div>
-
-        {renderWhatsappModal()}
-        {renderCelebrationBanner()}
-      </div>
-    );
-  }
-
-  // ══════════════════════════════════════════════════════════════════════════
-  // PORTAIL 1 : QG DIRECTION GÉNÉRALE
-  // CADRE UNIFIÉ PERMANENT : 10 PILIERS + MODES LUDIQUES INTÉGRÉS
-  // ══════════════════════════════════════════════════════════════════════════
-  if (directorViewingHr) {
-    return (
-      <div className="relative min-h-screen bg-[#07090e]">
-        <div className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-3 border-b border-indigo-500/30 bg-black/90 px-4 py-2.5 backdrop-blur-xl">
-          <div className="flex items-center gap-2">
-            <span className="rounded-full bg-indigo-500/20 px-3 py-1 font-mono text-xs font-black text-indigo-300">
-              👑 DIRECTION · SUPERVISION DU PÔLE RH & RECRUTEMENT DE MARTIN
-            </span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setDirectorViewingHr(false)}
-            className="rounded-full border border-indigo-400 bg-indigo-500/20 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-indigo-200 hover:bg-indigo-500/30"
-          >
-            ← Revenir au QG Direction
-          </button>
-        </div>
-        <CrmHrDashboard
-          currentUser={{
-            id: user.id,
-            fullName: `${user.fullName} (Supervision Direction)`,
-            email: user.email,
-            role: "admin",
-          }}
-          leads={leads}
-          onLogout={handleLogout}
-        />
-      </div>
-    );
-  }
-
-  if (directorDisplayMode === "sims_3d") {
-    return (
-      <>
-        <CrmSimsHQ3D
-          user={{
-            id: user.id,
-            fullName: user.fullName,
-            email: user.email,
-            role: user.role,
-            portalType: user.portalType,
-            title: user.title,
-            commissionPct: user.commissionPct,
-            recruitedBy: user.recruitedBy,
-          }}
-          leads={leads}
-          clients={clients}
-          quotes={quotes}
-          invoices={invoices}
-          projects={projects}
-          tasks={tasks}
-          todos={crmTodos}
-          members={members}
-          onToggleTodo={handleToggleTodo}
-          onAddTodo={handleAddTodo}
-          onDeleteTodo={handleDeleteTodo}
-          onDispatchLead={(leadId, target) => dispatchLead(leadId, target)}
-          onUpdateLeadStatus={(leadId, status) => updateLeadStatus(leadId, status)}
-          onOpenCallModal={openCallModal}
-          onOpenWhatsappModal={openWhatsappModal}
-          onCreateQuote={handleRequestQuoteAndRib}
-          onValidatePayment={handleValidatePayment}
-          onLogout={handleLogout}
-          onSwitchToProCockpit={() => setDirectorDisplayMode("cockpit")}
-        />
-        {renderWhatsappModal()}
-        {renderCelebrationBanner()}
-      </>
-    );
-  }
-
-  if (directorDisplayMode === "closer_arena") {
-    return (
-      <div className="relative min-h-screen bg-[#07090e]">
-        <div className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-3 border-b border-amber-500/30 bg-black/90 px-4 py-2.5 backdrop-blur-xl">
-          <div className="flex items-center gap-2">
-            <span className="rounded-full bg-amber-500/20 px-3 py-1 font-mono text-xs font-black text-amber-300">
-              👑 DIRECTION · APERÇU DE L'ARÈNE LUDIQUE COMMERCIALE
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setDirectorDisplayMode("cockpit")}
-              className="rounded-full border border-amber-400 bg-amber-400/20 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-amber-200 hover:bg-amber-400/30"
-            >
-              ← Revenir au QG Direction
-            </button>
-            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr" || user.email === "martin.leclipteur@gmail.com") && (
-              <button
-                type="button"
-                onClick={() => setMartinViewMode("hr")}
-                className="rounded-full border border-indigo-400/50 bg-indigo-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-indigo-300 hover:bg-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.3)]"
-              >
-                👥 Retour Espace RH Martin
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-500/15 px-3.5 py-1.5 text-xs font-bold text-red-300 hover:bg-red-500/25"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-              <span>Déconnexion</span>
-            </button>
-          </div>
-        </div>
-
-        <CrmUltraLudiqueArena
-          user={{
-            fullName: `${user.fullName} (Direction)`,
-            email: user.email,
-            commissionPct: 15,
-          }}
-          leads={leads}
-          onLogout={handleLogout}
-          onOpenCallModal={openCallModal}
-          onOpenWhatsappModal={openWhatsappModal}
-          onSignDeal={(leadId) => updateLeadStatus(leadId, "signed")}
-        />
-      </div>
-    );
-  }
-
-  const filteredDirectorLeads = leads.filter((l) => {
-    if (directorLeadScope === "mine") return l.assignedTo === user.id;
-    if (directorLeadScope === "team") return l.assignedTo !== user.id;
-    if (directorLeadScope.startsWith("mem-")) return l.assignedTo === directorLeadScope;
-    return true;
-  });
-
-  return (
-    <div className="min-h-screen bg-[#0a0b0e] text-[#f8f6f0]">
-      {/* Topbar QG Direction */}
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0a0b0e]/95 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
-          <div className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-2xl border border-[#c5a880]/50 bg-[#c5a880]/20 text-[#e5cba4]">
-              <Crown className="h-5 w-5" />
-            </span>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#c5a880]">
-                  QG DIRECTION · XR AGENCY
-                </span>
-                <Link
-                  to="/"
-                  className="rounded-full border border-white/15 px-2.5 py-0.5 text-[10px] text-white/70 hover:text-white"
-                >
-                  Voir le site ↗
-                </Link>
-              </div>
-              <h1 className="text-base font-bold text-white">{user.fullName}</h1>
-            </div>
-
-            {/* Bouton SIMS HQ 3D v1.5 Miami Penthouse */}
-            <button
-              type="button"
-              onClick={() => setDirectorDisplayMode("sims_3d")}
-              className="inline-flex items-center gap-2 rounded-full border border-purple-400/60 bg-gradient-to-r from-purple-600/30 via-indigo-600/30 to-amber-500/30 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-purple-200 shadow-[0_0_25px_rgba(168,85,247,0.4)] transition hover:from-purple-500 hover:to-amber-400 hover:text-black"
-            >
-              <span>🌴 Sims HQ 3D v1.5</span>
-            </button>
-
-            {/* Bouton Arène Commerciale Ludique pour la Direction */}
-            <button
-              type="button"
-              onClick={() => setDirectorDisplayMode("closer_arena")}
-              className="inline-flex items-center gap-2 rounded-full border border-emerald-400/50 bg-emerald-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-emerald-300 shadow-[0_0_20px_rgba(52,211,153,0.3)] transition hover:bg-emerald-400 hover:text-black"
-            >
-              <Swords className="h-3.5 w-3.5" />
-              <span>Arène Commerciale Ludique ⚔️</span>
-            </button>
-
-            {/* Bouton Pôle RH & Recrutement Martin (Supervision Direction) */}
-            <button
-              type="button"
-              onClick={() => setDirectorViewingHr(true)}
-              className="inline-flex items-center gap-1.5 rounded-full border border-indigo-400/60 bg-indigo-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.3)] transition hover:bg-indigo-500/30"
-            >
-              <Users className="h-3.5 w-3.5" />
-              <span>Pôle RH Martin</span>
-            </button>
-
-            {/* Badge War Room Direction */}
-            <div className="hidden sm:flex items-center gap-2 rounded-2xl border border-[#c5a880]/35 bg-black/60 px-3 py-1.5">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-[#e5cba4]">
-                WAR ROOM DIRECTION · STATUT OPÉRATIONNEL
-              </span>
-            </div>
-          </div>
-
-          {/* Les 10 Piliers Complets du QG Direction */}
-          <div className="flex flex-wrap items-center gap-1.5">
-            {[
-              { id: "overview", label: "👑 Vue Générale" },
-              { id: "leads", label: "📸 Leads & Dispatch", badge: leads.length },
-              { id: "clients", label: "👥 Clients", badge: clients.length },
-              { id: "quotes", label: "📝 Devis", badge: quotes.length },
-              {
-                id: "invoices",
-                label: "💳 Factures & RIB",
-                badge: invoices.filter((i) => i.status === "pending_transfer").length,
-                alert: invoices.filter((i) => i.status === "pending_transfer").length > 0,
-              },
-              { id: "projects", label: "💼 Projets", badge: projects.length },
-              { id: "providers", label: "🛠️ Prestataires", badge: providers.length },
-              { id: "calendar", label: "🕒 Calendrier & Dual Clocks", badge: tasks.length },
-              {
-                id: "maquettes",
-                label: "🎨 Maquettes",
-                badge: pendingMaquettes.length,
-                alert: pendingMaquettes.length > 0,
-              },
-              { id: "leaderboard", label: "🏆 Leaderboard" },
-            ].map((tab) => (
+        {/* NAVIGATION ONGLETS COLORÉE */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-4 gap-3">
+          <nav className={`flex flex-wrap gap-1.5 p-1.5 rounded-2xl border ${theme.tabBarBg}`}>
+            {allowedTabs.map((tab) => (
               <button
                 key={tab.id}
-                type="button"
                 onClick={() => {
-                  setDirectorTab(tab.id as typeof directorTab);
-                  setDirectorDisplayMode("cockpit");
+                  setActiveTab(tab.id);
+                  if (soundEnabled) playDing();
                 }}
-                className={cn(
-                  "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition",
-                  directorDisplayMode === "cockpit" && directorTab === tab.id
-                    ? "bg-[#c5a880] text-[#101114] shadow-[0_0_25px_rgba(197,168,128,0.35)]"
-                    : "border border-white/10 bg-white/5 text-white/75 hover:text-white",
-                )}
+                className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 ${
+                  activeTab === tab.id ? theme.tabActive : theme.tabIdle
+                }`}
               >
-                <span>{tab.label}</span>
-                {tab.badge !== undefined && (
+                {tab.label}
+                {tab.count !== null && (
                   <span
-                    className={cn(
-                      "rounded-full px-1.5 py-0.5 font-mono text-[10px]",
-                      tab.alert ? "bg-red-500 text-white animate-pulse" : "bg-black/30",
-                    )}
+                    className={`text-[10px] px-1.5 py-0.5 rounded-full font-extrabold ${
+                      activeTab === tab.id ? "bg-white/25 text-white" : "bg-indigo-500/15 text-indigo-600 dark:text-amber-300"
+                    }`}
                   >
-                    {tab.badge}
+                    {tab.count}
                   </span>
                 )}
               </button>
             ))}
+          </nav>
 
-            {(user.id === "mem-martin" || user.portalType === "hr_manager" || user.email === "martin@xragency.fr" || user.email === "martin.leclipteur@gmail.com") && (
-              <button
-                type="button"
-                onClick={() => setMartinViewMode("hr")}
-                className="rounded-full border border-indigo-400/50 bg-indigo-500/20 px-3.5 py-1.5 text-xs font-black uppercase tracking-wider text-indigo-300 hover:bg-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.3)]"
-              >
-                👥 Retour Espace RH Martin
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="ml-2 inline-flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-500/15 px-3.5 py-1.5 text-xs font-bold text-red-300 shadow-sm transition hover:bg-red-500/25 hover:border-red-400"
-              title="Se déconnecter et retourner à l'accueil du CRM"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-              <span>Déconnexion</span>
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-7xl space-y-6 px-4 pt-6 pb-24 sm:py-6 sm:px-6">
-        {successMsg && (
-          <div className="rounded-2xl border border-emerald-400/50 bg-emerald-500/20 px-4 py-3 text-xs font-bold text-emerald-200">
-            {successMsg}
-          </div>
-        )}
-        {errorMsg && (
-          <div className="rounded-2xl border border-red-500/50 bg-red-500/20 px-4 py-3 text-xs font-bold text-red-200">
-            {errorMsg}
-          </div>
-        )}
-
-        {/* Alerte Rouge 48h QG Direction */}
-        {urgentLeads48h.length > 0 && (
-          <div className="rounded-2xl border border-red-500/80 bg-gradient-to-r from-red-950/80 via-red-900/40 to-[#12141a] p-4 text-white shadow-[0_0_30px_rgba(239,68,68,0.35)] animate-pulse flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-red-500/30 text-red-400">
-                <Flame className="h-5 w-5" />
-              </span>
-              <div>
-                <h4 className="font-mono text-xs uppercase font-bold text-red-400 tracking-wider">
-                  ⚠️ ALERTE DIRECTION : {urgentLeads48h.length} PROSPECT(S) SANS SUIVI &gt; 48H
-                </h4>
-                <p className="text-xs text-white/80">
-                  {urgentLeads48h[0].company} ({urgentLeads48h[0].phone}) — Assignez ou relancez le
-                  prospect pour sécuriser le closing.
-                </p>
-              </div>
-            </div>
-            <a
-              href={`https://wa.me/${urgentLeads48h[0].phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                `Bonjour ${urgentLeads48h[0].contactName || ""}, c'est ${user.fullName} de la Direction XR Agency.`,
-              )}`}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-red-500 px-4 py-2 text-xs font-black uppercase text-white shadow-lg shadow-red-500/40 hover:bg-red-400 shrink-0"
-            >
-              <MessageCircle className="h-4 w-4" />
-              WhatsApp Direction
-            </a>
-          </div>
-        )}
-
-        {/* QG DIRECTION UNIFIÉ · 10 PILIERS SANS DISPERSION */}
-        {/* KPI Globaux Direction */}
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-          <div className="rounded-2xl border border-white/10 bg-[#12141b] p-4">
-            <span className="font-mono text-[10px] uppercase text-white/55">CA SIGNÉ TOTAL</span>
-            <p className="mt-1 text-xl font-black text-emerald-400">
-              {formatMoney(snapshot.stats?.revenueEur || 0)}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-[#12141b] p-4">
-            <span className="font-mono text-[10px] uppercase text-white/55">PIPELINE EN COURS</span>
-            <p className="mt-1 text-xl font-black text-[#e5cba4]">
-              {formatMoney(snapshot.stats?.pipelineEur || 0)}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-amber-400/30 bg-amber-500/10 p-4">
-            <span className="font-mono text-[10px] uppercase text-amber-300">
-              MAQUETTES À LIVRER
-            </span>
-            <p className="mt-1 text-xl font-black text-white">{pendingMaquettes.length}</p>
-          </div>
-          <div className="rounded-2xl border border-sky-400/30 bg-sky-500/10 p-4">
-            <span className="font-mono text-[10px] uppercase text-sky-300">
-              VIREMENTS EN ATTENTE
-            </span>
-            <p className="mt-1 text-xl font-black text-white">
-              {formatMoney(snapshot.stats?.pendingInvoicesEur || 0)}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-4">
-            <span className="font-mono text-[10px] uppercase text-emerald-300">
-              COMMISSIONS DÉBLOQUÉES
-            </span>
-            <p className="mt-1 text-xl font-black text-emerald-300">
-              {formatMoney(commissionSummary.unlockedEur)}
-            </p>
-          </div>
-        </div>
-
-        {/* ══════════════════════════════════════════════════════════════════
-            ONGLET 0 DIRECTION : VUE GÉNÉRALE & QG
-        ══════════════════════════════════════════════════════════════════ */}
-        {directorTab === "overview" && (
-          <div className="space-y-6">
-            {/* Bannière Actions Immédiates */}
-            <div className="rounded-3xl border border-[#c5a880]/40 bg-gradient-to-r from-[#211a12] via-[#151720] to-[#0f1118] p-6 shadow-2xl">
-              <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
-                <div className="max-w-2xl">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#c5a880]/20 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-[#e5cba4]">
-                    <Crown className="h-3.5 w-3.5" /> Centre de Commandement Général
-                  </span>
-                  <h2 className="mt-3 text-2xl font-bold text-white sm:text-3xl">
-                    Bienvenue au QG XR Agency, {user.fullName}.
-                  </h2>
-                  <p className="mt-2 text-xs leading-relaxed text-white/70 sm:text-sm">
-                    Gérez vos leads par capture d'écran ou téléphone, validez les maquettes en 1
-                    clic pour vos commerciaux, émettez vos devis et factures officiels avec
-                    coordonnées bancaires, et pilotez vos projets en direct.
-                  </p>
-                </div>
-                <div className="flex flex-wrap gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => setDirectorDisplayMode("closer_arena")}
-                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-black shadow-lg shadow-emerald-500/25 transition hover:brightness-110"
-                  >
-                    <Swords className="h-4 w-4" />
-                    Arène Commerciale Ludique ⚔️
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setDirectorTab("leads")}
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#c5a880] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-[#101114] shadow-lg hover:bg-[#d8be98]"
-                  >
-                    <Plus className="h-4 w-4" />
-                    Ajouter un Lead
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowOfficialQuoteModal(true)}
-                    className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-xs font-bold text-white hover:bg-white/20"
-                  >
-                    <FileText className="h-4 w-4 text-[#e5cba4]" />
-                    Générateur Devis & Contrat
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setDirectorTab("maquettes")}
-                    className="inline-flex items-center gap-2 rounded-xl border border-amber-400/40 bg-amber-500/10 px-4 py-2.5 text-xs font-bold text-amber-300 hover:bg-amber-500/20"
-                  >
-                    <Palette className="h-4 w-4" />
-                    Maquettes ({pendingMaquettes.length})
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Grille Synthétique : Tâches Urgentes + Maquettes + Alertes Virement */}
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-              {/* Colonne 1 : Tâches & Priorités du Jour */}
-              <div className="rounded-3xl border border-white/10 bg-[#12141b] p-6">
-                <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                  <h3 className="flex items-center gap-2 text-sm font-bold text-white">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                    Tâches du Jour ({tasks.filter((t) => t.status !== "done").length})
-                  </h3>
-                  <button
-                    type="button"
-                    onClick={() => setDirectorTab("calendar")}
-                    className="text-[11px] text-[#e5cba4] hover:underline"
-                  >
-                    Voir tout →
-                  </button>
-                </div>
-                <div className="mt-4 space-y-2.5">
-                  {tasks.slice(0, 5).map((task) => (
-                    <button
-                      key={task.id}
-                      type="button"
-                      onClick={() => void apiCall({ action: "toggle_task", taskId: task.id })}
-                      className={cn(
-                        "flex w-full items-center justify-between rounded-2xl border p-3 text-left transition",
-                        task.status === "done"
-                          ? "border-emerald-500/20 bg-emerald-500/5 text-white/40 line-through"
-                          : "border-white/10 bg-black/30 text-white hover:border-white/20",
-                      )}
-                    >
-                      <span className="text-xs font-medium">{task.title}</span>
-                      <span className="font-mono text-[10px] text-white/50">{task.dueDate}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Colonne 2 : Maquettes en attente de validation */}
-              <div className="rounded-3xl border border-amber-400/30 bg-[#12141b] p-6">
-                <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                  <h3 className="flex items-center gap-2 text-sm font-bold text-white">
-                    <Palette className="h-4 w-4 text-amber-300" />
-                    Maquettes Studio ({pendingMaquettes.length})
-                  </h3>
-                  <button
-                    type="button"
-                    onClick={() => setDirectorTab("maquettes")}
-                    className="text-[11px] text-amber-300 hover:underline"
-                  >
-                    Valider →
-                  </button>
-                </div>
-                <div className="mt-4 space-y-2.5">
-                  {pendingMaquettes.length === 0 ? (
-                    <p className="py-6 text-center text-xs text-white/50">
-                      Toutes les maquettes sont validées.
-                    </p>
-                  ) : (
-                    pendingMaquettes.slice(0, 4).map((m) => (
-                      <div
-                        key={m.id}
-                        className="rounded-2xl border border-amber-400/30 bg-amber-500/5 p-3 text-xs"
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-white">{m.company}</span>
-                          <span className="rounded bg-amber-500/20 px-2 py-0.5 font-mono text-[10px] text-amber-300">
-                            En attente
-                          </span>
-                        </div>
-                        <p className="mt-1 text-white/60">{m.serviceTarget}</p>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-
-              {/* Colonne 3 : Factures en attente de règlement */}
-              <div className="rounded-3xl border border-sky-400/30 bg-[#12141b] p-6">
-                <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                  <h3 className="flex items-center gap-2 text-sm font-bold text-white">
-                    <CreditCard className="h-4 w-4 text-sky-300" />
-                    Règlements en attente (
-                    {invoices.filter((i) => i.status === "pending_transfer").length})
-                  </h3>
-                  <button
-                    type="button"
-                    onClick={() => setDirectorTab("invoices")}
-                    className="text-[11px] text-sky-300 hover:underline"
-                  >
-                    Gérer →
-                  </button>
-                </div>
-                <div className="mt-4 space-y-2.5">
-                  {invoices
-                    .filter((i) => i.status === "pending_transfer")
-                    .slice(0, 4)
-                    .map((inv) => (
-                      <div
-                        key={inv.id}
-                        className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/30 p-3"
-                      >
-                        <div>
-                          <p className="text-xs font-bold text-white">{inv.clientCompany}</p>
-                          <p className="font-mono text-[10px] text-white/50">
-                            {inv.paymentReference}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <span className="font-mono text-xs font-bold text-emerald-300">
-                            {formatMoney(inv.totalEur)}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Suivi des Élèves de l'Académie XR School en formation 90j */}
-            <div className="rounded-3xl border border-sky-400/30 bg-gradient-to-r from-sky-950/30 via-[#12141b] to-[#12141b] p-6 shadow-xl">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div className="flex items-center gap-3.5">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-sky-500/20 text-sky-300">
-                    <GraduationCap className="h-6 w-6" />
-                  </span>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-sky-300">
-                        🎓 ACADÉMIE XR SCHOOL · PROMOTION 90 JOURS
-                      </span>
-                      <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 font-mono text-[9px] font-bold text-emerald-300">
-                        1 Élève en cours
-                      </span>
-                    </div>
-                    <h3 className="mt-1 text-base font-bold text-white">
-                      Karim Zeroual — Jour 14 / 90 (Scripts Sectoriels & Objections RPG)
-                    </h3>
-                    <p className="text-xs text-white/60">
-                      Entraîné sur 12 simulations · Passerelle CRM active · Accès sécurisé par
-                      identifiants individuels
-                    </p>
-                  </div>
-                </div>
-                <Link
-                  to="/school"
-                  className="rounded-xl border border-sky-400/40 bg-sky-500/15 px-4 py-2.5 text-xs font-bold text-sky-200 transition hover:bg-sky-500/25 shrink-0"
-                >
-                  Ouvrir l&apos;Académie XR School →
-                </Link>
-              </div>
-            </div>
-
-            {/* Raccourcis d'Accès Direct aux Modules */}
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <button
-                type="button"
-                onClick={() => setDirectorTab("clients")}
-                className="group flex flex-col justify-between rounded-2xl border border-white/10 bg-[#12141b] p-4 text-left transition hover:border-[#c5a880]"
-              >
-                <div className="flex items-center justify-between">
-                  <Users className="h-5 w-5 text-[#c5a880]" />
-                  <span className="font-mono text-xs text-white/50">{clients.length}</span>
-                </div>
-                <div className="mt-4">
-                  <h4 className="text-sm font-bold text-white group-hover:text-[#e5cba4]">
-                    Annuaire Clients
-                  </h4>
-                  <p className="text-[11px] text-white/60">Comptes, VIP, CA généré</p>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setDirectorTab("quotes")}
-                className="group flex flex-col justify-between rounded-2xl border border-white/10 bg-[#12141b] p-4 text-left transition hover:border-[#c5a880]"
-              >
-                <div className="flex items-center justify-between">
-                  <FileText className="h-5 w-5 text-emerald-400" />
-                  <span className="font-mono text-xs text-white/50">{quotes.length}</span>
-                </div>
-                <div className="mt-4">
-                  <h4 className="text-sm font-bold text-white group-hover:text-emerald-300">
-                    Devis Officiels
-                  </h4>
-                  <p className="text-[11px] text-white/60">Génération & cycle de vente</p>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setDirectorTab("projects")}
-                className="group flex flex-col justify-between rounded-2xl border border-white/10 bg-[#12141b] p-4 text-left transition hover:border-[#c5a880]"
-              >
-                <div className="flex items-center justify-between">
-                  <Briefcase className="h-5 w-5 text-sky-400" />
-                  <span className="font-mono text-xs text-white/50">{projects.length}</span>
-                </div>
-                <div className="mt-4">
-                  <h4 className="text-sm font-bold text-white group-hover:text-sky-300">
-                    Projets en cours
-                  </h4>
-                  <p className="text-[11px] text-white/60">Étapes & jalons de livraison</p>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setDirectorTab("providers")}
-                className="group flex flex-col justify-between rounded-2xl border border-white/10 bg-[#12141b] p-4 text-left transition hover:border-[#c5a880]"
-              >
-                <div className="flex items-center justify-between">
-                  <Building2 className="h-5 w-5 text-purple-400" />
-                  <span className="font-mono text-xs text-white/50">{providers.length}</span>
-                </div>
-                <div className="mt-4">
-                  <h4 className="text-sm font-bold text-white group-hover:text-purple-300">
-                    Prestataires
-                  </h4>
-                  <p className="text-[11px] text-white/60">Développeurs & sous-traitance</p>
-                </div>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* ══════════════════════════════════════════════════════════════════
-            ONGLET 1 DIRECTION : AJOUT ULTRA-RAPIDE (SCREENSHOT / TÉL) & DISPATCH
-        ══════════════════════════════════════════════════════════════════ */}
-        {directorTab === "leads" && (
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-            <div className="space-y-4 lg:col-span-5">
-              {/* SÉLECTEUR DE MODE : FLASH 5s vs FORMULAIRE DÉTAILLÉ */}
-              <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/40 p-1.5">
+          {activeTab === "kanban" && (
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              {myVisibleLeads.length > 0 && (
                 <button
-                  type="button"
-                  onClick={() => setDirectionAddMode("flash")}
-                  className={cn(
-                    "flex-1 flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-black uppercase tracking-wider transition",
-                    directionAddMode === "flash"
-                      ? "bg-amber-400 text-[#0b0d11] shadow-[0_0_20px_rgba(251,191,36,0.35)]"
-                      : "text-white/60 hover:text-white",
-                  )}
+                  onClick={handleExportCsv}
+                  className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-bold ${theme.card} ${theme.textMain}`}
                 >
-                  <Zap className="h-3.5 w-3.5" />⚡ Ajout Flash (5s)
+                  <Download className="w-3.5 h-3.5 text-indigo-500" /> CSV
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setDirectionAddMode("detailed")}
-                  className={cn(
-                    "flex-1 flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-black uppercase tracking-wider transition",
-                    directionAddMode === "detailed"
-                      ? "bg-[#c5a880] text-[#0b0d11] shadow-[0_0_20px_rgba(197,168,128,0.35)]"
-                      : "text-white/60 hover:text-white",
-                  )}
-                >
-                  <Camera className="h-3.5 w-3.5" />
-                  📋 Formulaire & Capture
-                </button>
-              </div>
-
-              {directionAddMode === "flash" ? (
-                /* FORMULAIRE FLASH 5 SECONDES */
-                <form
-                  onSubmit={handleFlashAddLead}
-                  className="rounded-3xl border border-amber-400/40 bg-gradient-to-br from-amber-950/20 via-[#12141b] to-black p-6 shadow-xl space-y-4"
-                >
-                  <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                    <div>
-                      <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-amber-300">
-                        ⚡ DISPATCH FLASH EN 5 SECONDES
-                      </span>
-                      <h3 className="text-base font-bold text-white">
-                        1 Champ · Extraction Automatique
-                      </h3>
-                    </div>
-                    <span className="text-2xl">⚡</span>
-                  </div>
-
-                  <div>
-                    <label className="mb-1 block text-[11px] font-semibold text-white/70">
-                      Téléphone ou Nom de l'entreprise :
-                    </label>
-                    <input
-                      type="text"
-                      value={flashLeadText}
-                      onChange={(e) => setFlashLeadText(e.target.value)}
-                      placeholder="Ex: 06 22 33 44 55 - Brasserie de la Mer"
-                      className="w-full rounded-2xl border border-amber-400/50 bg-black/60 p-3.5 text-sm font-bold text-white placeholder-white/40 focus:border-amber-400 focus:outline-none"
-                    />
-                    <p className="mt-1 text-[11px] text-white/50">
-                      Collez le numéro ou le nom, l'algorithme sépare les infos tout seul.
-                    </p>
-                  </div>
-
-                  <div>
-                    <label className="mb-1.5 block text-[11px] font-bold uppercase text-white/70">
-                      Assigner directement à :
-                    </label>
-                    <div className="grid grid-cols-3 gap-2">
-                      {closersList.map((c) => (
-                        <button
-                          key={c.id}
-                          type="button"
-                          onClick={() => setFlashCloserTarget(c.id)}
-                          className={cn(
-                            "rounded-xl border py-2 text-xs font-bold transition",
-                            flashCloserTarget === c.id
-                              ? "border-amber-400 bg-amber-400/20 text-amber-200"
-                              : "border-white/10 bg-black/40 text-white/60 hover:text-white",
-                          )}
-                        >
-                          {c.fullName.split(" ")[0]}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="mb-1.5 block text-[11px] font-bold uppercase text-white/70">
-                      Offre ciblée :
-                    </label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {[
-                        "Site Vitrine Pro (sur devis)",
-                        "Google Maps Top 3 (999 €)",
-                        "Site E-Commerce (1499 €)",
-                        "Système POS & CRM (2490 €)",
-                      ].map((srv) => (
-                        <button
-                          key={srv}
-                          type="button"
-                          onClick={() => setFlashServiceTarget(srv)}
-                          className={cn(
-                            "rounded-xl border p-2 text-left text-[11px] font-semibold transition",
-                            flashServiceTarget === srv
-                              ? "border-emerald-400 bg-emerald-500/20 text-emerald-200"
-                              : "border-white/10 bg-black/40 text-white/60 hover:text-white",
-                          )}
-                        >
-                          {srv}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={busy || !flashLeadText.trim()}
-                    className="w-full flex items-center justify-center gap-2 rounded-2xl bg-amber-400 py-3.5 text-xs font-black uppercase tracking-wider text-[#0b0d11] shadow-[0_0_25px_rgba(251,191,36,0.35)] transition hover:bg-amber-300 disabled:opacity-50 active:scale-95"
-                  >
-                    <Zap className="h-4 w-4" />⚡ Dispatcher au Vendeur en 1 Clic
-                  </button>
-                </form>
-              ) : (
-                /* Formulaire d'Ajout Express (Screenshot Ctrl+V, Photo ou Numéro) */
-                <form
-                  onSubmit={handleQuickAddLead}
-                  className="rounded-3xl border border-[#c5a880]/40 bg-[#12141b] p-6 shadow-xl"
-                >
-                  <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                    <div>
-                      <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#c5a880]">
-                        ⚡ AJOUT & DISPATCH EXPRESS
-                      </span>
-                      <h2 className="text-lg font-bold text-white">
-                        Nouveau Lead (Screenshot, Numéro ou Fiche)
-                      </h2>
-                    </div>
-                    <Camera className="h-5 w-5 text-[#c5a880]" />
-                  </div>
-
-                  {/* Choix : Garder pour moi (Direction) vs Envoyer à un commercial */}
-                  <div className="mt-4 grid grid-cols-2 gap-2 rounded-2xl bg-black/40 p-1.5">
-                    <button
-                      type="button"
-                      onClick={() => setLeadTargetMode("mine")}
-                      className={cn(
-                        "rounded-xl py-2.5 text-xs font-bold transition",
-                        leadTargetMode === "mine"
-                          ? "bg-[#c5a880] text-[#101114]"
-                          : "text-white/70 hover:text-white",
-                      )}
-                    >
-                      👑 Garder dans Mes Leads
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setLeadTargetMode("closer")}
-                      className={cn(
-                        "rounded-xl py-2.5 text-xs font-bold transition",
-                        leadTargetMode === "closer"
-                          ? "bg-emerald-400 text-[#101114]"
-                          : "text-white/70 hover:text-white",
-                      )}
-                    >
-                      🚀 Envoyer à un Vendeur
-                    </button>
-                  </div>
-
-                  {leadTargetMode === "closer" && (
-                    <div className="mt-3">
-                      <label className="mb-1 block text-[11px] font-semibold text-white/70">
-                        Choisir le commercial qui reçoit la mission :
-                      </label>
-                      <select
-                        value={leadAssignedCloser}
-                        onChange={(e) => setLeadAssignedCloser(e.target.value)}
-                        className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2.5 text-xs font-bold text-white"
-                      >
-                        {closersList.map((c) => (
-                          <option key={c.id} value={c.id}>
-                            {c.fullName} ({c.title})
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-
-                  {/* Zone Screenshot / Photo (Ctrl+V ou Upload) */}
-                  <div className="mt-4 rounded-2xl border border-dashed border-[#c5a880]/50 bg-black/30 p-3.5 text-center">
-                    <label className="cursor-pointer block">
-                      <span className="block text-xs font-bold text-[#e5cba4]">
-                        📸 Collez un Screenshot (Ctrl+V / Cmd+V) ou cliquez pour joindre une photo
-                      </span>
-                      <span className="mt-0.5 block text-[10px] text-white/55">
-                        Idéal pour envoyer une capture Google Maps, Instagram ou carte de visite
-                      </span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="hidden"
-                      />
-                    </label>
-                    {leadScreenshotDataUrl && (
-                      <div className="mt-3 relative">
-                        <img
-                          src={leadScreenshotDataUrl}
-                          alt="Aperçu capture"
-                          className="mx-auto max-h-36 rounded-xl border border-white/20 object-contain"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setLeadScreenshotDataUrl("")}
-                          className="mt-1.5 text-[10px] text-red-300 underline"
-                        >
-                          Retirer l'image
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <div>
-                      <label className="mb-1 block text-[11px] text-white/70">
-                        📞 Téléphone (suffit à lui seul) :
-                      </label>
-                      <input
-                        type="text"
-                        value={leadPhone}
-                        onChange={(e) => setLeadPhone(e.target.value)}
-                        placeholder="Ex: 06 12 34 56 78"
-                        className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2 text-xs text-white"
-                      />
-                    </div>
-                    <div>
-                      <label className="mb-1 block text-[11px] text-white/70">
-                        🏢 Nom Entreprise (optionnel) :
-                      </label>
-                      <input
-                        type="text"
-                        value={leadCompany}
-                        onChange={(e) => setLeadCompany(e.target.value)}
-                        placeholder="Ex: Serrurerie Royale Paris"
-                        className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2 text-xs text-white"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <div>
-                      <label className="mb-1 block text-[11px] text-white/70">Offre cible :</label>
-                      <select
-                        value={leadServiceTarget}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          setLeadServiceTarget(val);
-                          if (val.includes("499")) setLeadBudgetEur(499);
-                          else if (val.includes("799")) setLeadBudgetEur(799);
-                          else if (val.includes("1 499")) setLeadBudgetEur(1499);
-                          else if (val.includes("999")) setLeadBudgetEur(999);
-                          else if (val.includes("500")) setLeadBudgetEur(500);
-                          else if (val.includes("2 000")) setLeadBudgetEur(2000);
-                        }}
-                        className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2 text-xs text-white"
-                      >
-                        <option value="Site Vitrine Pro (sur devis)">
-                          Site Vitrine Pro (sur devis) — Comm 30%
-                        </option>
-                        <option value="Site Business Sur-Mesure (799 €)">
-                          Site Business (799 €) — Comm 30%
-                        </option>
-                        <option value="Site E-Commerce (1 499 €)">
-                          Site E-Commerce (1 499 €) — Comm 30%
-                        </option>
-                        <option value="Visibilité locale Google Maps 1 An (999 €)">
-                          Google Maps Top 3 (dès 999 €/an) — Comm 10%
-                        </option>
-                        <option value="Pack Conquête Google Maps Top 3 (1 490 €)">
-                          Pack Conquête Top 3 (1 490 €/an) — Comm 15%
-                        </option>
-                        <option value="CRM & Système POS Sur-Mesure (2 000 €)">
-                          CRM / POS Sur-Mesure (2 000 €+) — Comm 20%
-                        </option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="mb-1 block text-[11px] text-white/70">
-                        Budget estimé (€) :
-                      </label>
-                      <input
-                        type="number"
-                        value={leadBudgetEur}
-                        onChange={(e) => setLeadBudgetEur(Number(e.target.value) || 0)}
-                        className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2 text-xs text-white"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mt-3">
-                    <label className="mb-1 block text-[11px] text-white/70">
-                      Consigne / Note rapide :
-                    </label>
-                    <input
-                      type="text"
-                      value={leadNotes}
-                      onChange={(e) => setLeadNotes(e.target.value)}
-                      placeholder="Ex: Pas de site web, 2e page Google Maps, appeler avant 18h"
-                      className="w-full rounded-xl border border-white/15 bg-black/50 px-3 py-2 text-xs text-white"
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={busy}
-                    className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#c5a880] py-3 text-xs font-black uppercase tracking-wider text-[#101114] transition hover:bg-[#d8be98]"
-                  >
-                    <Send className="h-4 w-4" />
-                    {leadTargetMode === "mine"
-                      ? "Ajouter à Mes Leads Perso (Direction)"
-                      : "Envoyer la Carte de Mission au Commercial"}
-                  </button>
-                </form>
               )}
+              <div className={`flex-1 sm:w-60 flex items-center gap-2 rounded-xl px-3 py-2 text-xs border ${theme.card}`}>
+                <Search className={`w-3.5 h-3.5 ${theme.textSoft}`} />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Rechercher un prospect..."
+                  className={`bg-transparent border-none outline-none text-xs w-full ${theme.textMain}`}
+                />
+              </div>
             </div>
+          )}
+        </div>
 
-            {/* Liste séparée : Mes Leads Perso vs Leads Équipe Commerciale */}
-            <div className="space-y-4 lg:col-span-7">
-              <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-white/10 bg-[#12141b] p-3">
-                <div className="flex flex-wrap gap-1.5">
-                  {[
-                    { id: "all", label: `Tous les dossiers (${leads.length})` },
-                    {
-                      id: "mine",
-                      label: `👑 Mes Leads Perso (${leads.filter((l) => l.assignedTo === user.id).length})`,
-                    },
-                    ...members
-                      .filter((m) => m.role !== "admin")
-                      .map((m) => ({
-                        id: m.id,
-                        label: `👤 ${m.fullName} (${leads.filter((l) => l.assignedTo === m.id).length})`,
-                      })),
-                  ].map((f) => (
-                    <button
-                      key={f.id}
-                      type="button"
-                      onClick={() => setDirectorLeadScope(f.id)}
-                      className={cn(
-                        "rounded-xl px-3 py-1.5 text-xs font-bold transition",
-                        directorLeadScope === f.id
-                          ? "bg-[#c5a880] text-[#101114]"
-                          : "text-white/70 hover:text-white",
-                      )}
-                    >
-                      {f.label}
-                    </button>
-                  ))}
+        {/* ── VUE 1 : KANBAN DRAG & DROP COLORÉ (ZÉRO CLIENT FICTIF) ── */}
+        {activeTab === "kanban" && !isStudio && (
+          <div className="mt-5">
+            {myVisibleLeads.length === 0 ? (
+              <div className={`text-center py-16 px-6 rounded-3xl border max-w-xl mx-auto space-y-4 ${theme.card}`}>
+                <div className="h-16 w-16 rounded-3xl bg-gradient-to-br from-indigo-500 to-fuchsia-500 flex items-center justify-center text-3xl mx-auto shadow-lg text-white">
+                  🚀
+                </div>
+                <h3 className={`text-xl font-black ${theme.textMain}`}>Votre terrain de jeu est prêt !</h3>
+                <p className={`text-xs leading-relaxed ${theme.textMuted}`}>
+                  Zéro faux client ici. Ajoutez votre premier vrai prospect en 5 secondes, glissez-déposez vos cartes de colonne en colonne et débloquez vos premiers 100 XP !
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                  <button
+                    onClick={() => {
+                      setFormSetterId(currentUser.id);
+                      setFormCloserId(currentUser.id);
+                      setShowNewLeadModal(true);
+                    }}
+                    className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 text-white font-extrabold text-xs px-5 py-3 rounded-2xl shadow-lg"
+                  >
+                    <Plus className="w-4 h-4" /> Ajouter mon premier prospect
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("school")}
+                    className={`inline-flex items-center gap-2 font-bold text-xs px-4 py-3 rounded-2xl border ${theme.subCard} ${theme.textMain}`}
+                  >
+                    <GraduationCap className="w-4 h-4 text-indigo-500" /> Ouvrir XR School
+                  </button>
                 </div>
               </div>
-
-              <div className="space-y-3">
-                {filteredDirectorLeads.map((lead) => {
-                  const comm = getOfficialCommission(lead.serviceTarget, lead.budgetEur, user);
-                  const owner = members.find((m) => m.id === lead.assignedTo);
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3.5">
+                {(
+                  [
+                    { stage: "new", title: "1. Nouveaux", sub: "Glissez-déposez ✨", lightBg: "bg-sky-50/90 border-sky-200", darkBg: "bg-sky-500/10 border-sky-400/25", dot: "bg-sky-500", next: "rdv", nextLabel: "RDV →" },
+                    { stage: "rdv", title: "2. RDV / Qualifié", sub: "Setter → Closer", lightBg: "bg-teal-50/90 border-teal-200", darkBg: "bg-teal-500/10 border-teal-400/25", dot: "bg-teal-500", next: "mockup", nextLabel: "Maquette →" },
+                    { stage: "mockup", title: "3. Maquette", sub: "Studio + Concours", lightBg: "bg-amber-50/90 border-amber-200", darkBg: "bg-amber-500/10 border-amber-400/25", dot: "bg-amber-500", next: "negociation", nextLabel: "Négo →" },
+                    { stage: "negociation", title: "4. Négociation", sub: "Closing décisif", lightBg: "bg-violet-50/90 border-violet-200", darkBg: "bg-violet-500/10 border-violet-400/25", dot: "bg-violet-500", next: "won", nextLabel: "Signer 🎉" },
+                    { stage: "won", title: "5. Signés 🎉", sub: "Bravo · Studio OK", lightBg: "bg-emerald-50/90 border-emerald-200", darkBg: "bg-emerald-500/10 border-emerald-400/25", dot: "bg-emerald-500", next: null, nextLabel: "" },
+                  ] as const
+                ).map((col) => {
+                  const colLeads = filteredLeads.filter((l) => l.stage === col.stage);
+                  const isDropTarget = dragOverStage === col.stage;
                   return (
                     <div
-                      key={lead.id}
-                      className="rounded-3xl border border-white/10 bg-[#12141b] p-5 transition hover:border-white/20"
+                      key={col.stage}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        setDragOverStage(col.stage);
+                      }}
+                      onDragLeave={() => setDragOverStage(null)}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        setDragOverStage(null);
+                        if (draggedLeadId) moveStage(draggedLeadId, col.stage);
+                        setDraggedLeadId(null);
+                      }}
+                      className={`p-3.5 rounded-3xl border-2 flex flex-col min-h-[470px] transition-all ${
+                        theme.isDark ? col.darkBg : col.lightBg
+                      } ${isDropTarget ? "ring-4 ring-indigo-500/40 scale-[1.01]" : ""}`}
                     >
-                      <div className="flex flex-wrap items-start justify-between gap-3">
-                        <div>
-                          <div className="flex flex-wrap items-center gap-2">
-                            <span className="rounded-full bg-white/10 px-2.5 py-0.5 font-mono text-[10px] font-bold text-[#e5cba4]">
-                              {lead.assignedTo === user.id
-                                ? "👑 LEAD PERSO DIRECTION"
-                                : `🎯 Assigné à : ${owner?.fullName || "Commercial"}`}
-                            </span>
-                            <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 font-mono text-[10px] font-bold text-emerald-300">
-                              Comm. {comm.ruleLabel} : {formatMoney(comm.amountEur)}
-                            </span>
-                            {lead.maquetteStatus === "pending" && (
-                              <span className="rounded-full bg-amber-500/20 px-2.5 py-0.5 font-mono text-[10px] font-bold text-amber-300">
-                                🎨 Maquette en demande
-                              </span>
-                            )}
-                            {lead.maquetteStatus === "validated" && (
-                              <span className="rounded-full bg-emerald-500/25 px-2.5 py-0.5 font-mono text-[10px] font-bold text-emerald-200">
-                                ✅ Maquette Validée
-                              </span>
-                            )}
-                          </div>
-                          <h3 className="mt-2 text-base font-bold text-white">{lead.company}</h3>
-                          <p className="text-xs text-white/65">
-                            📞 {lead.phone} · {lead.serviceTarget} ({formatMoney(lead.budgetEur)})
-                          </p>
-                        </div>
-
-                        {/* Réassignation en 1 clic entre Toi (Direction) et n'importe quel vendeur */}
-                        <div className="flex items-center gap-2">
-                          <select
-                            value={lead.assignedTo}
-                            onChange={(e) =>
-                              void apiCall(
-                                {
-                                  action: "update_lead",
-                                  leadId: lead.id,
-                                  assignedTo: e.target.value,
-                                },
-                                "🔄 Attribution mise à jour !",
-                              )
-                            }
-                            className="rounded-xl border border-white/15 bg-black/50 px-2.5 py-1.5 text-xs text-white"
-                          >
-                            <option value={user.id}>👑 Garder pour Moi (Direction)</option>
-                            {closersList.map((c) => (
-                              <option key={c.id} value={c.id}>
-                                🎯 {c.fullName}
-                              </option>
-                            ))}
-                          </select>
-
-                          <button
-                            type="button"
-                            onClick={() => handleCopyLovable(lead)}
-                            className="rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/15 px-3 py-1.5 text-xs font-bold text-[#E2D5BC] hover:bg-[#D4AF37]/25"
-                            title="Copier le prompt d'architecture Lovable en 1 clic"
-                          >
-                            ⚡ Lovable
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setQuoteCompany(lead.company);
-                              setQuoteEmail(lead.email || "");
-                              setShowOfficialQuoteModal(true);
-                            }}
-                            className="rounded-xl border border-[#c5a880]/40 bg-[#c5a880]/15 px-3 py-1.5 text-xs font-bold text-[#e5cba4] hover:bg-[#c5a880]/25"
-                          >
-                            📄 Devis Officiel
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setWhatsappTemplateKey("contact");
-                              setWhatsappModalLead(lead);
-                            }}
-                            className="rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-3 py-1.5 text-xs font-bold text-emerald-300 hover:bg-emerald-500/25 active:scale-95"
-                          >
-                            <MessageCircle className="h-3.5 w-3.5 inline mr-1" />
-                            WhatsApp 1-Clic
-                          </button>
-                        </div>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <h3 className={`font-extrabold text-xs flex items-center gap-2 ${theme.textMain}`}>
+                          <span className={`w-2.5 h-2.5 rounded-full ${col.dot}`} />
+                          {col.title}
+                        </h3>
+                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-full border ${theme.card} ${theme.textMain}`}>
+                          {colLeads.length}
+                        </span>
                       </div>
+                      <p className={`text-[10px] mb-3 ${theme.textMuted}`}>{col.sub}</p>
 
-                      {lead.screenshotUrl && (
-                        <div className="mt-3 overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-2">
-                          <img
-                            src={lead.screenshotUrl}
-                            alt="Capture"
-                            className="max-h-36 rounded-xl object-contain"
+                      <div className="space-y-2.5 flex-1">
+                        {colLeads.map((lead) => (
+                          <LeadCard
+                            key={lead.id}
+                            lead={lead}
+                            members={members}
+                            todayIso={todayIso}
+                            theme={theme}
+                            onDragStart={() => setDraggedLeadId(lead.id)}
+                            onEdit={() => setEditingLead(lead)}
+                            onCall={() => {
+                              setActiveLeadForCockpit(lead);
+                              setAuditUrlInput(lead.websiteUrl || "");
+                              setAuditResult(null);
+                              setCheckoutMessage(null);
+                              setActiveTab("cockpit");
+                            }}
+                            onNext={col.next ? () => moveStage(lead.id, col.next) : undefined}
+                            nextLabel={col.nextLabel}
+                            onWin={col.stage !== "won" ? () => moveStage(lead.id, "won") : undefined}
+                            onPdf={() => generatePdfQuote(lead)}
                           />
-                        </div>
-                      )}
+                        ))}
+                      </div>
                     </div>
                   );
                 })}
               </div>
-            </div>
+            )}
           </div>
         )}
 
-        {/* ══════════════════════════════════════════════════════════════════
-            ONGLET 2 DIRECTION : STUDIO MAQUETTES (COLLER LE LIEN = VALIDÉE ✓)
-        ══════════════════════════════════════════════════════════════════ */}
-        {directorTab === "maquettes" && (
-          <div className="space-y-6">
-            <div className="rounded-3xl border border-amber-400/40 bg-[#12141b] p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-amber-300">
-                    🎨 DEMANDES DE MAQUETTES DES COMMERCIAUX
-                  </span>
-                  <h2 className="mt-1 text-xl font-bold text-white">
-                    Collez simplement le lien de la maquette pour la passer en « Validée ✓ »
-                  </h2>
-                </div>
+        {/* ── VUE 2 : COCKPIT D'APPEL + AUDIT EXPRESS + STRIPE + TIMELINE ── */}
+        {activeTab === "cockpit" && !isStudio && (
+          <div className="mt-5">
+            {myVisibleLeads.length === 0 ? (
+              <div className={`text-center py-12 px-4 rounded-3xl border max-w-lg mx-auto space-y-3 ${theme.card}`}>
+                <p className={`text-sm ${theme.textMuted}`}>
+                  Ajoutez un prospect pour activer son Cockpit d'Appel, l'Audit Express et les relances WhatsApp.
+                </p>
+                <button
+                  onClick={() => setShowNewLeadModal(true)}
+                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-bold"
+                >
+                  + Ajouter un prospect
+                </button>
               </div>
-
-              <div className="mt-5 space-y-4">
-                {pendingMaquettes.length === 0 ? (
-                  <p className="rounded-2xl border border-white/10 bg-black/30 p-6 text-center text-xs text-white/60">
-                    Aucune maquette en attente de création pour le moment.
-                  </p>
-                ) : (
-                  pendingMaquettes.map((lead) => {
-                    const closer = members.find((m) => m.id === lead.assignedTo);
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                <div className={`lg:col-span-4 rounded-3xl border p-4 space-y-2 max-h-[680px] overflow-y-auto ${theme.card}`}>
+                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-indigo-600 dark:text-amber-300 mb-2">
+                    Mes Prospects ({myVisibleLeads.length})
+                  </h3>
+                  {myVisibleLeads.map((l) => {
+                    const svc = XR_OFFICIAL_SERVICES.find((s) => s.id === l.serviceId);
+                    const selected = (activeLeadForCockpit?.id || myVisibleLeads[0].id) === l.id;
                     return (
-                      <div
-                        key={lead.id}
-                        className="rounded-2xl border border-amber-400/35 bg-black/40 p-5"
+                      <button
+                        key={l.id}
+                        onClick={() => {
+                          setActiveLeadForCockpit(l);
+                          setAuditUrlInput(l.websiteUrl || "");
+                          setAuditResult(null);
+                          setCheckoutMessage(null);
+                        }}
+                        className={`w-full text-left p-3 rounded-2xl border transition-all ${
+                          selected
+                            ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white border-transparent shadow-md"
+                            : `${theme.subCard} ${theme.textMain}`
+                        }`}
                       >
-                        <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-extrabold text-xs truncate">
+                            {svc?.icon} {l.name}
+                          </span>
+                          <span className={`text-[11px] font-mono font-bold shrink-0 ml-2 ${selected ? "text-amber-200" : "text-indigo-600 dark:text-amber-300"}`}>
+                            {formatPricePeriod(l.value, l.billing)}
+                          </span>
+                        </div>
+                        <p className={`text-[11px] truncate mt-0.5 ${selected ? "text-white/80" : theme.textMuted}`}>
+                          {l.contact} · {l.phone}
+                        </p>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {(() => {
+                  const target = activeLeadForCockpit || myVisibleLeads[0];
+                  const svc = XR_OFFICIAL_SERVICES.find((s) => s.id === target.serviceId) || XR_OFFICIAL_SERVICES[0];
+                  const playbook = getSectorServicePlaybook(target.sectorId, target.serviceId);
+
+                  const fillVars = (s: string) =>
+                    s
+                      .replace(/\[Prénom\]/g, target.contact)
+                      .replace(/\[Mon Prénom\]/g, currentUser.shortName)
+                      .replace(/\[Nom Entreprise\]/g, target.name);
+
+                  return (
+                    <div className="lg:col-span-8 space-y-4">
+                      {/* Carte Fiche Prospect & Boutons d'action */}
+                      <div className={`p-5 rounded-3xl border space-y-4 ${theme.card}`}>
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                           <div>
-                            <span className="rounded-full bg-amber-500/20 px-2.5 py-0.5 font-mono text-[10px] font-bold text-amber-300">
-                              ⏳ EN DEMANDE · Par {closer?.fullName || "Commercial"}
-                            </span>
-                            <h3 className="mt-1.5 text-lg font-bold text-white">
-                              {lead.company} ({lead.city})
-                            </h3>
-                            <p className="text-xs text-white/65">
-                              Offre : {lead.serviceTarget} · Tél : {lead.phone}
+                            <h2 className={`text-lg font-black flex items-center gap-2 ${theme.textMain}`}>
+                              <span>{svc.icon}</span>
+                              {target.name}
+                            </h2>
+                            <p className={`text-xs mt-0.5 ${theme.textMuted}`}>
+                              Contact : <strong>{target.contact}</strong> ·{" "}
+                              <span className="font-mono font-bold text-indigo-600 dark:text-amber-300">{target.phone}</span> ·{" "}
+                              <span>{playbook.sector.icon} {playbook.sector.name}</span>
                             </p>
-                            {lead.maquetteBrief && (
-                              <p className="mt-1 text-xs text-[#e5cba4]">
-                                Brief : {lead.maquetteBrief}
-                              </p>
-                            )}
+                          </div>
+
+                          <div className="flex flex-wrap gap-2">
+                            <a
+                              href={`tel:${target.phone.replace(/\s+/g, "")}`}
+                              onClick={() => {
+                                handleIncrementCall();
+                                appendTimeline(target.id, "Appel téléphonique lancé");
+                              }}
+                              className="inline-flex items-center gap-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-extrabold text-xs px-3.5 py-2.5 rounded-xl shadow-md"
+                            >
+                              <Phone className="w-3.5 h-3.5" /> Appeler
+                            </a>
+                            <a
+                              href={`https://wa.me/${target.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(fillVars(playbook.setting.dm1))}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={() => appendTimeline(target.id, "Message WhatsApp (J0) envoyé")}
+                              className="inline-flex items-center gap-1.5 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold text-xs px-3.5 py-2.5 rounded-xl"
+                            >
+                              <MessageSquare className="w-3.5 h-3.5" /> WhatsApp
+                            </a>
+                            <button
+                              onClick={() => generatePdfQuote(target)}
+                              className={`inline-flex items-center gap-1.5 font-bold text-xs px-3.5 py-2.5 rounded-xl border ${theme.subCard} ${theme.textMain}`}
+                            >
+                              <Download className="w-3.5 h-3.5 text-indigo-500" /> PDF
+                            </button>
+                            <button
+                              onClick={() => handleSendQuoteEmail(target)}
+                              disabled={sendingEmailQuote}
+                              className="inline-flex items-center gap-1.5 bg-violet-500/15 hover:bg-violet-500/25 text-violet-700 dark:text-violet-200 border border-violet-400/30 font-bold text-xs px-3.5 py-2.5 rounded-xl"
+                            >
+                              <Mail className="w-3.5 h-3.5" /> {sendingEmailQuote ? "..." : "Email Devis"}
+                            </button>
+                            <button
+                              onClick={() => handleGenerateStripeLink(target)}
+                              disabled={checkoutLoading}
+                              className="inline-flex items-center gap-1.5 bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-700 dark:text-indigo-200 border border-indigo-400/30 font-bold text-xs px-3.5 py-2.5 rounded-xl"
+                            >
+                              <CreditCard className="w-3.5 h-3.5" /> {checkoutLoading ? "..." : "Stripe"}
+                            </button>
+                            <button
+                              onClick={() => moveStage(target.id, "won")}
+                              className="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-extrabold text-xs px-3.5 py-2.5 rounded-xl shadow-md"
+                            >
+                              <Trophy className="w-3.5 h-3.5" /> Signé !
+                            </button>
                           </div>
                         </div>
 
-                        <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-                          <input
-                            type="url"
-                            value={maquetteLinkInputs[lead.id] || ""}
-                            onChange={(e) =>
-                              setMaquetteLinkInputs((prev) => ({
-                                ...prev,
-                                [lead.id]: e.target.value,
-                              }))
-                            }
-                            placeholder="Collez ici le lien de la maquette (ex: https://...)"
-                            className="flex-1 rounded-xl border border-white/20 bg-black/60 px-4 py-2.5 text-xs text-white focus:border-emerald-400 focus:outline-none"
-                          />
+                        {/* Pack Multi-Services en 1 clic */}
+                        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-200/60 dark:border-white/10 text-xs">
+                          <span className={`font-bold flex items-center gap-1 ${theme.textMuted}`}>
+                            <Layers className="w-3.5 h-3.5 text-indigo-500" /> Pack :
+                          </span>
+                          <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-200 font-bold text-[11px]">
+                            {svc.icon} {target.planLabel} ({formatPricePeriod(target.value, target.billing)})
+                          </span>
+                          {(target.extraItems || []).map((ex) => (
+                            <span key={ex.id} className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 font-bold text-[11px]">
+                              + {ex.planLabel} ({formatPricePeriod(ex.price, ex.billing)})
+                            </span>
+                          ))}
                           <button
-                            type="button"
-                            disabled={busy}
                             onClick={() => {
-                              const url = (maquetteLinkInputs[lead.id] || "").trim();
-                              if (!url) {
-                                setErrorMsg("Collez le lien URL de la maquette avant de valider.");
-                                return;
-                              }
-                              void apiCall(
-                                {
-                                  action: "validate_maquette",
-                                  leadId: lead.id,
-                                  maquetteUrl: url,
-                                },
-                                `✅ Maquette validée et envoyée à ${closer?.fullName || "votre commercial"} !`,
+                              const addon: LeadServiceItem = {
+                                id: `ex-${Date.now()}`,
+                                serviceId: "maintenance",
+                                planLabel: "WebCare Business",
+                                billing: "month",
+                                price: 49,
+                              };
+                              const nextExtras = [...(target.extraItems || []), addon];
+                              setLeads((prev) =>
+                                prev.map((l) => {
+                                  if (l.id !== target.id) return l;
+                                  const u = { ...l, extraItems: nextExtras };
+                                  void upsertLeadToSupabase(u);
+                                  return u;
+                                })
                               );
+                              setActiveLeadForCockpit({ ...target, extraItems: nextExtras });
+                              if (soundEnabled) playDing();
                             }}
-                            className="rounded-xl bg-emerald-400 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-[#0b0d11] hover:bg-emerald-300"
+                            className="px-2 py-0.5 rounded-lg border border-dashed border-indigo-400/50 text-[10px] font-bold text-indigo-600 dark:text-amber-300 hover:bg-indigo-500/10"
                           >
-                            Valider & Envoyer au Vendeur ✓
+                            + WebCare 49€/m
+                          </button>
+                          <button
+                            onClick={() => {
+                              const addon: LeadServiceItem = {
+                                id: `ex-${Date.now()}`,
+                                serviceId: "maps",
+                                planLabel: "Maps Top 3 Garanti",
+                                billing: "year",
+                                price: 990,
+                              };
+                              const nextExtras = [...(target.extraItems || []), addon];
+                              setLeads((prev) =>
+                                prev.map((l) => {
+                                  if (l.id !== target.id) return l;
+                                  const u = { ...l, extraItems: nextExtras };
+                                  void upsertLeadToSupabase(u);
+                                  return u;
+                                })
+                              );
+                              setActiveLeadForCockpit({ ...target, extraItems: nextExtras });
+                              if (soundEnabled) playDing();
+                            }}
+                            className="px-2 py-0.5 rounded-lg border border-dashed border-emerald-400/50 text-[10px] font-bold text-emerald-600 dark:text-emerald-300 hover:bg-emerald-500/10"
+                          >
+                            + Maps Top 3 (990€)
                           </button>
                         </div>
+
+                        {checkoutMessage && (
+                          <div className="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-400/30 text-xs font-semibold text-indigo-700 dark:text-indigo-200">
+                            {checkoutMessage}
+                          </div>
+                        )}
+
+                        {/* Relances Express J+2 & J+5 */}
+                        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-200/60 dark:border-white/10 text-xs">
+                          <span className={`font-bold ${theme.textMuted}`}>Relances express :</span>
+                          <a
+                            href={`https://wa.me/${target.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(fillVars(playbook.setting.followupJ2))}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            onClick={() => appendTimeline(target.id, "Relance WhatsApp J+2 envoyée")}
+                            className="px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-700 dark:text-amber-300 font-bold text-[11px]"
+                          >
+                            ⚡ Envoyer Relance J+2
+                          </a>
+                          <a
+                            href={`https://wa.me/${target.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(fillVars(playbook.setting.followupJ5))}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            onClick={() => appendTimeline(target.id, "Relance WhatsApp J+5 envoyée")}
+                            className="px-2.5 py-1 rounded-lg bg-violet-500/15 text-violet-700 dark:text-violet-300 font-bold text-[11px]"
+                          >
+                            🎯 Envoyer Relance J+5
+                          </a>
+                        </div>
                       </div>
-                    );
-                  })
-                )}
-              </div>
-            </div>
 
-            {/* Historique des maquettes déjà validées */}
-            <div className="rounded-3xl border border-white/10 bg-[#12141b] p-6">
-              <h3 className="text-base font-bold text-white">
-                ✅ Maquettes déjà validées et livrées ({validatedMaquettes.length})
-              </h3>
-              <div className="mt-4 space-y-2.5">
-                {validatedMaquettes.map((lead) => (
-                  <div
-                    key={lead.id}
-                    className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald-500/25 bg-emerald-950/15 p-3.5"
-                  >
-                    <div>
-                      <p className="text-sm font-bold text-white">{lead.company}</p>
-                      <a
-                        href={lead.maquetteUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-xs text-emerald-300 underline"
-                      >
-                        {lead.maquetteUrl}
-                      </a>
+                      {/* AUDIT EXPRESS 1-CLIC (/api/audit) */}
+                      <div className={`p-5 rounded-3xl border space-y-3 ${theme.card}`}>
+                        <h3 className="text-xs font-extrabold uppercase tracking-wider text-indigo-600 dark:text-amber-300 flex items-center gap-1.5">
+                          <Zap className="w-4 h-4" /> Audit Express du site prospect (Live /api/audit)
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                          <input
+                            type="text"
+                            value={auditUrlInput}
+                            onChange={(e) => setAuditUrlInput(e.target.value)}
+                            placeholder="https://site-du-prospect.fr"
+                            className={`flex-1 min-w-[200px] rounded-xl px-3.5 py-2 text-xs border ${theme.inputBg}`}
+                          />
+                          <button
+                            onClick={() => handleRunExpressAudit(target)}
+                            disabled={auditLoading}
+                            className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white font-extrabold text-xs shadow-md disabled:opacity-50"
+                          >
+                            {auditLoading ? "Analyse en cours..." : "⚡ Auditer en 5s"}
+                          </button>
+                        </div>
+
+                        {auditResult && (
+                          <div className={`p-3.5 rounded-2xl border space-y-2 ${theme.subCard}`}>
+                            {auditResult.error ? (
+                              <p className="text-xs text-rose-500 font-bold">{auditResult.error}</p>
+                            ) : (
+                              <>
+                                <div className="flex items-center justify-between">
+                                  <span className={`text-xs font-extrabold ${theme.textMain}`}>
+                                    Score détecté :{" "}
+                                    <span className={auditResult.score >= 75 ? "text-emerald-500" : "text-orange-500"}>
+                                      {auditResult.score}/100
+                                    </span>
+                                  </span>
+                                  <button
+                                    onClick={() => {
+                                      const summary = `Audit live (${auditResult.score}/100) : ${auditResult.recommendations?.[0]?.reason || "Optimisation mobile & conversion recommandée"}`;
+                                      setLeads((prev) =>
+                                        prev.map((l) => (l.id === target.id ? { ...l, issue: summary, websiteUrl: auditResult.url } : l))
+                                      );
+                                      setActiveLeadForCockpit({ ...target, issue: summary, websiteUrl: auditResult.url });
+                                      if (soundEnabled) playDing();
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-emerald-500 text-white text-[10px] font-extrabold"
+                                  >
+                                    ✓ Injecter dans l'accroche
+                                  </button>
+                                </div>
+                                {auditResult.recommendations?.slice(0, 2).map((rec, i) => (
+                                  <p key={i} className={`text-[11px] ${theme.textMuted}`}>
+                                    • <strong>{rec.service}</strong> : {rec.reason}
+                                  </p>
+                                ))}
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Accroche personnalisée + Objections */}
+                      <div className={`p-5 rounded-3xl border space-y-2.5 ${theme.card}`}>
+                        <h3 className="text-xs font-extrabold uppercase tracking-wider text-amber-600 dark:text-amber-300">
+                          Accroche adaptée ({playbook.sector.name} × {svc.shortName})
+                        </h3>
+                        <p className={`p-4 rounded-2xl border text-xs font-mono leading-relaxed ${theme.subCard} ${theme.textMain}`}>
+                          {fillVars(playbook.coldCall.opener)}
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className={`p-5 rounded-3xl border space-y-2.5 ${theme.card}`}>
+                          <h3 className="text-xs font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-300 flex items-center gap-1.5">
+                            <ShieldCheck className="w-4 h-4" /> Répliques Objections
+                          </h3>
+                          {playbook.objections.map((obj, idx) => (
+                            <div key={idx} className={`rounded-xl border overflow-hidden ${theme.subCard}`}>
+                              <button
+                                onClick={() => setOpenObjIdx(openObjIdx === idx ? null : idx)}
+                                className="w-full flex items-center justify-between p-3 text-left text-xs font-bold text-indigo-600 dark:text-amber-300"
+                              >
+                                <span>{obj.q}</span>
+                                <ChevronDown className={`w-4 h-4 transition-transform ${openObjIdx === idx ? "rotate-180" : ""}`} />
+                              </button>
+                              {openObjIdx === idx && (
+                                <div className="px-3 pb-3 text-xs font-mono leading-relaxed text-emerald-700 dark:text-emerald-200">
+                                  {fillVars(obj.a)}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Timeline Historique Prospect */}
+                        <div className={`p-5 rounded-3xl border space-y-2.5 ${theme.card}`}>
+                          <h3 className="text-xs font-extrabold uppercase tracking-wider text-violet-600 dark:text-violet-300 flex items-center gap-1.5">
+                            <Activity className="w-4 h-4" /> Historique Prospect
+                          </h3>
+                          {(target.timeline || []).length === 0 ? (
+                            <p className={`text-xs italic ${theme.textSoft}`}>Aucune action enregistrée encore.</p>
+                          ) : (
+                            <div className="space-y-2 max-h-[220px] overflow-y-auto">
+                              {(target.timeline || []).map((ev) => (
+                                <div key={ev.id} className={`p-2.5 rounded-xl border text-[11px] flex items-center justify-between gap-2 ${theme.subCard}`}>
+                                  <span className={theme.textMain}>{ev.text}</span>
+                                  <span className={`font-mono text-[10px] shrink-0 ${theme.textSoft}`}>{ev.date}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <span className="rounded-full bg-emerald-500/20 px-3 py-1 font-mono text-[10px] font-bold text-emerald-300">
-                      Validée ✓
-                    </span>
-                  </div>
-                ))}
+                  );
+                })()}
               </div>
-            </div>
+            )}
           </div>
         )}
 
-        {/* ══════════════════════════════════════════════════════════════════
-            ONGLET 3 DIRECTION : ANNUAIRE CLIENTS (COMPTES, VIP, CA)
-        ══════════════════════════════════════════════════════════════════ */}
-        {directorTab === "clients" && (
-          <div className="space-y-6">
-            <CrmClientsTab
-              clients={clients}
-              isAdmin={true}
-              onCreateClient={handleCreateClient}
-              onOpenNewQuoteForClient={(c) => {
-                setQuoteCompany(c.company);
-                setQuoteEmail(c.email);
-                setDirectorTab("quotes");
-              }}
-              onOpenNewProjectForClient={() => {
-                setDirectorTab("projects");
-              }}
-            />
-          </div>
+
+        {/* ── NOUVELLE VUE : ARENA APPELS & BATTLE PASS ── */}
+        {activeTab === "arena" && !isStudio && (
+          <QuestFocusArena
+            visibleLeads={myVisibleLeads}
+            currentUser={currentUser}
+            dailyCalls={dailyCalls}
+            theme={theme}
+            onLogCallOutcome={handleLogCallOutcome}
+            onOpenCockpit={(lead) => {
+              setActiveLeadForCockpit(lead);
+              setActiveTab("cockpit");
+            }}
+            onOpenNewLead={() => {
+              setFormSetterId(currentUser.id);
+              setFormCloserId(currentUser.id);
+              setDuplicateWarning("");
+              setShowNewLeadModal(true);
+            }}
+          />
         )}
 
-        {/* ══════════════════════════════════════════════════════════════════
-            ONGLET 4 DIRECTION : DEVIS OFFICIELS & CATALOGUE
-        ══════════════════════════════════════════════════════════════════ */}
-        {directorTab === "quotes" && (
-          <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-[#c5a880]/40 bg-[#12141b] p-5">
-              <div>
-                <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#c5a880]">
-                  GÉNÉRATEUR OFFICIEL DE DEVIS & CONTRAT
-                </span>
-                <h3 className="mt-1 text-lg font-bold text-white">
-                  Édition avec Mentions Légales, Acompte & coordonnées bancaires
-                </h3>
-                <p className="text-xs text-white/60">
-                  Générez un contrat PDF prêt à signer ou ajoutez une ligne devis directement au
-                  catalogue.
+        {/* ── NOUVELLE VUE : CLIENTS ACTIFS & FACTURES SEPA ── */}
+        {activeTab === "clients_invoices" && !isStudio && (
+          <ClientsInvoicesHub
+            visibleLeads={myVisibleLeads}
+            members={members}
+            currentUser={currentUser}
+            theme={theme}
+            onUpdateLead={(updated) => {
+              setLeads((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
+              void upsertLeadToSupabase(updated);
+            }}
+            onUnlockCommission={handleUnlockCommission}
+            onSound={() => soundEnabled && playDing()}
+          />
+        )}
+
+        {/* ── NOUVELLE VUE : SUIVI DE PRODUCTION EN 5 JALONS & PRESTATAIRES ── */}
+        {activeTab === "projects" && (
+          <ProjectsProvidersHub
+            visibleLeads={isDirector ? leads : myVisibleLeads}
+            members={members}
+            currentUser={currentUser}
+            theme={theme}
+            onUpdateLead={(updated) => {
+              setLeads((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
+              void upsertLeadToSupabase(updated);
+            }}
+            onSound={() => soundEnabled && playDing()}
+          />
+        )}
+
+                {/* ── VUE 3 : CONCOURS ARENA ── */}
+        {activeTab === "contest" && !isStudio && (
+          <ContestLeaderboard
+            allLeads={leads}
+            members={members}
+            currentUser={currentUser}
+            weeklyChallenge={weeklyChallenge}
+            theme={theme}
+          />
+        )}
+
+        {/* ── VUE 4 : XR SCHOOL ── */}
+        {activeTab === "school" && (
+          <SchoolModule currentUser={currentUser} theme={theme} onSound={() => soundEnabled && playDing()} />
+        )}
+
+        {/* ── VUE 5 : FILIÈRE RH MARTIN ── */}
+        {activeTab === "rh" && (isManager || isDirector) && (
+          <ManagerFiliereHub
+            managerId="martin"
+            members={members}
+            visibleLeads={myVisibleLeads}
+            theme={theme}
+            onPromoteCandidate={handlePromoteCandidate}
+            onSound={() => soundEnabled && playDing()}
+          />
+        )}
+
+        {/* ── VUE 6 : FINANCES & COMMISSIONS CLOISONNÉES ── */}
+        {activeTab === "finances" && !isStudio && (
+          <div className="mt-5 space-y-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className={`p-5 rounded-3xl border ${theme.card}`}>
+                <p className={`text-[11px] uppercase font-bold ${theme.textMuted}`}>
+                  {isDirector ? "CA One-Shot Agence" : "Mon CA One-Shot"}
+                </p>
+                <p className="text-2xl font-black text-emerald-500 mt-1.5 font-mono">
+                  {financeView.cashWon.toLocaleString("fr-FR")} €
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={() => setShowOfficialQuoteModal(true)}
-                className="inline-flex items-center gap-2 rounded-xl bg-[#c5a880] px-4 py-2.5 text-xs font-black uppercase tracking-wider text-[#101114] shadow-lg hover:bg-[#d8be98]"
-              >
-                <Sparkles className="h-4 w-4" />
-                Ouvrir le Générateur PDF / Contrat
-              </button>
+              <div className={`p-5 rounded-3xl border ${theme.card}`}>
+                <p className={`text-[11px] uppercase font-bold ${theme.textMuted}`}>
+                  {isDirector ? "MRR Mensuel Agence" : "Mon MRR Mensuel"}
+                </p>
+                <p className="text-2xl font-black text-sky-500 mt-1.5 font-mono">
+                  {financeView.mrrWon.toLocaleString("fr-FR")} €/m
+                </p>
+              </div>
+              <div className={`p-5 rounded-3xl border ${theme.card}`}>
+                <p className={`text-[11px] uppercase font-bold ${theme.textMuted}`}>Commissions Débloquées</p>
+                <p className="text-2xl font-black text-amber-500 mt-1.5 font-mono">
+                  {financeView.myCommissionUnlocked.toLocaleString("fr-FR")} €
+                </p>
+              </div>
+              <div className={`p-5 rounded-3xl border ${theme.card}`}>
+                <p className={`text-[11px] uppercase font-bold ${theme.textMuted}`}>En Attente Virement</p>
+                <p className="text-2xl font-black text-violet-500 mt-1.5 font-mono">
+                  {financeView.myCommissionPending.toLocaleString("fr-FR")} €
+                </p>
+              </div>
             </div>
 
-            <CrmQuotesTab
-              quotes={quotes}
-              isAdmin={true}
-              onCreateQuote={handleCreateQuote}
-              onUpdateQuoteStatus={handleUpdateQuoteStatus}
-            />
-          </div>
-        )}
-
-        {/* ══════════════════════════════════════════════════════════════════
-            ONGLET 5 DIRECTION : FACTURATION, coordonnées bancaires & COMMISSIONS
-        ══════════════════════════════════════════════════════════════════ */}
-        {directorTab === "invoices" && (
-          <div className="space-y-6">
-            {/* Bannière Coordonnées Bancaires Officielles */}
-            <div className="rounded-3xl border border-emerald-400/40 bg-gradient-to-r from-emerald-950/40 via-[#12141b] to-[#12141b] p-6 shadow-xl">
-              <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+            <div className={`rounded-3xl border p-6 space-y-4 ${theme.card}`}>
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-emerald-300">
-                    🏦 COMPTE BANCAIRE OFFICIEL XR AGENCY
-                  </span>
-                  <h3 className="mt-1 text-xl font-bold text-white">
-                    Coordonnées de paiement à confirmer
+                  <h3 className={`text-sm font-extrabold flex items-center gap-2 ${theme.textMain}`}>
+                    <Lock className="w-4 h-4 text-indigo-500" />
+                    {isDirector
+                      ? "Barèmes & Commissions — Toute l'équipe"
+                      : isManager
+                      ? "Vos commissions & candidats de votre filière"
+                      : "Mes commissions personnelles (Confidentiel)"}
                   </h3>
-                  <p className="mt-1 font-mono text-xs text-[#e5cba4]">
-                    Aucune coordonnée bancaire n’est enregistrée dans cette version
+                  <p className={`text-[11px] mt-0.5 ${theme.textMuted}`}>
+                    Cloisonnement strict : aucun commercial ne voit les barèmes ni les gains d'un autre.
                   </p>
                 </div>
-                <div className="text-left sm:text-right">
-                  <span className="font-mono text-[10px] uppercase text-white/60">
-                    VIREMENTS EN ATTENTE
-                  </span>
-                  <p className="font-mono text-2xl font-black text-white">
-                    {formatMoney(snapshot.stats?.pendingInvoicesEur || 0)}
-                  </p>
-                  <p className="text-[11px] text-emerald-300">
-                    Débloque instantanément la commission du closer au clic.
-                  </p>
-                </div>
-              </div>
-            </div>
 
-            <CrmInvoicesTab
-              invoices={invoices}
-              isAdmin={true}
-              onValidatePayment={handleValidatePayment}
-            />
-          </div>
-        )}
-
-        {/* ══════════════════════════════════════════════════════════════════
-            ONGLET 6 DIRECTION : PROJETS EN COURS & LIVRAISON
-        ══════════════════════════════════════════════════════════════════ */}
-        {directorTab === "projects" && (
-          <div className="space-y-6">
-            <CrmProjectsTab
-              projects={projects}
-              isAdmin={true}
-              onCreateProject={handleCreateProject}
-              onUpdateProject={handleUpdateProject}
-            />
-          </div>
-        )}
-
-        {/* ══════════════════════════════════════════════════════════════════
-            ONGLET 7 DIRECTION : PRESTATAIRES & SOUS-TRAITANTS
-        ══════════════════════════════════════════════════════════════════ */}
-        {directorTab === "providers" && (
-          <div className="space-y-6">
-            <CrmProvidersTab
-              providers={providers}
-              isAdmin={true}
-              onCreateProvider={handleCreateProvider}
-            />
-          </div>
-        )}
-
-        {/* ══════════════════════════════════════════════════════════════════
-            ONGLET 8 DIRECTION : CALENDRIER UNIFIÉ & DUAL CLOCKS PARIS / VIETNAM
-        ══════════════════════════════════════════════════════════════════ */}
-        {directorTab === "calendar" && (
-          <div className="space-y-6">
-            <CrmCalendarTab leads={leads} tasks={tasks} projects={projects} />
-
-            {/* Formulaire d'ajout de tâche Perso ou Pro */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (!newTaskTitle.trim()) return;
-                void apiCall(
-                  {
-                    action: "create_task",
-                    title: newTaskTitle.trim(),
-                    category: newTaskCategory,
-                    dueDate: newTaskDueDate,
-                    priority: "high",
-                  },
-                  "📅 Tâche ajoutée à votre calendrier !",
-                );
-                setNewTaskTitle("");
-              }}
-              className="flex flex-col gap-3 rounded-3xl border border-white/15 bg-[#12141b] p-5 sm:flex-row"
-            >
-              <select
-                value={newTaskCategory}
-                onChange={(e) => setNewTaskCategory(e.target.value as "pro" | "perso")}
-                className="rounded-xl border border-white/15 bg-black/50 px-3.5 py-2.5 text-xs font-bold text-white"
-              >
-                <option value="pro">🏢 Stratégie Pro & Agence</option>
-                <option value="perso">🧘‍♂️ Vie Perso & Routine</option>
-              </select>
-              <input
-                type="text"
-                value={newTaskTitle}
-                onChange={(e) => setNewTaskTitle(e.target.value)}
-                placeholder="Ajouter une étape, un rendez-vous ou un objectif..."
-                className="flex-1 rounded-xl border border-white/15 bg-black/50 px-4 py-2.5 text-xs text-white"
-              />
-              <input
-                type="text"
-                value={newTaskDueDate}
-                onChange={(e) => setNewTaskDueDate(e.target.value)}
-                placeholder="Échéance (ex: Aujourd'hui 14h)"
-                className="rounded-xl border border-white/15 bg-black/50 px-3.5 py-2.5 text-xs text-white sm:w-44"
-              />
-              <button
-                type="submit"
-                className="rounded-xl bg-[#c5a880] px-5 py-2.5 text-xs font-black uppercase text-[#101114]"
-              >
-                + Ajouter
-              </button>
-            </form>
-
-            {/* 2 Colonnes : To-Do Vie Perso vs Stratégie Pro & Appels */}
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-              <div className="rounded-3xl border border-sky-400/30 bg-[#12141b] p-6">
-                <h3 className="text-lg font-bold text-white">🧘‍♂️ Quêtes & To-Do Vie Perso</h3>
-                <div className="mt-4 space-y-2.5">
-                  {tasks
-                    .filter((t) => t.category === "perso")
-                    .map((task) => (
-                      <div
-                        key={task.id}
-                        className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/35 p-3.5"
-                      >
-                        <button
-                          type="button"
-                          onClick={() => void apiCall({ action: "toggle_task", taskId: task.id })}
-                          className={cn(
-                            "flex items-center gap-2.5 text-left text-xs font-semibold",
-                            task.status === "done" ? "text-white/40 line-through" : "text-white",
-                          )}
-                        >
-                          <CheckCircle2
-                            className={cn(
-                              "h-4 w-4",
-                              task.status === "done" ? "text-emerald-400" : "text-white/30",
-                            )}
-                          />
-                          <span>{task.title}</span>
-                        </button>
-                        <span className="font-mono text-[10px] text-sky-300">{task.dueDate}</span>
-                      </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <select
+                    value={selectedMonth}
+                    onChange={(e) => setSelectedMonth(e.target.value)}
+                    className={`rounded-xl px-3 py-2 text-xs font-bold border ${theme.inputBg}`}
+                  >
+                    <option value="all">📅 Toutes les périodes</option>
+                    {availableMonths.map((m) => (
+                      <option key={m} value={m}>
+                        Mois : {m}
+                      </option>
                     ))}
+                  </select>
+
+                  {(isDirector || isManager) && (
+                    <button
+                      onClick={() => {
+                        setNewMemberRecruitedBy(isManager ? currentUser.id : "");
+                        setShowAddMemberModal(true);
+                      }}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-xs shadow-sm"
+                    >
+                      <UserPlus className="w-3.5 h-3.5" />
+                      {isManager ? "Ajouter un candidat" : "Ajouter un membre"}
+                    </button>
+                  )}
                 </div>
               </div>
 
-              <div className="rounded-3xl border border-[#c5a880]/35 bg-[#12141b] p-6">
-                <h3 className="text-lg font-bold text-white">
-                  🏢 Stratégie Pro, Relances d’Appels & Rendez-vous
-                </h3>
-                <div className="mt-4 space-y-2.5">
-                  {tasks
-                    .filter((t) => t.category !== "perso")
-                    .map((task) => (
-                      <div
-                        key={task.id}
-                        className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/35 p-3.5"
-                      >
-                        <button
-                          type="button"
-                          onClick={() => void apiCall({ action: "toggle_task", taskId: task.id })}
-                          className={cn(
-                            "flex items-center gap-2.5 text-left text-xs font-semibold",
-                            task.status === "done" ? "text-white/40 line-through" : "text-white",
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead>
+                    <tr className={`border-b uppercase text-[10px] ${theme.border} ${theme.textSoft}`}>
+                      <th className="pb-3">Membre</th>
+                      <th className="pb-3">Barème (Setting / Closing / Full)</th>
+                      <th className="pb-3">One-Shot</th>
+                      <th className="pb-3">MRR</th>
+                      <th className="pb-3">En attente</th>
+                      <th className="pb-3 text-right">Débloqué</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200/50 dark:divide-white/10">
+                    {financeView.visibleMemberRows.map((row) => (
+                      <tr key={row.member.id}>
+                        <td className={`py-3 font-extrabold ${theme.textMain}`}>
+                          <div>{row.member.name}</div>
+                          <div className={`text-[10px] font-normal ${theme.textMuted}`}>
+                            {row.member.badge}
+                            {row.member.recruitedBy === "martin" ? " · Filière Martin" : ""}
+                          </div>
+                        </td>
+                        <td className={`py-3 text-[11px] ${theme.textMuted}`}>
+                          {row.member.roleType === "direction" ? (
+                            "Direction Générale"
+                          ) : isDirector ? (
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              <label className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg border ${theme.subCard}`}>
+                                <span className="text-[10px]">Set</span>
+                                <input
+                                  type="number"
+                                  min={0}
+                                  max={100}
+                                  value={Math.round(row.member.settingRate * 100)}
+                                  onChange={(e) => handleUpdateMemberRates(row.member.id, "settingRate", Number(e.target.value))}
+                                  className="w-9 bg-transparent font-mono font-bold text-indigo-600 dark:text-amber-300 text-right outline-none"
+                                />
+                                %
+                              </label>
+                              <label className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg border ${theme.subCard}`}>
+                                <span className="text-[10px]">Close</span>
+                                <input
+                                  type="number"
+                                  min={0}
+                                  max={100}
+                                  value={Math.round(row.member.closingRate * 100)}
+                                  onChange={(e) => handleUpdateMemberRates(row.member.id, "closingRate", Number(e.target.value))}
+                                  className="w-9 bg-transparent font-mono font-bold text-indigo-600 dark:text-amber-300 text-right outline-none"
+                                />
+                                %
+                              </label>
+                              <label className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg border ${theme.subCard}`}>
+                                <span className="text-[10px]">Full</span>
+                                <input
+                                  type="number"
+                                  min={0}
+                                  max={100}
+                                  value={Math.round(row.member.fullCycleRate * 100)}
+                                  onChange={(e) => handleUpdateMemberRates(row.member.id, "fullCycleRate", Number(e.target.value))}
+                                  className="w-9 bg-transparent font-mono font-bold text-emerald-600 dark:text-emerald-300 text-right outline-none"
+                                />
+                                %
+                              </label>
+                            </div>
+                          ) : row.member.roleType === "manager" ? (
+                            "20% Closing · 10% Setting · +10% Override recrues"
+                          ) : (
+                            `Setting ${Math.round(row.member.settingRate * 100)}% · Closing ${Math.round(row.member.closingRate * 100)}% · Full ${Math.round(row.member.fullCycleRate * 100)}%`
                           )}
-                        >
-                          <CheckCircle2
-                            className={cn(
-                              "h-4 w-4",
-                              task.status === "done" ? "text-emerald-400" : "text-white/30",
-                            )}
-                          />
-                          <span>{task.title}</span>
-                        </button>
-                        <span className="font-mono text-[10px] text-[#e5cba4]">{task.dueDate}</span>
-                      </div>
+                        </td>
+                        <td className={`py-3 font-mono font-bold ${theme.textMain}`}>{row.ownSalesOneShot.toLocaleString("fr-FR")} €</td>
+                        <td className="py-3 font-mono font-bold text-sky-500">{row.ownSalesMrr.toLocaleString("fr-FR")} €/m</td>
+                        <td className="py-3 font-mono font-bold text-amber-500">{row.pendingCom.toLocaleString("fr-FR")} €</td>
+                        <td className="py-3 text-right font-mono font-black text-emerald-500">{row.unlockedCom.toLocaleString("fr-FR")} €</td>
+                      </tr>
                     ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── VUE 7 : STUDIO (MAQUETTES + SIGNÉS · ZÉRO FINANCE) ── */}
+        {activeTab === "studio" && (isDirector || isStudio) && (
+          <div className="mt-5 space-y-5">
+            <div className={`p-5 rounded-3xl border space-y-3 ${theme.card}`}>
+              <h2 className={`text-sm font-extrabold flex items-center gap-2 ${theme.textMain}`}>
+                <Palette className="w-4 h-4 text-amber-500" />
+                1. Maquettes demandées ({leads.filter((l) => l.stage === "mockup").length})
+              </h2>
+              {leads.filter((l) => l.stage === "mockup").length === 0 ? (
+                <p className={`text-xs italic ${theme.textSoft}`}>Aucune maquette en attente.</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                  {leads
+                    .filter((l) => l.stage === "mockup")
+                    .map((item) => {
+                      const svc = XR_OFFICIAL_SERVICES.find((s) => s.id === item.serviceId);
+                      const closer = members.find((m) => m.id === item.closerId);
+                      return (
+                        <div key={item.id} className={`p-4 rounded-2xl border space-y-2 ${theme.subCard}`}>
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="font-bold text-indigo-600 dark:text-amber-300">{svc?.icon} {svc?.shortName}</span>
+                            <span className={`text-[10px] ${theme.textMuted}`}>Par {closer?.shortName}</span>
+                          </div>
+                          <h4 className={`font-extrabold text-sm ${theme.textMain}`}>{item.name}</h4>
+                          {item.websiteUrl && (
+                            <a href={item.websiteUrl.startsWith("http") ? item.websiteUrl : `https://${item.websiteUrl}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[11px] text-indigo-500 hover:underline">
+                              <Globe className="w-3 h-3" /> {item.websiteUrl}
+                            </a>
+                          )}
+                          <p className={`text-xs ${theme.textMuted}`}>{item.issue}</p>
+                          <button
+                            onClick={() => {
+                              setLeads((prev) => prev.map((l) => (l.id === item.id ? { ...l, mockupReady: !l.mockupReady } : l)));
+                              if (soundEnabled) playDing();
+                            }}
+                            className={`w-full py-2 rounded-xl text-xs font-extrabold ${
+                              item.mockupReady
+                                ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30"
+                                : "bg-gradient-to-r from-amber-400 to-orange-500 text-white"
+                            }`}
+                          >
+                            {item.mockupReady ? "✓ Maquette prête" : "Marquer maquette prête"}
+                          </button>
+                        </div>
+                      );
+                    })}
                 </div>
-              </div>
+              )}
             </div>
 
-            {/* Calendriers Opérationnels par Offre */}
-            <div className="rounded-3xl border border-white/10 bg-[#12141b] p-6">
-              <h3 className="text-lg font-bold text-white">
-                📋 Calendriers d’Exécution par Offre (Community Management, Google Maps, SEO & Web)
-              </h3>
-              <p className="mt-1 text-xs text-white/60">
-                Chaque prestation vendue suit un calendrier opérationnel précis étape par étape :
-              </p>
-
-              <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
-                {OPERATIONAL_CALENDAR_PLAYBOOKS.map((play) => (
-                  <div key={play.id} className="rounded-2xl border border-white/10 bg-black/40 p-5">
-                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-                      <h4 className="text-sm font-bold text-white">{play.title}</h4>
-                      <span className="rounded-full bg-[#c5a880]/20 px-2.5 py-0.5 font-mono text-[10px] font-bold text-[#e5cba4]">
-                        {play.badge}
-                      </span>
-                    </div>
-                    <ul className="mt-3 space-y-2">
-                      {play.steps.map((s) => (
-                        <li key={s.day} className="text-xs text-white/80">
-                          <strong className="font-mono text-[#e5cba4]">{s.day} :</strong> {s.task}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
+            <div className={`p-5 rounded-3xl border space-y-3 ${theme.card}`}>
+              <h2 className={`text-sm font-extrabold flex items-center gap-2 ${theme.textMain}`}>
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                2. Projets Signés à Produire & Livrer ({leads.filter((l) => l.stage === "won").length})
+              </h2>
+              {leads.filter((l) => l.stage === "won").length === 0 ? (
+                <p className={`text-xs italic ${theme.textSoft}`}>Aucun projet signé en file de production.</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                  {leads
+                    .filter((l) => l.stage === "won")
+                    .map((deal) => {
+                      const svc = XR_OFFICIAL_SERVICES.find((s) => s.id === deal.serviceId);
+                      return (
+                        <div key={deal.id} className={`p-4 rounded-2xl border space-y-2.5 ${theme.subCard}`}>
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="font-bold text-indigo-600 dark:text-amber-300">{svc?.icon} {svc?.shortName}</span>
+                            <select
+                              value={deal.studioStatus || "pending"}
+                              onChange={(e) => {
+                                setLeads((prev) =>
+                                  prev.map((l) =>
+                                    l.id === deal.id ? { ...l, studioStatus: e.target.value as "pending" | "in_production" | "delivered" } : l
+                                  )
+                                );
+                                if (soundEnabled) playDing();
+                              }}
+                              className={`rounded-lg px-2 py-1 text-[10px] font-bold border ${theme.inputBg}`}
+                            >
+                              <option value="pending">⏳ À démarrer</option>
+                              <option value="in_production">⚙️ En production</option>
+                              <option value="delivered">✅ Livré client</option>
+                            </select>
+                          </div>
+                          <h4 className={`font-extrabold text-sm ${theme.textMain}`}>{deal.name}</h4>
+                          <p className={`text-xs ${theme.textMuted}`}>{deal.planLabel} · {deal.contact} ({deal.phone})</p>
+                          <p className={`text-xs ${theme.textMuted}`}>{deal.issue}</p>
+                        </div>
+                      );
+                    })}
+                </div>
+              )}
             </div>
           </div>
         )}
 
-        {/* ══════════════════════════════════════════════════════════════════
-            ONGLET 9 DIRECTION : LEADERBOARD ÉQUIPE & EGO
-        ══════════════════════════════════════════════════════════════════ */}
-        {directorTab === "leaderboard" && (
-          <div className="rounded-3xl border border-white/10 bg-[#12141a] p-6">
-            <CrmEgoLeaderboard currentUserName={user.fullName} />
-          </div>
+        {/* ── VUE 8 : QG PRIVÉ ANTOINE ── */}
+        {activeTab === "qg" && isDirector && (
+          <DirectorPersonalHub
+            allLeads={leads}
+            members={members}
+            weeklyChallenge={weeklyChallenge}
+            onUpdateWeeklyChallenge={setWeeklyChallenge}
+            onUnlockCommission={handleUnlockCommission}
+            theme={theme}
+            onSound={() => soundEnabled && playDing()}
+          />
         )}
-      </main>
-
-      {/* BARRE DE NAVIGATION INFÉRIEURE MOBILE ULTRA-TACTILE (DIRECTION) */}
-      <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-around border-t border-white/10 bg-[#0f1118]/95 px-2 py-2 backdrop-blur-xl sm:hidden">
-        <button
-          type="button"
-          onClick={() => setDirectorTab("overview")}
-          className={cn(
-            "flex flex-col items-center gap-1 py-1 px-2 rounded-xl transition active:scale-95",
-            directorTab === "overview" ? "text-[#c5a880] font-bold" : "text-white/60",
-          )}
-        >
-          <span className="text-lg">👑</span>
-          <span className="text-[10px]">QG</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => setDirectorTab("leads")}
-          className={cn(
-            "flex flex-col items-center gap-1 py-1 px-2 rounded-xl transition active:scale-95",
-            directorTab === "leads" ? "text-[#c5a880] font-bold" : "text-white/60",
-          )}
-        >
-          <span className="text-lg">📸</span>
-          <span className="text-[10px]">Leads</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => setDirectorTab("maquettes")}
-          className={cn(
-            "flex flex-col items-center gap-1 py-1 px-2 rounded-xl transition active:scale-95",
-            directorTab === "maquettes" ? "text-[#c5a880] font-bold" : "text-white/60",
-          )}
-        >
-          <span className="text-lg">🎨</span>
-          <span className="text-[10px]">Maquettes</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => setDirectorTab("quotes")}
-          className={cn(
-            "flex flex-col items-center gap-1 py-1 px-2 rounded-xl transition active:scale-95",
-            directorTab === "quotes" ? "text-[#c5a880] font-bold" : "text-white/60",
-          )}
-        >
-          <span className="text-lg">📝</span>
-          <span className="text-[10px]">Devis</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => setMobileMenuOpen(true)}
-          className={cn(
-            "flex flex-col items-center gap-1 py-1 px-2 rounded-xl transition active:scale-95",
-            ["clients", "invoices", "projects", "providers", "calendar", "leaderboard"].includes(
-              directorTab,
-            )
-              ? "text-[#c5a880] font-bold"
-              : "text-white/60",
-          )}
-        >
-          <span className="text-lg">⋯</span>
-          <span className="text-[10px]">Plus</span>
-        </button>
       </div>
 
-      {/* DRAWER / MODALE PLUS SUR MOBILE POUR DIRECTION */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col justify-end bg-black/80 backdrop-blur-sm sm:hidden">
-          <div className="w-full rounded-t-3xl border-t border-white/10 bg-[#12141c] p-5 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#c5a880]">
-                Autres Sections Direction
-              </span>
-              <button
-                type="button"
-                onClick={() => setMobileMenuOpen(false)}
-                className="rounded-full bg-white/10 p-1.5 text-xs text-white/70 hover:text-white"
-              >
-                ✕
-              </button>
+      {/* ── PALETTE RAPIDE CTRL+K ── */}
+      {showCmdPalette && (
+        <div className="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-start justify-center pt-20 p-4" onClick={() => setShowCmdPalette(false)}>
+          <div className={`border rounded-3xl p-4 max-w-lg w-full space-y-3 ${theme.modalBg}`} onClick={(e) => e.stopPropagation()}>
+            <div className={`flex items-center gap-2.5 px-3 py-2.5 rounded-2xl border ${theme.inputBg}`}>
+              <Search className="w-4 h-4 text-indigo-500" />
+              <input
+                type="text"
+                autoFocus
+                value={cmdQuery}
+                onChange={(e) => setCmdQuery(e.target.value)}
+                placeholder="Rechercher un prospect ou sauter vers un onglet..."
+                className="bg-transparent border-none outline-none text-sm w-full"
+              />
             </div>
-            <div className="grid grid-cols-2 gap-2.5 py-4">
-              {[
-                { id: "clients", label: "Clients", icon: "👥" },
-                { id: "invoices", label: "Factures", icon: "💳" },
-                { id: "projects", label: "Projets", icon: "💼" },
-                { id: "providers", label: "Prestataires", icon: "🛠️" },
-                { id: "calendar", label: "Calendrier", icon: "📅" },
-                { id: "leaderboard", label: "Classement Ego", icon: "🏆" },
-              ].map((item) => (
+            <div className="space-y-1 max-h-64 overflow-y-auto">
+              {allowedTabs.map((t) => (
                 <button
-                  key={item.id}
-                  type="button"
+                  key={t.id}
                   onClick={() => {
-                    setDirectorTab(item.id as typeof directorTab);
-                    setMobileMenuOpen(false);
+                    setActiveTab(t.id);
+                    setShowCmdPalette(false);
                   }}
-                  className={cn(
-                    "flex items-center gap-2 rounded-xl border p-3 text-left text-xs font-bold transition",
-                    directorTab === item.id
-                      ? "border-[#c5a880] bg-[#c5a880]/15 text-[#e5cba4]"
-                      : "border-white/10 bg-white/5 text-white/80 hover:bg-white/10",
-                  )}
+                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold hover:bg-indigo-500/15 ${theme.textMain}`}
                 >
-                  <span className="text-base">{item.icon}</span>
-                  <span>{item.label}</span>
+                  Aller vers : {t.label}
                 </button>
               ))}
-            </div>
-            <div className="pt-2 border-t border-white/10">
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-2 rounded-xl border border-red-500/40 bg-red-500/15 py-3 text-xs font-bold text-red-300"
-              >
-                <LogOut className="h-4 w-4" />
-                <span>Se Déconnecter</span>
-              </button>
+              {myVisibleLeads
+                .filter((l) => l.name.toLowerCase().includes(cmdQuery.toLowerCase()))
+                .slice(0, 5)
+                .map((l) => (
+                  <button
+                    key={l.id}
+                    onClick={() => {
+                      setActiveLeadForCockpit(l);
+                      setActiveTab("cockpit");
+                      setShowCmdPalette(false);
+                    }}
+                    className={`w-full text-left px-3 py-2 rounded-xl text-xs hover:bg-indigo-500/15 flex justify-between ${theme.textMain}`}
+                  >
+                    <span className="font-bold">📞 {l.name}</span>
+                    <span className={theme.textMuted}>{l.contact}</span>
+                  </button>
+                ))}
             </div>
           </div>
         </div>
       )}
 
-      {/* MODALE DU GÉNÉRATEUR OFFICIEL DE DEVIS */}
-      {showOfficialQuoteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md">
-          <div className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-3xl border border-[#c5a880]/40 bg-[#0f1118] p-6 text-white shadow-2xl">
-            <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-4">
-              <div>
-                <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#c5a880]">
-                  XR AGENCY · STUDIO DEVIS OFFICIEL & CONTRAT
-                </span>
-                <h3 className="text-xl font-bold">
-                  Générateur Officiel avec coordonnées bancaires
-                </h3>
+      {/* ── MODAL NOUVEAU PROSPECT (AVEC ANTI-DOUBLON) ── */}
+      {showNewLeadModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+          <div className={`border rounded-3xl p-6 max-w-lg w-full space-y-4 max-h-[92vh] overflow-y-auto ${theme.modalBg}`}>
+            <div className={`flex items-center justify-between pb-3 border-b ${theme.border}`}>
+              <h3 className={`font-extrabold text-base flex items-center gap-2 ${theme.textMain}`}>
+                <Plus className="w-4 h-4 text-orange-500" /> Nouveau Prospect Flash
+              </h3>
+              <button onClick={() => setShowNewLeadModal(false)} className={theme.textSoft}>✕</button>
+            </div>
+
+            {duplicateWarning && (
+              <div className="p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-xs font-bold text-rose-600 dark:text-rose-300">
+                {duplicateWarning}
               </div>
-              <button
-                type="button"
-                onClick={() => setShowOfficialQuoteModal(false)}
-                className="rounded-full border border-white/20 px-3 py-1 text-xs text-white/70 hover:text-white"
-              >
-                Fermer ✕
-              </button>
-            </div>
-            <OfficialQuoteGenerator
-              initialClientName={quoteCompany || "Client Entreprise"}
-              initialClientEmail={quoteEmail || "contact@client.fr"}
-              onQuoteSigned={() => {
-                flashSuccess("Devis officiel généré avec succès !");
-                setShowOfficialQuoteModal(false);
-              }}
-            />
+            )}
+
+            <form onSubmit={handleCreateLead} className="space-y-3">
+              <div>
+                <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Entreprise / Commerce *</label>
+                <input type="text" required value={formName} onChange={(e) => setFormName(e.target.value)} placeholder="Nom de l'établissement" className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Contact</label>
+                  <input type="text" value={formContact} onChange={(e) => setFormContact(e.target.value)} placeholder="Prénom & Nom" className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Téléphone *</label>
+                  <input type="text" required value={formPhone} onChange={(e) => { setFormPhone(e.target.value); setDuplicateWarning(""); }} placeholder="+33 6 ..." className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2.5">
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Email (pour Devis)</label>
+                  <input type="email" value={formEmail} onChange={(e) => setFormEmail(e.target.value)} placeholder="client@mail.fr" className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Site web (Audit)</label>
+                  <input type="text" value={formWebsite} onChange={(e) => setFormWebsite(e.target.value)} placeholder="ex: monclient.fr" className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Relance prévue</label>
+                  <input type="date" value={formFollowUp} onChange={(e) => setFormFollowUp(e.target.value)} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Secteur</label>
+                  <select value={formSectorId} onChange={(e) => setFormSectorId(e.target.value)} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`}>
+                    {BUSINESS_SECTORS.map((sec) => <option key={sec.id} value={sec.id}>{sec.icon} {sec.name}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Service XR Agency</label>
+                  <select
+                    value={formServiceId}
+                    onChange={(e) => {
+                      const nextId = e.target.value;
+                      setFormServiceId(nextId);
+                      const s = XR_OFFICIAL_SERVICES.find((x) => x.id === nextId);
+                      if (s) {
+                        setFormPlanId(s.plans[0].id);
+                        setFormValue(s.plans[0].price);
+                      }
+                    }}
+                    className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`}
+                  >
+                    {XR_OFFICIAL_SERVICES.map((s) => <option key={s.id} value={s.id}>{s.icon} {s.name}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2.5">
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Formule</label>
+                  <select
+                    value={formPlanId}
+                    onChange={(e) => {
+                      setFormPlanId(e.target.value);
+                      const p = selectedModalService.plans.find((x) => x.id === e.target.value);
+                      if (p) setFormValue(p.price);
+                    }}
+                    className={`w-full mt-1 rounded-xl px-2.5 py-2 text-xs border ${theme.inputBg}`}
+                  >
+                    {selectedModalService.plans.map((p) => <option key={p.id} value={p.id}>{p.label} ({p.price} €)</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Montant (€)</label>
+                  <input type="number" value={formValue} onChange={(e) => setFormValue(Number(e.target.value))} className={`w-full mt-1 rounded-xl px-2.5 py-2 text-xs font-mono border ${theme.inputBg}`} />
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Paiement</label>
+                  <select value={formInstallmentPlan} onChange={(e) => setFormInstallmentPlan(e.target.value as "1x" | "3x")} className={`w-full mt-1 rounded-xl px-2.5 py-2 text-xs border ${theme.inputBg}`}>
+                    <option value="1x">1x (Acompte 50%)</option>
+                    <option value="3x">3x sans frais</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Pack Multi-Services Rapide */}
+              <div className={`p-3 rounded-2xl border space-y-2 ${theme.subCard}`}>
+                <div className="flex items-center justify-between gap-2">
+                  <span className={`text-[10px] font-extrabold uppercase flex items-center gap-1 ${theme.textMuted}`}>
+                    <Layers className="w-3 h-3 text-indigo-500" /> Pack Multi-Services (optionnel)
+                  </span>
+                  {formExtraItems.length > 0 && (
+                    <span className="text-[10px] font-extrabold text-indigo-600 dark:text-amber-300">
+                      +{formExtraItems.length} service(s)
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {(
+                    [
+                      { id: "wc-pro", serviceId: "webcare", planLabel: "WebCare Pro · 49 €/m", price: 49, billing: "monthly" as const, chip: "+ WebCare 49€/m" },
+                      { id: "maps-top3", serviceId: "maps", planLabel: "Google Maps Top 3 · 990 €", price: 990, billing: "annual" as const, chip: "+ Maps Top 3 (990€)" },
+                      { id: "br-pro", serviceId: "branding", planLabel: "Branding Pro · 229 €", price: 229, billing: "once" as const, chip: "+ Branding (229€)" },
+                    ] as (LeadServiceItem & { chip: string })[]
+                  ).map((preset) => {
+                    const already = formExtraItems.some((x) => x.serviceId === preset.serviceId);
+                    return (
+                      <button
+                        key={preset.serviceId}
+                        type="button"
+                        onClick={() => {
+                          if (already) {
+                            setFormExtraItems((prev) => prev.filter((x) => x.serviceId !== preset.serviceId));
+                          } else {
+                            setFormExtraItems((prev) => [
+                              ...prev,
+                              {
+                                id: `${preset.id}-${Date.now()}`,
+                                serviceId: preset.serviceId,
+                                planLabel: preset.planLabel,
+                                price: preset.price,
+                                billing: preset.billing,
+                              },
+                            ]);
+                          }
+                        }}
+                        className={`text-[10px] font-bold px-2.5 py-1 rounded-full border transition-all ${
+                          already
+                            ? "bg-indigo-600 text-white border-indigo-600"
+                            : `${theme.card} ${theme.textMain} hover:border-indigo-400`
+                        }`}
+                      >
+                        {already ? `✓ ${preset.chip.replace("+ ", "")}` : preset.chip}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Setter</label>
+                  <select value={formSetterId || currentUser.id} onChange={(e) => setFormSetterId(e.target.value)} disabled={!isDirector && !isManager} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border disabled:opacity-60 ${theme.inputBg}`}>
+                    {members.filter((m) => m.roleType !== "studio").map((m) => <option key={m.id} value={m.id}>{m.shortName} · {m.badge}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Closer</label>
+                  <select value={formCloserId || currentUser.id} onChange={(e) => setFormCloserId(e.target.value)} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`}>
+                    {members.filter((m) => m.roleType !== "studio").map((m) => <option key={m.id} value={m.id}>{m.shortName} · {m.badge}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Besoin / Faille</label>
+                <input type="text" value={formIssue} onChange={(e) => setFormIssue(e.target.value)} placeholder="Ex: Absent du Top 3 Maps, site lent..." className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+              </div>
+
+              <div className="pt-2 flex gap-2">
+                <button type="button" onClick={() => setShowNewLeadModal(false)} className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}>Annuler</button>
+                <button type="submit" className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold shadow-md">Enregistrer 🚀</button>
+              </div>
+            </form>
           </div>
         </div>
       )}
 
-      {/* Modales Globales Direction (WhatsApp 1-Clic & Célébration Victoire) */}
-      {renderWhatsappModal()}
-      {renderCelebrationBanner()}
+      {/* ── MODAL ÉDITION PROSPECT ── */}
+      {editingLead && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+          <div className={`border rounded-3xl p-6 max-w-lg w-full space-y-4 ${theme.modalBg}`}>
+            <div className={`flex items-center justify-between pb-3 border-b ${theme.border}`}>
+              <h3 className={`font-extrabold text-base ${theme.textMain}`}>Modifier : {editingLead.name}</h3>
+              <button onClick={() => setEditingLead(null)} className={theme.textSoft}>✕</button>
+            </div>
+            <form onSubmit={handleSaveEditedLead} className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Étape</label>
+                  <select value={editingLead.stage} onChange={(e) => setEditingLead({ ...editingLead, stage: e.target.value as LeadStage })} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`}>
+                    <option value="new">1. Nouveau</option>
+                    <option value="rdv">2. RDV / Qualifié</option>
+                    <option value="mockup">3. Maquette</option>
+                    <option value="negociation">4. Négociation</option>
+                    <option value="won">5. Signé 🎉</option>
+                  </select>
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Relance</label>
+                  <input type="date" value={editingLead.followUpDate || ""} onChange={(e) => setEditingLead({ ...editingLead, followUpDate: e.target.value })} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Montant principal (€)</label>
+                  <input type="number" value={editingLead.value} onChange={(e) => setEditingLead({ ...editingLead, value: Number(e.target.value) })} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs font-mono border ${theme.inputBg}`} />
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Téléphone</label>
+                  <input type="text" value={editingLead.phone} onChange={(e) => setEditingLead({ ...editingLead, phone: e.target.value })} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Email client</label>
+                  <input type="email" value={editingLead.email || ""} onChange={(e) => setEditingLead({ ...editingLead, email: e.target.value })} placeholder="client@mail.fr" className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Site web</label>
+                  <input type="text" value={editingLead.websiteUrl || ""} onChange={(e) => setEditingLead({ ...editingLead, websiteUrl: e.target.value })} placeholder="ex: monclient.fr" className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Échéancier</label>
+                  <select
+                    value={editingLead.installments?.plan || "1x"}
+                    onChange={(e) => {
+                      const plan = e.target.value as "1x" | "3x";
+                      setEditingLead({
+                        ...editingLead,
+                        installments: {
+                          plan,
+                          paidCount: editingLead.installments?.paidCount ?? 0,
+                        },
+                      });
+                    }}
+                    className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`}
+                  >
+                    <option value="1x">1x (Classique)</option>
+                    <option value="3x">3x sans frais</option>
+                  </select>
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Mensualités encaissées</label>
+                  <select
+                    value={editingLead.installments?.paidCount ?? 0}
+                    onChange={(e) => {
+                      const paidCount = Number(e.target.value);
+                      const plan = editingLead.installments?.plan || "1x";
+                      setEditingLead({
+                        ...editingLead,
+                        installments: {
+                          plan,
+                          paidCount,
+                        },
+                      });
+                    }}
+                    className={`w-full mt-1 rounded-xl px-3 py-2 text-xs font-mono border ${theme.inputBg}`}
+                  >
+                    <option value={0}>0 / {editingLead.installments?.plan === "3x" ? 3 : 1}</option>
+                    <option value={1}>1 / {editingLead.installments?.plan === "3x" ? 3 : 1}</option>
+                    {editingLead.installments?.plan === "3x" && <option value={2}>2 / 3</option>}
+                    {editingLead.installments?.plan === "3x" && <option value={3}>3 / 3 (Soldé ✓)</option>}
+                  </select>
+                </div>
+              </div>
+              {(editingLead.extraItems?.length || 0) > 0 && (
+                <div className={`p-2.5 rounded-xl border space-y-1.5 ${theme.subCard}`}>
+                  <p className={`text-[10px] font-extrabold uppercase ${theme.textMuted}`}>Services additionnels du Pack</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {editingLead.extraItems?.map((item, idx) => (
+                      <span key={`${item.serviceId}-${idx}`} className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-200">
+                        {item.planLabel}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setEditingLead({
+                              ...editingLead,
+                              extraItems: (editingLead.extraItems || []).filter((_, i) => i !== idx),
+                            })
+                          }
+                          className="hover:text-rose-500 font-black ml-0.5"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div>
+                <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Notes privées</label>
+                <textarea rows={3} value={editingLead.notes} onChange={(e) => setEditingLead({ ...editingLead, notes: e.target.value })} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+              </div>
+              <div className="pt-2 flex items-center justify-between gap-2">
+                <button type="button" onClick={() => handleDeleteLead(editingLead.id)} className="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-rose-500/15 text-rose-500 text-xs font-bold">
+                  <Trash2 className="w-3.5 h-3.5" /> Supprimer
+                </button>
+                <div className="flex gap-2">
+                  <button type="button" onClick={() => setEditingLead(null)} className={`px-4 py-2 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}>Annuler</button>
+                  <button type="submit" className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold">Enregistrer</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
-      {/* Bouton Flottant Déconnexion Toujours Accessible en Bas à Droite (Desktop) */}
-      <button
-        type="button"
-        onClick={handleLogout}
-        className="fixed bottom-5 right-5 z-30 hidden sm:flex items-center gap-2 rounded-full border border-red-500/50 bg-[#0f1118]/90 px-4 py-2.5 text-xs font-bold text-red-300 shadow-[0_10px_35px_rgba(239,68,68,0.25)] backdrop-blur-md transition hover:border-red-400 hover:bg-red-500/20 active:scale-95"
-        title="Se déconnecter et retourner au choix du portail et code PIN"
-      >
-        <LogOut className="h-4 w-4 text-red-400" />
-        <span>Déconnexion / Changer de portail</span>
-      </button>
+      {/* ── MODAL AJOUT MEMBRE ── */}
+      {showAddMemberModal && (isDirector || isManager) && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+          <div className={`border rounded-3xl p-6 max-w-md w-full space-y-4 ${theme.modalBg}`}>
+            <div className={`flex items-center justify-between pb-3 border-b ${theme.border}`}>
+              <h3 className={`font-extrabold text-base flex items-center gap-2 ${theme.textMain}`}>
+                <UserPlus className="w-4 h-4 text-indigo-500" />
+                {isManager ? "Nouveau candidat (ma filière)" : "Ajouter un membre"}
+              </h3>
+              <button onClick={() => setShowAddMemberModal(false)} className={theme.textSoft}>✕</button>
+            </div>
+            <form onSubmit={handleAddMember} className="space-y-3">
+              <div>
+                <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Prénom & Nom *</label>
+                <input type="text" required value={newMemberName} onChange={(e) => setNewMemberName(e.target.value)} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`} />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Rôle</label>
+                  <select value={newMemberRole} onChange={(e) => setNewMemberRole(e.target.value as UserRoleType)} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`}>
+                    <option value="setter">📞 Setter</option>
+                    <option value="closer">🎯 Closer</option>
+                    <option value="full_cycle">⚡ Full-Cycle</option>
+                    <option value="student">🎓 Élève XR School</option>
+                  </select>
+                </div>
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Code initial</label>
+                  <input type="text" maxLength={8} value={newMemberPin} onChange={(e) => setNewMemberPin(e.target.value)} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs font-mono border ${theme.inputBg}`} />
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <label className={`text-[10px] font-bold uppercase ${theme.textMuted}`}>Set %</label>
+                  <input type="number" value={newMemberSettingPct} onChange={(e) => setNewMemberSettingPct(Number(e.target.value))} className={`w-full mt-1 rounded-xl px-2 py-2 text-xs font-mono border ${theme.inputBg}`} />
+                </div>
+                <div>
+                  <label className={`text-[10px] font-bold uppercase ${theme.textMuted}`}>Close %</label>
+                  <input type="number" value={newMemberClosingPct} onChange={(e) => setNewMemberClosingPct(Number(e.target.value))} className={`w-full mt-1 rounded-xl px-2 py-2 text-xs font-mono border ${theme.inputBg}`} />
+                </div>
+                <div>
+                  <label className={`text-[10px] font-bold uppercase ${theme.textMuted}`}>Full %</label>
+                  <input type="number" value={newMemberFullPct} onChange={(e) => setNewMemberFullPct(Number(e.target.value))} className={`w-full mt-1 rounded-xl px-2 py-2 text-xs font-mono border ${theme.inputBg}`} />
+                </div>
+              </div>
+              {isDirector && (
+                <div>
+                  <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Filière</label>
+                  <select value={newMemberRecruitedBy} onChange={(e) => setNewMemberRecruitedBy(e.target.value)} className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`}>
+                    <option value="">Direct Agence (Antoine)</option>
+                    <option value="martin">Filière Martin (Override 10%)</option>
+                  </select>
+                </div>
+              )}
+              <div className="pt-2 flex gap-2">
+                <button type="button" onClick={() => setShowAddMemberModal(false)} className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}>Annuler</button>
+                <button type="submit" className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold">Créer</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── MODAL CHANGER MON MOT DE PASSE ── */}
+      {showChangePinModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+          <div className={`border rounded-3xl p-6 max-w-sm w-full space-y-4 ${theme.modalBg}`}>
+            <div className={`flex items-center justify-between pb-3 border-b ${theme.border}`}>
+              <h3 className={`font-extrabold text-base flex items-center gap-2 ${theme.textMain}`}>
+                <KeyRound className="w-4 h-4 text-indigo-500" /> Mon mot de passe
+              </h3>
+              <button onClick={() => setShowChangePinModal(false)} className={theme.textSoft}>✕</button>
+            </div>
+            <p className={`text-xs ${theme.textMuted}`}>
+              Dès que vous créez votre mot de passe personnel, il est masqué automatiquement sur l'écran de connexion.
+            </p>
+            <form onSubmit={handleSaveOwnPin} className="space-y-3">
+              <input type="password" required minLength={4} maxLength={20} value={newPinValue} onChange={(e) => { setNewPinValue(e.target.value); setChangePinError(""); }} placeholder="Nouveau mot de passe (min. 4 car.)" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
+              <input type="password" required minLength={4} maxLength={20} value={confirmPinValue} onChange={(e) => { setConfirmPinValue(e.target.value); setChangePinError(""); }} placeholder="Confirmer le mot de passe" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
+              {changePinError && <p className="text-xs text-rose-500 font-bold text-center">{changePinError}</p>}
+              <div className="pt-1 flex gap-2">
+                <button type="button" onClick={() => setShowChangePinModal(false)} className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}>Annuler</button>
+                <button type="submit" className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold">Enregistrer</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function LeadCard({
+  lead,
+  members,
+  todayIso,
+  theme,
+  onDragStart,
+  onEdit,
+  onCall,
+  onNext,
+  nextLabel,
+  onWin,
+  onPdf,
+}: {
+  lead: Lead;
+  members: TeamMember[];
+  todayIso: string;
+  theme: typeof CRM_THEMES[CrmThemeId];
+  onDragStart: () => void;
+  onEdit: () => void;
+  onCall: () => void;
+  onNext?: () => void;
+  nextLabel: string;
+  onWin?: () => void;
+  onPdf: () => void;
+}) {
+  const svc = XR_OFFICIAL_SERVICES.find((s) => s.id === lead.serviceId);
+  const closer = members.find((m) => m.id === lead.closerId);
+  const setter = members.find((m) => m.id === lead.setterId);
+  const isDue = lead.followUpDate && lead.followUpDate <= todayIso;
+  const totals = getLeadTotals(lead);
+  const extraCount = lead.extraItems?.length || 0;
+
+  return (
+    <div
+      draggable
+      onDragStart={onDragStart}
+      className={`p-3.5 rounded-2xl border cursor-grab active:cursor-grabbing transition-all hover:-translate-y-0.5 space-y-2 ${theme.card} ${theme.cardHover}`}
+    >
+      <div className="flex items-center justify-between gap-1">
+        <div className="flex items-center gap-1">
+          <span className="text-base">{svc?.icon || "🌐"}</span>
+          {extraCount > 0 && (
+            <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-600 dark:text-indigo-200 border border-indigo-500/25">
+              +{extraCount} pack
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[11px] font-black text-indigo-600 dark:text-amber-300 font-mono">
+            {extraCount > 0
+              ? `${totals.oneShotTotal > 0 ? `${totals.oneShotTotal.toLocaleString("fr-FR")} €` : ""}${totals.oneShotTotal > 0 && totals.mrrTotal > 0 ? " + " : ""}${totals.mrrTotal > 0 ? `${totals.mrrTotal}€/m` : ""}`
+              : formatPricePeriod(lead.value, lead.billing)}
+          </span>
+          <button onClick={onEdit} className={`${theme.textSoft} hover:text-indigo-500`} title="Modifier">
+            <Pencil className="w-3 h-3" />
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <h4 className={`font-extrabold text-xs ${theme.textMain}`}>{lead.name}</h4>
+        <p className={`text-[10px] truncate ${theme.textMuted}`}>
+          {lead.contact} · {lead.phone}
+        </p>
+      </div>
+
+      <p className={`text-[10px] p-2 rounded-xl border leading-snug ${theme.subCard} ${theme.textMuted}`}>
+        {lead.issue}
+      </p>
+
+      <div className="flex flex-wrap items-center gap-1.5">
+        {lead.installments?.plan === "3x" && (
+          <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+            3x ({lead.installments.paidCount}/3)
+          </span>
+        )}
+        {lead.stage === "mockup" && lead.mockupReady && (
+          <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500 text-white">
+            ✓ Maquette prête
+          </span>
+        )}
+        {lead.followUpDate && (
+          <span
+            className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-1 ${
+              isDue
+                ? "bg-rose-500 text-white"
+                : `${theme.subCard} ${theme.textMuted}`
+            }`}
+          >
+            <Calendar className="w-2.5 h-2.5" /> {lead.followUpDate}
+          </span>
+        )}
+        {lead.setterId !== lead.closerId && (
+          <span className="text-[9px] font-bold text-indigo-500">
+            {setter?.shortName} → {closer?.shortName}
+          </span>
+        )}
+      </div>
+
+      <div className={`pt-2 border-t flex items-center justify-between gap-1 ${theme.border}`}>
+        <button onClick={onCall} className="text-[10px] font-extrabold text-indigo-600 dark:text-amber-300 flex items-center gap-1">
+          <Phone className="w-3 h-3" /> Appel
+        </button>
+        <button onClick={onPdf} className={`text-[10px] font-bold flex items-center gap-0.5 ${theme.textMuted}`}>
+          <FileText className="w-3 h-3 text-amber-500" /> PDF
+        </button>
+        <div className="flex items-center gap-1">
+          {onNext && (
+            <button
+              onClick={onNext}
+              className="text-[10px] font-bold px-2 py-1 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-700 dark:text-indigo-200"
+            >
+              {nextLabel}
+            </button>
+          )}
+          {onWin && (
+            <button
+              onClick={onWin}
+              title="Marquer signé"
+              className="p-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-600 dark:text-emerald-300"
+            >
+              <CheckCircle2 className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

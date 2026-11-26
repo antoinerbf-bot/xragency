@@ -1804,10 +1804,10 @@ export function QuoteConfiguratorCompact() {
                   </div>
                 </div>
 
-                {/* 2. SITUATION ACTUELLE */}
+                {/* 3. SITUATION ACTUELLE */}
                 <div>
                   <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
-                    2. Votre Situation Actuelle
+                    3. Votre Situation Actuelle
                   </label>
                   <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
                     {CURRENT_SITUATIONS.map((sit) => {
@@ -1842,10 +1842,10 @@ export function QuoteConfiguratorCompact() {
                   </div>
                 </div>
 
-                {/* 3. FOURCHETTE BUDGÉTAIRE */}
+                {/* 4. FOURCHETTE BUDGÉTAIRE */}
                 <div>
                   <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
-                    3. Budget Envisagé
+                    4. Budget Envisagé
                   </label>
                   <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
                     {BUDGET_TIERS.map((tier) => {
@@ -1907,7 +1907,7 @@ export function QuoteConfiguratorCompact() {
                 <div>
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <label className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
-                      4. Vos Leviers d'Action & Services
+                      5. Vos Leviers d'Action & Services
                     </label>
                     <span className="text-xs text-[#57534B]">Sélectionnez ou ajustez librement</span>
                   </div>

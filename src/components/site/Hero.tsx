@@ -370,9 +370,9 @@ export function Hero() {
               <ArrowRight className="h-3.5 w-3.5 text-black" />
             </a>
 
-            {/* Secondary Action: Minimalist Translucent Showreel */}
+            {/* Secondary Action: Minimalist Translucent Method Link */}
             <a
-              href="#quote"
+              href="/methode"
               className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/45 bg-white/8 px-5 text-xs sm:text-sm font-medium text-white backdrop-blur-md transition-all duration-300 hover:bg-white/15 hover:border-white/70"
             >
               <span>{c.ctaSecondary}</span>
@@ -400,7 +400,7 @@ export function Hero() {
           </div>
 
           <a
-            href="#quote"
+            href="#services"
             className="hidden items-center gap-2 text-xs font-mono uppercase tracking-widest text-white/70 transition hover:text-[#E5C696] lg:inline-flex"
           >
             <span>{c.scroll}</span>

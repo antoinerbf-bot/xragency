@@ -32,6 +32,8 @@ import { Route as ApiAuditRouteImport } from './routes/api/audit'
 import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiCreateCheckoutRouteImport } from './routes/api/create-checkout'
 import { Route as ApiCrmRouteImport } from './routes/api/crm'
+import { Route as ApiCrmAuthRouteImport } from './routes/api/crm-auth'
+import { Route as ApiCrmSyncRouteImport } from './routes/api/crm-sync'
 import { Route as ApiSendQuoteRouteImport } from './routes/api/send-quote'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardAuditsRouteImport } from './routes/dashboard/audits'
@@ -163,6 +165,16 @@ const ApiCrmRoute = ApiCrmRouteImport.update({
   path: '/api/crm',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCrmAuthRoute = ApiCrmAuthRouteImport.update({
+  id: '/api/crm-auth',
+  path: '/api/crm-auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCrmSyncRoute = ApiCrmSyncRouteImport.update({
+  id: '/api/crm-sync',
+  path: '/api/crm-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiSendQuoteRoute = ApiSendQuoteRouteImport.update({
   id: '/api/send-quote',
   path: '/api/send-quote',
@@ -259,6 +271,8 @@ export interface FileRoutesByFullPath {
   '/api/contact': typeof ApiContactRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
   '/api/crm': typeof ApiCrmRoute
+  '/api/crm-auth': typeof ApiCrmAuthRoute
+  '/api/crm-sync': typeof ApiCrmSyncRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
@@ -297,6 +311,8 @@ export interface FileRoutesByTo {
   '/api/contact': typeof ApiContactRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
   '/api/crm': typeof ApiCrmRoute
+  '/api/crm-auth': typeof ApiCrmAuthRoute
+  '/api/crm-sync': typeof ApiCrmSyncRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
@@ -337,6 +353,8 @@ export interface FileRoutesById {
   '/api/contact': typeof ApiContactRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
   '/api/crm': typeof ApiCrmRoute
+  '/api/crm-auth': typeof ApiCrmAuthRoute
+  '/api/crm-sync': typeof ApiCrmSyncRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
@@ -378,6 +396,8 @@ export interface FileRouteTypes {
     | '/api/contact'
     | '/api/create-checkout'
     | '/api/crm'
+    | '/api/crm-auth'
+    | '/api/crm-sync'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
@@ -416,6 +436,8 @@ export interface FileRouteTypes {
     | '/api/contact'
     | '/api/create-checkout'
     | '/api/crm'
+    | '/api/crm-auth'
+    | '/api/crm-sync'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
@@ -455,6 +477,8 @@ export interface FileRouteTypes {
     | '/api/contact'
     | '/api/create-checkout'
     | '/api/crm'
+    | '/api/crm-auth'
+    | '/api/crm-sync'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
@@ -495,6 +519,8 @@ export interface RootRouteChildren {
   ApiContactRoute: typeof ApiContactRoute
   ApiCreateCheckoutRoute: typeof ApiCreateCheckoutRoute
   ApiCrmRoute: typeof ApiCrmRoute
+  ApiCrmAuthRoute: typeof ApiCrmAuthRoute
+  ApiCrmSyncRoute: typeof ApiCrmSyncRoute
   ApiSendQuoteRoute: typeof ApiSendQuoteRoute
   ServicesServiceIdRoute: typeof ServicesServiceIdRoute
   ServicesCrmRoute: typeof ServicesCrmRoute
@@ -667,6 +693,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiCrmRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/crm-auth': {
+      id: '/api/crm-auth'
+      path: '/api/crm-auth'
+      fullPath: '/api/crm-auth'
+      preLoaderRoute: typeof ApiCrmAuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/crm-sync': {
+      id: '/api/crm-sync'
+      path: '/api/crm-sync'
+      fullPath: '/api/crm-sync'
+      preLoaderRoute: typeof ApiCrmSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/send-quote': {
       id: '/api/send-quote'
       path: '/api/send-quote'
@@ -835,6 +875,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiContactRoute: ApiContactRoute,
   ApiCreateCheckoutRoute: ApiCreateCheckoutRoute,
   ApiCrmRoute: ApiCrmRoute,
+  ApiCrmAuthRoute: ApiCrmAuthRoute,
+  ApiCrmSyncRoute: ApiCrmSyncRoute,
   ApiSendQuoteRoute: ApiSendQuoteRoute,
   ServicesServiceIdRoute: ServicesServiceIdRoute,
   ServicesCrmRoute: ServicesCrmRoute,

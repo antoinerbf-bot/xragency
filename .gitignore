@@ -38,3 +38,4 @@ dist-ssr
 scripts/ffmpeg
 supabase/.temp/
 .data/
+jg-carglow/

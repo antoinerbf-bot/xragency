@@ -1311,13 +1311,13 @@ export function CustomCrmShowcase() {
             ════════════════════════════════════════════════════════════════ */}
         <div className="space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-[#d4af37]">
+            <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-[#9E7F5A]">
               TRANSPARENCE TARIFAIRE TOTALE
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white">
+            <h2 className="text-2xl sm:text-4xl font-black text-[#12110E]">
               Quelle formule correspond à votre entreprise ?
             </h2>
-            <p className="text-xs sm:text-sm text-neutral-300">
+            <p className="text-xs sm:text-sm text-[#5C554B]">
               Du restaurant indépendant qui veut rentabiliser son outil en 3 semaines, au groupe qui
               veut une immersion 3D digne d&apos;un jeu vidéo.
             </p>

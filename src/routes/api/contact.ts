@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Resend } from "resend";
 import { recordLeadFromWebsite } from "@/lib/crm-store";
+import { pushWebsiteLeadToCrm } from "./crm-sync";
 
 const escapeHtml = (value: string) =>
   value.replace(/[&<>"']/g, (character) => {
@@ -59,7 +60,7 @@ export const Route = createFileRoute("/api/contact")({
             );
           }
 
-          // Enregistrement systématique et résilient dans le CRM interne
+          // Enregistrement systématique et résilient dans le CRM interne + Supabase Live
           const crmResult = recordLeadFromWebsite({
             name,
             email,
@@ -70,6 +71,34 @@ export const Route = createFileRoute("/api/contact")({
             message,
             source: "Formulaire de contact web",
           });
+
+          const lowerNeed = need.toLowerCase();
+          const detectedServiceId = lowerNeed.includes("crm") || lowerNeed.includes("caisse")
+            ? "crm"
+            : lowerNeed.includes("maps")
+              ? "maps"
+              : lowerNeed.includes("seo")
+                ? "seo"
+                : lowerNeed.includes("social") || lowerNeed.includes("reseau")
+                  ? "social"
+                  : lowerNeed.includes("robot")
+                    ? "robotics"
+                    : lowerNeed.includes("brand") || lowerNeed.includes("logo")
+                      ? "branding"
+                      : "websites";
+
+          await pushWebsiteLeadToCrm({
+            name,
+            email,
+            phone,
+            company,
+            website,
+            need: need || "Demande entrante site web",
+            message,
+            source: "Site Web xragencyai.com",
+            serviceId: detectedServiceId,
+            valueEur: detectedServiceId === "crm" ? 2000 : detectedServiceId === "maps" ? 999 : 799,
+          }).catch(() => {});
 
           // Tentative d'envoi par e-mail via Resend si configuré
           const apiKey = process.env.RESEND_API_KEY;
