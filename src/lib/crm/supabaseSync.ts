@@ -1,151 +1,95 @@
-// ── XR AGENCY CRM — Couche de synchronisation Supabase temps réel + Fallback localStorage ──
+// XR AGENCY CRM — synchronisation via API serveur authentifiée.
+// Le navigateur ne parle plus directement aux tables CRM ni ne reçoit la service-role key.
 
-import { getSupabase, isSupabaseConfigured } from "@/lib/saas/supabase";
 import type { Lead, TeamMember } from "./data";
 
 export type SyncState = "supabase_live" | "local_ready" | "syncing" | "error";
 
 export function checkSupabaseStatus(): SyncState {
-  return isSupabaseConfigured() ? "supabase_live" : "local_ready";
+  return "syncing";
 }
 
-// Charger les leads depuis Supabase si configuré, sinon null (fallback localStorage)
-export async function fetchLeadsFromSupabase(): Promise<Lead[] | null> {
-  if (!isSupabaseConfigured()) return null;
-  try {
-    const supabase = getSupabase();
-    const { data, error } = await supabase
-      .from("crm_leads")
-      .select("*")
-      .order("created_at", { ascending: false });
-    if (error || !data) return null;
+function mapDbLead(r: any): Lead {
+  return {
+    id: r.id,
+    name: r.name,
+    contact: r.contact,
+    phone: r.phone,
+    email: r.email || undefined,
+    websiteUrl: r.website_url || undefined,
+    sectorId: r.sector_id,
+    serviceId: r.service_id,
+    planLabel: r.plan_label,
+    billing: r.billing,
+    value: Number(r.value) || 0,
+    extraItems: Array.isArray(r.extra_items) ? r.extra_items : [],
+    stage: r.stage,
+    setterId: r.setter_id,
+    closerId: r.closer_id,
+    issue: r.issue || "",
+    notes: r.notes || "",
+    followUpDate: r.follow_up_date || undefined,
+    wonAt: r.won_at || undefined,
+    wonMonth: r.won_at ? String(r.won_at).slice(0, 7) : undefined,
+    installments: r.installments || undefined,
+    createdAt: r.created_at ? new Date(r.created_at).toLocaleDateString("fr-FR", {
+      day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit",
+    }) : "",
+    commissionStatus: r.commission_status || "estimated",
+    mockupReady: Boolean(r.mockup_ready),
+    studioStatus: r.studio_status || undefined,
+    timeline: Array.isArray(r.timeline) ? r.timeline : [],
+  };
+}
 
-    return data.map((r) => ({
-      id: r.id,
-      name: r.name,
-      contact: r.contact,
-      phone: r.phone,
-      email: r.email || undefined,
-      websiteUrl: r.website_url || undefined,
-      sectorId: r.sector_id,
-      serviceId: r.service_id,
-      planLabel: r.plan_label,
-      billing: r.billing,
-      value: Number(r.value) || 0,
-      extraItems: Array.isArray(r.extra_items) ? r.extra_items : [],
-      stage: r.stage,
-      setterId: r.setter_id,
-      closerId: r.closer_id,
-      issue: r.issue || "",
-      notes: r.notes || "",
-      followUpDate: r.follow_up_date || undefined,
-      wonAt: r.won_at || undefined,
-      wonMonth: r.won_at ? String(r.won_at).slice(0, 7) : undefined,
-      installments: r.installments || undefined,
-      createdAt: new Date(r.created_at).toLocaleDateString("fr-FR", {
-        day: "2-digit",
-        month: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      commissionStatus: r.commission_status || "estimated",
-      mockupReady: Boolean(r.mockup_ready),
-      studioStatus: r.studio_status || undefined,
-      timeline: Array.isArray(r.timeline) ? r.timeline : [],
-    }));
+export async function fetchLeadsFromSupabase(): Promise<Lead[] | null> {
+  try {
+    const response = await fetch("/api/crm-data", { credentials: "same-origin", cache: "no-store" });
+    if (!response.ok) return null;
+    const body = await response.json();
+    if (!Array.isArray(body?.leads)) return null;
+    return body.leads.map(mapDbLead);
   } catch {
     return null;
   }
 }
 
-// Sauvegarder / mettre à jour un lead dans Supabase si configuré
 export async function upsertLeadToSupabase(lead: Lead): Promise<boolean> {
-  if (!isSupabaseConfigured()) return false;
   try {
-    const supabase = getSupabase();
-    const { error } = await supabase.from("crm_leads").upsert({
-      id: lead.id,
-      name: lead.name,
-      contact: lead.contact,
-      phone: lead.phone,
-      email: lead.email || null,
-      website_url: lead.websiteUrl || null,
-      sector_id: lead.sectorId,
-      service_id: lead.serviceId,
-      plan_label: lead.planLabel,
-      billing: lead.billing,
-      value: lead.value,
-      extra_items: lead.extraItems || [],
-      stage: lead.stage,
-      setter_id: lead.setterId,
-      closer_id: lead.closerId,
-      issue: lead.issue,
-      notes: lead.notes,
-      follow_up_date: lead.followUpDate || null,
-      won_at: lead.wonAt || null,
-      installments: lead.installments || { plan: "1x", paidCount: 0 },
-      commission_status: lead.commissionStatus,
-      mockup_ready: Boolean(lead.mockupReady),
-      studio_status: lead.studioStatus || null,
-      timeline: lead.timeline || [],
-      updated_at: new Date().toISOString(),
+    const response = await fetch("/api/crm-data", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(lead),
     });
-    return !error;
+    return response.ok;
   } catch {
     return false;
   }
 }
 
 export async function deleteLeadFromSupabase(leadId: string): Promise<boolean> {
-  if (!isSupabaseConfigured()) return false;
   try {
-    const supabase = getSupabase();
-    const { error } = await supabase.from("crm_leads").delete().eq("id", leadId);
-    return !error;
-  } catch {
-    return false;
-  }
-}
-
-export async function upsertMemberToSupabase(member: TeamMember): Promise<boolean> {
-  if (!isSupabaseConfigured()) return false;
-  try {
-    const supabase = getSupabase();
-    const { error } = await supabase.from("crm_members").upsert({
-      id: member.id,
-      name: member.name,
-      short_name: member.shortName,
-      role_label: member.roleLabel,
-      role_type: member.roleType,
-      recruited_by: member.recruitedBy || null,
-      setting_rate: member.settingRate,
-      closing_rate: member.closingRate,
-      full_cycle_rate: member.fullCycleRate,
-      override_rate: member.overrideRate || 0,
-      avatar_bg: member.avatarBg,
-      badge: member.badge,
-      pin_hash: 'server-managed',
-      custom_pin_set: Boolean(member.customPinSet),
+    const response = await fetch("/api/crm-data", {
+      method: "DELETE",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: leadId }),
     });
-    return !error;
+    return response.ok;
   } catch {
     return false;
   }
 }
 
-// Abonnement temps réel aux changements CRM
+// Les membres et taux de commission seront écrits par une route Direction dédiée.
+// Ne jamais écrire de PIN ni de pin_hash depuis le navigateur.
+export async function upsertMemberToSupabase(_member: TeamMember): Promise<boolean> {
+  return false;
+}
+
+// Polling léger : l'API serveur applique l'authentification et le RBAC à chaque lecture.
 export function subscribeCrmRealtime(onChange: () => void): (() => void) | null {
-  if (!isSupabaseConfigured()) return null;
-  try {
-    const supabase = getSupabase();
-    const channel = supabase
-      .channel("xr_crm_realtime")
-      .on("postgres_changes", { event: "*", schema: "public", table: "crm_leads" }, onChange)
-      .subscribe();
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  } catch {
-    return null;
-  }
+  const timer = window.setInterval(onChange, 15_000);
+  return () => window.clearInterval(timer);
 }
