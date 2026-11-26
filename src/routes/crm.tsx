@@ -2808,11 +2808,11 @@ function XrAgencyCrmApp() {
               <button onClick={() => setShowChangePinModal(false)} className={theme.textSoft}>✕</button>
             </div>
             <p className={`text-xs ${theme.textMuted}`}>
-              Dès que vous créez votre mot de passe personnel, il est masqué automatiquement sur l'écran de connexion.
+              Les codes d'accès sont gérés côté serveur et ne sont jamais enregistrés dans votre navigateur. Pour le modifier, contactez la direction.
             </p>
             <form onSubmit={handleSaveOwnPin} className="space-y-3">
-              <input type="password" required minLength={4} maxLength={20} value={newPinValue} onChange={(e) => { setNewPinValue(e.target.value); setChangePinError(""); }} placeholder="Nouveau mot de passe (min. 4 car.)" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
-              <input type="password" required minLength={4} maxLength={20} value={confirmPinValue} onChange={(e) => { setConfirmPinValue(e.target.value); setChangePinError(""); }} placeholder="Confirmer le mot de passe" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
+              <input type="password" required minLength={4} maxLength={20} value={newPinValue} onChange={(e) => { setNewPinValue(e.target.value); setChangePinError(""); }} placeholder="Code géré par la direction" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
+              <input type="password" required minLength={4} maxLength={20} value={confirmPinValue} onChange={(e) => { setConfirmPinValue(e.target.value); setChangePinError(""); }} placeholder="Modification côté serveur uniquement" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
               {changePinError && <p className="text-xs text-rose-500 font-bold text-center">{changePinError}</p>}
               <div className="pt-1 flex gap-2">
                 <button type="button" onClick={() => setShowChangePinModal(false)} className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}>Annuler</button>
