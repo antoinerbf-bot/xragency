@@ -9,6 +9,12 @@ export function checkSupabaseStatus(): SyncState {
   return "syncing";
 }
 
+function emitSyncState(state: SyncState): void {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("xr-crm-sync-status", { detail: state }));
+  }
+}
+
 function mapDbLead(r: any): Lead {
   return {
     id: r.id,
@@ -45,11 +51,19 @@ function mapDbLead(r: any): Lead {
 export async function fetchLeadsFromSupabase(): Promise<Lead[] | null> {
   try {
     const response = await fetch("/api/crm-data", { credentials: "same-origin", cache: "no-store" });
-    if (!response.ok) return null;
+    if (!response.ok) {
+      emitSyncState("error");
+      return null;
+    }
     const body = await response.json();
-    if (!Array.isArray(body?.leads)) return null;
+    if (!Array.isArray(body?.leads)) {
+      emitSyncState("error");
+      return null;
+    }
+    emitSyncState("supabase_live");
     return body.leads.map(mapDbLead);
   } catch {
+    emitSyncState("error");
     return null;
   }
 }
@@ -62,8 +76,10 @@ export async function upsertLeadToSupabase(lead: Lead): Promise<boolean> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(lead),
     });
+    emitSyncState(response.ok ? "supabase_live" : "error");
     return response.ok;
   } catch {
+    emitSyncState("error");
     return false;
   }
 }
@@ -76,8 +92,10 @@ export async function deleteLeadFromSupabase(leadId: string): Promise<boolean> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: leadId }),
     });
+    emitSyncState(response.ok ? "supabase_live" : "error");
     return response.ok;
   } catch {
+    emitSyncState("error");
     return false;
   }
 }
@@ -85,6 +103,7 @@ export async function deleteLeadFromSupabase(leadId: string): Promise<boolean> {
 // Les membres et taux de commission seront écrits par une route Direction dédiée.
 // Ne jamais écrire de PIN ni de pin_hash depuis le navigateur.
 export async function upsertMemberToSupabase(_member: TeamMember): Promise<boolean> {
+  emitSyncState("error");
   return false;
 }
 
