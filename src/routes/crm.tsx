@@ -1032,15 +1032,13 @@ function XrAgencyCrmApp() {
   };
 
   const handleExportCsv = () => {
-    const headers = "Entreprise;Contact;Telephone;Service;Formule;Valeur;Facturation;Etape;Relance;Date
-";
+    const headers = "Entreprise;Contact;Telephone;Service;Formule;Valeur;Facturation;Etape;Relance;Date\n";
     const rows = myVisibleLeads
       .map(
         (l) =>
           `"${l.name}";"${l.contact}";"${l.phone}";"${l.serviceId}";"${l.planLabel}";"${l.value}";"${l.billing}";"${l.stage}";"${l.followUpDate || ""}";"${l.createdAt}"`
       )
-      .join("
-");
+      .join("\n");
     const blob = new Blob([headers + rows], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
