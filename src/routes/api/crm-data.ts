@@ -139,9 +139,13 @@ export const Route = createFileRoute("/api/crm-data")({
           const supabase = getSupabaseServer();
           if (!(await ensureCrmMembers(supabase))) return Response.json({ error: "Initialisation des membres CRM impossible." }, { status: 503 });
           if (new URL(request.url).searchParams.get("resource") === "members") {
-            if (member.roleType !== "direction") return Response.json({ error: "Accès réservé à la direction." }, { status: 403 });
             const team = await loadCrmMembers(supabase);
-            return team ? Response.json({ members: team }) : Response.json({ error: "Lecture de l'équipe impossible." }, { status: 503 });
+            if (!team) return Response.json({ error: "Lecture de l'équipe impossible." }, { status: 503 });
+            if (member.roleType === "direction") return Response.json({ members: team });
+            const redacted = team.map((m) => m.id === member.id ? m : {
+              ...m, settingRate: 0, closingRate: 0, fullCycleRate: 0, overrideRate: 0,
+            });
+            return Response.json({ members: redacted });
           }
           const { data, error } = await supabase.from("crm_leads").select("*").order("created_at", { ascending: false });
           if (error) return Response.json({ error: "Lecture CRM impossible." }, { status: 503 });
