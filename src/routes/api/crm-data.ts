@@ -173,7 +173,8 @@ export const Route = createFileRoute("/api/crm-data")({
             overrideRate: z.number().min(0).max(1).optional(),
             avatarBg: z.string().max(200),
             badge: z.string().max(100),
-            customPinSet: z.boolean().optional(),\n            initialPin: z.string().min(6).max(128).optional(),
+            customPinSet: z.boolean().optional(),
+            initialPin: z.string().min(6).max(128).optional(),
           }).strict();
           const memberParsed = memberSchema.safeParse(body);
           if (!memberParsed.success) return Response.json({ error: "Profil membre invalide." }, { status: 400 });
