@@ -196,12 +196,15 @@ export const Route = createFileRoute("/api/crm-data")({
         const parsed = leadSchema.safeParse(body);
         if (!parsed.success) return Response.json({ error: "Données prospect invalides." }, { status: 400 });
         const lead = parsed.data as Lead;
-        const members = DEFAULT_TEAM_MEMBERS;
-        if (!canEditLead(member, lead, members)) return Response.json({ error: "Accès refusé à ce prospect." }, { status: 403 });
+        let members: TeamMember[] = DEFAULT_TEAM_MEMBERS;
 
         try {
           const supabase = getSupabaseServer();
           if (!(await ensureCrmMembers(supabase))) return Response.json({ error: "Initialisation des membres CRM impossible." }, { status: 503 });
+          const loadedMembers = await loadCrmMembers(supabase);
+          if (!loadedMembers) return Response.json({ error: "Lecture des permissions CRM impossible." }, { status: 503 });
+          members = loadedMembers;
+          if (!canEditLead(member, lead, members)) return Response.json({ error: "Accès refusé à ce prospect." }, { status: 403 });
           const { data: existing, error: lookupError } = await supabase.from("crm_leads").select("*").eq("id", lead.id).maybeSingle();
           if (lookupError) return Response.json({ error: "Vérification du prospect impossible." }, { status: 503 });
           if (existing) {
