@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createHmac, timingSafeEqual, scryptSync, randomBytes } from "node:crypto";\nimport { getSupabaseServer } from "@/lib/saas/supabase";
+import { createHmac, timingSafeEqual, scryptSync, randomBytes } from "node:crypto";\nimport { getSupabaseServer } from "@/lib/saas/supabase";\nimport { DEFAULT_TEAM_MEMBERS } from "@/lib/crm/data";
 
 const SESSION_COOKIE = "xr_crm_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 8;
@@ -77,6 +77,20 @@ export const Route = createFileRoute("/api/crm-auth")({
   server: {
     handlers: {
       GET: async ({ request }) => {
+        if (new URL(request.url).searchParams.get("profiles") === "1") {
+          const safeProfile = (m: any) => ({
+            id: m.id, name: m.name, shortName: m.shortName || m.short_name,
+            roleLabel: m.roleLabel || m.role_label, roleType: m.roleType || m.role_type,
+            avatarBg: m.avatarBg || m.avatar_bg, badge: m.badge,
+          });
+          const profiles = new Map(DEFAULT_TEAM_MEMBERS.map((m) => [m.id, safeProfile(m)]));
+          try {
+            const supabase = getSupabaseServer();
+            const { data } = await supabase.from("crm_members").select("id,name,short_name,role_label,role_type,avatar_bg,badge");
+            for (const row of data || []) profiles.set(row.id, safeProfile(row));
+          } catch { /* default profiles remain available */ }
+          return Response.json({ profiles: Array.from(profiles.values()) });
+        }
         const secret = getCrmSessionSecret();
         if (!secret) return Response.json({ authenticated: false, error: "CRM_SESSION_SECRET absent ou trop court." }, { status: 503 });
         const memberId = verifyCrmSessionCookie(request.headers.get("cookie"), secret);
