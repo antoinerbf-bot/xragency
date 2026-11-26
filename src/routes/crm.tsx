@@ -259,9 +259,6 @@ function XrAgencyCrmApp() {
 
   // Modal Changement Mot de Passe personnel
   const [showChangePinModal, setShowChangePinModal] = useState(false);
-  const [newPinValue, setNewPinValue] = useState("");
-  const [confirmPinValue, setConfirmPinValue] = useState("");
-  const [changePinError, setChangePinError] = useState("");
 
   // ── Persistance & Supabase Realtime ──
   useEffect(() => {
@@ -938,11 +935,6 @@ function XrAgencyCrmApp() {
         return updated;
       })
     );
-  };
-
-  const handleSaveOwnPin = (e: React.FormEvent) => {
-    e.preventDefault();
-    setChangePinError("Le code d'accès est géré côté serveur. Contactez la direction pour le modifier.");
   };
 
   const handleIncrementCall = () => {
@@ -2840,31 +2832,23 @@ function XrAgencyCrmApp() {
         </div>
       )}
 
-      {/* ── MODAL CHANGER MON MOT DE PASSE ── */}
+      {/* ── MODAL GESTION DU CODE ── */}
       {showChangePinModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
           <div className={`border rounded-3xl p-6 max-w-sm w-full space-y-4 ${theme.modalBg}`}>
             <div className={`flex items-center justify-between pb-3 border-b ${theme.border}`}>
               <h3 className={`font-extrabold text-base flex items-center gap-2 ${theme.textMain}`}>
-                <KeyRound className="w-4 h-4 text-indigo-500" /> Mon mot de passe
+                <KeyRound className="w-4 h-4 text-indigo-500" /> Code d'accès
               </h3>
               <button onClick={() => setShowChangePinModal(false)} className={theme.textSoft}>✕</button>
             </div>
             <p className={`text-xs ${theme.textMuted}`}>
-              Les codes d'accès sont gérés côté serveur et ne sont jamais enregistrés dans votre navigateur. Pour le modifier, contactez la direction.
+              Pour protéger les comptes, le code n'est pas modifiable depuis le navigateur. Demandez à la direction de le renouveler côté serveur.
             </p>
-            <form onSubmit={handleSaveOwnPin} className="space-y-3">
-              <input type="password" required minLength={4} maxLength={20} value={newPinValue} onChange={(e) => { setNewPinValue(e.target.value); setChangePinError(""); }} placeholder="Code géré par la direction" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
-              <input type="password" required minLength={4} maxLength={20} value={confirmPinValue} onChange={(e) => { setConfirmPinValue(e.target.value); setChangePinError(""); }} placeholder="Modification côté serveur uniquement" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
-              {changePinError && <p className="text-xs text-rose-500 font-bold text-center">{changePinError}</p>}
-              <div className="pt-1 flex gap-2">
-                <button type="button" onClick={() => setShowChangePinModal(false)} className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}>Annuler</button>
-                <button type="submit" className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold">Enregistrer</button>
-              </div>
-            </form>
+            <button type="button" onClick={() => setShowChangePinModal(false)} className="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold">Fermer</button>
           </div>
         </div>
-      )}
+      )}}
     </div>
   );
 }
