@@ -899,7 +899,7 @@ function XrAgencyCrmApp() {
       pin: "",
     };
     setMembers((prev) => [...prev, newMem]);
-    void upsertMemberToSupabase(newMem);
+
   };
 
   const handleAddMember = async (e: React.FormEvent) => {
