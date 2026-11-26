@@ -1577,12 +1577,7 @@ function XrAgencyCrmApp() {
             )}
 
             <button
-              onClick={() => {
-                setNewPinValue("");
-                setConfirmPinValue("");
-                setChangePinError("");
-                setShowChangePinModal(true);
-              }}
+              onClick={() => setShowChangePinModal(true)}
               title="Mon mot de passe"
               className={`p-2 rounded-xl border ${theme.subCard} ${theme.textMuted} hover:text-indigo-500`}
             >
