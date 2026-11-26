@@ -426,48 +426,6 @@ export function getSectorServicePlaybook(sectorId: string, serviceId: string): P
     };
   }
 
-  if (serviceId === "crm") {
-    return {
-      sector,
-      serviceId,
-      serviceName: service.name,
-      angle: `Supprimer les commissions prédatrices (30 % Uber Eats, Booking, intermédiaires) et les abonnements SaaS coûteux grâce à un CRM & logiciel métier 100 % propriétaire dès 2 000 € (ou Jumeau Numérique 3D Multi-Sites à 5 000 €).`,
-      coldCall: {
-        opener: `« Bonjour [Prénom], c'est [Mon Prénom] de XR Agency. Question directe pour [Nom Entreprise] : combien vous coûtent chaque mois vos outils logiciels éparpillés ou les commissions des plateformes intermédiaires sur vos ${sector.clientWord} ? »`,
-        qualification: [
-          `« Aujourd'hui, pilotez-vous votre caisse, vos réservations, vos stocks et votre fichier client dans un seul système qui vous appartient, ou payez-vous des abonnements et commissions chaque mois ? »`,
-          `« Si vous pouviez économiser 100 % des commissions tierces grâce à votre propre système clé en main livré une bonne fois pour toutes, quel serait l'impact sur votre marge annuelle ? »`,
-          `« Vous avez un seul établissement ou plusieurs sites à superviser en direct ? »`,
-        ],
-        bridge: `« On a préparé un simulateur interactif en direct adapté au secteur ${sector.name} (caisse POS, suivi client et même vue Jumeau Numérique 3D pour le multi-sites). On se prend 10 minutes demain à 11h ou 15h pour vous montrer la démo en partage d'écran ? »`,
-      },
-      setting: {
-        dm1: `Bonjour [Prénom] 💻 En regardant l'activité de [Nom Entreprise], j'ai pensé à vous : beaucoup d'acteurs en ${sector.name} perdent jusqu'à 20-30 % de marge en commissions plateformes ou abonnements logiciels. Chez XR Agency, on déploie votre propre CRM & système métier sur mesure (0 % de commission à vie). Je peux vous envoyer la démo interactive ?`,
-        followupJ2: `Bonjour [Prénom], sur 10 000 € de flux mensuel, récupérer ne serait-ce que 20 % de commissions représente 24 000 € de marge nette gardée par an — votre propre outil est amorti dès le premier mois. Je vous montre l'aperçu ?`,
-        followupJ5: `[Prénom], que vous ayez besoin d'un CRM & POS métier clé en main ou d'un Jumeau Numérique 3D pour superviser plusieurs établissements sur un seul écran, on peut cadrer votre cahier des charges en 15 minutes cette semaine.`,
-      },
-      pitchDemo: `« Voici votre futur cockpit métier sur mesure : contrairement aux logiciels en location où vous payez à vie par utilisateur ou par commande, ce système vous appartient à 100 % avec 0 % de commission. En Pack Pro Business, vous avez toute la gestion opérationnelle (caisse/commandes directes, base clients VIP, stocks, tableaux de bord). Et si vous gérez plusieurs espaces ou franchises, notre offre Jumeau Numérique 3D modélise vos établissements en temps réel pour tout superviser d'un coup d'œil. »`,
-      closing: {
-        mainClose: `« Au vu de votre volume actuel, préférez-vous démarrer sur le Pack Pro Business clé en main ou directement sur l'architecture Jumeau Numérique 3D Multi-Sites ? On bloque l'atelier d'architecture avec nos ingénieurs cette semaine ? »`,
-        upsellLine: `« Pour alimenter immédiatement votre nouveau CRM en clients directs sans commission, le duo gagnant consiste à y brancher votre Stratégie Google Maps et votre site de commande/réservation directe. »`,
-      },
-      objections: [
-        {
-          q: "« On utilise déjà un logiciel classique / Excel »",
-          a: `« Justement, additionnez vos abonnements mensuels sur 24 mois et le temps perdu à ressaisir les données entre vos outils : un système unifié taillé exactement pour votre équipe se rembourse en quelques semaines et valorise le fonds de commerce. »`,
-        },
-        {
-          q: "« J'ai peur que mon équipe ait du mal à s'y habituer »",
-          a: `« C'est toute la différence du sur-mesure XR Agency : on conçoit des interfaces ultra-ludiques, visuelles et tactiles, compréhensibles en 5 minutes aussi bien à 20 ans qu'à 60 ans, avec prise en main incluse. »`,
-        },
-        {
-          q: "« Combien de temps prend le déploiement ? »",
-          a: `« Nous partons de nos briques éprouvées par secteur métier que l'on personnalise à votre enseigne : vous voyez le prototype interactif très rapidement sans tunnel de développement interminable. »`,
-        },
-      ],
-    };
-  }
-
   // WebCare & Maintenance
   return {
     sector,
@@ -524,12 +482,12 @@ export const XR_SCHOOL_CURRICULUM: SchoolLesson[] = [
   {
     id: "m1",
     phase: "Module 1 · Fondations XR Agency",
-    title: "Maîtriser les 8 pôles de services & leurs livrables",
+    title: "Maîtriser les 7 pôles de services & leurs livrables",
     duration: "15 min",
-    summary: "Connaître parfaitement les bénéfices concrets de nos 8 offres (Sites web, Branding, SEO, Google Maps, Social Media, WebCare, CRM Sur-Mesure/Jumeau 3D et Robotique Korben) pour orienter chaque prospect vers la bonne solution.",
+    summary: "Connaître parfaitement les bénéfices concrets de nos 7 offres (Sites web, Branding, SEO, Google Maps Top 3, Social Media, WebCare et Robotique Korben) pour orienter chaque prospect vers la bonne solution.",
     checklist: [
-      "Savoir présenter clairement les 3 niveaux de Sites Web (Vitrine Pro, Business, E-commerce) + le CRM Sur-Mesure (2 000 € / Jumeau 3D 5 000 €)",
-      "Savoir expliquer la méthode en 4 étapes et le cadre d'audit préalable de l'offre Google Maps",
+      "Savoir présenter clairement les 3 niveaux de Sites Web (Vitrine Pro, Business, E-commerce)",
+      "Savoir expliquer la méthode en 4 étapes et le cadre de l'offre Google Maps Top 3",
       "Connaître les 4 familles de robots Korben (Accueil, Livraison, Nettoyage, Logistique/Polyvalent)",
     ],
   },

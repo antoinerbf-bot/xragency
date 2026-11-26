@@ -99,18 +99,6 @@ const QUIZ_QUESTIONS: QuizQuestion[] = [
     correctIdx: 1,
     explanation: "WebCare garantit la sérénité technique et la réactivité des mises à jour dès le premier jour.",
   },
-  {
-    id: "q6",
-    serviceId: "crm",
-    question: "Quel est l'argument roi pour présenter l'offre CRM & Caisse POS Sur-Mesure (ou Jumeau 3D Multi-Sites) ?",
-    options: [
-      "Facturer un gros pourcentage sur chaque commande du client",
-      "Un système 100 % propriétaire avec 0 % de commission à vie qui supprime les 20–30 % perdus sur les plateformes tierces",
-      "Remplacer tous les serveurs par un tableur Excel",
-    ],
-    correctIdx: 1,
-    explanation: "Le client devient 100 % propriétaire de son outil métier (caisse, réservations, fidélité ou supervision multi-sites 3D) sans commission prédatrice.",
-  },
 ];
 
 export function SchoolModule({ currentUser, theme, onSound }: SchoolModuleProps) {

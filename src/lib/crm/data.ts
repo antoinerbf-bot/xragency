@@ -1,4 +1,4 @@
-// ── XR AGENCY CRM — Modèle Unifié (v3002 + extensions ERP v3004), RBAC strict, 8 Services Officiels & Commissions ──
+// ── XR AGENCY CRM — Modèle de données, Rôles RBAC stricts, 7 Services officiels & Moteur de commissions ──
 
 export type UserRoleType =
   | "direction"
@@ -15,16 +15,15 @@ export interface TeamMember {
   shortName: string;
   roleLabel: string;
   roleType: UserRoleType;
-  email?: string;
-  recruitedBy?: string; // ex: "martin" -> Martin voit ce membre et touche son override 10%
+  recruitedBy?: string; // ex: "martin" -> Martin voit ce membre et touche son override
   settingRate: number; // % si agit en tant que Setter
   closingRate: number; // % si agit en tant que Closer
   fullCycleRate: number; // % si fait Setting + Closing
   overrideRate?: number; // % Manager sur les ventes des candidats qu'il ramène
   avatarBg: string;
   badge: string; // JAMAIS de % affiché dans le badge public pour préserver la confidentialité
-  pin: string; // Vide pour la Direction côté client (vérifié côté serveur sur /api/crm-auth)
-  customPinSet?: boolean;
+  pin: string;
+  customPinSet?: boolean; // Passe à true quand le membre personnalise son mot de passe
 }
 
 export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
@@ -34,14 +33,12 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     shortName: "Antoine",
     roleLabel: "Directeur Général & Fondateur",
     roleType: "direction",
-    email: "contact.xragency@gmail.com",
     settingRate: 1,
     closingRate: 1,
     fullCycleRate: 1,
     avatarBg: "from-amber-400 via-amber-500 to-orange-600",
     badge: "👑 Direction",
-    pin: "", // Vérifié exclusivement côté serveur (/api/crm-auth)
-    customPinSet: true,
+    pin: "071266",
   },
   {
     id: "martin",
@@ -49,13 +46,12 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     shortName: "Martin",
     roleLabel: "Manager RH & Closer Senior",
     roleType: "manager",
-    email: "martin.leclipteur@gmail.com",
     settingRate: 0.1,
     closingRate: 0.2,
     fullCycleRate: 0.2,
     overrideRate: 0.1,
     avatarBg: "from-blue-500 to-indigo-600",
-    badge: "👥 Manager RH",
+    badge: "👥 Manager",
     pin: "2026",
   },
   {
@@ -90,7 +86,6 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     shortName: "Christel",
     roleLabel: "Closer B2B",
     roleType: "closer",
-    email: "christelthirion@msn.com",
     recruitedBy: "martin",
     settingRate: 0.1,
     closingRate: 0.2,
@@ -145,18 +140,18 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     id: "studio",
     name: "Studio Créatif & Dév",
     shortName: "Studio",
-    roleLabel: "Pôle Production, Maquettes & Déploiement",
+    roleLabel: "Pôle Production & Maquettes",
     roleType: "studio",
     settingRate: 0,
     closingRate: 0,
     fullCycleRate: 0,
-    avatarBg: "from-zinc-700 to-zinc-950",
+    avatarBg: "from-zinc-600 to-zinc-900",
     badge: "🎨 Studio",
     pin: "0000",
   },
 ];
 
-// ── Les 8 Services Officiels XRAGENCY (100 % alignés avec xragencyai.com) ──
+// ── Les 7 Services Officiels de XR Agency (alignés avec le site public) ──
 
 export type BillingPeriod = "once" | "month" | "year";
 
@@ -185,33 +180,31 @@ export const XR_OFFICIAL_SERVICES: XrOfficialService[] = [
   {
     id: "websites",
     num: "01",
-    name: "Création de Sites Web Haute Couture",
+    name: "Création de sites web",
     shortName: "Site Web",
     icon: "🌐",
     category: "Web & Conversion",
     billing: "once",
     defaultPrice: 799,
-    deliverable:
-      "Design sur mesure responsive mobile, rapidité optimale, SEO technique, formulaires connectés et mise en ligne clé en main.",
-    upsellHint: "Coupler avec Infrastructure 79 €/an + WebCare (49 €/mois) ou Google Maps (999 €/an)",
+    deliverable: "Site responsive haute performance, SEO technique, formulaires et hébergement 1 an inclus.",
+    upsellHint: "Proposer WebCare (49 €/mois) ou Google Maps Top 3 (+990 €/an)",
     plans: [
       { id: "vitrine", label: "Site Vitrine Pro (3 pages)", price: 499, period: "once" },
       { id: "business", label: "Site Business (5 pages + Blog)", price: 799, period: "once" },
-      { id: "ecommerce", label: "E-commerce, Click & Collect & Réservation", price: 1499, period: "once" },
+      { id: "ecommerce", label: "E-commerce & Réservation", price: 1499, period: "once" },
     ],
   },
   {
     id: "branding",
     num: "02",
-    name: "Branding & Identité de Prestige",
+    name: "Branding & Identité",
     shortName: "Branding",
     icon: "✨",
     category: "Identité Visuelle",
     billing: "once",
     defaultPrice: 229,
-    deliverable:
-      "Logo vectoriel haute définition (AI, SVG, PNG, PDF), palette chromatique, typographies, Brand Book et cession des droits.",
-    upsellHint: "Idéal en ouverture avant un Site Vitrine Pro (499 €) ou Business (799 €)",
+    deliverable: "Logo vectoriel (AI, SVG, PNG, PDF), palette, typographie, Brand Book et droits cédés.",
+    upsellHint: "Combiner avec un Site Vitrine Pro (499 €)",
     plans: [
       { id: "logo", label: "Logo Signature", price: 179, period: "once" },
       { id: "kit", label: "Brand Identity Kit", price: 229, period: "once" },
@@ -221,120 +214,88 @@ export const XR_OFFICIAL_SERVICES: XrOfficialService[] = [
   {
     id: "seo",
     num: "03",
-    name: "Référencement SEO & Autorité Google",
+    name: "Référencement SEO",
     shortName: "SEO Mensuel",
     icon: "📈",
     category: "Acquisition Organique",
     billing: "month",
     defaultPrice: 299,
-    deliverable:
-      "Audit sémantique complet, optimisation technique et éditoriale, netlinking d'autorité et reporting mensuel des positions.",
-    upsellHint: "Combiner avec la Stratégie Google Maps (999 €/an) pour verrouiller le local + national",
+    deliverable: "Audit sémantique, optimisation on-page, netlinking et reporting mensuel transparent.",
+    upsellHint: "Coupler avec Google Maps Top 3 pour dominer le local",
     plans: [
-      { id: "seo-start", label: "SEO Croissance Locale", price: 299, period: "month" },
-      { id: "seo-pro", label: "SEO Performance Nationale", price: 499, period: "month" },
-      { id: "seo-authority", label: "SEO Autorité & Domination", price: 899, period: "month" },
+      { id: "seo-start", label: "SEO Croissance", price: 299, period: "month" },
+      { id: "seo-pro", label: "SEO Performance", price: 499, period: "month" },
     ],
   },
   {
     id: "maps",
     num: "04",
-    name: "Google Maps & Pack Local Top 3",
-    shortName: "Google Maps",
+    name: "Google Maps Top 3",
+    shortName: "Maps Top 3",
     icon: "📍",
     category: "Visibilité Locale",
     billing: "year",
-    defaultPrice: 999,
-    deliverable:
-      "Audit de zone préalable, restructuration Google Business Profile, photos géotaggées, citations NAP, collecte d'avis 5★ et suivi 12 mois.",
-    upsellHint: "Proposer le Pack Conquête Top 3 (1 490 €/an) sur les villes à forte concurrence",
-    plans: [
-      { id: "maps-strategy", label: "Stratégie Visibilité Google Maps (1 An)", price: 999, period: "year" },
-      { id: "maps-conquest", label: "Pack Conquête & Domination Top 3 (1 An)", price: 1490, period: "year" },
-      { id: "maps-network", label: "Pack Multi-Établissements & Réseau (jusqu'à 3 fiches)", price: 2490, period: "year" },
-    ],
+    defaultPrice: 990,
+    deliverable: "Audit local, optimisation Google Business Profile, suivi mensuel + Garantie Top 3 ou remboursé.",
+    upsellHint: "Idéal en pack avec Site Vitrine Pro ou Social Media",
+    plans: [{ id: "maps-top3", label: "Maps Top 3 Garanti (Annuel)", price: 990, period: "year" }],
   },
   {
     id: "social",
     num: "05",
-    name: "Social Media & Studio Vidéo 4K",
+    name: "Social Media",
     shortName: "Social Media",
     icon: "📱",
     category: "Réseaux Sociaux",
     billing: "month",
-    defaultPrice: 599,
-    deliverable:
-      "Ligne éditoriale, création de carrousels, Reels et Stories, rédaction des légendes, planification et reporting mensuel.",
-    upsellHint: "Ajouter le Brand Identity Kit (229 €) pour harmoniser tout le feed Instagram/TikTok",
+    defaultPrice: 499,
+    deliverable: "Calendrier éditorial, création visuels/Reels, rédaction, programmation et modération.",
+    upsellHint: "Ajouter Branding Identity Kit pour une direction artistique pro",
     plans: [
-      { id: "social-1", label: "Présence Essentielle (1 réseau)", price: 349, period: "month" },
-      { id: "social-2", label: "Croissance Active (Multi-réseaux + Reels)", price: 599, period: "month" },
-      { id: "social-3", label: "Domination Studio 4K", price: 799, period: "month" },
+      { id: "social-1", label: "Présence Essentielle (1 réseau · 8 posts)", price: 299, period: "month" },
+      { id: "social-2", label: "Croissance Active (2 réseaux · 20 posts)", price: 499, period: "month" },
+      { id: "social-3", label: "Domination Sociale (3 réseaux · 30 posts)", price: 699, period: "month" },
     ],
   },
   {
     id: "maintenance",
     num: "06",
-    name: "WebCare, Maintenance & Cyber-Sécurité",
+    name: "WebCare & Maintenance",
     shortName: "WebCare",
     icon: "🛡️",
-    category: "Infrastructure & Suivi",
+    category: "Abonnement Sécurité",
     billing: "month",
     defaultPrice: 49,
-    deliverable:
-      "Hébergement haute disponibilité, SSL/WAF, sauvegardes quotidiennes chiffrées, mises à jour et modifications courantes rapides.",
-    upsellHint: "Toujours inclure l'Infrastructure Annuelle (79 €/an) avec chaque création de site",
+    deliverable: "Mises à jour sécurité, sauvegardes, corrections contenus/visuels et support prioritaire.",
     plans: [
-      { id: "wc-infra", label: "Infrastructure Cloud & Sécurité Annuelle", price: 79, period: "year" },
-      { id: "wc-essentiel", label: "WebCare Essentiel (4 modifs/mois)", price: 29, period: "month" },
-      { id: "wc-pro", label: "WebCare Pro (10 modifs/mois · Prioritaire)", price: 49, period: "month" },
-      { id: "wc-business", label: "WebCare Business (Modifications illimitées)", price: 99, period: "month" },
-    ],
-  },
-  {
-    id: "crm",
-    num: "07",
-    name: "CRM Sur-Mesure, Caisse POS & Jumeau 3D",
-    shortName: "CRM & POS",
-    icon: "💻",
-    category: "Logiciels Métier 0% Commission",
-    billing: "once",
-    defaultPrice: 2000,
-    deliverable:
-      "Logiciel métier 100 % propriétaire sans abonnement prédateur ni commission (Caisse POS, KDS cuisine, Click & Collect, stocks, fidélité ou Jumeau 3D).",
-    upsellHint: "Présenter le Jumeau Numérique 3D Multi-Sites (5 000 €) aux groupes hôteliers, franchises et réseaux",
-    plans: [
-      { id: "crm-pro", label: "Pack Pro Business POS & CRM Sur-Mesure (0% commission)", price: 2000, period: "once" },
-      { id: "crm-3d", label: "Jumeau Numérique 3D & Supervision Multi-Sites", price: 5000, period: "once" },
+      { id: "wc-essentiel", label: "Essentiel (4 modifs/mois)", price: 29, period: "month" },
+      { id: "wc-business", label: "Business (10 modifs/mois · Prioritaire)", price: 49, period: "month" },
+      { id: "wc-unlimited", label: "Unlimited (Illimité + Évolutions)", price: 99, period: "month" },
     ],
   },
   {
     id: "robotics",
-    num: "08",
-    name: "Robotique Autonome & IA Physique Korben",
+    num: "07",
+    name: "Robotique de service & IA (Korben)",
     shortName: "Robot Korben",
     icon: "🤖",
     category: "Robotique & IA High-Ticket",
     billing: "month",
     defaultPrice: 499,
-    deliverable:
-      "Audit d'implantation, sélection robot autonome Korben (accueil, service salle, nettoyage, logistique), paramétrage et SAV.",
-    upsellHint: "Proposer une journée Démonstration sur site (250 €) pour déclencher le leasing ou l'achat",
+    deliverable: "Diagnostic des flux, sélection robot autonome Korben (accueil, livraison, nettoyage), déploiement & SAV français.",
+    upsellHint: "Proposer une démo événementielle (250 €) pour déclencher la location ou l'achat",
     plans: [
-      { id: "robot-demo", label: "Démonstration Événementielle sur site", price: 250, period: "once" },
-      { id: "robot-leasing", label: "Location Mensuelle Korben Clé en Main", price: 499, period: "month" },
-      { id: "robot-buy", label: "Achat Professionnel Robot Korben (HT)", price: 12000, period: "once" },
+      { id: "robot-demo", label: "Démonstration / Événement", price: 250, period: "once" },
+      { id: "robot-leasing", label: "Location sur mesure Korben", price: 499, period: "month" },
+      { id: "robot-buy", label: "Achat Professionnel (8k–21k € HT)", price: 12000, period: "once" },
     ],
   },
 ];
 
-// ── Modèle de Lead / Prospect avec Split Setter / Closer, Suivi Relance & Briques ERP v3004 ──
+// ── Modèle de Lead / Prospect avec Split Setter / Closer & Suivi Relance ──
 
 export type LeadStage = "new" | "rdv" | "mockup" | "negociation" | "won";
 export type CommissionStatus = "estimated" | "pending_payment" | "unlocked";
-export type LeadPriority = "urgent" | "high" | "normal";
-export type ProjectMilestone = "cadrage" | "design" | "dev" | "recette" | "live";
-export type InvoiceStatus = "none" | "quote_sent" | "pending_transfer" | "deposit_paid" | "paid_full";
 
 export interface LeadServiceItem {
   id: string;
@@ -351,16 +312,12 @@ export interface Lead {
   phone: string;
   email?: string;
   websiteUrl?: string;
-  city?: string;
-  source?: string;
-  priority?: LeadPriority;
-  callsCount?: number;
   sectorId: string;
   serviceId: string;
   planLabel: string;
   billing: BillingPeriod;
   value: number;
-  extraItems?: LeadServiceItem[];
+  extraItems?: LeadServiceItem[]; // Pack multi-services (ex: Site + WebCare + Maps Top 3)
   stage: LeadStage;
   setterId: string;
   closerId: string;
@@ -368,149 +325,35 @@ export interface Lead {
   notes: string;
   followUpDate?: string; // YYYY-MM-DD
   createdAt: string;
-  wonAt?: string; // ISO date de signature
-  wonMonth?: string; // YYYY-MM
-  installments?: { plan: "1x" | "3x"; paidCount: number };
+  wonAt?: string; // ISO date de signature (pour filtre mensuel paie)
+  wonMonth?: string; // YYYY-MM (ex: "2026-11")
+  installments?: { plan: "1x" | "3x"; paidCount: number }; // Suivi paiement 3x sans frais
   commissionStatus: CommissionStatus;
   mockupReady?: boolean;
-  mockupUrl?: string;
   studioStatus?: "pending" | "in_production" | "delivered";
-  projectMilestone?: ProjectMilestone;
-  providerId?: string;
-  providerCost?: number;
-  invoiceStatus?: InvoiceStatus;
-  invoiceRef?: string;
   timeline?: { id: string; date: string; text: string }[];
 }
 
-// ── Modèle Prestataire Externe (Sous-traitance & Marge Nette Direction — récupéré de v3004) ──
-
-export interface ExternalProvider {
-  id: string;
-  name: string;
-  specialty: string;
-  city: string;
-  contact: string;
-  avgRateEur: number;
-  rating: number;
-  notes?: string;
-}
-
-export const DEFAULT_PROVIDERS: ExternalProvider[] = [
-  {
-    id: "prov-web",
-    name: "Atelier Front & UI (Da Nang)",
-    specialty: "Sites Web Haute Couture & E-commerce",
-    city: "Da Nang · UTC+7",
-    contact: "studio.vn@xragencyai.com",
-    avgRateEur: 220,
-    rating: 5,
-    notes: "Intégration React/Tailwind ultra-rapide en 72h.",
-  },
-  {
-    id: "prov-maps",
-    name: "Pôle Local SEO & Citations",
-    specialty: "Google Maps Pack Local & Netlinking",
-    city: "Paris · UTC+1",
-    contact: "seo@xragencyai.com",
-    avgRateEur: 180,
-    rating: 5,
-    notes: "Restructuration GBP, photos géotaggées et citations NAP.",
-  },
-  {
-    id: "prov-video",
-    name: "Collectif Reels & Motion 4K",
-    specialty: "Montage Reels, TikTok & Direction Artistique",
-    city: "Paris / Dubaï",
-    contact: "social@xragencyai.com",
-    avgRateEur: 150,
-    rating: 5,
-    notes: "Pack mensuel Reels sous-titrés dynamiques.",
-  },
-  {
-    id: "prov-crm",
-    name: "Ingénierie Full-Stack POS & 3D",
-    specialty: "CRM Sur-Mesure, KDS & Jumeau Numérique 3D",
-    city: "Da Nang / Paris",
-    contact: "dev-crm@xragencyai.com",
-    avgRateEur: 550,
-    rating: 5,
-    notes: "Déploiement POS, Supabase et vue 3D isométrique.",
-  },
-];
-
-// ── Modèle Événement Calendrier Commercial (récupéré de v3004) ──
-
-export interface CrmAppointment {
-  id: string;
-  title: string;
-  date: string; // YYYY-MM-DD
-  time: string; // HH:MM
-  leadId?: string;
-  leadName?: string;
-  ownerId: string;
-  kind: "call" | "demo_mockup" | "closing" | "kickoff";
-  done: boolean;
-}
-
-// ── Coordonnées Bancaires Facturation & RIB XRAGENCY (configurables Direction) ──
-
-export interface CrmBankConfig {
-  companyLegal: string;
-  siret: string;
-  address: string;
-  bankName: string;
-  iban: string;
-  bic: string;
-  taxNotice: string;
-}
-
-export const DEFAULT_BANK_CONFIG: CrmBankConfig = {
-  companyLegal: "KARMA SASU · XR AGENCY",
-  siret: "SIREN 889 178 141 · SIRET 889 178 141 00012",
-  address: "78 Avenue des Champs-Élysées, 75008 Paris",
-  bankName: "Qonto / Banque Professionnelle France",
-  iban: "FR76 1695 8000 0100 0000 0000 042",
-  bic: "QNTOFRP1XXX",
-  taxNotice: "TVA non applicable, art. 293 B du CGI (ou autoliquidation internationale selon juridiction).",
-};
-
-// ── Somme Multi-Services (One-Shot + MRR + Annuel + Base de commission) ──
+// ── Somme Multi-Services (One-Shot + MRR + Base de commission) ──
 
 export function getLeadTotals(lead: Lead): {
   oneShotTotal: number;
   mrrTotal: number;
-  annualTotal: number;
   commissionBase: number;
   itemsCount: number;
 } {
-  let oneShotTotal = 0;
-  let mrrTotal = 0;
-  let annualTotal = 0;
-
-  if (lead.billing === "month") mrrTotal += lead.value;
-  else if (lead.billing === "year") {
-    oneShotTotal += lead.value;
-    annualTotal += lead.value;
-  } else {
-    oneShotTotal += lead.value;
-  }
+  let oneShotTotal = lead.billing === "month" ? 0 : lead.value;
+  let mrrTotal = lead.billing === "month" ? lead.value : 0;
 
   (lead.extraItems || []).forEach((item) => {
     if (item.billing === "month") mrrTotal += item.price;
-    else if (item.billing === "year") {
-      oneShotTotal += item.price;
-      annualTotal += item.price;
-    } else {
-      oneShotTotal += item.price;
-    }
+    else oneShotTotal += item.price;
   });
 
   return {
     oneShotTotal,
     mrrTotal,
-    annualTotal,
-    commissionBase: oneShotTotal + mrrTotal, // Base 1er mois MRR + Annuel/One-Shot encaissé
+    commissionBase: oneShotTotal + mrrTotal, // Base 1er mois MRR + One-Shot
     itemsCount: 1 + (lead.extraItems?.length || 0),
   };
 }
@@ -538,7 +381,7 @@ export function canViewMemberFinances(viewer: TeamMember, target: TeamMember): b
   return false;
 }
 
-// ── Moteur de calcul des commissions (Pack Multi-Services + Split Setter/Closer + Override Manager 10%) ──
+// ── Moteur de calcul des commissions (Pack Multi-Services + Split Setter/Closer + Override Manager) ──
 
 export interface DealCommissionBreakdown {
   setterAmount: number;

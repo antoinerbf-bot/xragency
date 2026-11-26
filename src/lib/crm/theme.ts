@@ -1,6 +1,6 @@
-// ── XR AGENCY CRM — Système de 4 thèmes colorés, ludiques & Haute Couture ──
+// ── XR AGENCY CRM — Système de thèmes colorés, ludiques & sympathiques ──
 
-export type CrmThemeId = "pop" | "couture" | "mint" | "sunset";
+export type CrmThemeId = "pop" | "mint" | "sunset";
 
 export interface CrmThemeTokens {
   id: CrmThemeId;
@@ -39,32 +39,10 @@ export const CRM_THEMES: Record<CrmThemeId, CrmThemeTokens> = {
     textMain: "text-slate-900",
     textMuted: "text-slate-600",
     textSoft: "text-slate-400",
-    tabBarBg: "bg-white/85 border-slate-200/80 shadow-sm",
-    tabActive:
-      "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-500/25 border-transparent",
+    tabBarBg: "bg-white/80 border-slate-200/80 shadow-sm",
+    tabActive: "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-500/25 border-transparent",
     tabIdle: "text-slate-600 hover:text-slate-900 hover:bg-indigo-50/80",
     badgeSoft: "bg-indigo-50 text-indigo-700 border-indigo-200",
-  },
-  couture: {
-    id: "couture",
-    label: "Or & Ivoire XR",
-    emoji: "🥂",
-    isDark: false,
-    pageBg: "bg-gradient-to-br from-[#FAF8F5] via-[#F5F0E6] to-[#FAF8F5] text-[#1A1815]",
-    card: "bg-white/95 border-[#E6DFD3] shadow-sm shadow-[#1A1815]/[0.04]",
-    cardHover: "hover:border-[#A67C40] hover:shadow-md hover:shadow-[#A67C40]/12",
-    subCard: "bg-[#FAF8F5] border-[#EBE5DC]",
-    modalBg: "bg-[#FAF8F5] border-[#DFD6C7] shadow-2xl",
-    inputBg: "bg-white border-[#DFD6C7] text-[#1A1815] placeholder:text-[#8C8274]",
-    border: "border-[#E6DFD3]",
-    textMain: "text-[#1A1815]",
-    textMuted: "text-[#5C554B]",
-    textSoft: "text-[#8C8274]",
-    tabBarBg: "bg-white/90 border-[#E6DFD3] shadow-sm",
-    tabActive:
-      "bg-gradient-to-r from-[#1A1815] via-[#2C2721] to-[#A67C40] text-[#FAF8F5] shadow-md shadow-[#1A1815]/20 border-transparent",
-    tabIdle: "text-[#5C554B] hover:text-[#1A1815] hover:bg-[#F3EDE2]",
-    badgeSoft: "bg-[#FAF8F5] text-[#8F6830] border-[#D8B788]",
   },
   mint: {
     id: "mint",
@@ -82,14 +60,13 @@ export const CRM_THEMES: Record<CrmThemeId, CrmThemeTokens> = {
     textMuted: "text-slate-600",
     textSoft: "text-slate-400",
     tabBarBg: "bg-white/85 border-emerald-200/70 shadow-sm",
-    tabActive:
-      "bg-gradient-to-r from-teal-500 to-emerald-500 text-white shadow-md shadow-teal-500/25 border-transparent",
+    tabActive: "bg-gradient-to-r from-teal-500 to-emerald-500 text-white shadow-md shadow-teal-500/25 border-transparent",
     tabIdle: "text-slate-600 hover:text-slate-900 hover:bg-emerald-50",
     badgeSoft: "bg-emerald-50 text-emerald-700 border-emerald-200",
   },
   sunset: {
     id: "sunset",
-    label: "Sunset Arcade",
+    label: "Sunset Vibrant",
     emoji: "🌅",
     isDark: true,
     pageBg: "bg-gradient-to-br from-[#141132] via-[#1f1645] to-[#0f2639] text-white",
@@ -103,8 +80,7 @@ export const CRM_THEMES: Record<CrmThemeId, CrmThemeTokens> = {
     textMuted: "text-indigo-100/75",
     textSoft: "text-indigo-200/45",
     tabBarBg: "bg-white/[0.05] border-white/[0.1]",
-    tabActive:
-      "bg-gradient-to-r from-amber-400 via-orange-500 to-pink-500 text-white shadow-md shadow-orange-500/25 border-transparent",
+    tabActive: "bg-gradient-to-r from-amber-400 via-orange-500 to-pink-500 text-white shadow-md shadow-orange-500/25 border-transparent",
     tabIdle: "text-indigo-100/70 hover:text-white hover:bg-white/[0.07]",
     badgeSoft: "bg-amber-400/15 text-amber-200 border-amber-400/30",
   },

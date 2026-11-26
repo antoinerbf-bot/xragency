@@ -1,4 +1,4 @@
-// ── XR AGENCY CRM — Couche de synchronisation Cloud (/api/crm-sync + Supabase Realtime + Fallback localStorage) ──
+// ── XR AGENCY CRM — Couche de synchronisation Supabase temps réel + Fallback localStorage ──
 
 import { getSupabase, isSupabaseConfigured } from "@/lib/saas/supabase";
 import type { Lead, TeamMember } from "./data";
@@ -9,103 +9,143 @@ export function checkSupabaseStatus(): SyncState {
   return isSupabaseConfigured() ? "supabase_live" : "local_ready";
 }
 
-export interface CrmSyncSnapshot {
-  leads: Lead[];
-  allLeadsForArena: Lead[];
-  members: TeamMember[];
-  mode: "service" | "anon" | "memory";
-}
-
-export async function fetchCrmSnapshotFromServer(): Promise<CrmSyncSnapshot | null> {
+// Charger les leads depuis Supabase si configuré, sinon null (fallback localStorage)
+export async function fetchLeadsFromSupabase(): Promise<Lead[] | null> {
+  if (!isSupabaseConfigured()) return null;
   try {
-    const res = await fetch("/api/crm-sync", {
-      method: "GET",
-      credentials: "include",
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (!data?.ok) return null;
-    return {
-      leads: Array.isArray(data.leads) ? data.leads : [],
-      allLeadsForArena: Array.isArray(data.allLeadsForArena) ? data.allLeadsForArena : [],
-      members: Array.isArray(data.members) ? data.members : [],
-      mode: data.mode || "memory",
-    };
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from("crm_leads")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error || !data) return null;
+
+    return data.map((r) => ({
+      id: r.id,
+      name: r.name,
+      contact: r.contact,
+      phone: r.phone,
+      email: r.email || undefined,
+      websiteUrl: r.website_url || undefined,
+      sectorId: r.sector_id,
+      serviceId: r.service_id,
+      planLabel: r.plan_label,
+      billing: r.billing,
+      value: Number(r.value) || 0,
+      extraItems: Array.isArray(r.extra_items) ? r.extra_items : [],
+      stage: r.stage,
+      setterId: r.setter_id,
+      closerId: r.closer_id,
+      issue: r.issue || "",
+      notes: r.notes || "",
+      followUpDate: r.follow_up_date || undefined,
+      wonAt: r.won_at || undefined,
+      wonMonth: r.won_at ? String(r.won_at).slice(0, 7) : undefined,
+      installments: r.installments || undefined,
+      createdAt: new Date(r.created_at).toLocaleDateString("fr-FR", {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      commissionStatus: r.commission_status || "estimated",
+      mockupReady: Boolean(r.mockup_ready),
+      studioStatus: r.studio_status || undefined,
+      timeline: Array.isArray(r.timeline) ? r.timeline : [],
+    }));
   } catch {
     return null;
   }
 }
 
-export async function fetchLeadsFromSupabase(): Promise<Lead[] | null> {
-  const snap = await fetchCrmSnapshotFromServer();
-  return snap ? snap.leads : null;
-}
-
+// Sauvegarder / mettre à jour un lead dans Supabase si configuré
 export async function upsertLeadToSupabase(lead: Lead): Promise<boolean> {
+  if (!isSupabaseConfigured()) return false;
   try {
-    const res = await fetch("/api/crm-sync", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "upsert_lead", lead }),
+    const supabase = getSupabase();
+    const { error } = await supabase.from("crm_leads").upsert({
+      id: lead.id,
+      name: lead.name,
+      contact: lead.contact,
+      phone: lead.phone,
+      email: lead.email || null,
+      website_url: lead.websiteUrl || null,
+      sector_id: lead.sectorId,
+      service_id: lead.serviceId,
+      plan_label: lead.planLabel,
+      billing: lead.billing,
+      value: lead.value,
+      extra_items: lead.extraItems || [],
+      stage: lead.stage,
+      setter_id: lead.setterId,
+      closer_id: lead.closerId,
+      issue: lead.issue,
+      notes: lead.notes,
+      follow_up_date: lead.followUpDate || null,
+      won_at: lead.wonAt || null,
+      installments: lead.installments || { plan: "1x", paidCount: 0 },
+      commission_status: lead.commissionStatus,
+      mockup_ready: Boolean(lead.mockupReady),
+      studio_status: lead.studioStatus || null,
+      timeline: lead.timeline || [],
+      updated_at: new Date().toISOString(),
     });
-    return res.ok;
+    return !error;
   } catch {
     return false;
   }
 }
 
 export async function deleteLeadFromSupabase(leadId: string): Promise<boolean> {
+  if (!isSupabaseConfigured()) return false;
   try {
-    const res = await fetch("/api/crm-sync", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "delete_lead", leadId }),
-    });
-    return res.ok;
+    const supabase = getSupabase();
+    const { error } = await supabase.from("crm_leads").delete().eq("id", leadId);
+    return !error;
   } catch {
     return false;
   }
 }
 
 export async function upsertMemberToSupabase(member: TeamMember): Promise<boolean> {
+  if (!isSupabaseConfigured()) return false;
   try {
-    const res = await fetch("/api/crm-sync", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "upsert_member", member }),
+    const supabase = getSupabase();
+    const { error } = await supabase.from("crm_members").upsert({
+      id: member.id,
+      name: member.name,
+      short_name: member.shortName,
+      role_label: member.roleLabel,
+      role_type: member.roleType,
+      recruited_by: member.recruitedBy || null,
+      setting_rate: member.settingRate,
+      closing_rate: member.closingRate,
+      full_cycle_rate: member.fullCycleRate,
+      override_rate: member.overrideRate || 0,
+      avatar_bg: member.avatarBg,
+      badge: member.badge,
+      pin_hash: member.pin,
+      custom_pin_set: Boolean(member.customPinSet),
     });
-    return res.ok;
+    return !error;
   } catch {
     return false;
   }
 }
 
+// Abonnement temps réel aux changements CRM
 export function subscribeCrmRealtime(onChange: () => void): (() => void) | null {
-  let supaCleanup: (() => void) | null = null;
-  if (isSupabaseConfigured()) {
-    try {
-      const supabase = getSupabase();
-      const channel = supabase
-        .channel("xr_crm_realtime")
-        .on("postgres_changes", { event: "*", schema: "public", table: "crm_leads" }, onChange)
-        .subscribe();
-      supaCleanup = () => {
-        supabase.removeChannel(channel);
-      };
-    } catch {
-      // ignore
-    }
+  if (!isSupabaseConfigured()) return null;
+  try {
+    const supabase = getSupabase();
+    const channel = supabase
+      .channel("xr_crm_realtime")
+      .on("postgres_changes", { event: "*", schema: "public", table: "crm_leads" }, onChange)
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  } catch {
+    return null;
   }
-
-  // Polling doux multi-postes toutes les 20s pour garantir la synchro même sous RLS strict
-  const pollId =
-    typeof window !== "undefined" ? window.setInterval(() => onChange(), 20_000) : null;
-
-  return () => {
-    supaCleanup?.();
-    if (pollId !== null && typeof window !== "undefined") window.clearInterval(pollId);
-  };
 }
