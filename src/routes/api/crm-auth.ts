@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createHmac, timingSafeEqual } from "node:crypto";
+import { createHmac, timingSafeEqual, scryptSync, randomBytes } from "node:crypto";\nimport { getSupabaseServer } from "@/lib/saas/supabase";
 
 const SESSION_COOKIE = "xr_crm_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 8;
@@ -23,6 +23,24 @@ function getMemberPins(): Record<string, string> {
   } catch {
     return {};
   }
+}
+
+function hashCrmPin(pin: string): string {
+  const salt = randomBytes(16);
+  const hash = scryptSync(pin, salt, 64);
+  return `scrypt${salt.toString("hex")}${hash.toString("hex")}`;
+}
+
+function verifyStoredCrmPin(pin: string, stored: string): boolean {
+  const parts = stored.split("$");
+  if (parts.length !== 3 || parts[0] !== "scrypt") return false;
+  try {
+    const salt = Buffer.from(parts[1], "hex");
+    const expected = Buffer.from(parts[2], "hex");
+    if (salt.length !== 16 || expected.length !== 64) return false;
+    const actual = scryptSync(pin, salt, 64);
+    return timingSafeEqual(actual, expected);
+  } catch { return false; }
 }
 
 function safeCompare(a: string, b: string): boolean {
@@ -105,8 +123,17 @@ export const Route = createFileRoute("/api/crm-auth")({
         const memberId = payload.memberId?.trim();
         const pin = payload.pin?.trim();
         const pins = getMemberPins();
-        const expectedPin = memberId ? pins[memberId] : undefined;
-        if (!memberId || !pin || !expectedPin || !safeCompare(pin, expectedPin)) {
+        let verified = Boolean(memberId && pin && pins[memberId] && safeCompare(pin, pins[memberId]));
+        if (!verified && memberId && pin) {
+          try {
+            const supabase = getSupabaseServer();
+            const { data: member } = await supabase.from("crm_members").select("pin_hash").eq("id", memberId).maybeSingle();
+            if (member?.pin_hash && String(member.pin_hash).startsWith("scrypt$")) {
+              verified = verifyStoredCrmPin(pin, String(member.pin_hash));
+            }
+          } catch { /* fail closed below */ }
+        }
+        if (!memberId || !pin || !verified) {
           return Response.json({ ok: false, error: "Identifiant ou code incorrect." }, { status: 401 });
         }
 
