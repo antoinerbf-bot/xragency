@@ -270,7 +270,11 @@ function XrAgencyCrmApp() {
   const [newMemberRecruitedBy, setNewMemberRecruitedBy] = useState("");
 
   // Modal Changement Mot de Passe personnel
-  const [showChangePinModal, setShowChangePinModal] = useState(false);\n  const [currentPinValue, setCurrentPinValue] = useState("");\n  const [newPinValue, setNewPinValue] = useState("");\n  const [confirmPinValue, setConfirmPinValue] = useState("");\n  const [changePinError, setChangePinError] = useState("");
+  const [showChangePinModal, setShowChangePinModal] = useState(false);
+  const [currentPinValue, setCurrentPinValue] = useState("");
+  const [newPinValue, setNewPinValue] = useState("");
+  const [confirmPinValue, setConfirmPinValue] = useState("");
+  const [changePinError, setChangePinError] = useState("");
 
   // ── Persistance & Supabase Realtime ──
   useEffect(() => {
