@@ -265,7 +265,8 @@ function XrAgencyCrmApp() {
   const [newMemberRole, setNewMemberRole] = useState<UserRoleType>("closer");
   const [newMemberSettingPct, setNewMemberSettingPct] = useState(10);
   const [newMemberClosingPct, setNewMemberClosingPct] = useState(20);
-  const [newMemberFullPct, setNewMemberFullPct] = useState(20);\n  const [newMemberPin, setNewMemberPin] = useState("");
+  const [newMemberFullPct, setNewMemberFullPct] = useState(20);
+  const [newMemberPin, setNewMemberPin] = useState("");
   const [newMemberRecruitedBy, setNewMemberRecruitedBy] = useState("");
 
   // Modal Changement Mot de Passe personnel
@@ -973,13 +974,15 @@ function XrAgencyCrmApp() {
   };
 
   const handleExportCsv = () => {
-    const headers = "Entreprise;Contact;Telephone;Service;Formule;Valeur;Facturation;Etape;Relance;Date\n";
+    const headers = "Entreprise;Contact;Telephone;Service;Formule;Valeur;Facturation;Etape;Relance;Date
+";
     const rows = myVisibleLeads
       .map(
         (l) =>
           `"${l.name}";"${l.contact}";"${l.phone}";"${l.serviceId}";"${l.planLabel}";"${l.value}";"${l.billing}";"${l.stage}";"${l.followUpDate || ""}";"${l.createdAt}"`
       )
-      .join("\n");
+      .join("
+");
     const blob = new Blob([headers + rows], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
