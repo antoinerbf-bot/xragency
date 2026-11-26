@@ -277,6 +277,15 @@ function XrAgencyCrmApp() {
     if (typeof window !== "undefined") localStorage.setItem("xr_crm_members_v5", JSON.stringify(members));
   }, [members]);
 
+  useEffect(() => {
+    const onSyncStatus = (event: Event) => {
+      const state = (event as CustomEvent<SyncState>).detail;
+      if (state) setSyncStatus(state);
+    };
+    window.addEventListener("xr-crm-sync-status", onSyncStatus);
+    return () => window.removeEventListener("xr-crm-sync-status", onSyncStatus);
+  }, []);
+
   // Restore a session only after the server validates the HttpOnly signed cookie.
   useEffect(() => {
     let active = true;
