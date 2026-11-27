@@ -760,20 +760,94 @@ export function DirectorPersonalHub({
             </div>
             <div>
               <h3 className={`font-black text-sm sm:text-base flex items-center gap-2 ${theme.textMain}`}>
-                Fidélisation &amp; Upsell Client (Offres Récurrentes)
+                Fidélisation &amp; Moteur MRR (Offres Récurrentes)
               </h3>
               <p className={`text-xs ${theme.textMuted}`}>
-                Relances des clients livrés pour souscrire aux abonnements WebCare, Google Maps Top 3 et forfaits annuels.
+                Relances des clients livrés pour souscrire aux abonnements WebCare (99€/m), Maps Top 3 (159€/m) et SEO.
               </p>
             </div>
           </div>
-          <button
-            onClick={() => setShowAddLoyalty(!showAddLoyalty)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-xs shadow-sm hover:scale-[1.02]"
-          >
-            <Plus className="w-3.5 h-3.5" /> Ajouter client à fidéliser
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => {
+                const wonLeads = allLeads.filter((l) => l.stage === "won");
+                const existingNames = new Set(loyaltyClients.map((c) => c.clientName.toLowerCase()));
+                const toAdd: LoyaltyClient[] = wonLeads
+                  .filter((l) => !existingNames.has(l.name.toLowerCase()))
+                  .map((l, i) => ({
+                    id: `loy-auto-${Date.now()}-${i}`,
+                    clientName: l.name,
+                    contactPerson: l.contact,
+                    phone: l.phone || "+33 6 00 00 00 00",
+                    currentService: "Site Web livré",
+                    targetRecurringOffer: "WebCare Maintenance Élite (99 €/m)",
+                    monthlyMrrEur: 99,
+                    nextFollowUpDate: new Date(Date.now() + 14 * 24 * 3600 * 1000).toISOString().slice(0, 10),
+                    status: "to_contact" as const,
+                    notes: "Import automatique prospect closé - Proposition WebCare à J+14",
+                  }));
+
+                if (toAdd.length === 0) {
+                  alert("Tous les clients closés sont déjà présents dans votre portefeuille de fidélisation !");
+                  return;
+                }
+
+                const updated = [...toAdd, ...loyaltyClients];
+                setLoyaltyClients(updated);
+                if (typeof window !== "undefined") {
+                  localStorage.setItem("xr_antoine_loyalty_clients", JSON.stringify(updated));
+                }
+                onSound?.();
+              }}
+              title="Importer automatiquement les clients closés pour programmer la relance récurrente à J+14"
+              className={`px-3 py-2 rounded-xl border text-xs font-bold transition hover:bg-black/5 dark:hover:bg-white/5 ${theme.subCard} ${theme.textMain}`}
+            >
+              ⚡ Auto-Import Clients Gagnés (J+14)
+            </button>
+            <button
+              onClick={() => setShowAddLoyalty(!showAddLoyalty)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-xs shadow-sm hover:scale-[1.02]"
+            >
+              <Plus className="w-3.5 h-3.5" /> Ajouter client à fidéliser
+            </button>
+          </div>
         </div>
+
+        {/* ── METRICS MRR / ARR REVENUS RÉCURRENTS ── */}
+        {(() => {
+          const activeSubscribers = loyaltyClients.filter((c) => c.status === "subscribed");
+          const totalMrr = activeSubscribers.reduce((acc, c) => acc + (c.monthlyMrrEur || 0), 0);
+          const totalArr = totalMrr * 12;
+          const pipelineMrr = loyaltyClients
+            .filter((c) => c.status !== "subscribed")
+            .reduce((acc, c) => acc + (c.monthlyMrrEur || 0), 0);
+
+          return (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3.5 rounded-2xl bg-black/5 dark:bg-white/5 border border-slate-200/50 dark:border-white/10">
+              <div>
+                <p className={`text-[10px] font-bold uppercase tracking-wider ${theme.textSoft}`}>MRR Actif Sécurisé</p>
+                <p className="font-mono font-black text-xl text-emerald-600 dark:text-emerald-400">
+                  {totalMrr.toLocaleString("fr-FR")} € <span className="text-xs font-normal text-slate-400">/ mois</span>
+                </p>
+                <p className={`text-[10px] ${theme.textMuted}`}>{activeSubscribers.length} client(s) sous contrat récurrent</p>
+              </div>
+              <div>
+                <p className={`text-[10px] font-bold uppercase tracking-wider ${theme.textSoft}`}>ARR (Projection Annuelle)</p>
+                <p className="font-mono font-black text-xl text-indigo-600 dark:text-amber-300">
+                  {totalArr.toLocaleString("fr-FR")} € <span className="text-xs font-normal text-slate-400">/ an</span>
+                </p>
+                <p className={`text-[10px] ${theme.textMuted}`}>Revenu garanti récurrent</p>
+              </div>
+              <div>
+                <p className={`text-[10px] font-bold uppercase tracking-wider ${theme.textSoft}`}>Potentiel en Négociation</p>
+                <p className="font-mono font-black text-xl text-amber-500">
+                  +{pipelineMrr.toLocaleString("fr-FR")} € <span className="text-xs font-normal text-slate-400">/ mois</span>
+                </p>
+                <p className={`text-[10px] ${theme.textMuted}`}>{loyaltyClients.length - activeSubscribers.length} client(s) à convertir</p>
+              </div>
+            </div>
+          );
+        })()}
 
         {showAddLoyalty && (
           <div className={`p-4 rounded-2xl border space-y-3 ${theme.subCard}`}>

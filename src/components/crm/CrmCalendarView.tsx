@@ -13,9 +13,22 @@ import {
   ArrowRight,
   Flame,
   ShieldAlert,
+  Download,
+  Briefcase,
+  Home,
+  Layers,
 } from "lucide-react";
 import type { Lead, TeamMember } from "@/lib/crm/data";
 import type { CrmThemeTokens } from "@/lib/crm/theme";
+
+interface CustomReminder {
+  id: string;
+  date: string;
+  time: string;
+  title: string;
+  memberId: string;
+  category?: "pro" | "perso";
+}
 
 interface CrmCalendarViewProps {
   leads: Lead[];
@@ -41,12 +54,11 @@ export function CrmCalendarView({
   const [selectedDate, setSelectedDate] = useState<string>(() => {
     return new Date().toISOString().slice(0, 10);
   });
-  const [customReminders, setCustomReminders] = useState<
-    { id: string; date: string; time: string; title: string; memberId: string }[]
-  >(() => {
+  const [scopeFilter, setScopeFilter] = useState<"all" | "pro" | "perso">("all");
+  const [customReminders, setCustomReminders] = useState<CustomReminder[]>(() => {
     if (typeof window !== "undefined") {
       try {
-        const saved = localStorage.getItem("xr_crm_custom_reminders");
+        const saved = localStorage.getItem("xr_crm_custom_reminders_v2");
         if (saved) return JSON.parse(saved);
       } catch {
         // ignore
@@ -57,14 +69,16 @@ export function CrmCalendarView({
         id: "rem-1",
         date: new Date().toISOString().slice(0, 10),
         time: "14:00",
-        title: "Point d'équipe Closing & Débrief Maquettes",
+        title: "Point Closing d'équipe & Débrief Maquettes",
         memberId: "all",
+        category: "pro",
       },
     ];
   });
 
   const [newReminderTitle, setNewReminderTitle] = useState("");
   const [newReminderTime, setNewReminderTime] = useState("10:00");
+  const [newReminderCategory, setNewReminderCategory] = useState<"pro" | "perso">("pro");
   const [showAddReminder, setShowAddReminder] = useState(false);
 
   // Filtrage des leads visibles pour l'utilisateur
@@ -107,37 +121,90 @@ export function CrmCalendarView({
     }).sort((a, b) => a.deadline.getTime() - b.deadline.getTime());
   }, [leads, members]);
 
-  // Événements pour la date sélectionnée
+  // Événements pour la date sélectionnée (filtrés selon le scope Pro/Perso)
   const eventsForSelectedDate = useMemo(() => {
-    const leadFollowUps = myVisibleLeads.filter((l) => l.followUpDate === selectedDate);
-    const mockupsDue = mockupQueue.filter(
-      (m) => m.deadline.toISOString().slice(0, 10) === selectedDate
-    );
-    const reminders = customReminders.filter(
-      (r) =>
-        r.date === selectedDate && (r.memberId === "all" || r.memberId === currentUser.id)
-    );
+    const leadFollowUps =
+      scopeFilter === "perso"
+        ? []
+        : myVisibleLeads.filter((l) => l.followUpDate === selectedDate);
+
+    const mockupsDue =
+      scopeFilter === "perso"
+        ? []
+        : mockupQueue.filter(
+            (m) => m.deadline.toISOString().slice(0, 10) === selectedDate
+          );
+
+    const reminders = customReminders.filter((r) => {
+      if (r.date !== selectedDate) return false;
+      // Vérification propriétaire (strictement personnel ou tous)
+      const isMine = r.memberId === "all" || r.memberId === currentUser.id;
+      if (!isMine) return false;
+
+      const cat = r.category || "pro";
+      if (scopeFilter === "pro" && cat !== "pro") return false;
+      if (scopeFilter === "perso" && cat !== "perso") return false;
+      return true;
+    });
 
     return { leadFollowUps, mockupsDue, reminders };
-  }, [myVisibleLeads, mockupQueue, customReminders, selectedDate, currentUser.id]);
+  }, [myVisibleLeads, mockupQueue, customReminders, selectedDate, currentUser.id, scopeFilter]);
 
   const handleAddReminder = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newReminderTitle.trim()) return;
-    const item = {
+    const item: CustomReminder = {
       id: `rem-${Date.now()}`,
       date: selectedDate,
       time: newReminderTime,
       title: newReminderTitle.trim(),
       memberId: currentUser.id,
+      category: newReminderCategory,
     };
     const updated = [item, ...customReminders];
     setCustomReminders(updated);
     if (typeof window !== "undefined") {
-      localStorage.setItem("xr_crm_custom_reminders", JSON.stringify(updated));
+      localStorage.setItem("xr_crm_custom_reminders_v2", JSON.stringify(updated));
     }
     setNewReminderTitle("");
     setShowAddReminder(false);
+  };
+
+  // Export vers fichier standard iCal (.ics) pour iPhone, Mac et Google Calendar
+  const handleExportIcs = () => {
+    let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//XR Agency//CRM Calendar//FR\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\n";
+
+    // Ajout des relances
+    myVisibleLeads.forEach((l) => {
+      if (!l.followUpDate) return;
+      const cleanDate = l.followUpDate.replace(/-/g, "");
+      icsContent += `BEGIN:VEVENT\nSUMMARY:Relance Client - ${l.name} (${l.contact})\nDESCRIPTION:Prospect XR Agency: ${l.phone || ""} - Étape: ${l.stage}\nDTSTART;VALUE=DATE:${cleanDate}\nDTEND;VALUE=DATE:${cleanDate}\nSTATUS:CONFIRMED\nEND:VEVENT\n`;
+    });
+
+    // Ajout des maquettes studio
+    mockupQueue.forEach((m) => {
+      const dStr = m.deadline.toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z";
+      icsContent += `BEGIN:VEVENT\nSUMMARY:⚡ Échéance Maquette 24h - ${m.lead.name}\nDESCRIPTION:Demandé par ${m.closerName} - Brief: ${m.lead.mockupNotes || ""}\nDTSTART:${dStr}\nDTEND:${dStr}\nPRIORITY:1\nSTATUS:CONFIRMED\nEND:VEVENT\n`;
+    });
+
+    // Ajout des rappels
+    customReminders.filter((r) => r.memberId === "all" || r.memberId === currentUser.id).forEach((r) => {
+      const cleanDate = r.date.replace(/-/g, "");
+      const cleanTime = (r.time || "10:00").replace(":", "") + "00";
+      icsContent += `BEGIN:VEVENT\nSUMMARY:[${r.category === "perso" ? "Perso" : "Pro"}] ${r.title}\nDTSTART:${cleanDate}T${cleanTime}\nDTEND:${cleanDate}T${cleanTime}\nSTATUS:CONFIRMED\nEND:VEVENT\n`;
+    });
+
+    icsContent += "END:VCALENDAR";
+
+    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `xr-agenda-${currentUser.shortName.toLowerCase()}.ics`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   // Génération des 14 prochains jours pour la réglette
@@ -287,7 +354,7 @@ export function CrmCalendarView({
         </div>
       )}
 
-      {/* ── BANDEAU OBJECTIFS DU MOIS ── */}
+      {/* ── BANDEAU OBJECTIFS DU MOIS & FILTRES PRO / PERSO ── */}
       <div className={`p-5 rounded-3xl border flex flex-col md:flex-row items-start md:items-center justify-between gap-4 ${theme.card}`}>
         <div className="flex items-center gap-3.5">
           <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center font-black shadow-lg shrink-0">
@@ -295,7 +362,7 @@ export function CrmCalendarView({
           </div>
           <div>
             <h2 className={`text-base sm:text-lg font-black ${theme.textMain}`}>
-              Calendrier Commercial &amp; Objectifs 📅
+              Calendrier Commercial &amp; Vie Pro/Perso 📅
             </h2>
             <p className={`text-xs ${theme.textMuted}`}>
               Synchronisation des relances, rendez-vous qualifiés et livraisons de maquettes.
@@ -304,6 +371,50 @@ export function CrmCalendarView({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {/* Sélecteur de portée Pro / Perso */}
+          <div className="inline-flex items-center p-1 rounded-xl border gap-1 bg-black/5 dark:bg-white/5 border-slate-200 dark:border-white/10 text-xs font-bold">
+            <button
+              onClick={() => setScopeFilter("all")}
+              className={`px-2.5 py-1 rounded-lg transition-all ${
+                scopeFilter === "all"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : `${theme.textMuted} hover:text-slate-900 dark:hover:text-white`
+              }`}
+            >
+              Tous
+            </button>
+            <button
+              onClick={() => setScopeFilter("pro")}
+              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg transition-all ${
+                scopeFilter === "pro"
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : `${theme.textMuted} hover:text-slate-900 dark:hover:text-white`
+              }`}
+            >
+              <Briefcase className="w-3 h-3" /> Pro
+            </button>
+            <button
+              onClick={() => setScopeFilter("perso")}
+              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg transition-all ${
+                scopeFilter === "perso"
+                  ? "bg-purple-600 text-white shadow-sm"
+                  : `${theme.textMuted} hover:text-slate-900 dark:hover:text-white`
+              }`}
+            >
+              <Home className="w-3 h-3" /> Perso
+            </button>
+          </div>
+
+          {/* Bouton Export iCal / Google Calendar */}
+          <button
+            onClick={handleExportIcs}
+            title="Exporter vers Apple Calendar, iPhone ou Google Calendar (.ics)"
+            className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition-all hover:bg-black/5 dark:hover:bg-white/5 ${theme.subCard} ${theme.textMain}`}
+          >
+            <Download className="w-3.5 h-3.5 text-indigo-500" />
+            <span className="hidden sm:inline">Export</span> iCal
+          </button>
+
           <button
             onClick={() => setShowAddReminder(!showAddReminder)}
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-xs shadow-sm hover:scale-[1.02]"
@@ -323,7 +434,7 @@ export function CrmCalendarView({
             <input
               type="text"
               required
-              placeholder="Objet du rappel (ex: Appel M. Dupont pour closing)..."
+              placeholder="Objet du rappel (ex: Appel client closing, sport, rdv médical)..."
               value={newReminderTitle}
               onChange={(e) => setNewReminderTitle(e.target.value)}
               className={`flex-1 min-w-[240px] px-3 py-2 rounded-xl text-xs border ${theme.inputBg}`}
@@ -334,6 +445,30 @@ export function CrmCalendarView({
               onChange={(e) => setNewReminderTime(e.target.value)}
               className={`px-3 py-2 rounded-xl text-xs border ${theme.inputBg}`}
             />
+            <div className="flex items-center gap-1 text-xs">
+              <button
+                type="button"
+                onClick={() => setNewReminderCategory("pro")}
+                className={`px-2.5 py-1.5 rounded-lg border font-bold text-xs ${
+                  newReminderCategory === "pro"
+                    ? "bg-indigo-600 text-white border-indigo-600"
+                    : `${theme.inputBg} ${theme.textMuted}`
+                }`}
+              >
+                💼 Pro
+              </button>
+              <button
+                type="button"
+                onClick={() => setNewReminderCategory("perso")}
+                className={`px-2.5 py-1.5 rounded-lg border font-bold text-xs ${
+                  newReminderCategory === "perso"
+                    ? "bg-purple-600 text-white border-purple-600"
+                    : `${theme.inputBg} ${theme.textMuted}`
+                }`}
+              >
+                🏠 Perso (Privé)
+              </button>
+            </div>
             <button
               type="submit"
               className="px-4 py-2 rounded-xl bg-emerald-600 text-white font-extrabold text-xs"
@@ -471,13 +606,39 @@ export function CrmCalendarView({
                   key={r.id}
                   className={`p-3.5 rounded-2xl border flex items-center justify-between gap-2 ${theme.subCard}`}
                 >
-                  <div>
-                    <h4 className={`font-bold text-xs ${theme.textMain}`}>{r.title}</h4>
-                    <p className={`text-[10px] font-mono text-indigo-600 dark:text-amber-300`}>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${
+                          r.category === "perso"
+                            ? "bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-500/30"
+                            : "bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30"
+                        }`}
+                      >
+                        {r.category === "perso" ? "🏠 Perso" : "💼 Pro"}
+                      </span>
+                      <h4 className={`font-bold text-xs truncate ${theme.textMain}`}>{r.title}</h4>
+                    </div>
+                    <p className={`text-[10px] font-mono mt-1 text-indigo-600 dark:text-amber-300`}>
                       ⏰ {r.time}
                     </p>
                   </div>
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => {
+                        const updated = customReminders.filter((x) => x.id !== r.id);
+                        setCustomReminders(updated);
+                        if (typeof window !== "undefined") {
+                          localStorage.setItem("xr_crm_custom_reminders_v2", JSON.stringify(updated));
+                        }
+                      }}
+                      title="Supprimer ce rappel"
+                      className="text-[11px] text-slate-400 hover:text-rose-500 p-1"
+                    >
+                      ✕
+                    </button>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  </div>
                 </div>
               ))}
             </div>

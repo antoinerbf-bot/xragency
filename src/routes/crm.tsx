@@ -2930,7 +2930,11 @@ function LeadCard({
   const extraCount = lead.extraItems?.length || 0;
 
   const cleanWa = formatWaPhone(lead.phone);
-  const waMsg = `Bonjour ${lead.contact || ""}, je vous contacte de la part de XR Agency concernant votre projet ${lead.name}.`;
+  const waMsg = lead.mockupReady
+    ? `Bonjour ${lead.contact || ""}, bonne nouvelle : notre Studio XR vient de finaliser la maquette interactive de votre futur site pour ${lead.name} ! Avez-vous 5 minutes pour qu'on vous la présente ?`
+    : lead.stage === "proposal"
+    ? `Bonjour ${lead.contact || ""}, je reviens vers vous suite à la proposition de XR Agency pour ${lead.name}. Avez-vous pu la consulter ou avez-vous des questions ?`
+    : `Bonjour ${lead.contact || ""}, je vous contacte de la part de XR Agency concernant la modernisation de l'image de marque et la visibilité web de ${lead.name}. Êtes-vous disponible 5 min pour un rapide échange ?`;
   const waUrl = cleanWa.length >= 8 ? `https://wa.me/${cleanWa}?text=${encodeURIComponent(waMsg)}` : null;
 
   return (
@@ -3021,7 +3025,21 @@ function LeadCard({
           <button onClick={onPdf} className={`text-[10px] font-bold flex items-center gap-0.5 ${theme.textMuted}`} title="Générer Devis PDF">
             <FileText className="w-3 h-3 text-amber-500" /> PDF
           </button>
-          {onRequestMockup && lead.stage !== "won" && (
+          {lead.mockupReady && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                const demoUrl = `${window.location.origin}/preview/${lead.id}`;
+                void navigator.clipboard?.writeText(demoUrl);
+                alert(`Lien démo interactif copié dans le presse-papier :\n${demoUrl}`);
+              }}
+              className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5 hover:underline"
+              title="Copier le lien de prévisualisation interactif de la maquette"
+            >
+              <Sparkles className="w-3 h-3 text-emerald-500" /> Démo Maquette
+            </button>
+          )}
+          {onRequestMockup && lead.stage !== "won" && !lead.mockupReady && (
             <button
               onClick={(e) => {
                 e.stopPropagation();

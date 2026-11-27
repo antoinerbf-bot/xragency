@@ -311,7 +311,7 @@ export function HomeServices() {
 
                       {/* 3 Key Deliverables */}
                       <div className="mt-6 flex flex-wrap gap-2.5">
-                        {service.deliverables.slice(0, 3).map((deliv) => (
+                        {(service.deliverables ?? []).slice(0, 3).map((deliv) => (
                           <div
                             key={deliv.title.fr}
                             className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-black/50 px-3.5 py-2 backdrop-blur-md text-xs text-white/90"

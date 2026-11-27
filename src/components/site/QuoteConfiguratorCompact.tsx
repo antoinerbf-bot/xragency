@@ -1218,7 +1218,7 @@ export function QuoteConfiguratorCompact() {
   const PACK_PRESETS = [
     {
       id: "launch",
-      emoji: "🌟",
+      Icon: Globe,
       badge: "Lancement Rapide",
       title: "Pack Lancement & Notoriété",
       sub: "Site web vitrine d'exception, identité visuelle signature et création de votre fiche Google Maps.",
@@ -1226,7 +1226,7 @@ export function QuoteConfiguratorCompact() {
     },
     {
       id: "leads",
-      emoji: "🚀",
+      Icon: TrendingUp,
       badge: "Performance & Flux",
       title: "Pack Conquête Clients",
       sub: "Arriver dans le Top 3 Google Maps, dominer le référencement naturel SEO et attirer sur les réseaux.",
@@ -1234,7 +1234,7 @@ export function QuoteConfiguratorCompact() {
     },
     {
       id: "direct",
-      emoji: "💰",
+      Icon: ShoppingBag,
       badge: "0% Commission",
       title: "Pack Vente Directe & CRM",
       sub: "Application web Click & Collect, réservations sans intermédiaire et logiciel CRM caisse sur-mesure.",
@@ -1242,7 +1242,7 @@ export function QuoteConfiguratorCompact() {
     },
     {
       id: "full",
-      emoji: "👑",
+      Icon: Gem,
       badge: "Tout-en-un Studio",
       title: "Écosystème Haute Couture",
       sub: "Dispositif complet : Identité globale, Site web, Top 3 Google, Automatisation IA & WebCare serein.",
@@ -1649,11 +1649,11 @@ export function QuoteConfiguratorCompact() {
             {/* STEP 1 — BESOINS & DIAGNOSTIC INTERACTIF */}
             {step === 1 && (
               <div className="space-y-8">
-                {/* 1. CHOIX LUDIQUE : QUEL EST VOTRE GRAND OBJECTIF ? */}
+                {/* 1. CHOIX LUDIQUE DU PACK STRATÉGIQUE */}
                 <div>
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
-                      1. Quel est votre Objectif Principal ? (1 Clic)
+                      1. Choisissez votre Pack Stratégique (1 Clic)
                     </label>
                     <span className="font-mono text-[10px] text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full font-semibold">
                       ✨ Pack configuré automatiquement
@@ -1663,6 +1663,7 @@ export function QuoteConfiguratorCompact() {
                   <div className="mt-3.5 grid grid-cols-1 gap-3 sm:grid-cols-2">
                     {PACK_PRESETS.map((p) => {
                       const isActive = activePackPreset === p.id;
+                      const Icon = p.Icon;
                       return (
                         <button
                           key={p.id}
@@ -1680,7 +1681,16 @@ export function QuoteConfiguratorCompact() {
                         >
                           <div>
                             <div className="flex items-center justify-between">
-                              <span className="text-2xl">{p.emoji}</span>
+                              <span
+                                className={cn(
+                                  "grid h-9 w-9 place-items-center rounded-xl transition",
+                                  isActive
+                                    ? "bg-white/20 text-[#E5C696]"
+                                    : "bg-white text-[#8D6C42] border border-[#171613]/10"
+                                )}
+                              >
+                                <Icon className="h-5 w-5" />
+                              </span>
                               <span
                                 className={cn(
                                   "font-mono text-[10px] font-semibold uppercase tracking-wider rounded-full px-2.5 py-0.5",
@@ -1692,7 +1702,7 @@ export function QuoteConfiguratorCompact() {
                                 {p.badge}
                               </span>
                             </div>
-                            <h4 className="mt-2.5 text-base font-bold tracking-tight">
+                            <h4 className="mt-3 text-base font-bold tracking-tight">
                               {p.title}
                             </h4>
                             <p
@@ -1717,61 +1727,14 @@ export function QuoteConfiguratorCompact() {
                   </div>
                 </div>
 
-                {/* 2. SIMULATEUR LUDIQUE DE GAINS & ÉCONOMIES DIRECTES */}
-                <div className="rounded-2xl border border-emerald-300/60 bg-gradient-to-br from-emerald-50/80 via-[#FAF7F0] to-emerald-50/40 p-4 sm:p-5 shadow-xs">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <TrendingUp className="h-4 w-4 text-emerald-700" />
-                        <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-emerald-900">
-                          Simulateur d'Économies & Vente Directe
-                        </span>
-                      </div>
-                      <p className="mt-1 text-xs text-[#524B40] max-w-md">
-                        En éliminant les commissions de 15% à 30% des plateformes tierces grâce à vos outils de commande & réservation directe XRAGENCY.
-                      </p>
-                    </div>
-
-                    <div className="sm:text-right shrink-0">
-                      <span className="font-mono text-2xl font-black text-emerald-800">
-                        ~{price(estimatedSavings)}
-                      </span>
-                      <span className="text-xs text-emerald-700 block font-semibold">/ mois d'économies</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 pt-3 border-t border-emerald-200/60">
-                    <div className="flex items-center justify-between text-xs font-semibold text-[#171613]">
-                      <span>Vos commandes ou clients mensuels :</span>
-                      <span className="font-mono font-bold text-sm bg-white px-2.5 py-0.5 rounded-lg border border-[#171613]/10">
-                        {monthlyVolume} clients / mois
-                      </span>
-                    </div>
-                    <input
-                      type="range"
-                      min={30}
-                      max={1200}
-                      step={10}
-                      value={monthlyVolume}
-                      onChange={(e) => setMonthlyVolume(Number(e.target.value))}
-                      className="mt-2.5 w-full accent-[#171613] cursor-pointer"
-                    />
-                    <div className="mt-1 flex justify-between text-[10px] font-mono text-[#777]">
-                      <span>30 <span className="hidden sm:inline">(Démarrage)</span></span>
-                      <span>300 <span className="hidden sm:inline">(Activité soutenue)</span></span>
-                      <span>1 200+ <span className="hidden sm:inline">(Forte affluence)</span></span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 3. SECTEUR D'ACTIVITÉ */}
+                {/* 2. SECTEUR D'ACTIVITÉ */}
                 <div>
                   <div className="flex items-center justify-between">
                     <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
                       2. Votre Secteur d'Activité
                     </label>
                     <span className="font-mono text-[10px] text-[#9E7F5A] bg-[#F4EFE6] px-2.5 py-0.5 rounded-full">
-                      Europe & International
+                      Adaptation sectorielle
                     </span>
                   </div>
                   <div className="mt-3.5 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
@@ -1784,7 +1747,6 @@ export function QuoteConfiguratorCompact() {
                           type="button"
                           onClick={() => {
                             setBusinessType(b.id);
-                            // Auto-apply recommended services
                             setSelectedServices(b.recommendedServices);
                           }}
                           className={`group flex items-center gap-3 rounded-2xl border p-3.5 text-start text-xs font-semibold transition-all duration-200 ${
@@ -1807,112 +1769,13 @@ export function QuoteConfiguratorCompact() {
                   </div>
                 </div>
 
-                {/* 3. SITUATION ACTUELLE */}
-                <div>
-                  <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
-                    3. Votre Situation Actuelle
-                  </label>
-                  <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                    {CURRENT_SITUATIONS.map((sit) => {
-                      const active = currentSituation === sit.id;
-                      return (
-                        <button
-                          key={sit.id}
-                          type="button"
-                          onClick={() => {
-                            setCurrentSituation(sit.id);
-                            if (!selectedServices.includes(sit.recommendedBoost)) {
-                              setSelectedServices((prev) => [...prev, sit.recommendedBoost]);
-                            }
-                          }}
-                          className={`flex items-start gap-2.5 rounded-2xl border p-3 text-start text-xs font-medium transition ${
-                            active
-                              ? "border-[#9E7F5A] bg-[#F7F2EA] text-[#171613] font-semibold"
-                              : "border-[#171613]/10 bg-[#FAF8F4] text-[#57534B] hover:border-[#9E7F5A]"
-                          }`}
-                        >
-                          <span
-                            className={`mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full border ${
-                              active ? "border-[#9E7F5A] bg-[#9E7F5A] text-white" : "border-[#171613]/25 bg-white"
-                            }`}
-                          >
-                            {active && <Check className="h-2.5 w-2.5" />}
-                          </span>
-                          <span className="leading-relaxed">{t(sit.label)}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* 4. FOURCHETTE BUDGÉTAIRE */}
-                <div>
-                  <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
-                    4. Budget Envisagé
-                  </label>
-                  <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-                    {BUDGET_TIERS.map((tier) => {
-                      const active = budgetTier === tier.id;
-                      return (
-                        <button
-                          key={tier.id}
-                          type="button"
-                          onClick={() => setBudgetTier(tier.id)}
-                          className={`flex flex-col justify-between rounded-2xl border p-3.5 text-start transition ${
-                            active
-                              ? "border-[#171613] bg-[#171613] text-[#F7F4EE] shadow-md"
-                              : "border-[#171613]/12 bg-[#FAF8F4] text-[#171613] hover:border-[#9E7F5A]"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="font-mono text-[10px] tracking-wider uppercase text-[#E5C696]">
-                              {tier.tag}
-                            </span>
-                            {active && <Check className="h-3.5 w-3.5 text-[#E5C696]" />}
-                          </div>
-                          <span className="mt-2 text-sm font-bold">{tier.range}</span>
-                          <span className={`text-[11px] mt-0.5 ${active ? "text-white/70" : "text-[#57534B]"}`}>
-                            {t(tier.label)}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* 4. CARTE DE RECOMMANDATION INTELLIGENTE SECTORIELLE */}
-                {(() => {
-                  const currBiz = BUSINESS_TYPES.find((b) => b.id === businessType) ?? BUSINESS_TYPES[0];
-                  return (
-                    <div className="rounded-2xl border border-[#D8B788]/40 bg-gradient-to-br from-[#FAF5EC] to-[#F3EDE2] p-4 sm:p-5 shadow-sm">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="h-4 w-4 text-[#B58D59]" />
-                        <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#8F6A38]">
-                          Diagnostic & Recommandation XRAGENCY
-                        </span>
-                      </div>
-                      <p className="mt-2 text-xs sm:text-[13px] leading-relaxed text-[#4A443B]">
-                        {t(currBiz.pitch)}
-                      </p>
-                      {currBiz.defaultLossEstimate > 0 && (
-                        <div className="mt-3 inline-flex items-center gap-2 rounded-xl border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">
-                          <TrendingUp className="h-3.5 w-3.5" />
-                          <span>
-                            Économie estimée : jusqu'à {price(currBiz.defaultLossEstimate)} / an de commissions tierces récupérées.
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })()}
-
-                {/* 5. SERVICES À SÉLECTIONNER */}
+                {/* 3. SERVICES À SÉLECTIONNER OU AJUSTER */}
                 <div>
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <label className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
-                      5. Vos Leviers d'Action & Services
+                      3. Vos Services & Pôles d'Excellence
                     </label>
-                    <span className="text-xs text-[#57534B]">Sélectionnez ou ajustez librement</span>
+                    <span className="text-xs text-[#57534B]">Ajustez les disciplines selon vos besoins</span>
                   </div>
                   <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                     {CATALOG_GROUPS.map(({ id, Icon, title, short, plans }) => {
@@ -1963,14 +1826,49 @@ export function QuoteConfiguratorCompact() {
                                 checked ? "text-emerald-300" : "text-[#12110E]"
                               }`}
                             >
-                              {minPlan.priceEur > 0
-                                ? `${safeLang === "en" ? "From" : "Dès"} ${price(minPlan.priceEur)}${getPeriodShortLabel(minPlan.period, safeLang)}`
-                                : ui.customBadge}
+                              {id === "websites"
+                                ? "À partir de 499 €"
+                                : minPlan.priceEur > 0
+                                  ? `${safeLang === "en" ? "From" : "Dès"} ${price(minPlan.priceEur)}${getPeriodShortLabel(minPlan.period, safeLang)}`
+                                  : ui.customBadge}
                             </p>
                           </div>
                         </button>
                       );
                     })}
+                  </div>
+                </div>
+
+                {/* 4. NOS 3 GARANTIES D'EXCELLENCE & DE RASSURANCE */}
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 border-t border-[#171613]/10 pt-5">
+                  <div className="rounded-2xl border border-emerald-500/20 bg-emerald-50/50 p-3.5 text-start">
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+                      <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
+                      Maquette 48h offerte
+                    </span>
+                    <p className="mt-1 text-[11px] text-[#4A453C] leading-snug">
+                      Prototype interactif sur-mesure livré sous 24-48h, sans aucun engagement.
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-amber-500/20 bg-amber-50/50 p-3.5 text-start">
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-amber-800 flex items-center gap-1.5">
+                      <TrendingUp className="h-3.5 w-3.5 text-amber-600" />
+                      Délai Garanti 7-14j
+                    </span>
+                    <p className="mt-1 text-[11px] text-[#4A453C] leading-snug">
+                      Planning contractuel ferme et production réactive sans décalage de date.
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-blue-500/20 bg-blue-50/50 p-3.5 text-start">
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-blue-800 flex items-center gap-1.5">
+                      <ShieldCheck className="h-3.5 w-3.5 text-blue-600" />
+                      0% Commission Cachée
+                    </span>
+                    <p className="mt-1 text-[11px] text-[#4A453C] leading-snug">
+                      Pleine propriété du code, de l'identité et de l'ensemble de vos outils.
+                    </p>
                   </div>
                 </div>
 
@@ -1984,9 +1882,9 @@ export function QuoteConfiguratorCompact() {
                   <button
                     type="button"
                     onClick={() => goStep(2)}
-                    className="inline-flex items-center gap-2 rounded-full bg-[#12110E] px-7 py-3.5 text-xs font-semibold text-white shadow-md transition hover:bg-[#2B2925]"
+                    className="inline-flex items-center gap-2 rounded-full bg-[#12110E] px-7 py-3.5 text-xs font-semibold text-white shadow-md transition hover:bg-[#2B2925] active:scale-[0.98]"
                   >
-                    {ui.continueBtn}
+                    <span>Continuer vers les formules & options</span>
                     <ArrowRight className="h-4 w-4 text-white" />
                   </button>
                 </div>
