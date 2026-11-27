@@ -684,7 +684,7 @@ export function Hero() {
                         <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                         PROJET RÉEL STUDIO
                       </span>
-                      <span className="rounded-full border border-emerald-500/30 bg-emerald-500/20 px-2.5 py-1 font-mono text-[10px] font-bold text-emerald-300 backdrop-blur-md">
+                      <span className="rounded-full border border-emerald-500/40 bg-black/80 px-2.5 py-1 font-mono text-[10px] font-bold text-emerald-300 backdrop-blur-md shadow-md">
                         {currentProject.metrics}
                       </span>
                     </div>
