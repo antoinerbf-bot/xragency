@@ -147,7 +147,7 @@ function XrAgencyCrmApp() {
   const [members, setMembers] = useState<TeamMember[]>(() => {
     if (typeof window !== "undefined") {
       try {
-        const saved = localStorage.getItem("xr_crm_members_v6");
+        const saved = localStorage.getItem("xr_crm_members_v7");
         if (saved) return JSON.parse(saved);
       } catch {
         // ignore
@@ -282,7 +282,7 @@ function XrAgencyCrmApp() {
   }, [leads]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") localStorage.setItem("xr_crm_members_v6", JSON.stringify(members));
+    if (typeof window !== "undefined") localStorage.setItem("xr_crm_members_v7", JSON.stringify(members));
   }, [members]);
 
   useEffect(() => {
@@ -529,9 +529,8 @@ function XrAgencyCrmApp() {
         return entered === "071266" || (pendingMember.pin && entered === pendingMember.pin);
       }
       return (
-        entered === pendingMember.pin ||
-        DEFAULT_TEAM_MEMBERS.find((m) => m.id === pendingMember.id)?.pin === entered ||
-        (pendingMember.pin === "" && entered === "1234")
+        (pendingMember.pin && entered === pendingMember.pin) ||
+        DEFAULT_TEAM_MEMBERS.find((m) => m.id === pendingMember.id)?.pin === entered
       );
     };
 
@@ -1250,13 +1249,15 @@ function XrAgencyCrmApp() {
           <div className="flex justify-center">
             <button
               onClick={() => {
-                setSchoolGuestMode(true);
+                setSchoolPinModal(true);
+                setSchoolPinInput("");
+                setSchoolPinError("");
                 if (soundEnabled) playDing();
               }}
               className="inline-flex flex-wrap items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 hover:brightness-110 text-xs sm:text-sm font-extrabold text-white shadow-xl shadow-indigo-500/25 transition-all hover:scale-[1.02]"
             >
               <GraduationCap className="w-5 h-5 text-amber-300" />
-              Entrer dans XR School (Formation Pure · 70 Trames & Dojo)
+              Entrer dans XR School (Formation Pure · Code : 1234)
             </button>
           </div>
 
@@ -1265,7 +1266,9 @@ function XrAgencyCrmApp() {
               <button
                 key={member.id}
                 onClick={() => {
-                  setCurrentUserId(member.id);
+                  setPendingMember(member);
+                  setPinInput("");
+                  setPinError("");
                   if (soundEnabled) playDing();
                 }}
                 className={`group p-4 rounded-3xl border transition-all hover:-translate-y-0.5 active:scale-[0.98] flex items-center gap-3.5 text-left ${theme.card} ${theme.cardHover}`}
@@ -1284,14 +1287,144 @@ function XrAgencyCrmApp() {
                     <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border ${theme.badgeSoft}`}>
                       {member.badge}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                      ⚡ Accès direct
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-500/10 text-slate-700 dark:text-slate-300 border border-slate-500/20">
+                      🔒 Code PIN requis
                     </span>
                   </div>
                 </div>
               </button>
             ))}
           </div>
+
+          {/* ── MODAL SÉCURISÉ DE CONNEXION PAR CODE PIN ── */}
+          {pendingMember && (
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+              <div className={`w-full max-w-sm rounded-3xl border p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150 ${theme.card}`}>
+                <div className="text-center space-y-2">
+                  <div
+                    className={`h-16 w-16 mx-auto rounded-3xl bg-gradient-to-br ${pendingMember.avatarBg} flex items-center justify-center text-3xl shadow-lg`}
+                  >
+                    {pendingMember.avatarChar || "👤"}
+                  </div>
+                  <h3 className={`text-base font-black ${theme.textMain}`}>
+                    {pendingMember.name}
+                  </h3>
+                  <p className={`text-xs ${theme.textMuted}`}>
+                    Veuillez saisir votre code PIN pour accéder à votre espace CRM.
+                  </p>
+                </div>
+
+                <form onSubmit={handleLoginSubmit} className="space-y-4">
+                  <div>
+                    <input
+                      type="password"
+                      inputMode="numeric"
+                      autoFocus
+                      required
+                      maxLength={10}
+                      placeholder="••••"
+                      value={pinInput}
+                      onChange={(e) => {
+                        setPinInput(e.target.value);
+                        if (pinError) setPinError("");
+                      }}
+                      className={`w-full text-center text-2xl font-mono tracking-[0.4em] font-black rounded-2xl px-4 py-3 border focus:outline-none focus:ring-2 focus:ring-indigo-500 ${theme.inputBg}`}
+                    />
+                    {pinError && (
+                      <p className="mt-2 text-xs font-bold text-rose-500 text-center animate-shake">
+                        ⚠️ {pinError}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPendingMember(null);
+                        setPinInput("");
+                        setPinError("");
+                      }}
+                      className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={authLoading || !pinInput.trim()}
+                      className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:brightness-110 text-white font-black text-xs shadow-lg shadow-indigo-500/25 disabled:opacity-50 transition-all"
+                    >
+                      {authLoading ? "Vérification..." : "Déverrouiller 🔓"}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* ── MODAL CODE PIN XR SCHOOL ── */}
+          {schoolPinModal && (
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+              <div className={`w-full max-w-sm rounded-3xl border p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150 ${theme.card}`}>
+                <div className="text-center space-y-2">
+                  <div className="h-16 w-16 mx-auto rounded-3xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 flex items-center justify-center text-3xl shadow-lg text-white">
+                    🎓
+                  </div>
+                  <h3 className={`text-base font-black ${theme.textMain}`}>
+                    Accès Académie XR School
+                  </h3>
+                  <p className={`text-xs ${theme.textMuted}`}>
+                    Saisissez le code d'accès formation pour débloquer les 70 trames et le dojo.
+                  </p>
+                </div>
+
+                <form onSubmit={handleSchoolPinSubmit} className="space-y-4">
+                  <div>
+                    <input
+                      type="password"
+                      inputMode="numeric"
+                      autoFocus
+                      required
+                      maxLength={6}
+                      placeholder="1234"
+                      value={schoolPinInput}
+                      onChange={(e) => {
+                        setSchoolPinInput(e.target.value);
+                        if (schoolPinError) setSchoolPinError("");
+                      }}
+                      className={`w-full text-center text-2xl font-mono tracking-[0.4em] font-black rounded-2xl px-4 py-3 border focus:outline-none focus:ring-2 focus:ring-indigo-500 ${theme.inputBg}`}
+                    />
+                    {schoolPinError && (
+                      <p className="mt-2 text-xs font-bold text-rose-500 text-center">
+                        ⚠️ {schoolPinError}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSchoolPinModal(false);
+                        setSchoolPinInput("");
+                        setSchoolPinError("");
+                      }}
+                      className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={!schoolPinInput.trim()}
+                      className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 hover:brightness-110 text-white font-black text-xs shadow-lg shadow-indigo-500/25 disabled:opacity-50 transition-all"
+                    >
+                      Accéder 🎓
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
