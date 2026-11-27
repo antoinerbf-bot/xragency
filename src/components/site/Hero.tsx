@@ -21,21 +21,21 @@ const HUBS: CityHub[] = [
     name: { fr: "Paris", en: "Paris", vi: "Paris", ar: "باريس", ru: "Париж" },
     country: { fr: "France", en: "France", vi: "Pháp", ar: "فرنسا", ru: "Франция" },
     timezone: "Europe/Paris",
-    image: "/showcase/home-v3/hub-paris.jpg",
-    position: "object-[center_40%]",
+    image: "/showcase/hero-editorial-concept01.jpg",
+    position: "object-center",
     tagline: {
-      fr: "Direction artistique, stratégie de marque & production haute couture.",
-      en: "Art direction, brand strategy & haute couture digital production.",
+      fr: "Direction artistique, stratégie de marque & production web haute couture.",
+      en: "Creative direction, brand strategy & haute couture web production.",
       vi: "Định hướng nghệ thuật, chiến lược thương hiệu & sản xuất số cao cấp.",
       ar: "الإدارة الفنية، استراتيجية العلامة التجارية والإنتاج الرقمي الراقي.",
       ru: "Арт-дирекшн, стратегия бренда и премиальное digital-производство.",
     },
     status: {
-      fr: "Studio actif · Équipe en production",
-      en: "Active studio · Production running",
-      vi: "Studio đang hoạt động",
-      ar: "استوديو نشط",
-      ru: "Студия активна",
+      fr: "Atelier Paris · Direction Créative",
+      en: "Paris Atelier · Creative Direction",
+      vi: "Studio Paris · Đang hoạt động",
+      ar: "استوديو باريس · نشط",
+      ru: "Студия Париж · В работе",
     },
   },
   {
@@ -49,71 +49,71 @@ const HUBS: CityHub[] = [
       ru: "Объединённые Арабские Эмираты",
     },
     timezone: "Asia/Dubai",
-    image: "/showcase/home-v3/hub-dubai.jpg",
+    image: "/showcase/hub-dubai-consultants.jpg",
     position: "object-center",
     tagline: {
-      fr: "Solutions IA avancées, automatisation & expériences immersives de luxe.",
-      en: "Advanced AI solutions, automation & luxury immersive experiences.",
-      vi: "Giải pháp AI tiên tiến, tự động hóa & trải nghiệm nhập vai cao cấp.",
-      ar: "حلول الذكاء الاصطناعي المتقدمة والأتمتة والتجارب الغامرة الفاخرة.",
-      ru: "Передовые ИИ-решения, автоматизация и иммерсивный премиум-опыт.",
+      fr: "Consultants en stratégie digitale, plateformes e-commerce & automatisation.",
+      en: "Digital strategy consultants, bespoke e-commerce & AI automation.",
+      vi: "Tư vấn chiến lược số, thương mại điện tử & tự động hóa.",
+      ar: "استشارات استراتيجية رقمية، منصات تجارة إلكترونية وأتمتة متقدمة.",
+      ru: "Консалтинг по digital-стратегии, e-commerce и автоматизация.",
     },
     status: {
-      fr: "Pôle IA & Croissance · En direct",
-      en: "AI & Growth Hub · Live",
-      vi: "Trung tâm AI & Tăng trưởng",
-      ar: "مركز الذكاء والنمو",
-      ru: "ИИ-хаб · В эфире",
+      fr: "Studio Dubaï · Pôle Croissance & Tech",
+      en: "Dubai Studio · Growth & Tech",
+      vi: "Studio Dubai · Tăng trưởng",
+      ar: "استوديو دبي · النمو والتقنية",
+      ru: "Студия Дубай · Развитие и технологии",
     },
   },
   {
-    id: "newyork",
-    name: { fr: "New York", en: "New York", vi: "New York", ar: "نيويورك", ru: "Нью-Йорк" },
+    id: "singapour",
+    name: { fr: "Singapour", en: "Singapore", vi: "Singapore", ar: "سنغافورة", ru: "Сингапур" },
     country: {
-      fr: "États-Unis",
-      en: "United States",
-      vi: "Hoa Kỳ",
-      ar: "الولايات المتحدة",
-      ru: "США",
+      fr: "Singapour",
+      en: "Singapore",
+      vi: "Singapore",
+      ar: "سنغافورة",
+      ru: "Сингапур",
     },
-    timezone: "America/New_York",
-    image: "/showcase/home-v3/hub-newyork.jpg",
+    timezone: "Asia/Singapore",
+    image: "/showcase/hub-singapore-consultants.jpg",
     position: "object-center",
     tagline: {
-      fr: "Direction artistique transatlantique, e-commerce d'envergure & créativité avant-gardiste.",
-      en: "Transatlantic creative direction, high-scale digital commerce & avant-garde design.",
-      vi: "Chỉ đạo nghệ thuật toàn cầu, thương mại điện tử quy mô lớn & thiết kế tiên phong.",
-      ar: "الإشراف الفني العالمي، التجارة الرقمية الكبرى والتصميم الريادي.",
-      ru: "Трансатлантический арт-дирекшн, масштабный e-commerce и передовой дизайн.",
+      fr: "Pôle Asie-Pacifique, campagnes d'acquisition d'envergure & design biophilique.",
+      en: "Asia-Pacific hub, high-scale acquisition campaigns & refined branding.",
+      vi: "Trung tâm Châu Á - Thái Bình Dương, chiến dịch mở rộng & thương hiệu.",
+      ar: "مركز آسيا والمحيط الهادئ، حملات استقطاب كبرى وتصميم متميز.",
+      ru: "Азиатско-Тихоокеанский хаб, масштабирование и брендинг.",
     },
     status: {
-      fr: "Studio Créatif Amériques · Connecté",
-      en: "Americas Creative Hub · Connected",
-      vi: "Studio Châu Mỹ · Trực tuyến",
-      ar: "استوديو الأمريكتين",
-      ru: "Американский хаб · На связи",
+      fr: "Studio Singapour · Pôle Asie",
+      en: "Singapore Studio · Asia Hub",
+      vi: "Studio Singapore · Châu Á",
+      ar: "استوديو سنغافورة · آسيا",
+      ru: "Студия Сингапур · Азия",
     },
   },
   {
-    id: "danang",
-    name: { fr: "Da Nang", en: "Da Nang", vi: "Đà Nẵng", ar: "دا نانغ", ru: "Дананг" },
-    country: { fr: "Vietnam", en: "Vietnam", vi: "Việt Nam", ar: "فيتنام", ru: "Вьетнам" },
-    timezone: "Asia/Ho_Chi_Minh",
-    image: "/showcase/home-v3/hub-danang.jpg",
-    position: "object-[center_28%]",
+    id: "geneve",
+    name: { fr: "Genève", en: "Geneva", vi: "Geneva", ar: "جنيف", ru: "Женева" },
+    country: { fr: "Suisse", en: "Switzerland", vi: "Thụy Sĩ", ar: "سويسرا", ru: "Швейцария" },
+    timezone: "Europe/Zurich",
+    image: "/showcase/hub-meeting-consultants.jpg",
+    position: "object-center",
     tagline: {
-      fr: "Ingénierie web réactive, montage vidéo cinématographique & support 24/7.",
-      en: "Responsive web engineering, cinematic video editing & 24/7 delivery.",
-      vi: "Kỹ thuật web tối ưu, dựng video điện ảnh & hỗ trợ 24/7.",
-      ar: "هندسة الويب السريعة، المونتاج السينمائي والدعم المتواصل.",
-      ru: "Веб-инженерия, кинематографичный монтаж и круглосуточная поддержка.",
+      fr: "Conseil stratégique de direction, gouvernance numérique & accompagnement de marque.",
+      en: "Executive strategy consulting, digital governance & premium brand advisory.",
+      vi: "Tư vấn chiến lược cấp cao, quản trị số & định vị thương hiệu.",
+      ar: "استشارات استراتيجية تنفيذية، حوكمة رقمية ودعم العلامات التجارية.",
+      ru: "Стратегический консалтинг, digital-трансформация и управление брендами.",
     },
     status: {
-      fr: "Coastal Studio · 24/7 Hub",
-      en: "Coastal Studio · 24/7 Hub",
-      vi: "Studio ven biển · Vận hành 24/7",
-      ar: "استوديو ساحلي",
-      ru: "Прибрежная студия",
+      fr: "Pôle Suisse · Conseil & Gouvernance",
+      en: "Swiss Hub · Strategy & Governance",
+      vi: "Studio Thụy Sĩ · Chiến lược",
+      ar: "استوديو سويسرا · الاستشارات",
+      ru: "Студия Швейцария · Стратегия",
     },
   },
 ];
@@ -260,13 +260,15 @@ export function Hero() {
   const { lang } = useLang();
   const c = COPY[lang] ?? COPY.fr;
   const [activeHubIndex, setActiveHubIndex] = useState<number>(0);
+  const [bgMode, setBgMode] = useState<"photo" | "video">("photo");
 
   useEffect(() => {
+    if (bgMode === "video") return;
     const timer = setInterval(() => {
       setActiveHubIndex((prev) => (prev + 1) % HUBS.length);
-    }, 4200);
+    }, 4500);
     return () => clearInterval(timer);
-  }, []);
+  }, [bgMode]);
 
   const activeHub = HUBS[activeHubIndex];
 
@@ -276,67 +278,96 @@ export function Hero() {
       aria-label="XR Agency Hero"
       className="xr-hero-refined relative isolate min-h-[100svh] w-full overflow-hidden bg-[#181512] pt-20 text-[#FAF7F2]"
     >
-      {/* ── Multi-Country Photo Sequence (Paris, Dubaï, New York, Da Nang) ── */}
+      {/* ── Background: Multi-Country Photo Sequence or 4K Video Loop ── */}
       <div className="absolute inset-0 -z-10 overflow-hidden bg-[#181512]">
-        {HUBS.map((hub, idx) => {
-          const isActive = idx === activeHubIndex;
-          return (
-            <div
-              key={hub.id}
-              className={cn(
-                "absolute inset-0 transition-opacity duration-1000 ease-in-out",
-                isActive
-                  ? "opacity-100 z-10 pointer-events-auto"
-                  : "opacity-0 z-0 pointer-events-none",
-              )}
-            >
-              <img
-                src={hub.image}
-                alt={`Studio XRAGENCY à ${hub.name.fr}`}
-                fetchPriority={isActive ? "high" : "low"}
-                loading={isActive ? "eager" : "lazy"}
+        {bgMode === "video" ? (
+          <div className="absolute inset-0">
+            <video
+              src="/videos/hero-ambient-loop.mp4"
+              poster="/showcase/hero-editorial-concept01.jpg"
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="h-full w-full object-cover contrast-[1.12] brightness-[0.84] saturate-[1.05]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#14110E]/60 via-transparent to-black/20 pointer-events-none" />
+          </div>
+        ) : (
+          HUBS.map((hub, idx) => {
+            const isActive = idx === activeHubIndex;
+            return (
+              <div
+                key={hub.id}
                 className={cn(
-                  "h-full w-full object-cover brightness-[1.08] contrast-[1.04] saturate-[1.05] transition-transform duration-[7000ms] ease-out",
-                  hub.position ?? "object-center",
-                  isActive ? "scale-105" : "scale-100",
+                  "absolute inset-0 transition-opacity duration-1000 ease-in-out",
+                  isActive
+                    ? "opacity-100 z-10 pointer-events-auto"
+                    : "opacity-0 z-0 pointer-events-none",
                 )}
-              />
+              >
+                <img
+                  src={hub.image}
+                  alt={`Studio XRAGENCY à ${hub.name.fr}`}
+                  fetchPriority={isActive ? "high" : "low"}
+                  loading={isActive ? "eager" : "lazy"}
+                  className={cn(
+                    "h-full w-full object-cover brightness-[1.06] contrast-[1.04] saturate-[1.05] transition-transform duration-[7000ms] ease-out",
+                    hub.position ?? "object-center",
+                    isActive ? "scale-105" : "scale-100",
+                  )}
+                />
 
-              {/* Luminous, radiant daylight: airy, bright and crystal clear */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-black/10 to-transparent pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#14110E]/50 via-transparent to-black/10 pointer-events-none" />
-            </div>
-          );
-        })}
+                {/* Radiant daylight & studio gradient: airy, bright and crystal clear */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/15 to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#14110E]/50 via-transparent to-black/15 pointer-events-none" />
+              </div>
+            );
+          })
+        )}
       </div>
 
-      {/* Top-Right: Discreet Live Hub Indicator (Positioned below fixed navbar) */}
-      <div className="absolute top-24 right-5 sm:right-8 lg:right-12 z-30 pointer-events-auto flex items-center gap-2.5">
-        <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/40 px-3 py-1.5 backdrop-blur-md text-white shadow-lg">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696] animate-pulse" />
-          <span className="font-mono text-[11px] font-semibold tracking-wider text-white">
-            {activeHub.name[lang] ?? activeHub.name.fr}
-          </span>
-          <span className="text-white/40">·</span>
-          <span className="font-mono text-[10px] text-[#E5C696] uppercase tracking-wider">
-            {activeHub.country[lang] ?? activeHub.country.fr}
-          </span>
-        </div>
+      {/* Top-Right: Discreet Live Hub Indicator & Mode Switcher */}
+      <div className="absolute top-24 right-5 sm:right-8 lg:right-12 z-30 pointer-events-auto flex flex-wrap items-center gap-2.5">
+        {/* Toggle between Photos Studios & Video */}
+        <button
+          type="button"
+          onClick={() => setBgMode((prev) => (prev === "photo" ? "video" : "photo"))}
+          className="inline-flex items-center gap-1.5 rounded-full border border-[#E5C696]/35 bg-black/60 px-3 py-1.5 text-[10px] sm:text-[11px] font-mono font-medium text-[#E5C696] backdrop-blur-md transition hover:bg-black/80 hover:border-[#E5C696]/60 cursor-pointer shadow-md"
+        >
+          {bgMode === "video" ? "📸 Mode Studios Photos" : "🎬 Mode Vidéo Immersive"}
+        </button>
 
-        <div className="flex items-center gap-1.5 rounded-full border border-white/20 bg-black/30 px-2.5 py-1.5 backdrop-blur-md">
-          {HUBS.map((h, i) => (
-            <button
-              key={h.id}
-              type="button"
-              onClick={() => setActiveHubIndex(i)}
-              aria-label={`Afficher le studio ${h.name.fr}`}
-              className={cn(
-                "h-1.5 rounded-full transition-all duration-300 cursor-pointer pointer-events-auto",
-                i === activeHubIndex ? "w-6 bg-[#E5C696]" : "w-1.5 bg-white/40 hover:bg-white/70",
-              )}
-            />
-          ))}
-        </div>
+        {bgMode === "photo" && (
+          <>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/40 px-3 py-1.5 backdrop-blur-md text-white shadow-lg">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696] animate-pulse" />
+              <span className="font-mono text-[11px] font-semibold tracking-wider text-white">
+                {activeHub.name[lang] ?? activeHub.name.fr}
+              </span>
+              <span className="text-white/40">·</span>
+              <span className="font-mono text-[10px] text-[#E5C696] uppercase tracking-wider">
+                {activeHub.country[lang] ?? activeHub.country.fr}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5 rounded-full border border-white/20 bg-black/30 px-2.5 py-1.5 backdrop-blur-md">
+              {HUBS.map((h, i) => (
+                <button
+                  key={h.id}
+                  type="button"
+                  onClick={() => setActiveHubIndex(i)}
+                  aria-label={`Afficher le studio ${h.name.fr}`}
+                  className={cn(
+                    "h-1.5 rounded-full transition-all duration-300 cursor-pointer pointer-events-auto",
+                    i === activeHubIndex ? "w-6 bg-[#E5C696]" : "w-1.5 bg-white/40 hover:bg-white/70",
+                  )}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
 
       {/* ── Content Container ── */}
@@ -376,6 +407,15 @@ export function Hero() {
               className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/45 bg-white/8 px-5 text-xs sm:text-sm font-medium text-white backdrop-blur-md transition-all duration-300 hover:bg-white/15 hover:border-white/70"
             >
               <span>{c.ctaSecondary}</span>
+              <ArrowRight className="h-3.5 w-3.5 text-[#E5C696]" />
+            </a>
+
+            {/* Third Action: Selected Work */}
+            <a
+              href="#work"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/25 bg-black/40 px-5 text-xs sm:text-sm font-medium text-white/90 backdrop-blur-md transition-all duration-300 hover:bg-black/60 hover:border-white/50"
+            >
+              <span>{c.ctaAgency}</span>
               <ArrowRight className="h-3.5 w-3.5 text-[#E5C696]" />
             </a>
           </div>
