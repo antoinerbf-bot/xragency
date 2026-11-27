@@ -318,44 +318,23 @@ export function Hero() {
         aria-label="XR Agency Hero"
         className="xr-hero-refined relative isolate min-h-[100svh] w-full overflow-hidden bg-[#181512] pt-20 text-[#FAF7F2]"
       >
-        {/* ── Background: Cinematic Real Studio & Iconic Skyline Video / Flow ── */}
+        {/* ── Background: Proposition 2 — Showreel Cinématique Continu & Immersif ── */}
         <div className="absolute inset-0 -z-10 overflow-hidden bg-[#14110E]">
-          {/* Real Ambient Studio & Global Skylines Video Loop */}
+          {/* Continuous Real 4K Showreel: Creative Team in Luxury Studio & Global Skylines */}
           <video
             autoPlay
             loop
             muted
             playsInline
-            poster={activeHub.image}
-            className="absolute inset-0 h-full w-full object-cover opacity-60 mix-blend-screen brightness-[1.05] contrast-[1.02] pointer-events-none"
+            poster="/showcase/hub-paris-real-team.jpg"
+            className="absolute inset-0 h-full w-full object-cover brightness-[1.08] contrast-[1.04] pointer-events-none transition-opacity duration-1000"
           >
             <source src="/videos/hero-ambient-loop.mp4" type="video/mp4" />
           </video>
 
-          {/* Photographic Multi-Hub Foundation (Paris, Dubaï, Singapour, New York, Tokyo) */}
-          {HUBS.map((hub, idx) => (
-            <div
-              key={hub.id}
-              className={cn(
-                "absolute inset-0 transition-opacity duration-1000 ease-in-out",
-                idx === activeHubIndex ? "opacity-100 z-0" : "opacity-0 -z-10 pointer-events-none",
-              )}
-            >
-              <img
-                src={hub.image}
-                alt={`${hub.name.fr} - ${hub.tagline.fr}`}
-                className={cn(
-                  "h-full w-full object-cover transform transition-transform duration-[7000ms] ease-out",
-                  hub.position ?? "object-center",
-                  hub.filterClass ?? "brightness-[1.05] contrast-[1.02]",
-                  idx === activeHubIndex ? "scale-105" : "scale-100",
-                )}
-              />
-            </div>
-          ))}
-
-          {/* Cinematic Scrim: Soft, luminous edges to protect text while keeping the skylines bright and sunlit */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#120F0D]/90 via-black/25 to-black/40 pointer-events-none" />
+          {/* Cinematic Haute Couture Scrim: Deep luxury framing, keeping the studio & skylines radiant */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#120F0D] via-black/35 to-black/50 pointer-events-none" />
+          <div className="absolute inset-0 bg-radial-[circle_at_center] from-transparent via-black/20 to-black/60 pointer-events-none" />
         </div>
 
         {/* ── Top-Left: Architectural Branding & Headline ── */}
@@ -395,18 +374,15 @@ export function Hero() {
               {c.sub}
             </p>
 
-            {/* CTA Row: Demande de maquette (avec estimation 200 à 300 € offerte), Audit gratuit, Appel stratégique 15 min */}
+            {/* CTA Row: Demande de maquette, Audit gratuit, Appel stratégique 15 min */}
             <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-              {/* Primary Action: Demande de maquette avec valeur estimée */}
+              {/* Primary Action: Demande de maquette */}
               <a
                 href="#quote"
-                className="group relative inline-flex h-11 items-center gap-2.5 rounded-full bg-white px-5 sm:px-6 text-xs sm:text-[13px] font-semibold text-black shadow-[0_0_25px_rgba(255,255,255,0.35)] transition-all duration-300 hover:bg-white/95 hover:shadow-[0_0_35px_rgba(255,255,255,0.6)] hover:scale-[1.03] active:scale-[0.98]"
+                className="group relative inline-flex h-11 items-center gap-2.5 rounded-full bg-white px-6 text-xs sm:text-[13px] font-semibold text-black shadow-[0_0_25px_rgba(255,255,255,0.35)] transition-all duration-300 hover:bg-white/95 hover:shadow-[0_0_35px_rgba(255,255,255,0.6)] hover:scale-[1.03] active:scale-[0.98]"
               >
                 <Sparkles className="h-4 w-4 text-[#A67C40] shrink-0" />
                 <span>Demander une maquette</span>
-                <span className="hidden sm:inline-flex items-center rounded-full bg-[#14120E] px-2 py-0.5 text-[9.5px] font-mono font-bold text-[#E5C696] tracking-wide">
-                  Estimation 200 à 300 € offerte
-                </span>
                 <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1 text-black" />
               </a>
 
@@ -426,12 +402,6 @@ export function Hero() {
               >
                 <span>📞 Appel stratégique (15 min)</span>
               </a>
-            </div>
-
-            {/* Mobile Pill: Estimation 200 à 300 € offerte */}
-            <div className="mt-2.5 sm:hidden inline-flex items-center gap-1.5 rounded-full border border-[#E5C696]/40 bg-black/60 px-3 py-1 font-mono text-[10px] text-[#E5C696] backdrop-blur-md">
-              <span>✦</span>
-              <span>Maquette sur-mesure · Estimation 200 à 300 € offerte</span>
             </div>
 
             {/* Reassurance Guarantee Footnote */}
