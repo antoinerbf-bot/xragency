@@ -14,8 +14,6 @@ import {
   FileText,
   AlertCircle,
   Download,
-  Volume2,
-  VolumeX,
   LogOut,
   Palette,
   Flame,
@@ -1671,16 +1669,6 @@ function XrAgencyCrmApp() {
               className={`p-2 rounded-xl border text-xs font-bold inline-flex items-center gap-1 ${theme.subCard} ${theme.textMuted}`}
             >
               <Command className="w-3.5 h-3.5" /> <span className="hidden md:inline">Ctrl+K</span>
-            </button>
-
-
-
-            <button
-              onClick={() => setSoundEnabled(!soundEnabled)}
-              className={`p-2 rounded-xl border ${theme.subCard} ${theme.textMuted}`}
-              title={soundEnabled ? "Sons activés" : "Sons coupés"}
-            >
-              {soundEnabled ? <Volume2 className="w-4 h-4 text-indigo-500" /> : <VolumeX className="w-4 h-4" />}
             </button>
 
             {!isStudio && (

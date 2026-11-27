@@ -22,9 +22,9 @@ const HUBS: CityHub[] = [
     name: { fr: "Paris", en: "Paris", vi: "Paris", ar: "باريس", ru: "Париж" },
     country: { fr: "France", en: "France", vi: "Pháp", ar: "فرنسا", ru: "Франция" },
     timezone: "Europe/Paris",
-    image: "/showcase/hub-paris-skyline-team.jpg",
-    position: "object-[center_50%]",
-    filterClass: "brightness-[1.08] contrast-[1.02]",
+    image: "/showcase/hub-paris-real-team.jpg",
+    position: "object-[center_40%]",
+    filterClass: "brightness-[1.02] contrast-[1.03]",
     tagline: {
       fr: "Studio Haussmann lumineux, direction artistique & production web haute couture.",
       en: "Sunlit Haussmann studio, creative direction & haute couture web production.",
@@ -51,9 +51,9 @@ const HUBS: CityHub[] = [
       ru: "Объединённые Арабские Эмираты",
     },
     timezone: "Asia/Dubai",
-    image: "/showcase/hub-dubai-skyline-team.jpg",
-    position: "object-[center_60%]",
-    filterClass: "brightness-[1.05] contrast-[1.02]",
+    image: "/showcase/hub-dubai-real-team.jpg",
+    position: "object-[center_45%]",
+    filterClass: "brightness-[1.02] contrast-[1.02]",
     tagline: {
       fr: "Penthouse lumineux en plein jour, plateformes e-commerce d'envergure & tech.",
       en: "Sunlit penthouse workspace, high-scale e-commerce & advanced tech.",
@@ -80,9 +80,9 @@ const HUBS: CityHub[] = [
       ru: "Сингапур",
     },
     timezone: "Asia/Singapore",
-    image: "/showcase/hub-singapore-skyline-team.jpg",
-    position: "object-[center_60%]",
-    filterClass: "brightness-[1.05] contrast-[1.02]",
+    image: "/showcase/hub-singapore-real-team.jpg",
+    position: "object-[center_40%]",
+    filterClass: "brightness-[1.02] contrast-[1.02]",
     tagline: {
       fr: "Échange complice & dynamique d'équipe, conception digitale & acquisition Asie-Pacifique.",
       en: "Candid creative collaboration, digital design & Asia-Pacific acquisition.",
@@ -109,9 +109,9 @@ const HUBS: CityHub[] = [
       ru: "США",
     },
     timezone: "America/New_York",
-    image: "/showcase/hub-newyork-skyline-team.jpg",
-    position: "object-[center_60%]",
-    filterClass: "brightness-[1.05] contrast-[1.02]",
+    image: "/showcase/hub-newyork-real-team.jpg",
+    position: "object-[center_45%]",
+    filterClass: "brightness-[1.02] contrast-[1.02]",
     tagline: {
       fr: "Studio Manhattan, stratégie de marque globale & plateformes digitales d'élite.",
       en: "Manhattan studio, global brand strategy & elite digital platforms.",
@@ -138,9 +138,9 @@ const HUBS: CityHub[] = [
       ru: "Япония",
     },
     timezone: "Asia/Tokyo",
-    image: "/showcase/hub-tokyo-skyline-team.jpg",
-    position: "object-[center_60%]",
-    filterClass: "brightness-[1.08] contrast-[1.02]",
+    image: "/showcase/hub-tokyo-real-team.jpg",
+    position: "object-[center_40%]",
+    filterClass: "brightness-[1.02] contrast-[1.02]",
     tagline: {
       fr: "Studio Ginza & Shibuya, technologies immersives & design minimaliste d'avant-garde.",
       en: "Ginza & Shibuya studio, immersive technologies & avant-garde minimalism.",
@@ -347,17 +347,17 @@ export function Hero() {
         </div>
 
         {/* ── Top-Left: Architectural Branding & Headline ── */}
-        <div className="absolute top-20 sm:top-24 left-4 sm:left-8 lg:left-12 z-30 pointer-events-auto max-w-[210px] sm:max-w-md">
+        <div className="absolute top-20 sm:top-24 left-4 sm:left-8 lg:left-12 z-30 pointer-events-auto max-w-[280px] sm:max-w-xl">
           <div className="inline-flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-            <span className="font-mono text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.16em] sm:tracking-[0.22em] text-white/90">
-              <span className="inline sm:hidden">AGENCE DIGITALE</span>
+            <span className="font-mono text-[9px] sm:text-[11px] font-semibold uppercase tracking-[0.18em] sm:tracking-[0.24em] text-white/95">
+              <span className="inline sm:hidden">AGENCE DIGITALE INTERNATIONALE</span>
               <span className="hidden sm:inline">{c.eyebrow}</span>
             </span>
           </div>
-          <h1 className="mt-1 font-serif text-xl sm:text-3xl lg:text-4xl font-light leading-[1.14] tracking-[-0.02em] text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+          <h1 className="mt-2 font-serif text-2xl sm:text-4xl lg:text-[3.2rem] font-light leading-[1.08] tracking-[-0.03em] text-white drop-shadow-[0_2px_16px_rgba(0,0,0,0.95)]">
             <span>{c.titlePart1}</span>
-            <span className="font-serif italic font-normal text-white">
+            <span className="font-serif italic font-normal text-white underline decoration-[#E5C696]/60 decoration-1 underline-offset-4">
               {c.titleItalic}
             </span>{" "}
             <span>{c.titlePart2}</span>

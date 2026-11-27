@@ -5,7 +5,6 @@ import { HomeServices } from "@/components/site/HomeServices";
 import { GoogleMapsShowcase } from "@/components/site/GoogleMapsShowcase";
 import { NexProWorkShowcase } from "@/components/site/NexProWorkShowcase";
 import { WhyAgencySection } from "@/components/site/WhyAgencySection";
-import { HomeSocialOffers } from "@/components/site/HomeSocialOffers";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
 import { StudioMethodSection } from "@/components/site/StudioMethodSection";
 import { Faq } from "@/components/site/Faq";
@@ -58,13 +57,10 @@ function Index() {
           {/* 05 — Réalisations : Projets réels d'exception & univers sectoriels */}
           <NexProWorkShowcase />
 
-          {/* 06 — Pourquoi XR Agency (Équipe & Piliers) */}
+          {/* 06 — Pourquoi XR Agency (Équipe & Piliers de Confiance) */}
           <WhyAgencySection />
 
-          {/* 07 — Offres Social Media (349 / 599 / 799 €) */}
-          <HomeSocialOffers />
-
-          {/* 08 — Méthode en 4 étapes & Cadrage de projet */}
+          {/* 07 — Méthode en 4 étapes & Bannière d'Engagement Clé en Main */}
           <StudioMethodSection />
 
           {/* 09 — FAQ */}

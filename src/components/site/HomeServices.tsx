@@ -8,13 +8,13 @@ import { cn } from "@/lib/utils";
 import { useOptionalFunnel } from "@/lib/funnel";
 
 const SERVICE_IMAGES: Record<string, string> = {
-  websites: "/showcase/svc-web-editorial.jpg",
-  branding: "/showcase/carte_blanche_hero_atelier.png",
-  seo: "/showcase/svc-seo-editorial.jpg",
-  maps: "/showcase/svc-maps-editorial.jpg",
-  social: "/showcase/agency-social-studio-hero.jpg",
-  maintenance: "/showcase/svc-webcare-editorial.jpg",
-  crm: "/showcase/lot5_crm_leads_pro.png",
+  websites: "/showcase/svc-web-real.jpg",
+  branding: "/showcase/svc-branding-real.jpg",
+  seo: "/showcase/svc-seo-real.jpg",
+  maps: "/showcase/svc-maps-real.jpg",
+  social: "/showcase/svc-social-real.jpg",
+  maintenance: "/showcase/svc-webcare-real.jpg",
+  crm: "/showcase/svc-crm-real.jpg",
   robotics: "/showcase/robotics_futuristic_sleek.jpg",
 };
 
@@ -255,29 +255,28 @@ export function HomeServices() {
           </aside>
 
           {/* Sticky Parallax Cards Sequence */}
-          <div className="relative space-y-12 sm:space-y-16">
+          <div className="relative space-y-16 pb-16 sm:space-y-20">
             {ORDERED_SERVICES.map((item, index) => {
               const service = SERVICES.find((s) => s.id === item.id) ?? SERVICES[0];
               const image = SERVICE_IMAGES[item.id] || "/showcase/web-luxury-showcase.jpg";
-              const plans = service.plans.slice(0, 3);
               const isSelected = funnel?.selectedServices.includes(item.funnelId) ?? false;
 
               return (
                 <article
                   id={`home-service-${item.id}`}
                   key={item.id}
-                  style={{ top: `calc(5.5rem + ${index * 12}px)` }}
-                  className="sticky group relative min-h-[64vh] overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#12100D] text-white shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500 hover:border-[#A67C40]/50 lg:min-h-[72vh]"
+                  style={{ top: "6.5rem", zIndex: index + 10 }}
+                  className="sticky group relative min-h-[60vh] overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#12100D] text-white shadow-[0_-12px_45px_rgba(0,0,0,0.6)] transition-all duration-500 hover:border-[#A67C40]/50 lg:min-h-[68vh]"
                 >
                   {/* Background photo with high clarity and visible illustration */}
                   <img
                     src={image}
                     alt={t(service.title)}
                     loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover object-center lg:object-right-top opacity-90 brightness-[1.02] contrast-[1.05] transition-transform duration-[1600ms] ease-out group-hover:scale-105"
+                    className="absolute inset-0 h-full w-full object-cover object-center lg:object-right-center opacity-95 brightness-[1.03] contrast-[1.03] transition-transform duration-[1600ms] ease-out group-hover:scale-105"
                   />
                   {/* Directional gradient mask: dark backdrop on left for text readability, fully clear on right so artwork is bright */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#100D0B] via-[#100D0B]/70 to-transparent lg:bg-gradient-to-r lg:from-[#100D0B] lg:via-[#100D0B]/85 lg:to-transparent lg:w-[68%] pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#100D0B] via-[#100D0B]/70 to-transparent lg:bg-gradient-to-r lg:from-[#100D0B] lg:via-[#100D0B]/80 lg:to-transparent lg:w-[62%] pointer-events-none" />
 
                   {/* Card Content Overlay */}
                   <div className="relative z-10 flex min-h-[64vh] flex-col justify-between p-7 sm:p-10 lg:min-h-[72vh] lg:p-12">
