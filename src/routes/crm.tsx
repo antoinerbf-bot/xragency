@@ -274,12 +274,6 @@ function XrAgencyCrmApp() {
   const [newMemberPin, setNewMemberPin] = useState("1234");
   const [newMemberRecruitedBy, setNewMemberRecruitedBy] = useState("");
 
-  // Modal Changement Mot de Passe personnel
-  const [showChangePinModal, setShowChangePinModal] = useState(false);
-  const [newPinValue, setNewPinValue] = useState("");
-  const [confirmPinValue, setConfirmPinValue] = useState("");
-  const [changePinError, setChangePinError] = useState("");
-
   // ── Persistance & Supabase Realtime ──
   useEffect(() => {
     if (typeof window !== "undefined") localStorage.setItem("xr_crm_theme_v4", themeId);
@@ -907,14 +901,14 @@ function XrAgencyCrmApp() {
     if (!newMemberName.trim() || !currentUser) return;
     const short = newMemberName.trim().split(" ")[0];
     const id = `${short.toLowerCase().replace(/[^a-z0-9]/g, "")}-${Date.now().toString().slice(-3)}`;
-    const roleMeta: Record<UserRoleType, { label: string; badge: string; bg: string }> = {
-      setter: { label: "Setter B2B", badge: "📞 Setter", bg: "from-cyan-500 to-blue-600" },
-      closer: { label: "Closer B2B", badge: "🎯 Closer", bg: "from-purple-500 to-violet-600" },
-      full_cycle: { label: "Commercial Full-Cycle", badge: "⚡ Full-Cycle", bg: "from-emerald-500 to-teal-600" },
-      student: { label: "Élève XR School · Commercial", badge: "🎓 Élève XR School", bg: "from-amber-500 to-orange-600" },
-      manager: { label: "Manager Équipe", badge: "👥 Manager", bg: "from-blue-500 to-indigo-600" },
-      studio: { label: "Studio Production", badge: "🎨 Studio", bg: "from-zinc-600 to-zinc-900" },
-      direction: { label: "Direction", badge: "👑 Direction", bg: "from-amber-400 to-orange-600" },
+    const roleMeta: Record<UserRoleType, { label: string; badge: string; bg: string; char: string }> = {
+      setter: { label: "Setter B2B", badge: "📞 Setter", bg: "from-cyan-500 to-blue-600", char: "🎧" },
+      closer: { label: "Closer B2B", badge: "🎯 Closer", bg: "from-purple-500 to-violet-600", char: "💼" },
+      full_cycle: { label: "Commercial Full-Cycle", badge: "⚡ Full-Cycle", bg: "from-emerald-500 to-teal-600", char: "⚡" },
+      student: { label: "Élève XR School · Commercial", badge: "🎓 Élève XR School", bg: "from-amber-500 to-orange-600", char: "🎓" },
+      manager: { label: "Manager Équipe", badge: "👥 Manager", bg: "from-blue-500 to-indigo-600", char: "👔" },
+      studio: { label: "Studio Production", badge: "🎨 Studio", bg: "from-zinc-600 to-zinc-900", char: "🎨" },
+      direction: { label: "Direction", badge: "👑 Direction", bg: "from-amber-400 to-orange-600", char: "👑" },
     };
     const meta = roleMeta[newMemberRole];
     const created: TeamMember = {
@@ -928,6 +922,7 @@ function XrAgencyCrmApp() {
       closingRate: Math.max(0, Math.min(100, newMemberClosingPct)) / 100,
       fullCycleRate: Math.max(0, Math.min(100, newMemberFullPct)) / 100,
       avatarBg: meta.bg,
+      avatarChar: meta.char,
       badge: meta.badge,
       pin: newMemberPin.trim() || "1234",
     };
@@ -954,32 +949,7 @@ function XrAgencyCrmApp() {
     );
   };
 
-  const handleSaveOwnPin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentUser) return;
-    const clean = newPinValue.trim();
-    if (clean.length < 4) {
-      setChangePinError("Choisissez un code d'au moins 4 caractères.");
-      return;
-    }
-    if (clean !== confirmPinValue.trim()) {
-      setChangePinError("Les deux codes ne correspondent pas.");
-      return;
-    }
-    setMembers((prev) =>
-      prev.map((m) => {
-        if (m.id !== currentUser.id) return m;
-        const updated = { ...m, pin: clean, customPinSet: true };
-        void upsertMemberToSupabase(updated);
-        return updated;
-      })
-    );
-    setNewPinValue("");
-    setConfirmPinValue("");
-    setChangePinError("");
-    setShowChangePinModal(false);
-    if (soundEnabled) playDing();
-  };
+
 
   const handleIncrementCall = () => {
     const next = dailyCalls + 1;
@@ -1291,9 +1261,12 @@ function XrAgencyCrmApp() {
                 className={`group p-4 rounded-3xl border transition-all hover:-translate-y-0.5 active:scale-[0.98] flex items-center gap-3.5 text-left ${theme.card} ${theme.cardHover}`}
               >
                 <div
-                  className={`h-13 w-13 p-3.5 rounded-2xl bg-gradient-to-br ${member.avatarBg} flex items-center justify-center text-white font-black text-lg shadow-md shrink-0`}
+                  className={`h-14 w-14 rounded-2xl bg-gradient-to-br ${member.avatarBg} flex flex-col items-center justify-center text-white font-black shadow-md shrink-0 relative overflow-hidden`}
                 >
-                  {member.shortName.charAt(0)}
+                  <span className="text-2xl drop-shadow-sm select-none">{member.avatarChar || "👤"}</span>
+                  <span className="text-[9px] font-black uppercase tracking-tighter opacity-80 leading-none mt-0.5">
+                    {member.shortName.slice(0, 3)}
+                  </span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className={`font-extrabold text-sm truncate group-hover:text-indigo-600 dark:group-hover:text-amber-300 transition-colors ${theme.textMain}`}>
@@ -1383,7 +1356,7 @@ function XrAgencyCrmApp() {
             <div
               className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${currentUser.avatarBg} flex items-center justify-center font-black text-white shadow-lg text-lg relative`}
             >
-              {currentUser.shortName.charAt(0)}
+              <span className="text-2xl drop-shadow-sm select-none">{currentUser.avatarChar || "👤"}</span>
               {!isStudio && (
                 <span className="absolute -bottom-1.5 -right-1.5 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-indigo-600 text-white border-2 border-white dark:border-[#171336] shadow-sm">
                   N{gameHud.level}
@@ -1507,18 +1480,7 @@ function XrAgencyCrmApp() {
               </button>
             )}
 
-            <button
-              onClick={() => {
-                setNewPinValue("");
-                setConfirmPinValue("");
-                setChangePinError("");
-                setShowChangePinModal(true);
-              }}
-              title="Mon mot de passe"
-              className={`p-2 rounded-xl border ${theme.subCard} ${theme.textMuted} hover:text-indigo-500`}
-            >
-              <KeyRound className="w-4 h-4" />
-            </button>
+
 
             <button
               onClick={() => {
@@ -2218,10 +2180,15 @@ function XrAgencyCrmApp() {
                     {financeView.visibleMemberRows.map((row) => (
                       <tr key={row.member.id}>
                         <td className={`py-3 font-extrabold ${theme.textMain}`}>
-                          <div>{row.member.name}</div>
-                          <div className={`text-[10px] font-normal ${theme.textMuted}`}>
-                            {row.member.badge}
-                            {row.member.recruitedBy === "martin" ? " · Filière Martin" : ""}
+                          <div className="flex items-center gap-2.5">
+                            <span className="text-xl select-none">{row.member.avatarChar || "👤"}</span>
+                            <div>
+                              <div>{row.member.name}</div>
+                              <div className={`text-[10px] font-normal ${theme.textMuted}`}>
+                                {row.member.badge}
+                                {row.member.recruitedBy === "martin" ? " · Filière Martin" : ""}
+                              </div>
+                            </div>
                           </div>
                         </td>
                         <td className={`py-3 text-[11px] ${theme.textMuted}`}>
@@ -2827,31 +2794,7 @@ function XrAgencyCrmApp() {
         </div>
       )}
 
-      {/* ── MODAL CHANGER MON MOT DE PASSE ── */}
-      {showChangePinModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
-          <div className={`border rounded-3xl p-6 max-w-sm w-full space-y-4 ${theme.modalBg}`}>
-            <div className={`flex items-center justify-between pb-3 border-b ${theme.border}`}>
-              <h3 className={`font-extrabold text-base flex items-center gap-2 ${theme.textMain}`}>
-                <KeyRound className="w-4 h-4 text-indigo-500" /> Mon mot de passe
-              </h3>
-              <button onClick={() => setShowChangePinModal(false)} className={theme.textSoft}>✕</button>
-            </div>
-            <p className={`text-xs ${theme.textMuted}`}>
-              Dès que vous créez votre mot de passe personnel, il est masqué automatiquement sur l'écran de connexion.
-            </p>
-            <form onSubmit={handleSaveOwnPin} className="space-y-3">
-              <input type="password" required minLength={4} maxLength={20} value={newPinValue} onChange={(e) => { setNewPinValue(e.target.value); setChangePinError(""); }} placeholder="Nouveau mot de passe (min. 4 car.)" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
-              <input type="password" required minLength={4} maxLength={20} value={confirmPinValue} onChange={(e) => { setConfirmPinValue(e.target.value); setChangePinError(""); }} placeholder="Confirmer le mot de passe" className={`w-full rounded-xl px-3.5 py-2.5 text-sm font-mono border ${theme.inputBg}`} />
-              {changePinError && <p className="text-xs text-rose-500 font-bold text-center">{changePinError}</p>}
-              <div className="pt-1 flex gap-2">
-                <button type="button" onClick={() => setShowChangePinModal(false)} className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}>Annuler</button>
-                <button type="submit" className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-extrabold">Enregistrer</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+
     </div>
   );
 }

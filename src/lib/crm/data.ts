@@ -21,6 +21,7 @@ export interface TeamMember {
   fullCycleRate: number; // % si fait Setting + Closing
   overrideRate?: number; // % Manager sur les ventes des candidats qu'il ramène
   avatarBg: string;
+  avatarChar: string; // Avatar / personnage distinctif fixe
   badge: string; // JAMAIS de % affiché dans le badge public pour préserver la confidentialité
   pin: string;
   customPinSet?: boolean; // Passe à true quand le membre personnalise son mot de passe
@@ -37,6 +38,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     closingRate: 1,
     fullCycleRate: 1,
     avatarBg: "from-amber-400 via-amber-500 to-orange-600",
+    avatarChar: "👑",
     badge: "👑 Direction",
     pin: "071266",
   },
@@ -51,6 +53,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     fullCycleRate: 0.2,
     overrideRate: 0.1,
     avatarBg: "from-blue-500 to-indigo-600",
+    avatarChar: "👔",
     badge: "👥 Manager",
     pin: "2026",
   },
@@ -64,6 +67,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     closingRate: 0.2,
     fullCycleRate: 0.3,
     avatarBg: "from-emerald-500 to-teal-700",
+    avatarChar: "⚡",
     badge: "⚡ Full-Cycle",
     pin: "1010",
   },
@@ -77,6 +81,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     closingRate: 0.2,
     fullCycleRate: 0.3,
     avatarBg: "from-pink-500 to-rose-700",
+    avatarChar: "🎯",
     badge: "⚡ Full-Cycle",
     pin: "2020",
   },
@@ -84,13 +89,14 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     id: "pilar",
     name: "Pilar",
     shortName: "Pilar",
-    roleLabel: "Commerciale Partenaire",
-    roleType: "closer",
+    roleLabel: "Commerciale Autonome · Prospection & Closing",
+    roleType: "full_cycle",
     settingRate: 0.1,
     closingRate: 0.2,
     fullCycleRate: 0.2,
     avatarBg: "from-rose-500 to-amber-600",
-    badge: "🎯 Closer (20% Sites / 10% Mensuel)",
+    avatarChar: "💼",
+    badge: "💼 Pote Closer (20% Sites · 10% Récurrent)",
     pin: "",
   },
   {
@@ -104,6 +110,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     closingRate: 0.2,
     fullCycleRate: 0.2,
     avatarBg: "from-purple-500 to-violet-700",
+    avatarChar: "📱",
     badge: "🎯 Closer",
     pin: "3030",
   },
@@ -118,6 +125,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     closingRate: 0.15,
     fullCycleRate: 0.2,
     avatarBg: "from-cyan-500 to-blue-700",
+    avatarChar: "🎧",
     badge: "📞 Setter",
     pin: "4040",
   },
@@ -132,6 +140,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     closingRate: 0.15,
     fullCycleRate: 0.15,
     avatarBg: "from-amber-600 to-orange-700",
+    avatarChar: "🚀",
     badge: "🎓 Élève XR School",
     pin: "5050",
   },
@@ -146,6 +155,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     closingRate: 0.15,
     fullCycleRate: 0.15,
     avatarBg: "from-fuchsia-500 to-purple-700",
+    avatarChar: "✨",
     badge: "🎓 Élève XR School",
     pin: "6060",
   },
@@ -159,6 +169,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     closingRate: 0,
     fullCycleRate: 0,
     avatarBg: "from-zinc-600 to-zinc-900",
+    avatarChar: "🎨",
     badge: "🎨 Studio",
     pin: "0000",
   },
@@ -388,10 +399,10 @@ export function canViewLead(viewer: TeamMember, lead: Lead, members: TeamMember[
 }
 
 export function canViewMemberFinances(viewer: TeamMember, target: TeamMember): boolean {
+  // Règle stricte de confidentialité : Seule la Direction voit les finances de tous les membres.
+  // Chaque commercial / employé voit exclusivement ses propres commissions, jamais celles des autres.
   if (viewer.roleType === "direction") return true;
-  if (viewer.id === target.id) return true;
-  if (viewer.roleType === "manager" && target.recruitedBy === viewer.id) return true;
-  return false;
+  return viewer.id === target.id;
 }
 
 // ── Moteur de calcul des commissions (Pack Multi-Services + Split Setter/Closer + Override Manager) ──
@@ -417,9 +428,11 @@ export function computeDealCommissions(lead: Lead, members: TeamMember[]): DealC
   let closerAmount = 0;
 
   if (lead.setterId === lead.closerId) {
+    // Cas full-cycle : elle prospecte et elle close elle-même (tout-en-un)
     let rate = closer?.roleType === "direction" ? 0 : (closer?.fullCycleRate ?? 0.2);
-    // Règle spécifique Pilar & Christel : 20% sur les sites, 10% sur les offres annuelles / mensuelles
-    if (closer?.id === "pilar" || closer?.id === "christel") {
+    // Règle générale démarcheuse / closer tout-en-un (ex: Pilar, Christel, profils commerciaux) :
+    // 20% sur la création de sites web et 10% sur tous les forfaits récurrents mensuels ou annuels
+    if (closer?.id === "pilar" || closer?.id === "christel" || closer?.roleType === "full_cycle" || closer?.roleType === "closer") {
       rate = isWebsite ? 0.20 : 0.10;
     }
     closerAmount = Math.round(baseValue * rate);
@@ -427,10 +440,10 @@ export function computeDealCommissions(lead: Lead, members: TeamMember[]): DealC
     let sRate = setter?.roleType === "direction" ? 0 : (setter?.settingRate ?? 0.1);
     let cRate = closer?.roleType === "direction" ? 0 : (closer?.closingRate ?? 0.15);
 
-    if (closer?.id === "pilar" || closer?.id === "christel") {
+    if (closer?.id === "pilar" || closer?.id === "christel" || closer?.roleType === "closer" || closer?.roleType === "full_cycle") {
       cRate = isWebsite ? 0.20 : 0.10;
     }
-    if (setter?.id === "pilar" || setter?.id === "christel") {
+    if (setter?.id === "pilar" || setter?.id === "christel" || setter?.roleType === "closer" || setter?.roleType === "full_cycle") {
       sRate = 0.10;
     }
 

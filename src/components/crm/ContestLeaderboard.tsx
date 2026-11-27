@@ -153,9 +153,9 @@ export function ContestLeaderboard({
                   <div className="flex items-center gap-3">
                     <span className="w-8 text-center text-lg font-black">{medal}</span>
                     <div
-                      className={`h-10 w-10 rounded-2xl bg-gradient-to-br ${row.member.avatarBg} flex items-center justify-center text-white font-extrabold text-sm shadow-md shrink-0`}
+                      className={`h-11 w-11 rounded-2xl bg-gradient-to-br ${row.member.avatarBg} flex items-center justify-center text-white font-extrabold shadow-md shrink-0`}
                     >
-                      {row.member.shortName.charAt(0)}
+                      <span className="text-xl select-none">{row.member.avatarChar || "👤"}</span>
                     </div>
                     <div>
                       <p className={`text-xs font-extrabold flex items-center gap-1.5 ${theme.textMain}`}>
