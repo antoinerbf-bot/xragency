@@ -1,14 +1,13 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   ArrowRight,
   BarChart3,
   CheckCircle2,
   ChevronRight,
-  Clock,
-  Globe2,
+  ExternalLink,
   Layers3,
+  Pause,
   Play,
-  ShieldCheck,
   Sparkles,
   Volume2,
   VolumeX,
@@ -18,8 +17,78 @@ import {
 import { cn } from "@/lib/utils";
 import { useLang, type Lang } from "@/lib/i18n";
 import { useFunnel } from "@/lib/funnel";
-import showcaseWebImg from "@/assets/web-luxury-showcase.jpg";
-import studioAtelierImg from "@/assets/hero-editorial-concept01.jpg";
+
+interface ShowcaseProject {
+  id: string;
+  name: string;
+  category: Record<Lang, string>;
+  image: string;
+  highlight: Record<Lang, string>;
+  metrics: string;
+}
+
+const FEATURED_PROJECTS: ShowcaseProject[] = [
+  {
+    id: "pokenball",
+    name: "Pok-N Ball · Franchise & Restauration",
+    category: {
+      fr: "Restauration · E-Commerce & Click & Collect",
+      en: "Restaurant · E-Commerce & Click & Collect",
+      vi: "Nhà hàng · Thương mại điện tử",
+      ar: "مطاعم · تجارة رقمية وطلب سريع",
+      ru: "Ресторанный бизнес · E-Commerce",
+    },
+    image: "/showcase/pokenball_showcase.jpg",
+    highlight: {
+      fr: "Menu interactif immersif, commande instantanée, 0% commission tierce.",
+      en: "Immersive menu, instant ordering, 0% third-party marketplace fees.",
+      vi: "Menu tương tác trực quan, đặt món tức thì, không mất phí nền tảng.",
+      ar: "قائمة تفاعلية متميزة، طلب مباشر بدون عمولات للتطبيقات الخارجية.",
+      ru: "Интерактивное меню, быстрый заказ, 0% комиссии сторонним агрегаторам.",
+    },
+    metrics: "100/100 Lighthouse · Chargement 0.38s",
+  },
+  {
+    id: "luxury",
+    name: "Maison Valois · Joaillerie & Luxe",
+    category: {
+      fr: "Haute Joaillerie & E-Commerce d'Exception",
+      en: "Haute Horlogerie & Luxury Commerce",
+      vi: "Trang sức cao cấp & Thương mại điện tử",
+      ar: "مجوهرات فاخرة وتجارة إلكترونية راقية",
+      ru: "Ювелирные изделия и премиум e-commerce",
+    },
+    image: "/showcase/sc-luxe.jpg",
+    highlight: {
+      fr: "Expérience d'achat sur-mesure, typographie haute couture et 3D.",
+      en: "Bespoke digital shopping experience, editorial typography and 3D.",
+      vi: "Trải nghiệm mua sắm độc bản, font chữ cao cấp và hiệu ứng 3D.",
+      ar: "تجربة تسوق رقمية حصرية مع هوية بصرية مخصصة وتصميم ثلاثي الأبعاد.",
+      ru: "Уникальный покупательский опыт, кутюрная типографика и 3D-детали.",
+    },
+    metrics: "Conversion +42% · Design Award 2026",
+  },
+  {
+    id: "hospitality",
+    name: "Villa Elara · Hôtellerie & Domaines",
+    category: {
+      fr: "Hôtellerie de Prestige & Réservation Directe",
+      en: "Prestige Hospitality & Direct Booking",
+      vi: "Khách sạn nghỉ dưỡng & Đặt phòng trực tiếp",
+      ar: "ضيافة فاخرة وحجز فندقي مباشر",
+      ru: "Премиум-отели и прямое бронирование",
+    },
+    image: "/showcase/sc-hotel.jpg",
+    highlight: {
+      fr: "Moteur de réservation direct sans frais OTA, immersion cinématographique.",
+      en: "Direct booking engine bypassing OTA fees, cinematic immersion.",
+      vi: "Hệ thống đặt phòng trực tiếp không qua trung gian, giao diện điện ảnh.",
+      ar: "محرك حجز مباشر يوفر عمولات المواقع الوسيطة مع تجربة بصرية سينمائية.",
+      ru: "Модуль прямого бронирования без комиссий букингов, кинематографичный дизайн.",
+    },
+    metrics: "Économie de 18% sur les commissions OTA",
+  },
+];
 
 interface Pillar {
   icon: typeof BarChart3;
@@ -38,7 +107,7 @@ const PILLARS: Pillar[] = [
       ru: "Стратегия и арт-дирекшн",
     },
     desc: {
-      fr: "Identité de marque singulière et positionnement premium.",
+      fr: "Identité de marque singulière et positionnement haut de gamme.",
       en: "Singular brand identity and high-end market positioning.",
       vi: "Định vị thương hiệu độc bản và đẳng cấp.",
       ar: "هوية تجارية متميزة وتموضع فاخر.",
@@ -116,9 +185,9 @@ const I18N = {
       clients: { val: "40+", label: "Marques et entreprises accompagnées" },
     },
     tabs: {
-      showcase: "Vitrine d'Excellence",
+      showcase: "Vitrine Réalisations",
       simulator: "Simulateur Express",
-      film: "Showreel Vidéo (1 min)",
+      film: "Showreel HD (1 min)",
     },
     sim: {
       title: "Estimez votre investissement en 10 secondes",
@@ -129,6 +198,13 @@ const I18N = {
       btn: "Personnaliser ce pack dans le configurateur",
     },
     statusAvailable: "Studio disponible · 3 créneaux de livraison ce mois-ci",
+    videoControls: {
+      play: "Lire la vidéo",
+      pause: "Mettre en pause",
+      unmute: "Activer le son",
+      mute: "Couper le son",
+      status: "Studio Ambiance 4K",
+    },
   },
   en: {
     badge: "BESPOKE DIGITAL STUDIO · PARIS · GENEVA · DUBAI · ASIA",
@@ -160,6 +236,13 @@ const I18N = {
       btn: "Customize this plan in configurator",
     },
     statusAvailable: "Studio online · 3 production slots open this month",
+    videoControls: {
+      play: "Play ambient video",
+      pause: "Pause video",
+      unmute: "Unmute",
+      mute: "Mute",
+      status: "4K Studio Ambient",
+    },
   },
   vi: {
     badge: "STUDIO KỸ THUẬT SỐ CAO CẤP · PARIS · GENEVA · DUBAI · CHÂU Á",
@@ -191,6 +274,13 @@ const I18N = {
       btn: "Tùy chỉnh gói này trong bộ cấu hình",
     },
     statusAvailable: "Studio đang hoạt động · Còn 3 suất triển khai trong tháng",
+    videoControls: {
+      play: "Phát video",
+      pause: "Tạm dừng",
+      unmute: "Bật âm thanh",
+      mute: "Tắt tiếng",
+      status: "Studio Video 4K",
+    },
   },
   ar: {
     badge: "استوديو رقمي فاخر · باريس · جنيف · دبي · آسيا",
@@ -222,6 +312,13 @@ const I18N = {
       btn: "تخصيص هذه الباقة في الحاسبة",
     },
     statusAvailable: "الاستوديو متاح · 3 مواعيد تسليم متاحة هذا الشهر",
+    videoControls: {
+      play: "تشغيل الفيديو",
+      pause: "إيقاف مؤقت",
+      unmute: "تشغيل الصوت",
+      mute: "كتم الصوت",
+      status: "فيديو الاستوديو 4K",
+    },
   },
   ru: {
     badge: "ПРЕМИАЛЬНАЯ DIGITAL-СТУДИЯ · ПАРИЖ · ЖЕНЕВА · ДУБАЙ · АЗИЯ",
@@ -253,6 +350,13 @@ const I18N = {
       btn: "Настроить этот пакет в конфигураторе",
     },
     statusAvailable: "Студия доступна · Осталось 3 слота на этот месяц",
+    videoControls: {
+      play: "Воспроизвести",
+      pause: "Пауза",
+      unmute: "Включить звук",
+      mute: "Без звука",
+      status: "4K видео студии",
+    },
   },
 };
 
@@ -263,19 +367,44 @@ export function Hero() {
 
   const [activeTab, setActiveTab] = useState<"showcase" | "simulator" | "film">("showcase");
   const [selectedPackIndex, setSelectedPackIndex] = useState<number>(1);
+  const [selectedProjectIndex, setSelectedProjectIndex] = useState<number>(0);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-  const videoPlayerRef = useRef<HTMLVideoElement>(null);
 
-  const handleOpenVideo = () => {
+  // Background Ambient Video Controls
+  const bgVideoRef = useRef<HTMLVideoElement>(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(true);
+  const [isVideoMuted, setIsVideoMuted] = useState<boolean>(true);
+
+  // Showreel modal video
+  const modalVideoRef = useRef<HTMLVideoElement>(null);
+
+  const toggleBgVideoPlay = () => {
+    if (!bgVideoRef.current) return;
+    if (bgVideoRef.current.paused) {
+      bgVideoRef.current.play().then(() => setIsVideoPlaying(true)).catch(() => {});
+    } else {
+      bgVideoRef.current.pause();
+      setIsVideoPlaying(false);
+    }
+  };
+
+  const toggleBgVideoMute = () => {
+    if (!bgVideoRef.current) return;
+    const nextMute = !bgVideoRef.current.muted;
+    bgVideoRef.current.muted = nextMute;
+    setIsVideoMuted(nextMute);
+  };
+
+  const handleOpenShowreel = () => {
     setIsVideoModalOpen(true);
     setTimeout(() => {
-      videoPlayerRef.current?.play().catch(() => {});
+      modalVideoRef.current?.play().catch(() => {});
     }, 150);
   };
 
-  const handleCloseVideo = () => {
-    if (videoPlayerRef.current) {
-      videoPlayerRef.current.pause();
+  const handleCloseShowreel = () => {
+    if (modalVideoRef.current) {
+      modalVideoRef.current.pause();
     }
     setIsVideoModalOpen(false);
   };
@@ -287,38 +416,69 @@ export function Hero() {
     else applyGoalPreset("growth_360");
   };
 
+  const currentProject = FEATURED_PROJECTS[selectedProjectIndex] ?? FEATURED_PROJECTS[0];
+
   return (
     <section
       id="hero"
       aria-label="XR Agency Hero"
-      className="relative isolate min-h-[100svh] w-full overflow-hidden bg-[#0D0B09] pt-24 pb-12 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-20 text-[#FAF7F2]"
+      className="relative isolate min-h-[100svh] w-full overflow-hidden bg-[#0A0806] pt-24 pb-12 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-20 text-[#FAF7F2]"
     >
-      {/* ── Subtle Atmospheric Light & Texture (Obsidian & Warm Champagne) ── */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-      >
+      {/* ── ARRIÈRE-PLAN VIDÉO IMMERSIF AMBIANCE STUDIO 4K ── */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden -z-10">
+        <video
+          ref={bgVideoRef}
+          autoPlay
+          muted={isVideoMuted}
+          loop
+          playsInline
+          preload="auto"
+          poster="/videos/clean-poster.jpg"
+          className="absolute inset-0 h-full w-full object-cover brightness-[0.62] contrast-[1.14] saturate-[1.08] transition-transform duration-[12000ms] scale-105"
+        >
+          <source src="/videos/hero-ambient-loop.mp4" type="video/mp4" />
+        </video>
+
+        {/* Dégradés d'orfèvrerie : lisibilité parfaite à gauche, éclat cinématographique à droite */}
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,8,6,0.96)_0%,rgba(10,8,6,0.85)_42%,rgba(10,8,6,0.48)_72%,rgba(10,8,6,0.24)_100%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,#0A0806_0%,rgba(10,8,6,0.6)_18%,transparent_45%)] pointer-events-none" />
+
+        {/* Halo doré subtil */}
         <div
-          className="absolute -top-32 right-[-10%] h-[680px] w-[680px] rounded-full opacity-25 blur-[140px]"
+          className="absolute -top-32 right-[5%] h-[650px] w-[650px] rounded-full opacity-20 blur-[140px] pointer-events-none"
           style={{
-            background: "radial-gradient(circle, #E5C696 0%, rgba(229,198,150,0.08) 60%, transparent 100%)",
+            background: "radial-gradient(circle, #E5C696 0%, rgba(229,198,150,0.06) 65%, transparent 100%)",
           }}
         />
-        <div
-          className="absolute bottom-[-10%] left-[-10%] h-[550px] w-[550px] rounded-full opacity-15 blur-[130px]"
-          style={{
-            background: "radial-gradient(circle, #D4AF37 0%, transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-[0.035]"
-          style={{
-            backgroundImage: "radial-gradient(#ffffff 1px, transparent 1px)",
-            backgroundSize: "28px 28px",
-          }}
-        />
-        {/* Soft edge fade to subsequent sections */}
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#FAF8F5] to-transparent pointer-events-none opacity-10" />
+      </div>
+
+      {/* ── CONTRÔLEUR VIDÉO IMMERSIF (Discret, en haut à droite) ── */}
+      <div className="absolute top-24 right-5 sm:right-8 lg:right-12 z-30 flex items-center gap-2">
+        <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/60 px-3 py-1.5 backdrop-blur-md shadow-lg text-white">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="font-mono text-[10px] sm:text-[11px] font-medium tracking-wider text-white/90">
+            {c.videoControls.status}
+          </span>
+          <span className="h-3 w-px bg-white/20" />
+          
+          <button
+            type="button"
+            onClick={toggleBgVideoPlay}
+            aria-label={isVideoPlaying ? c.videoControls.pause : c.videoControls.play}
+            className="p-1 text-white/70 hover:text-white transition cursor-pointer"
+          >
+            {isVideoPlaying ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3 fill-current" />}
+          </button>
+
+          <button
+            type="button"
+            onClick={toggleBgVideoMute}
+            aria-label={isVideoMuted ? c.videoControls.unmute : c.videoControls.mute}
+            className="p-1 text-white/70 hover:text-white transition cursor-pointer"
+          >
+            {isVideoMuted ? <VolumeX className="h-3 w-3" /> : <Volume2 className="h-3 w-3 text-[#E5C696]" />}
+          </button>
+        </div>
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
@@ -329,7 +489,7 @@ export function Hero() {
           <div className="lg:col-span-7 flex flex-col justify-center">
             
             {/* Kicker Badge: Clean Haute Joaillerie Pill */}
-            <div className="mb-5 inline-flex w-fit items-center gap-2.5 rounded-full border border-[#E5C696]/30 bg-[#16120E]/80 px-4 py-1.5 backdrop-blur-md shadow-sm">
+            <div className="mb-5 inline-flex w-fit items-center gap-2.5 rounded-full border border-[#E5C696]/35 bg-[#16120E]/85 px-4 py-1.5 backdrop-blur-md shadow-sm">
               <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696] animate-pulse" />
               <span className="font-mono text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.22em] text-[#E5C696]">
                 {c.badge}
@@ -346,13 +506,13 @@ export function Hero() {
             </h1>
 
             {/* Editorial Subtitle */}
-            <p className="mt-5 max-w-[620px] text-sm sm:text-base leading-relaxed text-white/80 font-normal">
+            <p className="mt-5 max-w-[620px] text-sm sm:text-base leading-relaxed text-white/85 font-normal">
               {c.sub}
             </p>
 
             {/* Real Authority Markers: Google Reviews + Delivery Guarantee */}
             <div className="mt-6 flex flex-wrap items-center gap-3 text-xs">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/60 px-3.5 py-1.5 backdrop-blur-md shadow-sm">
                 <svg className="h-4 w-4" viewBox="0 0 24 24">
                   <path
                     fill="#4285F4"
@@ -374,10 +534,10 @@ export function Hero() {
                 <span className="font-bold text-white">4.9 / 5</span>
                 <span className="text-[#E5C696] tracking-widest text-[11px]">★★★★★</span>
                 <span className="text-white/40">·</span>
-                <span className="text-white/70 font-medium">+40 marques propulsées</span>
+                <span className="text-white/80 font-medium">+40 marques propulsées</span>
               </div>
 
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-emerald-300 font-medium">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/35 bg-emerald-500/20 px-3.5 py-1.5 text-emerald-300 font-medium backdrop-blur-md">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                 <span>Livraison clé en main sous 10 à 14 jours</span>
               </div>
@@ -388,7 +548,7 @@ export function Hero() {
               {/* Primary Action: Direct Configuration */}
               <a
                 href="#quote"
-                className="group inline-flex min-h-[50px] items-center justify-center gap-3 rounded-full bg-[#E5C696] px-7 py-3 text-xs sm:text-sm font-bold text-[#14110E] shadow-[0_12px_30px_rgba(229,198,150,0.28)] transition-all duration-300 hover:bg-[#F2D7B0] hover:scale-[1.02] active:scale-[0.98]"
+                className="group inline-flex min-h-[50px] items-center justify-center gap-3 rounded-full bg-[#E5C696] px-7 py-3 text-xs sm:text-sm font-bold text-[#14110E] shadow-[0_12px_32px_rgba(229,198,150,0.32)] transition-all duration-300 hover:bg-[#F2D7B0] hover:scale-[1.02] active:scale-[0.98]"
               >
                 <span>{c.ctaPrimary}</span>
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -399,7 +559,7 @@ export function Hero() {
                 href="https://wa.me/33649219808?text=Bonjour%20XR%20Agency%2C%20je%20souhaite%20un%20devis%20ou%20un%20audit%20pour%20mon%20projet."
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex min-h-[50px] items-center justify-center gap-2.5 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-6 py-3 text-xs sm:text-sm font-semibold text-emerald-300 backdrop-blur-md transition-all duration-300 hover:bg-emerald-500/25 hover:border-emerald-400"
+                className="inline-flex min-h-[50px] items-center justify-center gap-2.5 rounded-full border border-emerald-500/40 bg-emerald-500/20 px-6 py-3 text-xs sm:text-sm font-semibold text-emerald-300 backdrop-blur-md transition-all duration-300 hover:bg-emerald-500/30 hover:border-emerald-400"
               >
                 <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span>{c.ctaWhatsapp}</span>
@@ -408,7 +568,7 @@ export function Hero() {
               {/* Work Link */}
               <a
                 href="#work"
-                className="inline-flex min-h-[50px] items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-xs sm:text-sm font-medium text-white/90 backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:border-white/40"
+                className="inline-flex min-h-[50px] items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 text-xs sm:text-sm font-medium text-white backdrop-blur-md transition-all duration-300 hover:bg-white/20 hover:border-white/50"
               >
                 <span>{c.ctaSecondary}</span>
                 <ChevronRight className="h-4 w-4 text-[#E5C696]" />
@@ -416,37 +576,37 @@ export function Hero() {
             </div>
 
             {/* Transparent Pricing Anchor Bar */}
-            <div className="mt-6 flex flex-wrap items-center gap-2 text-xs font-mono text-white/70">
-              <span className="text-white/40">Tarifs clairs :</span>
-              <span className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-[#E5C696] font-medium">
+            <div className="mt-6 flex flex-wrap items-center gap-2 text-xs font-mono text-white/80">
+              <span className="text-white/50">Tarifs clairs :</span>
+              <span className="rounded-md border border-white/15 bg-black/40 px-2.5 py-1 text-[#E5C696] font-medium backdrop-blur-sm">
                 Sites dès 499 €
               </span>
-              <span className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-[#E5C696] font-medium">
+              <span className="rounded-md border border-white/15 bg-black/40 px-2.5 py-1 text-[#E5C696] font-medium backdrop-blur-sm">
                 Google Maps 999 €/an
               </span>
-              <span className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-[#E5C696] font-medium">
+              <span className="rounded-md border border-white/15 bg-black/40 px-2.5 py-1 text-[#E5C696] font-medium backdrop-blur-sm">
                 Social 349 €/m
               </span>
-              <span className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-emerald-300 font-medium">
+              <span className="rounded-md border border-emerald-500/35 bg-emerald-500/20 px-2.5 py-1 text-emerald-300 font-medium backdrop-blur-sm">
                 0% commission tierce
               </span>
             </div>
 
             {/* Authority Metrics Row */}
-            <div className="mt-8 grid grid-cols-3 gap-4 sm:gap-8 border-t border-white/10 pt-6 max-w-[560px]">
+            <div className="mt-8 grid grid-cols-3 gap-4 sm:gap-8 border-t border-white/15 pt-6 max-w-[560px]">
               <div>
                 <strong className="block font-mono text-2xl sm:text-3xl font-bold tracking-tight text-white">
                   {c.metrics.delivery.val}
                 </strong>
-                <span className="mt-0.5 block text-[11px] sm:text-xs text-white/60">
+                <span className="mt-0.5 block text-[11px] sm:text-xs text-white/70">
                   {c.metrics.delivery.label}
                 </span>
               </div>
-              <div className="border-x border-white/10 px-3 sm:px-6">
+              <div className="border-x border-white/15 px-3 sm:px-6">
                 <strong className="block font-mono text-2xl sm:text-3xl font-bold tracking-tight text-[#E5C696]">
                   {c.metrics.ownership.val}
                 </strong>
-                <span className="mt-0.5 block text-[11px] sm:text-xs text-white/60">
+                <span className="mt-0.5 block text-[11px] sm:text-xs text-white/70">
                   {c.metrics.ownership.label}
                 </span>
               </div>
@@ -454,7 +614,7 @@ export function Hero() {
                 <strong className="block font-mono text-2xl sm:text-3xl font-bold tracking-tight text-white">
                   {c.metrics.clients.val}
                 </strong>
-                <span className="mt-0.5 block text-[11px] sm:text-xs text-white/60">
+                <span className="mt-0.5 block text-[11px] sm:text-xs text-white/70">
                   {c.metrics.clients.label}
                 </span>
               </div>
@@ -462,9 +622,9 @@ export function Hero() {
 
           </div>
 
-          {/* ── Column Right (5 cols): Interactive Studio Showcase & Conversion Console ── */}
+          {/* ── Column Right (5 cols): Interactive Studio Console & Live Project Showcase ── */}
           <div className="lg:col-span-5 relative">
-            <div className="group relative overflow-hidden rounded-[2rem] border border-[#E5C696]/25 bg-[#14110E]/90 p-3 sm:p-4 shadow-[0_25px_80px_rgba(0,0,0,0.7)] backdrop-blur-xl">
+            <div className="group relative overflow-hidden rounded-[2rem] border border-[#E5C696]/30 bg-[#14110E]/92 p-3 sm:p-4 shadow-[0_30px_90px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
               
               {/* Header Tabs: Showcase / Simulator / Film */}
               <div className="mb-3 flex items-center justify-between border-b border-white/10 pb-3">
@@ -473,7 +633,7 @@ export function Hero() {
                     type="button"
                     onClick={() => setActiveTab("showcase")}
                     className={cn(
-                      "rounded-lg px-3 py-1.5 text-xs font-semibold transition-all",
+                      "rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer",
                       activeTab === "showcase"
                         ? "bg-[#E5C696] text-[#14110E] shadow-sm"
                         : "text-white/60 hover:text-white hover:bg-white/5",
@@ -485,7 +645,7 @@ export function Hero() {
                     type="button"
                     onClick={() => setActiveTab("simulator")}
                     className={cn(
-                      "rounded-lg px-3 py-1.5 text-xs font-semibold transition-all",
+                      "rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer",
                       activeTab === "simulator"
                         ? "bg-[#E5C696] text-[#14110E] shadow-sm"
                         : "text-white/60 hover:text-white hover:bg-white/5",
@@ -497,55 +657,82 @@ export function Hero() {
 
                 <button
                   type="button"
-                  onClick={handleOpenVideo}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-2.5 py-1.5 text-[11px] font-medium text-[#E5C696] transition hover:bg-white/10"
+                  onClick={handleOpenShowreel}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-2.5 py-1.5 text-[11px] font-medium text-[#E5C696] transition hover:bg-white/10 cursor-pointer"
                 >
                   <Play className="h-3 w-3 fill-current" />
                   <span className="hidden sm:inline">{c.tabs.film}</span>
                 </button>
               </div>
 
-              {/* ── TAB 1: SHOWCASE VITRINE D'EXCEPTION ── */}
+              {/* ── TAB 1: SHOWCASE VITRINE D'EXCEPTION (AVEC SÉLECTEUR DE VRAIS PROJETS) ── */}
               {activeTab === "showcase" && (
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-black">
-                  <img
-                    src={showcaseWebImg}
-                    alt="XR Agency réalisations web et studio de luxe"
-                    className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-                    loading="eager"
-                  />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                <div>
+                  {/* Visual Frame of the Selected Project */}
+                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-black">
+                    <img
+                      src={currentProject.image}
+                      alt={currentProject.name}
+                      className="h-full w-full object-cover object-center transition-all duration-700 ease-out group-hover:scale-105"
+                      loading="eager"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
-                  {/* Top Floating Badge */}
-                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/60 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-[#E5C696] backdrop-blur-md">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      HAUTE PERFORMANCE WEB
-                    </span>
-                    <span className="rounded-full border border-emerald-500/30 bg-emerald-500/20 px-2.5 py-1 font-mono text-[10px] font-bold text-emerald-300 backdrop-blur-md">
-                      100/100 LIGHTHOUSE
-                    </span>
+                    {/* Top Floating Badge */}
+                    <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/70 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-[#E5C696] backdrop-blur-md">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        PROJET RÉEL STUDIO
+                      </span>
+                      <span className="rounded-full border border-emerald-500/30 bg-emerald-500/20 px-2.5 py-1 font-mono text-[10px] font-bold text-emerald-300 backdrop-blur-md">
+                        {currentProject.metrics}
+                      </span>
+                    </div>
+
+                    {/* Bottom Details */}
+                    <div className="absolute bottom-3 left-3 right-3 rounded-xl border border-white/15 bg-black/80 p-3 backdrop-blur-md">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-serif text-sm font-semibold text-white">
+                            {currentProject.name}
+                          </p>
+                          <p className="text-[11px] text-white/70 line-clamp-1">
+                            {currentProject.highlight[lang] ?? currentProject.highlight.fr}
+                          </p>
+                        </div>
+                        <a
+                          href="#work"
+                          className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#E5C696] text-[#14110E] transition hover:scale-110 ml-2"
+                          title="Voir nos projets"
+                        >
+                          <ArrowRight className="h-4 w-4" />
+                        </a>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Bottom Metrics Details */}
-                  <div className="absolute bottom-3 left-3 right-3 rounded-xl border border-white/15 bg-black/75 p-3 backdrop-blur-md">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-serif text-sm sm:text-base font-normal text-white">
-                          Architecture Digital & Design Studio
-                        </p>
-                        <p className="font-mono text-[10px] text-[#E5C696] tracking-wider uppercase">
-                          Paris · Dubaï · Genève · Da Nang
-                        </p>
-                      </div>
-                      <a
-                        href="#work"
-                        className="grid h-8 w-8 place-items-center rounded-full bg-[#E5C696] text-[#14110E] transition hover:scale-110"
-                        title="Voir nos projets"
+                  {/* Project Selector Pills */}
+                  <div className="mt-3 grid grid-cols-3 gap-2">
+                    {FEATURED_PROJECTS.map((proj, idx) => (
+                      <button
+                        key={proj.id}
+                        type="button"
+                        onClick={() => setSelectedProjectIndex(idx)}
+                        className={cn(
+                          "rounded-lg border p-2 text-left transition-all cursor-pointer",
+                          selectedProjectIndex === idx
+                            ? "border-[#E5C696] bg-[#E5C696]/15 text-white"
+                            : "border-white/10 bg-black/40 text-white/60 hover:text-white hover:border-white/25",
+                        )}
                       >
-                        <ArrowRight className="h-4 w-4" />
-                      </a>
-                    </div>
+                        <p className="text-[10px] font-bold truncate text-[#E5C696]">
+                          {idx === 0 ? "Pok-N Ball" : idx === 1 ? "Joaillerie" : "Villa & Resort"}
+                        </p>
+                        <p className="text-[9px] text-white/50 truncate">
+                          {idx === 0 ? "Restaurant" : idx === 1 ? "E-Commerce" : "Hôtellerie"}
+                        </p>
+                      </button>
+                    ))}
                   </div>
                 </div>
               )}
@@ -570,7 +757,7 @@ export function Hero() {
                           type="button"
                           onClick={() => handleChoosePack(idx)}
                           className={cn(
-                            "w-full rounded-xl border p-2.5 text-left transition-all flex items-center justify-between",
+                            "w-full rounded-xl border p-2.5 text-left transition-all flex items-center justify-between cursor-pointer",
                             selectedPackIndex === idx
                               ? "border-[#E5C696] bg-[#E5C696]/10 text-white shadow-sm"
                               : "border-white/10 bg-black/30 text-white/80 hover:border-white/30",
@@ -611,12 +798,12 @@ export function Hero() {
               )}
 
               {/* Status Guarantee Footer */}
-              <div className="mt-3 flex items-center justify-between text-[11px] font-mono text-white/65">
+              <div className="mt-3 flex items-center justify-between text-[11px] font-mono text-white/70">
                 <div className="flex items-center gap-1.5 text-emerald-400">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   <span>{c.statusAvailable}</span>
                 </div>
-                <span className="text-white/40">Garantie Livraison 10j</span>
+                <span className="text-white/50">Garantie Livraison 10j</span>
               </div>
 
             </div>
@@ -632,7 +819,7 @@ export function Hero() {
               return (
                 <div
                   key={p.title.fr}
-                  className="rounded-2xl border border-white/10 bg-[#16120E]/70 p-4 backdrop-blur-sm transition-all duration-300 hover:border-[#E5C696]/40 hover:bg-[#1A1612]"
+                  className="rounded-2xl border border-white/10 bg-[#16120E]/80 p-4 backdrop-blur-md transition-all duration-300 hover:border-[#E5C696]/40 hover:bg-[#1A1612]"
                 >
                   <div className="flex items-center gap-3">
                     <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-[#E5C696]/30 bg-[#241E18] text-[#E5C696]">
@@ -642,7 +829,7 @@ export function Hero() {
                       {p.title[lang] ?? p.title.fr}
                     </h3>
                   </div>
-                  <p className="mt-2.5 text-[11px] sm:text-xs leading-relaxed text-white/65">
+                  <p className="mt-2.5 text-[11px] sm:text-xs leading-relaxed text-white/70">
                     {p.desc[lang] ?? p.desc.fr}
                   </p>
                 </div>
@@ -676,15 +863,15 @@ export function Hero() {
               </span>
               <button
                 type="button"
-                onClick={handleCloseVideo}
-                className="rounded-lg p-1 text-white/60 transition hover:bg-white/10 hover:text-white"
+                onClick={handleCloseShowreel}
+                className="rounded-lg p-1 text-white/60 transition hover:bg-white/10 hover:text-white cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
             <div className="aspect-video w-full bg-black">
               <video
-                ref={videoPlayerRef}
+                ref={modalVideoRef}
                 src="/videos/xr-agency-vsl.mp4"
                 poster="/videos/vsl-poster.jpg"
                 controls
