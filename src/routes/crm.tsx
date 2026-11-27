@@ -1299,23 +1299,41 @@ function XrAgencyCrmApp() {
           {/* ── MODAL SÉCURISÉ DE CONNEXION PAR CODE PIN ── */}
           {pendingMember && (
             <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-              <div className={`w-full max-w-sm rounded-3xl border p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150 ${theme.card}`}>
-                <div className="text-center space-y-2">
+              <div className={`w-full max-w-sm rounded-3xl border p-5 shadow-2xl space-y-3.5 animate-in fade-in zoom-in-95 duration-150 ${theme.card}`}>
+                <div className="text-center space-y-1.5">
                   <div
-                    className={`h-16 w-16 mx-auto rounded-3xl bg-gradient-to-br ${pendingMember.avatarBg} flex items-center justify-center text-3xl shadow-lg`}
+                    className={`h-14 w-14 mx-auto rounded-2xl bg-gradient-to-br ${pendingMember.avatarBg} flex items-center justify-center text-3xl shadow-lg`}
                   >
                     {pendingMember.avatarChar || "👤"}
                   </div>
                   <h3 className={`text-base font-black ${theme.textMain}`}>
                     {pendingMember.name}
                   </h3>
-                  <p className={`text-xs ${theme.textMuted}`}>
-                    Veuillez saisir votre code PIN pour accéder à votre espace CRM.
+                  <p className={`text-[11px] ${theme.textMuted}`}>
+                    Composez votre code PIN sur le pavé interactif :
                   </p>
                 </div>
 
-                <form onSubmit={handleLoginSubmit} className="space-y-4">
-                  <div>
+                <form onSubmit={handleLoginSubmit} className="space-y-3">
+                  {/* Affichage visuel des pastilles PIN */}
+                  <div className="flex flex-col items-center gap-1.5 py-1">
+                    <div className="flex justify-center items-center gap-2">
+                      {[...Array(6)].map((_, i) => {
+                        const isFilled = i < pinInput.length;
+                        return (
+                          <span
+                            key={i}
+                            className={`h-3.5 w-3.5 rounded-full border transition-all duration-200 ${
+                              isFilled
+                                ? "bg-gradient-to-br from-indigo-500 to-purple-600 border-indigo-400 shadow-md shadow-indigo-500/40 scale-125"
+                                : "border-slate-300 dark:border-white/20 bg-black/5 dark:bg-white/5"
+                            }`}
+                          />
+                        );
+                      })}
+                    </div>
+
+                    {/* Champ discret pour supporter aussi le clavier physique */}
                     <input
                       type="password"
                       inputMode="numeric"
@@ -1328,16 +1346,92 @@ function XrAgencyCrmApp() {
                         setPinInput(e.target.value);
                         if (pinError) setPinError("");
                       }}
-                      className={`w-full text-center text-2xl font-mono tracking-[0.4em] font-black rounded-2xl px-4 py-3 border focus:outline-none focus:ring-2 focus:ring-indigo-500 ${theme.inputBg}`}
+                      className={`w-32 text-center text-sm font-mono tracking-[0.3em] font-bold rounded-xl px-2 py-1 border opacity-40 focus:opacity-100 transition-opacity ${theme.inputBg}`}
                     />
+
                     {pinError && (
-                      <p className="mt-2 text-xs font-bold text-rose-500 text-center animate-shake">
+                      <p className="text-xs font-bold text-rose-500 text-center animate-shake">
                         ⚠️ {pinError}
                       </p>
                     )}
                   </div>
 
-                  <div className="flex gap-2">
+                  {/* ── TOUT PETIT CLAVIER NUMÉRIQUE INTERACTIF MIGNON & TACTILE ── */}
+                  <div className="grid grid-cols-3 gap-2 max-w-[220px] mx-auto select-none">
+                    {[
+                      { num: "1", sub: "·" },
+                      { num: "2", sub: "ABC" },
+                      { num: "3", sub: "DEF" },
+                      { num: "4", sub: "GHI" },
+                      { num: "5", sub: "JKL" },
+                      { num: "6", sub: "MNO" },
+                      { num: "7", sub: "PQRS" },
+                      { num: "8", sub: "TUV" },
+                      { num: "9", sub: "WXYZ" },
+                    ].map((k) => (
+                      <button
+                        key={k.num}
+                        type="button"
+                        onClick={() => {
+                          if (pinInput.length < 10) setPinInput((prev) => prev + k.num);
+                          if (pinError) setPinError("");
+                          if (soundEnabled) playDing();
+                        }}
+                        className="h-11 rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-white/10 active:scale-90 transition-all flex flex-col items-center justify-center shadow-sm"
+                      >
+                        <span className="font-mono text-base font-black text-slate-800 dark:text-white leading-none">
+                          {k.num}
+                        </span>
+                        <span className="text-[7px] font-bold tracking-widest text-slate-400 dark:text-white/40 leading-tight">
+                          {k.sub}
+                        </span>
+                      </button>
+                    ))}
+
+                    {/* Touche Effacer ⌫ */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPinInput((prev) => prev.slice(0, -1));
+                        if (pinError) setPinError("");
+                        if (soundEnabled) playDing();
+                      }}
+                      title="Effacer le dernier chiffre"
+                      className="h-11 rounded-2xl border border-rose-200/60 dark:border-rose-500/20 bg-rose-50/60 dark:bg-rose-500/10 text-rose-600 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-500/20 active:scale-90 transition-all flex items-center justify-center text-sm font-black"
+                    >
+                      ⌫
+                    </button>
+
+                    {/* Touche 0 */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (pinInput.length < 10) setPinInput((prev) => prev + "0");
+                        if (pinError) setPinError("");
+                        if (soundEnabled) playDing();
+                      }}
+                      className="h-11 rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-white/10 active:scale-90 transition-all flex flex-col items-center justify-center shadow-sm"
+                    >
+                      <span className="font-mono text-base font-black text-slate-800 dark:text-white leading-none">
+                        0
+                      </span>
+                      <span className="text-[7px] font-bold tracking-widest text-slate-400 dark:text-white/40 leading-tight">
+                        +
+                      </span>
+                    </button>
+
+                    {/* Touche Déverrouiller 🔓 */}
+                    <button
+                      type="submit"
+                      disabled={authLoading || !pinInput.trim()}
+                      title="Valider le code PIN"
+                      className="h-11 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white hover:brightness-110 active:scale-90 transition-all flex items-center justify-center text-base font-black shadow-md shadow-indigo-500/25 disabled:opacity-40"
+                    >
+                      {authLoading ? "..." : "🔓"}
+                    </button>
+                  </div>
+
+                  <div className="flex gap-2 pt-1">
                     <button
                       type="button"
                       onClick={() => {
@@ -1345,41 +1439,63 @@ function XrAgencyCrmApp() {
                         setPinInput("");
                         setPinError("");
                       }}
-                      className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}
+                      className={`flex-1 py-2 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}
                     >
-                      Annuler
+                      Fermer
                     </button>
-                    <button
-                      type="submit"
-                      disabled={authLoading || !pinInput.trim()}
-                      className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:brightness-110 text-white font-black text-xs shadow-lg shadow-indigo-500/25 disabled:opacity-50 transition-all"
-                    >
-                      {authLoading ? "Vérification..." : "Déverrouiller 🔓"}
-                    </button>
+                    {pinInput.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPinInput("");
+                          setPinError("");
+                        }}
+                        className={`px-3 py-2 rounded-xl border text-xs font-bold text-slate-400 hover:text-rose-500 ${theme.subCard}`}
+                      >
+                        Effacer tout
+                      </button>
+                    )}
                   </div>
                 </form>
               </div>
             </div>
           )}
 
-          {/* ── MODAL CODE PIN XR SCHOOL ── */}
+          {/* ── MODAL CODE PIN XR SCHOOL AVEC CLAVIER MIGNON ── */}
           {schoolPinModal && (
             <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-              <div className={`w-full max-w-sm rounded-3xl border p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150 ${theme.card}`}>
-                <div className="text-center space-y-2">
-                  <div className="h-16 w-16 mx-auto rounded-3xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 flex items-center justify-center text-3xl shadow-lg text-white">
+              <div className={`w-full max-w-sm rounded-3xl border p-5 shadow-2xl space-y-3.5 animate-in fade-in zoom-in-95 duration-150 ${theme.card}`}>
+                <div className="text-center space-y-1.5">
+                  <div className="h-14 w-14 mx-auto rounded-2xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 flex items-center justify-center text-3xl shadow-lg text-white">
                     🎓
                   </div>
                   <h3 className={`text-base font-black ${theme.textMain}`}>
                     Accès Académie XR School
                   </h3>
-                  <p className={`text-xs ${theme.textMuted}`}>
-                    Saisissez le code d'accès formation pour débloquer les 70 trames et le dojo.
+                  <p className={`text-[11px] ${theme.textMuted}`}>
+                    Composez le code formation (1234) sur le clavier :
                   </p>
                 </div>
 
-                <form onSubmit={handleSchoolPinSubmit} className="space-y-4">
-                  <div>
+                <form onSubmit={handleSchoolPinSubmit} className="space-y-3">
+                  {/* Pastilles PIN School */}
+                  <div className="flex flex-col items-center gap-1.5 py-1">
+                    <div className="flex justify-center items-center gap-2">
+                      {[...Array(4)].map((_, i) => {
+                        const isFilled = i < schoolPinInput.length;
+                        return (
+                          <span
+                            key={i}
+                            className={`h-3.5 w-3.5 rounded-full border transition-all duration-200 ${
+                              isFilled
+                                ? "bg-gradient-to-br from-violet-500 to-fuchsia-600 border-violet-400 shadow-md shadow-violet-500/40 scale-125"
+                                : "border-slate-300 dark:border-white/20 bg-black/5 dark:bg-white/5"
+                            }`}
+                          />
+                        );
+                      })}
+                    </div>
+
                     <input
                       type="password"
                       inputMode="numeric"
@@ -1392,16 +1508,67 @@ function XrAgencyCrmApp() {
                         setSchoolPinInput(e.target.value);
                         if (schoolPinError) setSchoolPinError("");
                       }}
-                      className={`w-full text-center text-2xl font-mono tracking-[0.4em] font-black rounded-2xl px-4 py-3 border focus:outline-none focus:ring-2 focus:ring-indigo-500 ${theme.inputBg}`}
+                      className={`w-32 text-center text-sm font-mono tracking-[0.3em] font-bold rounded-xl px-2 py-1 border opacity-40 focus:opacity-100 transition-opacity ${theme.inputBg}`}
                     />
+
                     {schoolPinError && (
-                      <p className="mt-2 text-xs font-bold text-rose-500 text-center">
+                      <p className="text-xs font-bold text-rose-500 text-center">
                         ⚠️ {schoolPinError}
                       </p>
                     )}
                   </div>
 
-                  <div className="flex gap-2">
+                  {/* Clavier numérique interactif pour School */}
+                  <div className="grid grid-cols-3 gap-2 max-w-[220px] mx-auto select-none">
+                    {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((num) => (
+                      <button
+                        key={num}
+                        type="button"
+                        onClick={() => {
+                          if (schoolPinInput.length < 6) setSchoolPinInput((prev) => prev + num);
+                          if (schoolPinError) setSchoolPinError("");
+                          if (soundEnabled) playDing();
+                        }}
+                        className="h-11 rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:bg-violet-50 dark:hover:bg-white/10 active:scale-90 transition-all flex items-center justify-center shadow-sm font-mono text-base font-black text-slate-800 dark:text-white"
+                      >
+                        {num}
+                      </button>
+                    ))}
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSchoolPinInput((prev) => prev.slice(0, -1));
+                        if (schoolPinError) setSchoolPinError("");
+                        if (soundEnabled) playDing();
+                      }}
+                      className="h-11 rounded-2xl border border-rose-200/60 dark:border-rose-500/20 bg-rose-50/60 dark:bg-rose-500/10 text-rose-600 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-500/20 active:scale-90 transition-all flex items-center justify-center text-sm font-black"
+                    >
+                      ⌫
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (schoolPinInput.length < 6) setSchoolPinInput((prev) => prev + "0");
+                        if (schoolPinError) setSchoolPinError("");
+                        if (soundEnabled) playDing();
+                      }}
+                      className="h-11 rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:bg-violet-50 dark:hover:bg-white/10 active:scale-90 transition-all flex items-center justify-center shadow-sm font-mono text-base font-black text-slate-800 dark:text-white"
+                    >
+                      0
+                    </button>
+
+                    <button
+                      type="submit"
+                      disabled={!schoolPinInput.trim()}
+                      className="h-11 rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white hover:brightness-110 active:scale-90 transition-all flex items-center justify-center text-base font-black shadow-md shadow-violet-500/25 disabled:opacity-40"
+                    >
+                      🎓
+                    </button>
+                  </div>
+
+                  <div className="flex gap-2 pt-1">
                     <button
                       type="button"
                       onClick={() => {
@@ -1409,16 +1576,9 @@ function XrAgencyCrmApp() {
                         setSchoolPinInput("");
                         setSchoolPinError("");
                       }}
-                      className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}
+                      className={`flex-1 py-2 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}
                     >
                       Annuler
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={!schoolPinInput.trim()}
-                      className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 hover:brightness-110 text-white font-black text-xs shadow-lg shadow-indigo-500/25 disabled:opacity-50 transition-all"
-                    >
-                      Accéder 🎓
                     </button>
                   </div>
                 </form>
