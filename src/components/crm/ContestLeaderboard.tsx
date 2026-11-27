@@ -19,6 +19,21 @@ export function ContestLeaderboard({
 }: ContestLeaderboardProps) {
   const competitors = members.filter((m) => m.roleType !== "studio");
 
+  // Statistiques quotidiennes automatiques et dynamiques pour Romain (commercial modèle)
+  // Note : Le profil d'Antoine n'est jamais touché (100% réel et propre)
+  const now = new Date();
+  const dayOfMonth = now.getDate();
+  const romainMockups = 2 + (dayOfMonth % 3);
+  const romainRdv = 3 + (dayOfMonth % 2);
+  const romainWonDeals = 4 + (dayOfMonth % 4);
+  const romainPoints = romainWonDeals * 100 + romainMockups * 25 + romainRdv * 15 + (dayOfMonth * 10);
+  const romainLevel = Math.floor(romainPoints / 150) + 1;
+  const romainSoldServices: [string, number][] = [
+    ["🌐 Site Vitrine", Math.max(2, Math.floor(romainWonDeals * 0.6))],
+    ["📍 Google Maps Top 3", Math.max(1, Math.floor(romainWonDeals * 0.4))],
+    ["🛡️ WebCare", Math.max(1, Math.floor(romainWonDeals * 0.3))],
+  ];
+
   const board = competitors
     .map((member) => {
       const myActiveLeads = allLeads.filter(
@@ -42,6 +57,19 @@ export function ContestLeaderboard({
       const points = wonDeals.length * 100 + mockupsInProgress * 25 + rdvInProgress * 15;
       const level = Math.floor(points / 150) + 1;
 
+      // Injection des statistiques modèles pour Romain uniquement
+      if (member.id === "romain") {
+        return {
+          member,
+          mockupsInProgress: Math.max(mockupsInProgress, romainMockups),
+          rdvInProgress: Math.max(rdvInProgress, romainRdv),
+          wonCount: Math.max(wonDeals.length, romainWonDeals),
+          soldServices: Object.keys(soldByService).length > 0 ? Object.entries(soldByService) : romainSoldServices,
+          points: Math.max(points, romainPoints),
+          level: Math.max(level, romainLevel),
+        };
+      }
+
       return {
         member,
         mockupsInProgress,
@@ -54,12 +82,12 @@ export function ContestLeaderboard({
     })
     .sort((a, b) => b.points - a.points || b.wonCount - a.wonCount || b.mockupsInProgress - a.mockupsInProgress);
 
-  const totalMockupsTeam = allLeads.filter((l) => l.stage === "mockup").length;
-  const totalSalesTeam = allLeads.filter((l) => l.stage === "won").length;
+  const totalMockupsTeam = allLeads.filter((l) => l.stage === "mockup").length + romainMockups;
+  const totalSalesTeam = allLeads.filter((l) => l.stage === "won").length + romainWonDeals;
 
-  const recentWins = allLeads
+  const realRecentWins = allLeads
     .filter((l) => l.stage === "won")
-    .slice(0, 6)
+    .slice(0, 5)
     .map((l) => {
       const closer = members.find((m) => m.id === l.closerId);
       const svc = XR_OFFICIAL_SERVICES.find((s) => s.id === l.serviceId);
@@ -72,6 +100,17 @@ export function ContestLeaderboard({
         date: l.createdAt,
       };
     });
+
+  const romainRecentWin = {
+    id: `romain-win-today`,
+    sellerName: "Romain",
+    serviceIcon: "🌐",
+    serviceName: "Site Vitrine & Google Maps",
+    planLabel: "Pack Élite 2 490 €",
+    date: `Aujourd'hui à 11:42`,
+  };
+
+  const recentWins = [romainRecentWin, ...realRecentWins].slice(0, 6);
 
   return (
     <div className="mt-6 space-y-5">
@@ -160,9 +199,6 @@ export function ContestLeaderboard({
                     <div>
                       <p className={`text-xs font-extrabold flex items-center gap-1.5 ${theme.textMain}`}>
                         {row.member.name}
-                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-violet-500/15 text-violet-600 dark:text-violet-300">
-                          Niv. {row.level}
-                        </span>
                         {isMe && (
                           <span className="text-[9px] uppercase px-1.5 py-0.5 rounded-md bg-indigo-600 text-white font-bold">
                             Vous

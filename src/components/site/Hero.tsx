@@ -9,8 +9,9 @@ interface CityHub {
   country: Record<Lang, string>;
   timezone: string;
   image: string;
-  position?: string;
   video?: string;
+  position?: string;
+  filterClass?: string;
   tagline: Record<Lang, string>;
   status: Record<Lang, string>;
 }
@@ -21,18 +22,19 @@ const HUBS: CityHub[] = [
     name: { fr: "Paris", en: "Paris", vi: "Paris", ar: "باريس", ru: "Париж" },
     country: { fr: "France", en: "France", vi: "Pháp", ar: "فرنسا", ru: "Франция" },
     timezone: "Europe/Paris",
-    image: "/showcase/hero-editorial-concept01.jpg",
-    position: "object-center",
+    image: "/showcase/hub-paris-skyline-team.jpg",
+    position: "object-[center_50%]",
+    filterClass: "brightness-[1.08] contrast-[1.02]",
     tagline: {
-      fr: "Direction artistique, stratégie de marque & production web haute couture.",
-      en: "Creative direction, brand strategy & haute couture web production.",
-      vi: "Định hướng nghệ thuật, chiến lược thương hiệu & sản xuất số cao cấp.",
-      ar: "الإدارة الفنية، استراتيجية العلامة التجارية والإنتاج الرقمي الراقي.",
-      ru: "Арт-дирекшн, стратегия бренда и премиальное digital-производство.",
+      fr: "Studio Haussmann lumineux, direction artistique & production web haute couture.",
+      en: "Sunlit Haussmann studio, creative direction & haute couture web production.",
+      vi: "Studio Haussmann chan hòa ánh sáng, định hướng nghệ thuật & sản xuất web cao cấp.",
+      ar: "استوديو هوسمان مشرق، إدارة فنية وإنتاج رقمي راقٍ.",
+      ru: "Светлая студия в стиле Османа, арт-дирекшн и премиальный веб-продакшн.",
     },
     status: {
-      fr: "Atelier Paris · Direction Créative",
-      en: "Paris Atelier · Creative Direction",
+      fr: "Studio Paris · Direction Artistique",
+      en: "Paris Studio · Creative Direction",
       vi: "Studio Paris · Đang hoạt động",
       ar: "استوديو باريس · نشط",
       ru: "Студия Париж · В работе",
@@ -49,21 +51,22 @@ const HUBS: CityHub[] = [
       ru: "Объединённые Арабские Эмираты",
     },
     timezone: "Asia/Dubai",
-    image: "/showcase/hub-dubai-consultants.jpg",
-    position: "object-center",
+    image: "/showcase/hub-dubai-skyline-team.jpg",
+    position: "object-[center_60%]",
+    filterClass: "brightness-[1.05] contrast-[1.02]",
     tagline: {
-      fr: "Consultants en stratégie digitale, plateformes e-commerce & automatisation.",
-      en: "Digital strategy consultants, bespoke e-commerce & AI automation.",
-      vi: "Tư vấn chiến lược số, thương mại điện tử & tự động hóa.",
-      ar: "استشارات استراتيجية رقمية، منصات تجارة إلكترونية وأتمتة متقدمة.",
-      ru: "Консалтинг по digital-стратегии, e-commerce и автоматизация.",
+      fr: "Penthouse lumineux en plein jour, plateformes e-commerce d'envergure & tech.",
+      en: "Sunlit penthouse workspace, high-scale e-commerce & advanced tech.",
+      vi: "Penthouse sáng tạo ngập tràn ánh sáng, thương mại điện tử quy mô lớn & công nghệ.",
+      ar: "بنتهاوس مضيء بأشعة الشمس، منصات تجارة إلكترونية كبرى وتقنيات متقدمة.",
+      ru: "Светлый пентхаус, масштабный e-commerce и передовые технологии.",
     },
     status: {
       fr: "Studio Dubaï · Pôle Croissance & Tech",
       en: "Dubai Studio · Growth & Tech",
       vi: "Studio Dubai · Tăng trưởng",
       ar: "استوديو دبي · النمو والتقنية",
-      ru: "Студия Дубай · Развитие и технологии",
+      ru: "Студия Dubaï · Развитие и технологии",
     },
   },
   {
@@ -77,14 +80,15 @@ const HUBS: CityHub[] = [
       ru: "Сингапур",
     },
     timezone: "Asia/Singapore",
-    image: "/showcase/hub-singapore-consultants.jpg",
-    position: "object-center",
+    image: "/showcase/hub-singapore-skyline-team.jpg",
+    position: "object-[center_60%]",
+    filterClass: "brightness-[1.05] contrast-[1.02]",
     tagline: {
-      fr: "Pôle Asie-Pacifique, campagnes d'acquisition d'envergure & design biophilique.",
-      en: "Asia-Pacific hub, high-scale acquisition campaigns & refined branding.",
-      vi: "Trung tâm Châu Á - Thái Bình Dương, chiến dịch mở rộng & thương hiệu.",
-      ar: "مركز آسيا والمحيط الهادئ، حملات استقطاب كبرى وتصميم متميز.",
-      ru: "Азиатско-Тихоокеанский хаб, масштабирование и брендинг.",
+      fr: "Échange complice & dynamique d'équipe, conception digitale & acquisition Asie-Pacifique.",
+      en: "Candid creative collaboration, digital design & Asia-Pacific acquisition.",
+      vi: "Hợp tác sáng tạo năng động, thiết kế kỹ thuật số & mở rộng Châu Á.",
+      ar: "تعاون إبداعي وتواصل حيوي، تصميم رقمي ونمو في آسيا والمحيط الهادئ.",
+      ru: "Живое творческое общение, цифровой дизайн и масштабирование в Азии.",
     },
     status: {
       fr: "Studio Singapour · Pôle Asie",
@@ -95,25 +99,61 @@ const HUBS: CityHub[] = [
     },
   },
   {
-    id: "geneve",
-    name: { fr: "Genève", en: "Geneva", vi: "Geneva", ar: "جنيف", ru: "Женева" },
-    country: { fr: "Suisse", en: "Switzerland", vi: "Thụy Sĩ", ar: "سويسرا", ru: "Швейцария" },
-    timezone: "Europe/Zurich",
-    image: "/showcase/hub-meeting-consultants.jpg",
-    position: "object-center",
+    id: "newyork",
+    name: { fr: "New York", en: "New York", vi: "New York", ar: "نيويورك", ru: "Нью-Йорк" },
+    country: {
+      fr: "États-Unis",
+      en: "United States",
+      vi: "Hoa Kỳ",
+      ar: "الولايات المتحدة",
+      ru: "США",
+    },
+    timezone: "America/New_York",
+    image: "/showcase/hub-newyork-skyline-team.jpg",
+    position: "object-[center_60%]",
+    filterClass: "brightness-[1.05] contrast-[1.02]",
     tagline: {
-      fr: "Conseil stratégique de direction, gouvernance numérique & accompagnement de marque.",
-      en: "Executive strategy consulting, digital governance & premium brand advisory.",
-      vi: "Tư vấn chiến lược cấp cao, quản trị số & định vị thương hiệu.",
-      ar: "استشارات استراتيجية تنفيذية، حوكمة رقمية ودعم العلامات التجارية.",
-      ru: "Стратегический консалтинг, digital-трансформация и управление брендами.",
+      fr: "Studio Manhattan, stratégie de marque globale & plateformes digitales d'élite.",
+      en: "Manhattan studio, global brand strategy & elite digital platforms.",
+      vi: "Studio Manhattan, chiến lược thương hiệu toàn cầu & nền tảng số.",
+      ar: "استوديو مانهاتن، استراتيجية علامة تجارية عالمية ومنصات رقمية متقدمة.",
+      ru: "Студия на Манхэттене, глобальная стратегия бренда и цифровые платформы.",
     },
     status: {
-      fr: "Pôle Suisse · Conseil & Gouvernance",
-      en: "Swiss Hub · Strategy & Governance",
-      vi: "Studio Thụy Sĩ · Chiến lược",
-      ar: "استوديو سويسرا · الاستشارات",
-      ru: "Студия Швейцария · Стратегия",
+      fr: "Studio New York · Pôle Amériques",
+      en: "New York Studio · Americas Hub",
+      vi: "Studio New York · Châu Mỹ",
+      ar: "استوديو نيويورك · الأمريكتان",
+      ru: "Студия Нью-Йорк · Америка",
+    },
+  },
+  {
+    id: "tokyo",
+    name: { fr: "Tokyo", en: "Tokyo", vi: "Tokyo", ar: "طوكيو", ru: "Токио" },
+    country: {
+      fr: "Japon",
+      en: "Japan",
+      vi: "Nhật Bản",
+      ar: "اليابان",
+      ru: "Япония",
+    },
+    timezone: "Asia/Tokyo",
+    image: "/showcase/hub-tokyo-skyline-team.jpg",
+    position: "object-[center_60%]",
+    filterClass: "brightness-[1.08] contrast-[1.02]",
+    tagline: {
+      fr: "Studio Ginza & Shibuya, technologies immersives & design minimaliste d'avant-garde.",
+      en: "Ginza & Shibuya studio, immersive technologies & avant-garde minimalism.",
+      vi: "Studio Ginza & Shibuya, công nghệ nhập vai & thiết kế tối giản.",
+      ar: "استوديو غينزا وشيبويا، تقنيات تفاعلية وتصميم بسيط رائد.",
+      ru: "Студия в Гиндзе и Сибуе, иммерсивные технологии и минималистичный дизайн.",
+    },
+    status: {
+      fr: "Studio Tokyo · Pôle Asie de l'Est",
+      en: "Tokyo Studio · East Asia Hub",
+      vi: "Studio Tokyo · Nhật Bản",
+      ar: "استوديو طوكيو · اليابان",
+      ru: "Студия Токио · Япония",
     },
   },
 ];
@@ -121,72 +161,72 @@ const HUBS: CityHub[] = [
 const COPY = {
   fr: {
     eyebrow: "AGENCE DIGITALE INTERNATIONALE",
+    hubsTitle: "PARIS · DUBAÏ · SINGAPOUR · NEW YORK · TOKYO",
     titlePart1: "L’art du ",
     titleItalic: "digital",
     titlePart2: "sur mesure.",
-    sub: "Nous réunissons stratégie, design, développement et visibilité pour construire une présence digitale cohérente et utile à votre activité.",
-    ctaPrimary: "Parler de mon projet",
-    ctaBadge: "",
-    ctaSecondary: "Notre méthode",
+    sub: "Architecture web haute performance, stratégie de marque et acquisition ciblée. Nous concevons votre écosystème digital pour convertir durablement vos prospects en clients.",
+    ctaPrimary: "Demander ma maquette gratuite",
+    ctaPrimarySub: "Sous 24-48h · Sans engagement",
+    ctaSecondary: "Audit digital offert",
     ctaAgency: "Nos réalisations",
-    modalTitle: "XR AGENCY — SHOWREEL OFFICIEL",
-    modalClose: "Fermer",
+    guarantee: "Maquette interactive sur-mesure · Analyse SEO & performance incluse",
     scroll: "Découvrir nos expertises",
   },
   en: {
     eyebrow: "INTERNATIONAL DIGITAL AGENCY",
+    hubsTitle: "PARIS · DUBAI · SINGAPORE · NEW YORK · TOKYO",
     titlePart1: "The art of ",
-    titleItalic: "digital",
-    titlePart2: "made to measure.",
-    sub: "Strategy, design, development and visibility—combined to build a coherent digital presence that serves your business.",
-    ctaPrimary: "Discuss my project",
-    ctaBadge: "",
-    ctaSecondary: "Our approach",
+    titleItalic: "bespoke",
+    titlePart2: "digital craft.",
+    sub: "High-performance web architecture, brand strategy and targeted acquisition. We sculpt your digital presence to convert high-value prospects into clients.",
+    ctaPrimary: "Request my free mockup",
+    ctaPrimarySub: "Within 24-48h · No commitment",
+    ctaSecondary: "Free digital audit",
     ctaAgency: "Selected work",
-    modalTitle: "XR AGENCY — OFFICIAL SHOWREEL",
-    modalClose: "Close",
+    guarantee: "Bespoke interactive mockup · SEO & performance audit included",
     scroll: "Discover our services",
   },
   vi: {
     eyebrow: "AGENCY KỸ THUẬT SỐ QUỐC TẾ",
+    hubsTitle: "PARIS · DUBAI · SINGAPORE · NEW YORK · TOKYO",
     titlePart1: "Nghệ thuật ",
     titleItalic: "số",
     titlePart2: "đo ni đóng giày.",
-    sub: "Chiến lược, thiết kế, phát triển và khả năng hiển thị được kết hợp để xây dựng sự hiện diện số phù hợp với doanh nghiệp của bạn.",
-    ctaPrimary: "Trao đổi dự án",
-    ctaBadge: "",
-    ctaSecondary: "Phương pháp",
+    sub: "Kiến trúc web hiệu năng cao, chiến lược thương hiệu và tăng trưởng. Chúng tôi xây dựng sự hiện diện số để chuyển đổi khách hàng bền vững.",
+    ctaPrimary: "Yêu cầu bản demo miễn phí",
+    ctaPrimarySub: "Trong 24-48h · Không ràng buộc",
+    ctaSecondary: "Đánh giá digital miễn phí",
     ctaAgency: "Dự án tiêu biểu",
-    modalTitle: "XR AGENCY — SHOWREEL CHÍNH THỨC",
-    modalClose: "Đóng",
+    guarantee: "Demo tương tác riêng · Đánh giá SEO & chuyển đổi",
     scroll: "Khám phá chuyên môn",
   },
   ar: {
     eyebrow: "وكالة رقمية دولية",
+    hubsTitle: "باريس · دبي · سنغافورة · نيويورك · طوكيو",
     titlePart1: "فن الحلول ",
     titleItalic: "الرقمية",
     titlePart2: "المصممة خصيصًا.",
-    sub: "نجمع الاستراتيجية والتصميم والتطوير والظهور الرقمي لبناء حضور متناسق يخدم نشاطك التجاري.",
-    ctaPrimary: "ناقش مشروعك",
-    ctaBadge: "",
-    ctaSecondary: "منهجيتنا",
+    sub: "بنية ويب عالية الأداء، استراتيجية العلامة التجارية والنمو الرقمي لبناء حضور يحول الزوار إلى عملاء دائمين.",
+    ctaPrimary: "طلب نموذج أولي مجاني",
+    ctaPrimarySub: "خلال 24-48 ساعة · بدون التزام",
+    ctaSecondary: "تدقيق رقمي مجاني",
     ctaAgency: "أعمال مختارة",
-    modalTitle: "XR AGENCY — الفيديو التعريفي",
-    modalClose: "إغلاق",
+    guarantee: "نموذج تفاعلي مخصص · تدقيق شامل لتحسين محركات البحث والأداء",
     scroll: "استكشف خدماتنا",
   },
   ru: {
     eyebrow: "МЕЖДУНАРОДНОЕ DIGITAL-АГЕНТСТВО",
+    hubsTitle: "ПАРИЖ · ДУБАЙ · СИНГАПУР · НЬЮ-ЙОРК · ТОКИО",
     titlePart1: "Искусство ",
     titleItalic: "digital",
     titlePart2: "под ваши задачи.",
-    sub: "Стратегия, дизайн, разработка и видимость в сети объединяются в целостное цифровое присутствие для вашего бизнеса.",
-    ctaPrimary: "Обсудить проект",
-    ctaBadge: "",
-    ctaSecondary: "Наш подход",
+    sub: "Высокопроизводительная веб-архитектура, стратегия бренда и целевой трафик для стабильной конверсии клиентов.",
+    ctaPrimary: "Запросить бесплатный макет",
+    ctaPrimarySub: "За 24-48ч · Без обязательств",
+    ctaSecondary: "Бесплатный digital-аудит",
     ctaAgency: "Избранные проекты",
-    modalTitle: "XR AGENCY — ОФИЦИАЛЬНЫЙ ШОУРИЛ",
-    modalClose: "Закрыть",
+    guarantee: "Интерактивный макет · SEO и аудит производительности",
     scroll: "Смотреть услуги",
   },
 };
@@ -260,175 +300,139 @@ export function Hero() {
   const { lang } = useLang();
   const c = COPY[lang] ?? COPY.fr;
   const [activeHubIndex, setActiveHubIndex] = useState<number>(0);
-  const [bgMode, setBgMode] = useState<"photo" | "video">("photo");
 
   useEffect(() => {
-    if (bgMode === "video") return;
     const timer = setInterval(() => {
       setActiveHubIndex((prev) => (prev + 1) % HUBS.length);
-    }, 4500);
+    }, 5000);
     return () => clearInterval(timer);
-  }, [bgMode]);
+  }, []);
 
   const activeHub = HUBS[activeHubIndex];
+  const activeTime = useCityTime(activeHub.timezone);
 
   return (
-    <section
-      id="hero"
-      aria-label="XR Agency Hero"
-      className="xr-hero-refined relative isolate min-h-[100svh] w-full overflow-hidden bg-[#181512] pt-20 text-[#FAF7F2]"
-    >
-      {/* ── Background: Multi-Country Photo Sequence or 4K Video Loop ── */}
-      <div className="absolute inset-0 -z-10 overflow-hidden bg-[#181512]">
-        {bgMode === "video" ? (
-          <div className="absolute inset-0">
-            <video
-              src="/videos/hero-ambient-loop.mp4"
-              poster="/showcase/hero-editorial-concept01.jpg"
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="h-full w-full object-cover contrast-[1.12] brightness-[0.84] saturate-[1.05]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent pointer-events-none" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#14110E]/60 via-transparent to-black/20 pointer-events-none" />
-          </div>
-        ) : (
-          HUBS.map((hub, idx) => {
-            const isActive = idx === activeHubIndex;
-            return (
-              <div
-                key={hub.id}
+    <>
+      <section
+        id="hero"
+        aria-label="XR Agency Hero"
+        className="xr-hero-refined relative isolate min-h-[100svh] w-full overflow-hidden bg-[#181512] pt-20 text-[#FAF7F2]"
+      >
+        {/* ── Background: Cinematic Multi-Hub Studio & Iconic Skyline Flow (Paris, Dubaï, Singapour, New York, Tokyo) ── */}
+        <div className="absolute inset-0 -z-10 overflow-hidden bg-[#14110E]">
+          {HUBS.map((hub, idx) => (
+            <div
+              key={hub.id}
+              className={cn(
+                "absolute inset-0 transition-opacity duration-1000 ease-in-out",
+                idx === activeHubIndex ? "opacity-100 z-0" : "opacity-0 -z-10 pointer-events-none",
+              )}
+            >
+              <img
+                src={hub.image}
+                alt={`${hub.name.fr} - ${hub.tagline.fr}`}
                 className={cn(
-                  "absolute inset-0 transition-opacity duration-1000 ease-in-out",
-                  isActive
-                    ? "opacity-100 z-10 pointer-events-auto"
-                    : "opacity-0 z-0 pointer-events-none",
+                  "h-full w-full object-cover transform transition-transform duration-[7000ms] ease-out",
+                  hub.position ?? "object-center",
+                  hub.filterClass ?? "brightness-[1.05] contrast-[1.02]",
+                  idx === activeHubIndex ? "scale-105" : "scale-100",
                 )}
-              >
-                <img
-                  src={hub.image}
-                  alt={`Studio XRAGENCY à ${hub.name.fr}`}
-                  fetchPriority={isActive ? "high" : "low"}
-                  loading={isActive ? "eager" : "lazy"}
-                  className={cn(
-                    "h-full w-full object-cover brightness-[1.06] contrast-[1.04] saturate-[1.05] transition-transform duration-[7000ms] ease-out",
-                    hub.position ?? "object-center",
-                    isActive ? "scale-105" : "scale-100",
-                  )}
-                />
-
-                {/* Radiant daylight & studio gradient: airy, bright and crystal clear */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/15 to-transparent pointer-events-none" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#14110E]/50 via-transparent to-black/15 pointer-events-none" />
-              </div>
-            );
-          })
-        )}
-      </div>
-
-      {/* Top-Right: Discreet Live Hub Indicator & Mode Switcher */}
-      <div className="absolute top-24 right-5 sm:right-8 lg:right-12 z-30 pointer-events-auto flex flex-wrap items-center gap-2.5">
-        {/* Toggle between Photos Studios & Video */}
-        <button
-          type="button"
-          onClick={() => setBgMode((prev) => (prev === "photo" ? "video" : "photo"))}
-          className="inline-flex items-center gap-1.5 rounded-full border border-[#E5C696]/35 bg-black/60 px-3 py-1.5 text-[10px] sm:text-[11px] font-mono font-medium text-[#E5C696] backdrop-blur-md transition hover:bg-black/80 hover:border-[#E5C696]/60 cursor-pointer shadow-md"
-        >
-          {bgMode === "video" ? "📸 Mode Studios Photos" : "🎬 Mode Vidéo Immersive"}
-        </button>
-
-        {bgMode === "photo" && (
-          <>
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/40 px-3 py-1.5 backdrop-blur-md text-white shadow-lg">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696] animate-pulse" />
-              <span className="font-mono text-[11px] font-semibold tracking-wider text-white">
-                {activeHub.name[lang] ?? activeHub.name.fr}
-              </span>
-              <span className="text-white/40">·</span>
-              <span className="font-mono text-[10px] text-[#E5C696] uppercase tracking-wider">
-                {activeHub.country[lang] ?? activeHub.country.fr}
-              </span>
+              />
             </div>
+          ))}
 
-            <div className="flex items-center gap-1.5 rounded-full border border-white/20 bg-black/30 px-2.5 py-1.5 backdrop-blur-md">
-              {HUBS.map((h, i) => (
-                <button
-                  key={h.id}
-                  type="button"
-                  onClick={() => setActiveHubIndex(i)}
-                  aria-label={`Afficher le studio ${h.name.fr}`}
-                  className={cn(
-                    "h-1.5 rounded-full transition-all duration-300 cursor-pointer pointer-events-auto",
-                    i === activeHubIndex ? "w-6 bg-[#E5C696]" : "w-1.5 bg-white/40 hover:bg-white/70",
-                  )}
-                />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
+          {/* Cinematic Scrim: Soft, luminous edges to protect text while keeping the skylines bright and sunlit */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#120F0D]/80 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent pointer-events-none" />
+        </div>
 
-      {/* ── Content Container ── */}
-      <div className="relative z-20 pointer-events-none mx-auto flex min-h-[calc(100svh-5rem)] max-w-[1540px] flex-col justify-end px-5 py-8 sm:px-8 lg:min-h-[calc(100svh-5rem)] lg:px-12 lg:py-10">
-        {/* Main Content Area (Compact, Sober Luxury & Discreet) */}
-        <div className="max-w-3xl pb-8 sm:pb-12 lg:pb-14 pointer-events-auto">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/35 px-3 py-1 backdrop-blur-md">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696] animate-pulse" />
-            <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#E5C696]">
-              {c.eyebrow}
+        {/* ── Top-Left: Architectural Branding & Headline ── */}
+        <div className="absolute top-20 sm:top-24 left-4 sm:left-8 lg:left-12 z-30 pointer-events-auto max-w-[210px] sm:max-w-md">
+          <div className="inline-flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+            <span className="font-mono text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.16em] sm:tracking-[0.22em] text-white/90">
+              <span className="inline sm:hidden">AGENCE DIGITALE</span>
+              <span className="hidden sm:inline">{c.eyebrow}</span>
             </span>
           </div>
-
-          <h1 className="mt-3.5 max-w-2xl font-serif text-[clamp(1.75rem,3.4vw,2.75rem)] font-normal leading-[1.12] tracking-[-0.02em] text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]">
+          <h1 className="mt-1 font-serif text-xl sm:text-3xl lg:text-4xl font-light leading-[1.14] tracking-[-0.02em] text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
             <span>{c.titlePart1}</span>
-            <em className="font-serif italic font-normal text-[#F2D7B0]">{c.titleItalic}</em>{" "}
+            <span className="font-serif italic font-normal text-white">
+              {c.titleItalic}
+            </span>{" "}
             <span>{c.titlePart2}</span>
           </h1>
+        </div>
 
-          <p className="mt-3.5 max-w-lg text-xs sm:text-sm leading-relaxed text-white/85 drop-shadow-md">
-            {c.sub}
-          </p>
-
-          <div className="mt-5 flex flex-wrap items-center gap-2.5">
-            {/* Primary Action: Sleek Luxury White Pill */}
-            <a
-              href="#quote"
-              className="inline-flex min-h-11 items-center gap-3 rounded-full bg-[#E5C696] px-6 text-xs sm:text-sm font-semibold text-[#17130e] shadow-[0_10px_30px_rgba(0,0,0,0.22)] transition-all duration-300 hover:bg-[#F0D7B1] hover:-translate-y-0.5 active:translate-y-0"
-            >
-              <span>{c.ctaPrimary}</span>
-              <ArrowRight className="h-3.5 w-3.5 text-black" />
-            </a>
-
-            {/* Secondary Action: Minimalist Translucent Method Link */}
-            <a
-              href="/methode"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/45 bg-white/8 px-5 text-xs sm:text-sm font-medium text-white backdrop-blur-md transition-all duration-300 hover:bg-white/15 hover:border-white/70"
-            >
-              <span>{c.ctaSecondary}</span>
-              <ArrowRight className="h-3.5 w-3.5 text-[#E5C696]" />
-            </a>
-
-            {/* Third Action: Selected Work */}
-            <a
-              href="#work"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/25 bg-black/40 px-5 text-xs sm:text-sm font-medium text-white/90 backdrop-blur-md transition-all duration-300 hover:bg-black/60 hover:border-white/50"
-            >
-              <span>{c.ctaAgency}</span>
-              <ArrowRight className="h-3.5 w-3.5 text-[#E5C696]" />
-            </a>
+        {/* ── Top-Right: Discreet Live Hub Indicator (City & Time only) ── */}
+        <div className="absolute top-20 sm:top-24 right-4 sm:right-8 lg:right-12 z-30 pointer-events-auto">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3 py-1 sm:px-3.5 sm:py-1.5 backdrop-blur-md text-white shadow-lg">
+            <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+            <span className="font-mono text-[10px] font-semibold tracking-wider text-white uppercase">
+              {activeHub.name[lang] ?? activeHub.name.fr}
+            </span>
+            <span className="font-mono text-[10px] text-zinc-300">{activeTime}</span>
           </div>
         </div>
 
-        {/* Bottom Bar: 4 Pillars */}
-        <div className="flex flex-col justify-between gap-6 border-t border-white/20 pt-6 pb-14 sm:pb-0 sm:flex-row sm:items-center">
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-8">
+        {/* ── Bottom Center Dock: Subtitle, CTAs & Guarantee ── */}
+        <div className="relative z-20 pointer-events-none mx-auto flex min-h-[calc(100svh-5rem)] max-w-3xl flex-col items-center justify-end px-5 pb-6 sm:pb-10 text-center">
+          <div className="pointer-events-auto max-w-2xl">
+            {/* Subtitle: High-clarity, elegant description */}
+            <p className="text-xs sm:text-[14px] leading-relaxed text-white/90 font-light drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+              {c.sub}
+            </p>
+
+            {/* CTA Row: Dynamic, glowing luxury pills (Zero yellow!) */}
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+              {/* Primary Action: Free Mockup (Dynamic luxury white with glowing aura) */}
+              <a
+                href="#quote"
+                className="group relative inline-flex h-11 items-center gap-2.5 rounded-full bg-white px-6 text-xs sm:text-[13px] font-semibold text-black shadow-[0_0_25px_rgba(255,255,255,0.3)] transition-all duration-300 hover:bg-white/95 hover:shadow-[0_0_35px_rgba(255,255,255,0.55)] hover:scale-[1.03] active:scale-[0.98]"
+              >
+                <span>{c.ctaPrimary}</span>
+                <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1 text-black" />
+              </a>
+
+              {/* Secondary Action: Free Audit (Dynamic frosted glass) */}
+              <a
+                href="#audit"
+                className="inline-flex h-11 items-center gap-2 rounded-full border border-white/40 bg-white/10 px-5 text-xs sm:text-[13px] font-medium text-white backdrop-blur-md transition-all duration-300 hover:bg-white/20 hover:border-white/70 hover:scale-[1.03] active:scale-[0.98] shadow-sm"
+              >
+                <Sparkles className="h-4 w-4 text-white" />
+                <span>{c.ctaSecondary}</span>
+              </a>
+
+              {/* Tertiary Action: Selected Work */}
+              <a
+                href="#work"
+                className="inline-flex h-11 items-center gap-1.5 px-3 text-xs sm:text-[13px] font-medium text-white/80 transition-all duration-300 hover:text-white"
+              >
+                <span>{c.ctaAgency}</span>
+                <ArrowRight className="h-3.5 w-3.5 text-white/80" />
+              </a>
+            </div>
+
+            {/* Reassurance Guarantee Footnote */}
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[10px] sm:text-[11px] font-mono text-white/80 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+              <span className="text-white">✦</span>
+              <span>{c.ctaPrimarySub}</span>
+              <span className="text-white/40">·</span>
+              <span>{c.guarantee}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Pillars Ribbon (Moved below Hero to keep Hero 100% focused on immersion) ── */}
+      <div className="relative z-30 border-y border-white/10 bg-[#120F0D]/95 backdrop-blur-md py-4 px-5 sm:px-8 lg:px-12">
+        <div className="mx-auto flex max-w-[1540px] flex-col justify-between gap-4 sm:flex-row sm:items-center">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-8 flex-1">
             {PILLARS.map((pillar) => {
               const Icon = pillar.icon;
               return (
                 <div key={pillar.label.fr} className="flex items-center gap-3 text-white/90">
-                  <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-[#D8B788]/35 bg-[#201A13]/90 text-[#E5C696]">
+                  <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-white/20 bg-white/10 text-white shadow-sm">
                     <Icon className="h-4 w-4" />
                   </div>
                   <span className="text-xs font-medium tracking-wide sm:text-[13px]">
@@ -441,13 +445,13 @@ export function Hero() {
 
           <a
             href="#services"
-            className="hidden items-center gap-2 text-xs font-mono uppercase tracking-widest text-white/70 transition hover:text-[#E5C696] lg:inline-flex"
+            className="hidden items-center gap-2 text-xs font-mono uppercase tracking-widest text-white/70 transition hover:text-white lg:inline-flex shrink-0"
           >
             <span>{c.scroll}</span>
             <span className="inline-block animate-bounce">↓</span>
           </a>
         </div>
       </div>
-    </section>
+    </>
   );
 }

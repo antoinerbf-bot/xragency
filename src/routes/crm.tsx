@@ -63,9 +63,9 @@ import {
 } from "@/lib/crm/supabaseSync";
 import { BUSINESS_SECTORS, getSectorServicePlaybook } from "@/lib/crm/schoolScripts";
 import { SchoolModule } from "@/components/crm/SchoolModule";
-import { ContestLeaderboard } from "@/components/crm/ContestLeaderboard";
 import { DirectorPersonalHub } from "@/components/crm/DirectorPersonalHub";
 import { ManagerFiliereHub } from "@/components/crm/ManagerFiliereHub";
+import { CrmCalendarView } from "@/components/crm/CrmCalendarView";
 
 export const Route = createFileRoute("/crm")({
   head: () => ({
@@ -122,7 +122,7 @@ export function formatWaPhone(rawPhone?: string): string {
   return digits;
 }
 
-type CrmTab = "kanban" | "cockpit" | "contest" | "school" | "finances" | "studio" | "rh" | "qg";
+type CrmTab = "kanban" | "cockpit" | "calendar" | "school" | "finances" | "studio" | "rh" | "qg";
 
 interface QuickAuditResult {
   score: number;
@@ -147,16 +147,8 @@ function XrAgencyCrmApp() {
   const [members, setMembers] = useState<TeamMember[]>(() => {
     if (typeof window !== "undefined") {
       try {
-        const saved = localStorage.getItem("xr_crm_members_v5");
-        if (saved) {
-          const parsed: TeamMember[] = JSON.parse(saved);
-          const hasPilar = parsed.some((m) => m.id === "pilar");
-          if (!hasPilar) {
-            const pilarDef = DEFAULT_TEAM_MEMBERS.find((m) => m.id === "pilar");
-            if (pilarDef) parsed.splice(3, 0, pilarDef);
-          }
-          return parsed;
-        }
+        const saved = localStorage.getItem("xr_crm_members_v6");
+        if (saved) return JSON.parse(saved);
       } catch {
         // ignore
       }
@@ -274,6 +266,12 @@ function XrAgencyCrmApp() {
   const [newMemberPin, setNewMemberPin] = useState("1234");
   const [newMemberRecruitedBy, setNewMemberRecruitedBy] = useState("");
 
+  // Modal Demande de Maquette Studio (< 24h)
+  const [mockupModalLead, setMockupModalLead] = useState<Lead | null>(null);
+  const [mockupMapsUrl, setMockupMapsUrl] = useState("");
+  const [mockupSocialsUrl, setMockupSocialsUrl] = useState("");
+  const [mockupBriefNotes, setMockupBriefNotes] = useState("");
+
   // ── Persistance & Supabase Realtime ──
   useEffect(() => {
     if (typeof window !== "undefined") localStorage.setItem("xr_crm_theme_v4", themeId);
@@ -284,7 +282,7 @@ function XrAgencyCrmApp() {
   }, [leads]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") localStorage.setItem("xr_crm_members_v5", JSON.stringify(members));
+    if (typeof window !== "undefined") localStorage.setItem("xr_crm_members_v6", JSON.stringify(members));
   }, [members]);
 
   useEffect(() => {
@@ -958,6 +956,41 @@ function XrAgencyCrmApp() {
     if (soundEnabled) playDing();
   };
 
+  const handleSubmitMockupRequest = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!mockupModalLead || !currentUser) return;
+    const nowIso = new Date().toISOString();
+    const deadlineIso = new Date(Date.now() + 24 * 3600 * 1000).toISOString();
+    setLeads((prev) =>
+      prev.map((l) => {
+        if (l.id !== mockupModalLead.id) return l;
+        const updated: Lead = {
+          ...l,
+          stage: "mockup",
+          studioStatus: "pending",
+          mockupReady: false,
+          mockupRequestedAt: nowIso,
+          mockupDeadline: deadlineIso,
+          mockupUrgent: true,
+          googleMapsUrl: mockupMapsUrl.trim() || l.googleMapsUrl,
+          socialsUrl: mockupSocialsUrl.trim() || l.socialsUrl,
+          mockupNotes: mockupBriefNotes.trim(),
+        };
+        void upsertLeadToSupabase(updated);
+        return updated;
+      })
+    );
+    appendTimeline(
+      mockupModalLead.id,
+      `🎨 Demande de maquette transmise à Antoine / Studio (< 24h) par ${currentUser.shortName}`
+    );
+    setMockupModalLead(null);
+    setMockupMapsUrl("");
+    setMockupSocialsUrl("");
+    setMockupBriefNotes("");
+    if (soundEnabled) playDing();
+  };
+
   const handleExportCsv = () => {
     const headers = "Entreprise;Contact;Telephone;Service;Formule;Valeur;Facturation;Etape;Relance;Date\n";
     const rows = myVisibleLeads
@@ -1160,26 +1193,7 @@ function XrAgencyCrmApp() {
     appendTimeline(lead.id, "Devis PDF officiel téléchargé");
   };
 
-  // Sélecteur de thème coloré réutilisable
-  const ThemeSwitcherBar = (
-    <div className={`inline-flex items-center p-1 rounded-2xl border gap-1 ${theme.tabBarBg}`}>
-      {(Object.values(CRM_THEMES) as typeof CRM_THEMES[CrmThemeId][]).map((t) => (
-        <button
-          key={t.id}
-          onClick={() => {
-            setThemeId(t.id);
-            if (soundEnabled) playDing();
-          }}
-          title={t.label}
-          className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all ${
-            themeId === t.id ? theme.tabActive : theme.tabIdle
-          }`}
-        >
-          {t.emoji} <span className="hidden md:inline">{t.label}</span>
-        </button>
-      ))}
-    </div>
-  );
+
 
   // ═══════════════════════════════════════════════════════════
   // MODE ACCÈS LIBRE XR SCHOOL (1234 · FORMATION PURE)
@@ -1199,7 +1213,6 @@ function XrAgencyCrmApp() {
               </div>
             </div>
             <div className="flex items-center gap-2.5">
-              {ThemeSwitcherBar}
               <button
                 onClick={() => setSchoolGuestMode(false)}
                 className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border text-xs font-bold ${theme.card} ${theme.textMain}`}
@@ -1221,9 +1234,6 @@ function XrAgencyCrmApp() {
   if (!currentUser) {
     return (
       <div className={`min-h-screen flex flex-col justify-center items-center px-4 py-10 relative overflow-hidden transition-colors duration-300 ${theme.pageBg}`}>
-        {/* Sélecteur de thème flottant en haut à droite */}
-        <div className="fixed top-4 right-4 z-20">{ThemeSwitcherBar}</div>
-
         <div className="max-w-4xl w-full relative z-10 space-y-7">
           <div className="text-center space-y-3">
             <div className="inline-flex h-16 w-16 rounded-3xl bg-gradient-to-tr from-indigo-600 via-fuchsia-500 to-amber-400 items-center justify-center font-black text-white shadow-xl shadow-indigo-500/25 text-2xl">
@@ -1261,12 +1271,9 @@ function XrAgencyCrmApp() {
                 className={`group p-4 rounded-3xl border transition-all hover:-translate-y-0.5 active:scale-[0.98] flex items-center gap-3.5 text-left ${theme.card} ${theme.cardHover}`}
               >
                 <div
-                  className={`h-14 w-14 rounded-2xl bg-gradient-to-br ${member.avatarBg} flex flex-col items-center justify-center text-white font-black shadow-md shrink-0 relative overflow-hidden`}
+                  className={`h-13 w-13 rounded-2xl bg-gradient-to-br ${member.avatarBg} flex items-center justify-center text-white font-black shadow-md shrink-0`}
                 >
                   <span className="text-2xl drop-shadow-sm select-none">{member.avatarChar || "👤"}</span>
-                  <span className="text-[9px] font-black uppercase tracking-tighter opacity-80 leading-none mt-0.5">
-                    {member.shortName.slice(0, 3)}
-                  </span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className={`font-extrabold text-sm truncate group-hover:text-indigo-600 dark:group-hover:text-amber-300 transition-colors ${theme.textMain}`}>
@@ -1303,12 +1310,13 @@ function XrAgencyCrmApp() {
   const allowedTabs: { id: CrmTab; label: string; count: number | null }[] = isStudio
     ? [
         { id: "studio", label: "🎨 Studio (Maquettes & Projets)", count: studioMockupCount + studioWonCount },
+        { id: "calendar", label: "📅 Calendrier & Échéances", count: studioMockupCount || null },
         { id: "school", label: "🎓 XR School", count: null },
       ]
     : [
         { id: "kanban", label: "🎯 Mon Pipeline", count: myVisibleLeads.length },
         { id: "cockpit", label: "📞 Cockpit & Audit", count: null },
-        { id: "contest", label: "🏆 Concours Arena", count: null },
+        { id: "calendar", label: "📅 Calendrier & Rappels", count: dueFollowUpsCount || null },
         { id: "school", label: "🎓 XR School", count: null },
         ...(isManager || isDirector
           ? [{ id: "rh" as CrmTab, label: "👥 Filière RH", count: members.filter((m) => m.recruitedBy === "martin").length }]
@@ -1354,14 +1362,9 @@ function XrAgencyCrmApp() {
           {/* Profil + Niveau XP */}
           <div className="flex items-center gap-3.5">
             <div
-              className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${currentUser.avatarBg} flex items-center justify-center font-black text-white shadow-lg text-lg relative`}
+              className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${currentUser.avatarBg} flex items-center justify-center font-black text-white shadow-lg text-lg`}
             >
               <span className="text-2xl drop-shadow-sm select-none">{currentUser.avatarChar || "👤"}</span>
-              {!isStudio && (
-                <span className="absolute -bottom-1.5 -right-1.5 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-indigo-600 text-white border-2 border-white dark:border-[#171336] shadow-sm">
-                  N{gameHud.level}
-                </span>
-              )}
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
@@ -1371,54 +1374,21 @@ function XrAgencyCrmApp() {
                 <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full border ${theme.badgeSoft}`}>
                   {currentUser.badge}
                 </span>
-                <span
-                  className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
-                    syncStatus === "supabase_live"
-                      ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
-                      : "bg-sky-500/15 text-sky-700 dark:text-sky-300"
-                  }`}
-                >
-                  <Database className="w-2.5 h-2.5" />
-                  {syncStatus === "supabase_live" ? "Supabase Live" : "Local · Prêt Supabase"}
-                </span>
                 {dueFollowUpsCount > 0 && !isStudio && (
                   <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-500 text-white shadow-sm">
                     🔔 {dueFollowUpsCount} relance(s)
                   </span>
                 )}
               </div>
-              {!isStudio ? (
-                <div className="flex items-center gap-3 mt-1.5">
-                  <div className="w-28 h-2 rounded-full bg-slate-200/80 dark:bg-white/10 overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-amber-400 rounded-full transition-all duration-500"
-                      style={{ width: `${gameHud.progress}%` }}
-                    />
-                  </div>
-                  <span className={`text-[11px] font-bold ${theme.textMuted}`}>
-                    {gameHud.xp} XP · {gameHud.questLabel}
-                  </span>
-                </div>
-              ) : (
-                <p className={`text-xs ${theme.textMuted}`}>Pôle Studio · Maquettes demandées & Projets signés</p>
-              )}
+              <p className={`text-xs mt-1 ${theme.textMuted}`}>{currentUser.roleLabel}</p>
             </div>
           </div>
 
           {/* Barre Actions & HUD Jeu Vidéo */}
           <div className="flex flex-wrap items-center gap-2 w-full xl:w-auto justify-between xl:justify-end">
-            {ThemeSwitcherBar}
 
             {!isStudio && (
-              <div className={`hidden sm:flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border text-xs ${theme.subCard}`}>
-                <span className="font-bold text-indigo-600 dark:text-amber-300">⚡ {dailyCalls}/10</span>
-                <button
-                  onClick={handleIncrementCall}
-                  className="px-2 py-0.5 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-[10px] font-extrabold shadow-sm"
-                >
-                  +1 Appel
-                </button>
-                <span className="opacity-25">|</span>
+              <div className={`hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-2xl border text-xs ${theme.subCard}`}>
                 <Wallet className="w-3.5 h-3.5 text-emerald-500" />
                 <span className="font-mono font-black text-emerald-600 dark:text-emerald-300">
                   {financeView.myCommissionUnlocked.toLocaleString("fr-FR")} €
@@ -1437,24 +1407,7 @@ function XrAgencyCrmApp() {
               <Command className="w-3.5 h-3.5" /> <span className="hidden md:inline">Ctrl+K</span>
             </button>
 
-            {!isStudio && (
-              <button
-                onClick={() => {
-                  setSprintActive(!sprintActive);
-                  if (soundEnabled) playDing();
-                }}
-                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-extrabold border transition-all ${
-                  sprintActive
-                    ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white border-transparent animate-pulse shadow-md"
-                    : `${theme.subCard} ${theme.textMain}`
-                }`}
-              >
-                <Flame className={`w-3.5 h-3.5 ${sprintActive ? "text-white" : "text-orange-500"}`} />
-                {sprintActive
-                  ? `${Math.floor(sprintSeconds / 60)}:${(sprintSeconds % 60).toString().padStart(2, "0")}`
-                  : "Sprint 25m"}
-              </button>
-            )}
+
 
             <button
               onClick={() => setSoundEnabled(!soundEnabled)}
@@ -1499,6 +1452,31 @@ function XrAgencyCrmApp() {
             </button>
           </div>
         </header>
+
+        {/* BANDEAU NOTIFICATION DEMANDE MAQUETTES POUR ANTOINE (< 24H) */}
+        {isDirector && studioMockupCount > 0 && (
+          <div className="mt-4 p-4 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white shadow-lg shadow-orange-500/25 flex flex-wrap items-center justify-between gap-3 animate-pulse">
+            <div className="flex items-center gap-3">
+              <span className="h-9 w-9 rounded-xl bg-white/20 flex items-center justify-center text-xl shrink-0">
+                🚨
+              </span>
+              <div>
+                <p className="text-xs font-black uppercase tracking-wider text-amber-200">
+                  Notification Studio · Livraison sous 24h
+                </p>
+                <p className="text-sm font-bold">
+                  {studioMockupCount} demande(s) de maquette en attente envoyée(s) par les commerciaux !
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setActiveTab("calendar")}
+              className="px-4 py-2 rounded-xl bg-white text-slate-900 font-extrabold text-xs shadow-md hover:scale-105 transition-all"
+            >
+              📅 Ouvrir Calendrier &amp; Lancer Prod →
+            </button>
+          </div>
+        )}
 
         {/* NAVIGATION ONGLETS COLORÉE */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-4 gap-3">
@@ -1690,6 +1668,12 @@ function XrAgencyCrmApp() {
                             nextLabel={col.nextLabel}
                             onWin={col.stage !== "won" ? () => moveStage(lead.id, "won") : undefined}
                             onPdf={() => generatePdfQuote(lead)}
+                            onRequestMockup={() => {
+                              setMockupModalLead(lead);
+                              setMockupMapsUrl(lead.googleMapsUrl || "");
+                              setMockupSocialsUrl(lead.socialsUrl || "");
+                              setMockupBriefNotes(lead.mockupNotes || "");
+                            }}
                           />
                         ))}
                       </div>
@@ -2048,16 +2032,48 @@ function XrAgencyCrmApp() {
           </div>
         )}
 
-        {/* ── VUE 3 : CONCOURS ARENA ── */}
-        {activeTab === "contest" && !isStudio && (
-          <ContestLeaderboard
-            allLeads={leads}
+        {/* ── VUE : CALENDRIER & RAPPELS ── */}
+        {activeTab === "calendar" && (
+          <CrmCalendarView
+            leads={leads}
             members={members}
             currentUser={currentUser}
-            weeklyChallenge={weeklyChallenge}
             theme={theme}
+            onOpenLead={(lead) => {
+              setActiveLeadForCockpit(lead);
+              setActiveTab("cockpit");
+            }}
+            onLaunchProduction={(leadId) => {
+              setLeads((prev) =>
+                prev.map((l) =>
+                  l.id === leadId
+                    ? { ...l, studioStatus: "in_production" as const }
+                    : l
+                )
+              );
+              appendTimeline(leadId, "🚀 Maquette Studio lancée en production (< 24h)");
+              if (soundEnabled) playDing();
+            }}
+            onDeliverMockup={(leadId) => {
+              setLeads((prev) =>
+                prev.map((l) =>
+                  l.id === leadId
+                    ? {
+                        ...l,
+                        stage: "negociation" as const,
+                        mockupReady: true,
+                        studioStatus: "delivered" as const,
+                      }
+                    : l
+                )
+              );
+              appendTimeline(leadId, "✅ Maquette Studio livrée au commercial");
+              if (soundEnabled) playFanfare();
+            }}
           />
         )}
+
+
 
         {/* ── VUE 4 : XR SCHOOL ── */}
         {activeTab === "school" && (
@@ -2795,6 +2811,85 @@ function XrAgencyCrmApp() {
       )}
 
 
+      {/* ── MODAL DEMANDE DE MAQUETTE STUDIO (< 24H) ── */}
+      {mockupModalLead && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+          <div className={`border rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl ${theme.modalBg}`}>
+            <div className={`flex items-center justify-between pb-3 border-b ${theme.border}`}>
+              <h3 className={`font-black text-base flex items-center gap-2 ${theme.textMain}`}>
+                ⚡ Demande de Maquette Studio (&lt; 24h)
+              </h3>
+              <button onClick={() => setMockupModalLead(null)} className={theme.textSoft}>✕</button>
+            </div>
+
+            <p className={`text-xs ${theme.textMuted}`}>
+              Fournissez le maximum d'éléments (Google Maps, réseaux sociaux, brief client). Antoine et le Studio reçoivent la notification immédiatement pour livrer la maquette en moins de 24h.
+            </p>
+
+            <form onSubmit={handleSubmitMockupRequest} className="space-y-3">
+              <div>
+                <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>Client / Entreprise</label>
+                <input
+                  type="text"
+                  disabled
+                  value={`${mockupModalLead.name} (${mockupModalLead.contact})`}
+                  className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border opacity-75 ${theme.inputBg}`}
+                />
+              </div>
+
+              <div>
+                <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>📍 Lien Fiche Google Maps *</label>
+                <input
+                  type="text"
+                  placeholder="Lien Maps ou nom exact sur Google Maps"
+                  value={mockupMapsUrl}
+                  onChange={(e) => setMockupMapsUrl(e.target.value)}
+                  className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`}
+                />
+              </div>
+
+              <div>
+                <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>📸 Réseaux Sociaux (Instagram, Facebook, LinkedIn...)</label>
+                <input
+                  type="text"
+                  placeholder="Instagram @..., page Facebook ou LinkedIn"
+                  value={mockupSocialsUrl}
+                  onChange={(e) => setMockupSocialsUrl(e.target.value)}
+                  className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`}
+                />
+              </div>
+
+              <div>
+                <label className={`text-[11px] font-bold uppercase ${theme.textMuted}`}>📝 Points clés du prospect &amp; Attentes visuelles</label>
+                <textarea
+                  rows={3}
+                  placeholder="Points faibles actuels, concurrents, style souhaité, offre visée..."
+                  value={mockupBriefNotes}
+                  onChange={(e) => setMockupBriefNotes(e.target.value)}
+                  className={`w-full mt-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`}
+                />
+              </div>
+
+              <div className="pt-2 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setMockupModalLead(null)}
+                  className={`flex-1 py-2.5 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}
+                >
+                  Annuler
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 text-white text-xs font-black shadow-lg shadow-orange-500/25"
+                >
+                  🚀 Envoyer au Studio (&lt; 24h)
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
@@ -2811,6 +2906,7 @@ function LeadCard({
   nextLabel,
   onWin,
   onPdf,
+  onRequestMockup,
 }: {
   lead: Lead;
   members: TeamMember[];
@@ -2823,6 +2919,7 @@ function LeadCard({
   nextLabel: string;
   onWin?: () => void;
   onPdf: () => void;
+  onRequestMockup?: () => void;
 }) {
   const svc = XR_OFFICIAL_SERVICES.find((s) => s.id === lead.serviceId);
   const closer = members.find((m) => m.id === lead.closerId);
@@ -2924,6 +3021,18 @@ function LeadCard({
           <button onClick={onPdf} className={`text-[10px] font-bold flex items-center gap-0.5 ${theme.textMuted}`} title="Générer Devis PDF">
             <FileText className="w-3 h-3 text-amber-500" /> PDF
           </button>
+          {onRequestMockup && lead.stage !== "won" && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onRequestMockup();
+              }}
+              className="text-[10px] font-black text-amber-600 dark:text-amber-400 flex items-center gap-0.5 hover:underline"
+              title="Demander une maquette Studio sous 24h"
+            >
+              <Sparkles className="w-3 h-3 text-amber-500" /> Maquette 24h
+            </button>
+          )}
         </div>
         <div className="flex items-center gap-1 ml-auto">
           {onNext && (

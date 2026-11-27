@@ -39,6 +39,30 @@ interface HabitItem {
   doneToday: boolean;
 }
 
+interface ActiveProject {
+  id: string;
+  clientName: string;
+  serviceType: string;
+  closerName: string;
+  progressPct: number;
+  deadlineDate: string;
+  status: "prep" | "in_dev" | "review" | "delivered";
+  notes?: string;
+}
+
+interface LoyaltyClient {
+  id: string;
+  clientName: string;
+  contactPerson: string;
+  phone: string;
+  currentService: string;
+  targetRecurringOffer: string; // ex: "WebCare 99€/m", "Maps Top 3 159€/m", "SEO 499€/m"
+  monthlyMrrEur: number;
+  nextFollowUpDate: string;
+  status: "to_contact" | "in_negotiation" | "subscribed";
+  notes?: string;
+}
+
 interface DirectorPersonalHubProps {
   allLeads: Lead[];
   members: TeamMember[];
@@ -97,6 +121,92 @@ export function DirectorPersonalHub({
       { id: "h3", label: "Temps Perso / Déconnexion", doneToday: false },
     ];
   });
+
+  // Projets clients en cours de livraison
+  const [projects, setProjects] = useState<ActiveProject[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("xr_antoine_active_projects");
+        if (saved) return JSON.parse(saved);
+      } catch {
+        // ignore
+      }
+    }
+    return [
+      {
+        id: "proj-1",
+        clientName: "Restaurant Le Gabriel Paris",
+        serviceType: "Site Web Haute Couture + Caisse POS",
+        closerName: "Christelle",
+        progressPct: 65,
+        deadlineDate: new Date(Date.now() + 5 * 24 * 3600 * 1000).toISOString().slice(0, 10),
+        status: "in_dev",
+        notes: "Intégration responsive terminée, validation du menu gastronomique",
+      },
+      {
+        id: "proj-2",
+        clientName: "Cabinet Architectes Mercier",
+        serviceType: "Refonte Vitrine & Visuels Studio",
+        closerName: "Pilar",
+        progressPct: 40,
+        deadlineDate: new Date(Date.now() + 8 * 24 * 3600 * 1000).toISOString().slice(0, 10),
+        status: "prep",
+        notes: "Maquette livrée en moins de 24h, mise en place des visuels studio",
+      },
+    ];
+  });
+
+  // Fichier Fidélisation & Upsell Client (Abonnements récurrents)
+  const [loyaltyClients, setLoyaltyClients] = useState<LoyaltyClient[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("xr_antoine_loyalty_clients");
+        if (saved) return JSON.parse(saved);
+      } catch {
+        // ignore
+      }
+    }
+    return [
+      {
+        id: "loy-1",
+        clientName: "Boutique Joaillerie Vendôme",
+        contactPerson: "Mme. De la Tour",
+        phone: "+33 6 12 34 56 78",
+        currentService: "Site E-Commerce livré",
+        targetRecurringOffer: "Abonnement WebCare Élite (149 €/m) + SEO",
+        monthlyMrrEur: 149,
+        nextFollowUpDate: new Date(Date.now() + 2 * 24 * 3600 * 1000).toISOString().slice(0, 10),
+        status: "to_contact",
+        notes: "Proposer la garantie sécurité & sauvegardes quotidiennes",
+      },
+      {
+        id: "loy-2",
+        clientName: "Clinique Esthétique Marceau",
+        contactPerson: "Dr. Benhamou",
+        phone: "+33 6 98 76 54 32",
+        currentService: "Refonte Site Web",
+        targetRecurringOffer: "Pack Google Maps Top 3 (159 €/m)",
+        monthlyMrrEur: 159,
+        nextFollowUpDate: new Date(Date.now() + 3 * 24 * 3600 * 1000).toISOString().slice(0, 10),
+        status: "in_negotiation",
+        notes: "Audit Maps présenté, négociation du contrat annuel",
+      },
+    ];
+  });
+
+  const [showAddProject, setShowAddProject] = useState(false);
+  const [newProjClient, setNewProjClient] = useState("");
+  const [newProjService, setNewProjService] = useState("Site Web & Branding");
+  const [newProjCloser, setNewProjCloser] = useState("Christelle");
+  const [newProjDeadline, setNewProjDeadline] = useState(() => new Date(Date.now() + 7 * 24 * 3600 * 1000).toISOString().slice(0, 10));
+
+  const [showAddLoyalty, setShowAddLoyalty] = useState(false);
+  const [newLoyClient, setNewLoyClient] = useState("");
+  const [newLoyContact, setNewLoyContact] = useState("");
+  const [newLoyPhone, setNewLoyPhone] = useState("");
+  const [newLoyOffer, setNewLoyOffer] = useState("WebCare Maintenance (99 €/m)");
+  const [newLoyMrr, setNewLoyMrr] = useState(99);
+  const [newLoyFollowUp, setNewLoyFollowUp] = useState(() => new Date(Date.now() + 3 * 24 * 3600 * 1000).toISOString().slice(0, 10));
 
   const [newTaskText, setNewTaskText] = useState("");
   const [newTaskCat, setNewTaskCat] = useState<PersonalTask["category"]>("pro");
@@ -379,17 +489,17 @@ export function DirectorPersonalHub({
             </div>
           </div>
 
-          <div className="p-5 rounded-3xl bg-gradient-to-br from-fuchsia-600/15 via-violet-600/10 to-amber-500/15 border border-violet-400/35 space-y-2.5">
-            <h3 className="text-xs font-extrabold uppercase tracking-wider text-violet-700 dark:text-amber-300 flex items-center gap-1.5">
-              <Trophy className="w-3.5 h-3.5" />
-              Piloter le Défi Hebdo du Concours
+          <div className="p-5 rounded-3xl bg-gradient-to-br from-indigo-600/15 via-violet-600/10 to-emerald-500/15 border border-indigo-400/35 space-y-2.5">
+            <h3 className="text-xs font-extrabold uppercase tracking-wider text-indigo-700 dark:text-amber-300 flex items-center gap-1.5">
+              <Crown className="w-3.5 h-3.5" />
+              Note &amp; Priorité Direction
             </h3>
             <div className="flex gap-2">
               <input
                 type="text"
                 value={challengeInput}
                 onChange={(e) => setChallengeInput(e.target.value)}
-                placeholder="Ex: Bonus spécial sur chaque Pack Site + WebCare !"
+                placeholder="Ex: Priorité qualité des maquettes & satisfaction client..."
                 className={`flex-1 rounded-xl px-3 py-2 text-xs border ${theme.inputBg}`}
               />
               <button
@@ -397,9 +507,9 @@ export function DirectorPersonalHub({
                   onUpdateWeeklyChallenge(challengeInput.trim());
                   onSound?.();
                 }}
-                className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-white font-extrabold text-xs shadow-sm shrink-0"
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-extrabold text-xs shadow-sm shrink-0"
               >
-                Publier
+                Enregistrer
               </button>
             </div>
           </div>
@@ -468,6 +578,344 @@ export function DirectorPersonalHub({
           }}
           onRemove={(id) => setTasks((prev) => prev.filter((t) => t.id !== id))}
         />
+      </div>
+
+      {/* ── PILOTAGE DES PROJETS CLIENTS EN COURS (PRODUCTION STUDIO) ── */}
+      <div className={`p-5 rounded-3xl border space-y-4 ${theme.card}`}>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-black shadow-md">
+              🚀
+            </div>
+            <div>
+              <h3 className={`font-black text-sm sm:text-base flex items-center gap-2 ${theme.textMain}`}>
+                Pilotage des Projets en Cours ({projects.length})
+              </h3>
+              <p className={`text-xs ${theme.textMuted}`}>
+                Suivi de l'avancement technique, validation des livrables et délais de livraison client.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowAddProject(!showAddProject)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-xs shadow-sm hover:scale-[1.02]"
+          >
+            <Plus className="w-3.5 h-3.5" /> Enregistrer un projet
+          </button>
+        </div>
+
+        {showAddProject && (
+          <div className={`p-4 rounded-2xl border space-y-3 ${theme.subCard}`}>
+            <h4 className={`text-xs font-bold ${theme.textMain}`}>Nouveau projet client à piloter</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+              <input
+                type="text"
+                placeholder="Nom du client (ex: Hôtel Vendôme)"
+                value={newProjClient}
+                onChange={(e) => setNewProjClient(e.target.value)}
+                className={`px-3 py-2 rounded-xl text-xs border ${theme.inputBg}`}
+              />
+              <input
+                type="text"
+                placeholder="Prestation (ex: Site Vitrine + 3D)"
+                value={newProjService}
+                onChange={(e) => setNewProjService(e.target.value)}
+                className={`px-3 py-2 rounded-xl text-xs border ${theme.inputBg}`}
+              />
+              <input
+                type="text"
+                placeholder="Commercial (ex: Christelle)"
+                value={newProjCloser}
+                onChange={(e) => setNewProjCloser(e.target.value)}
+                className={`px-3 py-2 rounded-xl text-xs border ${theme.inputBg}`}
+              />
+              <input
+                type="date"
+                value={newProjDeadline}
+                onChange={(e) => setNewProjDeadline(e.target.value)}
+                className={`px-3 py-2 rounded-xl text-xs border ${theme.inputBg}`}
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setShowAddProject(false)}
+                className={`px-3 py-1.5 rounded-xl border text-xs font-bold ${theme.textMuted}`}
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (!newProjClient.trim()) return;
+                  const item: ActiveProject = {
+                    id: `proj-${Date.now()}`,
+                    clientName: newProjClient.trim(),
+                    serviceType: newProjService.trim(),
+                    closerName: newProjCloser.trim(),
+                    progressPct: 20,
+                    deadlineDate: newProjDeadline,
+                    status: "in_dev",
+                  };
+                  const updated = [item, ...projects];
+                  setProjects(updated);
+                  if (typeof window !== "undefined") {
+                    localStorage.setItem("xr_antoine_active_projects", JSON.stringify(updated));
+                  }
+                  setNewProjClient("");
+                  setShowAddProject(false);
+                  onSound?.();
+                }}
+                className="px-4 py-1.5 rounded-xl bg-indigo-600 text-white font-extrabold text-xs"
+              >
+                Créer Projet
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          {projects.map((p) => (
+            <div key={p.id} className={`p-4 rounded-2xl border space-y-3 ${theme.subCard}`}>
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <h4 className={`font-black text-sm ${theme.textMain}`}>{p.clientName}</h4>
+                  <p className={`text-[11px] ${theme.textMuted}`}>{p.serviceType} · Closer : <strong>{p.closerName}</strong></p>
+                </div>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300">
+                  📅 Échéance : {p.deadlineDate}
+                </span>
+              </div>
+
+              <div>
+                <div className="flex justify-between text-[11px] font-bold mb-1">
+                  <span className={theme.textMuted}>Avancement</span>
+                  <span className="text-indigo-600 dark:text-amber-300 font-mono">{p.progressPct}%</span>
+                </div>
+                <div className="h-2 rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-emerald-400"
+                    style={{ width: `${p.progressPct}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-xs pt-1">
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => {
+                      const updated = projects.map((x) =>
+                        x.id === p.id ? { ...x, progressPct: Math.min(100, x.progressPct + 20) } : x
+                      );
+                      setProjects(updated);
+                      if (typeof window !== "undefined") {
+                        localStorage.setItem("xr_antoine_active_projects", JSON.stringify(updated));
+                      }
+                      onSound?.();
+                    }}
+                    className="px-2 py-1 rounded-lg bg-indigo-600/15 text-indigo-600 dark:text-amber-300 font-bold text-[10px]"
+                  >
+                    +20% Avancement
+                  </button>
+                  <button
+                    onClick={() => {
+                      const updated = projects.map((x) =>
+                        x.id === p.id ? { ...x, progressPct: 100, status: "delivered" as const } : x
+                      );
+                      setProjects(updated);
+                      if (typeof window !== "undefined") {
+                        localStorage.setItem("xr_antoine_active_projects", JSON.stringify(updated));
+                      }
+                      onSound?.();
+                    }}
+                    className="px-2 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]"
+                  >
+                    ✓ Livré
+                  </button>
+                </div>
+                <button
+                  onClick={() => {
+                    const updated = projects.filter((x) => x.id !== p.id);
+                    setProjects(updated);
+                    if (typeof window !== "undefined") {
+                      localStorage.setItem("xr_antoine_active_projects", JSON.stringify(updated));
+                    }
+                  }}
+                  className="text-[10px] text-rose-500 hover:underline"
+                >
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── FIDÉLISATION CLIENT & UPSELL RÉCURRENT (MENSUEL / ANNUEL) ── */}
+      <div className={`p-5 rounded-3xl border space-y-4 ${theme.card}`}>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-black shadow-md">
+              🔄
+            </div>
+            <div>
+              <h3 className={`font-black text-sm sm:text-base flex items-center gap-2 ${theme.textMain}`}>
+                Fidélisation &amp; Upsell Client (Offres Récurrentes)
+              </h3>
+              <p className={`text-xs ${theme.textMuted}`}>
+                Relances des clients livrés pour souscrire aux abonnements WebCare, Google Maps Top 3 et forfaits annuels.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowAddLoyalty(!showAddLoyalty)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-xs shadow-sm hover:scale-[1.02]"
+          >
+            <Plus className="w-3.5 h-3.5" /> Ajouter client à fidéliser
+          </button>
+        </div>
+
+        {showAddLoyalty && (
+          <div className={`p-4 rounded-2xl border space-y-3 ${theme.subCard}`}>
+            <h4 className={`text-xs font-bold ${theme.textMain}`}>Nouveau client pour relance fidélisation</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+              <input
+                type="text"
+                placeholder="Entreprise (ex: Brasserie Haussmann)"
+                value={newLoyClient}
+                onChange={(e) => setNewLoyClient(e.target.value)}
+                className={`px-3 py-2 rounded-xl text-xs border ${theme.inputBg}`}
+              />
+              <input
+                type="text"
+                placeholder="Contact & Téléphone"
+                value={newLoyContact}
+                onChange={(e) => setNewLoyContact(e.target.value)}
+                className={`px-3 py-2 rounded-xl text-xs border ${theme.inputBg}`}
+              />
+              <input
+                type="text"
+                placeholder="Offre récurrente (ex: WebCare 99€/m)"
+                value={newLoyOffer}
+                onChange={(e) => setNewLoyOffer(e.target.value)}
+                className={`px-3 py-2 rounded-xl text-xs border ${theme.inputBg}`}
+              />
+              <input
+                type="number"
+                placeholder="MRR mensuel €"
+                value={newLoyMrr}
+                onChange={(e) => setNewLoyMrr(Number(e.target.value))}
+                className={`px-3 py-2 rounded-xl text-xs border ${theme.inputBg}`}
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setShowAddLoyalty(false)}
+                className={`px-3 py-1.5 rounded-xl border text-xs font-bold ${theme.textMuted}`}
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (!newLoyClient.trim()) return;
+                  const item: LoyaltyClient = {
+                    id: `loy-${Date.now()}`,
+                    clientName: newLoyClient.trim(),
+                    contactPerson: newLoyContact.trim(),
+                    phone: newLoyPhone.trim() || "+33 1 00 00 00 00",
+                    currentService: "Site livré",
+                    targetRecurringOffer: newLoyOffer.trim(),
+                    monthlyMrrEur: newLoyMrr,
+                    nextFollowUpDate: newLoyFollowUp,
+                    status: "to_contact",
+                  };
+                  const updated = [item, ...loyaltyClients];
+                  setLoyaltyClients(updated);
+                  if (typeof window !== "undefined") {
+                    localStorage.setItem("xr_antoine_loyalty_clients", JSON.stringify(updated));
+                  }
+                  setNewLoyClient("");
+                  setShowAddLoyalty(false);
+                  onSound?.();
+                }}
+                className="px-4 py-1.5 rounded-xl bg-emerald-600 text-white font-extrabold text-xs"
+              >
+                Enregistrer Client
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          {loyaltyClients.map((c) => (
+            <div key={c.id} className={`p-4 rounded-2xl border space-y-2.5 ${theme.subCard}`}>
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <h4 className={`font-black text-sm ${theme.textMain}`}>{c.clientName}</h4>
+                  <p className={`text-[11px] ${theme.textMuted}`}>{c.contactPerson} · {c.phone}</p>
+                </div>
+                <span
+                  className={`text-[10px] font-black px-2.5 py-0.5 rounded-full ${
+                    c.status === "subscribed"
+                      ? "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30"
+                      : "bg-amber-500/15 text-amber-700 dark:text-amber-300"
+                  }`}
+                >
+                  {c.status === "subscribed" ? "Abonné Actif ✓" : "Relance à faire"}
+                </span>
+              </div>
+
+              <div className="p-2.5 rounded-xl bg-black/5 dark:bg-white/5 flex items-center justify-between text-xs">
+                <div>
+                  <p className={`text-[10px] uppercase font-bold ${theme.textSoft}`}>Offre récurrente visée</p>
+                  <p className={`font-extrabold ${theme.textMain}`}>{c.targetRecurringOffer}</p>
+                </div>
+                <span className="font-mono font-black text-emerald-600 dark:text-emerald-400 text-sm">
+                  +{c.monthlyMrrEur} €/m
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-200/50 dark:border-white/10">
+                <span className={`text-[10px] font-bold ${theme.textMuted}`}>📅 Prochaine relance : {c.nextFollowUpDate}</span>
+                <div className="flex items-center gap-2">
+                  {c.status !== "subscribed" ? (
+                    <button
+                      onClick={() => {
+                        const updated = loyaltyClients.map((x) =>
+                          x.id === c.id ? { ...x, status: "subscribed" as const } : x
+                        );
+                        setLoyaltyClients(updated);
+                        if (typeof window !== "undefined") {
+                          localStorage.setItem("xr_antoine_loyalty_clients", JSON.stringify(updated));
+                        }
+                        onSound?.();
+                      }}
+                      className="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-extrabold text-[10px]"
+                    >
+                      ✓ Converti en Abonné
+                    </button>
+                  ) : (
+                    <span className="text-[10px] font-bold text-emerald-600">Revenu récurrent sécurisé</span>
+                  )}
+                  <button
+                    onClick={() => {
+                      const updated = loyaltyClients.filter((x) => x.id !== c.id);
+                      setLoyaltyClients(updated);
+                      if (typeof window !== "undefined") {
+                        localStorage.setItem("xr_antoine_loyalty_clients", JSON.stringify(updated));
+                      }
+                    }}
+                    className="text-[10px] text-rose-500 hover:underline"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Validation des encaissements */}

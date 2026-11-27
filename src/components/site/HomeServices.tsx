@@ -8,13 +8,13 @@ import { cn } from "@/lib/utils";
 import { useOptionalFunnel } from "@/lib/funnel";
 
 const SERVICE_IMAGES: Record<string, string> = {
-  websites: "/showcase/web-luxury-showcase.jpg",
-  branding: "/showcase/svc-branding-editorial.jpg",
+  websites: "/showcase/svc-web-editorial.jpg",
+  branding: "/showcase/carte_blanche_hero_atelier.png",
   seo: "/showcase/svc-seo-editorial.jpg",
   maps: "/showcase/svc-maps-editorial.jpg",
   social: "/showcase/agency-social-studio-hero.jpg",
-  maintenance: "/showcase/webcare_cyber_luxury.jpg",
-  crm: "/showcase/crm_digital_twin_3d.jpg",
+  maintenance: "/showcase/svc-webcare-editorial.jpg",
+  crm: "/showcase/lot5_crm_leads_pro.png",
   robotics: "/showcase/robotics_futuristic_sleek.jpg",
 };
 
@@ -269,14 +269,15 @@ export function HomeServices() {
                   style={{ top: `calc(5.5rem + ${index * 12}px)` }}
                   className="sticky group relative min-h-[64vh] overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#12100D] text-white shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500 hover:border-[#A67C40]/50 lg:min-h-[72vh]"
                 >
-                  {/* Background photo with subtle parallax scale */}
+                  {/* Background photo with high clarity and visible illustration */}
                   <img
                     src={image}
                     alt={t(service.title)}
                     loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover opacity-40 brightness-[0.85] transition-transform duration-[1600ms] ease-out group-hover:scale-105"
+                    className="absolute inset-0 h-full w-full object-cover object-center lg:object-right-top opacity-90 brightness-[1.02] contrast-[1.05] transition-transform duration-[1600ms] ease-out group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/65 to-black/30" />
+                  {/* Directional gradient mask: dark backdrop on left for text readability, fully clear on right so artwork is bright */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#100D0B] via-[#100D0B]/70 to-transparent lg:bg-gradient-to-r lg:from-[#100D0B] lg:via-[#100D0B]/85 lg:to-transparent lg:w-[68%] pointer-events-none" />
 
                   {/* Card Content Overlay */}
                   <div className="relative z-10 flex min-h-[64vh] flex-col justify-between p-7 sm:p-10 lg:min-h-[72vh] lg:p-12">
@@ -290,49 +291,33 @@ export function HomeServices() {
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="font-mono rounded-full border border-[#E5C696]/30 bg-black/50 px-3.5 py-1 text-xs font-semibold text-[#E5C696] backdrop-blur-md whitespace-nowrap">
-                          Dès {item.id === "maps" ? "999 €" : price(service.fromEur)}
-                          {service.fromPeriod === "month"
-                            ? " / mois"
-                            : service.fromPeriod === "year"
-                              ? " / an"
-                              : ""}
+                        <span className="font-mono rounded-full border border-[#E5C696]/30 bg-black/60 px-3.5 py-1 text-xs font-semibold text-[#E5C696] backdrop-blur-md whitespace-nowrap">
+                          {item.id === "websites" ? "À partir de 499 €" : "Accompagnement Dédié"}
                         </span>
                       </div>
                     </div>
 
                     {/* Main Information */}
-                    <div className="max-w-4xl py-4 sm:py-6">
+                    <div className="max-w-3xl py-4 sm:py-6">
                       <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-[#E5C696]/80">
                         {t(service.short)}
                       </p>
                       <h3 className="mt-2 font-serif text-3xl sm:text-5xl lg:text-[3.8rem] font-medium leading-[1.04] tracking-[-0.03em] text-white">
                         {t(service.title)}
                       </h3>
-                      <p className="mt-3 max-w-2xl text-xs sm:text-sm leading-relaxed text-white/80">
+                      <p className="mt-3 max-w-2xl text-xs sm:text-sm leading-relaxed text-white/85">
                         {t(service.description)}
                       </p>
 
-                      {/* Display the 3 Key Plans / Offers directly in the case */}
-                      <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                        {plans.map((plan) => (
+                      {/* 3 Key Deliverables */}
+                      <div className="mt-6 flex flex-wrap gap-2.5">
+                        {service.deliverables.slice(0, 3).map((deliv) => (
                           <div
-                            key={plan.name.fr}
-                            className="rounded-2xl border border-white/15 bg-black/45 p-4 backdrop-blur-md transition hover:border-[#E5C696]/50 hover:bg-black/65"
+                            key={deliv.title.fr}
+                            className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-black/50 px-3.5 py-2 backdrop-blur-md text-xs text-white/90"
                           >
-                            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#E5C696]">
-                              {t(plan.name)}
-                            </span>
-                            <p className="font-serif mt-1.5 text-2xl font-bold text-white">
-                              {price(plan.eur)}
-                            </p>
-                            <span className="font-mono mt-0.5 block text-[10px] text-white/60">
-                              {plan.period === "month"
-                                ? "/ mois"
-                                : plan.period === "year"
-                                  ? "/ an"
-                                  : "paiement unique"}
-                            </span>
+                            <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696]" />
+                            <span className="font-medium">{t(deliv.title)}</span>
                           </div>
                         ))}
                       </div>
@@ -343,7 +328,11 @@ export function HomeServices() {
                           id={item.id}
                           className="inline-flex items-center gap-2 rounded-full bg-[#E5C696] px-6 py-3 text-xs font-bold text-[#14110E] shadow-md transition hover:bg-[#F2D7B0] active:scale-[0.98]"
                         >
-                          <span>Explorer l'offre</span>
+                          <span>
+                            {item.id === "websites"
+                              ? "Explorer l'offre · à partir de 499 €"
+                              : "Explorer l'offre"}
+                          </span>
                           <ArrowUpRight className="h-4 w-4" />
                         </ServiceLink>
 
@@ -363,7 +352,7 @@ export function HomeServices() {
                             "inline-flex items-center gap-2 rounded-full border px-5 py-3 font-mono text-[11px] font-semibold backdrop-blur-md transition",
                             isSelected
                               ? "border-emerald-500 bg-emerald-500/20 text-emerald-300"
-                              : "border-white/25 bg-black/30 text-white hover:border-white/60 hover:bg-black/50",
+                              : "border-white/25 bg-black/40 text-white hover:border-white/60 hover:bg-black/60",
                           )}
                         >
                           {isSelected ? "✓ Dans votre devis" : "+ Ajouter au devis"}
