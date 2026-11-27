@@ -328,11 +328,11 @@ export function Nav() {
         >
           <Link
             to="/"
-            aria-label="XR AGENCY. — Accueil"
+            aria-label="XRAGENCY. — Accueil"
             className="group inline-flex items-center py-1 transition-opacity duration-200 hover:opacity-80"
           >
-            <span className="font-sans text-[12px] sm:text-[13px] font-semibold tracking-[0.24em] uppercase text-black select-none">
-              XR AGENCY.
+            <span className="font-sans text-[15px] sm:text-[17px] font-bold tracking-[0.22em] uppercase text-black select-none">
+              XRAGENCY.
             </span>
           </Link>
 

@@ -318,8 +318,21 @@ export function Hero() {
         aria-label="XR Agency Hero"
         className="xr-hero-refined relative isolate min-h-[100svh] w-full overflow-hidden bg-[#181512] pt-20 text-[#FAF7F2]"
       >
-        {/* ── Background: Cinematic Multi-Hub Studio & Iconic Skyline Flow (Paris, Dubaï, Singapour, New York, Tokyo) ── */}
+        {/* ── Background: Cinematic Real Studio & Iconic Skyline Video / Flow ── */}
         <div className="absolute inset-0 -z-10 overflow-hidden bg-[#14110E]">
+          {/* Real Ambient Studio & Global Skylines Video Loop */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster={activeHub.image}
+            className="absolute inset-0 h-full w-full object-cover opacity-60 mix-blend-screen brightness-[1.05] contrast-[1.02] pointer-events-none"
+          >
+            <source src="/videos/hero-ambient-loop.mp4" type="video/mp4" />
+          </video>
+
+          {/* Photographic Multi-Hub Foundation (Paris, Dubaï, Singapour, New York, Tokyo) */}
           {HUBS.map((hub, idx) => (
             <div
               key={hub.id}
@@ -342,8 +355,7 @@ export function Hero() {
           ))}
 
           {/* Cinematic Scrim: Soft, luminous edges to protect text while keeping the skylines bright and sunlit */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#120F0D]/80 via-transparent to-transparent pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#120F0D]/90 via-black/25 to-black/40 pointer-events-none" />
         </div>
 
         {/* ── Top-Left: Architectural Branding & Headline ── */}
@@ -383,43 +395,51 @@ export function Hero() {
               {c.sub}
             </p>
 
-            {/* CTA Row: International Marketing Agency Push-to-Call & Direct Pricing */}
+            {/* CTA Row: Demande de maquette (avec estimation 200 à 300 € offerte), Audit gratuit, Appel stratégique 15 min */}
             <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-              {/* Primary Action: Direct Call Booking */}
+              {/* Primary Action: Demande de maquette avec valeur estimée */}
               <a
-                href="tel:+33767566783"
-                className="group relative inline-flex h-11 items-center gap-2.5 rounded-full bg-white px-6 text-xs sm:text-[13px] font-semibold text-black shadow-[0_0_25px_rgba(255,255,255,0.3)] transition-all duration-300 hover:bg-white/95 hover:shadow-[0_0_35px_rgba(255,255,255,0.55)] hover:scale-[1.03] active:scale-[0.98]"
+                href="#quote"
+                className="group relative inline-flex h-11 items-center gap-2.5 rounded-full bg-white px-5 sm:px-6 text-xs sm:text-[13px] font-semibold text-black shadow-[0_0_25px_rgba(255,255,255,0.35)] transition-all duration-300 hover:bg-white/95 hover:shadow-[0_0_35px_rgba(255,255,255,0.6)] hover:scale-[1.03] active:scale-[0.98]"
               >
-                <span>📞 {c.ctaPrimary}</span>
+                <Sparkles className="h-4 w-4 text-[#A67C40] shrink-0" />
+                <span>Demander une maquette</span>
+                <span className="hidden sm:inline-flex items-center rounded-full bg-[#14120E] px-2 py-0.5 text-[9.5px] font-mono font-bold text-[#E5C696] tracking-wide">
+                  Estimation 200 à 300 € offerte
+                </span>
                 <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1 text-black" />
               </a>
 
-              {/* Secondary Action: Direct Pricing Configurator */}
+              {/* Secondary Action: Audit gratuit */}
               <a
                 href="#quote"
                 className="inline-flex h-11 items-center gap-2 rounded-full border border-white/40 bg-white/10 px-5 text-xs sm:text-[13px] font-medium text-white backdrop-blur-md transition-all duration-300 hover:bg-white/20 hover:border-white/70 hover:scale-[1.03] active:scale-[0.98] shadow-sm"
               >
-                <span>{c.ctaSecondary}</span>
+                <span>Audit gratuit</span>
                 <ArrowRight className="h-3.5 w-3.5 text-white/80" />
               </a>
 
-              {/* Tertiary Action: Direct WhatsApp Call */}
+              {/* Tertiary Action: Appel stratégique 15 min */}
               <a
-                href="https://wa.me/33767566783?text=Bonjour%20XR%20AGENCY%2C%20je%20souhaite%20%C3%A9changer%20sur%20un%20projet%20strat%C3%A9gique."
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex h-11 items-center gap-2 rounded-full border border-white/25 bg-black/40 px-4 text-xs sm:text-[13px] font-medium text-white/90 backdrop-blur-md transition-all duration-300 hover:bg-black/60 hover:text-white"
+                href="tel:+33767566783"
+                className="inline-flex h-11 items-center gap-2 rounded-full border border-white/25 bg-black/40 px-4 sm:px-5 text-xs sm:text-[13px] font-medium text-white/95 backdrop-blur-md transition-all duration-300 hover:bg-black/60 hover:border-white/40 hover:text-white"
               >
-                <span>💬 WhatsApp direct</span>
+                <span>📞 Appel stratégique (15 min)</span>
               </a>
+            </div>
+
+            {/* Mobile Pill: Estimation 200 à 300 € offerte */}
+            <div className="mt-2.5 sm:hidden inline-flex items-center gap-1.5 rounded-full border border-[#E5C696]/40 bg-black/60 px-3 py-1 font-mono text-[10px] text-[#E5C696] backdrop-blur-md">
+              <span>✦</span>
+              <span>Maquette sur-mesure · Estimation 200 à 300 € offerte</span>
             </div>
 
             {/* Reassurance Guarantee Footnote */}
             <div className="mt-3.5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[10.5px] sm:text-[11px] font-mono text-white/85 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
               <span className="text-[#E5C696]">✦</span>
-              <span>Ligne directe Directeur Associé : +33 7 67 56 67 83</span>
+              <span>Ligne directe Direction Associée : +33 7 67 56 67 83</span>
               <span className="text-white/40">·</span>
-              <span>Devis chiffré & Maquette 48h</span>
+              <span>Maquette personnalisée 48h sans engagement</span>
             </div>
           </div>
         </div>
