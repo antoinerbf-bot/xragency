@@ -222,7 +222,7 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
             {/* 4 Concrete Commitments */}
             <div className="space-y-3 pt-1">
               <div className="flex items-start gap-3 rounded-2xl border border-[#E5E5E0] bg-white p-3.5 shadow-sm">
-                <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#16A34A]" />
+                <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#A67C40]" />
                 <div>
                   <h4 className="text-xs font-semibold text-[#171613]">Cession de Propriété 100%</h4>
                   <p className="mt-0.5 text-[11px] text-[#5C574F]">Code source, nom de domaine et design vous appartiennent intégralement. Zéro dépendance captive.</p>
@@ -270,7 +270,7 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
               </a>
 
               <div className="flex flex-1 items-center gap-3 rounded-2xl border border-[#E5E5E0] bg-white p-3.5 shadow-sm">
-                <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#F0FDF4] text-[#16A34A]">
+                <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#FAF6F0] text-[#A67C40]">
                   <MapPin className="h-4 w-4" />
                 </div>
                 <div className="min-w-0">
@@ -286,7 +286,7 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
             <div className="rounded-3xl border border-[#E5E5E0] bg-white p-6 shadow-xl sm:p-8">
               {status === "success" ? (
                 <div className="py-10 text-center space-y-3 animate-fade-in">
-                  <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[#16A34A] text-white text-2xl shadow-lg">
+                  <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[#171613] text-[#E5C696] text-2xl shadow-lg">
                     ✓
                   </div>
                   <h3 className="font-serif text-2xl font-medium text-[#171613]">{c.success}</h3>
@@ -431,7 +431,7 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
                     <span className="h-2 w-2 rounded-full bg-[#1A73E8]" />
                     <span className="h-2 w-2 rounded-full bg-[#EA4335]" />
                     <span className="h-2 w-2 rounded-full bg-[#F59E0B]" />
-                    <span className="h-2 w-2 rounded-full bg-[#16A34A]" />
+                    <span className="h-2 w-2 rounded-full bg-[#A67C40]" />
                   </div>
                 </div>
                 <p className="mt-3 max-w-xl text-xs text-[#5C574F] leading-relaxed">
@@ -442,7 +442,7 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
               {/* Studio Direct Contact & Accreditation */}
               <div className="rounded-2xl border border-[#12110E]/15 bg-white p-4.5 shadow-sm shrink-0">
                 <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-[#16A34A]" />
+                  <span className="h-2 w-2 rounded-full bg-[#A67C40]" />
                   <span className="font-mono text-[10.5px] font-bold text-[#171613] tracking-wider">
                     STUDIO PERMANENCE & RELATIONS CLIENTS
                   </span>
@@ -450,7 +450,7 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
                 <div className="mt-3 flex flex-col gap-1.5 text-xs">
                   <div className="flex items-center gap-2 text-[#5C574F]">
                     <span className="font-semibold text-[#171613]">WhatsApp Direct :</span>
-                    <a href={WA_DIRECT} target="_blank" rel="noreferrer" className="font-mono text-[#16A34A] hover:underline font-bold">
+                    <a href={WA_DIRECT} target="_blank" rel="noreferrer" className="font-mono text-[#A67C40] hover:underline font-bold">
                       +33 7 67 56 67 83
                     </a>
                   </div>
@@ -545,7 +545,7 @@ export function Contact({ showFooter = true }: { showFooter?: boolean }) {
                     </div>
                     <div className="mt-4 pt-3 border-t border-[#F0EBE1] flex items-center justify-between text-[10px] font-mono text-[#8C8274]">
                       <span>{hub.schedule}</span>
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#16A34A]" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#A67C40]" />
                     </div>
                   </div>
                 ))}

@@ -259,7 +259,7 @@ export function GoogleMapsShowcase() {
                     )}
                   >
                     <Star className="h-3.5 w-3.5 fill-current" />
-                    <span>AVEC XRAGENCY (Top 1)</span>
+                    <span>AVEC XR AGENCY (Top 3)</span>
                   </button>
                   <button
                     type="button"
@@ -308,7 +308,7 @@ export function GoogleMapsShowcase() {
                             <Star className="h-3.5 w-3.5 fill-white text-white" />
                           </div>
                           <span className="mt-1 rounded bg-[#1A1815] px-2 py-0.5 font-mono text-[9px] font-bold text-white shadow-sm whitespace-nowrap">
-                            Votre Établissement (N°1)
+                            Votre Établissement (Top 3)
                           </span>
                         </div>
 
@@ -344,13 +344,13 @@ export function GoogleMapsShowcase() {
                   {/* Google Local 3-Pack Cards Simulation */}
                   {mode === "after" ? (
                     <div className="mt-3 space-y-2">
-                      {/* Top 1 : YOUR BUSINESS */}
+                      {/* Top 3 : YOUR BUSINESS */}
                       <div className="rounded-xl border-2 border-[#1A73E8] bg-white p-3.5 shadow-sm">
                         <div className="flex items-start justify-between gap-2">
                           <div>
                             <div className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2 py-0.5 font-mono text-[9px] font-bold text-[#1A73E8]">
                               <span className="h-1.5 w-1.5 rounded-full bg-[#1A73E8] animate-pulse" />
-                              N°1 PACK LOCAL · {activeCityName.toUpperCase()}
+                              TOP 3 PACK LOCAL · {activeCityName.toUpperCase()}
                             </div>
                             <h4 className="mt-1 font-sans text-base font-bold text-[#202124]">
                               Votre Établissement
@@ -420,7 +420,7 @@ export function GoogleMapsShowcase() {
 
               {/* Bottom Reassurance */}
               <div className="mt-4 flex items-center justify-between border-t border-[#EBE5DC] pt-3 text-xs text-[#7A7062]">
-                <span className="text-[11px]">Audit éligibilité gratuit pour {activeCityName}</span>
+                <span className="text-[11px] font-mono text-[#5C554B]">Positionnement & autorité Google Maps</span>
                 <span className="font-mono text-[11px] font-bold text-[#1A73E8]">
                   Exclusivité 1 établissement par ville
                 </span>
@@ -448,7 +448,7 @@ export function GoogleMapsShowcase() {
                 <div className="mt-4 rounded-xl border border-amber-300 bg-amber-50/70 p-3 text-xs text-amber-900 flex items-center gap-2.5">
                   <ShieldCheck className="h-4 w-4 shrink-0 text-amber-700" />
                   <span>
-                    <strong>Engagement d'Exclusivité :</strong> nous ne signons qu'avec un seul établissement par zone et spécialité pour garantir la 1ère place.
+                    <strong>Engagement d'Exclusivité :</strong> nous ne signons qu'avec un seul établissement par zone et spécialité pour garantir le Top 3 local.
                   </span>
                 </div>
 
@@ -555,12 +555,12 @@ export function GoogleMapsShowcase() {
                   </button>
 
                   <a
-                    href={`https://wa.me/33649219808?text=Bonjour%20XRAGENCY%2C%20pouvez-vous%20analyser%20mon%20%C3%A9tablissement%20%C3%A0%20${encodeURIComponent(activeCityName)}%20sur%20Google%20Maps%20%3F`}
+                    href={`https://wa.me/33649219808?text=Bonjour%20XR%20AGENCY%2C%20pouvez-vous%20analyser%20mon%20%C3%A9tablissement%20%C3%A0%20${encodeURIComponent(activeCityName)}%20sur%20Google%20Maps%20%3F`}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center justify-center gap-2 rounded-full border border-emerald-600/30 bg-emerald-50 py-2.5 text-xs font-semibold text-emerald-900 transition hover:bg-emerald-100"
+                    className="flex items-center justify-center gap-2 rounded-full border border-[#D5D0C5] bg-[#FAF8F5] py-2.5 text-xs font-semibold text-[#1A1815] transition hover:bg-white hover:border-[#1A1815]"
                   >
-                    <MessageCircle className="h-4 w-4 text-emerald-600" />
+                    <MessageCircle className="h-4 w-4 text-[#A67C40]" />
                     <span>Échanger sur WhatsApp</span>
                   </a>
                 </div>

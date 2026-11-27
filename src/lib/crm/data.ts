@@ -21,7 +21,7 @@ export interface TeamMember {
   fullCycleRate: number; // % si fait Setting + Closing
   overrideRate?: number; // % Manager sur les ventes des candidats qu'il ramène
   avatarBg: string;
-  avatarChar: string; // Avatar / personnage distinctif fixe
+  avatarChar?: string; // Avatar / personnage distinctif fixe
   badge: string; // JAMAIS de % affiché dans le badge public pour préserver la confidentialité
   pin: string;
   customPinSet?: boolean; // Passe à true quand le membre personnalise son mot de passe
@@ -30,7 +30,7 @@ export interface TeamMember {
 export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
   {
     id: "antoine",
-    name: "Antoine Rousseau",
+    name: "Antoine Rebuffé-Rousseau",
     shortName: "Antoine",
     roleLabel: "Directeur Général & Fondateur",
     roleType: "direction",
@@ -195,7 +195,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
 
 // ── Les 7 Services Officiels de XR Agency (alignés avec le site public) ──
 
-export type BillingPeriod = "once" | "month" | "year";
+export type BillingPeriod = "once" | "month" | "year" | "monthly" | "annual";
 
 export interface ServicePlan {
   id: string;
@@ -336,7 +336,7 @@ export const XR_OFFICIAL_SERVICES: XrOfficialService[] = [
 
 // ── Modèle de Lead / Prospect avec Split Setter / Closer & Suivi Relance ──
 
-export type LeadStage = "new" | "rdv" | "mockup" | "negociation" | "won";
+export type LeadStage = "new" | "rdv" | "mockup" | "negociation" | "won" | "proposal";
 export type CommissionStatus = "estimated" | "pending_payment" | "unlocked";
 
 export interface LeadServiceItem {
@@ -354,6 +354,10 @@ export interface Lead {
   phone: string;
   email?: string;
   websiteUrl?: string;
+  city?: string;
+  source?: string;
+  priority?: "normal" | "hot" | "urgent" | string;
+  callsCount?: number;
   sectorId: string;
   serviceId: string;
   planLabel: string;
@@ -375,10 +379,16 @@ export interface Lead {
   mockupRequestedAt?: string; // ISO date de la demande (< 24h)
   mockupDeadline?: string; // Échéance impérative de 24h
   mockupUrgent?: boolean;
+  mockupUrl?: string;
   googleMapsUrl?: string; // Fiche Google Maps
   socialsUrl?: string; // Réseaux sociaux (Instagram, Facebook...)
   mockupNotes?: string; // Brief spécifique maquette
   studioStatus?: "pending" | "in_production" | "delivered";
+  projectMilestone?: string;
+  providerId?: string;
+  providerCost?: number;
+  invoiceStatus?: "none" | "deposit_sent" | "paid" | string;
+  invoiceRef?: string;
   timeline?: { id: string; date: string; text: string }[];
 }
 

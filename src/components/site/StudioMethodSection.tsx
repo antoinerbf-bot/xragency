@@ -288,6 +288,12 @@ export function StudioMethodSection() {
 
           <div className="flex flex-wrap items-center gap-3.5">
             <a
+              href="tel:+33767566783"
+              className="inline-flex min-h-[46px] items-center gap-2.5 rounded-xl bg-white px-6 py-3 text-xs font-bold text-[#17130E] shadow-lg transition hover:bg-white/95 active:scale-[0.98]"
+            >
+              <span>📞 Appel stratégique direct (15 min)</span>
+            </a>
+            <a
               href="#quote"
               className="inline-flex min-h-[46px] items-center gap-2.5 rounded-xl bg-gradient-to-r from-[#E5C696] via-[#D5AF79] to-[#C2985E] px-6 py-3 text-xs font-bold text-[#17130E] shadow-[0_12px_28px_-8px_rgba(213,175,121,0.5)] transition hover:brightness-105 active:scale-[0.98]"
             >
@@ -295,7 +301,7 @@ export function StudioMethodSection() {
               <ArrowRight className="h-4 w-4 rtl:rotate-180" />
             </a>
             <a
-              href="https://wa.me/33649219808?text=Bonjour%20XRAGENCY%2C%20je%20souhaite%20r%C3%A9server%20un%20cr%C3%A9neau%20de%20production%20prioritaire."
+              href="https://wa.me/33767566783?text=Bonjour%20XR%20AGENCY%2C%20je%20souhaite%20r%C3%A9server%20un%20cr%C3%A9neau%20de%20production%20prioritaire."
               target="_blank"
               rel="noreferrer"
               className="inline-flex min-h-[46px] items-center gap-2.5 rounded-xl border border-white/25 bg-black/40 px-6 py-3 text-xs font-semibold text-white backdrop-blur-md transition hover:border-[#E5C696] hover:bg-black/60 active:scale-[0.98]"

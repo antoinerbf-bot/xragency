@@ -327,7 +327,7 @@ export function CustomCrmShowcase() {
               <Check className="h-4 w-4 text-[#C5A880]" /> Gestion des stocks en direct
             </span>
             <span className="inline-flex items-center gap-2 rounded-xl border border-[#E5E5E0] bg-white px-3.5 py-2 text-xs font-semibold text-[#2B2925] shadow-sm">
-              <Check className="h-4 w-4 text-[#16A34A]" /> 0% de commission à vie
+              <Check className="h-4 w-4 text-[#C5A880]" /> 0% de commission à vie
             </span>
             <span className="inline-flex items-center gap-2 rounded-xl border border-[#E5E5E0] bg-white px-3.5 py-2 text-xs font-semibold text-[#2B2925] shadow-sm">
               <Check className="h-4 w-4 text-[#C5A880]" /> Multi-établissements &amp; Franchise
@@ -445,11 +445,11 @@ export function CustomCrmShowcase() {
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/30 p-4 text-center space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">
+              <div className="rounded-2xl bg-[#D8B788]/15 border border-[#D8B788]/30 p-4 text-center space-y-1">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#E5C696]">
                   Gain net conservé sur 3 ans :
                 </span>
-                <p className="text-2xl font-black text-emerald-300 font-mono">
+                <p className="text-2xl font-black text-[#F2D7B0] font-mono">
                   + {threeYearsNetSavings.toLocaleString("fr-FR")} {curr}
                 </p>
                 <p className="text-[11px] text-neutral-300">
@@ -956,8 +956,8 @@ export function CustomCrmShowcase() {
                   <ChefHat className="h-4 w-4 text-[#00f2fe]" /> Écran Cuisine Tactile (KDS) ·
                   Synchronisation temps réel
                 </span>
-                <span className="text-[10px] text-emerald-400 font-mono flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" /> Serveur
+                <span className="text-[10px] text-[#E5C696] font-mono flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-[#E5C696] animate-ping" /> Serveur
                   WebSockets Connecté
                 </span>
               </div>
@@ -969,7 +969,7 @@ export function CustomCrmShowcase() {
                     className={cn(
                       "rounded-3xl border p-5 space-y-4 transition shadow-lg",
                       ord.status === "ready"
-                        ? "border-emerald-500/40 bg-emerald-950/20"
+                        ? "border-[#D8B788]/50 bg-[#1A1815]/80"
                         : "border-[#00f2fe]/40 bg-black/50",
                     )}
                   >
@@ -999,7 +999,7 @@ export function CustomCrmShowcase() {
                           Marquer Prêt
                         </button>
                       ) : (
-                        <div className="w-full rounded-xl bg-emerald-500/20 border border-emerald-500/40 p-2 text-center text-xs font-bold text-emerald-300">
+                        <div className="w-full rounded-xl bg-[#D8B788]/20 border border-[#D8B788]/40 p-2 text-center text-xs font-bold text-[#E5C696]">
                           ✓ Prêt au comptoir
                         </div>
                       )}
@@ -1048,7 +1048,7 @@ export function CustomCrmShowcase() {
                           onClick={() => {
                             setDriverOrders((prev) => prev.filter((o) => o.id !== d.id));
                           }}
-                          className="flex-1 rounded-xl bg-emerald-500 p-2 text-xs font-bold text-black hover:opacity-90 transition"
+                          className="flex-1 rounded-xl bg-[#E5C696] p-2 text-xs font-bold text-black hover:opacity-90 transition"
                         >
                           Valider Livraison ✓
                         </button>
@@ -1206,7 +1206,7 @@ export function CustomCrmShowcase() {
                     <span className="text-purple-300 font-bold flex items-center gap-2">
                       <Eye className="h-4 w-4" /> VUE ISOMÉTRIQUE SALLE &amp; CUISINE (120 FPS)
                     </span>
-                    <span className="text-emerald-400 font-bold">
+                    <span className="text-[#E5C696] font-bold">
                       12 TABLES OCCUPÉES · CA JOUR : 2 480 €
                     </span>
                   </div>
@@ -1219,7 +1219,7 @@ export function CustomCrmShowcase() {
                         status: "Occupée",
                         total: "64.50 €",
                         items: "3 pers",
-                        color: "bg-emerald-500",
+                        color: "bg-[#E5C696]",
                       },
                       {
                         id: "T2",
@@ -1480,8 +1480,8 @@ export function CustomCrmShowcase() {
           </div>
 
           {sentOk ? (
-            <div className="rounded-3xl border border-emerald-500/40 bg-emerald-950/20 p-8 text-center space-y-4 max-w-lg mx-auto">
-              <CheckCircle2 className="h-12 w-12 text-emerald-400 mx-auto" />
+            <div className="rounded-3xl border border-[#D8B788]/40 bg-[#171613] p-8 text-center space-y-4 max-w-lg mx-auto">
+              <CheckCircle2 className="h-12 w-12 text-[#E5C696] mx-auto" />
               <h3 className="text-xl font-bold text-white">Votre demande a bien été transmise !</h3>
               <p className="text-xs text-neutral-300 leading-relaxed">
                 Notre équipe prépare votre simulation d&apos;économies anti-commission et vous
@@ -1494,7 +1494,7 @@ export function CustomCrmShowcase() {
                   )}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 text-xs font-bold text-black hover:bg-emerald-400 transition"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#E5C696] px-6 py-3 text-xs font-bold text-black hover:bg-[#F2D7B0] transition"
                 >
                   <span>Accélérer sur WhatsApp</span>
                   <ArrowUpRight className="h-4 w-4" />

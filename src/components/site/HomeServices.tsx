@@ -350,7 +350,7 @@ export function HomeServices() {
                           className={cn(
                             "inline-flex items-center gap-2 rounded-full border px-5 py-3 font-mono text-[11px] font-semibold backdrop-blur-md transition",
                             isSelected
-                              ? "border-emerald-500 bg-emerald-500/20 text-emerald-300"
+                              ? "border-[#E5C696] bg-[#E5C696]/20 text-[#F2D7B0]"
                               : "border-white/25 bg-black/40 text-white hover:border-white/60 hover:bg-black/60",
                           )}
                         >

@@ -568,7 +568,7 @@ export function SocialSalesPage() {
                       rel="noreferrer"
                       className="flex w-full items-center justify-center gap-2 rounded-full border border-[#D5D5CF] bg-white py-2.5 text-xs font-semibold text-[#12110E] transition hover:bg-[#FAF9F5]"
                     >
-                      <MessageCircle className="h-3.5 w-3.5 text-[#16A34A]" />
+                      <MessageCircle className="h-3.5 w-3.5 text-[#A67C40]" />
                       <span>Échanger sur WhatsApp</span>
                     </a>
                   </div>
@@ -688,7 +688,7 @@ export function SocialSalesPage() {
                       rel="noreferrer"
                       className="flex w-full items-center justify-center gap-2 rounded-full border border-[#12110E] bg-white py-2.5 text-xs font-semibold text-[#12110E] transition hover:bg-[#FAF9F5]"
                     >
-                      <MessageCircle className="h-3.5 w-3.5 text-[#16A34A]" />
+                      <MessageCircle className="h-3.5 w-3.5 text-[#A67C40]" />
                       <span>Échanger sur cette formule N°1</span>
                     </a>
                   </div>
@@ -800,7 +800,7 @@ export function SocialSalesPage() {
                       rel="noreferrer"
                       className="flex w-full items-center justify-center gap-2 rounded-full border border-[#D5D5CF] bg-white py-2.5 text-xs font-semibold text-[#12110E] transition hover:bg-[#FAF9F5]"
                     >
-                      <MessageCircle className="h-3.5 w-3.5 text-[#16A34A]" />
+                      <MessageCircle className="h-3.5 w-3.5 text-[#A67C40]" />
                       <span>Échanger sur la Domination</span>
                     </a>
                   </div>
@@ -821,8 +821,8 @@ export function SocialSalesPage() {
                 {t(l("TRANSFORMATION CONCRÈTE & IMMERSIVE", "IMMERSIVE & REAL TRANSFORMATION", "BIẾN ĐỔI THỰC TẾ & CHẤT LƯỢNG", "التحول الحقيقي الملموس", "НАГЛЯДНОЕ ПРЕОБРАЖЕНИЕ"))}
               </span>
               <h2 className="mt-3 font-serif text-3xl font-medium tracking-tight text-[#12110E] sm:text-5xl">
-                {t(l("Sans XRAGENCY vs Avec XRAGENCY :", "Without XRAGENCY vs With XRAGENCY:", "Chưa có XRAGENCY vs Có XRAGENCY:", "بدون التعامل معنا مقابل بعد التعامل معنا:", "Без нас и с нами:"))}{" "}
-                <em className="font-serif italic font-normal text-[#12110E] underline decoration-[#16A34A]/40 underline-offset-8">
+                {t(l("Sans XR AGENCY vs Avec XR AGENCY :", "Without XR AGENCY vs With XR AGENCY:", "Chưa có XR AGENCY vs Có XR AGENCY:", "بدون التعامل معنا مقابل بعد التعامل معنا:", "Без нас и с нами:"))}{" "}
+                <em className="font-serif italic font-normal text-[#12110E] underline decoration-[#A67C40]/40 underline-offset-8">
                   {t(l("la métamorphose de votre image", "the visual metamorphosis", "sự lột xác hình ảnh", "التحول الجذري في صورتك", "преображение бренда"))}
                 </em>.
               </h2>
@@ -836,7 +836,7 @@ export function SocialSalesPage() {
               <div className="relative aspect-[16/9] w-full max-h-[460px] overflow-hidden">
                 <img
                   src={agencyBeforeAfterStudio}
-                  alt="Comparatif Avant Après Social Media Studio XRAGENCY"
+                  alt="Comparatif Avant Après Social Media Studio XR AGENCY"
                   className="h-full w-full object-cover object-center"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent pointer-events-none" />
@@ -846,11 +846,11 @@ export function SocialSalesPage() {
                       GAUCHE : GESTION AMATEUR (12 likes, 0 client)
                     </span>
                     <span className="font-mono text-xs text-white/70">VS</span>
-                    <span className="rounded-full bg-[#16A34A] px-3.5 py-1 font-mono text-[9px] font-bold text-white uppercase shadow-sm">
+                    <span className="rounded-full bg-[#1A1815] border border-[#E5C696]/50 px-3.5 py-1 font-mono text-[9px] font-bold text-[#E5C696] uppercase shadow-sm">
                       DROITE : PRODUCTION STUDIO 4K (+94 000 vues, +148 résas)
                     </span>
                   </div>
-                  <span className="rounded-full border border-white/20 bg-black/60 px-3 py-1 font-mono text-[9px] font-semibold text-emerald-400 backdrop-blur-md">
+                  <span className="rounded-full border border-white/20 bg-black/60 px-3 py-1 font-mono text-[9px] font-semibold text-[#E5C696] backdrop-blur-md">
                     TRANSFORMATION COMMERCIALE VÉRIFIÉE
                   </span>
                 </div>
@@ -931,21 +931,21 @@ export function SocialSalesPage() {
               </div>
 
               {/* CARTE DROITE : AVEC XR AGENCY (STUDIO 4K) */}
-              <div className="overflow-hidden rounded-3xl border-2 border-[#16A34A] bg-[#F7FCF8] p-6 shadow-xl sm:p-8">
-                <div className="flex items-center justify-between border-b border-[#16A34A]/30 pb-3">
+              <div className="overflow-hidden rounded-3xl border-2 border-[#12110E] bg-white p-6 shadow-xl sm:p-8">
+                <div className="flex items-center justify-between border-b border-[#12110E]/15 pb-3">
                   <div className="flex items-center gap-2">
-                    <span className="grid h-5 w-5 place-items-center rounded-full bg-[#16A34A] text-xs font-bold text-white">✓</span>
-                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#16A34A]">
-                      AVEC XRAGENCY · SIGNATURE STUDIO 4K
+                    <span className="grid h-5 w-5 place-items-center rounded-full bg-[#12110E] text-xs font-bold text-white">✓</span>
+                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#12110E]">
+                      AVEC XR AGENCY · SIGNATURE STUDIO 4K
                     </span>
                   </div>
-                  <span className="rounded-full bg-[#16A34A]/10 px-2.5 py-0.5 font-mono text-[9px] font-bold text-[#16A34A] border border-[#16A34A]/30">
+                  <span className="rounded-full bg-[#12110E]/10 px-2.5 py-0.5 font-mono text-[9px] font-bold text-[#A67C40] border border-[#A67C40]/30">
                     ★ Croissance Vérifiée
                   </span>
                 </div>
 
                 {/* Visuel Studio 4K Étalonné */}
-                <div className="relative mt-5 aspect-[16/10] w-full overflow-hidden rounded-2xl border border-[#16A34A]/40 bg-black shadow-inner">
+                <div className="relative mt-5 aspect-[16/10] w-full overflow-hidden rounded-2xl border border-[#12110E]/20 bg-black shadow-inner">
                   <img
                     src={currentInd.imageAfter}
                     alt="Après"
@@ -953,7 +953,7 @@ export function SocialSalesPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
                   <div className="absolute bottom-3 left-3 right-3 rounded-xl bg-black/80 p-3 text-white backdrop-blur-md border border-white/10">
-                    <p className="font-serif text-xs italic text-emerald-300">
+                    <p className="font-serif text-xs italic text-[#E5C696]">
                       {currentInd.hookAfter}
                     </p>
                     <span className="mt-1 block font-mono text-[9px] text-white/80">
@@ -964,21 +964,21 @@ export function SocialSalesPage() {
 
                 {/* Métriques de Succès Commercial */}
                 <div className="mt-5 grid grid-cols-3 gap-2 text-center">
-                  <div className="rounded-xl bg-[#16A34A]/10 p-2.5 border border-[#16A34A]/25">
-                    <span className="block font-mono text-[9px] text-[#16A34A] font-semibold">VUES</span>
+                  <div className="rounded-xl bg-[#FAF8F5] p-2.5 border border-[#12110E]/10">
+                    <span className="block font-mono text-[9px] text-[#A67C40] font-semibold">VUES</span>
                     <strong className="text-xs text-[#12110E] font-bold">{currentInd.viewsAfter}</strong>
                   </div>
-                  <div className="rounded-xl bg-[#16A34A]/10 p-2.5 border border-[#16A34A]/25">
-                    <span className="block font-mono text-[9px] text-[#16A34A] font-semibold">ENGAGEMENT</span>
+                  <div className="rounded-xl bg-[#FAF8F5] p-2.5 border border-[#12110E]/10">
+                    <span className="block font-mono text-[9px] text-[#A67C40] font-semibold">ENGAGEMENT</span>
                     <strong className="text-xs text-[#12110E] font-bold">{currentInd.likesAfter}</strong>
                   </div>
-                  <div className="rounded-xl bg-[#16A34A]/10 p-2.5 border border-[#16A34A]/25">
-                    <span className="block font-mono text-[9px] text-[#16A34A] font-semibold">RÉSULTAT</span>
-                    <strong className="text-xs text-[#16A34A] font-bold">{currentInd.resultAfter}</strong>
+                  <div className="rounded-xl bg-[#FAF8F5] p-2.5 border border-[#12110E]/10">
+                    <span className="block font-mono text-[9px] text-[#A67C40] font-semibold">RÉSULTAT</span>
+                    <strong className="text-xs text-[#12110E] font-bold">{currentInd.resultAfter}</strong>
                   </div>
                 </div>
 
-                <div className="mt-4 rounded-xl bg-emerald-50 p-3.5 text-xs font-medium text-emerald-900 border border-emerald-200">
+                <div className="mt-4 rounded-xl bg-[#FAF8F5] p-3.5 text-xs font-medium text-[#12110E] border border-[#12110E]/15">
                   {currentInd.quoteAfter}
                 </div>
               </div>
@@ -993,12 +993,12 @@ export function SocialSalesPage() {
           <div className="mx-auto max-w-[1360px] px-4 sm:px-8">
             <div className="mx-auto max-w-3xl text-center">
               <span className="inline-flex items-center gap-2 rounded-full border border-[#E5E5E0] bg-white px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-[#52504A]">
-                <Sparkles className="h-3.5 w-3.5 text-[#16A34A]" />
+                <Sparkles className="h-3.5 w-3.5 text-[#A67C40]" />
                 {t(l("SIMULATEUR DE FORMULE EN 3 CLICS", "3-CLICK PLAN SIMULATOR", "CÔNG CỤ TÍNH GÓI NHANH", "حاسبة الباقة في 3 خطوات", "ПОДБОР ТАРИФА ЗА 3 КЛИКА"))}
               </span>
               <h2 className="mt-3 font-serif text-3xl sm:text-5xl font-medium tracking-tight text-[#12110E]">
                 {t(l("Calculez la formule idéale pour", "Find the plan calibrated for", "Tìm gói chuẩn xác cho", "اعثر على الباقة المناسبة", "Найдите оптимальный тариф под"))}{" "}
-                <em className="font-serif italic font-normal text-[#12110E] underline decoration-[#16A34A]/40">
+                <em className="font-serif italic font-normal text-[#12110E] underline decoration-[#A67C40]/40">
                   {t(l("votre activité", "your business", "doanh nghiệp của bạn", "نشاطك التجاري", "ваш бизнес"))}
                 </em>.
               </h2>
@@ -1126,7 +1126,7 @@ export function SocialSalesPage() {
                 <div className="sticky top-28 flex flex-col justify-between rounded-3xl border border-[#E5E5E0] bg-white p-6 shadow-xl sm:p-8">
                   <div>
                     <div className="flex items-center justify-between border-b border-[#E8E6E0] pb-3">
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#16A34A]/30 bg-[#16A34A]/10 px-3 py-1 font-mono text-[9.5px] font-bold uppercase tracking-wider text-[#16A34A]">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#A67C40]/30 bg-[#A67C40]/10 px-3 py-1 font-mono text-[9.5px] font-bold uppercase tracking-wider text-[#A67C40]">
                         ✦ FORMULE CONSEILLÉE
                       </span>
                       <span className="font-mono text-xs text-[#52504A]">DÈS 3 MOIS</span>
@@ -1158,7 +1158,7 @@ export function SocialSalesPage() {
                     <ul className="mt-4 space-y-2">
                       {currentRecPlan.features.slice(0, 4).map((feat, k) => (
                         <li key={k} className="flex items-center gap-2 text-xs text-[#12110E]">
-                          <Check className="h-3.5 w-3.5 text-[#16A34A] shrink-0" />
+                          <Check className="h-3.5 w-3.5 text-[#A67C40] shrink-0" />
                           <span>{t(feat)}</span>
                         </li>
                       ))}
@@ -1184,7 +1184,7 @@ export function SocialSalesPage() {
                       rel="noreferrer"
                       className="flex w-full items-center justify-center gap-2 rounded-full border border-[#D5D5CF] bg-white py-3 text-xs font-semibold text-[#12110E] transition hover:bg-[#FAF9F5]"
                     >
-                      <MessageCircle className="h-4 w-4 text-[#16A34A]" />
+                      <MessageCircle className="h-4 w-4 text-[#A67C40]" />
                       <span>Échanger avec notre directrice artistique</span>
                     </a>
                   </div>
@@ -1257,17 +1257,17 @@ export function SocialSalesPage() {
                     <span className="h-2 w-2 rounded-full bg-[#1A73E8]" />
                     <span className="h-2 w-2 rounded-full bg-[#EA4335]" />
                     <span className="h-2 w-2 rounded-full bg-[#F59E0B]" />
-                    <span className="h-2 w-2 rounded-full bg-[#16A34A]" />
+                    <span className="h-2 w-2 rounded-full bg-[#A67C40]" />
                   </div>
                 </div>
                 <p className="mt-3 max-w-xl text-xs text-[#52504A] sm:text-sm leading-relaxed">
                   {t(
                     l(
-                      "XRAGENCY · Studio d'Ingénierie & de Direction Artistique Social Media. Nous produisons des flux de contenus 4K exigeants et orchestrons votre présence sur Instagram, TikTok, Facebook & LinkedIn.",
-                      "XRAGENCY · Social Media Art Direction & Production Studio. Crafting cinematic 4K video feeds and orchestrating brand dominance across Instagram, TikTok, Facebook & LinkedIn.",
-                      "XRAGENCY · Studio Định hướng Nghệ thuật & Sản xuất Mạng Xã hội. Sản xuất video 4K chất lượng cao và quản trị đa kênh chuyên nghiệp.",
-                      "XRAGENCY · استوديو الإخراج الفني وإنتاج محتوى التواصل الاجتماعي. ننتج مقاطع 4K سينمائية وندير حضورك على كافة المنصات باحترافية.",
-                      "XRAGENCY · Студия продакшна и арт-дирекшна для соцсетей. Создаём вирусные Reels 4K и полностью ведём ваши каналы.",
+                      "XR AGENCY · Studio d'Ingénierie & de Direction Artistique Social Media. Nous produisons des flux de contenus 4K exigeants et orchestrons votre présence sur Instagram, TikTok, Facebook & LinkedIn.",
+                      "XR AGENCY · Social Media Art Direction & Production Studio. Crafting cinematic 4K video feeds and orchestrating brand dominance across Instagram, TikTok, Facebook & LinkedIn.",
+                      "XR AGENCY · Studio Định hướng Nghệ thuật & Sản xuất Mạng Xã hội. Sản xuất video 4K chất lượng cao và quản trị đa kênh chuyên nghiệp.",
+                      "XR AGENCY · استوديو الإخراج الفني وإنتاج محتوى التواصل الاجتماعي. ننتج مقاطع 4K سينمائية وندير حضورك على كافة المنصات باحترافية.",
+                      "XR AGENCY · Студия продакшна и арт-дирекшна для соцсетей. Создаём вирусные Reels 4K и полностью ведём ваши каналы.",
                     ),
                   )}
                 </p>
@@ -1276,7 +1276,7 @@ export function SocialSalesPage() {
               {/* Live Agency Performance Badge */}
               <div className="rounded-2xl border border-[#E5E5E0] bg-white p-4 shadow-xs shrink-0">
                 <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 animate-ping rounded-full bg-[#16A34A]" />
+                  <span className="h-2 w-2 animate-ping rounded-full bg-[#A67C40]" />
                   <span className="font-mono text-[10.5px] font-bold text-[#12110E] tracking-wider">
                     XR CREATIVE NETWORK · EN DIRECT
                   </span>
@@ -1288,7 +1288,7 @@ export function SocialSalesPage() {
                   </div>
                   <div>
                     <span className="text-[#52504A] block text-[10px]">ENGAGEMENT MOYEN</span>
-                    <strong className="text-[#16A34A] text-sm">+340%</strong>
+                    <strong className="text-[#A67C40] text-sm">+340%</strong>
                   </div>
                 </div>
               </div>

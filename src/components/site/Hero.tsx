@@ -166,10 +166,10 @@ const COPY = {
     titleItalic: "digital",
     titlePart2: "sur mesure.",
     sub: "Architecture web haute performance, stratégie de marque et acquisition ciblée. Nous concevons votre écosystème digital pour convertir durablement vos prospects en clients.",
-    ctaPrimary: "Demander ma maquette gratuite",
-    ctaPrimarySub: "Sous 24-48h · Sans engagement",
-    ctaSecondary: "Audit digital offert",
-    ctaAgency: "Nos réalisations",
+    ctaPrimary: "Réserver un appel stratégique (15 min)",
+    ctaPrimarySub: "Diagnostic direct · Ligne associée",
+    ctaSecondary: "Estimer mon budget en direct",
+    ctaAgency: "Nos 8 pôles & tarifs",
     guarantee: "Maquette interactive sur-mesure · Analyse SEO & performance incluse",
     scroll: "Découvrir nos expertises",
   },
@@ -383,42 +383,43 @@ export function Hero() {
               {c.sub}
             </p>
 
-            {/* CTA Row: Dynamic, glowing luxury pills (Zero yellow!) */}
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
-              {/* Primary Action: Free Mockup (Dynamic luxury white with glowing aura) */}
+            {/* CTA Row: International Marketing Agency Push-to-Call & Direct Pricing */}
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+              {/* Primary Action: Direct Call Booking */}
               <a
-                href="#quote"
+                href="tel:+33767566783"
                 className="group relative inline-flex h-11 items-center gap-2.5 rounded-full bg-white px-6 text-xs sm:text-[13px] font-semibold text-black shadow-[0_0_25px_rgba(255,255,255,0.3)] transition-all duration-300 hover:bg-white/95 hover:shadow-[0_0_35px_rgba(255,255,255,0.55)] hover:scale-[1.03] active:scale-[0.98]"
               >
-                <span>{c.ctaPrimary}</span>
+                <span>📞 {c.ctaPrimary}</span>
                 <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1 text-black" />
               </a>
 
-              {/* Secondary Action: Free Audit (Dynamic frosted glass) */}
+              {/* Secondary Action: Direct Pricing Configurator */}
               <a
-                href="#audit"
+                href="#quote"
                 className="inline-flex h-11 items-center gap-2 rounded-full border border-white/40 bg-white/10 px-5 text-xs sm:text-[13px] font-medium text-white backdrop-blur-md transition-all duration-300 hover:bg-white/20 hover:border-white/70 hover:scale-[1.03] active:scale-[0.98] shadow-sm"
               >
-                <Sparkles className="h-4 w-4 text-white" />
                 <span>{c.ctaSecondary}</span>
+                <ArrowRight className="h-3.5 w-3.5 text-white/80" />
               </a>
 
-              {/* Tertiary Action: Selected Work */}
+              {/* Tertiary Action: Direct WhatsApp Call */}
               <a
-                href="#work"
-                className="inline-flex h-11 items-center gap-1.5 px-3 text-xs sm:text-[13px] font-medium text-white/80 transition-all duration-300 hover:text-white"
+                href="https://wa.me/33767566783?text=Bonjour%20XR%20AGENCY%2C%20je%20souhaite%20%C3%A9changer%20sur%20un%20projet%20strat%C3%A9gique."
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex h-11 items-center gap-2 rounded-full border border-white/25 bg-black/40 px-4 text-xs sm:text-[13px] font-medium text-white/90 backdrop-blur-md transition-all duration-300 hover:bg-black/60 hover:text-white"
               >
-                <span>{c.ctaAgency}</span>
-                <ArrowRight className="h-3.5 w-3.5 text-white/80" />
+                <span>💬 WhatsApp direct</span>
               </a>
             </div>
 
             {/* Reassurance Guarantee Footnote */}
-            <div className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[10px] sm:text-[11px] font-mono text-white/80 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
-              <span className="text-white">✦</span>
-              <span>{c.ctaPrimarySub}</span>
+            <div className="mt-3.5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[10.5px] sm:text-[11px] font-mono text-white/85 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+              <span className="text-[#E5C696]">✦</span>
+              <span>Ligne directe Directeur Associé : +33 7 67 56 67 83</span>
               <span className="text-white/40">·</span>
-              <span>{c.guarantee}</span>
+              <span>Devis chiffré & Maquette 48h</span>
             </div>
           </div>
         </div>

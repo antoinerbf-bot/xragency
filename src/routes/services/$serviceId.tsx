@@ -452,7 +452,7 @@ function GenericServiceDetailPage() {
                       <ul className="mt-5 space-y-3">
                         {(p.features ?? []).map((feature, k) => (
                           <li key={k} className="flex items-start gap-3 text-sm leading-5 text-[#2B2925]">
-                            <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#16A34A]" />
+                            <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#A67C40]" />
                             <span>{t(feature)}</span>
                           </li>
                         ))}
@@ -466,7 +466,7 @@ function GenericServiceDetailPage() {
                             rel="noreferrer"
                             className="flex w-full items-center justify-center gap-2 rounded-full bg-[#12110E] px-5 py-3.5 text-xs font-semibold text-white shadow-sm transition hover:bg-[#2B2925]"
                           >
-                            <MessageCircle className="h-4 w-4 text-[#16A34A]" />
+                            <MessageCircle className="h-4 w-4 text-[#A67C40]" />
                             {t({ fr: "Cadrer mon projet sur devis", en: "Scope my project on quote", vi: "Tư vấn báo giá dự án", ar: "تحديد نطاق المشروع بعرض سعر", ru: "Обсудить проект по смете" })}
                           </a>
                         ) : !isCustomMaps ? (
@@ -489,7 +489,7 @@ function GenericServiceDetailPage() {
                             rel="noreferrer"
                             className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-[#D5D5CF] bg-white py-3 text-xs font-semibold text-[#12110E] transition hover:border-[#12110E] hover:bg-[#F5F5F0]"
                           >
-                            <MessageCircle className="h-3.5 w-3.5 text-[#16A34A]" />
+                            <MessageCircle className="h-3.5 w-3.5 text-[#A67C40]" />
                             {t({ fr: "Parler de cette formule", en: "Discuss this plan", vi: "Trao đổi về gói này", ar: "ناقش هذه الباقة", ru: "Обсудить пакет" })}
                           </a>
                         )}

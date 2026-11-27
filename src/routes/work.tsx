@@ -177,9 +177,9 @@ function ReferencePreview({
         {/* Browser header mockup */}
         <div className="relative z-10 flex items-center justify-between border-b border-white/10 pb-3">
           <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-red-500/70" />
-            <span className="h-2 w-2 rounded-full bg-amber-500/70" />
-            <span className="h-2 w-2 rounded-full bg-emerald-500/70" />
+            <span className="h-2 w-2 rounded-full bg-white/40" />
+            <span className="h-2 w-2 rounded-full bg-white/40" />
+            <span className="h-2 w-2 rounded-full bg-white/40" />
             <span className="ml-2 font-mono text-[7px] text-white/40 tracking-wider truncate max-w-[150px]">
               {hostname}
             </span>
@@ -204,7 +204,7 @@ function ReferencePreview({
             <span className="rounded-md border border-white/10 bg-white/5 px-2 py-1 label-mono text-[6.5px] text-white/60">
               RÉFÉRENCE VISUELLE
             </span>
-            <span className="rounded-md border border-emerald-400/30 bg-emerald-500/10 px-2 py-1 label-mono text-[6.5px] text-emerald-300">
+            <span className="rounded-md border border-[#A67C40]/40 bg-[#A67C40]/15 px-2 py-1 label-mono text-[6.5px] text-[#E5C696]">
               SITE EXTERNE
             </span>
           </div>

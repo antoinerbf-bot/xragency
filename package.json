@@ -15,7 +15,8 @@
     "social:generate": "node scripts/generate-social-posts.js",
     "social:publish": "node scripts/publish-social.js",
     "social:daemon": "node scripts/social-daemon.js",
-    "social:studio": "open scripts/social-studio.html"
+    "social:studio": "open scripts/social-studio.html",
+    "deploy:preview": "bash scripts/deploy-preview.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

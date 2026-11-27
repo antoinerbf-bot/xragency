@@ -1655,7 +1655,7 @@ export function QuoteConfiguratorCompact() {
                     <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
                       1. Choisissez votre Pack Stratégique (1 Clic)
                     </label>
-                    <span className="font-mono text-[10px] text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full font-semibold">
+                    <span className="font-mono text-[10px] text-[#8D6C42] bg-[#FAF6F0] border border-[#D8B788]/40 px-3 py-1 rounded-full font-semibold">
                       ✨ Pack configuré automatiquement
                     </span>
                   </div>
@@ -1823,7 +1823,7 @@ export function QuoteConfiguratorCompact() {
                             </p>
                             <p
                               className={`mt-2 font-mono text-[11px] font-semibold ${
-                                checked ? "text-emerald-300" : "text-[#12110E]"
+                                checked ? "text-[#E5C696]" : "text-[#12110E]"
                               }`}
                             >
                               {id === "websites"
@@ -1841,9 +1841,9 @@ export function QuoteConfiguratorCompact() {
 
                 {/* 4. NOS 3 GARANTIES D'EXCELLENCE & DE RASSURANCE */}
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 border-t border-[#171613]/10 pt-5">
-                  <div className="rounded-2xl border border-emerald-500/20 bg-emerald-50/50 p-3.5 text-start">
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
-                      <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
+                  <div className="rounded-2xl border border-[#D8B788]/30 bg-[#FAF6F0] p-3.5 text-start">
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#8D6C42] flex items-center gap-1.5">
+                      <Sparkles className="h-3.5 w-3.5 text-[#A67C40]" />
                       Maquette 48h offerte
                     </span>
                     <p className="mt-1 text-[11px] text-[#4A453C] leading-snug">
@@ -1958,7 +1958,7 @@ export function QuoteConfiguratorCompact() {
                                 <div className="mt-3 border-t border-current/12 pt-2.5">
                                   <p
                                     className={`font-serif text-lg font-semibold ${
-                                      active ? "text-emerald-300" : "text-[#12110E]"
+                                      active ? "text-[#E5C696]" : "text-[#12110E]"
                                     }`}
                                   >
                                     {plan.priceEur > 0
@@ -2063,7 +2063,7 @@ export function QuoteConfiguratorCompact() {
                         rel="noreferrer"
                         className="inline-flex items-center gap-2 rounded-full bg-[#171613] px-6 py-3 text-xs font-semibold text-[#F7F4EE] hover:bg-[#2A2823]"
                       >
-                        <MessageCircle className="h-4 w-4 text-emerald-400" />
+                        <MessageCircle className="h-4 w-4 text-[#E5C696]" />
                         {ui.whatsappBtn}
                       </a>
                       <button
@@ -2182,9 +2182,9 @@ export function QuoteConfiguratorCompact() {
                           href={whatsappHref}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-3 text-xs font-bold text-white shadow-md transition hover:bg-emerald-700 hover:scale-[1.02]"
+                          className="inline-flex items-center justify-center gap-2 rounded-full border border-[#D8B788]/50 bg-[#171613] px-5 py-3 text-xs font-bold text-[#E5C696] shadow-md transition hover:bg-[#2A2823] hover:scale-[1.02]"
                         >
-                          <MessageCircle className="h-4 w-4 text-white" />
+                          <MessageCircle className="h-4 w-4 text-[#E5C696]" />
                           <span>💬 Valider sur WhatsApp (15m)</span>
                         </a>
                         <button
@@ -2245,12 +2245,12 @@ export function QuoteConfiguratorCompact() {
                 </ul>
 
                 {totals.bundleDiscount > 0 && (
-                  <div className="rounded-2xl border border-emerald-500/30 bg-emerald-50/80 p-3 my-2 text-xs">
-                    <div className="flex items-center justify-between text-emerald-800 font-bold">
+                  <div className="rounded-2xl border border-[#D8B788]/40 bg-[#FAF6F0] p-3 my-2 text-xs">
+                    <div className="flex items-center justify-between text-[#8D6C42] font-bold">
                       <span>🎁 Pack Synergie (-15%)</span>
                       <span>-{price(totals.bundleDiscount)}</span>
                     </div>
-                    <p className="text-[10.5px] text-emerald-700 mt-1 font-medium">
+                    <p className="text-[10.5px] text-[#A67C40] mt-1 font-medium">
                       + 1er mois WebCare offert (valeur 99 €)
                     </p>
                   </div>
@@ -2266,7 +2266,7 @@ export function QuoteConfiguratorCompact() {
                             {price(totals.once)}
                           </span>
                         )}
-                        <span className="font-serif text-2xl font-bold text-emerald-700">
+                        <span className="font-serif text-2xl font-bold text-[#12110E]">
                           {price(totals.finalOnce)}
                         </span>
                       </div>
@@ -2306,7 +2306,7 @@ export function QuoteConfiguratorCompact() {
                   >
                     {cartSynced ? (
                       <>
-                        <Check className="h-4 w-4 text-emerald-400" />
+                        <Check className="h-4 w-4 text-[#E5C696]" />
                         {ui.addedAllToCart}
                       </>
                     ) : (
@@ -2331,7 +2331,7 @@ export function QuoteConfiguratorCompact() {
             )}
 
             <div className="mt-5 flex items-start gap-2 border-t border-[#E5E5E0] pt-4 text-[11px] leading-relaxed text-[#706A61]">
-              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#8D6C42]" />
               <span>{ui.vatNotice}</span>
             </div>
           </aside>

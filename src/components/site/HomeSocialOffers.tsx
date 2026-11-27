@@ -181,11 +181,17 @@ export function HomeSocialOffers() {
           })}
         </div>
 
-        <div className="mt-10 text-center">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <a
+            href="tel:+33767566783"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#1A1815] px-6 text-xs font-semibold text-white shadow-sm transition hover:bg-[#332F2B]"
+          >
+            <span>📞 Réserver un appel stratégique (15 min)</span>
+          </a>
           <Link
             to="/services/$serviceId"
             params={{ serviceId: "social" }}
-            className="inline-flex items-center gap-2 text-xs font-semibold text-[#A67C40] transition hover:text-[#1A1815]"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[#1A1815]/20 bg-white px-5 text-xs font-semibold text-[#1A1815] transition hover:border-[#A67C40]"
           >
             <span>{c.all}</span>
             <ArrowRight className="h-3.5 w-3.5 rtl:rotate-180" />

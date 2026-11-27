@@ -124,7 +124,7 @@ function XrAgencyCrmApp() {
   const [members, setMembers] = useState<TeamMember[]>(() => {
     if (typeof window !== "undefined") {
       try {
-        const saved = localStorage.getItem("xr_crm_members_v7");
+        const saved = localStorage.getItem("xr_crm_members_v8");
         if (saved) return JSON.parse(saved);
       } catch {
         // ignore
@@ -259,7 +259,7 @@ function XrAgencyCrmApp() {
   }, [leads]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") localStorage.setItem("xr_crm_members_v7", JSON.stringify(members));
+    if (typeof window !== "undefined") localStorage.setItem("xr_crm_members_v8", JSON.stringify(members));
   }, [members]);
 
   useEffect(() => {

@@ -266,7 +266,7 @@ function PlanCard({ plan, t, lang }: { plan: Plan; t: (v: Copy) => string; lang:
             className="flex gap-2.5 text-sm leading-5 text-[#2B2925]"
           >
             <Check
-              className="mt-0.5 h-4 w-4 shrink-0 text-[#16A34A]"
+              className="mt-0.5 h-4 w-4 shrink-0 text-[#A67C40]"
             />
             <span>{t(feature)}</span>
           </li>
@@ -290,7 +290,7 @@ function PlanCard({ plan, t, lang }: { plan: Plan; t: (v: Copy) => string; lang:
           rel="noreferrer"
           className="flex w-full items-center justify-center gap-2 rounded-full border border-[#D5D5CF] bg-white py-2.5 text-xs font-semibold text-[#12110E] transition hover:border-[#12110E] hover:bg-[#F5F5F0]"
         >
-          <MessageCircle className="h-3.5 w-3.5 text-[#16A34A]" />
+          <MessageCircle className="h-3.5 w-3.5 text-[#A67C40]" />
           {t(c("Échanger sur WhatsApp", "Chat on WhatsApp", "Trao đổi WhatsApp", "تواصل عبر واتساب", "Обсудить в WhatsApp"))}
         </a>
       </div>
@@ -454,7 +454,7 @@ function SEOPage() {
                   <span className="rounded-full border border-white/20 bg-black/60 px-3 py-1 font-mono text-[9.5px] uppercase tracking-[0.2em] text-[#E5C696] backdrop-blur-md">
                     ✦ PROTOCOLE SÉMANTIQUE & AUDIT
                   </span>
-                  <span className="rounded-full border border-emerald-400/30 bg-emerald-950/60 px-2.5 py-0.5 font-mono text-[9.5px] font-bold text-emerald-300 backdrop-blur-md">
+                  <span className="rounded-full border border-[#A67C40]/40 bg-black/60 px-2.5 py-0.5 font-mono text-[9.5px] font-bold text-[#E5C696] backdrop-blur-md">
                     FLUX INBOUND 24/7
                   </span>
                 </div>

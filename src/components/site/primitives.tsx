@@ -15,9 +15,9 @@ export function Logo({ className, asLink = true }: { className?: string; asLink?
   };
 
   const content = (
-    <span className={cn("inline-flex items-center select-none leading-none tracking-[0.18em]", className)}>
-      <span className="font-sans text-[13px] sm:text-[14px] font-extrabold tracking-[0.20em] uppercase text-black dark:text-white">
-        XRAGENCY
+    <span className={cn("inline-flex items-center select-none leading-none tracking-[0.24em]", className)}>
+      <span className="font-sans text-[12px] sm:text-[13px] font-semibold tracking-[0.24em] uppercase text-black dark:text-white">
+        XR AGENCY.
       </span>
     </span>
   );
