@@ -78,39 +78,18 @@ export const Route = createFileRoute("/crm")({
   component: XrAgencyCrmApp,
 });
 
-// ── Synthétiseur audio natif léger (Web Audio API) ──
+// ── Synthétiseur audio : sons de clics désactivés ──
 
 function playTone(freq: number, type: OscillatorType, duration: number, delay = 0) {
-  try {
-    const AudioCtx =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    const ctx = new AudioCtx();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
-    gain.gain.setValueAtTime(0.11, ctx.currentTime + delay);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start(ctx.currentTime + delay);
-    osc.stop(ctx.currentTime + delay + duration);
-  } catch {
-    // audio indisponible
-  }
+  // Sons de clics désactivés pour une interface silencieuse et sobre
 }
 
 function playDing() {
-  playTone(587.33, "sine", 0.2);
-  playTone(880, "sine", 0.32, 0.06);
+  // Silence total pour les clics
 }
 
 function playFanfare() {
-  playTone(523.25, "triangle", 0.14, 0);
-  playTone(659.25, "triangle", 0.14, 0.11);
-  playTone(783.99, "triangle", 0.18, 0.22);
-  playTone(1046.5, "triangle", 0.48, 0.34);
+  // Silence
 }
 
 export function formatWaPhone(rawPhone?: string): string {
@@ -199,7 +178,7 @@ function XrAgencyCrmApp() {
   const syncStatus = checkSupabaseStatus();
 
   const [activeTab, setActiveTab] = useState<CrmTab>("kanban");
-  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [soundEnabled, setSoundEnabled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [kanbanFilter, setKanbanFilter] = useState<"all" | "urgent" | "websites" | "recurring">("all");
   const [activeLeadForCockpit, setActiveLeadForCockpit] = useState<Lead | null>(null);
@@ -1356,7 +1335,7 @@ function XrAgencyCrmApp() {
                     )}
                   </div>
 
-                  {/* ── TOUT PETIT CLAVIER NUMÉRIQUE INTERACTIF MIGNON & TACTILE ── */}
+                  {/* ── TOUT PETIT CLAVIER NUMÉRIQUE INTERACTIF MIGNON & TACTILE (SILENCIEUX) ── */}
                   <div className="grid grid-cols-3 gap-2 max-w-[220px] mx-auto select-none">
                     {[
                       { num: "1", sub: "·" },
@@ -1375,7 +1354,6 @@ function XrAgencyCrmApp() {
                         onClick={() => {
                           if (pinInput.length < 10) setPinInput((prev) => prev + k.num);
                           if (pinError) setPinError("");
-                          if (soundEnabled) playDing();
                         }}
                         className="h-11 rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-white/10 active:scale-90 transition-all flex flex-col items-center justify-center shadow-sm"
                       >
@@ -1394,7 +1372,6 @@ function XrAgencyCrmApp() {
                       onClick={() => {
                         setPinInput((prev) => prev.slice(0, -1));
                         if (pinError) setPinError("");
-                        if (soundEnabled) playDing();
                       }}
                       title="Effacer le dernier chiffre"
                       className="h-11 rounded-2xl border border-rose-200/60 dark:border-rose-500/20 bg-rose-50/60 dark:bg-rose-500/10 text-rose-600 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-500/20 active:scale-90 transition-all flex items-center justify-center text-sm font-black"
@@ -1408,7 +1385,6 @@ function XrAgencyCrmApp() {
                       onClick={() => {
                         if (pinInput.length < 10) setPinInput((prev) => prev + "0");
                         if (pinError) setPinError("");
-                        if (soundEnabled) playDing();
                       }}
                       className="h-11 rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-white/10 active:scale-90 transition-all flex flex-col items-center justify-center shadow-sm"
                     >
@@ -1518,7 +1494,7 @@ function XrAgencyCrmApp() {
                     )}
                   </div>
 
-                  {/* Clavier numérique interactif pour School */}
+                  {/* Clavier numérique interactif pour School (Silencieux) */}
                   <div className="grid grid-cols-3 gap-2 max-w-[220px] mx-auto select-none">
                     {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((num) => (
                       <button
@@ -1527,7 +1503,6 @@ function XrAgencyCrmApp() {
                         onClick={() => {
                           if (schoolPinInput.length < 6) setSchoolPinInput((prev) => prev + num);
                           if (schoolPinError) setSchoolPinError("");
-                          if (soundEnabled) playDing();
                         }}
                         className="h-11 rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:bg-violet-50 dark:hover:bg-white/10 active:scale-90 transition-all flex items-center justify-center shadow-sm font-mono text-base font-black text-slate-800 dark:text-white"
                       >
@@ -1540,7 +1515,6 @@ function XrAgencyCrmApp() {
                       onClick={() => {
                         setSchoolPinInput((prev) => prev.slice(0, -1));
                         if (schoolPinError) setSchoolPinError("");
-                        if (soundEnabled) playDing();
                       }}
                       className="h-11 rounded-2xl border border-rose-200/60 dark:border-rose-500/20 bg-rose-50/60 dark:bg-rose-500/10 text-rose-600 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-500/20 active:scale-90 transition-all flex items-center justify-center text-sm font-black"
                     >
@@ -1552,7 +1526,6 @@ function XrAgencyCrmApp() {
                       onClick={() => {
                         if (schoolPinInput.length < 6) setSchoolPinInput((prev) => prev + "0");
                         if (schoolPinError) setSchoolPinError("");
-                        if (soundEnabled) playDing();
                       }}
                       className="h-11 rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:bg-violet-50 dark:hover:bg-white/10 active:scale-90 transition-all flex items-center justify-center shadow-sm font-mono text-base font-black text-slate-800 dark:text-white"
                     >
