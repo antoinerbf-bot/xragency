@@ -1616,6 +1616,35 @@ export function WebsitesStudioPage() {
 // ════════════════════════════════════════════════════════════════════════════
 // 2. GOOGLE MAPS STUDIO PAGE (/services/maps) — 100% LUMINEUSE & LUDIQUE
 // ════════════════════════════════════════════════════════════════════════════
+// Authentic official Google multicolor branding
+export function GoogleWord({ className = "" }: { className?: string }) {
+  return (
+    <span className={`inline-block font-sans font-bold tracking-tight ${className}`}>
+      <span style={{ color: "#4285F4" }}>G</span>
+      <span style={{ color: "#EA4335" }}>o</span>
+      <span style={{ color: "#FBBC05" }}>o</span>
+      <span style={{ color: "#4285F4" }}>g</span>
+      <span style={{ color: "#34A853" }}>l</span>
+      <span style={{ color: "#EA4335" }}>e</span>
+    </span>
+  );
+}
+
+export function renderGoogleText(str: string) {
+  if (!str || !str.includes("Google")) return str;
+  const parts = str.split("Google");
+  return (
+    <>
+      {parts.map((part, index) => (
+        <span key={index}>
+          {part}
+          {index < parts.length - 1 && <GoogleWord className="mx-0.5" />}
+        </span>
+      ))}
+    </>
+  );
+}
+
 export function MapsDominationStudioPage() {
   const { t, price, lang } = useLang();
   const isRtl = lang === "ar";
@@ -1640,7 +1669,6 @@ export function MapsDominationStudioPage() {
   const [simNotice, setSimNotice] = useState<string | null>(null);
 
   // Interactive Customer Journey Step
-  const [activeJourneyStep, setActiveJourneyStep] = useState<number>(0);
 
   const displayCity = customCity.trim() || selectedCity;
 
@@ -1654,6 +1682,7 @@ export function MapsDominationStudioPage() {
       photo: sectorRestaurant,
       searchQuery: l("restaurant gastronomique", "fine dining restaurant", "nhà hàng cao cấp", "مطعم راقٍ", "гастрономический ресторан"),
       suggestedKeywords: ["restaurant gastronomique", "meilleure terrasse", "brunch dimanche", "privatisation restaurant", "traiteur événementiel"],
+      avgTicket: 65,
     },
     {
       id: "artisan" as const,
@@ -1664,6 +1693,7 @@ export function MapsDominationStudioPage() {
       photo: sectorConstruction,
       searchQuery: l("artisan renovation", "home renovation contractor", "thợ cải tạo nhà", "مقاول ترميم", "мастер по ремонту"),
       suggestedKeywords: ["entreprise rénovation", "artisan menuisier", "rénovation appartement", "devis travaux btp", "artisan qualifié"],
+      avgTicket: 1450,
     },
     {
       id: "hotel" as const,
@@ -1674,6 +1704,7 @@ export function MapsDominationStudioPage() {
       photo: pfMaisonLumiere,
       searchQuery: l("hotel boutique spa", "boutique hotel spa", "khách sạn boutique spa", "فندق بوتيك سبا", "бутик-отель спа"),
       suggestedKeywords: ["boutique hôtel spa", "séjour de luxe", "chambre vue panoramique", "réservation direct hôtel", "séminaire hôtel de charme"],
+      avgTicket: 380,
     },
     {
       id: "sante" as const,
@@ -1684,6 +1715,7 @@ export function MapsDominationStudioPage() {
       photo: sectorHealth,
       searchQuery: l("dentiste cabinet medical", "dentist dental clinic", "nha sĩ phòng khám", "طبيب أسنان عيادة", "стоматолог клиника"),
       suggestedKeywords: ["chirurgien esthétique", "cabinet dentaire", "blanchiment dentaire", "médecine esthétique", "urgence dentaire"],
+      avgTicket: 190,
     },
     {
       id: "avocat" as const,
@@ -1694,6 +1726,7 @@ export function MapsDominationStudioPage() {
       photo: XR_PHOTOS.strategy,
       searchQuery: l("avocat droit affaires", "business lawyer", "luật sư doanh nghiệp", "محامي شركات", "юрист по бизнесу"),
       suggestedKeywords: ["avocat droit des affaires", "cabinet avocat fiscaliste", "conseil juridique entreprise", "avocat fusion acquisition", "contentieux commercial"],
+      avgTicket: 950,
     },
     {
       id: "beaute" as const,
@@ -1704,6 +1737,7 @@ export function MapsDominationStudioPage() {
       photo: XR_PHOTOS.branding,
       searchQuery: l("institut beaute spa", "beauty salon spa", "spa làm đẹp", "صالون تجميل سبا", "салон красоты спа"),
       suggestedKeywords: ["institut de beauté de luxe", "soin visage haute technologie", "massage bien-être", "épilation laser définitive", "spa privatif"],
+      avgTicket: 110,
     },
   ];
 
@@ -1745,6 +1779,14 @@ export function MapsDominationStudioPage() {
     return base;
   })();
 
+  // Interactive ROI & Inbound Business Generation Calculation
+  const estCallsMin = Math.round(25 + userKeywords.length * 4 + (cityScale === "metro" ? 30 : cityScale === "medium" ? 15 : 6));
+  const estCallsMax = Math.round(estCallsMin * 1.7);
+  const conversionRate = currentSector.id === "resto" || currentSector.id === "beaute" ? 0.22 : 0.12;
+  const estRevenueMin = Math.round(estCallsMin * conversionRate * currentSector.avgTicket);
+  const estRevenueMax = Math.round(estCallsMax * conversionRate * currentSector.avgTicket);
+  const estRoiMultiple = Math.max(12, Math.round(estRevenueMin / 179));
+
   const selectedKeywordsLabel = `${userKeywords.length} mot(s)-clé(s) sélectionné(s)`;
 
   const selectedRankLabel =
@@ -1769,31 +1811,80 @@ export function MapsDominationStudioPage() {
             1. HERO LUMINEUX : PUR, ÉLÉGANT, SANS MOTIF ARTIFICIEL
            ════════════════════════════════════════════════════════════════════ */}
         <section className="relative overflow-hidden bg-white pb-16 pt-24 border-b border-[#E8E6E0] sm:pb-24 sm:pt-32">
-          {/* Soft ambient lighting — warm and natural, ZERO square grid */}
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,115,232,0.06),transparent_65%)]" />
+          {/* ════════════════════════════════════════════════════════════════
+              3D ISOMETRIC VECTOR MAP ILLUSTRATION BACKGROUND (CINEMATIC & PLAYFUL)
+             ════════════════════════════════════════════════════════════════ */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            {/* Ambient center warm glow */}
+            <div className="absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[800px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(166,124,64,0.12),transparent_70%)]" />
+
+            {/* Isometric grid roads svg */}
+            <svg
+              className="absolute left-1/2 top-1/2 h-[700px] w-[1200px] -translate-x-1/2 -translate-y-1/2 opacity-[0.22]"
+              viewBox="0 0 1200 700"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g stroke="#12110E" strokeWidth="1.2" strokeDasharray="4 6">
+                {/* Diagonal grid lines */}
+                <line x1="0" y1="200" x2="1200" y2="600" />
+                <line x1="0" y1="350" x2="1200" y2="750" />
+                <line x1="0" y1="500" x2="1200" y2="900" />
+                <line x1="0" y1="50" x2="1200" y2="450" />
+
+                <line x1="1200" y1="200" x2="0" y2="600" />
+                <line x1="1200" y1="350" x2="0" y2="750" />
+                <line x1="1200" y1="50" x2="0" y2="450" />
+              </g>
+
+              {/* Main Arterial Roads */}
+              <g stroke="#A67C40" strokeWidth="2.5" opacity="0.6">
+                <path d="M100 550 Q 600 350 1100 150" />
+                <path d="M150 150 Q 600 350 1050 550" />
+              </g>
+
+              {/* Central Top 3 Hub Circles */}
+              <circle cx="600" cy="350" r="90" stroke="#A67C40" strokeWidth="1.5" strokeDasharray="6 4" opacity="0.4" />
+              <circle cx="600" cy="350" r="140" stroke="#12110E" strokeWidth="1" strokeDasharray="4 6" opacity="0.25" />
+            </svg>
+
+            {/* Floating Map Pin 3D Indicators */}
+            <div className="absolute left-[20%] top-[28%] hidden lg:flex items-center gap-1.5 rounded-full border border-[#E5E5E0] bg-white/90 px-3 py-1 shadow-md backdrop-blur-xs">
+              <span className="h-2 w-2 rounded-full bg-[#EA4335]" />
+              <span className="font-mono text-[10px] font-semibold text-[#12110E]">Local Pack #1</span>
+            </div>
+            <div className="absolute right-[22%] top-[34%] hidden lg:flex items-center gap-1.5 rounded-full border border-[#E5E5E0] bg-white/90 px-3 py-1 shadow-md backdrop-blur-xs">
+              <span className="h-2 w-2 rounded-full bg-[#16A34A]" />
+              <span className="font-mono text-[10px] font-semibold text-[#12110E]">GPS 48.8566° N</span>
+            </div>
+          </div>
 
           <div className="relative mx-auto max-w-[1360px] px-4 sm:px-8">
             <div className="mx-auto max-w-4xl text-center">
-              <span className="inline-flex items-center gap-2 rounded-full border border-[#1A73E8]/20 bg-[#1A73E8]/8 px-4 py-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.2em] text-[#1A73E8]">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#A67C40]/30 bg-[#FAF7F2] px-4 py-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.2em] text-[#12110E]">
                 <MapPin className="h-3.5 w-3.5 text-[#EA4335]" />
-                {t(l("VISIBILITÉ GOOGLE MAPS · DOMINATION DU PACK LOCAL", "GOOGLE MAPS VISIBILITY · LOCAL PACK DOMINATION", "HIỂN THỊ GOOGLE MAPS · CHIẾM LĨNH TOP ĐỊA PHƯƠNG", "خرائط GOOGLE · تصدر حزمة البحث المحلي", "GOOGLE MAPS · ЛИДЕРСТВО В LOCAL PACK"))}
+                <span>VISIBILITÉ <GoogleWord className="text-[10.5px] mx-1" /> MAPS · CONQUÊTE DU TOP 3</span>
               </span>
 
               <h1 className="mt-5 font-serif text-[clamp(2.4rem,5.6vw,4.8rem)] font-medium leading-[1.04] tracking-tight text-[#12110E]">
-                {t(l("Faites de Google Maps votre premier canal", "Make Google Maps your primary channel", "Biến Google Maps thành kênh đón khách", "اجعل خرائط Google قناتك الأولى", "Сделайте Google Maps главным источником"))}{" "}
-                <span className="relative inline-block text-[#1A73E8]">
+                {t(l("Faites de ", "Make ", "Biến ", "اجعل ", "Сделайте "))}
+                <GoogleWord />
+                {t(l(" Maps votre premier canal", " Maps your primary channel", " Maps thành kênh đón khách", " Maps قناتك الأولى", " Maps главным источником"))}{" "}
+                <span className="relative inline-block text-[#A67C40]">
                   {t(l("d'acquisition locale.", "for local clients.", "khách hàng tại địa phương.", "لاكتساب العملاء محلياً.", "локальных клиентов."))}
                 </span>
               </h1>
 
               <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-[#52504A] sm:text-base">
-                {t(
-                  l(
-                    "97% des consommateurs recherchent un commerce ou un artisan local sur Google Maps. Nous positionnons votre établissement dans le Top 3 du Pack Local et assurons la gestion continue de votre e-réputation avec une rigueur absolue.",
-                    "97% of consumers search for nearby businesses on Google Maps. We elevate your profile to the Local 3-Pack and manage your reputation with absolute precision.",
-                    "97% khách hàng tìm kiếm địa điểm trên Google Maps. Chúng tôi đưa bạn vào Top 3 Local Pack và bảo chứng uy tín thương hiệu.",
-                    "97% من العملاء يبحثون عن الأنشطة التجارية عبر خرائط Google. نضع نشاطك ضمن أفضل 3 نتائج محلية وندير سمعتك بدقة متناهية.",
-                    "97% клиентов ищут заведения и услуги на Google Maps. Мы выводим вас в топ-3 Local Pack и системно управляем репутацией.",
+                {renderGoogleText(
+                  t(
+                    l(
+                      "97% des consommateurs recherchent un commerce ou un artisan local sur Google Maps. Nous positionnons votre établissement dans le Top 3 du Pack Local et assurons la gestion continue de votre e-réputation avec une rigueur absolue.",
+                      "97% of consumers search for nearby businesses on Google Maps. We elevate your profile to the Local 3-Pack and manage your reputation with absolute precision.",
+                      "97% khách hàng tìm kiếm địa điểm trên Google Maps. Chúng tôi đưa bạn vào Top 3 Local Pack và bảo chứng uy tín thương hiệu.",
+                      "97% من العملاء يبحثون عن الأنشطة التجارية عبر خرائط Google. نضع نشاطك ضمن أفضل 3 نتائج محلية وندير سمعتك بدقة متناهية.",
+                      "97% клиентов ищут заведения и услуги на Google Maps. Мы выводим вас в топ-3 Local Pack и системно управляем репутацией.",
+                    ),
                   ),
                 )}
               </p>
@@ -1804,201 +1895,286 @@ export function MapsDominationStudioPage() {
                   href="#simulateur-devis"
                   className="inline-flex items-center gap-2 rounded-full bg-[#12110E] px-6 py-3.5 text-xs font-semibold text-white shadow-md transition hover:bg-[#2B2925] hover:scale-[1.01]"
                 >
-                  <Sparkles className="h-4 w-4 text-[#C27838]" />
-                  {t(l("Simulateur de Devis & Conquête Local Pack", "Local Pack & Quote Simulator", "Mô phỏng Báo giá & Chiếm lĩnh Local Pack", "محاكاة التسعير وتصدر الخرائط", "Калькулятор продвижения в Local Pack"))}
+                  <Sparkles className="h-4 w-4 text-[#A67C40]" />
+                  {t(l("Simulateur de Rentabilité Local Pack", "Local Pack & ROI Simulator", "Mô phỏng Báo giá & Doanh thu", "محاكاة العائد المالي وتصدر الخرائط", "Калькулятор окупаемости в Local Pack"))}
                   <ArrowRight className="h-4 w-4" />
                 </a>
                 <a
-                  href="#offres"
+                  href="#formules-mensuelles"
                   className="inline-flex items-center gap-2 rounded-full border border-[#D5D5CF] bg-white px-6 py-3.5 text-xs font-semibold text-[#12110E] shadow-sm transition hover:border-[#12110E] hover:bg-[#F5F5F0]"
                 >
-                  {t(l("Découvrir les 2 formules officielles", "Explore the 2 official plans", "Khám phá 2 gói chính thức", "عرض الباقتين الرسميتين", "Смотреть 2 официальных тарифа"))}
+                  {t(l("Découvrir les 2 formules mensuelles", "Discover the 2 monthly plans", "Khám phá 2 gói quản lý hằng tháng", "اكتشف الباقتين الشهريتين", "Смотреть 2 ежемесячных тарифа"))}
                 </a>
               </div>
             </div>
 
             {/* ════════════════════════════════════════════════════════════════
-                LES 2 VRAIES OFFRES OFFICIELLES GOOGLE MAPS (999 € AN & 99 € MOIS)
+                1. OFFRE INITIALE UNIQUE : CONQUÊTE DU TOP 3 (999 €)
                ════════════════════════════════════════════════════════════════ */}
-            <div id="offres" className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
-              {/* OFFRE 01 : STRATÉGIE & CONQUÊTE DU TOP 3 (ANNUELLE) */}
-              <div className="relative flex flex-col justify-between rounded-3xl border border-[#1A73E8]/30 bg-white p-7 shadow-lg transition-all duration-300 hover:border-[#1A73E8] hover:shadow-xl sm:p-8">
-                <div>
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#EBEBE6] pb-4">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1A73E8]/10 px-3 py-1 font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#1A73E8]">
-                      <Compass className="h-3.5 w-3.5 text-[#1A73E8]" />
-                      {t(l("OFFRE 01 · STRATÉGIE ANNUELLE", "PLAN 01 · ANNUAL STRATEGY", "GÓI 01 · CHIẾN LƯỢC NĂM", "العرض 01 · استراتيجية سنوية", "ТАРИФ 01 · ГОДОВАЯ СТРАТЕГИЯ"))}
-                    </span>
-                    <span className="font-mono text-[11px] font-semibold text-[#52504A]">
-                      {t(l("Audit & Diagnostic de zone inclus", "Area audit & diagnostic included", "Bao gồm kiểm toán khu vực", "يشمل تدقيق المنطقة", "Аудит локации включён"))}
-                    </span>
-                  </div>
-
-                  <h3 className="mt-4 font-serif text-2xl font-medium text-[#12110E] sm:text-3xl">
-                    {t(l("Stratégie de Conquête Top 3 Google Maps", "Google Maps Top 3 Conquest Strategy", "Chiến lược Chiếm lĩnh Top 3 Google Maps", "استراتيجية تصدر أفضل 3 نتائج على الخرائط", "Стратегия вывода в топ-3 Google Maps"))}
-                  </h3>
-
-                  <div className="mt-3 flex items-baseline gap-2">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-[#52504A]">
-                      {t(l("À partir de", "From", "Từ", "ابتداءً من", "От"))}
-                    </span>
-                    <span className="font-serif text-4xl font-bold text-[#12110E] sm:text-5xl">
-                      {price(999)}
-                    </span>
-                    <span className="font-mono text-xs text-[#52504A]">{perYear}</span>
-                  </div>
-
-                  <p className="mt-3 text-xs leading-relaxed text-[#52504A]">
-                    {t(
-                      l(
-                        "Plan d'action annuel sur mesure selon vos mots-clés stratégiques, votre position actuelle sur Maps et l'intensité concurrentielle de votre zone. Conçu pour hisser durablement votre établissement dans le Local 3-Pack.",
-                        "Tailored annual action plan based on your target keywords, current map ranking and local competitor strength. Designed to secure your presence in the Local 3-Pack.",
-                        "Kế hoạch hành động hằng năm tùy chỉnh theo từ khóa, vị trí hiện tại và mức độ cạnh tranh tại khu vực của bạn.",
-                        "خطة سنوية مخصصة تعتمد على كلماتك المفتاحية وموقعك الحالي وقوة المنافسين في منطقتك لدخول حزمة أفضل 3 نتائج.",
-                        "Индивидуальный годовой план на основе ваших ключевых запросов, текущей позиции и конкуренции в городе.",
-                      ),
-                    )}
-                  </p>
-
-                  {/* Itemized Deliverables */}
-                  <ul className="mt-6 space-y-2.5 border-t border-[#EBEBE6] pt-5">
-                    {[
-                      l("Audit technique & décryptage des 3 leaders du Local Pack", "In-depth competitor analysis of the 3 Local Pack leaders", "Kiểm toán kỹ thuật & phân tích 3 đối thủ đứng đầu", "تحليل تقني لأبرز 3 منافسين متصدرين للنتائج", "Анализ 3 лидеров в Local Pack"),
-                      l("Restructuration intégrale de la fiche Google Business Profile", "Complete restructuring of your Google Business Profile", "Tái cấu trúc toàn diện hồ sơ Google Business", "إعادة هيكلة شاملة لملف Google Business", "Полная оптимизация профиля Google Business"),
-                      l("Géoréférencement & balisage EXIF de vos photos professionnelles", "Geotagging & EXIF metadata tagging of HD photos", "Gắn tọa độ địa lý & dữ liệu EXIF cho ảnh HD", "ترميز جغرافي وبيانات EXIF للصور", "Геопривязка и EXIF-разметка фотографий"),
-                      l("Harmonisation des citations locales NAP (Nom, Adresse, Téléphone)", "NAP local citation consistency across web directories", "Đồng bộ thông tin NAP trên các danh bạ uy tín", "توحيد بيانات الاسم والعنوان ورقم الهاتف", "Синхронизация NAP (название, адрес, телефон)"),
-                      l("Tableau de bord de suivi mensuel des positions & des appels entrants", "Monthly ranking tracking & detailed call volume report", "Báo cáo thứ hạng & cuộc gọi hằng tháng", "تقرير شهري لتتبع الترتيب وعدد الاتصالات", "Ежемесячный отчёт по позициям и звонкам"),
-                    ].map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2.5 text-xs text-[#2B2925]">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#1A73E8]" />
-                        <span>{t(item)}</span>
-                      </li>
-                    ))}
-                  </ul>
+            <div id="offres" className="mt-14 max-w-3xl mx-auto">
+              <div className="relative overflow-hidden rounded-3xl border-2 border-[#12110E] bg-white p-7 shadow-xl sm:p-9 transition hover:shadow-2xl">
+                {/* Top Corner Ribbon */}
+                <div className="absolute -right-12 top-7 rotate-45 bg-[#12110E] px-12 py-1 text-center font-mono text-[10px] font-bold uppercase tracking-widest text-[#A67C40] shadow-sm">
+                  PHASE 01
                 </div>
 
-                <div className="mt-8">
-                  <a
-                    href="#simulateur-devis"
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#12110E] py-3.5 text-xs font-semibold text-white transition hover:bg-[#2B2925] hover:scale-[1.01]"
-                  >
-                    <span>{t(l("Configurer mon projet & estimer le tarif", "Configure my project & estimate price", "Cấu hình dự án & tính giá", "تحديد معايير المشروع وتقدير التكلفة", "Рассчитать стоимость для моего города"))}</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </a>
-                </div>
-              </div>
-
-              {/* OFFRE 02 : PACK CONQUÊTE & DOMINATION TOP 3 (1 490 € / AN) */}
-              <div className="relative flex flex-col justify-between rounded-3xl border border-[#A67C40]/40 bg-white p-7 shadow-lg transition-all duration-300 hover:border-[#A67C40] hover:shadow-xl sm:p-8">
-                <div>
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#EBEBE6] pb-4">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#A67C40]/10 px-3 py-1 font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#A67C40]">
-                      <Star className="h-3.5 w-3.5 fill-[#A67C40] text-[#A67C40]" />
-                      {t(l("OFFRE 02 · PACK CONQUÊTE TOP 3 LOCAL", "PLAN 02 · TOP 3 LOCAL CONQUEST PACK", "GÓI 02 · CHIẾM LĨNH TOP 3 ĐỊA PHƯƠNG", "العرض 02 · باقة الهيمنة على المراكز الثلاثة الأولى", "ТАРИФ 02 · ЗАВОЕВАНИЕ ТОП-3 НА КАРТАХ"))}
-                    </span>
-                    <span className="font-mono text-[11px] font-bold text-[#A67C40]">
-                      {t(l("Accompagnement intensif 1 an", "Intensive 1-year support", "Đồng hành chuyên sâu 1 năm", "متابعة مكثفة لمدة سنة", "Интенсивное годовое ведение"))}
-                    </span>
-                  </div>
-
-                  <h3 className="mt-4 font-serif text-2xl font-medium text-[#12110E] sm:text-3xl">
-                    {t(l("Pack Conquête & Domination Top 3", "Top 3 Conquest & Local Domination Pack", "Gói Chiếm lĩnh Top 3 Địa phương", "باقة الهيمنة على المراكز الثلاثة الأولى محلياً", "Пакет Завоевание Топ-3 на картах"))}
-                  </h3>
-
-                  <div className="mt-3 flex items-baseline gap-2">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-[#52504A]">
-                      {t(l("Tarif annuel", "Annual rate", "Giá theo năm", "سعر سنوي", "Годовой тариф"))}
-                    </span>
-                    <span className="font-serif text-4xl font-bold text-[#12110E] sm:text-5xl">
-                      {price(1490)}
-                    </span>
-                    <span className="font-mono text-xs text-[#52504A]"> / an</span>
-                    <span className="rounded-full bg-[#FAF8F5] px-2.5 py-0.5 font-mono text-[10.5px] font-bold text-[#A67C40] border border-[#A67C40]/25">
-                      {t(l("Recommandé Forte Concurrence", "Recommended High Competition", "Khuyên dùng Cạnh tranh cao", "موصى به للمنافسة الشديدة", "Рекомендовано при высокой конкуренции"))}
-                    </span>
-                  </div>
-
-                  <p className="mt-3 text-xs leading-relaxed text-[#52504A]">
-                    {t(
-                      l(
-                        "Le programme offensif pour passer devant vos concurrents directs : positionnement sur 5 à 10 mots-clés stratégiques, production photo haute définition, stratégie d'avis clients 5 étoiles et défense contre les fiches parasites.",
-                        "The offensive program to outrank your direct competitors: targeting 5 to 10 strategic keywords, high-definition photo production, 5-star review acquisition strategy and protection against duplicate/spam listings.",
-                        "Chương trình bứt phá dẫn đầu đối thủ: định vị 5-10 từ khóa chiến lược, hình ảnh chất lượng cao và bảo vệ toàn diện hồ sơ.",
-                        "البرنامج المتقدم لتصدر المنافسين: استهداف 5 إلى 10 كلمات مفتاحية استراتيجية وتصوير عالي الدقة واستراتيجية تقييمات 5 نجوم وحماية كاملة.",
-                        "Наступательная стратегия для обхода конкурентов: продвижение по 5–10 ключевым словам, качественные фото, сбор отзывов 5 звёзд и защита профиля.",
-                      ),
-                    )}
-                  </p>
-
-                  {/* Checklist */}
-                  <ul className="mt-6 space-y-2.5 border-t border-[#EBEBE6] pt-5">
-                    {[
-                      l("Optimisation agressive sur 5 à 10 mots-clés stratégiques locaux", "Aggressive targeting across 5 to 10 high-intent strategic local queries", "Tối ưu hóa 5 đến 10 từ khóa địa phương chiến lược", "استهداف متقدم لـ 5 إلى 10 كلمات مفتاحية محلية", "Продвижение по 5–10 ключевым запросам"),
-                      l("Stratégie complète de collecte et de gestion automatisée des avis", "Full strategy for automated 5-star customer review collection", "Chiến lược tự động hóa thu thập đánh giá 5 sao", "استراتيجية أتمتة جمع التقييمات الإيجابية", "Стратегия сбора отзывов 5 звёзд"),
-                      l("Publication régulière de photos professionnelles géotaggées", "Regular high-definition geotagged photo uploads", "Đăng tải ảnh định vị chất lượng cao định kỳ", "نشر دوري لصور احترافية جغرافية", "Регулярные гео-фото высокого качества"),
-                      l("Protection active anti-modifications malveillantes & spam", "Active defense against competitor spam and malicious edits", "Bảo vệ chủ động chống spam và chỉnh sửa xấu", "حماية استباقية من التعديلات العشوائية والمنافسين", "Защита от спама и правок конкурентов"),
-                      l("Rapports mensuels de performance : appels, clics et itinéraires", "Monthly performance reporting: calls, clicks and directions", "Báo cáo hiệu suất hàng tháng: cuộc gọi, chỉ đường", "تقرير شهري للأداء: مكالمات وزيارات ومسارات", "Ежемесячные отчёты по звонкам и маршрутам"),
-                    ].map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2.5 text-xs text-[#2B2925]">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#A67C40]" />
-                        <span>{t(item)}</span>
-                      </li>
-                    ))}
-                  </ul>
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#EBEBE6] pb-4">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#A67C40]/10 border border-[#A67C40]/30 px-3 py-1 font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#A67C40]">
+                    <Compass className="h-3.5 w-3.5 text-[#A67C40]" />
+                    {t(l("CONQUÊTE INITIALE DU TOP 3", "INITIAL TOP 3 CONQUEST", "GÓI KHỞI ĐỘNG CHINH PHỤC TOP 3", "غزو الصدارة الأولي", "ПЕРВИЧНЫЙ ВЫВОД В ТОП-3"))}
+                  </span>
+                  <span className="font-mono text-[11px] font-semibold text-[#52504A]">
+                    {t(l("Pack Fondateur Complet · 100% Actionnable", "Complete Foundation Pack · 100% Actionable", "Trọn gói Khởi động · Thực chiến", "باقة التأسيس الكاملة", "Полный стартовый пакет"))}
+                  </span>
                 </div>
 
-                <div className="mt-8 space-y-2.5">
-                  <AddToCartBtn
-                    item={{
-                      serviceId: "maps",
-                      serviceName: "Google Maps",
-                      planName: t(l("Pack Conquête & Domination Top 3", "Top 3 Conquest & Local Domination Pack", "Gói Chiếm lĩnh Top 3 Địa phương", "باقة الهيمنة على المراكز الثلاثة الأولى", "Пакет Завоевание Топ-3")),
-                      priceEur: 1490,
-                      period: "year",
-                      periodLabel: t(l(" / an", " / year", " / năm", " / سنة", " / год")),
-                    }}
-                    popular={true}
-                  />
+                <h3 className="mt-4 font-serif text-2xl font-medium text-[#12110E] sm:text-3xl">
+                  {t(l("Stratégie & Conquête Initiale ", "Strategy & Initial Conquest ", "Chiến lược & Chinh phục ", "استراتيجية واقتحام ", "Стратегия и вывод в "))}
+                  <GoogleWord />
+                  {t(l(" Maps Top 3", " Maps Top 3", " Maps Top 3", " Maps أفضل 3", " Maps топ-3"))}
+                </h3>
+
+                <div className="mt-3 flex flex-wrap items-baseline gap-2">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-[#52504A]">
+                    {t(l("Tarif unique initial", "One-time initial fee", "Phí khởi động một lần", "تكلفة لمرة واحدة", "Разовый платёж"))}
+                  </span>
+                  <span className="font-serif text-4xl font-bold text-[#12110E] sm:text-5xl">
+                    {price(999)}
+                  </span>
+                  <span className="rounded-full bg-[#FAF7F2] px-3 py-0.5 font-mono text-xs font-bold text-[#A67C40] border border-[#A67C40]/30">
+                    {t(l("Audit & Restructuration Complète", "Full Audit & Restructuring", "Kiểm toán & Tái cấu trúc Toàn diện", "تدقيق شامل وإعادة هيكلة", "Полный аудит и перезапуск"))}
+                  </span>
+                </div>
+
+                <p className="mt-3 text-xs leading-relaxed text-[#52504A]">
+                  {t(
+                    l(
+                      "Le travail de fond chirurgical pour propulser votre fiche parmi les 3 premières positions locales. Nous auditons vos 3 concurrents leaders, restructurons intégralement votre fiche, injectons les données EXIF GPS dans vos photos et synchronisons votre autorité sur l'ensemble du web.",
+                      "The comprehensive foundation required to catapult your profile into the local Top 3. We audit your top 3 competitors, restructure your entire profile, embed EXIF GPS data into all imagery, and harmonize your NAP citations across the web.",
+                      "Quy trình toàn diện đưa hồ sơ của bạn vào Top 3 địa phương: phân tích 3 đối thủ dẫn đầu, tối ưu hồ sơ, nhúng dữ liệu EXIF GPS và đồng bộ danh bạ toàn mạng.",
+                      "العمل الجراحي الشامل لإيصال ملفك إلى المراكز الثلاثة الأولى: تدقيق المنافسين المتصدرين، إعادة هيكلة الملف بالكامل، وحقن إحداثيات GPS بالصور ومزامنة بياناتك عبر الويب.",
+                      "Фундаментальная подготовка для вывода профиля в топ-3: аудит конкурентов, полная оптимизация карточки, вшивание GPS-тегов в фото и синхронизация по всему интернету.",
+                    ),
+                  )}
+                </p>
+
+                {/* Deliverables Checklist */}
+                <ul className="mt-6 space-y-2.5 border-t border-[#EBEBE6] pt-5">
+                  {[
+                    l("Audit technique & décryptage algorithmique des 3 leaders de votre zone", "Technical audit & algorithmic reverse-engineering of your area's Top 3 leaders", "Kiểm toán kỹ thuật & giải mã thuật toán 3 đối thủ dẫn đầu", "تدقيق فني وتحليل خوارزمي للمنافسين الثلاثة الأقوى في منطقتك", "Аудит и расшифровка алгоритмов 3 лидеров вашего района"),
+                    l("Restructuration intégrale de la fiche Google Business Profile (catégories, attributs, horaires)", "Complete Google Business Profile revamp (primary/secondary categories, attributes, hours)", "Tái cấu trúc toàn diện hồ sơ Google Business Profile", "إعادة هيكلة شاملة للملف (الفئات الرئيسية والفرعية، الخصائص، المواعيد)", "Полная оптимизация профиля Google Business (категории, атрибуты, часы)"),
+                    l("Géoréférencement & balisage EXIF GPS de vos photos professionnelles", "Geotagging & precise GPS EXIF metadata tagging of your HD photos", "Gắn tọa độ địa lý & dữ liệu EXIF GPS cho toàn bộ ảnh chuyên nghiệp", "ترميز جغرافي وحقن إحداثيات GPS في بيانات الصور الرقمية", "Геопривязка и EXIF-разметка фотографий с точными координатами"),
+                    l("Harmonisation des citations NAP (Nom, Adresse, Téléphone) sur 25+ annuaires d'autorité", "Strict NAP citation synchronization across 25+ high-authority directories", "Đồng bộ thông tin NAP trên hơn 25 danh bạ uy tín", "توحيد بيانات الاسم والعنوان ورقم الهاتف عبر أكثر من 25 دليلاً موثوقاً", "Синхронизация данных NAP (имя, адрес, телефон) в 25+ авторитетных каталогах"),
+                    l("Nettoyage des doublons parasites qui siphonnent votre autorité algorithmique", "Deletion of ghost duplicate citations that dilute your ranking weight", "Xóa bỏ các hồ sơ trùng lặp gây phân tán uy tín", "حذف وإلغاء الملفات المكررة والوهمية التي تضعف ترتيبك", "Удаление старых дублей, размывающих авторитет карточки"),
+                    l("Rapport stratégique personnalisé remis avec plan de déploiement", "Personalized strategic audit report delivered with immediate action steps", "Báo cáo chiến lược cá nhân hóa kèm kế hoạch triển khai", "تقرير استراتيجي مخصص مع خطة عمل مباشرة", "Индивидуальный стратегический отчёт с планом внедрения"),
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2.5 text-xs text-[#2B2925]">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#16A34A]" />
+                      <span>{t(item)}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-8 flex flex-col sm:flex-row items-center gap-3">
                   <a
                     href={`${WA_BASE}${encodeURIComponent(
-                      t(
-                        l(
-                          "Bonjour XRAGENCY, je souhaite souscrire au Pack Conquête & Domination Google Maps Top 3 à 1 490 € / an.",
-                          "Hello XRAGENCY, I would like to subscribe to the Top 3 Conquest Google Maps pack at €1,490/year.",
-                          "Xin chào XRAGENCY, tôi muốn đăng ký gói Chiếm lĩnh Google Maps Top 3 (1.490 €/năm).",
-                          "مرحبًا XRAGENCY، أود الاشتراك في باقة الهيمنة على المراكز الثلاثة الأولى في خرائط Google بـ 1,490 € / سنة.",
-                          "Здравствуйте, XRAGENCY! Хочу подключить пакет Завоевание Топ-3 Google Maps за 1 490 €/год.",
-                        ),
-                      ),
+                      "Bonjour XRAGENCY, je souhaite lancer mon audit & restructuration initiale Google Maps Top 3 à 999 €.",
                     )}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex w-full items-center justify-center gap-2 rounded-full border border-[#D5D5CF] bg-white py-3 text-xs font-semibold text-[#12110E] transition hover:border-[#12110E] hover:bg-[#F5F5F0]"
+                    className="inline-flex w-full sm:flex-1 items-center justify-center gap-2 rounded-full bg-[#12110E] py-3.5 text-xs font-semibold text-white transition hover:bg-[#2B2925] hover:scale-[1.01]"
                   >
-                    <MessageCircle className="h-4 w-4 text-[#A67C40]" />
-                    <span>{t(l("Échanger sur WhatsApp", "Chat on WhatsApp", "Trao đổi WhatsApp", "تواصل عبر واتساب", "Написать в WhatsApp"))}</span>
+                    <Sparkles className="h-4 w-4 text-[#A67C40]" />
+                    <span>{t(l("Lancer ma conquête Top 3 (999 €)", "Launch my Top 3 conquest (€999)", "Khởi động chiếm lĩnh Top 3 (999 €)", "ابدأ غزو الصدارة (999 €)", "Запустить вывод в топ-3 (999 €)"))}</span>
+                    <ArrowRight className="h-4 w-4" />
                   </a>
+
+                  <a
+                    href="#formules-mensuelles"
+                    className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-[#D5D5CF] bg-[#FAF9F5] px-6 py-3.5 text-xs font-semibold text-[#12110E] transition hover:border-[#12110E] hover:bg-white"
+                  >
+                    <span>{t(l("Voir les formules mensuelles", "View monthly plans", "Xem các gói hằng tháng", "عرض الباقات الشهرية", "Ежемесячные тарифы"))}</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* ════════════════════════════════════════════════════════════════
+                2. LES 2 FORMULES MENSUELLES (99 € / MOIS ET 179 € / MOIS)
+               ════════════════════════════════════════════════════════════════ */}
+            <div id="formules-mensuelles" className="mt-20 scroll-mt-24">
+              <div className="text-center max-w-2xl mx-auto mb-10">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-[#A67C40]/30 bg-[#A67C40]/10 px-3.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#A67C40]">
+                  <Sparkles className="h-3 w-3 text-[#A67C40]" />
+                  {t(l("PHASE 02 · GESTION & PRÉSERVATION DU TOP 3", "PHASE 02 · TOP 3 MONTHLY MANAGEMENT & GROWTH", "GIAI ĐOẠN 02 · QUẢN LÝ & BẢO TOÀN TOP 3 HẰNG THÁNG", "المرحلة 02 · إدارة وتطوير الصدارة الشهرية", "ЭТАП 02 · ЕЖЕМЕСЯЧНОЕ ВЕДЕНИЕ И РОСТ В ТОП-3"))}
+                </span>
+                <h2 className="mt-3 font-serif text-3xl font-medium tracking-tight text-[#12110E] sm:text-4xl">
+                  {t(l("Deux formules mensuelles pour verrouiller votre Top 3.", "Two monthly formulas to lock in your Top 3 position.", "Hai gói quản lý hằng tháng bảo toàn vị thế Top 3.", "باقتان شهريتان لضمان بقائك الدائم في الصدارة.", "Два ежемесячных тарифа для удержания лидерства."))}
+                </h2>
+                <p className="mt-2 text-xs text-[#52504A] sm:text-sm">
+                  {t(l("Après la conquête initiale, Google exige une activité et une collecte d'avis continues. Choisissez la formule adaptée à votre ambition :", "Following initial conquest, Google requires regular activity and review velocity. Choose the plan matching your growth goals:", "Sau khi vào Top 3, Google đòi hỏi tương tác và đánh giá mới đều đặn. Hãy chọn gói phù hợp:", "بعد الصعود، تتطلب خوارزمية جوجل نشاطاً وتدفق تقييمات مستمراً. اختر الباقة الملائمة لطموحك:", "После выхода в топ Google требует регулярной активности и новых отзывов. Выберите подходящий формат:"))}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 max-w-5xl mx-auto">
+                {/* FORMULE 1 : ESSENTIELLE (99 € / MOIS) */}
+                <div className="relative flex flex-col justify-between rounded-3xl border border-[#E5E5E0] bg-[#FAF9F5] p-7 shadow-sm transition hover:border-[#12110E] hover:shadow-md sm:p-8">
+                  <div>
+                    <div className="flex items-center justify-between border-b border-[#EBEBE6] pb-4">
+                      <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#52504A]">
+                        {t(l("FORMULE 01 · ESSENTIELLE", "PLAN 01 · ESSENTIAL", "GÓI 01 · CƠ BẢN", "الباقة 01 · الأساسية", "ТАРИФ 01 · БАЗОВЫЙ"))}
+                      </span>
+                      <span className="rounded-full bg-white px-2.5 py-0.5 font-mono text-[10px] font-bold text-[#52504A] border border-[#E5E5E0]">
+                        {t(l("Préservation & Sécurité", "Security & Upkeep", "Duy trì & Bảo vệ", "حماية واستقرار", "Поддержание позиций"))}
+                      </span>
+                    </div>
+
+                    <h3 className="mt-4 font-serif text-2xl font-medium text-[#12110E]">
+                      {t(l("Gestion & Préservation", "Maintenance & Protection", "Quản lý & Duy trì", "إدارة وحماية الملف", "Ведение и защита"))}
+                    </h3>
+
+                    <div className="mt-3 flex items-baseline gap-1">
+                      <span className="font-serif text-4xl font-bold text-[#12110E]">
+                        {price(99)}
+                      </span>
+                      <span className="font-mono text-xs text-[#52504A]">{perMonth}</span>
+                      <span className="ml-2 font-mono text-[10px] text-[#777]">({t(l("sans engagement", "no commitment", "không ràng buộc", "بدون التزام", "без обязательств"))})</span>
+                    </div>
+
+                    <p className="mt-3 text-xs leading-relaxed text-[#52504A]">
+                      {t(
+                        l(
+                          "Idéal pour sécuriser vos acquis, répondre promptement à chaque avis client et protéger votre établissement contre les modifications frauduleuses.",
+                          "Ideal to safeguard your rankings, reply swiftly to reviews, and shield your profile against malicious competitor edits.",
+                          "Lý tưởng để bảo vệ thứ hạng đã đạt được, phản hồi nhanh mọi đánh giá và ngăn chặn chỉnh sửa xấu.",
+                          "مثالية لحماية صدارتك، والرد السريع على التقييمات، والتصدي للتعديلات العشوائية والمنافسين.",
+                          "Идеально для закрепления позиций, быстрых ответов на отзывы и защиты от правок конкурентов.",
+                        ),
+                      )}
+                    </p>
+
+                    <ul className="mt-6 space-y-2.5 border-t border-[#EBEBE6] pt-5">
+                      {[
+                        l("Modération & réponses professionnelles soignées aux avis sous 24h", "Professional strategic replies to all customer reviews within 24 hours", "Phản hồi chuyên nghiệp tất cả đánh giá của khách trong 24h", "ردود احترافية وذكية على جميع تقييمات العملاء خلال 24 ساعة", "Экспертные ответы на каждый отзыв в течение 24 часов"),
+                        l("Mises à jour hebdomadaires des horaires, jours fériés, congés & infos", "Weekly updates of opening hours, holidays and business information", "Cập nhật hàng tuần giờ mở cửa, ngày lễ và thông tin cơ sở", "تحديث أسبوعي لساعات العمل والإجازات ومعلومات النشاط", "Еженедельное обновление часов работы, праздников и данных"),
+                        l("Ajout mensuel de photos professionnelles géotaggées (EXIF GPS)", "Monthly upload of geotagged HD photos with embedded GPS coordinates", "Đăng tải ảnh chất lượng cao gắn thẻ định vị GPS định kỳ", "إضافة شهرية لصور عالية الدقة معززة بإحداثيات GPS", "Ежемесячная загрузка гео-фотографий с координатами"),
+                        l("Veille active anti-spam & défense contre les modifications concurrentes", "Active anti-spam defense & monitoring against competitor tampering", "Bảo vệ chủ động chống spam và chỉnh sửa phá hoại", "مراقبة استباقية ضد التعديلات التخريبية والبلاغات الكاذبة", "Защита от спама и несанкционированных правок конкурентов"),
+                        l("Rapport mensuel clair : appels téléphoniques reçus et itinéraires GPS", "Clear monthly analytics report: incoming calls and GPS direction clicks", "Báo cáo minh bạch hàng tháng: số cuộc gọi và yêu cầu chỉ đường", "تقرير شهري شفاف يوضح عدد الاتصالات وطلبات الاتجاهات المحققة", "Ежемесячный отчёт: количество звонков и построенных маршрутов"),
+                      ].map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-xs text-[#2B2925]">
+                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#16A34A]" />
+                          <span>{t(item)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-8">
+                    <a
+                      href={`${WA_BASE}${encodeURIComponent(
+                        "Bonjour XRAGENCY, je souhaite souscrire à la formule Essentielle Google Maps à 99 € / mois.",
+                      )}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex w-full items-center justify-center gap-2 rounded-full border border-[#D5D5CF] bg-white py-3 text-xs font-semibold text-[#12110E] transition hover:border-[#12110E] hover:bg-[#F5F5F0]"
+                    >
+                      <MessageCircle className="h-4 w-4 text-[#A67C40]" />
+                      <span>{t(l("Choisir la Formule Essentielle (99 € / mois)", "Select Essential Plan (€99/mo)", "Chọn Gói Cơ Bản (99 €/tháng)", "اختيار الباقة الأساسية (99 € / شهر)", "Выбрать базовый (99 €/мес)"))}</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* FORMULE 2 : DOMINATION OFFENSIVE (179 € / MOIS) */}
+                <div className="relative flex flex-col justify-between rounded-3xl border-2 border-[#12110E] bg-white p-7 shadow-xl transition hover:shadow-2xl sm:p-8">
+                  {/* Popular pill */}
+                  <div className="absolute -top-3 right-6 rounded-full bg-[#12110E] px-3.5 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-[#A67C40] shadow-sm">
+                    ★ RECOMMANDÉ CROISSANCE ACTIVE
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between border-b border-[#EBEBE6] pb-4">
+                      <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#A67C40]">
+                        {t(l("FORMULE 02 · DOMINATION OFFENSIVE", "PLAN 02 · OFFENSIVE DOMINATION", "GÓI 02 · CHIẾM LĨNH TẤN CÔNG", "الباقة 02 · الهيمنة الهجومية", "ТАРИФ 02 · АКТИВНЫЙ РОСТ"))}
+                      </span>
+                      <span className="rounded-full bg-[#FAF7F2] px-2.5 py-0.5 font-mono text-[10px] font-bold text-[#A67C40] border border-[#A67C40]/30">
+                        {t(l("Accélération & Avis 5★", "Acceleration & 5-Star Reviews", "Bứt phá & Đánh giá 5★", "نمو سريع وتقييمات 5 نجوم", "Максимальный приток клиентов"))}
+                      </span>
+                    </div>
+
+                    <h3 className="mt-4 font-serif text-2xl font-medium text-[#12110E]">
+                      {t(l("Domination Offensive & Avis 5★", "Offensive Domination & 5★ Reviews", "Chiếm lĩnh Toàn diện & Avis 5★", "الهيمنة وتدفق تقييمات 5 نجوم", "Лидерство и сбор отзывов 5★"))}
+                    </h3>
+
+                    <div className="mt-3 flex items-baseline gap-1">
+                      <span className="font-serif text-4xl font-bold text-[#12110E]">
+                        {price(179)}
+                      </span>
+                      <span className="font-mono text-xs text-[#52504A]">{perMonth}</span>
+                      <span className="ml-2 font-mono text-[10px] text-[#777]">({t(l("sans engagement", "no commitment", "không ràng buộc", "بدون التزام", "без обязательств"))})</span>
+                    </div>
+
+                    <p className="mt-3 text-xs leading-relaxed text-[#52504A]">
+                      {t(
+                        l(
+                          "Le dispositif complet pour distancer définitivement la concurrence locale, multiplier vos avis 5 étoiles physiques et capter la majorité des appels de votre agglomération.",
+                          "The complete engine to decisively outpace local competitors, accelerate genuine 5-star reviews on-site, and dominate high-intent inbound calls in your city.",
+                          "Giải pháp toàn diện vượt xa đối thủ: thu hút đánh giá 5 sao tại chỗ với thẻ NFC và thâu tóm tối đa khách hàng tại khu vực.",
+                          "المنظومة الكاملة لتجاوز المنافسين نهائياً، ومضاعفة تقييمات 5 نجوم عبر بطاقات NFC الذكية والاستحواذ على أكبر حصة من الاتصالات.",
+                          "Комплексный двигатель для полного отрыва от конкурентов: сбор 5★ отзывов через NFC-стойку и захват максимума звонков в городе.",
+                        ),
+                      )}
+                    </p>
+
+                    <ul className="mt-6 space-y-2.5 border-t border-[#EBEBE6] pt-5">
+                      {[
+                        l("Tout ce qui est inclus dans la Formule Essentielle (99 € / mois)", "Everything included in the Essential Plan (€99/mo)", "Toàn bộ quyền lợi của Gói Cơ bản (99 €/tháng)", "كل ما تتضمنه الباقة الأساسية (99 € / شهر)", "Всё, что входит в базовый тариф (99 €/мес)"),
+                        l("Dispositif Présentoir de comptoir physique NFC sans contact + QR Code inclus", "Free Shipped Contactless NFC acrylic counter display + instant QR code", "Tặng kèm biển đặt quầy thông minh gắn chip NFC & mã QR đánh giá nhanh", "لوحة مكتبية فاخرة بشريحة NFC ورمز QR مباشر لجمع التقييمات", "Физическая NFC-стойка на ресепшн + прямой QR-код для отзывов"),
+                        l("2 à 4 Google Posts promotionnels rédigés par mois avec visuels optimisés", "2 to 4 strategic promotional Google Posts authored monthly with custom visuals", "2-4 bài đăng Google Posts hằng tháng với hình ảnh được tối ưu", "كتابة ونشر من 2 إلى 4 منشورات ترويجية شهرياً بتصاميم احترافية", "Публикация 2–4 продающих постов Google Posts с баннерами"),
+                        l("Optimisation sémantique continue des attributs et catégories secondaires", "Ongoing keyword and semantic category expansion to capture long-tail queries", "Tối ưu hóa từ khóa và danh mục phụ liên tục mở rộng lượng tiếp cận", "تحسين مستمر للكلمات المفتاحية والفئات الفرعية لاقتناص كل عمليات البحث", "Постоянное расширение семантики и дополнительных категорий"),
+                        l("Veille concurrentielle mensuelle & interception des requêtes longue traîne", "Monthly competitor benchmarking & aggressive local keyword targeting", "Theo dõi đối thủ cạnh tranh và đón đầu các từ khóa tìm kiếm mới", "متابعة شهرية للمنافسين واقتناص الكلمات البحثية ذات العائد المرتفع", "Мониторинг конкурентов и перехват горячих поисковых запросов"),
+                        l("Tableau de bord de rentabilité ROI (CA estimé généré par les appels)", "Real-time ROI dashboard tracking estimated local revenue generated by calls", "Bảng theo dõi ROI đo lường doanh thu tạo ra từ cuộc gọi", "لوحة تحكم لقياس العائد المالي والإيرادات المحققة من المكالمات", "Дашборд окупаемости ROI с оценкой выручки от входящих звонков"),
+                        l("Ligne directe avec un stratège SEO local dédié chez XRAGENCY", "Direct line to your dedicated XRAGENCY local SEO strategist", "Kênh liên lạc trực tiếp với chuyên gia chiến lược SEO địa phương", "خط اتصال مباشر مع خبير استراتيجي مخصص لمتابعة نشاطك", "Прямая связь с персональным SEO-стратегом XRAGENCY"),
+                      ].map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-xs text-[#2B2925]">
+                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#A67C40]" />
+                          <span>{t(item)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-8">
+                    <a
+                      href={`${WA_BASE}${encodeURIComponent(
+                        "Bonjour XRAGENCY, je souhaite souscrire à la formule Domination Offensive Google Maps Top 3 à 179 € / mois.",
+                      )}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex w-full items-center justify-center gap-2 rounded-full border border-[#12110E] bg-[#12110E] py-3.5 text-xs font-semibold text-white transition hover:bg-[#2B2925] hover:scale-[1.01]"
+                    >
+                      <Sparkles className="h-4 w-4 text-[#A67C40]" />
+                      <span>{t(l("Choisir la Domination Offensive (179 € / mois)", "Select Offensive Domination (€179/mo)", "Chọn Gói Tấn Công (179 €/tháng)", "اختيار باقة الهيمنة الهجومية (179 € / شهر)", "Выбрать активный рост (179 €/мес)"))}</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ════════════════════════════════════════════════════════════════════
-            2. SIMULATEUR DE DEVIS & TUNNEL LUDIQUE : CRITÈRES RÉELS
-           ════════════════════════════════════════════════════════════════════ */}
         <section id="simulateur-devis" className="border-b border-[#E8E6E0] bg-[#FAF9F5] py-16 sm:py-24">
           <div className="mx-auto max-w-[1360px] px-4 sm:px-8">
             <div className="text-center">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#1A73E8]/25 bg-[#1A73E8]/8 px-3.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#1A73E8]">
-                <Sparkles className="h-3 w-3 text-[#1A73E8]" />
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#A67C40]/30 bg-[#A67C40]/10 px-3.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#A67C40]">
+                <Sparkles className="h-3 w-3 text-[#A67C40]" />
                 {t(l("TUNNEL DE DIAGNOSTIC & ESTIMATION EN DIRECT", "LIVE DIAGNOSTIC & ESTIMATION TUNNEL", "CÔNG CỤ ĐỊNH GIÁ & DỰ BÁO TRỰC TIẾP", "محاكاة وتقدير التكلفة والنتائج في الوقت الفعلي", "КАЛЬКУЛЯТОР СТОИМОСТИ И РЕЗУЛЬТАТОВ"))}
               </span>
               <h2 className="mt-3 font-serif text-3xl font-medium tracking-tight text-[#12110E] sm:text-5xl">
                 {t(l("Estimez votre investissement pour conquérir & préserver le Top 3.", "Estimate your investment to conquer & secure the Top 3.", "Dự toán đầu tư để chinh phục & bảo toàn Top 3.", "قدّر استثمارك لتصدر أفضل 3 نتائج وضمان بقائك فيها.", "Рассчитайте бюджет для выхода и закрепления в топ-3."))}
               </h2>
               <p className="mx-auto mt-3 max-w-2xl text-xs text-[#52504A] sm:text-sm">
-                {t(l("Le tarif annuel dépend directement de vos mots-clés, de votre rang actuel et de la concurrence de votre ville. Ajustez les critères ci-dessous :", "Annual investment depends on your target keywords, current ranking and local competition. Adjust your criteria below:", "Chi phí hằng năm phụ thuộc số lượng từ khóa, thứ hạng hiện tại và quy mô thị trường địa phương:", "تعتمد التكلفة السنوية بدقة على الكلمات المفتاحية وموقعك الحالي وحجم المدينة والمنافسة:", "Годовой бюджет зависит от ключевых слов, текущего положения и размера города. Выберите параметры ниже:"))}
+                {t(l("Les flux d'appels qualifiés et la rentabilité dépendent de vos mots-clés, de votre position actuelle et de la concurrence locale. Ajustez les critères ci-dessous :", "Qualified inbound calls and monthly ROI depend on your keywords, current ranking and local competition. Adjust your criteria below:", "Chi phí hằng năm phụ thuộc số lượng từ khóa, thứ hạng hiện tại và quy mô thị trường địa phương:", "تعتمد التكلفة السنوية بدقة على الكلمات المفتاحية وموقعك الحالي وحجم المدينة والمنافسة:", "Годовой бюджет зависит от ключевых слов, текущего положения и размера города. Выберите параметры ниже:"))}
               </p>
             </div>
 
@@ -2006,7 +2182,7 @@ export function MapsDominationStudioPage() {
             <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
               {/* CRITÈRE 1 : MÉTIER / SECTEUR */}
               <div className="rounded-2xl border border-[#E5E5E0] bg-white p-5 shadow-sm">
-                <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#1A73E8]">
+                <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#A67C40]">
                   {t(l("1. Métier / Activité", "1. Sector / Business", "1. Lĩnh vực hoạt động", "1. مجال النشاط", "1. Отрасль"))}
                 </span>
                 <div className="mt-3 space-y-1.5">
@@ -2030,7 +2206,7 @@ export function MapsDominationStudioPage() {
 
               {/* CRITÈRE 2 : POSITION ACTUELLE */}
               <div className="rounded-2xl border border-[#E5E5E0] bg-white p-5 shadow-sm">
-                <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#1A73E8]">
+                <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#A67C40]">
                   {t(l("2. Position actuelle sur Maps", "2. Current Rank on Maps", "2. Vị trí hiện tại", "2. الترتيب الحالي على الخرائط", "2. Текущая позиция"))}
                 </span>
                 <div className="mt-3 space-y-2">
@@ -2060,10 +2236,10 @@ export function MapsDominationStudioPage() {
               <div className="rounded-2xl border border-[#E5E5E0] bg-white p-5 shadow-sm flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#1A73E8]">
+                    <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#A67C40]">
                       {t(l("3. Vos Mots-clés Stratégiques", "3. Your Target Keywords", "3. Từ khóa chiến lược của bạn", "3. كلماتك المفتاحية المستهدفة", "3. Ваши ключевые слова"))}
                     </span>
-                    <span className="rounded-full bg-[#1A73E8]/10 px-2 py-0.5 font-mono text-[10px] font-bold text-[#1A73E8]">
+                    <span className="rounded-full bg-[#A67C40]/10 border border-[#A67C40]/30 px-2 py-0.5 font-mono text-[10px] font-bold text-[#A67C40]">
                       {userKeywords.length} actif{userKeywords.length > 1 ? "s" : ""}
                     </span>
                   </div>
@@ -2085,7 +2261,7 @@ export function MapsDominationStudioPage() {
                           handleAddKeyword();
                         }
                       }}
-                      className="w-full rounded-xl border border-[#D5D5CF] bg-[#FAF9F5] px-3 py-1.5 text-xs text-[#12110E] placeholder:text-[#999] focus:border-[#1A73E8] focus:bg-white focus:outline-none"
+                      className="w-full rounded-xl border border-[#D5D5CF] bg-[#FAF9F5] px-3 py-1.5 text-xs text-[#12110E] placeholder:text-[#999] focus:border-[#12110E] focus:bg-white focus:outline-none"
                     />
                     <button
                       type="button"
@@ -2101,7 +2277,7 @@ export function MapsDominationStudioPage() {
                     {userKeywords.map((kw) => (
                       <span
                         key={kw}
-                        className="inline-flex items-center gap-1 rounded-lg bg-[#1A73E8]/10 px-2 py-1 font-mono text-[11px] font-semibold text-[#1A73E8]"
+                        className="inline-flex items-center gap-1 rounded-lg bg-[#FAF7F2] border border-[#A67C40]/30 px-2 py-1 font-mono text-[11px] font-semibold text-[#12110E]"
                       >
                         <span>{kw}</span>
                         <button
@@ -2132,7 +2308,7 @@ export function MapsDominationStudioPage() {
                           onClick={() => handleToggleSuggested(sug)}
                           className={`rounded-md px-2 py-0.5 text-[10px] transition font-medium ${
                             isSelected
-                              ? "bg-[#1A73E8] text-white"
+                              ? "bg-[#12110E] text-white"
                               : "bg-[#F0EFEA] text-[#52504A] hover:bg-[#E5E4DE] hover:text-[#12110E]"
                           }`}
                         >
@@ -2147,7 +2323,7 @@ export function MapsDominationStudioPage() {
 
               {/* CRITÈRE 4 : VILLE & INTENSITÉ DE CONCURRENCE */}
               <div className="rounded-2xl border border-[#E5E5E0] bg-white p-5 shadow-sm">
-                <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#1A73E8]">
+                <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#A67C40]">
                   {t(l("4. Ville & Concurrence", "4. City & Competition", "4. Quy mô thành phố", "4. حجم المدينة والمنافسة", "4. Размер города"))}
                 </span>
                 <div className="mt-3 space-y-2">
@@ -2209,45 +2385,110 @@ export function MapsDominationStudioPage() {
                 CALCULATED RESULT CARD & SMARTPHONE SIMULATION PREVIEW
                ════════════════════════════════════════════════════════════════ */}
             <div className="mt-8 overflow-hidden rounded-3xl border border-[#E5E5E0] bg-white p-6 shadow-xl sm:p-10">
-              {/* Header result summary */}
-              <div className="flex flex-col gap-6 border-b border-[#EBEBE6] pb-8 lg:flex-row lg:items-center lg:justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="rounded-full bg-[#1A73E8]/10 px-3 py-1 font-mono text-[10.5px] font-bold text-[#1A73E8]">
-                      ★ {t(l("PROJECTION SUR-MESURE ESTIMÉE", "ESTIMATED BESPOKE PROJECTION", "DỰ TOÁN CHI PHÍ & VỊ THẾ", "التقدير المخصص لمشروعك", "ИНДИВИДУАЛЬНЫЙ РАСЧЁТ"))}
-                    </span>
-                    <span className="font-mono text-xs text-[#52504A]">
-                      {displayCity} · {selectedKeywordsLabel}
-                    </span>
+              {/* Header result summary — PROJECTION DE RENTABILITÉ & BUSINESS ESTIMÉ */}
+              <div className="flex flex-col gap-6 border-b border-[#EBEBE6] pb-8">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="rounded-full bg-[#A67C40]/10 border border-[#A67C40]/30 px-3 py-1 font-mono text-[10.5px] font-bold text-[#A67C40]">
+                        ★ {t(l("PROJECTION DE RENTABILITÉ & GAINS BUSINESS", "ESTIMATED ROI & BUSINESS REVENUE PROJECTION", "DỰ TOÁN DOANH THU & HIỆU QUẢ ĐẦU TƯ", "تقدير العائد المالي والأرباح لمشروعك", "ПРОГНОЗ ДОХОДА И ОКУПАЕМОСТИ"))}
+                      </span>
+                      <span className="font-mono text-xs text-[#52504A]">
+                        {displayCity} · {selectedKeywordsLabel}
+                      </span>
+                    </div>
+
+                    <div className="mt-3 flex flex-wrap items-baseline gap-2">
+                      <span className="text-xs font-mono uppercase tracking-wider text-[#52504A]">
+                        {t(l("Investissement conseillé :", "Recommended investment:", "Khoản đầu tư đề xuất:", "الاستثمار المقترح:", "Рекомендуемый бюджет:"))}
+                      </span>
+                      <span className="font-serif text-2xl font-bold text-[#12110E] sm:text-3xl">999 €</span>
+                      <span className="text-xs text-[#52504A] font-mono">
+                        ({t(l("Audit & Conquête Initiale", "Audit & Initial Conquest", "Kiểm toán & Chinh phục Ban đầu", "التدقيق والصعود الأولي", "Аудит и первичный запуск"))})
+                      </span>
+                      <span className="text-xs font-mono text-[#A67C40] font-bold">+</span>
+                      <span className="text-xs text-[#52504A] font-mono">dès</span>
+                      <span className="font-serif text-2xl font-bold text-[#A67C40] sm:text-3xl">99 €</span>
+                      <span className="text-xs text-[#52504A] font-mono">{perMonth}</span>
+                    </div>
+
+                    <p className="mt-1 text-xs text-[#52504A]">
+                      {t(l("Calculé en temps réel selon la concurrence de votre secteur et le volume de recherche local :", "Calculated in real-time based on your local market competition and search intent:", "Tính toán theo dữ liệu thực tế về cạnh tranh khu vực và lượng tìm kiếm:", "محسوب بالوقت الفعلي حسب حدة المنافسة في منطقتك وحجم البحث:", "Рассчитано в реальном времени с учётом конкуренции в вашем городе:"))}
+                    </p>
                   </div>
 
-                  <h3 className="mt-3 font-serif text-2xl font-medium sm:text-4xl text-[#12110E]">
-                    {t(l("Budget Annuel Stratégie Top 3 : dès", "Annual Top 3 Strategy Budget: from", "Dự toán hằng năm Chiến lược Top 3: từ", "الميزانية السنوية للتصدر: ابتداءً من", "Годовой бюджет вывода в топ-3: от"))}{" "}
-                    <span className="text-[#1A73E8] font-bold">{price(calculatedEstimate)}</span>
-                    <span className="text-base font-normal text-[#52504A]"> / an</span>
-                  </h3>
+                  <div className="flex flex-col gap-2 shrink-0">
+                    <a
+                      href={`${WA_BASE}${encodeURIComponent(
+                        `Bonjour XRAGENCY, suite à ma simulation Google Maps pour mon établissement (${t(currentSector.label)}) à ${displayCity}, je souhaite lancer la conquête du Top 3 (Audit initial 999 € + formule mensuelle) pour générer +${estCallsMin} à +${estCallsMax} appels/mois.`,
+                      )}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center justify-center gap-2 rounded-full bg-[#12110E] px-6 py-3.5 text-xs font-semibold text-white shadow-md transition hover:bg-[#2B2925] hover:scale-[1.01]"
+                    >
+                      <MessageCircle className="h-4 w-4 text-[#A67C40]" />
+                      <span>{t(l("Lancer mon audit pour", "Launch my audit for", "Khởi động kiểm toán cho", "ابدأ تدقيقي لـ", "Запустить аудит для"))} {displayCity}</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </a>
 
-                  <p className="mt-2 text-xs text-[#52504A] sm:text-sm">
-                    {t(l("Devis personnalisé affiné après diagnostic de zone. Stratégie clé en main pour propulser votre fiche dans le Top 3 local.", "Personalized quote refined after area diagnosis. Turnkey strategy to propel your business into the local Top 3.", "Báo giá chính xác sau kiểm toán khu vực. Chiến lược trọn gói đưa hồ sơ vào Top 3 địa phương.", "عرض سعر نهائي بعد تدقيق المنطقة. استراتيجية شاملة لإيصال ملفك إلى المراكز الثلاثة الأولى.", "Точный расчёт после аудита. Стратегия под ключ для вывода карточки в топ-3 на картах."))}
-                  </p>
+                    <div className="flex items-center justify-center gap-2 text-[11px] font-mono text-[#52504A]">
+                      <ShieldCheck className="h-3.5 w-3.5 text-[#16A34A]" />
+                      <span>{t(l("Sans engagement de durée · Audit 100% actionnable", "No commitment · 100% actionable audit", "Không ràng buộc kỳ hạn · Kiểm toán thực chiến", "بدون أي التزام زمني · تدقيق عملي 100%", "Без долгосрочных обязательств · Практический аудит"))}</span>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="flex flex-col gap-2.5 sm:flex-row lg:flex-col shrink-0">
-                  <a
-                    href={`${WA_BASE}${encodeURIComponent(
-                      `Bonjour XR Agency, je souhaite lancer mon audit Google Maps pour mon établissement (${t(currentSector.label)}) à ${displayCity} avec les critères : ${selectedKeywordsLabel}, position actuelle : ${selectedRankLabel}, estimation : dès ${calculatedEstimate} €/an.`,
-                    )}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#12110E] px-6 py-3.5 text-xs font-semibold text-white shadow-md transition hover:bg-[#2B2925] hover:scale-[1.01]"
-                  >
-                    <span>{t(l("Réserver mon audit pour", "Book my audit for", "Đặt lịch kiểm toán cho", "احجز التدقيق لـ", "Забронировать аудит для"))} {displayCity}</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </a>
+                {/* 3 Interactive Business Yield Cards */}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 pt-2">
+                  <div className="rounded-2xl border border-[#EBEBE6] bg-[#FAF9F5] p-4 text-start">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#52504A]">
+                        {t(l("Appels Qualifiés / Mois", "Qualified Calls / Month", "Cuộc gọi Chất lượng / Tháng", "المكالمات المؤهلة شهرياً", "Целевые звонки в месяц"))}
+                      </span>
+                      <span className="rounded bg-[#16A34A]/10 px-2 py-0.5 font-mono text-[9.5px] font-bold text-[#16A34A]">
+                        +180%
+                      </span>
+                    </div>
+                    <div className="mt-2 font-serif text-2xl font-bold text-[#12110E]">
+                      +{estCallsMin} à +{estCallsMax}
+                    </div>
+                    <p className="mt-1 text-[11px] text-[#52504A]">
+                      {t(l("Appels et demandes d'itinéraire GPS entrants générés sans publicité.", "Incoming phone calls & GPS direction requests generated organically.", "Cuộc gọi và chỉ đường GPS tự nhiên không qua quảng cáo.", "اتصالات وطلبات اتجاهات GPS مباشرة بدون إنفاق إعلاني.", "Звонки и маршруты, полученные без трат на рекламу.")) }
+                    </p>
+                  </div>
 
-                  <div className="flex items-center justify-center gap-2 text-[11px] font-mono text-[#52504A]">
-                    <ShieldCheck className="h-3.5 w-3.5 text-[#16A34A]" />
-                    <span>{t(l("Diagnostic sans engagement", "No-obligation diagnosis", "Kiểm toán không ràng buộc", "تدقيق بدون التزام", "Аудит без обязательств"))}</span>
+                  <div className="rounded-2xl border border-[#EBEBE6] bg-[#FAF9F5] p-4 text-start">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#52504A]">
+                        {t(l("Chiffre d'Affaires Mensuel Estimé", "Estimated Monthly Revenue", "Doanh thu Ước tính / Tháng", "الإيرادات الإضافية شهرياً", "Дополнительная выручка"))}
+                      </span>
+                      <span className="rounded bg-[#A67C40]/15 px-2 py-0.5 font-mono text-[9.5px] font-bold text-[#A67C40]">
+                        Panier {currentSector.avgTicket} €
+                      </span>
+                    </div>
+                    <div className="mt-2 font-serif text-2xl font-bold text-[#16A34A]">
+                      +{price(estRevenueMin)} à +{price(estRevenueMax)}
+                    </div>
+                    <p className="mt-1 text-[11px] text-[#52504A]">
+                      {t(l("Nouveaux clients locaux convertis sur la base de votre panier moyen.", "New local customers acquired calculated on your sector average ticket.", "Khách hàng mới được chuyển đổi dựa trên giá trị đơn hàng trung bình.", "عملاء محليون جدد محسوبون بناءً على متوسط إنفاق العميل بمجالك.", "Новые клиенты с расчётом по среднему чеку вашей ниши.")) }
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-[#EBEBE6] bg-[#FAF9F5] p-4 text-start">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#52504A]">
+                        {t(l("Rentabilité Estimée (ROI)", "Estimated Return on Investment", "Lợi tức Đầu tư Ước tính", "معدل العائد الاستثماري (ROI)", "Окупаемость инвестиций (ROI)"))}
+                      </span>
+                      <span className="rounded bg-[#12110E] px-2 py-0.5 font-mono text-[9.5px] font-bold text-white">
+                        Rentabilité x{estRoiMultiple}
+                      </span>
+                    </div>
+                    <div className="mt-2 font-serif text-2xl font-bold text-[#A67C40]">
+                      {estRoiMultiple}x à {Math.round(estRoiMultiple * 1.8)}x
+                    </div>
+                    <p className="mt-1 text-[11px] text-[#52504A]">
+                      {t(l("Votre investissement mensuel (dès 99 €/m) est rentabilisé dès les 2 à 3 premiers clients.", "Your monthly fee (from 99 €/mo) is amortized with your first 2 to 3 clients.", "Khoản phí hằng tháng (từ 99 €/tháng) hoàn vốn ngay từ 2-3 khách đầu tiên.", "يتم استرداد استثمارك الشهري (ابتداءً من 99 €) من أول 2 إلى 3 عملاء فقط.", "Ежемесячный бюджет (от 99 €/мес) окупается уже с первых 2–3 клиентов.")) }
+                    </p>
                   </div>
                 </div>
               </div>
@@ -2256,8 +2497,10 @@ export function MapsDominationStudioPage() {
               <div className="mt-8">
                 <div className="flex flex-col items-center justify-between gap-4 border-b border-[#EBEBE6] pb-4 sm:flex-row">
                   <div>
-                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#12110E]">
-                      {t(l("Simulation Visuelle en Direct sur Google Maps", "Live Visual Simulation on Google Maps", "Mô phỏng Giao diện Trực tiếp trên Google Maps", "محاكاة المظهر المباشر على خرائط Google", "Симуляция отображения в Google Maps"))}
+                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#12110E] flex items-center gap-1.5 flex-wrap">
+                      <span>{t(l("Simulation Visuelle en Direct sur", "Live Visual Simulation on", "Mô phỏng Giao diện Trực tiếp trên", "محاكاة المظهر المباشر على خرائط", "Симуляция отображения в"))}</span>
+                      <GoogleWord />
+                      <span>Maps</span>
                     </span>
                     <p className="mt-0.5 text-[11px] text-[#52504A]">
                       {t(l("Basculez entre votre état actuel et le Pack Local Top 3 pour observer la différence :", "Toggle between your current state and the Top 3 Local Pack to see the difference:", "Chuyển đổi giữa trạng thái hiện tại và Top 3 Local Pack để thấy sự khác biệt:", "بدّل بين وضعك الحالي وحزمة أفضل 3 نتائج لتشهد الفارق:", "Переключайтесь между текущим состоянием и топ-3 выдачи:"))}
@@ -2311,21 +2554,21 @@ export function MapsDominationStudioPage() {
                       <div className="mt-1 rounded-full border border-[#D5D5CF] bg-white px-3.5 py-2 shadow-sm flex items-center justify-between">
                         <div className="flex items-center gap-2 overflow-hidden">
                           <div className="flex items-center gap-0.5">
-                            <span className="h-2 w-2 rounded-full bg-[#1A73E8]" />
+                            <span className="h-2 w-2 rounded-full bg-[#4285F4]" />
                             <span className="h-2 w-2 rounded-full bg-[#EA4335]" />
-                            <span className="h-2 w-2 rounded-full bg-[#F59E0B]" />
-                            <span className="h-2 w-2 rounded-full bg-[#16A34A]" />
+                            <span className="h-2 w-2 rounded-full bg-[#FBBC05]" />
+                            <span className="h-2 w-2 rounded-full bg-[#34A853]" />
                           </div>
                           <span className="truncate font-sans text-xs text-[#202124] font-medium">
                             {t(currentSector.searchQuery)} à {displayCity}
                           </span>
                         </div>
-                        <Search className="h-4 w-4 shrink-0 text-[#1A73E8]" />
+                        <Search className="h-4 w-4 shrink-0 text-[#52504A]" />
                       </div>
 
                       {/* Filter Chips Bar */}
                       <div className="mt-2.5 flex items-center gap-1.5 overflow-x-auto pb-1 text-[10.5px]">
-                        <span className="shrink-0 rounded-full bg-[#1A73E8] px-2.5 py-0.5 font-medium text-white shadow-xs">
+                        <span className="shrink-0 rounded-full bg-[#12110E] px-2.5 py-0.5 font-medium text-white shadow-xs">
                           ✓ {t(l("Ouvert maintenant", "Open now", "Đang mở cửa", "مفتوح الآن", "Открыто"))}
                         </span>
                         <span className="shrink-0 rounded-full border border-[#D5D5CF] bg-white px-2.5 py-0.5 font-medium text-[#3C4043]">
@@ -2445,9 +2688,9 @@ export function MapsDominationStudioPage() {
                                     setSimNotice(t(l("✓ Simulation : Le prospect déclenche un appel téléphonique direct sur mobile.", "✓ Simulation: User taps direct call button on mobile.", "✓ Mô phỏng: Khách bấm gọi trực tiếp từ điện thoại.", "✓ محاكاة: العميل يضغط للاتصال المباشر من هاتفه.", "✓ Симуляция: Клиент сразу звонит со смартфона.")));
                                     setTimeout(() => setSimNotice(null), 3500);
                                   }}
-                                  className="flex items-center justify-center gap-1 rounded-lg bg-[#1A73E8] py-1.5 text-[10.5px] font-semibold text-white shadow-xs transition hover:bg-[#1557B0]"
+                                  className="flex items-center justify-center gap-1 rounded-lg bg-[#12110E] py-1.5 text-[10.5px] font-semibold text-white shadow-xs transition hover:bg-[#2B2925]"
                                 >
-                                  <Phone className="h-3 w-3" />
+                                  <Phone className="h-3 w-3 text-[#A67C40]" />
                                   <span>{t(l("Appeler", "Call", "Gọi điện", "اتصال", "Позвонить"))}</span>
                                 </button>
 
@@ -2459,7 +2702,7 @@ export function MapsDominationStudioPage() {
                                   }}
                                   className="flex items-center justify-center gap-1 rounded-lg border border-[#D5D5CF] bg-white py-1.5 text-[10.5px] font-semibold text-[#12110E] transition hover:bg-[#F5F5F0]"
                                 >
-                                  <Navigation className="h-3 w-3 text-[#1A73E8]" />
+                                  <Navigation className="h-3 w-3 text-[#A67C40]" />
                                   <span>{t(l("Itinéraire", "Directions", "Chỉ đường", "اتجاهات", "Маршрут"))}</span>
                                 </button>
 
@@ -2579,7 +2822,7 @@ export function MapsDominationStudioPage() {
                         )}
 
                         {simNotice && (
-                          <div className="mt-2 animate-fade-in rounded-xl border border-[#1A73E8]/30 bg-[#EBF3FE] p-2 text-center text-xs font-medium text-[#1A73E8]">
+                          <div className="mt-2 animate-fade-in rounded-xl border border-[#A67C40]/30 bg-[#FAF7F2] p-2 text-center text-xs font-medium text-[#12110E]">
                             {simNotice}
                           </div>
                         )}
@@ -2594,7 +2837,7 @@ export function MapsDominationStudioPage() {
                         <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#12110E]">
                           {t(l("IMPACT CONSTATÉ EN CONQUÊTE DU TOP 3", "OBSERVED METRICS ON TOP 3 ENTRY", "HIỆU QUẢ ĐO LƯỜNG KHI VÀO TOP 3", "الأثر الفعلي لدخول المراكز الثلاثة الأولى", "ФАКТИЧЕСКИЙ РЕЗУЛЬТАТ В ТОП-3"))}
                         </span>
-                        <span className="font-mono text-[10px] text-[#1A73E8] font-bold">100% Organique</span>
+                        <span className="font-mono text-[10px] text-[#A67C40] font-bold">100% Organique</span>
                       </div>
 
                       <div className="mt-4 space-y-3">
@@ -2632,10 +2875,11 @@ export function MapsDominationStudioPage() {
 
                         <div className="rounded-xl border border-[#EBEBE6] bg-white p-3.5 shadow-sm">
                           <div className="flex items-center justify-between">
-                            <span className="text-xs font-medium text-[#52504A]">
-                              {t(l("Note de réputation Google", "Google reputation score", "Điểm uy tín Google", "معدل التقييمات", "Рейтинг в Google"))}
+                            <span className="text-xs font-medium text-[#52504A] flex items-center gap-1">
+                              <span>{t(l("Note de réputation", "Reputation score on", "Điểm uy tín trên", "معدل التقييمات على", "Рейтинг в"))}</span>
+                              <GoogleWord />
                             </span>
-                            <span className={`font-mono text-xs font-bold ${simState === "after" ? "text-[#1A73E8]" : "text-[#888]"}`}>
+                            <span className={`font-mono text-xs font-bold ${simState === "after" ? "text-[#A67C40]" : "text-[#888]"}`}>
                               {simState === "after" ? "4.9 / 5 (148 avis certifiés)" : "3.8 / 5 (8 avis · fragile)"}
                             </span>
                           </div>
@@ -2661,735 +2905,6 @@ export function MapsDominationStudioPage() {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ════════════════════════════════════════════════════════════════════
-            3. LE PARCOURS CLIENT LUDIQUE, CHARMANT & ILLUSTRÉ
-           ════════════════════════════════════════════════════════════════════ */}
-        <section className="relative overflow-hidden bg-white py-16 sm:py-24 border-b border-[#E8E6E0]">
-          {/* Subtle colored ambient glows */}
-          <div className="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full bg-[#1A73E8]/5 blur-3xl" />
-          <div className="pointer-events-none absolute -right-20 bottom-20 h-72 w-72 rounded-full bg-[#EA4335]/5 blur-3xl" />
-
-          <div className="relative mx-auto max-w-[1360px] px-4 sm:px-8">
-            {/* Header */}
-            <div className="text-center">
-              <span className="inline-flex items-center gap-2 rounded-full border border-[#1A73E8]/25 bg-[#1A73E8]/8 px-4 py-1.5 font-mono text-[10.5px] font-bold uppercase tracking-[0.2em] text-[#1A73E8]">
-                <Sparkles className="h-3.5 w-3.5 text-[#1A73E8]" />
-                {t(l("PARCOURS CLIENT INTERACTIF & ILLUSTRÉ", "INTERACTIVE & ILLUSTRATED CLIENT JOURNEY", "HÀNH TRÌNH KHÁCH HÀNG TRỰC QUAN & MINH HỌA", "رحلة العميل التفاعلية والموضحة بالرسوم", "ИНТЕРАКТИВНЫЙ И ИЛЛЮСТРИРОВАННЫЙ МАРШРУТ"))}
-              </span>
-              <h2 className="mt-3 font-serif text-3xl font-medium tracking-tight text-[#12110E] sm:text-5xl">
-                {t(l("De l'ombre au sommet de Google Maps.", "From invisible to the top of Google Maps.", "Từ ẩn mình đến vị trí dẫn đầu Google Maps.", "من الغياب التام إلى قمة خرائط جوجل.", "От нуля до первого места в Google Maps."))}
-              </h2>
-              <p className="mx-auto mt-3 max-w-2xl text-xs text-[#52504A] sm:text-sm">
-                {t(
-                  l(
-                    "Une aventure en 5 étapes claires, transparentes et illustrées. Cliquez sur chaque étape pour découvrir comment nous transformons votre visibilité locale.",
-                    "A journey in 5 clear, transparent and illustrated steps. Tap each step to discover how we turn your local presence into an acquisition engine.",
-                    "Hành trình 5 bước minh bạch và sinh động. Nhấp vào từng bước để khám phá cách chúng tôi tạo đột phá hiển thị cho bạn.",
-                    "رحلة من 5 خطوات واضحة وممتعة. اضغط على أي خطوة لاكتشاف كيف نحوّل ظهورك المحلي إلى محرك مبيعات حقيقي.",
-                    "5 простых, наглядных и понятных шагов. Нажмите на любой шаг, чтобы увидеть процесс трансформации профиля.",
-                  ),
-                )}
-              </p>
-            </div>
-
-            {/* Interactive Step Switcher Tabs */}
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
-              {[
-                { idx: 0, num: "01", label: l("Radar & Failles", "Radar & Diagnostic", "Radar & Điểm yếu", "رادار الثغرات", "Радар локации"), color: "#1A73E8", icon: Radio },
-                { idx: 1, num: "02", label: l("Shooting & EXIF", "Photos & EXIF", "Ảnh & EXIF GPS", "تصوير وترميز", "HD-фото и EXIF"), color: "#EA4335", icon: Camera },
-                { idx: 2, num: "03", label: l("Cohérence NAP", "NAP Authority", "Đồng bộ NAP", "توحيد NAP", "Каталоги NAP"), color: "#16A34A", icon: Globe2 },
-                { idx: 3, num: "04", label: l("Arsenal Avis 5★", "5-Star Engine", "Avis 5★ & NFC", "تقييمات 5 نجوم", "Сбор отзывов 5★"), color: "#F59E0B", icon: QrCode },
-                { idx: 4, num: "05", label: l("Top 3 & Appels", "Top 3 & Calls", "Top 3 & Cuộc gọi", "أفضل 3 نتائج والاتصالات", "Топ-3 и звонки"), color: "#4F46E5", icon: Phone },
-              ].map((step) => {
-                const Icon = step.icon;
-                const isActive = activeJourneyStep === step.idx;
-                return (
-                  <button
-                    key={step.idx}
-                    type="button"
-                    onClick={() => setActiveJourneyStep(step.idx)}
-                    className={`group relative flex items-center gap-2.5 rounded-full px-4 py-2.5 text-xs font-semibold transition-all duration-200 ${
-                      isActive
-                        ? "bg-[#12110E] text-white shadow-lg scale-105"
-                        : "border border-[#E5E5E0] bg-[#FAF9F5] text-[#52504A] hover:border-[#12110E] hover:text-[#12110E] hover:bg-white"
-                    }`}
-                  >
-                    <span
-                      className="grid h-5 w-5 place-items-center rounded-full font-mono text-[10px] font-bold text-white transition"
-                      style={{ backgroundColor: step.color }}
-                    >
-                      {step.num}
-                    </span>
-                    <Icon className="h-3.5 w-3.5 transition group-hover:scale-110" style={{ color: isActive ? "#FFF" : step.color }} />
-                    <span>{t(step.label)}</span>
-                    {isActive && (
-                      <span className="absolute -bottom-1 left-1/2 h-1 w-6 -translate-x-1/2 rounded-full" style={{ backgroundColor: step.color }} />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Active Step Detailed Stage & Dynamic Illustration */}
-            <div className="mt-8 overflow-hidden rounded-3xl border border-[#E5E5E0] bg-[#FAF9F5] p-6 shadow-xl sm:p-10">
-              {/* STEP 0: RADIOGRAPHIE & RADAR CONCURRENTIEL */}
-              {activeJourneyStep === 0 && (
-                <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
-                  <div className="space-y-4 lg:col-span-6">
-                    <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1A73E8]/10 px-3 py-1 font-mono text-[10.5px] font-bold text-[#1A73E8]">
-                        <Radio className="h-3.5 w-3.5" />
-                        {t(l("ÉTAPE 01 · DÉTECTION & ANALYSE CHIRURGICALE", "STEP 01 · DETECTION & SURGICAL BREAKDOWN", "BƯỚC 01 · BÓC TÁCH & QUÉT THỊ TRƯỜNG", "الخطوة 01 · المسح والتحليل الجراحي", "ШАГ 01 · СКАНИРОВАНИЕ И АНАЛИЗ"))}
-                      </span>
-                      <span className="font-mono text-xs text-[#52504A]">Rayon 5 à 15 km</span>
-                    </div>
-
-                    <h3 className="font-serif text-2xl font-medium text-[#12110E] sm:text-3xl">
-                      {t(l("Radiographie de Zone & Radar Concurrentiel", "Area Radiography & Competitor Radar", "Kiểm toán Khu vực & Radar Đối thủ", "مسح المنطقة ورادار المنافسين", "Радиометрия локации и радар конкурентов"))}
-                    </h3>
-
-                    <p className="text-xs leading-relaxed text-[#52504A] sm:text-sm">
-                      {t(
-                        l(
-                          "Avant de toucher au moindre bouton, nous scannons votre zone géographique. Nous identifions les 3 concurrents qui captent vos clients, leurs failles sémantiques et le volume exact de recherches mensuelles que vous perdez aujourd'hui.",
-                          "Before taking any action, we scan your geographic radius. We identify the top 3 competitors stealing your calls, their keyword loopholes and the exact monthly search volume you are missing.",
-                          "Trước khi thao tác, chúng tôi quét bán kính khu vực. Xác định 3 đối thủ đang đón khách của bạn, điểm yếu của họ và dung lượng tìm kiếm bị bỏ lỡ.",
-                          "قبل البدء بأي تعديل، نقوم بمسح نطاقك الجغراfi كاملاً لكشف المنافسين الثلاثة الأقوى والثغرات التي ستمنحك الأسبقية عليهم.",
-                          "Сначала мы сканируем ваш район. Находим 3 главных конкурента, их уязвимости в ключевых словах и упущенный объём клиентов.",
-                        ),
-                      )}
-                    </p>
-
-                    <div className="rounded-2xl border border-[#E5E5E0] bg-white p-4 space-y-2">
-                      <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#1A73E8]">
-                        {t(l("Ce que nous déployons concrètement :", "What we execute concretely:", "Hạng mục triển khai cụ thể:", "ما نقوم بتنفيذه عملياً:", "Что мы делаем на этом шаге:"))}
-                      </span>
-                      <ul className="space-y-1.5 text-xs text-[#2B2925]">
-                        <li className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
-                          <span>{t(l("Scan des 20 facteurs algorithmiques Google Business Profile", "Audit of all 20 Google ranking signals", "Kiểm tra 20 yếu tố thuật toán Google", "تدقيق 20 معياراً في خوارزمية خرائط جوجل", "Аудит 20 факторов ранжирования Google"))}</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
-                          <span>{t(l("Analyse de densité des mots-clés stratégiques autour de votre adresse", "Keyword density analysis around your exact address", "Phân tích mật độ từ khóa quanh địa chỉ", "تحليل كثافة الكلمات المفتاحية حول عنوانك", "Анализ ключевых слов вокруг вашей локации"))}</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
-                          <span>{t(l("Cartographie des faiblesses du Top 3 concurrent", "Mapping vulnerabilities of the local Top 3", "Lập bản đồ điểm yếu của Top 3 đối thủ", "كشف نقاط ضعف المنافسين الثلاثة المتصدرين", "Карта уязвимостей топ-3 конкурентов"))}</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-3 pt-2">
-                      <div className="inline-flex items-center gap-2 rounded-xl bg-[#E8F0FE] px-3.5 py-2 text-xs font-semibold text-[#1A73E8]">
-                        <FileText className="h-4 w-4" />
-                        <span>{t(l("Livrable : Rapport de Rayonnement & Faisabilité", "Deliverable: Area Radiography Report", "Bàn giao: Báo cáo Tiềm năng Khu vực", "المخرج: تقرير نطاق التغطية والفرص", "Результат: Отчёт о потенциале выхода в топ-3"))}</span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setActiveJourneyStep(1)}
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#12110E] hover:underline"
-                      >
-                        <span>{t(l("Étape suivante : Shooting & EXIF", "Next step: Photos & EXIF", "Bước tiếp: Ảnh & EXIF", "الخطوة التالية: التصوير", "Следующий шаг: Фото"))}</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* REALISTIC GOOGLE MAPS 3-PACK SIMULATION (REPLACES ARTIFICIAL RADAR) */}
-                  <div className="lg:col-span-6">
-                    <div className="relative mx-auto aspect-[4/3] w-full max-w-[460px] overflow-hidden rounded-2xl border border-[#D5D5CF] bg-[#F8F9FA] p-4 shadow-xl flex flex-col justify-between">
-                      {/* Realistic Google Maps Search Header */}
-                      <div className="rounded-xl border border-[#E0E0DC] bg-white p-2.5 shadow-sm flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2 flex-1 min-w-0">
-                          <div className="grid h-6 w-6 place-items-center rounded-full bg-[#1A73E8] text-white shrink-0">
-                            <MapPin className="h-3.5 w-3.5" />
-                          </div>
-                          <span className="truncate font-sans text-xs text-[#202124] font-medium">
-                            {userKeywords[0] || t(currentSector.searchQuery)} à {displayCity}
-                          </span>
-                        </div>
-                        <span className="rounded-full bg-[#16A34A]/10 px-2 py-0.5 font-mono text-[9px] font-bold text-[#16A34A] shrink-0">
-                          ● EN DIRECT
-                        </span>
-                      </div>
-
-                      {/* Google Maps Local 3-Pack Results */}
-                      <div className="my-2 space-y-2">
-                        {/* RESULT #1 : CLIENT ESTABLISHMENT (TOP RANKED) */}
-                        <div className="relative rounded-xl border-2 border-[#1A73E8] bg-white p-3 shadow-md">
-                          <div className="absolute -top-2.5 right-3 rounded-full bg-[#1A73E8] px-2.5 py-0.5 font-mono text-[8.5px] font-bold text-white shadow-sm">
-                            ★ TOP 1 PACK LOCAL
-                          </div>
-                          <div className="flex items-start justify-between gap-2">
-                            <div>
-                              <h4 className="font-sans text-xs font-bold text-[#202124]">
-                                {t(currentSector.sampleName)}
-                              </h4>
-                              <div className="mt-0.5 flex items-center gap-1.5 text-[10.5px]">
-                                <span className="font-bold text-[#D97706]">4.9</span>
-                                <div className="flex text-[#F59E0B]">
-                                  {[...Array(5)].map((_, i) => (
-                                    <Star key={i} className="h-3 w-3 fill-amber-400" />
-                                  ))}
-                                </div>
-                                <span className="text-[#5F6368]">(184)</span>
-                                <span className="text-[#5F6368]">· {t(currentSector.category)}</span>
-                              </div>
-                              <p className="mt-0.5 text-[10px] text-[#5F6368]">
-                                <span className="font-semibold text-[#188038]">Ouvert</span> · Ferme à 23:00 · {displayCity}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Action Buttons (Call, Directions, Website) */}
-                          <div className="mt-2 flex items-center gap-2 border-t border-[#F1F3F4] pt-2">
-                            <span className="inline-flex items-center gap-1 rounded-lg bg-[#E8F0FE] px-2.5 py-1 text-[10px] font-semibold text-[#1A73E8]">
-                              <Phone className="h-3 w-3" /> Appeler
-                            </span>
-                            <span className="inline-flex items-center gap-1 rounded-lg border border-[#DADCE0] px-2.5 py-1 text-[10px] font-medium text-[#3C4043]">
-                              <Compass className="h-3 w-3" /> Itinéraire
-                            </span>
-                            <span className="inline-flex items-center gap-1 rounded-lg border border-[#DADCE0] px-2.5 py-1 text-[10px] font-medium text-[#3C4043]">
-                              <ArrowRight className="h-3 w-3" /> Site web
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* RESULT #2 : COMPETITOR B */}
-                        <div className="rounded-xl border border-[#E5E5E0] bg-white/70 p-2 text-[10px] text-[#5F6368] flex items-center justify-between">
-                          <div>
-                            <span className="font-semibold text-[#202124]">#2 Établissement Concurrent B</span>
-                            <div className="flex items-center gap-1 text-[9.5px] text-[#70757A]">
-                              <span>4.3 ★ (52)</span>
-                              <span>· 1.2 km</span>
-                            </div>
-                          </div>
-                          <span className="font-mono text-[9px] text-[#70757A]">-48% clics</span>
-                        </div>
-
-                        {/* RESULT #3 : COMPETITOR C */}
-                        <div className="rounded-xl border border-[#E5E5E0] bg-white/50 p-2 text-[10px] text-[#5F6368] flex items-center justify-between">
-                          <div>
-                            <span className="font-semibold text-[#202124]">#3 Établissement Concurrent C</span>
-                            <div className="flex items-center gap-1 text-[9.5px] text-[#70757A]">
-                              <span>4.1 ★ (31)</span>
-                              <span>· 2.4 km</span>
-                            </div>
-                          </div>
-                          <span className="font-mono text-[9px] text-[#70757A]">-75% clics</span>
-                        </div>
-                      </div>
-
-                      {/* Bottom live metrics */}
-                      <div className="flex items-center justify-between border-t border-[#EBEBE6] pt-2 text-[10px] font-mono text-[#52504A]">
-                        <span>Rayon audité : 15 km autour de {displayCity}</span>
-                        <span className="font-bold text-[#1A73E8]">+1 450 impressions/semaine</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* STEP 1: SHOOTING HD & BALISAGE GÉOGRAPHIQUE EXIF */}
-              {activeJourneyStep === 1 && (
-                <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
-                  <div className="space-y-4 lg:col-span-6">
-                    <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EA4335]/10 px-3 py-1 font-mono text-[10.5px] font-bold text-[#EA4335]">
-                        <Camera className="h-3.5 w-3.5" />
-                        {t(l("ÉTAPE 02 · BALISAGE VISUEL & GPS", "STEP 02 · VISUAL & GPS GEOTAGGING", "BƯỚC 02 · ĐỊNH DANH HÌNH ẢNH & GPS", "الخطوة 02 · التصوير والترميز الجغرافي", "ШАГ 02 · ВИЗУАЛ И EXIF-ГЕОТЕГИ"))}
-                      </span>
-                      <span className="font-mono text-xs text-[#52504A]">Résolution 4K & EXIF</span>
-                    </div>
-
-                    <h3 className="font-serif text-2xl font-medium text-[#12110E] sm:text-3xl">
-                      {t(l("Shooting HD & Balisage Géographique EXIF", "HD Shoot & GPS Geotagged Media", "Chụp ảnh HD & Gắn tọa độ EXIF", "تصوير احتراfi وترميز جغراfi EXIF", "HD-съёмка и EXIF-геотегирование"))}
-                    </h3>
-
-                    <p className="text-xs leading-relaxed text-[#52504A] sm:text-sm">
-                      {t(
-                        l(
-                          "Google favorise les fiches vivantes et authentiques. Nous gravons de manière invisible dans le code de vos photos les coordonnées GPS exactes de votre adresse. Google Cloud Vision lit ces données et valide physiquement votre présence dans la ville.",
-                          "Google prioritizes fresh, authentic profiles. We invisibly embed your exact GPS coordinates directly into image EXIF metadata. Google Cloud Vision detects these tags and confirms your physical local presence.",
-                          "Google ưu tiên hồ sơ sống động và chân thực. Chúng tôi gắn tọa độ GPS chuẩn xác vào file ảnh để thuật toán Google Cloud Vision xác nhận uy tín cơ sở.",
-                          "تفضل جوجل الملفات الموثوقة ذات الصور الحقيقية. نقوم بدمج إحداثيات GPS لعنوانك بدقة داخل ملفات الصور لتقرأها خوارزمية الرؤية من جوجل فوراً.",
-                          "Google продвигает живые профили. Мы прошиваем точные GPS-координаты вашей локации в метаданные EXIF. Нейросеть Google Vision мгновенно верифицирует бизнес.",
-                        ),
-                      )}
-                    </p>
-
-                    <div className="rounded-2xl border border-[#E5E5E0] bg-white p-4 space-y-2">
-                      <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#EA4335]">
-                        {t(l("Ce que nous déployons concrètement :", "What we execute concretely:", "Hạng mục triển khai cụ thể:", "ما نقوم بتنفيذه عملياً:", "Что мы делаем на этом шаге:"))}
-                      </span>
-                      <ul className="space-y-1.5 text-xs text-[#2B2925]">
-                        <li className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
-                          <span>{t(l("Shooting photo 4K de l'établissement, façade, équipe et produits phares", "4K authentic shoot of storefront, staff and showcase products", "Chụp ảnh 4K mặt tiền, nhân sự và sản phẩm chủ lực", "تصوير 4K احترافي للمكان والواجهة وفريق العمل والخدمات", "Съёмка 4K фасада, команды и ключевых услуг"))}</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
-                          <span>{t(l("Encodage EXIF géolocalisé (Latitude, Longitude, Altitude & Nom officiel)", "Geotagged EXIF encoding (Exact Lat, Long, Elevation & Business name)", "Mã hóa tọa độ EXIF định vị vĩ độ, kinh độ và tên chính thức", "تضمين إحداثيات GPS والاسم الرسمي داخل بيانات الصور الرقمية", "Прошивка координат (широта, долгота, точный адрес)"))}</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
-                          <span>{t(l("Validation par Google Vision API (score de pertinence certifié > 95%)", "Verification via Google Vision API (certified relevance > 95%)", "Xác thực qua Google Vision API đạt trên 95%", "اعتماد الصور عبر Google Vision API بنسبة تطابق تفوق 95%", "Проверка соответствия через Google Vision API"))}</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-3 pt-2">
-                      <div className="inline-flex items-center gap-2 rounded-xl bg-[#FCE8E6] px-3.5 py-2 text-xs font-semibold text-[#EA4335]">
-                        <Camera className="h-4 w-4" />
-                        <span>{t(l("Livrable : 25+ Photos Haute Résolution Balisées", "Deliverable: 25+ Geocoded HD Photos", "Bàn giao: 25+ Ảnh HD gắn GPS", "المخرج: 25+ صورة عالية الدقة مكوّدة جغرافياً", "Результат: 25+ гео-фотографий с подтверждением"))}</span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setActiveJourneyStep(2)}
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#12110E] hover:underline"
-                      >
-                        <span>{t(l("Étape suivante : Cohérence NAP", "Next step: NAP Authority", "Bước tiếp: Đồng bộ NAP", "الخطوة التالية: توحيد البيانات", "Следующий шаг: Каталоги"))}</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* ILLUSTRATION CAMERA VIEWFINDER & EXIF MOCKUP */}
-                  <div className="lg:col-span-6">
-                    <div className="relative mx-auto aspect-[4/3] w-full max-w-[460px] overflow-hidden rounded-2xl border border-[#D5D5CF] bg-zinc-900 shadow-2xl">
-                      <img
-                        src={currentSector.photo}
-                        alt="Shoot HD"
-                        className="h-full w-full object-cover filter brightness-95"
-                      />
-
-                      {/* Camera Viewfinder Overlay */}
-                      <div className="pointer-events-none absolute inset-0 p-4">
-                        <div className="h-full w-full rounded-xl border border-white/40 border-dashed relative">
-                          {/* Corner Focus Marks */}
-                          <div className="absolute left-3 top-3 h-4 w-4 border-l-2 border-t-2 border-white" />
-                          <div className="absolute right-3 top-3 h-4 w-4 border-r-2 border-t-2 border-white" />
-                          <div className="absolute bottom-3 left-3 h-4 w-4 border-b-2 border-l-2 border-white" />
-                          <div className="absolute bottom-3 right-3 h-4 w-4 border-b-2 border-r-2 border-white" />
-
-                          {/* Center Focus Reticle */}
-                          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                            <div className="h-8 w-8 rounded-full border border-white/60 flex items-center justify-center">
-                              <div className="h-1.5 w-1.5 rounded-full bg-[#EA4335]" />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* EXIF Metadata Card Floating */}
-                      <div className="absolute bottom-3 left-3 right-3 rounded-xl border border-white/20 bg-black/75 p-3 backdrop-blur-md text-white shadow-xl">
-                        <div className="flex items-center justify-between border-b border-white/10 pb-1.5 text-[10px] font-mono">
-                          <span className="flex items-center gap-1.5 text-[#EA4335] font-bold">
-                            <MapPin className="h-3 w-3" />
-                            EXIF GPS METADATA
-                          </span>
-                          <span className="text-[#16A34A] font-bold">✓ GOOGLE VISION VALIDATED</span>
-                        </div>
-                        <div className="mt-1.5 grid grid-cols-3 gap-2 font-mono text-[9.5px]">
-                          <div>
-                            <span className="text-white/60 block">LAT / LONG</span>
-                            <span className="font-semibold text-white">48.8566° N, 2.3522° E</span>
-                          </div>
-                          <div>
-                            <span className="text-white/60 block">LOCALITÉ</span>
-                            <span className="font-semibold text-white">{displayCity}</span>
-                          </div>
-                          <div>
-                            <span className="text-white/60 block">RÉSOLUTION</span>
-                            <span className="font-semibold text-white">4096 × 2732 · 4K</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* STEP 2: COHÉRENCE NAP & 25+ ANNUAIRES D'AUTORITÉ */}
-              {activeJourneyStep === 2 && (
-                <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
-                  <div className="space-y-4 lg:col-span-6">
-                    <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#16A34A]/10 px-3 py-1 font-mono text-[10.5px] font-bold text-[#16A34A]">
-                        <Globe2 className="h-3.5 w-3.5" />
-                        {t(l("ÉTAPE 03 · SYNCHRONISATION MULTI-RÉSEAU", "STEP 03 · MULTI-NETWORK SYNCHRONIZATION", "BƯỚC 03 · ĐỒNG BỘ ĐA MẠNG LƯỚI", "الخطوة 03 · المزامنة الشاملة عبر الشبكات", "ШАГ 03 · ЕДИНЫЙ ПРОФИЛЬ NAP"))}
-                      </span>
-                      <span className="font-mono text-xs text-[#52504A]">25+ Plateformes clés</span>
-                    </div>
-
-                    <h3 className="font-serif text-2xl font-medium text-[#12110E] sm:text-3xl">
-                      {t(l("Synchronisation NAP & 25+ Annuaires d'Autorité", "NAP Sync & 25+ Master Directories", "Đồng bộ NAP & 25+ Danh bạ Chính", "توحيد بيانات NAP عبر أكثر من 25 دليلاً", "Синхронизация NAP в 25+ главных каталогах"))}
-                    </h3>
-
-                    <p className="text-xs leading-relaxed text-[#52504A] sm:text-sm">
-                      {t(
-                        l(
-                          "Google ne croit pas une fiche sur parole : il vérifie que votre Nom, Adresse et Téléphone (NAP) sont rigoureusement identiques partout sur le web. Nous synchronisons vos données sur Apple Plans, Waze, Bing, PagesJaunes et éliminons tout doublon conflictuel.",
-                          "Google verifies third-party consensus: it demands that your Name, Address, and Phone (NAP) are strictly identical across the web. We synchronize your data on Apple Maps, Waze, Bing Places, Yelp and eliminate conflicting duplicate citations.",
-                          "Google đối chiếu dữ liệu chéo: đảm bảo Tên, Địa chỉ và Số điện thoại (NAP) hoàn toàn khớp trên toàn mạng internet. Chúng tôi đồng bộ trên Apple Maps, Waze, Bing và xóa bỏ trùng lặp.",
-                          "تتحقق جوجل من مطابقة اسمك وعنوانك ورقم هاتفك بدقة عبر المنصات العالمية. نقوم بمزامنة بياناتك على Apple Maps وWaze وBing وغيرها مع حذف أي بيانات مكررة.",
-                          "Google сверяет данные с десятками независимых источников: название, адрес и телефон (NAP) должны совпадать до символа. Мы синхронизируем профиль на всех картах.",
-                        ),
-                      )}
-                    </p>
-
-                    <div className="rounded-2xl border border-[#E5E5E0] bg-white p-4 space-y-2">
-                      <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#16A34A]">
-                        {t(l("Ce que nous déployons concrètement :", "What we execute concretely:", "Hạng mục triển khai cụ thể:", "ما نقوم بتنفيذه عملياً:", "Что мы делаем на этом шаге:"))}
-                      </span>
-                      <ul className="space-y-1.5 text-xs text-[#2B2925]">
-                        <li className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
-                          <span>{t(l("Alignement parfait du Nom, Adresse et Téléphone sans la moindre coquille", "Strict Name-Address-Phone formatting without single spelling discrepancy", "Đồng bộ tuyệt đối Tên, Địa chỉ, Số điện thoại chuẩn xác", "مطابقة تامة للاسم والعنوان ورقم الهاتف بدون أي خطأ إملائي", "Абсолютное соответствие NAP без расхождений"))}</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
-                          <span>{t(l("Création & certification sur Apple Plans, Waze, Bing Places, TripAdvisor, etc.", "Setup & verification on Apple Maps, Waze, Bing, TripAdvisor, Yelp", "Xác thực trên Apple Maps, Waze, Bing, TripAdvisor...", "توثيق رسمي على Apple Maps وWaze وBing وTripAdvisor", "Регистрация на Apple Maps, Waze, Bing, TripAdvisor"))}</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
-                          <span>{t(l("Suppression définitive des doublons fantômes qui diluaient votre autorité", "Permanent deletion of ghost duplicates that drained your ranking weight", "Xóa sổ các hồ sơ trùng lặp gây phân tán uy tín", "الحذف النهائي للملفات الوهمية المكررة التي تضعف ترتيبك", "Удаление старых дубликатов, размывающих вес профиля"))}</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-3 pt-2">
-                      <div className="inline-flex items-center gap-2 rounded-xl bg-[#E6F4EA] px-3.5 py-2 text-xs font-semibold text-[#16A34A]">
-                        <Globe2 className="h-4 w-4" />
-                        <span>{t(l("Livrable : Passeport Numérique Certifié & Dédupliqué", "Deliverable: Certified Multi-Directory Passport", "Bàn giao: Hộ chiếu Số Đa Nền tảng", "المخرج: جواز الحضور الرقمي الموحد الخالي من التكرار", "Результат: Единый цифровой паспорт во всех каталогах"))}</span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setActiveJourneyStep(3)}
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#12110E] hover:underline"
-                      >
-                        <span>{t(l("Étape suivante : Arsenal Avis 5★", "Next step: 5-Star Engine", "Bước tiếp: Avis 5★", "الخطوة التالية: التقييمات", "Следующий шаг: Отзывы"))}</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* ILLUSTRATION DIRECTORY NETWORK ECOSYSTEM */}
-                  <div className="lg:col-span-6">
-                    <div className="relative mx-auto aspect-[4/3] w-full max-w-[460px] overflow-hidden rounded-2xl border border-[#D5D5CF] bg-white p-6 shadow-xl flex flex-col justify-between">
-                      <div className="flex items-center justify-between border-b border-[#EBEBE6] pb-3">
-                        <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#12110E]">
-                          ÉCOSYSTÈME CITATIONS NAP
-                        </span>
-                        <span className="rounded-full bg-[#16A34A]/10 px-2.5 py-0.5 font-mono text-[10px] font-bold text-[#16A34A]">
-                          100% SYNCHRONISÉ
-                        </span>
-                      </div>
-
-                      {/* Directory Node Grid */}
-                      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 my-auto py-3">
-                        {[
-                          { name: "Google Maps", icon: "📍", status: "Maître" },
-                          { name: "Apple Plans", icon: "🍎", status: "Certifié" },
-                          { name: "Waze GPS", icon: "🚗", status: "Actif" },
-                          { name: "Bing Places", icon: "🌐", status: "Vérifié" },
-                          { name: "PagesJaunes", icon: "📒", status: "Synchronisé" },
-                          { name: "TripAdvisor", icon: "🦉", status: "Validé" },
-                        ].map((d, i) => (
-                          <div key={i} className="flex flex-col items-center justify-center rounded-xl border border-[#E5E5E0] bg-[#FAF9F5] p-3 text-center transition hover:border-[#16A34A]">
-                            <span className="text-xl">{d.icon}</span>
-                            <span className="mt-1 font-semibold text-xs text-[#12110E]">{d.name}</span>
-                            <span className="mt-0.5 font-mono text-[9px] text-[#16A34A] font-medium flex items-center gap-1">
-                              <Check className="h-2.5 w-2.5" /> {d.status}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="rounded-xl bg-[#F0FDF4] p-2.5 text-center font-mono text-[10.5px] text-[#16A34A] border border-[#16A34A]/20">
-                        ✓ Consensus algorithmique Google : 100% de concordance géographique
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* STEP 3: ARSENAL AVIS 5 ÉTOILES & CHEVALET NFC SANS CONTACT */}
-              {activeJourneyStep === 3 && (
-                <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
-                  <div className="space-y-4 lg:col-span-6">
-                    <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F59E0B]/10 px-3 py-1 font-mono text-[10.5px] font-bold text-[#B45309]">
-                        <QrCode className="h-3.5 w-3.5" />
-                        {t(l("ÉTAPE 04 · COLLECTE D'AVIS & CONVERSION", "STEP 04 · REVIEW ENGINE & CONVERSION", "BƯỚC 04 · CỖ MÁY ĐÁNH GIÁ & CHUYỂN ĐỔI", "الخطوة 04 · محرك التقييمات ومضاعفة التحويل", "ШАГ 04 · СБОР ОТЗЫВОВ 5★"))}
-                      </span>
-                      <span className="font-mono text-xs text-[#52504A]">Technologie NFC 1 Tap</span>
-                    </div>
-
-                    <h3 className="font-serif text-2xl font-medium text-[#12110E] sm:text-3xl">
-                      {t(l("Arsenal Avis 5 Étoiles & Chevalet NFC Sans Contact", "5-Star Review Engine & Contactless NFC Stand", "Cỗ máy Đánh giá 5 Sao & Thẻ Chạm NFC", "محرك التقييمات 5 نجوم وقاعدة NFC اللاتلامسية", "Диспетчер отзывов 5★ и стойка с чипом NFC"))}
-                    </h3>
-
-                    <p className="text-xs leading-relaxed text-[#52504A] sm:text-sm">
-                      {t(
-                        l(
-                          "Le volume et la fraîcheur des avis sont le signal n°1 de conversion. Nous vous équipons d'un support comptoir sans contact NFC + QR Code : vos clients posent leur smartphone et tombent directement sur la fenêtre 5 étoiles. Chaque avis reçoit une réponse sur-mesure sous 48h.",
-                          "Review volume and recency are the top conversion signals. We provide a contactless NFC desk stand & QR badge: customers simply tap their phone and land right on your 5-star review page. We craft custom replies within 48h for every review.",
-                          "Số lượng và độ mới của đánh giá là chìa khóa chuyển đổi số 1. Chúng tôi cung cấp thẻ chạm NFC để bàn & mã QR: khách chạm máy là đánh giá 5 sao tức thì. Mọi đánh giá đều được phản hồi tận tâm trong 48h.",
-                          "التقييمات الحديثة هي العامل الأهم لكسب ثقة العملاء. نزودك بقاعدة طاولة ذكية بتقنية NFC ورمز QR: يلمس العميل بهاتفه ليفتح نموذج التقييم مباشرة في ثانيتين مع الرد الاحترافي على كل تقييم خلال 48 ساعة.",
-                          "Свежие отзывы — главный фактор выбора заведения. Мы даём фирменную NFC-стойку: клиент прикладывает смартфон и за 3 секунды ставит 5 звёзд. Мы отвечаем на 100% отзывов за 48 часов.",
-                        ),
-                      )}
-                    </p>
-
-                    <div className="rounded-2xl border border-[#E5E5E0] bg-white p-4 space-y-2">
-                      <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#B45309]">
-                        {t(l("Ce que nous déployons concrètement :", "What we execute concretely:", "Hạng mục triển khai cụ thể:", "ما نقوم بتنفيذه عملياً:", "Что мы делаем на этом шаге:"))}
-                      </span>
-                      <ul className="space-y-1.5 text-xs text-[#2B2925]">
-                        <li className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
-                          <span>{t(l("Chevalet comptoir NFC en bois/plexiglas + QR Code ultra-rapide gravé", "Premium contactless NFC counter display + instant scanned QR badge", "Thẻ để bàn NFC cao cấp + mã QR khắc laser siêu nhạy", "قاعدة مكتبية فاخرة بتقنية NFC اللاتلامسية ورمز QR مخصص", "NFC-стойка на стойку администратора + мгновенный QR-код"))}</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
-                          <span>{t(l("Tunnel direct : le client n'a aucun menu à chercher, la boîte 5★ s'ouvre direct", "Direct funnel: zero menus to browse, 5-star rating dialog opens instantly", "Đường dẫn trực tiếp: mở ngay khung đánh giá không cần tìm kiếm", "توجيه فوري: يفتح صندوق تقييم 5 نجوم تلقائياً بدون أي تعقيد", "Прямая ссылка: окно 5 звёзд открывается сразу без поиска"))}</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
-                          <span>{t(l("Réponses humaines sous 48h intégrées avec vos mots-clés stratégiques", "Tailored human replies within 48h enriched with target local SEO keywords", "Phản hồi chỉn chu lồng ghép từ khóa chiến lược trong 48h", "ردود راقية خلال 48 ساعة بصياغة ذكية تدعم الكلمات المفتاحية", "Ответы на отзывы за 48ч с нужными ключевыми запросами"))}</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-3 pt-2">
-                      <div className="inline-flex items-center gap-2 rounded-xl bg-[#FEF7E0] px-3.5 py-2 text-xs font-semibold text-[#B45309]">
-                        <Award className="h-4 w-4" />
-                        <span>{t(l("Livrable : Kit Chevalet NFC Connecté + Charte Réponses 48h", "Deliverable: Connected NFC Kit + 48h Reply Playbook", "Bàn giao: Bộ Thẻ NFC + Quy chuẩn Phản hồi 48h", "المخرج: طقم NFC الذكي + بروتوكول الردود الاحترافية", "Результат: NFC-комплект + протокол ответов на отзывы"))}</span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setActiveJourneyStep(4)}
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#12110E] hover:underline"
-                      >
-                        <span>{t(l("Étape suivante : Conquête du Top 3", "Next step: Top 3 Conquest", "Bước tiếp: Chinh phục Top 3", "الخطوة التالية: حزمة أفضل 3 نتائج", "Следующий шаг: Топ-3"))}</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* ILLUSTRATION NFC TACTILE TAP & 5-STAR REVIEW CARD */}
-                  <div className="lg:col-span-6">
-                    <div className="relative mx-auto aspect-[4/3] w-full max-w-[460px] overflow-hidden rounded-2xl border border-[#D5D5CF] bg-gradient-to-br from-[#FFF9F2] to-[#FAF9F5] p-6 shadow-xl flex flex-col justify-between">
-                      {/* NFC Device Graphic Header */}
-                      <div className="flex items-center justify-between border-b border-[#EBEBE6] pb-3">
-                        <div className="flex items-center gap-2">
-                          <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#12110E] text-white">
-                            <Radio className="h-4 w-4" />
-                          </span>
-                          <div>
-                            <span className="block font-semibold text-xs text-[#12110E]">XR CONTACTLESS NFC</span>
-                            <span className="block font-mono text-[9px] text-[#52504A]">Chauffe & Déclenchement 1-Tap</span>
-                          </div>
-                        </div>
-                        <span className="rounded-full bg-[#16A34A]/10 px-2.5 py-0.5 font-mono text-[10px] font-bold text-[#16A34A]">
-                          100% AVIS RÉELS
-                        </span>
-                      </div>
-
-                      {/* Simulated 5-Star Google Review Box */}
-                      <div className="my-auto rounded-2xl border border-[#E5E5E0] bg-white p-4 shadow-md">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2.5">
-                            <div className="grid h-9 w-9 place-items-center rounded-full bg-[#1A73E8] font-bold text-xs text-white">
-                              CL
-                            </div>
-                            <div>
-                              <div className="font-semibold text-xs text-[#12110E]">Camille Laurent</div>
-                              <div className="flex text-amber-500 text-[11px] mt-0.5">
-                                {[...Array(5)].map((_, i) => (
-                                  <Star key={i} className="h-3.5 w-3.5 fill-amber-500" />
-                                ))}
-                                <span className="ml-1.5 font-mono text-[10px] text-[#52504A]">Il y a 2 heures</span>
-                              </div>
-                            </div>
-                          </div>
-                          <span className="rounded-md bg-[#E8F0FE] px-2 py-0.5 font-mono text-[9px] font-bold text-[#1A73E8]">
-                            Avis Certifié
-                          </span>
-                        </div>
-
-                        <p className="mt-2.5 text-xs text-[#2B2925] leading-relaxed italic">
-                          "Accueil exceptionnel et prestation remarquable ! Trouvé facilement sur Google Maps grâce aux photos magnifiques. Je recommande les yeux fermés."
-                        </p>
-
-                        <div className="mt-3 rounded-xl border border-[#E8E6E0] bg-[#FAF9F5] p-2.5 text-[11px] text-[#52504A]">
-                          <span className="font-semibold text-[#12110E] block text-[10.5px]">
-                            {t(l("Réponse du propriétaire (sous 1h15) :", "Response from the owner (within 1h15):", "Phản hồi từ chủ cơ sở:", "رد مالك النشاط (خلال ساعة):", "Ответ владельца (через 1 час):"))}
-                          </span>
-                          <span className="text-[10.5px] mt-0.5 block text-[#52504A]">
-                            "Merci infiniment Camille ! Toute l'équipe de {displayCity} est ravie de votre satisfaction..."
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between text-xs font-mono text-[#52504A] pt-1">
-                        <span>Taux de satisfaction : 99.2%</span>
-                        <span className="font-bold text-[#12110E]">Score : 4.9 ★ (148 avis)</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* STEP 4: CONQUÊTE TOP 3 & FLUX CONTINU D'APPELS */}
-              {activeJourneyStep === 4 && (
-                <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
-                  <div className="space-y-4 lg:col-span-6">
-                    <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#4F46E5]/10 px-3 py-1 font-mono text-[10.5px] font-bold text-[#4F46E5]">
-                        <Phone className="h-3.5 w-3.5" />
-                        {t(l("ÉTAPE 05 · FLUX DE CLIENTS & REVENUS", "STEP 05 · CLIENT INFLOW & REVENUE", "BƯỚC 05 · DÒNG KHÁCH HÀNG & DOANH THU", "الخطوة 05 · تدفق العملاء وتضاعف الإيرادات", "ШАГ 05 · ПОТОК КЛИЕНТОВ И ДОХОД"))}
-                      </span>
-                      <span className="font-mono text-xs text-[#52504A]">Pack Local Top 3</span>
-                    </div>
-
-                    <h3 className="font-serif text-2xl font-medium text-[#12110E] sm:text-3xl">
-                      {t(l("Conquête du Top 3 & Flux d'Appels Téléphoniques", "Top 3 Conquest & Inbound Phone Surge", "Chinh phục Top 3 & Bùng nổ Cuộc gọi Đến", "دخول أفضل 3 نتائج وتدفق الاتصالات المباشرة", "Выход в топ-3 и поток звонков"))}
-                    </h3>
-
-                    <p className="text-xs leading-relaxed text-[#52504A] sm:text-sm">
-                      {t(
-                        l(
-                          "Votre fiche est désormais installée dans le Top 3 du Pack Local de votre ville. Sur smartphone, les clients cliquent directement sur 'Appeler' ou 'Itinéraire'. Votre investissement annuel est rentabilisé dès les premières semaines grâce aux nouveaux clients générés.",
-                          "Your profile is now firmly established in the local Top 3 Pack. Mobile searchers tap 'Call' or 'Directions' with zero friction. Your annual investment is amortized within weeks from high-ticket local clients.",
-                          "Cơ sở của bạn đứng vững trong Top 3 Local Pack. Khách trên điện thoại bấm gọi hoặc chỉ đường ngay lập tức, đem lại dòng doanh thu đều đặn.",
-                          "أصبح ملفك ثابتاً في صدارة النتائج الثلاث الأولى. يضغط العملاء مباشرة على زر 'اتصال' أو 'الاتجاهات' لتتحول عمليات البحث اليومية إلى مبيعات وأرباح فورية.",
-                          "Ваш бизнес стабильно занимает топ-3 в блоке карт. Клиенты со смартфонов нажимают 'Позвонить' или 'Маршрут', обеспечивая стабильный приток заказов.",
-                        ),
-                      )}
-                    </p>
-
-                    <div className="rounded-2xl border border-[#E5E5E0] bg-white p-4 space-y-2">
-                      <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#4F46E5]">
-                        {t(l("Ce que vous récoltez au quotidien :", "What you reap daily:", "Kết quả thu hoạch hằng ngày:", "ما تحصده يومياً بشكل عملي:", "Ваши ежедневные результаты:"))}
-                      </span>
-                      <ul className="space-y-1.5 text-xs text-[#2B2925]">
-                        <li className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
-                          <span>{t(l("+180% d'appels entrants qualifiés sans dépenser un euro en publicité payante", "+180% incoming high-intent calls without burning budget on paid ads", "+180% cuộc gọi đến có nhu cầu thực mà không tốn tiền quảng cáo", "+180% اتصالات هاتفية من عملاء جاهزين دون أي مصاريف إعلانية", "+180% прямых целевых звонков без расходов на рекламу"))}</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
-                          <span>{t(l("Afflux régulier de clients physiques guidés directement par GPS jusqu'à vous", "Consistent stream of foot traffic routed straight to your storefront by GPS", "Lượng khách trực tiếp tìm đến cửa hàng nhờ định vị GPS", "تدفق مستمر للعملاء يقودهم نظام الملاحة بخرائط جوجل إلى باب محلك", "Постоянный поток посетителей по навигатору прямо к двери"))}</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#16A34A] mt-0.5" />
-                          <span>{t(l("Tableau de bord de suivi mensuel clair : appels, itinéraires et clics site web", "Clear monthly analytics dashboard: phone calls, GPS directions and website clicks", "Báo cáo theo dõi hằng tháng rõ ràng: cuộc gọi, chỉ đường và lượt truy cập", "لوحة تحكم شهرية واضحة تبيّن عدد المكالمات والاتجاهات المحققة", "Личный прозрачный дашборд: звонки, маршруты и клики"))}</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-3 pt-2">
-                      <div className="inline-flex items-center gap-2 rounded-xl bg-[#EEF2FF] px-3.5 py-2 text-xs font-semibold text-[#4F46E5]">
-                        <TrendingUp className="h-4 w-4" />
-                        <span>{t(l("Livrable : Tableau de Bord Mensuel + Suivi des Appels", "Deliverable: Monthly Performance Dashboard", "Bàn giao: Bảng đo lường Hiệu quả Hằng tháng", "المخرج: لوحة بيانات شهرية وتتبع للمكالمات", "Результат: Ежемесячный дашборд звонков и маршрутов"))}</span>
-                      </div>
-                      <a
-                        href="#simulateur-devis"
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#12110E] hover:underline"
-                      >
-                        <span>{t(l("Estimer mon investissement Top 3", "Estimate my Top 3 investment", "Dự toán chi phí Top 3", "قدّر استثمارك لدخول أفضل 3 نتائج", "Рассчитать бюджет для топ-3"))}</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* ILLUSTRATION INCOMING CALL PHONE NOTIFICATION & METRICS */}
-                  <div className="lg:col-span-6">
-                    <div className="relative mx-auto aspect-[4/3] w-full max-w-[460px] overflow-hidden rounded-2xl border border-[#D5D5CF] bg-[#12110E] p-6 shadow-2xl text-white flex flex-col justify-between">
-                      {/* Top Bar status */}
-                      <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#4F46E5]">
-                          SIGNAL LOCAL ACTIF
-                        </span>
-                        <span className="rounded-full bg-[#16A34A]/20 px-2.5 py-0.5 font-mono text-[9.5px] font-bold text-[#16A34A]">
-                          ● EN LIGNE TOP 3
-                        </span>
-                      </div>
-
-                      {/* Live Incoming Call Simulation Box */}
-                      <div className="my-auto rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-md">
-                        <div className="flex items-center gap-3.5">
-                          <div className="relative">
-                            <span className="absolute -inset-1 animate-ping rounded-full bg-[#16A34A]/50" />
-                            <div className="relative grid h-12 w-12 place-items-center rounded-full bg-[#16A34A] text-white shadow-lg">
-                              <Phone className="h-5 w-5 animate-bounce" />
-                            </div>
-                          </div>
-                          <div>
-                            <span className="rounded-md bg-[#16A34A]/20 px-2 py-0.5 font-mono text-[9px] font-bold text-[#16A34A]">
-                              NOUVEL APPEL ENTRANT (GOOGLE MAPS)
-                            </span>
-                            <h4 className="mt-1 font-serif text-lg font-medium text-white">
-                              Prospect Qualifié · {displayCity}
-                            </h4>
-                            <p className="font-mono text-[10px] text-white/60">
-                              Bouton "Appeler" déclenché depuis mobile
-                            </p>
-                          </div>
-                        </div>
-
-                        {/* Visual Growth bar */}
-                        <div className="mt-4 border-t border-white/10 pt-3 flex items-center justify-between text-xs font-mono">
-                          <span className="text-white/70">Flux mensuel d'appels :</span>
-                          <span className="font-bold text-[#16A34A]">+180% (45 à 75 appels)</span>
-                        </div>
-                      </div>
-
-                      {/* Bottom live ticker */}
-                      <div className="flex items-center justify-between font-mono text-[10px] text-white/60 pt-1">
-                        <span>Rayon d'action : {displayCity} et agglomération</span>
-                        <span className="text-[#4F46E5] font-bold">100% Organique (0 € Ads)</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* 5-Step Summary Pills Roadmap below */}
-            <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-5">
-              {[
-                { n: "01", t: l("Radar & Failles", "Radar & Gaps", "Radar & Điểm yếu", "رادار الثغرات", "Радар"), c: "#1A73E8" },
-                { n: "02", t: l("Shooting & EXIF", "Photos & EXIF", "Ảnh & EXIF GPS", "تصوير وترميز", "HD-фото"), c: "#EA4335" },
-                { n: "03", t: l("Synchronisation NAP", "NAP Authority", "Đồng bộ NAP", "توحيد NAP", "Каталоги"), c: "#16A34A" },
-                { n: "04", t: l("Arsenal Avis 5★", "5-Star Engine", "Avis 5★ NFC", "تقييمات 5 نجوم", "Отзывы"), c: "#F59E0B" },
-                { n: "05", t: l("Top 3 & Appels", "Top 3 & Calls", "Top 3 & Cuộc gọi", "أفضل 3 نتائج والاتصالات", "Топ-3"), c: "#4F46E5" },
-              ].map((pill, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setActiveJourneyStep(i)}
-                  className={`rounded-2xl p-3 text-start transition border ${
-                    activeJourneyStep === i
-                      ? "border-[#12110E] bg-white shadow-sm"
-                      : "border-[#EBEBE6] bg-[#FAF9F5] hover:border-[#12110E]"
-                  }`}
-                >
-                  <span className="font-mono text-xs font-bold" style={{ color: pill.c }}>
-                    {pill.n}
-                  </span>
-                  <div className="mt-1 font-serif text-xs font-medium text-[#12110E] truncate">
-                    {t(pill.t)}
-                  </div>
-                </button>
-              ))}
             </div>
           </div>
         </section>
@@ -3424,8 +2939,8 @@ export function MapsDominationStudioPage() {
                 },
               ].map((faq, i) => (
                 <div key={i} className="rounded-2xl border border-[#E5E5E0] bg-white p-5 shadow-sm">
-                  <h3 className="font-serif text-base font-semibold text-[#12110E]">{t(faq.q)}</h3>
-                  <p className="mt-2 text-xs leading-relaxed text-[#52504A]">{t(faq.a)}</p>
+                  <h3 className="font-serif text-base font-semibold text-[#12110E]">{renderGoogleText(t(faq.q))}</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-[#52504A]">{renderGoogleText(t(faq.a))}</p>
                 </div>
               ))}
             </div>

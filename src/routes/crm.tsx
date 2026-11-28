@@ -34,6 +34,8 @@ import {
   Command,
   Mail,
   Layers,
+  Kanban,
+  Users,
 } from "lucide-react";
 
 import {
@@ -65,6 +67,7 @@ import { DirectorPersonalHub } from "@/components/crm/DirectorPersonalHub";
 import { ManagerFiliereHub } from "@/components/crm/ManagerFiliereHub";
 import { CrmCalendarView } from "@/components/crm/CrmCalendarView";
 import { QuoteContractConfiguratorModal } from "@/components/crm/QuoteContractConfiguratorModal";
+import { calculateQuoteTva, detectCountryFromText } from "@/lib/crm/taxEngine";
 
 export const Route = createFileRoute("/crm")({
   head: () => ({
@@ -1124,20 +1127,41 @@ function XrAgencyCrmApp() {
     doc.line(M, y, R, y);
     y += 8;
 
+    const countryCode = lead.countryCode || detectCountryFromText(`${lead.city || ""} ${lead.phone || ""}`);
+    const tax = calculateQuoteTva({
+      issuerEntity: "FR_SASU",
+      clientCountryCode: countryCode,
+      clientType: lead.clientType || "b2b",
+      clientVatNumber: lead.clientVatNumber,
+      oneShotHt: totals.oneShotTotal,
+      mrrHt: totals.mrrTotal,
+      paymentMode: lead.installments?.plan === "3x" ? "3x" : "50_50",
+    });
+
     doc.setFillColor(...soft);
-    doc.roundedRect(114, y, R - 114, 28, 2, 2, "F");
-    doc.setTextColor(...gold);
+    doc.roundedRect(105, y, R - 105, 34, 2, 2, "F");
+    doc.setTextColor(...ink);
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(10.5);
-    if (totals.oneShotTotal > 0) {
-      doc.text("TOTAL ONE-SHOT :", 119, y + 10);
-      doc.text(`${totals.oneShotTotal.toLocaleString("fr-FR")} €`, R - 5, y + 10, { align: "right" });
-    }
-    if (totals.mrrTotal > 0) {
+    doc.setFontSize(8);
+    if (tax.oneShotHt > 0) {
+      doc.text("TOTAL HT :", 110, y + 6);
+      doc.text(`${tax.oneShotHt.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} €`, R - 5, y + 6, { align: "right" });
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.5);
+      doc.setTextColor(...muted);
+      doc.text(`TVA (${tax.taxRateLabel}) :`, 110, y + 12);
       doc.setTextColor(...ink);
+      doc.text(`${tax.oneShotTax.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} €`, R - 5, y + 12, { align: "right" });
+      doc.setFont("helvetica", "bold");
       doc.setFontSize(9.5);
-      doc.text("ABONNEMENT MENSUEL :", 119, y + 20);
-      doc.text(`${totals.mrrTotal.toLocaleString("fr-FR")} €/mois`, R - 5, y + 20, { align: "right" });
+      doc.setTextColor(...gold);
+      doc.text("TOTAL TTC :", 110, y + 19);
+      doc.text(`${tax.oneShotTtc.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} €`, R - 5, y + 19, { align: "right" });
+    }
+    if (tax.mrrHt > 0) {
+      doc.setTextColor(...ink);
+      doc.setFontSize(7.5);
+      doc.text(`Abonnement : ${tax.mrrHt}€ HT (${tax.mrrTtc}€ TTC / mois)`, 110, y + 26);
     }
 
     doc.setTextColor(...ink);
@@ -1148,13 +1172,14 @@ function XrAgencyCrmApp() {
     doc.setFontSize(7.5);
     doc.setTextColor(...muted);
     if (lead.installments?.plan === "3x" && totals.oneShotTotal > 0) {
-      doc.text(`• Échelonnement 3x sans frais : 3 × ${Math.round(totals.oneShotTotal / 3)} €`, M, y + 15);
+      doc.text(`• Échelonnement 3x sans frais : 3 × ${tax.installment3xTtc.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} € TTC`, M, y + 15);
     } else if (totals.oneShotTotal > 0) {
-      doc.text(`• Acompte 50 % : ${Math.round(totals.oneShotTotal * 0.5)} € · Solde : ${Math.round(totals.oneShotTotal * 0.5)} €`, M, y + 15);
+      doc.text(`• Acompte 50 % : ${tax.depositTtc.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} € TTC · Solde : ${tax.balanceTtc.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} € TTC`, M, y + 15);
     }
     if (totals.mrrTotal > 0) {
-      doc.text(`• Abonnement mensuel : ${totals.mrrTotal} €/mois sans frais cachés`, M, y + 21);
+      doc.text(`• Abonnement mensuel : ${tax.mrrTtc.toLocaleString("fr-FR")} € TTC/mois`, M, y + 21);
     }
+    doc.text(`• Régime TVA : ${tax.regimeName} (${tax.clientCountryLabel})`, M, y + 27);
 
     doc.setDrawColor(...line);
     doc.line(M, 282, R, 282);
@@ -1164,7 +1189,7 @@ function XrAgencyCrmApp() {
     doc.text("KARMA SASU · XR AGENCY", M, 287);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(...muted);
-    doc.text("SIREN 889 178 141 · SIRET 889 178 141 00012 · 78 Avenue des Champs-Élysées · 75008 Paris", M, 291);
+    doc.text(`SIREN 889 178 141 · SIRET 889 178 141 00012 · 78 Avenue des Champs-Élysées · 75008 Paris · ${tax.legalNotice}`, M, 291);
     doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83 · xragencyai.com", M, 295);
 
     return { doc, quoteNum };
@@ -1212,21 +1237,21 @@ function XrAgencyCrmApp() {
   }
 
   // ═══════════════════════════════════════════════════════════
-  // ÉCRAN DE CONNEXION COLORÉ, LUDIQUE & CHARMANT
+  // ÉCRAN DE CONNEXION ÉLÉGANT & SÉCURISÉ
   // ═══════════════════════════════════════════════════════════
   if (!currentUser) {
     return (
-      <div className={`min-h-screen flex flex-col justify-center items-center px-4 py-10 relative overflow-hidden transition-colors duration-300 ${theme.pageBg}`}>
-        <div className="max-w-4xl w-full relative z-10 space-y-7">
-          <div className="text-center space-y-3">
-            <div className="inline-flex h-16 w-16 rounded-3xl bg-gradient-to-tr from-indigo-600 via-fuchsia-500 to-amber-400 items-center justify-center font-black text-white shadow-xl shadow-indigo-500/25 text-2xl">
+      <div className={`min-h-screen flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden transition-colors duration-300 ${theme.pageBg}`}>
+        <div className="max-w-4xl w-full relative z-10 space-y-8">
+          <div className="text-center space-y-2">
+            <div className="inline-flex h-12 w-12 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 items-center justify-center font-bold tracking-wider text-sm shadow-sm">
               XR
             </div>
-            <h1 className={`text-3xl sm:text-4xl font-black tracking-tight ${theme.textMain}`}>
-              Bienvenue sur XR Agency Studio 🚀
+            <h1 className={`text-2xl sm:text-3xl font-bold tracking-tight ${theme.textMain}`}>
+              XR AGENCY · ESPACE COMMERCIAL
             </h1>
-            <p className={`text-sm max-w-lg mx-auto ${theme.textMuted}`}>
-              Votre espace commercial gamifié, simple et coloré. Cliquez sur votre profil pour vous connecter directement, ou ouvrez l'académie XR School.
+            <p className={`text-xs sm:text-sm max-w-md mx-auto ${theme.textMuted}`}>
+              Portail sécurisé de gestion du pipeline commercial, du studio de production et de XR School.
             </p>
           </div>
 
@@ -1238,14 +1263,14 @@ function XrAgencyCrmApp() {
                 setSchoolPinError("");
                 if (soundEnabled) playDing();
               }}
-              className="inline-flex flex-wrap items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 hover:brightness-110 text-xs sm:text-sm font-extrabold text-white shadow-xl shadow-indigo-500/25 transition-all hover:scale-[1.02]"
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border text-xs font-semibold transition-all hover:bg-slate-100 dark:hover:bg-zinc-800 ${theme.card} ${theme.textMain}`}
             >
-              <GraduationCap className="w-5 h-5 text-amber-300" />
-              Entrer dans XR School (Formation Pure · Code : 1234)
+              <GraduationCap className="w-4 h-4 text-indigo-500" />
+              <span>Accéder à XR School · Espace Formation</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
             {members.map((member) => (
               <button
                 key={member.id}
@@ -1255,24 +1280,24 @@ function XrAgencyCrmApp() {
                   setPinError("");
                   if (soundEnabled) playDing();
                 }}
-                className={`group p-4 rounded-3xl border transition-all hover:-translate-y-0.5 active:scale-[0.98] flex items-center gap-3.5 text-left ${theme.card} ${theme.cardHover}`}
+                className={`group p-4 rounded-2xl border transition-all hover:-translate-y-0.5 active:scale-[0.99] flex items-center gap-3.5 text-left ${theme.card} ${theme.cardHover}`}
               >
                 <div
-                  className={`h-13 w-13 rounded-2xl bg-gradient-to-br ${member.avatarBg} flex items-center justify-center text-white font-black shadow-md shrink-0`}
+                  className={`h-11 w-11 rounded-xl bg-slate-900 dark:bg-white/10 flex items-center justify-center text-white font-bold text-sm shrink-0 border border-slate-800 dark:border-white/15`}
                 >
-                  <span className="text-2xl drop-shadow-sm select-none">{member.avatarChar || "👤"}</span>
+                  <span className="select-none tracking-tight">{member.avatarChar || member.shortName.slice(0, 2).toUpperCase()}</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className={`font-extrabold text-sm truncate group-hover:text-indigo-600 dark:group-hover:text-amber-300 transition-colors ${theme.textMain}`}>
+                  <h3 className={`font-semibold text-sm truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors ${theme.textMain}`}>
                     {member.name}
                   </h3>
                   <p className={`text-[11px] truncate ${theme.textMuted}`}>{member.roleLabel}</p>
                   <div className="flex flex-wrap items-center gap-1.5 mt-2">
-                    <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border ${theme.badgeSoft}`}>
+                    <span className={`inline-block text-[10px] font-medium px-2 py-0.5 rounded-md border ${theme.badgeSoft}`}>
                       {member.badge}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-500/10 text-slate-700 dark:text-slate-300 border border-slate-500/20">
-                      🔒 Code PIN requis
+                    <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-md bg-slate-500/10 text-slate-700 dark:text-slate-300 border border-slate-500/20">
+                      <Lock className="w-2.5 h-2.5" /> PIN
                     </span>
                   </div>
                 </div>
@@ -1282,35 +1307,35 @@ function XrAgencyCrmApp() {
 
           {/* ── MODAL SÉCURISÉ DE CONNEXION PAR CODE PIN ── */}
           {pendingMember && (
-            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-              <div className={`w-full max-w-sm rounded-3xl border p-5 shadow-2xl space-y-3.5 animate-in fade-in zoom-in-95 duration-150 ${theme.card}`}>
-                <div className="text-center space-y-1.5">
+            <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className={`w-full max-w-sm rounded-2xl border p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150 ${theme.card}`}>
+                <div className="text-center space-y-1">
                   <div
-                    className={`h-14 w-14 mx-auto rounded-2xl bg-gradient-to-br ${pendingMember.avatarBg} flex items-center justify-center text-3xl shadow-lg`}
+                    className={`h-12 w-12 mx-auto rounded-xl bg-slate-900 dark:bg-white/10 flex items-center justify-center text-white font-bold text-base shadow-sm border border-slate-800 dark:border-white/15`}
                   >
-                    {pendingMember.avatarChar || "👤"}
+                    {pendingMember.avatarChar || pendingMember.shortName.slice(0, 2).toUpperCase()}
                   </div>
-                  <h3 className={`text-base font-black ${theme.textMain}`}>
+                  <h3 className={`text-base font-semibold ${theme.textMain}`}>
                     {pendingMember.name}
                   </h3>
-                  <p className={`text-[11px] ${theme.textMuted}`}>
-                    Composez votre code PIN sur le pavé interactif :
+                  <p className={`text-xs ${theme.textMuted}`}>
+                    Saisissez votre code PIN pour vous authentifier :
                   </p>
                 </div>
 
-                <form onSubmit={handleLoginSubmit} className="space-y-3">
+                <form onSubmit={handleLoginSubmit} className="space-y-4">
                   {/* Affichage visuel des pastilles PIN */}
-                  <div className="flex flex-col items-center gap-1.5 py-1">
-                    <div className="flex justify-center items-center gap-2">
+                  <div className="flex flex-col items-center gap-2 py-1">
+                    <div className="flex justify-center items-center gap-2.5">
                       {[...Array(6)].map((_, i) => {
                         const isFilled = i < pinInput.length;
                         return (
                           <span
                             key={i}
-                            className={`h-3.5 w-3.5 rounded-full border transition-all duration-200 ${
+                            className={`h-2.5 w-2.5 rounded-full transition-all duration-150 ${
                               isFilled
-                                ? "bg-gradient-to-br from-indigo-500 to-purple-600 border-indigo-400 shadow-md shadow-indigo-500/40 scale-125"
-                                : "border-slate-300 dark:border-white/20 bg-black/5 dark:bg-white/5"
+                                ? "bg-slate-900 dark:bg-white scale-125"
+                                : "bg-slate-200 dark:bg-zinc-800 border border-slate-300 dark:border-zinc-700"
                             }`}
                           />
                         );
@@ -1330,20 +1355,20 @@ function XrAgencyCrmApp() {
                         setPinInput(e.target.value);
                         if (pinError) setPinError("");
                       }}
-                      className={`w-32 text-center text-sm font-mono tracking-[0.3em] font-bold rounded-xl px-2 py-1 border opacity-40 focus:opacity-100 transition-opacity ${theme.inputBg}`}
+                      className={`w-32 text-center text-sm font-mono tracking-[0.3em] font-semibold rounded-lg px-2 py-1 border opacity-40 focus:opacity-100 transition-opacity ${theme.inputBg}`}
                     />
 
                     {pinError && (
-                      <p className="text-xs font-bold text-rose-500 text-center animate-shake">
-                        ⚠️ {pinError}
+                      <p className="text-xs font-semibold text-rose-500 text-center">
+                        {pinError}
                       </p>
                     )}
                   </div>
 
-                  {/* ── TOUT PETIT CLAVIER NUMÉRIQUE INTERACTIF MIGNON & TACTILE (SILENCIEUX) ── */}
+                  {/* ── CLAVIER NUMÉRIQUE INTERACTIF SOBRE & TACTILE ── */}
                   <div className="grid grid-cols-3 gap-2 max-w-[220px] mx-auto select-none">
                     {[
-                      { num: "1", sub: "·" },
+                      { num: "1", sub: "" },
                       { num: "2", sub: "ABC" },
                       { num: "3", sub: "DEF" },
                       { num: "4", sub: "GHI" },
@@ -1360,14 +1385,16 @@ function XrAgencyCrmApp() {
                           if (pinInput.length < 10) setPinInput((prev) => prev + k.num);
                           if (pinError) setPinError("");
                         }}
-                        className="h-11 rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-white/10 active:scale-90 transition-all flex flex-col items-center justify-center shadow-sm"
+                        className="h-10 rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 hover:bg-slate-100 dark:hover:bg-zinc-800 active:scale-95 transition-all flex flex-col items-center justify-center shadow-sm"
                       >
-                        <span className="font-mono text-base font-black text-slate-800 dark:text-white leading-none">
+                        <span className="font-mono text-sm font-semibold text-slate-900 dark:text-zinc-100 leading-none">
                           {k.num}
                         </span>
-                        <span className="text-[7px] font-bold tracking-widest text-slate-400 dark:text-white/40 leading-tight">
-                          {k.sub}
-                        </span>
+                        {k.sub && (
+                          <span className="text-[7px] font-medium tracking-wider text-slate-400 dark:text-zinc-500 leading-tight mt-0.5">
+                            {k.sub}
+                          </span>
+                        )}
                       </button>
                     ))}
 
@@ -1378,8 +1405,8 @@ function XrAgencyCrmApp() {
                         setPinInput((prev) => prev.slice(0, -1));
                         if (pinError) setPinError("");
                       }}
-                      title="Effacer le dernier chiffre"
-                      className="h-11 rounded-2xl border border-rose-200/60 dark:border-rose-500/20 bg-rose-50/60 dark:bg-rose-500/10 text-rose-600 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-500/20 active:scale-90 transition-all flex items-center justify-center text-sm font-black"
+                      title="Effacer"
+                      className="h-10 rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-slate-600 dark:text-zinc-400 hover:text-rose-600 active:scale-95 transition-all flex items-center justify-center text-xs font-semibold"
                     >
                       ⌫
                     </button>
@@ -1391,24 +1418,21 @@ function XrAgencyCrmApp() {
                         if (pinInput.length < 10) setPinInput((prev) => prev + "0");
                         if (pinError) setPinError("");
                       }}
-                      className="h-11 rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-white/10 active:scale-90 transition-all flex flex-col items-center justify-center shadow-sm"
+                      className="h-10 rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 hover:bg-slate-100 dark:hover:bg-zinc-800 active:scale-95 transition-all flex items-center justify-center shadow-sm"
                     >
-                      <span className="font-mono text-base font-black text-slate-800 dark:text-white leading-none">
+                      <span className="font-mono text-sm font-semibold text-slate-900 dark:text-zinc-100 leading-none">
                         0
-                      </span>
-                      <span className="text-[7px] font-bold tracking-widest text-slate-400 dark:text-white/40 leading-tight">
-                        +
                       </span>
                     </button>
 
-                    {/* Touche Déverrouiller 🔓 */}
+                    {/* Touche Valider */}
                     <button
                       type="submit"
                       disabled={authLoading || !pinInput.trim()}
                       title="Valider le code PIN"
-                      className="h-11 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white hover:brightness-110 active:scale-90 transition-all flex items-center justify-center text-base font-black shadow-md shadow-indigo-500/25 disabled:opacity-40"
+                      className="h-10 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 text-xs font-semibold active:scale-95 transition-all flex items-center justify-center shadow-sm disabled:opacity-30"
                     >
-                      {authLoading ? "..." : "🔓"}
+                      {authLoading ? "..." : <KeyRound className="w-3.5 h-3.5" />}
                     </button>
                   </div>
 
@@ -1420,7 +1444,7 @@ function XrAgencyCrmApp() {
                         setPinInput("");
                         setPinError("");
                       }}
-                      className={`flex-1 py-2 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}
+                      className={`flex-1 py-2 rounded-xl border text-xs font-medium ${theme.subCard} ${theme.textMuted}`}
                     >
                       Fermer
                     </button>
@@ -1431,9 +1455,9 @@ function XrAgencyCrmApp() {
                           setPinInput("");
                           setPinError("");
                         }}
-                        className={`px-3 py-2 rounded-xl border text-xs font-bold text-slate-400 hover:text-rose-500 ${theme.subCard}`}
+                        className={`px-3 py-2 rounded-xl border text-xs font-medium text-slate-400 hover:text-rose-500 ${theme.subCard}`}
                       >
-                        Effacer tout
+                        Effacer
                       </button>
                     )}
                   </div>
@@ -1442,35 +1466,35 @@ function XrAgencyCrmApp() {
             </div>
           )}
 
-          {/* ── MODAL CODE PIN XR SCHOOL AVEC CLAVIER MIGNON ── */}
+          {/* ── MODAL CODE PIN XR SCHOOL ── */}
           {schoolPinModal && (
-            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-              <div className={`w-full max-w-sm rounded-3xl border p-5 shadow-2xl space-y-3.5 animate-in fade-in zoom-in-95 duration-150 ${theme.card}`}>
-                <div className="text-center space-y-1.5">
-                  <div className="h-14 w-14 mx-auto rounded-2xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 flex items-center justify-center text-3xl shadow-lg text-white">
-                    🎓
+            <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className={`w-full max-w-sm rounded-2xl border p-5 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150 ${theme.card}`}>
+                <div className="text-center space-y-1">
+                  <div className="h-11 w-11 mx-auto rounded-xl bg-slate-900 dark:bg-white/10 flex items-center justify-center shadow-sm border border-slate-800 dark:border-white/15 text-indigo-400">
+                    <GraduationCap className="w-5 h-5" />
                   </div>
-                  <h3 className={`text-base font-black ${theme.textMain}`}>
+                  <h3 className={`text-base font-semibold ${theme.textMain}`}>
                     Accès Académie XR School
                   </h3>
-                  <p className={`text-[11px] ${theme.textMuted}`}>
-                    Composez le code formation (1234) sur le clavier :
+                  <p className={`text-xs ${theme.textMuted}`}>
+                    Saisissez le code d'accès formation (1234) :
                   </p>
                 </div>
 
-                <form onSubmit={handleSchoolPinSubmit} className="space-y-3">
+                <form onSubmit={handleSchoolPinSubmit} className="space-y-4">
                   {/* Pastilles PIN School */}
-                  <div className="flex flex-col items-center gap-1.5 py-1">
-                    <div className="flex justify-center items-center gap-2">
+                  <div className="flex flex-col items-center gap-2 py-1">
+                    <div className="flex justify-center items-center gap-2.5">
                       {[...Array(4)].map((_, i) => {
                         const isFilled = i < schoolPinInput.length;
                         return (
                           <span
                             key={i}
-                            className={`h-3.5 w-3.5 rounded-full border transition-all duration-200 ${
+                            className={`h-2.5 w-2.5 rounded-full transition-all duration-150 ${
                               isFilled
-                                ? "bg-gradient-to-br from-violet-500 to-fuchsia-600 border-violet-400 shadow-md shadow-violet-500/40 scale-125"
-                                : "border-slate-300 dark:border-white/20 bg-black/5 dark:bg-white/5"
+                                ? "bg-slate-900 dark:bg-white scale-125"
+                                : "bg-slate-200 dark:bg-zinc-800 border border-slate-300 dark:border-zinc-700"
                             }`}
                           />
                         );
@@ -1489,17 +1513,16 @@ function XrAgencyCrmApp() {
                         setSchoolPinInput(e.target.value);
                         if (schoolPinError) setSchoolPinError("");
                       }}
-                      className={`w-32 text-center text-sm font-mono tracking-[0.3em] font-bold rounded-xl px-2 py-1 border opacity-40 focus:opacity-100 transition-opacity ${theme.inputBg}`}
+                      className={`w-32 text-center text-sm font-mono tracking-[0.3em] font-semibold rounded-lg px-2 py-1 border opacity-40 focus:opacity-100 transition-opacity ${theme.inputBg}`}
                     />
 
                     {schoolPinError && (
-                      <p className="text-xs font-bold text-rose-500 text-center">
-                        ⚠️ {schoolPinError}
+                      <p className="text-xs font-semibold text-rose-500 text-center">
+                        {schoolPinError}
                       </p>
                     )}
                   </div>
 
-                  {/* Clavier numérique interactif pour School (Silencieux) */}
                   <div className="grid grid-cols-3 gap-2 max-w-[220px] mx-auto select-none">
                     {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((num) => (
                       <button
@@ -1509,7 +1532,7 @@ function XrAgencyCrmApp() {
                           if (schoolPinInput.length < 6) setSchoolPinInput((prev) => prev + num);
                           if (schoolPinError) setSchoolPinError("");
                         }}
-                        className="h-11 rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:bg-violet-50 dark:hover:bg-white/10 active:scale-90 transition-all flex items-center justify-center shadow-sm font-mono text-base font-black text-slate-800 dark:text-white"
+                        className="h-10 rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 hover:bg-slate-100 dark:hover:bg-zinc-800 active:scale-95 transition-all flex items-center justify-center shadow-sm font-mono text-sm font-semibold text-slate-900 dark:text-zinc-100"
                       >
                         {num}
                       </button>
@@ -1521,7 +1544,7 @@ function XrAgencyCrmApp() {
                         setSchoolPinInput((prev) => prev.slice(0, -1));
                         if (schoolPinError) setSchoolPinError("");
                       }}
-                      className="h-11 rounded-2xl border border-rose-200/60 dark:border-rose-500/20 bg-rose-50/60 dark:bg-rose-500/10 text-rose-600 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-500/20 active:scale-90 transition-all flex items-center justify-center text-sm font-black"
+                      className="h-10 rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-slate-600 dark:text-zinc-400 hover:text-rose-600 active:scale-95 transition-all flex items-center justify-center text-xs font-semibold"
                     >
                       ⌫
                     </button>
@@ -1532,7 +1555,7 @@ function XrAgencyCrmApp() {
                         if (schoolPinInput.length < 6) setSchoolPinInput((prev) => prev + "0");
                         if (schoolPinError) setSchoolPinError("");
                       }}
-                      className="h-11 rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:bg-violet-50 dark:hover:bg-white/10 active:scale-90 transition-all flex items-center justify-center shadow-sm font-mono text-base font-black text-slate-800 dark:text-white"
+                      className="h-10 rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 hover:bg-slate-100 dark:hover:bg-zinc-800 active:scale-95 transition-all flex items-center justify-center shadow-sm font-mono text-sm font-semibold text-slate-900 dark:text-zinc-100"
                     >
                       0
                     </button>
@@ -1540,9 +1563,9 @@ function XrAgencyCrmApp() {
                     <button
                       type="submit"
                       disabled={!schoolPinInput.trim()}
-                      className="h-11 rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white hover:brightness-110 active:scale-90 transition-all flex items-center justify-center text-base font-black shadow-md shadow-violet-500/25 disabled:opacity-40"
+                      className="h-10 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 text-xs font-semibold active:scale-95 transition-all flex items-center justify-center shadow-sm disabled:opacity-30"
                     >
-                      🎓
+                      <KeyRound className="w-3.5 h-3.5" />
                     </button>
                   </div>
 
@@ -1554,7 +1577,7 @@ function XrAgencyCrmApp() {
                         setSchoolPinInput("");
                         setSchoolPinError("");
                       }}
-                      className={`flex-1 py-2 rounded-xl border text-xs font-bold ${theme.subCard} ${theme.textMuted}`}
+                      className={`flex-1 py-2 rounded-xl border text-xs font-medium ${theme.subCard} ${theme.textMuted}`}
                     >
                       Annuler
                     </button>
@@ -1578,29 +1601,30 @@ function XrAgencyCrmApp() {
   const studioMockupCount = leads.filter((l) => l.stage === "mockup" && !l.mockupReady).length;
   const studioWonCount = leads.filter((l) => l.stage === "won" && l.studioStatus !== "delivered").length;
 
-  const allowedTabs: { id: CrmTab; label: string; count: number | null }[] = isStudio
+  const allowedTabs: { id: CrmTab; label: string; icon: any; count: number | null }[] = isStudio
     ? [
-        { id: "studio", label: "🎨 Studio (Maquettes & Projets)", count: studioMockupCount + studioWonCount },
-        { id: "calendar", label: "📅 Calendrier & Échéances", count: studioMockupCount || null },
-        { id: "school", label: "🎓 XR School", count: null },
+        { id: "studio", label: "Studio & Projets", icon: Palette, count: studioMockupCount + studioWonCount },
+        { id: "calendar", label: "Calendrier & Échéances", icon: Calendar, count: studioMockupCount || null },
+        { id: "school", label: "XR School", icon: GraduationCap, count: null },
       ]
     : [
-        { id: "kanban", label: "🎯 Mon Pipeline", count: myVisibleLeads.length },
-        { id: "cockpit", label: "📞 Cockpit & Audit", count: null },
-        { id: "calendar", label: "📅 Calendrier & Rappels", count: dueFollowUpsCount || null },
-        { id: "school", label: "🎓 XR School", count: null },
+        { id: "kanban", label: "Pipeline Commercial", icon: Kanban, count: myVisibleLeads.length },
+        { id: "cockpit", label: "Cockpit Prospection", icon: Phone, count: null },
+        { id: "calendar", label: "Calendrier & Rappels", icon: Calendar, count: dueFollowUpsCount || null },
+        { id: "school", label: "XR School", icon: GraduationCap, count: null },
         ...(isManager || isDirector
-          ? [{ id: "rh" as CrmTab, label: "👔 Hub Martin (RH & Social)", count: members.filter((m) => m.recruitedBy === "martin").length }]
+          ? [{ id: "rh" as CrmTab, label: "Filière & Réseaux (Martin)", icon: Users, count: members.filter((m) => m.recruitedBy === "martin").length }]
           : []),
         {
           id: "finances",
-          label: isDirector ? "💰 Finances & Équipe" : isManager ? "💰 Gains & Filière" : "💰 Mes Commissions",
+          label: isDirector ? "Finances Agence" : isManager ? "Commissions & Filière" : "Mes Commissions",
+          icon: Wallet,
           count: null,
         },
         ...(isDirector
           ? [
-              { id: "studio" as CrmTab, label: "🎨 Studio", count: studioMockupCount + studioWonCount },
-              { id: "qg" as CrmTab, label: "👑 Mon QG Privé", count: null },
+              { id: "studio" as CrmTab, label: "Studio Production", icon: Palette, count: studioMockupCount + studioWonCount },
+              { id: "qg" as CrmTab, label: "Direction Générale", icon: ShieldCheck, count: null },
             ]
           : []),
       ];
@@ -1612,56 +1636,55 @@ function XrAgencyCrmApp() {
     <div className={`min-h-screen font-sans transition-colors duration-300 ${theme.pageBg}`}>
       {/* Bandeau célébration closing */}
       {showCelebration && lastWonLead && (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 animate-bounce duration-300">
-          <div className="flex items-center gap-4 px-6 py-4 rounded-3xl bg-gradient-to-r from-amber-400 via-emerald-500 to-teal-500 text-white shadow-2xl border-2 border-white/40">
-            <span className="text-3xl">🎉</span>
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 animate-in fade-in zoom-in duration-200">
+          <div className="flex items-center gap-3.5 px-5 py-3 rounded-2xl bg-slate-900 text-white shadow-2xl border border-slate-700">
+            <CheckCircle2 className="w-5 h-5 text-emerald-400" />
             <div>
-              <p className="font-black text-base tracking-wide uppercase">
-                LEVEL UP ! VENTE SIGNÉE : {lastWonLead.name}
+              <p className="font-semibold text-xs tracking-wide uppercase">
+                Vente confirmée · {lastWonLead.name}
               </p>
-              <p className="text-xs text-white/95 font-semibold">
-                +100 XP au concours · Brief envoyé au Studio !
+              <p className="text-[11px] text-slate-300">
+                Dossier transmis au studio de production.
               </p>
             </div>
           </div>
         </div>
       )}
 
-      <div className="max-w-[1640px] mx-auto px-4 sm:px-6 py-5">
-        {/* HEADER LUDIQUE & COLORÉ */}
-        <header className={`p-4 sm:p-5 rounded-3xl border flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 ${theme.card}`}>
-          {/* Profil + Niveau XP */}
+      <div className="max-w-[1640px] mx-auto px-4 sm:px-6 py-6 space-y-5">
+        {/* HEADER EXÉCUTIF */}
+        <header className={`p-4 sm:p-5 rounded-2xl border flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 ${theme.card}`}>
+          {/* Profil */}
           <div className="flex items-center gap-3.5">
             <div
-              className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${currentUser.avatarBg} flex items-center justify-center font-black text-white shadow-lg text-lg`}
+              className={`h-11 w-11 rounded-xl bg-slate-900 dark:bg-white/10 flex items-center justify-center font-bold text-white text-sm shadow-sm border border-slate-800 dark:border-white/15`}
             >
-              <span className="text-2xl drop-shadow-sm select-none">{currentUser.avatarChar || "👤"}</span>
+              <span className="select-none tracking-tight">{currentUser.avatarChar || currentUser.shortName.slice(0, 2).toUpperCase()}</span>
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className={`text-base sm:text-lg font-black tracking-tight ${theme.textMain}`}>
-                  Salut {currentUser.shortName} 👋
+                <h1 className={`text-base font-semibold tracking-tight ${theme.textMain}`}>
+                  {currentUser.name}
                 </h1>
-                <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full border ${theme.badgeSoft}`}>
+                <span className={`text-[10px] font-medium px-2 py-0.5 rounded-md border ${theme.badgeSoft}`}>
                   {currentUser.badge}
                 </span>
                 {dueFollowUpsCount > 0 && !isStudio && (
-                  <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-500 text-white shadow-sm">
-                    🔔 {dueFollowUpsCount} relance(s)
+                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20">
+                    {dueFollowUpsCount} relance{dueFollowUpsCount > 1 ? "s" : ""}
                   </span>
                 )}
               </div>
-              <p className={`text-xs mt-1 ${theme.textMuted}`}>{currentUser.roleLabel}</p>
+              <p className={`text-xs mt-0.5 ${theme.textMuted}`}>{currentUser.roleLabel}</p>
             </div>
           </div>
 
-          {/* Barre Actions & HUD Jeu Vidéo */}
+          {/* Barre Actions */}
           <div className="flex flex-wrap items-center gap-2 w-full xl:w-auto justify-between xl:justify-end">
-
             {!isStudio && (
-              <div className={`hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-2xl border text-xs ${theme.subCard}`}>
+              <div className={`hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs ${theme.subCard}`}>
                 <Wallet className="w-3.5 h-3.5 text-emerald-500" />
-                <span className="font-mono font-black text-emerald-600 dark:text-emerald-300">
+                <span className="font-mono font-semibold text-emerald-600 dark:text-emerald-400">
                   {financeView.myCommissionUnlocked.toLocaleString("fr-FR")} €
                 </span>
               </div>
@@ -1673,9 +1696,9 @@ function XrAgencyCrmApp() {
                 setCmdQuery("");
               }}
               title="Recherche rapide (Ctrl+K)"
-              className={`p-2 rounded-xl border text-xs font-bold inline-flex items-center gap-1 ${theme.subCard} ${theme.textMuted}`}
+              className={`p-2 rounded-xl border text-xs font-medium inline-flex items-center gap-1.5 ${theme.subCard} ${theme.textMuted}`}
             >
-              <Command className="w-3.5 h-3.5" /> <span className="hidden md:inline">Ctrl+K</span>
+              <Command className="w-3.5 h-3.5" /> <span className="hidden md:inline text-[11px]">Recherche (Ctrl+K)</span>
             </button>
 
             {!isStudio && (
@@ -1687,14 +1710,12 @@ function XrAgencyCrmApp() {
                   setShowNewLeadModal(true);
                   if (soundEnabled) playDing();
                 }}
-                className="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 hover:brightness-110 text-white font-extrabold text-xs px-4 py-2.5 rounded-2xl shadow-lg shadow-orange-500/25 transition-all hover:scale-[1.02]"
+                className="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-semibold text-xs px-3.5 py-2 rounded-xl shadow-sm transition-all"
               >
-                <Plus className="w-4 h-4" />
-                Nouveau Prospect
+                <Plus className="w-3.5 h-3.5" />
+                <span>Nouveau Prospect</span>
               </button>
             )}
-
-
 
             <button
               onClick={() => {
@@ -1707,7 +1728,7 @@ function XrAgencyCrmApp() {
                 }).catch(() => {});
               }}
               title="Déconnexion"
-              className={`p-2 rounded-xl border ${theme.subCard} text-rose-500 hover:bg-rose-500/10`}
+              className={`p-2 rounded-xl border ${theme.subCard} text-slate-500 hover:text-rose-500 transition-colors`}
             >
               <LogOut className="w-4 h-4" />
             </button>
@@ -1716,55 +1737,59 @@ function XrAgencyCrmApp() {
 
         {/* BANDEAU NOTIFICATION DEMANDE MAQUETTES POUR ANTOINE (< 24H) */}
         {isDirector && studioMockupCount > 0 && (
-          <div className="mt-4 p-4 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white shadow-lg shadow-orange-500/25 flex flex-wrap items-center justify-between gap-3 animate-pulse">
+          <div className={`p-4 rounded-2xl border flex flex-wrap items-center justify-between gap-3 ${theme.card} border-amber-500/30 bg-amber-500/5`}>
             <div className="flex items-center gap-3">
-              <span className="h-9 w-9 rounded-xl bg-white/20 flex items-center justify-center text-xl shrink-0">
-                🚨
-              </span>
+              <div className="h-8 w-8 rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-xs shrink-0">
+                24h
+              </div>
               <div>
-                <p className="text-xs font-black uppercase tracking-wider text-amber-200">
-                  Notification Studio · Livraison sous 24h
+                <p className="text-xs font-semibold text-amber-600 dark:text-amber-400">
+                  Studio · Livraison sous 24h
                 </p>
-                <p className="text-sm font-bold">
-                  {studioMockupCount} demande(s) de maquette en attente envoyée(s) par les commerciaux !
+                <p className={`text-xs ${theme.textMain}`}>
+                  {studioMockupCount} demande{studioMockupCount > 1 ? "s" : ""} de maquette en attente transmise{studioMockupCount > 1 ? "s" : ""} par l'équipe commerciale.
                 </p>
               </div>
             </div>
             <button
               onClick={() => setActiveTab("calendar")}
-              className="px-4 py-2 rounded-xl bg-white text-slate-900 font-extrabold text-xs shadow-md hover:scale-105 transition-all"
+              className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-semibold text-xs shadow-sm transition-all"
             >
-              📅 Ouvrir Calendrier &amp; Lancer Prod →
+              Voir le planning studio →
             </button>
           </div>
         )}
 
-        {/* NAVIGATION ONGLETS COLORÉE */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-4 gap-3">
-          <nav className={`flex flex-wrap gap-1.5 p-1.5 rounded-2xl border ${theme.tabBarBg}`}>
-            {allowedTabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => {
-                  setActiveTab(tab.id);
-                  if (soundEnabled) playDing();
-                }}
-                className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 ${
-                  activeTab === tab.id ? theme.tabActive : theme.tabIdle
-                }`}
-              >
-                {tab.label}
-                {tab.count !== null && (
-                  <span
-                    className={`text-[10px] px-1.5 py-0.5 rounded-full font-extrabold ${
-                      activeTab === tab.id ? "bg-white/25 text-white" : "bg-indigo-500/15 text-indigo-600 dark:text-amber-300"
-                    }`}
-                  >
-                    {tab.count}
-                  </span>
-                )}
-              </button>
-            ))}
+        {/* NAVIGATION ONGLETS ÉPURÉE */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <nav className={`flex flex-wrap gap-1 p-1 rounded-xl border ${theme.tabBarBg}`}>
+            {allowedTabs.map((tab) => {
+              const TabIcon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => {
+                    setActiveTab(tab.id);
+                    if (soundEnabled) playDing();
+                  }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
+                    activeTab === tab.id ? theme.tabActive : theme.tabIdle
+                  }`}
+                >
+                  <TabIcon className="w-3.5 h-3.5" />
+                  <span>{tab.label}</span>
+                  {tab.count !== null && (
+                    <span
+                      className={`text-[10px] px-1.5 py-0.2 rounded font-mono font-semibold ${
+                        activeTab === tab.id ? "bg-white/20 text-white" : "bg-slate-500/15 text-slate-700 dark:text-slate-300"
+                      }`}
+                    >
+                      {tab.count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </nav>
 
           {activeTab === "kanban" && (
@@ -1772,9 +1797,9 @@ function XrAgencyCrmApp() {
               <div className="flex items-center gap-1 overflow-x-auto py-1">
                 <button
                   onClick={() => setKanbanFilter("all")}
-                  className={`text-[11px] font-bold px-2.5 py-1.5 rounded-xl border transition-all ${
+                  className={`text-[11px] font-medium px-2.5 py-1.5 rounded-lg border transition-all ${
                     kanbanFilter === "all"
-                      ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
+                      ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-transparent shadow-sm"
                       : `${theme.card} ${theme.textMuted}`
                   }`}
                 >
@@ -1782,46 +1807,45 @@ function XrAgencyCrmApp() {
                 </button>
                 <button
                   onClick={() => setKanbanFilter("urgent")}
-                  className={`text-[11px] font-bold px-2.5 py-1.5 rounded-xl border transition-all flex items-center gap-1 ${
+                  className={`text-[11px] font-medium px-2.5 py-1.5 rounded-lg border transition-all flex items-center gap-1 ${
                     kanbanFilter === "urgent"
-                      ? "bg-rose-600 text-white border-rose-600 shadow-sm"
-                      : `${theme.card} ${dueFollowUpsCount > 0 ? "text-rose-600 dark:text-rose-400 font-extrabold border-rose-500/30" : theme.textMuted}`
+                      ? "bg-rose-600 text-white border-transparent shadow-sm"
+                      : `${theme.card} ${dueFollowUpsCount > 0 ? "text-rose-600 dark:text-rose-400 font-semibold border-rose-500/30" : theme.textMuted}`
                   }`}
                 >
-                  <Flame className="w-3 h-3 text-amber-400" />
                   À relancer ({dueFollowUpsCount})
                 </button>
                 <button
                   onClick={() => setKanbanFilter("websites")}
-                  className={`text-[11px] font-bold px-2.5 py-1.5 rounded-xl border transition-all ${
+                  className={`text-[11px] font-medium px-2.5 py-1.5 rounded-lg border transition-all ${
                     kanbanFilter === "websites"
-                      ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
+                      ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-transparent shadow-sm"
                       : `${theme.card} ${theme.textMuted}`
                   }`}
                 >
-                  🌐 Sites
+                  Sites
                 </button>
                 <button
                   onClick={() => setKanbanFilter("recurring")}
-                  className={`text-[11px] font-bold px-2.5 py-1.5 rounded-xl border transition-all ${
+                  className={`text-[11px] font-medium px-2.5 py-1.5 rounded-lg border transition-all ${
                     kanbanFilter === "recurring"
-                      ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
+                      ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-transparent shadow-sm"
                       : `${theme.card} ${theme.textMuted}`
                   }`}
                 >
-                  🔄 Mensuels
+                  Abonnements
                 </button>
               </div>
 
               {myVisibleLeads.length > 0 && (
                 <button
                   onClick={handleExportCsv}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold ${theme.card} ${theme.textMain}`}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium ${theme.card} ${theme.textMain}`}
                 >
-                  <Download className="w-3.5 h-3.5 text-indigo-500" /> CSV
+                  <Download className="w-3.5 h-3.5 text-slate-500" /> Export CSV
                 </button>
               )}
-              <div className={`flex-1 sm:w-52 flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs border ${theme.card}`}>
+              <div className={`flex-1 sm:w-52 flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs border ${theme.card}`}>
                 <Search className={`w-3.5 h-3.5 ${theme.textSoft}`} />
                 <input
                   type="text"
@@ -1870,11 +1894,11 @@ function XrAgencyCrmApp() {
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3.5">
                 {(
                   [
-                    { stage: "new", title: "1. Nouveaux", sub: "Glissez-déposez ✨", lightBg: "bg-sky-50/90 border-sky-200", darkBg: "bg-sky-500/10 border-sky-400/25", dot: "bg-sky-500", next: "rdv", nextLabel: "RDV →" },
-                    { stage: "rdv", title: "2. RDV / Qualifié", sub: "Setter → Closer", lightBg: "bg-teal-50/90 border-teal-200", darkBg: "bg-teal-500/10 border-teal-400/25", dot: "bg-teal-500", next: "mockup", nextLabel: "Maquette →" },
-                    { stage: "mockup", title: "3. Maquette", sub: "Studio + Concours", lightBg: "bg-amber-50/90 border-amber-200", darkBg: "bg-amber-500/10 border-amber-400/25", dot: "bg-amber-500", next: "negociation", nextLabel: "Négo →" },
-                    { stage: "negociation", title: "4. Négociation", sub: "Closing décisif", lightBg: "bg-violet-50/90 border-violet-200", darkBg: "bg-violet-500/10 border-violet-400/25", dot: "bg-violet-500", next: "won", nextLabel: "Signer 🎉" },
-                    { stage: "won", title: "5. Signés 🎉", sub: "Bravo · Studio OK", lightBg: "bg-emerald-50/90 border-emerald-200", darkBg: "bg-emerald-500/10 border-emerald-400/25", dot: "bg-emerald-500", next: null, nextLabel: "" },
+                    { stage: "new", title: "Nouveaux prospects", sub: "Qualification & premier contact", lightBg: "bg-slate-50 border-slate-200", darkBg: "bg-zinc-900/40 border-zinc-800", dot: "bg-sky-500", next: "rdv", nextLabel: "RDV →" },
+                    { stage: "rdv", title: "RDV & Diagnostic", sub: "Setter → Closer", lightBg: "bg-slate-50 border-slate-200", darkBg: "bg-zinc-900/40 border-zinc-800", dot: "bg-teal-500", next: "mockup", nextLabel: "Maquette →" },
+                    { stage: "mockup", title: "Maquettes Studio", sub: "Production livrée < 24h", lightBg: "bg-slate-50 border-slate-200", darkBg: "bg-zinc-900/40 border-zinc-800", dot: "bg-amber-500", next: "negociation", nextLabel: "Négo →" },
+                    { stage: "negociation", title: "Négociation & Devis", sub: "Présentation offre & clôture", lightBg: "bg-slate-50 border-slate-200", darkBg: "bg-zinc-900/40 border-zinc-800", dot: "bg-indigo-500", next: "won", nextLabel: "Signer" },
+                    { stage: "won", title: "Contrats Signés", sub: "Acompte & mise en ligne", lightBg: "bg-slate-50 border-slate-200", darkBg: "bg-zinc-900/40 border-zinc-800", dot: "bg-emerald-500", next: null, nextLabel: "" },
                   ] as const
                 ).map((col) => {
                   const colLeads = filteredLeads.filter((l) => l.stage === col.stage);
@@ -1893,16 +1917,16 @@ function XrAgencyCrmApp() {
                         if (draggedLeadId) moveStage(draggedLeadId, col.stage);
                         setDraggedLeadId(null);
                       }}
-                      className={`p-3.5 rounded-3xl border-2 flex flex-col min-h-[470px] transition-all ${
+                      className={`p-3.5 rounded-2xl border flex flex-col min-h-[480px] transition-all ${
                         theme.isDark ? col.darkBg : col.lightBg
-                      } ${isDropTarget ? "ring-4 ring-indigo-500/40 scale-[1.01]" : ""}`}
+                      } ${isDropTarget ? "ring-2 ring-indigo-500/50" : ""}`}
                     >
                       <div className="flex items-center justify-between mb-0.5">
-                        <h3 className={`font-extrabold text-xs flex items-center gap-2 ${theme.textMain}`}>
-                          <span className={`w-2.5 h-2.5 rounded-full ${col.dot}`} />
+                        <h3 className={`font-semibold text-xs flex items-center gap-2 ${theme.textMain}`}>
+                          <span className={`w-2 h-2 rounded-full ${col.dot}`} />
                           {col.title}
                         </h3>
-                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-full border ${theme.card} ${theme.textMain}`}>
+                        <span className={`text-[10px] font-mono font-medium px-2 py-0.5 rounded-md border ${theme.card} ${theme.textMain}`}>
                           {colLeads.length}
                         </span>
                       </div>
@@ -3161,6 +3185,7 @@ function XrAgencyCrmApp() {
           onClose={() => setQuoteModalLead(null)}
           lead={quoteModalLead}
           closer={members.find((m) => m.id === quoteModalLead.closerId)}
+          currentUser={currentUser}
           theme={theme}
           onSaveLead={(updated) => {
             setLeads((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
@@ -3221,89 +3246,91 @@ function LeadCard({
     <div
       draggable
       onDragStart={onDragStart}
-      className={`p-3.5 rounded-2xl border cursor-grab active:cursor-grabbing transition-all hover:-translate-y-0.5 space-y-2 ${theme.card} ${theme.cardHover} ${isUrgent ? "ring-2 ring-rose-500/30" : ""}`}
+      className={`p-3.5 rounded-xl border cursor-grab active:cursor-grabbing transition-all hover:-translate-y-0.5 space-y-2.5 ${theme.card} ${theme.cardHover} ${isUrgent ? "border-rose-500/40" : ""}`}
     >
       <div className="flex items-center justify-between gap-1">
-        <div className="flex items-center gap-1">
-          <span className="text-base">{svc?.icon || "🌐"}</span>
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-slate-500/10 text-slate-700 dark:text-slate-300">
+            {((svc as any)?.label || (svc as any)?.name || "Pack").split(" ")[0]}
+          </span>
           {extraCount > 0 && (
-            <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-600 dark:text-indigo-200 border border-indigo-500/25">
-              +{extraCount} pack
+            <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+              +{extraCount} option{extraCount > 1 ? "s" : ""}
             </span>
           )}
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="text-[11px] font-black text-indigo-600 dark:text-amber-300 font-mono">
+          <span className="text-xs font-semibold text-slate-900 dark:text-zinc-100 font-mono tracking-tight">
             {extraCount > 0
-              ? `${totals.oneShotTotal > 0 ? `${totals.oneShotTotal.toLocaleString("fr-FR")} €` : ""}${totals.oneShotTotal > 0 && totals.mrrTotal > 0 ? " + " : ""}${totals.mrrTotal > 0 ? `${totals.mrrTotal}€/m` : ""}`
+              ? `${totals.oneShotTotal > 0 ? `${totals.oneShotTotal.toLocaleString("fr-FR")} €` : ""}${totals.oneShotTotal > 0 && totals.mrrTotal > 0 ? " + " : ""}${totals.mrrTotal > 0 ? `${totals.mrrTotal} €/m` : ""}`
               : formatPricePeriod(lead.value, lead.billing)}
           </span>
-          <button onClick={onEdit} className={`${theme.textSoft} hover:text-indigo-500`} title="Modifier">
+          <button onClick={onEdit} className={`${theme.textSoft} hover:text-slate-900 dark:hover:text-white transition-colors`} title="Modifier">
             <Pencil className="w-3 h-3" />
           </button>
         </div>
       </div>
 
       <div>
-        <h4 className={`font-extrabold text-xs ${theme.textMain}`}>{lead.name}</h4>
-        <p className={`text-[10px] truncate ${theme.textMuted}`}>
+        <h4 className={`font-semibold text-xs ${theme.textMain}`}>{lead.name}</h4>
+        <p className={`text-[11px] truncate ${theme.textMuted}`}>
           {lead.contact} · {lead.phone}
         </p>
       </div>
 
-      <p className={`text-[10px] p-2 rounded-xl border leading-snug ${theme.subCard} ${theme.textMuted}`}>
+      <p className={`text-[11px] p-2 rounded-lg border leading-snug ${theme.subCard} ${theme.textMuted}`}>
         {lead.issue}
       </p>
 
       <div className="flex flex-wrap items-center gap-1.5">
         {isUrgent && (
-          <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-rose-500 text-white flex items-center gap-1 shadow-sm animate-pulse">
-            <Flame className="w-2.5 h-2.5 text-amber-300" /> À relancer
+          <span className="text-[9px] font-medium px-2 py-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-rose-500" /> Relance requise
           </span>
         )}
         {lead.installments?.plan === "3x" && (
-          <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
-            3x ({lead.installments.paidCount}/3)
+          <span className="text-[9px] font-medium px-2 py-0.5 rounded bg-slate-500/10 text-slate-700 dark:text-slate-300 border border-slate-500/20">
+            3x sans frais ({lead.installments.paidCount}/3)
           </span>
         )}
         {lead.stage === "mockup" && lead.mockupReady && (
-          <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500 text-white">
-            ✓ Maquette prête
+          <span className="inline-flex items-center gap-1 text-[9px] font-medium px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            <CheckCircle2 className="w-2.5 h-2.5" /> Maquette prête
           </span>
         )}
         {lead.invoiceStatus === "paid" && (
-          <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
-            ✓ Acompte Encaissé
+          <span className="inline-flex items-center gap-1 text-[9px] font-medium px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            <CheckCircle2 className="w-2.5 h-2.5" /> Acompte validé
           </span>
         )}
         {lead.stage === "proposal" && lead.invoiceStatus !== "paid" && (
-          <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
-            🟡 En attente Acompte 50%
+          <span className="inline-flex items-center gap-1 text-[9px] font-medium px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> En attente acompte 50%
           </span>
         )}
         {lead.mapsContract?.enabled && (
-          <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-200 border border-amber-500/40 font-bold">
-            ★ Maps Top 3
+          <span className="text-[9px] font-medium px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+            Google Maps Top 3
           </span>
         )}
         {lead.followUpDate && !isUrgent && (
           <span
-            className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-1 ${theme.subCard} ${theme.textMuted}`}
+            className={`text-[9px] font-medium px-1.5 py-0.5 rounded flex items-center gap-1 ${theme.subCard} ${theme.textMuted}`}
           >
             <Calendar className="w-2.5 h-2.5" /> {lead.followUpDate}
           </span>
         )}
         {lead.setterId !== lead.closerId && (
-          <span className="text-[9px] font-bold text-indigo-500">
+          <span className="text-[9px] font-medium text-slate-500 dark:text-slate-400">
             {setter?.shortName} → {closer?.shortName}
           </span>
         )}
       </div>
 
       <div className={`pt-2 border-t flex flex-wrap items-center justify-between gap-1.5 ${theme.border}`}>
-        <div className="flex flex-wrap items-center gap-1.5">
-          <button onClick={onCall} className="text-[10px] font-extrabold text-indigo-600 dark:text-amber-300 flex items-center gap-1 hover:underline">
-            <Phone className="w-3 h-3" /> Appel
+        <div className="flex flex-wrap items-center gap-2">
+          <button onClick={onCall} className="text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1 transition-colors">
+            <Phone className="w-3 h-3 text-slate-500" /> Appel
           </button>
           {waUrl && (
             <a
@@ -3311,14 +3338,14 @@ function LeadCard({
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 hover:underline"
+              className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1 hover:underline"
               title="Ouvrir WhatsApp direct"
             >
               <MessageSquare className="w-3 h-3 text-emerald-500" /> WhatsApp
             </a>
           )}
-          <button onClick={onPdf} className="text-[10px] font-extrabold flex items-center gap-1 text-amber-600 dark:text-amber-400 hover:underline" title="Ouvrir le configurateur Devis & Contrat d'Engagement">
-            <FileText className="w-3 h-3 text-amber-500" /> Devis & Contrat
+          <button onClick={onPdf} className="text-[11px] font-medium flex items-center gap-1 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" title="Ouvrir le configurateur Devis & Contrat d'Engagement">
+            <FileText className="w-3 h-3 text-slate-500" /> Devis & Contrat
           </button>
           {lead.mockupReady && (
             <button
@@ -3328,7 +3355,7 @@ function LeadCard({
                 void navigator.clipboard?.writeText(demoUrl);
                 alert(`Lien démo interactif copié dans le presse-papier :\n${demoUrl}`);
               }}
-              className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5 hover:underline"
+              className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1 hover:underline"
               title="Copier le lien de prévisualisation interactif de la maquette"
             >
               <Sparkles className="w-3 h-3 text-emerald-500" /> Démo Maquette
@@ -3340,10 +3367,10 @@ function LeadCard({
                 e.stopPropagation();
                 onRequestMockup();
               }}
-              className="text-[10px] font-black text-amber-600 dark:text-amber-400 flex items-center gap-0.5 hover:underline"
+              className="text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1 transition-colors"
               title="Demander une maquette Studio sous 24h"
             >
-              <Sparkles className="w-3 h-3 text-amber-500" /> Maquette 24h
+              <Sparkles className="w-3 h-3 text-slate-500" /> Maquette 24h
             </button>
           )}
         </div>
@@ -3351,7 +3378,7 @@ function LeadCard({
           {onNext && (
             <button
               onClick={onNext}
-              className="text-[10px] font-bold px-2 py-1 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-700 dark:text-indigo-200"
+              className="text-[10px] font-medium px-2 py-1 rounded-md bg-slate-500/10 hover:bg-slate-500/20 text-slate-700 dark:text-slate-200 transition-colors"
             >
               {nextLabel}
             </button>
@@ -3360,7 +3387,7 @@ function LeadCard({
             <button
               onClick={onWin}
               title="Marquer signé"
-              className="p-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-600 dark:text-emerald-300"
+              className="p-1 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 transition-colors"
             >
               <CheckCircle2 className="w-3.5 h-3.5" />
             </button>
