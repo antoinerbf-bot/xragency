@@ -33,6 +33,7 @@ import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiCreateCheckoutRouteImport } from './routes/api/create-checkout'
 import { Route as ApiCrmRouteImport } from './routes/api/crm'
 import { Route as ApiCrmAuthRouteImport } from './routes/api/crm-auth'
+import { Route as ApiCrmEmailAlertRouteImport } from './routes/api/crm-email-alert'
 import { Route as ApiCrmSyncRouteImport } from './routes/api/crm-sync'
 import { Route as ApiSendQuoteRouteImport } from './routes/api/send-quote'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
@@ -170,6 +171,11 @@ const ApiCrmAuthRoute = ApiCrmAuthRouteImport.update({
   path: '/api/crm-auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCrmEmailAlertRoute = ApiCrmEmailAlertRouteImport.update({
+  id: '/api/crm-email-alert',
+  path: '/api/crm-email-alert',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiCrmSyncRoute = ApiCrmSyncRouteImport.update({
   id: '/api/crm-sync',
   path: '/api/crm-sync',
@@ -272,6 +278,7 @@ export interface FileRoutesByFullPath {
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
   '/api/crm': typeof ApiCrmRoute
   '/api/crm-auth': typeof ApiCrmAuthRoute
+  '/api/crm-email-alert': typeof ApiCrmEmailAlertRoute
   '/api/crm-sync': typeof ApiCrmSyncRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
@@ -312,6 +319,7 @@ export interface FileRoutesByTo {
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
   '/api/crm': typeof ApiCrmRoute
   '/api/crm-auth': typeof ApiCrmAuthRoute
+  '/api/crm-email-alert': typeof ApiCrmEmailAlertRoute
   '/api/crm-sync': typeof ApiCrmSyncRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
@@ -354,6 +362,7 @@ export interface FileRoutesById {
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
   '/api/crm': typeof ApiCrmRoute
   '/api/crm-auth': typeof ApiCrmAuthRoute
+  '/api/crm-email-alert': typeof ApiCrmEmailAlertRoute
   '/api/crm-sync': typeof ApiCrmSyncRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
@@ -397,6 +406,7 @@ export interface FileRouteTypes {
     | '/api/create-checkout'
     | '/api/crm'
     | '/api/crm-auth'
+    | '/api/crm-email-alert'
     | '/api/crm-sync'
     | '/api/send-quote'
     | '/dashboard/audits'
@@ -437,6 +447,7 @@ export interface FileRouteTypes {
     | '/api/create-checkout'
     | '/api/crm'
     | '/api/crm-auth'
+    | '/api/crm-email-alert'
     | '/api/crm-sync'
     | '/api/send-quote'
     | '/dashboard/audits'
@@ -478,6 +489,7 @@ export interface FileRouteTypes {
     | '/api/create-checkout'
     | '/api/crm'
     | '/api/crm-auth'
+    | '/api/crm-email-alert'
     | '/api/crm-sync'
     | '/api/send-quote'
     | '/dashboard/audits'
@@ -520,6 +532,7 @@ export interface RootRouteChildren {
   ApiCreateCheckoutRoute: typeof ApiCreateCheckoutRoute
   ApiCrmRoute: typeof ApiCrmRoute
   ApiCrmAuthRoute: typeof ApiCrmAuthRoute
+  ApiCrmEmailAlertRoute: typeof ApiCrmEmailAlertRoute
   ApiCrmSyncRoute: typeof ApiCrmSyncRoute
   ApiSendQuoteRoute: typeof ApiSendQuoteRoute
   ServicesServiceIdRoute: typeof ServicesServiceIdRoute
@@ -700,6 +713,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiCrmAuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/crm-email-alert': {
+      id: '/api/crm-email-alert'
+      path: '/api/crm-email-alert'
+      fullPath: '/api/crm-email-alert'
+      preLoaderRoute: typeof ApiCrmEmailAlertRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/crm-sync': {
       id: '/api/crm-sync'
       path: '/api/crm-sync'
@@ -876,6 +896,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCreateCheckoutRoute: ApiCreateCheckoutRoute,
   ApiCrmRoute: ApiCrmRoute,
   ApiCrmAuthRoute: ApiCrmAuthRoute,
+  ApiCrmEmailAlertRoute: ApiCrmEmailAlertRoute,
   ApiCrmSyncRoute: ApiCrmSyncRoute,
   ApiSendQuoteRoute: ApiSendQuoteRoute,
   ServicesServiceIdRoute: ServicesServiceIdRoute,

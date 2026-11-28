@@ -18,8 +18,12 @@ import {
   Home,
   Layers,
 } from "lucide-react";
-import type { Lead, TeamMember } from "@/lib/crm/data";
+import type { Lead, TeamMember, ClientMilestone } from "@/lib/crm/data";
 import type { CrmThemeTokens } from "@/lib/crm/theme";
+import {
+  buildLeadFollowUpGoogleUrl,
+  buildMilestoneGoogleUrl,
+} from "@/lib/crm/googleCalendarSync";
 
 interface CustomReminder {
   id: string;
@@ -39,6 +43,7 @@ interface CrmCalendarViewProps {
   onLaunchProduction?: (leadId: string) => void;
   onDeliverMockup?: (leadId: string) => void;
   onRequestMockup?: (lead: Lead) => void;
+  onOpenGoogleSync?: () => void;
 }
 
 export function CrmCalendarView({
@@ -49,6 +54,7 @@ export function CrmCalendarView({
   onOpenLead,
   onLaunchProduction,
   onDeliverMockup,
+  onOpenGoogleSync,
 }: CrmCalendarViewProps) {
   const isDirector = currentUser.roleType === "direction";
   const [selectedDate, setSelectedDate] = useState<string>(() => {
@@ -147,7 +153,34 @@ export function CrmCalendarView({
       return true;
     });
 
-    return { leadFollowUps, mockupsDue, reminders };
+    const clientMilestones: { lead: Lead; milestone: ClientMilestone }[] = [];
+    if (scopeFilter !== "perso") {
+      myVisibleLeads.forEach((l) => {
+        (l.clientMilestones || []).forEach((m) => {
+          if (m.targetDate === selectedDate) {
+            clientMilestones.push({ lead: l, milestone: m });
+          }
+        });
+        if (
+          l.onboardingDate === selectedDate &&
+          !clientMilestones.some((cm) => cm.lead.id === l.id && cm.milestone.type === "onboarding")
+        ) {
+          clientMilestones.unshift({
+            lead: l,
+            milestone: {
+              id: `ms-auto-${l.id}`,
+              targetDate: selectedDate,
+              title: `🎉 Date d'Entrée Client : ${l.name}`,
+              type: "onboarding",
+              status: "done",
+              notes: `Acompte 50% reçu. Services : ${l.activeServicesList?.join(", ") || l.planLabel}.`,
+            },
+          });
+        }
+      });
+    }
+
+    return { leadFollowUps, mockupsDue, reminders, clientMilestones };
   }, [myVisibleLeads, mockupQueue, customReminders, selectedDate, currentUser.id, scopeFilter]);
 
   const handleAddReminder = (e: React.FormEvent) => {
@@ -220,8 +253,11 @@ export function CrmCalendarView({
 
       const hasFollowUp = myVisibleLeads.some((l) => l.followUpDate === iso);
       const hasMockup = mockupQueue.some((m) => m.deadline.toISOString().slice(0, 10) === iso);
+      const hasMilestone = myVisibleLeads.some(
+        (l) => l.onboardingDate === iso || (l.clientMilestones || []).some((m) => m.targetDate === iso)
+      );
 
-      days.push({ iso, dayName, dayNum, monthName, hasFollowUp, hasMockup });
+      days.push({ iso, dayName, dayNum, monthName, hasFollowUp, hasMockup, hasMilestone });
     }
     return days;
   }, [myVisibleLeads, mockupQueue]);
@@ -405,6 +441,20 @@ export function CrmCalendarView({
             </button>
           </div>
 
+          {/* Bouton Google Calendar Sync */}
+          <button
+            onClick={() => {
+              if (onOpenGoogleSync) onOpenGoogleSync();
+              else handleExportIcs();
+            }}
+            title="Synchroniser avec Google Calendar & Configurer les Alertes Gmail"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 text-xs font-bold transition-all shadow-sm"
+          >
+            <CalendarIcon className="w-3.5 h-3.5 text-indigo-500" />
+            <span>Google Agenda &amp; Gmail</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          </button>
+
           {/* Bouton Export iCal / Google Calendar */}
           <button
             onClick={handleExportIcs}
@@ -519,8 +569,74 @@ export function CrmCalendarView({
       </div>
 
       {/* ── DÉTAILS DE LA JOURNÉE SÉLECTIONNÉE ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        {/* Colonne 1 : Relances Prospects */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        {/* Colonne 1 : Clients Entrés & Échéances Upsell */}
+        <div className={`p-5 rounded-3xl border space-y-3 ${theme.card}`}>
+          <h3 className={`font-black text-sm flex items-center gap-2 ${theme.textMain}`}>
+            <CalendarIcon className="w-4 h-4 text-indigo-500" />
+            Clients &amp; Jalons Upsell ({eventsForSelectedDate.clientMilestones.length})
+          </h3>
+
+          {eventsForSelectedDate.clientMilestones.length === 0 ? (
+            <p className={`text-xs italic py-6 text-center ${theme.textMuted}`}>
+              Aucun client entré ni jalon d'upsell ce jour.
+            </p>
+          ) : (
+            <div className="space-y-2.5">
+              {eventsForSelectedDate.clientMilestones.map((item, idx) => {
+                const isEntry = item.milestone.type === "onboarding";
+                const isUpsell = item.milestone.type === "upsell_check";
+                const isDelivery = item.milestone.type === "delivery";
+                return (
+                  <div
+                    key={`${item.lead.id}-${idx}`}
+                    onClick={() => onOpenLead(item.lead)}
+                    className={`p-3.5 rounded-2xl border cursor-pointer hover:border-indigo-500 transition-all ${theme.subCard}`}
+                  >
+                    <div className="flex items-start justify-between gap-1.5">
+                      <h4 className={`font-black text-xs ${theme.textMain}`}>{item.lead.name}</h4>
+                      <span
+                        className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full shrink-0 ${
+                          isEntry
+                            ? "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30"
+                            : isDelivery
+                            ? "bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30"
+                            : isUpsell
+                            ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30"
+                            : "bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-500/30"
+                        }`}
+                      >
+                        {isEntry ? "🎉 Entrée Client" : isDelivery ? "🚀 Livraison" : isUpsell ? "💡 Upsell J+30" : "📍 Suivi"}
+                      </span>
+                    </div>
+                    <p className={`text-[11px] mt-1 line-clamp-2 ${theme.textMuted}`}>
+                      {item.milestone.title}
+                    </p>
+                    {item.milestone.notes && (
+                      <p className="text-[10px] italic mt-1 text-zinc-500 dark:text-zinc-400">
+                        {item.milestone.notes}
+                      </p>
+                    )}
+                    <div className="mt-2 pt-1.5 border-t border-zinc-200/60 dark:border-zinc-800/60 flex items-center justify-between text-[10px]">
+                      <span className="text-zinc-400">Échéance jalon</span>
+                      <a
+                        href={buildMilestoneGoogleUrl(item.lead, item.milestone, members.find((m) => m.id === item.lead.closerId))}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-0.5"
+                      >
+                        + Google Agenda ↗
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Colonne 2 : Relances Prospects */}
         <div className={`p-5 rounded-3xl border space-y-3 ${theme.card}`}>
           <h3 className={`font-black text-sm flex items-center gap-2 ${theme.textMain}`}>
             <Phone className="w-4 h-4 text-emerald-500" />
@@ -548,13 +664,25 @@ export function CrmCalendarView({
                       {l.stage}
                     </span>
                   </div>
+                  <div className="mt-2 pt-1.5 border-t border-zinc-200/60 dark:border-zinc-800/60 flex items-center justify-between text-[10px]">
+                    <span className="text-zinc-400">Rappel client</span>
+                    <a
+                      href={buildLeadFollowUpGoogleUrl(l, members.find((m) => m.id === l.closerId))}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-0.5"
+                    >
+                      + Google Agenda ↗
+                    </a>
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        {/* Colonne 2 : Maquettes & Échéances */}
+        {/* Colonne 3 : Maquettes & Échéances */}
         <div className={`p-5 rounded-3xl border space-y-3 ${theme.card}`}>
           <h3 className={`font-black text-sm flex items-center gap-2 ${theme.textMain}`}>
             <Sparkles className="w-4 h-4 text-amber-500" />

@@ -37,9 +37,9 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     settingRate: 1,
     closingRate: 1,
     fullCycleRate: 1,
-    avatarBg: "from-amber-400 via-amber-500 to-orange-600",
-    avatarChar: "👑",
-    badge: "👑 Direction",
+    avatarBg: "from-amber-600 to-amber-800",
+    avatarChar: "A",
+    badge: "Direction Générale",
     pin: "071266",
   },
   {
@@ -52,9 +52,9 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     closingRate: 0.3,
     fullCycleRate: 0.3,
     overrideRate: 0.05,
-    avatarBg: "from-blue-500 to-indigo-600",
-    avatarChar: "👔",
-    badge: "👔 Manager RH · 🎯 Commercial (30%) · 📱 Head of Social",
+    avatarBg: "from-blue-600 to-indigo-800",
+    avatarChar: "M",
+    badge: "Manager RH & Head of Social",
     pin: "2026",
   },
   {
@@ -67,9 +67,9 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     settingRate: 0.1,
     closingRate: 0,
     fullCycleRate: 0.1,
-    avatarBg: "from-pink-500 to-rose-700",
-    avatarChar: "🎧",
-    badge: "📞 Seteuse Cold Call",
+    avatarBg: "from-rose-600 to-pink-800",
+    avatarChar: "S",
+    badge: "Seteuse B2B",
     pin: "2020",
   },
   {
@@ -82,9 +82,9 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     settingRate: 0.1,
     closingRate: 0.2,
     fullCycleRate: 0.2,
-    avatarBg: "from-purple-500 to-violet-700",
-    avatarChar: "📱",
-    badge: "⚡ Commerciale Full-Cycle",
+    avatarBg: "from-indigo-600 to-slate-800",
+    avatarChar: "C",
+    badge: "Commerciale Full-Cycle",
     pin: "3030",
   },
   {
@@ -97,9 +97,9 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     settingRate: 0.1,
     closingRate: 0.1,
     fullCycleRate: 0.1,
-    avatarBg: "from-cyan-500 to-blue-700",
-    avatarChar: "🎯",
-    badge: "🎯 Closeuse B2B",
+    avatarBg: "from-teal-600 to-cyan-800",
+    avatarChar: "C",
+    badge: "Closeuse B2B",
     pin: "4040",
   },
   {
@@ -112,9 +112,9 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     settingRate: 0.1,
     closingRate: 0.2,
     fullCycleRate: 0.2,
-    avatarBg: "from-emerald-500 to-teal-700",
-    avatarChar: "💼",
-    badge: "⚡ Commerciale Full-Cycle",
+    avatarBg: "from-emerald-600 to-teal-800",
+    avatarChar: "M",
+    badge: "Commerciale Full-Cycle",
     pin: "7070",
   },
   {
@@ -127,9 +127,9 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     settingRate: 0.1,
     closingRate: 0.2,
     fullCycleRate: 0.2,
-    avatarBg: "from-rose-500 to-amber-600",
-    avatarChar: "💎",
-    badge: "💼 Commerciale Full-Cycle",
+    avatarBg: "from-purple-600 to-violet-800",
+    avatarChar: "P",
+    badge: "Commerciale Full-Cycle",
     pin: "8080",
   },
   {
@@ -142,9 +142,9 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     settingRate: 0.1,
     closingRate: 0.2,
     fullCycleRate: 0.2,
-    avatarBg: "from-indigo-500 to-blue-700",
-    avatarChar: "⚡",
-    badge: "⚡ Commercial Full-Cycle",
+    avatarBg: "from-blue-600 to-slate-800",
+    avatarChar: "L",
+    badge: "Commercial Full-Cycle",
     pin: "1010",
   },
   {
@@ -157,9 +157,9 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     settingRate: 0.1,
     closingRate: 0.2,
     fullCycleRate: 0.2,
-    avatarBg: "from-amber-500 via-orange-500 to-red-600",
-    avatarChar: "🔥",
-    badge: "⚡ Full-Cycle · 🎓 Élève School",
+    avatarBg: "from-orange-600 to-amber-800",
+    avatarChar: "R",
+    badge: "Full-Cycle · XR School",
     pin: "5050",
   },
   {
@@ -172,9 +172,9 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     settingRate: 0.1,
     closingRate: 0.15,
     fullCycleRate: 0.15,
-    avatarBg: "from-fuchsia-500 to-purple-700",
-    avatarChar: "✨",
-    badge: "🎓 Élève XR School",
+    avatarBg: "from-fuchsia-600 to-purple-800",
+    avatarChar: "E",
+    badge: "Conseillère · XR School",
     pin: "6060",
   },
   {
@@ -186,9 +186,9 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     settingRate: 0,
     closingRate: 0,
     fullCycleRate: 0,
-    avatarBg: "from-zinc-600 to-zinc-900",
-    avatarChar: "🎨",
-    badge: "🎨 Studio",
+    avatarBg: "from-zinc-700 to-zinc-900",
+    avatarChar: "S",
+    badge: "Production Studio",
     pin: "0000",
   },
 ];
@@ -265,8 +265,9 @@ export const XR_OFFICIAL_SERVICES: XrOfficialService[] = [
     deliverable: "Audit sémantique, optimisation on-page, netlinking et reporting mensuel transparent.",
     upsellHint: "Coupler avec Google Maps Top 3 pour dominer le local",
     plans: [
-      { id: "seo-start", label: "SEO Croissance", price: 299, period: "month" },
-      { id: "seo-pro", label: "SEO Performance", price: 499, period: "month" },
+      { id: "seo-start", label: "SEO Croissance & Local", price: 299, period: "month" },
+      { id: "seo-pro", label: "SEO Performance Dominante", price: 499, period: "month" },
+      { id: "seo-elite", label: "SEO National & Stratégique", price: 799, period: "month" },
     ],
   },
   {
@@ -277,10 +278,10 @@ export const XR_OFFICIAL_SERVICES: XrOfficialService[] = [
     icon: "📍",
     category: "Visibilité Locale",
     billing: "year",
-    defaultPrice: 990,
-    deliverable: "Audit local, optimisation Google Business Profile, suivi mensuel + Garantie Top 3 ou remboursé.",
+    defaultPrice: 999,
+    deliverable: "Audit local, positionnement initial, optimisation Google Business Profile, contrat sur-mesure avec Garantie Top 3 ou remboursé sous délai fixé par Direction.",
     upsellHint: "Idéal en pack avec Site Vitrine Pro ou Social Media",
-    plans: [{ id: "maps-top3", label: "Maps Top 3 Garanti (Annuel)", price: 990, period: "year" }],
+    plans: [{ id: "maps-top3", label: "Maps Top 3 Garanti (Annuel sur-mesure)", price: 999, period: "year" }],
   },
   {
     id: "social",
@@ -339,6 +340,25 @@ export const XR_OFFICIAL_SERVICES: XrOfficialService[] = [
 export type LeadStage = "new" | "rdv" | "mockup" | "negociation" | "won" | "proposal";
 export type CommissionStatus = "estimated" | "pending_payment" | "unlocked";
 
+export type QuoteWorkflowStatus =
+  | "none"
+  | "draft"
+  | "pending_director_approval"
+  | "approved"
+  | "rejected"
+  | "sent_to_client"
+  | "signed";
+
+export interface ClientMilestone {
+  id: string;
+  targetDate: string; // YYYY-MM-DD
+  title: string;
+  serviceCategory?: string;
+  type: "onboarding" | "delivery" | "upsell_check" | "annual_renewal" | "followup";
+  status: "pending" | "done" | "dismissed";
+  notes?: string;
+}
+
 export interface LeadServiceItem {
   id: string;
   serviceId: string;
@@ -355,6 +375,9 @@ export interface Lead {
   email?: string;
   websiteUrl?: string;
   city?: string;
+  countryCode?: string; // ex: "FR", "BE", "CH", "US", etc.
+  clientType?: "b2b" | "b2c";
+  clientVatNumber?: string; // N° TVA Intracommunautaire si client pro UE
   source?: string;
   priority?: "normal" | "hot" | "urgent" | string;
   callsCount?: number;
@@ -390,6 +413,14 @@ export interface Lead {
   invoiceStatus?: "none" | "deposit_sent" | "paid" | string;
   invoiceRef?: string;
   quoteRef?: string;
+  quoteWorkflowStatus?: QuoteWorkflowStatus;
+  quoteRequestedAt?: string;
+  quoteApprovedAt?: string;
+  quoteApprovedBy?: string; // ex: "Antoine Rebuffé-Rousseau"
+  quoteDirectorNotes?: string;
+  onboardingDate?: string; // Date d'entrée client chez XR Agency (YYYY-MM-DD)
+  activeServicesList?: string[]; // Liste lisible des services souscrits
+  clientMilestones?: ClientMilestone[]; // Calendrier d'accompagnement & d'upsell
   depositAmount?: number;
   depositPaidAt?: string;
   depositMethod?: string;
@@ -398,9 +429,12 @@ export interface Lead {
     price: number;
     keywords: string;
     targetZone: string;
+    currentPosition?: string;
+    competitionLevel?: "moderee" | "forte" | "ultra_concurrentielle" | string;
     deliveryDelayDays: number;
     guaranteeClause: string;
     validatedBy: string;
+    directorApproved?: boolean;
   };
   timeline?: { id: string; date: string; text: string }[];
 }
@@ -524,8 +558,16 @@ export function computeDealCommissions(lead: Lead, members: TeamMember[]): DealC
     const manager = members.find((m) => m.id === recruiterId);
     if (manager) {
       managerId = manager.id;
-      // Base override 5% (monte à 10% lors du franchissement du palier de 15 000 €)
-      const overrideRate = manager.overrideRate ?? 0.05;
+      // Règle stricte Martin / Manager :
+      // - 10% direct sur les sites web & offres one-shot de son équipe
+      // - 5% sur les abonnements mensuels et annuels de son équipe
+      // - Boosté à 10% sur les abonnements mensuels si le défi équipe de 20k€ avant le 01/02/2027 est atteint
+      const isOneShot = lead.billing === "once" || lead.serviceId === "websites";
+      const isMonthly = lead.billing === "month";
+      let overrideRate = isOneShot ? 0.10 : 0.05;
+      if (isMonthly && manager.overrideRate && manager.overrideRate >= 0.10) {
+        overrideRate = 0.10;
+      }
       managerOverrideAmount = Math.round(baseValue * overrideRate);
     }
   }

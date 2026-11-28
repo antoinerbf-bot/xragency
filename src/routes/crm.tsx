@@ -67,6 +67,7 @@ import { DirectorPersonalHub } from "@/components/crm/DirectorPersonalHub";
 import { ManagerFiliereHub } from "@/components/crm/ManagerFiliereHub";
 import { CrmCalendarView } from "@/components/crm/CrmCalendarView";
 import { QuoteContractConfiguratorModal } from "@/components/crm/QuoteContractConfiguratorModal";
+import { GoogleWorkspaceSyncModal } from "@/components/crm/GoogleWorkspaceSyncModal";
 import { calculateQuoteTva, detectCountryFromText } from "@/lib/crm/taxEngine";
 
 export const Route = createFileRoute("/crm")({
@@ -255,6 +256,9 @@ function XrAgencyCrmApp() {
 
   // Modal Devis & Contrat Interactif & Facturation (Validation Acompte 50%)
   const [quoteModalLead, setQuoteModalLead] = useState<Lead | null>(null);
+
+  // Modal Synchronisation Google Workspace, Gmail & Calendrier
+  const [showGoogleSyncModal, setShowGoogleSyncModal] = useState<boolean>(false);
 
   // ── Persistance & Supabase Realtime ──
   useEffect(() => {
@@ -1701,6 +1705,17 @@ function XrAgencyCrmApp() {
               <Command className="w-3.5 h-3.5" /> <span className="hidden md:inline text-[11px]">Recherche (Ctrl+K)</span>
             </button>
 
+            {/* Bouton Connexion Google Workspace & Gmail */}
+            <button
+              onClick={() => setShowGoogleSyncModal(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold text-xs shadow-sm transition-all"
+              title="Connecter Google Workspace, Gmail & Synchroniser Google Agenda"
+            >
+              <Mail className="w-3.5 h-3.5 text-indigo-500" />
+              <span className="hidden lg:inline">Gmail &amp; Google Agenda</span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            </button>
+
             {!isStudio && (
               <button
                 onClick={() => {
@@ -2325,6 +2340,7 @@ function XrAgencyCrmApp() {
             members={members}
             currentUser={currentUser}
             theme={theme}
+            onOpenGoogleSync={() => setShowGoogleSyncModal(true)}
             onOpenLead={(lead) => {
               setActiveLeadForCockpit(lead);
               setActiveTab("cockpit");
@@ -3191,6 +3207,19 @@ function XrAgencyCrmApp() {
             setLeads((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
             void upsertLeadToSupabase(updated);
           }}
+          onNotification={(msg) => setCheckoutMessage(msg)}
+        />
+      )}
+
+      {/* Modal Synchronisation Google Workspace, Gmail & Calendrier */}
+      {showGoogleSyncModal && (
+        <GoogleWorkspaceSyncModal
+          isOpen={showGoogleSyncModal}
+          onClose={() => setShowGoogleSyncModal(false)}
+          currentUser={currentUser}
+          members={members}
+          leads={leads}
+          theme={theme}
           onNotification={(msg) => setCheckoutMessage(msg)}
         />
       )}

@@ -1902,8 +1902,53 @@ export function QuoteConfiguratorCompact() {
           </nav>
         </div>
 
+        {/* Social Proof Live Ticker & Gamification Progress Bar */}
+        <div className="mt-8 space-y-3">
+          {/* Social Proof Live Pulse Ticker */}
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#D8B788]/30 bg-[#FAF8F4] px-4 py-2.5 text-xs">
+            <div className="flex items-center gap-2.5">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
+              </span>
+              <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-emerald-900">
+                En direct :
+              </span>
+              <span className="text-[11.5px] font-medium text-[#45413A]">
+                Fiche Google Maps propulsée Top 3 à Lyon (il y a 38 min) · Site Business déployé à Paris (il y a 2h) · Solution POS Dubaï (il y a 3h)
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-[11px] font-semibold text-[#8D6C42]">
+              <span>⭐ 4.9/5 sur 120+ livrables audités</span>
+            </div>
+          </div>
+
+          {/* Gamification Completion Bar */}
+          <div className="rounded-2xl border border-[#171613]/10 bg-white p-3.5 shadow-xs">
+            <div className="flex items-center justify-between text-xs font-semibold mb-2">
+              <span className="text-[#171613] font-mono text-[11px] uppercase tracking-wider">
+                Progression de votre projet : {step === 1 ? "Étape 1/3 (Diagnostic)" : step === 2 ? "Étape 2/3 (Options & Synergie)" : "Étape 3/3 (Devis Certifié)"}
+              </span>
+              <span className="font-mono text-[11px] font-bold text-[#8D6C42]">
+                {step === 1 ? "33% · Diagnostic initialisé" : step === 2 ? "66% · Synergie -15% débloquée" : "100% · Devis contractuel prêt"}
+              </span>
+            </div>
+            <div className="h-2 w-full overflow-hidden rounded-full bg-[#FAF8F4] border border-[#171613]/10">
+              <div
+                className="h-full bg-gradient-to-r from-[#D8B788] via-[#E5C696] to-[#171613] transition-all duration-500 ease-out"
+                style={{ width: step === 1 ? "33%" : step === 2 ? "66%" : "100%" }}
+              />
+            </div>
+            <div className="mt-2 flex items-center justify-between font-mono text-[10px] text-[#706A61]">
+              <span className={step >= 1 ? "font-bold text-[#171613]" : ""}>✓ 1. Diagnostic sectoriel</span>
+              <span className={step >= 2 ? "font-bold text-[#171613]" : ""}>✓ 2. Synergie & Formules</span>
+              <span className={step >= 3 ? "font-bold text-[#171613]" : ""}>✓ 3. Devis PDF & WhatsApp</span>
+            </div>
+          </div>
+        </div>
+
         {/* Main 2-Column Workspace (Left: Step Form | Right: Live Sticky Summary) */}
-        <div className="mt-10 grid items-start gap-6 lg:grid-cols-12">
+        <div className="mt-6 grid items-start gap-6 lg:grid-cols-12">
           {/* Left Column: Active Step */}
           <div className="rounded-3xl border border-[#171613]/12 bg-white p-5 shadow-[0_20px_50px_rgba(23,22,19,0.05)] sm:p-8 lg:col-span-8">
             {/* STEP 1 — DIAGNOSTIC & BESOINS */}
@@ -1957,6 +2002,30 @@ export function QuoteConfiguratorCompact() {
                         </button>
                       );
                     })}
+                  </div>
+
+                  {/* Loss Aversion Alert Box for Selected Sector */}
+                  <div className="mt-3.5 rounded-2xl border border-amber-500/35 bg-amber-50/70 p-4 shadow-2xs">
+                    <div className="flex items-start gap-3">
+                      <span className="text-xl shrink-0">⚠️</span>
+                      <div className="flex-1">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-amber-950">
+                            Opportunités manquées estimées pour votre secteur ({t(activeBusiness.label)})
+                          </span>
+                          <span className="rounded-full bg-amber-200/80 px-2.5 py-0.5 font-mono text-[10px] font-bold text-amber-950">
+                            Pertes locales constatées
+                          </span>
+                        </div>
+                        <p className="mt-1 text-xs text-amber-950 leading-relaxed">
+                          En moyenne, un professionnel de votre secteur perd{" "}
+                          <strong className="font-bold underline decoration-amber-500 underline-offset-2">
+                            ~{(activeBusiness.defaultLossEstimate || 14000).toLocaleString("fr-FR")} € / an
+                          </strong>{" "}
+                          de chiffre d'affaires capté par les 3 premiers concurrents positionnés sur Google & Google Maps dans votre zone géographique.
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -2507,14 +2576,23 @@ export function QuoteConfiguratorCompact() {
                                       <span
                                         className={`rounded-full px-2 py-0.5 font-mono text-[9px] font-semibold uppercase ${
                                           active
-                                            ? "bg-white/20 text-white"
+                                            ? "bg-[#E5C696]/20 text-[#E5C696] border border-[#E5C696]/40"
                                             : "bg-[#EEE9E0] text-[#12110E]"
                                         }`}
                                       >
-                                        ★
+                                        ⭐ Plus choisi
                                       </span>
                                     )}
                                   </div>
+                                  {plan.popular && (
+                                    <p
+                                      className={`mt-1 font-mono text-[10px] font-bold ${
+                                        active ? "text-[#E5C696]" : "text-[#8D6C42]"
+                                      }`}
+                                    >
+                                      Recommandé pour votre secteur (78% des pros)
+                                    </p>
+                                  )}
                                   <p
                                     className={`mt-1.5 text-[11px] leading-relaxed ${
                                       active ? "text-[#F7F4EE]/75" : "text-[#57534B]"
@@ -2719,19 +2797,37 @@ export function QuoteConfiguratorCompact() {
                       </p>
                     )}
 
-                    {/* Reassurance & Fast-Track Box */}
-                    <div className="rounded-2xl border border-amber-500/30 bg-amber-50/70 p-4 space-y-2">
+                    {/* Reassurance & Objections Relief Box */}
+                    <div className="rounded-2xl border border-amber-500/30 bg-amber-50/70 p-4 space-y-2.5">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-amber-950 flex items-center gap-1.5">
                           <span className="text-base">🚀</span>
-                          Démarrage Express garanti sous 48h
+                          Démarrage Express & Garanties Contractuelles
                         </span>
                         <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200/70 text-amber-900">
-                          3 créneaux restants
+                          3 créneaux ce mois
                         </span>
                       </div>
-                      <p className="text-[11px] text-amber-900 leading-relaxed">
-                        Chaque projet est livré clé en main sous 10 à 14 jours ouvrés. Validez votre configuration directement avec un expert sur WhatsApp ou téléchargez votre devis officiel PDF.
+                      <div className="grid grid-cols-2 gap-2 text-[11px] text-amber-950">
+                        <div className="flex items-center gap-1.5 font-medium">
+                          <span className="text-emerald-700 font-bold">✓</span>
+                          <span>0 € débité aujourd'hui</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 font-medium">
+                          <span className="text-emerald-700 font-bold">✓</span>
+                          <span>Prototype 48h offert</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 font-medium">
+                          <span className="text-emerald-700 font-bold">✓</span>
+                          <span>Garantie Satisfait ou Remboursé</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 font-medium">
+                          <span className="text-emerald-700 font-bold">✓</span>
+                          <span>Code 100% propriétaire</span>
+                        </div>
+                      </div>
+                      <p className="text-[11px] text-amber-900/80 leading-relaxed pt-1 border-t border-amber-600/20">
+                        Chaque projet est validé sur devis officiel signé. Téléchargez votre PDF ou démarrez un échange direct de 15 minutes sur WhatsApp.
                       </p>
                     </div>
 
@@ -2833,6 +2929,38 @@ export function QuoteConfiguratorCompact() {
                   <p className="mt-1 text-[10.5px] text-emerald-800 leading-snug">
                     Engagement contractuel ferme noté sur votre devis officiel. Livraison sous 10 à 14 jours.
                   </p>
+                </div>
+
+                {/* Live Certified Pre-Quote Certificate Mockup */}
+                <div className="rounded-2xl border border-[#171613]/12 bg-[#FAF8F4] p-3.5 my-2.5 text-start font-mono text-[10.5px]">
+                  <div className="flex items-center justify-between border-b border-[#171613]/10 pb-2 text-[10px] text-[#706A61]">
+                    <span className="font-bold uppercase tracking-wider text-[#171613]">
+                      RÉF : XR-2026-{activeBusiness.id.toUpperCase().slice(0, 4)}
+                    </span>
+                    <span className="rounded bg-emerald-100 px-1.5 py-0.5 font-bold text-emerald-800">
+                      CERTIFIÉ CONFORME
+                    </span>
+                  </div>
+                  <div className="mt-2 space-y-1.5 text-[#45413A]">
+                    <div className="flex justify-between">
+                      <span className="text-[#706A61]">Dossier :</span>
+                      <strong className="text-[#171613] truncate max-w-[140px]">
+                        {client.company.trim() || "Votre Entreprise"}
+                      </strong>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#706A61]">Livrables :</span>
+                      <span>{chosenItems.length} service(s) configuré(s)</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#706A61]">Code source :</span>
+                      <span className="font-bold text-emerald-800">100% Propriétaire (Zero lock-in)</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#706A61]">Paiement :</span>
+                      <span className="font-semibold text-[#171613]">0 € aujourd'hui (acompte au lancement)</span>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="mt-2 space-y-2 border-t border-[#E5E5E0] pt-4">

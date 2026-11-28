@@ -180,7 +180,14 @@ export function HomeServices() {
   const { t, lang } = useLang();
   const funnel = useOptionalFunnel();
   const [active, setActive] = useState(0);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
   const locale = (lang || "fr") as Lang;
+
+  const handleToggleService = (funnelId: string, title: string) => {
+    funnel?.toggleService(funnelId);
+    setToastMessage(`« ${title} » sélectionné`);
+    setTimeout(() => setToastMessage(null), 4500);
+  };
 
   useEffect(() => {
     const nodes = ORDERED_SERVICES.map((item) =>
@@ -346,7 +353,7 @@ export function HomeServices() {
 
                             <button
                               type="button"
-                              onClick={() => funnel?.toggleService(item.funnelId)}
+                              onClick={() => handleToggleService(item.funnelId, t(service.title))}
                               className={cn(
                                 "inline-flex items-center gap-1.5 rounded-full border px-4 py-2.5 font-mono text-[11px] font-semibold transition",
                                 isSelected
@@ -386,6 +393,26 @@ export function HomeServices() {
           </div>
         </div>
       </div>
+
+      {/* Floating Selection Feedback Pill */}
+      {toastMessage && (
+        <aside
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 flex items-center gap-3 rounded-full border border-[#E5C696]/40 bg-[#14110E]/95 px-5 py-3 text-xs text-white shadow-2xl backdrop-blur-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-4"
+        >
+          <span className="flex h-2 w-2 rounded-full bg-[#E5C696] animate-pulse" />
+          <span className="font-medium text-[#F2D7B0]">{toastMessage}</span>
+          <span className="text-white/40">·</span>
+          <a
+            href="#quote"
+            className="inline-flex items-center gap-1 font-bold text-white underline underline-offset-4 hover:text-[#E5C696] transition"
+          >
+            <span>Voir mon devis</span>
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </a>
+        </aside>
+      )}
     </section>
   );
 }

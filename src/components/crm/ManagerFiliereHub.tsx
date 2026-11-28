@@ -158,7 +158,9 @@ export function ManagerFiliereHub({
 
   // ── 3. Simulateur de Gains Interactif ──
   const [simDirectSales, setSimDirectSales] = useState(6000);
-  const [simTeamSales, setSimTeamSales] = useState(16000);
+  const [simTeamOneShotSales, setSimTeamOneShotSales] = useState(12000);
+  const [simTeamMonthlySales, setSimTeamMonthlySales] = useState(6000);
+  const [simTeamAnnualSales, setSimTeamAnnualSales] = useState(3000);
   const [simSocialSales, setSimSocialSales] = useState(4000);
 
   // ── Données Équipe & Ventes Réelles ──
@@ -177,11 +179,11 @@ export function ManagerFiliereHub({
   // Martin prend 30% sur ses ventes directes
   const myDirectCommissions = Math.round(myDirectRevenue * 0.30);
 
-  // B. Défi 20 000 € avant le 01 Mars 2027
+  // B. Défi Personnel : 20 000 € avant le 01 Mars 2027 (maintien du statut commercial)
   const TARGET_DIRECT_SALES = 20000;
-  const DEADLINE_DATE = new Date("2027-03-01T00:00:00");
+  const DIRECT_DEADLINE_DATE = new Date("2027-03-01T00:00:00");
   const now = new Date();
-  const daysLeftUntilDeadline = Math.max(0, Math.ceil((DEADLINE_DATE.getTime() - now.getTime()) / (1000 * 3600 * 24)));
+  const daysLeftUntilDirectDeadline = Math.max(0, Math.ceil((DIRECT_DEADLINE_DATE.getTime() - now.getTime()) / (1000 * 3600 * 24)));
   const directSalesProgressPct = Math.min(100, Math.round((myDirectRevenue / TARGET_DIRECT_SALES) * 100));
 
   // C. Ventes de l'Équipe Commerciale (Override)
@@ -189,18 +191,54 @@ export function ManagerFiliereHub({
     () => leadsPool.filter((l) => l.stage === "won" && myTeam.some((m) => m.id === l.closerId || m.id === l.setterId)),
     [leadsPool, myTeam]
   );
-  const teamRevenue = useMemo(
-    () => teamWonDeals.reduce((sum, l) => sum + getLeadTotals(l).commissionBase, 0),
+
+  // Découpage de l'équipe : Sites One-Shot vs Abonnements Mensuels vs Annuels
+  const teamOneShotDeals = useMemo(
+    () => teamWonDeals.filter((l) => l.billing === "once" || l.serviceId === "websites"),
+    [teamWonDeals]
+  );
+  const teamMonthlyDeals = useMemo(
+    () => teamWonDeals.filter((l) => l.billing === "month"),
+    [teamWonDeals]
+  );
+  const teamAnnualDeals = useMemo(
+    () => teamWonDeals.filter((l) => l.billing === "year"),
     [teamWonDeals]
   );
 
-  // Palier Booster Override Équipe : 15 000 €
-  const OVERRIDE_BOOST_THRESHOLD = 15000;
-  const isOverrideBoostUnlocked = (teamRevenue + myDirectRevenue) >= OVERRIDE_BOOST_THRESHOLD;
-  const currentOverrideRate = isOverrideBoostUnlocked ? 0.10 : 0.05;
-  const teamOverrideCommissions = Math.round(teamRevenue * currentOverrideRate);
+  const teamOneShotRevenue = useMemo(
+    () => teamOneShotDeals.reduce((sum, l) => sum + getLeadTotals(l).commissionBase, 0),
+    [teamOneShotDeals]
+  );
+  const teamMonthlyRevenue = useMemo(
+    () => teamMonthlyDeals.reduce((sum, l) => sum + getLeadTotals(l).commissionBase, 0),
+    [teamMonthlyDeals]
+  );
+  const teamAnnualRevenue = useMemo(
+    () => teamAnnualDeals.reduce((sum, l) => sum + getLeadTotals(l).commissionBase, 0),
+    [teamAnnualDeals]
+  );
+  const teamRevenue = teamOneShotRevenue + teamMonthlyRevenue + teamAnnualRevenue;
 
-  // D. Attribution Réseaux Sociaux (10% sur tout deal closé venant des réseaux)
+  // D. Défi Booster Équipe : 20 000 € de CA d'équipe avant le 01 Février 2027
+  // Si atteint : Martin passe de 5% à 10% sur TOUS les abonnements mensuels de son équipe !
+  const TARGET_TEAM_SALES = 20000;
+  const TEAM_DEADLINE_DATE = new Date("2027-02-01T00:00:00");
+  const daysLeftUntilTeamDeadline = Math.max(0, Math.ceil((TEAM_DEADLINE_DATE.getTime() - now.getTime()) / (1000 * 3600 * 24)));
+  const teamSalesProgressPct = Math.min(100, Math.round((teamRevenue / TARGET_TEAM_SALES) * 100));
+  const isTeamBoostUnlocked = teamRevenue >= TARGET_TEAM_SALES;
+
+  // Taux de commissions de Martin sur son équipe :
+  // - Sites one-shot : 10% systématique
+  // - Abonnements mensuels : 5% de base ➔ 10% si équipe >= 20k€ avant le 01/02/2027
+  // - Abonnements annuels : 5%
+  const currentTeamMonthlyRate = isTeamBoostUnlocked ? 0.10 : 0.05;
+  const teamOneShotCommissions = Math.round(teamOneShotRevenue * 0.10);
+  const teamMonthlyCommissions = Math.round(teamMonthlyRevenue * currentTeamMonthlyRate);
+  const teamAnnualCommissions = Math.round(teamAnnualRevenue * 0.05);
+  const teamOverrideCommissions = teamOneShotCommissions + teamMonthlyCommissions + teamAnnualCommissions;
+
+  // E. Attribution Réseaux Sociaux (10% sur tout deal closé venant des réseaux)
   const socialWonDeals = useMemo(
     () =>
       leadsPool.filter((l) => {
@@ -227,10 +265,16 @@ export function ManagerFiliereHub({
   // Grand Total Réel des Gains de Martin
   const grandTotalCommissions = myDirectCommissions + teamOverrideCommissions + socialCommissions;
 
-  // Calcul du simulateur
-  const simTeamOverrideRate = (simTeamSales + simDirectSales) >= OVERRIDE_BOOST_THRESHOLD ? 0.10 : 0.05;
+  // Calcul du simulateur interactif
+  const simTeamTotalSales = simTeamOneShotSales + simTeamMonthlySales + simTeamAnnualSales;
+  const simIsTeamBoostUnlocked = simTeamTotalSales >= TARGET_TEAM_SALES;
+  const simTeamMonthlyRate = simIsTeamBoostUnlocked ? 0.10 : 0.05;
+
   const simDirectEarned = Math.round(simDirectSales * 0.30);
-  const simTeamEarned = Math.round(simTeamSales * simTeamOverrideRate);
+  const simTeamOneShotEarned = Math.round(simTeamOneShotSales * 0.10);
+  const simTeamMonthlyEarned = Math.round(simTeamMonthlySales * simTeamMonthlyRate);
+  const simTeamAnnualEarned = Math.round(simTeamAnnualSales * 0.05);
+  const simTeamEarned = simTeamOneShotEarned + simTeamMonthlyEarned + simTeamAnnualEarned;
   const simSocialEarned = Math.round(simSocialSales * 0.10);
   const simTotalMonthly = simDirectEarned + simTeamEarned + simSocialEarned;
 
@@ -336,49 +380,85 @@ export function ManagerFiliereHub({
         </div>
       </div>
 
-      {/* ── BANNIÈRE GAMIFIÉE : LE DÉFI COMMERCIAL 20 000 € (DEADLINE 01/03/2027) ── */}
-      <div className="relative overflow-hidden p-6 rounded-3xl border border-amber-500/40 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-zinc-900 shadow-xl">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* ── BANNIÈRES GAMIFIÉES : LES 2 DÉFIS MAJEURS DE MARTIN (PERSO & ÉQUIPE) ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Défi 1 : Ventes Directes Perso (Deadline 01/03/2027) */}
+        <div className="relative overflow-hidden p-5 rounded-3xl border border-amber-500/40 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-zinc-900 shadow-xl flex flex-col justify-between gap-3">
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-xl bg-amber-500 text-black font-black text-xs flex items-center gap-1 shadow-sm">
-                <Target className="w-4 h-4" /> OBJECTIF REQUIS
+            <div className="flex items-center justify-between gap-2">
+              <span className="px-2.5 py-1 rounded-xl bg-amber-500 text-black font-black text-[10px] flex items-center gap-1 shadow-sm">
+                <Target className="w-3.5 h-3.5" /> DÉFI PERSO DIRECT
               </span>
-              <h3 className={`text-base sm:text-lg font-black ${theme.textMain}`}>
-                Défi Starter Commercial : 20 000 € de CA avant le 01 Mars 2027
-              </h3>
+              <span className="text-[11px] font-mono font-bold text-amber-400">
+                Deadline : 01 Mars 2027
+              </span>
             </div>
-            <p className={`text-xs leading-relaxed max-w-2xl ${theme.textMuted}`}>
-              Vous bénéficiez d'un <strong>taux boosté exceptionnel de 30 %</strong> sur vos ventes directes en tant que commercial autonome.
-              Atteignez <strong>20 000 € de CA personnel</strong> avant le 1er mars 2027 pour rester dans l'équipe commerciale (au taux pérenne de 20%).
-              En cas de non-atteinte au 01/03/2027, vous vous consacrerez exclusivement à vos fonctions de <strong>Manager RH & Head of Social Media</strong>.
+            <h3 className={`text-sm sm:text-base font-black ${theme.textMain}`}>
+              Objectif Perso : 20 000 € de CA Direct (30 % ➔ 20 %)
+            </h3>
+            <p className={`text-[11px] leading-relaxed ${theme.textMuted}`}>
+              Vous profitez de <strong>30 % direct</strong> sur vos ventes personnelles. Atteignez <strong>20 000 € de CA personnel</strong> avant le 1er mars 2027 pour rester dans l'équipe commerciale à 20% pérenne. Sinon, vous basculerez exclusivement sur vos fonctions RH & Réseaux Sociaux.
             </p>
           </div>
 
-          <div className="flex items-center gap-4 shrink-0 bg-black/40 backdrop-blur-sm p-4 rounded-2xl border border-amber-500/30">
-            <div className="text-center">
-              <div className="text-2xl font-black font-mono text-amber-400">{daysLeftUntilDeadline}</div>
-              <div className="text-[9px] uppercase font-bold text-zinc-400">Jours Restants</div>
+          <div className="space-y-2 pt-1 border-t border-zinc-800">
+            <div className="flex items-center justify-between text-xs font-mono font-bold">
+              <span className="text-emerald-400">
+                {myDirectRevenue.toLocaleString("fr-FR")} € faits ({myDirectCommissions.toLocaleString("fr-FR")} € à 30%)
+              </span>
+              <span className="text-amber-400">{daysLeftUntilDirectDeadline}j restants · {directSalesProgressPct}%</span>
             </div>
-            <div className="h-8 w-[1px] bg-zinc-700"></div>
-            <div className="text-center">
-              <div className="text-2xl font-black font-mono text-emerald-400">{directSalesProgressPct}%</div>
-              <div className="text-[9px] uppercase font-bold text-zinc-400">Accompli</div>
+            <div className="w-full h-2.5 rounded-full bg-zinc-800 overflow-hidden p-0.5 border border-zinc-700">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-emerald-500 transition-all duration-500"
+                style={{ width: `${directSalesProgressPct}%` }}
+              ></div>
             </div>
           </div>
         </div>
 
-        {/* Barre de progression */}
-        <div className="mt-4 space-y-1.5">
-          <div className="flex items-center justify-between text-xs font-mono font-bold">
-            <span className="text-emerald-500">{myDirectRevenue.toLocaleString("fr-FR")} € générés (Gain : {myDirectCommissions.toLocaleString("fr-FR")} € à 30%)</span>
-            <span className="text-amber-500">Objectif : 20 000 €</span>
+        {/* Défi 2 : Booster Équipe Mensuelle (Deadline 01/02/2027) */}
+        <div className={`relative overflow-hidden p-5 rounded-3xl border shadow-xl flex flex-col justify-between gap-3 ${
+          isTeamBoostUnlocked
+            ? "border-emerald-500/50 bg-gradient-to-br from-emerald-500/15 via-teal-500/10 to-zinc-900"
+            : "border-indigo-500/40 bg-gradient-to-br from-indigo-500/10 via-blue-500/5 to-zinc-900"
+        }`}>
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between gap-2">
+              <span className={`px-2.5 py-1 rounded-xl text-white font-black text-[10px] flex items-center gap-1 shadow-sm ${
+                isTeamBoostUnlocked ? "bg-emerald-500" : "bg-indigo-600"
+              }`}>
+                <Flame className="w-3.5 h-3.5" /> DÉFI BOOSTER ÉQUIPE
+              </span>
+              <span className="text-[11px] font-mono font-bold text-indigo-400">
+                Deadline : 01 Février 2027
+              </span>
+            </div>
+            <h3 className={`text-sm sm:text-base font-black ${theme.textMain}`}>
+              Défi Équipe 20 000 € : Débloquez 10 % sur le Mensuel Récurrent !
+            </h3>
+            <p className={`text-[11px] leading-relaxed ${theme.textMuted}`}>
+              Sur les sites de votre équipe, vous prenez <strong>10 % direct</strong>. Sur le récurrent (WebCare, SEO, Social), vous prenez <strong>5 %</strong>. Si votre équipe génère <strong>20 000 € de CA avant le 01/02/2027</strong>, votre commission mensuelle <strong>double à 10 %</strong> !
+            </p>
           </div>
-          <div className="w-full h-3 rounded-full bg-zinc-800 overflow-hidden p-0.5 border border-zinc-700">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-emerald-500 transition-all duration-500"
-              style={{ width: `${directSalesProgressPct}%` }}
-            ></div>
+
+          <div className="space-y-2 pt-1 border-t border-zinc-800">
+            <div className="flex items-center justify-between text-xs font-mono font-bold">
+              <span className={isTeamBoostUnlocked ? "text-emerald-400 font-black" : "text-indigo-400"}>
+                {teamRevenue.toLocaleString("fr-FR")} € / 20 000 € {isTeamBoostUnlocked ? "🔥 DÉBLOQUÉ (10% ACTIF)" : "(Taux 5%)"}
+              </span>
+              <span className="text-zinc-400">{daysLeftUntilTeamDeadline}j restants · {teamSalesProgressPct}%</span>
+            </div>
+            <div className="w-full h-2.5 rounded-full bg-zinc-800 overflow-hidden p-0.5 border border-zinc-700">
+              <div
+                className={`h-full rounded-full transition-all duration-500 ${
+                  isTeamBoostUnlocked
+                    ? "bg-gradient-to-r from-emerald-500 to-teal-400 shadow-lg shadow-emerald-500/50"
+                    : "bg-gradient-to-r from-indigo-500 to-blue-500"
+                }`}
+                style={{ width: `${teamSalesProgressPct}%` }}
+              ></div>
+            </div>
           </div>
         </div>
       </div>
@@ -476,12 +556,12 @@ export function ManagerFiliereHub({
                 </span>
                 <span
                   className={`px-2.5 py-1 rounded-full text-[10px] font-black border ${
-                    isOverrideBoostUnlocked
+                    isTeamBoostUnlocked
                       ? "bg-emerald-500 text-white border-emerald-400 animate-pulse"
                       : "bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border-indigo-500/30"
                   }`}
                 >
-                  {isOverrideBoostUnlocked ? "🔥 10 % BOOST ACTIF" : "5 % Base ➔ 10 % Boost"}
+                  {isTeamBoostUnlocked ? "🔥 10 % MENSUEL BOOSTÉ" : "Sites 10% · Mensuel 5%"}
                 </span>
               </div>
               <div>
@@ -492,11 +572,22 @@ export function ManagerFiliereHub({
                   {teamOverrideCommissions.toLocaleString("fr-FR")} €
                 </p>
                 <p className={`text-[11px] mt-0.5 ${theme.textMuted}`}>
-                  Sur {teamRevenue.toLocaleString("fr-FR")} € de CA généré par vos {myTeam.length} commerciaux.
+                  Sur {teamRevenue.toLocaleString("fr-FR")} € de CA total généré par vos {myTeam.length} commerciaux.
                 </p>
               </div>
-              <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800 text-[10px] text-zinc-400">
-                Palier Boost : dès <strong>15 000 € de CA</strong>, votre override passe de 5% à 10% sur tout le CA !
+              <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800 text-[10px] space-y-1 text-zinc-400">
+                <div className="flex justify-between">
+                  <span>Sites & One-Shot (10%) :</span>
+                  <strong className="text-indigo-400 font-mono">+{teamOneShotCommissions} €</strong>
+                </div>
+                <div className="flex justify-between">
+                  <span>Abonnements Mensuels ({currentTeamMonthlyRate * 100}%) :</span>
+                  <strong className="text-emerald-400 font-mono">+{teamMonthlyCommissions} €</strong>
+                </div>
+                <div className="flex justify-between">
+                  <span>Forfaits Annuels (5%) :</span>
+                  <strong className="text-amber-400 font-mono">+{teamAnnualCommissions} €</strong>
+                </div>
               </div>
             </div>
 
@@ -546,44 +637,49 @@ export function ManagerFiliereHub({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-2">
               <div className={`p-4 rounded-2xl border ${theme.subCard} space-y-2`}>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-extrabold text-indigo-500">🌐 Sites Web (One-Shot)</span>
-                  <span className="text-[10px] font-bold text-zinc-400">Ex: 799 € / 1 499 €</span>
+                  <span className="text-xs font-extrabold text-indigo-500">🌐 Sites Web & One-Shot</span>
+                  <span className="text-[10px] font-bold text-zinc-400">Ex: 499 € à 2 000 €+</span>
                 </div>
                 <ul className="text-xs space-y-1.5 text-zinc-600 dark:text-zinc-300">
                   <li className="flex justify-between">
-                    <span>Commercial (Closer/Full-Cycle) :</span>
+                    <span>Commercial (Closer) :</span>
                     <strong className="text-emerald-500 font-mono">20 %</strong>
                   </li>
                   <li className="flex justify-between">
                     <span>Martin (Override Manager) :</span>
-                    <strong className="text-indigo-500 font-mono">5 % ➔ 10 %</strong>
+                    <strong className="text-indigo-500 font-mono">10 % direct</strong>
                   </li>
                   <li className="flex justify-between border-t pt-1 border-zinc-200 dark:border-zinc-700">
                     <span>Agence KARMA SASU :</span>
-                    <strong className="text-zinc-400 font-mono">70 % à 75 %</strong>
+                    <strong className="text-zinc-400 font-mono">70 % marge</strong>
                   </li>
                 </ul>
               </div>
 
               <div className={`p-4 rounded-2xl border ${theme.subCard} space-y-2`}>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-extrabold text-emerald-500">🛡️ Mensuels MRR (WebCare, SEO, IA)</span>
-                  <span className="text-[10px] font-bold text-zinc-400">Ex: 99 € à 499 €/m</span>
+                  <span className="text-xs font-extrabold text-emerald-500">🛡️ Mensuels MRR (WebCare, SEO, Social)</span>
+                  <span className="text-[10px] font-bold text-zinc-400">Ex: 29 € à 699 €/m</span>
                 </div>
                 <ul className="text-xs space-y-1.5 text-zinc-600 dark:text-zinc-300">
                   <li className="flex justify-between">
-                    <span>Commercial (Suivi régulier) :</span>
+                    <span>Commercial (Closer) :</span>
                     <strong className="text-emerald-500 font-mono">10 % / mois</strong>
                   </li>
                   <li className="flex justify-between">
-                    <span>Martin (Override Récurrent) :</span>
-                    <strong className="text-indigo-500 font-mono">5 % / mois</strong>
+                    <span>Martin (Override Mensuel) :</span>
+                    <strong className="text-indigo-500 font-mono">
+                      {isTeamBoostUnlocked ? "🔥 10 % (Boost Actif)" : "5 % ➔ 10 % Boost"}
+                    </strong>
                   </li>
                   <li className="flex justify-between border-t pt-1 border-zinc-200 dark:border-zinc-700">
                     <span>Agence KARMA SASU :</span>
-                    <strong className="text-zinc-400 font-mono">85 % marge</strong>
+                    <strong className="text-zinc-400 font-mono">80 % à 85 % marge</strong>
                   </li>
                 </ul>
+                <p className="text-[10px] text-zinc-400 pt-1">
+                  ⚡ Si l'équipe dépasse 20 000 € de CA avant le 01/02/2027, Martin passe à 10% sur le mensuel !
+                </p>
               </div>
 
               <div className={`p-4 rounded-2xl border ${theme.subCard} space-y-2`}>
@@ -593,7 +689,7 @@ export function ManagerFiliereHub({
                 </div>
                 <ul className="text-xs space-y-1.5 text-zinc-600 dark:text-zinc-300">
                   <li className="flex justify-between">
-                    <span>Commercial (Apporteur d'affaire) :</span>
+                    <span>Commercial (Closer) :</span>
                     <strong className="text-emerald-500 font-mono">10 % annuel</strong>
                   </li>
                   <li className="flex justify-between">
@@ -631,14 +727,23 @@ export function ManagerFiliereHub({
                 <p className="text-2xl font-black font-mono text-emerald-400">
                   {simTotalMonthly.toLocaleString("fr-FR")} € / mois
                 </p>
+                <div className="text-[10px] font-mono mt-0.5">
+                  {simIsTeamBoostUnlocked ? (
+                    <span className="text-emerald-400 font-bold">🔥 Boost Équipe 20k€ Actif (Mensuel à 10%)</span>
+                  ) : (
+                    <span className="text-amber-400 font-bold">
+                      ⚡ Équipe : {simTeamTotalSales.toLocaleString("fr-FR")} € / 20k€ (Mensuel à 5%)
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
               {/* Curseur 1 : Ventes Directes */}
-              <div className="space-y-2">
+              <div className="space-y-1.5 p-3 rounded-2xl border border-zinc-800 bg-zinc-900/60">
                 <div className="flex justify-between text-xs font-bold">
-                  <span>Mes Ventes Directes (30%) :</span>
+                  <span>Ventes Directes (30%) :</span>
                   <span className="font-mono text-amber-500">{simDirectSales.toLocaleString("fr-FR")} €</span>
                 </div>
                 <input
@@ -653,37 +758,54 @@ export function ManagerFiliereHub({
                 <p className="text-[10px] text-zinc-400">Gain direct : <strong>+{simDirectEarned} €</strong></p>
               </div>
 
-              {/* Curseur 2 : Ventes de l'Équipe */}
-              <div className="space-y-2">
+              {/* Curseur 2 : Sites One-Shot Équipe */}
+              <div className="space-y-1.5 p-3 rounded-2xl border border-zinc-800 bg-zinc-900/60">
                 <div className="flex justify-between text-xs font-bold">
-                  <span>Ventes de l'Équipe ({simTeamOverrideRate * 100}%) :</span>
-                  <span className="font-mono text-indigo-500">{simTeamSales.toLocaleString("fr-FR")} €</span>
+                  <span>Sites Équipe (10%) :</span>
+                  <span className="font-mono text-indigo-400">{simTeamOneShotSales.toLocaleString("fr-FR")} €</span>
                 </div>
                 <input
                   type="range"
                   min={0}
-                  max={40000}
-                  step={1000}
-                  value={simTeamSales}
-                  onChange={(e) => setSimTeamSales(Number(e.target.value))}
+                  max={30000}
+                  step={500}
+                  value={simTeamOneShotSales}
+                  onChange={(e) => setSimTeamOneShotSales(Number(e.target.value))}
                   className="w-full accent-indigo-500 cursor-pointer"
                 />
-                <p className="text-[10px] text-zinc-400">
-                  Override {simTeamOverrideRate * 100}% : <strong>+{simTeamEarned} €</strong>
-                  {(simTeamSales + simDirectSales) >= OVERRIDE_BOOST_THRESHOLD && " (🔥 Boost 10% actif !)"}
-                </p>
+                <p className="text-[10px] text-zinc-400">Override 10% : <strong>+{simTeamOneShotEarned} €</strong></p>
               </div>
 
-              {/* Curseur 3 : Deals Réseaux Sociaux */}
-              <div className="space-y-2">
+              {/* Curseur 3 : Abonnements Mensuels Équipe */}
+              <div className="space-y-1.5 p-3 rounded-2xl border border-zinc-800 bg-zinc-900/60">
                 <div className="flex justify-between text-xs font-bold">
-                  <span>Deals Réseaux Sociaux (10%) :</span>
-                  <span className="font-mono text-pink-500">{simSocialSales.toLocaleString("fr-FR")} €</span>
+                  <span>Mensuel MRR Équipe ({simTeamMonthlyRate * 100}%) :</span>
+                  <span className="font-mono text-emerald-400">{simTeamMonthlySales.toLocaleString("fr-FR")} €</span>
                 </div>
                 <input
                   type="range"
                   min={0}
                   max={20000}
+                  step={500}
+                  value={simTeamMonthlySales}
+                  onChange={(e) => setSimTeamMonthlySales(Number(e.target.value))}
+                  className="w-full accent-emerald-500 cursor-pointer"
+                />
+                <p className="text-[10px] text-zinc-400">
+                  Rente {simTeamMonthlyRate * 100}% : <strong>+{simTeamMonthlyEarned} €/m</strong>
+                </p>
+              </div>
+
+              {/* Curseur 4 : Deals Réseaux Sociaux */}
+              <div className="space-y-1.5 p-3 rounded-2xl border border-zinc-800 bg-zinc-900/60">
+                <div className="flex justify-between text-xs font-bold">
+                  <span>Réseaux Sociaux (10%) :</span>
+                  <span className="font-mono text-pink-500">{simSocialSales.toLocaleString("fr-FR")} €</span>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={15000}
                   step={500}
                   value={simSocialSales}
                   onChange={(e) => setSimSocialSales(Number(e.target.value))}
@@ -902,11 +1024,11 @@ export function ManagerFiliereHub({
                 Radar Coaching & Activité de l'Équipe ({myTeam.length} commerciaux rattachés)
               </h3>
               <p className={`text-xs mt-1 ${theme.textMuted}`}>
-                Chaque vente générée par votre équipe vous rapporte <strong>{currentOverrideRate * 100} % d'override</strong>.
-                {isOverrideBoostUnlocked ? (
-                  <span className="text-emerald-500 font-bold ml-1">🔥 Palier 15k€ franchi : Override boosté à 10% !</span>
+                Barème d'override : <strong>10 % sur les sites & one-shot</strong>, <strong>{currentTeamMonthlyRate * 100} % sur les abonnements mensuels</strong>, et <strong>5 % sur les forfaits annuels</strong>.
+                {isTeamBoostUnlocked ? (
+                  <span className="text-emerald-500 font-bold ml-1">🔥 Défi 20k€ équipe atteint : Mensuel doublé à 10% !</span>
                 ) : (
-                  <span className="text-indigo-500 font-bold ml-1">Atteignez 15 000 € de CA pour passer de 5% à 10% !</span>
+                  <span className="text-indigo-500 font-bold ml-1">Défi équipe 20k€ avant le 01/02/2027 pour doubler le mensuel à 10% !</span>
                 )}
               </p>
             </div>
@@ -926,7 +1048,15 @@ export function ManagerFiliereHub({
               const wonTotal = memberLeads
                 .filter((l) => l.stage === "won")
                 .reduce((s, l) => s + getLeadTotals(l).commissionBase, 0);
-              const overrideFromMember = Math.round(wonTotal * currentOverrideRate);
+              const overrideFromMember = memberLeads
+                .filter((l) => l.stage === "won")
+                .reduce((s, l) => {
+                  const base = getLeadTotals(l).commissionBase;
+                  const isOneShot = l.billing === "once" || l.serviceId === "websites";
+                  const isMonthly = l.billing === "month";
+                  const rate = isOneShot ? 0.10 : isMonthly ? currentTeamMonthlyRate : 0.05;
+                  return s + Math.round(base * rate);
+                }, 0);
               const needsCoaching = activeCount === 0 && wonCount === 0;
 
               return (

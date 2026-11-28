@@ -1,18 +1,32 @@
 import { jsPDF } from "jspdf";
 import type { Lead, TeamMember, LeadServiceItem } from "./data";
 import { XR_OFFICIAL_SERVICES, formatPricePeriod } from "./data";
+import {
+  calculateQuoteTva,
+  detectCountryFromText,
+  SUPPORTED_COUNTRIES,
+  type TaxIssuerEntity,
+  type TaxCalculationResult,
+} from "./taxEngine";
 
 export interface MapsContractDetails {
   enabled: boolean;
   price: number;
   keywords: string;
   targetZone: string;
+  currentPosition?: string;
+  competitionLevel?: string;
   deliveryDelayDays: number;
   guaranteeClause: string;
   validatedBy: string;
+  directorApproved?: boolean;
 }
 
 export interface QuoteConfiguratorData {
+  issuerEntity?: TaxIssuerEntity;
+  clientCountryCode?: string;
+  clientType?: "b2b" | "b2c";
+  clientVatNumber?: string;
   mainServiceId: string;
   mainPlanId: string;
   mainPlanLabel: string;
@@ -78,9 +92,23 @@ export function generateQuoteAndContractPdf(
   });
 
   const mapsPrice = config.mapsContract.enabled ? config.mapsContract.price : 0;
-  const grandOneShotTotal = oneShotTotal + mapsPrice;
-  const depositAmount = Math.round(grandOneShotTotal * 0.5);
-  const balanceAmount = grandOneShotTotal - depositAmount;
+  const grandOneShotHt = oneShotTotal + mapsPrice;
+
+  // Calcul automatique de la TVA selon la localisation du client & régime fiscal
+  const issuerEntity: TaxIssuerEntity = config.issuerEntity || "FR_SASU";
+  const clientCountryCode = config.clientCountryCode || lead.countryCode || detectCountryFromText(lead.city || lead.phone);
+  const clientType = config.clientType || lead.clientType || "b2b";
+  const clientVatNumber = config.clientVatNumber || lead.clientVatNumber;
+
+  const tax = calculateQuoteTva({
+    issuerEntity,
+    clientCountryCode,
+    clientType,
+    clientVatNumber,
+    oneShotHt: grandOneShotHt,
+    mrrHt: mrrTotal,
+    paymentMode: config.paymentMode,
+  });
 
   // Header sombre prestige
   doc.setFillColor(...ink);
@@ -112,30 +140,49 @@ export function generateQuoteAndContractPdf(
   // Cadre Émetteur & Client côte à côte
   const colW = (W - 2 * M - 8) / 2;
 
-  // Émetteur
+  // Émetteur (selon l'entité actuelle SASU ou future LLC / HK)
   doc.setFillColor(...soft);
-  doc.roundedRect(M, y, colW, 28, 2, 2, "F");
+  doc.roundedRect(M, y, colW, 30, 2, 2, "F");
   doc.setDrawColor(...line);
-  doc.roundedRect(M, y, colW, 28, 2, 2, "S");
+  doc.roundedRect(M, y, colW, 30, 2, 2, "S");
   doc.setTextColor(...gold);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(8);
   doc.text("ÉMETTEUR / PRESTATAIRE", M + 4, y + 6);
   doc.setTextColor(...ink);
   doc.setFontSize(9.5);
-  doc.text("KARMA SASU · XR AGENCY", M + 4, y + 12);
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(7.5);
-  doc.setTextColor(...muted);
-  doc.text("78 Avenue des Champs-Élysées · 75008 Paris", M + 4, y + 17);
-  doc.text("SIRET : 889 178 141 00012 · NAF : 6201Z", M + 4, y + 21);
-  doc.text("Directeur : Antoine Rebuffé-Rousseau · 07 67 56 67 83", M + 4, y + 25);
 
-  // Client
+  if (tax.issuerEntity === "FR_SASU") {
+    doc.text("KARMA SASU · XR AGENCY", M + 4, y + 12);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(...muted);
+    doc.text("78 Avenue des Champs-Élysées · 75008 Paris", M + 4, y + 17);
+    doc.text("SIRET : 889 178 141 00012 · N° TVA : FR 43 889 178 141", M + 4, y + 21);
+    doc.text("Directeur : Antoine Rebuffé-Rousseau · 07 67 56 67 83", M + 4, y + 25);
+  } else if (tax.issuerEntity === "US_LLC") {
+    doc.text("XR AGENCY LLC", M + 4, y + 12);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(...muted);
+    doc.text("Delaware / Wyoming · United States of America", M + 4, y + 17);
+    doc.text("Prestations Digitales Internationales · No EU VAT", M + 4, y + 21);
+    doc.text("Managing Director : Antoine Rebuffé-Rousseau", M + 4, y + 25);
+  } else {
+    doc.text("XR AGENCY LIMITED", M + 4, y + 12);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(...muted);
+    doc.text("Central · Hong Kong SAR · Régime 0% VAT", M + 4, y + 17);
+    doc.text("Hong Kong Companies Registry · Export Digital", M + 4, y + 21);
+    doc.text("Managing Director : Antoine Rebuffé-Rousseau", M + 4, y + 25);
+  }
+
+  // Client (avec pays & TVA si renseignée)
   const clientX = M + colW + 8;
   doc.setFillColor(...soft);
-  doc.roundedRect(clientX, y, colW, 28, 2, 2, "F");
-  doc.roundedRect(clientX, y, colW, 28, 2, 2, "S");
+  doc.roundedRect(clientX, y, colW, 30, 2, 2, "F");
+  doc.roundedRect(clientX, y, colW, 30, 2, 2, "S");
   doc.setTextColor(...gold);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(8);
@@ -146,11 +193,12 @@ export function generateQuoteAndContractPdf(
   doc.setFont("helvetica", "normal");
   doc.setFontSize(7.5);
   doc.setTextColor(...muted);
-  doc.text(`Contact : ${lead.contact || "Direction"}`, clientX + 4, y + 17);
+  doc.text(`Contact : ${lead.contact || "Direction"} · Pays : ${tax.clientCountryLabel}`, clientX + 4, y + 17);
   doc.text(`Tél : ${lead.phone}${lead.city ? ` · Ville : ${lead.city}` : ""}`, clientX + 4, y + 21);
-  doc.text(`Email : ${lead.email || "Non renseigné"}`, clientX + 4, y + 25);
+  const vatDisplay = tax.clientVatNumber ? ` · TVA : ${tax.clientVatNumber}` : "";
+  doc.text(`Email : ${lead.email || "Non renseigné"}${vatDisplay}`, clientX + 4, y + 25);
 
-  y += 34;
+  y += 36;
 
   // Tableau des prestations - Header
   doc.setFillColor(...ink);
@@ -160,7 +208,7 @@ export function generateQuoteAndContractPdf(
   doc.setFontSize(8);
   doc.text("DESIGNATION DE LA PRESTATION", M + 4, y + 5.5);
   doc.text("FORMULE / TYPE", 125, y + 5.5);
-  doc.text("MONTANT NET", R - 4, y + 5.5, { align: "right" });
+  doc.text("MONTANT HT", R - 4, y + 5.5, { align: "right" });
 
   y += 12;
 
@@ -244,8 +292,11 @@ export function generateQuoteAndContractPdf(
     doc.setFontSize(7.5);
     doc.setTextColor(...ink);
     doc.text(`• Zone géographique ciblée : ${config.mapsContract.targetZone || lead.city || "Zone locale prioritaire"}`, M + 4, y + 12);
-    doc.text(`• Mots-clés stratégiques : ${config.mapsContract.keywords || "Activité principale + ville"}`, M + 4, y + 17);
-    doc.text(`• Délai de livraison & positionnement garanti : ${config.mapsContract.deliveryDelayDays || 90} jours`, M + 4, y + 22);
+    const posNotice = config.mapsContract.currentPosition ? ` · Position de départ : ${config.mapsContract.currentPosition}` : "";
+    doc.text(`• Mots-clés stratégiques : ${config.mapsContract.keywords || "Activité principale + ville"}${posNotice}`, M + 4, y + 17);
+    const delayDays = config.mapsContract.deliveryDelayDays || 90;
+    const delayLabel = delayDays >= 365 ? "1 an (365 jours)" : delayDays >= 180 ? `${Math.round(delayDays / 30)} mois (${delayDays} jours)` : `${delayDays} jours`;
+    doc.text(`• Délai de livraison & positionnement garanti : ${delayLabel} (validé par la Direction)`, M + 4, y + 22);
 
     doc.setFont("helvetica", "bold");
     doc.setTextColor(...gold);
@@ -263,52 +314,62 @@ export function generateQuoteAndContractPdf(
     y += 37;
   }
 
-  // Totaux financiers
+  // Totaux financiers avec calcul automatique de la TVA
   y = Math.max(y + 2, 172);
   doc.setDrawColor(...line);
   doc.setLineWidth(0.2);
   doc.line(M, y, R, y);
   y += 5;
 
-  const summaryW = 76;
+  const summaryW = 86;
   const summaryX = R - summaryW;
   doc.setFillColor(...soft);
-  doc.roundedRect(summaryX, y, summaryW, 30, 2, 2, "F");
+  doc.roundedRect(summaryX, y, summaryW, 36, 2, 2, "F");
   doc.setDrawColor(...line);
-  doc.roundedRect(summaryX, y, summaryW, 30, 2, 2, "S");
+  doc.roundedRect(summaryX, y, summaryW, 36, 2, 2, "S");
 
   doc.setTextColor(...ink);
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(8.5);
-  doc.text("TOTAL ONE-SHOT NET :", summaryX + 4, y + 7);
-  doc.setTextColor(...gold);
-  doc.text(`${grandOneShotTotal.toLocaleString("fr-FR")} €`, R - 4, y + 7, { align: "right" });
+  doc.setFontSize(8);
+  doc.text("TOTAL HT :", summaryX + 4, y + 6);
+  doc.text(`${tax.oneShotHt.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`, R - 4, y + 6, { align: "right" });
 
-  if (mrrTotal > 0) {
-    doc.setTextColor(...ink);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(8.5);
-    doc.text("ABONNEMENT MENSUEL :", summaryX + 4, y + 15);
-    doc.setTextColor(...ink);
-    doc.text(`${mrrTotal.toLocaleString("fr-FR")} € / mois`, R - 4, y + 15, { align: "right" });
-  }
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(7.5);
+  doc.setTextColor(...muted);
+  doc.text(`TVA (${tax.taxRateLabel}) :`, summaryX + 4, y + 12);
+  doc.setTextColor(...ink);
+  doc.text(`${tax.oneShotTax.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`, R - 4, y + 12, { align: "right" });
 
-  doc.setTextColor(...gold);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9);
+  doc.setTextColor(...gold);
+  doc.text("TOTAL TTC NET :", summaryX + 4, y + 19);
+  doc.text(`${tax.oneShotTtc.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`, R - 4, y + 19, { align: "right" });
+
+  if (tax.mrrHt > 0) {
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(6.5);
+    doc.setTextColor(...muted);
+    doc.text(`Abonnement : ${tax.mrrHt.toLocaleString("fr-FR")}€ HT (${tax.mrrTtc.toLocaleString("fr-FR")}€ TTC / mois)`, summaryX + 4, y + 25);
+  }
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8.5);
+  doc.setTextColor(...ink);
   if (config.paymentMode === "3x") {
-    doc.text("PAIEMENT EN 3X SANS FRAIS :", summaryX + 4, y + 24);
-    doc.text(`3 × ${Math.round(grandOneShotTotal / 3).toLocaleString("fr-FR")} €`, R - 4, y + 24, { align: "right" });
+    doc.text("3x SANS FRAIS (TTC) :", summaryX + 4, y + 31);
+    doc.text(`3 × ${tax.installment3xTtc.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`, R - 4, y + 31, { align: "right" });
   } else {
-    doc.text("ACOMPTE 50 % À LA COMMANDE :", summaryX + 4, y + 24);
-    doc.text(`${depositAmount.toLocaleString("fr-FR")} €`, R - 4, y + 24, { align: "right" });
+    doc.text("ACOMPTE 50 % (TTC) :", summaryX + 4, y + 31);
+    doc.text(`${tax.depositTtc.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`, R - 4, y + 31, { align: "right" });
   }
 
   // Coordonnées bancaires pour le virement d'acompte
   const ribW = summaryX - M - 6;
   doc.setFillColor(...soft);
-  doc.roundedRect(M, y, ribW, 30, 2, 2, "F");
-  doc.roundedRect(M, y, ribW, 30, 2, 2, "S");
+  doc.roundedRect(M, y, ribW, 36, 2, 2, "F");
+  doc.roundedRect(M, y, ribW, 36, 2, 2, "S");
 
   doc.setTextColor(...ink);
   doc.setFont("helvetica", "bold");
@@ -318,19 +379,20 @@ export function generateQuoteAndContractPdf(
   doc.setFont("helvetica", "normal");
   doc.setFontSize(7.5);
   doc.setTextColor(...muted);
-  doc.text("Bénéficiaire : KARMA SASU (XR AGENCY)", M + 4, y + 12);
-  doc.text("Banque : Qonto · BIC : QNTOPRP1", M + 4, y + 17);
+  doc.text(`Bénéficiaire : ${tax.issuerEntity === "FR_SASU" ? "KARMA SASU (XR AGENCY)" : tax.issuerEntity === "US_LLC" ? "XR AGENCY LLC" : "XR AGENCY LIMITED"}`, M + 4, y + 11);
+  doc.text(`Acompte net TTC : ${tax.depositTtc.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} € · Solde : ${tax.balanceTtc.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} € TTC`, M + 4, y + 16);
+  doc.text("Banque : Qonto Business · BIC : QNTOPRP1", M + 4, y + 21);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(...ink);
-  doc.text("IBAN : FR76 1695 8000 0112 3456 7890 123", M + 4, y + 22);
+  doc.text("IBAN : FR76 1695 8000 0112 3456 7890 123", M + 4, y + 26);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(6.5);
   doc.setTextColor(...gold);
-  doc.text(`Motif obligatoire du virement : ${quoteNum} - ${lead.name.slice(0, 16)}`, M + 4, y + 27);
+  doc.text(`Motif obligatoire du virement : ${quoteNum} - ${lead.name.slice(0, 16)}`, M + 4, y + 31);
 
-  y += 34;
+  y += 40;
 
-  // Cadre "BON POUR ACCORD ET COMMANDE FERME"
+  // Cadre "BON POUR ACCORD ET COMMANDE FERME" avec mention TVA
   doc.setFillColor(255, 255, 255);
   doc.roundedRect(M, y, W - 2 * M, 34, 2, 2, "F");
   doc.setDrawColor(...ink);
@@ -339,20 +401,21 @@ export function generateQuoteAndContractPdf(
 
   doc.setTextColor(...ink);
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(8.5);
-  doc.text("BON POUR ACCORD ET COMMANDE FERME", M + 4, y + 6);
+  doc.setFontSize(8);
+  doc.text("BON POUR ACCORD ET COMMANDE FERME", M + 4, y + 5.5);
 
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(7);
+  doc.setFontSize(6.8);
   doc.setTextColor(...muted);
-  doc.text("Le Client déclare accepter sans réserve les prestations, montants et conditions stipulés ci-dessus.", M + 4, y + 11);
-  doc.text("L'engagement devient effectif à réception du présent document signé et du virement d'acompte.", M + 4, y + 15);
+  doc.text("Le Client déclare accepter sans réserve les prestations, montants HT/TTC et conditions stipulés ci-dessus.", M + 4, y + 10);
+  const splitNotice = doc.splitTextToSize(`Régime de TVA : ${tax.regimeName} — ${tax.legalNotice}`, W - 2 * M - 8);
+  doc.text(splitNotice, M + 4, y + 14.5);
 
-  doc.text("Date d'accord : ____ / ____ / 2026", M + 4, y + 22);
-  doc.text("Mention manuscrite obligatoire : « Bon pour accord et commande ferme »", M + 4, y + 27);
+  doc.text("Date d'accord : ____ / ____ / 2026", M + 4, y + 24);
+  doc.text("Mention manuscrite obligatoire : « Bon pour accord et commande ferme »", M + 4, y + 29);
 
   doc.setFont("helvetica", "bold");
-  doc.text("Signature du Client & Cachet commercial :", 125, y + 22);
+  doc.text("Signature du Client & Cachet commercial :", 125, y + 24);
 
   // Footer juridique
   doc.setDrawColor(...line);
@@ -363,7 +426,7 @@ export function generateQuoteAndContractPdf(
   doc.text("KARMA SASU · XR AGENCY · STUDIO DIGITAL & VISIBILITÉ LOCALE", M, 287);
   doc.setFont("helvetica", "normal");
   doc.setTextColor(...muted);
-  doc.text("SIREN 889 178 141 · SIRET 889 178 141 00012 · 78 Avenue des Champs-Élysées · 75008 Paris · TVA non applicable art. 293 B du CGI", M, 291);
+  doc.text(`SIREN 889 178 141 · SIRET 889 178 141 00012 · 78 Avenue des Champs-Élysées · 75008 Paris · ${tax.legalNotice}`, M, 291);
   doc.text("contact.xragency@gmail.com · +33 7 67 56 67 83 · xragencyai.com", M, 295);
 
   return { doc, quoteNum };
@@ -394,8 +457,22 @@ export function generateAcquittedInvoicePdf(
     if (item.billing !== "month") oneShotTotal += item.price;
   });
 
-  const depositAmount = customDepositAmount || Math.round(oneShotTotal * 0.5);
-  const balanceRemaining = oneShotTotal - depositAmount;
+  const clientCountryCode = lead.countryCode || detectCountryFromText(lead.city || lead.phone);
+  const clientType = lead.clientType || "b2b";
+  const clientVatNumber = lead.clientVatNumber;
+
+  const tax = calculateQuoteTva({
+    issuerEntity: "FR_SASU",
+    clientCountryCode,
+    clientType,
+    clientVatNumber,
+    oneShotHt: oneShotTotal,
+    mrrHt: 0,
+    paymentMode: "50_50",
+  });
+
+  const depositAmount = customDepositAmount || tax.depositTtc;
+  const balanceRemaining = Math.max(0, tax.oneShotTtc - depositAmount);
 
   // Header sombre avec sceau ACQUITTÉE
   doc.setFillColor(...ink);
@@ -459,7 +536,7 @@ export function generateAcquittedInvoicePdf(
   doc.setFontSize(7.5);
   doc.setTextColor(...muted);
   doc.text("78 Avenue des Champs-Élysées · 75008 Paris", M + 4, y + 17);
-  doc.text("SIRET : 889 178 141 00012 · NAF : 6201Z", M + 4, y + 21);
+  doc.text("SIRET : 889 178 141 00012 · N° TVA : FR 43 889 178 141", M + 4, y + 21);
   doc.text("Directeur : Antoine Rebuffé-Rousseau · 07 67 56 67 83", M + 4, y + 25);
 
   // Client
@@ -477,9 +554,10 @@ export function generateAcquittedInvoicePdf(
   doc.setFont("helvetica", "normal");
   doc.setFontSize(7.5);
   doc.setTextColor(...muted);
-  doc.text(`Contact : ${lead.contact || "Direction"}`, clientX + 4, y + 17);
+  doc.text(`Contact : ${lead.contact || "Direction"} · Pays : ${tax.clientCountryLabel}`, clientX + 4, y + 17);
   doc.text(`Tél : ${lead.phone}${lead.city ? ` · ${lead.city}` : ""}`, clientX + 4, y + 21);
-  doc.text(`Email : ${lead.email || "Non renseigné"}`, clientX + 4, y + 25);
+  const vatTxt = tax.clientVatNumber ? ` · TVA : ${tax.clientVatNumber}` : "";
+  doc.text(`Email : ${lead.email || "Non renseigné"}${vatTxt}`, clientX + 4, y + 25);
 
   y += 34;
 
@@ -491,7 +569,7 @@ export function generateAcquittedInvoicePdf(
   doc.setFontSize(8);
   doc.text("DESCRIPTION DE LA COMMANDE", M + 4, y + 5.5);
   doc.text("TYPE", 130, y + 5.5);
-  doc.text("TOTAL COMMANDE", R - 4, y + 5.5, { align: "right" });
+  doc.text("TOTAL HT", R - 4, y + 5.5, { align: "right" });
 
   y += 12;
 
@@ -507,7 +585,7 @@ export function generateAcquittedInvoicePdf(
   doc.setTextColor(...ink);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9);
-  doc.text(`${lead.value.toLocaleString("fr-FR")} €`, R - 4, y, { align: "right" });
+  doc.text(`${lead.value.toLocaleString("fr-FR")} € HT`, R - 4, y, { align: "right" });
 
   y += 6;
 
@@ -523,7 +601,7 @@ export function generateAcquittedInvoicePdf(
     doc.setTextColor(...ink);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(8.5);
-    doc.text(`${item.price.toLocaleString("fr-FR")} €`, R - 4, y, { align: "right" });
+    doc.text(`${item.price.toLocaleString("fr-FR")} € HT`, R - 4, y, { align: "right" });
     y += 5.5;
   });
 
@@ -532,11 +610,11 @@ export function generateAcquittedInvoicePdf(
   doc.line(M, y, R, y);
   y += 8;
 
-  // Cadre de règlement de l'acompte
+  // Cadre de règlement de l'acompte avec TVA
   doc.setFillColor(...soft);
-  doc.roundedRect(M, y, W - 2 * M, 42, 2, 2, "F");
+  doc.roundedRect(M, y, W - 2 * M, 46, 2, 2, "F");
   doc.setDrawColor(...line);
-  doc.roundedRect(M, y, W - 2 * M, 42, 2, 2, "S");
+  doc.roundedRect(M, y, W - 2 * M, 46, 2, 2, "S");
 
   doc.setTextColor(...ink);
   doc.setFont("helvetica", "bold");
@@ -544,30 +622,44 @@ export function generateAcquittedInvoicePdf(
   doc.text("RÉCAPITULATIF FINANCIER & STATUT DU RÈGLEMENT", M + 6, y + 7);
 
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(8.5);
+  doc.setFontSize(8);
   doc.setTextColor(...muted);
-  doc.text("Montant total de la commande :", M + 6, y + 16);
+  doc.text("Montant total de la commande (HT) :", M + 6, y + 15);
   doc.setTextColor(...ink);
   doc.setFont("helvetica", "bold");
-  doc.text(`${oneShotTotal.toLocaleString("fr-FR")} €`, 110, y + 16);
+  doc.text(`${tax.oneShotHt.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} € HT`, 125, y + 15);
+
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(...muted);
+  doc.text(`TVA applicable (${tax.taxRateLabel}) :`, M + 6, y + 21);
+  doc.setTextColor(...ink);
+  doc.setFont("helvetica", "bold");
+  doc.text(`${tax.oneShotTax.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} €`, 125, y + 21);
+
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(...muted);
+  doc.text("Montant total de la commande (TTC) :", M + 6, y + 27);
+  doc.setTextColor(...ink);
+  doc.setFont("helvetica", "bold");
+  doc.text(`${tax.oneShotTtc.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} € TTC`, 125, y + 27);
 
   doc.setTextColor(...emerald);
   doc.setFont("helvetica", "bold");
-  doc.text("Acompte 50 % ENCAISSÉ (Virement bancaire) :", M + 6, y + 25);
-  doc.text(`${depositAmount.toLocaleString("fr-FR")} € ACQUITTÉ`, 110, y + 25);
+  doc.text("Acompte 50 % ENCAISSÉ (Virement bancaire) :", M + 6, y + 34);
+  doc.text(`${depositAmount.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} € TTC ACQUITTÉ`, 125, y + 34);
 
   doc.setTextColor(...ink);
   doc.setFont("helvetica", "normal");
-  doc.text("Solde restant dû à la livraison finale :", M + 6, y + 34);
+  doc.text("Solde restant dû à la livraison finale :", M + 6, y + 41);
   doc.setFont("helvetica", "bold");
-  doc.text(`${balanceRemaining.toLocaleString("fr-FR")} €`, 110, y + 34);
+  doc.text(`${balanceRemaining.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} € TTC`, 125, y + 41);
 
   // Validation Studio & Direction
-  y += 48;
+  y += 50;
   doc.setFillColor(254, 252, 240);
-  doc.roundedRect(M, y, W - 2 * M, 24, 2, 2, "F");
+  doc.roundedRect(M, y, W - 2 * M, 22, 2, 2, "F");
   doc.setDrawColor(...gold);
-  doc.roundedRect(M, y, W - 2 * M, 24, 2, 2, "S");
+  doc.roundedRect(M, y, W - 2 * M, 22, 2, 2, "S");
 
   doc.setTextColor(...gold);
   doc.setFont("helvetica", "bold");
@@ -575,14 +667,14 @@ export function generateAcquittedInvoicePdf(
   doc.text("ACCUSÉ DE RÉCEPTION OFFICIEL & MISE EN PRODUCTION", M + 6, y + 6);
 
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(7.5);
-  doc.setTextColor(...ink);
-  doc.text("Nous accusons bonne réception de votre virement d'acompte. Votre facture d'acompte est dûment acquittée.", M + 6, y + 12);
-  doc.text("Antoine Rebuffé-Rousseau et l'équipe Studio XR Agency déclenchent immédiatement le calendrier de production.", M + 6, y + 16);
-  doc.setFont("helvetica", "italic");
   doc.setFontSize(7);
+  doc.setTextColor(...ink);
+  doc.text("Nous accusons bonne réception de votre virement d'acompte. Votre facture d'acompte est dûment acquittée.", M + 6, y + 11);
+  doc.text(`Régime fiscal : ${tax.regimeName} — ${tax.legalNotice}`, M + 6, y + 15);
+  doc.setFont("helvetica", "italic");
+  doc.setFontSize(6.5);
   doc.setTextColor(...muted);
-  doc.text(`Suivi assuré par : ${closer?.name || closer?.shortName || "Antoine Rebuffé-Rousseau"} · Direction Studio XR Agency`, M + 6, y + 20);
+  doc.text(`Suivi assuré par : ${closer?.name || closer?.shortName || "Antoine Rebuffé-Rousseau"} · Direction Studio XR Agency`, M + 6, y + 19);
 
   // Footer
   doc.setDrawColor(...line);
@@ -593,8 +685,8 @@ export function generateAcquittedInvoicePdf(
   doc.text("KARMA SASU · XR AGENCY · FACTURATION OFFICIELLE", M, 287);
   doc.setFont("helvetica", "normal");
   doc.setTextColor(...muted);
-  doc.text("Facture d'acompte établie conformément à l'article 289 du Code Général des Impôts · TVA non applicable, art. 293 B du CGI", M, 291);
-  doc.text("SIREN 889 178 141 · 78 Avenue des Champs-Élysées · 75008 Paris · contact.xragency@gmail.com", M, 295);
+  doc.text(`Facture établie conformément à l'article 289 du Code Général des Impôts · ${tax.legalNotice}`, M, 291);
+  doc.text("SIREN 889 178 141 · SIRET 889 178 141 00012 · 78 Avenue des Champs-Élysées · 75008 Paris · contact.xragency@gmail.com", M, 295);
 
   return { doc, invoiceNum };
 }

@@ -995,6 +995,182 @@ export function DirectorPersonalHub({
         </div>
       </div>
 
+      {/* ── 1. DEMANDES DE DEVIS DES COMMERCIAUX EN ATTENTE DE VALIDATION D'ANTOINE ── */}
+      {(() => {
+        const pendingApprovalLeads = allLeads.filter(
+          (l) => l.quoteWorkflowStatus === "pending_director_approval"
+        );
+        return (
+          <div className={`p-5 rounded-3xl border-2 ${pendingApprovalLeads.length > 0 ? "border-amber-500/50 bg-amber-500/5" : theme.card} space-y-3`}>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="p-2 rounded-xl bg-amber-500/20 text-amber-500">
+                  <FileText className="w-5 h-5" />
+                </span>
+                <div>
+                  <h3 className={`text-sm font-extrabold flex items-center gap-2 ${theme.textMain}`}>
+                    Demandes de Devis Soumises par les Commerciaux ({pendingApprovalLeads.length})
+                    {pendingApprovalLeads.length > 0 && (
+                      <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-full bg-amber-500 text-white animate-pulse">
+                        À Valider par Antoine
+                      </span>
+                    )}
+                  </h3>
+                  <p className={`text-xs ${theme.textMuted}`}>
+                    Les commerciaux configurent l'offre avec les infos du prospect. Vous confirmez le prix, le délai Google Maps et validez le devis officiel.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {pendingApprovalLeads.length === 0 ? (
+              <p className={`text-xs ${theme.textMuted}`}>
+                Aucune demande de devis en attente de validation actuellement. Dès qu'un commercial soumet une proposition, elle apparaît ici pour votre accord.
+              </p>
+            ) : (
+              <div className="space-y-2.5">
+                {pendingApprovalLeads.map((lead) => {
+                  const closer = members.find((m) => m.id === lead.closerId);
+                  const totals = getLeadTotals(lead);
+                  return (
+                    <div
+                      key={lead.id}
+                      className={`p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${theme.subCard} border-amber-500/30`}
+                    >
+                      <div className="text-xs space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-extrabold text-sm text-indigo-500 dark:text-indigo-400">
+                            {lead.name}
+                          </span>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300">
+                            Soumis par : <strong>{closer?.name || "Commercial"}</strong>
+                          </span>
+                        </div>
+                        <p className={`text-[11px] ${theme.textMuted}`}>
+                          Prestations : <strong>{lead.planLabel}</strong>
+                          {lead.extraItems && lead.extraItems.length > 0 && ` + ${lead.extraItems.map((i) => i.planLabel).join(", ")}`}
+                          {lead.mapsContract?.enabled && ` · ★ Pack Google Maps Top 3 Garanti (${lead.mapsContract.price} €/an · Délai ${lead.mapsContract.deliveryDelayDays}j)`}
+                        </p>
+                        <p className="text-[11px] font-bold text-amber-600 dark:text-amber-400">
+                          Total proposé : {totals.oneShotTotal.toLocaleString("fr-FR")} € HT {totals.mrrTotal > 0 ? `+ ${totals.mrrTotal} €/mois HT` : ""} · Acompte 50% attendu : {Math.round(totals.oneShotTotal * 0.5).toLocaleString("fr-FR")} €
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        {onOpenQuoteModal && (
+                          <button
+                            onClick={() => onOpenQuoteModal(lead)}
+                            className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-extrabold text-xs flex items-center gap-1.5 shadow-md"
+                          >
+                            <FileText className="w-4 h-4 text-white" />
+                            Examiner, Ajuster & Valider Devis (Antoine)
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })()}
+
+      {/* ── 2. NOUVEAUX CLIENTS ENTRÉS & CALENDRIER D'UPSELL ── */}
+      {(() => {
+        const onboardedClients = allLeads.filter(
+          (l) => l.onboardingDate || (l.stage === "won" && l.invoiceStatus === "paid")
+        );
+        return (
+          <div className={`p-5 rounded-3xl border ${theme.card} space-y-3`}>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="p-2 rounded-xl bg-emerald-500/20 text-emerald-500">
+                  <Calendar className="w-5 h-5" />
+                </span>
+                <div>
+                  <h3 className={`text-sm font-extrabold flex items-center gap-2 ${theme.textMain}`}>
+                    Nouveaux Clients Entrés & Calendrier de Suivi / Upsell ({onboardedClients.length})
+                  </h3>
+                  <p className={`text-xs ${theme.textMuted}`}>
+                    Clients sous contrat actif chez XR Agency avec date d'entrée officielle, prestations actives et jalons d'upsell à proposer.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {onboardedClients.length === 0 ? (
+              <p className={`text-xs ${theme.textMuted}`}>
+                Aucun client actif enregistré pour le moment. Dès qu'un acompte de 50% est validé, le client et ses opportunités d'upsell sont synchronisés ici.
+              </p>
+            ) : (
+              <div className="space-y-2.5">
+                {onboardedClients.map((client) => {
+                  const closer = members.find((m) => m.id === client.closerId);
+                  const entryDateStr = client.onboardingDate || client.wonAt?.slice(0, 10) || "Récent";
+                  const activeSvcs = client.activeServicesList?.join(" · ") || client.planLabel;
+
+                  // Détection des opportunités d'upsell
+                  const missingOffers: string[] = [];
+                  const extraIds = (client.extraItems || []).map((i) => i.id);
+                  if (!extraIds.some((id) => id.includes("wc"))) missingOffers.push("WebCare Maintenance (dès 29€/m)");
+                  if (!client.mapsContract?.enabled) missingOffers.push("Google Maps Top 3 Garanti (dès 999€/an)");
+                  if (!extraIds.some((id) => id.includes("social"))) missingOffers.push("Social Media (dès 299€/m)");
+                  if (!extraIds.some((id) => id.includes("seo"))) missingOffers.push("SEO Croissance (dès 299€/m)");
+
+                  return (
+                    <div
+                      key={client.id}
+                      className={`p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${theme.subCard}`}
+                    >
+                      <div className="text-xs space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-extrabold text-sm text-emerald-600 dark:text-emerald-400">
+                            {client.name}
+                          </span>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">
+                            Entré le : {entryDateStr}
+                          </span>
+                          <span className="text-[10px] text-zinc-500">
+                            Closer : <strong>{closer?.shortName || "XR Agency"}</strong>
+                          </span>
+                        </div>
+                        <p className={`text-[11px] ${theme.textMuted}`}>
+                          Prestations actives : <span className="font-medium text-zinc-700 dark:text-zinc-200">{activeSvcs}</span>
+                        </p>
+                        {missingOffers.length > 0 ? (
+                          <p className="text-[11px] text-indigo-600 dark:text-indigo-400 font-bold flex items-center gap-1">
+                            <span>💡 Prochains Upsells recommandés à J+30 :</span>
+                            <span className="font-normal text-zinc-600 dark:text-zinc-300">{missingOffers.slice(0, 2).join(" · ")}</span>
+                          </p>
+                        ) : (
+                          <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
+                            ★ Client Full-Stack XR Agency (Toutes offres souscrites)
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        {onOpenQuoteModal && (
+                          <button
+                            onClick={() => onOpenQuoteModal(client)}
+                            className="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-bold flex items-center gap-1"
+                            title="Consulter le devis et facturation"
+                          >
+                            <FileText className="w-3.5 h-3.5 text-zinc-500" />
+                            Gérer
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })()}
+
       {/* Devis émis en attente de virement d'acompte (50%) */}
       {(() => {
         const pendingQuotes = allLeads.filter(
