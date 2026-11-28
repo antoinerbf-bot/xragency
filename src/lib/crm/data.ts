@@ -46,15 +46,15 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     id: "martin",
     name: "Martin",
     shortName: "Martin",
-    roleLabel: "Manager RH & Équipe Commerciale",
+    roleLabel: "Manager RH, Commercial & Head of Social Media",
     roleType: "manager",
     settingRate: 0.1,
-    closingRate: 0.2,
-    fullCycleRate: 0.2,
-    overrideRate: 0.1,
+    closingRate: 0.3,
+    fullCycleRate: 0.3,
+    overrideRate: 0.05,
     avatarBg: "from-blue-500 to-indigo-600",
     avatarChar: "👔",
-    badge: "👥 Manager Filière",
+    badge: "👔 Manager RH · 🎯 Commercial (30%) · 📱 Head of Social",
     pin: "2026",
   },
   {
@@ -439,7 +439,17 @@ export function canViewLead(viewer: TeamMember, lead: Lead, members: TeamMember[
     if (lead.setterId === viewer.id || lead.closerId === viewer.id) return true;
     const setter = members.find((m) => m.id === lead.setterId);
     const closer = members.find((m) => m.id === lead.closerId);
-    return setter?.recruitedBy === viewer.id || closer?.recruitedBy === viewer.id;
+    if (setter?.recruitedBy === viewer.id || closer?.recruitedBy === viewer.id) return true;
+
+    // Martin est également Responsable Réseaux Sociaux : visibilité sur tous les leads issus des réseaux
+    const isSocialSource =
+      lead.source?.toLowerCase().includes("social") ||
+      lead.source?.toLowerCase().includes("réseau") ||
+      lead.source?.toLowerCase().includes("instagram") ||
+      lead.source?.toLowerCase().includes("tiktok") ||
+      lead.source?.toLowerCase().includes("linkedin") ||
+      lead.source?.toLowerCase().includes("youtube");
+    if (isSocialSource) return true;
   }
 
   return lead.setterId === viewer.id || lead.closerId === viewer.id;
@@ -452,13 +462,15 @@ export function canViewMemberFinances(viewer: TeamMember, target: TeamMember): b
   return viewer.id === target.id;
 }
 
-// ── Moteur de calcul des commissions (Pack Multi-Services + Split Setter/Closer + Override Manager) ──
+// ── Moteur de calcul des commissions (Pack Multi-Services + Split Setter/Closer + Override Manager + Attribution Réseaux) ──
 
 export interface DealCommissionBreakdown {
   setterAmount: number;
   closerAmount: number;
   managerOverrideAmount: number;
   managerId: string | null;
+  socialCommissionAmount: number;
+  socialManagerId: string | null;
 }
 
 export function computeDealCommissions(lead: Lead, members: TeamMember[]): DealCommissionBreakdown {
@@ -475,11 +487,15 @@ export function computeDealCommissions(lead: Lead, members: TeamMember[]): DealC
   let closerAmount = 0;
 
   if (lead.setterId === lead.closerId) {
-    // Cas full-cycle : elle prospecte et elle close elle-même (tout-en-un)
+    // Cas full-cycle : le commercial prospecte et close lui-même
     let rate = closer?.roleType === "direction" ? 0 : (closer?.fullCycleRate ?? 0.2);
-    // Règle générale démarcheuse / closer tout-en-un (ex: Pilar, Christel, profils commerciaux) :
-    // 20% sur la création de sites web et 10% sur tous les forfaits récurrents mensuels ou annuels
-    if (closer?.id === "pilar" || closer?.id === "christel" || closer?.roleType === "full_cycle" || closer?.roleType === "closer") {
+
+    // Martin en vente directe autonome : 30 % de commission (Défi 20k€ avant 01/03/2027)
+    if (closer?.id === "martin") {
+      rate = 0.30;
+    } else if (closer?.id === "pilar" || closer?.id === "christel" || closer?.roleType === "full_cycle" || closer?.roleType === "closer") {
+      // Règle générale démarcheuse / closer tout-en-un (ex: Pilar, Christelle, Romain, Marilyn, Lucas, Camille) :
+      // 20% sur la création de sites web et 10% sur tous les forfaits récurrents mensuels ou annuels
       rate = isWebsite ? 0.20 : 0.10;
     }
     closerAmount = Math.round(baseValue * rate);
@@ -487,7 +503,9 @@ export function computeDealCommissions(lead: Lead, members: TeamMember[]): DealC
     let sRate = setter?.roleType === "direction" ? 0 : (setter?.settingRate ?? 0.1);
     let cRate = closer?.roleType === "direction" ? 0 : (closer?.closingRate ?? 0.15);
 
-    if (closer?.id === "pilar" || closer?.id === "christel" || closer?.roleType === "closer" || closer?.roleType === "full_cycle") {
+    if (closer?.id === "martin") {
+      cRate = 0.30;
+    } else if (closer?.id === "pilar" || closer?.id === "christel" || closer?.roleType === "closer" || closer?.roleType === "full_cycle") {
       cRate = isWebsite ? 0.20 : 0.10;
     }
     if (setter?.id === "pilar" || setter?.id === "christel" || setter?.roleType === "closer" || setter?.roleType === "full_cycle") {
@@ -498,18 +516,44 @@ export function computeDealCommissions(lead: Lead, members: TeamMember[]): DealC
     closerAmount = Math.round(baseValue * cRate);
   }
 
+  // Override Manager sur l'équipe commerciale gérée
   let managerOverrideAmount = 0;
   let managerId: string | null = null;
   const recruiterId = closer?.recruitedBy || setter?.recruitedBy;
   if (recruiterId) {
     const manager = members.find((m) => m.id === recruiterId);
-    if (manager?.overrideRate) {
+    if (manager) {
       managerId = manager.id;
-      managerOverrideAmount = Math.round(baseValue * manager.overrideRate);
+      // Base override 5% (monte à 10% lors du franchissement du palier de 15 000 €)
+      const overrideRate = manager.overrideRate ?? 0.05;
+      managerOverrideAmount = Math.round(baseValue * overrideRate);
     }
   }
 
-  return { setterAmount, closerAmount, managerOverrideAmount, managerId };
+  // Attribution Réseaux Sociaux : 10 % pour le Responsable Réseaux (Martin) sur tout deal closé issu des réseaux
+  let socialCommissionAmount = 0;
+  let socialManagerId: string | null = null;
+  const isSocialSource =
+    lead.source?.toLowerCase().includes("social") ||
+    lead.source?.toLowerCase().includes("réseau") ||
+    lead.source?.toLowerCase().includes("instagram") ||
+    lead.source?.toLowerCase().includes("tiktok") ||
+    lead.source?.toLowerCase().includes("linkedin") ||
+    lead.source?.toLowerCase().includes("youtube");
+
+  if (isSocialSource) {
+    socialManagerId = "martin";
+    socialCommissionAmount = Math.round(baseValue * 0.10);
+  }
+
+  return {
+    setterAmount,
+    closerAmount,
+    managerOverrideAmount,
+    managerId,
+    socialCommissionAmount,
+    socialManagerId,
+  };
 }
 
 export function formatPricePeriod(value: number, billing: BillingPeriod): string {

@@ -125,7 +125,7 @@ function XrAgencyCrmApp() {
   const [members, setMembers] = useState<TeamMember[]>(() => {
     if (typeof window !== "undefined") {
       try {
-        const saved = localStorage.getItem("xr_crm_members_v8");
+        const saved = localStorage.getItem("xr_crm_members_v9");
         if (saved) return JSON.parse(saved);
       } catch {
         // ignore
@@ -263,7 +263,7 @@ function XrAgencyCrmApp() {
   }, [leads]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") localStorage.setItem("xr_crm_members_v8", JSON.stringify(members));
+    if (typeof window !== "undefined") localStorage.setItem("xr_crm_members_v9", JSON.stringify(members));
   }, [members]);
 
   useEffect(() => {
@@ -458,6 +458,9 @@ function XrAgencyCrmApp() {
           }
           if (b.managerId === member.id) {
             earnedOnDeal += b.managerOverrideAmount;
+          }
+          if (b.socialManagerId === member.id && b.socialCommissionAmount > 0) {
+            earnedOnDeal += b.socialCommissionAmount;
           }
           if (earnedOnDeal > 0) {
             if (deal.commissionStatus === "unlocked") unlockedCom += earnedOnDeal;
@@ -1587,7 +1590,7 @@ function XrAgencyCrmApp() {
         { id: "calendar", label: "📅 Calendrier & Rappels", count: dueFollowUpsCount || null },
         { id: "school", label: "🎓 XR School", count: null },
         ...(isManager || isDirector
-          ? [{ id: "rh" as CrmTab, label: "👥 Filière RH", count: members.filter((m) => m.recruitedBy === "martin").length }]
+          ? [{ id: "rh" as CrmTab, label: "👔 Hub Martin (RH & Social)", count: members.filter((m) => m.recruitedBy === "martin").length }]
           : []),
         {
           id: "finances",
@@ -2339,12 +2342,13 @@ function XrAgencyCrmApp() {
           <SchoolModule currentUser={currentUser} theme={theme} onSound={() => soundEnabled && playDing()} />
         )}
 
-        {/* ── VUE 5 : FILIÈRE RH MARTIN ── */}
+        {/* ── VUE 5 : FILIÈRE RH & SOCIAL MARTIN ── */}
         {activeTab === "rh" && (isManager || isDirector) && (
           <ManagerFiliereHub
             managerId="martin"
             members={members}
             visibleLeads={myVisibleLeads}
+            allLeads={leads}
             theme={theme}
             onPromoteCandidate={handlePromoteCandidate}
             onSound={() => soundEnabled && playDing()}
