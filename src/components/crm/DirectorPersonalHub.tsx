@@ -39,6 +39,43 @@ interface HabitItem {
   doneToday: boolean;
 }
 
+const PRIVATE_TASKS_SEED_KEY = "xr_antoine_private_tasks_seeded_v1";
+
+const DEFAULT_AGENCY_TOOL_TASKS: PersonalTask[] = [
+  { id: "agency-tool-hermes-local", text: "Tester Hermes et un modèle local sur le Mac, sans louer de serveur.", category: "pro", done: false, createdAt: "2026-11-28" },
+  { id: "agency-tool-cpanel", text: "Garder cPanel pour les sites : pas de Docker ni d'agents sur l'hébergement web.", category: "pro", done: false, createdAt: "2026-11-28" },
+  { id: "agency-tool-automation", text: "Choisir Activepieces Community (MIT) ; n8n n'est pas open source OSI.", category: "pro", done: false, createdAt: "2026-11-28" },
+  { id: "agency-tool-android", text: "Préparer l'accès Android au tableau Hermes via navigateur et WireGuard.", category: "pro", done: false, createdAt: "2026-11-28" },
+  { id: "agency-tool-workflows", text: "Démarrer par 3 workflows : nouveau lead, relance de devis, audit de site.", category: "pro", done: false, createdAt: "2026-11-28" },
+  { id: "agency-tool-vps", text: "Comparer un VPS root uniquement si le pilote doit tourner 24 h/24.", category: "achat", done: false, createdAt: "2026-11-28" },
+];
+
+function loadInitialPersonalTasks(): PersonalTask[] {
+  if (typeof window === "undefined") return [];
+
+  let saved: PersonalTask[] = [];
+  try {
+    const raw = localStorage.getItem("xr_antoine_private_tasks");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) saved = parsed;
+    }
+  } catch {
+    // ignore
+  }
+
+  if (localStorage.getItem(PRIVATE_TASKS_SEED_KEY) === "1") return saved;
+
+  const savedIds = new Set(saved.map((task) => task.id));
+  const seeded = [
+    ...DEFAULT_AGENCY_TOOL_TASKS.filter((task) => !savedIds.has(task.id)),
+    ...saved,
+  ];
+  localStorage.setItem(PRIVATE_TASKS_SEED_KEY, "1");
+  localStorage.setItem("xr_antoine_private_tasks", JSON.stringify(seeded));
+  return seeded;
+}
+
 interface DirectorPersonalHubProps {
   allLeads: Lead[];
   members: TeamMember[];
@@ -58,17 +95,9 @@ export function DirectorPersonalHub({
   theme,
   onSound,
 }: DirectorPersonalHubProps) {
-  const [tasks, setTasks] = useState<PersonalTask[]>(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const saved = localStorage.getItem("xr_antoine_private_tasks");
-        if (saved) return JSON.parse(saved);
-      } catch {
-        // ignore
-      }
-    }
-    return [];
-  });
+  const [tasks, setTasks] = useState<PersonalTask[]>(loadInitialPersonalTasks);
+  const [tasksReady, setTasksReady] = useState(false);
+  const [tasksSyncState, setTasksSyncState] = useState<"loading" | "syncing" | "synced" | "local">("loading");
 
   const [agenda, setAgenda] = useState<AgendaSlot[]>(() => {
     if (typeof window !== "undefined") {
@@ -116,8 +145,55 @@ export function DirectorPersonalHub({
   ).sort((a, b) => b.localeCompare(a));
 
   useEffect(() => {
-    if (typeof window !== "undefined") localStorage.setItem("xr_antoine_private_tasks", JSON.stringify(tasks));
-  }, [tasks]);
+    let active = true;
+
+    const loadSharedTasks = async () => {
+      try {
+        const response = await fetch("/api/crm-private-tasks", { credentials: "same-origin" });
+        if (!response.ok) throw new Error("Private tasks are not available");
+        const result = (await response.json()) as { tasks?: unknown };
+        if (!active) return;
+        if (Array.isArray(result.tasks)) setTasks(result.tasks as PersonalTask[]);
+        setTasksSyncState("synced");
+      } catch {
+        if (active) setTasksSyncState("local");
+      } finally {
+        if (active) setTasksReady(true);
+      }
+    };
+
+    void loadSharedTasks();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!tasksReady || typeof window === "undefined") return;
+
+    localStorage.setItem("xr_antoine_private_tasks", JSON.stringify(tasks));
+    let active = true;
+    const timer = window.setTimeout(async () => {
+      setTasksSyncState("syncing");
+      try {
+        const response = await fetch("/api/crm-private-tasks", {
+          method: "PUT",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tasks }),
+        });
+        if (!response.ok) throw new Error("Private tasks could not be synced");
+        if (active) setTasksSyncState("synced");
+      } catch {
+        if (active) setTasksSyncState("local");
+      }
+    }, 350);
+
+    return () => {
+      active = false;
+      window.clearTimeout(timer);
+    };
+  }, [tasks, tasksReady]);
 
   useEffect(() => {
     if (typeof window !== "undefined") localStorage.setItem("xr_antoine_agenda", JSON.stringify(agenda));
@@ -404,6 +480,22 @@ export function DirectorPersonalHub({
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+        <div>
+          <h3 className={`text-sm font-extrabold ${theme.textMain}`}>Feuille de route outils XR Agency</h3>
+          <p className={`text-xs mt-1 ${theme.textMuted}`}>Priorités gratuites et ouvertes, triées pour éviter les dépenses prématurées.</p>
+        </div>
+        <span className={`text-[10px] font-bold rounded-full border px-2.5 py-1 ${theme.subCard} ${theme.textMuted}`}>
+          {tasksSyncState === "loading"
+            ? "Chargement…"
+            : tasksSyncState === "syncing"
+              ? "Synchronisation…"
+              : tasksSyncState === "synced"
+                ? "Synchronisé sur vos appareils"
+                : "Enregistré sur cet appareil"}
+        </span>
       </div>
 
       {/* Ajout rapide tâche Pro / Perso / Achats */}
