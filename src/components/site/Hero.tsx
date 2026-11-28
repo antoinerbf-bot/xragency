@@ -3,158 +3,37 @@ import { ArrowRight, BarChart3, Layers3, Play, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLang, type Lang } from "@/lib/i18n";
 
-interface CityHub {
+interface TeamShowreelClip {
   id: string;
-  name: Record<Lang, string>;
-  country: Record<Lang, string>;
-  timezone: string;
-  image: string;
-  video?: string;
-  position?: string;
-  filterClass?: string;
-  tagline: Record<Lang, string>;
-  status: Record<Lang, string>;
+  video: string;
+  city: string;
+  focus: string;
 }
 
-const HUBS: CityHub[] = [
+const SHOWREEL_CLIPS: TeamShowreelClip[] = [
   {
-    id: "paris",
-    name: { fr: "Paris", en: "Paris", vi: "Paris", ar: "باريس", ru: "Париж" },
-    country: { fr: "France", en: "France", vi: "Pháp", ar: "فرنسا", ru: "Франция" },
-    timezone: "Europe/Paris",
-    image: "/showcase/hub-paris-real-team.jpg",
-    position: "object-[center_40%]",
-    filterClass: "brightness-[1.02] contrast-[1.03]",
-    tagline: {
-      fr: "Studio Haussmann lumineux, direction artistique & production web haute couture.",
-      en: "Sunlit Haussmann studio, creative direction & haute couture web production.",
-      vi: "Studio Haussmann chan hòa ánh sáng, định hướng nghệ thuật & sản xuất web cao cấp.",
-      ar: "استوديو هوسمان مشرق، إدارة فنية وإنتاج رقمي راقٍ.",
-      ru: "Светлая студия в стиле Османа, арт-дирекшн и премиальный веб-продакшн.",
-    },
-    status: {
-      fr: "Studio Paris · Direction Artistique",
-      en: "Paris Studio · Creative Direction",
-      vi: "Studio Paris · Đang hoạt động",
-      ar: "استوديو باريس · نشط",
-      ru: "Студия Париж · В работе",
-    },
+    id: "creative-strategy",
+    video: "/videos/hero-team-collaborative.mp4",
+    city: "Paris · Dubaï · New York",
+    focus: "Stratégie de Marque & Direction Artistique",
   },
   {
-    id: "dubai",
-    name: { fr: "Dubaï", en: "Dubai", vi: "Dubai", ar: "دبي", ru: "Дубай" },
-    country: {
-      fr: "Émirats arabes unis",
-      en: "United Arab Emirates",
-      vi: "Các Tiểu vương quốc Ả Rập Thống nhất",
-      ar: "الإمارات العربية المتحدة",
-      ru: "Объединённые Арабские Эмираты",
-    },
-    timezone: "Asia/Dubai",
-    image: "/showcase/hub-dubai-real-team.jpg",
-    position: "object-[center_45%]",
-    filterClass: "brightness-[1.02] contrast-[1.02]",
-    tagline: {
-      fr: "Penthouse lumineux en plein jour, plateformes e-commerce d'envergure & tech.",
-      en: "Sunlit penthouse workspace, high-scale e-commerce & advanced tech.",
-      vi: "Penthouse sáng tạo ngập tràn ánh sáng, thương mại điện tử quy mô lớn & công nghệ.",
-      ar: "بنتهاوس مضيء بأشعة الشمس، منصات تجارة إلكترونية كبرى وتقنيات متقدمة.",
-      ru: "Светлый пентхаус, масштабный e-commerce и передовые технологии.",
-    },
-    status: {
-      fr: "Studio Dubaï · Pôle Croissance & Tech",
-      en: "Dubai Studio · Growth & Tech",
-      vi: "Studio Dubai · Tăng trưởng",
-      ar: "استوديو دبي · النمو والتقنية",
-      ru: "Студия Dubaï · Развитие и технологии",
-    },
+    id: "growth-marketing",
+    video: "/videos/clip-46680.mp4",
+    city: "Pôle International",
+    focus: "Acquisition & Performance Digitale",
   },
   {
-    id: "singapour",
-    name: { fr: "Singapour", en: "Singapore", vi: "Singapore", ar: "سنغافورة", ru: "Сингапур" },
-    country: {
-      fr: "Singapour",
-      en: "Singapore",
-      vi: "Singapore",
-      ar: "سنغافورة",
-      ru: "Сингапур",
-    },
-    timezone: "Asia/Singapore",
-    image: "/showcase/hub-singapore-real-team.jpg",
-    position: "object-[center_40%]",
-    filterClass: "brightness-[1.02] contrast-[1.02]",
-    tagline: {
-      fr: "Échange complice & dynamique d'équipe, conception digitale & acquisition Asie-Pacifique.",
-      en: "Candid creative collaboration, digital design & Asia-Pacific acquisition.",
-      vi: "Hợp tác sáng tạo năng động, thiết kế kỹ thuật số & mở rộng Châu Á.",
-      ar: "تعاون إبداعي وتواصل حيوي، تصميم رقمي ونمو في آسيا والمحيط الهادئ.",
-      ru: "Живое творческое общение, цифровой дизайн и масштабирование в Азии.",
-    },
-    status: {
-      fr: "Studio Singapour · Pôle Asie",
-      en: "Singapore Studio · Asia Hub",
-      vi: "Studio Singapore · Châu Á",
-      ar: "استوديو سنغافورة · آسيا",
-      ru: "Студия Сингапур · Азия",
-    },
+    id: "ux-sprint",
+    video: "/videos/clip-23043.mp4",
+    city: "Studio Innovation",
+    focus: "Design d'Expérience & Prototypage",
   },
   {
-    id: "newyork",
-    name: { fr: "New York", en: "New York", vi: "New York", ar: "نيويورك", ru: "Нью-Йорк" },
-    country: {
-      fr: "États-Unis",
-      en: "United States",
-      vi: "Hoa Kỳ",
-      ar: "الولايات المتحدة",
-      ru: "США",
-    },
-    timezone: "America/New_York",
-    image: "/showcase/hub-newyork-real-team.jpg",
-    position: "object-[center_45%]",
-    filterClass: "brightness-[1.02] contrast-[1.02]",
-    tagline: {
-      fr: "Studio Manhattan, stratégie de marque globale & plateformes digitales d'élite.",
-      en: "Manhattan studio, global brand strategy & elite digital platforms.",
-      vi: "Studio Manhattan, chiến lược thương hiệu toàn cầu & nền tảng số.",
-      ar: "استوديو مانهاتن، استراتيجية علامة تجارية عالمية ومنصات رقمية متقدمة.",
-      ru: "Студия на Манхэттене, глобальная стратегия бренда и цифровые платформы.",
-    },
-    status: {
-      fr: "Studio New York · Pôle Amériques",
-      en: "New York Studio · Americas Hub",
-      vi: "Studio New York · Châu Mỹ",
-      ar: "استوديو نيويورك · الأمريكتان",
-      ru: "Студия Нью-Йорк · Америка",
-    },
-  },
-  {
-    id: "tokyo",
-    name: { fr: "Tokyo", en: "Tokyo", vi: "Tokyo", ar: "طوكيو", ru: "Токио" },
-    country: {
-      fr: "Japon",
-      en: "Japan",
-      vi: "Nhật Bản",
-      ar: "اليابان",
-      ru: "Япония",
-    },
-    timezone: "Asia/Tokyo",
-    image: "/showcase/hub-tokyo-real-team.jpg",
-    position: "object-[center_40%]",
-    filterClass: "brightness-[1.02] contrast-[1.02]",
-    tagline: {
-      fr: "Studio Ginza & Shibuya, technologies immersives & design minimaliste d'avant-garde.",
-      en: "Ginza & Shibuya studio, immersive technologies & avant-garde minimalism.",
-      vi: "Studio Ginza & Shibuya, công nghệ nhập vai & thiết kế tối giản.",
-      ar: "استوديو غينزا وشيبويا، تقنيات تفاعلية وتصميم بسيط رائد.",
-      ru: "Студия в Гиндзе и Сибуе, иммерсивные технологии и минималистичный дизайн.",
-    },
-    status: {
-      fr: "Studio Tokyo · Pôle Asie de l'Est",
-      en: "Tokyo Studio · East Asia Hub",
-      vi: "Studio Tokyo · Nhật Bản",
-      ar: "استوديو طوكيو · اليابان",
-      ru: "Студия Токио · Япония",
-    },
+    id: "client-review",
+    video: "/videos/clip-36897.mp4",
+    city: "Production Digitale",
+    focus: "Architecture Web & Déploiement",
   },
 ];
 
@@ -274,81 +153,60 @@ const PILLARS = [
   },
 ];
 
-function useCityTime(timezone: string) {
-  const [time, setTime] = useState<string>("");
-  useEffect(() => {
-    const update = () => {
-      try {
-        const str = new Intl.DateTimeFormat("fr-FR", {
-          hour: "2-digit",
-          minute: "2-digit",
-          timeZone: timezone,
-        }).format(new Date());
-        setTime(str);
-      } catch {
-        setTime("--:--");
-      }
-    };
-    update();
-    const interval = setInterval(update, 15000);
-    return () => clearInterval(interval);
-  }, [timezone]);
-  return time;
-}
-
 export function Hero() {
   const { lang } = useLang();
   const c = COPY[lang] ?? COPY.fr;
-  const [activeHubIndex, setActiveHubIndex] = useState<number>(0);
+  const [activeClipIndex, setActiveClipIndex] = useState<number>(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setActiveHubIndex((prev) => (prev + 1) % HUBS.length);
-    }, 5000);
+      setActiveClipIndex((prev) => (prev + 1) % SHOWREEL_CLIPS.length);
+    }, 7000);
     return () => clearInterval(timer);
   }, []);
 
-  const activeHub = HUBS[activeHubIndex];
-  const activeTime = useCityTime(activeHub.timezone);
+  const activeClip = SHOWREEL_CLIPS[activeClipIndex];
 
   return (
     <>
       <section
         id="hero"
         aria-label="XR Agency Hero"
-        className="xr-hero-refined relative isolate min-h-[100svh] w-full overflow-hidden bg-[#181512] pt-20 text-[#FAF7F2]"
+        className="xr-hero-refined relative isolate min-h-[100svh] w-full overflow-hidden bg-[#100E0C] pt-20 text-[#FAF7F2]"
       >
-        {/* ── Background: International Hubs Architecture & Creative Studios ── */}
-        <div className="absolute inset-0 -z-10 overflow-hidden bg-[#14110E]">
-          {HUBS.map((hub, idx) => (
-            <div
-              key={hub.id}
-              className={cn(
-                "absolute inset-0 transition-opacity duration-1000 ease-in-out",
-                idx === activeHubIndex ? "opacity-100 z-0" : "opacity-0 -z-10 pointer-events-none",
-              )}
-            >
-              <img
-                src={hub.image}
-                alt={`${hub.name.fr} - ${hub.tagline.fr}`}
+        {/* ── Background: Convivial & Professional Digital Marketing Team in Action ── */}
+        <div className="absolute inset-0 -z-10 overflow-hidden bg-[#100E0C]">
+          {SHOWREEL_CLIPS.map((clip, idx) => {
+            const isActive = idx === activeClipIndex;
+            return (
+              <div
+                key={clip.id}
                 className={cn(
-                  "h-full w-full object-cover transform transition-transform duration-[7000ms] ease-out",
-                  hub.position ?? "object-center",
-                  hub.filterClass ?? "brightness-[1.04] contrast-[1.02]",
-                  idx === activeHubIndex ? "scale-105" : "scale-100",
+                  "absolute inset-0 transition-opacity duration-1000 ease-in-out",
+                  isActive ? "opacity-100 z-0" : "opacity-0 -z-10 pointer-events-none",
                 )}
-              />
-            </div>
-          ))}
+              >
+                <video
+                  src={clip.video}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
+                  className="h-full w-full object-cover scale-[1.01]"
+                />
+              </div>
+            );
+          })}
 
-          {/* Cinematic Haute Couture Scrim: Deep luxury framing, keeping the studio & skylines radiant */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#120F0D]/90 via-black/25 to-black/45 pointer-events-none" />
+          {/* Luminous Luxury Scrim: Soft, luminous, keeping the team and their creative work vividly visible */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#100E0C]/80 via-black/15 to-black/40 pointer-events-none" />
         </div>
 
         {/* ── Top-Left: Architectural Branding & Headline ── */}
-        <div className="absolute top-20 sm:top-24 left-4 sm:left-8 lg:left-12 z-30 pointer-events-auto max-w-[280px] sm:max-w-xl">
+        <div className="absolute top-20 sm:top-24 left-4 sm:left-8 lg:left-12 z-30 pointer-events-auto max-w-[290px] sm:max-w-xl">
           <div className="inline-flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="font-mono text-[9px] sm:text-[11px] font-semibold uppercase tracking-[0.18em] sm:tracking-[0.24em] text-white/95">
               <span className="inline sm:hidden">AGENCE DIGITALE INTERNATIONALE</span>
               <span className="hidden sm:inline">{c.eyebrow}</span>
@@ -363,22 +221,24 @@ export function Hero() {
           </h1>
         </div>
 
-        {/* ── Top-Right: Discreet Live Hub Indicator (City & Time only) ── */}
+        {/* ── Top-Right: Discreet Live Team & International Hub Indicator ── */}
         <div className="absolute top-20 sm:top-24 right-4 sm:right-8 lg:right-12 z-30 pointer-events-auto">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3 py-1 sm:px-3.5 sm:py-1.5 backdrop-blur-md text-white shadow-lg">
-            <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/45 px-3.5 py-1.5 backdrop-blur-md text-white shadow-lg">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span className="font-mono text-[10px] font-semibold tracking-wider text-white uppercase">
-              {activeHub.name[lang] ?? activeHub.name.fr}
+              {activeClip.city}
             </span>
-            <span className="font-mono text-[10px] text-zinc-300">{activeTime}</span>
+            <span className="hidden sm:inline font-mono text-[10px] text-zinc-300">
+              · {activeClip.focus}
+            </span>
           </div>
         </div>
 
         {/* ── Bottom Center Dock: Subtitle, CTAs & Guarantee ── */}
-        <div className="relative z-20 pointer-events-none mx-auto flex min-h-[calc(100svh-5rem)] max-w-3xl flex-col items-center justify-end px-5 pb-6 sm:pb-10 text-center">
-          <div className="pointer-events-auto max-w-2xl">
+        <div className="relative z-20 pointer-events-none mx-auto flex min-h-[calc(100svh-5rem)] max-w-3xl flex-col items-center justify-end px-4 sm:px-6 pb-6 sm:pb-10 text-center">
+          <div className="pointer-events-auto w-full max-w-2xl flex flex-col items-center">
             {/* Subtitle: High-clarity, elegant description */}
-            <p className="text-xs sm:text-[14px] leading-relaxed text-white/90 font-light drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+            <p className="text-xs sm:text-[14px] leading-relaxed text-white/95 font-light drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
               {c.sub}
             </p>
 
