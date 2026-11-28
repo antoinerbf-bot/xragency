@@ -16,7 +16,9 @@ import { Route as CreationSiteInternetVietnamRouteImport } from './routes/creati
 import { Route as CrmRouteImport } from './routes/crm'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as InternationalRouteImport } from './routes/international'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
+import { Route as MethodeRouteImport } from './routes/methode'
 import { Route as NotreHistoireRouteImport } from './routes/notre-histoire'
 import { Route as RealisationsRouteImport } from './routes/realisations'
 import { Route as RecrutementRouteImport } from './routes/recrutement'
@@ -30,6 +32,9 @@ import { Route as ApiAuditRouteImport } from './routes/api/audit'
 import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as ApiCreateCheckoutRouteImport } from './routes/api/create-checkout'
 import { Route as ApiCrmRouteImport } from './routes/api/crm'
+import { Route as ApiCrmAuthRouteImport } from './routes/api/crm-auth'
+import { Route as ApiCrmEmailAlertRouteImport } from './routes/api/crm-email-alert'
+import { Route as ApiCrmSyncRouteImport } from './routes/api/crm-sync'
 import { Route as ApiSendQuoteRouteImport } from './routes/api/send-quote'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardAuditsRouteImport } from './routes/dashboard/audits'
@@ -38,6 +43,7 @@ import { Route as DashboardNewRouteImport } from './routes/dashboard/new'
 import { Route as DashboardProspectsRouteImport } from './routes/dashboard/prospects'
 import { Route as ServicesIndexRouteImport } from './routes/services/index'
 import { Route as ServicesServiceIdRouteImport } from './routes/services/$serviceId'
+import { Route as ServicesCrmRouteImport } from './routes/services/crm'
 import { Route as ServicesRobotiqueRouteImport } from './routes/services/robotique'
 import { Route as ServicesSeoRouteImport } from './routes/services/seo'
 import { Route as ServicesWebcareRouteImport } from './routes/services/webcare'
@@ -80,9 +86,19 @@ const FaqRoute = FaqRouteImport.update({
   path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InternationalRoute = InternationalRouteImport.update({
+  id: '/international',
+  path: '/international',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
   id: '/mentions-legales',
   path: '/mentions-legales',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MethodeRoute = MethodeRouteImport.update({
+  id: '/methode',
+  path: '/methode',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotreHistoireRoute = NotreHistoireRouteImport.update({
@@ -150,6 +166,21 @@ const ApiCrmRoute = ApiCrmRouteImport.update({
   path: '/api/crm',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCrmAuthRoute = ApiCrmAuthRouteImport.update({
+  id: '/api/crm-auth',
+  path: '/api/crm-auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCrmEmailAlertRoute = ApiCrmEmailAlertRouteImport.update({
+  id: '/api/crm-email-alert',
+  path: '/api/crm-email-alert',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCrmSyncRoute = ApiCrmSyncRouteImport.update({
+  id: '/api/crm-sync',
+  path: '/api/crm-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiSendQuoteRoute = ApiSendQuoteRouteImport.update({
   id: '/api/send-quote',
   path: '/api/send-quote',
@@ -190,6 +221,11 @@ const ServicesServiceIdRoute = ServicesServiceIdRouteImport.update({
   path: '/services/$serviceId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServicesCrmRoute = ServicesCrmRouteImport.update({
+  id: '/services/crm',
+  path: '/services/crm',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRobotiqueRoute = ServicesRobotiqueRouteImport.update({
   id: '/services/robotique',
   path: '/services/robotique',
@@ -225,7 +261,9 @@ export interface FileRoutesByFullPath {
   '/crm': typeof CrmRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/faq': typeof FaqRoute
+  '/international': typeof InternationalRoute
   '/mentions-legales': typeof MentionsLegalesRoute
+  '/methode': typeof MethodeRoute
   '/notre-histoire': typeof NotreHistoireRoute
   '/realisations': typeof RealisationsRoute
   '/recrutement': typeof RecrutementRoute
@@ -239,12 +277,16 @@ export interface FileRoutesByFullPath {
   '/api/contact': typeof ApiContactRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
   '/api/crm': typeof ApiCrmRoute
+  '/api/crm-auth': typeof ApiCrmAuthRoute
+  '/api/crm-email-alert': typeof ApiCrmEmailAlertRoute
+  '/api/crm-sync': typeof ApiCrmSyncRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
   '/dashboard/new': typeof DashboardNewRoute
   '/dashboard/prospects': typeof DashboardProspectsRouteWithChildren
   '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/services/crm': typeof ServicesCrmRoute
   '/services/robotique': typeof ServicesRobotiqueRoute
   '/services/seo': typeof ServicesSeoRoute
   '/services/webcare': typeof ServicesWebcareRoute
@@ -260,7 +302,9 @@ export interface FileRoutesByTo {
   '/creation-site-internet-vietnam': typeof CreationSiteInternetVietnamRoute
   '/crm': typeof CrmRoute
   '/faq': typeof FaqRoute
+  '/international': typeof InternationalRoute
   '/mentions-legales': typeof MentionsLegalesRoute
+  '/methode': typeof MethodeRoute
   '/notre-histoire': typeof NotreHistoireRoute
   '/realisations': typeof RealisationsRoute
   '/recrutement': typeof RecrutementRoute
@@ -274,12 +318,16 @@ export interface FileRoutesByTo {
   '/api/contact': typeof ApiContactRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
   '/api/crm': typeof ApiCrmRoute
+  '/api/crm-auth': typeof ApiCrmAuthRoute
+  '/api/crm-email-alert': typeof ApiCrmEmailAlertRoute
+  '/api/crm-sync': typeof ApiCrmSyncRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
   '/dashboard/new': typeof DashboardNewRoute
   '/dashboard/prospects': typeof DashboardProspectsRouteWithChildren
   '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/services/crm': typeof ServicesCrmRoute
   '/services/robotique': typeof ServicesRobotiqueRoute
   '/services/seo': typeof ServicesSeoRoute
   '/services/webcare': typeof ServicesWebcareRoute
@@ -297,7 +345,9 @@ export interface FileRoutesById {
   '/crm': typeof CrmRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/faq': typeof FaqRoute
+  '/international': typeof InternationalRoute
   '/mentions-legales': typeof MentionsLegalesRoute
+  '/methode': typeof MethodeRoute
   '/notre-histoire': typeof NotreHistoireRoute
   '/realisations': typeof RealisationsRoute
   '/recrutement': typeof RecrutementRoute
@@ -311,12 +361,16 @@ export interface FileRoutesById {
   '/api/contact': typeof ApiContactRoute
   '/api/create-checkout': typeof ApiCreateCheckoutRoute
   '/api/crm': typeof ApiCrmRoute
+  '/api/crm-auth': typeof ApiCrmAuthRoute
+  '/api/crm-email-alert': typeof ApiCrmEmailAlertRoute
+  '/api/crm-sync': typeof ApiCrmSyncRoute
   '/api/send-quote': typeof ApiSendQuoteRoute
   '/dashboard/audits': typeof DashboardAuditsRouteWithChildren
   '/dashboard/login': typeof DashboardLoginRoute
   '/dashboard/new': typeof DashboardNewRoute
   '/dashboard/prospects': typeof DashboardProspectsRouteWithChildren
   '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/services/crm': typeof ServicesCrmRoute
   '/services/robotique': typeof ServicesRobotiqueRoute
   '/services/seo': typeof ServicesSeoRoute
   '/services/webcare': typeof ServicesWebcareRoute
@@ -335,7 +389,9 @@ export interface FileRouteTypes {
     | '/crm'
     | '/dashboard'
     | '/faq'
+    | '/international'
     | '/mentions-legales'
+    | '/methode'
     | '/notre-histoire'
     | '/realisations'
     | '/recrutement'
@@ -349,12 +405,16 @@ export interface FileRouteTypes {
     | '/api/contact'
     | '/api/create-checkout'
     | '/api/crm'
+    | '/api/crm-auth'
+    | '/api/crm-email-alert'
+    | '/api/crm-sync'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
     | '/dashboard/new'
     | '/dashboard/prospects'
     | '/services/$serviceId'
+    | '/services/crm'
     | '/services/robotique'
     | '/services/seo'
     | '/services/webcare'
@@ -370,7 +430,9 @@ export interface FileRouteTypes {
     | '/creation-site-internet-vietnam'
     | '/crm'
     | '/faq'
+    | '/international'
     | '/mentions-legales'
+    | '/methode'
     | '/notre-histoire'
     | '/realisations'
     | '/recrutement'
@@ -384,12 +446,16 @@ export interface FileRouteTypes {
     | '/api/contact'
     | '/api/create-checkout'
     | '/api/crm'
+    | '/api/crm-auth'
+    | '/api/crm-email-alert'
+    | '/api/crm-sync'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
     | '/dashboard/new'
     | '/dashboard/prospects'
     | '/services/$serviceId'
+    | '/services/crm'
     | '/services/robotique'
     | '/services/seo'
     | '/services/webcare'
@@ -406,7 +472,9 @@ export interface FileRouteTypes {
     | '/crm'
     | '/dashboard'
     | '/faq'
+    | '/international'
     | '/mentions-legales'
+    | '/methode'
     | '/notre-histoire'
     | '/realisations'
     | '/recrutement'
@@ -420,12 +488,16 @@ export interface FileRouteTypes {
     | '/api/contact'
     | '/api/create-checkout'
     | '/api/crm'
+    | '/api/crm-auth'
+    | '/api/crm-email-alert'
+    | '/api/crm-sync'
     | '/api/send-quote'
     | '/dashboard/audits'
     | '/dashboard/login'
     | '/dashboard/new'
     | '/dashboard/prospects'
     | '/services/$serviceId'
+    | '/services/crm'
     | '/services/robotique'
     | '/services/seo'
     | '/services/webcare'
@@ -443,7 +515,9 @@ export interface RootRouteChildren {
   CrmRoute: typeof CrmRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   FaqRoute: typeof FaqRoute
+  InternationalRoute: typeof InternationalRoute
   MentionsLegalesRoute: typeof MentionsLegalesRoute
+  MethodeRoute: typeof MethodeRoute
   NotreHistoireRoute: typeof NotreHistoireRoute
   RealisationsRoute: typeof RealisationsRoute
   RecrutementRoute: typeof RecrutementRoute
@@ -457,8 +531,12 @@ export interface RootRouteChildren {
   ApiContactRoute: typeof ApiContactRoute
   ApiCreateCheckoutRoute: typeof ApiCreateCheckoutRoute
   ApiCrmRoute: typeof ApiCrmRoute
+  ApiCrmAuthRoute: typeof ApiCrmAuthRoute
+  ApiCrmEmailAlertRoute: typeof ApiCrmEmailAlertRoute
+  ApiCrmSyncRoute: typeof ApiCrmSyncRoute
   ApiSendQuoteRoute: typeof ApiSendQuoteRoute
   ServicesServiceIdRoute: typeof ServicesServiceIdRoute
+  ServicesCrmRoute: typeof ServicesCrmRoute
   ServicesRobotiqueRoute: typeof ServicesRobotiqueRoute
   ServicesSeoRoute: typeof ServicesSeoRoute
   ServicesWebcareRoute: typeof ServicesWebcareRoute
@@ -516,11 +594,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/international': {
+      id: '/international'
+      path: '/international'
+      fullPath: '/international'
+      preLoaderRoute: typeof InternationalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mentions-legales': {
       id: '/mentions-legales'
       path: '/mentions-legales'
       fullPath: '/mentions-legales'
       preLoaderRoute: typeof MentionsLegalesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/methode': {
+      id: '/methode'
+      path: '/methode'
+      fullPath: '/methode'
+      preLoaderRoute: typeof MethodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notre-histoire': {
@@ -614,6 +706,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiCrmRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/crm-auth': {
+      id: '/api/crm-auth'
+      path: '/api/crm-auth'
+      fullPath: '/api/crm-auth'
+      preLoaderRoute: typeof ApiCrmAuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/crm-email-alert': {
+      id: '/api/crm-email-alert'
+      path: '/api/crm-email-alert'
+      fullPath: '/api/crm-email-alert'
+      preLoaderRoute: typeof ApiCrmEmailAlertRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/crm-sync': {
+      id: '/api/crm-sync'
+      path: '/api/crm-sync'
+      fullPath: '/api/crm-sync'
+      preLoaderRoute: typeof ApiCrmSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/send-quote': {
       id: '/api/send-quote'
       path: '/api/send-quote'
@@ -668,6 +781,13 @@ declare module '@tanstack/react-router' {
       path: '/services/$serviceId'
       fullPath: '/services/$serviceId'
       preLoaderRoute: typeof ServicesServiceIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/crm': {
+      id: '/services/crm'
+      path: '/services/crm'
+      fullPath: '/services/crm'
+      preLoaderRoute: typeof ServicesCrmRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services/robotique': {
@@ -759,7 +879,9 @@ const rootRouteChildren: RootRouteChildren = {
   CrmRoute: CrmRoute,
   DashboardRoute: DashboardRouteWithChildren,
   FaqRoute: FaqRoute,
+  InternationalRoute: InternationalRoute,
   MentionsLegalesRoute: MentionsLegalesRoute,
+  MethodeRoute: MethodeRoute,
   NotreHistoireRoute: NotreHistoireRoute,
   RealisationsRoute: RealisationsRoute,
   RecrutementRoute: RecrutementRoute,
@@ -773,8 +895,12 @@ const rootRouteChildren: RootRouteChildren = {
   ApiContactRoute: ApiContactRoute,
   ApiCreateCheckoutRoute: ApiCreateCheckoutRoute,
   ApiCrmRoute: ApiCrmRoute,
+  ApiCrmAuthRoute: ApiCrmAuthRoute,
+  ApiCrmEmailAlertRoute: ApiCrmEmailAlertRoute,
+  ApiCrmSyncRoute: ApiCrmSyncRoute,
   ApiSendQuoteRoute: ApiSendQuoteRoute,
   ServicesServiceIdRoute: ServicesServiceIdRoute,
+  ServicesCrmRoute: ServicesCrmRoute,
   ServicesRobotiqueRoute: ServicesRobotiqueRoute,
   ServicesSeoRoute: ServicesSeoRoute,
   ServicesWebcareRoute: ServicesWebcareRoute,

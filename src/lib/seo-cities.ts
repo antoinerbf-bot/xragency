@@ -36,33 +36,43 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
     region: "Île-de-France",
     postalCode: "75008",
     coordinates: { lat: 48.8566, lng: 2.3522 },
-    badge: "BUREAU PRINCIPAL · CHAMPS-ÉLYSÉES · 75008",
+    badge: "ACCOMPAGNEMENT LOCAL · À DISTANCE",
     metaTitle: "XR Agency Paris — Agence Web de Prestige & Création de Site Internet",
     metaDescription:
-      "XR Agency Paris conçoit des sites internet sur mesure, du SEO Top 3 Google, du branding haute joaillerie et des automatisations IA pour les entreprises d'Île-de-France.",
+      "XR Agency Paris conçoit des sites internet sur mesure, du SEO local Google, du branding haute joaillerie et des automatisations IA pour les entreprises d'Île-de-France.",
     h1: "Création de Site Internet & Agence Web à Paris",
     h1Highlight: "L'Excellence Numérique dans la Capitale",
     tagline:
       "Haute direction artistique, architecture 3D WebGL et référencement naturel d'élite pour marques, family offices, cabinets et entreprises parisiennes d'envergure.",
     localMarketIntro:
       "À Paris, la concurrence numérique exige une identité visuelle sans compromis et une visibilité immédiate en tête des résultats Google. XR Agency accompagne les marques du Triangle d'Or, les cabinets d'affaires, les acteurs de l'hôtellerie de luxe et les PME franciliennes dans la création d'écosystèmes digitaux à fort pouvoir de conversion.",
-    sectors: ["Mode & Joaillerie", "Cabinets d'Avocats & Conseil", "Immobilier de Prestige", "Hôtellerie & Gastronomie", "Fintech & SaaS"],
+    sectors: [
+      "Mode & Joaillerie",
+      "Cabinets d'Avocats & Conseil",
+      "Immobilier de Prestige",
+      "Hôtellerie & Gastronomie",
+      "Fintech & SaaS",
+    ],
     localKeyPoints: [
       {
         title: "Direction Artistique Haute Couture",
-        description: "Design immersif digne des plus grandes maisons parisiennes, typographies de prestige et animations fluides à 60 FPS.",
+        description:
+          "Design immersif digne des plus grandes maisons parisiennes, typographies de prestige et animations adaptées aux appareils et au contexte du projet.",
       },
       {
-        title: "SEO Top 3 Google Paris & Île-de-France",
-        description: "Positionnement stratégique sur vos requêtes à fort volume d'intention et domination du pack local Google Maps.",
+        title: "SEO local Google Paris & Île-de-France",
+        description:
+          "Positionnement stratégique sur vos requêtes à fort volume d'intention et travail de visibilité locale sur Google Maps.",
       },
       {
         title: "Ingénierie Web Next-Gen",
-        description: "Développement React 19 / TanStack ultra-rapide avec score Lighthouse supérieur à 95 et hébergement haute sécurité.",
+        description:
+          "Développement React 19 / TanStack ultra-rapide avec optimisations techniques adaptées aux objectifs et contraintes du projet.",
       },
       {
-        title: "Accompagnement Sur Mesure en 7 Jours",
-        description: "Cycle de livraison accéléré à partir de 7 jours ouvrés pour vos sites vitrines stratégiques et lancements de collection.",
+        title: "Accompagnement sur mesure",
+        description:
+          "Calendrier défini selon le périmètre, les contenus et les intégrations du projet.",
       },
     ],
     keywords: [
@@ -79,17 +89,17 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
       {
         question: "Pourquoi choisir XR Agency pour créer un site internet à Paris ?",
         answer:
-          "XR Agency allie une direction artistique de niveau studio international, une vitesse de chargement instantanée et une stratégie d'acquisition organique (SEO) conçue pour conquérir la première page Google sur vos mots-clés stratégiques à Paris.",
+          "XR Agency allie une direction artistique de niveau studio international, une performance technique travaillée et une stratégie d'acquisition organique (SEO) conçue pour améliorer la visibilité sur vos requêtes stratégiques à Paris.",
       },
       {
         question: "Quels sont les délais de livraison pour une entreprise parisienne ?",
         answer:
-          "Nos sites vitrines sur mesure sont livrables à partir de 7 jours ouvrés. Les projets e-commerce et plateformes complexes requièrent généralement 2 à 4 semaines de production méticuleuse.",
+          "Le calendrier dépend du périmètre, des contenus et des intégrations. Il est établi et validé avant le démarrage.",
       },
       {
-        question: "Comment garantissez-vous la visibilité locale à Paris sur Google Maps ?",
+        question: "Comment travaillez-vous la visibilité locale à Paris sur Google Maps ?",
         answer:
-          "Notre système d'optimisation Google Maps Top 3 cible les arrondissements et zones de chalandise clés à Paris grâce à un travail approfondi sur le profil d'établissement, les citations locales et la cohérence NAP.",
+          "Nous analysons le profil d’établissement, les citations locales, la cohérence NAP, la concurrence et les zones de chalandise à Paris. Les objectifs sont définis après diagnostic, sans garantie de position.",
       },
     ],
   },
@@ -101,33 +111,43 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
     region: "Provence-Alpes-Côte d'Azur",
     postalCode: "13001",
     coordinates: { lat: 43.2965, lng: 5.3698 },
-    badge: "ANTENNE MÉDITERRANÉE · VIEUX-PORT & EUROMÉDITERRANÉE",
+    badge: "ACCOMPAGNEMENT LOCAL · À DISTANCE",
     metaTitle: "XR Agency Marseille — Agence Web & Création de Site Internet PACA",
     metaDescription:
-      "Studio web de référence à Marseille. Création de sites internet sur mesure, SEO local Top 3 Google Maps, branding et IA pour les entreprises marseillaises et de la région PACA.",
+      "Studio web de référence à Marseille. Création de sites internet sur mesure, SEO local Google Maps, branding et IA pour les entreprises marseillaises et de la région PACA.",
     h1: "Création de Site Internet & Agence Web à Marseille",
     h1Highlight: "Déployez Votre Puissance Digitale en PACA",
     tagline:
       "Des sites internet rapides, percutants et optimisés pour générer des leads qualifiés à Marseille, Aix-en-Provence et sur tout le littoral méditerranéen.",
     localMarketIntro:
       "Deuxième métropole de France et pôle économique du bassin méditerranéen, Marseille connaît un essor entrepreneurial majeur. XR Agency propulse les PME marseillaises, les acteurs maritimes, les professions libérales et les acteurs de la restauration vers le sommet de Google avec un design mémorable.",
-    sectors: ["Maritime & Logistique", "Immobilier Méditerranée", "Hôtellerie & Restauration", "Santé & Bien-être", "Commerce & PME"],
+    sectors: [
+      "Maritime & Logistique",
+      "Immobilier Méditerranée",
+      "Hôtellerie & Restauration",
+      "Santé & Bien-être",
+      "Commerce & PME",
+    ],
     localKeyPoints: [
       {
         title: "SEO Local Marseille & Métropole Aix-Marseille",
-        description: "Captation des requêtes géolocalisées pour vous positionner en premier choix face à vos concurrents locaux.",
+        description:
+          "Captation des requêtes géolocalisées pour améliorer votre visibilité auprès des recherches locales pertinentes.",
       },
       {
         title: "Design Méditerranéen & Expérience Immersive",
-        description: "Esthétique solaire, moderne et épurée, mettant en valeur l'authenticité et le professionnalisme de votre marque.",
+        description:
+          "Esthétique solaire, moderne et épurée, mettant en valeur l'authenticité et le professionnalisme de votre marque.",
       },
       {
         title: "Performance Mobile First",
-        description: "Plus de 75% du trafic local à Marseille provient des smartphones : nos interfaces sont ultra-rapides et fluides au toucher.",
+        description:
+          "Les usages mobiles occupent une place importante : les interfaces sont conçues en priorité pour les écrans tactiles.",
       },
       {
         title: "Support Réactif & Maintenance WebCare",
-        description: "Surveillance 24/7, sauvegardes quotidiennes et mises à jour continues pour sécuriser votre investissement digital.",
+        description:
+          "Maintenance, sauvegardes et mises à jour selon le périmètre défini au contrat.",
       },
     ],
     keywords: [
@@ -141,7 +161,8 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
     ],
     faqs: [
       {
-        question: "Quel est le coût moyen pour un site web professionnel à Marseille avec XR Agency ?",
+        question:
+          "Quel est le coût moyen pour un site web professionnel à Marseille avec XR Agency ?",
         answer:
           "Nos formules démarrent avec des packs vitrine transparents sans frais cachés, et des abonnements WebCare optionnels pour la maintenance et les évolutions continues.",
       },
@@ -151,9 +172,9 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
           "Absolument. Nous couvrons l'ensemble de la métropole Aix-Marseille-Provence, Aubagne, La Ciotat, Martigues et tout le département des Bouches-du-Rhône.",
       },
       {
-        question: "Comment être premier sur Google quand on tape mon métier à Marseille ?",
+        question: "Comment améliorer ma visibilité sur Google à Marseille ?",
         answer:
-          "Grâce à notre protocole SEO combinant architecture sémantique locale, vitesse de chargement instantanée et optimisation intensive de votre fiche Google Business Profile.",
+          "Grâce à notre protocole SEO combinant architecture sémantique locale, performance technique travaillée et optimisation intensive de votre fiche Google Business Profile.",
       },
     ],
   },
@@ -168,30 +189,40 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
     badge: "PÔLE RHÔNE-ALPES · PRESQU'ÎLE & PART-DIEU",
     metaTitle: "XR Agency Lyon — Agence Web & Création de Site Internet sur Mesure",
     metaDescription:
-      "Agence web d'excellence à Lyon. Création de sites internet sur mesure, SEO Google Top 3, branding et solutions digitales pour entreprises lyonnaises et régionales.",
+      "Création de sites internet sur mesure, référencement naturel, visibilité locale, branding et solutions digitales pour les entreprises lyonnaises et régionales.",
     h1: "Création de Site Internet & Agence Web à Lyon",
     h1Highlight: "L'Ingénierie Digitale au Cœur de Lyon",
     tagline:
       "Performance, rigueur esthétique et acquisition organique pour les entreprises de la Presqu'île, Part-Dieu, Confluence et de la région Auvergne-Rhône-Alpes.",
     localMarketIntro:
       "Carrefour européen de l'industrie, de la gastronomie et de l'innovation tech, Lyon rassemble des entreprises exigeantes. XR Agency conçoit des plateformes digitales robustes qui transforment les visiteurs en clients fidèles et consolident votre autorité sur le marché lyonnais.",
-    sectors: ["Industrie & Ingénierie", "Gastronomie & Terroir", "Santé & Biotech", "Finance & Gestion de Patrimoine", "Tech & E-commerce"],
+    sectors: [
+      "Industrie & Ingénierie",
+      "Gastronomie & Terroir",
+      "Santé & Biotech",
+      "Finance & Gestion de Patrimoine",
+      "Tech & E-commerce",
+    ],
     localKeyPoints: [
       {
         title: "Autorité SEO Lyon & Grand Lyon",
-        description: "Stratégie de mots-clés hyper-ciblée pour dominer les recherches stratégiques de la métropole lyonnaise.",
+        description:
+          "Stratégie de mots-clés hyper-ciblée pour dominer les recherches stratégiques de la métropole lyonnaise.",
       },
       {
         title: "Architecture Technique Sans Compromis",
-        description: "Temps de réponse instantané, code propre sans dépendances superflues et conformité RGPD irréprochable.",
+        description:
+          "Architecture soignée, performance travaillée et prise en compte des exigences de protection des données applicables au projet.",
       },
       {
         title: "Intégration CRM & Automatisation Commerciale",
-        description: "Connectez votre site internet directement à vos processus de vente pour ne perdre aucun prospect qualifié.",
+        description:
+          "Connectez votre site internet directement à vos processus de vente pour ne perdre aucun prospect qualifié.",
       },
       {
         title: "Design Épuré & Premium",
-        description: "Une image de marque solide et intemporelle qui reflète l'excellence lyonnaise auprès de vos partenaires.",
+        description:
+          "Une image de marque solide et intemporelle qui reflète l'excellence lyonnaise auprès de vos partenaires.",
       },
     ],
     keywords: [
@@ -232,30 +263,40 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
     badge: "PÔLE NOUVELLE-AQUITAINE · TRIANGLE D'OR & CHARTRONS",
     metaTitle: "XR Agency Bordeaux — Agence Web & Création de Site Internet Prestige",
     metaDescription:
-      "Agence web de prestige à Bordeaux. Conception de sites internet sur mesure, SEO local Top 3 Google, branding et stratégie digitale en Gironde et Nouvelle-Aquitaine.",
+      "Agence web de prestige à Bordeaux. Conception de sites internet sur mesure, SEO local visibilité Google, branding et stratégie digitale en Gironde et Nouvelle-Aquitaine.",
     h1: "Création de Site Internet & Agence Web à Bordeaux",
     h1Highlight: "Le Raffinement Digital en Terre Bordelaise",
     tagline:
       "Élégance, précision et puissance d'acquisition pour les domaines viticoles, commerces de prestige, cabinets et startups bordelaises.",
     localMarketIntro:
       "Bordeaux incarne l'art de vivre, l'excellence des grands terroirs et un écosystème d'entreprises en pleine expansion. XR Agency sublime l'image de marque de ses clients bordelais grâce à des interfaces élégantes et un positionnement SEO dominant sur Google.",
-    sectors: ["Vins & Domaines Viticoles", "Tourisme & Hôtellerie de Charme", "Immobilier de Prestige", "Professions Juridiques & Conseil", "Artisans & Créateurs"],
+    sectors: [
+      "Vins & Domaines Viticoles",
+      "Tourisme & Hôtellerie de Charme",
+      "Immobilier de Prestige",
+      "Professions Juridiques & Conseil",
+      "Artisans & Créateurs",
+    ],
     localKeyPoints: [
       {
         title: "Design Élégant & Storytelling Visuel",
-        description: "Mise en scène soignée de votre savoir-faire avec des typographies racées et une fluidité visuelle absolue.",
+        description:
+          "Mise en scène soignée de votre savoir-faire avec des typographies racées et une fluidité visuelle absolue.",
       },
       {
         title: "SEO Bordeaux & Gironde",
-        description: "Captation des requêtes à haute valeur ajoutée sur Bordeaux Métropole, le Bassin d'Arcachon et le Médoc.",
+        description:
+          "Captation des requêtes à haute valeur ajoutée sur Bordeaux Métropole, le Bassin d'Arcachon et le Médoc.",
       },
       {
         title: "Réservation & E-Commerce Premium",
-        description: "Modules de vente en ligne et de prise de rendez-vous intuitifs, sécurisés et optimisés pour la conversion.",
+        description:
+          "Modules de vente en ligne et de prise de rendez-vous intuitifs, sécurisés et optimisés pour la conversion.",
       },
       {
         title: "Visibilité Internationale & Multilingue",
-        description: "Sites multilingues (Français, Anglais, etc.) adaptés aux clientèles touristiques et marchés export.",
+        description:
+          "Sites multilingues (Français, Anglais, etc.) adaptés aux clientèles touristiques et marchés export.",
       },
     ],
     keywords: [
@@ -276,7 +317,7 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
       {
         question: "Combien de temps faut-il pour voir les résultats SEO à Bordeaux ?",
         answer:
-          "Les optimisations techniques et Google Maps produisent des premiers résultats dès 30 à 60 jours, avec une consolidation forte sur le Top 3 entre 3 et 6 mois.",
+          "Les délais et résultats varient selon le marché, la concurrence, l’état initial du site et les actions déployées.",
       },
       {
         question: "XR Agency intervient-elle sur le Bassin d'Arcachon ?",
@@ -293,7 +334,7 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
     region: "Occitanie",
     postalCode: "31000",
     coordinates: { lat: 43.6047, lng: 1.4442 },
-    badge: "ANTENNE OCCITANIE · CAPITOLE & COMPASS TECH",
+    badge: "ACCOMPAGNEMENT LOCAL · À DISTANCE",
     metaTitle: "XR Agency Toulouse — Agence Web & Création de Site Internet 31",
     metaDescription:
       "Agence web innovante à Toulouse. Conception de sites internet sur mesure, SEO local, branding et IA pour entreprises toulousaines et occitanes.",
@@ -303,23 +344,33 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
       "Un design percutant et une technologie web de pointe pour les acteurs de l'aéronautique, de la tech, du commerce et des services à Toulouse.",
     localMarketIntro:
       "Capitale européenne de l'aéronautique et métropole dynamique, Toulouse exige une excellence technique sans compromis. XR Agency dote les entreprises toulousaines de sites internet rapides, beaux et visibles là où leurs prospects cherchent.",
-    sectors: ["Aéronautique & Spatial", "Startups & Technologies", "BTP & Habitat", "Commerce & Services", "Restauration & Loisirs"],
+    sectors: [
+      "Aéronautique & Spatial",
+      "Startups & Technologies",
+      "BTP & Habitat",
+      "Commerce & Services",
+      "Restauration & Loisirs",
+    ],
     localKeyPoints: [
       {
-        title: "SEO Local Top 3 Toulouse",
-        description: "Conquête des premières positions Google Maps et recherche naturelle dans la Ville Rose et son agglomération.",
+        title: "SEO local à Toulouse",
+        description:
+          "Conquête des premières positions Google Maps et recherche naturelle dans la Ville Rose et son agglomération.",
       },
       {
         title: "Stack Technique Haute Vitesse",
-        description: "Temps de chargement sous la seconde pour maximiser la satisfaction utilisateur et le taux de conversion.",
+        description:
+          "Temps de chargement sous la seconde pour maximiser la satisfaction utilisateur et le taux de conversion.",
       },
       {
         title: "Solutions IA & Automatisation",
-        description: "Intégrez des agents conversationnels intelligents et des automatisations de prospects pour décupler votre efficacité.",
+        description:
+          "Intégrez des agents conversationnels intelligents et des automatisations de prospects pour décupler votre efficacité.",
       },
       {
         title: "Suivi & Évolution Continue",
-        description: "Un interlocuteur dédié et un contrat WebCare clair pour faire grandir votre outil de travail dans la durée.",
+        description:
+          "Un interlocuteur dédié et un contrat WebCare clair pour faire grandir votre outil de travail dans la durée.",
       },
     ],
     keywords: [
@@ -359,30 +410,40 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
     badge: "COOPÉRATION CÔTE D'AZUR · PROMENADE & CANNES",
     metaTitle: "XR Agency Nice — Agence Web Luxe & Création de Site Internet Côte d'Azur",
     metaDescription:
-      "Studio web haut de gamme à Nice & Côte d'Azur. Création de sites internet de prestige, SEO Top 3, branding et solutions digitales pour Monaco, Nice et Cannes.",
+      "Studio web haut de gamme à Nice & Côte d'Azur. Création de sites internet de prestige, SEO local, branding et solutions digitales pour Monaco, Nice et Cannes.",
     h1: "Création de Site Internet & Agence Web à Nice",
     h1Highlight: "Le Standard Luxe de la Riviera Digitale",
     tagline:
       "Esthétique haute joaillerie, immersion visuelle et SEO d'élite pour les acteurs du luxe, de l'hôtellerie, de l'immobilier et du nautisme sur la Côte d'Azur.",
     localMarketIntro:
       "Sur la Côte d'Azur, l'exigence de la clientèle internationale ne tolère aucune approximation. XR Agency crée des vitrines digitales raffinées qui valorisent les marques azuréennes à Nice, Cannes, Antibes et Monaco, avec un référencement naturel à forte rentabilité.",
-    sectors: ["Yachting & Nautisme", "Immobilier de Luxe", "Hôtellerie 5 Étoiles & Palaces", "Mode & Beauté", "Événementiel de Prestige"],
+    sectors: [
+      "Yachting & Nautisme",
+      "Immobilier de Luxe",
+      "Hôtellerie 5 Étoiles & Palaces",
+      "Mode & Beauté",
+      "Événementiel de Prestige",
+    ],
     localKeyPoints: [
       {
         title: "Expérience Visuelle Prestige",
-        description: "Direction artistique raffinée pour séduire une clientèle nationale et internationale exigeante.",
+        description:
+          "Direction artistique raffinée pour séduire une clientèle nationale et internationale exigeante.",
       },
       {
         title: "SEO Riviera & Monaco",
-        description: "Positionnez votre marque sur les requêtes à forte valeur patrimoniale de Nice, Cannes et Monaco.",
+        description:
+          "Positionnez votre marque sur les requêtes à forte valeur patrimoniale de Nice, Cannes et Monaco.",
       },
       {
         title: "Multilingue Natif (FR / EN / RU / AR)",
-        description: "Système de langues fluide et optimisé pour le référencement international de chaque version linguistique.",
+        description:
+          "Système de langues fluide et optimisé pour le référencement international de chaque version linguistique.",
       },
       {
         title: "Vidéos & Médias Haute Résolution",
-        description: "Intégration optimisée de vidéos cinématiques sans ralentir le temps de chargement de vos pages.",
+        description:
+          "Intégration optimisée de vidéos cinématiques sans ralentir le temps de chargement de vos pages.",
       },
     ],
     keywords: [
@@ -419,7 +480,7 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
     region: "Pays de la Loire",
     postalCode: "44000",
     coordinates: { lat: 47.2184, lng: -1.5536 },
-    badge: "ANTENNE GRAND OUEST · ÎLE DE NANTES & TECH",
+    badge: "ACCOMPAGNEMENT LOCAL · À DISTANCE",
     metaTitle: "XR Agency Nantes — Agence Web & Création de Site Internet 44",
     metaDescription:
       "Agence web à Nantes. Création de sites internet performants, SEO local, branding et ingénierie web pour entreprises nantaises et du Grand Ouest.",
@@ -428,24 +489,34 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
     tagline:
       "Des plateformes web élégantes et rapides qui convertissent vos prospects en clients à Nantes, Saint-Nazaire et dans les Pays de la Loire.",
     localMarketIntro:
-      "Pôle d'innovation et de créativité du Grand Ouest, Nantes abrite des entreprises audacieuses. XR Agency met à leur service des outils web ultra-performants qui valorisent leur ADN et s'imposent en première page de Google.",
-    sectors: ["E-commerce & Retail", "Industrie Créative & Design", "Tech & Numérique", "Santé & Éco-activités", "Artisans & PME"],
+      "Pôle d’innovation et de créativité du Grand Ouest, Nantes abrite des entreprises audacieuses. XR Agency les accompagne avec des outils web adaptés à leur identité et une stratégie de visibilité construite autour de leurs marchés.",
+    sectors: [
+      "E-commerce & Retail",
+      "Industrie Créative & Design",
+      "Tech & Numérique",
+      "Santé & Éco-activités",
+      "Artisans & PME",
+    ],
     localKeyPoints: [
       {
         title: "SEO Régional Grand Ouest",
-        description: "Gagnez en visibilité sur Nantes, Rennes, Angers et l'ensemble du bassin atlantique.",
+        description:
+          "Gagnez en visibilité sur Nantes, Rennes, Angers et l'ensemble du bassin atlantique.",
       },
       {
         title: "Éco-Conception & Vitesse Extrême",
-        description: "Des sites légers, sobres en consommation d'énergie et ultra-rapides sur toutes les connexions.",
+        description:
+          "Des sites légers, sobres en consommation d'énergie et ultra-rapides sur toutes les connexions.",
       },
       {
         title: "Conversion & Génération de Leads",
-        description: "Chaque page est pensée comme un entonnoir de conversion fluide pour maximiser vos demandes de contact.",
+        description:
+          "Chaque page est pensée comme un entonnoir de conversion fluide pour maximiser vos demandes de contact.",
       },
       {
         title: "Autonomie & Simplicité",
-        description: "Gérez vos contenus facilement ou déléguez l'intégralité des opérations à notre équipe WebCare.",
+        description:
+          "Gérez vos contenus facilement ou déléguez l'intégralité des opérations à notre équipe WebCare.",
       },
     ],
     keywords: [
@@ -482,7 +553,7 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
     region: "Grand Est",
     postalCode: "67000",
     coordinates: { lat: 48.5734, lng: 7.7521 },
-    badge: "ANTENNE EUROPÉENNE · GRAND EST & RHIN",
+    badge: "ACCOMPAGNEMENT LOCAL · À DISTANCE",
     metaTitle: "XR Agency Strasbourg — Agence Web & Création de Site Internet 67",
     metaDescription:
       "Agence web à Strasbourg. Création de sites internet sur mesure, SEO local et international, branding et transformation digitale en Alsace et Grand Est.",
@@ -492,23 +563,33 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
       "Sites vitrines de prestige, boutiques e-commerce et référencement naturel pour entreprises alsaciennes et transfrontalières.",
     localMarketIntro:
       "Capitale parlementaire européenne et carrefour transfrontalier, Strasbourg bénéficie d'une position stratégique unique. XR Agency propulse les PME alsaciennes sur le marché national et européen grâce à des sites web sur mesure et un SEO sans faille.",
-    sectors: ["Institutions & Conseil", "Artisanat d'Excellence & Terroir", "Santé & Médical", "Commerce Transfrontalier", "Industrie & Logistique"],
+    sectors: [
+      "Institutions & Conseil",
+      "Artisanat d'Excellence & Terroir",
+      "Santé & Médical",
+      "Commerce Transfrontalier",
+      "Industrie & Logistique",
+    ],
     localKeyPoints: [
       {
         title: "SEO Bilingue France / Allemagne",
-        description: "Optimisation pour capter la clientèle locale alsacienne et les opportunités transfrontalières allemandes et suisses.",
+        description:
+          "Optimisation pour capter la clientèle locale alsacienne et les opportunités transfrontalières allemandes et suisses.",
       },
       {
         title: "Design Institutionnel & Prestigieux",
-        description: "Un graphisme soigné, rassurant et rigoureux pour asseoir votre autorité professionnelle.",
+        description:
+          "Un graphisme soigné, rassurant et rigoureux pour asseoir votre autorité professionnelle.",
       },
       {
         title: "Sécurité & Conformité Européenne",
-        description: "Respect strict du RGPD, hébergement sur serveurs sécurisés en Europe et protocoles SSL haute certification.",
+        description:
+          "Respect strict du RGPD, hébergement sur serveurs sécurisés en Europe et protocoles SSL haute certification.",
       },
       {
         title: "Accompagnement de Proximité",
-        description: "Un chef de projet dédié pour vous guider de la définition du brief jusqu'au lancement opérationnel.",
+        description:
+          "Un chef de projet dédié pour vous guider de la définition du brief jusqu'au lancement opérationnel.",
       },
     ],
     keywords: [
@@ -545,33 +626,43 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
     region: "Occitanie",
     postalCode: "34000",
     coordinates: { lat: 43.6108, lng: 3.8767 },
-    badge: "ANTENNE OCCITANIE · COMÉDIE & TECH HUB",
+    badge: "ACCOMPAGNEMENT LOCAL · À DISTANCE",
     metaTitle: "XR Agency Montpellier — Agence Web & Création de Site Internet 34",
     metaDescription:
-      "Agence web créative à Montpellier. Création de sites internet sur mesure, SEO local Top 3 Google, branding et IA pour entreprises montpelliéraines.",
+      "Agence web créative à Montpellier. Création de sites internet sur mesure, SEO local visibilité Google, branding et IA pour entreprises montpelliéraines.",
     h1: "Création de Site Internet & Agence Web à Montpellier",
     h1Highlight: "Dynamisme Digital & Acquisition Client à Montpellier",
     tagline:
-      "Faites de votre site internet votre premier apporteur d'affaires à Montpellier, Nîmes, Sète et sur l'ensemble de l'Occitanie littorale.",
+      "Faites de votre site internet un point de contact clair pour vos prospects à Montpellier, Nîmes, Sète et sur l’ensemble de l’Occitanie littorale.",
     localMarketIntro:
       "Ville jeune, attractive et pôle d'innovation reconnu, Montpellier attire chaque année de nouveaux talents et entreprises. XR Agency aide les acteurs locaux à transformer cette effervescence en croissance mesurable grâce à des outils digitaux à haute conversion.",
-    sectors: ["Santé & Medtech", "Agroalimentaire & Vins", "Startups & Plateformes", "Tourisme & Hôtellerie", "Services aux Entreprises"],
+    sectors: [
+      "Santé & Medtech",
+      "Agroalimentaire & Vins",
+      "Startups & Plateformes",
+      "Tourisme & Hôtellerie",
+      "Services aux Entreprises",
+    ],
     localKeyPoints: [
       {
-        title: "Domination du Pack Local Google Maps",
-        description: "Garantissez la présence de votre établissement dans les 3 premiers résultats sur smartphone à Montpellier.",
+        title: "Visibilité locale sur Google Maps",
+        description:
+          "Améliorez la qualité de votre présence locale sur smartphone à Montpellier grâce à une stratégie définie après diagnostic.",
       },
       {
         title: "Expérience Utilisateur Centrée sur la Vente",
-        description: "Des parcours clients clairs et des boutons d'action stratégiques pour maximiser le taux de prise de contact.",
+        description:
+          "Des parcours clients clairs et des boutons d'action stratégiques pour maximiser le taux de prise de contact.",
       },
       {
         title: "Intégration d'Outils IA Modernes",
-        description: "Agents conversationnels intelligents et synchronisations CRM pour automatiser le traitement de vos leads.",
+        description:
+          "Agents conversationnels intelligents et synchronisations CRM pour automatiser le traitement de vos leads.",
       },
       {
         title: "Vitesse & Référencement Naturel",
-        description: "Des fondations techniques solides qui plaisent aux algorithmes de Google et vos visiteurs.",
+        description:
+          "Des fondations techniques solides qui plaisent aux algorithmes de Google et vos visiteurs.",
       },
     ],
     keywords: [
@@ -586,7 +677,7 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
       {
         question: "Pourquoi un bon référencement est-il crucial à Montpellier ?",
         answer:
-          "Avec la forte création d'entreprises à Montpellier, être visible dans le Top 3 Google Maps est souvent le seul moyen d'attirer des clients réguliers sans dépendre de la publicité payante.",
+          "Avec la forte création d'entreprises à Montpellier, être visible dans le visibilité Google Maps est souvent le seul moyen d'attirer des clients réguliers sans dépendre de la publicité payante.",
       },
       {
         question: "Pouvez-vous créer un site avec système de réservation en ligne ?",
@@ -608,33 +699,43 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
     region: "Hauts-de-France",
     postalCode: "59000",
     coordinates: { lat: 50.6292, lng: 3.0573 },
-    badge: "ANTENNE HAUTS-DE-FRANCE · VIEUX-LILLE & EURATECH",
+    badge: "ACCOMPAGNEMENT LOCAL · À DISTANCE",
     metaTitle: "XR Agency Lille — Agence Web & Création de Site Internet 59",
     metaDescription:
-      "Agence web à Lille. Création de sites internet sur mesure, SEO local Top 3 Google, e-commerce et branding pour entreprises lilloises et des Hauts-de-France.",
+      "Agence web à Lille. Création de sites internet sur mesure, SEO local visibilité Google, e-commerce et branding pour entreprises lilloises et des Hauts-de-France.",
     h1: "Création de Site Internet & Agence Web à Lille",
     h1Highlight: "La Puissance Digitale au Cœur des Flandres",
     tagline:
       "L'efficacité du design contemporain et la puissance du référencement naturel pour les entreprises du Vieux-Lille, d'EuraTechnologies et de la métropole lilloise.",
     localMarketIntro:
       "Berceau de grands groupes de distribution et pôle majeur de la French Tech avec EuraTechnologies, Lille allie tradition commerçante et modernité digitale. XR Agency conçoit des sites internet fiables, robustes et taillés pour générer un chiffre d'affaires prédictible.",
-    sectors: ["Commerce & Distribution", "Startups & Incubateurs", "Industrie & Logistique", "Professions Libérales", "Restauration & Tourisme"],
+    sectors: [
+      "Commerce & Distribution",
+      "Startups & Incubateurs",
+      "Industrie & Logistique",
+      "Professions Libérales",
+      "Restauration & Tourisme",
+    ],
     localKeyPoints: [
       {
         title: "E-Commerce & Retail Performant",
-        description: "Boutiques en ligne optimisées pour la vente avec gestion simplifiée des commandes et paiements ultra-sécurisés.",
+        description:
+          "Boutiques en ligne optimisées pour la vente avec gestion simplifiée des commandes et paiements ultra-sécurisés.",
       },
       {
         title: "SEO Métropole Européenne de Lille",
-        description: "Gagnez les meilleures places sur les recherches stratégiques à Lille, Roubaix, Tourcoing et Villeneuve-d'Ascq.",
+        description:
+          "Gagnez les meilleures places sur les recherches stratégiques à Lille, Roubaix, Tourcoing et Villeneuve-d'Ascq.",
       },
       {
         title: "Technologies Modernes & Évolutives",
-        description: "Développements pérennes sans obsolescence prématurée pour protéger vos investissements dans le temps.",
+        description:
+          "Développements pérennes sans obsolescence prématurée pour protéger vos investissements dans le temps.",
       },
       {
         title: "Support Réactif & Maintenance Continue",
-        description: "Une équipe à vos côtés pour répondre rapidement à vos demandes d'évolutions et sécuriser vos accès.",
+        description:
+          "Une équipe à vos côtés pour répondre rapidement à vos demandes d'évolutions et sécuriser vos accès.",
       },
     ],
     keywords: [
@@ -650,7 +751,7 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
       {
         question: "Pourquoi confier son site à XR Agency à Lille ?",
         answer:
-          "Nous combinons une direction artistique d'agence parisienne et une culture du résultat concret : chaque site est bâti pour convertir et se classer en première page Google.",
+          "Nous combinons une direction artistique soignée et une approche orientée objectifs : chaque site est conçu pour présenter clairement l’offre et faciliter la prise de contact.",
       },
       {
         question: "Accompagnez-vous les startups d'EuraTechnologies ?",
@@ -675,30 +776,40 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
     badge: "COUVERTURE NATIONALE · PARIS · LYON · MARSEILLE · FRANCE ENTIÈRE",
     metaTitle: "XR Agency France — Agence Web de Prestige & Studio Digital National",
     metaDescription:
-      "XR Agency France : création de sites internet sur mesure, SEO Top 3 Google, direction artistique de prestige et automatisation IA pour entreprises partout en France.",
+      "XR Agency France : création de sites internet sur mesure, SEO local Google, direction artistique de prestige et automatisation IA pour entreprises partout en France.",
     h1: "Agence Web & Création de Site Internet en France",
     h1Highlight: "L'Excellence Numérique Nationale",
     tagline:
       "Le studio digital de prestige qui accompagne les entreprises françaises dans leur conquête digitale : sites vitrines sur mesure, e-commerce, SEO et IA.",
     localMarketIntro:
-      "De Paris à Marseille, de Bordeaux à Lille et sur l'ensemble des territoires, les entreprises françaises méritent une présence en ligne irréprochable. XR Agency délivre des solutions digitales complètes qui unissent haute direction artistique, ingénierie de pointe et domination sur Google.",
-    sectors: ["Grandes Entreprises & PME", "Luxe & Haute Joaillerie", "Professions Réglementées", "E-Commerce National", "Franchises & Réseaux"],
+      "De Paris à Marseille, de Bordeaux à Lille et sur l'ensemble des territoires, les entreprises françaises méritent une présence en ligne irréprochable. XR Agency délivre des solutions digitales complètes qui unissent haute direction artistique, ingénierie de pointe et visibilité sur Google.",
+    sectors: [
+      "Grandes Entreprises & PME",
+      "Luxe & Haute Joaillerie",
+      "Professions Réglementées",
+      "E-Commerce National",
+      "Franchises & Réseaux",
+    ],
     localKeyPoints: [
       {
         title: "Déploiement National & Multi-Sites",
-        description: "Accompagnement de réseaux et franchises avec cohérence de marque et stratégies SEO locales multi-villes.",
+        description:
+          "Accompagnement de réseaux et franchises avec cohérence de marque et stratégies SEO locales multi-villes.",
       },
       {
-        title: "Livraison Rapide en 7 Jours",
-        description: "Processus de production rodé permettant de livrer un site vitrine d'exception en 7 jours ouvrés.",
+        title: "Calendrier de production défini",
+        description:
+          "Le calendrier de production est défini selon le périmètre, les contenus et les intégrations validés.",
       },
       {
-        title: "Garantie de Sérénité & Maintenance WebCare",
-        description: "Hébergement haute disponibilité, sauvegardes quotidiennes et mises à jour de sécurité 24/7.",
+        title: "Maintenance & WebCare",
+        description:
+          "Les modalités d’hébergement, de sauvegarde et de mise à jour sont précisées dans le devis et le contrat.",
       },
       {
         title: "Contact Direct & Équipe Dédiée",
-        description: "Accès direct à nos experts par WhatsApp, visioconférence et téléphone tout au long du projet.",
+        description:
+          "Accès direct à nos experts par WhatsApp, visioconférence et téléphone tout au long du projet.",
       },
     ],
     keywords: [
@@ -747,23 +858,33 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
       "Standards de design français, ingénierie ultra-rapide et visibilité Google locale et internationale pour les entreprises de Da Nang et du centre du Vietnam.",
     localMarketIntro:
       "Capitale touristique et nouveau hub technologique d'Asie du Sud-Est, Da Nang connaît une expansion fulgurante. XR Agency accompagne les entrepreneurs français, internationaux et vietnamiens (resorts de luxe, restaurants, agences de voyage, startups et commerces) dans la création de vitrines digitales performantes et bilingues.",
-    sectors: ["Resorts & Hôtels de Luxe", "Restaurants & Cafés Concept", "Immobilier & Expatriation", "Startups & Digital Nomades", "Tourisme & Loisirs"],
+    sectors: [
+      "Resorts & Hôtels de Luxe",
+      "Restaurants & Cafés Concept",
+      "Immobilier & Expatriation",
+      "Startups & Digital Nomades",
+      "Tourisme & Loisirs",
+    ],
     localKeyPoints: [
       {
         title: "Direction Artistique Française de Prestige",
-        description: "Une image de marque d'exception qui positionne immédiatement votre établissement au-dessus des standards locaux.",
+        description:
+          "Une image de marque d'exception qui positionne immédiatement votre établissement au-dessus des standards locaux.",
       },
       {
         title: "SEO Google Da Nang & International",
-        description: "Captation de la clientèle touristique internationale et des résidents locaux en français, anglais et vietnamien.",
+        description:
+          "Captation de la clientèle touristique internationale et des résidents locaux en français, anglais et vietnamien.",
       },
       {
         title: "Systèmes de Réservation & Menus Interactifs",
-        description: "Intégration de solutions de réservation directes, commandes en ligne et paiements sécurisés.",
+        description:
+          "Intégration de solutions de réservation directes, commandes en ligne et paiements sécurisés.",
       },
       {
         title: "Support Francophone Réactif sur Place",
-        description: "Équipe accessible sur les fuseaux horaires européen et asiatique, joignable directement par WhatsApp.",
+        description:
+          "Équipe accessible sur les fuseaux horaires européen et asiatique, joignable directement par WhatsApp.",
       },
     ],
     keywords: [
@@ -780,7 +901,7 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
       {
         question: "Pourquoi faire appel à XR Agency à Da Nang pour créer son site internet ?",
         answer:
-          "Nous combinons l'exigence esthétique et la rigueur technique d'une agence parisienne de premier plan avec une présence et une compréhension intime du marché de Da Nang et du Vietnam.",
+          "Nous combinons l'exigence esthétique et la rigueur technique d'une expertise digitale française et une connaissance des enjeux du marché de Da Nang et du Vietnam.",
       },
       {
         question: "Pouvez-vous concevoir un site trilingue Français / Anglais / Vietnamien ?",
@@ -813,23 +934,33 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
       "Des plateformes web d'exception taillées pour la métropole économique du Vietnam : District 1, Thảo Điền, District 7 et rayonnement en Asie du Sud-Est.",
     localMarketIntro:
       "Poumon économique vibrant du Vietnam, Hô Chi Minh-Ville rassemble multinationales, créateurs audacieux et PME en hyper-croissance. XR Agency apporte aux entreprises francophones et internationales de Saïgon des sites web d'une rare élégance visuelle et une puissance d'acquisition organique sur Google.",
-    sectors: ["Commerce & E-Commerce Asie", "Hospitality & Gastronomie Fine", "Immobilier de Luxe & Investissement", "Industrie & Export", "Tech & Services B2B"],
+    sectors: [
+      "Commerce & E-Commerce Asie",
+      "Hospitality & Gastronomie Fine",
+      "Immobilier de Luxe & Investissement",
+      "Industrie & Export",
+      "Tech & Services B2B",
+    ],
     localKeyPoints: [
       {
         title: "Standard International & Vitesse Foudroyante",
-        description: "Des interfaces optimisées pour les réseaux mobiles à haut débit du Vietnam et les consultations mondiales.",
+        description:
+          "Des interfaces optimisées pour les réseaux mobiles à haut débit du Vietnam et les consultations mondiales.",
       },
       {
         title: "SEO Google Vietnam & Export",
-        description: "Positionnez votre entreprise en première page sur les recherches au Vietnam et à l'international.",
+        description:
+          "Travaillez la visibilité de votre entreprise sur les recherches pertinentes au Vietnam et à l’international.",
       },
       {
         title: "Branding de Haute Volée",
-        description: "Identité de marque raffinée qui impose votre autorité face aux concurrents de la région asiatique.",
+        description:
+          "Identité de marque raffinée qui impose votre autorité face aux concurrents de la région asiatique.",
       },
       {
         title: "Écosystème CRM & Messageries (WhatsApp / Zalo)",
-        description: "Connexion directe avec les habitudes de communication locales pour convertir vos visiteurs sans friction.",
+        description:
+          "Connexion directe avec les habitudes de communication locales pour convertir vos visiteurs sans friction.",
       },
     ],
     keywords: [
@@ -849,7 +980,8 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
           "Oui, nous accompagnons les entrepreneurs et filiales françaises installées à Saïgon (District 1, Thảo Điền, District 2, District 7) avec une communication 100% en français et sur le fuseau horaire du Vietnam.",
       },
       {
-        question: "Quelles sont les intégrations possibles avec les réseaux sociaux et messageries au Vietnam ?",
+        question:
+          "Quelles sont les intégrations possibles avec les réseaux sociaux et messageries au Vietnam ?",
         answer:
           "Nous intégrons des boutons de contact direct WhatsApp, Zalo, Facebook Messenger et formulaires qualifiés pour répondre aux usages réels des consommateurs au Vietnam.",
       },
@@ -872,30 +1004,40 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
     badge: "PRESENCE ASIE · ĐÀ NẴNG · HỒ CHÍ MINH · HÀ NỘI · VIETNAM ENTIER",
     metaTitle: "Création de Site Internet au Vietnam — XR Agency | Agence Web Internationale",
     metaDescription:
-      "Expert en création de site internet au Vietnam : Da Nang, Ho Chi Minh, Hanoi. Studio digital français, standards luxe, SEO Google Top 3 et support réactif. Devis gratuit.",
+      "Création de sites internet au Vietnam : Da Nang, Hô Chi Minh-Ville et Hanoï. Direction artistique française, référencement naturel et accompagnement digital. Devis personnalisé.",
     h1: "Création de Site Internet au Vietnam & Agence Web",
     h1Highlight: "L'Excellence du Web Français au Cœur du Vietnam",
     tagline:
       "Le partenaire digital de confiance pour les entreprises, expats et marques au Vietnam : Da Nang, Hô Chi Minh-Ville, Hanoï et rayonnement international.",
     localMarketIntro:
       "Le Vietnam est l'un des marchés digitaux les plus dynamiques du monde avec plus de 78 millions d'internautes. XR Agency offre aux entreprises francophones, internationales et locales le meilleur des deux mondes : la direction artistique et l'exigence de qualité européenne, associées à une réactivité et une agilité incomparables sur place.",
-    sectors: ["Tourisme & Hôtellerie Internationale", "Import-Export & Sourcing", "Entreprises d'Expatriés", "E-Commerce & Retail", "Agences & Startups Tech"],
+    sectors: [
+      "Tourisme & Hôtellerie Internationale",
+      "Import-Export & Sourcing",
+      "Entreprises d'Expatriés",
+      "E-Commerce & Retail",
+      "Agences & Startups Tech",
+    ],
     localKeyPoints: [
       {
         title: "Standards de Qualité Européens",
-        description: "Design sur-mesure, respect strict des normes de sécurité, du RGPD et des meilleures pratiques d'ingénierie web.",
+        description:
+          "Design sur-mesure, respect strict des normes de sécurité, du RGPD et des meilleures pratiques d'ingénierie web.",
       },
       {
         title: "SEO Google Vietnam & Multi-Pays",
-        description: "Conquête de la première page sur Google Vietnam (.vn) et Google international sur vos expressions clés stratégiques.",
+        description:
+          "Travail de visibilité sur les recherches pertinentes au Vietnam et sur les marchés internationaux ciblés.",
       },
       {
-        title: "Livraison Rapide en 7 Jours Ouvrés",
-        description: "Déploiement accéléré de votre site vitrine ou boutique pour saisir immédiatement les opportunités du marché vietnamien.",
+        title: "Calendrier de production défini Ouvrés",
+        description:
+          "Déploiement accéléré de votre site vitrine ou boutique pour saisir immédiatement les opportunités du marché vietnamien.",
       },
       {
         title: "Interlocuteurs Francophones Dédiés",
-        description: "Échangez directement en français avec des experts du web qui comprennent vos enjeux et votre vision d'entreprise.",
+        description:
+          "Échangez directement en français avec des experts du web qui comprennent vos enjeux et votre vision d'entreprise.",
       },
     ],
     keywords: [
@@ -919,7 +1061,7 @@ export const CITIES_DATA: Record<string, CitySeoData> = {
       {
         question: "Combien coûte la création d'un site internet au Vietnam avec XR Agency ?",
         answer:
-          "Nos forfaits sont transparents et compétitifs, avec des sites vitrines professionnels livrables dès 7 jours et des solutions e-commerce complètes sans coût caché.",
+          "Les prestations et le calendrier sont définis selon le périmètre, les contenus et les intégrations retenus.",
       },
       {
         question: "Couvrez-vous Hanoi en plus de Da Nang et Ho Chi Minh ?",

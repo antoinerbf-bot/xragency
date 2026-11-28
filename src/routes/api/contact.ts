@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Resend } from "resend";
 import { recordLeadFromWebsite } from "@/lib/crm-store";
+import { pushWebsiteLeadToCrm } from "./crm-sync";
 
 const escapeHtml = (value: string) =>
   value.replace(/[&<>"']/g, (character) => {
@@ -59,7 +60,7 @@ export const Route = createFileRoute("/api/contact")({
             );
           }
 
-          // Enregistrement systématique et résilient dans le CRM interne
+          // Enregistrement systématique et résilient dans le CRM interne + Supabase Live
           const crmResult = recordLeadFromWebsite({
             name,
             email,
@@ -71,19 +72,58 @@ export const Route = createFileRoute("/api/contact")({
             source: "Formulaire de contact web",
           });
 
+          const lowerNeed = need.toLowerCase();
+          const detectedServiceId = lowerNeed.includes("crm") || lowerNeed.includes("caisse")
+            ? "crm"
+            : lowerNeed.includes("maps")
+              ? "maps"
+              : lowerNeed.includes("seo")
+                ? "seo"
+                : lowerNeed.includes("social") || lowerNeed.includes("reseau")
+                  ? "social"
+                  : lowerNeed.includes("robot")
+                    ? "robotics"
+                    : lowerNeed.includes("brand") || lowerNeed.includes("logo")
+                      ? "branding"
+                      : "websites";
+
+          await pushWebsiteLeadToCrm({
+            name,
+            email,
+            phone,
+            company,
+            website,
+            need: need || "Demande entrante site web",
+            message,
+            source: "Site Web xragencyai.com",
+            serviceId: detectedServiceId,
+            valueEur: detectedServiceId === "crm" ? 2000 : detectedServiceId === "maps" ? 999 : 799,
+          }).catch(() => {});
+
           // Tentative d'envoi par e-mail via Resend si configuré
           const apiKey = process.env.RESEND_API_KEY;
           if (apiKey) {
             try {
               const resend = new Resend(apiKey);
-              const from =
-                process.env.RESEND_FROM_EMAIL || "XR Agency <onboarding@resend.dev>";
+              const from = process.env.RESEND_FROM_EMAIL || "XR Agency <onboarding@resend.dev>";
+
+              const isHrOrRecruitment =
+                need.toLowerCase().includes("candidature") ||
+                need.toLowerCase().includes("recrutement") ||
+                need.toLowerCase().includes("rh") ||
+                need.toLowerCase().includes("closer");
+
+              const recipients = isHrOrRecruitment
+                ? ["contact.xragency@gmail.com", "martin.leclipteur@gmail.com"]
+                : ["contact.xragency@gmail.com"];
 
               await resend.emails.send({
                 from,
-                to: ["contact.xragency@gmail.com"],
+                to: recipients,
                 replyTo: email,
-                subject: `[Nouveau Contact] ${name.replace(/[\r\n]+/g, " ")}${company ? ` (${company.replace(/[\r\n]+/g, " ")})` : ""}`,
+                subject: isHrOrRecruitment
+                  ? `[Candidature RH · Martin] ${name.replace(/[\r\n]+/g, " ")}${company ? ` (${company.replace(/[\r\n]+/g, " ")})` : ""}`
+                  : `[Nouveau Contact] ${name.replace(/[\r\n]+/g, " ")}${company ? ` (${company.replace(/[\r\n]+/g, " ")})` : ""}`,
                 html: `
                   <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111;">
                     <h2 style="border-bottom: 2px solid #111; padding-bottom: 8px;">Nouvelle demande de contact — XR Agency</h2>
@@ -107,12 +147,16 @@ export const Route = createFileRoute("/api/contact")({
           return Response.json({
             ok: true,
             leadId: crmResult.leadId,
-            message: "Votre message a été transmis avec succès. Notre équipe vous répond sous 2h ouvrées.",
+            message:
+              "Votre message a été transmis avec succès. Notre équipe revient vers vous dès que possible.",
           });
         } catch (error) {
           console.error("Contact API error:", error);
           return Response.json(
-            { error: "Une erreur est survenue. Merci de réessayer ou de nous contacter via WhatsApp." },
+            {
+              error:
+                "Une erreur est survenue. Merci de réessayer ou de nous contacter via WhatsApp.",
+            },
             { status: 500 },
           );
         }

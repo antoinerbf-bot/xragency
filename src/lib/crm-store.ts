@@ -25,10 +25,13 @@ export interface CrmMemberRecord {
   email: string;
   fullName: string;
   title: string;
-  role: "admin" | "member";
-  portalType?: "director" | "closer" | "student";
+  role: "admin" | "member" | "client";
+  portalType?: "director" | "closer" | "student" | "client" | "hr_manager";
+  clientId?: string;
   phoneLine: string;
   commissionPct: number;
+  recruitedBy?: string; // ex: "mem-martin" pour les recrues de Martin
+  overrideCommissionPct?: number; // 10% pour Martin sur ses recrues
   passwordHash: string;
   active: boolean;
   createdAt: string;
@@ -96,17 +99,61 @@ export interface CrmLead {
  * - 20 % sur la vente de CRM / Systèmes POS sur-mesure
  * - 10 % sur Google Maps (Top 3 & GBP) et toutes les offres mensuelles (SEO, Community Management, WebCare)
  */
-export function computeLeadCommissionRate(serviceTarget: string): { ratePct: number; ruleLabel: string } {
+export function computeLeadCommissionRate(
+  serviceTarget: string,
+  member?: { id?: string; email?: string; recruitedBy?: string; commissionPct?: number },
+): {
+  ratePct: number;
+  ruleLabel: string;
+  overridePct?: number;
+} {
   const s = (serviceTarget || "").toLowerCase();
+  const isWebsite =
+    (s.includes("site") ||
+      s.includes("vitrine") ||
+      s.includes("e-commerce") ||
+      s.includes("ecommerce") ||
+      s.includes("refonte") ||
+      s.includes("web")) &&
+    !s.includes("webcare");
+
+  // RÈGLE SPÉCIALE CHRISTEL THIRION (christelthirion@msn.com) — RECRUTÉE PAR MARTIN :
+  // 20% sur les sites internet, 10% sur les mensualités, offres Google Maps ou vente de CRM
+  // + 10% pour Martin sur le CHIFFRE D'AFFAIRES généré
+  if (
+    member?.id === "mem-christel" ||
+    member?.email?.toLowerCase() === "christelthirion@msn.com"
+  ) {
+    if (isWebsite) {
+      return {
+        ratePct: 20,
+        ruleLabel: "20 % (Sites Internet · Barème Christel · Recrue Martin)",
+        overridePct: 10,
+      };
+    }
+    return {
+      ratePct: 10,
+      ruleLabel: "10 % (Maps / Mensualités / CRM · Barème Christel · Recrue Martin)",
+      overridePct: 10,
+    };
+  }
+
+  // RÈGLE COMMERCIAUX MARTIN : 20% sur tout ce qu'ils génèrent + 10% pour Martin
+  if (member?.recruitedBy === "mem-martin") {
+    return {
+      ratePct: 20,
+      ruleLabel: "20 % (Filière Martin)",
+      overridePct: 10,
+    };
+  }
+
   if (s.includes("crm") || s.includes("pos") || s.includes("caisse")) {
     return { ratePct: 20, ruleLabel: "20 % (Offre CRM / POS)" };
   }
-  if (s.includes("site") || s.includes("vitrine") || s.includes("e-commerce") || s.includes("ecommerce") || s.includes("refonte") || s.includes("web")) {
-    if (!s.includes("webcare")) {
-      return { ratePct: 30, ruleLabel: "30 % (Site Internet)" };
-    }
+  if (isWebsite) {
+    return { ratePct: 30, ruleLabel: "30 % (Site Internet Classique)" };
   }
-  return { ratePct: 10, ruleLabel: "10 % (Google Maps / Mensuel)" };
+  return { ratePct: member?.commissionPct || 10, ruleLabel: `${member?.commissionPct || 10} % (Barème Standard)` };
 }
 
 export interface CrmClientRecord {
@@ -267,12 +314,53 @@ export interface CrmActivity {
   projectId?: string;
   memberId: string;
   memberName: string;
-  type: "assigned" | "call" | "status" | "note" | "outsource" | "client_created" | "quote_sent" | "payment_confirmed" | "task_done";
+  type:
+    | "assigned"
+    | "call"
+    | "status"
+    | "note"
+    | "outsource"
+    | "client_created"
+    | "quote_sent"
+    | "payment_confirmed"
+    | "task_done";
   message: string;
   createdAt: string;
 }
 
+export interface ClientMessageRecord {
+  id: string;
+  clientId: string;
+  senderRole: "client" | "agency";
+  senderName: string;
+  body: string;
+  createdAt: string;
+}
+
+export interface ClientDocumentRecord {
+  id: string;
+  clientId: string;
+  projectId?: string;
+  title: string;
+  category: "brief" | "design" | "contract" | "deliverable" | "report";
+  url: string;
+  uploadedBy: string;
+  createdAt: string;
+}
+
+export interface ClientSupportTicket {
+  id: string;
+  clientId: string;
+  subject: string;
+  message: string;
+  priority: "normal" | "high" | "urgent";
+  status: "open" | "in_progress" | "resolved";
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface CrmStore {
+  version?: number;
   members: CrmMemberRecord[];
   leads: CrmLead[];
   clients: CrmClientRecord[];
@@ -283,35 +371,81 @@ export interface CrmStore {
   providers: CrmProviderRecord[];
   notifications: CrmNotification[];
   activities: CrmActivity[];
+  clientMessages?: ClientMessageRecord[];
+  clientDocuments?: ClientDocumentRecord[];
+  supportTickets?: ClientSupportTicket[];
 }
 
 export const COOKIE_NAME = "xr_crm_session";
 export const STORE_PATH = path.resolve(process.cwd(), ".data/xr-crm.json");
+const SECRET_FILE_PATH = path.resolve(process.cwd(), ".data/.crm-secret");
+let cachedSigningSecret: string | null = null;
 
 export function getSigningSecret(): string {
-  return process.env.XR_CRM_SECRET || process.env.STRIPE_SECRET_KEY || "xr-internal-crm-session-key-v1";
+  if (process.env.XR_CRM_SECRET && process.env.XR_CRM_SECRET.trim().length >= 16) {
+    return process.env.XR_CRM_SECRET.trim();
+  }
+  if (cachedSigningSecret) return cachedSigningSecret;
+  try {
+    if (fs.existsSync(SECRET_FILE_PATH)) {
+      const existing = fs.readFileSync(SECRET_FILE_PATH, "utf8").trim();
+      if (existing.length >= 32) {
+        cachedSigningSecret = existing;
+        return existing;
+      }
+    }
+    fs.mkdirSync(path.dirname(SECRET_FILE_PATH), { recursive: true });
+    const generated = crypto.randomBytes(32).toString("hex");
+    fs.writeFileSync(SECRET_FILE_PATH, generated, { encoding: "utf8", mode: 0o600 });
+    cachedSigningSecret = generated;
+    return generated;
+  } catch {
+    const ephemeral = crypto.randomBytes(32).toString("hex");
+    cachedSigningSecret = ephemeral;
+    return ephemeral;
+  }
 }
 
 export function hashPassword(password: string): string {
-  return crypto.scryptSync(password, "xr-agency-salt-2026", 32).toString("hex");
+  const salt = crypto.randomBytes(16).toString("hex");
+  const derived = crypto.scryptSync(password, salt, 32).toString("hex");
+  return `${salt}:${derived}`;
 }
 
-export function verifyPassword(password: string, hash: string): boolean {
+export function verifyPassword(password: string, storedHash: string): boolean {
   try {
-    const derived = crypto.scryptSync(password, "xr-agency-salt-2026", 32).toString("hex");
-    return crypto.timingSafeEqual(Buffer.from(derived, "hex"), Buffer.from(hash, "hex"));
+    if (!storedHash) return false;
+    if (storedHash.includes(":")) {
+      const [salt, hashHex] = storedHash.split(":");
+      if (!salt || !hashHex) return false;
+      const derived = crypto.scryptSync(password, salt, 32);
+      const expected = Buffer.from(hashHex, "hex");
+      if (derived.length !== expected.length) return false;
+      return crypto.timingSafeEqual(derived, expected);
+    }
+    // Backward-compatible verification for existing legacy hashes in .data/xr-crm.json
+    const legacyDerived = crypto.scryptSync(password, "xr-agency-salt-2026", 32);
+    const legacyExpected = Buffer.from(storedHash, "hex");
+    if (legacyDerived.length !== legacyExpected.length) return false;
+    return crypto.timingSafeEqual(legacyDerived, legacyExpected);
   } catch {
     return false;
   }
 }
 
-export function signSession(payload: { id: string; role: "admin" | "member"; exp: number }): string {
+export function signSession(payload: {
+  id: string;
+  role: "admin" | "member" | "client";
+  exp: number;
+}): string {
   const data = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
   const sig = crypto.createHmac("sha256", getSigningSecret()).update(data).digest("base64url");
   return `${data}.${sig}`;
 }
 
-export function verifySession(token: string | undefined): { id: string; role: "admin" | "member" } | null {
+export function verifySession(
+  token: string | undefined,
+): { id: string; role: "admin" | "member" | "client" } | null {
   if (!token || !token.includes(".")) return null;
   const [data, sig] = token.split(".");
   if (!data || !sig) return null;
@@ -322,7 +456,7 @@ export function verifySession(token: string | undefined): { id: string; role: "a
   try {
     const parsed = JSON.parse(Buffer.from(data, "base64url").toString("utf8")) as {
       id: string;
-      role: "admin" | "member";
+      role: "admin" | "member" | "client";
       exp: number;
     };
     if (!parsed.id || !parsed.exp || Date.now() > parsed.exp) return null;
@@ -346,8 +480,8 @@ declare global {
 }
 
 export function createInitialSeed(): CrmStore {
-  const adminPass = process.env.XR_CRM_ADMIN_PASS || "AdminXR2026!";
-  const staffPass = process.env.XR_CRM_STAFF_PASS || "EquipeXR2026!";
+  const adminPass = process.env.XR_CRM_ADMIN_PASS || "071266";
+  const staffPass = process.env.XR_CRM_STAFF_PASS || "2026";
   const now = Date.now();
   const iso = (minsAgo: number) => new Date(now - minsAgo * 60_000).toISOString();
 
@@ -368,11 +502,12 @@ export function createInitialSeed(): CrmStore {
       {
         id: "mem-lucas",
         email: "lucas@xragency.fr",
-        fullName: "Lucas Martin",
+        fullName: "Lucas Mercier",
         title: "Closer Senior · Sites & Google Maps",
         role: "member",
+        portalType: "closer",
         phoneLine: "+33 1 86 95 41 12",
-        commissionPct: 18,
+        commissionPct: 30, // Commercial classique direct à 30%
         passwordHash: hashPassword(staffPass),
         active: true,
         createdAt: iso(15_000),
@@ -383,23 +518,82 @@ export function createInitialSeed(): CrmStore {
         fullName: "Sarah Benali",
         title: "Conseillère XR School & Closing",
         role: "member",
+        portalType: "closer",
         phoneLine: "+33 1 86 95 41 18",
-        commissionPct: 20,
+        commissionPct: 30, // Commerciale classique directe à 30%
         passwordHash: hashPassword(staffPass),
         active: true,
         createdAt: iso(12_000),
       },
       {
+        id: "mem-christel",
+        email: "christelthirion@msn.com",
+        fullName: "Christel Thirion",
+        title: "Closer B2B · Recrue Martin (Sites 20% / Maps·CRM·Mensuel 10%)",
+        role: "member",
+        portalType: "closer",
+        phoneLine: "+33 6 00 00 00 00",
+        recruitedBy: "mem-martin", // Recrutée par Martin (Martin prend 10% sur son CA)
+        commissionPct: 20, // 20% sur les sites et 10% sur mensualités / Google Maps / CRM
+        passwordHash: hashPassword(staffPass),
+        active: true,
+        createdAt: iso(11_000),
+      },
+      {
+        id: "mem-camille",
+        email: "camille.b@outlook.fr",
+        fullName: "Camille Bernard",
+        title: "Closer B2B · Recrue Filière Martin",
+        role: "member",
+        portalType: "closer",
+        phoneLine: "+33 6 55 44 33 22",
+        recruitedBy: "mem-martin", // Recrutée par Martin (Martin prend 10% sur son CA)
+        commissionPct: 20, // 20% pour les recrues rentrées par Martin
+        passwordHash: hashPassword(staffPass),
+        active: true,
+        createdAt: iso(10_500),
+      },
+      {
+        id: "mem-martin",
+        email: "martin.leclipteur@gmail.com",
+        fullName: "Martin",
+        title: "Manager RH & Closer Senior",
+        role: "member",
+        portalType: "hr_manager", // Double interface : RH exclusif + Closer Martin
+        phoneLine: "+33 6 88 44 22 11",
+        commissionPct: 20, // 20% sur ses ventes directes
+        overrideCommissionPct: 10, // 10% d'override sur les ventes de toute son équipe recrutée !
+        passwordHash: hashPassword(staffPass),
+        active: true,
+        createdAt: iso(10_000),
+      },
+      {
         id: "mem-karim",
         email: "karim@xragency.fr",
         fullName: "Karim Diallo",
-        title: "Partenaire Agence · XR School J42",
+        title: "Closer B2B · Recrue Filière Martin",
         role: "member",
+        portalType: "closer",
         phoneLine: "+33 1 86 95 41 24",
-        commissionPct: 20,
+        recruitedBy: "mem-martin", // Recruté par Martin
+        commissionPct: 20, // 20% pour les recrues rentrées par Martin
         passwordHash: hashPassword(staffPass),
         active: true,
         createdAt: iso(8_000),
+      },
+      {
+        id: "mem-emma",
+        email: "emma@xragency.fr",
+        fullName: "Emma Laurent",
+        title: "Closer B2B · Recrue Filière Martin",
+        role: "member",
+        portalType: "closer",
+        phoneLine: "+33 6 77 88 99 00",
+        recruitedBy: "mem-martin", // Recrutée par Martin
+        commissionPct: 20, // 20% pour les recrues rentrées par Martin
+        passwordHash: hashPassword(staffPass),
+        active: true,
+        createdAt: iso(5_000),
       },
     ],
     leads: [
@@ -481,7 +675,8 @@ export function createInitialSeed(): CrmStore {
         assignedTo: "mem-sarah",
         sentBy: "Direction XR",
         source: "Page /school",
-        notes: "Intéressé par l'offre complète avec ligne pro, leads fournis et option sous-traitance.",
+        notes:
+          "Intéressé par l'offre complète avec ligne pro, leads fournis et option sous-traitance.",
         nextFollowUp: "Aujourd'hui · 16h00",
         callsCount: 2,
         createdAt: iso(320),
@@ -539,7 +734,11 @@ export function createInitialSeed(): CrmStore {
         city: "Paris 8e",
         country: "France",
         sector: "Finance & Conseil",
-        servicesPurchased: ["Refonte Site Business (799 €)", "SEO Starter (299 €/m)", "Full Brand Suite (399 €)"],
+        servicesPurchased: [
+          "Refonte Site Business (799 €)",
+          "SEO Starter (299 €/m)",
+          "Full Brand Suite (399 €)",
+        ],
         totalRevenueEur: 3600,
         status: "active",
         assignedTo: "mem-sarah",
@@ -556,9 +755,27 @@ export function createInitialSeed(): CrmStore {
         clientCompany: "Atelier Joaillerie Vendôme",
         clientEmail: "h.saintpriest@atelier-vendome.fr",
         items: [
-          { label: "Site Business sur mesure", detail: "Architecture Next-Gen React 19, responsive ultra-rapide", priceEur: 799, period: "once", quantity: 1 },
-          { label: "Full Brand Suite", detail: "Logo, typographies, palette et brand book 300 DPI", priceEur: 399, period: "once", quantity: 1 },
-          { label: "SEO Growth", detail: "Stratégie de conquête et netlinking mensuel", priceEur: 499, period: "month", quantity: 1 },
+          {
+            label: "Site Business sur mesure",
+            detail: "Architecture Next-Gen React 19, responsive ultra-rapide",
+            priceEur: 799,
+            period: "once",
+            quantity: 1,
+          },
+          {
+            label: "Full Brand Suite",
+            detail: "Logo, typographies, palette et brand book 300 DPI",
+            priceEur: 399,
+            period: "once",
+            quantity: 1,
+          },
+          {
+            label: "SEO Growth",
+            detail: "Stratégie de conquête et netlinking mensuel",
+            priceEur: 499,
+            period: "month",
+            quantity: 1,
+          },
         ],
         totalOnceEur: 1198,
         totalMonthlyEur: 499,
@@ -577,8 +794,20 @@ export function createInitialSeed(): CrmStore {
         clientCompany: "Poke-N-Ball",
         clientEmail: "contact@poke-n-ball.fr",
         items: [
-          { label: "Site Vitrine Pro", detail: "Design mobile-first et catalogue dynamique", priceEur: 499, period: "once", quantity: 1 },
-          { label: "Gestion Google Business Profile — Croissance", detail: "Optimisation fiches et avis clients", priceEur: 169, period: "month", quantity: 1 },
+          {
+            label: "Site Vitrine Pro",
+            detail: "Design mobile-first et catalogue dynamique",
+            priceEur: 499,
+            period: "once",
+            quantity: 1,
+          },
+          {
+            label: "Gestion Google Business Profile — Croissance",
+            detail: "Optimisation fiches et avis clients",
+            priceEur: 169,
+            period: "month",
+            quantity: 1,
+          },
         ],
         totalOnceEur: 499,
         totalMonthlyEur: 169,
@@ -599,20 +828,29 @@ export function createInitialSeed(): CrmStore {
         clientCompany: "Poke-N-Ball",
         clientEmail: "contact@poke-n-ball.fr",
         items: [
-          { label: "Site Vitrine Pro (Livraison 7j)", detail: "Conception, développement et mise en ligne", amountEur: 499 },
-          { label: "Gestion Google Maps M1", detail: "Premier mois formule Croissance", amountEur: 169 },
+          {
+            label: "Site Vitrine Pro (Livraison 7j)",
+            detail: "Conception, développement et mise en ligne",
+            amountEur: 499,
+          },
+          {
+            label: "Gestion Google Maps M1",
+            detail: "Premier mois formule Croissance",
+            amountEur: 169,
+          },
         ],
         totalEur: 668,
         taxRatePct: 0,
-        taxNotice: "TVA non applicable, art. 293 B du CGI.",
+        taxNotice: "Régime de TVA à confirmer avant émission définitive.",
         paymentMethod: "bank_transfer",
         paymentReference: "XR-PAY-PKNB-01",
         bankDetails: {
-          beneficiary: "KARMA SASU (XR Agency)",
-          bankName: "Banque Professionnelle France",
-          ibanMasked: "FR76 1005 7000 **** **** **** 42",
-          bic: "BNPAFRPPXXX",
-          instructions: "Mentionner impérativement la référence XR-PAY-PKNB-01 dans le libellé de votre virement.",
+          beneficiary: "",
+          bankName: "",
+          ibanMasked: "",
+          bic: "",
+          instructions:
+            "Mentionner impérativement la référence XR-PAY-PKNB-01 dans le libellé de votre virement.",
         },
         status: "paid",
         paidAt: iso(8900),
@@ -628,19 +866,24 @@ export function createInitialSeed(): CrmStore {
         clientCompany: "Cabinet Mercier Patrimoine",
         clientEmail: "a.mercier@mercierconseil.fr",
         items: [
-          { label: "Acompte Refonte Site & Branding", detail: "50% à la commande sur forfait global", amountEur: 1800 },
+          {
+            label: "Acompte Refonte Site & Branding",
+            detail: "50% à la commande sur forfait global",
+            amountEur: 1800,
+          },
         ],
         totalEur: 1800,
         taxRatePct: 0,
-        taxNotice: "TVA non applicable, art. 293 B du CGI.",
+        taxNotice: "Régime de TVA à confirmer avant émission définitive.",
         paymentMethod: "bank_transfer",
         paymentReference: "XR-PAY-MRC-1800",
         bankDetails: {
-          beneficiary: "KARMA SASU (XR Agency)",
-          bankName: "Banque Professionnelle France",
-          ibanMasked: "FR76 1005 7000 **** **** **** 42",
-          bic: "BNPAFRPPXXX",
-          instructions: "Mentionner impérativement la référence XR-PAY-MRC-1800 dans le libellé de votre virement.",
+          beneficiary: "",
+          bankName: "",
+          ibanMasked: "",
+          bic: "",
+          instructions:
+            "Mentionner impérativement la référence XR-PAY-MRC-1800 dans le libellé de votre virement.",
         },
         status: "paid",
         paidAt: iso(1350),
@@ -815,7 +1058,8 @@ export function createInitialSeed(): CrmStore {
         memberId: "mem-lucas",
         memberName: "Lucas Martin",
         type: "call",
-        message: "Premier contact avec Marc (Bistrot Saint-Germain). Fort intérêt pour le Top 3 Maps.",
+        message:
+          "Premier contact avec Marc (Bistrot Saint-Germain). Fort intérêt pour le Top 3 Maps.",
         createdAt: iso(120),
       },
       {
@@ -839,8 +1083,34 @@ export function loadStore(): CrmStore {
       const parsed = JSON.parse(fs.readFileSync(STORE_PATH, "utf8")) as Partial<CrmStore>;
       if (parsed && Array.isArray(parsed.members) && Array.isArray(parsed.leads)) {
         const initial = createInitialSeed();
+        const existingMemberIds = new Set(parsed.members.map((m) => m.id));
+        const mergedMembers = [...parsed.members];
+        for (const seedMember of initial.members) {
+          if (!existingMemberIds.has(seedMember.id)) {
+            mergedMembers.push(seedMember);
+          } else if (seedMember.id === "mem-martin") {
+            const idx = mergedMembers.findIndex((m) => m.id === "mem-martin");
+            if (idx !== -1) {
+              mergedMembers[idx] = {
+                ...mergedMembers[idx],
+                email: "martin.leclipteur@gmail.com",
+                portalType: "hr_manager",
+                overrideCommissionPct: 10,
+              };
+            }
+          } else if (seedMember.id === "mem-christel" || seedMember.id === "mem-camille") {
+            const idx = mergedMembers.findIndex((m) => m.id === seedMember.id);
+            if (idx !== -1) {
+              mergedMembers[idx] = {
+                ...mergedMembers[idx],
+                recruitedBy: "mem-martin",
+              };
+            }
+          }
+        }
         const store: CrmStore = {
-          members: parsed.members,
+          version: typeof parsed.version === "number" ? parsed.version : 1,
+          members: mergedMembers,
           leads: parsed.leads,
           clients: Array.isArray(parsed.clients) ? parsed.clients : initial.clients,
           quotes: Array.isArray(parsed.quotes) ? parsed.quotes : initial.quotes,
@@ -848,37 +1118,64 @@ export function loadStore(): CrmStore {
           projects: Array.isArray(parsed.projects) ? parsed.projects : initial.projects,
           tasks: Array.isArray(parsed.tasks) ? parsed.tasks : initial.tasks,
           providers: Array.isArray(parsed.providers) ? parsed.providers : initial.providers,
-          notifications: Array.isArray(parsed.notifications) ? parsed.notifications : initial.notifications,
+          notifications: Array.isArray(parsed.notifications)
+            ? parsed.notifications
+            : initial.notifications,
           activities: Array.isArray(parsed.activities) ? parsed.activities : initial.activities,
+          clientMessages: Array.isArray(parsed.clientMessages) ? parsed.clientMessages : [],
+          clientDocuments: Array.isArray(parsed.clientDocuments) ? parsed.clientDocuments : [],
+          supportTickets: Array.isArray(parsed.supportTickets) ? parsed.supportTickets : [],
         };
         globalThis.__xrCrmMemoryStore = store;
         return store;
       }
     }
-  } catch {}
+  } catch {
+    /* Storage fallback: keep the interface usable. */
+  }
 
   const seeded = createInitialSeed();
+  seeded.version = 1;
+  seeded.clientMessages = [];
+  seeded.clientDocuments = [];
+  seeded.supportTickets = [];
   saveStore(seeded);
   return seeded;
 }
 
 export function saveStore(store: CrmStore) {
+  store.version = (store.version || 0) + 1;
   globalThis.__xrCrmMemoryStore = store;
   try {
-    fs.mkdirSync(path.dirname(STORE_PATH), { recursive: true });
-    fs.writeFileSync(STORE_PATH, JSON.stringify(store, null, 2), "utf8");
-  } catch {}
+    const dir = path.dirname(STORE_PATH);
+    fs.mkdirSync(dir, { recursive: true });
+    const tmpPath = `${STORE_PATH}.${process.pid}.${Date.now()}.tmp`;
+    fs.writeFileSync(tmpPath, JSON.stringify(store, null, 2), "utf8");
+    fs.renameSync(tmpPath, STORE_PATH);
+  } catch {
+    /* Storage fallback: keep memory state updated even if disk is read-only. */
+  }
 }
 
 export function sanitizeMember(m: CrmMemberRecord) {
   const isStudent =
     m.portalType === "student" ||
-    m.id === "mem-karim" ||
-    m.title.toLowerCase().includes("school") ||
-    m.title.toLowerCase().includes("élève") ||
-    m.title.toLowerCase().includes("eleve");
-  const portalType: "director" | "closer" | "student" =
-    m.role === "admin" ? "director" : isStudent ? "student" : "closer";
+    (m.id !== "mem-karim" && (
+      m.title.toLowerCase().includes("school") ||
+      m.title.toLowerCase().includes("élève") ||
+      m.title.toLowerCase().includes("eleve")
+    ));
+  const isHr = m.portalType === "hr_manager" || m.id === "mem-martin";
+  const portalType: "director" | "closer" | "student" | "client" | "hr_manager" =
+    m.role === "client"
+      ? "client"
+      : m.role === "admin"
+        ? "director"
+        : isHr
+          ? "hr_manager"
+          : isStudent
+            ? "student"
+            : "closer";
   return {
     id: m.id,
     email: m.email,
@@ -886,18 +1183,103 @@ export function sanitizeMember(m: CrmMemberRecord) {
     title: m.title,
     role: m.role,
     portalType,
+    clientId: m.clientId,
     phoneLine: m.phoneLine,
     commissionPct: m.commissionPct,
+    recruitedBy: m.recruitedBy,
+    overrideCommissionPct: m.overrideCommissionPct,
     active: m.active,
     createdAt: m.createdAt,
   };
 }
 
+export function buildClientPortalSnapshot(store: CrmStore, clientId: string) {
+  const client = store.clients.find((c) => c.id === clientId) || null;
+  if (!client) {
+    return {
+      client: null,
+      projects: [],
+      tasks: [],
+      quotes: [],
+      invoices: [],
+      documents: [],
+      messages: [],
+      tickets: [],
+      stats: {
+        activeProjects: 0,
+        avgProgressPct: 0,
+        openTasks: 0,
+        pendingInvoicesEur: 0,
+        paidInvoicesEur: 0,
+        openTickets: 0,
+      },
+    };
+  }
+
+  const projects = store.projects.filter((p) => p.clientId === client.id);
+  const projectIds = new Set(projects.map((p) => p.id));
+  const tasks = store.tasks.filter(
+    (t) =>
+      (t.linkedEntityType === "client" && t.linkedEntityId === client.id) ||
+      (t.linkedEntityType === "project" && t.linkedEntityId && projectIds.has(t.linkedEntityId)),
+  );
+  const quotes = store.quotes.filter(
+    (q) =>
+      q.clientId === client.id ||
+      q.clientEmail.toLowerCase() === client.email.toLowerCase(),
+  );
+  const invoices = store.invoices.filter(
+    (i) =>
+      i.clientId === client.id ||
+      i.clientEmail.toLowerCase() === client.email.toLowerCase(),
+  );
+  const documents = (store.clientDocuments || []).filter((d) => d.clientId === client.id);
+  const messages = (store.clientMessages || []).filter((m) => m.clientId === client.id);
+  const tickets = (store.supportTickets || []).filter((t) => t.clientId === client.id);
+
+  const avgProgressPct = projects.length
+    ? Math.round(projects.reduce((s, p) => s + (p.progressPct || 0), 0) / projects.length)
+    : 0;
+
+  return {
+    client,
+    projects,
+    tasks,
+    quotes,
+    invoices,
+    documents,
+    messages,
+    tickets,
+    stats: {
+      activeProjects: projects.filter((p) => p.stage !== "delivered" && p.stage !== "suspended")
+        .length,
+      avgProgressPct,
+      openTasks: tasks.filter((t) => t.status !== "done").length,
+      pendingInvoicesEur: invoices
+        .filter((i) => i.status === "pending_transfer")
+        .reduce((s, i) => s + i.totalEur, 0),
+      paidInvoicesEur: invoices
+        .filter((i) => i.status === "paid")
+        .reduce((s, i) => s + i.totalEur, 0),
+      openTickets: tickets.filter((t) => t.status !== "resolved").length,
+    },
+  };
+}
+
 export function buildSnapshot(store: CrmStore, user: CrmMemberRecord) {
+  // Strict role isolation: client accounts ONLY receive their own Client Portal payload
+  if (user.role === "client") {
+    return {
+      authenticated: true,
+      storeVersion: store.version || 1,
+      isClientPortal: true,
+      user: sanitizeMember(user),
+      clientPortal: buildClientPortalSnapshot(store, user.clientId || ""),
+    };
+  }
+
   const isAdmin = user.role === "admin";
-  const visibleLeads = isAdmin
-    ? store.leads
-    : store.leads.filter((l) => l.assignedTo === user.id);
+  const visibleLeads = isAdmin ? store.leads : store.leads.filter((l) => l.assignedTo === user.id);
 
   const visibleLeadIds = new Set(visibleLeads.map((l) => l.id));
   const visibleActivities = store.activities
@@ -905,14 +1287,35 @@ export function buildSnapshot(store: CrmStore, user: CrmMemberRecord) {
     .slice(0, 80);
 
   const totalLeads = visibleLeads.length;
-  const signedLeads = visibleLeads.filter((l) => l.status === "signed" || l.status === "outsourced");
+  const signedLeads = visibleLeads.filter(
+    (l) => l.status === "signed" || l.status === "outsourced",
+  );
   const inProgressCount = visibleLeads.filter((l) =>
-    ["contacted", "in_progress", "callback", "proposal_prep", "proposal_sent", "negotiation"].includes(l.status)
+    [
+      "contacted",
+      "in_progress",
+      "callback",
+      "proposal_prep",
+      "proposal_sent",
+      "negotiation",
+    ].includes(l.status),
   ).length;
   const signedCount = signedLeads.length;
   const revenueEur = signedLeads.reduce((acc, l) => acc + (Number(l.budgetEur) || 0), 0);
   const pipelineEur = visibleLeads
-    .filter((l) => ["new", "to_qualify", "to_call", "contacted", "in_progress", "callback", "proposal_prep", "proposal_sent", "negotiation"].includes(l.status))
+    .filter((l) =>
+      [
+        "new",
+        "to_qualify",
+        "to_call",
+        "contacted",
+        "in_progress",
+        "callback",
+        "proposal_prep",
+        "proposal_sent",
+        "negotiation",
+      ].includes(l.status),
+    )
     .reduce((acc, l) => acc + (Number(l.budgetEur) || 0), 0);
   const totalCalls = visibleLeads.reduce((acc, l) => acc + (Number(l.callsCount) || 0), 0);
   const closingRate = totalLeads > 0 ? Math.round((signedCount / totalLeads) * 100) : 0;
@@ -939,7 +1342,7 @@ export function buildSnapshot(store: CrmStore, user: CrmMemberRecord) {
     : store.tasks.filter((t) => t.assignedTo === user.id || t.assignedTo === "all");
 
   const visibleNotifications = store.notifications.filter(
-    (n) => n.targetMemberId === "all" || n.targetMemberId === user.id
+    (n) => n.targetMemberId === "all" || n.targetMemberId === user.id,
   );
 
   const teamBreakdown = store.members
@@ -949,26 +1352,43 @@ export function buildSnapshot(store: CrmStore, user: CrmMemberRecord) {
       const mSigned = mLeads.filter((l) => l.status === "signed" || l.status === "outsourced");
       const mRev = mSigned.reduce((s, l) => s + (Number(l.budgetEur) || 0), 0);
       const mCom = mSigned.reduce((s, l) => {
-        const { ratePct } = computeLeadCommissionRate(l.serviceTarget);
+        const { ratePct } = computeLeadCommissionRate(l.serviceTarget, m);
         return s + Math.round(((Number(l.budgetEur) || 0) * ratePct) / 100);
       }, 0);
       const mCalls = mLeads.reduce((s, l) => s + (Number(l.callsCount) || 0), 0);
+      // RÈGLE DE CONFIDENTIALITÉ ABSOLUE : Seul l'administrateur (Antoine) et le commercial lui-même voient ses gains nets (coffre privé).
+      // En revanche, tout le monde sait ce qu'il génère (revenueEur).
+      const isSelf = m.id === user.id;
+      const canSeeCommission = isAdmin || isSelf;
+
       return {
         ...sanitizeMember(m),
         assignedCount: mLeads.length,
         toCallCount: mLeads.filter((l) => l.status === "to_call" || l.status === "new").length,
         signedCount: mSigned.length,
-        revenueEur: mRev,
-        estimatedCommissionEur: mCom,
+        revenueEur: mRev, // Ce qu'il génère (visible)
+        estimatedCommissionEur: canSeeCommission ? mCom : 0, // Strictement confidentiel (masqué pour les autres)
+        martinOverrideEur: (isAdmin || user.id === "mem-martin") && m.recruitedBy === "mem-martin" ? Math.round(mRev * 0.1) : 0,
         callsCount: mCalls,
         closingRate: mLeads.length > 0 ? Math.round((mSigned.length / mLeads.length) * 100) : 0,
       };
     });
 
+  const mrrEur = visibleQuotes
+    .filter((q) => q.status === "accepted")
+    .reduce((sum, q) => sum + (Number(q.totalMonthlyEur) || 0), 0);
+  const currentMonthPrefix = new Date().toISOString().slice(0, 7);
+  const monthlyRevenueEur = visibleInvoices
+    .filter((i) => i.status === "paid" && (i.paidAt || i.updatedAt || "").startsWith(currentMonthPrefix))
+    .reduce((sum, i) => sum + (Number(i.totalEur) || 0), 0);
+  const overdueTasksCount = visibleTasks.filter((t) => t.status === "overdue").length;
+
   return {
     authenticated: true,
+    storeVersion: store.version || 1,
+    isClientPortal: false,
     user: sanitizeMember(user),
-    members: store.members.filter((m) => m.active).map(sanitizeMember),
+    members: store.members.filter((m) => m.active && m.role !== "client").map(sanitizeMember),
     leads: visibleLeads,
     clients: visibleClients,
     quotes: visibleQuotes,
@@ -981,16 +1401,25 @@ export function buildSnapshot(store: CrmStore, user: CrmMemberRecord) {
     teamBreakdown,
     stats: {
       totalLeads,
-      toCallCount: visibleLeads.filter((l) => l.status === "to_call" || l.status === "new" || l.status === "to_qualify").length,
+      toCallCount: visibleLeads.filter(
+        (l) => l.status === "to_call" || l.status === "new" || l.status === "to_qualify",
+      ).length,
       inProgressCount,
       signedCount,
       outsourcedCount,
       revenueEur,
+      monthlyRevenueEur,
+      mrrEur,
       pipelineEur,
       totalCalls,
       closingRate,
-      activeProjectsCount: visibleProjects.filter((p) => p.stage === "production" || p.stage === "prep").length,
-      pendingInvoicesEur: visibleInvoices.filter((i) => i.status === "pending_transfer").reduce((sum, i) => sum + i.totalEur, 0),
+      overdueTasksCount,
+      activeProjectsCount: visibleProjects.filter(
+        (p) => p.stage === "production" || p.stage === "prep",
+      ).length,
+      pendingInvoicesEur: visibleInvoices
+        .filter((i) => i.status === "pending_transfer")
+        .reduce((sum, i) => sum + i.totalEur, 0),
     },
   };
 }
@@ -998,40 +1427,56 @@ export function buildSnapshot(store: CrmStore, user: CrmMemberRecord) {
 /**
  * Capture automatique d'un prospect depuis le formulaire de contact public
  */
-export function recordLeadFromWebsite(params: {
-  name: string;
-  email: string;
-  phone?: string;
-  company?: string;
-  website?: string;
-  need?: string;
-  message?: string;
-  source?: string;
-  city?: string;
-  budgetEur?: number;
-}): { ok: boolean; leadId: string } {
-  const store = loadStore();
+export function recordLeadFromWebsite(
+  params: {
+    name: string;
+    email: string;
+    phone?: string;
+    company?: string;
+    website?: string;
+    need?: string;
+    message?: string;
+    source?: string;
+    city?: string;
+    budgetEur?: number;
+  },
+  existingStore?: CrmStore,
+): { ok: boolean; leadId: string } {
+  const store = existingStore ?? loadStore();
+  const shouldSave = !existingStore;
   const now = new Date().toISOString();
   const cleanEmail = params.email.trim().toLowerCase();
   const cleanPhone = (params.phone || "").trim();
 
   // Détection doublon par email ou téléphone
-  let existing = store.leads.find(
-    (l) => (cleanEmail && l.email.toLowerCase() === cleanEmail) || (cleanPhone && l.phone === cleanPhone)
+  const existing = store.leads.find(
+    (l) =>
+      (cleanEmail && l.email.toLowerCase() === cleanEmail) ||
+      (cleanPhone && l.phone === cleanPhone),
   );
 
   if (existing) {
-    existing.notes = `${existing.notes}\n[${now.slice(0, 10)}] Nouveau message web : ${params.message || params.need || "Demande de contact"}`.trim();
+    existing.notes =
+      `${existing.notes}\n[${now.slice(0, 10)}] Nouveau message web : ${params.message || params.need || "Demande de contact"}`.trim();
     existing.updatedAt = now;
     if (params.budgetEur && params.budgetEur > existing.budgetEur) {
       existing.budgetEur = params.budgetEur;
     }
-    saveStore(store);
+    if (shouldSave) saveStore(store);
     return { ok: true, leadId: existing.id };
   }
 
-  // Attribution intelligente : Lucas par défaut pour sites/maps, Sarah pour school/conseil
-  const targetMemberId = (params.need || "").toLowerCase().includes("school") ? "mem-sarah" : "mem-lucas";
+  // Attribution intelligente :
+  // - Candidatures recrutement -> automatiquement assignées à Martin (mem-martin) !
+  // - School/conseil -> Sarah (mem-sarah)
+  // - Sites/Maps -> Lucas (mem-lucas)
+  const lowerNeed = (params.need || "").toLowerCase();
+  const targetMemberId =
+    lowerNeed.includes("candidature") || lowerNeed.includes("recrutement") || lowerNeed.includes("rh")
+      ? "mem-martin"
+      : lowerNeed.includes("school")
+        ? "mem-sarah"
+        : "mem-lucas";
   const targetMember = store.members.find((m) => m.id === targetMemberId) || store.members[0];
 
   const newLead: CrmLead = {
@@ -1051,7 +1496,7 @@ export function recordLeadFromWebsite(params: {
     sentBy: "Formulaire Web Public",
     source: params.source || "Site xragencyai.com",
     notes: `Demande de contact reçue en ligne :\nBesoin : ${params.need || "Non précisé"}\nMessage : ${params.message || "Aucun message complémentaire."}`,
-    nextFollowUp: "Sous 2h ouvrées",
+    nextFollowUp: "À planifier",
     callsCount: 0,
     createdAt: now,
     updatedAt: now,
@@ -1081,12 +1526,13 @@ export function recordLeadFromWebsite(params: {
     createdAt: now,
   });
 
-  saveStore(store);
+  if (shouldSave) saveStore(store);
   return { ok: true, leadId: newLead.id };
 }
 
 /**
  * Capture automatique d'un devis ou demande de virement depuis le configurateur
+ * (Utilise la même instance de store pour éviter tout écrasement du lead créé)
  */
 export function recordQuoteFromWebsite(params: {
   clientName: string;
@@ -1099,7 +1545,12 @@ export function recordQuoteFromWebsite(params: {
     goal?: string;
     situation?: string;
     budget?: string;
-    services?: Array<{ label: string; detail: string; price: number; period: "once" | "month" | "year" }>;
+    services?: Array<{
+      label: string;
+      detail: string;
+      price: number;
+      period: "once" | "month" | "year";
+    }>;
     once?: number;
     monthly?: number;
     annual?: number;
@@ -1109,17 +1560,21 @@ export function recordQuoteFromWebsite(params: {
   const store = loadStore();
   const now = new Date().toISOString();
 
-  // 1. Enregistrement ou mise à jour du lead
-  const { leadId } = recordLeadFromWebsite({
-    name: params.clientName,
-    email: params.clientEmail,
-    phone: params.phone,
-    company: params.clientCompany,
-    website: params.website,
-    need: (params.summary.services || []).map((s) => s.label).join(", ") || "Configuration sur-mesure",
-    source: "Configurateur / Devis en ligne",
-    budgetEur: (params.summary.once || 0) + (params.summary.monthly || 0) * 3,
-  });
+  // 1. Enregistrement ou mise à jour du lead sur la même instance store
+  const { leadId } = recordLeadFromWebsite(
+    {
+      name: params.clientName,
+      email: params.clientEmail,
+      phone: params.phone,
+      company: params.clientCompany,
+      website: params.website,
+      need:
+        (params.summary.services || []).map((s) => s.label).join(", ") || "Configuration sur-mesure",
+      source: "Configurateur / Devis en ligne",
+      budgetEur: (params.summary.once || 0) + (params.summary.monthly || 0) * 3,
+    },
+    store,
+  );
 
   // 2. Génération du devis formel
   const quoteId = `DEV-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -1145,7 +1600,8 @@ export function recordQuoteFromWebsite(params: {
     totalAnnualEur: params.summary.annual || 0,
     status: params.asBankTransfer ? "accepted" : "sent",
     validUntil: validUntilDate,
-    paymentTerms: "Règlement par virement bancaire professionnel à réception de commande. Livraison sous 7 jours ouvrés.",
+    paymentTerms:
+      "Modalités de règlement et calendrier confirmés au devis avant engagement.",
     notes: `Secteur : ${params.summary.sector || "Non précisé"}. Priorité : ${params.summary.goal || "Non précisé"}.`,
     createdAt: now,
     updatedAt: now,
@@ -1161,7 +1617,8 @@ export function recordQuoteFromWebsite(params: {
     invoiceId = `VIR-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
     paymentReference = `XR-${newQuote.id.slice(-4)}-${Date.now().toString(36).toUpperCase().slice(-4)}`;
 
-    const totalToPay = (params.summary.once || 0) > 0 ? (params.summary.once || 0) : (params.summary.monthly || 0);
+    const totalToPay =
+      (params.summary.once || 0) > 0 ? params.summary.once || 0 : params.summary.monthly || 0;
 
     const invoiceItems: InvoiceItem[] = (params.summary.services || []).map((s) => ({
       label: s.label,
@@ -1178,14 +1635,14 @@ export function recordQuoteFromWebsite(params: {
       items: invoiceItems,
       totalEur: totalToPay,
       taxRatePct: 0,
-      taxNotice: "TVA non applicable, art. 293 B du CGI.",
+      taxNotice: "Régime de TVA à confirmer avant émission définitive.",
       paymentMethod: "bank_transfer",
       paymentReference,
       bankDetails: {
-        beneficiary: "KARMA SASU (XR Agency)",
-        bankName: "Banque Professionnelle France",
-        ibanMasked: "FR76 1005 7000 **** **** **** 42",
-        bic: "BNPAFRPPXXX",
+        beneficiary: "",
+        bankName: "",
+        ibanMasked: "",
+        bic: "",
         instructions: `Mentionner impérativement la référence ${paymentReference} dans le libellé de votre virement bancaire pour validation automatique de votre commande.`,
       },
       status: "pending_transfer",

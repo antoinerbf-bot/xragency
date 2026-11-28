@@ -85,11 +85,11 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
       ru: "Сколько времени занимает создание сайта?",
     },
     a: {
-      fr: "Selon la formule choisie : 7 jours pour un Site Vitrine, 14 jours pour un Site Business et 21 jours pour un E-commerce. Ces délais incluent la conception et les révisions.",
-      en: "Depending on the plan: 7 days for a Showcase Site, 14 days for a Business Site and 21 days for an E-commerce site. These timeframes include design and revisions.",
-      vi: "Tùy theo gói: 7 ngày cho website giới thiệu, 14 ngày cho website doanh nghiệp và 21 ngày cho thương mại điện tử. Thời gian này đã bao gồm thiết kế và chỉnh sửa.",
-      ar: "بحسب الباقة: 7 أيام للموقع التعريفي، و14 يومًا لموقع الأعمال، و21 يومًا لمتجر إلكتروني. تشمل هذه المدد التصميم والمراجعات.",
-      ru: "В зависимости от пакета: 7 дней для презентационного сайта, 14 дней для бизнес-сайта и 21 день для интернет-магазина. Сроки включают дизайн и правки.",
+      fr: "Le calendrier est défini après validation du périmètre, des contenus nécessaires et des éventuelles intégrations. Il est précisé dans le devis avant le démarrage.",
+      en: "The schedule is set after the scope, required content and integrations have been confirmed. It is stated in the quote before work begins.",
+      vi: "Lịch thực hiện được xác định sau khi thống nhất phạm vi, nội dung cần thiết và các tích hợp. Thời gian được ghi rõ trong báo giá trước khi bắt đầu.",
+      ar: "يُحدد الجدول الزمني بعد اعتماد نطاق العمل والمحتوى المطلوب والتكاملات، ويُذكر في عرض السعر قبل بدء التنفيذ.",
+      ru: "Сроки определяются после согласования объёма, необходимых материалов и интеграций и указываются в смете до начала работ.",
     },
   },
   {
@@ -136,11 +136,11 @@ export const FAQ: { q: L; a: L; category: FaqCategory }[] = [
       ru: "Включены ли права на использование фирменного стиля?",
     },
     a: {
-      fr: "Oui. Vous êtes propriétaire de votre identité visuelle : tous les droits d'utilisation commerciale sont cédés à la livraison.",
-      en: "Yes. You own your visual identity: all commercial usage rights are transferred on delivery.",
-      vi: "Có. Bạn sở hữu bộ nhận diện của mình: toàn bộ quyền sử dụng thương mại được chuyển giao khi bàn giao.",
-      ar: "نعم. تصبح الهوية البصرية ملكًا لكم، مع نقل حقوق الاستخدام التجاري عند التسليم.",
-      ru: "Да. Вы владеете своей визуальной айдентикой, а коммерческие права передаются при сдаче проекта.",
+      fr: "Les droits d’utilisation, les fichiers sources et les éléments tiers sont précisés dans le devis et le contrat selon le périmètre de la prestation.",
+      en: "Usage rights, source files and third-party assets are specified in the quote and contract according to the agreed scope.",
+      vi: "Quyền sử dụng, tệp nguồn và tài sản của bên thứ ba được nêu rõ trong báo giá và hợp đồng theo phạm vi dịch vụ.",
+      ar: "تُحدد حقوق الاستخدام والملفات المصدرية والعناصر التابعة لأطراف ثالثة في عرض السعر والعقد وفق نطاق الخدمة.",
+      ru: "Права использования, исходные файлы и сторонние материалы указываются в смете и договоре в соответствии с согласованным объёмом.",
     },
   },
 ];

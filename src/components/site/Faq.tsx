@@ -1,9 +1,10 @@
 import { useState, useMemo } from "react";
+import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useLang } from "@/lib/i18n";
+import { useLang, type Lang } from "@/lib/i18n";
 import { UI } from "@/lib/copy";
 import { FAQ, type FaqCategory } from "@/lib/content";
-import { Reveal, SectionHeading } from "./primitives";
+import { Reveal } from "./primitives";
 
 const CATEGORIES: { key: FaqCategory | "all"; labelKey: keyof typeof UI }[] = [
   { key: "all", labelKey: "faqCatAll" },
@@ -15,10 +16,62 @@ const CATEGORIES: { key: FaqCategory | "all"; labelKey: keyof typeof UI }[] = [
   { key: "general", labelKey: "faqCatGeneral" },
 ];
 
+const FAQ_HEAD: Record<
+  Lang,
+  { eyebrow: string; title: string; accent: string; intro: string; showMore: string; showLess: string }
+> = {
+  fr: {
+    eyebrow: "QUESTIONS FRÉQUENTES",
+    title: "Toutes les réponses,",
+    accent: "sans détour.",
+    intro:
+      "Une question sur nos offres, nos délais ou notre façon de travailler ? Retrouvez l’essentiel ci-dessous ou contactez-nous directement.",
+    showMore: "Afficher toutes les questions",
+    showLess: "Réduire la liste",
+  },
+  en: {
+    eyebrow: "FREQUENTLY ASKED QUESTIONS",
+    title: "Clear answers,",
+    accent: "no jargon.",
+    intro:
+      "Have a question about our services, pricing or process? Find the key points below or reach out to our team directly.",
+    showMore: "Show all questions",
+    showLess: "Show fewer",
+  },
+  vi: {
+    eyebrow: "CÂU HỎI THƯỜNG GẶP",
+    title: "Giải đáp rõ ràng,",
+    accent: "trực diện.",
+    intro:
+      "Bạn có câu hỏi về dịch vụ, chi phí hoặc quy trình làm việc? Xem các thông tin chính bên dưới hoặc liên hệ trực tiếp với đội ngũ.",
+    showMore: "Xem tất cả câu hỏi",
+    showLess: "Thu gọn",
+  },
+  ar: {
+    eyebrow: "الأسئلة الشائعة",
+    title: "إجابات واضحة،",
+    accent: "دون تعقيد.",
+    intro:
+      "هل لديك سؤال حول خدماتنا أو أسعارنا أو طريقة عملنا؟ تجد أهم الإجابات أدناه أو يمكنك التواصل معنا مباشرة.",
+    showMore: "عرض جميع الأسئلة",
+    showLess: "عرض أقل",
+  },
+  ru: {
+    eyebrow: "ЧАСТЫЕ ВОПРОСЫ",
+    title: "Ясные ответы,",
+    accent: "по существу.",
+    intro:
+      "Есть вопросы об услугах, тарифах или процессе работы? Основные ответы собраны ниже, либо напишите нам напрямую.",
+    showMore: "Показать все вопросы",
+    showLess: "Свернуть список",
+  },
+};
+
 const INITIAL_VISIBLE = 6;
 
 export function Faq() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const h = FAQ_HEAD[lang] ?? FAQ_HEAD.fr;
   const [open, setOpen] = useState<number | null>(0);
   const [activeCat, setActiveCat] = useState<FaqCategory | "all">("all");
   const [showAll, setShowAll] = useState(false);
@@ -32,165 +85,110 @@ export function Faq() {
   const hasMore = filtered.length > INITIAL_VISIBLE;
 
   return (
-    <section id="faq" className="xr-section relative py-20 sm:py-28 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
+    <section
+      id="faq"
+      dir={lang === "ar" ? "rtl" : "ltr"}
+      className="relative border-t border-[#171613]/12 bg-[#F7F4EE] py-20 text-[#171613] sm:py-28"
+    >
+      <div className="mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12">
         <Reveal>
-          <div className="sec-head max-w-4xl">
-            <div className="sec-head-line">
-              <div className="sec-head-dash" />
-              <span className="mono-nex text-white/70">
-                <b className="text-[#c5a880] font-bold">07</b> / QUESTIONS FRÉQUENTES
+          <div className="max-w-3xl">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="h-px w-8 bg-[#9E7F5A]" />
+              <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#7D6344]">
+                {h.eyebrow}
               </span>
             </div>
-            <h2 className="h-nex text-3xl sm:text-5xl lg:text-[3.6rem] text-white">
-              Toutes les réponses,{" "}
-              <span className="text-[#dfc39d] font-serif font-light italic">
-                sans détour.
-              </span>
+            <h2 className="font-display text-[clamp(2.1rem,4.4vw,3.8rem)] font-medium leading-[1.02] tracking-[-0.04em] text-[#171613]">
+              {h.title}{" "}
+              <span className="font-serif font-normal italic text-[#9E7F5A]">{h.accent}</span>
             </h2>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-[#5C574F] sm:text-[15px]">
+              {h.intro}
+            </p>
           </div>
         </Reveal>
 
-        {/* Conversational intro */}
-        <Reveal delay={60}>
-          <p className="mt-6 text-sm italic text-muted-foreground/70 max-w-xl">
-            {t({
-              fr: "Une question ? Elle est sûrement là. Sinon, posez-la nous directement — on répond en moins de 2h.",
-              en: "A question? It's probably here. Otherwise, ask us directly — we reply in under 2h.",
-              vi: "Có câu hỏi? Chắc chắn có ở đây. Nếu không, hãy hỏi chúng tôi trực tiếp.",
-              ar: "هل لديك سؤال؟ ربما تجد الإجابة هنا. وإلا، اسألنا مباشرة وسنرد خلال ساعتين.",
-              ru: "Есть вопрос? Возможно, ответ уже здесь. Если нет, спросите нас напрямую — мы ответим в течение двух часов.",
-            })}
-          </p>
-        </Reveal>
-
         {/* Category filter pills */}
-        <Reveal delay={80}>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {CATEGORIES.map(({ key, labelKey }) => (
+        <div className="mt-7 flex flex-wrap gap-2">
+          {CATEGORIES.map(({ key, labelKey }) => {
+            const count = key === "all" ? FAQ.length : FAQ.filter((f) => f.category === key).length;
+            if (key !== "all" && count === 0) return null;
+            return (
               <button
                 key={key}
+                type="button"
                 onClick={() => {
                   setActiveCat(key);
                   setOpen(null);
                   setShowAll(false);
                 }}
                 className={cn(
-                  "label-mono rounded-full border px-3.5 py-1.5 text-xs transition-all duration-300",
+                  "min-h-10 rounded-full border px-4 py-1.5 text-xs font-medium transition",
                   activeCat === key
-                    ? "border-primary bg-primary text-primary-foreground shadow-sm"
-                    : "border-border text-muted-foreground hover:border-primary/40 hover:text-foreground",
+                    ? "border-[#171613] bg-[#171613] text-[#F7F4EE]"
+                    : "border-[#171613]/15 bg-white text-[#5C574F] hover:border-[#9E7F5A] hover:text-[#171613]",
                 )}
               >
                 {t(UI[labelKey])}
               </button>
-            ))}
-          </div>
-        </Reveal>
+            );
+          })}
+        </div>
 
         {/* Accordion */}
-        <div className="mt-8 divide-y divide-border/60 border-t border-border/60">
+        <div className="mt-8 divide-y divide-[#171613]/12 border-y border-[#171613]/12 bg-white/75 rounded-2xl border">
           {visible.map((item, i) => {
             const globalIdx = FAQ.indexOf(item);
             const active = open === globalIdx;
 
             return (
-              <Reveal key={globalIdx} delay={Math.min(i, 5) * 35}>
-                <div
-                  className={cn(
-                    "transition-colors duration-300",
-                    active && "bg-accent/25",
-                  )}
+              <div
+                key={globalIdx}
+                className={cn("transition-colors duration-200", active && "bg-white")}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpen(active ? null : globalIdx)}
+                  className="flex w-full items-center justify-between gap-4 px-5 py-5 text-start sm:px-7"
+                  aria-expanded={active}
                 >
-                  <button
-                    onClick={() => setOpen(active ? null : globalIdx)}
-                    className={cn(
-                      "flex w-full items-start gap-5 py-5 text-left transition-colors duration-200",
-                      active && "text-primary",
-                    )}
-                    aria-expanded={active}
-                  >
-                    {/* Number */}
-                    <span
-                      className={cn(
-                        "label-mono mt-0.5 shrink-0 text-xs transition-colors duration-300",
-                        active ? "text-primary" : "text-muted-foreground/50",
-                      )}
-                    >
+                  <div className="flex items-start gap-4">
+                    <span className="mt-0.5 shrink-0 font-mono text-xs font-semibold text-[#9E7F5A]">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-
-                    {/* Question */}
-                    <span className="display-serif flex-1 text-lg leading-snug sm:text-xl">
+                    <span className="text-sm font-semibold text-[#171613] sm:text-[15.5px]">
                       {t(item.q)}
                     </span>
-
-                    {/* Animated +/× icon */}
-                    <span
-                      className={cn(
-                        "mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-all duration-350",
-                        active
-                          ? "border-primary bg-primary text-primary-foreground rotate-45"
-                          : "border-border text-muted-foreground hover:border-primary/40",
-                      )}
-                      style={{ transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)" }}
-                      aria-hidden
-                    >
-                      <svg
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        className="h-3 w-3"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                      >
-                        <line x1="6" y1="1" x2="6" y2="11" />
-                        <line x1="1" y1="6" x2="11" y2="6" />
-                      </svg>
-                    </span>
-                  </button>
-
-                  {/* Answer — grid animation */}
-                  <div
-                    className="grid transition-all duration-350 ease-out"
-                    style={{
-                      gridTemplateRows: active ? "1fr" : "0fr",
-                      transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-                    }}
-                  >
-                    <div className="overflow-hidden">
-                      <div
-                        className={cn(
-                          "border-l-2 ml-11 mb-5 pl-4 transition-colors duration-300",
-                          active ? "border-primary/40" : "border-transparent",
-                        )}
-                      >
-                        <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                          {t(item.a)}
-                        </p>
-                      </div>
-                    </div>
                   </div>
-                </div>
-              </Reveal>
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 shrink-0 text-[#7D6344] transition-transform duration-200",
+                      active && "rotate-180",
+                    )}
+                  />
+                </button>
+                {active && (
+                  <div className="px-5 pb-6 ps-14 text-sm leading-7 text-[#5C574F] sm:px-7 sm:ps-16">
+                    {t(item.a)}
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>
 
-        {/* Show all / Show less toggle */}
-        {hasMore ? (
-          <Reveal delay={180}>
-            <div className="mt-6 flex justify-center">
-              <button
-                onClick={() => setShowAll((v) => !v)}
-                className="label-mono inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/5 px-5 py-2.5 text-xs text-primary transition-all duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground"
-              >
-                {showAll ? t(UI.faqShowLess) : t(UI.faqShowAll)}
-                <span>{showAll ? "↑" : "↓"}</span>
-              </button>
-            </div>
-          </Reveal>
-        ) : null}
+        {hasMore && (
+          <div className="mt-6 text-center">
+            <button
+              type="button"
+              onClick={() => setShowAll((v) => !v)}
+              className="inline-flex min-h-11 items-center rounded-full border border-[#171613]/18 bg-white px-5 py-2 text-xs font-semibold text-[#171613] hover:border-[#9E7F5A]"
+            >
+              {showAll ? h.showLess : h.showMore}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

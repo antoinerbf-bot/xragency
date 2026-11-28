@@ -1,18 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { ArrowRight, Compass, Globe2, Sparkles } from "lucide-react";
+import { ArrowRight, Compass, Globe2, Sparkles, Target, Users } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
-import { XR_JOURNEY_PHOTO } from "@/lib/photography";
+import storyMeeting from "@/assets/story-business-meeting.jpg";
+import heroCinematic from "@/assets/hero-cinematic.jpg";
 
 export const Route = createFileRoute("/notre-histoire")({
   head: () => ({
     meta: [
-      { title: "Our Story — XR Agency" },
-      { name: "description", content: "Discover XR Agency's story, method and international digital services across France, Asia and worldwide." },
-      { property: "og:title", content: "Our Story — XR Agency" },
-      { property: "og:description", content: "An independent digital agency connecting France, Asia and international markets." },
+      { title: "L’Agence — XR Agency" },
+      {
+        name: "description",
+        content:
+          "Découvrez l’histoire, la méthode et l’équipe internationale de XR Agency, agence digitale française à vocation internationale.",
+      },
+      { property: "og:title", content: "L’Agence — XR Agency" },
+      {
+        property: "og:description",
+        content: "Une agence digitale française à vocation internationale.",
+      },
     ],
     links: [{ rel: "canonical", href: "https://xragencyai.com/notre-histoire" }],
   }),
@@ -20,12 +28,169 @@ export const Route = createFileRoute("/notre-histoire")({
 });
 
 const COPY = {
-  fr:{regions:["France","Asie","International"],title:"Notre histoire",kicker:"XR AGENCY · NOTRE HISTOIRE",lead:"XR Agency accompagne les entreprises qui veulent transformer leur présence digitale en véritable outil commercial : stratégie, design, développement, visibilité et accompagnement continu.",caption:"France · Asie · International",alt:"Architecture contemporaine et ville internationale",steps:[["Comprendre","Nous partons de votre activité, de vos clients, de votre positionnement et de vos objectifs avant de choisir les leviers."],["Construire","Design, développement, branding, SEO et outils commerciaux sont assemblés autour d'un même parcours."],["Faire évoluer","Après la mise en ligne, WebCare, SEO, Google Maps et contenu permettent de faire progresser le dispositif dans le temps."]],system:"Notre système",headline:"Une seule équipe pour relier image, acquisition et produit.",body:"Sites web, e-commerce, branding, SEO, visibilité locale, community management, IA et WebCare sont pensés comme des briques complémentaires. L'objectif est de construire un système cohérent plutôt qu'empiler des prestations.",cta:"Construire mon projet",description:"Une agence digitale indépendante entre France, Asie et international."},
-  en:{regions:["France","Asia","International"],title:"Our story",kicker:"XR AGENCY · OUR STORY",lead:"XR Agency helps businesses turn their digital presence into a genuine commercial asset through strategy, design, development, visibility and ongoing support.",caption:"France · Asia · Worldwide",alt:"Contemporary architecture and an international city",steps:[["Understand","We start with your business, customers, positioning and goals before choosing the right levers."],["Build","Design, development, branding, SEO and sales tools are brought together into one coherent journey."],["Evolve","After launch, WebCare, SEO, Google Maps and content help improve the system over time."]],system:"Our system",headline:"One team connecting brand, acquisition and product.",body:"Websites, e-commerce, branding, SEO, local visibility, social media management, AI and WebCare are designed as complementary building blocks. The goal is a coherent system, not a pile of disconnected services.",cta:"Build my project",description:"An independent digital agency connecting France, Asia and international markets."},
-  vi:{regions:["Pháp","Châu Á","Quốc tế"],title:"Câu chuyện của chúng tôi",kicker:"XR AGENCY · CÂU CHUYỆN CỦA CHÚNG TÔI",lead:"XR Agency giúp doanh nghiệp biến sự hiện diện số thành công cụ kinh doanh thực sự thông qua chiến lược, thiết kế, phát triển, khả năng hiển thị và hỗ trợ liên tục.",caption:"Pháp · Châu Á · Quốc tế",alt:"Kiến trúc hiện đại và thành phố quốc tế",steps:[["Thấu hiểu","Chúng tôi bắt đầu từ hoạt động kinh doanh, khách hàng, định vị và mục tiêu của bạn trước khi chọn giải pháp."],["Xây dựng","Thiết kế, phát triển, thương hiệu, SEO và công cụ bán hàng được kết nối thành một hành trình thống nhất."],["Phát triển","Sau khi ra mắt, WebCare, SEO, Google Maps và nội dung giúp cải thiện hệ thống theo thời gian."]],system:"Hệ thống của chúng tôi",headline:"Một đội ngũ kết nối thương hiệu, thu hút khách hàng và sản phẩm.",body:"Website, thương mại điện tử, thương hiệu, SEO, hiển thị địa phương, quản lý mạng xã hội, AI và WebCare được thiết kế để bổ trợ lẫn nhau. Mục tiêu là một hệ thống nhất quán thay vì các dịch vụ rời rạc.",cta:"Xây dựng dự án của tôi",description:"Studio kỹ thuật số độc lập kết nối Pháp, châu Á và thị trường quốc tế."},
-  ar:{regions:["فرنسا","آسيا","دولياً"],title:"قصتنا",kicker:"XR AGENCY · قصتنا",lead:"تساعد XR Agency الشركات على تحويل حضورها الرقمي إلى أداة تجارية فعّالة من خلال الاستراتيجية والتصميم والتطوير والظهور والدعم المستمر.",caption:"فرنسا · آسيا · العالم",alt:"عمارة معاصرة ومدينة عالمية",steps:[["الفهم","نبدأ بنشاطك التجاري وعملائك ومكانتك وأهدافك قبل اختيار الحلول المناسبة."],["البناء","نجمع التصميم والتطوير والهوية التجارية وتحسين محركات البحث وأدوات المبيعات ضمن تجربة واحدة متكاملة."],["التطوير","بعد الإطلاق، تساعد خدمات WebCare وSEO وGoogle Maps والمحتوى على تحسين المنظومة بمرور الوقت."]],system:"منظومتنا",headline:"فريق واحد يربط الهوية واكتساب العملاء والمنتج.",body:"نصمم المواقع والتجارة الإلكترونية والهوية التجارية وSEO والظهور المحلي وإدارة الشبكات الاجتماعية والذكاء الاصطناعي وWebCare كعناصر متكاملة. هدفنا بناء منظومة متماسكة بدلاً من تجميع خدمات منفصلة.",cta:"لنطوّر مشروعي",description:"وكالة رقمية مستقلة تربط فرنسا وآسيا والأسواق العالمية."},
-  ru:{regions:["Франция","Азия","Международно"],title:"Наша история",kicker:"XR AGENCY · НАША ИСТОРИЯ",lead:"XR Agency помогает компаниям превратить цифровое присутствие в полноценный коммерческий инструмент с помощью стратегии, дизайна, разработки, продвижения и постоянной поддержки.",caption:"Франция · Азия · Весь мир",alt:"Современная архитектура и международный город",steps:[["Понять","Сначала мы изучаем ваш бизнес, клиентов, позиционирование и цели, а затем выбираем подходящие инструменты."],["Создать","Дизайн, разработка, брендинг, SEO и инструменты продаж объединяются в единый пользовательский путь."],["Развивать","После запуска WebCare, SEO, Google Maps и контент помогают улучшать систему со временем."]],system:"Наша система",headline:"Одна команда объединяет бренд, привлечение клиентов и продукт.",body:"Сайты, электронная коммерция, брендинг, SEO, локальная видимость, управление соцсетями, ИИ и WebCare задуманы как взаимодополняющие элементы. Наша цель — целостная система вместо набора разрозненных услуг.",cta:"Разработать мой проект",description:"Независимое digital-агентство, объединяющее Францию, Азию и международные рынки."},
+  fr: {
+    kicker: "L’AGENCE · XR AGENCY",
+    title: "Une agence française",
+    accent: "à vocation internationale.",
+    lead: "Née à Paris, XR Agency réunit une équipe d’experts passionnés par le digital, la créativité et la performance, au service des entreprises ambitieuses en France et à l’international.",
+    bullets: [
+      "Une équipe multidisciplinaire (stratégie, design, code, SEO, social)",
+      "Un accompagnement sur mesure et orienté résultats",
+      "Une vision globale et internationale",
+    ],
+    cta: "Démarrer un projet avec nous",
+    caption: "Paris · France · Asie · International",
+    alt: "Équipe XR Agency en séance de travail",
+    steps: [
+      [
+        "Comprendre",
+        "Nous partons de votre activité, de vos clients, de votre positionnement et de vos objectifs avant de choisir les leviers.",
+      ],
+      [
+        "Construire",
+        "Design, développement, branding, SEO et outils commerciaux sont assemblés autour d’un même parcours.",
+      ],
+      [
+        "Faire évoluer",
+        "Après la mise en ligne, WebCare, SEO, Google Maps et contenu permettent de faire progresser le dispositif dans le temps.",
+      ],
+    ],
+    system: "NOTRE SYSTÈME",
+    headline: "Une seule équipe pour relier image, acquisition et produit.",
+    body: "Sites web, e-commerce, branding, SEO, visibilité locale, community management, IA et WebCare sont pensés comme des briques complémentaires. L’objectif est de construire un système cohérent plutôt qu’empiler des prestations.",
+    description: "Une agence digitale française à vocation internationale.",
+  },
+  en: {
+    kicker: "THE AGENCY · XR AGENCY",
+    title: "A French digital agency",
+    accent: "with an international outlook.",
+    lead: "Founded in Paris, XR Agency brings together specialists in digital strategy, editorial design, engineering and growth to support ambitious businesses in France and worldwide.",
+    bullets: [
+      "A multidisciplinary team (strategy, design, code, SEO, social)",
+      "Bespoke, results-oriented support",
+      "A global and international perspective",
+    ],
+    cta: "Start a project with us",
+    caption: "Paris · France · Asia · Worldwide",
+    alt: "XR Agency team working together",
+    steps: [
+      [
+        "Understand",
+        "We start with your business, customers, positioning and goals before choosing the right levers.",
+      ],
+      [
+        "Build",
+        "Design, development, branding, SEO and sales tools are brought together into one coherent journey.",
+      ],
+      [
+        "Evolve",
+        "After launch, WebCare, SEO, Google Maps and content help improve the system over time.",
+      ],
+    ],
+    system: "OUR SYSTEM",
+    headline: "One team connecting brand, acquisition and product.",
+    body: "Websites, e-commerce, branding, SEO, local visibility, social media management, AI and WebCare are designed as complementary building blocks. The goal is a coherent system, not a pile of disconnected services.",
+    description: "An independent digital agency connecting France, Asia and international markets.",
+  },
+  vi: {
+    kicker: "VỀ AGENCY · XR AGENCY",
+    title: "Một agency Pháp",
+    accent: "với tầm nhìn quốc tế.",
+    lead: "Khởi nguồn từ Paris, XR Agency quy tụ đội ngũ chuyên gia đam mê kỹ thuật số, sáng tạo và hiệu quả kinh doanh, đồng hành cùng doanh nghiệp tại Pháp và quốc tế.",
+    bullets: [
+      "Đội ngũ đa chuyên môn (chiến lược, thiết kế, lập trình, SEO, social)",
+      "Đồng hành may đo và định hướng kết quả",
+      "Tầm nhìn toàn cầu và quốc tế",
+    ],
+    cta: "Bắt đầu dự án cùng chúng tôi",
+    caption: "Paris · Pháp · Châu Á · Quốc tế",
+    alt: "Đội ngũ XR Agency đang làm việc",
+    steps: [
+      [
+        "Thấu hiểu",
+        "Chúng tôi bắt đầu từ hoạt động kinh doanh, khách hàng, định vị và mục tiêu của bạn trước khi chọn giải pháp.",
+      ],
+      [
+        "Xây dựng",
+        "Thiết kế, phát triển, thương hiệu, SEO và công cụ bán hàng được kết nối thành một hành trình thống nhất.",
+      ],
+      [
+        "Phát triển",
+        "Sau khi ra mắt, WebCare, SEO, Google Maps và nội dung giúp cải thiện hệ thống theo thời gian.",
+      ],
+    ],
+    system: "HỆ THỐNG CỦA CHÚNG TÔI",
+    headline: "Một đội ngũ kết nối thương hiệu, thu hút khách hàng và sản phẩm.",
+    body: "Website, thương mại điện tử, thương hiệu, SEO, hiển thị địa phương, quản lý mạng xã hội, AI và WebCare được thiết kế để bổ trợ lẫn nhau.",
+    description: "Studio kỹ thuật số độc lập kết nối Pháp, châu Á và thị trường quốc tế.",
+  },
+  ar: {
+    kicker: "الوكالة · XR AGENCY",
+    title: "وكالة فرنسية",
+    accent: "بآفاق دولية.",
+    lead: "انطلقت XR Agency من باريس وتجمع فريقًا من الخبراء في الاستراتيجية الرقمية والتصميم والتطوير والنمو لخدمة الشركات الطموحة في فرنسا وحول العالم.",
+    bullets: [
+      "فريق متعدد التخصصات (استراتيجية، تصميم، برمجة، SEO، تواصل)",
+      "مرافقة مخصصة وموجهة نحو النتائج",
+      "رؤية شاملة ودولية",
+    ],
+    cta: "ابدأ مشروعك معنا",
+    caption: "باريس · فرنسا · آسيا · العالم",
+    alt: "فريق XR Agency أثناء العمل",
+    steps: [
+      [
+        "الفهم",
+        "نبدأ بنشاطك التجاري وعملائك ومكانتك وأهدافك قبل اختيار الحلول المناسبة.",
+      ],
+      [
+        "البناء",
+        "نجمع التصميم والتطوير والهوية التجارية وتحسين محركات البحث وأدوات المبيعات ضمن تجربة واحدة متكاملة.",
+      ],
+      [
+        "التطوير",
+        "بعد الإطلاق، تساعد خدمات WebCare وSEO وGoogle Maps والمحتوى على تحسين المنظومة بمرور الوقت.",
+      ],
+    ],
+    system: "منظومتنا",
+    headline: "فريق واحد يربط الهوية واكتساب العملاء والمنتج.",
+    body: "نصمم المواقع والتجارة الإلكترونية والهوية التجارية وSEO والظهور المحلي وإدارة الشبكات الاجتماعية والذكاء الاصطناعي وWebCare كعناصر متكاملة.",
+    description: "وكالة رقمية مستقلة تربط فرنسا وآسيا والأسواق العالمية.",
+  },
+  ru: {
+    kicker: "АГЕНТСТВО · XR AGENCY",
+    title: "Французское агентство",
+    accent: "международного уровня.",
+    lead: "Основанное в Париже, XR Agency объединяет экспертов в digital-стратегии, дизайне, разработке и продвижении для амбициозных компаний во Франции и по всему миру.",
+    bullets: [
+      "Мультидисциплинарная команда (стратегия, дизайн, код, SEO, соцсети)",
+      "Индивидуальное сопровождение с фокусом на результат",
+      "Глобальное и международное видение",
+    ],
+    cta: "Начать проект с нами",
+    caption: "Париж · Франция · Азия · Весь мир",
+    alt: "Команда XR Agency за работой",
+    steps: [
+      [
+        "Понять",
+        "Сначала мы изучаем ваш бизнес, клиентов, позиционирование и цели, а затем выбираем подходящие инструменты.",
+      ],
+      [
+        "Создать",
+        "Дизайн, разработка, брендинг, SEO и инструменты продаж объединяются в единый пользовательский путь.",
+      ],
+      [
+        "Развивать",
+        "После запуска WebCare, SEO, Google Maps и контент помогают улучшать систему со временем.",
+      ],
+    ],
+    system: "НАША СИСТЕМА",
+    headline: "Одна команда объединяет бренд, привлечение клиентов и продукт.",
+    body: "Сайты, электронная коммерция, брендинг, SEO, локальная видимость, управление соцсетями, ИИ и WebCare задуманы как взаимодополняющие элементы.",
+    description: "Независимое digital-агентство, объединяющее Францию, Азию и международные рынки.",
+  },
 } as const;
+
+const BULLET_ICONS = [Users, Target, Globe2];
 
 function StoryPage() {
   const { lang } = useLang();
@@ -35,11 +200,135 @@ function StoryPage() {
     const description = document.querySelector('meta[name="description"]');
     if (description) description.setAttribute("content", c.description);
   }, [c]);
-  const schema = { "@context":"https://schema.org", "@type":"AboutPage", name:`${c.title} — XR Agency`, url:"https://xragencyai.com/notre-histoire", about:{"@type":"Organization",name:"XR Agency"} };
-  return <div className="min-h-screen overflow-x-hidden bg-background text-foreground" dir={lang==="ar"?"rtl":"ltr"}><Nav/><main className="pt-28">
-    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema)}}/>
-    <section className="border-b border-border/60 py-20 sm:py-28 lg:py-36"><div className="mx-auto max-w-7xl px-5 lg:px-10"><p className="label-mono text-[10px] uppercase tracking-[.25em] text-primary">{c.kicker}</p><h1 className="display-serif mt-5 max-w-5xl text-[clamp(3.5rem,9vw,8rem)] leading-[.84]">{c.regions[0]}.<br/><em className="not-italic italic text-primary">{c.regions[1]}.</em><br/>{c.regions[2]}.</h1><p className="mt-8 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">{c.lead}</p></div><figure className="mx-auto mt-10 max-w-7xl overflow-hidden rounded-[2rem] border border-border/70"><img src={XR_JOURNEY_PHOTO} alt={c.alt} className="h-[360px] w-full object-cover object-center sm:h-[500px]" loading="eager" decoding="async"/><figcaption className="border-t border-border/60 bg-card/70 px-5 py-3 label-mono text-[9px] uppercase tracking-[.16em] text-muted-foreground">{c.caption}</figcaption></figure></section>
-    <section className="py-16 sm:py-24"><div className="mx-auto max-w-7xl px-5 lg:px-10"><div className="grid gap-5 md:grid-cols-3">{c.steps.map(([title,desc],i)=>{const Icon=[Compass,Sparkles,Globe2][i];return <article key={title} className="rounded-[1.75rem] border border-border bg-card/50 p-7"><Icon className="h-5 w-5 text-primary"/><span className="label-mono mt-8 block text-[9px] text-primary">{String(i+1).padStart(2,"0")}</span><h2 className="display-serif mt-3 text-3xl">{title}</h2><p className="mt-3 text-sm leading-6 text-muted-foreground">{desc}</p></article>})}</div></div></section>
-    <section className="border-y border-border/60 py-16 sm:py-24"><div className="mx-auto max-w-4xl px-5 text-center"><p className="label-mono text-[10px] uppercase tracking-[.2em] text-primary">{c.system}</p><h2 className="display-serif mt-4 text-4xl sm:text-6xl">{c.headline}</h2><p className="mt-5 text-sm leading-7 text-muted-foreground">{c.body}</p><a href="/#quote" className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-[10px] font-semibold uppercase tracking-[.14em] text-primary-foreground">{c.cta}<ArrowRight className="h-4 w-4"/></a></div></section>
-  </main><Contact/></div>;
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: `${c.title} — XR Agency`,
+    url: "https://xragencyai.com/notre-histoire",
+    about: { "@type": "Organization", name: "XR Agency" },
+  };
+
+  return (
+    <div
+      className="min-h-screen overflow-x-hidden bg-[#F7F4EE] text-[#171613]"
+      dir={lang === "ar" ? "rtl" : "ltr"}
+    >
+      <Nav />
+      <main className="pt-20">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+
+        {/* 2-Column Editorial Hero matching mockup frame 06 / 10 */}
+        <section className="border-b border-[#171613]/10 py-14 sm:py-20">
+          <div className="mx-auto grid max-w-[1540px] grid-cols-1 items-center gap-10 px-5 sm:px-8 lg:grid-cols-12 lg:gap-14 lg:px-10">
+            <div className="lg:col-span-6">
+              <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.26em] text-[#9E7B4F]">
+                {c.kicker}
+              </p>
+              <h1 className="mt-3 font-serif text-[clamp(2.3rem,4.4vw,4rem)] font-normal leading-[1.04] tracking-[-0.02em] text-[#171613]">
+                {c.title} <span className="italic text-[#8D6C42]">{c.accent}</span>
+              </h1>
+              <p className="mt-5 text-sm leading-7 text-[#5C574F] sm:text-base">{c.lead}</p>
+
+              <div className="mt-6 space-y-3">
+                {c.bullets.map((b, i) => {
+                  const Icon = BULLET_ICONS[i];
+                  return (
+                    <div key={b} className="flex items-center gap-3">
+                      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[#EFE6D5] text-[#8D6C42]">
+                        <Icon className="h-4 w-4" />
+                      </span>
+                      <span className="text-sm font-medium text-[#171613]">{b}</span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <a
+                href="/#quote"
+                className="mt-8 inline-flex min-h-[46px] items-center gap-2.5 rounded-xl bg-gradient-to-r from-[#E5C696] via-[#D5AF79] to-[#C2985E] px-6 py-3 text-xs font-bold text-[#17130E] shadow-md transition hover:brightness-105"
+              >
+                <span>{c.cta}</span>
+                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+              </a>
+            </div>
+
+            <div className="lg:col-span-6">
+              <figure className="overflow-hidden rounded-2xl border border-[#171613]/10 bg-white p-2 shadow-[0_24px_70px_-28px_rgba(23,22,19,0.25)]">
+                <img
+                  src={storyMeeting}
+                  alt={c.alt}
+                  className="aspect-[16/10] w-full rounded-xl object-cover object-center"
+                  loading="eager"
+                />
+                <figcaption className="px-3 pb-1 pt-2.5 font-mono text-[10px] uppercase tracking-[0.18em] text-[#7A5E3A]">
+                  {c.caption}
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        {/* 3 Pillars */}
+        <section className="bg-[#EFE9DD] py-16 sm:py-20">
+          <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-10">
+            <div className="grid gap-5 md:grid-cols-3">
+              {c.steps.map(([title, desc], i) => {
+                const Icon = [Compass, Sparkles, Globe2][i];
+                return (
+                  <article
+                    key={title}
+                    className="rounded-2xl border border-[#171613]/10 bg-[#FAF7F2] p-7 shadow-sm"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#EFE6D5] text-[#8D6C42]">
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <span className="font-mono text-xs font-semibold text-[#8D6C42]">
+                        0{i + 1}
+                      </span>
+                    </div>
+                    <h2 className="mt-6 font-serif text-2xl font-medium text-[#171613]">
+                      {title}
+                    </h2>
+                    <p className="mt-3 text-sm leading-6 text-[#5C574F]">{desc}</p>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Dark CTA Banner */}
+        <section className="relative isolate overflow-hidden border-y border-[#D8B788]/25 bg-[#120F0C] py-16 text-[#FAF7F2] sm:py-20">
+          <img
+            src={heroCinematic}
+            alt=""
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-30"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#0F0C09]/95 via-[#0F0C09]/85 to-[#0F0C09]/60" />
+          <div className="relative z-10 mx-auto max-w-4xl px-5 text-center">
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#E5C696]">
+              {c.system}
+            </p>
+            <h2 className="mt-4 font-serif text-3xl font-normal text-white sm:text-5xl">
+              {c.headline}
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-white/80">{c.body}</p>
+            <a
+              href="/#quote"
+              className="mt-8 inline-flex min-h-[46px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#E5C696] via-[#D5AF79] to-[#C2985E] px-6 py-3 text-xs font-bold text-[#17130E] shadow-lg transition hover:brightness-105"
+            >
+              <span>{c.cta}</span>
+              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+            </a>
+          </div>
+        </section>
+      </main>
+      <Contact />
+    </div>
+  );
 }

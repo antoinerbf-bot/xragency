@@ -1,5 +1,12 @@
 import { useState, useEffect, useMemo } from "react";
-import { ArrowRight, TrendingDown, TrendingUp, AlertTriangle, Sparkles, ShieldAlert } from "lucide-react";
+import {
+  ArrowRight,
+  TrendingDown,
+  TrendingUp,
+  AlertTriangle,
+  Sparkles,
+  ShieldAlert,
+} from "lucide-react";
 import { Parallax, Reveal } from "./primitives";
 import { useLang, type Lang } from "@/lib/i18n";
 import { useFunnel } from "@/lib/funnel";
@@ -12,10 +19,7 @@ export function CostOfInaction() {
   const { sector, setSector, scrollToSection } = useFunnel();
 
   const currentProfile = useMemo(() => {
-    return (
-      SECTOR_COST_PROFILES.find((p) => p.id === sector) ||
-      SECTOR_COST_PROFILES[0]
-    );
+    return SECTOR_COST_PROFILES.find((p) => p.id === sector) || SECTOR_COST_PROFILES[0];
   }, [sector]);
 
   const [ticket, setTicket] = useState<number>(currentProfile.avgTicket);
@@ -154,7 +158,8 @@ export function CostOfInaction() {
                   <span className="label-mono text-[8px] xr-muted-2 mt-1 block">/ MOIS</span>
                 </div>
                 <p className="text-[10px] xr-muted leading-4">
-                  Perte directe causée par des prospects locaux captés par vos 3 concurrents immédiats.
+                  Perte directe causée par des prospects locaux captés par vos 3 concurrents
+                  immédiats.
                 </p>
               </div>
 
@@ -170,10 +175,13 @@ export function CostOfInaction() {
                   <p className="font-mono text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-emerald-400">
                     +{monthlyLoss.toLocaleString("fr-FR")} €
                   </p>
-                  <span className="label-mono text-[8px] xr-muted-2 mt-1 block">/ MOIS AVEC XR</span>
+                  <span className="label-mono text-[8px] xr-muted-2 mt-1 block">
+                    / MOIS AVEC XR
+                  </span>
                 </div>
                 <p className="text-[10px] xr-muted leading-4">
-                  Avec une fiche Google Maps #1, un site premium à fort taux de conversion et du SEO ciblé.
+                  Avec une fiche Google Business Profile soignée, un site clair et une stratégie SEO
+                  adaptée.
                 </p>
               </div>
             </div>

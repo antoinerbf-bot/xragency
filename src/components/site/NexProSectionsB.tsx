@@ -92,8 +92,9 @@ export function RealisationsSection() {
                         PRÉSENTATION DU BESOIN
                       </span>
                       <p className="mt-2 text-xs leading-relaxed text-[#E8DCC4]/85">
-                        Créer une vitrine digitale appétissante et structurer la prise de commande en ligne ainsi que
-                        l&apos;encaissement en restaurant au sein d&apos;un parcours fluide.
+                        Créer une vitrine digitale appétissante et structurer la prise de commande
+                        en ligne ainsi que l&apos;encaissement en restaurant au sein d&apos;un
+                        parcours fluide.
                       </p>
                     </div>
 
@@ -102,8 +103,9 @@ export function RealisationsSection() {
                         SOLUTIONS MISES EN PLACE
                       </span>
                       <p className="mt-2 text-xs leading-relaxed text-[#E8DCC4]/85">
-                        Conception du site web, déploiement d&apos;un module de commande personnalisable et connexion au
-                        système de caisse (POS) pour centraliser la production en cuisine.
+                        Conception du site web, déploiement d&apos;un module de commande
+                        personnalisable et connexion au système de caisse (POS) pour centraliser la
+                        production en cuisine.
                       </p>
                     </div>
                   </div>
@@ -117,29 +119,29 @@ export function RealisationsSection() {
                       <div className="rounded-xl border border-white/10 bg-[#0B0B0C] p-3.5">
                         <h4 className="text-xs font-bold text-white">1. Site web</h4>
                         <p className="mt-1 text-[11px] text-[#E8DCC4]/75">
-                          Vitrine responsive mettant en valeur la carte, les ingrédients frais et l&apos;identité de
-                          l&apos;enseigne.
+                          Vitrine responsive mettant en valeur la carte, les ingrédients frais et
+                          l&apos;identité de l&apos;enseigne.
                         </p>
                       </div>
                       <div className="rounded-xl border border-white/10 bg-[#0B0B0C] p-3.5">
                         <h4 className="text-xs font-bold text-white">2. Commande en ligne</h4>
                         <p className="mt-1 text-[11px] text-[#E8DCC4]/75">
-                          Parcours de composition de poke bowl étape par étape (base, protéine, toppings, sauce) sur
-                          mobile et desktop.
+                          Parcours de composition de poke bowl étape par étape (base, protéine,
+                          toppings, sauce) sur mobile et desktop.
                         </p>
                       </div>
                       <div className="rounded-xl border border-white/10 bg-[#0B0B0C] p-3.5">
                         <h4 className="text-xs font-bold text-white">3. Système de caisse</h4>
                         <p className="mt-1 text-[11px] text-[#E8DCC4]/75">
-                          Terminal de caisse restaurant relié aux commandes pour synchroniser la salle, le click &amp;
-                          collect et la cuisine.
+                          Terminal de caisse restaurant relié aux commandes pour synchroniser la
+                          salle, le click &amp; collect et la cuisine.
                         </p>
                       </div>
                       <div className="rounded-xl border border-white/10 bg-[#0B0B0C] p-3.5">
                         <h4 className="text-xs font-bold text-white">4. Expérience client</h4>
                         <p className="mt-1 text-[11px] text-[#E8DCC4]/75">
-                          Parcours sans friction depuis la découverte sur smartphone jusqu&apos;au retrait de la
-                          commande en établissement.
+                          Parcours sans friction depuis la découverte sur smartphone jusqu&apos;au
+                          retrait de la commande en établissement.
                         </p>
                       </div>
                     </div>
@@ -210,7 +212,9 @@ export function RealisationsSection() {
                           <span className="rounded-lg bg-[#0B0B0C] px-2.5 py-1 font-mono text-[9px] font-bold text-[#C5A059]">
                             POKE-N-BALL
                           </span>
-                          <span className="font-mono text-[9px] text-[#5A534A]">Capture Desktop · Site &amp; Menu</span>
+                          <span className="font-mono text-[9px] text-[#5A534A]">
+                            Capture Desktop · Site &amp; Menu
+                          </span>
                         </div>
                         <span className="rounded-full bg-[#8B704F] px-3 py-1 text-[9px] font-bold text-white">
                           Commander en ligne
@@ -226,8 +230,8 @@ export function RealisationsSection() {
                             Composez votre Poke Bowl ou découvrez nos recettes signatures.
                           </h4>
                           <p className="mt-2 text-xs text-[#4A443C]">
-                            Sélectionnez votre base, vos protéines marinées, vos accompagnements frais et validez votre
-                            retrait en quelques clics.
+                            Sélectionnez votre base, vos protéines marinées, vos accompagnements
+                            frais et validez votre retrait en quelques clics.
                           </p>
                           <div className="mt-3 flex flex-wrap gap-2">
                             <span className="rounded-lg border border-[#0B0B0C]/15 bg-white px-2.5 py-1 text-[9px] font-semibold">
@@ -244,8 +248,8 @@ export function RealisationsSection() {
 
                         <div className="overflow-hidden rounded-xl border border-[#0B0B0C]/10 bg-white">
                           <img
-                            src="/showcase/audit_app_04_poke_case.png"
-                            alt="Aperçu Poke-N-Ball"
+                            src="/showcase/pokenball_showcase.jpg"
+                            alt="Aperçu Pok-N Ball Belgique"
                             className="h-40 w-full object-cover"
                           />
                         </div>
@@ -257,14 +261,18 @@ export function RealisationsSection() {
                     <div className="mx-auto max-w-xs rounded-[2rem] border-4 border-[#2C2925] bg-[#F8F6F0] p-4 text-[#0B0B0C] shadow-2xl">
                       <div className="mx-auto mb-3 h-1 w-12 rounded-full bg-[#0B0B0C]/20" />
                       <div className="flex items-center justify-between border-b border-[#0B0B0C]/10 pb-2">
-                        <span className="font-mono text-[9px] font-bold text-[#0B0B0C]">POKE-N-BALL MOBILE</span>
+                        <span className="font-mono text-[9px] font-bold text-[#0B0B0C]">
+                          POKE-N-BALL MOBILE
+                        </span>
                         <span className="rounded-full bg-[#8B704F] px-2 py-0.5 text-[8px] font-bold text-white">
                           Panier (2)
                         </span>
                       </div>
                       <div className="mt-3 space-y-2">
                         <div className="rounded-xl bg-white p-3 border border-[#0B0B0C]/10">
-                          <span className="font-mono text-[7.5px] text-[#8B704F] font-bold">ÉTAPE 1 SUR 4</span>
+                          <span className="font-mono text-[7.5px] text-[#8B704F] font-bold">
+                            ÉTAPE 1 SUR 4
+                          </span>
                           <p className="text-xs font-bold">Poke Signature Saumon Avocat</p>
                           <p className="mt-0.5 text-[10px] text-[#5A534A]">
                             Riz vinaigré, saumon frais, avocat, edamame, mangue, sauce maison.
@@ -289,22 +297,32 @@ export function RealisationsSection() {
                       </div>
                       <div className="mt-4 grid grid-cols-3 gap-2.5 text-xs">
                         <div className="rounded-xl border border-white/10 bg-white/5 p-3">
-                          <span className="font-mono text-[8px] text-[#E8DCC4]/70 block">COMMANDE WEB #104</span>
-                          <span className="mt-1 block font-bold text-white">Click &amp; Collect</span>
+                          <span className="font-mono text-[8px] text-[#E8DCC4]/70 block">
+                            COMMANDE WEB #104
+                          </span>
+                          <span className="mt-1 block font-bold text-white">
+                            Click &amp; Collect
+                          </span>
                           <span className="mt-1 inline-block rounded bg-[#C5A059]/20 px-1.5 py-0.5 text-[9px] text-[#C5A059]">
                             En préparation
                           </span>
                         </div>
                         <div className="rounded-xl border border-white/10 bg-white/5 p-3">
-                          <span className="font-mono text-[8px] text-[#E8DCC4]/70 block">COMMANDE SALLE #105</span>
+                          <span className="font-mono text-[8px] text-[#E8DCC4]/70 block">
+                            COMMANDE SALLE #105
+                          </span>
                           <span className="mt-1 block font-bold text-white">Sur place · Borne</span>
                           <span className="mt-1 inline-block rounded bg-emerald-500/20 px-1.5 py-0.5 text-[9px] text-emerald-300">
                             Prêt au comptoir
                           </span>
                         </div>
                         <div className="rounded-xl border border-white/10 bg-white/5 p-3">
-                          <span className="font-mono text-[8px] text-[#E8DCC4]/70 block">GESTION TICKETS</span>
-                          <span className="mt-1 block font-bold text-white">Impression Cuisine</span>
+                          <span className="font-mono text-[8px] text-[#E8DCC4]/70 block">
+                            GESTION TICKETS
+                          </span>
+                          <span className="mt-1 block font-bold text-white">
+                            Impression Cuisine
+                          </span>
                           <span className="mt-1 inline-block rounded bg-white/10 px-1.5 py-0.5 text-[9px] text-[#E8DCC4]">
                             Automatique
                           </span>
@@ -315,8 +333,8 @@ export function RealisationsSection() {
                 </div>
 
                 <p className="text-[11px] text-[#E8DCC4]/70">
-                  Architecture complète déployée par XR Agency : site vitrine, module de commande en ligne et caisse
-                  connectée.
+                  Architecture complète déployée par XR Agency : site vitrine, module de commande en
+                  ligne et caisse connectée.
                 </p>
               </div>
             </div>
@@ -342,10 +360,13 @@ export function RealisationsSection() {
                 <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-[#8B704F]">
                   DIRECTION ARTISTIQUE &amp; E-COMMERCE ÉDITORIAL
                 </span>
-                <h3 className="mt-1 font-serif text-2xl font-semibold text-[#0B0B0C]">Maison Lumière</h3>
+                <h3 className="mt-1 font-serif text-2xl font-semibold text-[#0B0B0C]">
+                  Maison Lumière
+                </h3>
                 <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#4A443C]">
-                  Démonstration de direction artistique pour une maison de haute parfumerie et objets d&apos;intérieur :
-                  typographie éditoriale, fiche produit immersive et parcours d&apos;achat épuré.
+                  Démonstration de direction artistique pour une maison de haute parfumerie et
+                  objets d&apos;intérieur : typographie éditoriale, fiche produit immersive et
+                  parcours d&apos;achat épuré.
                 </p>
               </div>
             </div>
@@ -368,10 +389,13 @@ export function RealisationsSection() {
                 <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-[#8B704F]">
                   IMMOBILIER DE PRESTIGE &amp; RÉSERVATION PRIVÉE
                 </span>
-                <h3 className="mt-1 font-serif text-2xl font-semibold text-[#0B0B0C]">Villa Azur</h3>
+                <h3 className="mt-1 font-serif text-2xl font-semibold text-[#0B0B0C]">
+                  Villa Azur
+                </h3>
                 <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#4A443C]">
-                  Démonstration d&apos;interface dédiée à l&apos;hôtellerie et à l&apos;immobilier : galerie grand
-                  format, visite privée sur demande et qualification des acquéreurs ou voyageurs.
+                  Démonstration d&apos;interface dédiée à l&apos;hôtellerie et à l&apos;immobilier :
+                  galerie grand format, visite privée sur demande et qualification des acquéreurs ou
+                  voyageurs.
                 </p>
               </div>
             </div>
@@ -432,8 +456,8 @@ export function MethodSection() {
               <span className="italic text-[#E8DCC4]">structuré en quatre étapes.</span>
             </h2>
             <p className="mt-4 text-sm sm:text-base leading-relaxed text-[#E8DCC4]/80">
-              De la première prise de contact jusqu&apos;au suivi après mise en ligne, chaque étape est pensée pour vous
-              faire gagner du temps et sécuriser votre investissement.
+              De la première prise de contact jusqu&apos;au suivi après mise en ligne, chaque étape
+              est pensée pour vous faire gagner du temps et sécuriser votre investissement.
             </p>
           </div>
         </Reveal>
@@ -452,14 +476,18 @@ export function MethodSection() {
                   <h3 className="mt-5 font-serif text-xl sm:text-2xl font-semibold text-white">
                     {step.num} — {step.title}
                   </h3>
-                  <p className="mt-3 text-xs sm:text-sm leading-relaxed text-[#E8DCC4]/80">{step.desc}</p>
+                  <p className="mt-3 text-xs sm:text-sm leading-relaxed text-[#E8DCC4]/80">
+                    {step.desc}
+                  </p>
                 </div>
 
                 <div className="mt-6 border-t border-white/10 pt-4">
                   <span className="font-mono text-[8px] uppercase tracking-wider text-[#C5A059] block">
                     ENGAGEMENT ÉTAPE
                   </span>
-                  <span className="mt-1 block text-xs font-semibold text-[#F8F6F0]">{step.deliverable}</span>
+                  <span className="mt-1 block text-xs font-semibold text-[#F8F6F0]">
+                    {step.deliverable}
+                  </span>
                 </div>
               </div>
             </Reveal>
@@ -528,8 +556,8 @@ export function WhyXrAgencySection() {
               </h2>
             </div>
             <p className="max-w-md text-sm leading-relaxed text-[#4A443C]">
-              Des engagements fondés sur notre expérience, l&apos;étendue de nos compétences et la transparence de nos
-              tarifs.
+              Des engagements fondés sur notre expérience, l&apos;étendue de nos compétences et la
+              transparence de nos tarifs.
             </p>
           </div>
         </Reveal>
@@ -542,8 +570,12 @@ export function WhyXrAgencySection() {
                   <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#0B0B0C] font-mono text-[10px] font-bold text-[#C5A059]">
                     {adv.num}
                   </span>
-                  <h3 className="mt-4 font-serif text-2xl font-semibold text-[#0B0B0C]">{adv.title}</h3>
-                  <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-[#4A443C]">{adv.desc}</p>
+                  <h3 className="mt-4 font-serif text-2xl font-semibold text-[#0B0B0C]">
+                    {adv.title}
+                  </h3>
+                  <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-[#4A443C]">
+                    {adv.desc}
+                  </p>
                 </div>
                 <div className="mt-5 flex items-center gap-2 border-t border-[#0B0B0C]/10 pt-3.5 text-[11px] font-semibold text-[#8B704F]">
                   <CheckCircle2 className="h-3.5 w-3.5" />
@@ -563,7 +595,10 @@ export function WhyXrAgencySection() {
    ========================================================================== */
 export function BespokeConfiguratorSection() {
   return (
-    <section id="configurateur" className="relative border-t border-[#0B0B0C]/10 bg-[#F3EFE7] pt-16 sm:pt-20">
+    <section
+      id="configurateur"
+      className="relative border-t border-[#0B0B0C]/10 bg-[#F3EFE7] pt-16 sm:pt-20"
+    >
       <div className="mx-auto max-w-[1600px] px-5 sm:px-8 md:px-12 lg:px-16">
         <Reveal>
           <div className="rounded-[2rem] border border-[#0B0B0C]/12 bg-[#101114] p-7 sm:p-10 lg:p-12 text-[#F8F6F0] shadow-xl">
@@ -579,9 +614,9 @@ export function BespokeConfiguratorSection() {
                   Construisez votre solution sur mesure.
                 </h2>
                 <p className="mt-3 max-w-2xl text-sm sm:text-base leading-relaxed text-[#E8DCC4]/85">
-                  Sélectionnez un ou plusieurs services, comparez les formules, visualisez les tarifs et modalités
-                  d&apos;engagement, puis téléchargez votre récapitulatif ou transmettez directement votre demande à
-                  notre équipe.
+                  Sélectionnez un ou plusieurs services, comparez les formules, visualisez les
+                  tarifs et modalités d&apos;engagement, puis téléchargez votre récapitulatif ou
+                  transmettez directement votre demande à notre équipe.
                 </p>
               </div>
 
@@ -680,7 +715,9 @@ export function BriefFaqSection() {
                 >
                   <div className="flex items-center gap-4">
                     <span className="font-mono text-xs font-bold text-[#8B704F]">0{idx + 1}</span>
-                    <span className="font-serif text-lg sm:text-xl font-semibold text-[#0B0B0C]">{item.q}</span>
+                    <span className="font-serif text-lg sm:text-xl font-semibold text-[#0B0B0C]">
+                      {item.q}
+                    </span>
                   </div>
                   <span
                     className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border transition-transform duration-200 ${
@@ -765,9 +802,9 @@ export function FinalContactAndFooterSection() {
                 </h2>
 
                 <p className="mt-5 max-w-xl text-sm sm:text-base leading-relaxed text-[#E8DCC4]/80">
-                  Vous souhaitez lancer un nouveau site web, refondre votre identité de marque, développer votre
-                  visibilité sur Google Maps ou équiper votre établissement ? Choisissez le mode d&apos;échange qui vous
-                  convient.
+                  Vous souhaitez lancer un nouveau site web, refondre votre identité de marque,
+                  développer votre visibilité sur Google Maps ou équiper votre établissement ?
+                  Choisissez le mode d&apos;échange qui vous convient.
                 </p>
 
                 {/* Les 3 boutons exacts de la Section 10 du Master Brief */}
@@ -803,36 +840,51 @@ export function FinalContactAndFooterSection() {
                     <span className="font-mono text-[8.5px] uppercase tracking-wider text-[#C5A059] block">
                       COORDONNÉES DIRECTES
                     </span>
-                    <a href="mailto:contact.xragency@gmail.com" className="mt-1 block font-semibold text-white hover:underline">
+                    <a
+                      href="mailto:contact.xragency@gmail.com"
+                      className="mt-1 block font-semibold text-white hover:underline"
+                    >
                       contact.xragency@gmail.com
                     </a>
-                    <a href={WA_DIRECT} target="_blank" rel="noreferrer" className="mt-0.5 block hover:text-white">
+                    <a
+                      href={WA_DIRECT}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-0.5 block hover:text-white"
+                    >
                       WhatsApp : +33 7 67 56 67 83
                     </a>
                   </div>
                   <div>
                     <span className="font-mono text-[8.5px] uppercase tracking-wider text-[#C5A059] block">
-                      SIÈGE SOCIAL
+                      CONTACT
                     </span>
-                    <p className="mt-1 text-white font-semibold">KARMA SASU · XR AGENCY</p>
-                    <p className="mt-0.5">78 Avenue des Champs-Élysées, Bureau 562, 75008 Paris</p>
+                    <p className="mt-1 text-white font-semibold">XR Agency</p>
+                    <p className="mt-0.5">Équipe internationale · France & Vietnam</p>
                   </div>
                 </div>
               </div>
 
               {/* Colonne droite : Formulaire de demande de devis relié au CRM (/api/contact) */}
-              <div id="contact-form" className="rounded-2xl border border-white/12 bg-[#0B0B0C] p-6 sm:p-8">
+              <div
+                id="contact-form"
+                className="rounded-2xl border border-white/12 bg-[#0B0B0C] p-6 sm:p-8"
+              >
                 <h3 className="font-serif text-2xl text-white">Transmettre votre demande</h3>
                 <p className="mt-1 text-xs text-[#E8DCC4]/70">
-                  Votre message est directement enregistré dans notre CRM. Réponse personnalisée sous 24h.
+                  Votre message est directement enregistré dans notre CRM. Réponse personnalisée
+                  sous 24h.
                 </p>
 
                 {status === "success" ? (
                   <div className="mt-6 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-6 text-center">
                     <CheckCircle2 className="mx-auto h-10 w-10 text-emerald-400" />
-                    <h4 className="mt-3 font-serif text-xl text-white">Demande envoyée avec succès</h4>
+                    <h4 className="mt-3 font-serif text-xl text-white">
+                      Demande envoyée avec succès
+                    </h4>
                     <p className="mt-1 text-xs text-[#E8DCC4]/80">
-                      Merci. Notre équipe a bien reçu votre demande et revient vers vous très rapidement.
+                      Merci. Notre équipe a bien reçu votre demande et revient vers vous très
+                      rapidement.
                     </p>
                     <button
                       type="button"
@@ -844,7 +896,14 @@ export function FinalContactAndFooterSection() {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="mt-5 space-y-4">
-                    <input type="text" name="hp" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
+                    <input
+                      type="text"
+                      name="hp"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      className="hidden"
+                      aria-hidden="true"
+                    />
                     {status === "error" && (
                       <div className="rounded-xl border border-red-500/40 bg-red-500/10 p-3 text-xs text-red-300">
                         {errorMessage}
@@ -895,13 +954,23 @@ export function FinalContactAndFooterSection() {
                           name="need"
                           className="w-full rounded-xl border border-white/15 bg-[#141519] px-4 py-3 text-xs text-white focus:border-[#C5A059] focus:outline-none"
                         >
-                          <option value="Site Web">Création ou refonte de Site Web (dès 499 €)</option>
-                          <option value="Branding">Branding &amp; Identité Visuelle (dès 199 €)</option>
-                          <option value="Google Maps">Google Maps &amp; Visibilité Locale (dès 99 €)</option>
+                          <option value="Site Web">
+                            Création ou refonte de Site Web (dès 499 €)
+                          </option>
+                          <option value="Branding">
+                            Branding &amp; Identité Visuelle (dès 199 €)
+                          </option>
+                          <option value="Google Maps">
+                            Google Maps &amp; Visibilité Locale (dès 99 €)
+                          </option>
                           <option value="SEO">SEO &amp; Référencement Naturel (dès 299 €/m)</option>
-                          <option value="Social Media">Social Media &amp; Contenu (dès 349 €/m)</option>
+                          <option value="Social Media">
+                            Social Media &amp; Contenu (dès 349 €/m)
+                          </option>
                           <option value="WebCare">Maintenance &amp; WebCare (dès 29 €/m)</option>
-                          <option value="POS & Robotique">Caisse POS (2 000 €) / Robotique (dès 499 €/m)</option>
+                          <option value="POS & Robotique">
+                            Caisse POS (2 000 €) / Robotique (dès 499 €/m)
+                          </option>
                           <option value="Projet Complet">Combinaison de plusieurs services</option>
                         </select>
                       </div>
@@ -926,7 +995,9 @@ export function FinalContactAndFooterSection() {
                       className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#C5A059] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.15em] text-[#0B0B0C] transition hover:bg-[#E8DCC4] disabled:opacity-50"
                     >
                       <Send className="h-3.5 w-3.5" />
-                      <span>{status === "loading" ? "Envoi en cours..." : "Envoyer ma demande de devis"}</span>
+                      <span>
+                        {status === "loading" ? "Envoi en cours..." : "Envoyer ma demande de devis"}
+                      </span>
                     </button>
                   </form>
                 )}
@@ -941,8 +1012,9 @@ export function FinalContactAndFooterSection() {
             <div>
               <Logo className="text-white" />
               <p className="mt-4 text-xs leading-relaxed text-[#E8DCC4]/70">
-                Agence digitale internationale spécialisée en création de sites web, identité de marque, référencement
-                Google Maps &amp; SEO, réseaux sociaux, maintenance et technologies de point de vente.
+                Agence digitale internationale spécialisée en création de sites web, identité de
+                marque, référencement Google Maps &amp; SEO, réseaux sociaux, maintenance et
+                technologies de point de vente.
               </p>
             </div>
 
@@ -952,37 +1024,65 @@ export function FinalContactAndFooterSection() {
               </span>
               <ul className="mt-4 space-y-2 text-xs text-[#E8DCC4]/80">
                 <li>
-                  <Link to="/services/websites" className="hover:text-white">
+                  <Link
+                    to="/services/$serviceId"
+                    params={{ serviceId: "websites" }}
+                    className="hover:text-white"
+                  >
                     Sites Web (499 € · 799 € · 1 499 €)
                   </Link>
                 </li>
                 <li>
-                  <Link to="/services/branding" className="hover:text-white">
+                  <Link
+                    to="/services/$serviceId"
+                    params={{ serviceId: "branding" }}
+                    className="hover:text-white"
+                  >
                     Branding &amp; Identité (199 € · 299 € · 399 €)
                   </Link>
                 </li>
                 <li>
-                  <Link to="/services/seo" className="hover:text-white">
+                  <Link
+                    to="/services/$serviceId"
+                    params={{ serviceId: "seo" }}
+                    className="hover:text-white"
+                  >
                     SEO Naturel (299 €/m · 499 €/m)
                   </Link>
                 </li>
                 <li>
-                  <Link to="/services/maps" className="hover:text-white">
+                  <Link
+                    to="/services/$serviceId"
+                    params={{ serviceId: "maps" }}
+                    className="hover:text-white"
+                  >
                     Google Maps (99 € · 169 € · 299 € · 550 €)
                   </Link>
                 </li>
                 <li>
-                  <Link to="/services/social" className="hover:text-white">
-                    Social Media (349 €/m · 499 €/m · 799 €/m)
+                  <Link
+                    to="/services/$serviceId"
+                    params={{ serviceId: "social" }}
+                    className="hover:text-white"
+                  >
+                    Social Media (349 €/m · 599 €/m · 799 €/m)
                   </Link>
                 </li>
                 <li>
-                  <Link to="/services/webcare" className="hover:text-white">
+                  <Link
+                    to="/services/$serviceId"
+                    params={{ serviceId: "webcare" }}
+                    className="hover:text-white"
+                  >
                     Maintenance WebCare (29 € · 49 € · 99 €/m)
                   </Link>
                 </li>
                 <li>
-                  <Link to="/services/robotique" className="hover:text-white">
+                  <Link
+                    to="/services/$serviceId"
+                    params={{ serviceId: "robotique" }}
+                    className="hover:text-white"
+                  >
                     POS Restaurant (2 000 €) &amp; Robotique
                   </Link>
                 </li>
@@ -1032,16 +1132,20 @@ export function FinalContactAndFooterSection() {
                 INFORMATIONS LÉGALES
               </span>
               <div className="mt-4 space-y-2 text-xs text-[#E8DCC4]/75">
-                <p className="font-semibold text-white">KARMA SASU · XRAGENCY</p>
-                <p>SIREN 889 178 141 · SIRET 889 178 141 00012</p>
-                <p>78 Avenue des Champs-Élysées, Bureau 562, 75008 Paris</p>
-                <p>Hébergement : o2switch (France · RGPD)</p>
+                <p className="font-semibold text-white">XR Agency</p>
+                <p>
+                  Les informations de l’entité contractante et de l’hébergement sont précisées dans
+                  les documents contractuels validés.
+                </p>
+                <a href="mailto:contact.xragency@gmail.com" className="underline">
+                  contact.xragency@gmail.com
+                </a>
               </div>
             </div>
           </div>
 
           <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-[#E8DCC4]/60 sm:flex-row">
-            <p>© {new Date().getFullYear()} KARMA SASU · XR Agency. Tous droits réservés.</p>
+            <p>© {new Date().getFullYear()} XR Agency. Tous droits réservés.</p>
             <a
               href="#hero"
               className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3.5 py-1.5 font-mono text-[9px] text-[#E8DCC4] hover:border-[#C5A059]"

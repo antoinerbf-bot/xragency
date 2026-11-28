@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, Check, LifeBuoy, ShieldCheck, Sparkles, Wrench, ServerCog } from "lucide-react";
+import { ArrowRight, Check, LifeBuoy, ShieldCheck, Sparkles, Wrench, ServerCog, MessageCircle } from "lucide-react";
 import { Nav } from "@/components/site/Nav";
-import { ServiceIllustration } from "@/components/site/ServiceIllustration";
-import { Parallax } from "@/components/site/primitives";
 import { Contact } from "@/components/site/Contact";
+import { AddToCartBtn } from "@/components/site/Cart";
+import { CONTACT } from "@/lib/content";
 import { XR_PHOTOS } from "@/lib/photography";
 import { useLang, type Lang } from "@/lib/i18n";
 
@@ -285,84 +285,316 @@ const plans = [
 ];
 
 function WebCarePage() {
-  const { lang } = useLang();
+  const { lang, price } = useLang();
   const tx = (value: string) => translateWebCare(value, lang);
-  return <div dir={lang === "ar" ? "rtl" : "ltr"} className="min-h-screen overflow-x-hidden bg-background text-foreground">
-    <Nav />
-    <main className="pt-28">
-      <section className="relative overflow-hidden border-b border-border/60 py-16 sm:py-24 lg:py-32"><Parallax speed={0.04} className="pointer-events-none absolute -inset-[8%] opacity-30"><img src={XR_PHOTOS.maintenance} alt="" aria-hidden="true" className="h-[116%] w-full object-cover object-center blur-[1px]" /></Parallax>
-        <div className="absolute inset-0 bg-background/85" /><div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_25%,hsl(var(--primary)/.18),transparent_40%)]" />
-        <div className="relative mx-auto max-w-7xl px-5 lg:px-10">
-          <div className="grid items-center gap-10 lg:grid-cols-12">
-          <div className="max-w-4xl lg:col-span-7">
-            <span className="label-mono text-[10px] uppercase tracking-[0.25em] text-primary">XR AGENCY · 06 · WEBCARE</span>
-            <h1 className="display-serif mt-6 text-[clamp(3.2rem,8vw,7rem)] leading-[.86]">{tx("Votre site évolue.")}<br/><em className="not-italic italic text-primary">{tx("Nous aussi.")}</em></h1>
-            <p className="mt-7 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">{tx("Maintenance courante, corrections et évolutions légères : une formule claire pour garder votre site propre, à jour et exploitable sans transformer chaque petite demande en nouveau devis.")}</p>
-          </div>
-          <Parallax speed={-0.035} className="lg:col-span-5">
-            <div className="relative">
-              <ServiceIllustration service="maintenance" title="WEBCARE" />
-            </div>
-          </Parallax>
-          </div>
-          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-[1.1fr_.9fr]">
-            <div className="rounded-[2rem] border border-primary/30 bg-primary/[.06] p-7 shadow-xl">
-              <div className="flex items-center gap-3"><ServerCog className="h-6 w-6 text-primary"/><span className="label-mono text-[10px] uppercase tracking-[.18em] text-primary">{tx("Infrastructure annuelle")}</span></div>
-              <div className="mt-5 flex items-end gap-2"><span className="display-serif text-6xl text-primary">79 €</span><span className="mb-2 label-mono text-[9px] text-muted-foreground">/ an</span></div>
-              <p className="mt-4 text-sm leading-6 text-muted-foreground">{tx("XR Agency gère l'hébergement, le nom de domaine et la sécurité de l'infrastructure.")}</p>
-              <div className="mt-5 grid gap-2 sm:grid-cols-3">{["Hébergement","Nom de domaine","Sécurité"].map(x=><div key={x} className="rounded-xl border border-border bg-background/70 p-3 text-center text-[10px] font-medium">{tx(x)}</div>)}</div>
-            </div>
-            <div className="rounded-[2rem] border border-border bg-card/60 p-7">
-              <div className="flex items-center gap-3"><ShieldCheck className="h-6 w-6 text-primary"/><span className="label-mono text-[10px] uppercase tracking-[.18em] text-primary">{tx("À retenir")}</span></div>
-              <p className="mt-5 text-sm leading-7 text-muted-foreground">{tx("Les 79 € / an couvrent l'infrastructure. Les interventions de maintenance et d'évolution sont choisies séparément selon votre besoin.")}</p>
-              <p className="mt-4 text-xs text-muted-foreground">{tx("Les développements majeurs, refontes et nouvelles fonctionnalités font toujours l'objet d'un devis spécifique.")}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-      <Parallax speed={-0.025}><section className="border-b border-border/60 py-14 sm:py-20">
-        <div className="mx-auto max-w-7xl px-5 lg:px-10">
-          <div className="grid gap-3 md:grid-cols-3">
-            {[[LifeBuoy,"Corrections","Petites modifications de contenu, visuels et sections."],[Wrench,"Évolutions","Ajustements courants pour que le site reste utile."],[ShieldCheck,"Suivi","Surveillance et interventions techniques selon la formule choisie."]].map(([Icon,title,desc])=>{const I=Icon as typeof LifeBuoy;return <div key={String(title)} className="rounded-[1.5rem] border border-border bg-card/50 p-6 transition-all hover:-translate-y-1 hover:border-primary/40"><I className="h-5 w-5 text-primary"/><h2 className="display-serif mt-6 text-3xl">{tx(String(title))}</h2><p className="mt-3 text-sm leading-6 text-muted-foreground">{tx(String(desc))}</p></div>})}
-          </div>
-        </div>
-      </section></Parallax>
-      <section id="plans" className="relative overflow-hidden py-20 lg:py-28"><div className="pointer-events-none absolute -left-28 top-12 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
-        <div className="mx-auto max-w-7xl px-5 lg:px-10">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"><div><span className="label-mono text-[10px] uppercase tracking-[0.25em] text-primary">{tx("Maintenance mensuelle")}</span><h2 className="display-serif mt-4 text-4xl sm:text-6xl">{tx("Choisissez votre niveau")}<br/>{tx("d'accompagnement.")}</h2></div><p className="max-w-md text-sm leading-6 text-muted-foreground">{tx("Les volumes concernent les demandes courantes. Les travaux hors périmètre restent séparés pour préserver une charge de travail réaliste.")}</p></div>
-          <div className="mt-10 grid gap-4 lg:grid-cols-3">
-            {plans.map((plan,index)=><article key={plan.name} className={`rounded-[1.75rem] border p-7 transition-all hover:-translate-y-1 hover:shadow-2xl sm:p-8 ${index===1?"border-primary/50 bg-primary/[0.05]":"border-border bg-card/60"}`}><div className="flex items-center justify-between"><span className="label-mono text-[9px] text-primary">0{index+1}</span>{index===1&&<span className="label-mono rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[8px] text-primary">{tx("ÉQUILIBRE")}</span>}</div><h3 className="display-serif mt-7 text-3xl">{tx(plan.name)}</h3><p className="mt-2 text-xs text-muted-foreground">{tx(plan.badge)}</p><div className="mt-6 flex items-end gap-2 border-y border-border py-5"><span className="display-serif text-5xl text-primary">{plan.price} €</span><span className="label-mono mb-1 text-[9px] text-muted-foreground">/ mois</span></div><ul className="mt-6 space-y-3">{plan.features.map(feature=><li key={tx(feature)} className="flex gap-3 text-sm leading-5 text-muted-foreground"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary"/>{tx(feature)}</li>)}</ul><a href={`https://wa.me/33767566783?text=${encodeURIComponent(`Bonjour XR Agency, je souhaite parler du forfait WebCare « ${plan.name} » à ${plan.price} €/mois.`)}`} target="_blank" rel="noreferrer" className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-5 py-3.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">{tx("Parler à XR Agency")} <ArrowRight className="h-4 w-4"/></a></article>)}
-          </div>
-        </div>
-      </section>
-      <section className="border-t border-border/60 py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-5 lg:px-10">
-          <div className="mb-8">
-            <span className="label-mono text-[10px] uppercase tracking-[.25em] text-primary">{tx("Lecture rapide")}</span>
-            <h2 className="display-serif mt-4 text-4xl sm:text-5xl">{tx("Ce que chaque niveau couvre.")}</h2>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-muted-foreground">{tx("Les points ci-dessous reprennent les éléments de chaque formule, afin de rendre le périmètre lisible avant de choisir.")}</p>
-          </div>
-          <div className="grid gap-4 lg:grid-cols-3">
-            {plans.map((plan,index) => (
-              <article key={plan.name + "-detail"} className="rounded-[1.5rem] border border-border bg-card/45 p-6 sm:p-7">
-                <div className="flex items-center justify-between gap-3">
-                  <span className="label-mono text-[8px] tracking-[.18em] text-primary">0{index + 1} · {plan.name.toUpperCase()}</span>
-                  <span className="label-mono text-[8px] text-muted-foreground">{plan.features.length} {tx("éléments")}</span>
+  const perYearLabel = { fr: "/ an", en: "/ year", vi: "/ năm", ar: "/ سنة", ru: "/ год" }[lang];
+  const waMsgFor = (planLabel: string, amountEur: number, periodText: string) =>
+    ({
+      fr: `Bonjour XR Agency, je souhaite parler du forfait WebCare « ${planLabel} » à ${amountEur} € ${periodText}.`,
+      en: `Hello XR Agency, I would like to discuss the WebCare "${planLabel}" plan at €${amountEur} ${periodText}.`,
+      vi: `Xin chào XR Agency, tôi muốn trao đổi về gói WebCare "${planLabel}" (${amountEur} € ${periodText}).`,
+      ar: `مرحبًا XR Agency، أود مناقشة باقة WebCare "${planLabel}" بقيمة ${amountEur} € ${periodText}.`,
+      ru: `Здравствуйте, XR Agency! Хочу обсудить пакет WebCare «${planLabel}» (${amountEur} € ${periodText}).`,
+    })[lang];
+
+  return (
+    <div dir={lang === "ar" ? "rtl" : "ltr"} className="min-h-screen overflow-x-hidden bg-[#F7F4EE] text-[#171613]">
+      <Nav />
+      <main className="pt-28">
+        {/* Hero */}
+        <section className="border-b border-[#171613]/10 bg-[#F7F4EE] py-14 sm:py-20 lg:py-24">
+          <div className="mx-auto max-w-7xl px-5 lg:px-10">
+            <div className="grid items-center gap-10 lg:grid-cols-12">
+              <div className="lg:col-span-7">
+                <div className="inline-flex items-center gap-2.5">
+                  <span className="h-[1px] w-7 bg-[#9E7F5A]" aria-hidden />
+                  <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7D6445]">
+                    XR AGENCY · WEBCARE
+                  </span>
                 </div>
-                <div className="mt-6 space-y-3">
-                  {plan.features.map(feature => (
-                    <div key={feature} className="flex gap-3 text-sm leading-5 text-muted-foreground">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary"/>
-                      {feature}
+                <h1 className="mt-5 font-serif text-4xl font-medium leading-[1.03] tracking-[-0.025em] text-[#171613] sm:text-6xl lg:text-[4.5rem]">
+                  {tx("Votre site évolue.")}
+                  <br />
+                  <em className="italic font-normal text-[#9E7F5A]">{tx("Nous aussi.")}</em>
+                </h1>
+                <p className="mt-6 max-w-2xl text-sm leading-7 text-[#57534B] sm:text-base">
+                  {tx("Maintenance courante, corrections et évolutions légères : une formule claire pour garder votre site propre, à jour et exploitable sans transformer chaque petite demande en nouveau devis.")}
+                </p>
+              </div>
+              <div className="lg:col-span-5">
+                <div className="group relative overflow-hidden rounded-[2rem] border border-[#171613]/12 bg-[#171613] shadow-[0_24px_60px_rgba(23,22,19,0.12)]">
+                  <img
+                    src={XR_PHOTOS.maintenance}
+                    alt="WebCare XR Agency"
+                    className="aspect-[4/3] w-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.04]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
+                  <div className="absolute inset-x-4 top-4 flex items-center justify-between pointer-events-none">
+                    <span className="rounded-full border border-white/20 bg-black/60 px-3 py-1 font-mono text-[9.5px] uppercase tracking-[0.2em] text-[#E5C696] backdrop-blur-md">
+                      ✦ INFRASTRUCTURE & SÉCURITÉ ACTIVE
+                    </span>
+                    <span className="rounded-full border border-[#A67C40]/40 bg-black/60 px-2.5 py-0.5 font-mono text-[9.5px] font-bold text-[#E5C696] backdrop-blur-md">
+                      99.98% UPTIME
+                    </span>
+                  </div>
+                  <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/15 bg-black/75 p-3.5 text-white backdrop-blur-xl">
+                    <h4 className="font-serif text-base font-medium text-white">Sérénité Technique 24/7</h4>
+                    <p className="mt-0.5 text-xs text-white/70">Sauvegardes quotidiennes, correctifs de sécurité continus et SLA garanti.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Infrastructure 79 €/an + À retenir */}
+            <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-[1.1fr_.9fr]">
+              <div className="flex flex-col justify-between rounded-3xl border border-[#E5E5E0] bg-white p-7 text-[#12110E] shadow-xl">
+                <div>
+                  <div className="flex items-center gap-3">
+                    <ServerCog className="h-5 w-5 text-[#12110E]" />
+                    <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-[#12110E]">
+                      {tx("Infrastructure annuelle")}
+                    </span>
+                  </div>
+                  <div className="mt-5 flex items-baseline gap-2">
+                    <span className="font-serif text-5xl font-semibold text-[#12110E] sm:text-6xl">
+                      {price(79)}
+                    </span>
+                    <span className="font-mono text-xs text-[#52504A]">{perYearLabel}</span>
+                  </div>
+                  <p className="mt-4 text-sm leading-6 text-[#52504A]">
+                    {tx("XR Agency gère l'hébergement, le nom de domaine et la sécurité de l'infrastructure.")}
+                  </p>
+                  <div className="mt-5 grid gap-2 sm:grid-cols-3">
+                    {["Hébergement", "Nom de domaine", "Sécurité"].map((x) => (
+                      <div
+                        key={x}
+                        className="rounded-xl border border-[#EBEBE6] bg-[#FAF9F5] p-3 text-center text-xs font-medium text-[#2B2925]"
+                      >
+                        {tx(x)}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-6">
+                  <AddToCartBtn
+                    item={{
+                      serviceId: "maintenance",
+                      serviceName: "WebCare",
+                      planName: tx("Infrastructure annuelle"),
+                      priceEur: 79,
+                      period: "year",
+                      periodLabel: perYearLabel,
+                    }}
+                    popular
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col justify-between rounded-3xl border border-[#171613]/12 bg-white p-7">
+                <div>
+                  <div className="flex items-center gap-3">
+                    <ShieldCheck className="h-5 w-5 text-[#9E7F5A]" />
+                    <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7D6445]">
+                      {tx("À retenir")}
+                    </span>
+                  </div>
+                  <p className="mt-5 text-sm leading-7 text-[#45413A]">
+                    {tx("Les 79 € / an couvrent l'infrastructure. Les interventions de maintenance et d'évolution sont choisies séparément selon votre besoin.")}
+                  </p>
+                  <p className="mt-4 text-xs leading-6 text-[#57534B]">
+                    {tx("Les développements majeurs, refontes et nouvelles fonctionnalités font toujours l'objet d'un devis spécifique.")}
+                  </p>
+                </div>
+                <div className="mt-6 border-t border-[#171613]/10 pt-4">
+                  <a
+                    href={`${CONTACT.whatsapp}?text=${encodeURIComponent(waMsgFor(tx("Infrastructure annuelle"), 79, perYearLabel))}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#171613]/20 bg-[#FAF8F4] px-5 py-3 text-xs font-semibold text-[#171613] transition hover:border-[#9E7F5A]"
+                  >
+                    <MessageCircle className="h-4 w-4 text-[#7D6445]" />
+                    {tx("Parler à XR Agency")}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 3 Pillars */}
+        <section className="border-b border-[#171613]/10 bg-[#EEE9E0] py-14 sm:py-20">
+          <div className="mx-auto max-w-7xl px-5 lg:px-10">
+            <div className="grid gap-4 md:grid-cols-3">
+              {(
+                [
+                  [LifeBuoy, "Corrections", "Petites modifications de contenu, visuels et sections."],
+                  [Wrench, "Évolutions", "Ajustements courants pour que le site reste utile."],
+                  [ShieldCheck, "Suivi", "Surveillance et interventions techniques selon la formule choisie."],
+                ] as const
+              ).map(([Icon, title, desc]) => (
+                <div
+                  key={title}
+                  className="xr-editorial-card rounded-3xl border border-[#171613]/10 bg-white p-6"
+                >
+                  <Icon className="h-5 w-5 text-[#9E7F5A]" />
+                  <h2 className="mt-5 font-serif text-2xl font-medium text-[#171613]">
+                    {tx(title)}
+                  </h2>
+                  <p className="mt-2.5 text-sm leading-6 text-[#57534B]">{tx(desc)}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Monthly Maintenance Plans */}
+        <section id="plans" className="bg-[#F7F4EE] py-20 lg:py-24">
+          <div className="mx-auto max-w-7xl px-5 lg:px-10">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7D6445]">
+                  {tx("Maintenance mensuelle")}
+                </span>
+                <h2 className="mt-3 font-serif text-3xl font-medium text-[#171613] sm:text-5xl">
+                  {tx("Choisissez votre niveau")}
+                  <br />
+                  {tx("d'accompagnement.")}
+                </h2>
+              </div>
+              <p className="max-w-md text-sm leading-6 text-[#57534B]">
+                {tx("Les volumes concernent les demandes courantes. Les travaux hors périmètre restent séparés pour préserver une charge de travail réaliste.")}
+              </p>
+            </div>
+            <div className="mt-10 grid gap-5 lg:grid-cols-3">
+              {plans.map((plan, index) => {
+                const isFeatured = index === 1;
+                return (
+                  <article
+                    key={plan.name}
+                    className={`flex flex-col justify-between rounded-3xl border p-7 sm:p-8 transition ${
+                      isFeatured
+                        ? "border-2 border-[#12110E] bg-white text-[#12110E] shadow-xl ring-1 ring-black/5"
+                        : "border border-[#E5E5E0] bg-[#FAF9F5] text-[#12110E] hover:border-[#12110E]"
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-xs font-semibold text-[#52504A]">
+                          0{index + 1}
+                        </span>
+                        {isFeatured && (
+                          <span className="rounded-full bg-[#12110E] px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
+                            {tx("ÉQUILIBRE")}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="mt-6 font-serif text-3xl font-medium text-[#12110E]">{tx(plan.name)}</h3>
+                      <p className="mt-2 text-xs text-[#52504A]">
+                        {tx(plan.badge)}
+                      </p>
+                      <div className="mt-6 flex items-baseline gap-2 border-y border-[#EBEBE6] py-5">
+                        <span className="font-serif text-5xl font-semibold text-[#12110E]">{price(plan.price)}</span>
+                        <span className="font-mono text-xs text-[#52504A]">
+                          {tx("/ mois")}
+                        </span>
+                      </div>
+                      <ul className="mt-6 space-y-3">
+                        {plan.features.map((feature) => (
+                          <li
+                            key={feature}
+                            className="flex gap-3 text-sm leading-5 text-[#2B2925]"
+                          >
+                            <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#A67C40]" />
+                            <span>{tx(feature)}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  ))}
-                </div>
-              </article>
-            ))}
+
+                    <div className="mt-8 space-y-2.5">
+                      <AddToCartBtn
+                        item={{
+                          serviceId: "maintenance",
+                          serviceName: "WebCare",
+                          planName: tx(plan.name),
+                          priceEur: plan.price,
+                          period: "month",
+                          periodLabel: tx("/ mois"),
+                        }}
+                        popular={isFeatured}
+                      />
+                      <a
+                        href={`${CONTACT.whatsapp}?text=${encodeURIComponent(waMsgFor(tx(plan.name), plan.price, tx("/ mois")))}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#D5D5CF] bg-white px-5 py-2.5 text-xs font-semibold text-[#12110E] transition hover:border-[#12110E] hover:bg-[#F5F5F0]"
+                      >
+                        <MessageCircle className="h-3.5 w-3.5 text-[#A67C40]" />
+                        <span>{tx("Parler à XR Agency")}</span>
+                      </a>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
-      <section className="border-t border-border/60 py-16"><div className="mx-auto max-w-3xl px-5 text-center"><Sparkles className="mx-auto h-5 w-5 text-primary"/><h2 className="display-serif mt-4 text-4xl sm:text-5xl">{tx("Un site propre, sans abonnement incompréhensible.")}</h2><p className="mt-5 text-sm leading-7 text-muted-foreground">{tx("79 € / an pour l'infrastructure, puis le niveau de maintenance dont vous avez réellement besoin. Les évolutions importantes sont toujours cadrées séparément.")}</p></div></section>
-    </main><Contact />
-  </div>;
+        </section>
+
+        {/* Scope breakdown (fixed untranslated feature bug) */}
+        <section className="border-t border-[#171613]/10 bg-[#EEE9E0] py-16 sm:py-20">
+          <div className="mx-auto max-w-7xl px-5 lg:px-10">
+            <div className="mb-8">
+              <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7D6445]">
+                {tx("Lecture rapide")}
+              </span>
+              <h2 className="mt-3 font-serif text-3xl font-medium text-[#171613] sm:text-5xl">
+                {tx("Ce que chaque niveau couvre.")}
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-[#57534B]">
+                {tx("Les points ci-dessous reprennent les éléments de chaque formule, afin de rendre le périmètre lisible avant de choisir.")}
+              </p>
+            </div>
+            <div className="grid gap-4 lg:grid-cols-3">
+              {plans.map((plan, index) => (
+                <article
+                  key={plan.name + "-detail"}
+                  className="rounded-3xl border border-[#171613]/10 bg-white p-6 sm:p-7"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7D6445]">
+                      0{index + 1} · {tx(plan.name).toUpperCase()}
+                    </span>
+                    <span className="font-mono text-[10px] text-[#57534B]">
+                      {plan.features.length} {tx("éléments")}
+                    </span>
+                  </div>
+                  <div className="mt-5 space-y-3">
+                    {plan.features.map((feature) => (
+                      <div key={feature} className="flex gap-3 text-sm leading-5 text-[#45413A]">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#9E7F5A]" />
+                        <span>{tx(feature)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="border-t border-[#171613]/10 bg-[#F7F4EE] py-16">
+          <div className="mx-auto max-w-3xl px-5 text-center">
+            <Sparkles className="mx-auto h-5 w-5 text-[#9E7F5A]" />
+            <h2 className="mt-4 font-serif text-3xl font-medium text-[#171613] sm:text-5xl">
+              {tx("Un site propre, sans abonnement incompréhensible.")}
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-[#57534B]">
+              {tx("79 € / an pour l'infrastructure, puis le niveau de maintenance dont vous avez réellement besoin. Les évolutions importantes sont toujours cadrées séparément.")}
+            </p>
+          </div>
+        </section>
+      </main>
+      <Contact />
+    </div>
+  );
 }

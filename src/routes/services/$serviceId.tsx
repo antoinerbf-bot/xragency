@@ -18,6 +18,8 @@ import {
   BrandingStudioPage,
   AiAndCustomSoftwareStudioPage,
 } from "@/components/site/ImmersiveServicePages";
+import { CustomCrmShowcase } from "@/components/site/CustomCrmShowcase";
+import { RoboticsShowcase } from "@/components/site/RoboticsShowcase";
 import { cn } from "@/lib/utils";
 
 const SERVICE_ALIASES: Record<string, string> = {
@@ -27,7 +29,11 @@ const SERVICE_ALIASES: Record<string, string> = {
   "referencement-naturel": "seo",
   websites: "websites",
   "site-web": "websites",
+  "site-internet": "websites",
+  "sites-web": "websites",
+  "sites-internet": "websites",
   "creation-site-web": "websites",
+  "creation-site-internet": "websites",
   "creation-de-sites-web": "websites",
   ecommerce: "websites",
   "e-commerce": "websites",
@@ -48,14 +54,16 @@ const SERVICE_ALIASES: Record<string, string> = {
   refonte: "refonte",
   "refonte-site": "refonte",
   "refonte-de-site-web": "refonte",
-  ads: "ads",
-  "google-ads": "ads",
-  "publicite-digitale": "ads",
   strategy: "strategy",
   "strategie-digitale": "strategy",
   conseil: "strategy",
   ai: "ai",
   ia: "ai",
+  crm: "crm",
+  "crm-sur-mesure": "crm",
+  logiciel: "crm",
+  logiciels: "crm",
+  pos: "crm",
 };
 
 export const Route = createFileRoute("/services/$serviceId")({
@@ -94,7 +102,18 @@ function ServiceDetailPage() {
   if (service.id === "websites") return <WebsitesStudioPage />;
   if (service.id === "maps") return <MapsDominationStudioPage />;
   if (service.id === "branding") return <BrandingStudioPage />;
+  if (service.id === "crm") return <CustomCrmShowcase />;
   if (service.id === "ai" || service.id === "strategy") return <AiAndCustomSoftwareStudioPage />;
+  if (service.id === "robotics")
+    return (
+      <div className="min-h-screen overflow-x-hidden bg-[#FAF8F5] text-[#1A1815]">
+        <Nav />
+        <main>
+          <RoboticsShowcase />
+          <Contact />
+        </main>
+      </div>
+    );
   return <GenericServiceDetailPage />;
 }
 
@@ -183,7 +202,7 @@ function GenericServiceDetailPage() {
   };
 
   return (
-    <div className="xr-section min-h-screen overflow-x-hidden">
+    <div dir={lang === "ar" ? "rtl" : "ltr"} className="min-h-screen overflow-x-hidden bg-[#F7F4EE] text-[#171613]">
       <Nav />
 
       <main className="pt-28">
@@ -367,38 +386,38 @@ function GenericServiceDetailPage() {
                     <article
                       onClick={() => setSelectedPlanIndex(i)}
                       className={cn(
-                        "group flex h-full cursor-pointer flex-col rounded-[1.8rem] border p-6 transition-all duration-400 sm:p-7",
+                        "group flex h-full cursor-pointer flex-col rounded-[1.8rem] border p-6 transition-all duration-300 sm:p-7",
                         isSelected
-                          ? "border-emerald-500/80 bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] shadow-[0_20px_50px_-20px_rgba(16,185,129,0.25)] ring-1 ring-emerald-500/30"
-                          : "xr-line bg-[var(--xr-surface)] hover:-translate-y-1 hover:border-white/20",
+                          ? "border-2 border-[#12110E] bg-white text-[#12110E] shadow-xl ring-1 ring-black/5"
+                          : "border border-[#E5E5E0] bg-[#FAF9F5] text-[#12110E] hover:-translate-y-1 hover:border-[#12110E]",
                       )}
                     >
                       <div className="flex items-center justify-between gap-3">
-                        <span className={cn("label-mono text-[7px]", isSelected ? "text-emerald-500 font-bold" : "xr-muted-2")}>
+                        <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[#52504A]">
                           {String(i + 1).padStart(2, "0")} / {String(service.plans.length).padStart(2, "0")}
                         </span>
                         {p.popular ? (
-                          <span className={cn("rounded-full border px-3 py-1 label-mono text-[6px]", isSelected ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400 font-bold" : "xr-line")}>
+                          <span className="rounded-full bg-[#12110E] px-3 py-1 font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-white">
                             {t(UI.popular)}
                           </span>
                         ) : null}
                       </div>
 
-                      <h3 className="display-serif mt-8 text-3xl leading-none sm:text-4xl">{t(p.name)}</h3>
-                      <p className="mt-3 text-xs leading-5 xr-muted">
+                      <h3 className="display-serif mt-7 text-3xl leading-none sm:text-4xl text-[#12110E]">{t(p.name)}</h3>
+                      <p className="mt-3 text-xs leading-5 text-[#52504A]">
                         {p.audience ? t(p.audience) : t({ fr: "Formule définie par les éléments inclus.", en: "Plan defined by the items included.", vi: "Gói được xác định bởi các hạng mục.", ar: "باقة محددة بالعناصر المشمولة.", ru: "Состав пакета определён включёнными элементами." })}
                       </p>
 
-                      <div className={cn("mt-7 border-y py-5", isSelected ? "border-emerald-500/20" : "xr-line")}>
+                      <div className="mt-7 border-y border-[#EBEBE6] py-5">
                         {service.id === "websites" && p.period === "once" ? (
-                          <div className={cn("mb-4 flex rounded-xl border p-1", isSelected ? "border-emerald-500/30 bg-[var(--xr-bg)]" : "xr-line bg-[var(--xr-bg)]")}>
+                          <div className="mb-4 flex rounded-xl border border-[#D5D5CF] bg-[#F5F5F0] p-1 shadow-inner">
                             <button
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setInstallmentSelections((prev) => ({ ...prev, [i]: false }));
                               }}
-                              className={cn("flex-1 rounded-lg py-2 text-[8px] font-semibold uppercase tracking-[.12em]", !isInst ? "bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] shadow-sm" : "xr-muted")}
+                              className={cn("flex-1 rounded-lg py-2 text-[9px] font-semibold uppercase tracking-[.12em]", !isInst ? "bg-[#12110E] text-white shadow-sm" : "text-[#52504A]")}
                             >
                               {t({ fr: "Comptant", en: "One-off", vi: "Một lần", ar: "دفعة واحدة", ru: "Разово" })}
                             </button>
@@ -408,7 +427,7 @@ function GenericServiceDetailPage() {
                                 e.stopPropagation();
                                 setInstallmentSelections((prev) => ({ ...prev, [i]: true }));
                               }}
-                              className={cn("flex-1 rounded-lg py-2 text-[8px] font-semibold uppercase tracking-[.12em]", isInst ? "bg-[var(--xr-surface-strong)] text-[var(--xr-ink)] shadow-sm" : "xr-muted")}
+                              className={cn("flex-1 rounded-lg py-2 text-[9px] font-semibold uppercase tracking-[.12em]", isInst ? "bg-[#12110E] text-white shadow-sm" : "text-[#52504A]")}
                             >
                               {t({ fr: "Mensualités", en: "Monthly", vi: "Hàng tháng", ar: "أقساط شهرية", ru: "В рассрочку" })}
                             </button>
@@ -416,15 +435,15 @@ function GenericServiceDetailPage() {
                         ) : null}
 
                         <div className="flex items-end gap-2">
-                          <span className="display-serif text-5xl">{price(displayPrice)}</span>
-                          <span className={cn("label-mono pb-1 text-[8px]", isSelected ? "xr-muted" : "xr-muted-2")}>
+                          <span className="display-serif text-5xl text-[#12110E]">{price(displayPrice)}</span>
+                          <span className="label-mono pb-1 text-[8px] text-[#52504A]">
                             {isCustomMaps
                               ? t({ fr: "à partir de 999 € / an", en: "from €999 / year", vi: "từ 999 € / năm", ar: "ابتداءً من 999 € / سنة", ru: "от 999 € / год" })
                               : t(PERIOD_LABEL[displayPeriod])}
                           </span>
                         </div>
                         {planIsInstallment ? (
-                          <p className={cn("mt-2 text-[10px] leading-4", isSelected ? "text-emerald-400 font-medium" : "xr-muted")}>
+                          <p className="mt-2 text-[11px] leading-4 text-[#52504A]">
                             {t({ fr: "Mensualités calculées sur 12 mois.", en: "Monthly instalments calculated over 12 months.", vi: "Thanh toán hàng tháng tính trên 12 tháng.", ar: "أقساط شهرية على 12 شهراً.", ru: "Ежемесячный платёж рассчитан на 12 месяцев." })}
                           </p>
                         ) : null}
@@ -432,8 +451,8 @@ function GenericServiceDetailPage() {
 
                       <ul className="mt-5 space-y-3">
                         {(p.features ?? []).map((feature, k) => (
-                          <li key={k} className={cn("flex items-start gap-3 text-sm leading-5", isSelected ? "text-[var(--xr-ink)] font-normal" : "xr-muted")}>
-                            <Check className={cn("mt-0.5 h-4 w-4 shrink-0", isSelected ? "text-emerald-500" : "xr-muted-2")} />
+                          <li key={k} className="flex items-start gap-3 text-sm leading-5 text-[#2B2925]">
+                            <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#A67C40]" />
                             <span>{t(feature)}</span>
                           </li>
                         ))}
@@ -445,9 +464,9 @@ function GenericServiceDetailPage() {
                             href={planWaUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-3.5 text-[9px] font-bold uppercase tracking-[.14em] text-white shadow-lg transition hover:bg-emerald-500"
+                            className="flex w-full items-center justify-center gap-2 rounded-full bg-[#12110E] px-5 py-3.5 text-xs font-semibold text-white shadow-sm transition hover:bg-[#2B2925]"
                           >
-                            <MessageCircle className="h-4 w-4" />
+                            <MessageCircle className="h-4 w-4 text-[#A67C40]" />
                             {t({ fr: "Cadrer mon projet sur devis", en: "Scope my project on quote", vi: "Tư vấn báo giá dự án", ar: "تحديد نطاق المشروع بعرض سعر", ru: "Обсудить проект по смете" })}
                           </a>
                         ) : !isCustomMaps ? (
@@ -468,14 +487,9 @@ function GenericServiceDetailPage() {
                             href={planWaUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className={cn(
-                              "mt-3 flex w-full items-center justify-center gap-2 rounded-full border py-3 text-[9px] font-semibold uppercase tracking-[.12em] transition",
-                              isSelected
-                                ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
-                                : "xr-line bg-[var(--xr-bg)] xr-muted hover:bg-[var(--xr-surface-strong)]",
-                            )}
+                            className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-[#D5D5CF] bg-white py-3 text-xs font-semibold text-[#12110E] transition hover:border-[#12110E] hover:bg-[#F5F5F0]"
                           >
-                            <MessageCircle className="h-3.5 w-3.5" />
+                            <MessageCircle className="h-3.5 w-3.5 text-[#A67C40]" />
                             {t({ fr: "Parler de cette formule", en: "Discuss this plan", vi: "Trao đổi về gói này", ar: "ناقش هذه الباقة", ru: "Обсудить пакет" })}
                           </a>
                         )}

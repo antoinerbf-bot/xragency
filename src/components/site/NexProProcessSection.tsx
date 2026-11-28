@@ -1,5 +1,14 @@
 import React from "react";
-import { ArrowRight, CheckCircle2, Clock, FileCode, Rocket, ShieldCheck, Sparkles, UserCheck } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Clock,
+  FileCode,
+  Rocket,
+  ShieldCheck,
+  Sparkles,
+  UserCheck,
+} from "lucide-react";
 
 interface Step {
   num: string;
@@ -23,7 +32,7 @@ const STEPS: Step[] = [
     num: "02",
     days: "Jours 3 – 7",
     title: "Développement haute couture",
-    desc: "Nous intégrons votre identité visuelle, rédigeons des textes persuasifs axés sur le closing et optimisons chaque ligne de code pour garantir un score de vitesse supérieur à 95/100 sur Google PageSpeed.",
+    desc: "Nous intégrons votre identité visuelle, rédigeons des textes persuasifs axés sur le closing et optimisons chaque ligne de code pour mesurer et optimiser les performances sur les pages et appareils ciblés.",
     deliverable: "Design responsive & Vitesse ultra-rapide (<1s)",
     icon: <FileCode className="h-5 w-5 text-[#dfc39d]" />,
   },
@@ -39,7 +48,7 @@ const STEPS: Step[] = [
     num: "04",
     days: "Jour 14",
     title: "Lancement officiel & Accompagnement",
-    desc: "Mise en ligne sur votre nom de domaine sécurisé (HTTPS), formation de 30 minutes en visio pour prendre en main vos outils et remise de la propriété intégrale de votre code. Support garanti 7j/7.",
+    desc: "Mise en ligne sur votre nom de domaine sécurisé (HTTPS), formation de 30 minutes en visio pour prendre en main vos outils et remise de la propriété intégrale de votre code. Modalités de support définies dans le contrat.",
     deliverable: "Site en ligne & Accompagnement dédié",
     icon: <Rocket className="h-5 w-5 text-[#c5a880]" />,
   },
@@ -47,7 +56,10 @@ const STEPS: Step[] = [
 
 export function NexProProcessSection() {
   return (
-    <section id="processus" className="relative bg-[#06080e] text-[#f8f6f0] py-20 sm:py-28 lg:py-36 border-t border-white/10 overflow-hidden">
+    <section
+      id="processus"
+      className="relative bg-[#06080e] text-[#f8f6f0] py-20 sm:py-28 lg:py-36 border-t border-white/10 overflow-hidden"
+    >
       {/* Halo d'ambiance */}
       <div
         aria-hidden="true"
@@ -63,7 +75,8 @@ export function NexProProcessSection() {
           <div className="sec-head-line">
             <div className="sec-head-dash" />
             <span className="mono-nex text-white/70">
-              <b className="text-[#c5a880] font-bold">04</b> / DÉROULEMENT DU PROJET · 14 JOURS CHRONO
+              <b className="text-[#c5a880] font-bold">04</b> / DÉROULEMENT DU PROJET · 14 JOURS
+              CHRONO
             </span>
           </div>
 
@@ -75,7 +88,8 @@ export function NexProProcessSection() {
           </h2>
 
           <p className="mt-3 text-sm sm:text-base text-neutral-400 max-w-2xl leading-relaxed">
-            De votre première prise de contact à la mise en ligne officielle, chaque jalon est planifié avec transparence. Vous restez maître de chaque décision.
+            De votre première prise de contact à la mise en ligne officielle, chaque jalon est
+            planifié avec transparence. Vous restez maître de chaque décision.
           </p>
         </div>
 
@@ -90,9 +104,7 @@ export function NexProProcessSection() {
                 {/* En-tête de carte avec Numéro et Délai */}
                 <div className="flex items-center justify-between border-b border-white/10 pb-4">
                   <div className="flex items-center gap-3">
-                    <span className="h-nex text-3xl font-black text-[#c5a880]">
-                      {step.num}
-                    </span>
+                    <span className="h-nex text-3xl font-black text-[#c5a880]">{step.num}</span>
                     <span className="rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-neutral-300">
                       {step.days}
                     </span>
@@ -106,9 +118,7 @@ export function NexProProcessSection() {
                 <h3 className="h-nex mt-5 text-xl text-white group-hover:text-[#dfc39d] transition">
                   {step.title}
                 </h3>
-                <p className="mt-3 text-xs leading-relaxed text-neutral-300">
-                  {step.desc}
-                </p>
+                <p className="mt-3 text-xs leading-relaxed text-neutral-300">{step.desc}</p>
               </div>
 
               {/* Livrable Contractuel */}
@@ -136,10 +146,7 @@ export function NexProProcessSection() {
             </p>
           </div>
 
-          <a
-            href="#quote"
-            className="btn-nex text-xs uppercase tracking-wider shrink-0"
-          >
+          <a href="#quote" className="btn-nex text-xs uppercase tracking-wider shrink-0">
             <span>Démarrer mon projet maintenant</span>
             <ArrowRight className="h-4 w-4" />
           </a>

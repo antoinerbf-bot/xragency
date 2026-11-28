@@ -1,4 +1,13 @@
-import { ShieldCheck, CheckCircle2, KeyRound, Sparkles, Building2, Lock, Award, HeartHandshake } from "lucide-react";
+import {
+  ShieldCheck,
+  CheckCircle2,
+  KeyRound,
+  Sparkles,
+  Building2,
+  Lock,
+  Award,
+  HeartHandshake,
+} from "lucide-react";
 import { Parallax, Reveal } from "./primitives";
 import { useLang, type Lang } from "@/lib/i18n";
 import { FUNNEL_UI } from "@/lib/funnel-i18n";
@@ -19,7 +28,8 @@ export function ProofAndGuarantees() {
               <div className="sec-head-line">
                 <div className="sec-head-dash" />
                 <span className="mono-nex text-white/70">
-                  <b className="text-[#c5a880] font-bold">06</b> / GARANTIES CONTRACTUELLES & STATUTS
+                  <b className="text-[#c5a880] font-bold">06</b> / GARANTIES CONTRACTUELLES &
+                  STATUTS
                 </span>
               </div>
               <h2 className="h-nex text-3xl sm:text-5xl lg:text-[3.6rem] text-white">
@@ -72,10 +82,10 @@ export function ProofAndGuarantees() {
             <div className="sm:px-6 first:pl-0">
               <span className="label-mono text-[7px] xr-muted-2 block mb-1.5 flex items-center gap-1.5 justify-center sm:justify-start">
                 <Building2 className="h-3 w-3" />
-                SOCIÉTÉ ENREGISTRÉE EN FRANCE
+                CONTACT XR AGENCY
               </span>
-              <p className="text-xs font-semibold">KARMA SASU · SIREN 889 178 141</p>
-              <p className="text-[10px] xr-muted mt-0.5">78 Avenue des Champs-Élysées, 75008 Paris</p>
+              <p className="text-xs font-semibold">XR Agency</p>
+              <p className="text-[10px] xr-muted mt-0.5">contact.xragency@gmail.com</p>
             </div>
 
             <div className="pt-4 sm:pt-0 sm:px-6">
@@ -83,8 +93,12 @@ export function ProofAndGuarantees() {
                 <Lock className="h-3 w-3" />
                 PAIEMENTS & SÉCURITÉ
               </span>
-              <p className="text-xs font-semibold">Stripe Verified · TLS 1.3 End-to-End</p>
-              <p className="text-[10px] xr-muted mt-0.5">Acomptes sécurisés, factures conformes</p>
+              <p className="text-xs font-semibold">
+                Paiement selon les modalités validées au devis
+              </p>
+              <p className="text-[10px] xr-muted mt-0.5">
+                Documents et échéances précisés contractuellement
+              </p>
             </div>
 
             <div className="pt-4 sm:pt-0 sm:px-6">
@@ -92,8 +106,10 @@ export function ProofAndGuarantees() {
                 <HeartHandshake className="h-3 w-3" />
                 ACCOMPAGNEMENT DÉDIÉ
               </span>
-              <p className="text-xs font-semibold">Direct Alexandre · Fondateur XR</p>
-              <p className="text-[10px] xr-muted mt-0.5">+33 7 67 56 67 83 · contact.xragency@gmail.com</p>
+              <p className="text-xs font-semibold">Équipe XR Agency</p>
+              <p className="text-[10px] xr-muted mt-0.5">
+                +33 7 67 56 67 83 · contact.xragency@gmail.com
+              </p>
             </div>
           </div>
         </div>

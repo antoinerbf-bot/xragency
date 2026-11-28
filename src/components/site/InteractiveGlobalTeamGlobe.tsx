@@ -46,17 +46,17 @@ const GLOBAL_HUBS: GlobalHub[] = [
       vi: "Giám đốc Điều hành, Chiến lược 360° & Kiến trúc AI",
     },
     specialty: {
-      fr: "Sites Sur-Mesure, Domination Google Maps Top 3, Logiciels/CRM & Robotique",
-      en: "Bespoke Websites, Google Maps Top 3 Domination, Custom Software & Robotics",
-      vi: "Website Thiết kế riêng, Google Maps Top 3, Phần mềm & Robot",
+      fr: "Sites sur mesure, visibilité locale, logiciels / CRM et robotique",
+      en: "Bespoke websites, local visibility, custom software and robotics",
+      vi: "Website thiết kế riêng, hiện diện địa phương, phần mềm và robot",
     },
     bio: {
-      fr: "Pilotage central des projets grands comptes et PME exigeantes en France : conception web haute couture, garantie contractuelle Google Maps Top 3 et déploiement de robots humanoïdes.",
-      en: "Central hub for demanding SMEs and enterprise clients across France: haute-couture web design, guaranteed Google Maps Top 3 and humanoid robotics deployment.",
-      vi: "Trung tâm điều phối chiến lược tại Pháp: thiết kế web cao cấp, cam kết Top 3 Google Maps và triển khai robot dịch vụ.",
+      fr: "Pilotage central des projets grands comptes et PME exigeantes en France : conception web sur mesure, stratégie de visibilité locale et déploiement de solutions robotiques.",
+      en: "Central hub for demanding SMEs and enterprise clients across France: bespoke web design, local visibility strategy and robotics deployment.",
+      vi: "Trung tâm điều phối chiến lược tại Pháp: thiết kế web theo yêu cầu, chiến lược hiện diện địa phương và triển khai robot dịch vụ.",
     },
     languages: ["Français", "English"],
-    projectsCount: "140+ projets livrés",
+    projectsCount: "Équipe internationale",
     badge: { fr: "QG Principal", en: "Primary HQ", vi: "Trụ sở chính" },
   },
   {
@@ -90,7 +90,11 @@ const GLOBAL_HUBS: GlobalHub[] = [
   {
     id: "dubai",
     city: { fr: "Dubaï", en: "Dubai", vi: "Dubai" },
-    country: { fr: "Émirats Arabes Unis · MENA", en: "United Arab Emirates · MENA", vi: "UAE · Trung Đông" },
+    country: {
+      fr: "Émirats Arabes Unis · MENA",
+      en: "United Arab Emirates · MENA",
+      vi: "UAE · Trung Đông",
+    },
     flag: "🇦🇪",
     lat: 25.2048,
     lng: 55.2708,
@@ -146,7 +150,11 @@ const GLOBAL_HUBS: GlobalHub[] = [
   {
     id: "hcmc",
     city: { fr: "Hô Chi Minh-Ville", en: "Ho Chi Minh City", vi: "TP. Hồ Chí Minh" },
-    country: { fr: "Vietnam · Studio Ingénierie", en: "Vietnam · Engineering Studio", vi: "Việt Nam · Studio Kỹ thuật" },
+    country: {
+      fr: "Vietnam · Studio Ingénierie",
+      en: "Vietnam · Engineering Studio",
+      vi: "Việt Nam · Studio Kỹ thuật",
+    },
     flag: "🇻🇳",
     lat: 10.8231,
     lng: 106.6297,
@@ -243,7 +251,7 @@ function latLngToVector3(lat: number, lng: number, radius: number): THREE.Vector
 function getTargetRotationForHub(lat: number, lng: number): { rotX: number; rotY: number } {
   const theta = (lng + 180) * (Math.PI / 180);
   const rotY = theta - Math.PI / 2;
-  const rotX = (lat * Math.PI) / 180 * 0.65;
+  const rotX = ((lat * Math.PI) / 180) * 0.65;
   return { rotX, rotY };
 }
 
@@ -519,7 +527,7 @@ export function InteractiveGlobalTeamGlobe() {
     rotationRef.current.targetY = rotationRef.current.startRotY + dx * 0.0065;
     rotationRef.current.targetX = Math.max(
       -0.85,
-      Math.min(0.85, rotationRef.current.startRotX + dy * 0.0065)
+      Math.min(0.85, rotationRef.current.startRotX + dy * 0.0065),
     );
   };
 
@@ -656,7 +664,8 @@ export function InteractiveGlobalTeamGlobe() {
               <div className="pointer-events-none absolute bottom-3 left-1/2 z-30 -translate-x-1/2 flex items-center gap-2 rounded-full border border-[#c5a880]/45 bg-black/80 px-4 py-1.5 backdrop-blur-xl shadow-xl">
                 <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
                 <span className="font-mono text-[9.5px] font-bold uppercase tracking-wider text-white whitespace-nowrap">
-                  {activeHub.flag} {activeHub.city[l].toUpperCase()} · AGENT : {activeHub.agentName.toUpperCase()}
+                  {activeHub.flag} {activeHub.city[l].toUpperCase()} · AGENT :{" "}
+                  {activeHub.agentName.toUpperCase()}
                 </span>
               </div>
             </div>
@@ -668,9 +677,7 @@ export function InteractiveGlobalTeamGlobe() {
                   ? "3D Satellite Earth · Click any city pin on the globe or drag to rotate"
                   : "Globe 3D Satellite · Cliquez directement sur une ville du globe ou glissez pour tourner"}
               </span>
-              <span className="font-mono text-[10px] text-[#c5a880]">
-                7 HUBS MONDIAUX · 24H/24
-              </span>
+              <span className="font-mono text-[10px] text-[#c5a880]">7 HUBS MONDIAUX · 24H/24</span>
             </div>
           </div>
 

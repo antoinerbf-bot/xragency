@@ -1,167 +1,155 @@
-import React from "react";
-import { ArrowRight, CheckCircle2, MessageSquare, Quote, Star } from "lucide-react";
+import { ArrowRight, BadgeCheck, FileCheck2, MessageSquareText } from "lucide-react";
+import { useLang } from "@/lib/i18n";
 
-interface Review {
-  id: string;
-  name: string;
-  role: string;
-  company: string;
-  city: string;
-  rating: number;
-  quote: string;
-  metrics: string;
-  date: string;
-}
-
-const REVIEWS: Review[] = [
+const PRINCIPLES = [
   {
-    id: "1",
-    name: "Alexandre V.",
-    role: "Fondateur & Directeur Général",
-    company: "Villa Azur Suites & Domaines",
-    city: "Cannes (06)",
-    rating: 5,
-    quote: "On donnait 35 000 € par an à Booking en commissions. XR Agency nous a conçu un site sublime avec réservation directe et le Pack Google Maps #1. En 3 semaines, nos réservations en direct ont explosé. La maquette livrée sous 24h nous avait bluffés dès le premier jour.",
-    metrics: "+38 000 € de marge récupérée par an",
-    date: "Avis vérifié Google",
+    icon: FileCheck2,
+    title: "Un périmètre écrit",
+    description:
+      "Les livrables, délais prévisionnels et modalités sont précisés avant le démarrage.",
   },
   {
-    id: "2",
-    name: "Dr. Sarah M.",
-    role: "Chirurgien Esthétique",
-    company: "Cabinet Médical Haussmann",
-    city: "Paris 8e (75)",
-    rating: 5,
-    quote: "Mon cabinet manquait de visibilité sur Google Maps. En moins de 25 jours, nous sommes passés en première position sur nos requêtes clés. Le standard téléphonique a doublé ses prises de rendez-vous qualifiés. Une équipe ultra-réactive et un standing remarquable.",
-    metrics: "Position #1 Google Maps en 25 jours",
-    date: "Avis vérifié Google",
+    icon: MessageSquareText,
+    title: "Des retours traçables",
+    description: "Les étapes de validation et les échanges projet restent documentés.",
   },
   {
-    id: "3",
-    name: "Laurent B.",
-    role: "Associé Gérant",
-    company: "Cabinet Mercier & Associés",
-    city: "Bordeaux (33)",
-    rating: 5,
-    quote: "Zéro perte de temps, pas de jargon technique. Un directeur de projet unique, des délais tenus au jour près et un résultat qui impose immédiatement le respect auprès de nos clients institutionnels. Je recommande les yeux fermés.",
-    metrics: "45 dossiers qualifiés dès le 1er trimestre",
-    date: "Avis vérifié Google",
-  },
-  {
-    id: "4",
-    name: "Matthieu T.",
-    role: "Restaurateur & Chef Propriétaire",
-    company: "Maison Lumière",
-    city: "Lyon (69)",
-    rating: 5,
-    quote: "Le système de recueil d'avis 5★ automatisé et le site mobile ultra-rapide ont transformé notre fréquentation. Plus de 180 nouveaux avis 5 étoiles récoltés et des services complets chaque week-end sans passer par les intermédiaires.",
-    metrics: "+150 couverts réservés chaque semaine",
-    date: "Avis vérifié Google",
+    icon: BadgeCheck,
+    title: "Des preuves vérifiables",
+    description: "Les références et indicateurs ne sont publiés qu’avec validation du client.",
   },
 ];
 
 export function NexProReviews() {
+  const { lang } = useLang();
+  const copy = {
+    fr: {
+      eyebrow: "Transparence & méthode",
+      title: "Des engagements clairs. Des preuves qui peuvent être vérifiées.",
+      intro:
+        "Nous ne publions pas de faux avis, de notes Google reconstituées ou de résultats commerciaux non documentés. Les références nominatives sont partagées uniquement lorsqu’elles sont vérifiables et autorisées par le client.",
+      items: [
+        [
+          "Un périmètre écrit",
+          "Les livrables, délais prévisionnels et modalités sont précisés avant le démarrage.",
+        ],
+        [
+          "Des retours traçables",
+          "Les étapes de validation et les échanges projet restent documentés.",
+        ],
+        [
+          "Des preuves vérifiables",
+          "Les références et indicateurs ne sont publiés qu’avec validation du client.",
+        ],
+      ],
+      cta: "Échanger sur votre projet",
+    },
+    en: {
+      eyebrow: "Transparency & method",
+      title: "Clear commitments. Evidence that can be verified.",
+      intro:
+        "We do not publish fabricated reviews, reconstructed Google ratings or undocumented commercial results. Named references are shared only when verifiable and approved by the client.",
+      items: [
+        [
+          "A written scope",
+          "Deliverables, indicative timing and terms are set out before work begins.",
+        ],
+        ["Traceable feedback", "Project reviews and approval stages remain documented."],
+        [
+          "Verifiable evidence",
+          "References and performance indicators are published only with client approval.",
+        ],
+      ],
+      cta: "Discuss your project",
+    },
+    vi: {
+      eyebrow: "Minh bạch và phương pháp",
+      title: "Cam kết rõ ràng. Bằng chứng có thể kiểm chứng.",
+      intro:
+        "Chúng tôi không đăng đánh giá giả, điểm Google dựng lại hoặc kết quả kinh doanh không có tài liệu chứng minh. Chỉ chia sẻ tên khách hàng khi có thể xác minh và được khách hàng đồng ý.",
+      items: [
+        [
+          "Phạm vi bằng văn bản",
+          "Sản phẩm bàn giao, thời gian dự kiến và điều kiện được xác định trước khi bắt đầu.",
+        ],
+        ["Phản hồi có lưu vết", "Các bước duyệt và trao đổi dự án được ghi nhận."],
+        ["Bằng chứng xác minh được", "Chỉ công bố tham chiếu và chỉ số khi khách hàng chấp thuận."],
+      ],
+      cta: "Trao đổi về dự án",
+    },
+    ar: {
+      eyebrow: "الشفافية والمنهجية",
+      title: "التزامات واضحة وأدلة قابلة للتحقق.",
+      intro:
+        "لا ننشر تقييمات مصطنعة أو درجات Google مُعاد تركيبها أو نتائج تجارية غير موثقة. لا نشارك أسماء العملاء إلا عند إمكانية التحقق والحصول على موافقتهم.",
+      items: [
+        ["نطاق عمل مكتوب", "تُحدد المخرجات والجدول المتوقع والشروط قبل بدء العمل."],
+        ["ملاحظات موثقة", "تظل مراحل المراجعة والموافقة موثقة."],
+        ["أدلة قابلة للتحقق", "لا تُنشر المراجع والمؤشرات إلا بعد موافقة العميل."],
+      ],
+      cta: "ناقش مشروعك",
+    },
+    ru: {
+      eyebrow: "Прозрачность и методика",
+      title: "Чёткие обязательства. Проверяемые подтверждения.",
+      intro:
+        "Мы не публикуем вымышленные отзывы, искусственные оценки Google или неподтверждённые коммерческие результаты. Именные рекомендации размещаются только с разрешения клиента и при возможности проверки.",
+      items: [
+        ["Письменный объём работ", "Результаты, сроки и условия фиксируются до начала работ."],
+        ["Документированные отзывы", "Этапы проверки и согласования проекта сохраняются."],
+        ["Проверяемые подтверждения", "Отзывы и показатели публикуются только с согласия клиента."],
+      ],
+      cta: "Обсудить проект",
+    },
+  }[lang] ?? {
+    eyebrow: "Transparency & method",
+    title: "Clear commitments. Verifiable evidence.",
+    intro:
+      "Client references and performance claims are published only when verified and approved.",
+    items: [
+      ["Written scope", "Deliverables and terms are agreed before work begins."],
+      ["Traceable feedback", "Reviews and approval stages are documented."],
+      ["Verifiable evidence", "References are shared only with client approval."],
+    ],
+    cta: "Discuss your project",
+  };
   return (
-    <section id="avis" className="relative bg-[#070911] text-[#f8f6f0] py-20 sm:py-28 lg:py-36 border-t border-white/10 overflow-hidden">
-      {/* Halo d'ambiance */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute top-10 right-10 h-[500px] w-[500px] rounded-full opacity-10 blur-[130px]"
-        style={{
-          background: "radial-gradient(circle, #dfc39d 0%, #c5a880 50%, transparent 70%)",
-        }}
-      />
-
-      <div className="relative z-10 mx-auto max-w-[1560px] px-5 sm:px-8 lg:px-12">
-        {/* En-tête style NexPro avec note Google Reviews */}
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 border-b border-white/10 pb-8">
-          <div className="sec-head max-w-3xl mb-0">
-            <div className="sec-head-line">
-              <div className="sec-head-dash" />
-              <span className="mono-nex text-white/70">
-                <b className="text-[#c5a880] font-bold">08</b> / AVIS VÉRIFIÉS & RETOURS D'EXPÉRIENCE
-              </span>
-            </div>
-
-            <h2 className="h-nex text-3xl sm:text-5xl lg:text-[3.6rem] text-white">
-              Ce que disent les dirigeants{" "}
-              <span className="text-[#dfc39d] font-serif font-light italic">
-                qui nous font confiance.
-              </span>
-            </h2>
-          </div>
-
-          {/* Badge Global Google 5.0 ★ */}
-          <div className="inline-flex items-center gap-3.5 rounded-2xl border border-[#c5a880]/30 bg-[#121622]/90 px-5 py-3 shadow-xl backdrop-blur-xl shrink-0">
-            <div className="flex text-amber-400">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-4 w-4 fill-current" />
-              ))}
-            </div>
-            <div>
-              <p className="font-mono text-xs font-bold text-white">5.0 / 5 · Google Reviews</p>
-              <p className="text-[10px] text-neutral-400">100% de recommandations clients</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Grille des 4 Avis Clients Vérifiés */}
-        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {REVIEWS.map((rev) => (
-            <div
-              key={rev.id}
-              className="group flex flex-col justify-between rounded-3xl border border-white/10 bg-[#0c0f18]/80 p-6 sm:p-7 backdrop-blur-xl transition-all duration-300 hover:border-[#c5a880]/40 hover:-translate-y-1 hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8)]"
-            >
-              <div>
-                {/* En-tête de carte avec étoiles et date */}
-                <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                  <div className="flex text-amber-400">
-                    {[...Array(rev.rating)].map((_, i) => (
-                      <Star key={i} className="h-3 w-3 fill-current" />
-                    ))}
-                  </div>
-                  <span className="font-mono text-[9px] uppercase tracking-wider text-emerald-400 flex items-center gap-1">
-                    <CheckCircle2 className="h-2.5 w-2.5" />
-                    {rev.date}
-                  </span>
-                </div>
-
-                {/* Métrique d'Impact en exergue */}
-                <div className="my-4 rounded-xl border border-[#c5a880]/20 bg-[#c5a880]/10 px-3 py-1.5">
-                  <span className="font-mono text-[10px] font-bold text-[#e5cba4]">
-                    {rev.metrics}
-                  </span>
-                </div>
-
-                {/* Citation */}
-                <p className="text-xs leading-relaxed text-neutral-300 italic">
-                  « {rev.quote} »
-                </p>
-              </div>
-
-              {/* Auteur */}
-              <div className="mt-6 pt-4 border-t border-white/10">
-                <p className="text-sm font-bold text-white">{rev.name}</p>
-                <p className="text-[11px] text-[#c5a880]">{rev.company}</p>
-                <p className="text-[10px] text-neutral-400">{rev.city}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Appel à l'action */}
-        <div className="mt-12 text-center">
-          <p className="text-xs sm:text-sm text-neutral-400 mb-4">
-            Envie de constater le même impact pour votre activité ?
+    <section
+      id="avis"
+      className="border-t border-white/10 bg-[#101114] py-20 text-[#f8f6f0] sm:py-28 lg:py-32"
+    >
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+        <div className="max-w-3xl">
+          <p className="font-mono text-[10px] uppercase tracking-[.16em] text-[#c5a880]">
+            {copy.eyebrow}
           </p>
-          <a
-            href="#quote"
-            className="btn-nex text-xs uppercase tracking-wider inline-flex"
-          >
-            <span>Demander mon audit & ma maquette gratuite</span>
-            <ArrowRight className="h-4 w-4" />
-          </a>
+          <h2 className="mt-5 font-serif text-4xl leading-tight sm:text-5xl">{copy.title}</h2>
+          <p className="mt-5 max-w-2xl text-sm leading-7 text-white/65">{copy.intro}</p>
         </div>
+
+        <div className="mt-12 grid gap-3 md:grid-cols-3">
+          {PRINCIPLES.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <article
+                key={item.title}
+                className="rounded-2xl border border-white/10 bg-white/[.025] p-6"
+              >
+                <Icon className="h-5 w-5 text-[#c5a880]" strokeWidth={1.6} />
+                <h3 className="mt-8 text-base font-medium">{copy.items[index][0]}</h3>
+                <p className="mt-3 text-xs leading-6 text-white/60">{copy.items[index][1]}</p>
+              </article>
+            );
+          })}
+        </div>
+
+        <a
+          href="#quote"
+          className="mt-9 inline-flex items-center gap-2 rounded-full border border-[#c5a880]/40 px-5 py-3 text-xs font-medium text-[#e8dcc4] transition-colors hover:bg-white/5"
+        >
+          {copy.cta}
+          <ArrowRight className="h-4 w-4" />
+        </a>
       </div>
     </section>
   );

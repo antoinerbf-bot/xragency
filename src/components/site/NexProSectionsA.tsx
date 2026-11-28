@@ -80,14 +80,16 @@ export function AgencyPresentationSection() {
 
               <h2 className="mt-4 font-serif text-[clamp(2rem,4vw,3.6rem)] font-normal leading-[1.04] tracking-[-0.02em] text-[#0B0B0C]">
                 Une agence digitale internationale forte de{" "}
-                <span className="italic text-[#8B704F]">dix années d&apos;expérience</span> aux côtés des entreprises.
+                <span className="italic text-[#8B704F]">dix années d&apos;expérience</span> aux
+                côtés des entreprises.
               </h2>
 
               <p className="mt-6 max-w-2xl text-[15px] sm:text-[16.5px] leading-relaxed text-[#38342E]">
-                XR Agency réunit au sein d&apos;un même studio les compétences créatives, techniques et commerciales
-                indispensables pour développer votre activité. Plutôt que de multiplier les prestataires, vous
-                bénéficiez d&apos;un interlocuteur unique capable de concevoir votre identité, bâtir votre site web,
-                déployer votre visibilité sur Google et installer vos outils de gestion.
+                XR Agency réunit au sein d&apos;un même studio les compétences créatives, techniques
+                et commerciales indispensables pour développer votre activité. Plutôt que de
+                multiplier les prestataires, vous bénéficiez d&apos;un interlocuteur unique capable
+                de concevoir votre identité, bâtir votre site web, déployer votre visibilité sur
+                Google et installer vos outils de gestion.
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -120,8 +122,13 @@ export function AgencyPresentationSection() {
 
               <div className="mt-5 divide-y divide-[#0B0B0C]/10">
                 {AGENCY_DOMAINS.map((domain) => (
-                  <div key={domain.id} className="py-3.5 first:pt-0 last:pb-0 flex items-start gap-4">
-                    <span className="font-mono text-[10px] font-bold text-[#8B704F] mt-0.5">{domain.id}</span>
+                  <div
+                    key={domain.id}
+                    className="py-3.5 first:pt-0 last:pb-0 flex items-start gap-4"
+                  >
+                    <span className="font-mono text-[10px] font-bold text-[#8B704F] mt-0.5">
+                      {domain.id}
+                    </span>
                     <div>
                       <h3 className="text-sm font-bold text-[#0B0B0C]">{domain.title}</h3>
                       <p className="mt-0.5 text-xs leading-relaxed text-[#524C43]">{domain.desc}</p>
@@ -145,8 +152,10 @@ const CORE_EXPERTISES = [
     id: "websites",
     num: "01",
     title: "Sites Web & E-commerce",
-    shortDesc: "Sites vitrines professionnels, sites business administrables et boutiques e-commerce ou réservation.",
-    clientBenefit: "Transformez vos visiteurs en demandes de devis et en achats grâce à un parcours rapide et rassurant.",
+    shortDesc:
+      "Sites vitrines professionnels, sites business administrables et boutiques e-commerce ou réservation.",
+    clientBenefit:
+      "Transformez vos visiteurs en demandes de devis et en achats grâce à un parcours rapide et rassurant.",
     fromPrice: "Dès 499 €",
     href: "/services/websites",
     icon: Monitor,
@@ -156,8 +165,10 @@ const CORE_EXPERTISES = [
     id: "branding",
     num: "02",
     title: "Branding & Identité Visuelle",
-    shortDesc: "Création de logo signature, univers de marque complet et charte graphique multi-supports.",
-    clientBenefit: "Inspirez immédiatement confiance face à vos concurrents avec une image cohérente et mémorable.",
+    shortDesc:
+      "Création de logo signature, univers de marque complet et charte graphique multi-supports.",
+    clientBenefit:
+      "Inspirez immédiatement confiance face à vos concurrents avec une image cohérente et mémorable.",
     fromPrice: "Dès 199 €",
     href: "/services/branding",
     icon: Palette,
@@ -167,8 +178,10 @@ const CORE_EXPERTISES = [
     id: "seo",
     num: "03",
     title: "SEO & Référencement Naturel",
-    shortDesc: "Optimisation technique, ciblage de mots-clés stratégiques et création de contenus éditoriaux.",
-    clientBenefit: "Attirez chaque mois un flux régulier de prospects qui recherchent activement vos prestations sur Google.",
+    shortDesc:
+      "Optimisation technique, ciblage de mots-clés stratégiques et création de contenus éditoriaux.",
+    clientBenefit:
+      "Attirez chaque mois un flux régulier de prospects qui recherchent activement vos prestations sur Google.",
     fromPrice: "Dès 299 € / mois",
     href: "/services/seo",
     icon: Search,
@@ -178,8 +191,10 @@ const CORE_EXPERTISES = [
     id: "maps",
     num: "04",
     title: "Google Maps & Visibilité Locale",
-    shortDesc: "Optimisation complète de votre fiche Google Business Profile, pack visibilité et SEO local conquête.",
-    clientBenefit: "Captez les appels, demandes d'itinéraires et visites des clients situés dans votre zone géographique.",
+    shortDesc:
+      "Optimisation complète de votre fiche Google Business Profile, pack visibilité et SEO local conquête.",
+    clientBenefit:
+      "Captez les appels, demandes d'itinéraires et visites des clients situés dans votre zone géographique.",
     fromPrice: "Dès 99 €",
     href: "/services/maps",
     icon: MapPin,
@@ -189,8 +204,10 @@ const CORE_EXPERTISES = [
     id: "social",
     num: "05",
     title: "Social Media & Contenu",
-    shortDesc: "Gestion complète de vos réseaux sociaux, calendrier éditorial, visuels sur mesure et vidéos courtes.",
-    clientBenefit: "Restez présent dans l'esprit de votre audience sans y consacrer votre temps opérationnel.",
+    shortDesc:
+      "Gestion complète de vos réseaux sociaux, calendrier éditorial, visuels sur mesure et vidéos courtes.",
+    clientBenefit:
+      "Restez présent dans l'esprit de votre audience sans y consacrer votre temps opérationnel.",
     fromPrice: "Dès 349 € / mois",
     href: "/services/social",
     icon: Share2,
@@ -200,8 +217,10 @@ const CORE_EXPERTISES = [
     id: "maintenance",
     num: "06",
     title: "Maintenance & WebCare",
-    shortDesc: "Sauvegardes régulières, mises à jour techniques, surveillance de sécurité et modifications incluses.",
-    clientBenefit: "Garantissez la disponibilité, la rapidité et la sécurité de votre site tout au long de l'année.",
+    shortDesc:
+      "Sauvegardes régulières, mises à jour techniques, surveillance de sécurité et modifications incluses.",
+    clientBenefit:
+      "Contribuez à la disponibilité, à la rapidité et à la sécurité de votre site tout au long de l’année.",
     fromPrice: "Dès 29 € / mois",
     href: "/services/webcare",
     icon: ShieldCheck,
@@ -211,8 +230,10 @@ const CORE_EXPERTISES = [
     id: "robotics",
     num: "07",
     title: "Technologies, POS, CRM & Robotique",
-    shortDesc: "Système de caisse et gestion restaurant clé en main, CRM commercial et robots de service.",
-    clientBenefit: "Fluidifiez vos opérations en point de vente, centralisez vos commandes et modernisez l'accueil client.",
+    shortDesc:
+      "Système de caisse et gestion restaurant clé en main, CRM commercial et robots de service.",
+    clientBenefit:
+      "Fluidifiez vos opérations en point de vente, centralisez vos commandes et modernisez l'accueil client.",
     fromPrice: "POS 2 000 € · Robots dès 499 €/m",
     href: "/services/robotique",
     icon: Bot,
@@ -239,8 +260,8 @@ export function CoreExpertisesGridSection() {
               </h2>
             </div>
             <p className="max-w-md text-sm leading-relaxed text-[#4E4840]">
-              Chaque prestation répond à un objectif commercial précis : visibilité, crédibilité, acquisition de
-              prospects ou performance opérationnelle.
+              Chaque prestation répond à un objectif commercial précis : visibilité, crédibilité,
+              acquisition de prospects ou performance opérationnelle.
             </p>
           </div>
         </Reveal>
@@ -250,7 +271,11 @@ export function CoreExpertisesGridSection() {
             const Icon = exp.icon;
             const isWide = idx === 6;
             return (
-              <Reveal key={exp.id} delay={idx * 45} className={isWide ? "md:col-span-2 lg:col-span-3" : ""}>
+              <Reveal
+                key={exp.id}
+                delay={idx * 45}
+                className={isWide ? "md:col-span-2 lg:col-span-3" : ""}
+              >
                 <div
                   className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-[1.5rem] border border-[#0B0B0C]/12 bg-[#FDFBF7] p-6 sm:p-7 shadow-[0_14px_36px_-18px_rgba(11,11,12,0.1)] transition-all duration-300 hover:-translate-y-1 hover:border-[#8B704F] hover:shadow-[0_24px_48px_-20px_rgba(139,112,79,0.22)] ${
                     isWide ? "lg:flex-row lg:items-center lg:gap-10" : ""
@@ -268,7 +293,9 @@ export function CoreExpertisesGridSection() {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0C]/90 via-[#0B0B0C]/30 to-transparent" />
                       <div className="absolute left-3.5 top-3.5 flex items-center gap-2 rounded-full border border-[#E8DCC4]/25 bg-[#0B0B0C]/75 px-3 py-1 backdrop-blur-md">
-                        <span className="font-mono text-[9px] font-bold text-[#C5A059]">{exp.num}</span>
+                        <span className="font-mono text-[9px] font-bold text-[#C5A059]">
+                          {exp.num}
+                        </span>
                         <span className="font-mono text-[8.5px] uppercase tracking-wider text-[#F8F6F0]">
                           {exp.visualTag}
                         </span>
@@ -280,7 +307,9 @@ export function CoreExpertisesGridSection() {
                   </div>
 
                   {/* Contenu structuré : Titre, Description courte, Bénéfice client, Accès page dédiée */}
-                  <div className={`flex flex-1 flex-col justify-between ${isWide ? "mt-5 lg:mt-0" : "mt-5"}`}>
+                  <div
+                    className={`flex flex-1 flex-col justify-between ${isWide ? "mt-5 lg:mt-0" : "mt-5"}`}
+                  >
                     <div>
                       <div className="flex items-center justify-between gap-2">
                         <h3 className="font-serif text-xl sm:text-2xl font-semibold text-[#0B0B0C] group-hover:text-[#8B704F] transition-colors">
@@ -299,7 +328,9 @@ export function CoreExpertisesGridSection() {
                         <span className="block font-mono text-[8px] font-bold uppercase tracking-[0.18em] text-[#8B704F]">
                           BÉNÉFICE CLIENT
                         </span>
-                        <p className="mt-1 text-xs font-medium leading-snug text-[#1C1A17]">{exp.clientBenefit}</p>
+                        <p className="mt-1 text-xs font-medium leading-snug text-[#1C1A17]">
+                          {exp.clientBenefit}
+                        </p>
                       </div>
                     </div>
 
@@ -334,7 +365,9 @@ export function CoreExpertisesGridSection() {
    (Composition variée inspirée de NexPro — Zéro cartes identiques)
    ========================================================================== */
 export function EditorialServicesShowcaseSection() {
-  const [activeSocialTier, setActiveSocialTier] = useState<"essentiel" | "croissance" | "autorite">("croissance");
+  const [activeSocialTier, setActiveSocialTier] = useState<"essentiel" | "croissance" | "autorite">(
+    "croissance",
+  );
 
   return (
     <section
@@ -355,8 +388,9 @@ export function EditorialServicesShowcaseSection() {
               <span className="italic text-[#8B704F]">des tarifs connus d&apos;avance.</span>
             </h2>
             <p className="mt-4 text-[15px] sm:text-[16.5px] leading-relaxed text-[#464039]">
-              Découvrez dans le détail nos sept domaines d&apos;intervention. Chaque formule affiche clairement son
-              périmètre, son tarif et ses modalités pour vous permettre de décider en toute transparence.
+              Découvrez dans le détail nos sept domaines d&apos;intervention. Chaque formule affiche
+              clairement son périmètre, son tarif et ses modalités pour vous permettre de décider en
+              toute transparence.
             </p>
           </div>
         </Reveal>
@@ -383,8 +417,8 @@ export function EditorialServicesShowcaseSection() {
                     Sites Web haute conversion : Vitrine, Business &amp; E-commerce
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-[#4A443C]">
-                    Nous concevons des sites rapides, élégants et structurés pour transformer vos visiteurs en prises de
-                    contact, réservations ou commandes en ligne.
+                    Nous concevons des sites rapides, élégants et structurés pour transformer vos
+                    visiteurs en prises de contact, réservations ou commandes en ligne.
                   </p>
 
                   {/* Les 3 formules officielles Sites Web */}
@@ -400,8 +434,8 @@ export function EditorialServicesShowcaseSection() {
                         <span className="font-serif text-2xl font-bold text-[#0B0B0C]">499 €</span>
                       </div>
                       <p className="mt-2 text-xs text-[#4A443C]">
-                        Jusqu&apos;à 3 pages sur mesure, design responsive mobile &amp; desktop, formulaire de contact,
-                        intégration WhatsApp et optimisation SEO initiale.
+                        Jusqu&apos;à 3 pages sur mesure, design responsive mobile &amp; desktop,
+                        formulaire de contact, intégration WhatsApp et optimisation SEO initiale.
                       </p>
                     </div>
 
@@ -416,8 +450,9 @@ export function EditorialServicesShowcaseSection() {
                         <span className="font-serif text-2xl font-bold text-[#0B0B0C]">799 €</span>
                       </div>
                       <p className="mt-2 text-xs text-[#4A443C]">
-                        Jusqu&apos;à 5 pages, architecture commerciale complète, galerie ou réalisations, blog
-                        administrable, suivi analytique et optimisation de conversion.
+                        Jusqu&apos;à 5 pages, architecture commerciale complète, galerie ou
+                        réalisations, blog administrable, suivi analytique et optimisation de
+                        conversion.
                       </p>
                     </div>
 
@@ -427,13 +462,17 @@ export function EditorialServicesShowcaseSection() {
                           <span className="font-mono text-[8.5px] font-bold uppercase tracking-widest text-[#8B704F]">
                             FORMULE 03
                           </span>
-                          <h4 className="text-base font-bold text-[#0B0B0C]">E-commerce &amp; Réservation</h4>
+                          <h4 className="text-base font-bold text-[#0B0B0C]">
+                            E-commerce &amp; Réservation
+                          </h4>
                         </div>
-                        <span className="font-serif text-2xl font-bold text-[#0B0B0C]">1 499 €</span>
+                        <span className="font-serif text-2xl font-bold text-[#0B0B0C]">
+                          1 499 €
+                        </span>
                       </div>
                       <p className="mt-2 text-xs text-[#4A443C]">
-                        Catalogue produits ou prestations, paiement sécurisé en ligne (Stripe / CB), gestion des
-                        commandes ou réservations et tableau de bord complet.
+                        Catalogue produits ou prestations, paiement sécurisé en ligne (Stripe / CB),
+                        gestion des commandes ou réservations et tableau de bord complet.
                       </p>
                     </div>
                   </div>
@@ -441,7 +480,8 @@ export function EditorialServicesShowcaseSection() {
 
                 <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-[#0B0B0C]/10 pt-5">
                   <Link
-                    to="/services/websites"
+                    to="/services/$serviceId"
+                    params={{ serviceId: "websites" }}
                     className="inline-flex items-center gap-2 rounded-full bg-[#0B0B0C] px-6 py-3 text-[10.5px] font-bold uppercase tracking-[0.15em] text-[#F8F6F0] hover:bg-[#8B704F] transition"
                   >
                     <span>Détails des offres Sites Web</span>
@@ -481,7 +521,9 @@ export function EditorialServicesShowcaseSection() {
                   {/* Contenu simulé d'une interface client réelle et lisible */}
                   <div className="mt-4 rounded-xl bg-[#F8F6F0] p-4 text-[#0B0B0C]">
                     <div className="flex items-center justify-between border-b border-[#0B0B0C]/10 pb-2.5">
-                      <span className="font-serif text-xs font-bold tracking-wider">MAISON D&apos;ARCHITECTURE</span>
+                      <span className="font-serif text-xs font-bold tracking-wider">
+                        MAISON D&apos;ARCHITECTURE
+                      </span>
                       <span className="rounded-full bg-[#0B0B0C] px-2.5 py-1 text-[8px] font-bold text-[#F8F6F0]">
                         Demander un rendez-vous
                       </span>
@@ -519,16 +561,28 @@ export function EditorialServicesShowcaseSection() {
                   {/* Indicateurs techniques vérifiables */}
                   <div className="mt-4 grid grid-cols-3 gap-2.5 text-center">
                     <div className="rounded-xl border border-white/10 bg-white/5 p-2.5">
-                      <span className="block font-mono text-[8px] text-[#E8DCC4]/70">RESPONSIVE</span>
-                      <span className="mt-0.5 block text-xs font-bold text-[#F8F6F0]">Mobile · Tablette · PC</span>
+                      <span className="block font-mono text-[8px] text-[#E8DCC4]/70">
+                        RESPONSIVE
+                      </span>
+                      <span className="mt-0.5 block text-xs font-bold text-[#F8F6F0]">
+                        Mobile · Tablette · PC
+                      </span>
                     </div>
                     <div className="rounded-xl border border-white/10 bg-white/5 p-2.5">
-                      <span className="block font-mono text-[8px] text-[#E8DCC4]/70">STRUCTURE SEO</span>
-                      <span className="mt-0.5 block text-xs font-bold text-[#C5A059]">Balisage &amp; Indexation</span>
+                      <span className="block font-mono text-[8px] text-[#E8DCC4]/70">
+                        STRUCTURE SEO
+                      </span>
+                      <span className="mt-0.5 block text-xs font-bold text-[#C5A059]">
+                        Balisage &amp; Indexation
+                      </span>
                     </div>
                     <div className="rounded-xl border border-white/10 bg-white/5 p-2.5">
-                      <span className="block font-mono text-[8px] text-[#E8DCC4]/70">PROPRIÉTÉ</span>
-                      <span className="mt-0.5 block text-xs font-bold text-[#F8F6F0]">Sans location forcée</span>
+                      <span className="block font-mono text-[8px] text-[#E8DCC4]/70">
+                        PROPRIÉTÉ
+                      </span>
+                      <span className="mt-0.5 block text-xs font-bold text-[#F8F6F0]">
+                        Sans location forcée
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -556,8 +610,8 @@ export function EditorialServicesShowcaseSection() {
                   Une identité visuelle qui impose votre statut dès le premier regard.
                 </h3>
                 <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-[#E8DCC4]/80">
-                  Du logotype vectoriel à la charte graphique complète, nous créons des systèmes visuels cohérents pour
-                  vos supports digitaux, imprimés et enseignes.
+                  Du logotype vectoriel à la charte graphique complète, nous créons des systèmes
+                  visuels cohérents pour vos supports digitaux, imprimés et enseignes.
                 </p>
 
                 {/* Planche de style visuelle intégrée */}
@@ -583,7 +637,9 @@ export function EditorialServicesShowcaseSection() {
                 {/* Les 3 tarifs officiels Branding */}
                 <div className="mt-6 grid gap-3 sm:grid-cols-3">
                   <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-4">
-                    <span className="font-mono text-[8px] text-[#C5A059] uppercase">FORMULE 01</span>
+                    <span className="font-mono text-[8px] text-[#C5A059] uppercase">
+                      FORMULE 01
+                    </span>
                     <h4 className="mt-1 text-sm font-bold text-white">Logo Signature</h4>
                     <p className="mt-1 font-serif text-2xl font-bold text-[#E8DCC4]">199 €</p>
                     <p className="mt-1.5 text-[11px] text-[#E8DCC4]/75">
@@ -592,16 +648,21 @@ export function EditorialServicesShowcaseSection() {
                   </div>
 
                   <div className="rounded-2xl border border-[#C5A059] bg-white/[0.08] p-4">
-                    <span className="font-mono text-[8px] text-[#C5A059] uppercase">FORMULE 02</span>
+                    <span className="font-mono text-[8px] text-[#C5A059] uppercase">
+                      FORMULE 02
+                    </span>
                     <h4 className="mt-1 text-sm font-bold text-white">Identité de Marque</h4>
                     <p className="mt-1 font-serif text-2xl font-bold text-[#E8DCC4]">299 €</p>
                     <p className="mt-1.5 text-[11px] text-[#E8DCC4]/75">
-                      Logo, palette chromatique, typographies officielles et déclinaisons réseaux sociaux.
+                      Logo, palette chromatique, typographies officielles et déclinaisons réseaux
+                      sociaux.
                     </p>
                   </div>
 
                   <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-4">
-                    <span className="font-mono text-[8px] text-[#C5A059] uppercase">FORMULE 03</span>
+                    <span className="font-mono text-[8px] text-[#C5A059] uppercase">
+                      FORMULE 03
+                    </span>
                     <h4 className="mt-1 text-sm font-bold text-white">Charte Graphique Complète</h4>
                     <p className="mt-1 font-serif text-2xl font-bold text-[#E8DCC4]">399 €</p>
                     <p className="mt-1.5 text-[11px] text-[#E8DCC4]/75">
@@ -613,13 +674,17 @@ export function EditorialServicesShowcaseSection() {
 
               <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
                 <Link
-                  to="/services/branding"
+                  to="/services/$serviceId"
+                  params={{ serviceId: "branding" }}
                   className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-[#E8DCC4] hover:text-[#C5A059]"
                 >
                   <span>Explorer l&apos;offre Branding</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
-                <a href="#configurateur" className="font-mono text-xs text-[#C5A059] hover:underline">
+                <a
+                  href="#configurateur"
+                  className="font-mono text-xs text-[#C5A059] hover:underline"
+                >
                   Choisir une formule →
                 </a>
               </div>
@@ -641,8 +706,8 @@ export function EditorialServicesShowcaseSection() {
                   Positionnez votre entreprise durablement sur Google.
                 </h3>
                 <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-[#4A443C]">
-                  Audit sémantique, optimisation technique des pages, maillage interne et rédaction de contenus ciblés
-                  pour capter les recherches commerciales de votre secteur.
+                  Audit sémantique, optimisation technique des pages, maillage interne et rédaction
+                  de contenus ciblés pour capter les recherches commerciales de votre secteur.
                 </p>
 
                 {/* Les 2 formules officielles SEO */}
@@ -651,7 +716,9 @@ export function EditorialServicesShowcaseSection() {
                     <div className="flex items-baseline justify-between gap-2">
                       <div>
                         <h4 className="text-base font-bold text-[#0B0B0C]">SEO Essentiel</h4>
-                        <span className="font-mono text-[9px] font-semibold text-[#8B704F]">SANS ENGAGEMENT</span>
+                        <span className="font-mono text-[9px] font-semibold text-[#8B704F]">
+                          SANS ENGAGEMENT
+                        </span>
                       </div>
                       <div className="text-right">
                         <span className="font-serif text-2xl font-bold text-[#0B0B0C]">299 €</span>
@@ -659,7 +726,8 @@ export function EditorialServicesShowcaseSection() {
                       </div>
                     </div>
                     <p className="mt-2 text-xs text-[#4A443C]">
-                      Optimisation technique, suivi des mots-clés prioritaires, corrections on-page et rapport mensuel.
+                      Optimisation technique, suivi des mots-clés prioritaires, corrections on-page
+                      et rapport mensuel.
                     </p>
                   </div>
 
@@ -667,7 +735,9 @@ export function EditorialServicesShowcaseSection() {
                     <div className="flex items-baseline justify-between gap-2">
                       <div>
                         <h4 className="text-base font-bold text-[#0B0B0C]">SEO Croissance</h4>
-                        <span className="font-mono text-[9px] font-semibold text-[#8B704F]">ENGAGEMENT 3 MOIS</span>
+                        <span className="font-mono text-[9px] font-semibold text-[#8B704F]">
+                          ENGAGEMENT 3 MOIS
+                        </span>
                       </div>
                       <div className="text-right">
                         <span className="font-serif text-2xl font-bold text-[#0B0B0C]">499 €</span>
@@ -675,8 +745,8 @@ export function EditorialServicesShowcaseSection() {
                       </div>
                     </div>
                     <p className="mt-2 text-xs text-[#4A443C]">
-                      Stratégie de contenu étendue, création de pages d&apos;acquisition, autorité thématique et suivi
-                      de conversion.
+                      Stratégie de contenu étendue, création de pages d&apos;acquisition, autorité
+                      thématique et suivi de conversion.
                     </p>
                   </div>
                 </div>
@@ -684,7 +754,8 @@ export function EditorialServicesShowcaseSection() {
 
               <div className="mt-6 flex items-center justify-between border-t border-[#0B0B0C]/10 pt-4">
                 <Link
-                  to="/services/seo"
+                  to="/services/$serviceId"
+                  params={{ serviceId: "seo" }}
                   className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-[#0B0B0C] hover:text-[#8B704F]"
                 >
                   <span>Détails du référencement SEO</span>
@@ -722,10 +793,13 @@ export function EditorialServicesShowcaseSection() {
                         <span className="rounded bg-[#0B0B0C] px-1.5 py-0.5 font-mono text-[8px] font-bold text-[#C5A059]">
                           FICHE OPTIMISÉE
                         </span>
-                        <span className="text-xs font-bold text-[#0B0B0C]">Votre Établissement</span>
+                        <span className="text-xs font-bold text-[#0B0B0C]">
+                          Votre Établissement
+                        </span>
                       </div>
                       <p className="mt-1 text-[10.5px] text-[#4A443C]">
-                        Catégories structurées · Services détaillés · Photos HD · Zone d&apos;intervention
+                        Catégories structurées · Services détaillés · Photos HD · Zone
+                        d&apos;intervention
                       </p>
                     </div>
                     <div className="flex gap-1.5">
@@ -740,16 +814,26 @@ export function EditorialServicesShowcaseSection() {
 
                   <div className="grid grid-cols-3 gap-2 pt-2">
                     <div className="rounded-xl border border-[#0B0B0C]/10 bg-white p-3 text-center">
-                      <span className="font-mono text-[8px] text-[#8B704F] block">APPELS DIRECTS</span>
-                      <span className="mt-1 block text-xs font-bold text-[#0B0B0C]">Clic Mobile</span>
+                      <span className="font-mono text-[8px] text-[#8B704F] block">
+                        APPELS DIRECTS
+                      </span>
+                      <span className="mt-1 block text-xs font-bold text-[#0B0B0C]">
+                        Clic Mobile
+                      </span>
                     </div>
                     <div className="rounded-xl border border-[#0B0B0C]/10 bg-white p-3 text-center">
                       <span className="font-mono text-[8px] text-[#8B704F] block">ITINÉRAIRES</span>
-                      <span className="mt-1 block text-xs font-bold text-[#0B0B0C]">Trafic en point de vente</span>
+                      <span className="mt-1 block text-xs font-bold text-[#0B0B0C]">
+                        Trafic en point de vente
+                      </span>
                     </div>
                     <div className="rounded-xl border border-[#0B0B0C]/10 bg-white p-3 text-center">
-                      <span className="font-mono text-[8px] text-[#8B704F] block">AVIS CLIENTS</span>
-                      <span className="mt-1 block text-xs font-bold text-[#0B0B0C]">Réassurance locale</span>
+                      <span className="font-mono text-[8px] text-[#8B704F] block">
+                        AVIS CLIENTS
+                      </span>
+                      <span className="mt-1 block text-xs font-bold text-[#0B0B0C]">
+                        Réassurance locale
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -764,8 +848,8 @@ export function EditorialServicesShowcaseSection() {
                   Captez les clients qui cherchent vos services autour de vous.
                 </h3>
                 <p className="mt-2 text-sm text-[#4A443C]">
-                  Quatre niveaux d&apos;intervention clairs pour créer, optimiser ou propulser votre fiche Google
-                  Business Profile sur votre zone de chalandise.
+                  Quatre niveaux d&apos;intervention clairs pour créer, optimiser ou propulser votre
+                  fiche Google Business Profile sur votre zone de chalandise.
                 </p>
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -775,7 +859,8 @@ export function EditorialServicesShowcaseSection() {
                       <span className="font-serif text-xl font-bold text-[#0B0B0C]">99 €</span>
                     </div>
                     <p className="mt-1.5 text-xs text-[#4A443C]">
-                      Audit, paramétrage complet des catégories, horaires, attributs, description optimisée et médias.
+                      Audit, paramétrage complet des catégories, horaires, attributs, description
+                      optimisée et médias.
                     </p>
                   </div>
 
@@ -785,7 +870,8 @@ export function EditorialServicesShowcaseSection() {
                       <span className="font-serif text-xl font-bold text-[#0B0B0C]">169 €</span>
                     </div>
                     <p className="mt-1.5 text-xs text-[#4A443C]">
-                      Optimisation avancée du catalogue de services, publications Google Posts et cohérence locale.
+                      Optimisation avancée du catalogue de services, publications Google Posts et
+                      cohérence locale.
                     </p>
                   </div>
 
@@ -795,32 +881,38 @@ export function EditorialServicesShowcaseSection() {
                       <span className="font-serif text-xl font-bold text-[#0B0B0C]">299 €</span>
                     </div>
                     <p className="mt-1.5 text-xs text-[#4A443C]">
-                      Dispositif complet d&apos;optimisation multi-critères, citations locales et stratégie de collecte
-                      d&apos;avis.
+                      Dispositif complet d&apos;optimisation multi-critères, citations locales et
+                      stratégie de collecte d&apos;avis.
                     </p>
                   </div>
 
                   <div className="rounded-2xl border border-[#0B0B0C]/12 bg-[#101114] p-4 text-[#F8F6F0]">
                     <div className="flex items-baseline justify-between">
-                      <h4 className="text-sm font-bold text-[#E8DCC4]">Option SEO Local Conquête</h4>
+                      <h4 className="text-sm font-bold text-[#E8DCC4]">
+                        Option SEO Local Conquête
+                      </h4>
                       <span className="font-serif text-xl font-bold text-[#C5A059]">550 €</span>
                     </div>
                     <p className="mt-1.5 text-xs text-[#E8DCC4]/80">
-                      Travail ciblé sur <strong>jusqu&apos;à 10 mots-clés locaux</strong> pour renforcer durablement
-                      votre présence géographique.
+                      Travail ciblé sur <strong>jusqu&apos;à 10 mots-clés locaux</strong> pour
+                      renforcer durablement votre présence géographique.
                     </p>
                   </div>
                 </div>
 
                 <div className="mt-6 flex items-center justify-between">
                   <Link
-                    to="/services/maps"
+                    to="/services/$serviceId"
+                    params={{ serviceId: "maps" }}
                     className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-[#0B0B0C] hover:text-[#8B704F]"
                   >
                     <span>Voir la page Google Maps dédiée</span>
                     <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
-                  <a href="#configurateur" className="font-mono text-xs font-bold text-[#8B704F] hover:underline">
+                  <a
+                    href="#configurateur"
+                    className="font-mono text-xs font-bold text-[#8B704F] hover:underline"
+                  >
                     Sélectionner dans le devis →
                   </a>
                 </div>
@@ -844,7 +936,8 @@ export function EditorialServicesShowcaseSection() {
                 </h3>
               </div>
               <Link
-                to="/services/social"
+                to="/services/$serviceId"
+                params={{ serviceId: "social" }}
                 className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-[#8B704F] hover:text-[#0B0B0C]"
               >
                 <span>Découvrir la page Social Media</span>
@@ -867,14 +960,16 @@ export function EditorialServicesShowcaseSection() {
                     ENGAGEMENT 3 MOIS
                   </span>
                 </div>
-                <h4 className="mt-2 font-serif text-2xl font-bold text-[#0B0B0C]">Pack Essentiel</h4>
+                <h4 className="mt-2 font-serif text-2xl font-bold text-[#0B0B0C]">
+                  Pack Essentiel
+                </h4>
                 <div className="mt-3 flex items-baseline gap-1">
                   <span className="font-serif text-3xl font-bold text-[#0B0B0C]">349 €</span>
                   <span className="font-mono text-xs text-[#5A534A]">/ mois</span>
                 </div>
                 <p className="mt-3 text-xs leading-relaxed text-[#4A443C]">
-                  Présence régulière et professionnelle : planning éditorial, création graphique sur mesure, rédaction
-                  des publications et programmation mensuelle.
+                  Présence régulière et professionnelle : planning éditorial, création graphique sur
+                  mesure, rédaction des publications et programmation mensuelle.
                 </p>
               </div>
 
@@ -891,14 +986,14 @@ export function EditorialServicesShowcaseSection() {
                     Le plus choisi
                   </span>
                 </div>
-                <h4 className="mt-2 font-serif text-2xl font-bold text-white">Pack Croissance</h4>
+                <h4 className="mt-2 font-serif text-2xl font-bold text-white">Croissance Active</h4>
                 <div className="mt-3 flex items-baseline gap-1">
-                  <span className="font-serif text-3xl font-bold text-[#C5A059]">499 €</span>
+                  <span className="font-serif text-3xl font-bold text-[#C5A059]">599 €</span>
                   <span className="font-mono text-xs text-[#E8DCC4]/75">/ mois</span>
                 </div>
                 <p className="mt-3 text-xs leading-relaxed text-[#E8DCC4]/85">
-                  Cadence soutenue multi-formats (carrousels, stories, vidéos courtes Reels/TikTok), direction
-                  artistique dédiée et reporting d&apos;audience mensuel.
+                  Cadence soutenue multi-formats (carrousels, stories, vidéos courtes Reels/TikTok),
+                  direction artistique dédiée et reporting d&apos;audience mensuel.
                 </p>
               </div>
 
@@ -916,14 +1011,16 @@ export function EditorialServicesShowcaseSection() {
                     ENGAGEMENT 6 MOIS
                   </span>
                 </div>
-                <h4 className="mt-2 font-serif text-2xl font-bold text-[#0B0B0C]">Pack Autorité</h4>
+                <h4 className="mt-2 font-serif text-2xl font-bold text-[#0B0B0C]">
+                  Domination Sociale
+                </h4>
                 <div className="mt-3 flex items-baseline gap-1">
                   <span className="font-serif text-3xl font-bold text-[#0B0B0C]">799 €</span>
                   <span className="font-mono text-xs text-[#5A534A]">/ mois</span>
                 </div>
                 <p className="mt-3 text-xs leading-relaxed text-[#4A443C]">
-                  Accompagnement intensif pour les marques ambitieuses : production éditoriale haute fréquence, vidéos
-                  verticales premium, animation et pilotage stratégique.
+                  Accompagnement intensif pour les marques ambitieuses : production éditoriale haute
+                  fréquence, vidéos verticales premium, animation et pilotage stratégique.
                 </p>
               </div>
             </div>
@@ -950,17 +1047,23 @@ export function EditorialServicesShowcaseSection() {
 
                 <div className="mt-6 grid grid-cols-3 gap-3">
                   <div className="rounded-2xl border border-[#0B0B0C]/12 bg-[#FDFBF7] p-4 text-center">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#0B0B0C]">Essentiel</h4>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#0B0B0C]">
+                      Essentiel
+                    </h4>
                     <p className="mt-2 font-serif text-2xl font-bold text-[#0B0B0C]">29 €</p>
                     <span className="font-mono text-[9px] text-[#5A534A]">/ mois</span>
                   </div>
                   <div className="rounded-2xl border-2 border-[#8B704F] bg-[#FDFBF7] p-4 text-center">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#8B704F]">Pro</h4>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#8B704F]">
+                      Pro
+                    </h4>
                     <p className="mt-2 font-serif text-2xl font-bold text-[#0B0B0C]">49 €</p>
                     <span className="font-mono text-[9px] text-[#5A534A]">/ mois</span>
                   </div>
                   <div className="rounded-2xl border border-[#0B0B0C]/12 bg-[#FDFBF7] p-4 text-center">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#0B0B0C]">Business</h4>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#0B0B0C]">
+                      Business
+                    </h4>
                     <p className="mt-2 font-serif text-2xl font-bold text-[#0B0B0C]">99 €</p>
                     <span className="font-mono text-[9px] text-[#5A534A]">/ mois</span>
                   </div>
@@ -976,7 +1079,8 @@ export function EditorialServicesShowcaseSection() {
 
               <div className="mt-6 flex items-center justify-between border-t border-[#0B0B0C]/10 pt-4">
                 <Link
-                  to="/services/webcare"
+                  to="/services/$serviceId"
+                  params={{ serviceId: "webcare" }}
                   className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-[#0B0B0C] hover:text-[#8B704F]"
                 >
                   <span>Comparer les plans WebCare</span>
@@ -1006,11 +1110,13 @@ export function EditorialServicesShowcaseSection() {
                       <h4 className="text-sm font-bold text-[#E8DCC4]">
                         Système de caisse et gestion restaurant (Installation complète)
                       </h4>
-                      <span className="font-serif text-2xl font-bold text-[#C5A059] shrink-0">2 000 €</span>
+                      <span className="font-serif text-2xl font-bold text-[#C5A059] shrink-0">
+                        2 000 €
+                      </span>
                     </div>
                     <p className="mt-1 text-xs text-[#E8DCC4]/75">
-                      Prise de commande, synchronisation salle/cuisine, click &amp; collect, gestion des tables et suivi
-                      du chiffre d&apos;affaires.
+                      Prise de commande, synchronisation salle/cuisine, click &amp; collect, gestion
+                      des tables et suivi du chiffre d&apos;affaires.
                     </p>
                   </div>
 
@@ -1022,11 +1128,15 @@ export function EditorialServicesShowcaseSection() {
                         <span className="font-bold text-white">Dès 499 € / mois</span>
                       </div>
                       <div className="rounded-xl bg-[#0B0B0C] p-2.5 border border-white/10">
-                        <span className="font-mono text-[8px] text-[#C5A059] block">ACHAT (SELON MODÈLE)</span>
+                        <span className="font-mono text-[8px] text-[#C5A059] block">
+                          ACHAT (SELON MODÈLE)
+                        </span>
                         <span className="font-bold text-white">8 000 € à 21 000 € HT</span>
                       </div>
                       <div className="rounded-xl bg-[#0B0B0C] p-2.5 border border-white/10">
-                        <span className="font-mono text-[8px] text-[#C5A059] block">DÉMO CONDITIONS RÉELLES</span>
+                        <span className="font-mono text-[8px] text-[#C5A059] block">
+                          DÉMO CONDITIONS RÉELLES
+                        </span>
                         <span className="font-bold text-white">250 € (déduits si commande)</span>
                       </div>
                     </div>
@@ -1036,7 +1146,8 @@ export function EditorialServicesShowcaseSection() {
 
               <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
                 <Link
-                  to="/services/robotique"
+                  to="/services/$serviceId"
+                  params={{ serviceId: "robotique" }}
                   className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-[#E8DCC4] hover:text-[#C5A059]"
                 >
                   <span>Découvrir nos solutions POS &amp; Robotique</span>

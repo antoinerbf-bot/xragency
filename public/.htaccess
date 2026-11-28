@@ -16,6 +16,15 @@
 
   # 3. Redirection 301 permanente : /work -> /realisations (évite le contenu dupliqué)
   RewriteRule ^work/?$ /realisations [R=301,L]
+
+  # 4. Ne pas intercepter les requêtes destinées aux maquettes clients (/previews/)
+  RewriteCond %{REQUEST_URI} ^/previews/ [NC]
+  RewriteRule ^ - [L]
+
+  # 5. Routage SPA (React / TanStack Router) pour /crm et toutes les sous-pages
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.html [L]
 </IfModule>
 
 # ==============================================================================

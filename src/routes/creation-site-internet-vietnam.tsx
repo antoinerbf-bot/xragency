@@ -1,5 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, ChevronDown, Compass, Globe, MapPin, MessageCircle, ShieldCheck, Sparkles, Star, TrendingUp, Zap } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  ChevronDown,
+  Compass,
+  Globe,
+  MapPin,
+  MessageCircle,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  TrendingUp,
+  Zap,
+} from "lucide-react";
 import { useState } from "react";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
@@ -13,13 +26,13 @@ export const Route = createFileRoute("/creation-site-internet-vietnam")({
       {
         name: "description",
         content:
-          "Expert en création de site internet au Vietnam : Da Nang, Ho Chi Minh, Hanoi. Studio digital français, standards luxe, SEO Google Top 3 et support réactif. Devis gratuit.",
+          "Expert en création de site internet au Vietnam : Da Nang, Ho Chi Minh, Hanoi. Studio digital international, création web, SEO naturel et accompagnement au Vietnam. Devis personnalisé.",
       },
       { property: "og:title", content: "Création de Site Internet au Vietnam — XR Agency" },
       {
         property: "og:description",
         content:
-          "Le partenaire digital de référence au Vietnam : Da Nang, Saïgon, Hanoï. Standards européens, vitesse instantanée et acquisition Google.",
+          "Création de sites web et accompagnement digital à Da Nang, Hô Chi Minh-Ville et Hanoï.",
       },
       { property: "og:url", content: "https://xragencyai.com/creation-site-internet-vietnam" },
       { property: "og:type", content: "website" },
@@ -29,7 +42,7 @@ export const Route = createFileRoute("/creation-site-internet-vietnam")({
       {
         name: "twitter:description",
         content:
-          "Expert en création de site internet au Vietnam : Da Nang, Ho Chi Minh, Hanoi. Studio digital français, standards luxe, SEO Google Top 3 et support réactif.",
+          "Expert en création de site internet au Vietnam : Da Nang, Ho Chi Minh, Hanoi. Studio digital international, création web, SEO naturel et accompagnement au Vietnam.",
       },
       {
         name: "keywords",
@@ -38,9 +51,7 @@ export const Route = createFileRoute("/creation-site-internet-vietnam")({
       },
       { name: "geo.placename", content: "Vietnam" },
       { name: "geo.region", content: "VN" },
-      { name: "geo.position", content: "16.0544;108.2022" },
-      { name: "ICBM", content: "16.0544, 108.2022" },
-    ],
+          ],
     links: [{ rel: "canonical", href: "https://xragencyai.com/creation-site-internet-vietnam" }],
   }),
   component: VietnamLandingPage,
@@ -52,8 +63,7 @@ function VietnamLandingPage() {
   const vietnamSchema = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    name: "XR Agency Vietnam",
-    alternateName: "KARMA SASU",
+    name: "XR Agency",
     url: "https://xragencyai.com/creation-site-internet-vietnam",
     logo: "https://xragencyai.com/logo-xr-agency.svg",
     image: "https://xragencyai.com/og-image.svg",
@@ -61,51 +71,30 @@ function VietnamLandingPage() {
       "Expert en création de site internet au Vietnam : Da Nang, Ho Chi Minh, Hanoi. Direction artistique française, ingénierie React 19, SEO Google et multilingue.",
     telephone: "+33 7 67 56 67 83",
     email: "contact.xragency@gmail.com",
-    priceRange: "€€€",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "Bureau Asie — Da Nang & Ho Chi Minh",
-      addressLocality: "Đà Nẵng",
-      postalCode: "550000",
-      addressCountry: "VN",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 16.0544,
-      longitude: 108.2022,
-    },
     areaServed: [
       { "@type": "City", name: "Đà Nẵng" },
       { "@type": "City", name: "Thành phố Hồ Chí Minh" },
       { "@type": "City", name: "Hà Nội" },
       { "@type": "Country", name: "Vietnam" },
     ],
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        opens: "08:00",
-        closes: "20:00",
-      },
-    ],
   };
 
   const faqList = [
     {
       q: "Pourquoi faire appel à XR Agency pour créer un site internet au Vietnam ?",
-      a: "XR Agency combine l'excellence créative d'un studio parisien (direction artistique soignée, typographies de prestige, animations 3D fluides) et la proximité opérationnelle d'une présence active au Vietnam (Da Nang, Ho Chi Minh, Hanoi). Vous bénéficiez d'une communication 100% en français et sur votre fuseau horaire.",
+      a: "XR Agency accompagne les entreprises qui souhaitent développer leur présence numérique au Vietnam. Le cadrage du projet, les langues de travail et les modalités de suivi sont définis avec vous avant le démarrage.",
     },
     {
       q: "Mes clients sont à la fois locaux et internationaux : comment gérez-vous le multilingue ?",
-      a: "Nos architectures gèrent nativement le trilingue Français / Anglais / Vietnamien. Chaque version dispose de sa propre structure d'URLs, de ses balises de ciblage hreflang et d'un contenu adapté culturellement pour maximiser le référencement sur Google.com et Google.com.vn.",
+      a: "Nous définissons l’architecture linguistique selon vos marchés cibles. Les versions linguistiques, les URL et les balises hreflang sont cadrées pendant la conception afin de préserver la cohérence éditoriale et le référencement.",
     },
     {
       q: "Quels sont les délais pour lancer un site web professionnel au Vietnam ?",
-      a: "Nos sites vitrines de prestige sont livrables en 7 jours ouvrés. Pour les boutiques e-commerce ou plateformes complexes avec réservation, comptez 2 à 4 semaines de production avec suivi continu par WhatsApp.",
+      a: "Le délai dépend du périmètre, des contenus disponibles, des intégrations et du nombre de langues. Un calendrier réaliste est établi après validation du cahier des charges.",
     },
     {
       q: "Pouvez-vous intégrer les méthodes de paiement locales vietnamiennes ?",
-      a: "Oui, nous intégrons aussi bien les solutions internationales (Stripe, PayPal, cartes bancaires) que les passerelles locales les plus populaires au Vietnam (VNPAY, MoMo, ZaloPay, QR code bancaire Napas).",
+      a: "Les solutions de paiement sont étudiées selon votre statut, votre banque, votre marché et les contraintes du prestataire. La faisabilité et les éventuels frais d’intégration sont confirmés avant tout engagement.",
     },
   ];
 
@@ -123,23 +112,36 @@ function VietnamLandingPage() {
   };
 
   const waLink = `${CONTACT.whatsapp}?text=${encodeURIComponent(
-    "Bonjour XR Agency, je souhaite échanger sur un projet de création de site web / SEO au Vietnam (Da Nang, Ho Chi Minh, Hanoi)."
+    "Bonjour XR Agency, je souhaite échanger sur un projet de création de site web / SEO au Vietnam (Da Nang, Ho Chi Minh, Hanoi).",
   )}`;
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#030406] text-white selection:bg-[#d4af37] selection:text-black">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(vietnamSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(vietnamSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
       <Nav />
 
       <main className="relative z-10 pt-28 sm:pt-36">
         {/* ── 1. MONUMENTAL HERO ── */}
         <section className="relative px-5 sm:px-8 lg:px-14 max-w-[1440px] mx-auto pb-16 sm:pb-24">
-          <nav aria-label="Fil d'Ariane" className="flex items-center gap-2 text-xs text-white/50 mb-8 font-mono">
-            <Link to="/" className="hover:text-white transition">Accueil</Link>
+          <nav
+            aria-label="Fil d'Ariane"
+            className="flex items-center gap-2 text-xs text-white/50 mb-8 font-mono"
+          >
+            <Link to="/" className="hover:text-white transition">
+              Accueil
+            </Link>
             <span>/</span>
-            <Link to="/services" className="hover:text-white transition">Agences</Link>
+            <Link to="/services" className="hover:text-white transition">
+              Agences
+            </Link>
             <span>/</span>
             <span className="text-[#d4af37]">Vietnam</span>
           </nav>
@@ -161,7 +163,9 @@ function VietnamLandingPage() {
               </h1>
 
               <p className="mt-6 text-base sm:text-xl text-[#94a3b8] leading-relaxed max-w-2xl font-light">
-                Le studio digital français de référence au Vietnam. Nous créons des sites vitrines d'exception, des plateformes e-commerce à forte conversion et des stratégies SEO pour conquérir Google à Da Nang, Saïgon, Hanoï et à l'international.
+                Le studio digital français de référence au Vietnam. Nous créons des sites vitrines
+                d'exception, des plateformes e-commerce à forte conversion et des stratégies SEO
+                pour conquérir Google à Da Nang, Saïgon, Hanoï et à l'international.
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -177,7 +181,8 @@ function VietnamLandingPage() {
                 </a>
 
                 <Link
-                  to="/services/websites"
+                  to="/services/$serviceId"
+                  params={{ serviceId: "websites" }}
                   className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-4 font-mono text-xs font-bold uppercase tracking-wider text-white transition hover:bg-white/10"
                 >
                   <span>Nos Formules Dès 7j</span>
@@ -205,8 +210,12 @@ function VietnamLandingPage() {
               <div className="absolute top-0 right-0 h-48 w-48 bg-[#d4af37]/15 rounded-full blur-3xl pointer-events-none" />
               <div className="flex items-center justify-between pb-6 border-b border-white/10">
                 <div>
-                  <p className="font-mono text-[9px] uppercase tracking-widest text-[#d4af37]">HUB VIETNAM</p>
-                  <h3 className="text-2xl font-bold uppercase tracking-tight text-white mt-1">XR Agency · Asie</h3>
+                  <p className="font-mono text-[9px] uppercase tracking-widest text-[#d4af37]">
+                    HUB VIETNAM
+                  </p>
+                  <h3 className="text-2xl font-bold uppercase tracking-tight text-white mt-1">
+                    XR Agency · Asie
+                  </h3>
                 </div>
                 <Compass className="h-6 w-6 text-[#d4af37]" />
               </div>
@@ -231,10 +240,22 @@ function VietnamLandingPage() {
               </div>
 
               <div className="mt-8 pt-6 border-t border-white/10">
-                <p className="font-mono text-[9px] uppercase tracking-wider text-white/50 mb-3">Clientèles Accompagnées au Vietnam:</p>
+                <p className="font-mono text-[9px] uppercase tracking-wider text-white/50 mb-3">
+                  Clientèles Accompagnées au Vietnam:
+                </p>
                 <div className="flex flex-wrap gap-2">
-                  {["Resorts & Hôtels", "Entrepreneurs Expats", "Import-Export", "Restaurants & Bars", "Agences de Voyage", "Tech & SaaS"].map((s) => (
-                    <span key={s} className="rounded-full border border-white/12 bg-white/5 px-3 py-1 font-mono text-[10px] text-white/80">
+                  {[
+                    "Resorts & Hôtels",
+                    "Entrepreneurs Expats",
+                    "Import-Export",
+                    "Restaurants & Bars",
+                    "Agences de Voyage",
+                    "Tech & SaaS",
+                  ].map((s) => (
+                    <span
+                      key={s}
+                      className="rounded-full border border-white/12 bg-white/5 px-3 py-1 font-mono text-[10px] text-white/80"
+                    >
                       {s}
                     </span>
                   ))}
@@ -254,37 +275,52 @@ function VietnamLandingPage() {
               L'Élégance Française, la Vitesse et la Réactivité au Vietnam
             </h2>
             <p className="mt-6 text-base sm:text-lg text-[#94a3b8] leading-relaxed">
-              Créer un site internet au Vietnam ne doit pas signifier faire des compromis sur le design ou la fiabilité. Nous vous offrons le niveau d'exigence d'une grande agence parisienne, combiné à la réactivité d'une équipe active sur le fuseau horaire asiatique.
+              Créer un site internet au Vietnam ne doit pas signifier faire des compromis sur le
+              design ou la fiabilité. Nous vous offrons le niveau d'exigence d'une grande agence
+              parisienne, combiné à la réactivité d'une équipe active sur le fuseau horaire
+              asiatique.
             </p>
           </div>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-2xl border border-white/10 bg-[#090b10] p-6 hover:border-[#d4af37]/40 transition">
               <span className="font-mono text-xs font-bold text-[#d4af37]">01.</span>
-              <h3 className="mt-3 text-lg font-bold uppercase text-white">Direction Artistique Haute Couture</h3>
+              <h3 className="mt-3 text-lg font-bold uppercase text-white">
+                Direction Artistique Haute Couture
+              </h3>
               <p className="mt-3 text-xs sm:text-sm text-[#94a3b8] leading-relaxed">
-                Des maquettes sur mesure inspirées des plus grandes marques internationales. Zéro template préfabriqué.
+                Des maquettes sur mesure inspirées des plus grandes marques internationales. Zéro
+                template préfabriqué.
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-[#090b10] p-6 hover:border-[#d4af37]/40 transition">
               <span className="font-mono text-xs font-bold text-[#d4af37]">02.</span>
-              <h3 className="mt-3 text-lg font-bold uppercase text-white">SEO Google Vietnam & Monde</h3>
+              <h3 className="mt-3 text-lg font-bold uppercase text-white">
+                SEO Google Vietnam & Monde
+              </h3>
               <p className="mt-3 text-xs sm:text-sm text-[#94a3b8] leading-relaxed">
-                Positionnement durable en première page sur Google.com.vn et Google.com pour capter des clients réguliers.
+                Positionnement durable en première page sur Google.com.vn et Google.com pour capter
+                des clients réguliers.
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-[#090b10] p-6 hover:border-[#d4af37]/40 transition">
               <span className="font-mono text-xs font-bold text-[#d4af37]">03.</span>
-              <h3 className="mt-3 text-lg font-bold uppercase text-white">Paiements & Réservations Directs</h3>
+              <h3 className="mt-3 text-lg font-bold uppercase text-white">
+                Paiements & Réservations Directs
+              </h3>
               <p className="mt-3 text-xs sm:text-sm text-[#94a3b8] leading-relaxed">
-                Intégration Stripe, PayPal et passerelles vietnamiennes (VNPAY, MoMo) avec encaissement direct sans intermédiaire.
+                Intégration de solutions de paiement compatibles avec votre activité, après
+                encaissement direct sans intermédiaire.
               </p>
             </div>
             <div className="rounded-2xl border border-white/10 bg-[#090b10] p-6 hover:border-[#d4af37]/40 transition">
               <span className="font-mono text-xs font-bold text-[#d4af37]">04.</span>
-              <h3 className="mt-3 text-lg font-bold uppercase text-white">Livraison Clé en Main 7 Jours</h3>
+              <h3 className="mt-3 text-lg font-bold uppercase text-white">
+                Planning défini après cadrage
+              </h3>
               <p className="mt-3 text-xs sm:text-sm text-[#94a3b8] leading-relaxed">
-                Déploiement rapide de votre site avec formation complète et contrat d'assistance WebCare en continu.
+                Déploiement rapide de votre site avec formation complète et contrat d'assistance
+                WebCare en continu.
               </p>
             </div>
           </div>
@@ -308,14 +344,21 @@ function VietnamLandingPage() {
             {/* Da Nang */}
             <div className="rounded-3xl border border-white/10 bg-[#090b10] p-8 flex flex-col justify-between hover:border-[#d4af37] transition">
               <div>
-                <span className="font-mono text-[10px] text-[#d4af37] font-bold uppercase">CENTRE VIETNAM</span>
+                <span className="font-mono text-[10px] text-[#d4af37] font-bold uppercase">
+                  CENTRE VIETNAM
+                </span>
                 <h3 className="text-2xl font-bold uppercase text-white mt-2">Da Nang & Hoi An</h3>
                 <p className="text-xs sm:text-sm text-[#94a3b8] mt-3 leading-relaxed">
-                  Pôle touristique et tech hub en plein essor. Idéal pour resorts, hôtels de charme, restaurants, agences de voyage et nomades digitaux.
+                  Pôle touristique et tech hub en plein essor. Idéal pour resorts, hôtels de charme,
+                  restaurants, agences de voyage et nomades digitaux.
                 </p>
               </div>
               <div className="mt-8 pt-6 border-t border-white/10">
-                <Link to="/agence-web/$city" params={{ city: "danang" }} className="inline-flex items-center gap-1 font-mono text-xs font-bold text-[#d4af37] hover:underline">
+                <Link
+                  to="/agence-web/$city"
+                  params={{ city: "danang" }}
+                  className="inline-flex items-center gap-1 font-mono text-xs font-bold text-[#d4af37] hover:underline"
+                >
                   <span>Agence Web Da Nang</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
@@ -325,14 +368,23 @@ function VietnamLandingPage() {
             {/* Ho Chi Minh */}
             <div className="rounded-3xl border border-white/10 bg-[#090b10] p-8 flex flex-col justify-between hover:border-[#d4af37] transition">
               <div>
-                <span className="font-mono text-[10px] text-[#d4af37] font-bold uppercase">SUD VIETNAM</span>
-                <h3 className="text-2xl font-bold uppercase text-white mt-2">Ho Chi Minh (Saïgon)</h3>
+                <span className="font-mono text-[10px] text-[#d4af37] font-bold uppercase">
+                  SUD VIETNAM
+                </span>
+                <h3 className="text-2xl font-bold uppercase text-white mt-2">
+                  Ho Chi Minh (Saïgon)
+                </h3>
                 <p className="text-xs sm:text-sm text-[#94a3b8] mt-3 leading-relaxed">
-                  Poumon économique du pays : District 1, Thảo Điền, District 7. Conçu pour le e-commerce, les cabinets B2B, l'industrie et les marques de prestige.
+                  Poumon économique du pays : District 1, Thảo Điền, District 7. Conçu pour le
+                  e-commerce, les cabinets B2B, l'industrie et les marques de prestige.
                 </p>
               </div>
               <div className="mt-8 pt-6 border-t border-white/10">
-                <Link to="/agence-web/$city" params={{ city: "ho-chi-minh" }} className="inline-flex items-center gap-1 font-mono text-xs font-bold text-[#d4af37] hover:underline">
+                <Link
+                  to="/agence-web/$city"
+                  params={{ city: "ho-chi-minh" }}
+                  className="inline-flex items-center gap-1 font-mono text-xs font-bold text-[#d4af37] hover:underline"
+                >
                   <span>Agence Web Ho Chi Minh</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
@@ -342,14 +394,21 @@ function VietnamLandingPage() {
             {/* France & Europe */}
             <div className="rounded-3xl border border-white/10 bg-[#090b10] p-8 flex flex-col justify-between hover:border-[#d4af37] transition">
               <div>
-                <span className="font-mono text-[10px] text-[#d4af37] font-bold uppercase">SIÈGE EUROPÉEN</span>
+                <span className="font-mono text-[10px] text-[#d4af37] font-bold uppercase">
+                  SIÈGE EUROPÉEN
+                </span>
                 <h3 className="text-2xl font-bold uppercase text-white mt-2">Paris & France</h3>
                 <p className="text-xs sm:text-sm text-[#94a3b8] mt-3 leading-relaxed">
-                  Siège social sur les Champs-Élysées à Paris. La garantie juridique, technique et contractuelle d'une société française (KARMA SASU).
+                  Accompagnement de projets en France et en Europe. Les informations juridiques et
+                  contractuelles sont communiquées dans les documents de chaque projet.
                 </p>
               </div>
               <div className="mt-8 pt-6 border-t border-white/10">
-                <Link to="/agence-web/$city" params={{ city: "paris" }} className="inline-flex items-center gap-1 font-mono text-xs font-bold text-[#d4af37] hover:underline">
+                <Link
+                  to="/agence-web/$city"
+                  params={{ city: "paris" }}
+                  className="inline-flex items-center gap-1 font-mono text-xs font-bold text-[#d4af37] hover:underline"
+                >
                   <span>Agence Web Paris</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
@@ -383,7 +442,9 @@ function VietnamLandingPage() {
                     className="w-full flex items-center justify-between p-6 text-left hover:bg-white/[0.02] transition"
                   >
                     <span className="text-sm sm:text-base font-bold text-white pr-4">{faq.q}</span>
-                    <ChevronDown className={`h-5 w-5 text-[#d4af37] shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+                    <ChevronDown
+                      className={`h-5 w-5 text-[#d4af37] shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                    />
                   </button>
                   {isOpen && (
                     <div className="px-6 pb-6 text-xs sm:text-sm text-[#94a3b8] leading-relaxed border-t border-white/5 pt-4">
@@ -404,7 +465,8 @@ function VietnamLandingPage() {
               Lancez Votre Site Internet au Vietnam Dès Cette Semaine
             </h2>
             <p className="mt-4 text-sm sm:text-base text-[#94a3b8] max-w-xl mx-auto">
-              Échangez directement avec notre direction en français via WhatsApp pour un devis et une analyse gratuite de votre projet.
+              Échangez directement avec notre direction en français via WhatsApp pour un devis et
+              une première analyse de votre projet.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <a

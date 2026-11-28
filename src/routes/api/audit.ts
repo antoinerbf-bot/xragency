@@ -72,7 +72,12 @@ export const Route = createFileRoute("/api/audit")({
           const alt = (html.match(/<img[^>]+alt=["'][^"']*["']/gi) || []).length;
           const types = [...new Set((body.types?.length ? body.types : [body.type || "design"]).filter((x): x is string => ["design","seo","security","conversion","technical"].includes(x)))];
           if (!types.length) return Response.json({ error: "Sélectionnez au moins un axe d'audit." }, { status: 400 });
-          const typeScores = types.map(type => scoreAudit(html, response.headers, type));
+          const allPillars = ["design", "seo", "security", "conversion", "technical"] as const;
+          const pillarScores: Record<string, number> = {};
+          for (const p of allPillars) {
+            pillarScores[p] = scoreAudit(html, response.headers, p);
+          }
+          const typeScores = types.map(type => pillarScores[type] ?? scoreAudit(html, response.headers, type));
           const score = Math.round(typeScores.reduce((sum, value) => sum + value, 0) / typeScores.length);
           const recommendations = types.map(type => TYPE_META[type]).filter(Boolean);
           const sector = body.sector || "autre";
@@ -105,7 +110,7 @@ export const Route = createFileRoute("/api/audit")({
                 ];
             return checks.map(item => ({ ...item, label: (TYPE_META[type]?.service || type) + " · " + item.label }));
           });
-          return Response.json({ ok: true, url: target.toString(), types, score, title, description, findings, recommendations, status: response.status });
+          return Response.json({ ok: true, url: target.toString(), types, score, pillarScores, title, description, findings, recommendations, status: response.status });
         } catch (error) {
           return Response.json({ error: error instanceof Error ? error.message : "Impossible d'analyser cette URL." }, { status: 502 });
         }

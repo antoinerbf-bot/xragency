@@ -34,9 +34,10 @@ const TABS: ToolTab[] = [
   {
     id: "maps",
     num: "02",
-    title: "Radar & Domination Google Maps #1",
-    subtitle: "Positionnez votre établissement dans le Top 3 local et captez les appels entrants.",
-    badge: "PACK LOCAL 3-PACK",
+    title: "Diagnostic de visibilité locale",
+    subtitle:
+      "Analysez votre présence locale et identifiez les pistes d’amélioration de votre fiche.",
+    badge: "VISIBILITÉ LOCALE",
   },
   {
     id: "ai",
@@ -74,7 +75,7 @@ export function NexProInteractiveTools() {
         aria-hidden="true"
         className="pointer-events-none absolute -top-40 left-1/3 h-[600px] w-[600px] rounded-full opacity-15 blur-[140px]"
         style={{
-          background: "radial-gradient(circle, #2e5fff 0%, #c5a880 50%, transparent 75%)",
+          background: "radial-gradient(circle, rgba(197,168,128,.16) 0%, transparent 75%)",
         }}
       />
 
@@ -84,7 +85,8 @@ export function NexProInteractiveTools() {
           <div className="sec-head-line">
             <div className="sec-head-dash" />
             <span className="mono-nex text-white/70">
-              <b className="text-[#c5a880] font-bold">02.B</b> / DÉMOS ET OUTILS INTERACTIFS EN DIRECT
+              <b className="text-[#c5a880] font-bold">02.B</b> / DÉMOS ET OUTILS INTERACTIFS EN
+              DIRECT
             </span>
           </div>
 
@@ -96,7 +98,8 @@ export function NexProInteractiveTools() {
           </h2>
 
           <p className="mt-3 text-sm sm:text-base text-neutral-400 max-w-2xl leading-relaxed">
-            Cliquez sur un outil pour observer comment nous transformons votre visibilité en chiffre d'affaires prévisible.
+            Cliquez sur un outil pour observer comment nous transformons votre visibilité en chiffre
+            d'affaires prévisible.
           </p>
         </div>
 
@@ -151,7 +154,6 @@ export function NexProInteractiveTools() {
           {/* Colonne Droite : L'Écran Dynamique Interactif */}
           <div className="lg:col-span-7">
             <div className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-gradient-to-b from-[#0f1422] to-[#080b12] p-6 sm:p-8 shadow-[0_30px_90px_-30px_rgba(0,0,0,0.9)] backdrop-blur-2xl min-h-[440px] flex flex-col justify-between">
-              
               {/* Barre Supérieure du Terminal */}
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div className="flex items-center gap-2">
@@ -182,20 +184,23 @@ export function NexProInteractiveTools() {
                     </div>
 
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                      {["Hôtellerie & Luxe", "Restaurant Gastronomique", "Immobilier & Patrimoine", "Artisanat Bâtiment"].map(
-                        (sec, i) => (
-                          <div
-                            key={i}
-                            className={`rounded-2xl border p-3.5 text-xs font-semibold text-center transition ${
-                              i === 0
-                                ? "border-[#c5a880] bg-[#c5a880]/15 text-[#e5cba4]"
-                                : "border-white/10 bg-white/5 text-neutral-400"
-                            }`}
-                          >
-                            {sec}
-                          </div>
-                        )
-                      )}
+                      {[
+                        "Hôtellerie & Luxe",
+                        "Restaurant Gastronomique",
+                        "Immobilier & Patrimoine",
+                        "Artisanat Bâtiment",
+                      ].map((sec, i) => (
+                        <div
+                          key={i}
+                          className={`rounded-2xl border p-3.5 text-xs font-semibold text-center transition ${
+                            i === 0
+                              ? "border-[#c5a880] bg-[#c5a880]/15 text-[#e5cba4]"
+                              : "border-white/10 bg-white/5 text-neutral-400"
+                          }`}
+                        >
+                          {sec}
+                        </div>
+                      ))}
                     </div>
 
                     <div className="rounded-2xl border border-white/10 bg-black/40 p-4 flex items-center justify-between gap-4">
@@ -204,27 +209,30 @@ export function NexProInteractiveTools() {
                           <CheckCircle2 className="h-5 w-5" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-white">Maquette interactive sur smartphone & PC</p>
-                          <p className="text-[11px] text-neutral-400">Recevez un lien privé pour tester votre futur site</p>
+                          <p className="text-xs font-bold text-white">
+                            Maquette interactive sur smartphone & PC
+                          </p>
+                          <p className="text-[11px] text-neutral-400">
+                            Recevez un lien privé pour tester votre futur site
+                          </p>
                         </div>
                       </div>
-                      <a
-                        href="#quote"
-                        className="btn-nex text-xs shrink-0"
-                      >
+                      <a href="#quote" className="btn-nex text-xs shrink-0">
                         Commander ma maquette
                       </a>
                     </div>
                   </div>
                 )}
 
-                {/* SCÈNE 2 : RADAR GOOGLE MAPS #1 */}
+                {/* SCÈNE 2 : DIAGNOSTIC DE VISIBILITÉ LOCALE */}
                 {activeTab === 1 && (
                   <div className="space-y-4 animate-fadeIn">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <MapPin className="h-4 w-4 text-[#ea4335]" />
-                        <span className="font-mono text-xs text-white">Requête : « Restaurant gastronomique Cannes »</span>
+                        <span className="font-mono text-xs text-white">
+                          Requête : « Restaurant gastronomique Cannes »
+                        </span>
                       </div>
                       <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 font-mono text-[10px] font-bold text-emerald-400">
                         TOP 1 DÉTECTÉ
@@ -234,10 +242,16 @@ export function NexProInteractiveTools() {
                     <div className="space-y-2.5">
                       <div className="flex items-center justify-between rounded-2xl border border-emerald-400/40 bg-emerald-500/10 p-3.5">
                         <div className="flex items-center gap-3">
-                          <span className="font-mono text-base font-black text-emerald-400">#1</span>
+                          <span className="font-mono text-base font-black text-emerald-400">
+                            EXEMPLE
+                          </span>
                           <div>
-                            <p className="text-xs font-bold text-white">Maison Lumière — Table Étoilée (Client XR)</p>
-                            <p className="text-[10px] text-neutral-300">★★★★★ 4.9 (184 avis) · Ouvert</p>
+                            <p className="text-xs font-bold text-white">
+                              Maison Lumière — Table Étoilée (Client XR)
+                            </p>
+                            <p className="text-[10px] text-neutral-300">
+                              Fiche illustrative · données fictives
+                            </p>
                           </div>
                         </div>
                         <span className="rounded-full bg-emerald-400 px-3 py-1 font-mono text-[10px] font-black text-black">
@@ -249,8 +263,12 @@ export function NexProInteractiveTools() {
                         <div className="flex items-center gap-3">
                           <span className="font-mono text-base font-bold text-neutral-400">#2</span>
                           <div>
-                            <p className="text-xs font-semibold text-neutral-300">Le Rivage Cannes</p>
-                            <p className="text-[10px] text-neutral-400">★★★★☆ 4.2 (89 avis)</p>
+                            <p className="text-xs font-semibold text-neutral-300">
+                              Établissement de démonstration
+                            </p>
+                            <p className="text-[10px] text-neutral-400">
+                              Exemple fictif · aucune note réelle
+                            </p>
                           </div>
                         </div>
                         <span className="text-[10px] font-mono text-neutral-400">Concurrent</span>
@@ -258,7 +276,8 @@ export function NexProInteractiveTools() {
                     </div>
 
                     <p className="text-xs text-neutral-400 italic text-center">
-                      Garantie contractuelle : Top 3 24h/24 pendant 1 an ou remboursé.
+                      Maquette illustrative avec données fictives — aucun classement Google n’est
+                      garanti.
                     </p>
                   </div>
                 )}
@@ -273,13 +292,20 @@ export function NexProInteractiveTools() {
 
                     <div className="space-y-2 text-xs">
                       <div className="max-w-[80%] rounded-2xl bg-white/10 p-3 text-white">
-                        <span className="block text-[9px] font-mono text-neutral-400 mb-1">PROSPECT · 14:32</span>
-                        « Bonjour, je cherche une suite avec terrasse vue mer pour ce week-end, vous avez des disponibilités ? »
+                        <span className="block text-[9px] font-mono text-neutral-400 mb-1">
+                          PROSPECT · 14:32
+                        </span>
+                        « Bonjour, je cherche une suite avec terrasse vue mer pour ce week-end, vous
+                        avez des disponibilités ? »
                       </div>
 
                       <div className="ml-auto max-w-[80%] rounded-2xl bg-[#005c4b] p-3 text-white border border-emerald-400/30">
-                        <span className="block text-[9px] font-mono text-emerald-300 mb-1">AGENT IA XR · 14:32 (Réponse en 3s)</span>
-                        « Bonjour Monsieur ! Il nous reste la Suite Azur 302 avec terrasse panoramique. Souhaitez-vous la bloquer directement au tarif préférentiel de 420 € ? »
+                        <span className="block text-[9px] font-mono text-emerald-300 mb-1">
+                          AGENT IA XR · 14:32 (Réponse en 3s)
+                        </span>
+                        « Bonjour Monsieur ! Il nous reste la Suite Azur 302 avec terrasse
+                        panoramique. Souhaitez-vous la bloquer directement au tarif préférentiel de
+                        420 € ? »
                       </div>
                     </div>
 
@@ -293,7 +319,9 @@ export function NexProInteractiveTools() {
                 {activeTab === 3 && (
                   <div className="space-y-4 animate-fadeIn">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs text-[#c5a880] uppercase">Production Audiovisuelle & Reels 4K</span>
+                      <span className="font-mono text-xs text-[#c5a880] uppercase">
+                        Production Audiovisuelle & Reels 4K
+                      </span>
                       <span className="rounded-full bg-rose-500/20 px-2.5 py-0.5 font-mono text-[10px] text-rose-300">
                         480 000 VUES GÉNÉRÉES
                       </span>
@@ -301,22 +329,32 @@ export function NexProInteractiveTools() {
 
                     <div className="grid grid-cols-3 gap-3">
                       {[
-                        { title: "Tournage Culinaire", stats: "+120k vues", format: "9:16 vertical" },
+                        {
+                          title: "Tournage Culinaire",
+                          stats: "+120k vues",
+                          format: "9:16 vertical",
+                        },
                         { title: "Drone & Domaine", stats: "+210k vues", format: "4K cinéma" },
                         { title: "Storytelling Atelier", stats: "+150k vues", format: "Interview" },
                       ].map((item, i) => (
-                        <div key={i} className="rounded-2xl border border-white/10 bg-black/50 p-3 text-center">
+                        <div
+                          key={i}
+                          className="rounded-2xl border border-white/10 bg-black/50 p-3 text-center"
+                        >
                           <div className="grid h-10 w-10 mx-auto place-items-center rounded-xl bg-white/10 text-white mb-2">
                             <Video className="h-5 w-5 text-[#c5a880]" />
                           </div>
                           <p className="text-xs font-bold text-white">{item.title}</p>
-                          <p className="text-[10px] text-emerald-400 font-mono mt-0.5">{item.stats}</p>
+                          <p className="text-[10px] text-emerald-400 font-mono mt-0.5">
+                            {item.stats}
+                          </p>
                         </div>
                       ))}
                     </div>
 
                     <p className="text-xs text-neutral-400 text-center">
-                      Scénarisation, tournage sur site, montage ultra-dynamique et publication sponsorisée.
+                      Scénarisation, tournage sur site, montage ultra-dynamique et publication
+                      sponsorisée.
                     </p>
                   </div>
                 )}

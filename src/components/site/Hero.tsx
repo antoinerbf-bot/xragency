@@ -1,324 +1,415 @@
-import { useState, useRef } from "react";
-import {
-  ArrowRight,
-  ChevronDown,
-  Play,
-  X,
-  Layers,
-  Globe2,
-  Plane,
-  Sparkles,
-  Award,
-} from "lucide-react";
-import heroAtelierPhoto from "@/assets/hero-editorial-concept01.jpg";
+import { useEffect, useState } from "react";
+import { ArrowRight, BarChart3, Layers3, Play, Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useLang, type Lang } from "@/lib/i18n";
+
+interface StudioScene {
+  id: string;
+  city: Record<Lang, string>;
+  landmark: string;
+  country: Record<Lang, string>;
+  timezone: string;
+  image: string;
+  role: Record<Lang, string>;
+  description: Record<Lang, string>;
+}
+
+const STUDIOS: StudioScene[] = [
+  {
+    id: "paris",
+    city: { fr: "Paris", en: "Paris", vi: "Paris", ar: "باريس", ru: "Париж" },
+    landmark: "Vue Tour Eiffel & Toits Parisiens",
+    country: { fr: "France", en: "France", vi: "Pháp", ar: "فرنسا", ru: "Франция" },
+    timezone: "Europe/Paris",
+    image: "/showcase/hub-paris-real-team.jpg?v=20261128b",
+    role: {
+      fr: "Direction Artistique & Production Digitale",
+      en: "Art Direction & Haute Couture Digital",
+      vi: "Định hướng nghệ thuật & Sản xuất số",
+      ar: "الإدارة الفنية والإنتاج الرقمي",
+      ru: "Арт-дирекшн и цифровой продакшн",
+    },
+    description: {
+      fr: "Studio Haussmannien baigné de lumière : directeurs artistiques complices, Figma & architecture web sur mesure.",
+      en: "Sunlit Haussmann studio: passionate art directors, bespoke web architecture & Figma prototypes.",
+      vi: "Studio Haussmann ngập tràn ánh sáng tự nhiên: sáng tạo nghệ thuật & kiến trúc web cao cấp.",
+      ar: "استوديو باريسي مشرق: إدارة فنية وبنية ويب مصممة خصيصًا.",
+      ru: "Светлая парижская студия: креативные директора, заказная веб-архитектура и прототипы.",
+    },
+  },
+  {
+    id: "dubai",
+    city: { fr: "Dubaï", en: "Dubai", vi: "Dubai", ar: "دبي", ru: "Дубай" },
+    landmark: "Vue Burj Khalifa & Skyline",
+    country: { fr: "Émirats arabes unis", en: "UAE", vi: "UAE", ar: "الإمارات", ru: "ОАЭ" },
+    timezone: "Asia/Dubai",
+    image: "/showcase/hub-dubai-real-team.jpg",
+    role: {
+      fr: "Pôle Croissance & E-commerce International",
+      en: "Global Growth & E-Commerce Engineering",
+      vi: "Tăng trưởng & Thương mại điện tử",
+      ar: "النمو والتجارة الإلكترونية",
+      ru: "Международный рост и e-commerce",
+    },
+    description: {
+      fr: "Penthouse vitré face au Burj Khalifa : équipe tech & marketing focalisée sur l'acquisition et la conversion.",
+      en: "Floor-to-ceiling penthouse facing Burj Khalifa: elite tech & marketing scaling international brands.",
+      vi: "Penthouse hướng Burj Khalifa: đội ngũ kỹ thuật và tăng trưởng quy mô lớn.",
+      ar: "بنتهاوس مطل على برج خليفة: فريق تقني وتسويقي لتوسيع العلامات التجارية.",
+      ru: "Пентхаус с видом на Бурдж-Халифа: масштабирование брендов и конверсии.",
+    },
+  },
+  {
+    id: "newyork",
+    city: { fr: "New York", en: "New York", vi: "New York", ar: "نيويورك", ru: "Нью-Йорк" },
+    landmark: "Vue Skyline Manhattan & Briques SoHo",
+    country: { fr: "États-Unis", en: "USA", vi: "Hoa Kỳ", ar: "أمريكا", ru: "США" },
+    timezone: "America/New_York",
+    image: "/showcase/hub-newyork-real-team.jpg",
+    role: {
+      fr: "Stratégie de Marque & Plateformes Globales",
+      en: "Global Brand Strategy & Platforms",
+      vi: "Chiến lược thương hiệu toàn cầu",
+      ar: "استراتيجية العلامة التجارية",
+      ru: "Глобальная стратегия бренда",
+    },
+    description: {
+      fr: "Loft SoHo lumineux : équipe dynamique et conviviale, prototypage d'applications et positionnement haut de gamme.",
+      en: "Bright SoHo loft: warm, collaborative team crafting premier digital ecosystems.",
+      vi: "Loft SoHo sáng tạo: đội ngũ năng động xây dựng hệ sinh thái số cao cấp.",
+      ar: "لوفت مانهاتن المضيء: فريق متكامل لتصميم منصات رقمية متقدمة.",
+      ru: "Лофт в Сохо: дружная команда, премиальные цифровые экосистемы.",
+    },
+  },
+  {
+    id: "tokyo",
+    city: { fr: "Tokyo", en: "Tokyo", vi: "Tokyo", ar: "طوكيو", ru: "Токио" },
+    landmark: "Vue Tokyo Tower & Shibuya",
+    country: { fr: "Japon", en: "Japan", vi: "Nhật Bản", ar: "اليابان", ru: "Япония" },
+    timezone: "Asia/Tokyo",
+    image: "/showcase/hub-tokyo-real-team.jpg",
+    role: {
+      fr: "Expériences Immersives & Design Minimaliste",
+      en: "Immersive Experiences & Pure Minimalism",
+      vi: "Trải nghiệm nhập vai & Tối giản",
+      ar: "تجارب تفاعلية وتصميم نقي",
+      ru: "Иммерсивные технологии и минимализм",
+    },
+    description: {
+      fr: "Studio épuré et avant-gardiste : interface tactile, performance extrême et esthétique intemporelle.",
+      en: "Minimalist studio: high-speed interactive interfaces and timeless aesthetics.",
+      vi: "Studio tối giản: giao diện tốc độ cao và thẩm mỹ chuẩn mực.",
+      ar: "استوديو بسيط ومتقدم: واجهات سريعة وأناقة استثنائية.",
+      ru: "Минималистичная студия: интерфейсы нового поколения и эстетика.",
+    },
+  },
+];
+
+const COPY = {
+  fr: {
+    eyebrow: "AGENCE DIGITALE INTERNATIONALE",
+    hubsTitle: "PARIS · DUBAÏ · SINGAPOUR · NEW YORK · TOKYO",
+    titlePart1: "L’art du ",
+    titleItalic: "digital",
+    titlePart2: "sur mesure.",
+    sub: "Architecture web haute performance, stratégie de marque et acquisition ciblée. Nous concevons votre écosystème digital pour convertir durablement vos prospects en clients.",
+    ctaPrimary: "Réserver un appel stratégique (15 min)",
+    ctaPrimarySub: "Diagnostic direct · Ligne associée",
+    ctaSecondary: "Estimer mon budget en direct",
+    ctaAgency: "Nos 8 pôles & tarifs",
+    guarantee: "Maquette interactive sur-mesure · Analyse SEO & performance incluse",
+    scroll: "Découvrir nos expertises",
+  },
+  en: {
+    eyebrow: "INTERNATIONAL DIGITAL AGENCY",
+    hubsTitle: "PARIS · DUBAI · SINGAPORE · NEW YORK · TOKYO",
+    titlePart1: "The art of ",
+    titleItalic: "bespoke",
+    titlePart2: "digital craft.",
+    sub: "High-performance web architecture, brand strategy and targeted acquisition. We sculpt your digital presence to convert high-value prospects into clients.",
+    ctaPrimary: "Request my free mockup",
+    ctaPrimarySub: "Within 24-48h · No commitment",
+    ctaSecondary: "Free digital audit",
+    ctaAgency: "Selected work",
+    guarantee: "Bespoke interactive mockup · SEO & performance audit included",
+    scroll: "Discover our services",
+  },
+  vi: {
+    eyebrow: "AGENCY KỸ THUẬT SỐ QUỐC TẾ",
+    hubsTitle: "PARIS · DUBAI · SINGAPORE · NEW YORK · TOKYO",
+    titlePart1: "Nghệ thuật ",
+    titleItalic: "số",
+    titlePart2: "đo ni đóng giày.",
+    sub: "Kiến trúc web hiệu năng cao, chiến lược thương hiệu và tăng trưởng. Chúng tôi xây dựng sự hiện diện số để chuyển đổi khách hàng bền vững.",
+    ctaPrimary: "Yêu cầu bản demo miễn phí",
+    ctaPrimarySub: "Trong 24-48h · Không ràng buộc",
+    ctaSecondary: "Đánh giá digital miễn phí",
+    ctaAgency: "Dự án tiêu biểu",
+    guarantee: "Demo tương tác riêng · Đánh giá SEO & chuyển đổi",
+    scroll: "Khám phá chuyên môn",
+  },
+  ar: {
+    eyebrow: "وكالة رقمية دولية",
+    hubsTitle: "باريس · دبي · سنغافورة · نيويورك · طوكيو",
+    titlePart1: "فن الحلول ",
+    titleItalic: "الرقمية",
+    titlePart2: "المصممة خصيصًا.",
+    sub: "بنية ويب عالية الأداء، استراتيجية العلامة التجارية والنمو الرقمي لبناء حضور يحول الزوار إلى عملاء دائمين.",
+    ctaPrimary: "طلب نموذج أولي مجاني",
+    ctaPrimarySub: "خلال 24-48 ساعة · بدون التزام",
+    ctaSecondary: "تدقيق رقمي مجاني",
+    ctaAgency: "أعمال مختارة",
+    guarantee: "نموذج تفاعلي مخصص · تدقيق شامل لتحسين محركات البحث والأداء",
+    scroll: "استكشف خدماتنا",
+  },
+  ru: {
+    eyebrow: "МЕЖДУНАРОДНОЕ DIGITAL-АГЕНТСТВО",
+    hubsTitle: "ПАРИЖ · ДУБАЙ · СИНГАПУР · НЬЮ-ЙОРК · ТОКИО",
+    titlePart1: "Искусство ",
+    titleItalic: "digital",
+    titlePart2: "под ваши задачи.",
+    sub: "Высокопроизводительная веб-архитектура, стратегия бренда и целевой трафик для стабильной конверсии клиентов.",
+    ctaPrimary: "Запросить бесплатный макет",
+    ctaPrimarySub: "За 24-48ч · Без обязательств",
+    ctaSecondary: "Бесплатный digital-аудит",
+    ctaAgency: "Избранные проекты",
+    guarantee: "Интерактивный макет · SEO и аудит производительности",
+    scroll: "Смотреть услуги",
+  },
+};
+
+const PILLARS = [
+  {
+    icon: BarChart3,
+    label: {
+      fr: "Stratégie & Conseil",
+      en: "Strategy & Advisory",
+      vi: "Chiến lược & Tư vấn",
+      ar: "الاستراتيجية والاستشارات",
+      ru: "Стратегия и консалтинг",
+    },
+  },
+  {
+    icon: Play,
+    label: {
+      fr: "Production Créative",
+      en: "Creative Production",
+      vi: "Sản xuất Sáng tạo",
+      ar: "الإنتاج الإبداعي",
+      ru: "Креативное производство",
+    },
+  },
+  {
+    icon: Layers3,
+    label: {
+      fr: "Acquisition & Visibilité",
+      en: "Acquisition & SEO",
+      vi: "Thu hút & Hiển thị",
+      ar: "الاستحواذ والظهور",
+      ru: "Привлечение и видимость",
+    },
+  },
+  {
+    icon: Sparkles,
+    label: {
+      fr: "Automatisation & IA",
+      en: "Automation & AI",
+      vi: "Tự động hóa & AI",
+      ar: "الأتمتة والذكاء",
+      ru: "Автоматизация и ИИ",
+    },
+  },
+];
+
+function useCityTime(timezone: string) {
+  const [time, setTime] = useState<string>(() => {
+    try {
+      return new Intl.DateTimeFormat("fr-FR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: timezone,
+      }).format(new Date());
+    } catch {
+      return "--:--";
+    }
+  });
+
+  useEffect(() => {
+    const update = () => {
+      try {
+        const str = new Intl.DateTimeFormat("fr-FR", {
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: timezone,
+        }).format(new Date());
+        setTime(str);
+      } catch {
+        setTime("--:--");
+      }
+    };
+    update();
+    const interval = setInterval(update, 15000);
+    return () => clearInterval(interval);
+  }, [timezone]);
+  return time;
+}
 
 export function Hero() {
-  const [cinemaModalOpen, setCinemaModalOpen] = useState(false);
-  const modalVideoRef = useRef<HTMLVideoElement>(null);
+  const { lang } = useLang();
+  const c = COPY[lang] ?? COPY.fr;
+  const [activeStudioIndex, setActiveStudioIndex] = useState<number>(0);
 
-  const openFullFilm = () => {
-    setCinemaModalOpen(true);
-    setTimeout(() => {
-      modalVideoRef.current?.play().catch(() => {});
-    }, 100);
-  };
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveStudioIndex((prev) => (prev + 1) % STUDIOS.length);
+    }, 7500);
+    return () => clearInterval(timer);
+  }, []);
 
-  const closeFilm = () => {
-    if (modalVideoRef.current) {
-      modalVideoRef.current.pause();
-    }
-    setCinemaModalOpen(false);
-  };
+  const activeStudio = STUDIOS[activeStudioIndex];
+  const activeTime = useCityTime(activeStudio.timezone);
 
   return (
-    <section
-      id="hero"
-      className="relative isolate min-h-[100svh] overflow-hidden bg-[#FAF8F5] text-[#0E1015] pt-24 sm:pt-28 lg:pt-32"
-    >
-      {/* ── SUBTILE TEXTURE DE FOND CHALEUREUSE ── */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-40 mix-blend-multiply"
-        style={{
-          backgroundImage:
-            "radial-gradient(#E8E2D8 1px, transparent 1px), radial-gradient(#E8E2D8 1px, #FAF8F5 1px)",
-          backgroundSize: "40px 40px",
-          backgroundPosition: "0 0, 20px 20px",
-        }}
-      />
+    <>
+      <section
+        id="hero"
+        aria-label="XR Agency Hero"
+        className="xr-hero-refined relative isolate min-h-[100svh] w-full overflow-hidden bg-[#100E0C] pt-20 text-[#FAF7F2]"
+      >
+        {/* ── Background: Luminous, Charming International Studios & Real Creative Teams ── */}
+        <div className="absolute inset-0 -z-10 overflow-hidden bg-[#100E0C]">
+          {STUDIOS.map((studio, idx) => {
+            const isActive = idx === activeStudioIndex;
+            return (
+              <div
+                key={studio.id}
+                className={cn(
+                  "absolute inset-0 transition-opacity duration-1000 ease-in-out",
+                  isActive ? "opacity-100 z-0" : "opacity-0 -z-10 pointer-events-none",
+                )}
+              >
+                <img
+                  src={studio.image}
+                  alt={`${studio.city.fr} - ${studio.landmark}`}
+                  className={cn(
+                    "h-full w-full object-cover object-center transform transition-transform duration-[8500ms] ease-out will-change-transform filter brightness-[1.02] contrast-[1.03]",
+                    isActive ? "scale-105" : "scale-100",
+                  )}
+                />
+              </div>
+            );
+          })}
 
-      <div className="relative z-10 mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-12">
-        {/* ── 01 / GRILLE HERO : TITRE & CTA À GAUCHE · ATELIER PARISIEN À DROITE ── */}
-        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14 pb-12 sm:pb-16">
-          
-          {/* Colonne Gauche (7 cols) */}
-          <div className="lg:col-span-6 xl:col-span-6 max-w-[680px]">
-            {/* Kicker supérieur avec tiret fin */}
-            <div className="mb-4 inline-flex items-center gap-3">
-              <span className="h-px w-8 bg-[#BFA27E]" />
-              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-[#8F7453]">
-                AGENCE DIGITALE INTERNATIONALE
-              </span>
-            </div>
+          {/* Haute Couture Soft Light Scrim: Preserves broad daylight, genuine facial warmth and iconic skylines */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#100E0C]/85 via-black/10 to-black/35 pointer-events-none" />
+        </div>
 
-            {/* Titre Principal H1 Éditorial */}
-            <h1 className="font-sans text-[clamp(2.6rem,5vw,5.2rem)] font-extrabold leading-[0.98] tracking-[-0.035em] text-[#0E1015]">
-              <span className="block">L'art du digital</span>
-              <span className="mt-1 block font-serif font-normal italic tracking-tight text-[#BFA27E]">
-                sur mesure.
-              </span>
-            </h1>
+        {/* ── Top-Left: Architectural Branding & Headline ── */}
+        <div className="absolute top-20 sm:top-24 left-4 sm:left-8 lg:left-12 z-30 pointer-events-auto max-w-[320px] sm:max-w-xl">
+          <div className="inline-flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-mono text-[9px] sm:text-[11px] font-semibold uppercase tracking-[0.18em] sm:tracking-[0.24em] text-white/95">
+              {c.eyebrow}
+            </span>
+          </div>
+          <h1 className="mt-2 font-serif text-2xl sm:text-4xl lg:text-[3.2rem] font-light leading-[1.08] tracking-[-0.03em] text-white drop-shadow-[0_2px_16px_rgba(0,0,0,0.95)]">
+            <span>{c.titlePart1}</span>
+            <span className="font-serif italic font-normal text-white underline decoration-[#E5C696]/60 decoration-1 underline-offset-4">
+              {c.titleItalic}
+            </span>{" "}
+            <span>{c.titlePart2}</span>
+          </h1>
+        </div>
 
-            {/* Paragraphe descriptif */}
-            <p className="mt-5 text-[15px] sm:text-[16.5px] leading-relaxed text-[#4A4E57] max-w-[560px]">
-              Stratégie, création et performance pour les marques, restaurants, hôtels et entreprises ambitieuses en France et à l'international.
+        {/* ── Top-Right: Discreet Live International Studio & Landmark Indicator ── */}
+        <div className="hidden md:block absolute top-20 sm:top-24 right-4 sm:right-8 lg:right-12 z-30 pointer-events-auto">
+          <div className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-black/45 px-4 py-2 backdrop-blur-md text-white shadow-xl transition-all duration-500">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-mono text-[11px] font-semibold tracking-wider text-white uppercase">
+              {activeStudio.city[lang] ?? activeStudio.city.fr}
+            </span>
+            <span className="font-mono text-[11px] text-[#E5C696]">✦ {activeStudio.landmark}</span>
+            <span className="font-mono text-[10px] text-zinc-300">({activeTime})</span>
+          </div>
+        </div>
+
+        {/* ── Bottom Center Dock: Subtitle, CTAs & Guarantee ── */}
+        <div className="relative z-20 pointer-events-none mx-auto flex min-h-[calc(100svh-5rem)] max-w-3xl flex-col items-center justify-end px-4 sm:px-6 pb-6 sm:pb-10 text-center">
+          <div className="pointer-events-auto w-full max-w-2xl flex flex-col items-center">
+            {/* Subtitle: High-clarity, elegant description */}
+            <p className="text-xs sm:text-[14px] leading-relaxed text-white/95 font-light drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+              {c.sub}
             </p>
 
-            {/* Double Bouton d'Action */}
-            <div className="mt-8 flex flex-wrap items-center gap-4">
+            {/* CTA Row: Demande de maquette, Audit gratuit, Appel stratégique 15 min */}
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+              {/* Primary Action: Demande de maquette */}
               <a
-                href="#tunnel-secteurs"
-                className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#0E1015] px-7 py-3.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-[0_12px_30px_rgba(14,16,21,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#20242D] hover:shadow-[0_16px_36px_rgba(14,16,21,0.3)] active:scale-[0.98]"
+                href="#quote"
+                className="group relative inline-flex h-11 items-center gap-2.5 rounded-full bg-white px-6 text-xs sm:text-[13px] font-semibold text-black shadow-[0_0_25px_rgba(255,255,255,0.35)] transition-all duration-300 hover:bg-white/95 hover:shadow-[0_0_35px_rgba(255,255,255,0.6)] hover:scale-[1.03] active:scale-[0.98]"
               >
-                <span>Démarrer mon projet</span>
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                <Sparkles className="h-4 w-4 text-[#A67C40] shrink-0" />
+                <span>Demander une maquette</span>
+                <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1 text-black" />
               </a>
 
-              <button
-                type="button"
-                onClick={openFullFilm}
-                className="group inline-flex items-center justify-center gap-2.5 rounded-full border border-[#0E1015]/15 bg-white/80 px-6 py-3.5 text-[11px] font-semibold text-[#0E1015] shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#BFA27E] hover:bg-white active:scale-[0.98]"
+              {/* Secondary Action: Audit gratuit */}
+              <a
+                href="#quote"
+                className="inline-flex h-11 items-center gap-2 rounded-full border border-white/40 bg-white/10 px-5 text-xs sm:text-[13px] font-medium text-white backdrop-blur-md transition-all duration-300 hover:bg-white/20 hover:border-white/70 hover:scale-[1.03] active:scale-[0.98] shadow-sm"
               >
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-[#FAF3EA] text-[#8F7453] transition-colors group-hover:bg-[#BFA27E] group-hover:text-white">
-                  <Play className="h-3 w-3 fill-current ml-0.5" />
-                </span>
-                <span>Découvrir notre approche</span>
-              </button>
+                <span>Audit gratuit</span>
+                <ArrowRight className="h-3.5 w-3.5 text-white/80" />
+              </a>
+
+              {/* Tertiary Action: Appel stratégique 15 min */}
+              <a
+                href="tel:+33767566783"
+                className="inline-flex h-11 items-center gap-2 rounded-full border border-white/25 bg-black/40 px-4 sm:px-5 text-xs sm:text-[13px] font-medium text-white/95 backdrop-blur-md transition-all duration-300 hover:bg-black/60 hover:border-white/40 hover:text-white"
+              >
+                <span>📞 Appel stratégique (15 min)</span>
+              </a>
             </div>
 
-            {/* Preuve Sociale & Avis Google */}
-            <div className="mt-8 inline-flex items-center gap-3 rounded-full border border-[#0E1015]/10 bg-white/70 px-4 py-2 shadow-sm backdrop-blur-sm">
-              <div className="flex items-center gap-1.5">
-                {/* Icône Google G colorée */}
-                <svg className="h-4 w-4" viewBox="0 0 24 24">
-                  <path
-                    fill="#4285F4"
-                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                  />
-                  <path
-                    fill="#34A853"
-                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                  />
-                  <path
-                    fill="#FBBC05"
-                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
-                  />
-                  <path
-                    fill="#EA4335"
-                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
-                  />
-                </svg>
-                <span className="font-bold text-xs text-[#0E1015]">4,9 / 5</span>
-              </div>
-              <div className="flex text-[#BFA27E] text-xs">
-                {"★★★★★".split("").map((star, i) => (
-                  <span key={i}>{star}</span>
-                ))}
-              </div>
-              <span className="h-3 w-px bg-[#0E1015]/15" />
-              <span className="text-[11.5px] font-medium text-[#4A4E57]">
-                +50 entreprises accompagnées
-              </span>
+            {/* Reassurance Guarantee Footnote */}
+            <div className="mt-3.5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[10.5px] sm:text-[11px] font-mono text-white/85 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+              <span className="text-[#E5C696]">✦</span>
+              <span>Ligne directe Direction Associée : +33 7 67 56 67 83</span>
+              <span className="text-white/40">·</span>
+              <span>Maquette personnalisée 48h sans engagement</span>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Colonne Droite (6 cols) : Photographie Haute Résolution Atelier Parisien */}
-          <div className="lg:col-span-6 xl:col-span-6">
-            <div className="relative group overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] border border-[#0E1015]/10 bg-white p-2.5 shadow-[0_30px_90px_rgba(14,16,21,0.12)] transition-transform duration-500 hover:shadow-[0_35px_100px_rgba(14,16,21,0.16)]">
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[1.6rem] sm:rounded-[2.1rem]">
-                <img
-                  src={heroAtelierPhoto}
-                  alt="Équipe XR Agency au travail dans l'atelier parisien avec vue sur la Tour Eiffel"
-                  className="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                  loading="eager"
-                />
-                
-                {/* Voile de dégradé subtil en bas de l'image */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
-
-                {/* Badge Flottant Paris Tour Eiffel */}
-                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white drop-shadow">
-                  <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/60 px-3 py-1 backdrop-blur-md">
-                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-[10px] font-semibold tracking-wider uppercase text-white/95">
-                      Paris · Siège International
-                    </span>
+      {/* ── Pillars Ribbon (Moved below Hero to keep Hero 100% focused on immersion) ── */}
+      <div className="relative z-30 border-y border-white/10 bg-[#120F0D]/95 backdrop-blur-md py-4 px-5 sm:px-8 lg:px-12">
+        <div className="mx-auto flex max-w-[1540px] flex-col justify-between gap-4 sm:flex-row sm:items-center">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-8 flex-1">
+            {PILLARS.map((pillar) => {
+              const Icon = pillar.icon;
+              return (
+                <div key={pillar.label.fr} className="flex items-center gap-3 text-white/90">
+                  <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-white/20 bg-white/10 text-white shadow-sm">
+                    <Icon className="h-4 w-4" />
                   </div>
-                  <button
-                    type="button"
-                    onClick={openFullFilm}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/25 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md transition hover:bg-white hover:text-black"
-                  >
-                    <Play className="h-3 w-3 fill-current" /> Voir le film
-                  </button>
+                  <span className="text-xs font-medium tracking-wide sm:text-[13px]">
+                    {pillar.label[lang] ?? pillar.label.fr}
+                  </span>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ── BANDEAU DE RÉASSURANCE PRESTIGE : MARQUES MONDIALES ── */}
-        <div className="border-t border-[#0E1015]/10 py-6 sm:py-8">
-          <div className="flex flex-wrap items-center justify-between gap-6">
-            {/* Intitulé à gauche */}
-            <div className="flex items-center gap-4">
-              <span className="text-[12px] font-semibold text-[#666B75] uppercase tracking-wider">
-                Ils nous font confiance
-              </span>
-              <span className="hidden sm:block h-4 w-px bg-[#0E1015]/15" />
-            </div>
-
-            {/* Logos de Prestige : Typographie Haute Couture & Authenticité */}
-            <div className="flex flex-wrap items-center gap-8 sm:gap-12 text-[#22252C] font-serif text-lg sm:text-xl font-bold tracking-widest opacity-85">
-              <span className="transition hover:opacity-100 font-sans tracking-[0.25em] text-[15px] sm:text-[17px] font-black">
-                ACCOR
-              </span>
-              <span className="transition hover:opacity-100 font-serif tracking-[0.2em] text-[16px] sm:text-[18px]">
-                L'ORÉAL
-              </span>
-              <span className="transition hover:opacity-100 font-serif tracking-[0.3em] text-[15px] sm:text-[17px]">
-                DIOR
-              </span>
-              <span className="transition hover:opacity-100 font-sans tracking-[0.18em] text-[15px] sm:text-[17px] font-bold">
-                MARRIOTT
-              </span>
-              <span className="transition hover:opacity-100 font-serif tracking-[0.25em] text-[15px] sm:text-[17px]">
-                HYATT
-              </span>
-              <span className="transition hover:opacity-100 font-sans tracking-[0.15em] text-[15px] sm:text-[17px] font-black">
-                Uber
-              </span>
-            </div>
-
-            {/* Lien droit vers réalisations */}
-            <a
-              href="#realisations"
-              className="group inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#0E1015] hover:text-[#BFA27E] transition"
-            >
-              <span>+ 50 projets réalisés</span>
-              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-            </a>
-          </div>
-        </div>
-
-        {/* ── LES 4 PILIERS FONDAMENTAUX DE VALEUR ── */}
-        <div className="border-t border-[#0E1015]/10 pt-8 pb-12 sm:pb-16">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            
-            {/* Pilier 1 : Conseil stratégique */}
-            <div className="group rounded-2xl border border-[#0E1015]/8 bg-white/70 p-5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#BFA27E] hover:bg-white hover:shadow-md">
-              <div className="flex items-center gap-3 mb-2.5">
-                <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#FAF3EA] text-[#8F7453] transition-colors group-hover:bg-[#BFA27E] group-hover:text-white">
-                  <Award className="h-5 w-5" />
-                </span>
-                <h3 className="font-sans text-sm font-bold text-[#0E1015]">
-                  Conseil stratégique
-                </h3>
-              </div>
-              <p className="text-[12.5px] leading-relaxed text-[#555A64]">
-                Des recommandations claires, concrètes et adaptées à votre marché.
-              </p>
-            </div>
-
-            {/* Pilier 2 : Exécution sur mesure */}
-            <div className="group rounded-2xl border border-[#0E1015]/8 bg-white/70 p-5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#BFA27E] hover:bg-white hover:shadow-md">
-              <div className="flex items-center gap-3 mb-2.5">
-                <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#FAF3EA] text-[#8F7453] transition-colors group-hover:bg-[#BFA27E] group-hover:text-white">
-                  <Layers className="h-5 w-5" />
-                </span>
-                <h3 className="font-sans text-sm font-bold text-[#0E1015]">
-                  Exécution sur mesure
-                </h3>
-              </div>
-              <p className="text-[12.5px] leading-relaxed text-[#555A64]">
-                Des solutions concrètes, créatives et hautement performantes.
-              </p>
-            </div>
-
-            {/* Pilier 3 : Expertise digitale */}
-            <div className="group rounded-2xl border border-[#0E1015]/8 bg-white/70 p-5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#BFA27E] hover:bg-white hover:shadow-md">
-              <div className="flex items-center gap-3 mb-2.5">
-                <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#FAF3EA] text-[#8F7453] transition-colors group-hover:bg-[#BFA27E] group-hover:text-white">
-                  <Globe2 className="h-5 w-5" />
-                </span>
-                <h3 className="font-sans text-sm font-bold text-[#0E1015]">
-                  Expertise digitale
-                </h3>
-              </div>
-              <p className="text-[12.5px] leading-relaxed text-[#555A64]">
-                Une maîtrise complète des leviers de visibilité et d'acquisition 360°.
-              </p>
-            </div>
-
-            {/* Pilier 4 : Accompagnement international */}
-            <div className="group rounded-2xl border border-[#0E1015]/8 bg-white/70 p-5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#BFA27E] hover:bg-white hover:shadow-md">
-              <div className="flex items-center gap-3 mb-2.5">
-                <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#FAF3EA] text-[#8F7453] transition-colors group-hover:bg-[#BFA27E] group-hover:text-white">
-                  <Plane className="h-5 w-5" />
-                </span>
-                <h3 className="font-sans text-sm font-bold text-[#0E1015]">
-                  Accompagnement international
-                </h3>
-              </div>
-              <p className="text-[12.5px] leading-relaxed text-[#555A64]">
-                Une équipe réactive et multiculturelle pour vous accompagner partout.
-              </p>
-            </div>
+              );
+            })}
           </div>
 
-          {/* Indicateur de Découverte / Scroll */}
-          <div className="mt-8 flex justify-center">
-            <a
-              href="#services"
-              className="group inline-flex flex-col items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[#8F7453] transition hover:text-[#0E1015]"
-            >
-              <span>Découvrir nos expertises</span>
-              <ChevronDown className="h-4 w-4 transition-transform group-hover:translate-y-1" />
-            </a>
-          </div>
+          <a
+            href="#services"
+            className="hidden items-center gap-2 text-xs font-mono uppercase tracking-widest text-white/70 transition hover:text-white lg:inline-flex shrink-0"
+          >
+            <span>{c.scroll}</span>
+            <span className="inline-block animate-bounce">↓</span>
+          </a>
         </div>
       </div>
-
-      {/* ── MODALE PLEIN ÉCRAN DU FILM CINÉMA AVEC SON ── */}
-      {cinemaModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-xl">
-          <div className="relative w-full max-w-5xl overflow-hidden rounded-3xl border border-[#BFA27E]/50 bg-[#08090c] p-3 shadow-2xl">
-            <div className="mb-2 flex items-center justify-between px-2">
-              <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#E5CBA4]">
-                🎬 FILM OFFICIEL XR AGENCY — COMMUNICATION, WEB, SEO, MAPS TOP 3 & IA
-              </span>
-              <button
-                type="button"
-                onClick={closeFilm}
-                className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold text-white hover:bg-white/20"
-              >
-                <X className="h-4 w-4" /> Fermer
-              </button>
-            </div>
-            <div className="aspect-video w-full overflow-hidden rounded-2xl bg-black">
-              <video
-                ref={modalVideoRef}
-                src="/videos/xr-agency-vsl.mp4"
-                poster="/videos/vsl-poster.jpg"
-                controls
-                autoPlay
-                playsInline
-                className="h-full w-full object-cover"
-              />
-            </div>
-          </div>
-        </div>
-      )}
-    </section>
+    </>
   );
 }

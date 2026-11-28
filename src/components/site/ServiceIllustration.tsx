@@ -1,5 +1,37 @@
 import { useState, useRef, type ReactNode } from "react";
-import { Activity, ArrowUpRight, Bookmark, Bot, Check, CheckCircle2, Clock, Cpu, Eye, Film, Gauge, Globe2, Heart, Lock, MapPin, Megaphone, MessageCircle, Music, Palette, Play, Radio, Search, Server, Share2, ShieldCheck, Sparkles, TrendingUp, Video, Volume2, Zap } from "lucide-react";
+import {
+  Activity,
+  ArrowUpRight,
+  Bookmark,
+  Bot,
+  Check,
+  CheckCircle2,
+  Clock,
+  Cpu,
+  Eye,
+  Film,
+  Gauge,
+  Globe2,
+  Heart,
+  Layers,
+  Lock,
+  MapPin,
+  Megaphone,
+  MessageCircle,
+  Music,
+  Palette,
+  Play,
+  Radio,
+  Search,
+  Server,
+  Share2,
+  ShieldCheck,
+  Sparkles,
+  TrendingUp,
+  Video,
+  Volume2,
+  Zap,
+} from "lucide-react";
 import { XR_PHOTOS } from "@/lib/photography";
 import { Parallax } from "./primitives";
 
@@ -15,7 +47,16 @@ export function InstagramLogo({ className = "h-5 w-5" }: { className?: string })
         </radialGradient>
       </defs>
       <rect x="2" y="2" width="20" height="20" rx="5.5" fill="url(#xrInstaGrad)" />
-      <rect x="5.5" y="5.5" width="13" height="13" rx="3.5" fill="none" stroke="#ffffff" strokeWidth="1.8" />
+      <rect
+        x="5.5"
+        y="5.5"
+        width="13"
+        height="13"
+        rx="3.5"
+        fill="none"
+        stroke="#ffffff"
+        strokeWidth="1.8"
+      />
       <circle cx="12" cy="12" r="3.2" fill="none" stroke="#ffffff" strokeWidth="1.8" />
       <circle cx="16.5" cy="7.5" r="0.9" fill="#ffffff" />
     </svg>
@@ -70,12 +111,26 @@ const META: Record<string, Meta> = {
   maintenance: { number: "06", label: "WEBCARE", photo: "maintenance", position: "50% 50%" },
   robotics: { number: "07", label: "ROBOTIQUE", photo: "robotics", position: "50% 50%" },
   refonte: { number: "08", label: "REFONTE", photo: "refonte", position: "50% 46%" },
-  ads: { number: "09", label: "GOOGLE ADS", photo: "ads", position: "50% 48%" },
+  ads: {
+    number: "09",
+    label: "PUBLICITÉ PAYANTE · NON PROPOSÉE",
+    photo: "ads",
+    position: "50% 48%",
+  },
   strategy: { number: "10", label: "STRATÉGIE", photo: "strategy", position: "50% 42%" },
   ai: { number: "11", label: "IA", photo: "ai", position: "50% 50%" },
+  crm: { number: "07", label: "CRM SUR-MESURE", photo: "crm", position: "50% 50%" },
 };
 
-function Stage({ children, className = "", accent = "rgba(255,255,255,.08)" }: { children: ReactNode; className?: string; accent?: string }) {
+function Stage({
+  children,
+  className = "",
+  accent = "rgba(255,255,255,.08)",
+}: {
+  children: ReactNode;
+  className?: string;
+  accent?: string;
+}) {
   return (
     <div
       className={
@@ -88,7 +143,10 @@ function Stage({ children, className = "", accent = "rgba(255,255,255,.08)" }: {
         className="pointer-events-none absolute -right-20 -top-20 z-[1] h-72 w-72 rounded-full blur-3xl opacity-20"
         style={{ background: accent }}
       />
-      <div aria-hidden className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(135deg,transparent_0%,rgba(255,255,255,.08)_46%,transparent_62%)]" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(135deg,transparent_0%,rgba(255,255,255,.08)_46%,transparent_62%)]"
+      />
       <div className="relative z-[2] h-full">{children}</div>
     </div>
   );
@@ -117,13 +175,7 @@ function Label({ children }: { children: ReactNode }) {
   return <span className="label-mono text-[7px] tracking-[.2em] text-white/55">{children}</span>;
 }
 
-function Glass({
-  children,
-  className = "",
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+function Glass({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <div
       className={
@@ -141,8 +193,14 @@ function WebVisual() {
 
   return (
     <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[#0e1015] via-[#090b0e] to-[#0e1015] p-6 text-white shadow-2xl backdrop-blur-2xl sm:p-8">
-      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-[#c5a880]/15 blur-3xl" />
-      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-[#c5a880]/15 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl"
+      />
 
       {/* Barre supérieure type Studio Browser + Toggle Mobile/Desktop */}
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-4">
@@ -160,7 +218,9 @@ function WebVisual() {
             type="button"
             onClick={() => setDevice("desktop")}
             className={`rounded-full px-2.5 py-0.5 font-mono text-[8px] font-bold uppercase transition ${
-              device === "desktop" ? "bg-[#c5a880] text-[#090a0d]" : "text-white/70 hover:text-white"
+              device === "desktop"
+                ? "bg-[#c5a880] text-[#090a0d]"
+                : "text-white/70 hover:text-white"
             }`}
           >
             Vue PC 16:10
@@ -182,7 +242,9 @@ function WebVisual() {
         <div className="flex justify-center">
           <div
             className={`group relative overflow-hidden rounded-[1.8rem] border border-white/20 bg-black shadow-2xl transition-all duration-500 ${
-              device === "mobile" ? "w-[235px] aspect-[9/16] rounded-[2.2rem]" : "w-full aspect-[16/10]"
+              device === "mobile"
+                ? "w-[235px] aspect-[9/16] rounded-[2.2rem]"
+                : "w-full aspect-[16/10]"
             }`}
           >
             <video
@@ -200,7 +262,7 @@ function WebVisual() {
                 ● LIVE VIDEO RENDER
               </span>
               <span className="rounded-full bg-[#c5a880] px-2.5 py-0.5 font-mono text-[7.5px] font-black text-black">
-                MAQUETTE 24H
+                APERÇU DE CONCEPTION
               </span>
             </div>
             <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
@@ -209,7 +271,9 @@ function WebVisual() {
                   ARCHITECTURE HAUTE CONVERSION
                 </span>
                 <p className="text-xs font-semibold text-white">
-                  {device === "mobile" ? "Expérience Mobile Immersive" : "Vitrine, Business & E-Commerce"}
+                  {device === "mobile"
+                    ? "Expérience Mobile Immersive"
+                    : "Vitrine, Business & E-Commerce"}
                 </p>
               </div>
               <span className="rounded-full bg-white/15 px-3 py-1 label-mono text-[7px] font-bold text-white backdrop-blur-md">
@@ -222,12 +286,17 @@ function WebVisual() {
         <div className="space-y-3">
           <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl">
             <div className="flex items-center justify-between">
-              <span className="label-mono text-[6.5px] text-[#e5cba4]">LIVRAISON CLÉ EN MAIN 7 JOURS</span>
+              <span className="label-mono text-[6.5px] text-[#e5cba4]">
+                CALENDRIER DÉFINI AU DEVIS
+              </span>
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
             </div>
-            <h4 className="mt-1 text-xs font-bold text-white">Maquette Gratuite Validée Avant Lancement</h4>
+            <h4 className="mt-1 text-xs font-bold text-white">
+              Direction de conception & périmètre validé
+            </h4>
             <p className="mt-1 text-[9px] leading-relaxed text-white/70">
-              Design éditorial sur-mesure, parcours mobile ultra-fluide, formulaires connectés et propriété 100 % du code.
+              Design éditorial sur-mesure, parcours mobile ultra-fluide, formulaires connectés et
+              propriété 100 % du code.
             </p>
           </div>
 
@@ -284,7 +353,10 @@ function BrandingVisual() {
 
   return (
     <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[#0e1015] via-[#090b0e] to-[#0e1015] p-6 text-white shadow-2xl backdrop-blur-2xl sm:p-8">
-      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-[#c5a880]/15 blur-3xl" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-[#c5a880]/15 blur-3xl"
+      />
 
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-4">
         <div className="flex items-center gap-2">
@@ -297,7 +369,7 @@ function BrandingVisual() {
           <span className="rounded-full bg-[#c5a880]/20 px-2.5 py-0.5 font-mono text-[7px] font-bold text-[#e5cba4]">
             CESSION 100% DROITS
           </span>
-          <Label>04 / BRANDING</Label>
+          <Label>02 / BRANDING</Label>
         </div>
       </div>
 
@@ -314,10 +386,12 @@ function BrandingVisual() {
               <span className="label-mono text-[7px] text-[#e5cba4] font-bold">
                 ATELIER TYPOGRAPHIE & COULEURS
               </span>
-              <p className="text-xs font-semibold text-white">Logo Vectoriel, Papeterie & Brand Book</p>
+              <p className="text-xs font-semibold text-white">
+                Logo Vectoriel, Papeterie & Brand Book
+              </p>
             </div>
             <span className="rounded-full bg-[#c5a880] px-3 py-1 label-mono text-[7px] font-black text-black">
-              199 € · 399 € · 699 €
+              199 € · 299 € · 399 €
             </span>
           </div>
         </div>
@@ -325,7 +399,9 @@ function BrandingVisual() {
         <div className="space-y-3">
           <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl">
             <div className="flex items-center justify-between">
-              <span className="label-mono text-[6.5px] text-[#e5cba4]">TESTER UNE HARMONIE CHROMATIQUE</span>
+              <span className="label-mono text-[6.5px] text-[#e5cba4]">
+                TESTER UNE HARMONIE CHROMATIQUE
+              </span>
             </div>
             <div className="mt-2 flex gap-1.5">
               {palettes.map((p, i) => (
@@ -356,13 +432,16 @@ function BrandingVisual() {
 
           <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-white">Livrables Vectoriels HD & Print</span>
+              <span className="text-[11px] font-bold text-white">
+                Livrables Vectoriels HD & Print
+              </span>
               <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 label-mono text-[6.5px] font-bold text-emerald-300">
                 300 DPI
               </span>
             </div>
             <p className="mt-1.5 text-[9px] leading-relaxed text-white/70">
-              Fichiers sources (AI, SVG, PDF, PNG), charte graphique complète et kit réseaux sociaux.
+              Fichiers sources (AI, SVG, PDF, PNG), charte graphique complète et kit réseaux
+              sociaux.
             </p>
           </div>
         </div>
@@ -385,7 +464,9 @@ function SeoVisual() {
         <div className="flex items-center justify-between border-b xr-line pb-3">
           <div className="flex items-center gap-2">
             <Search className="h-3.5 w-3.5 text-sky-500" />
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">GOOGLE SERP PREVIEW</span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">
+              GOOGLE SERP PREVIEW
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <span className="label-mono text-[7px] text-emerald-500 font-bold">+184% TRAFIC</span>
@@ -403,19 +484,29 @@ function SeoVisual() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
               <div>
-                <span className="label-mono text-[7px] text-white/90">PILOTAGE ACQUISITION ORGANIQUE</span>
-                <p className="text-[10px] font-semibold text-white">Top 1 Google · Croissance +184%</p>
+                <span className="label-mono text-[7px] text-white/90">
+                  PILOTAGE ACQUISITION ORGANIQUE
+                </span>
+                <p className="text-[10px] font-semibold text-white">
+                  Top 1 Google · Croissance +184%
+                </p>
               </div>
-              <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[7px] text-emerald-300 backdrop-blur-md">Certifié A+</span>
+              <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[7px] text-emerald-300 backdrop-blur-md">
+                Certifié A+
+              </span>
             </div>
           </div>
 
           <div className="space-y-3">
             <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3.5 backdrop-blur-md">
               <div className="flex items-center gap-2 text-[8px] xr-muted">
-                <span className="grid h-4 w-4 place-items-center rounded-full bg-neutral-900 text-[6px] font-black text-white">XR</span>
+                <span className="grid h-4 w-4 place-items-center rounded-full bg-neutral-900 text-[6px] font-black text-white">
+                  XR
+                </span>
                 <span>https://xragencyai.com</span>
-                <span className="label-mono text-[6px] text-emerald-500 font-bold ml-auto">POSITION #1</span>
+                <span className="label-mono text-[6px] text-emerald-500 font-bold ml-auto">
+                  EXEMPLE DE RÉSULTAT
+                </span>
               </div>
               <h4 className="mt-1 text-xs font-semibold text-sky-600 dark:text-sky-400">
                 XR Agency | Agence Web & Performance Digitale
@@ -433,8 +524,12 @@ function SeoVisual() {
         </div>
 
         <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">NETLINKING · COCON SÉMANTIQUE · CORE WEB VITALS</span>
-          <span className="label-mono text-[7px] xr-accent font-semibold">À PARTIR DE 299 €/MOIS</span>
+          <span className="label-mono text-[7px] xr-muted">
+            NETLINKING · COCON SÉMANTIQUE · CORE WEB VITALS
+          </span>
+          <span className="label-mono text-[7px] xr-accent font-semibold">
+            À PARTIR DE 299 €/MOIS
+          </span>
         </div>
       </div>
     </Stage>
@@ -446,7 +541,10 @@ function MapsVisual() {
 
   return (
     <div className="relative isolate overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[#0e1015] via-[#090b0e] to-[#0e1015] p-6 text-white shadow-2xl sm:p-8">
-      <div aria-hidden className="pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full bg-emerald-500/15 blur-3xl" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full bg-emerald-500/15 blur-3xl"
+      />
 
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
         <div className="flex items-center gap-2.5">
@@ -454,7 +552,7 @@ function MapsVisual() {
             <MapPin className="h-4 w-4" />
           </span>
           <span className="font-mono text-[8px] tracking-[.18em] text-white/75">
-            GOOGLE MAPS · PACK LOCAL TOP 3 GARANTI 24H/24 & 7J/7
+            GOOGLE MAPS · EXEMPLE DE VISIBILITÉ LOCALE
           </span>
         </div>
 
@@ -463,19 +561,23 @@ function MapsVisual() {
             type="button"
             onClick={() => setSelectedOffer("top3")}
             className={`rounded-full px-3 py-1 font-mono text-[7.5px] font-bold uppercase transition ${
-              selectedOffer === "top3" ? "bg-[#c5a880] text-black" : "text-white/70 hover:text-white"
+              selectedOffer === "top3"
+                ? "bg-[#c5a880] text-black"
+                : "text-white/70 hover:text-white"
             }`}
           >
-            Offre 1 : Top 3 (dès 999 €/an)
+            Offre 1 : Optimisation locale (dès 999 €/an)
           </button>
           <button
             type="button"
             onClick={() => setSelectedOffer("manage")}
             className={`rounded-full px-3 py-1 font-mono text-[7.5px] font-bold uppercase transition ${
-              selectedOffer === "manage" ? "bg-emerald-400 text-black" : "text-white/70 hover:text-white"
+              selectedOffer === "manage"
+                ? "bg-[#c5a880] text-black"
+                : "text-white/70 hover:text-white"
             }`}
           >
-            Offre 2 : Gestion (500 €/an)
+            Offre 2 : Conquête Top 3 (1 490 €/an)
           </button>
         </div>
       </div>
@@ -485,7 +587,7 @@ function MapsVisual() {
         <div className="relative min-h-[290px] overflow-hidden rounded-2xl border border-white/15 bg-[#12151c]">
           <img
             src={XR_PHOTOS.maps}
-            alt="Google Maps Top 3"
+            alt="Visibilité locale Google Maps"
             className="absolute inset-0 h-full w-full object-cover opacity-55"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/30" />
@@ -493,7 +595,7 @@ function MapsVisual() {
           <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full border border-white/20 bg-black/75 px-3 py-1.5 backdrop-blur-xl">
             <Search className="h-3.5 w-3.5 text-[#c5a880]" />
             <span className="font-mono text-[8px] font-bold text-white">
-              EX : « SERRURIER PARIS » · TOP 3 GARANTI
+              EXEMPLE DE RECHERCHE LOCALE · SIMULATION
             </span>
           </div>
 
@@ -507,19 +609,20 @@ function MapsVisual() {
           <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-white/15 bg-black/80 p-3.5 backdrop-blur-xl">
             <div className="flex items-center justify-between">
               <span className="font-mono text-[8px] font-bold text-[#e5cba4]">
-                GARANTIE CONTRACTUELLE 12 MOIS
+                SUIVI DE VISIBILITÉ LOCALE
               </span>
               <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 font-mono text-[7.5px] font-bold text-emerald-300">
-                OU REMBOURSÉ
+                EXEMPLE ILLUSTRATIF
               </span>
             </div>
             <p className="mt-1 text-[10px] text-white/80">
-              Validation préalable obligatoire par nos experts et analystes selon la concurrence de votre ville.
+              Validation préalable obligatoire par nos experts et analystes selon la concurrence de
+              votre ville.
             </p>
           </div>
         </div>
 
-        {/* Colonne Droite : Classement Google Maps en Direct */}
+        {/* Exemple illustratif de résultats locaux */}
         <div className="space-y-3">
           <div className="relative overflow-hidden rounded-2xl border border-[#c5a880]/60 bg-gradient-to-r from-[#1d1912] to-[#12151c] p-4 shadow-xl">
             <div className="flex items-start justify-between gap-3">
@@ -529,19 +632,21 @@ function MapsVisual() {
                 </span>
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <h4 className="text-sm font-bold text-white">Votre Établissement (Leader Local)</h4>
+                    <h4 className="text-sm font-bold text-white">Exemple de fiche établissement</h4>
                     <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 font-mono text-[7px] font-bold text-emerald-300">
-                      TOP 3 GARANTI 24/7
+                      VISIBILITÉ LOCALE
                     </span>
                   </div>
                   <div className="mt-1 flex flex-wrap items-center gap-2 text-[10px]">
-                    <span className="font-bold text-[#e5cba4]">5.0 ★★★★★</span>
-                    <span className="text-white/65">(Avis vérifiés & optimisés)</span>
+                    <span className="font-bold text-[#e5cba4]">Exemple de fiche</span>
+                    <span className="text-white/65">
+                      Exemple de présentation — données illustratives
+                    </span>
                   </div>
                   <p className="mt-2 text-[10px] text-white/80">
                     {selectedOffer === "top3"
-                      ? "Propulsion & maintien dans les 3 premiers résultats pendant 1 an complet (dès 999 € / an)."
-                      : "Pilotage intégral de votre fiche pendant 12 mois : photos géolocalisées, avis & posts (500 € / an)."}
+                      ? "Optimisation du profil, des informations et des signaux locaux selon le périmètre défini (dès 999 € / an)."
+                      : "Accompagnement intensif : 5 à 10 mots-clés stratégiques, photos géotaggées et avis clients (1 490 € / an)."}
                   </p>
                 </div>
               </div>
@@ -554,9 +659,11 @@ function MapsVisual() {
                 <span className="grid h-6 w-6 place-items-center rounded-lg border border-white/15 font-mono text-[10px] font-bold text-white/70">
                   #2
                 </span>
-                <span className="text-xs font-medium text-white/80">Concurrent Local B · 4.2 ★</span>
+                <span className="text-xs font-medium text-white/80">
+                  Exemple de résultat local B
+                </span>
               </div>
-              <span className="font-mono text-[7.5px] text-white/50">DISTANCÉ</span>
+              <span className="font-mono text-[7.5px] text-white/50">POSITION VARIABLE</span>
             </div>
           </div>
 
@@ -566,9 +673,11 @@ function MapsVisual() {
                 <span className="grid h-6 w-6 place-items-center rounded-lg border border-white/15 font-mono text-[10px] font-bold text-white/70">
                   #3
                 </span>
-                <span className="text-xs font-medium text-white/80">Concurrent Local C · 3.9 ★</span>
+                <span className="text-xs font-medium text-white/80">
+                  Exemple de résultat local C
+                </span>
               </div>
-              <span className="font-mono text-[7.5px] text-white/50">DISTANCÉ</span>
+              <span className="font-mono text-[7.5px] text-white/50">POSITION VARIABLE</span>
             </div>
           </div>
         </div>
@@ -576,7 +685,7 @@ function MapsVisual() {
 
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-4">
         <span className="label-mono text-[7px] text-white/60">
-          OFFRE 1 : TOP 3 GARANTI 1 AN (DÈS 999 €/AN) · OFFRE 2 : GESTION ANNUELLE (500 €/AN)
+          EXEMPLE PÉDAGOGIQUE — AUCUN CLASSEMENT RÉEL N’EST AFFICHÉ
         </span>
         <span className="label-mono text-[7px] font-bold text-[#e5cba4]">
           VALIDATION EXPERTS OBLIGATOIRE
@@ -625,8 +734,8 @@ function SocialVisual() {
     {
       id: "facebook" as const,
       name: "Facebook & Meta Ads",
-      badge: "LOCAL 5KM & ROAS ×4.2",
-      tagline: "Acquisition Géolocalisée Rentable",
+      badge: "REELS, FEED & DIFFUSION CIBLÉE",
+      tagline: "Acquisition Géolocalisée & Notoriété",
       accent: "from-blue-500 to-indigo-500",
       border: "hover:border-blue-500/50",
       activeBg: "bg-blue-500/10 border-blue-500/40 text-blue-300",
@@ -650,8 +759,8 @@ function SocialVisual() {
             platform === "instagram"
               ? "radial-gradient(circle, #e1306c, #f77737)"
               : platform === "tiktok"
-              ? "radial-gradient(circle, #00f2fe, #fe2c55)"
-              : "radial-gradient(circle, #1877F2, #0d5bb5)",
+                ? "radial-gradient(circle, #00f2fe, #fe2c55)"
+                : "radial-gradient(circle, #1877F2, #0d5bb5)",
         }}
       />
 
@@ -668,14 +777,16 @@ function SocialVisual() {
                 <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-ping" />
               </span>
             </div>
-            <p className="text-[10px] xr-muted">Tournages 4K, montage cinématique & community management</p>
+            <p className="text-[10px] xr-muted">
+              Tournages 4K, montage cinématique & community management
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <span className="rounded-full border border-emerald-500/30 bg-emerald-500/15 px-3 py-1 label-mono text-[7px] font-bold text-emerald-400">
             100% CLÉ-EN-MAIN
           </span>
-          <Label>03 / SOCIAL</Label>
+          <Label>05 / SOCIAL MEDIA</Label>
         </div>
       </div>
 
@@ -689,7 +800,9 @@ function SocialVisual() {
               <span className="h-1.5 w-1.5 rounded-full bg-[#1b202e]" />
               <div className="flex items-center gap-1">
                 <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
-                <span className="label-mono text-[5.5px] font-bold text-white tracking-wider">REC 4K</span>
+                <span className="label-mono text-[5.5px] font-bold text-white tracking-wider">
+                  REC 4K
+                </span>
               </div>
             </div>
 
@@ -716,7 +829,9 @@ function SocialVisual() {
                     </span>
                   </div>
                   <span className="label-mono text-[6px] text-white/70 block -mt-0.5">
-                    {platform === "facebook" ? "Sponsorisé · Rayon 5 km" : "Production 4K officielle"}
+                    {platform === "facebook"
+                      ? "Sponsorisé · Rayon 5 km"
+                      : "Production 4K officielle"}
                   </span>
                 </div>
               </div>
@@ -781,7 +896,9 @@ function SocialVisual() {
               >
                 <div
                   className={`h-9 w-9 rounded-full flex items-center justify-center backdrop-blur-md transition border ${
-                    isSaved ? "bg-amber-400 text-black border-amber-300" : "bg-black/50 border-white/20 text-white"
+                    isSaved
+                      ? "bg-amber-400 text-black border-amber-300"
+                      : "bg-black/50 border-white/20 text-white"
                   }`}
                 >
                   <Bookmark className={`h-4 w-4 ${isSaved ? "fill-current" : ""}`} />
@@ -867,12 +984,22 @@ function SocialVisual() {
 
             <div className="mt-3 grid gap-2 sm:grid-cols-3">
               {[
-                { step: "01", title: "Cadrer", desc: "Votre marque, vos clients et vos objectifs." },
+                {
+                  step: "01",
+                  title: "Cadrer",
+                  desc: "Votre marque, vos clients et vos objectifs.",
+                },
                 { step: "02", title: "Créer", desc: "Un univers visuel et des formats adaptés." },
-                { step: "03", title: "Publier", desc: "Un calendrier éditorial clair et régulier." },
+                {
+                  step: "03",
+                  title: "Publier",
+                  desc: "Un calendrier éditorial clair et régulier.",
+                },
               ].map((item) => (
                 <div key={item.step} className="rounded-xl border xr-line bg-[var(--xr-bg)]/80 p-3">
-                  <span className="label-mono text-[7px] font-bold text-amber-300">{item.step} / ÉTAPE</span>
+                  <span className="label-mono text-[7px] font-bold text-amber-300">
+                    {item.step} / ÉTAPE
+                  </span>
                   <p className="mt-1 text-sm font-semibold text-[var(--xr-ink)]">{item.title}</p>
                   <p className="mt-1 text-[9px] leading-4 xr-muted">{item.desc}</p>
                 </div>
@@ -903,7 +1030,7 @@ function SocialVisual() {
                 VOTRE PRÉSENCE SOCIALE, PRÊTE À DÉCOLLER
               </span>
               <p className="text-[11px] font-bold text-[var(--xr-ink)]">
-                Dès 349 € / mois · Prise en charge intégrale sous 7 jours
+                Dès 349 € / mois · Périmètre défini ensemble
               </p>
             </div>
             <a
@@ -933,15 +1060,23 @@ function WebcareVisual() {
   return (
     <div className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[var(--xr-surface)] via-[var(--xr-bg)] to-[var(--xr-surface)] p-6 shadow-2xl backdrop-blur-2xl sm:p-8">
       {/* Halos cloud subtils */}
-      <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" />
-      <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-16 -bottom-16 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"
+      />
 
       <div className="flex items-center justify-between border-b xr-line pb-4">
         <div className="flex items-center gap-2">
           <span className="flex h-5 w-5 items-center justify-center rounded-md bg-cyan-500/15 text-cyan-400">
             <ShieldCheck className="h-3.5 w-3.5" />
           </span>
-          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">SUPERVISION CLOUD DÉDIÉE · SÉCURITÉ & MAINTENANCE HAUTE DISPONIBILITÉ</span>
+          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">
+            SUPERVISION CLOUD DÉDIÉE · SÉCURITÉ & MAINTENANCE HAUTE DISPONIBILITÉ
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -963,7 +1098,9 @@ function WebcareVisual() {
             <p className="mt-1 text-lg sm:text-xl font-bold text-cyan-400">&lt; 92 ms</p>
             <div className="mt-1.5 flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              <span className="label-mono text-[6px] text-emerald-400 font-medium">Paris CDG · Edge A+</span>
+              <span className="label-mono text-[6px] text-emerald-400 font-medium">
+                Paris CDG · Edge A+
+              </span>
             </div>
           </div>
 
@@ -973,7 +1110,9 @@ function WebcareVisual() {
               <Server className="h-3 w-3 text-amber-300" />
             </div>
             <p className="mt-1 text-lg sm:text-xl font-bold text-[var(--xr-ink)]">99.99%</p>
-            <span className="mt-1.5 block label-mono text-[6px] text-amber-300/90 font-medium">Garantie contractuelle</span>
+            <span className="mt-1.5 block label-mono text-[6px] text-amber-300/90 font-medium">
+              Garantie contractuelle
+            </span>
           </div>
 
           <div className="rounded-[1.4rem] border xr-line bg-[var(--xr-surface-strong)]/90 p-3.5 sm:p-4 shadow-sm backdrop-blur-xl">
@@ -982,7 +1121,9 @@ function WebcareVisual() {
               <Lock className="h-3 w-3 text-emerald-400" />
             </div>
             <p className="mt-1 text-lg sm:text-xl font-bold text-emerald-400">TLS 1.3</p>
-            <span className="mt-1.5 block label-mono text-[6px] text-emerald-300/80 font-medium">Pare-feu anti-DDoS</span>
+            <span className="mt-1.5 block label-mono text-[6px] text-emerald-300/80 font-medium">
+              Pare-feu anti-DDoS
+            </span>
           </div>
         </div>
 
@@ -991,7 +1132,9 @@ function WebcareVisual() {
           <div className="flex items-center justify-between border-b xr-line pb-2.5">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-cyan-400" />
-              <span className="text-[11px] font-bold text-[var(--xr-ink)]">Journal de Surveillance en Temps Réel</span>
+              <span className="text-[11px] font-bold text-[var(--xr-ink)]">
+                Journal de Surveillance en Temps Réel
+              </span>
             </div>
             <span className="label-mono text-[6.5px] text-cyan-300/90 font-bold uppercase tracking-wider">
               SURVEILLANCE 24/7/365
@@ -1001,21 +1144,27 @@ function WebcareVisual() {
             <div className="flex items-center justify-between py-1 border-b xr-line/40">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-3 w-3 text-emerald-400 shrink-0" />
-                <span className="text-[var(--xr-ink)]">Sauvegarde quotidienne cloud chiffrée AES-256 (France & Francfort)</span>
+                <span className="text-[var(--xr-ink)]">
+                  Sauvegarde quotidienne cloud chiffrée AES-256 (France & Francfort)
+                </span>
               </div>
               <span className="label-mono text-[7px] text-emerald-400 font-bold">SUCCÈS 04:00</span>
             </div>
             <div className="flex items-center justify-between py-1 border-b xr-line/40">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-3 w-3 text-emerald-400 shrink-0" />
-                <span className="text-[var(--xr-ink)]">Filtrage WAF applicatif & scans de vulnérabilités continues</span>
+                <span className="text-[var(--xr-ink)]">
+                  Filtrage WAF applicatif & scans de vulnérabilités continues
+                </span>
               </div>
               <span className="label-mono text-[7px] text-cyan-400 font-bold">0 INTRUSION</span>
             </div>
             <div className="flex items-center justify-between py-1">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-3 w-3 text-emerald-400 shrink-0" />
-                <span className="text-[var(--xr-ink)]">Mises à jour de sécurité du noyau et monitoring continu des temps de réponse</span>
+                <span className="text-[var(--xr-ink)]">
+                  Mises à jour de sécurité du noyau et monitoring continu des temps de réponse
+                </span>
               </div>
               <span className="label-mono text-[7px] text-amber-300 font-bold">À JOUR</span>
             </div>
@@ -1024,8 +1173,12 @@ function WebcareVisual() {
       </div>
 
       <div className="flex items-center justify-between border-t xr-line pt-4">
-        <span className="label-mono text-[7px] xr-muted">SAUVEGARDES QUOTIDIENNES · INFOGÉRANCE SENIOR · MODIFICATIONS INCLUSES</span>
-        <span className="label-mono text-[7px] font-bold text-amber-300">SÉRÉNITÉ DIGITALE DÈS 29 € / MOIS</span>
+        <span className="label-mono text-[7px] xr-muted">
+          SAUVEGARDES QUOTIDIENNES · INFOGÉRANCE SENIOR · MODIFICATIONS INCLUSES
+        </span>
+        <span className="label-mono text-[7px] font-bold text-amber-300">
+          SÉRÉNITÉ DIGITALE DÈS 29 € / MOIS
+        </span>
       </div>
     </div>
   );
@@ -1037,7 +1190,7 @@ const KORBEN_ROBOTS = [
     name: "TriBot",
     type: "Collecte & Tri Intelligent",
     image: "https://www.korbenforpeople.com/wp-content/uploads/2026/01/S3J0900-scaled.png",
-    specs: ["120 L Bacs (2×60L)", "Écran 18,5\" FHD", "Batterie échangeable", "24 h/24 Continu"],
+    specs: ["120 L Bacs (2×60L)", 'Écran 18,5" FHD', "Batterie échangeable", "24 h/24 Continu"],
     tag: "HÔTELS · RETAIL · GARES",
     url: "https://www.korbenforpeople.com/robot/tribot/",
   },
@@ -1046,7 +1199,7 @@ const KORBEN_ROBOTS = [
     name: "Welcome Plus",
     type: "Accueil VIP & Assistant interactif",
     image: "https://www.korbenforpeople.com/wp-content/uploads/2025/08/ROBOT-ACCUEIL-02-scaled.png",
-    specs: ["Écran tactile 27\"", "30+ Langues", "Guidage LiDAR", "Interaction Vocale"],
+    specs: ['Écran tactile 27"', "30+ Langues", "Guidage LiDAR", "Interaction Vocale"],
     tag: "SIÈGES · SALONS · CLINIQUE",
     url: "https://www.korbenforpeople.com/robot/welcome-plus/",
   },
@@ -1054,7 +1207,8 @@ const KORBEN_ROBOTS = [
     id: "delivery-pro",
     name: "Delivery Pro",
     type: "Service & Livraison Autonome",
-    image: "https://www.korbenforpeople.com/wp-content/uploads/2025/08/DELIVERY-BOTS-2-VUE-01-scaled.png",
+    image:
+      "https://www.korbenforpeople.com/wp-content/uploads/2025/08/DELIVERY-BOTS-2-VUE-01-scaled.png",
     specs: ["Charge utile 60 kg", "3 à 4 Plateaux", "Suspension active", "Évitement 360°"],
     tag: "RESTAURANTS · HÔTELS",
     url: "https://www.korbenforpeople.com/robot/delivery-pro/",
@@ -1098,8 +1252,14 @@ function RoboticsVisual() {
       className="relative overflow-hidden rounded-[2.5rem] border xr-line bg-gradient-to-b from-[var(--xr-surface)] via-[#080b10] to-[var(--xr-surface)] p-5 sm:p-7 shadow-2xl backdrop-blur-2xl"
     >
       {/* Dynamic ambient sci-fi halos */}
-      <div aria-hidden className="pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full bg-cyan-500/15 blur-3xl" />
-      <div aria-hidden className="pointer-events-none absolute -left-20 -bottom-20 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full bg-cyan-500/15 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-20 -bottom-20 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"
+      />
 
       {/* Header with live 3D status badge */}
       <div className="flex items-center justify-between border-b xr-line pb-3.5">
@@ -1107,7 +1267,9 @@ function RoboticsVisual() {
           <span className="flex h-5 w-5 items-center justify-center rounded-md bg-cyan-500/15 text-cyan-400">
             <Bot className="h-3.5 w-3.5" />
           </span>
-          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">XR × KORBEN · ROBOTS PROFESSIONNELS EN SITUATION RÉELLE</span>
+          <span className="label-mono text-[7px] tracking-[.18em] xr-muted">
+            XR × KORBEN · ROBOTS PROFESSIONNELS EN SITUATION RÉELLE
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-0.5 label-mono text-[6.5px] font-bold text-cyan-300">
@@ -1142,11 +1304,20 @@ function RoboticsVisual() {
       {/* Interactive 3D Stage */}
       <div className="relative mt-4 flex flex-col md:flex-row items-center justify-between gap-5 rounded-2xl border xr-line bg-gradient-to-b from-[#0e121a]/90 to-[#07090d]/90 p-5 backdrop-blur-xl overflow-hidden min-h-[300px]">
         {/* Holographic floor grid & laser scan */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(6,182,212,.15)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,.15)_1px,transparent_1px)] [background-size:24px_24px]" />
-        
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(6,182,212,.15)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,.15)_1px,transparent_1px)] [background-size:24px_24px]"
+        />
+
         {/* Concentric pedestal glow */}
-        <div aria-hidden className="pointer-events-none absolute left-1/2 md:left-[35%] bottom-6 -translate-x-1/2 h-20 w-56 rounded-full bg-cyan-500/20 blur-xl" />
-        <div aria-hidden className="pointer-events-none absolute left-1/2 md:left-[35%] bottom-8 -translate-x-1/2 h-10 w-44 rounded-full border border-cyan-400/40 shadow-[0_0_20px_rgba(6,182,212,0.4)]" />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 md:left-[35%] bottom-6 -translate-x-1/2 h-20 w-56 rounded-full bg-cyan-500/20 blur-xl"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 md:left-[35%] bottom-8 -translate-x-1/2 h-10 w-44 rounded-full border border-cyan-400/40 shadow-[0_0_20px_rgba(6,182,212,0.4)]"
+        />
 
         {/* 3D Moving Robot Container */}
         <div
@@ -1166,16 +1337,25 @@ function RoboticsVisual() {
         <div className="relative z-10 flex-1 w-full space-y-3">
           <div className="rounded-xl border xr-line bg-[var(--xr-surface)]/90 p-3.5 backdrop-blur-md">
             <div className="flex items-center justify-between">
-              <span className="label-mono text-[7px] text-cyan-400 font-bold">{selectedRobot.tag}</span>
-              <span className="label-mono text-[6.5px] text-emerald-400 font-semibold">DISPONIBLE DÉMO</span>
+              <span className="label-mono text-[7px] text-cyan-400 font-bold">
+                {selectedRobot.tag}
+              </span>
+              <span className="label-mono text-[6.5px] text-emerald-400 font-semibold">
+                DISPONIBLE DÉMO
+              </span>
             </div>
-            <h4 className="mt-1 text-base font-bold text-white tracking-tight">{selectedRobot.name}</h4>
+            <h4 className="mt-1 text-base font-bold text-white tracking-tight">
+              {selectedRobot.name}
+            </h4>
             <p className="text-[10px] text-white/70 font-medium">{selectedRobot.type}</p>
-            
+
             {/* Tech Specs Pills */}
             <div className="mt-3 grid grid-cols-2 gap-1.5">
               {selectedRobot.specs.map((spec, i) => (
-                <div key={i} className="flex items-center gap-1.5 rounded-lg border xr-line bg-[var(--xr-bg)]/80 px-2 py-1.5 text-[7.5px] text-white/85">
+                <div
+                  key={i}
+                  className="flex items-center gap-1.5 rounded-lg border xr-line bg-[var(--xr-bg)]/80 px-2 py-1.5 text-[7.5px] text-white/85"
+                >
                   <Cpu className="h-2.5 w-2.5 text-cyan-400 shrink-0" />
                   <span className="truncate">{spec}</span>
                 </div>
@@ -1185,7 +1365,9 @@ function RoboticsVisual() {
 
           <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-amber-400/25 bg-amber-400/5 px-3 py-2 text-[9px]">
             <span className="text-white/80">Location mensuelle ou achat accompagné</span>
-            <span className="label-mono text-[7.5px] font-bold text-amber-300">DÈS 499 € / MOIS</span>
+            <span className="label-mono text-[7.5px] font-bold text-amber-300">
+              DÈS 499 € / MOIS
+            </span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -1209,9 +1391,12 @@ function RoboticsVisual() {
 
       <div className="flex items-center justify-between border-t xr-line pt-3.5 mt-3.5">
         <span className="label-mono text-[7px] xr-muted">
-          ORIENTATION 3D : [ X: {rotate.x > 0 ? `+${rotate.x}` : rotate.x}° · Y: {rotate.y > 0 ? `+${rotate.y}` : rotate.y}° ]
+          ORIENTATION 3D : [ X: {rotate.x > 0 ? `+${rotate.x}` : rotate.x}° · Y:{" "}
+          {rotate.y > 0 ? `+${rotate.y}` : rotate.y}° ]
         </span>
-        <span className="label-mono text-[7px] font-bold text-cyan-400">ÉCOSYSTÈME IA & ROBOTIQUE LIVRÉ SUR SITE</span>
+        <span className="label-mono text-[7px] font-bold text-cyan-400">
+          ÉCOSYSTÈME IA & ROBOTIQUE LIVRÉ SUR SITE
+        </span>
       </div>
     </div>
   );
@@ -1226,7 +1411,9 @@ function RefonteVisual() {
             <span className="flex h-5 w-5 items-center justify-center rounded-md bg-neutral-500/10 text-neutral-300">
               <Globe2 className="h-3 w-3" />
             </span>
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">AUDIT & TRANSFORMATION DIGITALE</span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">
+              AUDIT & TRANSFORMATION DIGITALE
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <span className="label-mono text-[7px] text-emerald-500 font-bold">REBUILD A+</span>
@@ -1234,45 +1421,49 @@ function RefonteVisual() {
           </div>
         </div>
 
-        {/* Before / After comparison matrix */}
+        {/* Real Architectural Case Study Preview + KPI Badges */}
         <div className="my-auto py-3 space-y-3">
-          <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-3.5 backdrop-blur-md">
-              <div className="flex items-center justify-between">
-                <span className="label-mono text-[6.5px] font-bold text-red-400">AVANT REFONTE</span>
-                <span className="text-[10px] text-red-400">✕</span>
-              </div>
-              <p className="mt-1.5 text-xs font-semibold text-[var(--xr-ink)]">Site Obsolète</p>
-              <div className="mt-2 space-y-1 text-[8px] xr-muted">
-                <p>• Temps de chargement : 4.8s</p>
-                <p>• Mobile non optimisé</p>
-                <p>• Taux de conversion : 0.8%</p>
-              </div>
+          <div className="group relative overflow-hidden rounded-2xl border border-white/15 bg-black shadow-xl">
+            <img
+              src={XR_PHOTOS.refonte}
+              alt="Transformation et refonte de site web de prestige"
+              className="aspect-[16/9] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+            <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+              <span className="rounded-full border border-emerald-400/40 bg-emerald-500/20 px-2.5 py-0.5 font-mono text-[7.5px] font-bold text-emerald-300 backdrop-blur-md">
+                ✦ TRANSFORMATION NEXT-GEN
+              </span>
+              <span className="rounded-full bg-black/70 px-2.5 py-0.5 font-mono text-[7.5px] font-bold text-white border border-white/20 backdrop-blur-md">
+                SCORE 99+
+              </span>
             </div>
-
-            <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 backdrop-blur-md ring-1 ring-emerald-500/20">
-              <div className="flex items-center justify-between">
-                <span className="label-mono text-[6.5px] font-bold text-emerald-400">APRÈS XR REFONTE</span>
-                <span className="text-[10px] text-emerald-400 font-bold">✓</span>
+            <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between text-white">
+              <div>
+                <p className="font-serif text-sm font-medium">Refonte Complète & Optimisation Conversion</p>
+                <p className="text-[10px] text-white/70">Chargement 0.3s · 100% Mobile First · Zéro régression SEO</p>
               </div>
-              <p className="mt-1.5 text-xs font-bold text-[var(--xr-ink)]">Architecture Next-Gen</p>
-              <div className="mt-2 space-y-1 text-[8px] font-medium text-emerald-300">
-                <p>• Temps de chargement : 0.3s</p>
-                <p>• 100% Mobile-First & Fluide</p>
-                <p>• Taux de conversion : 4.6% (×5.7)</p>
-              </div>
+              <span className="rounded-lg bg-emerald-500/20 px-2 py-1 font-mono text-[8px] font-bold text-emerald-300 border border-emerald-400/30 backdrop-blur-md">
+                ×5.7 Conversion
+              </span>
             </div>
           </div>
 
           <div className="rounded-xl border xr-line bg-[var(--xr-surface)] px-3 py-2 text-[9px] flex items-center justify-between">
-            <span className="xr-muted">Migration sans perte de trafic ni de SEO existant</span>
-            <span className="label-mono text-[7px] text-emerald-400 font-bold">ZÉRO REGRESSION</span>
+            <span className="xr-muted">Migration fluide sans perte de positions Google</span>
+            <span className="label-mono text-[7px] text-emerald-400 font-bold">
+              CONSERVATION 100% HISTORIQUE
+            </span>
           </div>
         </div>
 
         <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">AUDIT UX · REFONTE CODE · CONVERSIONS BOOSTÉES</span>
-          <span className="label-mono text-[7px] text-emerald-500 font-semibold">ON RECONSTRUIT POUR GAGNER</span>
+          <span className="label-mono text-[7px] xr-muted">
+            AUDIT UX · REFONTE CODE · CONVERSIONS BOOSTÉES
+          </span>
+          <span className="label-mono text-[7px] text-emerald-500 font-semibold">
+            ARCHITECTURE SUR-MESURE
+          </span>
         </div>
       </div>
     </Stage>
@@ -1281,56 +1472,20 @@ function RefonteVisual() {
 
 function AdsVisual() {
   return (
-    <Stage accent="rgba(56,189,248,.14)">
-      <div className="relative h-full min-h-[380px] p-5 sm:min-h-[430px] sm:p-7 flex flex-col justify-between">
-        <div className="flex items-center justify-between border-b xr-line pb-3">
-          <div className="flex items-center gap-2">
-            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-sky-500/10 text-sky-400">
-              <Megaphone className="h-3 w-3" />
-            </span>
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">GOOGLE ADS & META ADS CAMPAIGNS</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="label-mono text-[7px] text-emerald-500 font-bold">ROAS 4.8×</span>
-            <Label>09 / ADS</Label>
-          </div>
+    <Stage accent="rgba(197,168,128,.12)">
+      <div className="flex min-h-[380px] flex-col justify-center p-7 text-center sm:min-h-[430px]">
+        <div className="mx-auto grid h-12 w-12 place-items-center rounded-full border border-border bg-background text-muted-foreground">
+          <Megaphone className="h-5 w-5" />
         </div>
-
-        {/* Paid acquisition metrics console */}
-        <div className="my-auto py-3 space-y-3">
-          <div className="grid grid-cols-3 gap-2.5">
-            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <span className="label-mono text-[6.5px] xr-muted-2">CTR MOYEN</span>
-              <p className="mt-1 text-base font-bold text-sky-400">8.4%</p>
-              <span className="label-mono text-[6px] text-emerald-400 font-medium">+140% vs marché</span>
-            </div>
-            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <span className="label-mono text-[6.5px] xr-muted-2">COÛT PAR LEAD</span>
-              <p className="mt-1 text-base font-bold text-[var(--xr-ink)]">12.50 €</p>
-              <span className="label-mono text-[6px] text-emerald-400 font-medium">-42% CPA</span>
-            </div>
-            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <span className="label-mono text-[6.5px] xr-muted-2">RETOUR / INVEST.</span>
-              <p className="mt-1 text-base font-bold text-emerald-500">4.8× ROAS</p>
-              <span className="label-mono text-[6px] text-emerald-400 font-medium">Rentabilité nette</span>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-sky-500/20 bg-[var(--xr-surface-strong)] p-3.5 backdrop-blur-md">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-[var(--xr-ink)]">Campagnes Précises & Mots-Clés Intentionnistes</span>
-              <span className="label-mono text-[6.5px] font-bold text-sky-400">TRACKING SERVER-SIDE</span>
-            </div>
-            <p className="mt-1 text-[8.5px] leading-relaxed xr-muted">
-              Ciblage ultra-qualifié à fort pouvoir d'achat, A/B testing continu des accroches et landing pages dédiées à forte conversion.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">SEARCH · SHOPPING · REMARKETING · SCALING</span>
-          <span className="label-mono text-[7px] text-emerald-500 font-semibold">ACQUISITION RENTABLE & MESURABLE</span>
-        </div>
+        <p className="label-mono mt-6 text-[9px] text-muted-foreground">INFORMATION</p>
+        <h3 className="display-serif mt-3 text-3xl text-foreground">Publicité payante</h3>
+        <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-muted-foreground">
+          XR Agency ne propose pas de gestion Google Ads ou Meta Ads. Notre accompagnement porte sur
+          le site, le référencement naturel et la visibilité locale.
+        </p>
+        <span className="mx-auto mt-6 rounded-lg border border-border px-3 py-2 text-xs text-muted-foreground">
+          Service non proposé
+        </span>
       </div>
     </Stage>
   );
@@ -1345,31 +1500,62 @@ function StrategyVisual() {
             <span className="flex h-5 w-5 items-center justify-center rounded-md bg-indigo-500/10 text-indigo-400">
               <Gauge className="h-3 w-3" />
             </span>
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">STRATÉGIE DIGITALE & EXPANSION</span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">
+              STRATÉGIE DIGITALE & EXPANSION
+            </span>
           </div>
           <Label>10 / STRATÉGIE</Label>
         </div>
 
-        {/* Strategy Roadmap */}
-        <div className="my-auto py-3 space-y-2.5">
-          {[
-            { phase: "PHASE 1", label: "Diagnostic d'Opportunité & Concurrence", status: "Terminé", color: "text-emerald-400" },
-            { phase: "PHASE 2", label: "Positionnement de Prestige & Offre Irrésistible", status: "En cours", color: "text-indigo-400" },
-            { phase: "PHASE 3", label: "Tunnel de Vente & Canaux d'Acquisition Directe", status: "Prévu", color: "xr-muted" },
-          ].map((item, idx) => (
-            <div key={idx} className="flex items-center justify-between rounded-xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
-              <div className="flex items-center gap-2.5">
-                <span className="label-mono text-[6.5px] font-bold text-indigo-300">{item.phase}</span>
-                <span className="text-[11px] font-semibold text-[var(--xr-ink)]">{item.label}</span>
-              </div>
-              <span className={`label-mono text-[6.5px] font-bold ${item.color}`}>{item.status}</span>
+        {/* Editorial Strategy Showcase */}
+        <div className="my-auto py-3 space-y-3">
+          <div className="group relative overflow-hidden rounded-2xl border border-white/15 bg-black shadow-xl">
+            <img
+              src={XR_PHOTOS.strategy}
+              alt="Direction stratégique et audit de croissance"
+              className="aspect-[16/9] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+            <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+              <span className="rounded-full border border-indigo-400/40 bg-indigo-500/20 px-2.5 py-0.5 font-mono text-[7.5px] font-bold text-indigo-200 backdrop-blur-md">
+                ✦ AUDIT CONCURRENTIEL & MARCHÉ
+              </span>
+              <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 font-mono text-[7.5px] font-bold text-emerald-300 border border-emerald-400/30 backdrop-blur-md">
+                ROADMAP 90J
+              </span>
             </div>
-          ))}
+            <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between text-white">
+              <div>
+                <p className="font-serif text-sm font-medium">Positionnement de Prestige & Canaux d'Acquisition</p>
+                <p className="text-[10px] text-white/70">Plan d'action chiffré, sélection des priorités et rentabilité mesurée.</p>
+              </div>
+              <span className="rounded-lg bg-indigo-500/20 px-2.5 py-1 font-mono text-[8px] font-bold text-indigo-200 border border-indigo-400/30 backdrop-blur-md">
+                Sur-Mesure
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { phase: "01. DIAGNOSTIC", text: "Marché & Concurrence" },
+              { phase: "02. CADRAGE", text: "Offre & Parcours Client" },
+              { phase: "03. EXPANSION", text: "Acquisition & Fidélisation" },
+            ].map((item, idx) => (
+              <div key={idx} className="rounded-xl border xr-line bg-[var(--xr-surface)] p-2.5 text-center">
+                <span className="block font-mono text-[6.5px] font-bold text-indigo-400">{item.phase}</span>
+                <span className="mt-0.5 block text-[8.5px] font-semibold text-[var(--xr-ink)]">{item.text}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">PLAN D'ACTION CONCRET · KPIS CHIFFRÉS · ROADMAP 90J</span>
-          <span className="label-mono text-[7px] text-emerald-500 font-semibold">DIRECTION STRATÉGIQUE CLAIRE</span>
+          <span className="label-mono text-[7px] xr-muted">
+            PLAN D'ACTION CONCRET · KPIS CHIFFRÉS · ROADMAP 90J
+          </span>
+          <span className="label-mono text-[7px] text-emerald-500 font-semibold">
+            DIRECTION STRATÉGIQUE CLAIRE
+          </span>
         </div>
       </div>
     </Stage>
@@ -1385,7 +1571,9 @@ function AiVisual() {
             <span className="flex h-5 w-5 items-center justify-center rounded-md bg-purple-500/10 text-purple-400">
               <Sparkles className="h-3 w-3" />
             </span>
-            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">INTELLIGENCE ARTIFICIELLE & AUTOMATISATION</span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">
+              INTELLIGENCE ARTIFICIELLE & AUTOMATISATION
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <span className="label-mono text-[7px] text-emerald-500 font-bold">IA ACTIVE</span>
@@ -1399,29 +1587,114 @@ function AiVisual() {
             <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
               <span className="label-mono text-[6.5px] text-purple-400 font-bold">AGENT 01</span>
               <p className="mt-1 text-[11px] font-bold text-[var(--xr-ink)]">Capture & Triage</p>
-              <p className="mt-1 text-[7.5px] xr-muted">Qualification automatique des leads entrants 24/7</p>
+              <p className="mt-1 text-[7.5px] xr-muted">
+                Qualification automatique des leads entrants 24/7
+              </p>
             </div>
             <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
               <span className="label-mono text-[6.5px] text-purple-400 font-bold">AGENT 02</span>
               <p className="mt-1 text-[11px] font-bold text-[var(--xr-ink)]">RAG & Connaissance</p>
-              <p className="mt-1 text-[7.5px] xr-muted">Réponses ultra-précises basées sur vos documents</p>
+              <p className="mt-1 text-[7.5px] xr-muted">
+                Réponses ultra-précises basées sur vos documents
+              </p>
             </div>
             <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
               <span className="label-mono text-[6.5px] text-purple-400 font-bold">AGENT 03</span>
               <p className="mt-1 text-[11px] font-bold text-[var(--xr-ink)]">Workflows Métier</p>
-              <p className="mt-1 text-[7.5px] xr-muted">Génération automatique de devis et synchronisation</p>
+              <p className="mt-1 text-[7.5px] xr-muted">
+                Génération automatique de devis et synchronisation
+              </p>
             </div>
           </div>
 
           <div className="flex items-center justify-between rounded-xl border border-purple-500/20 bg-purple-500/5 p-3 text-[9px]">
-            <span className="font-semibold text-[var(--xr-ink)]">Gain de productivité constaté : <span className="text-emerald-400 font-bold">15 à 25h / semaine</span> par collaborateur</span>
-            <span className="label-mono text-[7px] text-purple-300 font-bold shrink-0">100% INTÉGRÉ</span>
+            <span className="font-semibold text-[var(--xr-ink)]">
+              Gain de productivité constaté :{" "}
+              <span className="text-emerald-400 font-bold">15 à 25h / semaine</span> par
+              collaborateur
+            </span>
+            <span className="label-mono text-[7px] text-purple-300 font-bold shrink-0">
+              100% INTÉGRÉ
+            </span>
           </div>
         </div>
 
         <div className="flex items-center justify-between border-t xr-line pt-3">
-          <span className="label-mono text-[7px] xr-muted">LLMS SUR-MESURE · EMBEDDINGS · AUTOMATION N8N/MAKE</span>
-          <span className="label-mono text-[7px] text-emerald-500 font-semibold">TRANSFORMATION IA IMMÉDIATE</span>
+          <span className="label-mono text-[7px] xr-muted">
+            LLMS SUR-MESURE · EMBEDDINGS · AUTOMATION N8N/MAKE
+          </span>
+          <span className="label-mono text-[7px] text-emerald-500 font-semibold">
+            TRANSFORMATION IA IMMÉDIATE
+          </span>
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+function CrmVisual() {
+  return (
+    <Stage accent="rgba(212,175,55,.14)">
+      <div className="relative h-full min-h-[380px] p-5 sm:min-h-[430px] sm:p-7 flex flex-col justify-between">
+        <div className="flex items-center justify-between border-b xr-line pb-3">
+          <div className="flex items-center gap-2">
+            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[#D8B788]/20 text-[#D8B788]">
+              <Layers className="h-3 w-3" />
+            </span>
+            <span className="label-mono text-[7px] tracking-[.18em] xr-muted">
+              CRM SUR-MESURE & LOGICIELS MÉTIER
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="label-mono text-[7px] text-emerald-500 font-bold">ZÉRO COMMISSION</span>
+            <Label>07 / CRM</Label>
+          </div>
+        </div>
+
+        {/* POS & Restaurant Simulation Preview */}
+        <div className="my-auto py-3 space-y-3">
+          <div className="grid grid-cols-3 gap-2.5">
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
+              <span className="label-mono text-[6.5px] text-[#D8B788] font-bold">CAISSE TACTILE POS</span>
+              <p className="mt-1 text-[11px] font-bold text-[var(--xr-ink)]">Tickets & Commandes</p>
+              <p className="mt-1 text-[7.5px] xr-muted">
+                Prise de commande ultra-rapide sur mobile & tablette
+              </p>
+            </div>
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
+              <span className="label-mono text-[6.5px] text-emerald-400 font-bold">ÉCRAN CUISINE KDS</span>
+              <p className="mt-1 text-[11px] font-bold text-[var(--xr-ink)]">Flux Temps Réel</p>
+              <p className="mt-1 text-[7.5px] xr-muted">
+                Envoi direct en cuisine avec avertisseur sonore
+              </p>
+            </div>
+            <div className="rounded-2xl border xr-line bg-[var(--xr-surface)] p-3 backdrop-blur-md">
+              <span className="label-mono text-[6.5px] text-sky-400 font-bold">GESTION DES STOCKS</span>
+              <p className="mt-1 text-[11px] font-bold text-[var(--xr-ink)]">Inventaire Automatique</p>
+              <p className="mt-1 text-[7.5px] xr-muted">
+                Décompte des ingrédients & alertes de rupture
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between rounded-xl border border-[#D8B788]/25 bg-[#D8B788]/5 p-3 text-[9px]">
+            <span className="font-semibold text-[var(--xr-ink)]">
+              Économie moyenne constatée vs Uber/Booking :{" "}
+              <span className="text-emerald-400 font-bold">+2 500 € / mois</span> conservés dans votre marge
+            </span>
+            <span className="label-mono text-[7px] text-[#D8B788] font-bold shrink-0">
+              CESSION 100%
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between border-t xr-line pt-3">
+          <span className="label-mono text-[7px] xr-muted">
+            RESTAURANTS · HÔTELS · COMMERCE · INTÉGRATION ROBOTIQUE KORBEN
+          </span>
+          <span className="label-mono text-[7px] text-emerald-500 font-semibold">
+            DÈS 2 000 € UNE FOIS
+          </span>
         </div>
       </div>
     </Stage>
@@ -1435,7 +1708,9 @@ function GenericVisual({ info }: { info: Meta }) {
       {src ? <Photo src={src} position={info.position} className="opacity-[.9]" /> : null}
       <div className="absolute inset-0 bg-gradient-to-t from-black/58 via-black/6 to-transparent" />
       <div className="absolute left-5 top-5 sm:left-7 sm:top-7">
-        <Label>{info.number} / {info.label}</Label>
+        <Label>
+          {info.number} / {info.label}
+        </Label>
       </div>
     </Stage>
   );
@@ -1444,18 +1719,33 @@ function GenericVisual({ info }: { info: Meta }) {
 export function ServiceIllustration({ service, title }: Props) {
   const info = META[service] ?? META.websites;
   const visual =
-    service === "websites" ? <WebVisual /> :
-    service === "branding" ? <BrandingVisual /> :
-    service === "seo" ? <SeoVisual /> :
-    service === "maps" ? <MapsVisual /> :
-    service === "social" ? <SocialVisual /> :
-    service === "maintenance" ? <WebcareVisual /> :
-    service === "robotics" ? <RoboticsVisual /> :
-    service === "refonte" ? <RefonteVisual /> :
-    service === "ads" ? <AdsVisual /> :
-    service === "strategy" ? <StrategyVisual /> :
-    service === "ai" ? <AiVisual /> :
-    <GenericVisual info={info} />;
+    service === "websites" ? (
+      <WebVisual />
+    ) : service === "branding" ? (
+      <BrandingVisual />
+    ) : service === "seo" ? (
+      <SeoVisual />
+    ) : service === "maps" ? (
+      <MapsVisual />
+    ) : service === "social" ? (
+      <SocialVisual />
+    ) : service === "maintenance" ? (
+      <WebcareVisual />
+    ) : service === "crm" ? (
+      <CrmVisual />
+    ) : service === "robotics" ? (
+      <RoboticsVisual />
+    ) : service === "refonte" ? (
+      <RefonteVisual />
+    ) : service === "ads" ? (
+      <AdsVisual />
+    ) : service === "strategy" ? (
+      <StrategyVisual />
+    ) : service === "ai" ? (
+      <AiVisual />
+    ) : (
+      <GenericVisual info={info} />
+    );
 
   return (
     <figure className="group relative w-full overflow-hidden rounded-[2.2rem] border xr-line bg-[var(--xr-bg-elev)] shadow-[var(--xr-shadow)]">

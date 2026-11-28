@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/site/Nav";
 import { Contact } from "@/components/site/Contact";
+import { useLang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -18,10 +19,11 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
+  const { lang } = useLang();
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div dir={lang === "ar" ? "rtl" : "ltr"} className="min-h-screen bg-[#171613] text-[#F7F4EE]">
       <Nav />
-      <main className="pt-24">
+      <main className="pt-20">
         <Contact />
       </main>
     </div>

@@ -1,219 +1,299 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Bot } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
-import { SurfaceDigital } from "./SurfaceDigital";
-import { cn } from "@/lib/utils";
-import { Parallax } from "./primitives";
-import { ServiceIllustration } from "./ServiceIllustration";
+import { CANONICAL_SERVICE_URLS } from "@/lib/catalog";
+import { XR_PHOTOS } from "@/lib/photography";
 
-/** Core catalog shown on /services — coherent set, not the full internal list */
-const CATALOG_IDS = [
-  "websites",
-  "branding",
-  "seo",
-  "maps",
-  "social",
-  "maintenance",
-  "robotics",
-] as const;
+const CORE_IDS = ["websites", "seo", "maps", "social", "branding", "maintenance"] as const;
 
-const SERVICE_KICKER: Record<string, { fr: string; en: string; vi: string; ar?: string; ru?: string }> = {
-  websites: { fr: "FLAGSHIP", en: "FLAGSHIP", vi: "FLAGSHIP", ar: "الخدمة الرئيسية", ru: "КЛЮЧЕВОЕ" },
-  branding: { fr: "IDENTITÉ", en: "IDENTITY", vi: "NHẬN DIỆN", ar: "الهوية", ru: "АЙДЕНТИКА" },
-  seo: { fr: "VISIBILITÉ", en: "VISIBILITY", vi: "HIỂN THỊ", ar: "الظهور", ru: "ВИДИМОСТЬ" },
-  maps: { fr: "LOCAL", en: "LOCAL", vi: "ĐỊA PHƯƠNG", ar: "محلي", ru: "ЛОКАЛЬНО" },
-  social: { fr: "RÉSEAUX", en: "SOCIAL", vi: "MẠNG XÃ HỘI", ar: "التواصل", ru: "СОЦСЕТИ" },
-  maintenance: { fr: "CARE", en: "CARE", vi: "BẢO TRÌ", ar: "الصيانة", ru: "ПОДДЕРЖКА" },
-  robotics: { fr: "ROBOTICS", en: "ROBOTICS", vi: "ROBOT", ar: "الروبوتات", ru: "РОБОТОТЕХНИКА" },
+const SERVICE_IMAGES: Record<string, string> = {
+  websites: XR_PHOTOS.websites,
+  seo: XR_PHOTOS.seo,
+  maps: XR_PHOTOS.maps,
+  social: XR_PHOTOS.social,
+  branding: XR_PHOTOS.branding,
+  maintenance: XR_PHOTOS.maintenance,
+  robotics: XR_PHOTOS.robotics,
 };
-const HREF: Record<string, string> = {
-  websites: "/services/websites",
-  branding: "/services/branding",
-  seo: "/services/seo",
-  maps: "/services/maps",
-  social: "/services/social",
-  maintenance: "/services/webcare",
+
+const SERVICE_KICKER: Record<string, { fr: string; en: string; vi: string; ar: string; ru: string }> = {
+  websites: { fr: "SITES WEB", en: "WEBSITES", vi: "WEBSITE", ar: "المواقع", ru: "САЙТЫ" },
+  seo: { fr: "VISIBILITÉ GOOGLE", en: "GOOGLE SEO", vi: "SEO GOOGLE", ar: "الظهور على Google", ru: "SEO GOOGLE" },
+  maps: { fr: "PRÉSENCE LOCALE", en: "LOCAL MAPS", vi: "GOOGLE MAPS", ar: "خرائط محلية", ru: "GOOGLE MAPS" },
+  social: { fr: "SOCIAL MEDIA", en: "SOCIAL MEDIA", vi: "MẠNG XÃ HỘI", ar: "التواصل الاجتماعي", ru: "СОЦСЕТИ" },
+  branding: { fr: "IDENTITÉ & MARQUE", en: "BRANDING", vi: "THƯƠNG HIỆU", ar: "الهوية البصرية", ru: "БРЕНДИНГ" },
+  maintenance: { fr: "WEBCARE", en: "WEBCARE", vi: "BẢO TRÌ", ar: "الصيانة", ru: "ПОДДЕРЖКА" },
+  robotics: { fr: "IA & ROBOTIQUE", en: "AI & ROBOTICS", vi: "AI & ROBOT", ar: "الذكاء والروبوتات", ru: "ИИ И РОБОТИКА" },
 };
 
 export function ServicesCatalog() {
   const { t, price, lang } = useLang();
-  const catalog = CATALOG_IDS.map((id) => SERVICES.find((s) => s.id === id)).filter(
+  const isRtl = lang === "ar";
+  const coreServices = CORE_IDS.map((id) => SERVICES.find((s) => s.id === id)).filter(
     Boolean,
   ) as typeof SERVICES;
+  const roboticsService = SERVICES.find((s) => s.id === "robotics");
 
   const copy = {
     fr: {
-      eyebrow: "SERVICES",
-      title1: "Plusieurs expertises.",
-      title2: "Un seul système.",
-      lead: "Sites vitrines, sites business et e-commerce, identité, SEO, Google Maps, réseaux et maintenance. Chaque prestation répond à un besoin précis — ensemble, elles construisent une présence digitale qui convertit.",
-      learn: "En savoir plus",
+      eyebrow: "NOS EXPERTISES",
+      title1: "Des solutions digitales complètes",
+      title2: "et sur mesure.",
+      lead: "De la stratégie à l’exécution, nous activons les bons leviers pour développer votre visibilité, attirer des clients qualifiés et structurer votre croissance durable.",
+      learn: "Découvrir le service",
       from: "À partir de",
-      ctaTitle: "Pas sûr par où commencer ?",
-      ctaLead: "Décrivez votre situation. On vous propose un ordre clair et une estimation.",
-      cta: "Lancer mon analyse",
-      enter: "Entrer dans l’expérience",
-      quote: "Faire mon devis",
-      compose: "Composer cette offre",
-      quoteFree: "Faire mon devis gratuit",
+      ctaTitle: "Pas encore sûr de l’ordre des priorités ?",
+      ctaLead:
+        "Décrivez vos objectifs dans notre configurateur en 3 étapes ou demandez un audit gratuit. Nous vous proposons un plan d’action clair et chiffré.",
+      quote: "Composer mon devis",
+      compose: "Ajouter au devis",
+      quoteFree: "Démarrer mon projet",
       perMonth: " / mois",
       perYear: " / an",
+      specialBadge: "INNOVATION & LOGICIELS MÉTIERS",
+      aiCta: "IA & Logiciels sur mesure",
     },
     en: {
-      eyebrow: "SERVICES",
-      title1: "Multiple disciplines.",
-      title2: "One system.",
-      lead: "Showcase, business and e-commerce websites, identity, SEO, Google Maps, social and maintenance. Each service solves a specific need — together they build a digital presence that converts.",
-      learn: "Learn more",
+      eyebrow: "OUR EXPERTISE",
+      title1: "Complete, tailor-made",
+      title2: "digital solutions.",
+      lead: "From strategy to execution, we activate the right levers to grow your visibility, attract qualified clients and build lasting performance.",
+      learn: "Explore service",
       from: "From",
-      ctaTitle: "Not sure where to start?",
-      ctaLead: "Tell us about your situation. We'll suggest a sequence and a budget range.",
-      cta: "Start my analysis",
-      enter: "Enter the experience",
+      ctaTitle: "Not sure where to start first?",
+      ctaLead:
+        "Share your goals in our 3-step quote configurator or run a free diagnostic. We will recommend a clear sequence and transparent budget.",
       quote: "Build my quote",
-      compose: "Build this offer",
-      quoteFree: "Get my free quote",
+      compose: "Configure offer",
+      quoteFree: "Start my project",
       perMonth: " / mo",
       perYear: " / yr",
+      specialBadge: "INNOVATION & CUSTOM SOFTWARE",
+      aiCta: "AI & Custom Software",
     },
     vi: {
-      eyebrow: "DỊCH VỤ",
-      title1: "Nhiều chuyên môn.",
-      title2: "Một hệ thống.",
-      lead: "Website giới thiệu, website doanh nghiệp và e-commerce, nhận diện, SEO, Google Maps, mạng xã hội và bảo trì. Mỗi dịch vụ giải quyết một nhu cầu cụ thể — cùng nhau tạo nên hiện diện số có khả năng chuyển đổi.",
-      learn: "Tìm hiểu thêm",
+      eyebrow: "CHUYÊN MÔN CỦA CHÚNG TÔI",
+      title1: "Giải pháp số toàn diện",
+      title2: "và may đo riêng.",
+      lead: "Từ chiến lược đến thực thi, chúng tôi kích hoạt đúng đòn bẩy giúp bạn tăng độ phủ, thu hút khách hàng tiềm năng và phát triển bền vững.",
+      learn: "Xem chi tiết",
       from: "Từ",
-      ctaTitle: "Chưa chắc bắt đầu từ đâu?",
-      ctaLead: "Mô tả tình huống của bạn. Chúng tôi đề xuất thứ tự và khoảng ngân sách.",
-      cta: "Bắt đầu phân tích",
-      enter: "Bước vào trải nghiệm",
+      ctaTitle: "Chưa chắc nên bắt đầu từ đâu?",
+      ctaLead:
+        "Mô tả mục tiêu của bạn trong công cụ báo giá 3 bước. Chúng tôi sẽ đề xuất thứ tự triển khai và ngân sách minh bạch.",
       quote: "Tạo báo giá",
       compose: "Chọn gói này",
-      quoteFree: "Nhận báo giá miễn phí",
+      quoteFree: "Bắt đầu dự án",
       perMonth: " / tháng",
       perYear: " / năm",
+      specialBadge: "ĐỔI MỚI & PHẦN MỀM RIÊNG",
+      aiCta: "AI & Phần mềm theo yêu cầu",
     },
     ar: {
-      eyebrow: "الخدمات",
-      title1: "خبرات متعددة.",
-      title2: "منظومة واحدة.",
-      lead: "مواقع تعريفية وتجارية ومتاجر إلكترونية، وهوية بصرية، وتحسين محركات البحث، وخرائط Google، وشبكات اجتماعية وصيانة. تعالج كل خدمة حاجة محددة، وتتكامل الخدمات لبناء حضور رقمي يحقق النتائج.",
-      learn: "اكتشف المزيد",
+      eyebrow: "خبراتنا الرقمية",
+      title1: "حلول رقمية متكاملة",
+      title2: "مصممة على مقاسك.",
+      lead: "من الاستراتيجية إلى التنفيذ، نفعّل الأدوات المناسبة لتعزيز ظهورك، وجذب عملاء مؤهلين، وبناء نمو مستدام لعلامتك.",
+      learn: "اكتشف الخدمة",
       from: "ابتداءً من",
-      ctaTitle: "لست متأكدًا من أين تبدأ؟",
-      ctaLead: "اشرح لنا وضعك، وسنقترح ترتيبًا واضحًا ونطاقًا تقديريًا للميزانية.",
-      cta: "ابدأ التحليل",
-      enter: "اكتشف التجربة",
-      quote: "أنشئ عرض السعر",
-      compose: "اختر هذه الباقة",
-      quoteFree: "احصل على عرض سعر مجاني",
+      ctaTitle: "لست متأكدًا من نقطة البداية؟",
+      ctaLead:
+        "شاركنا أهدافك عبر مُهيّئ العرض في 3 خطوات لنقترح لك خطة عمل واضحة وميزانية شفافة.",
+      quote: "إنشاء عرض سعر",
+      compose: "اختر هذه الخدمة",
+      quoteFree: "ابدأ مشروعي",
       perMonth: " / شهر",
       perYear: " / سنة",
+      specialBadge: "الابتكار والبرمجيات المخصصة",
+      aiCta: "الذكاء الاصطناعي والبرمجيات",
     },
     ru: {
-      eyebrow: "УСЛУГИ",
-      title1: "Разные компетенции.",
-      title2: "Единая система.",
-      lead: "Сайты-визитки и бизнес-сайты, интернет-магазины, айдентика, SEO, Google Maps, социальные сети и обслуживание. Каждая услуга решает конкретную задачу, а вместе они создают цифровое присутствие, которое помогает конвертировать посетителей в клиентов.",
-      learn: "Подробнее",
+      eyebrow: "НАШИ КОМПЕТЕНЦИИ",
+      title1: "Комплексные цифровые решения",
+      title2: "под ваши задачи.",
+      lead: "От стратегии до реализации — задействуем нужные каналы для роста видимости, привлечения целевых клиентов и устойчивого развития бренда.",
+      learn: "Подробнее об услуге",
       from: "От",
-      ctaTitle: "Не знаете, с чего начать?",
-      ctaLead: "Расскажите о своей ситуации. Мы предложим понятную последовательность действий и ориентир по бюджету.",
-      cta: "Начать анализ",
-      enter: "Открыть возможности",
+      ctaTitle: "Не знаете, с какого шага начать?",
+      ctaLead:
+        "Опишите задачи в 3-шаговом конфигураторе сметы — мы предложим понятный план действий и прозрачный бюджет.",
       quote: "Составить смету",
-      compose: "Выбрать этот пакет",
-      quoteFree: "Получить бесплатную смету",
+      compose: "Выбрать услугу",
+      quoteFree: "Начать проект",
       perMonth: " / мес",
       perYear: " / год",
+      specialBadge: "ИННОВАЦИИ И ИНДИВИДУАЛЬНОЕ ПО",
+      aiCta: "ИИ и разработка ПО",
     },
   }[lang];
 
   return (
-    <section className="relative">
-      {/* Hero — same Surface digitale universe as Home */}
-      <div className="relative min-h-[70vh] overflow-hidden border-b border-border/40">
-        <div className="pointer-events-none absolute inset-0 bg-background">
-          <SurfaceDigital className="opacity-80" />
-        </div>
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(80% 60% at 50% 40%, transparent 0%, color-mix(in oklab, var(--background) 55%, transparent) 70%, var(--background) 100%)",
-          }}
-        />
-        <div className="relative z-10 mx-auto flex min-h-[70vh] max-w-[1400px] flex-col justify-end px-5 pb-16 pt-32 sm:px-8 lg:px-12 lg:pb-24">
-          <Parallax speed={-0.035}><p className="label-mono text-[10px] uppercase tracking-[0.32em] text-primary">{copy.eyebrow}</p>
-          <h1 className="display-serif mt-5 max-w-5xl text-5xl leading-[0.9] sm:text-7xl lg:text-[6.5rem]">
-            {copy.title1}
-            <br />
-            <span className="text-foreground/90">{copy.title2}</span>
-          </h1>
-          <p className="mt-8 max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
-            {copy.lead}
-          </p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <a href="/#quote" className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 label-mono text-[10px] font-semibold uppercase tracking-[.14em] text-primary-foreground transition hover:-translate-y-0.5">{copy.enter} <ArrowUpRight className="h-4 w-4" /></a>
-            <a href="/#quote" className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-5 py-3 label-mono text-[10px] font-semibold uppercase tracking-[.14em] text-foreground transition hover:border-primary hover:text-primary">{copy.quote}</a>
+    <section
+      dir={isRtl ? "rtl" : "ltr"}
+      className="relative bg-[#F7F4EE] text-[#171613]"
+    >
+      {/* Editorial Ivory Header */}
+      <div className="border-b border-[#171613]/10 bg-[#F7F4EE] pb-14 pt-32 sm:pb-20 sm:pt-36">
+        <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
+          <div className="grid items-end gap-8 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <div className="inline-flex items-center gap-3">
+                <span className="h-[1px] w-7 bg-[#9E7F5A]" aria-hidden />
+                <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7D6445]">
+                  {copy.eyebrow}
+                </span>
+              </div>
+              <h1 className="mt-5 font-serif text-4xl font-medium leading-[1.03] tracking-[-0.025em] text-[#171613] sm:text-6xl lg:text-[4.25rem]">
+                {copy.title1}{" "}
+                <span className="italic font-normal text-[#9E7F5A]">{copy.title2}</span>
+              </h1>
+            </div>
+            <div className="lg:col-span-5">
+              <p className="text-sm leading-relaxed text-[#57534B] sm:text-base">{copy.lead}</p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a
+                  href="/#quote"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#171613] px-6 py-3 text-xs font-semibold text-[#F7F4EE] transition hover:bg-[#2A2823]"
+                >
+                  {copy.quoteFree} <ArrowUpRight className="h-4 w-4 text-white" />
+                </a>
+                <a
+                  href="/#audit"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#171613]/20 bg-white px-6 py-3 text-xs font-semibold text-[#171613] transition hover:border-[#9E7F5A]"
+                >
+                  {copy.quote}
+                </a>
+              </div>
+            </div>
           </div>
-          </Parallax>
-          <p className="mt-6 label-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
-            01 // {String(catalog.length).padStart(2, "0")}
-          </p>
         </div>
       </div>
 
-      {/* Six service scenes — editorial bento */}
-      <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-12 lg:gap-6">
-          {catalog.map((service, index) => {
-            const kicker = SERVICE_KICKER[service.id] ?? { fr: "SERVICE", en: "SERVICE", vi: "DỊCH VỤ" };
-            const href = HREF[service.id] ?? `/services/${service.id}`;
-            const featured = index === 0;
+      {/* 6 Core Services — Clean 3×2 Editorial Grid */}
+      <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8 lg:px-12 lg:py-20">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {coreServices.map((service, index) => {
+            const kicker = SERVICE_KICKER[service.id] ?? SERVICE_KICKER.websites;
+            const href = CANONICAL_SERVICE_URLS[service.id] ?? `/services/${service.id}`;
+            const img = SERVICE_IMAGES[service.id] ?? XR_PHOTOS.websites;
+            const periodText =
+              service.fromPeriod === "month"
+                ? copy.perMonth
+                : service.fromPeriod === "year"
+                  ? copy.perYear
+                  : "";
+
             return (
-              <article key={service.id} className={cn("group relative overflow-hidden rounded-[2rem] border border-border/70 bg-card/50 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-primary/45 hover:shadow-2xl", featured ? "md:col-span-2 lg:col-span-7" : "lg:col-span-5")}>
-                <div className={cn("relative overflow-hidden", featured ? "min-h-[560px]" : "min-h-[460px]")}>
-                  <div className="absolute inset-0 p-3 sm:p-5"><ServiceIllustration service={service.id} title={t(service.title)} /></div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/55 to-transparent" />
-                  <div className="relative z-10 flex h-full min-h-[460px] flex-col justify-between p-6 sm:p-8">
-                    <div className="flex items-center justify-between">
-                      <span className="label-mono rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[8px] uppercase tracking-[.2em] text-white/70 backdrop-blur">{kicker[lang] ?? kicker.en}</span>
-                      <span className="label-mono text-[8px] text-white/40">{String(index + 1).padStart(2, "0")} / {String(catalog.length).padStart(2, "0")}</span>
-                    </div>
-                    <div className="max-w-2xl">
-                      <h2 className={cn("display-serif leading-[.9] text-white", featured ? "text-5xl sm:text-7xl" : "text-4xl sm:text-5xl")}>{t(service.title)}</h2>
-                      <p className="mt-4 max-w-xl text-sm leading-6 text-white/60">{t(service.description)}</p>
-                      <div className="mt-6 flex flex-wrap items-center gap-2.5">
-                        <a href={href} className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/35 px-5 py-3 label-mono text-[9px] font-semibold uppercase tracking-[.12em] text-white transition hover:-translate-y-0.5 hover:border-white/40">
-                          {copy.learn} <ArrowUpRight className="h-4 w-4" />
-                        </a>
-                        <a href={`/?service=${service.id}#quote`} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 label-mono text-[9px] font-semibold uppercase tracking-[.12em] text-black transition hover:-translate-y-0.5 hover:bg-white/90">
-                          {copy.compose} <ArrowUpRight className="h-4 w-4" />
-                        </a>
-                        <span className="rounded-full border border-white/15 bg-black/30 px-4 py-3 label-mono text-[9px] text-white/70 backdrop-blur">{copy.from} {price(service.fromEur)}{service.fromPeriod === "month" ? copy.perMonth : service.fromPeriod === "year" ? copy.perYear : ""}</span>
-                      </div>
-                    </div>
+              <article
+                key={service.id}
+                className="xr-editorial-card group flex flex-col overflow-hidden rounded-3xl border border-[#171613]/10 bg-white shadow-[0_12px_34px_rgba(23,22,19,0.05)]"
+              >
+                <a href={href} className="relative block aspect-[16/10] overflow-hidden bg-[#171613]">
+                  <img
+                    src={img}
+                    alt={t(service.title)}
+                    loading={index < 3 ? "eager" : "lazy"}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#171613]/55 via-transparent to-transparent" />
+                  <div className="absolute inset-x-4 top-4 flex items-center justify-between gap-2">
+                    <span className="rounded-full border border-white/25 bg-[#171613]/75 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[#F7F4EE] backdrop-blur-md">
+                      {String(index + 1).padStart(2, "0")} / 06 · {kicker[lang] ?? kicker.en}
+                    </span>
+                    <span className="rounded-full bg-[#F7F4EE]/95 px-3 py-1 font-mono text-[10px] font-semibold text-[#171613] shadow-sm">
+                      {copy.from} {price(service.fromEur)}
+                      {periodText}
+                    </span>
+                  </div>
+                </a>
+
+                <div className="flex flex-1 flex-col p-6">
+                  <h2 className="font-serif text-2xl font-medium leading-tight text-[#171613]">
+                    {t(service.title)}
+                  </h2>
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-[#57534B]">
+                    {t(service.description)}
+                  </p>
+                  <div className="mt-6 flex flex-wrap items-center gap-2.5 border-t border-[#171613]/10 pt-4">
+                    <a
+                      href={href}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-[#171613] px-4 py-2 text-xs font-semibold text-[#F7F4EE] transition hover:bg-[#2A2823]"
+                    >
+                      {copy.learn} <ArrowUpRight className="h-3.5 w-3.5 text-white" />
+                    </a>
+                    <a
+                      href={`/?service=${service.id}#quote`}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-[#171613]/15 bg-[#FAF8F4] px-4 py-2 text-xs font-medium text-[#171613] transition hover:border-[#9E7F5A]"
+                    >
+                      {copy.compose}
+                    </a>
                   </div>
                 </div>
               </article>
             );
           })}
         </div>
+
+        {/* Full-Width Feature Card: AI, Software & Robotics */}
+        {roboticsService && (
+          <article className="mt-8 overflow-hidden rounded-3xl border border-[#E5E5E0] bg-white text-[#12110E] shadow-[0_20px_50px_rgba(23,22,19,0.06)]">
+            <div className="grid items-center gap-6 lg:grid-cols-12">
+              <div className="relative h-64 lg:col-span-5 lg:h-full bg-slate-900">
+                <img
+                  src={SERVICE_IMAGES.robotics}
+                  alt={t(roboticsService.title)}
+                  loading="lazy"
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/10 hidden lg:block" />
+              </div>
+              <div className="p-6 sm:p-8 lg:col-span-7 lg:p-10">
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#E5E5E0] bg-[#FAF9F5] px-3.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[#706A61]">
+                  <Bot className="h-3.5 w-3.5 text-[#12110E]" /> {copy.specialBadge}
+                </span>
+                <h2 className="mt-4 font-serif text-3xl font-medium text-[#12110E] sm:text-4xl">
+                  {t(roboticsService.title)}
+                </h2>
+                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#5A554E]">
+                  {t(roboticsService.description)}
+                </p>
+                <div className="mt-6 flex flex-wrap items-center gap-3">
+                  <Link
+                    to="/services/robotique"
+                    className="inline-flex items-center gap-2 rounded-full bg-[#12110E] px-5 py-2.5 text-xs font-semibold text-white shadow-md transition hover:bg-[#2B2925]"
+                  >
+                    {copy.learn} <ArrowUpRight className="h-4 w-4 text-white" />
+                  </Link>
+                  <a
+                    href="/services/ai"
+                    className="inline-flex items-center gap-2 rounded-full border border-[#E5E5E0] bg-[#FAF9F5] px-5 py-2.5 text-xs font-semibold text-[#12110E] transition hover:bg-white hover:border-[#12110E]"
+                  >
+                    {copy.aiCta} <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
+        )}
+
         {/* Bottom CTA */}
-        <div className="mt-20 rounded-3xl border border-primary/20 bg-primary/[0.04] px-8 py-12 sm:px-12 lg:px-16">
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <div className="mt-14 rounded-3xl border border-[#171613]/12 bg-[#EEE9E0] px-7 py-10 sm:px-12 lg:px-14">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <h3 className="display-serif text-3xl sm:text-4xl">{copy.ctaTitle}</h3>
-              <p className="mt-3 max-w-xl text-sm leading-7 text-muted-foreground">{copy.ctaLead}</p>
+              <h3 className="font-serif text-2xl font-medium text-[#171613] sm:text-4xl">
+                {copy.ctaTitle}
+              </h3>
+              <p className="mt-2.5 max-w-xl text-sm leading-relaxed text-[#57534B]">
+                {copy.ctaLead}
+              </p>
             </div>
             <a
               href="/#quote"
-              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-6 py-3.5 label-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-foreground transition-all hover:gap-3"
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#171613] px-7 py-3.5 text-xs font-semibold text-[#F7F4EE] transition hover:bg-[#2A2823]"
             >
               {copy.quoteFree}
-              <ArrowUpRight className="h-4 w-4" />
+              <ArrowUpRight className="h-4 w-4 text-white" />
             </a>
           </div>
         </div>

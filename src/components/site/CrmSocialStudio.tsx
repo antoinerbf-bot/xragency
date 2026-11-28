@@ -113,10 +113,10 @@ const INITIAL_CAMPAIGNS: SocialCampaign[] = [
         "Plan 1 (0-3s) : Chronomètre comparatif entre un vieux CMS lourd et une architecture React 19 / Vite.\nPlan 2 (3-8s) : Score 100/100 sur Google PageSpeed Insights.\nPlan 3 (8-15s) : 'Optimise ta conversion avec XR Agency : audit express sur xragencyai.com'",
     },
     instagram: {
-      caption: `La vitesse est le premier facteur de conversion web en 2026 🏎️💨\n\nChaque seconde de chargement en trop détruit votre taux de rebond. Nous développons des applications ultra-légères avec TanStack Start et Tailwind v4.\n\nRésultat : Score 100/100 garanti et conversion maximale.\n\n👉 Audit offert de votre site actuel sur xragencyai.com\n\n#pagespeed #webperf #seo #react19 #tanstack #developpeurweb`,
+      caption: `La performance web se travaille page par page.\n\nNous examinons les médias, le code, les ressources et les parcours mobiles avec des outils de mesure adaptés.\n\nLes résultats dépendent du contenu, de l’hébergement et des appareils testés.\n\nDemandez un diagnostic de votre site sur xragencyai.com\n\n#pagespeed #webperf #seo #react19 #tanstack #developpeurweb`,
     },
     facebook: {
-      post: `Saviez-vous que plus de la moitié des visiteurs quittent un site s'il met plus de 3 secondes à s'afficher ?\n\nNos architectures web modernes garantissent des performances extrêmes et un SEO technique sans compromis.\n\nFaites tester votre site gratuitement sur https://xragencyai.com`,
+      post: `Un parcours lent ou difficile à utiliser peut freiner la prise de contact.\n\nNous optimisons les ressources, la structure et le SEO technique selon le périmètre du projet. Les performances sont mesurées, jamais garanties par un score arbitraire.\n\nFaites tester votre site gratuitement sur https://xragencyai.com`,
     },
     assets: {
       squareSvg: "/social-assets/demo-square.svg",
@@ -152,13 +152,17 @@ export function CrmSocialStudio() {
       try {
         const saved = localStorage.getItem("xr_crm_social_campaigns");
         if (saved) return JSON.parse(saved);
-      } catch {}
+      } catch {
+        /* Audio or storage fallback: keep the interface usable. */
+      }
     }
     return INITIAL_CAMPAIGNS;
   });
 
   const [filter, setFilter] = useState<"all" | "ready" | "published">("all");
-  const [selectedPlatform, setSelectedPlatform] = useState<Record<string, "instagram" | "facebook" | "tiktok">>({});
+  const [selectedPlatform, setSelectedPlatform] = useState<
+    Record<string, "instagram" | "facebook" | "tiktok">
+  >({});
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -172,13 +176,17 @@ export function CrmSocialStudio() {
     if (typeof window !== "undefined") {
       try {
         localStorage.setItem("xr_crm_social_campaigns", JSON.stringify(newItems));
-      } catch {}
+      } catch {
+        /* Audio or storage fallback: keep the interface usable. */
+      }
     }
   };
 
   const toggleStatus = (id: string) => {
     const updated = campaigns.map((c) =>
-      c.id === id ? { ...c, status: c.status === "ready" ? ("published" as const) : ("ready" as const) } : c
+      c.id === id
+        ? { ...c, status: c.status === "ready" ? ("published" as const) : ("ready" as const) }
+        : c,
     );
     saveCampaigns(updated);
     showToast("Statut de la campagne mis à jour !");
@@ -191,7 +199,11 @@ export function CrmSocialStudio() {
     }
   };
 
-  const handle1ClickPublish = (platform: "instagram" | "facebook" | "tiktok", text: string, campaignId: string) => {
+  const handle1ClickPublish = (
+    platform: "instagram" | "facebook" | "tiktok",
+    text: string,
+    campaignId: string,
+  ) => {
     handleCopy(text, `Texte ${platform}`);
     setCopiedId(campaignId);
 
@@ -284,7 +296,8 @@ export function CrmSocialStudio() {
             </h2>
             <p className="max-w-2xl text-xs text-neutral-300 leading-relaxed">
               Créez et publiez en <strong className="text-white">1 clic</strong> sur vos comptes{" "}
-              <strong className="text-[#00f2fe]">Instagram</strong>, <strong className="text-[#1877f2]">Facebook</strong> et{" "}
+              <strong className="text-[#00f2fe]">Instagram</strong>,{" "}
+              <strong className="text-[#1877f2]">Facebook</strong> et{" "}
               <strong className="text-white">TikTok</strong> pour propulser le trafic vers{" "}
               <strong className="text-[#d4af37]">xragencyai.com</strong>.
             </p>
@@ -314,19 +327,27 @@ export function CrmSocialStudio() {
         {/* Quick Stats Bar */}
         <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 border-t border-white/10 pt-4 text-xs">
           <div className="rounded-xl border border-white/8 bg-black/20 p-3">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">Total Campagnes</span>
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">
+              Total Campagnes
+            </span>
             <p className="text-lg font-black text-white">{campaigns.length}</p>
           </div>
           <div className="rounded-xl border border-white/8 bg-black/20 p-3">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">Prêtes à publier</span>
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">
+              Prêtes à publier
+            </span>
             <p className="text-lg font-black text-[#00f2fe]">{readyCount}</p>
           </div>
           <div className="rounded-xl border border-white/8 bg-black/20 p-3">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">Déjà diffusées</span>
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">
+              Déjà diffusées
+            </span>
             <p className="text-lg font-black text-[#d4af37]">{publishedCount}</p>
           </div>
           <div className="rounded-xl border border-white/8 bg-black/20 p-3">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">Mode Diffusion</span>
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">
+              Mode Diffusion
+            </span>
             <p className="text-xs font-bold text-emerald-400 flex items-center gap-1.5 mt-1">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
               Session Mac 1-Clic Active
@@ -349,7 +370,9 @@ export function CrmSocialStudio() {
               onClick={() => setFilter(item.id)}
               className={cn(
                 "rounded-lg px-3 py-1.5 font-bold transition",
-                filter === item.id ? "bg-[#d4af37] text-[#050608]" : "text-neutral-400 hover:text-white"
+                filter === item.id
+                  ? "bg-[#d4af37] text-[#050608]"
+                  : "text-neutral-400 hover:text-white",
               )}
             >
               {item.label}
@@ -369,15 +392,15 @@ export function CrmSocialStudio() {
             activePlatform === "instagram"
               ? camp.instagram.caption
               : activePlatform === "facebook"
-              ? camp.facebook.post
-              : `[HOOK 3s]\n${camp.tiktok.hook}\n\n[SCÉNARIO VIDÉO]\n${camp.tiktok.script}`;
+                ? camp.facebook.post
+                : `[HOOK 3s]\n${camp.tiktok.hook}\n\n[SCÉNARIO VIDÉO]\n${camp.tiktok.script}`;
 
           return (
             <div
               key={camp.id}
               className={cn(
                 "flex flex-col justify-between rounded-3xl border bg-[#0b0c13] p-5 shadow-xl transition hover:border-[#00f2fe]/40",
-                camp.status === "published" ? "border-white/8 opacity-75" : "border-white/12"
+                camp.status === "published" ? "border-white/8 opacity-75" : "border-white/12",
               )}
             >
               <div className="space-y-4">
@@ -398,9 +421,13 @@ export function CrmSocialStudio() {
                       "rounded-full p-1 text-[10px] font-bold transition",
                       camp.status === "published"
                         ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                        : "bg-white/5 text-neutral-400 hover:text-white"
+                        : "bg-white/5 text-neutral-400 hover:text-white",
                     )}
-                    title={camp.status === "published" ? "Marquer comme à publier" : "Marquer comme publié"}
+                    title={
+                      camp.status === "published"
+                        ? "Marquer comme à publier"
+                        : "Marquer comme publié"
+                    }
                   >
                     <CheckCircle2 className="h-4 w-4" />
                   </button>
@@ -410,32 +437,42 @@ export function CrmSocialStudio() {
                 <div className="flex rounded-xl border border-white/8 bg-black/30 p-1 text-[11px]">
                   <button
                     type="button"
-                    onClick={() => setSelectedPlatform((prev) => ({ ...prev, [camp.id]: "instagram" }))}
+                    onClick={() =>
+                      setSelectedPlatform((prev) => ({ ...prev, [camp.id]: "instagram" }))
+                    }
                     className={cn(
                       "flex-1 rounded-lg py-1 font-bold text-center transition",
                       activePlatform === "instagram"
                         ? "bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] text-white shadow-sm"
-                        : "text-neutral-400 hover:text-white"
+                        : "text-neutral-400 hover:text-white",
                     )}
                   >
                     📸 Insta
                   </button>
                   <button
                     type="button"
-                    onClick={() => setSelectedPlatform((prev) => ({ ...prev, [camp.id]: "facebook" }))}
+                    onClick={() =>
+                      setSelectedPlatform((prev) => ({ ...prev, [camp.id]: "facebook" }))
+                    }
                     className={cn(
                       "flex-1 rounded-lg py-1 font-bold text-center transition",
-                      activePlatform === "facebook" ? "bg-[#1877f2] text-white shadow-sm" : "text-neutral-400 hover:text-white"
+                      activePlatform === "facebook"
+                        ? "bg-[#1877f2] text-white shadow-sm"
+                        : "text-neutral-400 hover:text-white",
                     )}
                   >
                     📘 Facebook
                   </button>
                   <button
                     type="button"
-                    onClick={() => setSelectedPlatform((prev) => ({ ...prev, [camp.id]: "tiktok" }))}
+                    onClick={() =>
+                      setSelectedPlatform((prev) => ({ ...prev, [camp.id]: "tiktok" }))
+                    }
                     className={cn(
                       "flex-1 rounded-lg py-1 font-bold text-center transition",
-                      activePlatform === "tiktok" ? "bg-black text-[#00f2fe] border border-white/20 shadow-sm" : "text-neutral-400 hover:text-white"
+                      activePlatform === "tiktok"
+                        ? "bg-black text-[#00f2fe] border border-white/20 shadow-sm"
+                        : "text-neutral-400 hover:text-white",
                     )}
                   >
                     🎵 TikTok
@@ -487,7 +524,9 @@ export function CrmSocialStudio() {
                 <div className="grid grid-cols-3 gap-2">
                   <button
                     type="button"
-                    onClick={() => handle1ClickPublish("instagram", camp.instagram.caption, camp.id)}
+                    onClick={() =>
+                      handle1ClickPublish("instagram", camp.instagram.caption, camp.id)
+                    }
                     className="flex flex-col items-center justify-center rounded-xl bg-gradient-to-br from-[#f09433] via-[#dc2743] to-[#bc1888] p-2 text-white shadow-sm hover:opacity-90 active:scale-95 transition"
                   >
                     <span className="text-[10px] font-black uppercase tracking-wider">Insta</span>
@@ -499,7 +538,9 @@ export function CrmSocialStudio() {
                     onClick={() => handle1ClickPublish("facebook", camp.facebook.post, camp.id)}
                     className="flex flex-col items-center justify-center rounded-xl bg-[#1877f2] p-2 text-white shadow-sm hover:bg-[#166fe5] active:scale-95 transition"
                   >
-                    <span className="text-[10px] font-black uppercase tracking-wider">Facebook</span>
+                    <span className="text-[10px] font-black uppercase tracking-wider">
+                      Facebook
+                    </span>
                     <span className="text-[8px] font-medium opacity-90">1-Clic</span>
                   </button>
 
@@ -509,7 +550,7 @@ export function CrmSocialStudio() {
                       handle1ClickPublish(
                         "tiktok",
                         `[HOOK] ${camp.tiktok.hook}\n\n[SCRIPT]\n${camp.tiktok.script}`,
-                        camp.id
+                        camp.id,
                       )
                     }
                     className="flex flex-col items-center justify-center rounded-xl bg-black border border-white/20 p-2 text-[#00f2fe] shadow-sm hover:bg-white/5 active:scale-95 transition"

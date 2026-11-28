@@ -124,17 +124,20 @@ export function FunnelProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const applyGoalPreset = useCallback((goalId: string) => {
-    const pill = HERO_FUNNEL_PILLS.find((p) => p.id === goalId);
-    if (pill) {
-      setState((prev) => ({
-        ...prev,
-        goal: goalId,
-        selectedServices: Array.from(new Set([...prev.selectedServices, ...pill.services])),
-      }));
-      scrollToSection(pill.targetAnchor);
-    }
-  }, [scrollToSection]);
+  const applyGoalPreset = useCallback(
+    (goalId: string) => {
+      const pill = HERO_FUNNEL_PILLS.find((p) => p.id === goalId);
+      if (pill) {
+        setState((prev) => ({
+          ...prev,
+          goal: goalId,
+          selectedServices: Array.from(new Set([...prev.selectedServices, ...pill.services])),
+        }));
+        scrollToSection(pill.targetAnchor);
+      }
+    },
+    [scrollToSection],
+  );
 
   const computedPricing = useMemo(() => {
     let totalOnce = 0;
@@ -142,7 +145,8 @@ export function FunnelProvider({ children }: { children: React.ReactNode }) {
 
     state.selectedServices.forEach((svcId) => {
       if (svcId === "website") {
-        const p = state.websiteTier === "ecommerce" ? 1499 : state.websiteTier === "business" ? 799 : 499;
+        const p =
+          state.websiteTier === "ecommerce" ? 1499 : state.websiteTier === "business" ? 799 : 499;
         totalOnce += p;
       } else if (svcId === "branding") {
         const p = state.brandingTier === "premium" ? 349 : 179;
@@ -159,12 +163,15 @@ export function FunnelProvider({ children }: { children: React.ReactNode }) {
     return { totalOnce, totalMonth };
   }, [state.selectedServices, state.websiteTier, state.brandingTier]);
 
-  const buildWhatsAppUrl = useCallback((lang: Lang) => {
-    const intro = FUNNEL_UI.sticky.waIntro[lang] ?? FUNNEL_UI.sticky.waIntro.fr;
-    const servicesList = state.selectedServices.join(", ");
-    const text = `${intro}\n• Secteur : ${state.sector}\n• Services : ${servicesList}\n• Estimation : ${computedPricing.totalOnce} €${computedPricing.totalMonth > 0 ? ` + ${computedPricing.totalMonth} €/mois` : ""}`;
-    return `${CONTACT.whatsapp}?text=${encodeURIComponent(text)}`;
-  }, [state.selectedServices, state.sector, computedPricing]);
+  const buildWhatsAppUrl = useCallback(
+    (lang: Lang) => {
+      const intro = FUNNEL_UI.sticky.waIntro[lang] ?? FUNNEL_UI.sticky.waIntro.fr;
+      const servicesList = state.selectedServices.join(", ");
+      const text = `${intro}\n• Secteur : ${state.sector}\n• Services : ${servicesList}\n• Estimation : ${computedPricing.totalOnce} €${computedPricing.totalMonth > 0 ? ` + ${computedPricing.totalMonth} €/mois` : ""}`;
+      return `${CONTACT.whatsapp}?text=${encodeURIComponent(text)}`;
+    },
+    [state.selectedServices, state.sector, computedPricing],
+  );
 
   const value = useMemo(
     () => ({
@@ -194,10 +201,14 @@ export function FunnelProvider({ children }: { children: React.ReactNode }) {
       scrollToSection,
       computedPricing,
       buildWhatsAppUrl,
-    ]
+    ],
   );
 
   return <FunnelContext.Provider value={value}>{children}</FunnelContext.Provider>;
+}
+
+export function useOptionalFunnel() {
+  return useContext(FunnelContext);
 }
 
 export function useFunnel() {

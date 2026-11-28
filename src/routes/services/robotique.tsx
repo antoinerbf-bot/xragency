@@ -17,7 +17,7 @@ export const Route = createFileRoute("/services/robotique")({
 
 function RoboticsPage() {
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#050608] text-white">
+    <div className="min-h-screen overflow-x-hidden bg-[#FAF8F5] text-[#1A1815]">
       <Nav />
       <main>
         <RoboticsShowcase />
