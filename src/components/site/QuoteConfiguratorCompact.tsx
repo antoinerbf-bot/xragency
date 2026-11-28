@@ -1158,7 +1158,7 @@ const UI_COPY: Record<
   }
 > = {
   fr: {
-    eyebrow: "CONFIGURATEUR DE DEVIS EN 3 ÉTAPES",
+    eyebrow: "DIAGNOSTIC & PROPOSITION STRATÉGIQUE SUR-MESURE",
     heading: "Votre projet,",
     headingAccent: "notre solution.",
     subtitle:
@@ -1206,7 +1206,7 @@ const UI_COPY: Record<
     editStep: "Modifier",
   },
   en: {
-    eyebrow: "3-STEP QUOTE CONFIGURATOR",
+    eyebrow: "STRATEGIC DIAGNOSTIC & TAILORED PROPOSAL",
     heading: "Your project,",
     headingAccent: "our solution.",
     subtitle:
@@ -1527,6 +1527,63 @@ export function QuoteConfiguratorCompact() {
   });
   const [stepError, setStepError] = useState("");
   const [cartSynced, setCartSynced] = useState(false);
+  const [wizardStep, setWizardStep] = useState<number>(0);
+  const [isAdvancing, setIsAdvancing] = useState<boolean>(false);
+
+  const handleSelectSector = (id: string) => {
+    handleDiagnosticChange({ sector: id });
+    setIsAdvancing(true);
+    setTimeout(() => {
+      setWizardStep(1);
+      setIsAdvancing(false);
+    }, 180);
+  };
+
+  const handleSelectWebsite = (id: string) => {
+    handleDiagnosticChange({ website: id });
+    setIsAdvancing(true);
+    setTimeout(() => {
+      setWizardStep(2);
+      setIsAdvancing(false);
+    }, 180);
+  };
+
+  const handleSelectSocial = (id: string) => {
+    handleDiagnosticChange({ social: id });
+    setIsAdvancing(true);
+    setTimeout(() => {
+      setWizardStep(3);
+      setIsAdvancing(false);
+    }, 180);
+  };
+
+  const handleSelectFind = (id: string) => {
+    handleDiagnosticChange({ find: id });
+    setIsAdvancing(true);
+    setTimeout(() => {
+      setWizardStep(4);
+      setIsAdvancing(false);
+    }, 180);
+  };
+
+  const handleSelectGoal = (id: string) => {
+    setDevelopGoals([id]);
+    handleDiagnosticChange({ goals: [id] });
+    setIsAdvancing(true);
+    setTimeout(() => {
+      setWizardStep(5);
+      setIsAdvancing(false);
+    }, 180);
+  };
+
+  const handleSelectBudget = (id: string) => {
+    handleDiagnosticChange({ budget: id });
+    setIsAdvancing(true);
+    setTimeout(() => {
+      setWizardStep(6);
+      setIsAdvancing(false);
+    }, 220);
+  };
 
   const [client, setClient] = useState({
     company: "",
@@ -1640,6 +1697,7 @@ export function QuoteConfiguratorCompact() {
   };
 
   const resetAll = () => {
+    setWizardStep(0);
     setStep(1);
     setSelectedServices([]);
     setSubmitOk(null);
@@ -1875,1046 +1933,729 @@ export function QuoteConfiguratorCompact() {
             </p>
           </div>
 
-          {/* 3-Step Indicator Bar */}
-          <nav aria-label="Étapes du configurateur" className="flex items-center gap-2">
-            {([1, 2, 3] as const).map((s) => {
-              const label = s === 1 ? ui.step1 : s === 2 ? ui.step2 : ui.step3;
-              const isActive = step === s;
-              const isDone = step > s;
-              return (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => goStep(s)}
-                  className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-semibold transition sm:px-4 ${
-                    isActive
-                      ? "border-[#171613] bg-[#171613] text-[#F7F4EE]"
-                      : isDone
-                        ? "border-[#9E7F5A]/50 bg-[#EEE9E0] text-[#171613]"
-                        : "border-[#171613]/15 bg-white text-[#57534B] hover:border-[#9E7F5A]"
-                  }`}
-                >
-                  {isDone && <Check className="h-3.5 w-3.5 text-[#9E7F5A]" />}
-                  <span>{label}</span>
-                </button>
-              );
-            })}
-          </nav>
+          {/* Wizard Navigation Indicator */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#171613]/10 bg-white p-1.5 shadow-xs">
+            <button
+              type="button"
+              onClick={() => setWizardStep(0)}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition",
+                wizardStep < 6
+                  ? "bg-[#171613] text-[#F7F4EE]"
+                  : "bg-transparent text-[#57534B] hover:text-[#171613]"
+              )}
+            >
+              <span>1. Diagnostic Personnalisé</span>
+              {wizardStep < 6 && (
+                <span className="rounded-full bg-white/20 px-2 py-0.5 font-mono text-[10px]">
+                  {wizardStep + 1}/6
+                </span>
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => setWizardStep(6)}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition",
+                wizardStep === 6
+                  ? "bg-[#171613] text-[#F7F4EE]"
+                  : "bg-transparent text-[#57534B] hover:text-[#171613]"
+              )}
+            >
+              <Check className="h-3.5 w-3.5 text-[#E5C696]" />
+              <span>2. Proposition Finale</span>
+            </button>
+          </div>
         </div>
 
-        {/* Main 2-Column Workspace (Left: Step Form | Right: Live Sticky Summary) */}
-        <div className="mt-10 grid items-start gap-6 lg:grid-cols-12">
-          {/* Left Column: Active Step */}
-          <div className="rounded-3xl border border-[#171613]/12 bg-white p-5 shadow-[0_20px_50px_rgba(23,22,19,0.05)] sm:p-8 lg:col-span-8">
-            {/* STEP 1 — DIAGNOSTIC & BESOINS */}
-            {step === 1 && (
-              <div className="space-y-9">
-                {/* 1. SECTEUR D'ACTIVITÉ */}
-                <div>
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
-                      1. Votre Secteur d'Activité
-                    </label>
-                    <span className="font-mono text-[10px] text-[#8D6C42] bg-[#FAF6F0] border border-[#D8B788]/40 px-3 py-1 rounded-full font-semibold">
-                      Sélectionnez votre domaine d'activité
-                    </span>
-                  </div>
-
-                  <div className="mt-3.5 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
-                    {BUSINESS_TYPES.map((b) => {
-                      const active = businessType === b.id;
-                      const SectorIcon = b.icon;
-                      return (
-                        <button
-                          key={b.id}
-                          type="button"
-                          onClick={() => handleDiagnosticChange({ sector: b.id })}
-                          className={cn(
-                            "group flex flex-col justify-between rounded-2xl border p-3.5 text-start transition-all duration-200",
-                            active
-                              ? "border-[#171613] bg-[#171613] text-[#F7F4EE] shadow-md -translate-y-0.5"
-                              : "border-[#171613]/12 bg-[#FAF8F4] text-[#45413A] hover:border-[#9E7F5A] hover:bg-white"
-                          )}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span
-                              className={cn(
-                                "grid h-8 w-8 shrink-0 place-items-center rounded-xl transition",
-                                active
-                                  ? "bg-white/20 text-[#E5C696]"
-                                  : "bg-white text-[#8D6C42] border border-[#171613]/10"
-                              )}
-                            >
-                              <SectorIcon className="h-4 w-4" />
-                            </span>
-                            {active && (
-                              <span className="h-2 w-2 rounded-full bg-[#E5C696]" />
-                            )}
-                          </div>
-                          <span className="mt-2.5 block text-xs font-semibold leading-snug">
-                            {t(b.label)}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* 2. DIAGNOSTIC INTERACTIF (QUESTIONS COHÉRENTES) */}
-                <div className="rounded-3xl border border-[#D8B788]/30 bg-[#FAF8F5]/80 p-5 sm:p-7 space-y-7">
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#EBE5DC] pb-4">
-                    <div>
-                      <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.2em] text-[#8D6C42]">
-                        2. Diagnostic Digital de votre Entreprise
-                      </span>
-                      <h4 className="mt-1 font-serif text-lg font-medium text-[#1A1815]">
-                        Questions stratégiques pour adapter notre solution
-                      </h4>
-                    </div>
-                    <span className="font-mono text-[10px] text-[#A67C40] bg-white border border-[#D8B788]/40 px-3 py-1 rounded-full font-semibold shadow-2xs">
-                      Recommandation intelligente en direct
-                    </span>
-                  </div>
-
-                  {/* Question A: Site internet */}
-                  <div>
-                    <label className="block text-xs font-bold text-[#1A1815] mb-2.5">
-                      A. Avez-vous déjà un site internet ?
-                    </label>
-                    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-                      {DIAGNOSTIC_QUESTIONS.website.map((item) => {
-                        const active = websiteStatus === item.id;
-                        const Icon = item.icon;
-                        return (
-                          <button
-                            key={item.id}
-                            type="button"
-                            onClick={() => handleDiagnosticChange({ website: item.id })}
-                            className={cn(
-                              "rounded-2xl border p-3.5 text-start transition-all duration-200",
-                              active
-                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-md -translate-y-0.5"
-                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40] hover:bg-[#FAF8F5]"
-                            )}
-                          >
-                            <div className="flex items-center justify-between mb-2">
-                              <span
-                                className={cn(
-                                  "grid h-7 w-7 place-items-center rounded-lg transition",
-                                  active
-                                    ? "bg-white/20 text-[#E5C696]"
-                                    : "bg-[#FAF8F5] text-[#8D6C42] border border-[#E5DFD5]"
-                                )}
-                              >
-                                <Icon className="h-3.5 w-3.5" />
-                              </span>
-                              <span
-                                className={cn(
-                                  "font-mono text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full",
-                                  active
-                                    ? "bg-[#E5C696] text-[#171613]"
-                                    : "bg-[#F0EBE1] text-[#7A6B56]"
-                                )}
-                              >
-                                {item.badge}
-                              </span>
-                            </div>
-                            <span className="block text-xs font-bold">{item.title}</span>
-                            <span
-                              className={cn(
-                                "mt-1 block text-[11px] leading-relaxed",
-                                active ? "text-white/75" : "text-[#706A61]"
-                              )}
-                            >
-                              {item.desc}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Question B: Réseaux sociaux */}
-                  <div>
-                    <label className="block text-xs font-bold text-[#1A1815] mb-2.5">
-                      B. Quelle est votre présence actuelle sur les réseaux sociaux ?
-                    </label>
-                    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-                      {DIAGNOSTIC_QUESTIONS.social.map((item) => {
-                        const active = socialStatus === item.id;
-                        const Icon = item.icon;
-                        return (
-                          <button
-                            key={item.id}
-                            type="button"
-                            onClick={() => handleDiagnosticChange({ social: item.id })}
-                            className={cn(
-                              "rounded-2xl border p-3.5 text-start transition-all duration-200",
-                              active
-                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-md -translate-y-0.5"
-                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40] hover:bg-[#FAF8F5]"
-                            )}
-                          >
-                            <div className="flex items-center justify-between mb-2">
-                              <span
-                                className={cn(
-                                  "grid h-7 w-7 place-items-center rounded-lg transition",
-                                  active
-                                    ? "bg-white/20 text-[#E5C696]"
-                                    : "bg-[#FAF8F5] text-[#8D6C42] border border-[#E5DFD5]"
-                                )}
-                              >
-                                <Icon className="h-3.5 w-3.5" />
-                              </span>
-                              <span
-                                className={cn(
-                                  "font-mono text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full",
-                                  active
-                                    ? "bg-[#E5C696] text-[#171613]"
-                                    : "bg-[#F0EBE1] text-[#7A6B56]"
-                                )}
-                              >
-                                {item.badge}
-                              </span>
-                            </div>
-                            <span className="block text-xs font-bold">{item.title}</span>
-                            <span
-                              className={cn(
-                                "mt-1 block text-[11px] leading-relaxed",
-                                active ? "text-white/75" : "text-[#706A61]"
-                              )}
-                            >
-                              {item.desc}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Question C: Acquisition actuelle */}
-                  <div>
-                    <label className="block text-xs font-bold text-[#1A1815] mb-2.5">
-                      C. Comment vos clients vous trouvent-ils actuellement ?
-                    </label>
-                    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
-                      {DIAGNOSTIC_QUESTIONS.find.map((item) => {
-                        const active = findStatus === item.id;
-                        const Icon = item.icon;
-                        return (
-                          <button
-                            key={item.id}
-                            type="button"
-                            onClick={() => handleDiagnosticChange({ find: item.id })}
-                            className={cn(
-                              "rounded-2xl border p-3.5 text-start transition-all duration-200",
-                              active
-                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-md -translate-y-0.5"
-                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40] hover:bg-[#FAF8F5]"
-                            )}
-                          >
-                            <div className="flex items-center justify-between mb-2">
-                              <span
-                                className={cn(
-                                  "grid h-7 w-7 place-items-center rounded-lg transition",
-                                  active
-                                    ? "bg-white/20 text-[#E5C696]"
-                                    : "bg-[#FAF8F5] text-[#8D6C42] border border-[#E5DFD5]"
-                                )}
-                              >
-                                <Icon className="h-3.5 w-3.5" />
-                              </span>
-                              <span
-                                className={cn(
-                                  "font-mono text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full",
-                                  active
-                                    ? "bg-[#E5C696] text-[#171613]"
-                                    : "bg-[#F0EBE1] text-[#7A6B56]"
-                                )}
-                              >
-                                {item.badge}
-                              </span>
-                            </div>
-                            <span className="block text-xs font-bold">{item.title}</span>
-                            <span
-                              className={cn(
-                                "mt-1 block text-[11px] leading-relaxed",
-                                active ? "text-white/75" : "text-[#706A61]"
-                              )}
-                            >
-                              {item.desc}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Question D: Objectifs prioritaires */}
-                  <div>
-                    <div className="flex items-center justify-between mb-2.5">
-                      <label className="block text-xs font-bold text-[#1A1815]">
-                        D. Que souhaitez-vous développer ou mettre en place ?
-                      </label>
-                      <span className="text-[10px] text-[#8D6C42] font-semibold">
-                        Multi-choix possible
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
-                      {DIAGNOSTIC_QUESTIONS.develop.map((item) => {
-                        const active = developGoals.includes(item.id);
-                        const Icon = item.icon;
-                        return (
-                          <button
-                            key={item.id}
-                            type="button"
-                            onClick={() => toggleDevelopGoal(item.id)}
-                            className={cn(
-                              "flex items-center justify-between rounded-2xl border p-3.5 text-start transition-all duration-200",
-                              active
-                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-md -translate-y-0.5"
-                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40] hover:bg-[#FAF8F5]"
-                            )}
-                          >
-                            <div className="flex items-center gap-2.5 min-w-0">
-                              <span
-                                className={cn(
-                                  "grid h-7 w-7 shrink-0 place-items-center rounded-lg transition",
-                                  active
-                                    ? "bg-white/20 text-[#E5C696]"
-                                    : "bg-[#FAF8F5] text-[#8D6C42] border border-[#E5DFD5]"
-                                )}
-                              >
-                                <Icon className="h-3.5 w-3.5" />
-                              </span>
-                              <div className="min-w-0">
-                                <span className="block text-xs font-bold truncate">{item.title}</span>
-                                <span
-                                  className={cn(
-                                    "font-mono text-[9px] block",
-                                    active ? "text-[#E5C696]" : "text-[#8D6C42]"
-                                  )}
-                                >
-                                  {item.badge}
-                                </span>
-                              </div>
-                            </div>
-                            <span
-                              className={cn(
-                                "grid h-5 w-5 shrink-0 place-items-center rounded-full border transition ml-2",
-                                active
-                                  ? "border-[#E5C696] bg-[#E5C696] text-[#171613]"
-                                  : "border-[#D5CFC5] bg-transparent"
-                              )}
-                            >
-                              {active && <Check className="h-3 w-3 stroke-[3]" />}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Question E: Budget indicatif */}
-                  <div>
-                    <label className="block text-xs font-bold text-[#1A1815] mb-2.5">
-                      E. Quel est votre budget indicatif envisagé ?
-                    </label>
-                    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-                      {BUDGET_TIERS.map((tier) => {
-                        const active = budgetTier === tier.id;
-                        return (
-                          <button
-                            key={tier.id}
-                            type="button"
-                            onClick={() => handleDiagnosticChange({ budget: tier.id })}
-                            className={cn(
-                              "rounded-2xl border p-3.5 text-start transition-all duration-200",
-                              active
-                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-md -translate-y-0.5"
-                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40] hover:bg-[#FAF8F5]"
-                            )}
-                          >
-                            <div className="flex flex-wrap items-center justify-between gap-1.5">
-                              <span className="font-mono text-[11px] font-bold text-[#A67C40] whitespace-nowrap">
-                                {tier.range}
-                              </span>
-                              <span
-                                className={cn(
-                                  "font-mono text-[9px] uppercase font-semibold px-2 py-0.5 rounded-full whitespace-nowrap",
-                                  active
-                                    ? "bg-[#E5C696] text-[#171613]"
-                                    : "bg-[#F0EBE1] text-[#7A6B56]"
-                                )}
-                              >
-                                {tier.tag}
-                              </span>
-                            </div>
-                            <span className="mt-2 block text-xs font-bold">
-                              {t(tier.label)}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-
-                {/* 3. SIMULATEUR D'IMPACT BUSINESS & ROI (VENTE & CONVERSION) */}
-                <div className="relative overflow-hidden rounded-3xl border border-[#D8B788]/40 bg-gradient-to-br from-[#1A1815] via-[#14120E] to-[#0D0B09] p-6 sm:p-7 text-white shadow-2xl">
-                  <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-[#A67C40]/10 blur-3xl pointer-events-none" />
-
-                  <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
-                    <div className="flex items-center gap-3">
-                      <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#E5C696]/20 border border-[#E5C696]/30 text-[#E5C696] shadow-inner">
-                        <TrendingUp className="h-4 w-4" />
-                      </span>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.2em] text-[#E5C696]">
-                            Projection Business · {t(activeBusiness.label)}
-                          </span>
-                          <span className="inline-flex items-center gap-1 font-mono text-[9px] font-bold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full">
-                            ● ROI Stratégique
-                          </span>
-                        </div>
-                        <h4 className="mt-0.5 font-serif text-lg sm:text-xl font-medium text-white">
-                          Accélération commerciale & captation de parts de marché
-                        </h4>
-                      </div>
-                    </div>
-
-                    <div className="text-right">
-                      <span className="font-mono text-[9.5px] uppercase text-white/60 tracking-wider block">Score de Potentiel</span>
-                      <span className="font-mono text-base font-bold text-[#E5C696]">96 / 100</span>
-                    </div>
-                  </div>
-
-                  <div className="relative z-10 mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                    <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-md">
-                      <span className="font-mono text-[9.5px] uppercase text-white/60 tracking-wider">Demandes Qualifiées</span>
-                      <p className="mt-1 font-serif text-xl sm:text-2xl font-bold text-[#E5C696]">+18 à +42</p>
-                      <p className="mt-1 text-[11px] text-white/70 leading-snug">
-                        Nouveaux prospects & réservations estimés par mois via votre Top 3 Maps et site optimisé.
-                      </p>
-                    </div>
-
-                    <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-md">
-                      <span className="font-mono text-[9.5px] uppercase text-white/60 tracking-wider">Délai d'Amortissement</span>
-                      <p className="mt-1 font-serif text-xl sm:text-2xl font-bold text-emerald-400">30 à 60 jours</p>
-                      <p className="mt-1 text-[11px] text-white/70 leading-snug">
-                        Le retour sur investissement moyen compense intégralement le budget dès les premières commandes.
-                      </p>
-                    </div>
-
-                    <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-md">
-                      <span className="font-mono text-[9.5px] uppercase text-white/60 tracking-wider">Sécurité Contractuelle</span>
-                      <p className="mt-1 font-serif text-xl sm:text-2xl font-bold text-white">Garanti ou Remboursé</p>
-                      <p className="mt-1 text-[11px] text-[#E5C696] leading-snug font-medium">
-                        Engagement juridique ferme stipulé sur votre devis : zéro risque pour votre entreprise.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 3. SERVICES RECOMMANDÉS SELON VOTRE SITUATION */}
-                <div>
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div>
-                      <label className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
-                        3. Solutions & Services Recommandés selon votre situation
-                      </label>
-                      <p className="text-xs text-[#57534B] mt-0.5">
-                        Pré-sélectionnés d'après vos réponses. Cliquez pour ajouter ou retirer une discipline.
-                      </p>
-                    </div>
-                    <span className="font-mono text-[10.5px] font-bold text-[#A67C40] bg-[#FAF6F0] border border-[#D8B788]/40 px-3 py-1 rounded-full">
-                      ✨ {selectedServices.length} disciplines actives
-                    </span>
-                  </div>
-
-                  <div className="mt-3.5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    {CATALOG_GROUPS.map(({ id, Icon, title, short, plans }) => {
-                      const checked = selectedServices.includes(id);
-                      const minPlan = plans[0];
-                      return (
-                        <button
-                          key={id}
-                          type="button"
-                          onClick={() => toggleService(id)}
-                          className={cn(
-                            "group flex items-start gap-3.5 rounded-2xl border p-4 text-start transition",
-                            checked
-                              ? "border-[#171613] bg-[#171613] text-[#F7F4EE] shadow-md"
-                              : "border-[#171613]/12 bg-[#FAF8F4] text-[#171613] hover:border-[#9E7F5A] hover:bg-white"
-                          )}
-                        >
-                          <span
-                            className={cn(
-                              "mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl",
-                              checked
-                                ? "bg-white/15 text-white"
-                                : "border border-[#171613]/12 bg-white text-[#706A61]"
-                            )}
-                          >
-                            <Icon className="h-4 w-4" />
-                          </span>
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center justify-between gap-2">
-                              <span className="text-sm font-semibold">{t(title)}</span>
-                              <span
-                                className={cn(
-                                  "grid h-5 w-5 shrink-0 place-items-center rounded-full border transition",
-                                  checked
-                                    ? "border-[#E5C696] bg-[#E5C696] text-[#12110E]"
-                                    : "border-[#171613]/20 bg-white"
-                                )}
-                              >
-                                {checked && <Check className="h-3 w-3 stroke-[3]" />}
-                              </span>
-                            </div>
-                            <p
-                              className={cn(
-                                "mt-1 text-xs",
-                                checked ? "text-[#F7F4EE]/75" : "text-[#57534B]"
-                              )}
-                            >
-                              {t(short)}
-                            </p>
-                            <p
-                              className={cn(
-                                "mt-2 font-mono text-[11px] font-semibold",
-                                checked ? "text-[#E5C696]" : "text-[#12110E]"
-                              )}
-                            >
-                              {id === "websites"
-                                ? "À partir de 499 €"
-                                : id === "maps"
-                                  ? "999 € (Garanti ou remboursé)"
-                                  : minPlan.priceEur > 0
-                                    ? `${safeLang === "en" ? "From" : "Dès"} ${price(minPlan.priceEur)}${getPeriodShortLabel(minPlan.period, safeLang)}`
-                                    : ui.customBadge}
-                            </p>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* 4. NOS 3 GARANTIES D'EXCELLENCE & DE RASSURANCE */}
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 border-t border-[#171613]/10 pt-5">
-                  <div className="rounded-2xl border border-[#D8B788]/30 bg-[#FAF6F0] p-3.5 text-start">
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#8D6C42] flex items-center gap-1.5">
-                      <Sparkles className="h-3.5 w-3.5 text-[#A67C40]" />
-                      Maquette 48h offerte
-                    </span>
-                    <p className="mt-1 text-[11px] text-[#4A453C] leading-snug">
-                      Prototype interactif sur-mesure livré sous 24-48h, sans aucun engagement.
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl border border-amber-500/20 bg-amber-50/50 p-3.5 text-start">
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-amber-800 flex items-center gap-1.5">
-                      <TrendingUp className="h-3.5 w-3.5 text-amber-600" />
-                      Délai Garanti 7-14j
-                    </span>
-                    <p className="mt-1 text-[11px] text-[#4A453C] leading-snug">
-                      Planning contractuel ferme et production réactive sans décalage de date.
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl border border-blue-500/20 bg-blue-50/50 p-3.5 text-start">
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-blue-800 flex items-center gap-1.5">
-                      <ShieldCheck className="h-3.5 w-3.5 text-blue-600" />
-                      0% Commission Cachée
-                    </span>
-                    <p className="mt-1 text-[11px] text-[#4A453C] leading-snug">
-                      Pleine propriété du code, de l'identité et de l'ensemble de vos outils.
-                    </p>
-                  </div>
-                </div>
-
-                {stepError && (
-                  <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-medium text-red-700">
-                    {stepError}
-                  </p>
-                )}
-
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#171613]/10 pt-6">
-                  <div className="flex items-center gap-2 text-xs text-[#57534B]">
-                    <ShieldCheck className="h-4 w-4 text-[#A67C40] shrink-0" />
-                    <span>Configuration 100% sans engagement · Devis contractuel PDF instantané</span>
-                  </div>
-
+        {/* WORKSPACE: Compact Auto-Advancing Wizard OR Tailored Final Proposition */}
+        {wizardStep < 6 ? (
+          /* COMPACT LUDIQUE MICRO-STEP WIZARD (1 QUESTION AT A TIME) */
+          <div className="mt-8 max-w-3xl mx-auto rounded-3xl border border-[#171613]/12 bg-white p-6 sm:p-9 shadow-[0_20px_50px_rgba(23,22,19,0.06)] transition-all duration-300">
+            {/* Top Bar of the Question Card */}
+            <div className="flex items-center justify-between border-b border-[#171613]/10 pb-4">
+              <div className="flex items-center gap-3">
+                {wizardStep > 0 && (
                   <button
                     type="button"
-                    onClick={() => goStep(2)}
-                    className="group inline-flex items-center gap-3 rounded-full bg-[#12110E] px-8 py-4 text-xs sm:text-[13px] font-bold text-white shadow-xl transition-all duration-300 hover:bg-[#2B2925] hover:scale-[1.02] active:scale-[0.98]"
+                    onClick={() => setWizardStep((prev) => Math.max(0, prev - 1))}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-[#171613]/15 px-3 py-1 font-mono text-[11px] font-semibold text-[#8D6C42] transition hover:bg-[#FAF8F4] hover:text-[#171613]"
                   >
-                    <span>Valider mon diagnostic & choisir mes formules (Étape 2/3)</span>
-                    <ArrowRight className="h-4 w-4 text-[#E5C696] transition-transform group-hover:translate-x-1" />
+                    <ArrowLeft className="h-3.5 w-3.5" />
+                    <span>Précédent</span>
                   </button>
+                )}
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#171613]">
+                  Question {wizardStep + 1} sur 6
+                </span>
+              </div>
+
+              {wizardStep > 0 && (
+                <span className="font-mono text-[10.5px] font-semibold text-[#8D6C42] bg-[#FAF6F0] border border-[#D8B788]/40 px-3 py-1 rounded-full truncate max-w-[180px]">
+                  {t(activeBusiness.label)}
+                </span>
+              )}
+            </div>
+
+            {/* Micro Progress Bar */}
+            <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-[#FAF8F4] border border-[#171613]/10">
+              <div
+                className="h-full bg-gradient-to-r from-[#D8B788] via-[#E5C696] to-[#171613] transition-all duration-300 ease-out"
+                style={{ width: `${((wizardStep + 1) / 6) * 100}%` }}
+              />
+            </div>
+
+            {/* STEP 0: SECTEUR */}
+            {wizardStep === 0 && (
+              <div className="mt-7 space-y-5 animate-in fade-in duration-200">
+                <div>
+                  <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[#171613]">
+                    1. Quel est votre secteur d'activité ?
+                  </h3>
+                  <p className="mt-1.5 text-xs sm:text-sm text-[#57534B]">
+                    Sélectionnez votre domaine pour calibrer immédiatement l'écosystème adapté.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
+                  {BUSINESS_TYPES.map((b) => {
+                    const active = businessType === b.id;
+                    const SectorIcon = b.icon;
+                    return (
+                      <button
+                        key={b.id}
+                        type="button"
+                        onClick={() => handleSelectSector(b.id)}
+                        className={cn(
+                          "group flex flex-col justify-between rounded-2xl border p-3.5 text-start transition-all duration-200",
+                          active
+                            ? "border-[#171613] bg-[#171613] text-[#F7F4EE] shadow-md -translate-y-0.5"
+                            : "border-[#171613]/12 bg-[#FAF8F4] text-[#45413A] hover:border-[#9E7F5A] hover:bg-white active:scale-[0.98]"
+                        )}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span
+                            className={cn(
+                              "grid h-8 w-8 shrink-0 place-items-center rounded-xl transition",
+                              active
+                                ? "bg-white/20 text-[#E5C696]"
+                                : "bg-white text-[#8D6C42] border border-[#171613]/10"
+                            )}
+                          >
+                            <SectorIcon className="h-4 w-4" />
+                          </span>
+                          {active && (
+                            <span className="h-2 w-2 rounded-full bg-[#E5C696]" />
+                          )}
+                        </div>
+                        <span className="mt-2.5 block text-xs font-semibold leading-snug">
+                          {t(b.label)}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
 
-            {/* STEP 2 — OPTIONS & FORMULES */}
-            {step === 2 && (
-              <div className="space-y-6">
+            {/* STEP 1: SITE INTERNET */}
+            {wizardStep === 1 && (
+              <div className="mt-7 space-y-5 animate-in fade-in duration-200">
                 <div>
-                  <h3 className="font-serif text-2xl font-medium text-[#171613]">
-                    {ui.step2Title}
+                  <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[#171613]">
+                    2. Avez-vous déjà un site internet ?
                   </h3>
-                  <p className="mt-1 text-sm text-[#57534B]">{ui.step2Sub}</p>
+                  <p className="mt-1.5 text-xs sm:text-sm text-[#57534B]">
+                    Nous adaptons notre niveau d'intervention (création complète de 0 à 1 ou refonte d'élite).
+                  </p>
                 </div>
 
-                <div className="space-y-6">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  {DIAGNOSTIC_QUESTIONS.website.map((item) => {
+                    const active = websiteStatus === item.id;
+                    const Icon = item.icon;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => handleSelectWebsite(item.id)}
+                        className={cn(
+                          "rounded-2xl border p-4 text-start transition-all duration-200",
+                          active
+                            ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-md -translate-y-0.5"
+                            : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40] hover:bg-[#FAF8F5] active:scale-[0.98]"
+                        )}
+                      >
+                        <div className="flex items-center justify-between mb-3">
+                          <span
+                            className={cn(
+                              "grid h-8 w-8 place-items-center rounded-lg transition",
+                              active
+                                ? "bg-white/20 text-[#E5C696]"
+                                : "bg-[#FAF8F5] text-[#8D6C42] border border-[#E5DFD5]"
+                            )}
+                          >
+                            <Icon className="h-4 w-4" />
+                          </span>
+                          <span
+                            className={cn(
+                              "font-mono text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full",
+                              active
+                                ? "bg-[#E5C696] text-[#171613]"
+                                : "bg-[#F0EBE1] text-[#7A6B56]"
+                            )}
+                          >
+                            {item.badge}
+                          </span>
+                        </div>
+                        <span className="block text-sm font-bold">{item.title}</span>
+                        <span
+                          className={cn(
+                            "mt-1.5 block text-xs leading-relaxed",
+                            active ? "text-white/75" : "text-[#706A61]"
+                          )}
+                        >
+                          {item.desc}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 2: RÉSEAUX SOCIAUX */}
+            {wizardStep === 2 && (
+              <div className="mt-7 space-y-5 animate-in fade-in duration-200">
+                <div>
+                  <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[#171613]">
+                    3. Quelle est votre présence sur les réseaux sociaux ?
+                  </h3>
+                  <p className="mt-1.5 text-xs sm:text-sm text-[#57534B]">
+                    Une identité visuelle signature démultiplie l'impact de toutes vos actions de communication.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  {DIAGNOSTIC_QUESTIONS.social.map((item) => {
+                    const active = socialStatus === item.id;
+                    const Icon = item.icon;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => handleSelectSocial(item.id)}
+                        className={cn(
+                          "rounded-2xl border p-4 text-start transition-all duration-200",
+                          active
+                            ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-md -translate-y-0.5"
+                            : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40] hover:bg-[#FAF8F5] active:scale-[0.98]"
+                        )}
+                      >
+                        <div className="flex items-center justify-between mb-3">
+                          <span
+                            className={cn(
+                              "grid h-8 w-8 place-items-center rounded-lg transition",
+                              active
+                                ? "bg-white/20 text-[#E5C696]"
+                                : "bg-[#FAF8F5] text-[#8D6C42] border border-[#E5DFD5]"
+                            )}
+                          >
+                            <Icon className="h-4 w-4" />
+                          </span>
+                          <span
+                            className={cn(
+                              "font-mono text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full",
+                              active
+                                ? "bg-[#E5C696] text-[#171613]"
+                                : "bg-[#F0EBE1] text-[#7A6B56]"
+                            )}
+                          >
+                            {item.badge}
+                          </span>
+                        </div>
+                        <span className="block text-sm font-bold">{item.title}</span>
+                        <span
+                          className={cn(
+                            "mt-1.5 block text-xs leading-relaxed",
+                            active ? "text-white/75" : "text-[#706A61]"
+                          )}
+                        >
+                          {item.desc}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 3: VISIBILITÉ & ACQUISITION LOCALE */}
+            {wizardStep === 3 && (
+              <div className="mt-7 space-y-5 animate-in fade-in duration-200">
+                <div>
+                  <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[#171613]">
+                    4. Comment vos clients vous trouvent-ils actuellement ?
+                  </h3>
+                  <p className="mt-1.5 text-xs sm:text-sm text-[#57534B]">
+                    Identifions vos plus gros leviers d'acquisition sur Google et Google Maps.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {DIAGNOSTIC_QUESTIONS.find.map((item) => {
+                    const active = findStatus === item.id;
+                    const Icon = item.icon;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => handleSelectFind(item.id)}
+                        className={cn(
+                          "rounded-2xl border p-4 text-start transition-all duration-200",
+                          active
+                            ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-md -translate-y-0.5"
+                            : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40] hover:bg-[#FAF8F5] active:scale-[0.98]"
+                        )}
+                      >
+                        <div className="flex items-center justify-between mb-3">
+                          <span
+                            className={cn(
+                              "grid h-8 w-8 place-items-center rounded-lg transition",
+                              active
+                                ? "bg-white/20 text-[#E5C696]"
+                                : "bg-[#FAF8F5] text-[#8D6C42] border border-[#E5DFD5]"
+                            )}
+                          >
+                            <Icon className="h-4 w-4" />
+                          </span>
+                          <span
+                            className={cn(
+                              "font-mono text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full",
+                              active
+                                ? "bg-[#E5C696] text-[#171613]"
+                                : "bg-[#F0EBE1] text-[#7A6B56]"
+                            )}
+                          >
+                            {item.badge}
+                          </span>
+                        </div>
+                        <span className="block text-sm font-bold">{item.title}</span>
+                        <span
+                          className={cn(
+                            "mt-1.5 block text-xs leading-relaxed",
+                            active ? "text-white/75" : "text-[#706A61]"
+                          )}
+                        >
+                          {item.desc}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 4: OBJECTIF PRIORITAIRE */}
+            {wizardStep === 4 && (
+              <div className="mt-7 space-y-5 animate-in fade-in duration-200">
+                <div>
+                  <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[#171613]">
+                    5. Que souhaitez-vous développer en priorité ?
+                  </h3>
+                  <p className="mt-1.5 text-xs sm:text-sm text-[#57534B]">
+                    Définissez le premier levier commercial stratégique à débloquer.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {DIAGNOSTIC_QUESTIONS.develop.map((item) => {
+                    const active = developGoals.includes(item.id);
+                    const Icon = item.icon;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => handleSelectGoal(item.id)}
+                        className={cn(
+                          "flex flex-col justify-between rounded-2xl border p-4 text-start transition-all duration-200",
+                          active
+                            ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-md -translate-y-0.5"
+                            : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40] hover:bg-[#FAF8F5] active:scale-[0.98]"
+                        )}
+                      >
+                        <div>
+                          <div className="flex items-center justify-between mb-3">
+                            <span
+                              className={cn(
+                                "grid h-8 w-8 place-items-center rounded-lg transition",
+                                active
+                                  ? "bg-white/20 text-[#E5C696]"
+                                  : "bg-[#FAF8F5] text-[#8D6C42] border border-[#E5DFD5]"
+                              )}
+                            >
+                              <Icon className="h-4 w-4" />
+                            </span>
+                            <span
+                              className={cn(
+                                "font-mono text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full",
+                                active
+                                  ? "bg-[#E5C696] text-[#171613]"
+                                  : "bg-[#F0EBE1] text-[#7A6B56]"
+                              )}
+                            >
+                              {item.badge}
+                            </span>
+                          </div>
+                          <span className="block text-sm font-bold">{item.title}</span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 5: BUDGET D'INVESTISSEMENT */}
+            {wizardStep === 5 && (
+              <div className="mt-7 space-y-5 animate-in fade-in duration-200">
+                <div>
+                  <h3 className="font-serif text-2xl sm:text-3xl font-medium text-[#171613]">
+                    6. Quelle enveloppe budgétaire prévoyez-vous ?
+                  </h3>
+                  <p className="mt-1.5 text-xs sm:text-sm text-[#57534B]">
+                    Nous ajustons les formules pour un retour sur investissement maximal dès le premier mois.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  {BUDGET_TIERS.map((tier) => {
+                    const active = budgetTier === tier.id;
+                    return (
+                      <button
+                        key={tier.id}
+                        type="button"
+                        onClick={() => handleSelectBudget(tier.id)}
+                        className={cn(
+                          "rounded-2xl border p-4 text-start transition-all duration-200",
+                          active
+                            ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-md -translate-y-0.5"
+                            : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40] hover:bg-[#FAF8F5] active:scale-[0.98]"
+                        )}
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-1.5">
+                          <span className="font-mono text-xs font-bold text-[#A67C40]">
+                            {tier.range}
+                          </span>
+                          <span
+                            className={cn(
+                              "font-mono text-[9px] uppercase font-semibold px-2 py-0.5 rounded-full",
+                              active
+                                ? "bg-[#E5C696] text-[#171613]"
+                                : "bg-[#F0EBE1] text-[#7A6B56]"
+                            )}
+                          >
+                            {tier.tag}
+                          </span>
+                        </div>
+                        <span className="mt-2.5 block text-sm font-bold">
+                          {t(tier.label)}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Compact Card Footer */}
+            <div className="mt-6 flex items-center justify-between border-t border-[#171613]/10 pt-4 text-[11px] text-[#706A61]">
+              <span className="flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-[#8D6C42]" />
+                Cliquez sur une option pour avancer automatiquement
+              </span>
+              <span className="font-mono text-[10px] text-[#8D6C42] uppercase tracking-wider font-semibold">
+                Haute Couture Studio
+              </span>
+            </div>
+          </div>
+        ) : (
+          /* STEP 6: LA PROPOSITION FINALE SUR-MESURE */
+          <div className="mt-8 grid items-start gap-6 lg:grid-cols-12 animate-in fade-in duration-300">
+            {/* Left Column: Recommended Strategy & Tailored Services */}
+            <div className="rounded-3xl border border-[#171613]/12 bg-white p-5 sm:p-8 shadow-[0_20px_50px_rgba(23,22,19,0.05)] lg:col-span-8 space-y-6">
+              {/* Executive Proposition Header */}
+              <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[#171613]/10 pb-5">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#8D6C42] bg-[#FAF6F0] border border-[#D8B788]/40 px-2.5 py-0.5 rounded-full">
+                      ⭐ Proposition Sur-Mesure Calibrée
+                    </span>
+                  </div>
+                  <h3 className="mt-2 font-serif text-2xl sm:text-3xl font-medium text-[#171613]">
+                    Votre Solution Stratégique Clé en Main
+                  </h3>
+                  <p className="mt-1 text-xs sm:text-sm text-[#57534B]">
+                    Spécialement conçue pour : <strong>{t(activeBusiness.label)}</strong> · Budget cible : <strong>{BUDGET_TIERS.find(b => b.id === budgetTier)?.range}</strong>
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setWizardStep(0)}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[#171613]/15 px-3.5 py-1.5 font-mono text-xs font-medium text-[#57534B] hover:border-[#171613] hover:text-[#171613] transition"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                  <span>Modifier mes critères</span>
+                </button>
+              </div>
+
+              {/* Recommended Services Cards */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#7D6445]">
+                    Disciplines recommandées pour votre profil ({selectedServices.length})
+                  </span>
+                  <span className="text-[11px] text-[#706A61]">
+                    Pré-activées selon vos réponses
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3.5">
                   {selectedServices.map((serviceId) => {
                     const group = CATALOG_GROUPS.find((g) => g.id === serviceId);
                     if (!group) return null;
                     const Icon = group.Icon;
-                    const activePlanId = selectedPlans[serviceId] ?? group.plans[0].id;
+                    const planId = selectedPlans[serviceId] ?? group.plans[0].id;
+                    const plan = group.plans.find((p) => p.id === planId) ?? group.plans[0];
+
                     return (
                       <div
                         key={serviceId}
-                        className="rounded-2xl border border-[#171613]/10 bg-[#FAF8F4] p-4 sm:p-5"
+                        className="rounded-2xl border border-[#171613]/10 bg-[#FAF8F4] p-4 sm:p-5 transition hover:border-[#9E7F5A]"
                       >
-                        <div className="flex items-center gap-2.5">
-                          <Icon className="h-4 w-4 text-[#9E7F5A]" />
-                          <h4 className="font-serif text-lg font-medium text-[#171613]">
-                            {t(group.title)}
-                          </h4>
-                        </div>
-                        <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
-                          {group.plans.map((plan) => {
-                            const active = activePlanId === plan.id;
-                            return (
-                              <button
-                                key={plan.id}
-                                type="button"
-                                onClick={() => selectPlan(serviceId, plan.id)}
-                                className={`flex flex-col justify-between rounded-2xl border p-4 text-start transition ${
-                                  active
-                                    ? "border-[#171613] bg-[#171613] text-[#F7F4EE] shadow-md"
-                                    : "border-[#171613]/12 bg-white text-[#171613] hover:border-[#9E7F5A]"
-                                }`}
-                              >
-                                <div>
-                                  <div className="flex items-center justify-between gap-2">
-                                    <span className="text-xs font-semibold">{t(plan.label)}</span>
-                                    {plan.popular && (
-                                      <span
-                                        className={`rounded-full px-2 py-0.5 font-mono text-[9px] font-semibold uppercase ${
-                                          active
-                                            ? "bg-white/20 text-white"
-                                            : "bg-[#EEE9E0] text-[#12110E]"
-                                        }`}
-                                      >
-                                        ★
-                                      </span>
-                                    )}
-                                  </div>
-                                  <p
-                                    className={`mt-1.5 text-[11px] leading-relaxed ${
-                                      active ? "text-[#F7F4EE]/75" : "text-[#57534B]"
-                                    }`}
-                                  >
-                                    {t(plan.detail)}
-                                  </p>
-                                </div>
-                                <div className="mt-3 border-t border-current/12 pt-2.5">
-                                  <p
-                                    className={`font-serif text-lg font-semibold ${
-                                      active ? "text-[#E5C696]" : "text-[#12110E]"
-                                    }`}
-                                  >
-                                    {plan.priceEur > 0
-                                      ? `${plan.customQuote ? `${safeLang === "en" ? "From" : "Dès"} ` : ""}${price(plan.priceEur)}${getPeriodShortLabel(plan.period, safeLang)}`
-                                      : ui.customBadge}
-                                  </p>
-                                  {plan.commitmentMonths && (
-                                    <p
-                                      className={`mt-0.5 font-mono text-[10px] ${
-                                        active ? "text-[#F7F4EE]/70" : "text-[#706A61]"
-                                      }`}
-                                    >
-                                      {getCommitmentLabel(plan.commitmentMonths, safeLang)}
-                                    </p>
-                                  )}
-                                </div>
-                              </button>
-                            );
-                          })}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                          <div className="flex items-start gap-3">
+                            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white text-[#8D6C42] border border-[#171613]/10">
+                              <Icon className="h-4 w-4" />
+                            </span>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <h4 className="font-serif text-base sm:text-lg font-bold text-[#171613]">
+                                  {t(group.title)}
+                                </h4>
+                                <span className="font-mono text-[10px] font-bold text-[#8D6C42] bg-white border border-[#D8B788]/40 px-2 py-0.5 rounded-full">
+                                  {t(plan.label)}
+                                </span>
+                              </div>
+                              <p className="mt-1 text-xs text-[#57534B] leading-relaxed">
+                                {t(plan.detail)}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex sm:flex-col items-center sm:items-end justify-between border-t sm:border-t-0 pt-2 sm:pt-0 border-current/10 shrink-0">
+                            <span className="font-serif text-lg font-bold text-[#12110E]">
+                              {plan.customQuote
+                                ? plan.priceEur > 0
+                                  ? `${price(plan.priceEur)}${getPeriodShortLabel(plan.period, safeLang)}*`
+                                  : ui.customBadge
+                                : `${price(plan.priceEur)}${getPeriodShortLabel(plan.period, safeLang)}`}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => toggleService(serviceId)}
+                              className="font-mono text-[10.5px] text-[#8D6C42] hover:text-[#171613] underline underline-offset-2 font-medium"
+                            >
+                              Retirer
+                            </button>
+                          </div>
                         </div>
                       </div>
                     );
                   })}
                 </div>
+              </div>
 
-                <div className="flex items-center justify-between border-t border-[#171613]/10 pt-5">
-                  <button
-                    type="button"
-                    onClick={() => goStep(1)}
-                    className="inline-flex items-center gap-2 rounded-full border border-[#171613]/20 bg-white px-5 py-3 text-xs font-semibold text-[#171613] transition hover:border-[#9E7F5A]"
-                  >
-                    <ArrowLeft className="h-4 w-4" />
-                    {ui.backBtn}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => goStep(3)}
-                    className="inline-flex items-center gap-2 rounded-full bg-[#12110E] px-7 py-3.5 text-xs font-semibold text-white shadow-md transition hover:bg-[#2B2925]"
-                  >
-                    {ui.continueBtn}
-                    <ArrowRight className="h-4 w-4 text-white" />
-                  </button>
+              {/* 3 Reassurance Guarantees */}
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 border-t border-[#171613]/10 pt-5 text-xs text-[#45413A]">
+                <div className="flex items-start gap-2.5 rounded-2xl bg-[#FAF8F4] p-3 border border-[#171613]/10">
+                  <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <div>
+                    <strong className="block font-bold text-[#171613]">Garanti ou Remboursé</strong>
+                    <span className="text-[11px] text-[#706A61]">Clause stipulée sur devis officiel.</span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2.5 rounded-2xl bg-[#FAF8F4] p-3 border border-[#171613]/10">
+                  <TrendingUp className="h-4 w-4 text-[#8D6C42] shrink-0 mt-0.5" />
+                  <div>
+                    <strong className="block font-bold text-[#171613]">Délais 10 à 14 jours</strong>
+                    <span className="text-[11px] text-[#706A61]">Planning contractuel sans retard.</span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2.5 rounded-2xl bg-[#FAF8F4] p-3 border border-[#171613]/10">
+                  <Sparkles className="h-4 w-4 text-[#8D6C42] shrink-0 mt-0.5" />
+                  <div>
+                    <strong className="block font-bold text-[#171613]">Code 100% Propriétaire</strong>
+                    <span className="text-[11px] text-[#706A61]">Zéro abonnement forcé ni lock-in.</span>
+                  </div>
                 </div>
               </div>
-            )}
+            </div>
 
-            {/* STEP 3 — RÉCAPITULATIF & ENVOI */}
-            {step === 3 && (
-              <div className="space-y-6">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <h3 className="font-serif text-2xl font-medium text-[#171613]">
-                      {ui.step3Title}
-                    </h3>
-                    <p className="mt-1 text-sm text-[#57534B]">{ui.step3Sub}</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={resetAll}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-[#171613]/15 px-3.5 py-1.5 text-xs font-medium text-[#57534B] hover:border-[#171613] hover:text-[#171613]"
-                  >
-                    <RotateCcw className="h-3.5 w-3.5" />
-                    {ui.resetBtn}
-                  </button>
+            {/* Right Column: Live Sticky Summary & Fast Action CTAs */}
+            <aside className="rounded-3xl border border-[#E5E5E0] bg-white p-6 text-[#12110E] shadow-[0_20px_50px_rgba(23,22,19,0.06)] lg:sticky lg:top-24 lg:col-span-4 space-y-5">
+              <div className="flex items-center justify-between border-b border-[#E5E5E0] pb-4">
+                <div>
+                  <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[#706A61]">
+                    {ui.summaryTitle}
+                  </p>
+                  <p className="mt-0.5 text-xs text-[#5A554E]">{t(activeBusiness.label)}</p>
                 </div>
+                <span className="rounded-full bg-[#12110E] px-2.5 py-0.5 font-mono text-xs font-bold text-white">
+                  {chosenItems.length}
+                </span>
+              </div>
 
-                {/* Editable Context Summary */}
-                <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#171613]/10 bg-[#FAF8F4] px-4 py-3 text-xs">
-                  <div className="space-y-0.5">
-                    <p>
-                      <span className="text-[#57534B]">{ui.businessLabel} : </span>
-                      <strong className="text-[#171613]">{t(activeBusiness.label)}</strong>
-                    </p>
-                    <p>
-                      <span className="text-[#57534B]">{ui.goalLabel} : </span>
-                      <strong className="text-[#171613]">{t(activeGoal.label)}</strong>
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => goStep(1)}
-                    className="font-semibold text-[#7D6445] underline underline-offset-4 hover:text-[#171613]"
-                  >
-                    {ui.editStep}
-                  </button>
-                </div>
+              {chosenItems.length === 0 ? (
+                <p className="py-6 text-center text-xs text-[#5A554E]">{ui.emptySelection}</p>
+              ) : (
+                <>
+                  <ul className="divide-y divide-[#E5E5E0]">
+                    {chosenItems.map(({ group, plan }) => (
+                      <li key={group.id} className="flex items-start justify-between gap-3 py-2.5 text-xs">
+                        <div className="min-w-0">
+                          <p className="font-semibold text-[#12110E] truncate">{t(group.title)}</p>
+                          <p className="text-[11px] text-[#5A554E]">{t(plan.label)}</p>
+                        </div>
+                        <span className="shrink-0 font-mono font-semibold text-[#12110E]">
+                          {price(plan.priceEur)}{getPeriodShortLabel(plan.period, safeLang)}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
 
-                {submitOk ? (
-                  <div className="rounded-3xl border border-[#9E7F5A]/40 bg-[#FAF8F4] p-7 text-center">
-                    <CheckCircle2 className="mx-auto h-10 w-10 text-[#7D6445]" />
-                    <h4 className="mt-3 font-serif text-2xl font-medium text-[#171613]">
-                      {ui.successTitle}
-                    </h4>
-                    <p className="mt-2 text-sm text-[#57534B]">
-                      {ui.successSub}{" "}
-                      <strong className="font-mono text-[#171613]">({submitOk})</strong>
-                    </p>
-                    <div className="mt-6 flex flex-wrap justify-center gap-3">
-                      <a
-                        href={whatsappHref}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-2 rounded-full bg-[#171613] px-6 py-3 text-xs font-semibold text-[#F7F4EE] hover:bg-[#2A2823]"
-                      >
-                        <MessageCircle className="h-4 w-4 text-[#E5C696]" />
-                        {ui.whatsappBtn}
-                      </a>
-                      <button
-                        type="button"
-                        onClick={resetAll}
-                        className="inline-flex items-center gap-2 rounded-full border border-[#171613]/20 bg-white px-5 py-3 text-xs font-semibold text-[#171613]"
-                      >
-                        {ui.resetBtn}
-                      </button>
+                  {totals.bundleDiscount > 0 && (
+                    <div className="rounded-2xl border border-[#D8B788]/40 bg-[#FAF6F0] p-3 text-xs">
+                      <div className="flex items-center justify-between text-[#8D6C42] font-bold">
+                        <span>🎁 Pack Synergie (-15%)</span>
+                        <span>-{price(totals.bundleDiscount)}</span>
+                      </div>
+                      <p className="text-[10.5px] text-[#A67C40] mt-1 font-medium">
+                        Remise automatique appliquée sur votre sélection.
+                      </p>
                     </div>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmitQuote} className="space-y-4">
-                    <h4 className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7D6445]">
-                      {ui.contactHeading}
-                    </h4>
+                  )}
 
-                    <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
-                      <div>
-                        <label className="mb-1 block text-xs font-medium text-[#45413A]">
-                          {ui.companyLabel}
-                        </label>
+                  <div className="space-y-1.5 border-t border-[#E5E5E0] pt-3.5">
+                    {totals.once > 0 && (
+                      <div className="flex items-baseline justify-between">
+                        <span className="text-xs text-[#5A554E]">{ui.onceTotal}</span>
+                        <div className="text-right">
+                          {totals.bundleDiscount > 0 && (
+                            <span className="text-xs line-through text-slate-400 mr-2">
+                              {price(totals.once)}
+                            </span>
+                          )}
+                          <span className="font-serif text-2xl font-bold text-[#12110E]">
+                            {price(totals.finalOnce)}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                    {totals.monthly > 0 && (
+                      <div className="flex items-baseline justify-between">
+                        <span className="text-xs text-[#5A554E]">{ui.monthlyTotal}</span>
+                        <span className="font-serif text-lg font-semibold text-[#12110E]">
+                          {price(totals.monthly)}
+                          {getPeriodShortLabel("month", safeLang)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Dual Action CTAs */}
+                  <div className="space-y-2.5 border-t border-[#E5E5E0] pt-4">
+                    <a
+                      href={whatsappHref}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex w-full items-center justify-center gap-2 rounded-full border border-[#D8B788]/50 bg-[#171613] px-4 py-3 text-xs font-bold text-[#E5C696] shadow-md transition hover:bg-[#2A2823] hover:scale-[1.01]"
+                    >
+                      <MessageCircle className="h-4 w-4 text-[#E5C696]" />
+                      <span>💬 Valider sur WhatsApp (15 min)</span>
+                    </a>
+
+                    {submitOk ? (
+                      <div className="rounded-2xl border border-emerald-500/30 bg-emerald-50 p-3 text-center text-xs text-emerald-900">
+                        <p className="font-bold">Devis PDF téléchargé !</p>
+                        <p className="text-[11px] mt-0.5 text-emerald-800">Réf : {submitOk}</p>
+                      </div>
+                    ) : (
+                      <form onSubmit={handleSubmitQuote} className="space-y-2 pt-1">
+                        <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#706A61]">
+                          Ou recevoir mon devis officiel PDF :
+                        </p>
                         <input
                           type="text"
                           required
+                          placeholder="Nom de votre entreprise *"
                           value={client.company}
                           onChange={(e) => setClient({ ...client, company: e.target.value })}
-                          className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3.5 py-2.5 text-sm text-[#171613] focus:border-[#9E7F5A] focus:bg-white focus:outline-none"
+                          className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3 py-2 text-xs text-[#171613] focus:border-[#9E7F5A] focus:outline-none"
                         />
-                      </div>
-                      <div>
-                        <label className="mb-1 block text-xs font-medium text-[#45413A]">
-                          {ui.nameLabel}
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={client.name}
-                          onChange={(e) => setClient({ ...client, name: e.target.value })}
-                          className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3.5 py-2.5 text-sm text-[#171613] focus:border-[#9E7F5A] focus:bg-white focus:outline-none"
-                        />
-                      </div>
-                      <div>
-                        <label className="mb-1 block text-xs font-medium text-[#45413A]">
-                          {ui.emailLabel}
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          value={client.email}
-                          onChange={(e) => setClient({ ...client, email: e.target.value })}
-                          className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3.5 py-2.5 text-sm text-[#171613] focus:border-[#9E7F5A] focus:bg-white focus:outline-none"
-                        />
-                      </div>
-                      <div>
-                        <label className="mb-1 block text-xs font-medium text-[#45413A]">
-                          {ui.phoneLabel}
-                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <input
+                            type="text"
+                            required
+                            placeholder="Votre nom *"
+                            value={client.name}
+                            onChange={(e) => setClient({ ...client, name: e.target.value })}
+                            className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3 py-2 text-xs text-[#171613] focus:border-[#9E7F5A] focus:outline-none"
+                          />
+                          <input
+                            type="email"
+                            required
+                            placeholder="Email pro *"
+                            value={client.email}
+                            onChange={(e) => setClient({ ...client, email: e.target.value })}
+                            className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3 py-2 text-xs text-[#171613] focus:border-[#9E7F5A] focus:outline-none"
+                          />
+                        </div>
                         <input
                           type="tel"
                           required
+                          placeholder="Téléphone / WhatsApp *"
                           value={client.whatsapp}
                           onChange={(e) => setClient({ ...client, whatsapp: e.target.value })}
-                          className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3.5 py-2.5 text-sm text-[#171613] focus:border-[#9E7F5A] focus:bg-white focus:outline-none"
+                          className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3 py-2 text-xs text-[#171613] focus:border-[#9E7F5A] focus:outline-none"
                         />
-                      </div>
-                    </div>
 
-                    <div>
-                      <label className="mb-1 block text-xs font-medium text-[#45413A]">
-                        {ui.websiteLabel}
-                      </label>
-                      <input
-                        type="text"
-                        value={client.website}
-                        onChange={(e) => setClient({ ...client, website: e.target.value })}
-                        placeholder="https://..."
-                        className="w-full rounded-xl border border-[#171613]/15 bg-[#FAF8F4] px-3.5 py-2.5 text-sm text-[#171613] focus:border-[#9E7F5A] focus:bg-white focus:outline-none"
-                      />
-                    </div>
+                        {submitError && (
+                          <p className="text-[10.5px] text-red-600 font-medium">{submitError}</p>
+                        )}
 
-                    {submitError && (
-                      <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-medium text-red-700">
-                        {submitError}
-                      </p>
-                    )}
-
-                    {/* Reassurance & Fast-Track Box */}
-                    <div className="rounded-2xl border border-amber-500/30 bg-amber-50/70 p-4 space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-amber-950 flex items-center gap-1.5">
-                          <span className="text-base">🚀</span>
-                          Démarrage Express garanti sous 48h
-                        </span>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200/70 text-amber-900">
-                          3 créneaux restants
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-amber-900 leading-relaxed">
-                        Chaque projet est livré clé en main sous 10 à 14 jours ouvrés. Validez votre configuration directement avec un expert sur WhatsApp ou téléchargez votre devis officiel PDF.
-                      </p>
-                    </div>
-
-                    <div className="flex flex-col gap-3 border-t border-[#171613]/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
-                      <button
-                        type="button"
-                        onClick={() => goStep(2)}
-                        className="inline-flex items-center justify-center gap-2 rounded-full border border-[#171613]/20 bg-white px-5 py-3 text-xs font-semibold text-[#171613] transition hover:border-[#9E7F5A]"
-                      >
-                        <ArrowLeft className="h-4 w-4" />
-                        {ui.backBtn}
-                      </button>
-
-                      <div className="flex flex-col gap-2.5 sm:flex-row">
-                        <a
-                          href={whatsappHref}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center justify-center gap-2 rounded-full border border-[#D8B788]/50 bg-[#171613] px-5 py-3 text-xs font-bold text-[#E5C696] shadow-md transition hover:bg-[#2A2823] hover:scale-[1.02]"
-                        >
-                          <MessageCircle className="h-4 w-4 text-[#E5C696]" />
-                          <span>💬 Valider sur WhatsApp (15m)</span>
-                        </a>
                         <button
                           type="submit"
                           disabled={sending}
-                          className="inline-flex items-center justify-center gap-2 rounded-full bg-[#171613] px-6 py-3 text-xs font-semibold text-[#F7F4EE] transition hover:bg-[#2A2823] disabled:opacity-50"
+                          className="flex w-full items-center justify-center gap-2 rounded-full border border-[#171613]/20 bg-white px-4 py-2.5 text-xs font-semibold text-[#171613] transition hover:bg-[#FAF8F4] disabled:opacity-50"
                         >
-                          <Download className="h-4 w-4 text-white" />
-                          {sending ? ui.sendingBtn : ui.submitBtn}
+                          <Download className="h-3.5 w-3.5" />
+                          <span>{sending ? ui.sendingBtn : "Télécharger mon devis PDF"}</span>
                         </button>
-                      </div>
-                    </div>
-                  </form>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Right Column: Live Editorial Summary Card */}
-          <aside className="rounded-3xl border border-[#E5E5E0] bg-white p-6 text-[#12110E] shadow-[0_20px_50px_rgba(23,22,19,0.06)] lg:sticky lg:top-24 lg:col-span-4">
-            <div className="flex items-center justify-between border-b border-[#E5E5E0] pb-4">
-              <div>
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[#706A61]">
-                  {ui.summaryTitle}
-                </p>
-                <p className="mt-0.5 text-xs text-[#5A554E]">{t(activeBusiness.label)}</p>
-              </div>
-              <span className="rounded-full bg-[#12110E] px-2.5 py-0.5 font-mono text-xs font-bold text-white">
-                {chosenItems.length}
-              </span>
-            </div>
-
-            {chosenItems.length === 0 ? (
-              <p className="py-8 text-center text-xs text-[#5A554E]">{ui.emptySelection}</p>
-            ) : (
-              <>
-                <ul className="divide-y divide-[#E5E5E0] py-2">
-                  {chosenItems.map(({ group, plan }) => (
-                    <li key={group.id} className="flex items-start justify-between gap-3 py-3">
-                      <div className="min-w-0">
-                        <p className="text-xs font-semibold text-[#12110E]">{t(group.title)}</p>
-                        <p className="text-[11px] text-[#5A554E]">{t(plan.label)}</p>
-                        {plan.commitmentMonths && (
-                          <p className="mt-0.5 font-mono text-[10px] text-[#706A61]">
-                            {getCommitmentLabel(plan.commitmentMonths, safeLang)}
-                          </p>
-                        )}
-                      </div>
-                      <span className="shrink-0 font-mono text-xs font-semibold text-[#12110E]">
-                        {plan.customQuote
-                          ? plan.priceEur > 0
-                            ? `${price(plan.priceEur)}${getPeriodShortLabel(plan.period, safeLang)}*`
-                            : ui.customBadge
-                          : `${price(plan.priceEur)}${getPeriodShortLabel(plan.period, safeLang)}`}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-                {totals.bundleDiscount > 0 && (
-                  <div className="rounded-2xl border border-[#D8B788]/40 bg-[#FAF6F0] p-3 my-2 text-xs">
-                    <div className="flex items-center justify-between text-[#8D6C42] font-bold">
-                      <span>🎁 Pack Synergie (-15%)</span>
-                      <span>-{price(totals.bundleDiscount)}</span>
-                    </div>
-                    <p className="text-[10.5px] text-[#A67C40] mt-1 font-medium">
-                      + 1er mois WebCare offert (valeur 99 €)
-                    </p>
-                  </div>
-                )}
-
-                {/* Assurance & Reassurance conversion card */}
-                <div className="rounded-2xl border border-emerald-500/25 bg-emerald-50/60 p-3 my-2.5 text-xs">
-                  <div className="flex items-center gap-1.5 font-bold text-emerald-900">
-                    <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
-                    <span>Garantie Satisfait ou Remboursé</span>
-                  </div>
-                  <p className="mt-1 text-[10.5px] text-emerald-800 leading-snug">
-                    Engagement contractuel ferme noté sur votre devis officiel. Livraison sous 10 à 14 jours.
-                  </p>
-                </div>
-
-                <div className="mt-2 space-y-2 border-t border-[#E5E5E0] pt-4">
-                  {totals.once > 0 && (
-                    <div className="flex items-baseline justify-between">
-                      <span className="text-xs text-[#5A554E]">{ui.onceTotal}</span>
-                      <div className="text-right">
-                        {totals.bundleDiscount > 0 && (
-                          <span className="text-xs line-through text-slate-400 mr-2">
-                            {price(totals.once)}
-                          </span>
-                        )}
-                        <span className="font-serif text-2xl font-bold text-[#12110E]">
-                          {price(totals.finalOnce)}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                  {totals.monthly > 0 && (
-                    <div className="flex items-baseline justify-between">
-                      <span className="text-xs text-[#5A554E]">{ui.monthlyTotal}</span>
-                      <span className="font-serif text-xl font-semibold text-[#12110E]">
-                        {price(totals.monthly)}
-                        {getPeriodShortLabel("month", safeLang)}
-                      </span>
-                    </div>
-                  )}
-                  {totals.annual > 0 && (
-                    <div className="flex items-baseline justify-between">
-                      <span className="text-xs text-[#5A554E]">{ui.annualTotal}</span>
-                      <span className="font-serif text-xl font-semibold text-[#12110E]">
-                        {price(totals.annual)}
-                        {getPeriodShortLabel("year", safeLang)}
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {totals.hasCustom && (
-                  <p className="mt-3 rounded-xl border border-[#E5E5E0] bg-[#FAF9F5] p-3 text-[11px] leading-relaxed text-[#5A554E]">
-                    * {ui.customNote}
-                  </p>
-                )}
-
-                <div className="mt-5 space-y-2.5">
-                  <button
-                    type="button"
-                    onClick={syncAllToCart}
-                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[#12110E] px-4 py-3 text-xs font-semibold text-white shadow-md transition hover:bg-[#2B2925]"
-                  >
-                    {cartSynced ? (
-                      <>
-                        <Check className="h-4 w-4 text-[#E5C696]" />
-                        {ui.addedAllToCart}
-                      </>
-                    ) : (
-                      <>
-                        <ShoppingBag className="h-4 w-4" />
-                        {ui.addAllToCart}
-                      </>
+                      </form>
                     )}
-                  </button>
-                  {step < 3 && (
-                    <button
-                      type="button"
-                      onClick={() => goStep(3)}
-                      className="flex w-full items-center justify-center gap-2 rounded-full border border-[#E5E5E0] bg-white px-4 py-2.5 text-xs font-semibold text-[#12110E] transition hover:bg-[#FAF9F5]"
-                    >
-                      {ui.step3}
-                      <ArrowRight className="h-3.5 w-3.5 text-[#12110E]" />
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
+                  </div>
+                </>
+              )}
 
-            <div className="mt-5 flex items-start gap-2 border-t border-[#E5E5E0] pt-4 text-[11px] leading-relaxed text-[#706A61]">
-              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#8D6C42]" />
-              <span>{ui.vatNotice}</span>
-            </div>
-          </aside>
-        </div>
+              <div className="border-t border-[#E5E5E0] pt-3 text-[10.5px] text-[#706A61] flex items-start gap-1.5 leading-snug">
+                <ShieldCheck className="h-3.5 w-3.5 text-[#8D6C42] shrink-0 mt-0.5" />
+                <span>Tarifs indicatifs en EUR. Devis contractuel validé avant tout engagement.</span>
+              </div>
+            </aside>
+          </div>
+        )}
       </div>
     </section>
   );
