@@ -21,7 +21,7 @@ const STUDIOS: StudioScene[] = [
     landmark: "Vue Tour Eiffel & Toits Parisiens",
     country: { fr: "France", en: "France", vi: "Pháp", ar: "فرنسا", ru: "Франция" },
     timezone: "Europe/Paris",
-    image: "/showcase/hub-paris-real-team.jpg",
+    image: "/showcase/hub-paris-real-team.jpg?v=20261128b",
     role: {
       fr: "Direction Artistique & Production Digitale",
       en: "Art Direction & Haute Couture Digital",
