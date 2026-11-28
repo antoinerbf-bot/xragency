@@ -204,12 +204,11 @@ export function Hero() {
         </div>
 
         {/* ── Top-Left: Architectural Branding & Headline ── */}
-        <div className="absolute top-20 sm:top-24 left-4 sm:left-8 lg:left-12 z-30 pointer-events-auto max-w-[290px] sm:max-w-xl">
+        <div className="absolute top-20 sm:top-24 left-4 sm:left-8 lg:left-12 z-30 pointer-events-auto max-w-[320px] sm:max-w-xl">
           <div className="inline-flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="font-mono text-[9px] sm:text-[11px] font-semibold uppercase tracking-[0.18em] sm:tracking-[0.24em] text-white/95">
-              <span className="inline sm:hidden">AGENCE DIGITALE INTERNATIONALE</span>
-              <span className="hidden sm:inline">{c.eyebrow}</span>
+              {c.eyebrow}
             </span>
           </div>
           <h1 className="mt-2 font-serif text-2xl sm:text-4xl lg:text-[3.2rem] font-light leading-[1.08] tracking-[-0.03em] text-white drop-shadow-[0_2px_16px_rgba(0,0,0,0.95)]">
@@ -221,14 +220,14 @@ export function Hero() {
           </h1>
         </div>
 
-        {/* ── Top-Right: Discreet Live Team & International Hub Indicator ── */}
-        <div className="absolute top-20 sm:top-24 right-4 sm:right-8 lg:right-12 z-30 pointer-events-auto">
+        {/* ── Top-Right: Discreet Live Team & International Hub Indicator (Desktop & Tablet) ── */}
+        <div className="hidden md:block absolute top-20 sm:top-24 right-4 sm:right-8 lg:right-12 z-30 pointer-events-auto">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/45 px-3.5 py-1.5 backdrop-blur-md text-white shadow-lg">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span className="font-mono text-[10px] font-semibold tracking-wider text-white uppercase">
               {activeClip.city}
             </span>
-            <span className="hidden sm:inline font-mono text-[10px] text-zinc-300">
+            <span className="font-mono text-[10px] text-zinc-300">
               · {activeClip.focus}
             </span>
           </div>
