@@ -7,7 +7,6 @@ import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
 import { FunnelProvider } from "@/lib/funnel";
 import { FunnelRail } from "@/components/site/FunnelRail";
-import { MobileStickyCta } from "@/components/site/MobileStickyCta";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -38,7 +37,6 @@ function Index() {
       <div className="relative min-h-screen overflow-x-clip bg-[#FAF8F5] text-[#1A1815]">
         <Nav />
         <FunnelRail />
-        <MobileStickyCta />
         <main className="relative z-10">
           {/* 01 — Hero épuré, sobre & haute couture */}
           <Hero />
