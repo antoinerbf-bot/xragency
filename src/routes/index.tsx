@@ -2,11 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
 import { HomeServices } from "@/components/site/HomeServices";
-import { GoogleMapsShowcase } from "@/components/site/GoogleMapsShowcase";
-import { NexProWorkShowcase } from "@/components/site/NexProWorkShowcase";
-import { WhyAgencySection } from "@/components/site/WhyAgencySection";
 import { QuoteConfiguratorCompact } from "@/components/site/QuoteConfiguratorCompact";
-import { StudioMethodSection } from "@/components/site/StudioMethodSection";
 import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
 import { FunnelProvider } from "@/lib/funnel";
@@ -42,31 +38,19 @@ function Index() {
         <Nav />
         <FunnelRail />
         <main className="relative z-10">
-          {/* 01 — Hero épuré, sobre & haute couture (Paris, Dubaï, Genève, Da Nang) */}
+          {/* 01 — Hero épuré, sobre & haute couture */}
           <Hero />
 
-          {/* 02 — "Votre projet, notre solution" : Simulateur & Configurateur en 3 étapes dès le premier scroll */}
+          {/* 02 — "Votre projet, notre solution" : Diagnostic interactif orienté secteur & besoins réels */}
           <QuoteConfiguratorCompact />
 
-          {/* 03 — Nos Univers & Pôles d'Expertise au Scroll Parallaxe */}
+          {/* 03 — Nos 8 Pôles d'Excellence & Tarifs : Scroll fluide sans superposition */}
           <HomeServices />
 
-          {/* 04 — Google Maps & Visibilité Locale : Pack Local Top 3 dès 999 €/an */}
-          <GoogleMapsShowcase />
-
-          {/* 05 — Réalisations : Projets réels d'exception & univers sectoriels */}
-          <NexProWorkShowcase />
-
-          {/* 06 — Pourquoi XR Agency (Équipe & Piliers de Confiance) */}
-          <WhyAgencySection />
-
-          {/* 07 — Méthode en 4 étapes & Bannière d'Engagement Clé en Main */}
-          <StudioMethodSection />
-
-          {/* 09 — FAQ */}
+          {/* 04 — FAQ transparente */}
           <Faq />
 
-          {/* 10 — Contact & Hubs Internationaux de prestige */}
+          {/* 05 — Contact & Ligne directe */}
           <Contact />
         </main>
       </div>

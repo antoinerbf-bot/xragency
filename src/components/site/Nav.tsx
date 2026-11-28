@@ -141,10 +141,10 @@ const NAV_COPY: Record<
 > = {
   fr: {
     home: "Accueil",
-    expertises: "Expertises",
-    work: "Réalisations",
+    expertises: "Nos services",
+    work: "Nos réalisations",
     method: "Méthode",
-    agency: "L’Agence",
+    agency: "Notre agence",
     international: "International",
     resources: "Ressources",
     affiliation: "Affiliation",
@@ -156,7 +156,7 @@ const NAV_COPY: Record<
     mapsTool: "Simulateur Google Maps",
     quoteTool: "Devis en 3 étapes",
     quoteCta: "Devis personnalisé",
-    catalogTag: "XRAGENCY · NOS EXPERTISES",
+    catalogTag: "XRAGENCY · NOS SERVICES & TARIFS",
     menu: "Ouvrir le menu",
     chooseLanguage: "Choisir la langue",
     langPrefix: "Langue : ",
@@ -276,6 +276,7 @@ export function Nav() {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const resTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const langMenuRef = useRef<HTMLDivElement>(null);
+  const servicesRef = useRef<HTMLDivElement>(null);
 
   const onScroll = useCallback(() => {
     setScrolled(window.scrollY > 24);
@@ -293,6 +294,9 @@ export function Nav() {
     const onDocClick = (e: MouseEvent) => {
       if (langMenuRef.current && !langMenuRef.current.contains(e.target as Node)) {
         setLanguageOpen(false);
+      }
+      if (servicesRef.current && !servicesRef.current.contains(e.target as Node)) {
+        setServicesOpen(false);
       }
     };
     const onKeyDown = (e: KeyboardEvent) => {
@@ -326,84 +330,95 @@ export function Nav() {
           aria-label="Navigation principale"
           className="relative flex min-h-[64px] items-center justify-between gap-3 py-2 text-[#1A1815]"
         >
-          <Link
-            to="/"
-            aria-label="XRAGENCY. — Accueil"
-            className="group inline-flex items-center py-1 transition-opacity duration-200 hover:opacity-80"
-          >
-            <span className="font-sans text-[15px] sm:text-[17px] font-bold tracking-[0.22em] uppercase text-black select-none">
-              XRAGENCY.
-            </span>
-          </Link>
+          {/* Left: Logo + Immediate Direct Buttons (Nos services, Nos réalisations, Notre agence) */}
+          <div className="flex items-center gap-3 sm:gap-6">
+            <Link
+              to="/"
+              aria-label="XRAGENCY. — Accueil"
+              className="group inline-flex items-center py-1 transition-opacity duration-200 hover:opacity-80"
+            >
+              <span className="font-sans text-[15px] sm:text-[17px] font-bold tracking-[0.22em] uppercase text-black select-none">
+                XRAGENCY.
+              </span>
+            </Link>
 
-          {/* Desktop Center Navigation Links */}
-          <div className="hidden min-w-0 flex-1 items-center justify-center lg:flex px-2 xl:px-4">
-            <div className="flex items-center gap-0.5 lg:gap-1 xl:gap-2">
-              {/* 1. Accueil */}
-              <Link
-                to="/"
-                className={cn(
-                  "relative whitespace-nowrap px-2.5 py-1.5 text-xs xl:text-[13px] font-medium tracking-[0.01em] transition",
-                  isHome ? "text-[#1A1815] font-semibold" : "text-[#5C554B] hover:text-[#1A1815]",
-                )}
-              >
-                {c.home}
-                {isHome && (
-                  <span className="absolute inset-x-3 bottom-0.5 h-[2px] rounded-full bg-[#A67C40]" />
-                )}
-              </Link>
-
-              {/* 2. Expertises v */}
+            {/* Direct Navigation Buttons Beside Logo */}
+            <div className="flex items-center gap-1 sm:gap-1.5">
+              {/* 1. Nos services */}
               <div
+                ref={servicesRef}
                 className="relative"
                 onMouseEnter={() => {
                   if (timer.current) clearTimeout(timer.current);
                   setServicesOpen(true);
                 }}
                 onMouseLeave={() => {
-                  timer.current = setTimeout(() => setServicesOpen(false), 180);
+                  timer.current = setTimeout(() => setServicesOpen(false), 220);
                 }}
               >
                 <button
                   type="button"
                   aria-expanded={servicesOpen}
-                  onClick={() => setServicesOpen((v) => !v)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (timer.current) clearTimeout(timer.current);
+                    setServicesOpen((v) => !v);
+                  }}
                   className={cn(
-                    "inline-flex items-center gap-1 whitespace-nowrap px-3 py-2 text-[13px] font-medium tracking-[0.01em] transition",
-                    location.pathname.startsWith("/services")
-                      ? "text-[#A67C40] font-semibold"
-                      : "text-[#5C554B] hover:text-[#1A1815]",
+                    "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs sm:text-[13px] font-semibold transition border",
+                    servicesOpen || location.pathname.startsWith("/services")
+                      ? "border-[#A67C40]/40 bg-[#FAF6F0] text-[#A67C40] shadow-xs"
+                      : "border-transparent text-[#2C2924] hover:border-[#E8E2D8] hover:bg-[#FAF8F5] hover:text-[#1A1815]"
                   )}
                 >
-                  {c.expertises}
+                  <span>{c.expertises}</span>
                   <ChevronDown
                     className={cn(
                       "h-3.5 w-3.5 text-[#A67C40] transition-transform duration-200",
-                      servicesOpen && "rotate-180",
+                      servicesOpen && "rotate-180"
                     )}
                   />
                 </button>
 
+                {/* Enhanced "Nos services & tarifs" Mega-Menu */}
                 {servicesOpen && (
-                  <div className="fixed left-1/2 -translate-x-1/2 top-[64px] w-[min(1040px,calc(100vw-2rem))] max-w-[1040px] rounded-2xl border border-[#E8E2D8] bg-white/98 backdrop-blur-2xl p-5 sm:p-6 text-[#1A1815] shadow-[0_24px_70px_rgba(26,24,21,0.14)] animate-in fade-in slide-in-from-top-2 duration-200 z-50">
-                    <div className="mb-4 flex items-center justify-between border-b border-[#EBE5DC] pb-3">
-                      <div className="flex items-center gap-2.5">
-                        <span className="h-px w-7 bg-[#A67C40]" />
-                        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#A67C40]">
-                          {c.catalogTag}
-                        </span>
+                  <div
+                    onMouseEnter={() => {
+                      if (timer.current) clearTimeout(timer.current);
+                    }}
+                    onMouseLeave={() => {
+                      timer.current = setTimeout(() => setServicesOpen(false), 200);
+                    }}
+                    className="fixed left-1/2 -translate-x-1/2 top-[64px] w-[min(1120px,calc(100vw-1.5rem))] max-w-[1120px] rounded-3xl border border-[#E8E2D8] bg-white/98 backdrop-blur-2xl p-5 sm:p-6 text-[#1A1815] shadow-[0_24px_70px_rgba(26,24,21,0.16)] animate-in fade-in slide-in-from-top-2 duration-200 z-50"
+                  >
+                    <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[#EBE5DC] pb-3.5">
+                      <div className="flex items-center gap-3">
+                        <span className="h-2 w-2 rounded-full bg-[#A67C40]" />
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-[#A67C40]">
+                              Nos services & tarifs officiels
+                            </span>
+                            <span className="font-mono text-[9.5px] font-semibold uppercase bg-[#FAF6F0] text-[#8D6C42] border border-[#D8B788]/30 px-2 py-0.5 rounded-full">
+                              8 Expertises
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-[#706A61] hidden sm:block mt-0.5">
+                            Ingénierie digitale, acquisition locale & internationale, résultats garantis par contrat.
+                          </p>
+                        </div>
                       </div>
                       <Link
                         to="/services"
                         onClick={() => setServicesOpen(false)}
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#A67C40] hover:text-[#1A1815] transition"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-[#D8B788]/40 bg-[#FAF6F0] px-3.5 py-1.5 text-xs font-semibold text-[#A67C40] hover:bg-[#A67C40] hover:text-white transition shadow-xs"
                       >
                         {t(UI.navFullCatalog)}
                         <ArrowRight className="h-3.5 w-3.5" />
                       </Link>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                       {IDS.map((id) => {
                         const s = SERVICES.find((x) => x.id === id);
                         const I = ICONS[id];
@@ -414,18 +429,18 @@ export function Nav() {
                             key={id}
                             to={hrefFor(id) as "/services"}
                             onClick={() => setServicesOpen(false)}
-                            className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-[#EBE5DC] bg-[#FAF8F5] p-3.5 transition duration-300 hover:-translate-y-0.5 hover:border-[#A67C40] hover:bg-white hover:shadow-md"
+                            className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-[#EBE5DC] bg-[#FAF8F5] p-3.5 transition duration-300 hover:-translate-y-1 hover:border-[#A67C40] hover:bg-white hover:shadow-lg"
                           >
                             <div>
-                              <div className="mb-3 flex items-center justify-between">
-                                <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#A67C40]/10 text-[#A67C40] transition-colors group-hover:bg-[#A67C40] group-hover:text-white">
+                              <div className="mb-2.5 flex items-center justify-between">
+                                <span className="grid h-8 w-8 place-items-center rounded-xl bg-[#A67C40]/10 text-[#A67C40] transition-colors group-hover:bg-[#A67C40] group-hover:text-white">
                                   <I className="h-4 w-4" />
                                 </span>
                                 <img
                                   src={XR_PHOTOS[id]}
                                   alt=""
                                   loading="lazy"
-                                  className="h-9 w-14 rounded-md object-cover border border-[#E8E2D8]"
+                                  className="h-8 w-12 rounded-lg object-cover border border-[#E8E2D8]"
                                 />
                               </div>
                               <span className="block text-xs font-bold text-[#1A1815] group-hover:text-[#A67C40] transition-colors">
@@ -440,7 +455,7 @@ export function Nav() {
                                 {t(UI.navFromPrice)}
                               </span>
                               <span className="font-mono text-[11px] font-bold text-[#A67C40]">
-                                {price(s.fromEur)}
+                                {id === "maps" ? "999 € (Garanti)" : price(s.fromEur)}
                                 {periodTxt ? ` ${periodTxt}` : ""}
                               </span>
                             </div>
@@ -452,150 +467,36 @@ export function Nav() {
                 )}
               </div>
 
-              {/* 3. Réalisations */}
+              {/* 2. Nos réalisations */}
               <Link
                 to="/work"
                 className={cn(
-                  "whitespace-nowrap px-3 py-2 text-[13px] font-medium tracking-[0.01em] transition",
+                  "inline-flex items-center rounded-full px-3 py-1.5 text-xs sm:text-[13px] font-medium transition border border-transparent hover:border-[#E8E2D8] hover:bg-[#FAF8F5]",
                   location.pathname === "/work"
-                    ? "text-[#A67C40] font-semibold"
-                    : "text-[#5C554B] hover:text-[#1A1815]",
+                    ? "border-[#A67C40]/30 bg-[#FAF6F0] font-semibold text-[#A67C40]"
+                    : "text-[#5C554B] hover:text-[#1A1815]"
                 )}
               >
                 {c.work}
               </Link>
 
-              {/* 4. Méthode */}
-              <Link
-                to="/methode"
-                className={cn(
-                  "whitespace-nowrap px-3 py-2 text-[13px] font-medium tracking-[0.01em] transition",
-                  location.pathname === "/methode"
-                    ? "text-[#A67C40] font-semibold"
-                    : "text-[#5C554B] hover:text-[#1A1815]",
-                )}
-              >
-                {c.method}
-              </Link>
-
-              {/* 5. L'Agence */}
+              {/* 3. Notre agence */}
               <Link
                 to="/notre-histoire"
                 className={cn(
-                  "whitespace-nowrap px-3 py-2 text-[13px] font-medium tracking-[0.01em] transition",
+                  "inline-flex items-center rounded-full px-3 py-1.5 text-xs sm:text-[13px] font-medium transition border border-transparent hover:border-[#E8E2D8] hover:bg-[#FAF8F5]",
                   location.pathname === "/notre-histoire"
-                    ? "text-[#A67C40] font-semibold"
-                    : "text-[#5C554B] hover:text-[#1A1815]",
+                    ? "border-[#A67C40]/30 bg-[#FAF6F0] font-semibold text-[#A67C40]"
+                    : "text-[#5C554B] hover:text-[#1A1815]"
                 )}
               >
                 {c.agency}
               </Link>
-
-              {/* 6. International */}
-              <Link
-                to="/international"
-                className={cn(
-                  "inline-flex items-center gap-1 whitespace-nowrap px-3 py-2 text-[13px] font-medium tracking-[0.01em] transition",
-                  location.pathname === "/international"
-                    ? "text-[#A67C40] font-semibold"
-                    : "text-[#5C554B] hover:text-[#1A1815]",
-                )}
-              >
-                {c.international}
-                <ChevronDown className="h-3.5 w-3.5 text-[#A67C40]" />
-              </Link>
-
-              {/* 7. Ressources v */}
-              <div
-                className="relative"
-                onMouseEnter={() => {
-                  if (resTimer.current) clearTimeout(resTimer.current);
-                  setResourcesOpen(true);
-                }}
-                onMouseLeave={() => {
-                  resTimer.current = setTimeout(() => setResourcesOpen(false), 180);
-                }}
-              >
-                <button
-                  type="button"
-                  aria-expanded={resourcesOpen}
-                  onClick={() => setResourcesOpen((v) => !v)}
-                  className="inline-flex items-center gap-1 whitespace-nowrap px-3 py-2 text-[13px] font-medium tracking-[0.01em] text-[#5C554B] transition hover:text-[#1A1815]"
-                >
-                  {c.resources}
-                  <ChevronDown
-                    className={cn(
-                      "h-3.5 w-3.5 text-[#A67C40] transition-transform duration-200",
-                      resourcesOpen && "rotate-180",
-                    )}
-                  />
-                </button>
-
-                {resourcesOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-72 rounded-2xl border border-[#D8B788]/25 bg-[#15120E] p-2.5 text-[#FAF7F2] shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150">
-                    <a
-                      href="/#audit"
-                      onClick={() => setResourcesOpen(false)}
-                      className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-xs font-medium text-white/90 transition hover:bg-white/5 hover:text-[#D8B788]"
-                    >
-                      <Sparkles className="h-4 w-4 text-[#D8B788]" />
-                      <span>{c.auditTool}</span>
-                    </a>
-                    <a
-                      href="/#maps-simulator"
-                      onClick={() => setResourcesOpen(false)}
-                      className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-xs font-medium text-white/90 transition hover:bg-white/5 hover:text-[#D8B788]"
-                    >
-                      <MapPinned className="h-4 w-4 text-[#D8B788]" />
-                      <span>{c.mapsTool}</span>
-                    </a>
-                    <a
-                      href="/#quote"
-                      onClick={() => setResourcesOpen(false)}
-                      className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-xs font-medium text-white/90 transition hover:bg-white/5 hover:text-[#D8B788]"
-                    >
-                      <Calculator className="h-4 w-4 text-[#D8B788]" />
-                      <span>{c.quoteTool}</span>
-                    </a>
-                    <div className="my-1.5 h-px bg-white/10" />
-                    <Link
-                      to="/faq"
-                      onClick={() => setResourcesOpen(false)}
-                      className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs text-white/80 transition hover:bg-white/5 hover:text-white"
-                    >
-                      <HelpCircle className="h-4 w-4 text-[#D8B788]/80" />
-                      <span>{c.faq}</span>
-                    </Link>
-                    <Link
-                      to="/affiliation"
-                      onClick={() => setResourcesOpen(false)}
-                      className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs text-white/80 transition hover:bg-white/5 hover:text-white"
-                    >
-                      <span>{c.affiliation}</span>
-                    </Link>
-                    <Link
-                      to="/recrutement"
-                      onClick={() => setResourcesOpen(false)}
-                      className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs text-white/80 transition hover:bg-white/5 hover:text-white"
-                    >
-                      <span>{c.recruitment}</span>
-                    </Link>
-                    <Link
-                      to="/dashboard"
-                      onClick={() => setResourcesOpen(false)}
-                      className="mt-1 flex items-center gap-2.5 rounded-xl border border-[#D8B788]/25 bg-[#D8B788]/10 px-3 py-2 text-xs font-semibold text-[#D8B788] transition hover:bg-[#D8B788]/20"
-                    >
-                      <UserRound className="h-4 w-4" />
-                      <span>{c.clientSpace}</span>
-                    </Link>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
 
-          {/* Right Controls matching mockup: 🌐 FR v + Gold Demander un devis → */}
-          <div className="flex shrink-0 items-center gap-2.5">
+          {/* Right Controls: Flag Language + Cart + 2-Bars Suspended Button (No quote button) */}
+          <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
             {/* Language Switcher with Flag */}
             <div className="relative" ref={langMenuRef}>
               <button
@@ -603,14 +504,14 @@ export function Nav() {
                 aria-label={c.chooseLanguage}
                 aria-expanded={languageOpen}
                 onClick={() => setLanguageOpen((v) => !v)}
-                className="flex h-9 items-center gap-2 rounded-full border border-[#E5E0D8] bg-[#FAF8F5] px-3 text-xs font-semibold text-[#1A1815] transition hover:border-[#D1B07A] hover:bg-white shadow-sm"
+                className="flex h-9 items-center gap-1.5 sm:gap-2 rounded-full border border-[#E5E0D8] bg-[#FAF8F5] px-2.5 sm:px-3 text-xs font-semibold text-[#1A1815] transition hover:border-[#D1B07A] hover:bg-white shadow-2xs"
               >
                 <FlagIcon code={lang} />
                 <span className="uppercase text-[11px] font-mono">{lang}</span>
                 <ChevronDown
                   className={cn(
                     "h-3 w-3 text-[#5C554B] transition-transform",
-                    languageOpen && "rotate-180",
+                    languageOpen && "rotate-180"
                   )}
                 />
               </button>
@@ -631,7 +532,7 @@ export function Nav() {
                         "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-start text-xs font-medium transition",
                         lang === l.code
                           ? "bg-[#FAF8F5] font-semibold text-[#A67C40]"
-                          : "text-[#423C34] hover:bg-[#F5F2EB] hover:text-[#1A1815]",
+                          : "text-[#423C34] hover:bg-[#F5F2EB] hover:text-[#1A1815]"
                       )}
                     >
                       <FlagIcon code={l.code} />
@@ -645,48 +546,20 @@ export function Nav() {
 
             <CartFloatingButton />
 
-            {/* Mobile Compact Quote CTA */}
-            <a
-              href="/#quote"
-              onClick={(e) => {
-                if (isHome && document.getElementById("quote")) {
-                  e.preventDefault();
-                  document.getElementById("quote")?.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
-              className="inline-flex h-8 items-center rounded-full bg-[#1A1815] px-3.5 text-[11px] font-bold text-white shadow-sm sm:hidden"
-            >
-              Devis
-            </a>
-
-            {/* Warm Champagne Gold CTA Button */}
-            <a
-              href="/#quote"
-              onClick={(e) => {
-                if (isHome && document.getElementById("quote")) {
-                  e.preventDefault();
-                  document.getElementById("quote")?.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
-              className="hidden min-h-9 items-center gap-2 whitespace-nowrap rounded-full bg-[#1A1815] px-5 py-2 text-[12.5px] font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#332F2B] hover:scale-[1.02] active:scale-[0.98] sm:inline-flex"
-            >
-              <span>{c.quoteCta}</span>
-              <ArrowRight className="h-3.5 w-3.5 text-[#E5C696] rtl:rotate-180" />
-            </a>
-
+            {/* Suspended 2 Horizontal Bars Menu Button (Always visible) */}
             <button
               type="button"
               aria-label={c.menu}
               aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-[#EBE5DC] bg-[#FAF8F5] text-[#1A1815] lg:hidden"
+              className="grid h-9 w-9 sm:h-10 sm:w-10 shrink-0 place-items-center rounded-xl border border-[#EBE5DC] bg-[#FAF8F5] text-[#1A1815] hover:border-[#D1B07A] hover:bg-white shadow-2xs transition"
             >
               {open ? (
                 <X className="h-4 w-4" />
               ) : (
-                <span className="space-y-1.5">
-                  <span className="block h-[1.5px] w-4 bg-current" />
-                  <span className="block h-[1.5px] w-4 bg-current" />
+                <span className="space-y-1.5 flex flex-col items-center justify-center">
+                  <span className="block h-[1.8px] w-4.5 bg-[#1A1815] rounded-full" />
+                  <span className="block h-[1.8px] w-4.5 bg-[#1A1815] rounded-full" />
                 </span>
               )}
             </button>
@@ -829,7 +702,7 @@ export function Nav() {
                 className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#1A1815] bg-white px-4 text-xs font-bold text-[#1A1815] shadow-xs hover:bg-[#FAF8F5] transition"
               >
                 <Phone className="h-3.5 w-3.5 text-[#A67C40]" />
-                <span>📞 Réserver un appel</span>
+                <span>Réserver un appel</span>
               </a>
 
               <a

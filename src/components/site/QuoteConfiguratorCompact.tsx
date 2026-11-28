@@ -624,8 +624,8 @@ const BUSINESS_TYPES: Array<{
     id: "restaurant",
     icon: UtensilsCrossed,
     label: l(
-      "Restauration & Poké / Food",
-      "Restaurants, Poké & Food Bars",
+      "Restauration, Bars & Poké",
+      "Restaurants, Bars & Poké",
       "Nhà hàng & Quán ăn",
       "المطاعم والمقاهي والأغذية",
       "Рестораны и гастрономия",
@@ -639,6 +639,27 @@ const BUSINESS_TYPES: Array<{
       "Loại bỏ 15-30% phí hoa hồng với hệ thống đặt món và POS sở hữu riêng.",
       "تخلص من عمولات منصات التوصيل عبر موقعك ونقاط البيع الخاصة بك.",
       "Экономьте 15–30% комиссий платформ доставки со своей системой заказов.",
+    ),
+  },
+  {
+    id: "btp",
+    icon: Wrench,
+    label: l(
+      "BTP, Rénovation & Artisans",
+      "Construction, Renovation & Trades",
+      "Xây dựng, Sửa chữa & Thủ công",
+      "المقاولات والبناء والتشطيبات",
+      "Строительство, ремонт и мастера",
+    ),
+    recommendedServices: ["maps", "websites", "seo"],
+    recommendedPlan: "maps_strategy",
+    defaultLossEstimate: 15000,
+    pitch: l(
+      "Apparaissez dans le Top 3 Google Maps de votre ville dès qu'un propriétaire cherche un artisan qualifié.",
+      "Rank in the Google Maps Top 3 whenever homeowners search for licensed contractors.",
+      "Lọt Top 3 Google Maps địa phương ngay khi khách hàng tìm kiếm thợ thi công.",
+      "تصدر المراكز الأولى على خرائط Google عند بحث العملاء عن مقاولين محليين.",
+      "Выход в топ-3 Google Maps для привлечения прямых заказов на ремонт.",
     ),
   },
   {
@@ -663,6 +684,69 @@ const BUSINESS_TYPES: Array<{
     ),
   },
   {
+    id: "beauty",
+    icon: Stethoscope,
+    label: l(
+      "Cliniques privées & Santé",
+      "Private Clinics & Health",
+      "Phòng khám, Thẩm mỹ & Y tế",
+      "العيادات الطبية والصحة",
+      "Клиники и здоровье",
+    ),
+    recommendedServices: ["websites", "maps", "maintenance"],
+    recommendedPlan: "maps_strategy",
+    defaultLossEstimate: 0,
+    pitch: l(
+      "Classement Top 3 Google Maps, respect du secret médical et prise de rendez-vous qualifiée sans intermédiaire.",
+      "Top 3 Google Maps visibility, medical-grade compliance and direct qualified appointments.",
+      "Định vị Top 3 Google Maps, bảo mật y tế và đặt lịch hẹn chuẩn xác.",
+      "تصدر خرائط Google وتعيين مواعيد المرضى مباشرة مع أمان البيانات.",
+      "Выход в топ-3 Google Maps, медицинские стандарты и прямой поток пациентов.",
+    ),
+  },
+  {
+    id: "services",
+    icon: Briefcase,
+    label: l(
+      "Avocats, Finance & Conseil B2B",
+      "Law, Wealth & B2B Advisory",
+      "Tư vấn Doanh nghiệp & Luật",
+      "الاستشارات والشركات المالية والقانونية",
+      "B2B-консалтинг, право и финансы",
+    ),
+    recommendedServices: ["websites", "seo", "branding"],
+    recommendedPlan: "seo_growth",
+    defaultLossEstimate: 0,
+    pitch: l(
+      "Positionnement d'autorité, réassurance institutionnelle et génération de mandats stratégiques.",
+      "Institutional credibility, high-authority positioning and high-value mandate generation.",
+      "Xây dựng uy tín thể chế và thu hút các hợp đồng chiến lược lớn.",
+      "ترسيخ المكانة المهنية وجلب عقود وصفقات أعمال استراتيجية.",
+      "Институциональный авторитет и привлечение крупных корпоративных контрактов.",
+    ),
+  },
+  {
+    id: "spas",
+    icon: Sparkles,
+    label: l(
+      "Beauté, Spas & Coiffure",
+      "Beauty, Salons & Spas",
+      "Spa, Thẩm mỹ & Làm đẹp",
+      "صالونات التجميل والسبا والعناية",
+      "Салоны красоты, спа и стиль",
+    ),
+    recommendedServices: ["maps", "social", "websites"],
+    recommendedPlan: "maps_strategy",
+    defaultLossEstimate: 6000,
+    pitch: l(
+      "Dominez les recherches Google locales et attirez une clientèle élégante grâce à un feed social media signature.",
+      "Dominate local Google searches and attract high-end clientele with signature social aesthetics.",
+      "Chiếm lĩnh tìm kiếm địa phương và thu hút khách hàng VIP qua hình ảnh ấn tượng.",
+      "تصدر البحث المحلي واجتذاب عميلات راقيات عبر محتوى بصري فاخر.",
+      "Топ-3 Google Maps и визуальный контент для привлечения клиентов.",
+    ),
+  },
+  {
     id: "realestate",
     icon: Building2,
     label: l(
@@ -684,14 +768,35 @@ const BUSINESS_TYPES: Array<{
     ),
   },
   {
+    id: "auto",
+    icon: Layers,
+    label: l(
+      "Automobile, Concessionnaires & Transport",
+      "Automotive, Dealerships & Transport",
+      "Ô tô, Đại lý & Vận tải",
+      "السيارات والوكالات وخدمات النقل",
+      "Автобизнес, дилеры и транспорт",
+    ),
+    recommendedServices: ["websites", "maps", "crm"],
+    recommendedPlan: "website_business",
+    defaultLossEstimate: 10000,
+    pitch: l(
+      "Catalogue digital de véhicules en stock, prise de rendez-vous essai et visibilité Google Maps d'autorité.",
+      "Digital inventory catalogue, test drive bookings and dominant local Google Maps presence.",
+      "Hiển thị kho xe trực tuyến, đặt lịch lái thử và bứt phá Google Maps.",
+      "كتالوج سيارات متزامن وحجز تجارب قيادة وحضور قوي على الخرائط.",
+      "Онлайн-каталог авто, запись на тест-драйв и лидерство на картах.",
+    ),
+  },
+  {
     id: "commerce",
     icon: ShoppingBag,
     label: l(
-      "Boutiques de luxe, Mode & Retail",
-      "Luxury Retail, Fashion & Goods",
+      "Commerces de détail, Mode & E-commerce",
+      "Retail, Fashion & E-Commerce",
       "Cửa hàng thời trang & Bán lẻ cao cấp",
-      "متاجر الأزياء والتجزئة الراقية",
-      "Бутики, мода и премиум-ритейл",
+      "متاجر الأزياء والتجزئة والبيع الإلكتروني",
+      "Бутики, ритейл и e-commerce",
     ),
     recommendedServices: ["websites", "branding", "crm"],
     recommendedPlan: "website_ecommerce",
@@ -705,48 +810,6 @@ const BUSINESS_TYPES: Array<{
     ),
   },
   {
-    id: "beauty",
-    icon: Stethoscope,
-    label: l(
-      "Cliniques privées, Esthétique & Santé",
-      "Private Clinics, Aesthetic & Health",
-      "Phòng khám, Thẩm mỹ & Y tế",
-      "العيادات الطبية والتجميل والصحة",
-      "Клиники, косметология и здоровье",
-    ),
-    recommendedServices: ["websites", "maps", "maintenance"],
-    recommendedPlan: "maps_strategy",
-    defaultLossEstimate: 0,
-    pitch: l(
-      "Classement Top 3 Google Maps, respect du secret médical et prise de rendez-vous qualifiée sans intermédiaire.",
-      "Top 3 Google Maps visibility, medical-grade compliance and direct qualified appointments.",
-      "Định vị Top 3 Google Maps, bảo mật y tế và đặt lịch hẹn chuẩn xác.",
-      "تصدر خرائط Google وتعيين مواعيد المرضى مباشرة مع أمان البيانات.",
-      "Выход в топ-3 Google Maps, медицинские стандарты и прямой поток пациентов.",
-    ),
-  },
-  {
-    id: "services",
-    icon: Briefcase,
-    label: l(
-      "Conseil B2B, Avocats & Finance",
-      "B2B Advisory, Law & Wealth",
-      "Tư vấn Doanh nghiệp & Luật",
-      "الاستشارات والشركات المالية والقانونية",
-      "B2B-консалтинг, право и финансы",
-    ),
-    recommendedServices: ["websites", "seo", "branding"],
-    recommendedPlan: "seo_growth",
-    defaultLossEstimate: 0,
-    pitch: l(
-      "Positionnement d'autorité, réassurance institutionnelle et génération de mandats stratégiques.",
-      "Institutional credibility, high-authority positioning and high-value mandate generation.",
-      "Xây dựng uy tín thể chế và thu hút các hợp đồng chiến lược lớn.",
-      "ترسيخ المكانة المهنية وجلب عقود وصفقات أعمال استراتيجية.",
-      "Институциональный авторитет и привлечение крупных корпоративных контрактов.",
-    ),
-  },
-  {
     id: "craft",
     icon: Gem,
     label: l(
@@ -757,7 +820,7 @@ const BUSINESS_TYPES: Array<{
       "Ремесленники и премиум-мастера",
     ),
     recommendedServices: ["branding", "websites", "social"],
-    recommendedPlan: "branding_foundation",
+    recommendedPlan: "branding_suite",
     defaultLossEstimate: 0,
     pitch: l(
       "Sublimation photographique de vos créations, storytelling d'orfèvre et clientèle internationale.",
@@ -767,7 +830,124 @@ const BUSINESS_TYPES: Array<{
       "Фотографическая подача мастерства, сторителлинг и выход на международный рынок.",
     ),
   },
+  {
+    id: "other",
+    icon: Globe,
+    label: l(
+      "Autre secteur d'activité",
+      "Other Business Sector",
+      "Lĩnh vực kinh doanh khác",
+      "قطاع نشاط آخر",
+      "Другая сфера деятельности",
+    ),
+    recommendedServices: ["websites", "maps", "seo"],
+    recommendedPlan: "website_business",
+    defaultLossEstimate: 0,
+    pitch: l(
+      "Stratégie digitale sur-mesure adaptée à votre marché spécifique et vos objectifs de croissance.",
+      "Custom digital strategy tailored to your specific niche and revenue objectives.",
+      "Chiến lược số hóa may đo tối ưu riêng cho thị trường và mục tiêu của bạn.",
+      "استراتيجية رقمية مخصصة تناسب طبيعة سوقك وأهداف نمو مبيعاتك.",
+      "Индивидуальная стратегия под ваш рынок и бизнес-цели.",
+    ),
+  },
 ];
+
+const DIAGNOSTIC_QUESTIONS = {
+  website: [
+    {
+      id: "no",
+      title: "Non, projet de création intégrale",
+      desc: "Créer un site vitrine ou e-commerce moderne de A à Z.",
+      services: ["websites"] as ServiceKey[],
+    },
+    {
+      id: "redesign",
+      title: "Oui, mais obsolète ou peu performant",
+      desc: "Besoin d'une refonte design percutante et axée conversion.",
+      services: ["websites", "seo"] as ServiceKey[],
+    },
+    {
+      id: "modern",
+      title: "Oui, moderne & déjà fonctionnel",
+      desc: "Priorité à l'acquisition de trafic, SEO & maintenance WebCare.",
+      services: ["seo", "maintenance"] as ServiceKey[],
+    },
+  ],
+  social: [
+    {
+      id: "none",
+      title: "Inexistante ou inactive",
+      desc: "Aucune publication régulière, besoin d'une identité visuelle.",
+      services: ["branding", "social"] as ServiceKey[],
+    },
+    {
+      id: "growing",
+      title: "Présente, mais manque d'impact & d'abonnés",
+      desc: "Besoin de visuels professionnels, régularité et engagement.",
+      services: ["social"] as ServiceKey[],
+    },
+    {
+      id: "active",
+      title: "Active, communauté établie",
+      desc: "Recherche de production photo/vidéo d'élite et acquisition.",
+      services: ["social"] as ServiceKey[],
+    },
+  ],
+  find: [
+    {
+      id: "invisible",
+      title: "Quasi invisibles sur le web",
+      desc: "Les concurrents raflent les clients sur Google & Google Maps.",
+      services: ["maps", "seo"] as ServiceKey[],
+    },
+    {
+      id: "mouth",
+      title: "Principalement par bouche-à-oreille",
+      desc: "Manque d'un canal digital prévisible pour acquérir de nouveaux clients.",
+      services: ["websites", "maps"] as ServiceKey[],
+    },
+    {
+      id: "google",
+      title: "Via Google & Google Maps",
+      desc: "Souhait de consolider et dominer le Top 3 garanti sur les mots-clés clés.",
+      services: ["maps", "seo"] as ServiceKey[],
+    },
+    {
+      id: "social",
+      title: "Réseaux sociaux ou publicités",
+      desc: "Besoin de convertir ce trafic en réservations directes sans commission.",
+      services: ["websites", "crm"] as ServiceKey[],
+    },
+  ],
+  develop: [
+    {
+      id: "dev_web",
+      title: "Site web d'élite & haute conversion",
+      services: ["websites"] as ServiceKey[],
+    },
+    {
+      id: "dev_maps",
+      title: "Google Maps Top 3 Garanti ou Remboursé",
+      services: ["maps"] as ServiceKey[],
+    },
+    {
+      id: "dev_leads",
+      title: "SEO Google & Nouveaux clients",
+      services: ["seo"] as ServiceKey[],
+    },
+    {
+      id: "dev_brand",
+      title: "Image de marque forte & Réseaux sociaux",
+      services: ["branding", "social"] as ServiceKey[],
+    },
+    {
+      id: "dev_crm",
+      title: "Caisse POS, CRM sur-mesure & IA",
+      services: ["crm", "ai"] as ServiceKey[],
+    },
+  ],
+};
 
 const CURRENT_SITUATIONS: Array<{
   id: string;
@@ -1208,47 +1388,97 @@ export function QuoteConfiguratorCompact() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [businessType, setBusinessType] = useState<string>(BUSINESS_TYPES[0].id);
+  const [websiteStatus, setWebsiteStatus] = useState<string>("no");
+  const [socialStatus, setSocialStatus] = useState<string>("none");
+  const [findStatus, setFindStatus] = useState<string>("invisible");
+  const [developGoals, setDevelopGoals] = useState<string[]>(["dev_web", "dev_maps"]);
   const [goalId, setGoalId] = useState<string>(GOALS[1].id);
-  const [currentSituation, setCurrentSituation] = useState<string>(CURRENT_SITUATIONS[0].id);
   const [budgetTier, setBudgetTier] = useState<string>(BUDGET_TIERS[1].id);
-  const [selectedServices, setSelectedServices] = useState<ServiceKey[]>(["maps", "seo", "social"]);
+  const [selectedServices, setSelectedServices] = useState<ServiceKey[]>(["websites", "maps", "crm"]);
   const [monthlyVolume, setMonthlyVolume] = useState<number>(180);
-  const [activePackPreset, setActivePackPreset] = useState<string>("leads");
 
-  const PACK_PRESETS = [
-    {
-      id: "launch",
-      Icon: Globe,
-      badge: "Lancement Rapide",
-      title: "Pack Lancement & Notoriété",
-      sub: "Site web vitrine d'exception, identité visuelle signature et création de votre fiche Google Maps.",
-      services: ["websites", "branding", "maps"] as ServiceKey[],
-    },
-    {
-      id: "leads",
-      Icon: TrendingUp,
-      badge: "Performance & Flux",
-      title: "Pack Conquête Clients",
-      sub: "Arriver dans le Top 3 Google Maps, dominer le référencement naturel SEO et attirer sur les réseaux.",
-      services: ["maps", "seo", "social"] as ServiceKey[],
-    },
-    {
-      id: "direct",
-      Icon: ShoppingBag,
-      badge: "0% Commission",
-      title: "Pack Vente Directe & CRM",
-      sub: "Application web Click & Collect, réservations sans intermédiaire et logiciel CRM caisse sur-mesure.",
-      services: ["websites", "crm", "maintenance"] as ServiceKey[],
-    },
-    {
-      id: "full",
-      Icon: Gem,
-      badge: "Tout-en-un Studio",
-      title: "Écosystème Haute Couture",
-      sub: "Dispositif complet : Identité globale, Site web, Top 3 Google, Automatisation IA & WebCare serein.",
-      services: ["websites", "branding", "maps", "seo", "crm", "maintenance"] as ServiceKey[],
-    },
-  ];
+  // Dynamic automatic recommendation engine based on user diagnostic answers
+  const computeRecommendations = (
+    sectorId: string,
+    wStatus: string,
+    sStatus: string,
+    fStatus: string,
+    dGoals: string[],
+    bTier: string,
+  ) => {
+    const s = new Set<ServiceKey>();
+
+    // 1. Sector base recommendation
+    const sector = BUSINESS_TYPES.find((b) => b.id === sectorId) ?? BUSINESS_TYPES[0];
+    sector.recommendedServices.forEach((svc) => s.add(svc));
+
+    // 2. Website diagnostic
+    const w = DIAGNOSTIC_QUESTIONS.website.find((item) => item.id === wStatus);
+    w?.services.forEach((svc) => s.add(svc));
+
+    // 3. Social diagnostic
+    const sc = DIAGNOSTIC_QUESTIONS.social.find((item) => item.id === sStatus);
+    sc?.services.forEach((svc) => s.add(svc));
+
+    // 4. Client acquisition diagnostic
+    const f = DIAGNOSTIC_QUESTIONS.find.find((item) => item.id === fStatus);
+    f?.services.forEach((svc) => s.add(svc));
+
+    // 5. Explicit user goals
+    dGoals.forEach((gid) => {
+      const g = DIAGNOSTIC_QUESTIONS.develop.find((item) => item.id === gid);
+      g?.services.forEach((svc) => s.add(svc));
+    });
+
+    // 6. Enterprise / bespoke tier includes custom CRM or AI
+    if (bTier === "bespoke") {
+      s.add("crm");
+      s.add("ai");
+    }
+
+    return Array.from(s);
+  };
+
+  const handleDiagnosticChange = (updates: {
+    sector?: string;
+    website?: string;
+    social?: string;
+    find?: string;
+    goals?: string[];
+    budget?: string;
+  }) => {
+    const nextSector = updates.sector ?? businessType;
+    const nextWebsite = updates.website ?? websiteStatus;
+    const nextSocial = updates.social ?? socialStatus;
+    const nextFind = updates.find ?? findStatus;
+    const nextGoals = updates.goals ?? developGoals;
+    const nextBudget = updates.budget ?? budgetTier;
+
+    if (updates.sector) setBusinessType(nextSector);
+    if (updates.website) setWebsiteStatus(nextWebsite);
+    if (updates.social) setSocialStatus(nextSocial);
+    if (updates.find) setFindStatus(nextFind);
+    if (updates.goals) setDevelopGoals(nextGoals);
+    if (updates.budget) setBudgetTier(nextBudget);
+
+    const recommended = computeRecommendations(
+      nextSector,
+      nextWebsite,
+      nextSocial,
+      nextFind,
+      nextGoals,
+      nextBudget,
+    );
+    setSelectedServices(recommended);
+    setCartSynced(false);
+  };
+
+  const toggleDevelopGoal = (gid: string) => {
+    const next = developGoals.includes(gid)
+      ? developGoals.filter((item) => item !== gid)
+      : [...developGoals, gid];
+    handleDiagnosticChange({ goals: next });
+  };
 
   const estimatedSavings = useMemo(() => {
     const perOrderSavings = 7.5;
@@ -1646,98 +1876,21 @@ export function QuoteConfiguratorCompact() {
         <div className="mt-10 grid items-start gap-6 lg:grid-cols-12">
           {/* Left Column: Active Step */}
           <div className="rounded-3xl border border-[#171613]/12 bg-white p-5 shadow-[0_20px_50px_rgba(23,22,19,0.05)] sm:p-8 lg:col-span-8">
-            {/* STEP 1 — BESOINS & DIAGNOSTIC INTERACTIF */}
+            {/* STEP 1 — DIAGNOSTIC & BESOINS */}
             {step === 1 && (
-              <div className="space-y-8">
-                {/* 1. CHOIX LUDIQUE DU PACK STRATÉGIQUE */}
+              <div className="space-y-9">
+                {/* 1. SECTEUR D'ACTIVITÉ */}
                 <div>
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
-                      1. Choisissez votre Pack Stratégique (1 Clic)
+                      1. Votre Secteur d'Activité
                     </label>
                     <span className="font-mono text-[10px] text-[#8D6C42] bg-[#FAF6F0] border border-[#D8B788]/40 px-3 py-1 rounded-full font-semibold">
-                      ✨ Pack configuré automatiquement
+                      Sélectionnez votre domaine d'activité
                     </span>
                   </div>
 
-                  <div className="mt-3.5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    {PACK_PRESETS.map((p) => {
-                      const isActive = activePackPreset === p.id;
-                      const Icon = p.Icon;
-                      return (
-                        <button
-                          key={p.id}
-                          type="button"
-                          onClick={() => {
-                            setActivePackPreset(p.id);
-                            setSelectedServices(p.services);
-                          }}
-                          className={cn(
-                            "group relative flex flex-col justify-between rounded-2xl border p-4 sm:p-5 text-start transition-all duration-300 shadow-xs",
-                            isActive
-                              ? "border-[#171613] bg-[#171613] text-[#F7F4EE] shadow-lg -translate-y-1"
-                              : "border-[#171613]/12 bg-[#FAF8F4] text-[#2C2924] hover:border-[#9E7F5A] hover:bg-white"
-                          )}
-                        >
-                          <div>
-                            <div className="flex items-center justify-between">
-                              <span
-                                className={cn(
-                                  "grid h-9 w-9 place-items-center rounded-xl transition",
-                                  isActive
-                                    ? "bg-white/20 text-[#E5C696]"
-                                    : "bg-white text-[#8D6C42] border border-[#171613]/10"
-                                )}
-                              >
-                                <Icon className="h-5 w-5" />
-                              </span>
-                              <span
-                                className={cn(
-                                  "font-mono text-[10px] font-semibold uppercase tracking-wider rounded-full px-2.5 py-0.5",
-                                  isActive
-                                    ? "bg-[#E5C696] text-[#171613]"
-                                    : "bg-[#EEE8DC] text-[#7A6343]"
-                                )}
-                              >
-                                {p.badge}
-                              </span>
-                            </div>
-                            <h4 className="mt-3 text-base font-bold tracking-tight">
-                              {p.title}
-                            </h4>
-                            <p
-                              className={cn(
-                                "mt-1.5 text-xs leading-relaxed",
-                                isActive ? "text-white/80" : "text-[#5C554B]"
-                              )}
-                            >
-                              {p.sub}
-                            </p>
-                          </div>
-
-                          <div className="mt-4 flex items-center justify-between border-t border-current/10 pt-3 text-[11px] font-semibold">
-                            <span>{p.services.length} services inclus</span>
-                            <span className={isActive ? "text-[#E5C696]" : "text-[#8D6C42]"}>
-                              {isActive ? "✓ Sélectionné" : "Activer ce pack →"}
-                            </span>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* 2. SECTEUR D'ACTIVITÉ */}
-                <div>
-                  <div className="flex items-center justify-between">
-                    <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
-                      2. Votre Secteur d'Activité
-                    </label>
-                    <span className="font-mono text-[10px] text-[#9E7F5A] bg-[#F4EFE6] px-2.5 py-0.5 rounded-full">
-                      Adaptation sectorielle
-                    </span>
-                  </div>
-                  <div className="mt-3.5 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+                  <div className="mt-3.5 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
                     {BUSINESS_TYPES.map((b) => {
                       const active = businessType === b.id;
                       const SectorIcon = b.icon;
@@ -1745,39 +1898,263 @@ export function QuoteConfiguratorCompact() {
                         <button
                           key={b.id}
                           type="button"
-                          onClick={() => {
-                            setBusinessType(b.id);
-                            setSelectedServices(b.recommendedServices);
-                          }}
-                          className={`group flex items-center gap-3 rounded-2xl border p-3.5 text-start text-xs font-semibold transition-all duration-200 ${
+                          onClick={() => handleDiagnosticChange({ sector: b.id })}
+                          className={cn(
+                            "group flex flex-col justify-between rounded-2xl border p-3.5 text-start transition-all duration-200",
                             active
                               ? "border-[#171613] bg-[#171613] text-[#F7F4EE] shadow-md -translate-y-0.5"
                               : "border-[#171613]/12 bg-[#FAF8F4] text-[#45413A] hover:border-[#9E7F5A] hover:bg-white"
-                          }`}
+                          )}
                         >
-                          <span
-                            className={`grid h-8 w-8 shrink-0 place-items-center rounded-xl transition ${
-                              active ? "bg-white/20 text-[#E5C696]" : "bg-white text-[#8D6C42] border border-[#171613]/10"
-                            }`}
-                          >
-                            <SectorIcon className="h-4 w-4" />
+                          <div className="flex items-center justify-between">
+                            <span
+                              className={cn(
+                                "grid h-8 w-8 shrink-0 place-items-center rounded-xl transition",
+                                active
+                                  ? "bg-white/20 text-[#E5C696]"
+                                  : "bg-white text-[#8D6C42] border border-[#171613]/10"
+                              )}
+                            >
+                              <SectorIcon className="h-4 w-4" />
+                            </span>
+                            {active && (
+                              <span className="h-2 w-2 rounded-full bg-[#E5C696]" />
+                            )}
+                          </div>
+                          <span className="mt-2.5 block text-xs font-semibold leading-snug">
+                            {t(b.label)}
                           </span>
-                          <span className="leading-snug">{t(b.label)}</span>
                         </button>
                       );
                     })}
                   </div>
                 </div>
 
-                {/* 3. SERVICES À SÉLECTIONNER OU AJUSTER */}
-                <div>
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <label className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
-                      3. Vos Services & Pôles d'Excellence
-                    </label>
-                    <span className="text-xs text-[#57534B]">Ajustez les disciplines selon vos besoins</span>
+                {/* 2. DIAGNOSTIC INTERACTIF (QUESTIONS COHÉRENTES) */}
+                <div className="rounded-3xl border border-[#D8B788]/30 bg-[#FAF8F5]/80 p-5 sm:p-7 space-y-7">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#EBE5DC] pb-4">
+                    <div>
+                      <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.2em] text-[#8D6C42]">
+                        2. Diagnostic Digital de votre Entreprise
+                      </span>
+                      <h4 className="mt-1 font-serif text-lg font-medium text-[#1A1815]">
+                        Questions stratégiques pour adapter notre solution
+                      </h4>
+                    </div>
+                    <span className="font-mono text-[10px] text-[#A67C40] bg-white border border-[#D8B788]/40 px-3 py-1 rounded-full font-semibold shadow-2xs">
+                      Recommandation intelligente en direct
+                    </span>
                   </div>
-                  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+
+                  {/* Question A: Site internet */}
+                  <div>
+                    <label className="block text-xs font-bold text-[#1A1815] mb-2.5">
+                      A. Avez-vous déjà un site internet ?
+                    </label>
+                    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+                      {DIAGNOSTIC_QUESTIONS.website.map((item) => {
+                        const active = websiteStatus === item.id;
+                        return (
+                          <button
+                            key={item.id}
+                            type="button"
+                            onClick={() => handleDiagnosticChange({ website: item.id })}
+                            className={cn(
+                              "rounded-2xl border p-3.5 text-start transition-all",
+                              active
+                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-sm"
+                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40]"
+                            )}
+                          >
+                            <span className="block text-xs font-bold">{item.title}</span>
+                            <span
+                              className={cn(
+                                "mt-1 block text-[11px] leading-relaxed",
+                                active ? "text-white/75" : "text-[#706A61]"
+                              )}
+                            >
+                              {item.desc}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Question B: Réseaux sociaux */}
+                  <div>
+                    <label className="block text-xs font-bold text-[#1A1815] mb-2.5">
+                      B. Quelle est votre présence actuelle sur les réseaux sociaux ?
+                    </label>
+                    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+                      {DIAGNOSTIC_QUESTIONS.social.map((item) => {
+                        const active = socialStatus === item.id;
+                        return (
+                          <button
+                            key={item.id}
+                            type="button"
+                            onClick={() => handleDiagnosticChange({ social: item.id })}
+                            className={cn(
+                              "rounded-2xl border p-3.5 text-start transition-all",
+                              active
+                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-sm"
+                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40]"
+                            )}
+                          >
+                            <span className="block text-xs font-bold">{item.title}</span>
+                            <span
+                              className={cn(
+                                "mt-1 block text-[11px] leading-relaxed",
+                                active ? "text-white/75" : "text-[#706A61]"
+                              )}
+                            >
+                              {item.desc}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Question C: Acquisition actuelle */}
+                  <div>
+                    <label className="block text-xs font-bold text-[#1A1815] mb-2.5">
+                      C. Comment vos clients vous trouvent-ils actuellement ?
+                    </label>
+                    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
+                      {DIAGNOSTIC_QUESTIONS.find.map((item) => {
+                        const active = findStatus === item.id;
+                        return (
+                          <button
+                            key={item.id}
+                            type="button"
+                            onClick={() => handleDiagnosticChange({ find: item.id })}
+                            className={cn(
+                              "rounded-2xl border p-3.5 text-start transition-all",
+                              active
+                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-sm"
+                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40]"
+                            )}
+                          >
+                            <span className="block text-xs font-bold">{item.title}</span>
+                            <span
+                              className={cn(
+                                "mt-1 block text-[11px] leading-relaxed",
+                                active ? "text-white/75" : "text-[#706A61]"
+                              )}
+                            >
+                              {item.desc}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Question D: Objectifs prioritaires */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2.5">
+                      <label className="block text-xs font-bold text-[#1A1815]">
+                        D. Que souhaitez-vous développer ou mettre en place ?
+                      </label>
+                      <span className="text-[10px] text-[#8D6C42] font-semibold">
+                        Multi-choix possible
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+                      {DIAGNOSTIC_QUESTIONS.develop.map((item) => {
+                        const active = developGoals.includes(item.id);
+                        return (
+                          <button
+                            key={item.id}
+                            type="button"
+                            onClick={() => toggleDevelopGoal(item.id)}
+                            className={cn(
+                              "flex items-center justify-between rounded-2xl border p-3.5 text-start transition-all",
+                              active
+                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-sm"
+                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40]"
+                            )}
+                          >
+                            <span className="text-xs font-bold">{item.title}</span>
+                            <span
+                              className={cn(
+                                "grid h-5 w-5 shrink-0 place-items-center rounded-full border transition",
+                                active
+                                  ? "border-[#E5C696] bg-[#E5C696] text-[#171613]"
+                                  : "border-[#D5CFC5] bg-transparent"
+                              )}
+                            >
+                              {active && <Check className="h-3 w-3 stroke-[3]" />}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Question E: Budget indicatif */}
+                  <div>
+                    <label className="block text-xs font-bold text-[#1A1815] mb-2.5">
+                      E. Quel est votre budget indicatif envisagé ?
+                    </label>
+                    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+                      {BUDGET_TIERS.map((tier) => {
+                        const active = budgetTier === tier.id;
+                        return (
+                          <button
+                            key={tier.id}
+                            type="button"
+                            onClick={() => handleDiagnosticChange({ budget: tier.id })}
+                            className={cn(
+                              "rounded-2xl border p-3.5 text-start transition-all",
+                              active
+                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-sm"
+                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40]"
+                            )}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-mono text-[11px] font-bold text-[#A67C40] whitespace-nowrap">
+                                {tier.range}
+                              </span>
+                              <span
+                                className={cn(
+                                  "font-mono text-[9.5px] uppercase font-semibold px-2 py-0.5 rounded-full",
+                                  active
+                                    ? "bg-[#E5C696] text-[#171613]"
+                                    : "bg-[#F0EBE1] text-[#7A6B56]"
+                                )}
+                              >
+                                {tier.tag}
+                              </span>
+                            </div>
+                            <span className="mt-1.5 block text-xs font-bold">
+                              {t(tier.label)}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. SERVICES RECOMMANDÉS SELON VOTRE SITUATION */}
+                <div>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <label className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#7D6445]">
+                        3. Solutions & Services Recommandés selon votre situation
+                      </label>
+                      <p className="text-xs text-[#57534B] mt-0.5">
+                        Pré-sélectionnés d'après vos réponses. Cliquez pour ajouter ou retirer une discipline.
+                      </p>
+                    </div>
+                    <span className="font-mono text-[10.5px] font-bold text-[#A67C40] bg-[#FAF6F0] border border-[#D8B788]/40 px-3 py-1 rounded-full">
+                      ✨ {selectedServices.length} disciplines actives
+                    </span>
+                  </div>
+
+                  <div className="mt-3.5 grid grid-cols-1 gap-3 sm:grid-cols-2">
                     {CATALOG_GROUPS.map(({ id, Icon, title, short, plans }) => {
                       const checked = selectedServices.includes(id);
                       const minPlan = plans[0];
@@ -1786,18 +2163,20 @@ export function QuoteConfiguratorCompact() {
                           key={id}
                           type="button"
                           onClick={() => toggleService(id)}
-                          className={`group flex items-start gap-3.5 rounded-2xl border p-4 text-start transition ${
+                          className={cn(
+                            "group flex items-start gap-3.5 rounded-2xl border p-4 text-start transition",
                             checked
                               ? "border-[#171613] bg-[#171613] text-[#F7F4EE] shadow-md"
                               : "border-[#171613]/12 bg-[#FAF8F4] text-[#171613] hover:border-[#9E7F5A] hover:bg-white"
-                          }`}
+                          )}
                         >
                           <span
-                            className={`mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl ${
+                            className={cn(
+                              "mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl",
                               checked
                                 ? "bg-white/15 text-white"
                                 : "border border-[#171613]/12 bg-white text-[#706A61]"
-                            }`}
+                            )}
                           >
                             <Icon className="h-4 w-4" />
                           </span>
@@ -1805,32 +2184,37 @@ export function QuoteConfiguratorCompact() {
                             <div className="flex items-center justify-between gap-2">
                               <span className="text-sm font-semibold">{t(title)}</span>
                               <span
-                                className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border ${
+                                className={cn(
+                                  "grid h-5 w-5 shrink-0 place-items-center rounded-full border transition",
                                   checked
-                                    ? "border-white bg-white text-[#12110E]"
+                                    ? "border-[#E5C696] bg-[#E5C696] text-[#12110E]"
                                     : "border-[#171613]/20 bg-white"
-                                }`}
+                                )}
                               >
-                                {checked && <Check className="h-3 w-3" />}
+                                {checked && <Check className="h-3 w-3 stroke-[3]" />}
                               </span>
                             </div>
                             <p
-                              className={`mt-1 text-xs ${
+                              className={cn(
+                                "mt-1 text-xs",
                                 checked ? "text-[#F7F4EE]/75" : "text-[#57534B]"
-                              }`}
+                              )}
                             >
                               {t(short)}
                             </p>
                             <p
-                              className={`mt-2 font-mono text-[11px] font-semibold ${
+                              className={cn(
+                                "mt-2 font-mono text-[11px] font-semibold",
                                 checked ? "text-[#E5C696]" : "text-[#12110E]"
-                              }`}
+                              )}
                             >
                               {id === "websites"
                                 ? "À partir de 499 €"
-                                : minPlan.priceEur > 0
-                                  ? `${safeLang === "en" ? "From" : "Dès"} ${price(minPlan.priceEur)}${getPeriodShortLabel(minPlan.period, safeLang)}`
-                                  : ui.customBadge}
+                                : id === "maps"
+                                  ? "999 € (Garanti ou remboursé)"
+                                  : minPlan.priceEur > 0
+                                    ? `${safeLang === "en" ? "From" : "Dès"} ${price(minPlan.priceEur)}${getPeriodShortLabel(minPlan.period, safeLang)}`
+                                    : ui.customBadge}
                             </p>
                           </div>
                         </button>

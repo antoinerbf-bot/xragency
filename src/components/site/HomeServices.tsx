@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useLang, type Lang } from "@/lib/i18n";
 import { SERVICES } from "@/lib/content";
-import { UI } from "@/lib/copy";
 import { cn } from "@/lib/utils";
 import { useOptionalFunnel } from "@/lib/funnel";
 
@@ -23,6 +22,7 @@ export const ORDERED_SERVICES = [
     id: "websites",
     funnelId: "website",
     num: "01",
+    priceTag: "Dès 499 € (Paiement unique)",
     tag: {
       fr: "01 · UNIVERS WEB · HAUTE COUTURE",
       en: "01 · WEB UNIVERSE · HAUTE COUTURE",
@@ -36,6 +36,7 @@ export const ORDERED_SERVICES = [
     id: "branding",
     funnelId: "branding",
     num: "02",
+    priceTag: "Dès 199 € (Logo & Charte)",
     tag: {
       fr: "02 · BRANDING & IDENTITÉ DE PRESTIGE",
       en: "02 · BRANDING & PRESTIGE IDENTITY",
@@ -49,6 +50,7 @@ export const ORDERED_SERVICES = [
     id: "seo",
     funnelId: "seo",
     num: "03",
+    priceTag: "Dès 299 € / mois",
     tag: {
       fr: "03 · SEO GOOGLE & AUTORITÉ ORGANIQUE",
       en: "03 · GOOGLE SEO & ORGANIC AUTHORITY",
@@ -62,6 +64,7 @@ export const ORDERED_SERVICES = [
     id: "maps",
     funnelId: "maps",
     num: "04",
+    priceTag: "999 € (Conquête 1 an garanti) + dès 99 €/m",
     tag: {
       fr: "04 · GOOGLE MAPS · VISIBILITÉ PACK LOCAL TOP 3",
       en: "04 · GOOGLE MAPS · LOCAL 3-PACK VISIBILITY",
@@ -75,6 +78,7 @@ export const ORDERED_SERVICES = [
     id: "social",
     funnelId: "social",
     num: "05",
+    priceTag: "Dès 399 € / mois",
     tag: {
       fr: "05 · SOCIAL MEDIA & PRODUCTION VIDÉO 4K",
       en: "05 · SOCIAL MEDIA & 4K VIDEO STUDIO",
@@ -88,6 +92,7 @@ export const ORDERED_SERVICES = [
     id: "maintenance",
     funnelId: "maintenance",
     num: "06",
+    priceTag: "Dès 29 € / mois (ou 79 € / an)",
     tag: {
       fr: "06 · WEBCARE & CYBER SÉCURITÉ 24/7",
       en: "06 · WEBCARE & 24/7 CLOUD SECURITY",
@@ -101,6 +106,7 @@ export const ORDERED_SERVICES = [
     id: "crm",
     funnelId: "crm",
     num: "07",
+    priceTag: "Sur-mesure · Déploiement clé en main",
     tag: {
       fr: "07 · CRM SUR-MESURE & LOGICIELS MÉTIER",
       en: "07 · BESPOKE CRM & OPERATIONS SOFTWARE",
@@ -114,6 +120,7 @@ export const ORDERED_SERVICES = [
     id: "robotics",
     funnelId: "robotics",
     num: "08",
+    priceTag: "Sur devis & audit d'intégration",
     tag: {
       fr: "08 · ROBOTIQUE AUTONOME & IA PHYSIQUE KORBEN",
       en: "08 · AUTONOMOUS ROBOTICS & KORBEN PHYSICAL AI",
@@ -170,7 +177,7 @@ function ServiceLink({
 }
 
 export function HomeServices() {
-  const { t, price, lang } = useLang();
+  const { t, lang } = useLang();
   const funnel = useOptionalFunnel();
   const [active, setActive] = useState(0);
   const locale = (lang || "fr") as Lang;
@@ -191,7 +198,7 @@ export function HomeServices() {
         );
         if (index >= 0) setActive(index);
       },
-      { rootMargin: "-30% 0px -40% 0px", threshold: [0.1, 0.35, 0.6] },
+      { rootMargin: "-20% 0px -20% 0px", threshold: [0.15, 0.4, 0.7] },
     );
 
     nodes.forEach((node) => observer.observe(node));
@@ -202,23 +209,23 @@ export function HomeServices() {
     <section
       id="services"
       data-section="homepage-services"
-      className="relative bg-[#FAF8F5] py-20 sm:py-28 lg:py-36 text-[#1A1815]"
+      className="relative bg-[#FAF8F5] py-20 sm:py-28 lg:py-32 text-[#1A1815]"
     >
-      <div className="mx-auto max-w-[1540px] px-5 sm:px-8 lg:px-12">
+      <div className="mx-auto max-w-[1540px] px-4 sm:px-8 lg:px-12">
         {/* Header */}
-        <div className="mb-14 grid gap-8 border-b border-[#1A1815]/10 pb-10 lg:grid-cols-[1fr_auto] lg:items-end">
+        <div className="mb-12 grid gap-6 border-b border-[#1A1815]/10 pb-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
-            <div className="mb-3 inline-flex items-center gap-2.5">
+            <div className="mb-2.5 inline-flex items-center gap-2.5">
               <span className="h-px w-8 bg-[#A67C40]" />
               <span className="font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-[#A67C40]">
-                NOS 8 PÔLES D'EXCELLENCE · PARCOURS STRATÉGIQUE
+                NOS 8 PÔLES D'EXCELLENCE & TARIFS
               </span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-5xl lg:text-[3.8rem] font-medium leading-[1.04] tracking-[-0.03em] text-[#1A1815]">
-              Choisissez votre levier, découvrez le dispositif complet.
+            <h2 className="font-serif text-3xl sm:text-5xl lg:text-[3.6rem] font-medium leading-[1.05] tracking-[-0.03em] text-[#1A1815]">
+              Chaque service, pensé pour faire grandir votre activité.
             </h2>
-            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[#5C554B] sm:text-base">
-              Chaque discipline est pensée pour s’intégrer avec rigueur à votre écosystème : livrables documentés, garanties claires et exécution sans compromis.
+            <p className="mt-3.5 max-w-2xl text-sm leading-relaxed text-[#5C554B] sm:text-base">
+              Explorez nos pôles digitaux en scrollant librement : design sur-mesure, acquisition locale garantie, automatisation et accompagnement continu.
             </p>
           </div>
           <div className="hidden lg:block font-mono text-right text-xs uppercase tracking-[0.2em] text-[#A67C40] font-semibold">
@@ -226,10 +233,10 @@ export function HomeServices() {
           </div>
         </div>
 
-        {/* ── PARALLAX CARDS SEQUENCE WITH LATERAL TIMELINE ── */}
-        <div className="grid gap-8 lg:grid-cols-[64px_minmax(0,1fr)]">
-          {/* Vertical Dash Indicator */}
-          <aside className="hidden lg:flex flex-col items-center gap-3 pt-6 sticky top-36 h-fit">
+        {/* ── FLUID SERVICES SEQUENCE WITH SIDEBAR NAV ── */}
+        <div className="grid gap-8 lg:grid-cols-[56px_minmax(0,1fr)]">
+          {/* Vertical Sticky Dash Indicator */}
+          <aside className="hidden lg:flex flex-col items-center gap-3 pt-6 sticky top-28 h-fit">
             {ORDERED_SERVICES.map((item, index) => (
               <button
                 key={item.id}
@@ -237,7 +244,7 @@ export function HomeServices() {
                 onClick={() =>
                   document
                     .getElementById(`home-service-${item.id}`)
-                    ?.scrollIntoView({ behavior: "smooth", block: "center" })
+                    ?.scrollIntoView({ behavior: "smooth", block: "start" })
                 }
                 aria-label={item.num}
                 className="group flex w-full items-center justify-center py-1.5 transition-all"
@@ -254,8 +261,8 @@ export function HomeServices() {
             ))}
           </aside>
 
-          {/* Sticky Parallax Cards Sequence */}
-          <div className="relative space-y-16 pb-16 sm:space-y-20">
+          {/* Natural, Smooth Cards Sequence (No superposition bugs) */}
+          <div className="relative space-y-10 sm:space-y-12">
             {ORDERED_SERVICES.map((item, index) => {
               const service = SERVICES.find((s) => s.id === item.id) ?? SERVICES[0];
               const image = SERVICE_IMAGES[item.id] || "/showcase/web-luxury-showcase.jpg";
@@ -265,108 +272,102 @@ export function HomeServices() {
                 <article
                   id={`home-service-${item.id}`}
                   key={item.id}
-                  style={{ top: "6.5rem", zIndex: index + 10 }}
-                  className="sticky group relative min-h-[60vh] overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#12100D] text-white shadow-[0_-12px_45px_rgba(0,0,0,0.6)] transition-all duration-500 hover:border-[#A67C40]/50 lg:min-h-[68vh]"
+                  className="group relative overflow-hidden rounded-[2rem] border border-[#171613]/10 bg-[#12100D] text-white shadow-xl transition-all duration-300 hover:border-[#A67C40]/50"
                 >
-                  {/* Background photo with high clarity and visible illustration */}
-                  <img
-                    src={image}
-                    alt={t(service.title)}
-                    loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover object-center lg:object-right-center opacity-95 brightness-[1.03] contrast-[1.03] transition-transform duration-[1600ms] ease-out group-hover:scale-105"
-                  />
-                  {/* Directional gradient mask: dark backdrop on left for text readability, fully clear on right so artwork is bright */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#100D0B] via-[#100D0B]/70 to-transparent lg:bg-gradient-to-r lg:from-[#100D0B] lg:via-[#100D0B]/80 lg:to-transparent lg:w-[62%] pointer-events-none" />
-
-                  {/* Card Content Overlay */}
-                  <div className="relative z-10 flex min-h-[64vh] flex-col justify-between p-7 sm:p-10 lg:min-h-[72vh] lg:p-12">
-                    {/* Top Bar inside card */}
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3.5 py-1 backdrop-blur-md">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696] animate-pulse" />
-                        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#E5C696]">
-                          {item.tag[locale] ?? item.tag.fr}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2 shrink-0">
-                        <span className="font-mono rounded-full border border-[#E5C696]/30 bg-black/60 px-3.5 py-1 text-xs font-semibold text-[#E5C696] backdrop-blur-md whitespace-nowrap">
-                          {item.id === "websites" ? "À partir de 499 €" : "Accompagnement Dédié"}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Main Information */}
-                    <div className="max-w-3xl py-4 sm:py-6">
-                      <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-[#E5C696]/80">
-                        {t(service.short)}
-                      </p>
-                      <h3 className="mt-2 font-serif text-3xl sm:text-5xl lg:text-[3.8rem] font-medium leading-[1.04] tracking-[-0.03em] text-white">
-                        {t(service.title)}
-                      </h3>
-                      <p className="mt-3 max-w-2xl text-xs sm:text-sm leading-relaxed text-white/85">
-                        {t(service.description)}
-                      </p>
-
-                      {/* 3 Key Deliverables */}
-                      <div className="mt-6 flex flex-wrap gap-2.5">
-                        {(service.deliverables ?? []).slice(0, 3).map((deliv) => (
-                          <div
-                            key={deliv.title.fr}
-                            className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-black/50 px-3.5 py-2 backdrop-blur-md text-xs text-white/90"
-                          >
-                            <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696]" />
-                            <span className="font-medium">{t(deliv.title)}</span>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Conversion-Driven CTAs : Call + Quote + Explore */}
-                      <div className="mt-7 flex flex-wrap items-center gap-3">
-                        <ServiceLink
-                          id={item.id}
-                          className="inline-flex items-center gap-2 rounded-full bg-[#E5C696] px-6 py-3 text-xs font-bold text-[#14110E] shadow-md transition hover:bg-[#F2D7B0] active:scale-[0.98]"
-                        >
-                          <span>
-                            {item.id === "websites"
-                              ? "Explorer l'offre · à partir de 499 €"
-                              : "Explorer l'offre"}
+                  <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[480px] lg:min-h-[520px]">
+                    {/* Content Column */}
+                    <div className="relative z-10 lg:col-span-7 flex flex-col justify-between p-6 sm:p-8 lg:p-10 bg-gradient-to-t lg:bg-gradient-to-r from-[#12100D] via-[#12100D]/95 to-[#12100D]/80">
+                      {/* Top Bar inside card */}
+                      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+                        <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3.5 py-1 backdrop-blur-md">
+                          <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696] animate-pulse" />
+                          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#E5C696]">
+                            {item.tag[locale] ?? item.tag.fr}
                           </span>
-                          <ArrowUpRight className="h-4 w-4" />
-                        </ServiceLink>
+                        </div>
 
-                        <a
-                          href="https://wa.me/33649219808?text=Bonjour%20XRAGENCY%2C%20je%20souhaite%20r%C3%A9server%20un%20appel%20strat%C3%A9gique%20au%20sujet%20de%20vos%20services."
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-xs font-semibold text-white backdrop-blur-md transition hover:bg-white/20 active:scale-[0.98]"
-                        >
-                          <span>📞 Réserver un appel</span>
-                        </a>
+                        <span className="font-mono rounded-full border border-[#E5C696]/40 bg-[#E5C696]/15 px-3 py-1 text-xs font-semibold text-[#E5C696] whitespace-nowrap">
+                          {item.priceTag}
+                        </span>
+                      </div>
 
-                        <button
-                          type="button"
-                          onClick={() => funnel?.toggleService(item.funnelId)}
-                          className={cn(
-                            "inline-flex items-center gap-2 rounded-full border px-5 py-3 font-mono text-[11px] font-semibold backdrop-blur-md transition",
-                            isSelected
-                              ? "border-[#E5C696] bg-[#E5C696]/20 text-[#F2D7B0]"
-                              : "border-white/25 bg-black/40 text-white hover:border-white/60 hover:bg-black/60",
-                          )}
-                        >
-                          {isSelected ? "✓ Dans votre devis" : "+ Ajouter au devis"}
-                        </button>
+                      {/* Main Information */}
+                      <div className="py-5 sm:py-6">
+                        <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-[#E5C696]/80">
+                          {t(service.short)}
+                        </p>
+                        <h3 className="mt-2 font-serif text-2xl sm:text-4xl lg:text-[2.9rem] font-medium leading-[1.08] tracking-[-0.02em] text-white">
+                          {t(service.title)}
+                        </h3>
+                        <p className="mt-3 max-w-2xl text-xs sm:text-sm leading-relaxed text-white/80">
+                          {t(service.description)}
+                        </p>
+
+                        {/* 3 Key Deliverables */}
+                        <div className="mt-5 flex flex-wrap gap-2">
+                          {(service.deliverables ?? []).slice(0, 3).map((deliv) => (
+                            <div
+                              key={deliv.title.fr}
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 backdrop-blur-xs text-[11px] text-white/90"
+                            >
+                              <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696]" />
+                              <span className="font-medium">{t(deliv.title)}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Conversion CTAs */}
+                        <div className="mt-7 flex flex-wrap items-center gap-2.5">
+                          <ServiceLink
+                            id={item.id}
+                            className="inline-flex items-center gap-2 rounded-full bg-[#E5C696] px-5 py-2.5 text-xs font-bold text-[#14110E] shadow-sm transition hover:bg-[#F2D7B0] active:scale-[0.98]"
+                          >
+                            <span>Découvrir l'offre</span>
+                            <ArrowUpRight className="h-4 w-4" />
+                          </ServiceLink>
+
+                          <a
+                            href={`https://wa.me/33649219808?text=Bonjour%20XRAGENCY%2C%20je%20souhaite%20des%20renseignements%20sur%20l'offre%20${encodeURIComponent(t(service.title))}.`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/5 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-white/15"
+                          >
+                            <span>📞 Échanger (15 min)</span>
+                          </a>
+
+                          <button
+                            type="button"
+                            onClick={() => funnel?.toggleService(item.funnelId)}
+                            className={cn(
+                              "inline-flex items-center gap-1.5 rounded-full border px-4 py-2.5 font-mono text-[11px] font-semibold transition",
+                              isSelected
+                                ? "border-[#E5C696] bg-[#E5C696]/20 text-[#F2D7B0]"
+                                : "border-white/20 bg-white/5 text-white/90 hover:border-white/40",
+                            )}
+                          >
+                            {isSelected ? "✓ Dans votre sélection" : "+ Ajouter au projet"}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Bottom Indicator */}
+                      <div className="flex items-center justify-between border-t border-white/10 pt-3 font-mono text-[10px] text-white/50 uppercase tracking-widest">
+                        <span>
+                          0{index + 1} / 0{ORDERED_SERVICES.length} · {item.id.toUpperCase()}
+                        </span>
+                        <span className="text-white/40">XRAGENCY HAUTE COUTURE</span>
                       </div>
                     </div>
 
-                    {/* Bottom Indicator */}
-                    <div className="flex items-center justify-between border-t border-white/15 pt-4 font-mono text-[10px] text-white/50 uppercase tracking-widest">
-                      <span>
-                        0{index + 1} / 0{ORDERED_SERVICES.length} · {item.id.toUpperCase()}
-                      </span>
-                      <span className="hidden sm:inline">
-                        Défilez pour le service suivant ↓
-                      </span>
+                    {/* Image Column: 16:9 Aspect Ratio Container */}
+                    <div className="relative min-h-[260px] lg:min-h-full lg:col-span-5 overflow-hidden">
+                      <img
+                        src={image}
+                        alt={t(service.title)}
+                        loading="lazy"
+                        className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-l from-transparent via-transparent to-[#12100D]/80" />
                     </div>
                   </div>
                 </article>
