@@ -318,23 +318,31 @@ export function Hero() {
         aria-label="XR Agency Hero"
         className="xr-hero-refined relative isolate min-h-[100svh] w-full overflow-hidden bg-[#181512] pt-20 text-[#FAF7F2]"
       >
-        {/* ── Background: Proposition 2 — Showreel Cinématique Continu & Immersif ── */}
+        {/* ── Background: International Hubs Architecture & Creative Studios ── */}
         <div className="absolute inset-0 -z-10 overflow-hidden bg-[#14110E]">
-          {/* Continuous Real 4K Showreel: Creative Team in Luxury Studio & Global Skylines */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            poster="/showcase/hub-paris-real-team.jpg"
-            className="absolute inset-0 h-full w-full object-cover brightness-[1.08] contrast-[1.04] pointer-events-none transition-opacity duration-1000"
-          >
-            <source src="/videos/hero-ambient-loop.mp4" type="video/mp4" />
-          </video>
+          {HUBS.map((hub, idx) => (
+            <div
+              key={hub.id}
+              className={cn(
+                "absolute inset-0 transition-opacity duration-1000 ease-in-out",
+                idx === activeHubIndex ? "opacity-100 z-0" : "opacity-0 -z-10 pointer-events-none",
+              )}
+            >
+              <img
+                src={hub.image}
+                alt={`${hub.name.fr} - ${hub.tagline.fr}`}
+                className={cn(
+                  "h-full w-full object-cover transform transition-transform duration-[7000ms] ease-out",
+                  hub.position ?? "object-center",
+                  hub.filterClass ?? "brightness-[1.04] contrast-[1.02]",
+                  idx === activeHubIndex ? "scale-105" : "scale-100",
+                )}
+              />
+            </div>
+          ))}
 
           {/* Cinematic Haute Couture Scrim: Deep luxury framing, keeping the studio & skylines radiant */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#120F0D] via-black/35 to-black/50 pointer-events-none" />
-          <div className="absolute inset-0 bg-radial-[circle_at_center] from-transparent via-black/20 to-black/60 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#120F0D]/90 via-black/25 to-black/45 pointer-events-none" />
         </div>
 
         {/* ── Top-Left: Architectural Branding & Headline ── */}
