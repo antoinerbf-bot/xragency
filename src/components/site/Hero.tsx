@@ -3,37 +3,105 @@ import { ArrowRight, BarChart3, Layers3, Play, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLang, type Lang } from "@/lib/i18n";
 
-interface TeamShowreelClip {
+interface StudioScene {
   id: string;
-  video: string;
-  city: string;
-  focus: string;
+  city: Record<Lang, string>;
+  landmark: string;
+  country: Record<Lang, string>;
+  timezone: string;
+  image: string;
+  role: Record<Lang, string>;
+  description: Record<Lang, string>;
 }
 
-const SHOWREEL_CLIPS: TeamShowreelClip[] = [
+const STUDIOS: StudioScene[] = [
   {
-    id: "creative-strategy",
-    video: "/videos/hero-team-collaborative.mp4",
-    city: "Paris · Dubaï · New York",
-    focus: "Stratégie de Marque & Direction Artistique",
+    id: "paris",
+    city: { fr: "Paris", en: "Paris", vi: "Paris", ar: "باريس", ru: "Париж" },
+    landmark: "Vue Tour Eiffel & Toits Parisiens",
+    country: { fr: "France", en: "France", vi: "Pháp", ar: "فرنسا", ru: "Франция" },
+    timezone: "Europe/Paris",
+    image: "/showcase/hub-paris-real-team.jpg",
+    role: {
+      fr: "Direction Artistique & Production Digitale",
+      en: "Art Direction & Haute Couture Digital",
+      vi: "Định hướng nghệ thuật & Sản xuất số",
+      ar: "الإدارة الفنية والإنتاج الرقمي",
+      ru: "Арт-дирекшн и цифровой продакшн",
+    },
+    description: {
+      fr: "Studio Haussmannien baigné de lumière : directeurs artistiques complices, Figma & architecture web sur mesure.",
+      en: "Sunlit Haussmann studio: passionate art directors, bespoke web architecture & Figma prototypes.",
+      vi: "Studio Haussmann ngập tràn ánh sáng tự nhiên: sáng tạo nghệ thuật & kiến trúc web cao cấp.",
+      ar: "استوديو باريسي مشرق: إدارة فنية وبنية ويب مصممة خصيصًا.",
+      ru: "Светлая парижская студия: креативные директора, заказная веб-архитектура и прототипы.",
+    },
   },
   {
-    id: "growth-marketing",
-    video: "/videos/clip-46680.mp4",
-    city: "Pôle International",
-    focus: "Acquisition & Performance Digitale",
+    id: "dubai",
+    city: { fr: "Dubaï", en: "Dubai", vi: "Dubai", ar: "دبي", ru: "Дубай" },
+    landmark: "Vue Burj Khalifa & Skyline",
+    country: { fr: "Émirats arabes unis", en: "UAE", vi: "UAE", ar: "الإمارات", ru: "ОАЭ" },
+    timezone: "Asia/Dubai",
+    image: "/showcase/hub-dubai-real-team.jpg",
+    role: {
+      fr: "Pôle Croissance & E-commerce International",
+      en: "Global Growth & E-Commerce Engineering",
+      vi: "Tăng trưởng & Thương mại điện tử",
+      ar: "النمو والتجارة الإلكترونية",
+      ru: "Международный рост и e-commerce",
+    },
+    description: {
+      fr: "Penthouse vitré face au Burj Khalifa : équipe tech & marketing focalisée sur l'acquisition et la conversion.",
+      en: "Floor-to-ceiling penthouse facing Burj Khalifa: elite tech & marketing scaling international brands.",
+      vi: "Penthouse hướng Burj Khalifa: đội ngũ kỹ thuật và tăng trưởng quy mô lớn.",
+      ar: "بنتهاوس مطل على برج خليفة: فريق تقني وتسويقي لتوسيع العلامات التجارية.",
+      ru: "Пентхаус с видом на Бурдж-Халифа: масштабирование брендов и конверсии.",
+    },
   },
   {
-    id: "ux-sprint",
-    video: "/videos/clip-23043.mp4",
-    city: "Studio Innovation",
-    focus: "Design d'Expérience & Prototypage",
+    id: "newyork",
+    city: { fr: "New York", en: "New York", vi: "New York", ar: "نيويورك", ru: "Нью-Йорк" },
+    landmark: "Vue Skyline Manhattan & Briques SoHo",
+    country: { fr: "États-Unis", en: "USA", vi: "Hoa Kỳ", ar: "أمريكا", ru: "США" },
+    timezone: "America/New_York",
+    image: "/showcase/hub-newyork-real-team.jpg",
+    role: {
+      fr: "Stratégie de Marque & Plateformes Globales",
+      en: "Global Brand Strategy & Platforms",
+      vi: "Chiến lược thương hiệu toàn cầu",
+      ar: "استراتيجية العلامة التجارية",
+      ru: "Глобальная стратегия бренда",
+    },
+    description: {
+      fr: "Loft SoHo lumineux : équipe dynamique et conviviale, prototypage d'applications et positionnement haut de gamme.",
+      en: "Bright SoHo loft: warm, collaborative team crafting premier digital ecosystems.",
+      vi: "Loft SoHo sáng tạo: đội ngũ năng động xây dựng hệ sinh thái số cao cấp.",
+      ar: "لوفت مانهاتن المضيء: فريق متكامل لتصميم منصات رقمية متقدمة.",
+      ru: "Лофт в Сохо: дружная команда, премиальные цифровые экосистемы.",
+    },
   },
   {
-    id: "client-review",
-    video: "/videos/clip-36897.mp4",
-    city: "Production Digitale",
-    focus: "Architecture Web & Déploiement",
+    id: "tokyo",
+    city: { fr: "Tokyo", en: "Tokyo", vi: "Tokyo", ar: "طوكيو", ru: "Токио" },
+    landmark: "Vue Tokyo Tower & Shibuya",
+    country: { fr: "Japon", en: "Japan", vi: "Nhật Bản", ar: "اليابان", ru: "Япония" },
+    timezone: "Asia/Tokyo",
+    image: "/showcase/hub-tokyo-real-team.jpg",
+    role: {
+      fr: "Expériences Immersives & Design Minimaliste",
+      en: "Immersive Experiences & Pure Minimalism",
+      vi: "Trải nghiệm nhập vai & Tối giản",
+      ar: "تجارب تفاعلية وتصميم نقي",
+      ru: "Иммерсивные технологии и минимализм",
+    },
+    description: {
+      fr: "Studio épuré et avant-gardiste : interface tactile, performance extrême et esthétique intemporelle.",
+      en: "Minimalist studio: high-speed interactive interfaces and timeless aesthetics.",
+      vi: "Studio tối giản: giao diện tốc độ cao và thẩm mỹ chuẩn mực.",
+      ar: "استوديو بسيط ومتقدم: واجهات سريعة وأناقة استثنائية.",
+      ru: "Минималистичная студия: интерфейсы нового поколения и эстетика.",
+    },
   },
 ];
 
@@ -153,19 +221,53 @@ const PILLARS = [
   },
 ];
 
+function useCityTime(timezone: string) {
+  const [time, setTime] = useState<string>(() => {
+    try {
+      return new Intl.DateTimeFormat("fr-FR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: timezone,
+      }).format(new Date());
+    } catch {
+      return "--:--";
+    }
+  });
+
+  useEffect(() => {
+    const update = () => {
+      try {
+        const str = new Intl.DateTimeFormat("fr-FR", {
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: timezone,
+        }).format(new Date());
+        setTime(str);
+      } catch {
+        setTime("--:--");
+      }
+    };
+    update();
+    const interval = setInterval(update, 15000);
+    return () => clearInterval(interval);
+  }, [timezone]);
+  return time;
+}
+
 export function Hero() {
   const { lang } = useLang();
   const c = COPY[lang] ?? COPY.fr;
-  const [activeClipIndex, setActiveClipIndex] = useState<number>(0);
+  const [activeStudioIndex, setActiveStudioIndex] = useState<number>(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setActiveClipIndex((prev) => (prev + 1) % SHOWREEL_CLIPS.length);
-    }, 7000);
+      setActiveStudioIndex((prev) => (prev + 1) % STUDIOS.length);
+    }, 7500);
     return () => clearInterval(timer);
   }, []);
 
-  const activeClip = SHOWREEL_CLIPS[activeClipIndex];
+  const activeStudio = STUDIOS[activeStudioIndex];
+  const activeTime = useCityTime(activeStudio.timezone);
 
   return (
     <>
@@ -174,33 +276,32 @@ export function Hero() {
         aria-label="XR Agency Hero"
         className="xr-hero-refined relative isolate min-h-[100svh] w-full overflow-hidden bg-[#100E0C] pt-20 text-[#FAF7F2]"
       >
-        {/* ── Background: Convivial & Professional Digital Marketing Team in Action ── */}
+        {/* ── Background: Luminous, Charming International Studios & Real Creative Teams ── */}
         <div className="absolute inset-0 -z-10 overflow-hidden bg-[#100E0C]">
-          {SHOWREEL_CLIPS.map((clip, idx) => {
-            const isActive = idx === activeClipIndex;
+          {STUDIOS.map((studio, idx) => {
+            const isActive = idx === activeStudioIndex;
             return (
               <div
-                key={clip.id}
+                key={studio.id}
                 className={cn(
                   "absolute inset-0 transition-opacity duration-1000 ease-in-out",
                   isActive ? "opacity-100 z-0" : "opacity-0 -z-10 pointer-events-none",
                 )}
               >
-                <video
-                  src={clip.video}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="auto"
-                  className="h-full w-full object-cover scale-[1.01]"
+                <img
+                  src={studio.image}
+                  alt={`${studio.city.fr} - ${studio.landmark}`}
+                  className={cn(
+                    "h-full w-full object-cover object-center transform transition-transform duration-[8500ms] ease-out will-change-transform filter brightness-[1.02] contrast-[1.03]",
+                    isActive ? "scale-105" : "scale-100",
+                  )}
                 />
               </div>
             );
           })}
 
-          {/* Luminous Luxury Scrim: Soft, luminous, keeping the team and their creative work vividly visible */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#100E0C]/80 via-black/15 to-black/40 pointer-events-none" />
+          {/* Haute Couture Soft Light Scrim: Preserves broad daylight, genuine facial warmth and iconic skylines */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#100E0C]/85 via-black/10 to-black/35 pointer-events-none" />
         </div>
 
         {/* ── Top-Left: Architectural Branding & Headline ── */}
@@ -220,16 +321,15 @@ export function Hero() {
           </h1>
         </div>
 
-        {/* ── Top-Right: Discreet Live Team & International Hub Indicator (Desktop & Tablet) ── */}
+        {/* ── Top-Right: Discreet Live International Studio & Landmark Indicator ── */}
         <div className="hidden md:block absolute top-20 sm:top-24 right-4 sm:right-8 lg:right-12 z-30 pointer-events-auto">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/45 px-3.5 py-1.5 backdrop-blur-md text-white shadow-lg">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-mono text-[10px] font-semibold tracking-wider text-white uppercase">
-              {activeClip.city}
+          <div className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-black/45 px-4 py-2 backdrop-blur-md text-white shadow-xl transition-all duration-500">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-mono text-[11px] font-semibold tracking-wider text-white uppercase">
+              {activeStudio.city[lang] ?? activeStudio.city.fr}
             </span>
-            <span className="font-mono text-[10px] text-zinc-300">
-              · {activeClip.focus}
-            </span>
+            <span className="font-mono text-[11px] text-[#E5C696]">✦ {activeStudio.landmark}</span>
+            <span className="font-mono text-[10px] text-zinc-300">({activeTime})</span>
           </div>
         </div>
 
