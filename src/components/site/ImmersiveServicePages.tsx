@@ -6,20 +6,24 @@ import {
   Award,
   BarChart3,
   Bot,
+  Briefcase,
   Building2,
   Camera,
+  Car,
   Check,
   CheckCircle,
   CheckCircle2,
   Clock,
   Compass,
   Cpu,
+  Dumbbell,
   ExternalLink,
   Eye,
   FileText,
   Gauge,
   Globe2,
   HelpCircle,
+  Home,
   Instagram,
   Layers,
   Linkedin,
@@ -34,6 +38,7 @@ import {
   Phone,
   QrCode,
   Radio,
+  Scissors,
   Search,
   Send,
   Share2,
@@ -42,6 +47,7 @@ import {
   Smartphone,
   Sparkles,
   Star,
+  Store,
   Sun,
   Target,
   ThumbsUp,
@@ -64,7 +70,14 @@ import { useLang, type L } from "@/lib/i18n";
 import sectorConstruction from "@/assets/sector-construction.jpg";
 import sectorRestaurant from "@/assets/sector-restaurant.jpg";
 import sectorHealth from "@/assets/sector-health.jpg";
+import sectorHospitality from "@/assets/sector-hospitality.jpg";
+import sectorRealestate from "@/assets/sector-realestate.jpg";
+import sectorAutomotive from "@/assets/sector-automotive.jpg";
+import sectorEvents from "@/assets/sector-events.jpg";
+import sectorOther from "@/assets/sector-other.jpg";
 import pfMaisonLumiere from "@/assets/pf-01-maison-lumiere.jpg";
+import pfCabinetMercier from "@/assets/pf-04-cabinet-mercier.jpg";
+import pfElanStudio from "@/assets/pf-05-elan-studio.jpg";
 
 const WA_BASE = `${CONTACT.whatsapp}?text=`;
 const l = (fr: string, en: string, vi: string, ar: string, ru: string): L => ({
@@ -1652,9 +1665,9 @@ export function MapsDominationStudioPage() {
   const perMonth = t(l("/ mois", "/ month", "/ tháng", "/ شهر", "/ мес"));
 
   // Interactive Simulator & Funnel State
-  const [selectedSector, setSelectedSector] = useState<
-    "resto" | "artisan" | "hotel" | "sante" | "avocat" | "beaute"
-  >("resto");
+  const [selectedSector, setSelectedSector] = useState<string>("resto");
+  const [customSectorName, setCustomSectorName] = useState<string>("");
+  const [showCustomSectorInput, setShowCustomSectorInput] = useState<boolean>(false);
   const [currentRank, setCurrentRank] = useState<"invisible" | "inter" | "unoptimized">("invisible");
   const [userKeywords, setUserKeywords] = useState<string[]>([
     "restaurant gastronomique",
@@ -1674,7 +1687,7 @@ export function MapsDominationStudioPage() {
 
   const sectors = [
     {
-      id: "resto" as const,
+      id: "resto",
       icon: Utensils,
       label: l("Restaurant & Café", "Restaurant & Cafe", "Nhà hàng & Cafe", "مطعم ومقهى", "Ресторан и кафе"),
       sampleName: l("L'Atelier des Saveurs", "The Flavor Workshop", "Xưởng Vị Giác", "ورشة النكهات", "Мастерская Вкуса"),
@@ -1685,7 +1698,7 @@ export function MapsDominationStudioPage() {
       avgTicket: 65,
     },
     {
-      id: "artisan" as const,
+      id: "artisan",
       icon: Wrench,
       label: l("Artisan & BTP", "Trades & Construction", "Thợ & Xây dựng", "حرفي ومقاولات", "Мастер и ремонт"),
       sampleName: l("Maison Rénovation Prestige", "Prestige Home Renovation", "Cải tạo Nhà Đẳng cấp", "ترميم راقٍ للمنازل", "Престиж Ремонт"),
@@ -1696,18 +1709,18 @@ export function MapsDominationStudioPage() {
       avgTicket: 1450,
     },
     {
-      id: "hotel" as const,
+      id: "hotel",
       icon: Building2,
-      label: l("Hôtel & Résidence", "Hotel & Luxury Stay", "Khách sạn & Khu nghỉ dưỡng", "فندق ومنتجع", "Отель и курорт"),
+      label: l("Hôtel & Tourisme", "Hotel & Luxury Stay", "Khách sạn & Khu nghỉ dưỡng", "فندق ومنتجع", "Отель и курорт"),
       sampleName: l("Villa Belle Époque · Boutique Hôtel", "Belle Epoque Villa Boutique Hotel", "Khách sạn Boutique Belle Epoque", "فندق بوتيك فيلا بيل إيبوك", "Вилла Бель Эпок Отель"),
       category: l("Hôtel 4 étoiles & Spa", "4-star boutique hotel & spa", "Khách sạn 4 sao & Spa", "فندق 4 نجوم ومنتجع", "Отель 4 звезды и спа"),
-      photo: pfMaisonLumiere,
+      photo: sectorHospitality,
       searchQuery: l("hotel boutique spa", "boutique hotel spa", "khách sạn boutique spa", "فندق بوتيك سبا", "бутик-отель спа"),
       suggestedKeywords: ["boutique hôtel spa", "séjour de luxe", "chambre vue panoramique", "réservation direct hôtel", "séminaire hôtel de charme"],
       avgTicket: 380,
     },
     {
-      id: "sante" as const,
+      id: "sante",
       icon: Sparkles,
       label: l("Cabinet Médical & Dentaire", "Medical & Dental Clinic", "Phòng khám & Nha khoa", "عيادة طبية وأسنان", "Клиника и стоматология"),
       sampleName: l("Centre Dentaire & Esthétique Sourire", "Dental & Aesthetic Smile Clinic", "Trung tâm Nha khoa Thẩm mỹ", "مركز طب وتجميل الأسنان", "Стоматологический центр"),
@@ -1718,20 +1731,20 @@ export function MapsDominationStudioPage() {
       avgTicket: 190,
     },
     {
-      id: "avocat" as const,
-      icon: ShieldCheck,
-      label: l("Avocat & Notaire", "Lawyer & Notary", "Luật sư & Công chứng", "محاماة وتوثيق", "Юрист и нотариус"),
+      id: "avocat",
+      icon: Briefcase,
+      label: l("Avocat & Juridique", "Lawyer & Notary", "Luật sư & Công chứng", "محاماة وتوثيق", "Юрист и нотариус"),
       sampleName: l("Cabinet Associés Droit & Conseil", "Legal & Advisory Partners", "Công ty Luật & Tư vấn", "مكتب محاماة واستشارات", "Юридическая коллегия"),
       category: l("Cabinet d'avocats au Barreau", "Bar-registered law firm", "Văn phòng luật sư", "مكتب محاماة معتمد", "Адвокатский кабинет"),
-      photo: XR_PHOTOS.strategy,
+      photo: pfCabinetMercier,
       searchQuery: l("avocat droit affaires", "business lawyer", "luật sư doanh nghiệp", "محامي شركات", "юрист по бизнесу"),
       suggestedKeywords: ["avocat droit des affaires", "cabinet avocat fiscaliste", "conseil juridique entreprise", "avocat fusion acquisition", "contentieux commercial"],
       avgTicket: 950,
     },
     {
-      id: "beaute" as const,
-      icon: Star,
-      label: l("Beauté & Spa", "Beauty & Wellness", "Làm đẹp & Spa", "Tư vấn & Spa", "Красота и спа"),
+      id: "beaute",
+      icon: Scissors,
+      label: l("Beauté & Spa", "Beauty & Wellness", "Làm đẹp & Spa", "صالون وتجميل", "Красота и спа"),
       sampleName: l("Institut Harmonie & Soins Privés", "Harmony Private Spa & Beauty", "Viện Chăm sóc & Spa Riêng", "معهد العناية والسبا الخاص", "Институт Красоты и Спа"),
       category: l("Institut de beauté & massages", "Beauty salon & wellness massages", "Spa làm đẹp & massage", "صالون تجميل وعناية", "Салон красоты и массаж"),
       photo: XR_PHOTOS.branding,
@@ -1739,9 +1752,68 @@ export function MapsDominationStudioPage() {
       suggestedKeywords: ["institut de beauté de luxe", "soin visage haute technologie", "massage bien-être", "épilation laser définitive", "spa privatif"],
       avgTicket: 110,
     },
+    {
+      id: "immobilier",
+      icon: Home,
+      label: l("Immobilier & Agence", "Real Estate Agency", "Bất động sản & Đại lý", "عقارات ووكالة", "Недвижимость и агентство"),
+      sampleName: l("Agence Prestige & Demeures", "Prestige Estates & Homes", "Bất động sản Đẳng cấp", "وكالة العقارات الفاخرة", "Престижная недвижимость"),
+      category: l("Agence immobilière haut de gamme", "High-end real estate agency", "Đại lý bất động sản cao cấp", "وكالة عقارية راقية", "Агентство элитной недвижимости"),
+      photo: sectorRealestate,
+      searchQuery: l("agence immobiliere prestige", "luxury real estate agency", "bất động sản cao cấp", "عقارات راقية", "элитная недвижимость"),
+      suggestedKeywords: ["estimation immobilière offerte", "agence immobilière prestige", "vente appartement standing", "gestion locative premium", "chasseur immobilier"],
+      avgTicket: 3200,
+    },
+    {
+      id: "auto",
+      icon: Car,
+      label: l("Garage & Auto", "Automotive & Garage", "Gara ô tô & Sửa chữa", "صيانة سيارات ومعارض", "Автосервис и детейлинг"),
+      sampleName: l("Atelier Mécanique & Carrosserie Pro", "Pro Mechanical & Body Shop", "Xưởng Cơ khí & Thân vỏ", "ورشة ميكانيكا وهيكل احترافية", "Автотехцентр и детейлинг"),
+      category: l("Garage automobile & entretien", "Auto workshop & repair", "Gara ô tô và bảo dưỡng", "صيانة وتصليح سيارات", "Автосервис и ремонт"),
+      photo: sectorAutomotive,
+      searchQuery: l("garage automobile carrosserie", "auto repair shop bodywork", "gara sửa chữa ô tô", "ورشة صيانة سيارات", "автосервис кузовной ремонт"),
+      suggestedKeywords: ["révision automobile garantie", "carrosserie peinture auto", "changement pneus géométrie", "diagnostic électronique auto", "garage voiture de prêt"],
+      avgTicket: 420,
+    },
+    {
+      id: "fitness",
+      icon: Dumbbell,
+      label: l("Fitness & Sport", "Fitness & Wellness", "Thể hình & Thể thao", "لياقة ورياضة", "Фитнес и спорт"),
+      sampleName: l("Élan Studio Coaching Privé", "Elan Private Fitness Studio", "Phòng tập Riêng Elan", "استوديو إيلان للتدريب الرياضي", "Студия Фитнеса Elan"),
+      category: l("Club de fitness & coaching", "Fitness studio & coaching", "Phòng tập & huấn luyện viên", "مركز تدريب ولياقة خاصة", "Фитнес-клуб и персональные тренировки"),
+      photo: pfElanStudio,
+      searchQuery: l("salle fitness coaching", "fitness studio personal trainer", "phòng tập huấn luyện viên", "نادي رياضي مدرب خاص", "фитнес студия тренер"),
+      suggestedKeywords: ["salle de sport premium", "coach sportif personnel", "cours pilates petit groupe", "abonnement fitness sans engagement", "remise en forme rapide"],
+      avgTicket: 95,
+    },
+    {
+      id: "commerce",
+      icon: Store,
+      label: l("Commerce & Traiteur", "Retail & Delicatessen", "Cửa hàng & Ẩm thực", "متاجر وأغذية راقية", "Магазин и гастрономия"),
+      sampleName: l("Maison Gourmande & Épicerie Fine", "Gourmet House & Fine Foods", "Cửa hàng Đặc sản Cao cấp", "متجر الأطعمة الفاخرة", "Гастроном и деликатесы"),
+      category: l("Commerce de bouche & traiteur", "Gourmet boutique & catering", "Cửa hàng thực phẩm & tiệc", "متجر أغذية وتموين مناسبات", "Деликатесы и кейтеринг"),
+      photo: sectorEvents,
+      searchQuery: l("epicerie fine traiteur", "fine deli caterer", "thực phẩm cao cấp", "متجر أطعمة فاخرة", "деликатесы кейтеринг"),
+      suggestedKeywords: ["traiteur réception cocktail", "épicerie fine produits du terroir", "coffret gourmand artisanal", "plateaux repas entreprise", "commerce de proximité"],
+      avgTicket: 85,
+    },
+    {
+      id: "autre",
+      icon: Sparkles,
+      label: l("Autre secteur...", "Other sector...", "Lĩnh vực khác...", "قطاع آخر...", "Другая сфера..."),
+      sampleName: l("Votre Établissement d'Excellence", "Your Premier Business", "Doanh nghiệp của Bạn", "منشأتك المتميزة", "Ваше предприятие"),
+      category: l("Service local & professionnel", "Local & professional service", "Dịch vụ địa phương chuyên nghiệp", "خدمة محلية احترافية", "Локальный сервис"),
+      photo: sectorOther,
+      searchQuery: l("service professionnel local", "local professional service", "dịch vụ chuyên nghiệp", "خدمة محلية", "профессиональные услуги"),
+      suggestedKeywords: ["service de proximité certifié", "devis gratuit immédiat", "intervention rapide", "spécialiste recommandé", "service client 5 étoiles"],
+      avgTicket: 260,
+    },
   ];
 
   const currentSector = sectors.find((s) => s.id === selectedSector) ?? sectors[0];
+  const displaySectorLabel = selectedSector === "autre" && customSectorName.trim()
+    ? customSectorName.trim()
+    : t(currentSector.label);
+
   const citiesList = ["Paris", "Lyon", "Bordeaux", "Marseille", "Nice", "Da Nang", "Genève"];
 
   const handleAddKeyword = () => {
@@ -1785,7 +1857,7 @@ export function MapsDominationStudioPage() {
   const conversionRate = currentSector.id === "resto" || currentSector.id === "beaute" ? 0.22 : 0.12;
   const estRevenueMin = Math.round(estCallsMin * conversionRate * currentSector.avgTicket);
   const estRevenueMax = Math.round(estCallsMax * conversionRate * currentSector.avgTicket);
-  const estRoiMultiple = Math.max(12, Math.round(estRevenueMin / 179));
+  const estRoiMultiple = Math.max(12, Math.round(estRevenueMin / 199));
 
   const selectedKeywordsLabel = `${userKeywords.length} mot(s)-clé(s) sélectionné(s)`;
 
@@ -1921,10 +1993,10 @@ export function MapsDominationStudioPage() {
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#EBEBE6] pb-4">
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-[#A67C40]/10 border border-[#A67C40]/30 px-3 py-1 font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#A67C40]">
                     <Compass className="h-3.5 w-3.5 text-[#A67C40]" />
-                    {t(l("CONQUÊTE INITIALE DU TOP 3", "INITIAL TOP 3 CONQUEST", "GÓI KHỞI ĐỘNG CHINH PHỤC TOP 3", "غزو الصدارة الأولي", "ПЕРВИЧНЫЙ ВЫВОД В ТОП-3"))}
+                    {t(l("CONQUÊTE INITIALE DU TOP 3 · CONTRAT D'ENGAGEMENT", "INITIAL TOP 3 CONQUEST · FORMAL CONTRACT", "GÓI KHỞI ĐỘNG CHINH PHỤC TOP 3 · CAM KẾT HỢP ĐỒNG", "غزو الصدارة الأولي · عقد رسمي ملزم", "ПЕРВИЧНЫЙ ВЫВОД В ТОП-3 · ДОГОВОР С ОБЯЗАТЕЛЬСТВАМИ"))}
                   </span>
-                  <span className="font-mono text-[11px] font-semibold text-[#52504A]">
-                    {t(l("Pack Fondateur Complet · 100% Actionnable", "Complete Foundation Pack · 100% Actionable", "Trọn gói Khởi động · Thực chiến", "باقة التأسيس الكاملة", "Полный стартовый пакет"))}
+                  <span className="font-mono text-[11px] font-semibold text-[#16A34A]">
+                    ✓ {t(l("1 Seul Paiement Unique · 100% Garanti ou Remboursé", "Single One-Time Payment · 100% Money-Back Guaranteed", "Thanh toán 1 lần duy nhất · Hoàn tiền 100%", "دفعة واحدة فقط · ضمان استرجاع 100%", "Один платёж · 100% возврат средств"))}
                   </span>
                 </div>
 
@@ -1936,17 +2008,52 @@ export function MapsDominationStudioPage() {
 
                 <div className="mt-3 flex flex-wrap items-baseline gap-2">
                   <span className="text-xs font-semibold uppercase tracking-wider text-[#52504A]">
-                    {t(l("Tarif unique initial", "One-time initial fee", "Phí khởi động một lần", "تكلفة لمرة واحدة", "Разовый платёж"))}
+                    {t(l("Tarif unique initial (un seul paiement)", "One-time initial fee (single payment)", "Phí khởi động một lần (trả 1 lần)", "تكلفة لمرة واحدة (دفعة وحيدة)", "Разовый платёж (без абонплаты)"))}
                   </span>
                   <span className="font-serif text-4xl font-bold text-[#12110E] sm:text-5xl">
                     {price(999)}
                   </span>
                   <span className="rounded-full bg-[#FAF7F2] px-3 py-0.5 font-mono text-xs font-bold text-[#A67C40] border border-[#A67C40]/30">
-                    {t(l("Audit & Restructuration Complète", "Full Audit & Restructuring", "Kiểm toán & Tái cấu trúc Toàn diện", "تدقيق شامل وإعادة هيكلة", "Полный аудит и перезапуск"))}
+                    {t(l("Audit, Restructuration & Engagement Top 3", "Audit, Restructuring & Top 3 Guarantee", "Kiểm toán, Tái cấu trúc & Cam kết Top 3", "تدقيق وإعادة هيكلة وضمان الصدارة", "Аудит, оптимизация и гарантия топ-3"))}
                   </span>
                 </div>
 
-                <p className="mt-3 text-xs leading-relaxed text-[#52504A]">
+                {/* ════════════════════════════════════════════════════════════
+                    SCEAU DATE D'ANNIVERSAIRE · 1 AN TRANQUILLE & CONTRAT OFFICIEL
+                   ════════════════════════════════════════════════════════════ */}
+                <div className="mt-5 rounded-2xl border-2 border-[#A67C40]/40 bg-[#FAF7F2] p-4.5 sm:p-5 relative overflow-hidden shadow-xs">
+                  <div className="flex items-start gap-3.5">
+                    <div className="h-10 w-10 shrink-0 rounded-2xl bg-[#12110E] flex items-center justify-center text-[#A67C40] shadow-sm">
+                      <Award className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-[#A67C40]">
+                          ★ {t(l("SCEAU DATE D'ANNIVERSAIRE · 1 AN DE TRANQUILLITÉ TOTALE", "ANNIVERSARY SEAL · 1 FULL YEAR OF PEACE OF MIND", "DẤU ẤN KỶ NIỆM · 1 NĂM YÊN TÂM TUYỆT ĐỐI", "ختم الذكرى السنوية · عام كامل من راحة البال", "ЗНАК ГОДОВОЙ СТАБИЛЬНОСТИ · 1 ГОД СПОКОЙСТВИЯ"))}
+                        </span>
+                        <span className="rounded-full bg-[#16A34A]/10 border border-[#16A34A]/30 px-2 py-0.5 font-mono text-[10px] font-bold text-[#16A34A]">
+                          100% GARANTI OU REMBOURSÉ
+                        </span>
+                      </div>
+                      <h4 className="mt-1 font-serif text-base font-semibold text-[#12110E]">
+                        {t(l("Devis & Contrat officiel délivré dès la commande.", "Official quote & binding contract delivered upon order.", "Báo giá & Hợp đồng chính thức bàn giao ngay khi đặt hàng.", "عرض سعر وعقد رسمي ملزم يُسلَّم فور بدء العمل.", "Официальный договор с обязательствами при оформлении.")) }
+                      </h4>
+                      <p className="mt-1.5 text-xs leading-relaxed text-[#52504A]">
+                        {t(
+                          l(
+                            "Nous délivrons un devis et un contrat officiel nous engageant juridiquement à positionner votre établissement dans le Top 3 Google Maps sur les mots-clés sélectionnés. Dès que votre fiche apparaît dans le Top 3 : c'est votre date d'anniversaire officielle, vous êtes tranquille pendant 1 an complet ! Un seul paiement unique, aucun engagement forcé ni frais cachés. Si le Top 3 n'est pas atteint : vous êtes 100% remboursé sans condition.",
+                            "We provide an official quote and formal contract legally binding us to rank your business in the Google Maps Top 3 on your targeted keywords. As soon as you appear in the Top 3: that becomes your official anniversary date, and you enjoy 1 full year of peace of mind! One single payment, no hidden lock-in. If the Top 3 is not achieved: 100% fully refunded, no questions asked.",
+                            "Chúng tôi cung cấp báo giá và hợp đồng chính thức cam kết pháp lý đưa cơ sở của bạn vào Top 3 Google Maps với các từ khóa đã chọn. Ngay khi lọt vào Top 3: đó là ngày kỷ niệm chính thức, bạn hoàn toàn yên tâm trong suốt 1 năm! Thanh toán 1 lần duy nhất, không ràng buộc ngầm. Nếu không đạt Top 3: hoàn tiền 100% vô điều kiện.",
+                            "نقدم عرض سعر وعقداً رسمياً يلزمنا قانونياً بإيصال نشاطك إلى أفضل 3 نتائج على خرائط Google على الكلمات المختارة. وبمجرد ظهورك في المراكز الثلاثة الأولى: يُعتمد تاريخ الذكرى السنوية وتنعم براحة بال تامة لمدة عام كامل! دفعة واحدة فقط بدون أي التزامات خفية. وإن لم نصل لأفضل 3 نتائج: تسترد 100% من أموالك دون قيد أو شرط.",
+                            "Мы оформляем официальный договор, юридически фиксирующий обязательство вывести ваш бизнес в топ-3 Google Maps по выбранным ключевым словам. Как только карточка входит в топ-3: фиксируется официальная дата, и вы спокойны целый год! Разовый платёж, никаких скрытых условий. Если результат не достигнут — 100% возврат средств без споров.",
+                          ),
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="mt-4 text-xs leading-relaxed text-[#52504A]">
                   {t(
                     l(
                       "Le travail de fond chirurgical pour propulser votre fiche parmi les 3 premières positions locales. Nous auditons vos 3 concurrents leaders, restructurons intégralement votre fiche, injectons les données EXIF GPS dans vos photos et synchronisons votre autorité sur l'ensemble du web.",
@@ -1966,7 +2073,7 @@ export function MapsDominationStudioPage() {
                     l("Géoréférencement & balisage EXIF GPS de vos photos professionnelles", "Geotagging & precise GPS EXIF metadata tagging of your HD photos", "Gắn tọa độ địa lý & dữ liệu EXIF GPS cho toàn bộ ảnh chuyên nghiệp", "ترميز جغرافي وحقن إحداثيات GPS في بيانات الصور الرقمية", "Геопривязка и EXIF-разметка фотографий с точными координатами"),
                     l("Harmonisation des citations NAP (Nom, Adresse, Téléphone) sur 25+ annuaires d'autorité", "Strict NAP citation synchronization across 25+ high-authority directories", "Đồng bộ thông tin NAP trên hơn 25 danh bạ uy tín", "توحيد بيانات الاسم والعنوان ورقم الهاتف عبر أكثر من 25 دليلاً موثوقاً", "Синхронизация данных NAP (имя, адрес, телефон) в 25+ авторитетных каталогах"),
                     l("Nettoyage des doublons parasites qui siphonnent votre autorité algorithmique", "Deletion of ghost duplicate citations that dilute your ranking weight", "Xóa bỏ các hồ sơ trùng lặp gây phân tán uy tín", "حذف وإلغاء الملفات المكررة والوهمية التي تضعف ترتيبك", "Удаление старых дублей, размывающих авторитет карточки"),
-                    l("Rapport stratégique personnalisé remis avec plan de déploiement", "Personalized strategic audit report delivered with immediate action steps", "Báo cáo chiến lược cá nhân hóa kèm kế hoạch triển khai", "تقرير استراتيجي مخصص مع خطة عمل مباشرة", "Индивидуальный стратегический отчёт с планом внедрения"),
+                    l("Rapport stratégique personnalisé remis avec plan de déploiement et contrat officiel", "Personalized strategic audit report delivered with deployment plan and binding contract", "Báo cáo chiến lược cá nhân hóa kèm kế hoạch triển khai và hợp đồng chính thức", "تقرير استراتيجي مخصص مع خطة عمل وعقد ملزم معتمد", "Индивидуальный стратегический отчёт с планом внедрения и договором"),
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-2.5 text-xs text-[#2B2925]">
                       <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#16A34A]" />
@@ -1978,7 +2085,7 @@ export function MapsDominationStudioPage() {
                 <div className="mt-8 flex flex-col sm:flex-row items-center gap-3">
                   <a
                     href={`${WA_BASE}${encodeURIComponent(
-                      "Bonjour XRAGENCY, je souhaite lancer mon audit & restructuration initiale Google Maps Top 3 à 999 €.",
+                      "Bonjour XRAGENCY, je souhaite lancer mon audit & restructuration initiale Google Maps Top 3 à 999 € (Devis, Contrat officiel, Sceau Date d'Anniversaire 1 an tranquille, 100% Garanti ou Remboursé).",
                     )}`}
                     target="_blank"
                     rel="noreferrer"
@@ -1993,7 +2100,7 @@ export function MapsDominationStudioPage() {
                     href="#formules-mensuelles"
                     className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-[#D5D5CF] bg-[#FAF9F5] px-6 py-3.5 text-xs font-semibold text-[#12110E] transition hover:border-[#12110E] hover:bg-white"
                   >
-                    <span>{t(l("Voir les formules mensuelles", "View monthly plans", "Xem các gói hằng tháng", "عرض الباقات الشهرية", "Ежемесячные тарифы"))}</span>
+                    <span>{t(l("Voir les 2 formules mensuelles", "View 2 monthly plans", "Xem 2 gói hằng tháng", "عرض الباقتين الشهرية", "2 ежемесячных тарифа"))}</span>
                     <ArrowRight className="h-3.5 w-3.5" />
                   </a>
                 </div>
@@ -2001,7 +2108,7 @@ export function MapsDominationStudioPage() {
             </div>
 
             {/* ════════════════════════════════════════════════════════════════
-                2. LES 2 FORMULES MENSUELLES (99 € / MOIS ET 179 € / MOIS)
+                2. LES 2 FORMULES MENSUELLES (99 € / MOIS ET 199 € / MOIS)
                ════════════════════════════════════════════════════════════════ */}
             <div id="formules-mensuelles" className="mt-20 scroll-mt-24">
               <div className="text-center max-w-2xl mx-auto mb-10">
@@ -2013,7 +2120,7 @@ export function MapsDominationStudioPage() {
                   {t(l("Deux formules mensuelles pour verrouiller votre Top 3.", "Two monthly formulas to lock in your Top 3 position.", "Hai gói quản lý hằng tháng bảo toàn vị thế Top 3.", "باقتان شهريتان لضمان بقائك الدائم في الصدارة.", "Два ежемесячных тарифа для удержания лидерства."))}
                 </h2>
                 <p className="mt-2 text-xs text-[#52504A] sm:text-sm">
-                  {t(l("Après la conquête initiale, Google exige une activité et une collecte d'avis continues. Choisissez la formule adaptée à votre ambition :", "Following initial conquest, Google requires regular activity and review velocity. Choose the plan matching your growth goals:", "Sau khi vào Top 3, Google đòi hỏi tương tác và đánh giá mới đều đặn. Hãy chọn gói phù hợp:", "بعد الصعود، تتطلب خوارزمية جوجل نشاطاً وتدفق تقييمات مستمراً. اختر الباقة الملائمة لطموحك:", "После выхода в топ Google требует регулярной активности и новых отзывов. Выберите подходящий формат:"))}
+                  {t(l("Après la conquête initiale, Google exige une activité et une collecte d'avis continues. Choisissez la formule adaptée à votre ambition (engagement minimum 6 mois) :", "Following initial conquest, Google requires regular activity and review velocity. Choose the plan matching your growth goals (minimum 6-month commitment):", "Sau khi vào Top 3, Google đòi hỏi tương tác và đánh giá mới đều đặn. Hãy chọn gói phù hợp (cam kết tối thiểu 6 tháng):", "بعد الصعود، تتطلب خوارزمية جوجل نشاطاً وتدفق تقييمات مستمراً. اختر الباقة الملائمة لطموحك (التزام 6 أشهر كحد أدنى):", "После выхода в топ Google требует регулярной активности и новых отзывов. Выберите подходящий формат (минимум 6 месяцев):"))}
                 </p>
               </div>
 
@@ -2039,7 +2146,9 @@ export function MapsDominationStudioPage() {
                         {price(99)}
                       </span>
                       <span className="font-mono text-xs text-[#52504A]">{perMonth}</span>
-                      <span className="ml-2 font-mono text-[10px] text-[#777]">({t(l("sans engagement", "no commitment", "không ràng buộc", "بدون التزام", "без обязательств"))})</span>
+                      <span className="ml-2 font-mono text-[10.5px] font-medium text-[#A67C40]">
+                        ({t(l("engagement minimum 6 mois", "minimum 6-month commitment", "cam kết tối thiểu 6 tháng", "التزام 6 أشهر كحد أدنى", "контракт от 6 мес."))})
+                      </span>
                     </div>
 
                     <p className="mt-3 text-xs leading-relaxed text-[#52504A]">
@@ -2073,7 +2182,7 @@ export function MapsDominationStudioPage() {
                   <div className="mt-8">
                     <a
                       href={`${WA_BASE}${encodeURIComponent(
-                        "Bonjour XRAGENCY, je souhaite souscrire à la formule Essentielle Google Maps à 99 € / mois.",
+                        "Bonjour XRAGENCY, je souhaite souscrire à la formule Essentielle Google Maps à 99 € / mois (engagement 6 mois).",
                       )}`}
                       target="_blank"
                       rel="noreferrer"
@@ -2085,7 +2194,7 @@ export function MapsDominationStudioPage() {
                   </div>
                 </div>
 
-                {/* FORMULE 2 : DOMINATION OFFENSIVE (179 € / MOIS) */}
+                {/* FORMULE 2 : DOMINATION OFFENSIVE (199 € / MOIS) */}
                 <div className="relative flex flex-col justify-between rounded-3xl border-2 border-[#12110E] bg-white p-7 shadow-xl transition hover:shadow-2xl sm:p-8">
                   {/* Popular pill */}
                   <div className="absolute -top-3 right-6 rounded-full bg-[#12110E] px-3.5 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-[#A67C40] shadow-sm">
@@ -2108,10 +2217,12 @@ export function MapsDominationStudioPage() {
 
                     <div className="mt-3 flex items-baseline gap-1">
                       <span className="font-serif text-4xl font-bold text-[#12110E]">
-                        {price(179)}
+                        {price(199)}
                       </span>
                       <span className="font-mono text-xs text-[#52504A]">{perMonth}</span>
-                      <span className="ml-2 font-mono text-[10px] text-[#777]">({t(l("sans engagement", "no commitment", "không ràng buộc", "بدون التزام", "без обязательств"))})</span>
+                      <span className="ml-2 font-mono text-[10.5px] font-medium text-[#A67C40]">
+                        ({t(l("engagement minimum 6 mois", "minimum 6-month commitment", "cam kết tối thiểu 6 tháng", "التزام 6 أشهر كحد أدنى", "контракт от 6 мес."))})
+                      </span>
                     </div>
 
                     <p className="mt-3 text-xs leading-relaxed text-[#52504A]">
@@ -2147,14 +2258,14 @@ export function MapsDominationStudioPage() {
                   <div className="mt-8">
                     <a
                       href={`${WA_BASE}${encodeURIComponent(
-                        "Bonjour XRAGENCY, je souhaite souscrire à la formule Domination Offensive Google Maps Top 3 à 179 € / mois.",
+                        "Bonjour XRAGENCY, je souhaite souscrire à la formule Domination Offensive Google Maps Top 3 à 199 € / mois (engagement 6 mois).",
                       )}`}
                       target="_blank"
                       rel="noreferrer"
                       className="flex w-full items-center justify-center gap-2 rounded-full border border-[#12110E] bg-[#12110E] py-3.5 text-xs font-semibold text-white transition hover:bg-[#2B2925] hover:scale-[1.01]"
                     >
                       <Sparkles className="h-4 w-4 text-[#A67C40]" />
-                      <span>{t(l("Choisir la Domination Offensive (179 € / mois)", "Select Offensive Domination (€179/mo)", "Chọn Gói Tấn Công (179 €/tháng)", "اختيار باقة الهيمنة الهجومية (179 € / شهر)", "Выбрать активный рост (179 €/мес)"))}</span>
+                      <span>{t(l("Choisir la Domination Offensive (199 € / mois)", "Select Offensive Domination (€199/mo)", "Chọn Gói Tấn Công (199 €/tháng)", "اختيار باقة الهيمنة الهجومية (199 € / شهر)", "Выбрать активный рост (199 €/мес)"))}</span>
                     </a>
                   </div>
                 </div>
@@ -2178,29 +2289,152 @@ export function MapsDominationStudioPage() {
               </p>
             </div>
 
+            {/* ════════════════════════════════════════════════════════════════
+                DYNAMIC SECTOR VISUAL SHOWCASE BANNER
+               ════════════════════════════════════════════════════════════════ */}
+            <div className="mt-8 overflow-hidden rounded-3xl border border-[#E5E5E0] bg-white p-4 sm:p-6 shadow-sm">
+              <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-12">
+                {/* Sector Visual Card */}
+                <div className="relative h-48 sm:h-52 lg:col-span-5 overflow-hidden rounded-2xl bg-[#12110E] group shadow-inner">
+                  <img
+                    src={currentSector.photo}
+                    alt={displaySectorLabel}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+                  
+                  <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1 shadow-sm backdrop-blur-xs">
+                    <MapPin className="h-3 w-3 text-[#EA4335]" />
+                    <span className="font-mono text-[10px] font-bold text-[#12110E] uppercase tracking-wider">
+                      {displaySectorLabel}
+                    </span>
+                  </div>
+
+                  <div className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-[#12110E]/80 border border-[#A67C40]/40 px-2.5 py-0.5 backdrop-blur-xs">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#16A34A] animate-pulse" />
+                    <span className="font-mono text-[9px] font-bold text-[#FAF7F2]">Local Pack #1</span>
+                  </div>
+
+                  <div className="absolute bottom-3 left-3 right-3 text-white">
+                    <span className="font-mono text-[9px] uppercase tracking-wider text-[#A67C40]">
+                      PROJECTION CONQUÊTE DU TOP 3 · {displayCity.toUpperCase()}
+                    </span>
+                    <h4 className="font-serif text-base font-semibold text-white truncate">
+                      {t(currentSector.sampleName)}
+                    </h4>
+                    <div className="mt-0.5 flex flex-wrap items-center gap-2 text-[10px] text-white/80">
+                      <span className="text-amber-400 font-bold">★★★★★ 4.9 (148 avis)</span>
+                      <span>· Panier moyen : ~{currentSector.avgTicket} €</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sector Strategy Insight & Live Query Pill */}
+                <div className="lg:col-span-7 flex flex-col justify-between h-full">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-full bg-[#A67C40]/10 border border-[#A67C40]/30 px-3 py-0.5 font-mono text-[10.5px] font-bold text-[#A67C40]">
+                        SECTEUR ACTIVITÉ : {displaySectorLabel.toUpperCase()}
+                      </span>
+                      <span className="font-mono text-xs text-[#52504A]">
+                        Catégorie : {t(currentSector.category)}
+                      </span>
+                    </div>
+
+                    <h3 className="mt-2 font-serif text-xl sm:text-2xl font-medium text-[#12110E]">
+                      {t(l("Stratégie de conquête pour votre établissement à", "Conquest strategy for your business in", "Chiến lược chiếm lĩnh cho cơ sở tại", "خطة الاستحواذ لنشاطك التجاري في", "Стратегия вывода в топ для"))}{" "}
+                      <span className="text-[#A67C40] underline decoration-[#A67C40]/30 underline-offset-4">{displayCity}</span>
+                    </h3>
+
+                    <p className="mt-1.5 text-xs text-[#52504A] leading-relaxed">
+                      {t(
+                        l(
+                          "Dans ce secteur, les clients recherchent des professionnels locaux hautement recommandés avec des avis récents. Dès que votre fiche atteint le Top 3, votre date d'anniversaire est fixée pour un an de sérénité totale, garantie par contrat officiel.",
+                          "In this sector, local clients seek proven providers with pristine recent reviews. As soon as you hit the Top 3, your anniversary date is secured for 1 full year of peace of mind, bound by contract.",
+                          "Trong lĩnh vực này, khách hàng luôn tìm kiếm đơn vị gần nhất có đánh giá xuất sắc. Ngay khi đạt Top 3, ngày kỷ niệm được ấn định cho 1 năm yên tâm hoàn toàn.",
+                          "في هذا النشاط، يفضل العملاء المهنيين المحليين الحاصلين على تقييمات ممتازة. وبمجرد بلوغك الصدارة، يبدأ عام راحة البال المضمون بعقد رسمي.",
+                          "В этой нише клиенты выбирают заведения с высоким рейтингом. Как только карточка входит в топ-3, фиксируется официальная дата на 1 год спокойствия.",
+                        ),
+                      )}
+                    </p>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap items-center gap-2 pt-3 border-t border-[#EBEBE6]">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-[#52504A]">
+                      {t(l("Requête phare ciblée :", "Primary target query:", "Từ khóa mục tiêu:", "الكلمة المفتاحية المستهدفة:", "Основной запрос:"))}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-lg bg-[#FAF7F2] border border-[#A67C40]/30 px-3 py-1 font-mono text-xs font-semibold text-[#12110E]">
+                      <Search className="h-3 w-3 text-[#A67C40]" />
+                      "{t(currentSector.searchQuery)} {displayCity}"
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Interactive Criteria Cards */}
-            <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-4">
+            <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-4">
               {/* CRITÈRE 1 : MÉTIER / SECTEUR */}
-              <div className="rounded-2xl border border-[#E5E5E0] bg-white p-5 shadow-sm">
-                <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#A67C40]">
-                  {t(l("1. Métier / Activité", "1. Sector / Business", "1. Lĩnh vực hoạt động", "1. مجال النشاط", "1. Отрасль"))}
-                </span>
-                <div className="mt-3 space-y-1.5">
-                  {sectors.map((sec) => (
-                    <button
-                      key={sec.id}
-                      type="button"
-                      onClick={() => setSelectedSector(sec.id)}
-                      className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-start text-xs font-medium transition ${
-                        selectedSector === sec.id
-                          ? "bg-[#12110E] text-white shadow-sm font-semibold"
-                          : "border border-[#EBEBE6] bg-[#FAF9F5] text-[#2B2925] hover:border-[#12110E]"
-                      }`}
-                    >
-                      <span className="truncate">{t(sec.label)}</span>
-                      {selectedSector === sec.id && <Check className="h-3.5 w-3.5 text-white" />}
-                    </button>
-                  ))}
+              <div className="rounded-2xl border border-[#E5E5E0] bg-white p-5 shadow-sm flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider text-[#A67C40]">
+                      {t(l("1. Métier / Activité", "1. Sector / Business", "1. Lĩnh vực hoạt động", "1. مجال النشاط", "1. Отрасль"))}
+                    </span>
+                    <span className="rounded-full bg-[#FAF7F2] border border-[#A67C40]/30 px-2 py-0.5 font-mono text-[10px] font-bold text-[#A67C40]">
+                      {sectors.length} secteurs
+                    </span>
+                  </div>
+
+                  <div className="mt-3 space-y-1.5 max-h-[300px] overflow-y-auto pr-1">
+                    {sectors.map((sec) => {
+                      const IconComp = sec.icon;
+                      const isSelected = selectedSector === sec.id;
+                      return (
+                        <button
+                          key={sec.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedSector(sec.id);
+                            if (sec.id === "autre") {
+                              setShowCustomSectorInput(true);
+                            } else {
+                              setShowCustomSectorInput(false);
+                            }
+                          }}
+                          className={`flex w-full items-center justify-between rounded-xl px-2.5 py-2 text-start text-xs font-medium transition ${
+                            isSelected
+                              ? "bg-[#12110E] text-white shadow-sm font-semibold"
+                              : "border border-[#EBEBE6] bg-[#FAF9F5] text-[#2B2925] hover:border-[#12110E]"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 truncate">
+                            <IconComp className={`h-3.5 w-3.5 shrink-0 ${isSelected ? "text-[#A67C40]" : "text-[#777]"}`} />
+                            <span className="truncate">
+                              {sec.id === "autre" && customSectorName.trim() ? customSectorName.trim() : t(sec.label)}
+                            </span>
+                          </div>
+                          {isSelected && <Check className="h-3.5 w-3.5 shrink-0 text-white" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Autre secteur custom field */}
+                  {(selectedSector === "autre" || showCustomSectorInput) && (
+                    <div className="mt-2.5 pt-2 border-t border-[#EBEBE6]">
+                      <label className="block text-[10px] font-mono text-[#52504A] mb-1">
+                        {t(l("Indiquez votre métier exact :", "Specify your exact profession:", "Nhập ngành nghề của bạn:", "حدد مهنتك بالتفصيل:", "Укажите вашу специальность:"))}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder={t(l("ex: Architecte, Paysagiste...", "ex: Architect, Landscaper...", "vd: Kiến trúc sư...", "مثال: مهندس معماري...", "напр.: Архитектор..."))}
+                        value={customSectorName}
+                        onChange={(e) => setCustomSectorName(e.target.value)}
+                        className="w-full rounded-xl border border-[#A67C40]/50 bg-[#FAF7F2] px-3 py-1.5 text-xs text-[#12110E] placeholder:text-[#999] focus:border-[#12110E] focus:outline-none"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -2404,12 +2638,14 @@ export function MapsDominationStudioPage() {
                       </span>
                       <span className="font-serif text-2xl font-bold text-[#12110E] sm:text-3xl">999 €</span>
                       <span className="text-xs text-[#52504A] font-mono">
-                        ({t(l("Audit & Conquête Initiale", "Audit & Initial Conquest", "Kiểm toán & Chinh phục Ban đầu", "التدقيق والصعود الأولي", "Аудит и первичный запуск"))})
+                        ({t(l("Audit & Conquête · Contrat officiel Top 3 & 1 an garanti", "Audit & Conquest · Official contract Top 3 & 1 yr guarantee", "Kiểm toán & Chinh phục · Hợp đồng Top 3 & 1 năm bảo đảm", "التدقيق والصعود · عقد رسمي للصدارة وضمان لعام", "Аудит и запуск · Договор с гарантией на 1 год"))})
                       </span>
                       <span className="text-xs font-mono text-[#A67C40] font-bold">+</span>
                       <span className="text-xs text-[#52504A] font-mono">dès</span>
                       <span className="font-serif text-2xl font-bold text-[#A67C40] sm:text-3xl">99 €</span>
-                      <span className="text-xs text-[#52504A] font-mono">{perMonth}</span>
+                      <span className="text-xs text-[#52504A] font-mono">ou</span>
+                      <span className="font-serif text-2xl font-bold text-[#12110E] sm:text-3xl">199 €</span>
+                      <span className="text-xs text-[#52504A] font-mono">{perMonth} (engagement 6 mois)</span>
                     </div>
 
                     <p className="mt-1 text-xs text-[#52504A]">
@@ -2420,7 +2656,7 @@ export function MapsDominationStudioPage() {
                   <div className="flex flex-col gap-2 shrink-0">
                     <a
                       href={`${WA_BASE}${encodeURIComponent(
-                        `Bonjour XRAGENCY, suite à ma simulation Google Maps pour mon établissement (${t(currentSector.label)}) à ${displayCity}, je souhaite lancer la conquête du Top 3 (Audit initial 999 € + formule mensuelle) pour générer +${estCallsMin} à +${estCallsMax} appels/mois.`,
+                        `Bonjour XRAGENCY, suite à ma simulation Google Maps pour mon établissement (${displaySectorLabel}) à ${displayCity}, je souhaite lancer la conquête du Top 3 (Audit initial 999 € avec Devis, Contrat officiel d'engagement et Sceau Date d'Anniversaire 1 an tranquille) pour générer +${estCallsMin} à +${estCallsMax} appels/mois.`,
                       )}`}
                       target="_blank"
                       rel="noreferrer"
@@ -2433,7 +2669,7 @@ export function MapsDominationStudioPage() {
 
                     <div className="flex items-center justify-center gap-2 text-[11px] font-mono text-[#52504A]">
                       <ShieldCheck className="h-3.5 w-3.5 text-[#16A34A]" />
-                      <span>{t(l("Sans engagement de durée · Audit 100% actionnable", "No commitment · 100% actionable audit", "Không ràng buộc kỳ hạn · Kiểm toán thực chiến", "بدون أي التزام زمني · تدقيق عملي 100%", "Без долгосрочных обязательств · Практический аудит"))}</span>
+                      <span>{t(l("Devis & Contrat officiel délivré · 100% Garanti ou Remboursé", "Official quote & contract delivered · 100% Guaranteed", "Báo giá & Hợp đồng chính thức · Hoàn tiền 100%", "عقد رسمي معتمد · ضمان استرجاع 100%", "Официальный договор · 100% гарантия возврата"))}</span>
                     </div>
                   </div>
                 </div>
@@ -2926,16 +3162,16 @@ export function MapsDominationStudioPage() {
             <div className="mt-8 space-y-4">
               {[
                 {
-                  q: l("Pourquoi le Top 3 Google Maps génère-t-il plus d'appels qu'un site web ?", "Why does the Top 3 generate more phone calls than a standard website?", "Tại sao Top 3 Google Maps tạo nhiều cuộc gọi hơn website?", "لماذا تحقق أفضل 3 نتائج على الخرائط اتصالات أكثر من الموقع؟", "Почему топ-3 карт даёт больше звонков, чем сайт?"),
-                  a: l("Sur mobile, le Local 3-Pack de Google s'affiche avant les résultats naturels. Il offre un bouton direct 'Appeler' et 'Itinéraire' qui court-circuite la navigation : le client vous contacte immédiatement.", "On mobile, the Local 3-Pack appears above standard organic results with direct 'Call' and 'Directions' buttons, driving immediate high-intent actions.", "Trên di động, Local 3-Pack hiện ngay đầu với nút gọi và chỉ đường trực tiếp, tạo tương tác tức thì.", "على الجوال، تظهر النتائج الثلاث الأولى مباشرة مع زر اتصال فوري وتوجيه جغرافي بنقرة واحدة.", "На смартфонах блок карт отображается первым с кнопками 'Позвонить' и 'Маршрут', снимая все барьеры."),
+                  q: l("Comment fonctionne la garantie contractuelle et le Sceau Date d'Anniversaire ?", "How does the contractual guarantee and Anniversary Seal work?", "Cam kết hợp đồng và Dấu ấn Kỷ niệm hoạt động thế nào?", "كيف يعمل الضمان التعاقدي وختم الذكرى السنوية؟", "Как работает договорная гарантия и Знак годовщины?"),
+                  a: l("Un devis et un contrat officiel d'engagement vous sont délivrés et contresignés dès votre commande. Ce contrat engage formellement XRAGENCY à positionner votre établissement dans le Top 3 Google Maps sur vos mots-clés cibles. Dès que votre fiche apparaît dans le Top 3, la date est officiellement actée : c'est votre date d'anniversaire et vous êtes tranquille pendant 1 an complet. Un seul paiement unique (999 €), aucun abonnement forcé. Si le Top 3 n'est pas atteint : remboursement intégral à 100% sans condition.", "An official quote and legally binding contract are issued and signed upon order. This contract commits XRAGENCY to ranking your business in the Google Maps Top 3 on your target keywords. As soon as you enter the Top 3, the date is marked: that is your official anniversary date and you enjoy 1 full year of peace of mind with 1 single payment (€999). If the Top 3 is not delivered: 100% money-back guarantee, no questions asked.", "Báo giá và hợp đồng chính thức được ký kết ngay khi đặt hàng, cam kết pháp lý đưa cơ sở vào Top 3 Google Maps. Ngay khi đạt Top 3, ngày kỷ niệm được ấn định cho 1 năm an tâm tuyệt đối với 1 lần thanh toán duy nhất (999 €). Nếu không đạt Top 3: hoàn tiền 100% vô điều kiện.", "يتم تسليم وتوقيع عرض سعر وعقد رسمي ملزم فور الطلب يضمن وصولك لأفضل 3 نتائج على خرائط Google. بمجرد ظهورك بالصدارة، يُعتمد تاريخ الذكرى السنوية وتنعم بعام كامل من راحة البال بدفعة واحدة (999 €). وإن لم يتحقق الهدف: تسترد أموالك كاملة 100%.", "Официальный договор оформляется и подписывается при заказе. XRAGENCY юридически обязуется вывести ваш бизнес в топ-3 Google Maps. При входе в топ-3 фиксируется официальная дата годовщины: вы спокойны целый год при разовом платеже (999 €). Если топ-3 не достигнут — 100% возврат средств."),
                 },
                 {
-                  q: l("Y a-t-il une garantie de position n°1 ?", "Is there a guarantee for position #1?", "Có cam kết vị trí số 1 không?", "هل تضمنون المركز الأول؟", "Есть ли гарантия первого места?"),
-                  a: l("Non, et aucun prestataire sérieux ne peut le garantir car Google reste seul souverain de son algorithme. Nous optimisons en revanche 100% des critères officiels (pertinence, distance, autorité des avis) pour maximiser vos chances de conquérir le Top 3.", "No, and no honest agency can guarantee rank #1 as Google controls its algorithm. However, we meticulously optimize 100% of official signals (relevance, distance, authority) to maximize your ranking power.", "Không, không ai có thể can thiệp thuật toán Google. Nhưng chúng tôi tối ưu 100% tiêu chí chính thức để tối đa hóa cơ hội đạt Top 3.", "لا، فخوارزمية جوجل وحدها صاحبة القرار. لكننا نحسن 100% من معايير الترتيب الرسمية لتعظيم فرصك في الصدارة.", "Нет, никто не управляет алгоритмом Google напрямую. Но мы выжимаем 100% из официальных факторов ранжирования."),
+                  q: l("Pourquoi le Top 3 Google Maps génère-t-il plus d'appels qu'un site web classique ?", "Why does Google Maps Top 3 generate more calls than a regular website?", "Tại sao Top 3 Google Maps tạo nhiều cuộc gọi hơn website thông thường?", "لماذا تحقق أفضل 3 نتائج على الخرائط اتصالات أكثر من المواقع؟", "Почему топ-3 карт даёт больше звонков, чем обычный сайт?"),
+                  a: l("Sur mobile, le Pack Local de Google apparaît au-dessus des résultats naturels avec les boutons directs 'Appeler' et 'Itinéraire GPS'. Le client qualifié n'a pas besoin de chercher un formulaire : il clique et vous appelle immédiatement.", "On mobile, Google's Local Pack appears above organic results with instant 'Call' and 'GPS Directions' buttons. High-intent customers connect immediately without browsing friction.", "Trên di động, Local Pack xuất hiện trên cùng với nút gọi và chỉ đường tức thì, khách hàng bấm gọi ngay.", "على الهاتف، تظهر حزمة النتائج الأولى في القمة مع أزرار الاتصال والملاحة المباشرة لتحويل العميل فوراً.", "На смартфонах блок карт стоит выше поисковой выдачи с прямыми кнопками звонка и маршрута."),
                 },
                 {
-                  q: l("Comment se déroule la conquête du Top 3 Google Maps ?", "How does ranking in the Top 3 on Google Maps work?", "Quy trình đưa hồ sơ lên Top 3 Google Maps như thế nào?", "كيف تسير خطة الوصول إلى المراكز الثلاثة الأولى؟", "Как проходит вывод в топ-3 на картах Google?"),
-                  a: l("Après l'audit initial de votre zone, nous restructurons intégralement votre profil : catégories sémantiques, photos géotaggées, nettoyage des citations locales et automatisation des avis clients 5 étoiles pour générer un flux d'appels et d'itinéraires régulier.", "After the initial area audit, we fully restructure your profile: semantic categories, geotagged photography, local citation cleanup and 5-star review acceleration to generate consistent calls and direction requests.", "Sau kiểm toán ban đầu, chúng tôi cấu trúc lại toàn bộ hồ sơ: danh mục chuẩn SEO, ảnh định vị và quy trình thu thập đánh giá 5 sao.", "بعد التدقيق الأولي لمنطقتك، نعيد هيكلة ملفك بالكامل: فئات دقيقة وصور احترافية وتنظيف البيانات المحلية وأتمتة تقييمات 5 نجوم لتدفق العملاء.", "После аудита мы полностью перенастраиваем профиль: точные категории, гео-фото, очистка цитирований и система сбора отзывов 5 звёзд."),
+                  q: l("Pourquoi les formules de gestion mensuelle prévoient-elles un engagement de 6 mois ?", "Why do monthly management plans have a 6-month minimum commitment?", "Tại sao các gói quản lý hằng tháng có cam kết tối thiểu 6 tháng?", "لماذا تتطلب باقات الإدارة الشهرية التزاماً بـ 6 أشهر؟", "Почему ежемесячные тарифы предполагают контракт от 6 месяцев?"),
+                  a: l("L'algorithme de Google exige une régularité continue dans les avis clients récents, les photos géolocalisées et les publications. Une période de 6 mois permet d'ancrer durablement votre autorité face aux concurrents qui tentent de reprendre vos positions.", "Google's local algorithm strictly rewards consistent review velocity, geotagged photo uploads and monthly posts. A 6-month timeframe firmly anchors your market leadership against aggressive competitors.", "Thuật toán Google đòi hỏi hoạt động đều đặn về đánh giá mới, ảnh định vị và bài đăng. Kỳ hạn 6 tháng giúp củng cố vị thế dẫn đầu vững chắc trước đối thủ.", "تتطلب خوارزميات جوجل تدفقاً مستمراً للتقييمات والمنشورات والصور، وفترة 6 أشهر كافية لتثبيت تفوقك الدائم وحمايتك من المنافسين.", "Алгоритмы Google поощряют регулярный приток отзывов и гео-фото. Срок в 6 месяцев позволяет надёжно забетонировать лидерство."),
                 },
               ].map((faq, i) => (
                 <div key={i} className="rounded-2xl border border-[#E5E5E0] bg-white p-5 shadow-sm">
