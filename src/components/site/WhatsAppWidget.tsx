@@ -91,7 +91,7 @@ export function WhatsAppWidget() {
   return (
     <aside
       aria-label="WhatsApp XR Agency"
-      className="hidden sm:flex fixed bottom-4 right-4 z-40 items-center gap-1.5 transition-all duration-300 ease-out rtl:right-auto rtl:left-4"
+      className="fixed bottom-4 right-4 z-40 flex items-center gap-1.5 transition-all duration-300 ease-out rtl:right-auto rtl:left-4"
     >
       <a
         href={waUrl}
