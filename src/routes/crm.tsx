@@ -64,6 +64,7 @@ import { SchoolModule } from "@/components/crm/SchoolModule";
 import { DirectorPersonalHub } from "@/components/crm/DirectorPersonalHub";
 import { ManagerFiliereHub } from "@/components/crm/ManagerFiliereHub";
 import { CrmCalendarView } from "@/components/crm/CrmCalendarView";
+import { QuoteContractConfiguratorModal } from "@/components/crm/QuoteContractConfiguratorModal";
 
 export const Route = createFileRoute("/crm")({
   head: () => ({
@@ -248,6 +249,9 @@ function XrAgencyCrmApp() {
   const [mockupMapsUrl, setMockupMapsUrl] = useState("");
   const [mockupSocialsUrl, setMockupSocialsUrl] = useState("");
   const [mockupBriefNotes, setMockupBriefNotes] = useState("");
+
+  // Modal Devis & Contrat Interactif & Facturation (Validation Acompte 50%)
+  const [quoteModalLead, setQuoteModalLead] = useState<Lead | null>(null);
 
   // ── Persistance & Supabase Realtime ──
   useEffect(() => {
@@ -1921,7 +1925,7 @@ function XrAgencyCrmApp() {
                             onNext={col.next ? () => moveStage(lead.id, col.next) : undefined}
                             nextLabel={col.nextLabel}
                             onWin={col.stage !== "won" ? () => moveStage(lead.id, "won") : undefined}
-                            onPdf={() => generatePdfQuote(lead)}
+                            onPdf={() => setQuoteModalLead(lead)}
                             onRequestMockup={() => {
                               setMockupModalLead(lead);
                               setMockupMapsUrl(lead.googleMapsUrl || "");
@@ -2043,10 +2047,11 @@ function XrAgencyCrmApp() {
                               <MessageSquare className="w-3.5 h-3.5" /> WhatsApp
                             </a>
                             <button
-                              onClick={() => generatePdfQuote(target)}
-                              className={`inline-flex items-center gap-1.5 font-bold text-xs px-3.5 py-2.5 rounded-xl border ${theme.subCard} ${theme.textMain}`}
+                              onClick={() => setQuoteModalLead(target)}
+                              className="inline-flex items-center gap-1.5 font-bold text-xs px-3.5 py-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-300"
+                              title="Ouvrir le configurateur Devis & Contrat d'Engagement"
                             >
-                              <Download className="w-3.5 h-3.5 text-indigo-500" /> PDF
+                              <FileText className="w-3.5 h-3.5 text-amber-500" /> Devis & Contrat
                             </button>
                             <button
                               onClick={() => handleSendQuoteEmail(target)}
@@ -2628,6 +2633,7 @@ function XrAgencyCrmApp() {
             onUnlockCommission={handleUnlockCommission}
             theme={theme}
             onSound={() => soundEnabled && playDing()}
+            onOpenQuoteModal={(l) => setQuoteModalLead(l)}
           />
         )}
       </div>
@@ -3144,6 +3150,22 @@ function XrAgencyCrmApp() {
         </div>
       )}
 
+      {/* Modal Devis & Contrat Interactif & Facturation (Acompte 50%) */}
+      {quoteModalLead && (
+        <QuoteContractConfiguratorModal
+          isOpen={Boolean(quoteModalLead)}
+          onClose={() => setQuoteModalLead(null)}
+          lead={quoteModalLead}
+          closer={members.find((m) => m.id === quoteModalLead.closerId)}
+          theme={theme}
+          onSaveLead={(updated) => {
+            setLeads((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
+            void upsertLeadToSupabase(updated);
+          }}
+          onNotification={(msg) => setCheckoutMessage(msg)}
+        />
+      )}
+
     </div>
   );
 }
@@ -3245,6 +3267,21 @@ function LeadCard({
             ✓ Maquette prête
           </span>
         )}
+        {lead.invoiceStatus === "paid" && (
+          <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+            ✓ Acompte Encaissé
+          </span>
+        )}
+        {lead.stage === "proposal" && lead.invoiceStatus !== "paid" && (
+          <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+            🟡 En attente Acompte 50%
+          </span>
+        )}
+        {lead.mapsContract?.enabled && (
+          <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-200 border border-amber-500/40 font-bold">
+            ★ Maps Top 3
+          </span>
+        )}
         {lead.followUpDate && !isUrgent && (
           <span
             className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-1 ${theme.subCard} ${theme.textMuted}`}
@@ -3276,8 +3313,8 @@ function LeadCard({
               <MessageSquare className="w-3 h-3 text-emerald-500" /> WhatsApp
             </a>
           )}
-          <button onClick={onPdf} className={`text-[10px] font-bold flex items-center gap-0.5 ${theme.textMuted}`} title="Générer Devis PDF">
-            <FileText className="w-3 h-3 text-amber-500" /> PDF
+          <button onClick={onPdf} className="text-[10px] font-extrabold flex items-center gap-1 text-amber-600 dark:text-amber-400 hover:underline" title="Ouvrir le configurateur Devis & Contrat d'Engagement">
+            <FileText className="w-3 h-3 text-amber-500" /> Devis & Contrat
           </button>
           {lead.mockupReady && (
             <button

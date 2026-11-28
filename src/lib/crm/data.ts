@@ -389,6 +389,19 @@ export interface Lead {
   providerCost?: number;
   invoiceStatus?: "none" | "deposit_sent" | "paid" | string;
   invoiceRef?: string;
+  quoteRef?: string;
+  depositAmount?: number;
+  depositPaidAt?: string;
+  depositMethod?: string;
+  mapsContract?: {
+    enabled: boolean;
+    price: number;
+    keywords: string;
+    targetZone: string;
+    deliveryDelayDays: number;
+    guaranteeClause: string;
+    validatedBy: string;
+  };
   timeline?: { id: string; date: string; text: string }[];
 }
 

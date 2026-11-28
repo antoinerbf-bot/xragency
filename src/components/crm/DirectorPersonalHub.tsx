@@ -13,6 +13,7 @@ import {
   Flame,
   Download,
   Trophy,
+  FileText,
 } from "lucide-react";
 import { type Lead, computeDealCommissions, getLeadTotals, type TeamMember } from "@/lib/crm/data";
 import type { CrmThemeTokens } from "@/lib/crm/theme";
@@ -71,6 +72,7 @@ interface DirectorPersonalHubProps {
   onUnlockCommission: (leadId: string) => void;
   theme: CrmThemeTokens;
   onSound?: () => void;
+  onOpenQuoteModal?: (lead: Lead) => void;
 }
 
 export function DirectorPersonalHub({
@@ -81,6 +83,7 @@ export function DirectorPersonalHub({
   onUnlockCommission,
   theme,
   onSound,
+  onOpenQuoteModal,
 }: DirectorPersonalHubProps) {
   const [tasks, setTasks] = useState<PersonalTask[]>(() => {
     if (typeof window !== "undefined") {
@@ -992,6 +995,63 @@ export function DirectorPersonalHub({
         </div>
       </div>
 
+      {/* Devis émis en attente de virement d'acompte (50%) */}
+      {(() => {
+        const pendingQuotes = allLeads.filter(
+          (l) => l.stage === "proposal" || l.invoiceStatus === "deposit_sent"
+        );
+        return (
+          <div className={`p-5 rounded-3xl border ${theme.card} space-y-3`}>
+            <div className="flex items-center justify-between gap-2">
+              <h3 className={`text-sm font-extrabold flex items-center gap-2 ${theme.textMain}`}>
+                <FileText className="w-4 h-4 text-amber-500" />
+                Devis & Contrats en Attente du Virement de l'Acompte 50% ({pendingQuotes.length})
+              </h3>
+            </div>
+            {pendingQuotes.length === 0 ? (
+              <p className={`text-xs ${theme.textMuted}`}>
+                Aucun devis en attente d'acompte actuellement. Dès qu'un prospect valide sa maquette, configurez son devis interactif pour synchroniser le virement attendu.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {pendingQuotes.map((lead) => {
+                  const totals = getLeadTotals(lead);
+                  const depositAmount = Math.round(totals.oneShotTotal * 0.5);
+                  const closer = members.find((m) => m.id === lead.closerId);
+                  return (
+                    <div
+                      key={lead.id}
+                      className={`p-3.5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${theme.subCard}`}
+                    >
+                      <div className="text-xs space-y-0.5">
+                        <p className={`font-extrabold ${theme.textMain}`}>
+                          {lead.name} — Total {totals.oneShotTotal.toLocaleString("fr-FR")} € {totals.mrrTotal > 0 ? `+ ${totals.mrrTotal} €/mois` : ""} ({lead.planLabel})
+                        </p>
+                        <p className={`text-[11px] ${theme.textMuted}`}>
+                          Acompte attendu : <strong className="text-amber-500">{depositAmount.toLocaleString("fr-FR")} €</strong> · Commercial : {closer?.shortName || "XR Agency"} · Contact : {lead.phone}
+                          {lead.mapsContract?.enabled && " · ★ Pack Maps Top 3 inclus"}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        {onOpenQuoteModal && (
+                          <button
+                            onClick={() => onOpenQuoteModal(lead)}
+                            className="px-3 py-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold text-xs flex items-center gap-1 shadow-sm"
+                          >
+                            <FileText className="w-3.5 h-3.5 text-amber-500" />
+                            Gérer Devis & Virement
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })()}
+
       {/* Validation des encaissements */}
       <div className={`p-5 rounded-3xl border ${theme.card} space-y-3`}>
         <h3 className={`text-sm font-extrabold flex items-center gap-2 ${theme.textMain}`}>
@@ -1026,12 +1086,23 @@ export function DirectorPersonalHub({
                       {breakdown.managerOverrideAmount > 0 && ` · Override Martin : ${breakdown.managerOverrideAmount} €`}
                     </p>
                   </div>
-                  <button
-                    onClick={() => onUnlockCommission(lead.id)}
-                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-extrabold text-xs shadow-sm shrink-0"
-                  >
-                    ✓ Virement reçu · Débloquer
-                  </button>
+                  <div className="flex items-center gap-2 shrink-0">
+                    {onOpenQuoteModal && (
+                      <button
+                        onClick={() => onOpenQuoteModal(lead)}
+                        className="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-bold"
+                        title="Ouvrir le devis & la facture"
+                      >
+                        <FileText className="w-3.5 h-3.5 text-zinc-500" />
+                      </button>
+                    )}
+                    <button
+                      onClick={() => onUnlockCommission(lead.id)}
+                      className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-extrabold text-xs shadow-sm shrink-0"
+                    >
+                      ✓ Virement reçu · Débloquer
+                    </button>
+                  </div>
                 </div>
               );
             })}
