@@ -261,116 +261,126 @@ export function HomeServices() {
             ))}
           </aside>
 
-          {/* Natural, Smooth Cards Sequence (No superposition bugs) */}
-          <div className="relative space-y-10 sm:space-y-12">
+          {/* ── LUXURY STACKED PARALLAX CARDS SEQUENCE ── */}
+          <div className="relative pb-16">
             {ORDERED_SERVICES.map((item, index) => {
               const service = SERVICES.find((s) => s.id === item.id) ?? SERVICES[0];
               const image = SERVICE_IMAGES[item.id] || "/showcase/web-luxury-showcase.jpg";
               const isSelected = funnel?.selectedServices.includes(item.funnelId) ?? false;
+              const isLast = index === ORDERED_SERVICES.length - 1;
 
               return (
-                <article
-                  id={`home-service-${item.id}`}
+                <div
                   key={item.id}
-                  className="group relative overflow-hidden rounded-[2rem] border border-[#171613]/10 bg-[#12100D] text-white shadow-xl transition-all duration-300 hover:border-[#A67C40]/50"
+                  className="sticky"
+                  style={{
+                    top: `clamp(68px, calc(64px + ${index * 14}px), 180px)`,
+                    zIndex: index + 10,
+                    marginBottom: isLast ? "0px" : "clamp(3.5rem, 8vh, 6rem)",
+                  }}
                 >
-                  <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[480px] lg:min-h-[520px]">
-                    {/* Content Column */}
-                    <div className="relative z-10 lg:col-span-7 flex flex-col justify-between p-6 sm:p-8 lg:p-10 bg-gradient-to-t lg:bg-gradient-to-r from-[#12100D] via-[#12100D]/95 to-[#12100D]/80">
-                      {/* Top Bar inside card */}
-                      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
-                        <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3.5 py-1 backdrop-blur-md">
-                          <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696] animate-pulse" />
-                          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#E5C696]">
-                            {item.tag[locale] ?? item.tag.fr}
+                  <article
+                    id={`home-service-${item.id}`}
+                    className="group relative overflow-hidden rounded-[2rem] border border-[#D8B788]/25 bg-[#12100D] text-white shadow-[0_-10px_35px_rgba(0,0,0,0.5),0_25px_60px_rgba(0,0,0,0.4)] transition-all duration-300 hover:border-[#A67C40]/60"
+                  >
+                    <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[460px] lg:min-h-[500px]">
+                      {/* Content Column */}
+                      <div className="relative z-10 lg:col-span-7 flex flex-col justify-between p-6 sm:p-8 lg:p-10 bg-gradient-to-t lg:bg-gradient-to-r from-[#12100D] via-[#12100D]/95 to-[#12100D]/80">
+                        {/* Top Bar inside card */}
+                        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+                          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3.5 py-1 backdrop-blur-md">
+                            <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696] animate-pulse" />
+                            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#E5C696]">
+                              {item.tag[locale] ?? item.tag.fr}
+                            </span>
+                          </div>
+
+                          <span className="font-mono rounded-full border border-[#E5C696]/40 bg-[#E5C696]/15 px-3 py-1 text-xs font-semibold text-[#E5C696] whitespace-nowrap">
+                            {item.priceTag}
                           </span>
                         </div>
 
-                        <span className="font-mono rounded-full border border-[#E5C696]/40 bg-[#E5C696]/15 px-3 py-1 text-xs font-semibold text-[#E5C696] whitespace-nowrap">
-                          {item.priceTag}
-                        </span>
-                      </div>
+                        {/* Main Information */}
+                        <div className="py-4 sm:py-5">
+                          <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-[#E5C696]/80">
+                            {t(service.short)}
+                          </p>
+                          <h3 className="mt-2 font-serif text-2xl sm:text-4xl lg:text-[2.75rem] font-medium leading-[1.08] tracking-[-0.02em] text-white">
+                            {t(service.title)}
+                          </h3>
+                          <p className="mt-3 max-w-2xl text-xs sm:text-sm leading-relaxed text-white/80">
+                            {t(service.description)}
+                          </p>
 
-                      {/* Main Information */}
-                      <div className="py-5 sm:py-6">
-                        <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-[#E5C696]/80">
-                          {t(service.short)}
-                        </p>
-                        <h3 className="mt-2 font-serif text-2xl sm:text-4xl lg:text-[2.9rem] font-medium leading-[1.08] tracking-[-0.02em] text-white">
-                          {t(service.title)}
-                        </h3>
-                        <p className="mt-3 max-w-2xl text-xs sm:text-sm leading-relaxed text-white/80">
-                          {t(service.description)}
-                        </p>
+                          {/* 3 Key Deliverables */}
+                          <div className="mt-5 flex flex-wrap gap-2">
+                            {(service.deliverables ?? []).slice(0, 3).map((deliv) => (
+                              <div
+                                key={deliv.title.fr}
+                                className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 backdrop-blur-xs text-[11px] text-white/90"
+                              >
+                                <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696]" />
+                                <span className="font-medium">{t(deliv.title)}</span>
+                              </div>
+                            ))}
+                          </div>
 
-                        {/* 3 Key Deliverables */}
-                        <div className="mt-5 flex flex-wrap gap-2">
-                          {(service.deliverables ?? []).slice(0, 3).map((deliv) => (
-                            <div
-                              key={deliv.title.fr}
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 backdrop-blur-xs text-[11px] text-white/90"
+                          {/* Conversion CTAs */}
+                          <div className="mt-6 flex flex-wrap items-center gap-2.5">
+                            <ServiceLink
+                              id={item.id}
+                              className="inline-flex items-center gap-2 rounded-full bg-[#E5C696] px-5 py-2.5 text-xs font-bold text-[#14110E] shadow-sm transition hover:bg-[#F2D7B0] active:scale-[0.98]"
                             >
-                              <span className="h-1.5 w-1.5 rounded-full bg-[#E5C696]" />
-                              <span className="font-medium">{t(deliv.title)}</span>
-                            </div>
-                          ))}
+                              <span>Découvrir l'offre</span>
+                              <ArrowUpRight className="h-4 w-4" />
+                            </ServiceLink>
+
+                            <a
+                              href={`https://wa.me/33649219808?text=Bonjour%20XRAGENCY%2C%20je%20souhaite%20des%20renseignements%20sur%20l'offre%20${encodeURIComponent(t(service.title))}.`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/5 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-white/15"
+                            >
+                              <span>📞 Échanger (15 min)</span>
+                            </a>
+
+                            <button
+                              type="button"
+                              onClick={() => funnel?.toggleService(item.funnelId)}
+                              className={cn(
+                                "inline-flex items-center gap-1.5 rounded-full border px-4 py-2.5 font-mono text-[11px] font-semibold transition",
+                                isSelected
+                                  ? "border-[#E5C696] bg-[#E5C696]/20 text-[#F2D7B0]"
+                                  : "border-white/20 bg-white/5 text-white/90 hover:border-white/40",
+                              )}
+                            >
+                              {isSelected ? "✓ Dans votre sélection" : "+ Ajouter au projet"}
+                            </button>
+                          </div>
                         </div>
 
-                        {/* Conversion CTAs */}
-                        <div className="mt-7 flex flex-wrap items-center gap-2.5">
-                          <ServiceLink
-                            id={item.id}
-                            className="inline-flex items-center gap-2 rounded-full bg-[#E5C696] px-5 py-2.5 text-xs font-bold text-[#14110E] shadow-sm transition hover:bg-[#F2D7B0] active:scale-[0.98]"
-                          >
-                            <span>Découvrir l'offre</span>
-                            <ArrowUpRight className="h-4 w-4" />
-                          </ServiceLink>
-
-                          <a
-                            href={`https://wa.me/33649219808?text=Bonjour%20XRAGENCY%2C%20je%20souhaite%20des%20renseignements%20sur%20l'offre%20${encodeURIComponent(t(service.title))}.`}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/5 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-white/15"
-                          >
-                            <span>📞 Échanger (15 min)</span>
-                          </a>
-
-                          <button
-                            type="button"
-                            onClick={() => funnel?.toggleService(item.funnelId)}
-                            className={cn(
-                              "inline-flex items-center gap-1.5 rounded-full border px-4 py-2.5 font-mono text-[11px] font-semibold transition",
-                              isSelected
-                                ? "border-[#E5C696] bg-[#E5C696]/20 text-[#F2D7B0]"
-                                : "border-white/20 bg-white/5 text-white/90 hover:border-white/40",
-                            )}
-                          >
-                            {isSelected ? "✓ Dans votre sélection" : "+ Ajouter au projet"}
-                          </button>
+                        {/* Bottom Indicator */}
+                        <div className="flex items-center justify-between border-t border-white/10 pt-3 font-mono text-[10px] text-white/50 uppercase tracking-widest">
+                          <span>
+                            0{index + 1} / 0{ORDERED_SERVICES.length} · {item.id.toUpperCase()}
+                          </span>
+                          <span className="text-white/40">XRAGENCY HAUTE COUTURE</span>
                         </div>
                       </div>
 
-                      {/* Bottom Indicator */}
-                      <div className="flex items-center justify-between border-t border-white/10 pt-3 font-mono text-[10px] text-white/50 uppercase tracking-widest">
-                        <span>
-                          0{index + 1} / 0{ORDERED_SERVICES.length} · {item.id.toUpperCase()}
-                        </span>
-                        <span className="text-white/40">XRAGENCY HAUTE COUTURE</span>
+                      {/* Image Column: 16:9 Aspect Ratio Container */}
+                      <div className="relative min-h-[240px] lg:min-h-full lg:col-span-5 overflow-hidden">
+                        <img
+                          src={image}
+                          alt={t(service.title)}
+                          loading="lazy"
+                          className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-l from-transparent via-transparent to-[#12100D]/80" />
                       </div>
                     </div>
-
-                    {/* Image Column: 16:9 Aspect Ratio Container */}
-                    <div className="relative min-h-[260px] lg:min-h-full lg:col-span-5 overflow-hidden">
-                      <img
-                        src={image}
-                        alt={t(service.title)}
-                        loading="lazy"
-                        className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-l from-transparent via-transparent to-[#12100D]/80" />
-                    </div>
-                  </div>
-                </article>
+                  </article>
+                </div>
               );
             })}
           </div>

@@ -857,93 +857,123 @@ const DIAGNOSTIC_QUESTIONS = {
   website: [
     {
       id: "no",
+      icon: Globe,
+      badge: "Création 0 à 1",
       title: "Non, projet de création intégrale",
-      desc: "Créer un site vitrine ou e-commerce moderne de A à Z.",
+      desc: "Créer un site vitrine ou e-commerce moderne haute performance de A à Z.",
       services: ["websites"] as ServiceKey[],
     },
     {
       id: "redesign",
+      icon: RotateCcw,
+      badge: "Refonte Stratégique",
       title: "Oui, mais obsolète ou peu performant",
-      desc: "Besoin d'une refonte design percutante et axée conversion.",
+      desc: "Besoin d'une refonte design percutante, mobile-first et axée conversion.",
       services: ["websites", "seo"] as ServiceKey[],
     },
     {
       id: "modern",
+      icon: TrendingUp,
+      badge: "Optimisation & Flux",
       title: "Oui, moderne & déjà fonctionnel",
-      desc: "Priorité à l'acquisition de trafic, SEO & maintenance WebCare.",
+      desc: "Priorité à l'acquisition de trafic qualifié, SEO & maintenance WebCare 24/7.",
       services: ["seo", "maintenance"] as ServiceKey[],
     },
   ],
   social: [
     {
       id: "none",
+      icon: Share2,
+      badge: "À lancer",
       title: "Inexistante ou inactive",
-      desc: "Aucune publication régulière, besoin d'une identité visuelle.",
+      desc: "Aucune publication régulière, besoin d'une identité de marque signature.",
       services: ["branding", "social"] as ServiceKey[],
     },
     {
       id: "growing",
-      title: "Présente, mais manque d'impact & d'abonnés",
-      desc: "Besoin de visuels professionnels, régularité et engagement.",
+      icon: Sparkles,
+      badge: "En développement",
+      title: "Présente, mais manque d'impact",
+      desc: "Besoin de visuels professionnels, régularité et engagement communautaire.",
       services: ["social"] as ServiceKey[],
     },
     {
       id: "active",
+      icon: Gem,
+      badge: "Actif · Scalabilité",
       title: "Active, communauté établie",
-      desc: "Recherche de production photo/vidéo d'élite et acquisition.",
+      desc: "Recherche de production photo/vidéo d'élite, Reels & acquisition payante.",
       services: ["social"] as ServiceKey[],
     },
   ],
   find: [
     {
       id: "invisible",
+      icon: Search,
+      badge: "Urgence Acquisition",
       title: "Quasi invisibles sur le web",
-      desc: "Les concurrents raflent les clients sur Google & Google Maps.",
+      desc: "Les concurrents raflent les clients sur Google & Google Maps chaque jour.",
       services: ["maps", "seo"] as ServiceKey[],
     },
     {
       id: "mouth",
+      icon: Briefcase,
+      badge: "Canal à créer",
       title: "Principalement par bouche-à-oreille",
-      desc: "Manque d'un canal digital prévisible pour acquérir de nouveaux clients.",
+      desc: "Manque d'un canal digital prévisible pour acquérir de nouveaux clients en continu.",
       services: ["websites", "maps"] as ServiceKey[],
     },
     {
       id: "google",
+      icon: MapPin,
+      badge: "Top 3 Garanti",
       title: "Via Google & Google Maps",
-      desc: "Souhait de consolider et dominer le Top 3 garanti sur les mots-clés clés.",
+      desc: "Souhait de consolider et dominer le Top 3 garanti sur vos mots-clés stratégiques.",
       services: ["maps", "seo"] as ServiceKey[],
     },
     {
       id: "social",
+      icon: ShoppingBag,
+      badge: "Conversion Directe",
       title: "Réseaux sociaux ou publicités",
-      desc: "Besoin de convertir ce trafic en réservations directes sans commission.",
+      desc: "Besoin de convertir ce trafic en réservations et ventes directes sans commission.",
       services: ["websites", "crm"] as ServiceKey[],
     },
   ],
   develop: [
     {
       id: "dev_web",
-      title: "Site web d'élite & haute conversion",
+      icon: Globe,
+      badge: "Dès 499 €",
+      title: "Site web d'élite & conversion",
       services: ["websites"] as ServiceKey[],
     },
     {
       id: "dev_maps",
-      title: "Google Maps Top 3 Garanti ou Remboursé",
+      icon: MapPin,
+      badge: "Top 3 Garanti",
+      title: "Google Maps Domination Locale",
       services: ["maps"] as ServiceKey[],
     },
     {
       id: "dev_leads",
+      icon: TrendingUp,
+      badge: "SEO 1ère page",
       title: "SEO Google & Nouveaux clients",
       services: ["seo"] as ServiceKey[],
     },
     {
       id: "dev_brand",
-      title: "Image de marque forte & Réseaux sociaux",
+      icon: Palette,
+      badge: "Haute Couture",
+      title: "Image de marque & Réseaux",
       services: ["branding", "social"] as ServiceKey[],
     },
     {
       id: "dev_crm",
-      title: "Caisse POS, CRM sur-mesure & IA",
+      icon: Bot,
+      badge: "Sur-mesure",
+      title: "Caisse POS, CRM métier & IA",
       services: ["crm", "ai"] as ServiceKey[],
     },
   ],
@@ -1954,18 +1984,41 @@ export function QuoteConfiguratorCompact() {
                     <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
                       {DIAGNOSTIC_QUESTIONS.website.map((item) => {
                         const active = websiteStatus === item.id;
+                        const Icon = item.icon;
                         return (
                           <button
                             key={item.id}
                             type="button"
                             onClick={() => handleDiagnosticChange({ website: item.id })}
                             className={cn(
-                              "rounded-2xl border p-3.5 text-start transition-all",
+                              "rounded-2xl border p-3.5 text-start transition-all duration-200",
                               active
-                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-sm"
-                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40]"
+                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-md -translate-y-0.5"
+                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40] hover:bg-[#FAF8F5]"
                             )}
                           >
+                            <div className="flex items-center justify-between mb-2">
+                              <span
+                                className={cn(
+                                  "grid h-7 w-7 place-items-center rounded-lg transition",
+                                  active
+                                    ? "bg-white/20 text-[#E5C696]"
+                                    : "bg-[#FAF8F5] text-[#8D6C42] border border-[#E5DFD5]"
+                                )}
+                              >
+                                <Icon className="h-3.5 w-3.5" />
+                              </span>
+                              <span
+                                className={cn(
+                                  "font-mono text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full",
+                                  active
+                                    ? "bg-[#E5C696] text-[#171613]"
+                                    : "bg-[#F0EBE1] text-[#7A6B56]"
+                                )}
+                              >
+                                {item.badge}
+                              </span>
+                            </div>
                             <span className="block text-xs font-bold">{item.title}</span>
                             <span
                               className={cn(
@@ -1989,18 +2042,41 @@ export function QuoteConfiguratorCompact() {
                     <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
                       {DIAGNOSTIC_QUESTIONS.social.map((item) => {
                         const active = socialStatus === item.id;
+                        const Icon = item.icon;
                         return (
                           <button
                             key={item.id}
                             type="button"
                             onClick={() => handleDiagnosticChange({ social: item.id })}
                             className={cn(
-                              "rounded-2xl border p-3.5 text-start transition-all",
+                              "rounded-2xl border p-3.5 text-start transition-all duration-200",
                               active
-                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-sm"
-                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40]"
+                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-md -translate-y-0.5"
+                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40] hover:bg-[#FAF8F5]"
                             )}
                           >
+                            <div className="flex items-center justify-between mb-2">
+                              <span
+                                className={cn(
+                                  "grid h-7 w-7 place-items-center rounded-lg transition",
+                                  active
+                                    ? "bg-white/20 text-[#E5C696]"
+                                    : "bg-[#FAF8F5] text-[#8D6C42] border border-[#E5DFD5]"
+                                )}
+                              >
+                                <Icon className="h-3.5 w-3.5" />
+                              </span>
+                              <span
+                                className={cn(
+                                  "font-mono text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full",
+                                  active
+                                    ? "bg-[#E5C696] text-[#171613]"
+                                    : "bg-[#F0EBE1] text-[#7A6B56]"
+                                )}
+                              >
+                                {item.badge}
+                              </span>
+                            </div>
                             <span className="block text-xs font-bold">{item.title}</span>
                             <span
                               className={cn(
@@ -2024,18 +2100,41 @@ export function QuoteConfiguratorCompact() {
                     <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
                       {DIAGNOSTIC_QUESTIONS.find.map((item) => {
                         const active = findStatus === item.id;
+                        const Icon = item.icon;
                         return (
                           <button
                             key={item.id}
                             type="button"
                             onClick={() => handleDiagnosticChange({ find: item.id })}
                             className={cn(
-                              "rounded-2xl border p-3.5 text-start transition-all",
+                              "rounded-2xl border p-3.5 text-start transition-all duration-200",
                               active
-                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-sm"
-                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40]"
+                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-md -translate-y-0.5"
+                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40] hover:bg-[#FAF8F5]"
                             )}
                           >
+                            <div className="flex items-center justify-between mb-2">
+                              <span
+                                className={cn(
+                                  "grid h-7 w-7 place-items-center rounded-lg transition",
+                                  active
+                                    ? "bg-white/20 text-[#E5C696]"
+                                    : "bg-[#FAF8F5] text-[#8D6C42] border border-[#E5DFD5]"
+                                )}
+                              >
+                                <Icon className="h-3.5 w-3.5" />
+                              </span>
+                              <span
+                                className={cn(
+                                  "font-mono text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full",
+                                  active
+                                    ? "bg-[#E5C696] text-[#171613]"
+                                    : "bg-[#F0EBE1] text-[#7A6B56]"
+                                )}
+                              >
+                                {item.badge}
+                              </span>
+                            </div>
                             <span className="block text-xs font-bold">{item.title}</span>
                             <span
                               className={cn(
@@ -2064,22 +2163,45 @@ export function QuoteConfiguratorCompact() {
                     <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
                       {DIAGNOSTIC_QUESTIONS.develop.map((item) => {
                         const active = developGoals.includes(item.id);
+                        const Icon = item.icon;
                         return (
                           <button
                             key={item.id}
                             type="button"
                             onClick={() => toggleDevelopGoal(item.id)}
                             className={cn(
-                              "flex items-center justify-between rounded-2xl border p-3.5 text-start transition-all",
+                              "flex items-center justify-between rounded-2xl border p-3.5 text-start transition-all duration-200",
                               active
-                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-sm"
-                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40]"
+                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-md -translate-y-0.5"
+                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40] hover:bg-[#FAF8F5]"
                             )}
                           >
-                            <span className="text-xs font-bold">{item.title}</span>
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <span
+                                className={cn(
+                                  "grid h-7 w-7 shrink-0 place-items-center rounded-lg transition",
+                                  active
+                                    ? "bg-white/20 text-[#E5C696]"
+                                    : "bg-[#FAF8F5] text-[#8D6C42] border border-[#E5DFD5]"
+                                )}
+                              >
+                                <Icon className="h-3.5 w-3.5" />
+                              </span>
+                              <div className="min-w-0">
+                                <span className="block text-xs font-bold truncate">{item.title}</span>
+                                <span
+                                  className={cn(
+                                    "font-mono text-[9px] block",
+                                    active ? "text-[#E5C696]" : "text-[#8D6C42]"
+                                  )}
+                                >
+                                  {item.badge}
+                                </span>
+                              </div>
+                            </div>
                             <span
                               className={cn(
-                                "grid h-5 w-5 shrink-0 place-items-center rounded-full border transition",
+                                "grid h-5 w-5 shrink-0 place-items-center rounded-full border transition ml-2",
                                 active
                                   ? "border-[#E5C696] bg-[#E5C696] text-[#171613]"
                                   : "border-[#D5CFC5] bg-transparent"
@@ -2107,19 +2229,19 @@ export function QuoteConfiguratorCompact() {
                             type="button"
                             onClick={() => handleDiagnosticChange({ budget: tier.id })}
                             className={cn(
-                              "rounded-2xl border p-3.5 text-start transition-all",
+                              "rounded-2xl border p-3.5 text-start transition-all duration-200",
                               active
-                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-sm"
-                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40]"
+                                ? "border-[#171613] bg-[#171613] text-[#FAF7F2] shadow-md -translate-y-0.5"
+                                : "border-[#E5DFD5] bg-white text-[#2C2924] hover:border-[#A67C40] hover:bg-[#FAF8F5]"
                             )}
                           >
-                            <div className="flex items-center justify-between">
+                            <div className="flex flex-wrap items-center justify-between gap-1.5">
                               <span className="font-mono text-[11px] font-bold text-[#A67C40] whitespace-nowrap">
                                 {tier.range}
                               </span>
                               <span
                                 className={cn(
-                                  "font-mono text-[9.5px] uppercase font-semibold px-2 py-0.5 rounded-full",
+                                  "font-mono text-[9px] uppercase font-semibold px-2 py-0.5 rounded-full whitespace-nowrap",
                                   active
                                     ? "bg-[#E5C696] text-[#171613]"
                                     : "bg-[#F0EBE1] text-[#7A6B56]"
@@ -2128,12 +2250,69 @@ export function QuoteConfiguratorCompact() {
                                 {tier.tag}
                               </span>
                             </div>
-                            <span className="mt-1.5 block text-xs font-bold">
+                            <span className="mt-2 block text-xs font-bold">
                               {t(tier.label)}
                             </span>
                           </button>
                         );
                       })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. SIMULATEUR D'IMPACT BUSINESS & ROI (VENTE & CONVERSION) */}
+                <div className="relative overflow-hidden rounded-3xl border border-[#D8B788]/40 bg-gradient-to-br from-[#1A1815] via-[#14120E] to-[#0D0B09] p-6 sm:p-7 text-white shadow-2xl">
+                  <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-[#A67C40]/10 blur-3xl pointer-events-none" />
+
+                  <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+                    <div className="flex items-center gap-3">
+                      <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#E5C696]/20 border border-[#E5C696]/30 text-[#E5C696] shadow-inner">
+                        <TrendingUp className="h-4 w-4" />
+                      </span>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-[10.5px] font-bold uppercase tracking-[0.2em] text-[#E5C696]">
+                            Projection Business · {t(activeBusiness.label)}
+                          </span>
+                          <span className="inline-flex items-center gap-1 font-mono text-[9px] font-bold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+                            ● ROI Stratégique
+                          </span>
+                        </div>
+                        <h4 className="mt-0.5 font-serif text-lg sm:text-xl font-medium text-white">
+                          Accélération commerciale & captation de parts de marché
+                        </h4>
+                      </div>
+                    </div>
+
+                    <div className="text-right">
+                      <span className="font-mono text-[9.5px] uppercase text-white/60 tracking-wider block">Score de Potentiel</span>
+                      <span className="font-mono text-base font-bold text-[#E5C696]">96 / 100</span>
+                    </div>
+                  </div>
+
+                  <div className="relative z-10 mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                    <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-md">
+                      <span className="font-mono text-[9.5px] uppercase text-white/60 tracking-wider">Demandes Qualifiées</span>
+                      <p className="mt-1 font-serif text-xl sm:text-2xl font-bold text-[#E5C696]">+18 à +42</p>
+                      <p className="mt-1 text-[11px] text-white/70 leading-snug">
+                        Nouveaux prospects & réservations estimés par mois via votre Top 3 Maps et site optimisé.
+                      </p>
+                    </div>
+
+                    <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-md">
+                      <span className="font-mono text-[9.5px] uppercase text-white/60 tracking-wider">Délai d'Amortissement</span>
+                      <p className="mt-1 font-serif text-xl sm:text-2xl font-bold text-emerald-400">30 à 60 jours</p>
+                      <p className="mt-1 text-[11px] text-white/70 leading-snug">
+                        Le retour sur investissement moyen compense intégralement le budget dès les premières commandes.
+                      </p>
+                    </div>
+
+                    <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-md">
+                      <span className="font-mono text-[9.5px] uppercase text-white/60 tracking-wider">Sécurité Contractuelle</span>
+                      <p className="mt-1 font-serif text-xl sm:text-2xl font-bold text-white">Garanti ou Remboursé</p>
+                      <p className="mt-1 text-[11px] text-[#E5C696] leading-snug font-medium">
+                        Engagement juridique ferme stipulé sur votre devis : zéro risque pour votre entreprise.
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -2262,14 +2441,19 @@ export function QuoteConfiguratorCompact() {
                   </p>
                 )}
 
-                <div className="flex justify-end border-t border-[#171613]/10 pt-5">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#171613]/10 pt-6">
+                  <div className="flex items-center gap-2 text-xs text-[#57534B]">
+                    <ShieldCheck className="h-4 w-4 text-[#A67C40] shrink-0" />
+                    <span>Configuration 100% sans engagement · Devis contractuel PDF instantané</span>
+                  </div>
+
                   <button
                     type="button"
                     onClick={() => goStep(2)}
-                    className="inline-flex items-center gap-2 rounded-full bg-[#12110E] px-7 py-3.5 text-xs font-semibold text-white shadow-md transition hover:bg-[#2B2925] active:scale-[0.98]"
+                    className="group inline-flex items-center gap-3 rounded-full bg-[#12110E] px-8 py-4 text-xs sm:text-[13px] font-bold text-white shadow-xl transition-all duration-300 hover:bg-[#2B2925] hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    <span>Continuer vers les formules & options</span>
-                    <ArrowRight className="h-4 w-4 text-white" />
+                    <span>Valider mon diagnostic & choisir mes formules (Étape 2/3)</span>
+                    <ArrowRight className="h-4 w-4 text-[#E5C696] transition-transform group-hover:translate-x-1" />
                   </button>
                 </div>
               </div>
@@ -2639,6 +2823,17 @@ export function QuoteConfiguratorCompact() {
                     </p>
                   </div>
                 )}
+
+                {/* Assurance & Reassurance conversion card */}
+                <div className="rounded-2xl border border-emerald-500/25 bg-emerald-50/60 p-3 my-2.5 text-xs">
+                  <div className="flex items-center gap-1.5 font-bold text-emerald-900">
+                    <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <span>Garantie Satisfait ou Remboursé</span>
+                  </div>
+                  <p className="mt-1 text-[10.5px] text-emerald-800 leading-snug">
+                    Engagement contractuel ferme noté sur votre devis officiel. Livraison sous 10 à 14 jours.
+                  </p>
+                </div>
 
                 <div className="mt-2 space-y-2 border-t border-[#E5E5E0] pt-4">
                   {totals.once > 0 && (
